@@ -13,6 +13,8 @@ namespace zin;
 
 use zin\utils\style;
 
+$isEn = $app->getClientLang() == 'en';
+
 $getMeasureItem = function($data)
 {
     global $lang;
@@ -106,7 +108,7 @@ blockPanel
         cell
         (
             setClass('col text-center py-4'),
-            set::width('16%'),
+            set::width($isEn ? '20%' : '16%'),
             div(span(setClass('font-bold text-md'), $lang->block->welcome->reviewByMe)),
             div(set::className('flex-auto center'), $getMeasureItem($reviewByMe))
         ),

@@ -55,6 +55,7 @@ foreach($regions as $currentRegionID => $regionName) $regionMenu[] = li(set::cla
 $app->loadLang('release');
 $app->loadLang('execution');
 $this->loadModel('productplan');
+$expireDays = isset($config->kanban->reminder->expireDays) ? $config->kanban->reminder->expireDays : 1;
 jsVar('laneCount',  $laneCount);
 jsVar('kanbanLang', $lang->kanban);
 jsVar('columnLang', $lang->kanbancolumn);
@@ -78,6 +79,8 @@ jsVar('canViewExecution', common::hasPriv('execution', 'task') && $config->visio
 jsVar('canViewBuild', common::hasPriv('build', 'view') && $config->vision != 'lite');
 jsVar('canViewTicket', common::hasPriv('ticket', 'view'));
 jsVar('userList', $userList);
+jsVar('expireDays', $expireDays);
+jsVar('today', helper::today());
 
 dropmenu(set::tab('kanban'), set::objectID($kanban->id));
 

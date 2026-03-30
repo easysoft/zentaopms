@@ -35,7 +35,7 @@ $lang->my->deleteContacts  = 'Delete Contact';
 $lang->my->viewContacts    = 'View Contact';
 $lang->my->shareContacts   = 'Public Contacts';
 $lang->my->limited         = 'Permission restricted. You can only edit your own data.';
-$lang->my->score           = '我的积分';
+$lang->my->score           = 'My Points';
 $lang->my->scoreRule       = 'Point Rules';
 $lang->my->noTodo          = 'No Todo yet.';
 $lang->my->noData          = 'No %s yet.';
@@ -61,7 +61,7 @@ $lang->my->adminView       = 'System administrators have permission to delete pu
 $lang->my->indexAction      = 'Dashboard Overview';
 $lang->my->calendarAction   = 'My Calendar';
 $lang->my->workAction       = 'My Work';
-$lang->my->contributeAction = 'My Contributtion';
+$lang->my->contributeAction = 'My Contribution';
 $lang->my->profileAction    = 'Profile';
 $lang->my->dynamicAction    = 'Recents';
 

@@ -19,7 +19,7 @@ formPanel
     (
         formGroup
         (
-            set::label($lang->release->common . $lang->release->status),
+            set::label($lang->release->status),
             set::control('radioListInline'),
             set::name('status'),
             set::value('normal'),

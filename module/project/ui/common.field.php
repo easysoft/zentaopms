@@ -151,7 +151,7 @@ $fields->field('coverExecutionPriv')
     ->width('full')
     ->control('radioList')
     ->items($lang->project->coverExecutionPrivList)
-    ->hidden(!empty(data('project.coverExecutionPriv')))
+    ->hidden(data('project.coverExecutionPriv') === null || !empty(data('project.coverExecutionPriv')))
     ->wrapBefore();
 
 $storyTypeList = array();

@@ -20,12 +20,21 @@ class reportZen extends report
      */
     protected function getReminder(): array
     {
+        $this->app->loadConfig('message');
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+
         /* Get reminder data. */
-        $bugs = $tasks = $todos = $testTasks = array();
+        $bugs = $tasks = $todos = $testTasks = $cards = array();
         if($this->config->report->dailyreminder->bug)      $bugs      = $this->report->getUserBugs();
         if($this->config->report->dailyreminder->task)     $tasks     = $this->report->getUserTasks();
         if($this->config->report->dailyreminder->todo)     $todos     = $this->report->getUserTodos();
         if($this->config->report->dailyreminder->testTask) $testTasks = $this->report->getUserTestTasks();
+
+        $cardMailSetting    = isset($messageSetting['mail']['setting']['kanbancard']) ? $messageSetting['mail']['setting']['kanbancard'] : array();
+        $cardMessageSetting = isset($messageSetting['message']['setting']['kanbancard']) ? $messageSetting['message']['setting']['kanbancard'] : array();
+        if(in_array('nearing', $cardMailSetting))    $cards = $this->report->getUserKanbanCards();
+        if(in_array('nearing', $cardMessageSetting)) $this->loadModel('kanban')->saveCardNotice($cards);
 
         /* Get user who need reminders, and set reminder data to them. */
         $reminder = array();
@@ -35,6 +44,7 @@ class reportZen extends report
         if(!empty($tasks))     foreach($tasks     as $user => $task)     $reminder[$user]->tasks     = $task;
         if(!empty($todos))     foreach($todos     as $user => $todo)     $reminder[$user]->todos     = $todo;
         if(!empty($testTasks)) foreach($testTasks as $user => $testTask) $reminder[$user]->testTasks = $testTask;
+        if(!empty($cards))     foreach($cards     as $user => $card)     $reminder[$user]->cards     = $card;
         return $reminder;
     }
 
@@ -211,4 +221,3 @@ class reportZen extends report
         $this->view->data = $data;
     }
 }
-

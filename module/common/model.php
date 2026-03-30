@@ -1231,6 +1231,7 @@ eof;
             {
                 if($this->app->tab == 'project' || $this->app->tab == 'execution')
                 {
+                    static::$userPrivs = array();
                     $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
@@ -1457,8 +1458,35 @@ eof;
      */
     public function resetProjectPriv(int $projectID = 0)
     {
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
+        if($this->app->tab == 'execution')
+        {
+            if($module == 'execution' && $method == 'all') return;
+            $executionID = $this->session->execution;
+            if(!empty($_GET['executionID'])) $executionID = $_GET['executionID'];
+            if(!empty($_GET['execution']))   $executionID = $_GET['execution'];
+            if(empty($executionID)) return;
+
+            $execution = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if(empty($execution)) return;
+            $projectID = $execution->project;
+        }
+        else
+        {
+            if(($module == 'project' && $method == 'browse') || ($module == 'project' && $method == 'template')) return;
+            if(empty($projectID) && !empty($_GET['projectID'])) $projectID = $_GET['projectID'];
+            if(empty($projectID) && !empty($_GET['project']))   $projectID = $_GET['project'];
+        }
+
         /* Get user program priv. */
-        if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
+        if(empty($projectID) && $this->session->project) $projectID = $this->session->project;
         if(empty($projectID)) return;
 
         $program = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -1486,7 +1514,7 @@ eof;
         if($program->auth == 'reset')
         {
             /* If priv way is reset, unset common program priv, and cover by program priv. */
-            $projectPrivs = $this->loadModel('project')->getPrivsByModel($program->multiple ? $program->model : 'noSprint', $projectID, $program->hasProduct);
+            $projectPrivs = $this->loadModel('project')->getPrivsByModel($program->multiple ? $program->model : 'noSprint', (int)$projectID, $program->hasProduct);
             foreach($projectPrivs as $module => $methods)
             {
                 foreach($methods as $method => $label)
@@ -1512,10 +1540,6 @@ eof;
             if(isset($projectRights['browse']) and !isset($rights['project']['browse'])) $rights['project']['browse'] = 1;
             if(isset($projectRights['kanban']) and !isset($rights['project']['kanban'])) $rights['project']['kanban'] = 1;
             if(isset($projectRights['index'])  and !isset($rights['project']['index']))  $rights['project']['index']  = 1;
-
-            if(isset($projectPrivs->execution->linkStory))      $rights['execution']['linkstory']      = 1;
-            if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
-            if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
             $this->app->user->rights['rights'] = $rights;
         }
@@ -4016,7 +4040,7 @@ EOF;
 
         if(isset($app->workspaceInfo)) return $app->workspaceInfo;
 
-        if(!empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
+        if($config->vision != 'rnd' || !empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
         {
             $app->workspaceInfo = array('enabled' => false, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;

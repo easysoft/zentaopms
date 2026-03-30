@@ -111,7 +111,7 @@ $lang->product->assignToNullBugs        = 'Unassigned Bugs';
 $lang->product->assignToNullBugsTitle   = 'Unassigned Bugs';
 $lang->product->fixedBugs               = 'Fixed Bugs';
 $lang->product->closedBugs              = 'Closed Bugs';
-$lang->product->bugFixedRate            = 'Fix %';
+$lang->product->bugFixedRate            = 'Fix Rate';
 $lang->product->unfoldClosed            = 'Show Closed';
 $lang->product->totalBugs               = 'Total Bugs';
 $lang->product->storyDeliveryRate       = "Story Delivery %";
@@ -225,21 +225,21 @@ $lang->product->statusList['normal'] = 'Standard';
 $lang->product->statusList['closed'] = 'Closed';
 
 global $config;
-$lang->product->aclList['open'] = "Public (Accessible to anyone with {$lang->productCommon} view permissions.)";
+$lang->product->aclList['open'] = "Public (Accessible to anyone with \"{$lang->productCommon}\" view permissions.)";
 if($config->systemMode == 'ALM' && helper::hasFeature('program'))
 {
     $lang->product->aclList['private'] = "Private {$lang->productCommon} (Manager and Stakeholders of the respective program, team members and stakeholders of the associated {$lang->projectCommon} can access)";
 }
 else
 {
-    $lang->product->aclList['private'] = "Private {$lang->productCommon} (Team members and stakeholders of the associated {$lang->projectCommon} can access)";
+    $lang->product->aclList['private'] = "Private (Accessible to the product leads, linked project teams, and stakeholders)";
 }
 
 $lang->product->abbr = new stdclass();
 $lang->product->abbr->aclList['private'] = "Private";
 $lang->product->abbr->aclList['open']    = 'Public';
 
-$lang->product->aclTips['open']    = "Accessible to anyone with {$lang->productCommon} view permissions.";
+$lang->product->aclTips['open']    = "Accessible to anyone with \"{$lang->productCommon}\" view permissions.";
 $lang->product->aclTips['private'] = "Accessible only to relevant managers under {$lang->productCommon}, as well as team members and stakeholders under the linked {$lang->projectCommon}.";
 
 $lang->product->allSummary           = "<strong>%s</strong> stories on this page, estimated <strong>%s</strong> ({$lang->hourCommon}), with <strong>%s</strong> test case coverage.";

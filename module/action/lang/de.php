@@ -692,7 +692,7 @@ $lang->action->dynamicAction->execution['closed']    = 'Close ' . $lang->executi
 $lang->action->dynamicAction->execution['managed']   = 'Manage ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['moved']     = 'Improt Task';
+$lang->action->dynamicAction->execution['moved']     = 'Import Task';
 
 $lang->action->dynamicAction->kanban['created'] = 'Create Kanban';
 $lang->action->dynamicAction->kanban['edited']  = 'Kanban Settings';
@@ -702,7 +702,7 @@ $lang->action->dynamicAction->kanban['deleted'] = 'Delete Kanban';
 $lang->action->dynamicAction->kanbanspace['created'] = 'Create Space';
 $lang->action->dynamicAction->kanbanspace['edited']  = 'Space Settings';
 $lang->action->dynamicAction->kanbanspace['closed']  = 'Close Space';
-$lang->action->dynamicAction->kanbanspace['deleted'] = 'Deleted Space';
+$lang->action->dynamicAction->kanbanspace['deleted'] = 'Delete Space';
 
 $lang->action->dynamicAction->kanbanregion['created'] = 'Create Region';
 $lang->action->dynamicAction->kanbanregion['edited']  = 'Edit Region';
@@ -1142,7 +1142,7 @@ $lang->action->apiTitle->updatetrainee         = 'Update trainee';
 
 /* Code Review in Repo or Merge Request module. */
 $lang->action->desc->repocreated                  = '$date, created and reviewed by <strong>$actor</strong>: $extra.' . "\n";
-$lang->action->label->repocreated                 = "create and review";
+$lang->action->label->repocreated                 = "Create and Review";
 $lang->action->dynamicAction->task['gitcommited'] = 'GIT Commit';
 $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
 $lang->action->desc->createppm                    = '$extra';

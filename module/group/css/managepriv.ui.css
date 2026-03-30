@@ -33,7 +33,7 @@
 #privPackageList td.package-column {padding: 20px 16px; background-color: #FFF;}
 #privPackageList div.package {display: inline-flex; width: calc(25% - 5px); padding: 10px 0; align-items: center;}
 #privPackageList .package + .package {padding: 0;}
-#privPackageList .package .check-all {height: 20px; max-width: calc(100% - 30px); overflow: hidden;}
+#privPackageList .package .check-all {height: 20px; max-width: calc(100% - 25px); overflow: hidden;}
 #privPackageList .package input {margin-top: 0px; margin-left: 0px; left: 0px; height: 20px;}
 #privPackageList .package label {display: inline-block; white-space: nowrap;}
 #privPackageList .privs, #privPackageList .menus-privs {padding: 20px 20px 0 20px; margin: 10px 0px;border: 1px solid #D9DBE1; background-color: #F9FAFB; position: relative; display: block; max-width: unset; box-shadow: unset; z-index: 1; width: 100%;}

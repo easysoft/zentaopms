@@ -12,6 +12,7 @@ namespace zin;
 
 jsVar('projectID', $projectID);
 jsVar('multiple', isset($moMultipleExecutionID) ? false : true);
+$isEn = $app->getClientLang() == 'en';
 
 $buildExecutionID = $executionID ? $executionID : (isset($noMultipleExecutionID) ? $noMultipleExecutionID : 0);
 $hideExecution    = false;
@@ -21,7 +22,7 @@ if($app->tab == 'execution' && $executionID) $hideExecution = true;
 formPanel
 (
     set::title($lang->testtask->create),
-
+    $isEn ? set::labelWidth('8rem') : null,
     on::change('[name=product]', isset($executionID) ? 'loadProductRelated' : 'loadTestReports(this.value)'),
     on::change('[name=execution]', 'loadExecutionRelated'),
     formGroup

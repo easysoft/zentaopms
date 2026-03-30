@@ -9,7 +9,7 @@
  * @version     $Id: en.php 5053 2013-07-06 08:17:37Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->user->common           = 'Users';
+$lang->user->common           = 'User';
 $lang->user->id               = 'ID';
 $lang->user->inside           = 'Internal Users';
 $lang->user->outside          = 'External Users';

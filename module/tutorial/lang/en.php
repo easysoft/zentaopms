@@ -109,7 +109,7 @@ $lang->tutorial->starter->createAccount->step1->name = 'Click on Admin';
 $lang->tutorial->starter->createAccount->step1->desc = 'Here you can manage accounts and set things up just the way you like.';
 
 $lang->tutorial->starter->createAccount->step2 = new stdClass();
-$lang->tutorial->starter->createAccount->step2->name = 'Click on User Management';
+$lang->tutorial->starter->createAccount->step2->name = 'Click on User';
 $lang->tutorial->starter->createAccount->step2->desc = 'Here, you can manage departments, add personnel, and configure group permissions.';
 
 $lang->tutorial->starter->createAccount->step3 = new stdClass();
@@ -132,7 +132,7 @@ $lang->tutorial->starter->createProgram->title = 'Create Program';
 
 $lang->tutorial->starter->createProgram->step1 = new stdClass();
 $lang->tutorial->starter->createProgram->step1->name = 'Click on Program';
-$lang->tutorial->starter->createProgram->step1->desc = 'Here you can manage your project sets.';
+$lang->tutorial->starter->createProgram->step1->desc = 'Here you can manage your programs.';
 
 $lang->tutorial->starter->createProgram->step2 = new stdClass();
 $lang->tutorial->starter->createProgram->step2->name = 'Click on Create Program';
@@ -150,10 +150,10 @@ $lang->tutorial->starter->createProduct->title = 'Create Product';
 
 $lang->tutorial->starter->createProduct->step1 = new stdClass();
 $lang->tutorial->starter->createProduct->step1->name = 'Go to Product';
-$lang->tutorial->starter->createProduct->step1->desc = 'Here you can manage your product sets.';
+$lang->tutorial->starter->createProduct->step1->desc = 'Here you can manage your products.';
 
 $lang->tutorial->starter->createProduct->step2 = new stdClass();
-$lang->tutorial->starter->createProduct->step2->name = 'Click "Add Product"';
+$lang->tutorial->starter->createProduct->step2->name = 'Click "Create Product"';
 $lang->tutorial->starter->createProduct->step2->desc = 'You can create products here.';
 
 $lang->tutorial->starter->createProduct->step3 = new stdClass();
@@ -176,7 +176,7 @@ $lang->tutorial->starter->createStory->step2->desc = 'Click the product to view 
 
 $lang->tutorial->starter->createStory->step3 = new stdClass();
 $lang->tutorial->starter->createStory->step3->name = 'Click to Create Story';
-$lang->tutorial->starter->createStory->step3->desc = 'Here you can create story.';
+$lang->tutorial->starter->createStory->step3->desc = 'Here you can create a story.';
 
 $lang->tutorial->starter->createStory->step4 = new stdClass();
 $lang->tutorial->starter->createStory->step4->name = 'Fill out the form';
@@ -197,7 +197,7 @@ $lang->tutorial->starter->createProject->step2->name = 'Click on Create Project'
 $lang->tutorial->starter->createProject->step2->desc = 'Here, you can choose different project management methods to create different types of projects.';
 
 $lang->tutorial->starter->createProject->step3 = new stdClass();
-$lang->tutorial->starter->createProject->step3->name = 'Click on Scrum Project';
+$lang->tutorial->starter->createProject->step3->name = 'Click on Scrum';
 $lang->tutorial->starter->createProject->step3->desc = 'Please click on Scrum to create a Scrum project';
 
 $lang->tutorial->starter->createProject->step4 = new stdClass();
@@ -224,7 +224,7 @@ $lang->tutorial->starter->manageTeam->step3->desc = 'Click on settings to start 
 
 $lang->tutorial->starter->manageTeam->step4 = new stdClass();
 $lang->tutorial->starter->manageTeam->step4->name = 'Click on Team';
-$lang->tutorial->starter->manageTeam->step4->desc = 'Click on the team to view the project members.';
+$lang->tutorial->starter->manageTeam->step4->desc = 'Click on team to view the project members.';
 
 $lang->tutorial->starter->manageTeam->step5 = new stdClass();
 $lang->tutorial->starter->manageTeam->step5->name = 'Click on Manage Team';
@@ -261,7 +261,7 @@ $lang->tutorial->starter->createProjectExecution->step5->name = 'Fill out the fo
 
 $lang->tutorial->starter->createProjectExecution->step6 = new stdClass();
 $lang->tutorial->starter->createProjectExecution->step6->name = 'Save the form';
-$lang->tutorial->starter->createProjectExecution->step6->desc = 'After saving, you can set up the team, link requirements, create tasks, or return to Task and Execution lists.';
+$lang->tutorial->starter->createProjectExecution->step6->desc = 'After saving, you can manage team, link stories, create tasks, or return to task and execution lists.';
 
 $lang->tutorial->starter->linkStory = new stdClass();
 $lang->tutorial->starter->linkStory->title = "Link {$lang->SRCommon}";
@@ -1231,10 +1231,10 @@ $lang->tutorial->accountManage->deptManage->step1->desc = 'You can manage accoun
 
 $lang->tutorial->accountManage->deptManage->step2 = new stdClass();
 $lang->tutorial->accountManage->deptManage->step2->name = 'Click on User Management';
-$lang->tutorial->accountManage->deptManage->step2->desc = 'You can manage departments, add personnel, and configure group permissions here.';
+$lang->tutorial->accountManage->deptManage->step2->desc = 'You can manage departments, add users, and manage group permissions here.';
 
 $lang->tutorial->accountManage->deptManage->step3 = new stdClass();
-$lang->tutorial->accountManage->deptManage->step3->name = 'Click on Dept';
+$lang->tutorial->accountManage->deptManage->step3->name = 'Click on Department';
 $lang->tutorial->accountManage->deptManage->step3->desc = 'You can click here to manage departments.';
 
 $lang->tutorial->accountManage->deptManage->step4 = new stdClass();
@@ -1248,19 +1248,19 @@ $lang->tutorial->accountManage->addUser = new stdClass();
 $lang->tutorial->accountManage->addUser->title = 'Add User';
 
 $lang->tutorial->accountManage->addUser->step1 = new stdClass();
-$lang->tutorial->accountManage->addUser->step1->name = 'Click on Users';
-$lang->tutorial->accountManage->addUser->step1->desc = 'You can manage company personnel here.';
+$lang->tutorial->accountManage->addUser->step1->name = 'Click on User';
+$lang->tutorial->accountManage->addUser->step1->desc = 'You can manage company users here.';
 
 $lang->tutorial->accountManage->addUser->step2 = new stdClass();
 $lang->tutorial->accountManage->addUser->step2->name = 'Click on Add User';
-$lang->tutorial->accountManage->addUser->step2->desc = 'Click to add company personnel.';
+$lang->tutorial->accountManage->addUser->step2->desc = 'Click to add company users.';
 
 $lang->tutorial->accountManage->addUser->step3 = new stdClass();
 $lang->tutorial->accountManage->addUser->step3->name = 'Fill out the form';
 
 $lang->tutorial->accountManage->addUser->step4 = new stdClass();
 $lang->tutorial->accountManage->addUser->step4->name = 'Save the form';
-$lang->tutorial->accountManage->addUser->step4->desc = 'After saving, you can view it in the personnel list.';
+$lang->tutorial->accountManage->addUser->step4->desc = 'After saving, you can view it in the User list.';
 
 $lang->tutorial->accountManage->privManage = new stdClass();
 $lang->tutorial->accountManage->privManage->title = 'Permission Management';
@@ -1278,7 +1278,7 @@ $lang->tutorial->accountManage->privManage->step3->name = 'Fill out the form';
 
 $lang->tutorial->accountManage->privManage->step4 = new stdClass();
 $lang->tutorial->accountManage->privManage->step4->name = 'Save the form';
-$lang->tutorial->accountManage->privManage->step4->desc = 'After saving, you can view it in the personnel list.';
+$lang->tutorial->accountManage->privManage->step4->desc = 'After saving, you can view it in the User list.';
 
 $lang->tutorial->accountManage->privManage->step5 = new stdClass();
 $lang->tutorial->accountManage->privManage->step5->name = 'Click on Member Management';
@@ -1289,7 +1289,7 @@ $lang->tutorial->accountManage->privManage->step6->name = 'Fill out the form';
 
 $lang->tutorial->accountManage->privManage->step7 = new stdClass();
 $lang->tutorial->accountManage->privManage->step7->name = 'Save the form';
-$lang->tutorial->accountManage->privManage->step7->desc = 'After saving, you can view it in the personnel list.';
+$lang->tutorial->accountManage->privManage->step7->desc = 'After saving, you can view it in the User list.';
 
 $lang->tutorial->accountManage->privManage->step8 = new stdClass();
 $lang->tutorial->accountManage->privManage->step8->name = 'Click on Assign Permissions';
@@ -1328,7 +1328,7 @@ $lang->tutorial->productManage->moduleManage->step1->name = 'Click on the Produc
 $lang->tutorial->productManage->moduleManage->step1->desc = 'Click to enter the product and view detailed information.';
 
 $lang->tutorial->productManage->moduleManage->step2 = new stdClass();
-$lang->tutorial->productManage->moduleManage->step2->name = 'Click on Module Settings';
+$lang->tutorial->productManage->moduleManage->step2->name = 'Click on Set Module';
 $lang->tutorial->productManage->moduleManage->step2->desc = 'Click to manage the product modules';
 
 $lang->tutorial->productManage->moduleManage->step3 = new stdClass();
@@ -1343,33 +1343,33 @@ $lang->tutorial->productManage->storyManage->title = 'Story Management';
 
 $lang->tutorial->productManage->storyManage->step1 = new stdClass();
 $lang->tutorial->productManage->storyManage->step1->name = 'Click on Epic';
-$lang->tutorial->productManage->storyManage->step1->desc = 'Here you can manage the business stories of the product.';
+$lang->tutorial->productManage->storyManage->step1->desc = 'Here you can manage Epics of the product.';
 
 $lang->tutorial->productManage->storyManage->step2 = new stdClass();
 $lang->tutorial->productManage->storyManage->step2->name = 'Click on Create Epic';
-$lang->tutorial->productManage->storyManage->step2->desc = 'Click to submit business stories.';
+$lang->tutorial->productManage->storyManage->step2->desc = 'Click to submit create epics of the product.';
 
 $lang->tutorial->productManage->storyManage->step3 = new stdClass();
 $lang->tutorial->productManage->storyManage->step3->name = 'Fill in the Form';
 
 $lang->tutorial->productManage->storyManage->step4 = new stdClass();
 $lang->tutorial->productManage->storyManage->step4->name = 'Save the Form';
-$lang->tutorial->productManage->storyManage->step4->desc = 'After saving, you can view it in the business stories list.';
+$lang->tutorial->productManage->storyManage->step4->desc = 'After saving, you can view it in epic list.';
 
 $lang->tutorial->productManage->storyManage->step5 = new stdClass();
 $lang->tutorial->productManage->storyManage->step5->name = 'Click on Split Epic';
-$lang->tutorial->productManage->storyManage->step5->desc = 'Click to split business stories into user stories.';
+$lang->tutorial->productManage->storyManage->step5->desc = 'Click to split epic into features.';
 
 $lang->tutorial->productManage->storyManage->step6 = new stdClass();
 $lang->tutorial->productManage->storyManage->step6->name = 'Fill in the Form';
 
 $lang->tutorial->productManage->storyManage->step7 = new stdClass();
 $lang->tutorial->productManage->storyManage->step7->name = 'Save the Form';
-$lang->tutorial->productManage->storyManage->step7->desc = 'After saving, you can view it in the stories list.';
+$lang->tutorial->productManage->storyManage->step7->desc = 'After saving, you can view it in the epics list.';
 
 $lang->tutorial->productManage->storyManage->step8 = new stdClass();
-$lang->tutorial->productManage->storyManage->step8->name = 'Click on Split User Stories';
-$lang->tutorial->productManage->storyManage->step8->desc = 'Click to split user stories into development stories.';
+$lang->tutorial->productManage->storyManage->step8->name = 'Click on Split feature';
+$lang->tutorial->productManage->storyManage->step8->desc = 'Click to split feature into stories.';
 
 $lang->tutorial->productManage->storyManage->step9 = new stdClass();
 $lang->tutorial->productManage->storyManage->step9->name = 'Fill in the Form';
@@ -1401,7 +1401,7 @@ $lang->tutorial->productManage->storyManage->step16->name = 'Save the Form';
 $lang->tutorial->productManage->storyManage->step16->desc = 'After saving, the story changes are completed.';
 
 $lang->tutorial->productManage->storyManage->step17 = new stdClass();
-$lang->tutorial->productManage->storyManage->step17->name = 'Click on Track';
+$lang->tutorial->productManage->storyManage->step17->name = 'Click on Matrix';
 $lang->tutorial->productManage->storyManage->step17->desc = 'Here you can track the progress of stories.';
 
 $lang->tutorial->productManage->planManage = new stdClass();
@@ -1476,7 +1476,7 @@ $lang->tutorial->productManage->releaseManage->step5->desc = 'Click to enter the
 
 $lang->tutorial->productManage->releaseManage->step6 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step6->name = 'Click on Link Story';
-$lang->tutorial->productManage->releaseManage->step6->desc = 'Click to link the development stories to be released this time.';
+$lang->tutorial->productManage->releaseManage->step6->desc = 'Click to link the stories to be released this time.';
 
 $lang->tutorial->productManage->releaseManage->step7 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step7->name = 'Check Stories';
@@ -1486,7 +1486,7 @@ $lang->tutorial->productManage->releaseManage->step8->name = 'Click Save';
 $lang->tutorial->productManage->releaseManage->step8->desc = 'After saving, the stories are linked to the release successfully .';
 
 $lang->tutorial->productManage->releaseManage->step9 = new stdClass();
-$lang->tutorial->productManage->releaseManage->step9->name = 'Click on Resolved Bug';
+$lang->tutorial->productManage->releaseManage->step9->name = 'Click on Fixed Bug';
 $lang->tutorial->productManage->releaseManage->step9->desc = 'Click to view and manage the bugs resolved in this release.';
 
 $lang->tutorial->productManage->releaseManage->step10 = new stdClass();
@@ -1502,7 +1502,7 @@ $lang->tutorial->productManage->releaseManage->step12->desc = 'After saving, the
 
 $lang->tutorial->productManage->releaseManage->step13 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step13->name = 'Click on Active Bug';
-$lang->tutorial->productManage->releaseManage->step13->desc = 'Click to view and manage the resolved bugs in this release.';
+$lang->tutorial->productManage->releaseManage->step13->desc = 'Click to view and manage the unresolved bugs in this release.';
 
 $lang->tutorial->productManage->releaseManage->step14 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step14->name = 'Click on Link Bug';

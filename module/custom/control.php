@@ -321,19 +321,28 @@ class custom extends control
      * 看板关闭设置。
      * Set whether the kanban is read-only.
      *
+     * @param  string $type closedSetting|expireReminder
      * @access public
      * @return void
      */
-    public function kanban()
+    public function kanban(string $type = 'closedSetting')
     {
+        $this->loadModel('kanban');
         if($_POST)
         {
-            $this->loadModel('setting')->setItem("system.common.CRKanban", $this->post->kanban);
+            if($type == 'closedSetting')
+            {
+                $this->loadModel('setting')->setItem("system.common.CRKanban", $this->post->kanban);
+            }
+            else
+            {
+                $this->loadModel('setting')->setItem('system.kanban.reminder.expireDays', (int)$this->post->expireDays);
+            }
             return $this->sendSuccess(array('load' => true));
         }
 
         $this->view->title = $this->lang->custom->kanban;
-
+        $this->view->type  = $type;
         $this->display();
     }
 

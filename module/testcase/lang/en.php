@@ -36,7 +36,7 @@ $lang->testcase->statusAB         = 'Status';
 $lang->testcase->subStatus        = 'Sub Status';
 $lang->testcase->steps            = 'Steps';
 $lang->testcase->openedBy         = 'Created by';
-$lang->testcase->openedByAB       = 'Reporter';
+$lang->testcase->openedByAB       = 'Creator';
 $lang->testcase->openedDate       = 'Created Date';
 $lang->testcase->lastEditedBy     = 'Edited by';
 $lang->testcase->result           = 'Result';
@@ -143,7 +143,7 @@ $lang->testcase->browse                  = "Case List";
 $lang->testcase->listView                = "View by List";
 $lang->testcase->groupCase               = "View by Group";
 $lang->testcase->groupView               = "Group View";
-$lang->testcase->zeroCase                = "Stories without cases";
+$lang->testcase->zeroCase                = "Stories without Cases";
 $lang->testcase->import                  = "Import";
 $lang->testcase->importAction            = "Import Case";
 $lang->testcase->importCaseAction        = "Import Case";
@@ -178,7 +178,7 @@ $lang->testcase->deleteStep   = 'Delete';
 $lang->testcase->insertBefore = 'Inserted Before';
 $lang->testcase->insertAfter  = 'Inserted After';
 
-$lang->testcase->assignToMe   = 'AssignedToMe';
+$lang->testcase->assignToMe   = 'Assigned to Me';
 $lang->testcase->openedByMe   = 'CreatedByMe';
 $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
@@ -280,7 +280,7 @@ $lang->testcase->action->linked2execution      = array('main' => '$date, linked 
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, removed by <strong>$actor</strong> from <strong>$extra</strong>.');
 
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
-$lang->testcase->featureBar['browse']['wait']        = 'Waiting';
+$lang->testcase->featureBar['browse']['wait']        = 'Waiting Review';
 $lang->testcase->featureBar['browse'][]              = '-';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
 

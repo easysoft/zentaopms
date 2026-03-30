@@ -92,6 +92,8 @@ $lang->kanban->allUsers            = 'Charger Tous';
 $lang->kanban->colWidth            = 'Column Width';
 $lang->kanban->minColWidth         = 'Min Column Width';
 $lang->kanban->maxColWidth         = 'Max Column Width';
+$lang->kanban->nearing             = 'The card is due soon.';
+$lang->kanban->due                 = 'The card is due.';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';

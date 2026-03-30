@@ -1,12 +1,12 @@
-$(document).on('click', '.model-item', function()
+window.openCreateProjectLink = function($target, appTab, isInModal)
 {
-    const link = $(this).data('url');
+    const link = $target.data('url');
     if(!link) return false;
 
     zui.Modal.hide();
 
     openUrl(link, {'app': appTab});
-});
+};
 
 $(function()
 {

@@ -55,10 +55,12 @@ class storyLifeInfo extends wg
 
     protected function build()
     {
+        global $app;
         return new datalist
         (
             set::className('story-life-info'),
-            set::items($this->getItems())
+            set::items($this->getItems()),
+            $app->getClientLang() == 'en' ? set::labelWidth(80) : null
         );
     }
 }

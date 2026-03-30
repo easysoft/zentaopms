@@ -67,6 +67,8 @@ $lang->custom->limitTaskDateAction  = 'Set Duration Required';
 $lang->custom->closeSetting         = 'Close Settings';
 $lang->custom->gradeRule            = 'Allow Cross-Level Subdivision';
 $lang->custom->setExecutionClose    = 'Execution Close Setting';
+$lang->custom->kanbanExpireReminder = 'Kanban Expire Reminder';
+$lang->custom->kanbanExpireDays     = 'Kanban Expire Days';
 
 $lang->custom->gradeRuleList['cross']    = 'Yes';
 $lang->custom->gradeRuleList['stepwise'] = 'No';
@@ -215,6 +217,7 @@ $lang->custom->notice->readOnlyOfProject   = "Once set Changes Prohibited, any c
 2. For {$lang->productCommon}-based {$lang->projectCommon}s with{$lang->custom->executionCommon} disabled: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, builds, releases, efforts, test request, test reports, documents, etc.<br/>
 3. For non-{$lang->productCommon}-based {$lang->projectCommon}s with {$lang->custom->executionCommon} enabled: The following will not be editable under closed {$lang->projectCommon}s: {$lang->custom->executionCommon}, stories, design, reviews, review issues, baselines, bugs, test cases, test requestd, test reports, documents, builds, releases, efforts, process tailoring, research, estimation, issues, risks, opportunities, meetings, QA plans, non-conformities, etc.<br/>
 4. For non-{$lang->productCommon}-based {$lang->projectCommon}s with {$lang->custom->executionCommon} disabled: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, bugs, test cases, test requestd, test reports, documents, builds, releases, efforts, etc.";
+$lang->custom->notice->kanbanReminder      = 'When the card deadline is less than the set number of days, the expiration reminder is triggered.';
 if(in_array($config->edition, array('open', 'biz')))
 {
     $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts, test tasks, test reports, documents and stories of the closed {$lang->executionCommon} is also forbidden.";
@@ -302,7 +305,7 @@ $lang->custom->features['execution']            = 'Execution';
 $lang->custom->features['qa']                   = 'Test';
 $lang->custom->features['devops']               = 'CI&CD';
 $lang->custom->features['kanban']               = 'Kanban';
-$lang->custom->features['doc']                  = 'Doc';
+$lang->custom->features['doc']                  = 'Document';
 $lang->custom->features['report']               = 'BI';
 $lang->custom->features['system']               = 'Company';
 $lang->custom->features['assetlib']             = 'Asset';

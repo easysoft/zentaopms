@@ -112,7 +112,7 @@ $lang->extension->errorDownloadPathNotWritable = 'The download directory <strong
 $lang->extension->errorPackageFileExists       = 'A file named <strong>%s</strong> already exists in the download directory. <strong>To %s again, <a href="%s" class="alert-link">please click here</a>.</strong>';
 $lang->extension->errorDownloadFailed          = 'Download failed. Please try again. If the problem persists, please download the file manually and install it via the upload function.';
 $lang->extension->errorMd5Checking             = 'The downloaded file is incomplete. Please try again. If the problem persists, please download the file manually and install it via the upload function.';
-$lang->extension->errorCheckIncompatible       = 'This add-on is incompatible with your version of Sanplex and may not function correctly after %s. <strong>You can <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">Force %s</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">Cancel</a>.</strong>';
+$lang->extension->errorCheckIncompatible       = 'This add-on is incompatible with your version of ZenTao and may not function correctly after %s. <strong>You can <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">Force %s</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">Cancel</a>.</strong>';
 $lang->extension->errorFileConflicted          = 'The following file conflicts were detected:<br/>%s<strong>You can <a href="#" load-url="%s" onclick="loadUrl(this)" class="btn size-sm">Overwrite</a> or <a href="#" load-url="%s" onclick="loadParentUrl(this)" class="btn size-sm">Cancel</a>.</strong>';
 $lang->extension->errorPackageNotFound         = 'File <strong>%s</strong> not found. The automatic download may have failed. Please try downloading again.';
 $lang->extension->errorTargetPathNotWritable   = 'The target directory <strong>%s</strong> is not writable.';
@@ -120,7 +120,7 @@ $lang->extension->errorTargetPathNotExists     = 'The target directory <strong>%
 $lang->extension->errorInstallDB               = 'Failed to execute database query. Error: %s';
 $lang->extension->errorConflicts               = 'Conflicted with “%s”!';
 $lang->extension->errorDepends                 = 'The following add-on dependencies are missing or have incorrect versions:<br/><br/>%s';
-$lang->extension->errorIncompatible            = 'This add-on is incompatible with your version of Sanplex.';
+$lang->extension->errorIncompatible            = 'This add-on is incompatible with your version of ZenTao.';
 $lang->extension->errorUninstallDepends        = 'Cannot uninstall. Add-on "%s" depends on this add-on.';
 $lang->extension->errorExtracted               = 'Failed to extract package file %s. It may not be a valid ZIP file. Error:<br/>%s';
 $lang->extension->errorFileNotEmpty            = 'Uploaded file cannot be empty.';

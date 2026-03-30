@@ -70,5 +70,6 @@ $lang->message->label->compilefail  = 'Build Failed';
 $lang->message->label->archived     = 'Archive';
 $lang->message->label->restore      = 'Restore';
 $lang->message->label->moved        = 'Move';
+$lang->message->label->nearing      = 'Due Reminder';
 $lang->message->label->published    = 'Release';
 $lang->message->label->changestatus = 'Change Release Status';

@@ -1017,6 +1017,7 @@ class projectModel extends model
 
             foreach($methods as $method => $label)
             {
+                if($method == 'submitIpd' && $model != 'ipd') continue;
                 if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) continue;
 
                 if(!isset($privs->$module)) $privs->$module = new stdclass();

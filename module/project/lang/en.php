@@ -104,7 +104,7 @@ $lang->project->day             = 'Day';
 $lang->project->newProduct      = 'New Product';
 $lang->project->associatePlan   = 'Link Plan';
 $lang->project->tenThousandYuan = '10k';
-$lang->project->planDate        = 'Schedule Date';
+$lang->project->planDate        = 'Planned Duration';
 $lang->project->delayInfo       = '%s days delayed';
 
 /* Fields. */
@@ -178,7 +178,7 @@ $lang->project->stageBy            = 'Phase Type';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
-$lang->project->mine               = 'Involved';
+$lang->project->mine               = 'My Involvement';
 $lang->project->myProject          = 'My Managed';
 $lang->project->other              = 'Others';
 $lang->project->acl                = 'Access Control';
@@ -214,7 +214,7 @@ $lang->project->longTime           = 'Long-Term';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = "More {$lang->projectCommon}s";
 $lang->project->days               = 'Work Days';
-$lang->project->daysUnit           = '(Unit: Days)';
+$lang->project->daysUnit           = ' (Unit: Days)';
 $lang->project->mailto             = 'Mail to';
 $lang->project->etc                = " , etc";
 $lang->project->product            = $lang->productCommon;
@@ -223,7 +223,7 @@ $lang->project->plan               = 'Plan';
 $lang->project->createKanban       = 'Create Kanban';
 $lang->project->kanban             = 'Kanban';
 $lang->project->moreActions        = 'More Actions';
-$lang->project->taskDateLimit      = 'Task Time Limit';
+$lang->project->taskDateLimit      = 'Scheduling Constraints';
 $lang->project->isTpl              = 'Set as template';
 $lang->project->tplWhiteList       = 'Template White List';
 $lang->project->firstEnd           = 'Planned Completion Date at Start';
@@ -374,11 +374,11 @@ $lang->project->featureBar['build']['all'] = 'All Builds';
 
 $lang->project->featureBar['group']['all'] = 'All Groups';
 
-$lang->project->aclList['open']    = "Public (accessible with {$lang->projectCommon} view permissions.)";
+$lang->project->aclList['open']    = "Public (Accessible to anyone with \"{$lang->projectCommon}\" view permissions.)";
 $lang->project->aclList['private'] = "Private (For the {$lang->projectCommon} manager, team members and stakeholders only.)";
 
-$lang->project->taskDateLimitList['limit'] = "Restrict subtask duration (A subtasks start and end dates must fall within the parent tasks time range.)";
-$lang->project->taskDateLimitList['auto']  = "Auto-adjust parent task duration (The parent tasks time range automatically adjusts based on its subtasks start and end dates.)";
+$lang->project->taskDateLimitList['limit'] = "Restrict Subtask Dates (Must stay within parent task period)";
+$lang->project->taskDateLimitList['auto']  = "Auto-extend Parent Task (Adjusts based on subtask dates)";
 
 $lang->project->multipleList['1'] = 'Yes';
 $lang->project->multipleList['0'] = 'No';
@@ -390,16 +390,16 @@ $lang->project->shortAclList['open']    = 'Public';
 $lang->project->shortAclList['private'] = 'Private';
 $lang->project->shortAclList['program'] = 'Public in the Program';
 
-$lang->project->subAclList['open']    = "Public (accessible with {$lang->projectCommon} view permissions.)";
-$lang->project->subAclList['private'] = "Private (Only the {$lang->projectCommon} manager, team members and stakeholders can access.)";
-$lang->project->subAclList['program'] = "Public in the program (all upper-level program managers and stakeholders, the {$lang->projectCommon} manager, team members and stakeholders can access.)";
+$lang->project->subAclList['open']    = "Public (Accessible to anyone with \"{$lang->projectCommon}\" view permissions.)";
+$lang->project->subAclList['private'] = "Private (Accessible only to {$lang->projectCommon} manager, team members and stakeholders.)";
+$lang->project->subAclList['program'] = "Public within Program (Accessible to all upper-level program managers and stakeholders, the {$lang->projectCommon} manager, team members and stakeholders.)";
 
-$lang->project->kanbanAclList['open']    = "Public (accessible with {$lang->projectCommon} view permissions.)";
+$lang->project->kanbanAclList['open']    = "Public (Accessible to anyone with \"{$lang->projectCommon}\" view permissions.)";
 $lang->project->kanbanAclList['private'] = "Private (For the {$lang->projectCommon} manager, team members only)";
 
-$lang->project->kanbanSubAclList['open']    = "Public (accessible with {$lang->projectCommon} view permissions.)";
-$lang->project->kanbanSubAclList['private'] = "Private (Only the {$lang->projectCommon} manager, team members can access)";
-$lang->project->kanbanSubAclList['program'] = "Public in the program (all upper-level program managers and stakeholders, the {$lang->projectCommon} manager, team members can access.)";
+$lang->project->kanbanSubAclList['open']    = "Public (Accessible to anyone with \"{$lang->projectCommon}\" view permissions.)";
+$lang->project->kanbanSubAclList['private'] = "Private (Accessible only to {$lang->projectCommon} manager, team members)";
+$lang->project->kanbanSubAclList['program'] = "Public within Program (Accessible to all upper-level program managers and stakeholders, the {$lang->projectCommon} manager, team members.)";
 
 if($config->systemMode == 'light')
 {
@@ -407,8 +407,8 @@ if($config->systemMode == 'light')
     unset($lang->project->kanbanSubAclList['program']);
 }
 
-$lang->project->authList['extend'] = "Inherit (system privilege and {$lang->projectCommon} privilege)";
-$lang->project->authList['reset']  = "Reset ({$lang->projectCommon} permissions only)";
+$lang->project->authList['extend'] = "Inherit (Union of System and {$lang->projectCommon} permissions)";
+$lang->project->authList['reset']  = "Override ({$lang->projectCommon} permissions only)";
 
 $lang->project->sortAuthList['extend'] = 'Inherit';
 $lang->project->sortAuthList['reset']  = 'Reset';

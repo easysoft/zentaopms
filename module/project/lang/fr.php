@@ -104,7 +104,7 @@ $lang->project->day             = 'Day';
 $lang->project->newProduct      = 'New Product';
 $lang->project->associatePlan   = 'Associate Plan';
 $lang->project->tenThousandYuan = '10k';
-$lang->project->planDate        = 'Schedule Date';
+$lang->project->planDate        = 'Planned Duration';
 $lang->project->delayInfo       = 'Delayed for %s days';
 
 /* Fields. */
@@ -214,7 +214,7 @@ $lang->project->longTime           = 'Long-Term';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = "More {$lang->projectCommon}";
 $lang->project->days               = 'Days';
-$lang->project->daysUnit           = '(Unit: Days)';
+$lang->project->daysUnit           = ' (Unit: Days)';
 $lang->project->mailto             = 'Mailto';
 $lang->project->etc                = " , etc";
 $lang->project->product            = $lang->productCommon;

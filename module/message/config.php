@@ -14,7 +14,7 @@ $config->message->objectTypes['case']        = array('opened', 'edited', 'commen
 $config->message->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated');
 $config->message->objectTypes['todo']        = array('opened', 'edited');
 $config->message->objectTypes['doc']         = array('releaseddoc', 'edited');
-$config->message->objectTypes['kanbancard']  = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved');
+$config->message->objectTypes['kanbancard']  = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved', 'nearing');
 
 $config->message->available = array();
 if($config->enableER) $config->message->available['mail']['epic']        = $config->message->objectTypes['epic'];

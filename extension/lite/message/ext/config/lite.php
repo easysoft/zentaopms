@@ -5,10 +5,12 @@ $config->message->objectTypes['project'] = array('opened', 'edited', 'started', 
 $config->message->objectTypes['task']    = array('opened', 'edited', 'assigned', 'finished', 'deleted');
 $config->message->objectTypes['todo']    = array('opened', 'edited');
 $config->message->objectTypes['doc']     = array('created', 'edited');
+$config->message->objectTypes['kanbancard'] = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved', 'nearing');
 
 $config->message->available['mail']['story'] = $config->message->objectTypes['story'];
 $config->message->available['mail']['task']  = $config->message->objectTypes['task'];
 $config->message->available['mail']['doc']   = $config->message->objectTypes['doc'];
+$config->message->available['mail']['kanbancard'] = $config->message->objectTypes['kanbancard'];
 
 $config->message->available['webhook']  = $config->message->objectTypes;
 
@@ -16,6 +18,7 @@ $config->message->available['message']['story'] = $config->message->objectTypes[
 $config->message->available['message']['task']  = $config->message->objectTypes['task'];
 $config->message->available['message']['todo']  = $config->message->objectTypes['todo'];
 $config->message->available['message']['doc']   = $config->message->objectTypes['doc'];
+$config->message->available['message']['kanbancard'] = $config->message->objectTypes['kanbancard'];
 
 $config->message->typeLink = array();
 $config->message->typeLink['mail']    = 'mail|index';

@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 set::zui(true);
+$isEn = $app->getClientLang() == 'en';
 
 div
 (
@@ -49,7 +50,7 @@ div
             a
             (
                 setID('upgrade'),
-                setClass('btn primary disabled w-24'),
+                setClass('btn primary disabled ' . ($isEn ? 'w-28' : 'w-24')),
                 $lang->upgrade->continue
             )
         )

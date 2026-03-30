@@ -54,10 +54,10 @@ panel
     ),
     div
     (
-        setClass('mt-5 mb-5'),
+        setClass('mt-5 mb-5 flex gap-y-2 flex-wrap'),
         btn
         (
-            set::className('mr-2 tipBtn ml-1'),
+            set::className('mr-2 tipBtn'),
             $lang->project->setTeam,
             set::target('_blank'),
             set::url(createLink('project', 'team', "projectID={$projectID}"))

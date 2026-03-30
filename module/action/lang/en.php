@@ -517,7 +517,7 @@ $lang->action->label->compilefail             = 'Compile Fail';
 $lang->action->label->reopen                  = 'reopened';
 $lang->action->label->approve                 = 'Passed';
 $lang->action->label->reject                  = 'Rejected';
-$lang->action->label->importfromgitlab        = 'linked from Gitlab';
+$lang->action->label->importfromgitlab        = 'linked from GitLab';
 $lang->action->label->archived                = 'Archived';
 $lang->action->label->restore                 = 'restored';
 $lang->action->label->mergedbranch            = 'merged branch';
@@ -601,15 +601,15 @@ $lang->action->label->converttonewdoc         = 'converted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
-$lang->action->dynamicAction->todo['opened']    = 'Create Todo';
-$lang->action->dynamicAction->todo['edited']    = 'Edit Todo';
-$lang->action->dynamicAction->todo['erased']    = 'Delete Todo';
-$lang->action->dynamicAction->todo['finished']  = 'Complete Todo';
-$lang->action->dynamicAction->todo['activated'] = 'Activate Todo';
-$lang->action->dynamicAction->todo['closed']    = 'Close Todo';
-$lang->action->dynamicAction->todo['assigned']  = 'Assign Todo';
-$lang->action->dynamicAction->todo['undeleted'] = 'Restore Todo';
-$lang->action->dynamicAction->todo['hidden']    = 'Hide Todo';
+$lang->action->dynamicAction->todo['opened']    = 'Create To-do';
+$lang->action->dynamicAction->todo['edited']    = 'Edit To-do';
+$lang->action->dynamicAction->todo['erased']    = 'Delete To-do';
+$lang->action->dynamicAction->todo['finished']  = 'Complete To-do';
+$lang->action->dynamicAction->todo['activated'] = 'Activate To-do';
+$lang->action->dynamicAction->todo['closed']    = 'Close To-do';
+$lang->action->dynamicAction->todo['assigned']  = 'Assign To-do';
+$lang->action->dynamicAction->todo['undeleted'] = 'Restore To-do';
+$lang->action->dynamicAction->todo['hidden']    = 'Hide To-do';
 
 $lang->action->dynamicAction->program['opened']    = 'Create Program';
 $lang->action->dynamicAction->program['edited']    = 'Edit Program';
@@ -658,11 +658,11 @@ $lang->action->dynamicAction->release['notified']     = 'Send Release Notificati
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Create Story';
-$lang->action->dynamicAction->story['importfromgitlab']      = "Create Story from Gitlab";
+$lang->action->dynamicAction->story['importfromgitlab']      = "Create Story from GitLab";
 $lang->action->dynamicAction->story['edited']                = 'Edit Story';
 $lang->action->dynamicAction->story['activated']             = 'Activate Story';
 $lang->action->dynamicAction->story['reviewed']              = 'Review Story';
-$lang->action->dynamicAction->story['recalled']              = 'Recall Review';
+$lang->action->dynamicAction->story['recalled']              = 'Withdraw Review';
 $lang->action->dynamicAction->story['closed']                = 'Close Story';
 $lang->action->dynamicAction->story['assigned']              = 'Assign Story';
 $lang->action->dynamicAction->story['changed']               = 'Change Story';
@@ -693,7 +693,7 @@ $lang->action->dynamicAction->execution['closed']    = 'Close ' . $lang->executi
 $lang->action->dynamicAction->execution['managed']   = 'Manage ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
-$lang->action->dynamicAction->execution['moved']     = 'Improt Task';
+$lang->action->dynamicAction->execution['moved']     = 'Import Task';
 
 $lang->action->dynamicAction->kanban['created'] = 'Create Kanban';
 $lang->action->dynamicAction->kanban['edited']  = 'Kanban Settings';
@@ -703,7 +703,7 @@ $lang->action->dynamicAction->kanban['deleted'] = 'Delete Kanban';
 $lang->action->dynamicAction->kanbanspace['created'] = 'Create Space';
 $lang->action->dynamicAction->kanbanspace['edited']  = 'Space Settings';
 $lang->action->dynamicAction->kanbanspace['closed']  = 'Close Space';
-$lang->action->dynamicAction->kanbanspace['deleted'] = 'Deleted Space';
+$lang->action->dynamicAction->kanbanspace['deleted'] = 'Delete Space';
 
 $lang->action->dynamicAction->kanbanregion['created'] = 'Create Zone';
 $lang->action->dynamicAction->kanbanregion['edited']  = 'Edit Zone';
@@ -736,7 +736,7 @@ $lang->action->dynamicAction->design['deleted']   = 'Delete Design';
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']               = 'Create Task';
-$lang->action->dynamicAction->task['importfromgitlab']     = "Create Task from Gitlab";
+$lang->action->dynamicAction->task['importfromgitlab']     = "Create Task from GitLab";
 $lang->action->dynamicAction->task['edited']               = 'Edit Task';
 $lang->action->dynamicAction->task['commented']            = 'Task Comment';
 $lang->action->dynamicAction->task['assigned']             = 'Assign Task';
@@ -774,7 +774,7 @@ $lang->action->dynamicAction->build['edited']  = 'Edit Build';
 $lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']               = 'Report Bug';
-$lang->action->dynamicAction->bug['importfromgitlab']     = "Create Bug from Gitlab";
+$lang->action->dynamicAction->bug['importfromgitlab']     = "Create Bug from GitLab";
 $lang->action->dynamicAction->bug['edited']               = 'Edit Bug';
 $lang->action->dynamicAction->bug['activated']            = 'Activate Bug';
 $lang->action->dynamicAction->bug['assigned']             = 'Assign Bug';
@@ -838,7 +838,7 @@ $lang->action->dynamicAction->zahost['created'] = 'Create Host';
 $lang->action->dynamicAction->zanode['created'] = 'Create Zagent Node';
 $lang->action->dynamicAction->zanode['suspend'] = 'Suspend Zagent Node';
 $lang->action->dynamicAction->zanode['resume']  = 'Restore Zagent Node';
-$lang->action->dynamicAction->zanode['reboot']  = 'RestartZagent Node';
+$lang->action->dynamicAction->zanode['reboot']  = 'Restart Zagent Node';
 $lang->action->dynamicAction->zanode['boot']    = 'Start Zagent Node';
 $lang->action->dynamicAction->zanode['destroy'] = 'Close Zagent Node';
 

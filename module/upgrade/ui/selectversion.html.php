@@ -13,7 +13,7 @@ namespace zin;
 set::zui(true);
 
 $clientLang   = $app->getClientLang();
-$labelWidth   = $clientLang === 'en' ? '4rem' : '6rem';
+$labelWidth   = $clientLang === 'en' ? '8rem' : '6rem';
 $versionWidth = $clientLang === 'en' ? 'w-1/2' : 'w-3/5';
 
 div

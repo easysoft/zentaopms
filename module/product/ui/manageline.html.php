@@ -66,7 +66,7 @@ foreach($lines as $line)
                 set::className('ml-4'),
                 set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}", 'required' => true)),
                 set::name("programs[id$line->id]"),
-                set::items($programs),
+                set::items($linePrograms[$line->id]),
                 set::value($line->root),
                 on::change('isProductLineEmpty')
             ) : null

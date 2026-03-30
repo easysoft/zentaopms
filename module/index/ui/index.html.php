@@ -162,7 +162,7 @@ div
                     span(setClass('text'), $lang->more),
                     toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
                 ),
-                ul(setClass('dropdown-menu menu'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu scrollbar-light'), setID('menuMoreList'))
             )
         ),
         ul

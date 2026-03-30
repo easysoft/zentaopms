@@ -117,8 +117,8 @@ else
 }
 
 /* Init table data for dtable. */
-$config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = helper::createLink($buildModule, 'unlinkBug', "buildID={$build->id}&bugID={id}");
-$config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = helper::createLink($buildModule, 'unlinkStory', "buildID={$build->id}&storyID={id}");
+$config->build->bug->dtable->fieldList['actions']['list']['unlinkBug']['url']     = array('module' => $buildModule, 'method' => 'unlinkBug',   'params' => "buildID={$build->id}&bugID={id}");
+$config->build->story->dtable->fieldList['actions']['list']['unlinkStory']['url'] = array('module' => $buildModule, 'method' => 'unlinkStory', 'params' => "buildID={$build->id}&storyID={id}");
 if(!$canBeChanged)
 {
     unset($config->build->bug->dtable->fieldList['actions']['list']);
@@ -126,7 +126,7 @@ if(!$canBeChanged)
 }
 
 $stories = initTableData($stories, $config->build->story->dtable->fieldList, $this->build);
-$bugs    = initTableData($bugs, $config->build->bug->dtable->fieldList, $this->build);
+$bugs    = initTableData($bugs,    $config->build->bug->dtable->fieldList,   $this->build);
 
 $onlyNoCheckCount = 0;
 if(!empty($build->builds))
@@ -161,6 +161,7 @@ if(!empty($build->builds))
 detailBody
 (
     set::hasExtraMain(false),
+    on::click('.batch-btn')->call('window.handleBatchBtnClick', jsRaw('target')),
     sectionList(
         tabs
         (

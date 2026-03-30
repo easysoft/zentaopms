@@ -1298,9 +1298,10 @@ $config->my->ssh->dtable->fieldList['actions']['list']     = $config->my->ssh->a
 $config->my->ssh->dtable->fieldList['actions']['menu']     = array('edit', 'delete');
 if($isEn)
 {
-    $config->my->task->dtable->fieldList['finishedBy']['width'] = 100;
+    $config->my->task->dtable->fieldList['finishedBy']['width'] = 120;
     $config->my->task->dtable->fieldList['left']['width']       = 100;
     $config->my->task->dtable->fieldList['assignedTo']['width'] = 100;
+    $config->my->task->dtable->fieldList['estimate']['width']   = 100;
 
     $config->my->bug->dtable->fieldList['resolvedBy']['width'] = 100;
     $config->my->bug->dtable->fieldList['assignedTo']['width'] = 120;

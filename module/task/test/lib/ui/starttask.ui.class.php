@@ -60,12 +60,12 @@ class startTaskTester extends tester
             if(!is_object($form->dom->modalText)) return $this->failed('预计剩余都为空或0时没有提示');
             if($form->dom->modalText->getText() != $this->lang->task->confirmFinish) return $this->failed('预计剩余为空或0时提示错误');
             $form->dom->confirmBtn->click();
-            $form->wait(5);
+            $form->wait(10);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->done) return $this->failed('预计剩余为空或0时任务没有完成');
         }
         else
         {
-            $form->wait(5);
+            $form->wait(10);
             if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('开始任务后状态错误');
         }
         if($form->dom->taskAssignedTo->getText() != $assignedTo)     return $this->failed('开始任务后指派给错误');

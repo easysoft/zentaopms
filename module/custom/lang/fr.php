@@ -67,6 +67,8 @@ $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeSetting         = 'Close Setting';
 $lang->custom->gradeRule            = 'Allow cross-level segmentation';
 $lang->custom->setExecutionClose    = 'Execution Close Setting';
+$lang->custom->kanbanExpireReminder = 'Kanban Expire Reminder';
+$lang->custom->kanbanExpireDays     = 'Kanban Expire Days';
 
 $lang->custom->gradeRuleList['cross']    = 'Yes';
 $lang->custom->gradeRuleList['stepwise'] = 'No';
@@ -215,6 +217,7 @@ $lang->custom->notice->readOnlyOfProject   = "If Change Forbidden, any change on
 2. For {$lang->productCommon}-based {$lang->projectCommon}s without {$lang->custom->executionCommon}: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, versions, releases, logs, testrequest, testreports, documents, etc.<br/>
 3. For non-{$lang->productCommon}-based {$lang->projectCommon}s with {$lang->custom->executionCommon} enabled: The following will not be editable under closed {$lang->projectCommon}s: {$lang->custom->executionCommon}, stories, design, reviews, review issues, baselines, bugs, testcases, testrequest, testreports, documents, versions, releases, logs, process trimming, research, estimation, issues, risks, opportunities, meetings, quality assurance plans, non-conformities, etc.<br/>
 4. For non-{$lang->productCommon}-based {$lang->projectCommon}s without {$lang->custom->executionCommon} enabled: The following will not be editable under closed {$lang->projectCommon}s: tasks, stories, bugs, testcases, testrequest, testreports, documents, versions, releases, logs, etc.";
+$lang->custom->notice->kanbanReminder      = 'When the card deadline is less than the set number of days, the expiration reminder is triggered.';
 if(in_array($config->edition, array('open', 'biz')))
 {
     $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts, test tasks, test reports, documents and stories of the closed {$lang->executionCommon} is also forbidden.";

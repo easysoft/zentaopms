@@ -54,4 +54,4 @@ $lang->caselib->libraryDelete = 'Are you sure you want to delete this test case 
 $lang->caselib->noModule      = '<div>No module information available.</div><div>Please set up test case library modules.</div>';
 
 $lang->caselib->featureBar['browse']['all']  = 'All';
-$lang->caselib->featureBar['browse']['wait'] = 'Pending Review';
+$lang->caselib->featureBar['browse']['wait'] = 'Waiting Review';
