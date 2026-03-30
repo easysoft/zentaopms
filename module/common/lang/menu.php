@@ -241,7 +241,7 @@ $lang->scrum->menu->story       = array('link' => "{$lang->common->story}|projec
 $lang->scrum->menu->projectplan = array('link' => "{$lang->productplan->shortCommon}|projectplan|browse|productID=%s", 'subModule' => 'productplan');
 $lang->scrum->menu->doc         = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'subModule' => 'doc,api', 'icon' => 'icon-file-text');
 $lang->scrum->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'exclude' => 'execution-create,execution-batchedit', 'icon' => 'icon-test');
-if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my', 'icon' => 'icon-devops');
+if(helper::hasFeature('devops')) $lang->scrum->menu->devops      = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my,repobranchrule', 'icon' => 'icon-devops');
 $lang->scrum->menu->build       = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild', 'icon' => 'icon-wrench');
 $lang->scrum->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system', 'icon' => 'icon-tag');
 $lang->scrum->menu->dynamic     = array('link' => "$lang->dynamic|project|dynamic|project=%s", 'icon' => 'icon-news');
@@ -281,7 +281,7 @@ $lang->scrum->menu->settings['subMenu']->module      = array('link' => "{$lang->
 $lang->scrum->menu->devops['subMenu']         = new stdclass();
 $lang->scrum->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff');
 $lang->scrum->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
-$lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->scrum->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'subModule' => 'repobranchrule', 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->scrum->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create,edit');
 $lang->scrum->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");
@@ -301,7 +301,7 @@ $lang->waterfall->menu->story      = array('link' => "{$lang->common->story}|pro
 $lang->waterfall->menu->design     = array('link' => "{$lang->design->common}|design|browse|project=%s", 'icon' => 'icon-design');
 $lang->waterfall->menu->qa         = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug,testreport', 'alias' => 'bug,testtask,testcase,testreport', 'icon' => 'icon-test');
 $lang->waterfall->menu->doc        = array('link' => "{$lang->doc->common}|doc|projectSpace|objectID=%s", 'icon' => 'icon-file-text');
-if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my', 'icon' => 'icon-devops');
+if(helper::hasFeature('devops')) $lang->waterfall->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my,repobranchrule', 'icon' => 'icon-devops');
 $lang->waterfall->menu->build      = array('link' => "{$lang->build->common}|projectbuild|browse|project=%s", 'subModule' => 'projectbuild', 'icon' => 'icon-wrench');
 $lang->waterfall->menu->release    = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease,system', 'icon' => 'icon-tag');
 $lang->waterfall->menu->dynamic    = array('link' => "$lang->dynamic|project|dynamic|project=%s", 'icon' => 'icon-news');
@@ -342,7 +342,7 @@ $lang->waterfall->menu->design['subMenu']->ads  = array('link' => "{$lang->desig
 $lang->waterfall->menu->devops['subMenu']         = new stdclass();
 $lang->waterfall->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff');
 $lang->waterfall->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
-$lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->waterfall->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'subModule' => 'repobranchrule', 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->waterfall->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
 $lang->waterfall->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");
@@ -390,7 +390,7 @@ if($config->edition != 'open') $lang->execution->menu->view = array('link' => "$
 
 $lang->execution->menu->story      = array('link' => "{$lang->common->story}|execution|story|executionID=%s", 'subModule' => 'story,requirement,epic', 'alias' => 'storyview,storykanban,linkstory,batchtotask', 'icon' => 'icon-story');
 $lang->execution->menu->qa         = array('link' => "{$lang->qa->common}|execution|bug|executionID=%s", 'subModule' => 'bug,testcase,testtask,testreport', 'alias' => 'qa,bug,testcase,testtask,testreport', 'icon' => 'icon-test');
-if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my', 'alias' => 'create', 'icon' => 'icon-devops');
+if(helper::hasFeature('devops')) $lang->execution->menu->devops = array('link' => "{$lang->devops->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,ppm,my,repobranchrule', 'alias' => 'create', 'icon' => 'icon-devops');
 $lang->execution->menu->doc        = array('link' => "{$lang->doc->common}|execution|doc|objectID=%s", 'subModule' => 'doc', 'icon' => 'icon-file-text');
 $lang->execution->menu->build      = array('link' => "{$lang->build->common}|execution|build|executionID=%s", 'subModule' => 'build', 'icon' => 'icon-wrench');
 $lang->execution->menu->action     = array('link' => "$lang->dynamic|execution|dynamic|executionID=%s", 'icon' => 'icon-volume-up', 'icon' => 'icon-news');
@@ -436,7 +436,7 @@ $lang->execution->menu->qa['menuOrder'][20] = 'testreport';
 $lang->execution->menu->devops['subMenu']         = new stdclass();
 $lang->execution->menu->devops['subMenu']->repo   = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff');
 $lang->execution->menu->devops['subMenu']->commit = array('link' => "{$lang->repo->commit}|repo|log|repoID=0&branchID=&objectID=%s", 'alias' => 'log,diff');
-$lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
+$lang->execution->menu->devops['subMenu']->branch = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=0&objectID=%s", 'subModule' => 'repobranchrule', 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->tag    = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=0&objectID=%s", 'exclude' => 'repo-browse,repo-log');
 $lang->execution->menu->devops['subMenu']->ppm    = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=0&mode=status&param=opened&objectID=%s", 'subModule' => 'ppm', 'alias' => 'create');
 $lang->execution->menu->devops['subMenu']->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=0&browseType=all&executionID=%s");

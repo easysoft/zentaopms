@@ -12,6 +12,54 @@ declare(strict_types=1);
 class repobranchrule extends control
 {
     /**
+     * Common actions.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID     projectID|executionID
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
+    {
+        $tab   = $this->app->tab;
+        $repos = $this->loadModel('repo')->getRepoPairs($tab, $objectID);
+
+        if($tab == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($objectID);
+            if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
+            $this->loadModel('project')->setMenu($objectID);
+            $this->view->projectID = $objectID;
+        }
+        elseif($tab == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
+            if($execution)
+            {
+                $features = $this->execution->getExecutionFeatures($execution);
+                if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+            }
+
+            $this->loadModel('execution')->setMenu($objectID);
+            $this->view->executionID = $objectID;
+        }
+        elseif($tab != 'admin')
+        {
+            $this->repo->setMenu($repos, $repoID, $spaceID);
+        }
+
+        if(empty($repos) && !in_array(strtolower($this->methodName), array('create', 'edit', 'setrules', 'createrepo', 'import', 'maintain')))
+        {
+            $method = $this->app->tab == 'devops' ? 'maintain' : 'createRepo';
+            return $this->locate(inLink($method, "objectID=$objectID"));
+        }
+    }
+
+    /**
      * 配置分支规则。
      * Set a branch rule.
      *
@@ -22,7 +70,7 @@ class repobranchrule extends control
      * @access public
      * @return void
      */
-    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings', bool $isDefault = false)
+    public function setBranchRule(int $branchTypeID = 0, int $repoID = 0, string $branchRawName = '', string $from = 'settings', int $objectID = 0)
     {
         // 根据 '分支' 或 '设置' 的操作入口不同，实现对应的菜单高亮定位
         if($from == 'branch')
@@ -37,7 +85,7 @@ class repobranchrule extends control
             $this->lang->devops->menu->settings['subModule'] .= ',repobranchrule';
             $this->lang->devops->menu->settings['subMenu']->branchType['subModule'] = 'repobranchrule';
         }
-        $this->loadModel('ci')->setMenu($repoID);
+        $this->commonAction($repoID, $objectID);
 
         $branchName  = empty($branchRawName) ? $branchRawName : helper::safe64Decode($branchRawName);
         $branchType  = $this->loadModel('repobranchtype')->getBranchTypeByID($branchTypeID);
@@ -91,7 +139,7 @@ class repobranchrule extends control
         $this->view->from         = $from;
         $this->view->repoID       = $repoID;
         $this->view->branchName   = $branchRawName;
-        $this->view->isDefault    = $isDefault;
+        $this->view->objectID     = $objectID;
         $this->view->branchTypeID = $branchTypeID;
         $this->view->ruleID       = zget($originRule, 'id', 0);
         $this->view->originRule   = !$originRule ? array() : $originRule;
@@ -112,9 +160,9 @@ class repobranchrule extends control
      * @access public
      * @return void
      */
-    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID, string $from, bool $isDefault)
+    public function ajaxDeleteBranchRule(int $branchTypeID, int $repoID, string $branchName, int $ruleID, string $from, int $objectID = 0)
     {
-        $link = $this->createLink('repobranchrule', 'setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&isDefault=$isDefault");
+        $link = $this->createLink('repobranchrule', 'setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&objectID=$objectID");
         if($ruleID == 0)
         {
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
