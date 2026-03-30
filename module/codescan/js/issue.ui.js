@@ -111,9 +111,8 @@ window.changeTreeType = function(obj)
 
 window.issueTreeClick = function(info)
 {
-    if(!info || !info.item || !info.item.is_leaf) return false;
+    if(!info || !info.item || !info.item.isLeaf) return false;
 
-    console.log(info.item);
     $.cookie.set('issueFile', info.item.ref);
     loadPage(info.item.link);
     return false;

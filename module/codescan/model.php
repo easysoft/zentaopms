@@ -822,20 +822,13 @@ class codescanModel extends model
      */
     public function changeIssueState(int|array $issueIdList, string $status, string $solution = null, string $solutionDate = null, int $ignoreDate = 0): bool
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         if(is_numeric($issueIdList)) $issueIdList = array($issueIdList);
         foreach($issueIdList as $index => $issueID) $issueIdList[$index] = (int)$issueID;
-
-        $url = sprintf($apiRoot->url, "/scan/issues/status");
 
         $data = new stdclass();
         $data->status = $status;
         $data->ids    = $issueIdList;
-        if(!is_null($solution))     $data->resolution = $solution;
-        if(!is_null($solutionDate)) $data->resolved   = strtotime($solutionDate) * 1000;
-        if(!empty($ignoreDate))     $data->ignored    = $ignoreDate == -1 ? -1 : $ignoreDate * 1000;
-        $result = json_decode(common::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'POST'), $apiRoot->header, 'json', 'POST'));
-        $this->gitfox->getResponse($result);
+        $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
         if(dao::isError()) return false;
 
         $this->loadModel('action');
@@ -844,7 +837,7 @@ class codescanModel extends model
         foreach($issueIdList as $issueID)
         {
             $issue = $this->getScanIssue($issueID, false);
-            $extra = empty($issue) || empty($repoPair[$issue->repo_id]) ? '' : "{$issue->content}|issueID={$issueID}&repoID={$repoPair[$issue->repo_id]}";
+            $extra = empty($issue) || empty($repoPair[$issue->repoID]) ? '' : "{$issue->content}|issueID={$issueID}&repoID={$repoPair[$issue->repoID]}";
             $this->action->create('codescanissue', $issueID, $status . 'ScanIssue', '', $extra);
         }
 
@@ -862,7 +855,10 @@ class codescanModel extends model
      */
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
-        $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues';
+        if(isset($params['repoID'])) $params['repoID'] = (int)$params['repoID'];
+        if(isset($params['ruleID'])) $params['ruleID'] = (int)$params['ruleID'];
+
+        $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues/list';
         $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
 
         if(empty($result) || empty($result->data)) return array();
@@ -892,14 +888,8 @@ class codescanModel extends model
         $IdList = array();
         foreach($issueIdList as $issueID) $IdList[] = (int)$issueID;
 
-        $params = new stdclass();
-        $params->issue_ids = $IdList;
-
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, '/scan/issues/list_by_ids');
-
-        $result = json_decode(common::http($url, $params, array(), $apiRoot->header, 'json', 'POST'));
-        return $this->gitfox->getResponse($result);
+        $params = array('ids' => $IdList);
+        return $this->loadModel('gitfox')->request('/scan/issues/batch', 'POST', $params);
     }
 
     /**

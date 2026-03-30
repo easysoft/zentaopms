@@ -45,6 +45,7 @@ $headers = nav
             $type == 'issue' ? setClass('active') : null
         )
     ),
+    /* li（扫描日志tab）先注释掉。
     li
     (
         setClass('nav-item'),
@@ -57,4 +58,5 @@ $headers = nav
             $type == 'log' ? setClass('active') : null
         )
     )
+    */
 );

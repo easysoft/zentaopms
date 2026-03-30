@@ -1260,15 +1260,15 @@ class codescan extends control
         $this->view->planList = array_column($this->codescanZen->getListByQuery('plan'), 'name', 'id');
         $this->codescanZen->buildSearchForm($this->config->codescan->issue->search, $queryID, $actionURL);
 
-        $condition = $repoID ? "repo_id=$serviceRepoID" : "task_id=$taskID";
+        $condition = $repoID ? "repoID=$serviceRepoID" : "taskID=$taskID";
         if($severity) $condition .= "&priority=$severity";
-        if(!empty($params['ruleID']) && $params['ruleID'] != 'all') $condition .= "&rule_id={$params['ruleID']}";
+        if(!empty($params['ruleID']) && $params['ruleID'] != 'all') $condition .= "&ruleID={$params['ruleID']}";
         if(!empty($params['branch']) && $this->cookie->issueFile) $condition .= "&branch={$params['branch']}&file={$this->cookie->issueFile}";
 
         $conditions = $this->codescanZen->buildParams($type, $condition, (int)$queryID, $orderBy, $pager->recPerPage, $pager->pageID);
-        $conditions = $type == 'bySearch' && $repoID ? array_merge($conditions, array('repo_id' => $serviceRepoID)) : array_merge($conditions, array('task_id' => $taskID));
+        $conditions = $type == 'bySearch' && $repoID ? array_merge($conditions, array('repoID' => $serviceRepoID)) : array_merge($conditions, array('taskID' => $taskID));
         $issueList  = $this->codescan->getScanIssueList($taskID, $conditions);
-        $pager->recTotal = zget($issueList, 'total', 0);
+        $pager->recTotal = zget(zget($issueList, 'pager', array()), 'total', 0);
 
         $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);
         foreach($taskList as &$repoTask) $repoTask = $this->codescanZen->processTaskData($repoTask, $repoList);
