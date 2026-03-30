@@ -479,7 +479,8 @@ $config->codescan->task->dtable->fieldList['actions']['name']  = 'actions';
 $config->codescan->task->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->codescan->task->dtable->fieldList['actions']['type']  = 'actions';
 $config->codescan->task->dtable->fieldList['actions']['width'] = '100';
-$config->codescan->task->dtable->fieldList['actions']['menu']  = array('resend', 'issue', 'taskLog');
+// $config->codescan->task->dtable->fieldList['actions']['menu']  = array('resend', 'issue', 'taskLog');
+$config->codescan->task->dtable->fieldList['actions']['menu']  = array('resend', 'issue');
 $config->codescan->task->dtable->fieldList['actions']['list']  = $config->codescan->task->actionList;
 
 $config->codescan->issue->dtable = new stdclass();
