@@ -888,14 +888,8 @@ class codescanModel extends model
         $IdList = array();
         foreach($issueIdList as $issueID) $IdList[] = (int)$issueID;
 
-        $params = new stdclass();
-        $params->issue_ids = $IdList;
-
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url     = sprintf($apiRoot->url, '/scan/issues/list_by_ids');
-
-        $result = json_decode(common::http($url, $params, array(), $apiRoot->header, 'json', 'POST'));
-        return $this->gitfox->getResponse($result);
+        $params = array('ids' => $IdList);
+        return $this->loadModel('gitfox')->request('/scan/issues/batch', 'POST', $params);
     }
 
     /**
