@@ -1892,7 +1892,7 @@ class repo extends control
             $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
             $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
         }
-        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repo->id);
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repo->id, 'id_asc');
         if(!empty($branchTypes))
         {
             $this->lang->repo->featureBar['browsebranch']['all'] = $this->lang->all;
