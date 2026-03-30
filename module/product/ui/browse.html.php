@@ -29,6 +29,7 @@ jsVar('storyAssignedToPriv', hasPriv('story', 'assignTo'));
 jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
 jsVar('requirementAssignedToPriv', hasPriv('requirement', 'assignTo'));
 jsVar('epicViewPriv', hasPriv('epic', 'view'));
+jsVar('epicAssignedToPriv', hasPriv('epic', 'assignTo'));
 
 $viewType          = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
