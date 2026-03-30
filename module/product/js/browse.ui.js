@@ -121,9 +121,8 @@ window.renderCell = function(result, info)
             }
         }
 
-        if((story.type == 'story' && !storyViewPriv) ||
-           (story.type == 'requirement' && !requirementViewPriv) ||
-           (story.type == 'epic' && !epicViewPriv)) result[0] = result[0].props.children;
+        if(result[0].props && ((story.type == 'story' && !storyViewPriv) || (story.type == 'requirement' && !requirementViewPriv) || (story.type == 'epic' && !epicViewPriv))) result[0] = result[0].props.children;
+
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
@@ -132,7 +131,7 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo')
     {
-        if(info.row.data.rawStatus == 'closed')
+        if(info.row.data.rawStatus == 'closed' && result[0]['props'])
         {
             delete result[0]['props']['data-toggle'];
             delete result[0]['props']['href'];
