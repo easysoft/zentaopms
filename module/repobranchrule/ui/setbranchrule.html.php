@@ -8,12 +8,12 @@ if(!isInModal())
     (
         set::module($module),
         set::tab($module),
-        set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}"))
+        set::url(createLink($module, 'ajaxGetDropMenu', "objectID={$repoID}&module={$app->rawModule}&method={$app->rawMethod}&tab={$app->tab}"))
     );
 }
 
-$backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID") : createLink('repobranchtype', 'browse', "repoID=$repoID");
-$url     = createLink('repobranchrule', 'setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from");
+$backURL = empty($branchTypeID) ? createLink('repo', 'browseBranch', "repoID=$repoID&objectID=$objectID") : createLink('repobranchtype', 'browse', "repoID=$repoID");
+$url     = createLink('repobranchrule', 'setBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&from=$from&objectID=$objectID");
 
 formPanel
 (
@@ -21,16 +21,16 @@ formPanel
     set::title($title),
     set::actions
     (
-        !empty($branchTypeID) ? array('submit', array('text' => $lang->cancel, 'url' => $backURL)) :
         array
         (
             'submit',
-            array('text' => $lang->cancel, 'url' => $backURL),
-            array
+            array('text' => $lang->cancel, 'url' => $backURL, 'data-app' => $app->tab),
+            empty($branchTypeID) ? array
             (
-                'text' => $lang->repo->branchRule->delete,
-                'url'  => createLink('repobranchrule', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID&from=$from&isDefault=$isDefault")
-            )
+                'text'     => $lang->repo->branchRule->delete,
+                'data-app' => $app->tab,
+                'url'      => createLink('repobranchrule', 'ajaxDeleteBranchRule', "branchTypeID=$branchTypeID&repoID=$repoID&branchName=$branchName&ruleID=$ruleID&from=$from&objectID=$objectID")
+            ) : null
         )
     ),
     formGroup
