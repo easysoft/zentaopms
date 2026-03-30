@@ -4259,7 +4259,7 @@ $config->group->package->browseReviewRequest = new stdclass();
 $config->group->package->browseReviewRequest->order  = 2580;
 $config->group->package->browseReviewRequest->subset = 'codeReview';
 $config->group->package->browseReviewRequest->privs  = array();
-$config->group->package->browseReviewRequest->privs['ppm-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain'), 'recommend' => array('ppm-addReview', 'ppm-approval', 'ppm-close', 'ppm-create', 'ppm-edit', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink', 'ppm-view'));
+$config->group->package->browseReviewRequest->privs['ppm-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain', 'repo-browse'), 'recommend' => array('ppm-addReview', 'ppm-approval', 'ppm-close', 'ppm-create', 'ppm-edit', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink', 'ppm-view'));
 $config->group->package->browseReviewRequest->privs['ppm-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array());
 
 $config->group->package->submitReviewRequest = new stdclass();
