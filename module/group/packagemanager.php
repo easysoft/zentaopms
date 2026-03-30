@@ -3557,6 +3557,12 @@ $config->group->package->projectRelation->privs['programplan-batcheditrelation']
 $config->group->package->projectRelation->privs['programplan-deleterelation']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
 $config->group->package->projectRelation->privs['programplan-batchdeleterelation'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
 
+$config->group->package->taskAutoSchedule = new stdclass();
+$config->group->package->taskAutoSchedule->order  = 15;
+$config->group->package->taskAutoSchedule->subset = 'programplan';
+$config->group->package->taskAutoSchedule->privs  = array();
+$config->group->package->taskAutoSchedule->privs['programplan-taskAutoSchedule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('programplan-browse'), 'recommend' => array());
+
 $config->group->package->executionRelation = new stdclass();
 $config->group->package->executionRelation->order  = 10;
 $config->group->package->executionRelation->subset = 'executionview';
