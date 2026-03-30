@@ -225,7 +225,7 @@ class customModel extends model
         $group   = 0;
         foreach($menu as $item)
         {
-            if($module == 'main' && isset($item->name) && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
+            if($module == 'main' && isset($item->name) && $item->name != 'other' && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
             {
                 $menu[$item->order]->divider = $isFirst ? false : true;
                 $group = $dividerOrders[$item->name];
