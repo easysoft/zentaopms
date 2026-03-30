@@ -1718,25 +1718,14 @@ class aiModelTest extends baseTest
         if($objectId > 900) return 0;
 
         // 如果能够加载真实的model，尝试调用真实方法
-<<<<<<< HEAD:module/ai/test/lib/model.class.php
         if($this->instance)
-=======
         // 注意：真实方法可能因为数据库中没有对应数据而返回false，此时应使用模拟逻辑
-        if($this->objectModel)
->>>>>>> release/21.7.9:module/ai/test/lib/ai.unittest.class.php
         {
             try {
                 $realPrompt = $this->instance->getPromptById($promptID);
                 if($realPrompt)
                 {
-<<<<<<< HEAD:module/ai/test/lib/model.class.php
                     $result = $this->instance->getObjectForPromptById($realPrompt, $objectId);
-                    if(dao::isError()) return 0;
-                    if($result === false) return 0;
-                    if(is_array($result)) return count($result);
-                    return $result ? 1 : 0;
-=======
-                    $result = $this->objectModel->getObjectForPromptById($realPrompt, $objectId);
                     if(dao::isError())
                     {
                         // 数据库错误，使用模拟逻辑
@@ -1746,8 +1735,6 @@ class aiModelTest extends baseTest
                         // 真实方法返回有效结果，使用真实结果
                         return count($result);
                     }
-                    // 如果真实方法返回false或空结果，继续使用模拟逻辑
->>>>>>> release/21.7.9:module/ai/test/lib/ai.unittest.class.php
                 }
             } catch (Exception $e) {
                 // 如果真实方法失败，继续使用模拟逻辑
