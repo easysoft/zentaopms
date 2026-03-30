@@ -660,6 +660,7 @@ $lang->group->package->deleteReportTemplate  = '删除报告模板';
 $lang->group->package->productSetting        = '产品配置';
 $lang->group->package->executionSetting      = '执行配置';
 $lang->group->package->featureSwitch         = '功能开关';
-$lang->group->package->taskAutoSchedule      = '任务自动排期';
+$lang->group->package->executionAutoSchedule = '任务自动排期';
+$lang->group->package->projectAutoSchedule   = '任务自动排期';
 
 include (dirname(__FILE__) . '/resource.php');
