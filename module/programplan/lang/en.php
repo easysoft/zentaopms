@@ -87,6 +87,7 @@ $lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
 $lang->programplan->createGanttVersion  = 'Create Gantt Version';
 $lang->programplan->editGanttVersion    = 'Edit Gantt Version';
 $lang->programplan->deleteGanttVersion  = 'Delete Gantt Version';
+$lang->programplan->diffGanttVersion    = 'Compare Gantt Versions';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";

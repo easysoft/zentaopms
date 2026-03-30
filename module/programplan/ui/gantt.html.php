@@ -130,7 +130,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         (
             setID('versionList'),
             setClass('ml-2'),
-            setStyle('order', '20000'),
             dropdown
             (
                 h::css
@@ -143,6 +142,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 jsVar('versionLangData', $langData),
                 jsVar('versionID', $versionID),
                 jsVar('currentVersion', $currentVersion),
+                jsVar('canDiffVersion', hasPriv('programplan', 'diffGanttVersion')),
                 jsVar('+diffMode', isset($ganttBaseline)),
                 jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
                 div
