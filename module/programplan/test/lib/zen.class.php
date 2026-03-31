@@ -719,26 +719,11 @@ class programplanZenTest extends baseTest
      * @access public
      * @return int|string
      */
-    public function buildStagesTest(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): int|string
+    public function buildStagesTest(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): array
     {
-        try
-        {
-            $reflection = new ReflectionClass($this->zenInstance);
-            $method = $reflection->getMethod('buildStages');
-            $method->setAccessible(true);
-
-            $result = $method->invoke($this->zenInstance, $projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
-
-            if(dao::isError()) return 'error';
-
-            if(is_array($result)) return count($result);
-
-            return 0;
-        }
-        catch(Throwable $e)
-        {
-            return 'error';
-        }
+        $result = $this->invokeArgs('buildStages', [$projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
