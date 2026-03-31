@@ -1769,6 +1769,7 @@ $config->delete['22_0'][] = 'module/group/view/';
 $config->delete['22_0'][] = 'module/doc/view/';
 $config->delete['22_0'][] = 'module/common/view/sparkline.html.php';
 $config->delete['22_0'][] = 'module/common/view/sortable.html.php';
+$config->delete['22_0'][] = 'module/common/view/treetable.html.php';
 $config->delete['22_0'][] = 'extension/lite/project/ext/view/execution.html.php';
 $config->delete['22_0'][] = 'extension/lite/task/ext/view/create.html.php';
 

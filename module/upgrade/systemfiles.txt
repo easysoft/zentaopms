@@ -1011,7 +1011,6 @@
 ,common/view/querymenu.html.php,
 ,common/view/syntaxhighlighter.html.php,
 ,common/view/tablesorter.html.php,
-,common/view/treetable.html.php,
 ,common/view/validation.html.php,
 ,common/view/version.html.php,
 ,common/view/ztree.html.php,
