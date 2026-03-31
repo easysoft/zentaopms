@@ -29,6 +29,7 @@ formPanel
         set::label($lang->programplan->desc),
         textarea(set::name('items'), set::rows(3))
     ),
+    formHidden('category', $type),
     formHidden('product', $productID),
     formHidden('data', '')
 );

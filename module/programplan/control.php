@@ -496,10 +496,12 @@ class programplan extends control
      * Create a version of Gantt.
      *
      * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function createGanttVersion(int $projectID = 0, int $productID = 0)
+    public function createGanttVersion(int $projectID = 0, int $productID = 0, string $type = '')
     {
         if($_POST)
         {
@@ -520,10 +522,13 @@ class programplan extends control
             $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND {$condition}")->exec();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $versionID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('ganttversion', $versionID, 'created', '', $version->title);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
         $this->view->productID = $productID;
+        $this->view->type      = $type;
         $this->display();
     }
 
@@ -546,15 +551,21 @@ class programplan extends control
             $this->lang->object->version = $this->lang->programplan->version;
             $this->lang->error->unique   = $this->lang->error->repeat;
 
-            $oldVersion = $this->programplan->fetchByID($versionID, 'baseline');
+            $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+            $changes    = common::createChanges($oldVersion, $version);
+            if(empty($changes)) return $this->send(array('result' => 'success', 'closeModal' => true));
+
             $condition  = $oldVersion->project ? "project={$oldVersion->project}" : "execution={$oldVersion->execution}";
             $this->dao->update(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND id != {$versionID} AND {$condition}")->where('id')->eq($versionID)->exec();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $actionID = $this->loadModel('action')->create('ganttversion', $versionID, 'edited', '', $version->title);
+            $this->action->logHistory($actionID, $changes);
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
-        $this->view->version = $this->programplan->fetchByID($versionID, 'baseline');
+        $this->view->version = $this->programplan->fetchByID($versionID, 'ganttversion');
         $this->display();
     }
 
@@ -568,6 +579,9 @@ class programplan extends control
      */
     public function deleteGanttVersion(int $versionID)
     {
+        $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+        $this->loadModel('action')->create('ganttversion', $versionID, 'deleted', '', $oldVersion->title);
+
         $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'callback' => "loadCurrentPage('#versionList')"));
     }
