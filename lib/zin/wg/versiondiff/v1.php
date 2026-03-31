@@ -1,0 +1,89 @@
+<?php
+declare(strict_types=1);
+namespace zin;
+
+class versiondiff extends wg
+{
+    protected static array $defineProps = array(
+        'versionID:string',
+        'currentVersion:string',
+        'canDiffVersion:bool',
+        'diffMode:bool',
+        'baseline:string',
+        'browseTemplate:string',
+        'diffLang:array',
+        'versionItems?:array'
+    );
+
+    public static function getPageCSS(): string
+    {
+        return file_get_contents(__DIR__ . DS . 'css' . DS . 'v1.css');
+    }
+
+    public static function getPageJS(): ?string
+    {
+        global $app;
+        $js = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
+        return $js;
+    }
+
+    protected function build()
+    {
+        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline'));
+        return dropdown
+        (
+            jsVar('versionLangData', $diffLang),
+            jsVar('versionID', $versionID),
+            jsVar('currentVersion', $currentVersion),
+            jsVar('canDiffVersion', $canDiffVersion),
+            jsVar('+diffMode', $diffMode),
+            jsVar('browseTemplate', $browseTemplate),
+            div
+            (
+                btn
+                (
+                    setID('versionBox'),
+                    setClass('ghost gray-300-outline rounded-full', $this->prop('className')),
+                    set::text($currentVersion),
+                    set::hint($currentVersion),
+                    set::caret(),
+                    $diffMode ? setData(array('value' => $versionID)) : null
+                ),
+                span
+                (
+                    setID('compareBox'),
+                    setClass($diffMode ? '' : 'hidden'),
+                    btn
+                    (
+                        setClass('ghost'),
+                        set::size('sm'),
+                        set::icon('exchange'),
+                        on::click()->call('exchangeVersion', jsRaw('event'))
+                    ),
+                    btn
+                    (
+                        setID('nextBox'),
+                        setClass('ghost gray-300-outline rounded-full'),
+                        set::text($diffMode ? zget(zget($versionItems, $baseline, array()), 'title') : ''),
+                        set::hint($diffMode ? zget(zget($versionItems, $baseline, array()), 'title') : null),
+                        set::caret(),
+                        $diffMode ? setData(array('value' => $baseline)) : null
+                    )
+                )
+            ),
+            set::menu([
+               'checkOnClick' => '.has-checkbox .item',
+               'items' => array_values($versionItems),
+               'width' => 200,
+               'header' => jsRaw('setVersionDropdownHeader'),
+               'footer' => jsRaw('setVersionDropdownFooter'),
+               'getItem' => jsRaw('getVersionItem'),
+               'onClickItem' => jsRaw('setClickVersionItem')
+            ]),
+            set::triggerProps([
+                'onShown' => jsRaw('showMenu'),
+                'onHide' => jsRaw('function(){return !this.menu.state.showCheckbox}')
+            ])
+        );
+    }
+}
