@@ -131,71 +131,19 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setID('versionList'),
             setClass('ml-2'),
             setStyle(array('order' => '10010')),
-            dropdown
+            versiondiff
             (
-                h::css
-                (
-                    '.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}',
-                    '.menu-item .item-content {overflow:hidden; text-overflow:clip;}',
-                    '.menu-item .item-title {flex:none;}',
-                    '#versionBox .text, #nextBox .text{overflow:hidden}'
-                ),
-                jsVar('versionLangData', $langData),
-                jsVar('versionID', $versionID),
-                jsVar('currentVersion', $currentVersion),
-                jsVar('canDiffVersion', hasPriv('programplan', 'diffGanttVersion')),
-                jsVar('+diffMode', isset($ganttBaseline)),
-                jsVar('browseTemplate', createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
-                div
-                (
-                    btn
-                    (
-                        setID('versionBox'),
-                        setClass('ghost gray-300-outline rounded-full fixed-item'),
-                        setStyle(array('max-width' => '150px')),
-                        set::text($currentVersion),
-                        set::hint($currentVersion),
-                        set::caret(),
-                        isset($ganttBaseline) ? setData(array('value' => $versionID)) : null
-                    ),
-                    span
-                    (
-                        setID('compareBox'),
-                        setClass(isset($ganttBaseline) ? '' : 'hidden'),
-                        btn
-                        (
-                            setClass('ghost'),
-                            set::size('sm'),
-                            set::icon('exchange'),
-                            on::click()->call('exchangeVersion', jsRaw('event'))
-                        ),
-                        btn
-                        (
-                            setID('nextBox'),
-                            setClass('ghost gray-300-outline rounded-full'),
-                            setStyle(array('max-width' => '150px')),
-                            set::text(isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : ''),
-                            set::hint(isset($ganttBaseline) ? zget(zget($versionItems, $ganttBaseline, array()), 'title') : null),
-                            set::caret(),
-                            isset($ganttBaseline) ? setData(array('value' => $ganttBaseline)) : null
-                        )
-                    )
-                ),
-                set::menu([
-                   'checkOnClick' => '.has-checkbox .item',
-                   'items' => array_values($versionItems),
-                   'width' => 200,
-                   'header' => jsRaw('setVersionDropdownHeader'),
-                   'footer' => jsRaw('setVersionDropdownFooter'),
-                   'getItem' => jsRaw('getVersionItem'),
-                   'onClickItem' => jsRaw('setClickVersionItem')
-                ]),
-                set::triggerProps([
-                    'onShown' => jsRaw('showMenu'),
-                    'onHide' => jsRaw('function(){return !this.menu.state.showCheckbox}')
-                ]),
+                set::className('fixed-item'),
+                set::versionID($versionID),
+                set::currentVersion($currentVersion),
+                set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
+                set::diffMode(isset($ganttBaseline)),
+                set::versionItems($versionItems),
+                set::diffLang($langData),
+                set::browseTemplate(createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
+                set::baseline(isset($ganttBaseline) ? $ganttBaseline : null)
             )
-        ),
+        )
     );
     toolbar
     (
