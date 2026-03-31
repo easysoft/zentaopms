@@ -1318,7 +1318,7 @@ class codescan extends control
         $repo     = $this->loadModel('repo')->getByID($repoID);
         if(!$repo) $this->sendError($this->lang->codescan->notice->repoNotFound, true);
 
-        $task = $this->codescan->getScanTask($issue->created_by_task);
+        $task = $this->codescan->getScanTask($issue->createdByTaskID);
         if(!empty($task)) $task = $this->codescanZen->processTaskData($task, array());
 
         $this->view->title         = $this->lang->codescan->issueView;
@@ -1328,7 +1328,7 @@ class codescan extends control
         $this->view->task          = empty($task) ? array() : $task;
         $this->view->repoID        = $repoID;
         $this->view->productID     = empty($repo) || empty($repo->product) ? 0 : explode(',', $repo->product)[0];
-        $this->view->fileIssueList = empty($issue) ? array() : $this->codescanZen->getFileIssueList($issue->file, $issue->repo_id);
+        $this->view->fileIssueList = empty($issue) ? array() : $this->codescanZen->getFileIssueList($issue->path, $issue->repoID, $issue->createdByTaskID);
         $this->view->repoPair      = array_column($this->loadModel('repo')->getGitFoxRepos(), 'id', 'serviceProject');
         $this->view->actions       = $issue ? $this->loadModel('action')->getList('codescanissue', $issueID) : array();
         $this->display();

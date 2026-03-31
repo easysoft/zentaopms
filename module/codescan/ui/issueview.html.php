@@ -20,7 +20,7 @@ if(!empty($fileIssueList))
 {
     foreach($fileIssueList as $fileIssue)
     {
-        $issueRepoID = zget($repoPair, $fileIssue->repo_id, 0);
+        $issueRepoID = zget($repoPair, $fileIssue->repoID, 0);
 
         $setItems[] = div
         (
@@ -68,7 +68,7 @@ detailHeader
             $lang->goback
         ),
         label(setClass('flex-none'), $issue->id),
-        label(setClass('flex-none'), basename($issue->file)),
+        label(setClass('flex-none'), basename($issue->path)),
         entityLabel
         (
             set::level(1),
@@ -108,7 +108,7 @@ div
                 div
                 (
                     setClass('m-1'),
-                    label(setClass('gray-500-pale mr-2 size-lg'), set::title(zget($lang->codescan->typeList, $issue->type)), zget($lang->codescan->typeList, $issue->type)),
+                    label(setClass('gray-500-pale mr-2 size-lg'), set::title(zget($lang->codescan->typeList, $issue->ruleType)), zget($lang->codescan->typeList, $issue->ruleType)),
                     !empty($issue->priority) && $issue->priority == 'low'    ? label(setClass('gray-500-pale mr-2 size-lg'), set::title(zget($lang->codescan->severityList, $issue->priority, '')), zget($lang->codescan->severityList, $issue->priority, '')) : null,
                     !empty($issue->priority) && $issue->priority == 'medium' ? label(setClass('warning-pale mr-2 size-lg'),  set::title(zget($lang->codescan->severityList, $issue->priority, '')), zget($lang->codescan->severityList, $issue->priority, '')) : null,
                     !empty($issue->priority) && $issue->priority == 'high'   ? label(setClass('danger-pale mr-2 size-lg'),   set::title(zget($lang->codescan->severityList, $issue->priority, '')), zget($lang->codescan->severityList, $issue->priority, '')) : null,
@@ -246,7 +246,7 @@ div
                     item
                     (
                         set::name($lang->codescan->createTime),
-                        date('Y-m-d H:i:s', intval($task->created / 1000))
+                        $task->createdDate
                     ),
                     item
                     (
@@ -290,7 +290,7 @@ $setItems ? sidebar
             div
             (
                 setClass('absolute font-bold issue-file-title text-md clip canvas w-full h-12 px-2 pt-4'),
-                basename($issue->file) . $lang->codescan->fileIssueList,
+                basename($issue->path) . $lang->codescan->fileIssueList,
                 label(setClass('size-sm rounded-full ml-1'), count($setItems))
             ),
         ),
@@ -303,13 +303,6 @@ $setItems ? sidebar
 ) : null;
 
 $actionList = $this->loadModel('common')->buildOperateMenu($issue);
-foreach($actionList as $actionType => $typeActions)
-{
-    foreach($typeActions as $key => $action)
-    {
-        $actionList[$actionType][$key]['url'] = str_replace(array('{repo}', '{productID}', '{serverID}', '{repoID}'), array($repoID, $productID, $serverID, $repoID), $action['url']);
-    }
-}
 div
 (
     setClass('detail-actions center sticky mt-4 bottom-4 z-10'),

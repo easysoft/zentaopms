@@ -168,8 +168,6 @@ class codescanModel extends model
      */
     public function getScanRules(array $params = array()): array|object
     {
-        $params['priority'] = zget($this->config->codescan->severityMapList, $params['priority'], -1);
-
         return $this->loadModel('gitfox')->request('/scan/rules/list', 'POST', $params) ?: array();
     }
 
