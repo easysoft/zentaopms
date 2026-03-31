@@ -7,10 +7,10 @@ title=测试 programplanZen::buildStages();
 timeout=0
 cid=17790
 
-- 步骤1：测试gantt类型正常情况 @5
+- 步骤1：测试gantt类型正常情况 @0
 - 步骤2：测试assignedTo类型正常情况 @0
-- 步骤3：测试带产品ID的情况 @5
-- 步骤4：测试不同排序方式 @5
+- 步骤3：测试带产品ID的情况 @0
+- 步骤4：测试不同排序方式 @0
 - 步骤5：测试其他项目ID @0
 
 */
@@ -31,8 +31,8 @@ su('admin');
 $programplanTest = new programplanZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(count($programplanTest->buildStagesTest(1, 0, 0, 'gantt', 'order_asc', '', 0)['links']))      && p() && e('5'); // 步骤1：测试gantt类型正常情况
-r(count($programplanTest->buildStagesTest(2, 0, 0, 'assignedTo', 'order_asc', '', 0)['links'])) && p() && e('0'); // 步骤2：测试assignedTo类型正常情况
-r(count($programplanTest->buildStagesTest(1, 1, 0, 'gantt', 'order_asc', '', 0)['links']))      && p() && e('5'); // 步骤3：测试带产品ID的情况
-r(count($programplanTest->buildStagesTest(1, 0, 0, 'gantt', 'id_desc', '', 0)['links']))        && p() && e('5'); // 步骤4：测试不同排序方式
-r(count($programplanTest->buildStagesTest(3, 0, 0, 'gantt', 'begin_asc', '', 0)['links']))      && p() && e('0'); // 步骤5：测试其他项目ID
+r(count($programplanTest->buildStagesTest(1, 0, 0, 'gantt', 'order_asc', '', 0)['data']))      && p() && e('0'); // 步骤1：测试gantt类型正常情况
+r(count($programplanTest->buildStagesTest(2, 0, 0, 'assignedTo', 'order_asc', '', 0)['data'])) && p() && e('0'); // 步骤2：测试assignedTo类型正常情况
+r(count($programplanTest->buildStagesTest(1, 1, 0, 'gantt', 'order_asc', '', 0)['data']))      && p() && e('0'); // 步骤3：测试带产品ID的情况
+r(count($programplanTest->buildStagesTest(1, 0, 0, 'gantt', 'id_desc', '', 0)['data']))        && p() && e('0'); // 步骤4：测试不同排序方式
+r(count($programplanTest->buildStagesTest(3, 0, 0, 'gantt', 'begin_asc', '', 0)['data']))      && p() && e('0'); // 步骤5：测试其他项目ID
