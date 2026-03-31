@@ -22,7 +22,7 @@
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg); color: var(--zt-menu-text-active)}
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg); color: var(--zt-menu-text-active)}
 #menu .nav > li > a > .text {white-space: nowrap;}
-#menu .nav > li > a > .icon {font-size: 18px; display: inline-flex; align-items: center; justify-content: center;}
+#menu .nav > li > a > .icon {font-size: 16px; display: inline-flex; align-items: center; justify-content: center; margin-right: 2px;}
 @supports not (gap: 1px) {#menu .nav > li > a > .icon {margin-right: 4px;}}
 
 #spaceHeading {display: none; height: 40px; align-items: center; flex-wrap: nowrap; gap: 4px; margin: 8px; background-color: rgba(var(--color-canvas-rgb), .1); border-radius: var(--radius-md); position: relative; padding: 0 8px;}
