@@ -130,7 +130,7 @@ div
     set::className('flex'),
     cell
     (
-        set::width('1/3'),
+        set::width('232px'),
         set::className('lineTree mr-1'),
         panel
         (
