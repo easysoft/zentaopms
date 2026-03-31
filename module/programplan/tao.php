@@ -607,17 +607,22 @@ class programplanTao extends programplanModel
      * Build task group by assignedTo.
      *
      * @param  array     $task
+     * @param  string    $type
      * @access protected
      * @return array
      */
-    protected function buildTaskGroup(array $tasks): array
+    protected function buildTaskGroup(array $tasks, string $type = 'assignedTo'): array
     {
         $taskGroup  = array();
         $multiTasks = array();
         foreach($tasks as $taskID => $task)
         {
-            $taskGroup[$task->assignedTo][$taskID] = $task;
-            if($task->mode == 'multi') $multiTasks[$taskID] = $task->assignedTo;
+            $taskGroup[$task->$type][$taskID] = $task;
+            if($task->mode == 'multi' && in_array($task->status, $this->config->task->unfinishedStatus))
+            {
+                if($type == 'assignedTo') $multiTasks[$taskID] = $task->$type;
+                if($type != 'assignedTo') $task->assignedTo = $this->lang->task->team;
+            }
         }
         if(empty($multiTasks)) return $taskGroup;
 
@@ -629,6 +634,7 @@ class programplanTao extends programplanModel
         foreach($taskTeams as $taskID => $team)
         {
             $assignedTo = $multiTasks[$taskID];
+            unset($taskGroup[''][$taskID]);
             foreach($team as $member)
             {
                 $account = $member->account;
@@ -754,14 +760,17 @@ class programplanTao extends programplanModel
      * @param  int       $groupID
      * @param  string    $group
      * @param  array     $users
+     * @param  string    $type
      * @access protected
      * @return object
      */
-    protected function buildGroupDataForGantt(int $groupID, string $group, array $users): object
+    protected function buildGroupDataForGantt(int $groupID, string $group, array $users, string $type = 'assignedTo'): object
     {
         $this->app->loadLang('task');
         $groupName = $group;
-        $groupName = $group != '/' ? zget($users, $group) : $this->lang->task->noAssigned;
+
+        if($type == 'assignedTo') $groupName = $group != '/' ? zget($users, $group) : $this->lang->task->noAssigned;
+        if($type == 'type')       $groupName = zget($this->lang->task->typeList, $group);
 
         $dataGroup                = new stdclass();
         $dataGroup->id            = $groupID;
@@ -770,7 +779,7 @@ class programplanTao extends programplanModel
         $dataGroup->percent       = '';
         $dataGroup->attribute     = '';
         $dataGroup->milestone     = '';
-        $dataGroup->owner_id      = $group;
+        $dataGroup->owner_id      = '';
         $dataGroup->status        = '';
         $dataGroup->begin         = '';
         $dataGroup->deadline      = '';
