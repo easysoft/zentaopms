@@ -1774,6 +1774,21 @@ class repoModel extends model
     }
 
     /**
+     * 根据bug列表获取产品和执行。
+     * Get products and executions of bugs.
+     *
+     * @param  array    $bugs
+     * @access public
+     * @return array
+     */
+    public function getBugProductsAndExecutions($bugs)
+    {
+        $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
+        foreach($records as $record) $record->product = ",{$record->product},";
+        return $records;
+    }
+
+    /**
      * 构造git和svn的展示链接。
      * Build url for git and svn.
      *
@@ -2897,6 +2912,10 @@ class repoModel extends model
                 {
                     $objectList = $this->loadModel('story')->getByList($objects[$objectType]);
                 }
+                elseif($objectType == 'bugs')
+                {
+                    $objectList = $this->getBugProductsAndExecutions($objects[$objectType]);
+                }
                 elseif($objectType != 'designs')
                 {
                     $objectList = $this->getTaskProductsAndExecutions($objects[$objectType]);
@@ -2912,8 +2931,8 @@ class repoModel extends model
 
                     if($objectType != 'designs')
                     {
-                        $action->product    = $objectType == 'stories' ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
-                        $action->execution  = $objectType == 'stories' ? 0 : $objectList[$objectID]['execution'];
+                        $action->product    = in_array($objectType, array('stories', 'bugs')) ? $objectList[$objectID]->product : $objectList[$objectID]['product'];
+                        $action->execution  = in_array($objectType, array('stories', 'bugs')) ? 0 : $objectList[$objectID]['execution'];
                     }
 
                     $this->saveRecord($action, $changes);
