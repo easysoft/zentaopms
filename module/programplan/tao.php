@@ -618,7 +618,7 @@ class programplanTao extends programplanModel
         foreach($tasks as $taskID => $task)
         {
             $taskGroup[$task->$type][$taskID] = $task;
-            if($task->mode == 'multi' && in_array($task->status, $this->config->task->unfinishedStatus))
+            if($task->mode == 'multi' && in_array($task->status, array('wait', 'doing', 'pause')))
             {
                 if($type == 'assignedTo') $multiTasks[$taskID] = $task->$type;
                 if($type != 'assignedTo') $task->assignedTo = $this->lang->task->team;
