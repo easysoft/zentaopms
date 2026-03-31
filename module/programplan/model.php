@@ -189,9 +189,10 @@ class programplanModel extends model
     }
 
     /**
-     * 获取按照指派给分组甘特图相关数据。
+     * 获取分组后的甘特图相关数据。
      * Gets Gantt chart related data as assigned to the group.
      *
+     * @param  string  $type
      * @param  int     $executionID
      * @param  int     $productID
      * @param  int     $baselineID
@@ -202,7 +203,7 @@ class programplanModel extends model
      * @access public
      * @return string|array
      */
-    public function getDataForGanttGroupByAssignedTo(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0): string|array
+    public function getDataForGanttGroup(string $type, int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0): string|array
     {
         $datas       = array();
         $stageIndex  = array();
@@ -211,7 +212,7 @@ class programplanModel extends model
         $planIdList = array_column($plans, 'id');
         $users      = $this->loadModel('user')->getPairs('noletter');
         $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID);
-        $tasksGroup = $this->programplanTao->buildTaskGroup($tasks);
+        $tasksGroup = $this->programplanTao->buildTaskGroup($tasks, $type);
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
@@ -238,7 +239,7 @@ class programplanModel extends model
             if(!$group) $group = '/'; // 未指派
             $groupID ++;
             $groupKey = $groupID . $group;
-            $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users);
+            $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users, $type);
 
             $realStartDate = array();
             $realEndDate   = array();
