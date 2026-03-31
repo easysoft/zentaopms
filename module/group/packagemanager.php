@@ -1293,12 +1293,6 @@ $config->group->package->manageExecutionEffort->subset = 'execution';
 $config->group->package->manageExecutionEffort->privs  = array();
 $config->group->package->manageExecutionEffort->privs['execution-effort'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 255, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->executionAutoSchedule = new stdclass();
-$config->group->package->executionAutoSchedule->order  = 30;
-$config->group->package->executionAutoSchedule->subset = 'execution';
-$config->group->package->executionAutoSchedule->privs  = array();
-$config->group->package->executionAutoSchedule->privs['execution-taskAutoSchedule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-gantt'), 'recommend' => array());
-
 $config->group->package->manageBuild = new stdclass();
 $config->group->package->manageBuild->order  = 10;
 $config->group->package->manageBuild->subset = 'executionbuild';
@@ -3563,12 +3557,6 @@ $config->group->package->projectRelation->privs['programplan-editrelation']     
 $config->group->package->projectRelation->privs['programplan-batcheditrelation']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
 $config->group->package->projectRelation->privs['programplan-deleterelation']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
 $config->group->package->projectRelation->privs['programplan-batchdeleterelation'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 6, 'depend' => array('programplan-browse', 'programplan-relation'), 'recommend' => array());
-
-$config->group->package->projectAutoSchedule = new stdclass();
-$config->group->package->projectAutoSchedule->order  = 15;
-$config->group->package->projectAutoSchedule->subset = 'programplan';
-$config->group->package->projectAutoSchedule->privs  = array();
-$config->group->package->projectAutoSchedule->privs['programplan-taskAutoSchedule'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('programplan-browse'), 'recommend' => array());
 
 $config->group->package->executionRelation = new stdclass();
 $config->group->package->executionRelation->order  = 10;
