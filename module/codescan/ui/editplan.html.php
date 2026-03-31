@@ -65,7 +65,7 @@ formPanel
         set::required(true),
         set::label($lang->codescan->repo),
         set::readonly(true),
-        set::value(zget($plan, 'repo', '')),
+        set::value(zget($plan, 'repoID', '')),
         set::items(array_column($repoList, 'name', 'id')),
         on::init()->call('getBranches')
     ),
@@ -116,7 +116,7 @@ formPanel
     (
         set::name('solutions'),
         set::width('2/3'),
-        set::label($lang->codescan->solutions),
+        set::label($lang->codescan->solutionIDs),
         set::required(true),
         set::value(empty($plan->solutionIDs) ? array() : $plan->solutionIDs),
         set::items(array_column($solutionList, 'name', 'id')),
