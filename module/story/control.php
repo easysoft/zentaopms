@@ -433,7 +433,7 @@ class story extends control
                 if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedBy', 'changedDate', 'reviewedDate'))) unset($changes[$index]);
             }
 
-            if(empty($changes))
+            if(empty($changes) && !$this->post->comment)
             {
                 $reviewers = $this->story->getReviewerPairs($storyID, $oldStory->version);
                 $oldStory->reviewer = array_keys($reviewers);
