@@ -109,7 +109,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     }
 
     $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '');
-    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}"), 'data-toggle' => 'modal'));
+    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}&type={$type}"), 'data-toggle' => 'modal'));
     $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '');
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
@@ -123,13 +123,14 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
 
     featureBar
     (
-        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
+        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
         $productDropdown,
         $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
         li
         (
             setID('versionList'),
             setClass('ml-2'),
+            setStyle(array('order' => '10010')),
             dropdown
             (
                 h::css
