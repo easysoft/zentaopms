@@ -1781,7 +1781,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getBugProductsAndExecutions($bugs)
+    public function getBugProductsAndExecutions(array $bugs): array
     {
         $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
         foreach($records as $record) $record->product = ",{$record->product},";
