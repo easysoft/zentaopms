@@ -159,38 +159,6 @@ class pipeline extends control
     }
 
     /**
-     * Arrange a pipeline.
-     *
-     * @param  int    $pipelineID
-     * @access public
-     * @return void
-     */
-    public function arrange(int $id, int $space = 0, int $repoID = 0, $type = 'space')
-    {
-        $this->commonAction($space);
-        if($repoID)
-        {
-            $this->pipelineZen->checkRepoEmpty();
-            $repoID = $this->loadModel('repo')->saveState($repoID);
-
-            /* Set session. */
-            $this->loadModel('ci')->setMenu($repoID);
-        }
-        else
-        {
-            $this->session->set('repoID', '');
-        }
-
-        $this->view->title    = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->edit;
-        $this->view->pipeline = $this->pipeline->getByID($id);
-        $this->view->repoID   = $repoID;
-        $this->view->type     = $type;
-        $this->view->repo     = $this->loadModel('repo')->getByID($repoID);;
-
-        $this->display();
-    }
-
-    /**
      * View pipeline and compile.
      *
      * @param  int    $pipelineID
@@ -325,9 +293,8 @@ class pipeline extends control
      */
     public function ajaxGetRefList(int $repoID)
     {
-        $repo = $this->loadModel('repo')->getByID($repoID);
-        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, (int)$repo->serviceProject);
-        if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
+        $repo    = $this->loadModel('repo')->getByID($repoID);
+        $refList = $this->repo->getBranches($repo, true);
 
         $options = array();
         foreach($refList as $branch => $branchName)
@@ -827,7 +794,7 @@ class pipeline extends control
         $this->view->pipeline  = $this->pipeline->getByID(empty($this->view->execution) ? 0 : $this->view->execution->pipelineID);
         $this->view->repoID    = $repoID;
         $this->view->type      = $type;
-        $this->view->repo      = $this->loadModel('repo')->getByID($repoID);;
+        $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
 
         $this->display();
     }
