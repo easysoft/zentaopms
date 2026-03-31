@@ -661,7 +661,5 @@ $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
 $lang->group->package->featureSwitch         = 'Feature Switch';
-$lang->group->package->executionAutoSchedule = 'Task Auto Schedule';
-$lang->group->package->projectAutoSchedule   = 'Task Auto Schedule';
 
 include (dirname(__FILE__) . '/resource.php');
