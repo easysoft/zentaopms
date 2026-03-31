@@ -1007,7 +1007,6 @@ $config->group->package->manageProjectStory = new stdclass();
 $config->group->package->manageProjectStory->order  = 10;
 $config->group->package->manageProjectStory->subset = 'projectstory';
 $config->group->package->manageProjectStory->privs  = array();
-$config->group->package->manageProjectStory->privs['story-batchToTask']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 130, 'depend' => array('projectstory-story'), 'recommend' => array('execution-task'));
 $config->group->package->manageProjectStory->privs['projectstory-linkStory']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('projectstory-story'), 'recommend' => array('projectstory-importFromLib', 'projectstory-importplanstories', 'projectstory-unlinkStory', 'story-batchToTask'));
 $config->group->package->manageProjectStory->privs['projectstory-importplanstories'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('projectstory-story'), 'recommend' => array('projectstory-importFromLib', 'projectstory-linkStory', 'projectstory-unlinkStory', 'story-batchToTask'));
 $config->group->package->manageProjectStory->privs['projectstory-unlinkStory']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('projectstory-story'), 'recommend' => array('projectstory-batchUnlinkStory', 'projectstory-importFromLib', 'projectstory-importplanstories', 'projectstory-linkStory', 'story-batchToTask'));
@@ -1290,6 +1289,7 @@ $config->group->package->manageExecutionStory->privs['execution-unlinkStory']   
 $config->group->package->manageExecutionStory->privs['execution-batchUnlinkStory']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('execution-story'), 'recommend' => array('execution-unlinkStory'));
 $config->group->package->manageExecutionStory->privs['execution-storySort']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-storyEstimate', 'execution-storyKanban', 'execution-storyView', 'execution-unlinkStory'));
 $config->group->package->manageExecutionStory->privs['execution-storyEstimate']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd',      'order' => 6, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-storyKanban', 'execution-storySort', 'execution-storyView', 'execution-unlinkStory'));
+$config->group->package->manageExecutionStory->privs['story-batchToTask']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('execution-story'), 'recommend' => array('execution-linkStory', 'execution-importplanstories', 'execution-storyView', 'execution-unlinkStory'));
 
 $config->group->package->manageExecutionEffort = new stdclass();
 $config->group->package->manageExecutionEffort->order  = 25;
