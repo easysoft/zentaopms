@@ -466,11 +466,11 @@ class codescanZen extends codescan
      */
     protected function buildPlanData(object $plan): object
     {
-        $plan->latestScanTime   = empty($plan->latest_run_time) ? '' : date('Y-m-d H:i:s', $plan->latest_run_time);
+        $plan->latestScanTime   = empty($plan->latestRunTime) ? '' : $plan->latestRunTime;
         $plan->solutions        = empty($plan->solutionIDs) ? '' : implode(',', $plan->solutionIDs);
-        $plan->latestScanTime   = empty($plan->latest_task_created) ? '' : date('Y-m-d H:i:s', intval($plan->latest_task_created / 1000));
-        $plan->latestExecStatus = empty($plan->latest_task_status) ? '-' : $plan->latest_task_status;
-        $plan->latestExecResult = empty($plan->latest_task_result) ? '-' : $plan->latest_task_result;
+        $plan->latestScanTime   = empty($plan->latestTaskCreated) ? '' : $plan->latestTaskCreated;
+        $plan->latestExecStatus = empty($plan->latestTaskStatus) ? '-' : $plan->latestTaskStatus;
+        $plan->latestExecResult = empty($plan->latestTaskResult) ? '-' : $plan->latestTaskResult;
 
         if(!empty($plan->branches) && !empty($plan->branches->include))
         {
