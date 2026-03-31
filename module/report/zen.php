@@ -38,7 +38,7 @@ class reportZen extends report
 
         /* Get user who need reminders, and set reminder data to them. */
         $reminder = array();
-        $users    = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos), array_keys($testTasks)));
+        $users    = array_unique(array_merge(array_keys($bugs), array_keys($tasks), array_keys($todos), array_keys($testTasks), array_keys($cards)));
         if(!empty($users))     foreach($users     as $user)              $reminder[$user] = new stdclass();
         if(!empty($bugs))      foreach($bugs      as $user => $bug)      $reminder[$user]->bugs      = $bug;
         if(!empty($tasks))     foreach($tasks     as $user => $task)     $reminder[$user]->tasks     = $task;

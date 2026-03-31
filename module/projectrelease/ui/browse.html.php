@@ -147,6 +147,8 @@ $createReleaseLink = hasPriv('projectrelease', 'create') ? createLink('projectre
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => 'insertListToDoc'));
 if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#projectreleases', 'release')"));
 
+if(!common::hasPriv('projectrelease', 'linkStory')) unset($cols['actions']['list']['linkStory']);
+if(!common::hasPriv('projectrelease', 'linkBug'))   unset($cols['actions']['list']['linkBug']);
 $tableData = initTableData($releases, $cols);
 dtable
 (

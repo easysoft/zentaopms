@@ -238,17 +238,26 @@ class reportModel extends model
     public function getUserKanbanCards(): array
     {
         $expireDays = isset($this->config->kanban->reminder->expireDays) ? $this->config->kanban->reminder->expireDays : 1;
-        return $this->dao->select('t1.id, t1.name, t2.account as user, t1.end as deadline, t1.kanban')
-            ->from(TABLE_KANBANCARD)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.assignedTo = t2.account')
-            ->where('t1.assignedTo')->ne('')
-            ->andWhere('t1.progress')->lt(100)
-            ->andWhere('t1.archived')->eq(0)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t1.end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
-            ->fetchGroup('user');
+        $cards = $this->dao->select('id, name, assignedTo, end as deadline, kanban')
+            ->from(TABLE_KANBANCARD)
+            ->where('assignedTo')->ne('')
+            ->andWhere('progress')->lt(100)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
+            ->fetchAll();
+
+        $cardGroups = array();
+        foreach($cards as $card)
+        {
+            $assignedToList = explode(',', $card->assignedTo);
+            foreach($assignedToList as $assignedTo)
+            {
+                $cardGroups[$assignedTo][] = $card;
+            }
+        }
+
+        return $cardGroups;
     }
 
     /**

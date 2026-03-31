@@ -41,7 +41,7 @@ class activateTaskTester extends tester
             if($form->dom->leftTip->getText() != sprintf($this->lang->error->notempty, $this->lang->task->left)) return $this->failed('预计剩余为空或0时提示错误');
             return $this->success('预计剩余为空或0时提示正确');
         }
-        $form->wait(10);
+        $form->wait(3);
         if($form->dom->taskAssignedTo->getText() != $assignedTo)                      return $this->failed('激活任务后指派给错误');
         if(floatval($form->dom->taskLeft->getText()) != $left)                        return $this->failed('激活任务后预计剩余错误');
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('激活任务后任务状态错误');

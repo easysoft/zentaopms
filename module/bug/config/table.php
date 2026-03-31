@@ -27,17 +27,19 @@ $config->bug->dtable->fieldList['title']['group']    = 1;
 $config->bug->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->bug->dtable->fieldList['title']['sortType'] = true;
 
-$config->bug->dtable->fieldList['severity']['title']    = $lang->bug->severity;
-$config->bug->dtable->fieldList['severity']['type']     = 'severity';
-$config->bug->dtable->fieldList['severity']['show']     = true;
-$config->bug->dtable->fieldList['severity']['group']    = 2;
-$config->bug->dtable->fieldList['severity']['sortType'] = true;
+$config->bug->dtable->fieldList['severity']['title']        = $lang->bug->severity;
+$config->bug->dtable->fieldList['severity']['type']         = 'severity';
+$config->bug->dtable->fieldList['severity']['show']         = true;
+$config->bug->dtable->fieldList['severity']['group']        = 2;
+$config->bug->dtable->fieldList['severity']['sortType']     = true;
+$config->bug->dtable->fieldList['severity']['severityList'] = $lang->bug->severityList;
 
 $config->bug->dtable->fieldList['pri']['title']    = $lang->bug->pri;
 $config->bug->dtable->fieldList['pri']['type']     = 'pri';
 $config->bug->dtable->fieldList['pri']['show']     = true;
 $config->bug->dtable->fieldList['pri']['group']    = 2;
 $config->bug->dtable->fieldList['pri']['sortType'] = true;
+$config->bug->dtable->fieldList['pri']['priList']  = $lang->bug->priList;
 
 $config->bug->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
 $config->bug->dtable->fieldList['status']['type']      = 'status';

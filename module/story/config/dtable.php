@@ -142,6 +142,7 @@ $config->story->dtable->fieldList['reviewer']['width']    = '100';
 $config->story->dtable->fieldList['reviewer']['sortType'] = false;
 $config->story->dtable->fieldList['reviewer']['show']     = true;
 $config->story->dtable->fieldList['reviewer']['group']    = 5;
+if($isEn) $config->story->dtable->fieldList['reviewer']['width'] = '120';
 
 $config->story->dtable->fieldList['reviewedDate']['name']     = 'reviewedDate';
 $config->story->dtable->fieldList['reviewedDate']['title']    = $lang->story->reviewedDate;
@@ -157,6 +158,7 @@ $config->story->dtable->fieldList['stage']['type']      = 'status';
 $config->story->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList + $lang->requirement->stageList;
 $config->story->dtable->fieldList['stage']['show']      = true;
 $config->story->dtable->fieldList['stage']['group']     = 6;
+if($isEn) $config->story->dtable->fieldList['stage']['width'] = '120';
 
 $config->story->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->story->dtable->fieldList['assignedTo']['title']       = $lang->story->assignedTo;
