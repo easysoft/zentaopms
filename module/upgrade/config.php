@@ -1766,6 +1766,7 @@ $config->delete['22_0'][] = 'extension/lite/kanban/ext/view/';
 $config->delete['22_0'][] = 'extension/lite/attend/';
 $config->delete['22_0'][] = 'module/block/view/';
 $config->delete['22_0'][] = 'module/group/view/';
+$config->delete['22_0'][] = 'module/doc/view/';
 $config->delete['22_0'][] = 'module/common/view/sparkline.html.php';
 $config->delete['22_0'][] = 'module/common/view/sortable.html.php';
 $config->delete['22_0'][] = 'extension/lite/project/ext/view/execution.html.php';
