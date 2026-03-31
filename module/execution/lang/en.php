@@ -548,8 +548,8 @@ $lang->execution->featureBar['task']['status']       = $lang->more;
 
 $lang->execution->moreSelects['task']['status']['wait']         = 'Waiting';
 $lang->execution->moreSelects['task']['status']['doing']        = 'Doing';
-$lang->execution->moreSelects['task']['status']['undone']       = 'Unfinished';
-$lang->execution->moreSelects['task']['status']['finishedbyme'] = 'FinishedByMe';
+$lang->execution->moreSelects['task']['status']['undone']       = 'Uncompleted';
+$lang->execution->moreSelects['task']['status']['finishedbyme'] = 'Completed by Me';
 $lang->execution->moreSelects['task']['status']['done']         = 'Done';
 $lang->execution->moreSelects['task']['status']['closed']       = 'Closed';
 $lang->execution->moreSelects['task']['status']['cancel']       = 'Cancelled';
