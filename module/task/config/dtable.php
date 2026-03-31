@@ -64,7 +64,7 @@ $config->task->dtable->fieldList['assignedTo']['show']        = true;
 $config->task->dtable->fieldList['assignedTo']['group']       = 3;
 $config->task->dtable->fieldList['assignedTo']['control']     = 'select';
 $config->task->dtable->fieldList['assignedTo']['dataSource']  = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
-if($isEn) $config->task->dtable->fieldList['assignedTo']['width'] = '120';
+if($isEn) $config->task->dtable->fieldList['assignedTo']['width'] = '140';
 
 $config->task->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->task->dtable->fieldList['assignedDate']['sortType'] = true;

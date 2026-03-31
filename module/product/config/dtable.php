@@ -1,4 +1,6 @@
 <?php
+global $app;
+$isEn = $app->getClientLang() == 'en';
 $config->product->dtable = new stdclass();
 
 $config->product->dtable->fieldList['name']['name']         = 'name';
@@ -195,8 +197,6 @@ $config->product->all->dtable->fieldList['createdDate']['width']    = 90;
 $config->product->all->dtable->fieldList['createdDate']['type']     = 'date';
 $config->product->all->dtable->fieldList['createdDate']['sortType'] = true;
 $config->product->all->dtable->fieldList['createdDate']['group']    = '1';
-
-$isEn = $app->getClientLang() == 'en';
 
 if($config->enableER)
 {
@@ -464,6 +464,7 @@ if($isEn)
     $config->product->all->dtable->fieldList['testCaseCoverage']['width']  = 136;
     $config->product->all->dtable->fieldList['unresolvedBugs']['width']    = 120;
     $config->product->all->dtable->fieldList['releases']['width']          = 120;
+    $config->product->all->dtable->fieldList['PO']['width']                = 150;
 }
 
 if($config->systemMode != 'ALM' && $config->systemMode != 'PLM')

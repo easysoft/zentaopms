@@ -1,5 +1,7 @@
 <?php
 global $lang,$app;
+$isEn = $app->getClientLang() == 'en';
+
 $config->project->dtable = new stdclass();
 $config->project->dtable->team = new stdclass();
 $config->project->dtable->testtask = new stdclass();
@@ -56,6 +58,7 @@ $config->project->dtable->fieldList['PM']['data-toggle'] = 'modal';
 $config->project->dtable->fieldList['PM']['data-size']   = 'sm';
 $config->project->dtable->fieldList['PM']['group']       = 3;
 $config->project->dtable->fieldList['PM']['show']        = true;
+if($isEn) $config->project->dtable->fieldList['PM']['width'] = '150';
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
 $config->project->dtable->fieldList['storyPoints']['type']     = 'count';
@@ -76,6 +79,7 @@ $config->project->dtable->fieldList['executionCount']['type']     = 'count';
 $config->project->dtable->fieldList['executionCount']['group']    = 4;
 $config->project->dtable->fieldList['executionCount']['show']     = 4;
 $config->project->dtable->fieldList['executionCount']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['executionCount']['width'] = '120px';
 
 $config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']     = 'budget';
@@ -96,6 +100,7 @@ $config->project->dtable->fieldList['invested']['type']     = 'count';
 $config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['invested']['width'] = '120px';
 
 if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
 {
@@ -114,6 +119,7 @@ $config->project->dtable->fieldList['begin']['type']     = 'date';
 $config->project->dtable->fieldList['begin']['sortType'] = true;
 $config->project->dtable->fieldList['begin']['group']    = 6;
 $config->project->dtable->fieldList['begin']['show']     = true;
+if($isEn) $config->project->dtable->fieldList['begin']['width'] = '120px';
 
 $config->project->dtable->fieldList['end']['title']    = $lang->project->end;
 $config->project->dtable->fieldList['end']['name']     = 'end';
@@ -121,6 +127,7 @@ $config->project->dtable->fieldList['end']['type']     = 'date';
 $config->project->dtable->fieldList['end']['sortType'] = true;
 $config->project->dtable->fieldList['end']['group']    = 6;
 $config->project->dtable->fieldList['end']['show']     = true;
+if($isEn) $config->project->dtable->fieldList['end']['width'] = '120px';
 
 $config->project->dtable->fieldList['realBegan']['title'] = $lang->project->realBeganAB;
 $config->project->dtable->fieldList['realBegan']['type']  = 'date';
@@ -147,6 +154,7 @@ $config->project->dtable->fieldList['progress']['name']  = 'progress';
 $config->project->dtable->fieldList['progress']['type']  = 'progress';
 $config->project->dtable->fieldList['progress']['group'] = 7;
 $config->project->dtable->fieldList['progress']['show']  = true;
+if($isEn) $config->project->dtable->fieldList['progress']['width'] = '100px';
 
 if($config->edition != 'open')
 {

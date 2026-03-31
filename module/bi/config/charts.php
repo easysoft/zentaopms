@@ -2139,7 +2139,7 @@ FROM
 	LEFT JOIN (
 	SELECT
 		id, name,
-		YEAR ( openedDate ) AS `year`
+		YEAR ( `openedDate` ) AS `year`
 	FROM
 		zt_project
 	WHERE
@@ -2213,7 +2213,7 @@ SELECT
 	t2.title
 FROM
 	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
-	LEFT JOIN ( SELECT id, title, YEAR ( openedDate ) AS `year` FROM zt_story WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
+	LEFT JOIN ( SELECT id, title, YEAR ( `openedDate` ) AS `year` FROM zt_story WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
 ,
@@ -2242,7 +2242,7 @@ SELECT
 	t2.title
 FROM
 	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
-	LEFT JOIN ( SELECT id, title, YEAR ( openedDate ) AS `year` FROM zt_bug WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
+	LEFT JOIN ( SELECT id, title, YEAR ( `openedDate` ) AS `year` FROM zt_bug WHERE deleted = '0' ) AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
 ,
@@ -2303,7 +2303,7 @@ FROM
 	LEFT JOIN (
 	SELECT
 		id, name,
-		YEAR ( openedDate ) AS `year`
+		YEAR ( `openedDate` ) AS `year`
 	FROM
 		zt_project
 	WHERE
@@ -2364,7 +2364,7 @@ SELECT
 	t2.name
 FROM
 	( SELECT DISTINCT YEAR ( `date` ) AS `year` FROM zt_action ) AS t1
-	LEFT JOIN ( SELECT id, name, YEAR ( openedDate ) AS `year` FROM zt_task WHERE deleted = '0' AND type != 'research') AS t2 ON t1.`year` = t2.`year`
+	LEFT JOIN ( SELECT id, name, YEAR ( `openedDate` ) AS `year` FROM zt_task WHERE deleted = '0' AND type != 'research') AS t2 ON t1.`year` = t2.`year`
  WHERE t2.id IS NOT NULL
 EOT
 ,

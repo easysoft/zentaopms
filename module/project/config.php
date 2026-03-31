@@ -142,6 +142,7 @@ $config->project->projectPriv['repo']        = array('create', 'showSyncCommit',
 $config->project->projectPriv['mr']          = array('browse');
 $config->project->projectPriv['execution']   = array('start', 'edit', 'close', 'delete');
 $config->project->projectPriv['report']      = array('projectSummary');
+$config->project->projectPriv['build']       = array();
 if($config->edition != 'max') $config->project->projectPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect', 'userIssue');
 
 

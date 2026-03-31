@@ -101,9 +101,10 @@ $config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
 $config->release->dtable->story->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->story->fieldList['title']['data-app']    = $app->tab;
 
-$config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;
-$config->release->dtable->story->fieldList['pri']['name']  = 'pri';
-$config->release->dtable->story->fieldList['pri']['type']  = 'pri';
+$config->release->dtable->story->fieldList['pri']['title']   = $lang->priAB;
+$config->release->dtable->story->fieldList['pri']['name']    = 'pri';
+$config->release->dtable->story->fieldList['pri']['type']    = 'pri';
+$config->release->dtable->story->fieldList['pri']['priList'] = $lang->story->priList;
 
 $config->release->dtable->story->fieldList['status']['title']     = $lang->statusAB;
 $config->release->dtable->story->fieldList['status']['name']      = 'status';
@@ -147,13 +148,15 @@ $config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
 $config->release->dtable->bug->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->bug->fieldList['title']['data-app']    = $app->tab;
 
-$config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;
-$config->release->dtable->bug->fieldList['severity']['name']  = 'severity';
-$config->release->dtable->bug->fieldList['severity']['type']  = 'severity';
+$config->release->dtable->bug->fieldList['severity']['title']        = $lang->bug->severity;
+$config->release->dtable->bug->fieldList['severity']['name']         = 'severity';
+$config->release->dtable->bug->fieldList['severity']['type']         = 'severity';
+$config->release->dtable->bug->fieldList['severity']['severityList'] = $lang->bug->severityList;
 
-$config->release->dtable->bug->fieldList['pri']['title'] = $lang->priAB;
-$config->release->dtable->bug->fieldList['pri']['name']  = 'pri';
-$config->release->dtable->bug->fieldList['pri']['type']  = 'pri';
+$config->release->dtable->bug->fieldList['pri']['title']   = $lang->priAB;
+$config->release->dtable->bug->fieldList['pri']['name']    = 'pri';
+$config->release->dtable->bug->fieldList['pri']['type']    = 'pri';
+$config->release->dtable->bug->fieldList['pri']['priList'] = $lang->bug->priList;
 
 $config->release->dtable->bug->fieldList['status']['title']     = $lang->statusAB;
 $config->release->dtable->bug->fieldList['status']['name']      = 'status';

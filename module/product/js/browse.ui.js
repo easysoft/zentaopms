@@ -121,9 +121,8 @@ window.renderCell = function(result, info)
             }
         }
 
-        if((story.type == 'story' && !storyViewPriv) ||
-           (story.type == 'requirement' && !requirementViewPriv) ||
-           (story.type == 'epic' && !epicViewPriv)) result[0] = result[0].props.children;
+        if(result[0].props && ((story.type == 'story' && !storyViewPriv) || (story.type == 'requirement' && !requirementViewPriv) || (story.type == 'epic' && !epicViewPriv))) result[0] = result[0].props.children;
+
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
@@ -132,22 +131,33 @@ window.renderCell = function(result, info)
     }
     if(info.col.name == 'assignedTo')
     {
-        if(info.row.data.status == 'closed' || !requirementAssignedToPriv)
+        if(info.row.data.rawStatus == 'closed' && result[0]['props'])
         {
             delete result[0]['props']['data-toggle'];
             delete result[0]['props']['href'];
             result[0]['props']['className'] += ' disabled';
         }
-        else if(storyAssignedToPriv && requirementAssignedToPriv)
-        {
-            result[0]['props']['href'] = $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id);
-        }
-        else if(!storyAssignedToPriv && requirementAssignedToPriv)
+        else
         {
             let assignToClass = info.row.data.assignedTo == userAccount ? 'is-me' : '';
             if(!info.row.data.assignedTo) assignToClass = 'is-unassigned';
 
-            result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            if(storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
+            {
+                result[0]['props']['href'] = $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id);
+            }
+            else if(!storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
+            {
+                result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            }
+            else if(storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+            {
+                result[0]['props']['href'] = $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id);
+            }
+            else if(!storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+            {
+                result[0] = {html : '<a href=' + $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            }
         }
     }
     if(info.col.name == 'childItem')
