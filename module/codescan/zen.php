@@ -596,20 +596,20 @@ class codescanZen extends codescan
      * @access protected
      * @return void
      */
-    protected function getFileIssueList(string $file, int $serviceRepoID)
+    protected function getFileIssueList(string $file, int $serviceRepoID, int $taskID)
     {
         $params = array();
-        $params['repo_id'] = $serviceRepoID;
-        $params['file']    = $file;
-        $params['sort']    = 'line';
-        $params['order']   = 'asc';
-        $params['limit']   = 100;
-        $params['page']    = 1;
+        $params['repoID'] = $serviceRepoID;
+        $params['file']   = $file;
+        $params['sort']   = 'line';
+        $params['order']  = 'asc';
+        $params['limit']  = 100;
+        $params['page']   = 1;
 
         $list = array();
         while(true)
         {
-            $result = $this->codescan->getScanIssueList($this->serverID, 0, $params);
+            $result = $this->codescan->getScanIssueList($taskID, $params);
             if(empty($result) || empty($result->data)) break;
 
             $list = array_merge($list, $result->data);
