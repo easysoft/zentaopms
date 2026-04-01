@@ -269,6 +269,8 @@ if($config->edition != 'open' && $zaiConfig)
     }
 }
 
+to::headBefore(h::css('.icon-app-empty::before{content: "\e919"}'));
+
 to::head
 (
     $zaiConfig ? h::js('window.zai=' . js::value($zaiConfig) . ';') : null,

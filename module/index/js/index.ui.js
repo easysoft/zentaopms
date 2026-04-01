@@ -848,14 +848,17 @@ function initAppsMenu(items)
 
         item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
         item.text = $link.text().trim();
-        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+        $link.html('<i class="icon icon-app-empty ' + item.icon + '"></i><span class="text"></span>', false);
+        $link.find('.text').toggleClass('font-brand', ['devops', 'bi', 'safe'].includes(item.code)).attr('title', item.text).text(item.text);
         apps.map[item.code] = item;
 
         $('<li class="hint-right is-original"></li>')
             .attr({'data-app': item.code, 'data-hint': item.text})
             .append($link)
             .appendTo($menuMainNav);
+
+        const hasLongText = $link.find('.text').width() > ($link.outerWidth() - 24);
+        $link.toggleClass('has-long-text', hasLongText).find('.text').attr('title', hasLongText ? item.text : null);
 
         if(!apps.defaultCode) apps.defaultCode = item.code;
     });
@@ -1130,8 +1133,8 @@ function updateSpaceMenu(info)
             .addClass('rounded' + (item.notApp ? '' : ' open-in-app'));
 
         item.icon = item.icon || `icon-${item.code}`;
-        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+        $link.html('<i class="icon icon-app-empty ' + item.icon + '"></i><span class="text"></span>', false);
+        $link.find('.text').toggleClass('font-brand', ['devops', 'bi', 'safe'].includes(item.code)).attr('title', item.text).text(item.text);
 
         $('<li class="hint-right is-space"></li>')
             .attr({'data-app': currentCode, 'data-hint': item.text, 'data-name': item.code})
