@@ -1056,6 +1056,15 @@ class programplanTao extends programplanModel
         return !dao::isError();
     }
 
+    /**
+     * 排序任务。
+     * Sort tasks for gantt.
+     *
+     * @param  array   $tasks
+     * @param  string  $orderBy
+     * @return array
+     * @access public
+     */
     public function sortForGantt(array $tasks, string $orderBy): array
     {
         if(empty($tasks)) return array();
