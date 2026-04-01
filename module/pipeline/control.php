@@ -288,18 +288,21 @@ class pipeline extends control
      * Ajax get reference list function.
      *
      * @param  int    $repoID
+     * @param  string $query
      * @access public
      * @return void
      */
-    public function ajaxGetRefList(int $repoID)
+    public function ajaxGetRefList(int $repoID, string $query = '')
     {
-        $repo    = $this->loadModel('repo')->getByID($repoID);
-        $refList = $this->repo->getBranches($repo, true);
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        $scm  = $this->app->loadClass('scm');
+        $scm->setEngine($repo);
+        $refList = $scm->branch($query, 'date_desc');
 
         $options = array();
         foreach($refList as $branch => $branchName)
         {
-            $options[] = array('text' => $branchName, 'value' => $branch);
+            $options[] = array('text' => $query ? zget($branchName, 'name', '') : $branchName, 'value' => $branch);
         }
         $this->send(array('result' => 'success', 'refList' => $options));
     }
