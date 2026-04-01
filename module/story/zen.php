@@ -2143,6 +2143,8 @@ class storyZen extends story
         if(!empty($_FILES['files']['name'][0]) || !empty($_POST['renameFiles']) || !empty($_POST['deleteFiles'])) return true;
 
         $oldStory = $this->story->getByID($storyID);
+        if(!empty($oldStory->docs) && empty($_POST['oldDocs'])) return true;
+
         $changes  = common::createChanges($oldStory, $storyData);
         foreach($changes as $index => $change)
         {
