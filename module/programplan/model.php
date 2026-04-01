@@ -133,10 +133,11 @@ class programplanModel extends model
      * @param  bool    $returnJson
      * @param  string  $browseType
      * @param  int     $queryID
+     * @param  string  $orderBy
      * @access public
      * @return string|array
      */
-    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, $browseType = '', $queryID = 0): string|array
+    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0, string $orderBy = ''): string|array
     {
         $plans   = $this->getStage($projectID, $productID, 'all', 'order');
         $project = $this->loadModel('project')->getById($projectID);
@@ -162,7 +163,6 @@ class programplanModel extends model
         /* Set plan for gantt view. */
         $result = $this->programplanTao->initGanttPlans($plans, $browseType);
         $datas          = $result['datas'];
-        $planIdList     = $result['planIdList'];
         $stageIndex     = $result['stageIndex'];
         $reviewDeadline = $result['reviewDeadline'];
 
@@ -173,6 +173,9 @@ class programplanModel extends model
         $result     = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
         $datas      = $result['datas'];
         $stageIndex = $result['stageIndex'];
+
+        /* 根据排序字段手动排序。 Manually sort by order field. */
+        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         /* Build data for ipd. */
         if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
@@ -200,10 +203,11 @@ class programplanModel extends model
      * @param  bool    $returnJson
      * @param  string  $browseType
      * @param  int     $queryID
+     * @param  string  $orderBy
      * @access public
      * @return string|array
      */
-    public function getDataForGanttGroup(string $type, int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0): string|array
+    public function getDataForGanttGroup(string $type, int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0, string $orderBy = ''): string|array
     {
         $datas       = array();
         $stageIndex  = array();
@@ -284,6 +288,9 @@ class programplanModel extends model
             if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
             if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
         }
+
+        /* 根据排序字段手动排序。 Manually sort by order field. */
+        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
         $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
@@ -898,7 +905,7 @@ class programplanModel extends model
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_asc', $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,estStarted_asc,id_asc', $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
@@ -909,7 +916,7 @@ class programplanModel extends model
                 ->andWhere('t1.execution')->in($planIdList)
                 ->andWhere('t1.status')->ne('cancel')
                 ->andWhere('t1.closedReason')->ne('cancel')
-                ->orderBy('execution_asc, order_asc, id_asc')
+                ->orderBy('execution_asc,estStarted_asc,id_asc')
                 ->fetchAll('id');
         }
 

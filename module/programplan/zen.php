@@ -407,8 +407,8 @@ class programplanZen extends programplan
             $stages = $this->loadModel('project')->getGanttDataByVersion((int)$versionID);
             if($stages) return $stages;
         }
-        if($type == 'gantt') return $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
-        if(isset($this->lang->programplan->ganttBrowseType[$type])) return $this->programplan->getDataForGanttGroup($type, $projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
+        if($type == 'gantt') return $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
+        if(isset($this->lang->programplan->ganttBrowseType[$type])) return $this->programplan->getDataForGanttGroup($type, $projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
         return array();
     }
 

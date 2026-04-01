@@ -810,6 +810,9 @@ class programplanTao extends programplanModel
      */
     protected function buildTaskDataForGantt(object $task, array $dateLimit, int $groupID = 0, array $tasksMap = array()): object
     {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
         $taskPri  = "<span class='pri-%s align-middle' title='%s'>%s</span> ";
         $pri      = zget($this->lang->task->priList, $task->pri);
         $priIcon  = sprintf($taskPri, $task->pri, $pri, $pri);
@@ -817,33 +820,46 @@ class programplanTao extends programplanModel
         $progress = $total > 0 ? round($task->consumed / $total, 3) : 0;
 
         $data = new stdclass();
-        $data->id           = $task->id;
-        $data->type         = 'task';
-        $data->text         = $priIcon . "<span class='gantt_title'>#{$task->id} {$task->name}</span>";
-        $data->percent      = '';
-        $data->rawStatus    = zget($task, 'rawStatus', $task->status);
-        $data->status       = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
-        $data->owner_id     = $task->assignedTo;
-        $data->attribute    = '';
-        $data->milestone    = '';
-        $data->begin        = substr($dateLimit['start'], 0, 10);
-        $data->deadline     = substr($dateLimit['end'], 0, 10);
-        $data->realBegan    = $dateLimit['realBegan'] ? substr($dateLimit['realBegan'], 0, 10) : '';
-        $data->realEnd      = $dateLimit['realEnd'] ? substr($dateLimit['realEnd'], 0, 10) : '';
-        $data->pri          = $task->pri;
-        $data->parent       = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
-        $data->open         = true;
-        $data->progress     = $progress;
-        $data->taskProgress = ($progress * 100) . '%';
-        $data->start_date   = $dateLimit['start'];
-        $data->endDate      = $dateLimit['end'];
-        $data->duration     = 1;
-        $data->estimate     = $task->estimate;
-        $data->consumed     = $task->consumed;
-        $data->color         = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
-        $data->progressColor = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
-        $data->textColor     = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
-        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+        $data->id             = $task->id;
+        $data->type           = 'task';
+        $data->text           = $priIcon . "<span class='gantt_title'>#{$task->id} {$task->name}</span>";
+        $data->story          = $task->story ? '#' . $task->story : '';
+        $data->status         = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
+        $data->owner_id       = $task->assignedTo;
+        $data->attribute      = '';
+        $data->milestone      = '';
+        $data->begin          = substr($dateLimit['start'], 0, 10);
+        $data->deadline       = substr($dateLimit['end'], 0, 10);
+        $data->realBegan      = $dateLimit['realBegan'] ? substr($dateLimit['realBegan'], 0, 10) : '';
+        $data->realEnd        = $dateLimit['realEnd'] ? substr($dateLimit['realEnd'], 0, 10) : '';
+        $data->parent         = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
+        $data->progress       = $progress;
+        $data->taskProgress   = ($progress * 100) . '%';
+        $data->start_date     = $dateLimit['start'];
+        $data->endDate        = $dateLimit['end'];
+        $data->duration       = 1;
+        $data->estimate       = $task->estimate;
+        $data->consumed       = $task->consumed;
+        $data->left           = $task->left;
+        $data->rawStatus      = zget($task, 'rawStatus', $task->status);
+        $data->pri            = zget($this->lang->task->priList, $task->pri);
+        $data->taskType       = zget($this->lang->task->typeList, $task->type);
+        $data->closedReason   = zget($this->lang->task->reasonList, $task->closedReason);
+        $data->openedBy       = zget($users, $task->openedBy);
+        $data->finishedBy     = zget($users, $task->finishedBy);
+        $data->closedBy       = zget($users, $task->closedBy);
+        $data->canceledBy     = zget($users, $task->canceledBy);
+        $data->lastEditedBy   = zget($users, $task->lastEditedBy);
+        $data->mailto         = empty($task->mailto) ? '' : implode(', ', array_map(function($user) use($users) { return zget($users, $user); }, explode(',', $task->mailto)));
+        $data->color          = zget($this->lang->execution->gantt->color, $task->pri, $this->lang->execution->gantt->defaultColor);
+        $data->progressColor  = zget($this->lang->execution->gantt->progressColor, $task->pri, $this->lang->execution->gantt->defaultProgressColor);
+        $data->textColor      = zget($this->lang->execution->gantt->textColor, $task->pri, $this->lang->execution->gantt->defaultTextColor);
+        $data->openedDate     = helper::isZeroDate($task->openedDate)     ? '' : substr($task->openedDate,     0, 10);
+        $data->assignedDate   = helper::isZeroDate($task->assignedDate)   ? '' : substr($task->assignedDate,   0, 10);
+        $data->closedDate     = helper::isZeroDate($task->closedDate)     ? '' : substr($task->closedDate,     0, 10);
+        $data->canceledDate   = helper::isZeroDate($task->canceledDate)   ? '' : substr($task->canceledDate,   0, 10);
+        $data->lastEditedDate = helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 0, 10);
+        $data->activatedDate  = helper::isZeroDate($task->activatedDate)  ? '' : substr($task->activatedDate,  0, 10);
 
         if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) or empty($data->endDate)) $data->duration = 1;
@@ -1038,5 +1054,44 @@ class programplanTao extends programplanModel
         $this->dao->update(TABLE_EXECUTION)->data($data)->where('id')->eq($executionID)->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * 排序任务。
+     * Sort tasks for gantt.
+     *
+     * @param  array   $tasks
+     * @param  string  $orderBy
+     * @return array
+     * @access public
+     */
+    public function sortForGantt(array $tasks, string $orderBy): array
+    {
+        if(empty($tasks)) return array();
+
+        list($orderField, $orderDirect) = $this->loadModel('execution')->parseOrderBy($orderBy);
+        if(empty($orderField)) return $tasks;
+
+        $orderKeys = array();
+        $isNumeric = true;
+        foreach($tasks as $id => $ganttItem)
+        {
+            if($ganttItem->type != 'task') continue;
+
+            $orderKeys[$id] = $ganttItem->{$orderField};
+            if(!is_numeric($orderKeys[$id])) $isNumeric = false;
+            if($orderField == 'start_date') $orderKeys[$id] = date('Y-m-d', strtotime($orderKeys[$id]));
+        }
+
+        if($orderDirect == 'asc')  asort($orderKeys, $isNumeric ? SORT_NUMERIC : SORT_REGULAR);
+        if($orderDirect == 'desc') arsort($orderKeys, $isNumeric ? SORT_NUMERIC : SORT_REGULAR);
+        foreach($orderKeys as $id => $fieldValue)
+        {
+            $ganttItem = $tasks[$id];
+
+            unset($tasks[$id]);
+            $tasks[$id] = $ganttItem;
+        }
+        return $tasks;
     }
 }
