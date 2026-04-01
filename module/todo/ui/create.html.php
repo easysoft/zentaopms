@@ -298,10 +298,11 @@ formPanel
             inputControl
             (
                 set::prefix($lang->todo->advance),
-                set::prefixWidth('42'),
+                set::prefixWidth($app->getClientLang() == 'en' ? '80' : '42'),
                 input
                 (
                     setClass('before-days'),
+                    set::style(array('padding-left' => $app->getClientLang() == 'en' ? '88px' : '50px')),
                     set::name('config[beforeDays]')
                 ),
                 to::suffix($lang->todo->cycleDay),
