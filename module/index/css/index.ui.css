@@ -14,6 +14,7 @@
 [lang^='en'] {--zt-menu-width: 132px!important;}
 
 #menu {position: fixed; left: 0; top: 0; bottom: 0; background: var(--zt-menu-bg); width: var(--zt-menu-width); color: var(--zt-menu-text-color); transition: width .1s; user-select: none; z-index: 1120;}
+#menu.waiting-workspace > * {visibility: hidden;}
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider, #menuMoreList > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 2px 8px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none; margin: 0}

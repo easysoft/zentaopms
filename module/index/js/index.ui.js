@@ -821,6 +821,16 @@ function refreshMenu()
 /** Init apps menu list. */
 function initAppsMenu(items)
 {
+    if($.cookie.get('workspace'))
+    {
+        $('#menu').addClass('waiting-workspace');
+        $(document).on('openapp', () =>
+        {
+            if($.cookie.get('workspace') === getLastAppCode()) return;
+            $('#menu').removeClass('waiting-workspace');
+        });
+    }
+
     apps.map.help =
     {
         code:     'help',
@@ -1087,16 +1097,18 @@ function updateSpaceMenu(info)
     const currentCode  = currentApp.code;
     const hasSpaceNav  = spaceType === currentCode;
     const $menuMainNav = $('#menuMainNav');
+    const $menu        = $('#menu');
 
     $.apps.workspace = spaceType;
     currentApp.workspace = info;
-    $('#menu').attr('data-space', spaceType);
+    $menu.attr('data-space', spaceType);
     $('body').toggleClass('has-space', hasSpaceNav);
 
     $menuMainNav.children('.is-space').remove();
     if(!hasSpaceNav)
     {
         refreshMenu();
+        if(info !== undefined) $menu.removeClass('waiting-workspace');
         return;
     }
 
@@ -1144,6 +1156,7 @@ function updateSpaceMenu(info)
             .appendTo($menuMainNav);
     });
     refreshMenu();
+    $menu.removeClass('waiting-workspace');
 }
 
 $(document).on('contextmenu', '#menuMainNav .divider', function(event)
