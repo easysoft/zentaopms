@@ -2126,4 +2126,41 @@ class storyZen extends story
 
         return sprintf($this->lang->story->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
     }
+
+    /**
+     * 检查数据是否有变化。
+     * Check if data has changed.
+     *
+     * @param  int    $storyID
+     * @param  object $storyData
+     * @access public
+     * @return bool
+     */
+    public function checkDataChanged(int $storyID, object $storyData): bool
+    {
+        if($this->post->comment) return true;
+        if(!empty($storyData->docs)) return true;
+        if(!empty($_FILES['files']['name'][0]) || !empty($_POST['renameFiles']) || !empty($_POST['deleteFiles'])) return true;
+
+        $oldStory = $this->story->getByID($storyID);
+        $changes  = common::createChanges($oldStory, $storyData);
+        foreach($changes as $index => $change)
+        {
+            if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedBy', 'changedDate', 'reviewedDate', 'docs'))) unset($changes[$index]);
+        }
+        if(!empty($changes)) return true;
+
+        $reviewers = $this->story->getReviewerPairs($storyID, $oldStory->version);
+        $oldStory->reviewer = array_keys($reviewers);
+        $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
+        if($diff) return true;
+
+        $docVersions = !empty($_POST['docVersions']) ? $_POST['docVersions'] : array();
+        foreach($docVersions as $docID => $version)
+        {
+            if(empty($oldStory->docVersions[$docID]) || $oldStory->docVersions[$docID] != $version) return true;
+        }
+
+        return false;
+    }
 }
