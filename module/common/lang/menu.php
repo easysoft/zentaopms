@@ -903,3 +903,4 @@ $lang->iconMap['effort']        = 'time';
 $lang->iconMap['CFD']           = 'chart-area';
 $lang->iconMap['build']         = 'wrench';
 $lang->iconMap['settings']      = 'cog-outline';
+$lang->iconMap['designguide']   = 'design';
