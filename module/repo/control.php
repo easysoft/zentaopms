@@ -502,7 +502,7 @@ class repo extends control
         if(!$repo->synced) return $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch or tag for git. */
-        $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
+        $branchID = $branchID ? $branchID : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
         if($this->app->tab == 'devops' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
