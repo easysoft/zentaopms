@@ -579,6 +579,7 @@
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
         $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
+        if(isLoading) setTimeout(() => $target.find('.load-indicator.loading').removeClass('loading'), loadingIndicatorDelay || 0);
         $target.toggleClass(loadingClass, isLoading);
     }
 
