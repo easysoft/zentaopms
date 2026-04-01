@@ -17,7 +17,7 @@
 #menu .nav {flex-direction: column; align-items: stretch;}
 #menu .nav > li {display: block; height: var(--zt-menu-height, 38px); padding: 4px 8px; transition: padding .2s;}
 #menu .nav > .divider, #menuMoreList > .divider {background: var(--color-canvas); opacity: .12; height: 1px; padding: 2px 8px; align-self: stretch; background-clip: content-box; box-sizing: content-box; border: none; margin: 0}
-#menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md);}
+#menu .nav > li > a {color: inherit; display: flex; align-items: center; gap: 4px; padding: 0 6px; height: calc(var(--zt-menu-height, 38px) - 8px); transition: color .2s, background-color .2s; border-radius: var(--radius-md); overflow: hidden;}
 #menu .nav > li > a.active,
 #menu .nav > li > a:hover {background: var(--zt-menu-hover-bg); color: var(--zt-menu-text-active)}
 #menu .nav > li > a.active {background: var(--zt-menu-active-bg); color: var(--zt-menu-text-active)}
@@ -58,7 +58,7 @@
 
 body.hide-menu {--zt-menu-width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}
-.hide-menu #menu .nav > .divider {padding: 6px;}
+.hide-menu #menu .nav > .divider {padding: 2px 6px;}
 .hide-menu #menu .nav > li > a {justify-content: center;}
 .hide-menu #menu .nav > li > a > .text {display: none;}
 .hide-menu #menu #menuMoreNav .nav > li > a > .text {display: flex;}
