@@ -38,6 +38,7 @@ $config->logonMethods[] = 'action.commentzin';
 $config->logonMethods[] = 'action.editcommentzin';
 $config->logonMethods[] = 'action.restorestages';
 $config->logonMethods[] = 'admin.ignore';
+$config->logonMethods[] = 'admin.ajaxgetdropmenu';
 $config->logonMethods[] = 'caselib.index';
 $config->logonMethods[] = 'company.index';
 $config->logonMethods[] = 'cron.consume';
@@ -170,15 +171,16 @@ $config->logonMethods[] = 'zanode.nodelist';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
+$config->ajaxDependencies['action.ajaxgetmoreactions']                        = ['project.dynamic', 'product.dynamic', 'my.dynamic', 'block.printblock', 'company.dynamic', 'execution.dynamic', 'user.dynamic', 'product.view', 'execution.view'];
 $config->ajaxDependencies['admin.ajaxchangetableengine']                      = 'admin.tableengine';
 $config->ajaxDependencies['admin.ajaxsendcode']                               = ['admin.certifyztemail', 'admin.certifyztmobile'];
 $config->ajaxDependencies['admin.ajaxsetzentaodata']                          = 'admin.index';
 $config->ajaxDependencies['ai.ajaxtestprompt']                                = ['ai.promptaudit'];
-$config->ajaxDependencies['api.ajaxgetapi']                                   = 'api.index';
+$config->ajaxDependencies['api.ajaxgetapi']                                   = ['api.index', 'doc.app', 'doc.templatelist', 'doc.quick', 'reporttemplate.browse', 'weekly.docviewer'];
 $config->ajaxDependencies['api.ajaxgetdata']                                  = 'api.index';
 $config->ajaxDependencies['api.ajaxgetdropmenu']                              = ['api.index', 'api.createlib'];
 $config->ajaxDependencies['api.ajaxgethome']                                  = 'api.index';
-$config->ajaxDependencies['api.ajaxgetlibapilist']                            = 'api.index';
+$config->ajaxDependencies['api.ajaxgetlibapilist']                            = ['api.index', 'doc.app', 'doc.templatelist', 'doc.quick', 'reporttemplate.browse', 'weekly.docviewer'];
 $config->ajaxDependencies['api.ajaxgetlist']                                  = 'api.ajaxgetdropmenu';
 $config->ajaxDependencies['backup.ajaxcheckbackupversion']                    = 'backup.index';
 $config->ajaxDependencies['backup.ajaxgetdiskspace']                          = 'backup.index';
