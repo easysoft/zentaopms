@@ -2,6 +2,7 @@
 global $app, $lang;
 $app->loadLang('release');
 $app->loadModuleConfig('release');
+$isEn = $app->getClientLang() == 'en';
 
 $config->projectrelease->actionList = array();
 
@@ -71,6 +72,7 @@ $config->projectrelease->dtable->fieldList['name']['fixed']    = 'left';
 $config->projectrelease->dtable->fieldList['name']['link']     = array('module' => 'projectrelease', 'method' => 'view', 'params' => 'releaseID={id}');
 $config->projectrelease->dtable->fieldList['name']['show']     = true;
 $config->projectrelease->dtable->fieldList['name']['required'] = true;
+if($isEn) $config->projectrelease->dtable->fieldList['name']['width'] = 130;
 
 $config->projectrelease->dtable->fieldList['product']['name']  = 'product';
 $config->projectrelease->dtable->fieldList['product']['title'] = $lang->projectrelease->product;
@@ -89,6 +91,7 @@ $config->projectrelease->dtable->fieldList['build']['title'] = $lang->release->i
 $config->projectrelease->dtable->fieldList['build']['type']  = 'category';
 $config->projectrelease->dtable->fieldList['build']['group'] = '1';
 $config->projectrelease->dtable->fieldList['build']['show']  = true;
+if($isEn) $config->projectrelease->dtable->fieldList['build']['width'] = 120;
 
 $config->projectrelease->dtable->fieldList['status']['title']     = $lang->release->status;
 $config->projectrelease->dtable->fieldList['status']['name']      = 'status';
@@ -104,12 +107,14 @@ $config->projectrelease->dtable->fieldList['date']['type']     = 'date';
 $config->projectrelease->dtable->fieldList['date']['minWidth'] = '100';
 $config->projectrelease->dtable->fieldList['date']['group']    = '3';
 $config->projectrelease->dtable->fieldList['date']['show']     = true;
+if($isEn) $config->projectrelease->dtable->fieldList['date']['width'] = 160;
 
 $config->projectrelease->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
 $config->projectrelease->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
 $config->projectrelease->dtable->fieldList['releasedDate']['type']     = 'date';
 $config->projectrelease->dtable->fieldList['releasedDate']['minWidth'] = '100';
 $config->projectrelease->dtable->fieldList['releasedDate']['show']     = true;
+if($isEn) $config->projectrelease->dtable->fieldList['releasedDate']['width'] = 160;
 
 $config->projectrelease->dtable->fieldList['desc']['title']    = $lang->release->desc;
 $config->projectrelease->dtable->fieldList['desc']['name']     = 'desc';
