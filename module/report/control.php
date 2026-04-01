@@ -73,6 +73,7 @@ class report extends control
             $mailTitle .= isset($mail->tasks)     ? sprintf($this->lang->report->mailTitle->task,     count($mail->tasks))     : '';
             $mailTitle .= isset($mail->todos)     ? sprintf($this->lang->report->mailTitle->todo,     count($mail->todos))     : '';
             $mailTitle .= isset($mail->testTasks) ? sprintf($this->lang->report->mailTitle->testTask, count($mail->testTasks)) : '';
+            $mailTitle .= isset($mail->cards)     ? sprintf($this->lang->report->mailTitle->card,     count($mail->cards))     : '';
             $mailTitle  = rtrim($mailTitle, ',');
 
             /* Get email content and title.*/
