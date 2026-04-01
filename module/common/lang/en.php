@@ -218,6 +218,14 @@ $lang->contactUs->email  = 'Email';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = 'Wechat';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = 'Select Users';
+$lang->userSelector->deptTitle     = 'Filter by Department';
+$lang->userSelector->userTitle     = 'Select Users';
+$lang->userSelector->selectedTitle = 'Selected';
+$lang->userSelector->allText       = 'All Users';
+$lang->userSelector->emptyText     = 'No users available';
+
 $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
 $lang->common->stories      = 'Stories';
