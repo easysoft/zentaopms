@@ -158,8 +158,53 @@ class form extends fixer
         $action  = $app->control->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return $configObject;
 
-        $uiID         = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
-        $fieldList    = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
+        $uiID      = $app->control->loadModel('workflowlayout')->getUIByDataID($flow->module, $action->action, $objectID);
+        $fieldList = $app->control->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
+        if($action->open != 'none')
+        {
+            /* Reset the show property of a field according by the linkages. */
+            /* 根据界面联动设置重置字段的是否显示属性。*/
+            $linkages = zget($action->linkages, $uiID, array());
+            foreach($linkages as $linkage)
+            {
+                $sources = zget($linkage, 'sources', array());
+                $targets = zget($linkage, 'targets', array());
+
+                if(!$linkage or !$sources or !$targets) continue;
+
+                foreach($sources as $source)
+                {
+                    if(!isset($fieldList[$source->field])) continue;
+                    if(!isset($this->rawdata->{$source->field})) continue;
+
+                    $dataValue = $this->rawdata->{$source->field};
+                    $condition = false;
+
+                    if($source->operator == '==') $condition = $dataValue == $source->value;
+                    if($source->operator == '!=') $condition = $dataValue != $source->value;
+                    if($source->operator == '>')  $condition = $dataValue >  $source->value;
+                    if($source->operator == '>=') $condition = $dataValue >= $source->value;
+                    if($source->operator == '<')  $condition = $dataValue <  $source->value;
+                    if($source->operator == '<=') $condition = $dataValue <= $source->value;
+
+                    foreach($targets as $target)
+                    {
+                        if(!isset($fieldList[$target->field])) continue;
+
+                        $targetField = $fieldList[$target->field];
+
+                        if($condition)
+                        {
+                            if($target->status == 'show') $targetField->show = 1;
+                            if($target->status == 'hide') $targetField->show = 0;
+                        }
+
+                        $fieldList[$target->field] = $targetField;
+                    }
+                }
+            }
+        }
+
         $layouts      = $app->control->workflowlayout->getFields($moduleName, $methodName, $uiID, $flow->group);
         $notEmptyRule = $app->control->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
         if($layouts)
