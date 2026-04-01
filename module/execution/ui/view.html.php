@@ -12,10 +12,14 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
-$isEn     = $app->getClientLang() == 'en';
 $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
 $isKanban = isset($execution->type) && $execution->type == 'kanban';
 $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "executionID={$execution->id}");
+
+$isEn       = $app->getClientLang() == 'en';
+$storyTitle = $isEn ? $lang->common->stories : $lang->common->story;
+$taskTitle  = $isEn ? $lang->task->plural : $lang->task->common;
+$bugTitle   = $isEn ? $lang->bug->plural : $lang->bug->common;
 
 /* Construct suitable actions for the current execution. */
 $execution->rawID = $execution->id;
@@ -196,7 +200,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->storyCount
                     ),
-                    $isEn ? $lang->common->stories : $lang->common->story
+                    $storyTitle
                 ) : null,
                 div
                 (
@@ -206,7 +210,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->taskCount
                     ),
-                    $isEn ? $lang->task->plural :$lang->task->common
+                    $taskTitle
                 ),
                 $features['qa'] ? div
                 (
@@ -216,7 +220,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->bugCount
                     ),
-                    $isEn ? $lang->bug->plural : $lang->bug->common
+                    $bugTitle
                 ) : null
             )
         ),
