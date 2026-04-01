@@ -10,29 +10,12 @@ declare(strict_types=1);
  */
 namespace zin;
 $varList = array();
-if($pipeline->type == 'repo')
-{
-    $varList[] = h::tr
-        (
-            setClass('tr-row'),
-            h::td(set::width(150), setClass('text-center'), $lang->pipeline->branch),
-            h::td(set::width(150), setClass('text-center'), 'gitRef'),
-            h::td
-            (
-                picker
-                (
-                    set::name('gitRef'),
-                    set::items($branchList)
-                )
-            )
-        );
-}
 
 if(!empty($variables))
 {
     foreach($variables as $variable)
     {
-        if($variable->key == 'gitRef' || !$variable->runtime) continue;
+        if(!$variable->runtime) continue;
 
         $varList[] = h::tr
         (
@@ -41,6 +24,13 @@ if(!empty($variables))
             h::td(set::width(150), setClass('text-center'), $variable->key),
             h::td
             (
+                $variable->key == 'gitRef' ?
+                picker
+                (
+                    set::name($variable->key),
+                    set::items($branchList),
+                    set::value(zget($variable, 'defaultValue', ''))
+                ) :
                 input
                 (
                     set::name($variable->key),

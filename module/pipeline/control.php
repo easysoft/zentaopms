@@ -97,7 +97,7 @@ class pipeline extends control
             if(empty($vars)) continue;
             foreach($vars as $var)
             {
-                if($var->runtime)
+                if(!empty($var->runtime))
                 {
                     $showVars = true;
                     break;
@@ -211,11 +211,6 @@ class pipeline extends control
             $varPairs = array_column($variables, 'name', 'key');
             foreach($formData as $varKey => $varValue)
             {
-                if($varKey == 'gitRef' && !$varValue)
-                {
-                    dao::$errors[$varKey] = sprintf($this->lang->error->notempty, $this->lang->pipeline->branch);
-                    continue;
-                }
                 if(empty($varPairs[$varKey])) continue;
                 if(!$varValue) dao::$errors[$varKey] = sprintf($this->lang->error->notempty, $varPairs[$varKey]);
             }
