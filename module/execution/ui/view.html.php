@@ -12,6 +12,7 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+$isEn     = $app->getClientLang() == 'en';
 $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 1000) / 1000 * 100 : 0;
 $isKanban = isset($execution->type) && $execution->type == 'kanban';
 $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "executionID={$execution->id}");
@@ -195,7 +196,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->storyCount
                     ),
-                    $lang->common->story
+                    $isEn ? $lang->common->stories : $lang->common->story
                 ) : null,
                 div
                 (
@@ -205,7 +206,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->taskCount
                     ),
-                    $lang->task->common
+                    $isEn ? $lang->task->plural :$lang->task->common
                 ),
                 $features['qa'] ? div
                 (
@@ -215,7 +216,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->bugCount
                     ),
-                    $lang->bug->common
+                    $isEn ? $lang->bug->plural : $lang->bug->common
                 ) : null
             )
         ),
