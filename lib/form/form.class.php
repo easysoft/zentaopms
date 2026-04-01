@@ -167,10 +167,11 @@ class form extends fixer
             $linkages = zget($action->linkages, $uiID, array());
             foreach($linkages as $linkage)
             {
+                if(empty($linkage)) continue;
+
                 $sources = zget($linkage, 'sources', array());
                 $targets = zget($linkage, 'targets', array());
-
-                if(!$linkage or !$sources or !$targets) continue;
+                if(empty($sources) || empty($targets)) continue;
 
                 foreach($sources as $source)
                 {
