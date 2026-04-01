@@ -49,7 +49,7 @@ $parent->parent = 1;
 
 $isFutureList = array(0, 1);
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->createTest($postData,   $isFutureList[0])) && p('title')   && e('测试创建1');              // 测试正常创建
 r($planTester->createTest($postData,   $isFutureList[1])) && p('title')   && e('测试创建1');              // 测试正常创建
 r($planTester->createTest($noTitle,    $isFutureList[0])) && p('title:0') && e('『计划名称』不能为空。'); // 测试不填名称创建失败

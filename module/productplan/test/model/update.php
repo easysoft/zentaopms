@@ -48,7 +48,7 @@ $parentErrorData->begin = '2022-03-01';
 $titleErrorData = clone $postData;
 $titleErrorData->title = '';
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->updateTest($planIdList[0], $postData))        && p('0:old,new') && e('计划1,测试修改');                                                 // 修改planId=1的数据,打印出旧的名称
 r($planTester->updateTest($planIdList[0], $postData))        && p('0:old')     && e('0');                                                              // 二次修改旧的数据，由于数据发生变化，理应失败
 r($planTester->updateTest($planIdList[1], $beginData))       && p('begin')     && e('父计划的开始日期：2021-03-01，开始日期不能小于父计划的开始日期'); // 测试子计划开始日期不能小于父计划的开始日期
