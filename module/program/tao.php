@@ -47,6 +47,12 @@ class programTao extends programModel
         if($program->type == 'project') $modelClass = get_class($this->project);
         if($program->type == 'program') $modelClass = get_class($this);
 
+        if($config->edition != 'open')
+        {
+            $this->loadModel('flow');
+            $flowActions = $this->loadModel('workflowaction')->getList($program->type);
+        }
+
         $actionsMap         = array();
         $canStartProgram    = common::hasPriv($program->type, 'start',    $program);
         $canSuspendProgram  = common::hasPriv($program->type, 'suspend',  $program);
@@ -58,6 +64,17 @@ class programTao extends programModel
             if($action == 'close' && (!$canCloseProgram || $program->status != 'doing')) continue;
             if($action == 'activate' && (!$canActivateProgram || $program->status != 'closed')) continue;
             if($action == 'start' && (!$canStartProgram || ($program->status != 'wait' && $program->status != 'suspended'))) continue;
+
+            if($config->edition != 'open')
+            {
+                foreach($flowActions as $flowAction)
+                {
+                    if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+                    {
+                        if(!$this->flow->checkConditions($flowAction->conditions, $data)) continue 2;
+                    }
+                }
+            }
 
             $item = new stdclass();
             $item->name   = $action;
@@ -78,6 +95,17 @@ class programTao extends programModel
             {
                 if(!common::hasPriv($program->type, $action, $program)) continue;
                 if($action == 'close' && $program->status == 'doing') continue;
+
+                if($config->edition != 'open')
+                {
+                    foreach($flowActions as $flowAction)
+                    {
+                        if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+                        {
+                            if(!$this->flow->checkConditions($flowAction->conditions, $data)) continue 2;
+                        }
+                    }
+                }
 
                 $item = new stdclass();
                 $item->name     = $action;
