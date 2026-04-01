@@ -283,6 +283,29 @@ class pipelineModel extends model
                 $content->variables = $copyPipelineContent->variables;
             }
 
+            if(!empty($pipeline->repoID))
+            {
+                if(!empty($content->variables))
+                {
+                    $variables = json_decode($content->variables);
+                    foreach($variables as &$var)
+                    {
+                        if($var->key == 'gitRef')
+                        {
+                            $var->runtime      = true;
+                            $var->defaultValue = '';
+                            unset($var->value);
+                        }
+                    }
+                    $content->variables = json_encode($variables);
+                }
+                else
+                {
+                    $variables = array(array('key' => 'gitRef', 'name' => $this->lang->pipeline->branch, 'value' => '', 'defaultValue' => '', 'runtime' => true));
+                    $content->variables = json_encode($variables);
+                }
+            }
+
             $this->dao->insert(TABLE_PIPELINECONTENT)->data($content)->exec();
             if(dao::isError()) return false;
 
@@ -290,10 +313,10 @@ class pipelineModel extends model
             {
                 $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
 
-                unset($content->data, $content->variables);
                 $content->trigger = $copyTrigger->trigger;
                 $content->cron    = $copyTrigger->cron;
             }
+            unset($content->data, $content->variables);
             $this->dao->insert(TABLE_PIPELINETRIGGER)->data($content)->exec();
             if(dao::isError()) return false;
         }
