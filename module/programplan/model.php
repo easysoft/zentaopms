@@ -175,7 +175,7 @@ class programplanModel extends model
         $stageIndex = $result['stageIndex'];
 
         /* 根据排序字段手动排序。 Manually sort by order field. */
-        $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
+        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         /* Build data for ipd. */
         if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
@@ -290,7 +290,7 @@ class programplanModel extends model
         }
 
         /* 根据排序字段手动排序。 Manually sort by order field. */
-        $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
+        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
         $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
