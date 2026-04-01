@@ -59,8 +59,9 @@ foreach($pipelines as $pipeline)
     );
 }
 
-$checkAI   = true;
-$checkScan = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
+$checkAI     = true;
+$checkScan   = $scanSevereIssue <= $config->ppm->scanSevereIssue && $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue && $scanPassRate >= $config->ppm->scanPassRate;
+$hasConflict = empty($checkResult->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
 
 $domBox = div
 (

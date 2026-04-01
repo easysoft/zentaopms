@@ -200,4 +200,41 @@ class ppmZen extends ppm
 
         return $message;
     }
+
+    /**
+     * 获取合并检查结果。
+     * Get merge check result.
+     *
+     * @param  object $ppm
+     * @param  string $reviewResult
+     * @access public
+     * @return object
+     */
+    public function getCheckResult(object $ppm, string $reviewResult): object
+    {
+        $result = new stdClass();
+        $mergeCheck = $this->loadModel('gitfox')->apiGetMergeCheckMessage($ppm->repoID, $ppm->sourceBranch, $ppm->targetBranch);
+        $result->conflictFiles = empty($mergeCheck) ? array() : zget($mergeCheck, 'conflictFiles', array());
+        $result->message       = empty($mergeCheck) ? '' : zget($mergeCheck, 'message', '');
+
+        $rule          = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
+        $ppmHandLeUser = empty($rule) ? array() : explode(',', zget($rule, 'ppmHandleUser', ''));
+        $ppmHandLeUser = array_filter($ppmHandLeUser);
+        $userCanMerge  = empty($ppmHandLeUser) || in_array($this->app->user->account, $ppmHandLeUser);
+        if(!$userCanMerge)
+        {
+            $users = $this->loadModel('user')->getPairs('noletter');
+
+            $canMergeUsers = array();
+            foreach($ppmHandLeUser as $user)
+            {
+                $canMergeUsers[] = zget($users, $user);
+            }
+            $canMergeUsers   = sprintf($this->lang->ppm->notice->userNotAllowMerge, implode(',', $canMergeUsers));
+            $result->message = $result->message ? $result->message . '; ' . $canMergeUsers : $canMergeUsers;
+        }
+        $result->canMerge = empty($result->conflictFiles) && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$result->message;
+
+        return $result;
+    }
 }

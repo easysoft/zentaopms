@@ -35,7 +35,7 @@ jsVar('file', $currentEntry);
 jsVar('entry', $entry);
 jsVar('diffLink', $diffLink);
 jsVar('urlParams', "repoID={$ppm->repoID}&objectID=$objectID&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=$showBug&encoding=$encoding");
-jsVar('sseURL', "{$config->devops->gitfoxURL}:{$config->devops->gitfoxPort}/api/v2/spaces/{$repo->spaceID}/events?App=zentao&Operator={$app->user->account}&Authorization={$gitfoxServer->token}");
+jsVar('sseURL', "{$config->devops->gitfoxURL}:{$config->devops->gitfoxPort}/api/v2/spaces/{$repo->spaceID}/events");
 
 h:css("#monacoTree .text-clip {overflow: visible;}");
 
@@ -46,9 +46,8 @@ $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['inline'], 'icon'
 $dropMenus[] = array('text' => $this->lang->repo->viewDiffList['appose'], 'icon' => 'col-archive', 'id' => 'appose', 'class' => 'inline-appose');
 
 $encoding      = empty($encoding) ? '' : $encoding;
-$hasConflict   = empty($mergeCheckMessage->conflictFiles) ? 'no' : 'yes'; // 是否有代码冲突
-$checkMessage  = empty($mergeCheckMessage) ? '' : zget($mergeCheckMessage, 'message', '');
-$conflictFiles = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
+$checkMessage  = zget($checkResult, 'message', '');
+$conflictFiles = zget($checkResult, 'conflictFiles', array());
 $minReviewers  = empty($flow) ? 0 : $flow->definition->reviewFlow->approvals->minReviewers;
 
 $basicItems = array();
@@ -58,22 +57,10 @@ $basicItems[] = item(set::name($lang->ppm->targetBranch), $ppm->targetBranch);
 $basicItems[] = item(set::name($lang->ppm->sourceBranch), $ppm->sourceBranch);
 $basicItems[] = item(set::name($lang->ppm->description),  !empty($ppm->desc) ? strip_tags($ppm->desc) : $lang->noData);
 
-$userCanMerge = empty($rule) || empty($rule->ppmHandleUser) || in_array($app->user->account, explode(',', $rule->ppmHandleUser));
-if(!$userCanMerge)
-{
-    $canMergeUsers = array();
-    foreach(explode(',', $rule->ppmHandleUser) as $user)
-    {
-        $canMergeUsers[] = zget($users, $user);
-    }
-    $canMergeUsers = sprintf($lang->ppm->notice->userNotAllowMerge, implode(',', $canMergeUsers));
-    $checkMessage  = $checkMessage ? $checkMessage . '; ' . $canMergeUsers : $canMergeUsers;
-}
-$canMerge = $hasConflict == 'no' && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$checkMessage && $userCanMerge;
+$canMerge = zget($checkResult, 'canMerge', false);
 
-$mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
-$defaultMergeType = empty($defaultMergeType) ? 'rebase' : $defaultMergeType;
-$mergeBtnItems    = array();
+$mergeTypeList = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
+$mergeBtnItems = array();
 foreach($mergeTypeList as $mergeType)
 {
     $mergeBtnItems[] = array
