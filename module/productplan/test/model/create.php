@@ -20,6 +20,7 @@ cid=17627
 */
 
 zenData('productplan')->gen(0);
+zenData('product')->gen(5);
 
 $postData = new stdclass();
 $postData->title   = '测试创建1';
