@@ -184,6 +184,7 @@ $lang->programplan->ganttBrowseType['module']      = '按模块分组';
 $lang->programplan->ganttBrowseType['story']       = "按{$lang->SRCommon}分组";
 $lang->programplan->ganttBrowseType['status']      = '按状态分组';
 $lang->programplan->ganttBrowseType['pri']         = '按优先级分组';
+$lang->programplan->ganttBrowseType['finishedBy']  = '按完成者分组';
 
 $lang->programplan->reviewColorList['draft']     = '#FC913F';
 $lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
