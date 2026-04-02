@@ -64,8 +64,6 @@ $ganttFields['column_start_date'] = array('text' => $lang->programplan->ganttCus
 $ganttFields['column_end_date']   = array('text' => $lang->programplan->ganttCustom['deadline']);
 foreach($lang->programplan->ganttCustom as $field => $name)
 {
-    if($field == 'progress') continue;
-
     $ganttField = "column_{$field}";
     if(isset($ganttFields[$ganttField])) continue;
     $ganttFields[$ganttField] = in_array($field, $notSort) ? $name : array('text' => $name);
