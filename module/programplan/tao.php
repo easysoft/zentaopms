@@ -689,6 +689,8 @@ class programplanTao extends programplanModel
         $data->start_date    = $start;
         $data->endDate       = $end;
         $data->duration      = 1;
+        $data->openedBy      = $plan->openedBy;
+        $data->finishedBy    = '';
         $data->color         = $this->lang->execution->gantt->stage->color;
         $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
         $data->textColor     = $this->lang->execution->gantt->stage->textColor;
