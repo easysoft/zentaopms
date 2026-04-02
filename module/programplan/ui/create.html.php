@@ -86,7 +86,7 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $canP
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData, $app)
+$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $project, $syncData, $app)
 {
     $items = array();
     $isEn  = $app->getClientLang() == 'en';
