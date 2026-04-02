@@ -179,6 +179,7 @@ formPanel
                 span
                 (
                     setClass('input-group-addon'),
+                    set::style(array('width' => $app->getClientLang() == 'en' ? '80px' : '42px')),
                     $lang->todo->weekly
                 ),
                 picker
@@ -216,6 +217,7 @@ formPanel
                 span
                 (
                     setClass('input-group-addon'),
+                    set::style(array('width' => $app->getClientLang() == 'en' ? '80px' : '42px')),
                     $lang->todo->monthly
                 ),
                 picker
@@ -253,6 +255,7 @@ formPanel
                 span
                 (
                     setClass('input-group-addon'),
+                    set::style(array('width' => $app->getClientLang() == 'en' ? '80px' : '42px')),
                     $lang->todo->specify
                 ),
                 picker
