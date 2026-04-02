@@ -1603,6 +1603,15 @@ eof;
                 if($method == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
         }
+        if($module == 'story')
+        {
+            $reviewer = $app->control->dao->select('*')->from(TABLE_STORYREVIEW)
+                ->where('story')->eq($object->id)
+                ->andWhere('version')->eq($object->version)
+                ->andWhere('reviewer')->eq($account)
+                ->fetch();
+            if(!empty($reviewer)) return true;
+        }
 
         if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
         if(!empty($object->addedBy)      && $object->addedBy      == $account) return true;
