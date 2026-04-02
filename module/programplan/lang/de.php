@@ -177,14 +177,15 @@ $lang->programplan->error->emptyParentName = "Contains sub stages, stage names c
 $lang->programplan->error->noProject       = "When there are no waterfall, waterfall plus {$lang->projectCommon} in the system, Gantt charts cannot be added.";
 $lang->programplan->error->noProject4IPD   = "When there are no waterfall, waterfall plus, or IPD {$lang->projectCommon} in the system, Gantt charts cannot be added.";
 
-$lang->programplan->ganttBrowseType['gantt']       = 'Group by Stage';
-$lang->programplan->ganttBrowseType['assignedTo']  = 'Group by AssignedTo';
-$lang->programplan->ganttBrowseType['type']        = 'Group by Type';
-$lang->programplan->ganttBrowseType['module']      = 'Group by Module';
-$lang->programplan->ganttBrowseType['story']       = "Group by {$lang->SRCommon}";
-$lang->programplan->ganttBrowseType['status']      = 'Group by Status';
-$lang->programplan->ganttBrowseType['pri']         = 'Group by Pri';
-$lang->programplan->ganttBrowseType['finishedBy']  = 'Group by FinishedBy';
+$lang->programplan->ganttBrowseType['gantt']      = 'Group by Stage';
+$lang->programplan->ganttBrowseType['assignedTo'] = 'Group by AssignedTo';
+$lang->programplan->ganttBrowseType['type']       = 'Group by Type';
+$lang->programplan->ganttBrowseType['module']     = 'Group by Module';
+$lang->programplan->ganttBrowseType['story']      = "Group by {$lang->SRCommon}";
+$lang->programplan->ganttBrowseType['status']     = 'Group by Status';
+$lang->programplan->ganttBrowseType['pri']        = 'Group by Pri';
+$lang->programplan->ganttBrowseType['finishedBy'] = 'Group by FinishedBy';
+$lang->programplan->ganttBrowseType['closedBy']   = 'Group by ClosedBy';
 
 $lang->programplan->reviewColorList['draft']     = '#FC913F';
 $lang->programplan->reviewColorList['reviewing'] = '#CD6F27';

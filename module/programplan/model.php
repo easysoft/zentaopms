@@ -239,12 +239,12 @@ class programplanModel extends model
         $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
 
         $objects = array();
-        if(in_array($type, array('assignedTo', 'finishedBy'))) $objects = $this->loadModel('user')->getPairs('noletter');
+        if(in_array($type, array('assignedTo', 'finishedBy', 'closedBy'))) $objects = $this->loadModel('user')->getPairs('noletter');
         if($type == 'module') $objects = $this->loadModel('tree')->getModulesName(array_keys($tasksGroup));
         if($type == 'story')  $objects = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in(array_keys($tasksGroup))->fetchPairs('id', 'title');
 
         if($type == 'pri') ksort($tasksGroup);
-        if($type == 'finishedBy')
+        if(in_array($type, array('finishedBy', 'closedBy')))
         {
             $unDoneTasks = !empty($tasksGroup['']) ? $tasksGroup[''] : array();
             if(!empty($unDoneTasks))
