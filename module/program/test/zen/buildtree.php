@@ -67,9 +67,9 @@ $project2->parent = 0;
 
 $programs = array(1 => $program1, 2 => $program2, 3 => $program3, 4 => $program4, 5 => $program5, 8 => $project1, 9 => $project2);
 
-r($programTest->buildTreeTest(array(), 0)) && p() && e('0');
-r($programTest->buildTreeTest($programs, 0)) && p('0:id;1:id') && e('1;2');
-r($programTest->buildTreeTest($programs, 0)) && p('0:text') && e('顶级项目集A');
-r($programTest->buildTreeTest($programs, 1)) && p('0:id;1:id') && e('3;4');
-r($programTest->buildTreeTest($programs, 3)) && p('0:id,text') && e('5,孙项目集E');
-r($programTest->buildTreeTest($programs, 0)) && p('0:id,text,keys') && e('1,顶级项目集A,dingjixiangmujia djxmja');
+r($programTest->buildTreeTest(array(), 0)) && p() && e('0'); // 查看空数组输入
+r($programTest->buildTreeTest($programs, 0)) && p('0:id;1:id') && e('1;2'); // 查看单层顶级项目集(parent=0)
+r($programTest->buildTreeTest($programs, 0)) && p('0:text') && e('顶级项目集A'); // 查看树节点属性完整性
+r($programTest->buildTreeTest($programs, 1)) && p('0:id;1:id') && e('3;4'); // 查看多层嵌套项目集树形结构 正确构建父子关系和递归子节点
+r($programTest->buildTreeTest($programs, 3)) && p('0:id,text') && e('5,孙项目集E'); // 查看指定父ID构建子树 返回指定父ID的子项目集
+r($programTest->buildTreeTest($programs, 0)) && p('0:id,text,keys') && e('1,顶级项目集A,dingjixiangmujia djxmja'); // 查看树节点属性完整性 包含id、text、label、keys等必需属性
