@@ -63,6 +63,7 @@ $config->ppm->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->ppm->dtable->fieldList['actions']['type']  = 'actions';
 $config->ppm->dtable->fieldList['actions']['menu']  = array('edit', 'delete');
 $config->ppm->dtable->fieldList['actions']['list']  = $config->ppm->actionList;
+$config->ppm->dtable->fieldList['actions']['width'] = '80';
 
 $config->ppm->taskDtable = new stdclass();
 $config->ppm->taskDtable->fieldList['id']['title']    = $lang->idAB;
