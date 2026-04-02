@@ -1,5 +1,7 @@
 <?php
 global $lang,$app;
+$isEn = $app->getClientLang() == 'en';
+
 $config->design->dtable = new stdclass();
 $config->design->linkcommit = new stdclass();
 $config->design->viewcommit = new stdclass();
@@ -26,6 +28,7 @@ $config->design->dtable->fieldList['product']['sortType'] = true;
 $config->design->dtable->fieldList['type']['type']      = 'status';
 $config->design->dtable->fieldList['type']['statusMap'] = $lang->design->typeList;
 $config->design->dtable->fieldList['type']['sortType']  = true;
+if($isEn) $config->design->dtable->fieldList['type']['width'] = '120';
 
 $config->design->dtable->fieldList['assignedTo']['title']       = $lang->design->assignedTo;
 $config->design->dtable->fieldList['assignedTo']['type']        = 'assign';
@@ -53,6 +56,7 @@ if($config->edition != 'open')
     $config->design->dtable->fieldList['relatedObject']['group']       = 2;
     $config->design->dtable->fieldList['relatedObject']['flex']        = false;
     $config->design->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($isEn) $config->design->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->design->dtable->fieldList['actions']['type'] = 'actions';

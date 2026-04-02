@@ -236,6 +236,7 @@ $config->project->execution->dtable->fieldList['PM']['sortType'] = true;
 $config->project->execution->dtable->fieldList['PM']['width']    = '100';
 $config->project->execution->dtable->fieldList['PM']['group']    = '2';
 $config->project->execution->dtable->fieldList['PM']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['PM']['width'] = '150';
 
 $config->project->execution->dtable->fieldList['openedDate']['title']    = $lang->execution->openedDate;
 $config->project->execution->dtable->fieldList['openedDate']['name']     = 'openedDate';
@@ -244,6 +245,7 @@ $config->project->execution->dtable->fieldList['openedDate']['sortType'] = true;
 $config->project->execution->dtable->fieldList['openedDate']['width']    = '96';
 $config->project->execution->dtable->fieldList['openedDate']['group']    = '3';
 $config->project->execution->dtable->fieldList['openedDate']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['openedDate']['width'] = '120';
 
 $config->project->execution->dtable->fieldList['begin']['title']    = $lang->execution->begin;
 $config->project->execution->dtable->fieldList['begin']['name']     = 'begin';
@@ -252,6 +254,7 @@ $config->project->execution->dtable->fieldList['begin']['sortType'] = true;
 $config->project->execution->dtable->fieldList['begin']['width']    = '96';
 $config->project->execution->dtable->fieldList['begin']['group']    = '3';
 $config->project->execution->dtable->fieldList['begin']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['begin']['width'] = '120';
 
 $config->project->execution->dtable->fieldList['end']['title']    = $lang->execution->end;
 $config->project->execution->dtable->fieldList['end']['name']     = 'end';

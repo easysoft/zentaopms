@@ -158,6 +158,7 @@ $lang->noticeDrag      = 'Click or drag files here to upload. Maximum size: %s.'
 $lang->allProgress     = 'Progress';
 $lang->hasReviewed     = 'This content has already been reviewed. No further action is required.';
 $lang->appNotFound     = 'You do not have permission to access this application. Please check your permission settings.';
+$lang->uploadFiles     = 'Upload Files';
 
 $lang->fieldDisplaySetting = 'Field display settings';
 $lang->fieldSettingTip     = 'The following fields are collapsed by default. Please click "Show more fields" to expand them, or use the pin icon to keep specific fields visible.';
@@ -216,6 +217,7 @@ $lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
+$lang->common->stories      = 'Stories';
 $lang->cache->common        = 'Cache';
 $lang->my->common           = 'Dashboard';
 $lang->todo->common         = 'To-do';
@@ -375,8 +377,8 @@ $lang->runner->common           = 'Runner';
 $lang->repobranchrule->common   = 'Branch Rule';
 
 $lang->dashboard       = 'Overview';
-$lang->contribute      = 'Contributions';
-$lang->dynamic         = 'Activities';
+$lang->contribute      = 'Contribution';
+$lang->dynamic         = 'Recents';
 $lang->whitelist       = 'Whitelist';
 $lang->roadmap         = 'Roadmap';
 $lang->track           = 'Matrix';

@@ -207,7 +207,7 @@
 #menu #menuNav {background-color: var(--color-secondary-900); border-radius: 6px 6px 0 0; position: static; margin: 8px 8px 0;}
 #menuFooter {position: static!important; background-color: var(--color-secondary-900); margin: 0 8px 8px; border-radius: 0 0 6px 6px; border-top: 1px solid rgba(var(--color-canvas-rgb), .12)}
 #menu .nav > li > a.active {background-color: var(--color-primary-500)!important}
-#menu .nav > li > a > .icon {color: var(--color-gray-400); margin-right: 2px; transform: scale(90%);}
+#menu .nav > li > a > .icon, #menuMoreList > .menu-item > a > .icon {color: var(--color-gray-400);}
 #menu .nav > li > a.active > .icon {color: var(--color-canvas);}
 #menuToggleMenu .menu-toggle .icon-menu-arrow-left::before {content: "\e980"}
 

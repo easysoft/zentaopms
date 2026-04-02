@@ -81,6 +81,7 @@ $lang->task->addSub              = 'Add Child';
 $lang->task->otherExecution      = 'Cross Execution';
 
 $lang->task->common            = 'Task';
+$lang->task->plural            = 'Tasks';
 $lang->task->id                = 'ID';
 $lang->task->project           = $lang->projectCommon;
 $lang->task->execution         = 'Execution';

@@ -106,6 +106,7 @@ class navbar extends wg
         $responsiveNavOptions['container']        = 'parent';
         $responsiveNavOptions['more']             = ['text' => $lang->other, 'caret' => true];
         $responsiveNavOptions['moreDropdown']     = ['trigger' => 'hover'];
+        $responsiveNavOptions['watch']            = ['container', '#toolbar', '#heading'];
         $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => ($(container).width() - 20 - (2 * Math.max(($("#heading").outerWidth() || 0), $("#toolbar").outerWidth() || 0)))');
 
         return h::nav

@@ -45,5 +45,5 @@ $lang->projectstory->featureBar['story']['changing']  = 'Changing';
 $lang->projectstory->featureBar['story']['more']      = $lang->more;
 
 $lang->projectstory->moreSelects['story']['more']['closed']            = 'Closed';
-$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = 'Linked'   . $lang->execution->common;
-$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = 'Unlinked' . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = 'Linked '   . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = 'Unlinked ' . $lang->execution->common;

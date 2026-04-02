@@ -12,6 +12,11 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+$isEn       = $app->getClientLang() == 'en';
+$storyTitle = $isEn ? $lang->common->stories : $lang->common->story;
+$taskTitle  = $isEn ? $lang->task->plural : $lang->task->common;
+$bugTitle   = $isEn ? $lang->bug->plural : $lang->bug->common;
+
 jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
 $programDom = array();
@@ -199,19 +204,19 @@ row
                     (
                         setClass('w-1/3 storyCount'),
                         div(setClass('text-md font-bold'), $statData->storyCount),
-                        span(setClass('text-gray'), $lang->common->story)
+                        span(setClass('text-gray'), $storyTitle)
                     ),
                     div
                     (
                         setClass('w-1/3 taskCount'),
                         div(setClass('text-md font-bold'), $statData->taskCount),
-                        span(setClass('text-gray'), $lang->task->common)
+                        span(setClass('text-gray'), $taskTitle)
                     ),
                     div
                     (
                         setClass('w-1/3 bugCount'),
                         div(setClass('text-md font-bold'), $statData->bugCount),
-                        span(setClass('text-gray'), $lang->bug->common)
+                        span(setClass('text-gray'), $bugTitle)
                     )
                 )
             ),

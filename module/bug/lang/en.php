@@ -11,6 +11,7 @@
  */
 /* Fieldlist. */
 $lang->bug->common           = 'Bug';
+$lang->bug->plural           = 'Bugs';
 $lang->bug->id               = 'ID';
 $lang->bug->product          = $lang->productCommon;
 $lang->bug->branch           = 'Branch/Platform';

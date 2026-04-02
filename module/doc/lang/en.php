@@ -102,7 +102,7 @@ $lang->docTemplate->oldDocEditingTip             = 'This template was created wi
 $lang->docTemplate->leaveEditingConfirm          = 'You are currently editing a document template. Are you sure you want to leave?';
 $lang->docTemplate->searchScopePlaceholder       = 'Search Scope';
 $lang->docTemplate->searchTypePlaceholder        = 'Search Categories';
-$lang->docTemplate->moveDocTemplate              = 'Move Template';
+$lang->docTemplate->moveDocTemplate              = 'Move Document Template';
 $lang->docTemplate->moveSubTemplate              = 'Move Sub Template';
 $lang->docTemplate->createTypeFirst              = 'Please create a document template category first.';
 $lang->docTemplate->editedList                   = 'Template editor';
@@ -120,7 +120,7 @@ $lang->docTemplate->needEditable                 = 'You do not have permission t
 
 $lang->docTemplate->create = 'More';
 $lang->docTemplate->edit   = 'Scope';
-$lang->docTemplate->delete = 'No document templates.';
+$lang->docTemplate->delete = 'Delete Document Template';
 
 $lang->docTemplate->more       = 'No description.';
 $lang->docTemplate->scopeLabel = 'of';
@@ -337,7 +337,7 @@ $lang->doc->previewTip      = 'Displayed data can be modified via filter setting
 $lang->doc->insertTip       = 'Please select at least one item after previewing.';
 $lang->doc->insertText      = 'Insert';
 $lang->doc->searchCondition = 'Search Filters';
-$lang->doc->list            = 'List';
+$lang->doc->list            = ' List';
 $lang->doc->detail          = 'Details';
 $lang->doc->zentaoData      = 'Zentao Data';
 $lang->doc->emptyError      = 'Cannot be empty.';
@@ -361,27 +361,27 @@ $lang->doc->tips->noCaselib   = 'No test case libraries found. Please create one
 
 $lang->doc->zentaoList = array();
 $lang->doc->zentaoList['story']          = $lang->SRCommon;
-$lang->doc->zentaoList['productStory']   = $lang->productCommon . $lang->SRCommon;
-$lang->doc->zentaoList['projectStory']   = $lang->projectCommon . $lang->SRCommon;
-$lang->doc->zentaoList['executionStory'] = $lang->execution->common . $lang->SRCommon;
-$lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . $lang->SRCommon;
+$lang->doc->zentaoList['productStory']   = $lang->productCommon . ' ' . $lang->SRCommon;
+$lang->doc->zentaoList['projectStory']   = $lang->projectCommon . ' ' . $lang->SRCommon;
+$lang->doc->zentaoList['executionStory'] = $lang->execution->common . ' ' . $lang->SRCommon;
+$lang->doc->zentaoList['planStory']      = $lang->productplan->shortCommon . ' ' . $lang->SRCommon;
 
 $lang->doc->zentaoList['case']        = $lang->testcase->common;
-$lang->doc->zentaoList['productCase'] = $lang->productCommon . $lang->testcase->common;
-$lang->doc->zentaoList['projectCase'] = $lang->projectCommon . $lang->testcase->common;
-$lang->doc->zentaoList['caselib']     = 'Test Case Library' . $lang->testcase->common;
+$lang->doc->zentaoList['productCase'] = $lang->productCommon . ' ' . $lang->testcase->common;
+$lang->doc->zentaoList['projectCase'] = $lang->projectCommon . ' ' . $lang->testcase->common;
+$lang->doc->zentaoList['caselib']     = 'Test Case Library';
 
 $lang->doc->zentaoList['task']       = $lang->task->common;
 $lang->doc->zentaoList['bug']        = $lang->bug->common;
-$lang->doc->zentaoList['projectBug'] = $lang->projectCommon . $lang->bug->common;
+$lang->doc->zentaoList['projectBug'] = $lang->projectCommon . ' ' . $lang->bug->common;
 $lang->doc->zentaoList['productBug'] = 'Product Bug';
 $lang->doc->zentaoList['planBug']    = 'Plan Bug';
 
 $lang->doc->zentaoList['more']               = 'More';
 $lang->doc->zentaoList['productPlan']        = $lang->productCommon . ' Plan';
 $lang->doc->zentaoList['productPlanContent'] = $lang->productCommon . ' Plan Details';
-$lang->doc->zentaoList['productRelease']     = $lang->productCommon . $lang->release->common;
-$lang->doc->zentaoList['projectRelease']     = $lang->projectCommon . $lang->release->common;
+$lang->doc->zentaoList['productRelease']     = $lang->productCommon . ' ' . $lang->release->common;
+$lang->doc->zentaoList['projectRelease']     = $lang->projectCommon . ' ' . $lang->release->common;
 $lang->doc->zentaoList['ER']                 = $lang->defaultERName;
 $lang->doc->zentaoList['UR']                 = $lang->URCommon;
 $lang->doc->zentaoList['feedback']           = 'Feedback';
@@ -567,7 +567,7 @@ $lang->doc->noticeAcl['doc']['private'] = 'Accessible only for the creator.';
 
 $lang->doc->placeholder = new stdclass();
 $lang->doc->placeholder->url       = 'URL';
-$lang->doc->placeholder->execution = 'When the execution is empty, the document will be created in the project library.';
+$lang->doc->placeholder->execution = 'In project library if no execution.';
 
 $lang->doc->summary = "<strong>%s</strong> files on this page with the total size <strong>%s</strong>. <strong>%s</strong>: ";
 $lang->doc->ge      = ':';

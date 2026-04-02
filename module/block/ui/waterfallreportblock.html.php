@@ -187,7 +187,7 @@ if($project)
                                 array
                                 (
                                     'content'   => array('html' => $lang->block->projectstatistic->totalProgressTip),
-                                    'placement' => 'bottom',
+                                    'placement' => 'bottom-end',
                                     'type'      => 'white',
                                     'className' => 'text-dark border border-light leading-5'
                                 )

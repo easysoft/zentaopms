@@ -156,12 +156,18 @@ class featureBar extends wg
     {
         $nav = $this->block('nav');
         if(!empty($nav) && $nav[0] instanceof nav) return $nav;
+
+        $responsiveNavOptions = [];
+        $responsiveNavOptions['container']        = 'parent';
+        $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => (Array.from($(container).children()).reduce((acc, item) => acc - (item.hasAttribute("z-use-responsivenavhelper") ? 0 : (item.clientWidth + 20)), container.clientWidth - 32))');
+        $responsiveNavOptions['fixedItems']       = jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle").length) {$(ele).css("order", 10000);return true} return false}');
+
         return new nav
         (
             set::compact(),
             set::className('nav-feature'),
             set::items($this->getItems()),
-            zui::create('ResponsiveNavHelper', ['container' => 'parent', 'fixedItems' => jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle").length) {$(ele).css("order", 10000);return true} return false}')]),
+            zui::create('ResponsiveNavHelper', $responsiveNavOptions),
             divorce($this->children())
         );
     }

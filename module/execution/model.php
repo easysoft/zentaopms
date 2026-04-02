@@ -3936,6 +3936,7 @@ class executionModel extends model
         if(!empty($execution->frozen) && in_array($action, array('edit', 'createChildStage', 'delete', 'putoff'))) return false;
         if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
+        if($action == 'edit') return in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd')) ? commonModel::hasPriv('programplan', 'edit') : commonModel::hasPriv('execution', 'edit');
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);
@@ -4963,7 +4964,8 @@ class executionModel extends model
                         if($actionName == 'createChildStage' && !$canCreateChildStage) continue;
                         if($actionName == 'createTask' && !$canCreateTask)  continue;
                         if($actionName == 'edit' && $isStage && !$canEditStage) continue;
-                        if(!in_array($actionName, array('createTask', 'createChildStage')) && !commonModel::hasPriv('execution', $actionName)) continue;
+                        if($actionName == 'edit' && !$isStage && !commonModel::hasPriv('execution', 'edit')) continue;
+                        if(!in_array($actionName, array('createTask', 'createChildStage', 'edit')) && !commonModel::hasPriv('execution', $actionName)) continue;
 
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
 

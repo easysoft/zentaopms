@@ -511,7 +511,7 @@ if($tasks)
         set::id('tasksTable'),
         h::table
         (
-            setClass('table condensed'),
+            setClass('table table-fixed condensed'),
             h::thead($thead()),
             h::tbody($tbody())
         )
