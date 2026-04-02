@@ -255,13 +255,13 @@ featureBar
             $lang->testcase->onlyAutomated
         )
     ) : null,
-    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? searchToggle
+    !in_array($rawMethod, array('browseunits', 'groupcase', 'zerocase')) ? li(searchToggle
     (
         set::simple($isFromDoc || $isFromAI),
         $searchTargetConfig,
         set::module($searchModule),
         set::open($browseType == 'bysearch')
-    ) : null
+    )) : null
 );
 
 if($isFromDoc || $isFromAI)
