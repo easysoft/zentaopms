@@ -183,6 +183,7 @@ $lang->programplan->ganttBrowseType['type']        = 'Group by Type';
 $lang->programplan->ganttBrowseType['module']      = 'Group by Module';
 $lang->programplan->ganttBrowseType['story']       = "Group by {$lang->SRCommon}";
 $lang->programplan->ganttBrowseType['status']      = 'Group by Status';
+$lang->programplan->ganttBrowseType['pri']         = 'Group by Pri';
 
 $lang->programplan->reviewColorList['draft']     = '#FC913F';
 $lang->programplan->reviewColorList['reviewing'] = '#CD6F27';

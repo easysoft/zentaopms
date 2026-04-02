@@ -776,6 +776,7 @@ class programplanTao extends programplanModel
         if($type == 'module')     $groupName = zget($objects, $group, '/');
         if($type == 'story')      $groupName = zget($objects, $group, $this->lang->task->noStory);
         if($type == 'status')     $groupName = zget($this->lang->task->statusList, $group);
+        if($type == 'pri')        $groupName = zget($this->lang->task->priList, $group);
 
         $dataGroup                = new stdclass();
         $dataGroup->id            = $groupID;

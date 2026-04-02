@@ -242,6 +242,9 @@ class programplanModel extends model
         if($type == 'assignedTo') $objects = $this->loadModel('user')->getPairs('noletter');
         if($type == 'module')     $objects = $this->loadModel('tree')->getModulesName(array_keys($tasksGroup));
         if($type == 'story')      $objects = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in(array_keys($tasksGroup))->fetchPairs('id', 'title');
+
+        if($type == 'pri') ksort($tasksGroup);
+
         foreach($tasksGroup as $group => $tasks)
         {
             if(!$group) $group = '/'; // 未指派
