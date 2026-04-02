@@ -239,7 +239,7 @@ class programplanModel extends model
         $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
 
         $objects = array();
-        if($type == 'assingedTo') $objects = $this->loadModel('user')->getPairs('noletter');
+        if($type == 'assignedTo') $objects = $this->loadModel('user')->getPairs('noletter');
         if($type == 'module')     $objects = $this->loadModel('tree')->getModulesName(array_keys($tasksGroup));
         foreach($tasksGroup as $group => $tasks)
         {
