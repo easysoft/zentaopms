@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-h::css(file_get_contents('../css/header/lite.ui.css'));
+h::css('#mainNavbar .main-navbar-right {position: absolute; right: 2.5rem; top: 0.5rem;}#mainNavbar .main-navbar-right .btn {padding: 0.5rem;}');
 
 $currentModule = $app->rawModule;
 $currentMethod = $app->rawMethod;
