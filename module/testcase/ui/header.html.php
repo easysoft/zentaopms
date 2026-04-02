@@ -246,7 +246,7 @@ featureBar
     ) : null,
     $showAutoCaseCheckbox ? li
     (
-        set::className('nav-item mr-2'),
+        set::className('nav-item pr-4'),
         checkbox
         (
             setID('onlyAutoCase'),
