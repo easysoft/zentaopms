@@ -3006,9 +3006,6 @@ class repoModel extends model
      */
     public function getBugsByRepo($repoID = 0, $browseType = '', $executionID = 0, $bugs = array(), $orderBy = 'id_desc', $pager = null)
     {
-        $this->app->loadConfig('misc');
-        if(!$this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''))) return array();
-
         if($this->app->tab == 'project')
         {
             $executionIDList = $this->loadModel('execution')->fetchExecutionList($executionID, 'all');

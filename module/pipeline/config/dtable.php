@@ -67,11 +67,6 @@ $config->pipeline->actionList['exec']['hint']        = $lang->pipeline->exec;
 $config->pipeline->actionList['exec']['url']         = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}");
 $config->pipeline->actionList['exec']['data-toggle'] = 'modal';
 
-$config->pipeline->actionList['arrange']['icon'] = 'design';
-$config->pipeline->actionList['arrange']['text'] = $lang->pipeline->arrange;
-$config->pipeline->actionList['arrange']['hint'] = $lang->pipeline->arrange;
-$config->pipeline->actionList['arrange']['url']  = helper::createLink('pipeline', 'arrange',"id={id}");
-
 $config->pipeline->actionList['delete']['icon']       = 'trash';
 $config->pipeline->actionList['delete']['text']       = $lang->pipeline->delete;
 $config->pipeline->actionList['delete']['hint']       = $lang->pipeline->delete;
@@ -82,7 +77,7 @@ $config->pipeline->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->dtable->fieldList['actions']['width'] = 150;
 $config->pipeline->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->dtable->fieldList['actions']['menu']  = array('exec', 'execution', 'arrange', 'delete');
+$config->pipeline->dtable->fieldList['actions']['menu']  = array('exec', 'execution', 'delete');
 $config->pipeline->dtable->fieldList['actions']['list']  = $config->pipeline->actionList;
 
 $config->pipeline->execution->dtable = new stdclass();

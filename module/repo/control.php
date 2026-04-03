@@ -1162,7 +1162,7 @@ class repo extends control
         $this->view->suffix      = 'c';
         $this->view->blames      = array();
         $this->view->showEditor  = true;
-        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
+        $this->view->canReview   = true;
         $this->display('repo', 'ajaxgeteditorcontent');
     }
 
@@ -1236,7 +1236,7 @@ class repo extends control
         $this->view->pathInfo    = $pathInfo;
         $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
-        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
+        $this->view->canReview   = true;
         $this->display();
     }
 
