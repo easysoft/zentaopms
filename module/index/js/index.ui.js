@@ -1049,20 +1049,18 @@ function restoreMenuNavToServer()
  * @param {(item: string) => void} onClick click handler of menu item.
  * @returns {Array<{icon: string; text: string; onClick: () => void;}>}
  */
-function generateAddMenuNavItems($item, onClick)
+function generateAddMenuNavItems($item)
 {
-    const items = canAddDivider($item)
-        ? [
-            {
-                icon: 'icon-minus',
-                text: langData.divider,
-                onClick: () => {
-                    onClick('divider');
-                    saveMenuNavToServer();
-                }
-            }
-        ]
-        : [];
+    const onClick = addMenuToMainNavCb($item);
+    const items = [];
+    if(canAddDivider($li)) items.push({
+        icon: 'icon-minus',
+        text: langData.divider,
+        onClick: () => {
+            onClick('divider');
+            saveMenuNavToServer();
+        }
+    });
 
     const data = getMenuNavData();
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
@@ -1076,17 +1074,94 @@ function generateAddMenuNavItems($item, onClick)
     for(const name of allAppCodeSet)
     {
         const [icon, title] = getAppItemIconAndTitle(name);
-        items.push(
-            {
-                icon,
-                text: title,
-                onClick: () => {
-                    onClick(name);
-                    saveMenuNavToServer();
-                }
+        items.push({
+            icon,
+            text: title,
+            onClick: () => {
+                onClick(name);
+                saveMenuNavToServer();
             }
-        );
+        });
     }
+    return items;
+}
+
+function addMenuToSpaceNavCb($li, info)
+{
+    return (name) => {
+        if(name === 'divider')
+        {
+            $li.after('<li class="divider"></li>');
+            refreshMenu();
+            return
+        }
+
+        const fromName = $li.attr('data-name');
+        const item = info.itemMap.get(name);
+        if(!item) return;
+        if(name === 'divider')
+        {
+            const index = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(index, 0, {type: 'divider'});
+            $li.after('<li class="divider is-space"></li>');
+        }
+        else
+        {
+            const oldIndex = info.items.findIndex(item => item.code === name);
+            info.items.splice(oldIndex, 1);
+            const newIndex = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(newIndex, 0, item);
+            item.hidden = false;
+            updateSpaceMenu(info);
+        }
+    };
+}
+
+function generateAddSpaceNavItems($ele)
+{
+    const currentApp = getLastApp();
+    const info       = currentApp.workspace;
+    const $li        = $ele.closest('li');
+    if(!info || !$li.length) return [];
+
+    const handleItemClick = (name) => {
+        const fromName = $li.attr('data-name');
+        const item = info.itemMap.get(name);
+        if(!item) return;
+        if(name === 'divider')
+        {
+            const index = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(index, 0, {type: 'divider'});
+            $li.after('<li class="divider is-space"></li>');
+        }
+        else
+        {
+            const oldIndex = info.items.findIndex(item => item.code === name);
+            info.items.splice(oldIndex, 1);
+            const newIndex = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(newIndex + 1, 0, item);
+            item.hidden = false;
+            updateSpaceMenu(info);
+        }
+
+        saveMenuNavToServer();
+    };
+    const items = [];
+    if(canAddDivider($li)) items.push({
+        icon: 'icon-minus',
+        text: langData.divider,
+        onClick: () => handleItemClick('divider')
+    });
+
+    info.items.forEach((item) => {
+        if(!item.hidden) return;
+        items.push({
+            icon: `icon-${item.code}`,
+            text: item.text,
+            onClick: () => handleItemClick(item.code)
+        });
+    });
+
     return items;
 }
 
@@ -1126,15 +1201,10 @@ function updateSpaceMenu(info)
     }
     $spaceHeading.find('.icon').attr('class', `icon icon-${info.icon || spaceType}`);
 
-    if(info.items[info.items.length -1]['data-id'] === 'more')
-    {
-        info.items.pop();
-        if(info.items[info.items.length -1]['type'] === 'divider') info.items.pop();
-    }
-
     info.items.forEach(function(item)
     {
         item.code = item['data-id'];
+        if(item.code === 'more') return;
         if(item === 'divider' || item.type === 'divider') return $menuMainNav.append('<li class="divider is-space"></li>');
 
         const $link= $('<a data-pos="menu"></a>')
@@ -1197,11 +1267,8 @@ $(document).on('contextmenu', '#menuMainNav .divider', function(event)
             saveMenuNavToServer();
         }
     });
-    const toAddedItems = $.apps.workspace ? [] : generateAddMenuNavItems($divider, addMenuToMainNavCb($divider));
-    if(toAddedItems.length)
-    {
-        items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
-    }
+    const toAddedItems = $.apps.workspace ? generateAddSpaceNavItems($divider) : generateAddMenuNavItems($divider);
+    items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
     items.push({text: langData.restore, onClick: () => restoreMenuNavToServer()});
 
     items = items.filter(Boolean);
@@ -1288,7 +1355,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             },
             disabled: hideDisabled,
         });
-        const toAddedItems = inWorkspace ? [] : generateAddMenuNavItems($btn, addMenuToMainNavCb($btn));
+        const toAddedItems = inWorkspace ? generateAddSpaceNavItems($btn) : generateAddMenuNavItems($btn);
         if(toAddedItems.length)
         {
             items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
@@ -1574,8 +1641,9 @@ function getAppItemIconAndTitle(name)
  * @param {Cash} $li menu item li
  * @returns {(name: string) => void}
  */
-function addMenuToMainNavCb($li) {
+function addMenuToMainNavCb($ele) {
     return (name) => {
+        const $li = $ele.closest('li');
         if(name === 'divider')
         {
             $li.after('<li class="divider"></li>');
@@ -1601,7 +1669,7 @@ function addMenuToMainNavCb($li) {
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
-        $('<li class="hint-right"></li>')
+        $('<li class="hint-right is-original"></li>')
             .attr({'data-app': item.code, 'data-hint': item.text})
             .append($link)
             .insertAfter($li);
@@ -1619,8 +1687,8 @@ function addMenuToMainNavCb($li) {
 function canAddDivider($item)
 {
     $item = $item.closest('li');
-    if($item.is('.divider'))        return false;
-    if($item.next().is('.divider')) return false;
-    if($item.is(':last-child'))     return false;
+    if($item.is('.divider'))                       return false;
+    if($item.next().not('.hidden').is('.divider')) return false;
+    if($item.is(':last-child'))                    return false;
     return true;
 }

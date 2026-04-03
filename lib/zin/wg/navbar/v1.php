@@ -50,6 +50,7 @@ class navbar extends wg
         $showViewSwitcher = ($isTaskViews || $isTaskReport) && !empty($config->sanplexVersion) && $config->vision === 'rnd';
         $items            = static::getWorkspaceItems($showViewSwitcher);
         $activeID         = data('activeMenu');
+        $menuGroup        = data('mainNavbarGroup');
         $activeItem       = array('data-id' => $activeID);
 
         foreach($originItems as $item)
@@ -71,9 +72,9 @@ class navbar extends wg
             new nav
             (
                 setData('workspace', $workspace),
-                setData('navbarGroup', data('mainNavbarGroup')),
+                setData('navbarGroup', $menuGroup),
                 setData('mainNavbarGroup', $app->tab . '-' . $activeID),
-                on::init()->call('initPageNavbar', $originItems, $workspace, $activeID, "__WORKSPACE_{$workspace}__"),
+                on::init()->call('initPageNavbar', $originItems, $workspace, $activeID, "__WORKSPACE_{$workspace}__", empty($config->customMenu->{$menuGroup}) ? [] : json_decode($config->customMenu->{$menuGroup})),
                 set::items($items),
                 $this->children()
             ),
