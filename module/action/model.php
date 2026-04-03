@@ -1596,9 +1596,10 @@ class actionModel extends model
                 return $action;
             }
 
-            $moduleName   = 'programplan';
-            $methodName   = 'browse';
-            $params       = "projectID={$ganttversion->project}&productID={$ganttversion->product}&type={$ganttversion->category}&orderBy=id_asc&baselineID=0&browseType=&queryID=0&from=project&blockID=0&version={$ganttversion->id}";
+            $project    = $this->loadModel('project')->fetchById($action->project);
+            $moduleName = 'programplan';
+            $methodName = 'browse';
+            $params     = "projectID={$ganttversion->project}&productID={$ganttversion->product}&type={$ganttversion->category}&orderBy=id_asc&baselineID=0&browseType=&queryID=0&from=project&blockID=0&version={$ganttversion->id}";
             if(!empty($ganttversion->execution))
             {
                 $moduleName = 'execution';

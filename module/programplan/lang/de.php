@@ -84,10 +84,10 @@ $lang->programplan->editRelation        = 'Manage Task Relation';
 $lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';
 $lang->programplan->deleteRelation      = 'Delete Relation';
 $lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
-$lang->programplan->createGanttVersion  = 'Create Gantt Version';
-$lang->programplan->editGanttVersion    = 'Edit Gantt Version';
-$lang->programplan->deleteGanttVersion  = 'Delete Gantt Version';
-$lang->programplan->diffGanttVersion    = 'Compare Gantt Versions';
+$lang->programplan->createGanttVersion  = 'Create Version';
+$lang->programplan->editGanttVersion    = 'Edit Version';
+$lang->programplan->deleteGanttVersion  = 'Delete Version';
+$lang->programplan->diffGanttVersion    = 'Version comparison';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";

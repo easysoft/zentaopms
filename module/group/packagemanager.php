@@ -3540,12 +3540,17 @@ $config->group->package->gantt = new stdclass();
 $config->group->package->gantt->order  = 10;
 $config->group->package->gantt->subset = 'programplan';
 $config->group->package->gantt->privs  = array();
-$config->group->package->gantt->privs['programplan-browse']             = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
-$config->group->package->gantt->privs['programplan-ganttEdit']          = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
-$config->group->package->gantt->privs['programplan-createGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-deleteGanttVersion'));
-$config->group->package->gantt->privs['programplan-editGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-createGanttVersion', 'programplan-deleteGanttVersion'));
-$config->group->package->gantt->privs['programplan-deleteGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion'));
-$config->group->package->gantt->privs['programplan-diffGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion'));
+$config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
+$config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse'), 'recommend' => array());
+
+$config->group->package->ganttVersion = new stdclass();
+$config->group->package->ganttVersion->order  = 10;
+$config->group->package->ganttVersion->subset = 'programplan';
+$config->group->package->ganttVersion->privs  = array();
+$config->group->package->ganttVersion->privs['programplan-createGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-deleteGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-editGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('programplan-browse'), 'recommend' => array('programplan-createGanttVersion', 'programplan-deleteGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-deleteGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-diffGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion', 'programplan-deleteGanttVersion'));
 
 $config->group->package->projectRelation = new stdclass();
 $config->group->package->projectRelation->order  = 10;
