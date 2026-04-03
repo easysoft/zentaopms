@@ -834,6 +834,7 @@ class programplanTao extends programplanModel
         $data->story          = $task->story ? '#' . $task->story : '';
         $data->status         = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
         $data->owner_id       = $task->assignedTo;
+        $data->keywords       = $task->keywords;
         $data->attribute      = '';
         $data->milestone      = '';
         $data->begin          = substr($dateLimit['start'], 0, 10);

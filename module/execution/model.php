@@ -3854,7 +3854,7 @@ class executionModel extends model
             ->andWhere($condition)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
