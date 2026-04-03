@@ -78,8 +78,7 @@ class navbar extends wg
                 set::items($items),
                 $this->children()
             ),
-            $showViewSwitcher ? css('#actionBar>a[href^="' . str_replace('.html', '', createLink('task', 'report')) . '"]{display: none;}') : null,
-            commonModel::isTutorialMode() ? null : on::contextmenu('.nav-item:not(.nav-dropdown) > a, .nav-divider')->call('handleNavbarContextmenu', jsRaw('event'), jsRaw('this')),
+            $showViewSwitcher ? css('#actionBar>a[href^="' . str_replace('.html', '', createLink('task', 'report')) . '"]{display: none;}') : null
         );
     }
 
