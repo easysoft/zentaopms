@@ -2336,6 +2336,7 @@ eof;
         $varsReplaced = true;
         foreach($lang->menu as $menu)
         {
+            if(!is_array($menu)) continue;
             if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
             if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
             if(!$varsReplaced) break;
