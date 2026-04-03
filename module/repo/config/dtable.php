@@ -352,3 +352,46 @@ $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
 $config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
+
+$config->repo->dtable->system = new stdclass();
+$config->repo->dtable->system->fieldList['id']['title']    = $lang->idAB;
+$config->repo->dtable->system->fieldList['id']['name']     = 'id';
+$config->repo->dtable->system->fieldList['id']['type']     = 'id';
+$config->repo->dtable->system->fieldList['id']['sortType'] = true;
+$config->repo->dtable->system->fieldList['id']['order']    = 5;
+
+$config->repo->dtable->system->fieldList['product']['title']    = $lang->repo->system->product;
+$config->repo->dtable->system->fieldList['product']['type']     = 'text';
+$config->repo->dtable->system->fieldList['product']['sortType'] = true;
+$config->repo->dtable->system->fieldList['product']['order']    = 10;
+$config->repo->dtable->system->fieldList['product']['width']    = 0.15;
+
+$config->repo->dtable->system->fieldList['name']['title'] = $lang->repo->system->name;
+$config->repo->dtable->system->fieldList['name']['type']  = 'text';
+$config->repo->dtable->system->fieldList['name']['hint']  = true;
+$config->repo->dtable->system->fieldList['name']['sortType'] = true;
+$config->repo->dtable->system->fieldList['name']['order'] = 15;
+$config->repo->dtable->system->fieldList['name']['width'] = 0.15;
+
+$config->repo->dtable->system->fieldList['status']['title']     = $lang->repo->system->status;
+$config->repo->dtable->system->fieldList['status']['type']      = 'status';
+$config->repo->dtable->system->fieldList['status']['name']      = 'status';
+$config->repo->dtable->system->fieldList['status']['statusMap'] = $lang->system->statusList;
+$config->repo->dtable->system->fieldList['status']['sortType']  = true;
+$config->repo->dtable->system->fieldList['status']['align']     = 'left';
+$config->repo->dtable->system->fieldList['status']['order']     = 20;
+$config->repo->dtable->system->fieldList['status']['width']     = 0.15;
+
+$config->repo->dtable->system->fieldList['latestRelease']['title'] = $lang->repo->system->latestRelease;
+$config->repo->dtable->system->fieldList['latestRelease']['name']  = 'latestRelease';
+$config->repo->dtable->system->fieldList['latestRelease']['type']  = 'text';
+$config->repo->dtable->system->fieldList['latestRelease']['order'] = 25;
+$config->repo->dtable->system->fieldList['latestRelease']['width'] = 0.15;
+
+$config->repo->dtable->system->fieldList['deployStatus']['title']     = $lang->repo->system->deployStatus;
+$config->repo->dtable->system->fieldList['deployStatus']['type']      = 'status';
+$config->repo->dtable->system->fieldList['deployStatus']['name']      = 'deployStatus';
+$config->repo->dtable->system->fieldList['deployStatus']['statusMap'] = $lang->deploy->statusList;
+$config->repo->dtable->system->fieldList['deployStatus']['align']     = 'left';
+$config->repo->dtable->system->fieldList['deployStatus']['width']     = 0.15;
+$config->repo->dtable->system->fieldList['deployStatus']['order']     = 30;
