@@ -3540,8 +3540,9 @@ $config->group->package->gantt = new stdclass();
 $config->group->package->gantt->order  = 10;
 $config->group->package->gantt->subset = 'programplan';
 $config->group->package->gantt->privs  = array();
-$config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
-$config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse'), 'recommend' => array());
+$config->group->package->gantt->privs['programplan-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
+$config->group->package->gantt->privs['programplan-ganttEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse'), 'recommend' => array());
+$config->group->package->gantt->privs['programplan-ganttExport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array());
 
 $config->group->package->ganttVersion = new stdclass();
 $config->group->package->ganttVersion->order  = 10;

@@ -13,6 +13,7 @@ $lang->programplan->common        = 'Program Plan';
 $lang->programplan->browse        = 'Gantt Chart';
 $lang->programplan->gantt         = 'Gantt Chart';
 $lang->programplan->ganttEdit     = 'Gantt Edit';
+$lang->programplan->ganttExport   = 'Gantt Export';
 $lang->programplan->list          = 'Stage List';
 $lang->programplan->create        = 'Create';
 $lang->programplan->edit          = 'Edit Stage';
