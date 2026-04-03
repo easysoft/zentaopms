@@ -2299,4 +2299,62 @@ class repo extends control
         $this->view->browseType = $browseType;
         $this->display();
     }
+
+    /**
+     * 浏览分支列表。
+     * Browse branch list.
+     *
+     * @param  int    $space
+     * @param  string $type
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $keyword
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseSystem(int $space = 0, string $type = 'all',string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $param = 0)
+    {
+        $this->app->loadClass('pager', true);
+        $this->loadModel('space')->setMenu($space);
+
+        $queryID   = $type == 'bySearch' ? $param : 0;
+        $actionURL = $this->createLink('repo', 'browseSystem', "space={$space}&type=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $this->repoZen->buildSystemSearchForm($queryID, $actionURL);
+
+        $systemQuery = $type == 'bySearch' ? $this->repoZen->getSystemSearchQuery($queryID) : '';
+        $systems = $this->repo->getSystemList($systemQuery, $space);
+        foreach($systems as &$system)
+        {
+            $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
+        }
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($systems as $orderSystem)
+        {
+            $orderList[] = $orderSystem->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $systems);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $systemTotal = count($systems);
+        $pager       = new pager($systemTotal, $recPerPage, $pageID);
+        $systems     = array_chunk($systems, (int)$pager->recPerPage);
+        if($systems && !isset($systems[$pageID - 1])) $pageID = 1;
+
+        $this->view->title    = $this->lang->repo->browseSystem;
+        $this->view->appList  = empty($systems) ? $systems: $systems[$pageID - 1];
+        $this->view->releases = $this->loadModel('release')->getPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
+        $this->view->param    = $param;;
+        $this->view->type     = $type;
+        $this->view->inSpace  = !empty($space);
+        $this->view->spaceID  = $space;
+        $this->display();
+    }
 }
