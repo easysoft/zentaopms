@@ -33,7 +33,7 @@ $config->repo->svnBatchNum = 10;
 $config->repo->images      = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary      = '|pdf|';
 $config->repo->synced      = '';
-$config->repo->notSyncSCM  = array('Gitlab');
+$config->repo->notSyncSCM  = array('Gitlab', 'GitFox');
 
 $config->repo->repoSyncLog = new stdclass();
 $config->repo->repoSyncLog->one            = '1';
@@ -78,9 +78,12 @@ $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs');
-$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs');
-$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git');
+$config->repo->gitfox = new stdclass;
+$config->repo->gitfox->apiPath = "%s/api/v2/repos/%s/";
+
+$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs', 'gitfox');
+$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs', 'GitFox');
+$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git', 'GitFox');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
