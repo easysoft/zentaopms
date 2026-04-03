@@ -400,7 +400,7 @@ class pipelineModel extends model
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, '/pipeline/executions');
-        if(!empty($variables->gitRef)) $variables->gitRef = 'ref/heads/' . $variables->gitRef;
+        if(!empty($variables->gitRef)) $variables->gitRef = 'refs/heads/' . $variables->gitRef;
 
         $data = new stdClass();
         $data->pipelineID = $id;
