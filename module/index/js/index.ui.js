@@ -1053,6 +1053,7 @@ function generateAddMenuNavItems($item)
 {
     const onClick = addMenuToMainNavCb($item);
     const items = [];
+    const $li = $item.closest('li');
     if(canAddDivider($li)) items.push({
         icon: 'icon-minus',
         text: langData.divider,
@@ -1126,8 +1127,6 @@ function generateAddSpaceNavItems($ele)
 
     const handleItemClick = (name) => {
         const fromName = $li.attr('data-name');
-        const item = info.itemMap.get(name);
-        if(!item) return;
         if(name === 'divider')
         {
             const index = info.items.findIndex(item => item.code === fromName);
@@ -1136,6 +1135,8 @@ function generateAddSpaceNavItems($ele)
         }
         else
         {
+            const item = info.itemMap.get(name);
+            if(!item) return;
             const oldIndex = info.items.findIndex(item => item.code === name);
             info.items.splice(oldIndex, 1);
             const newIndex = info.items.findIndex(item => item.code === fromName);
@@ -1156,7 +1157,7 @@ function generateAddSpaceNavItems($ele)
     info.items.forEach((item) => {
         if(!item.hidden) return;
         items.push({
-            icon: `icon-${item.code}`,
+            icon: `icon-app-empty ${item.icon || `icon-${item.code}`}`,
             text: item.text,
             onClick: () => handleItemClick(item.code)
         });
@@ -1345,7 +1346,14 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             onClick: hideDisabled ? null : () => {
                 const $li = $btn.closest('li');
                 $li.hide().attr('data-hidden', '1');
-                if(!$.apps.workspace)
+                if($.apps.workspace)
+                {
+                    const info = app.workspace;
+                    const name = $li.attr('data-name');
+                    const item = info.items.find(x => x.code === name);
+                    if(item) item.hidden = true;
+                }
+                else
                 {
                     closeApp(code);
                     refreshMenu();
