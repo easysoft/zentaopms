@@ -720,35 +720,41 @@ class programplanTao extends programplanModel
      */
     protected function buildPointDataForGantt(int $planID, object $point, array $reviewDeadline): object
     {
+        static $users;
+        if(empty($users)) $users = $this->loadModel('user')->getPairs('noletter');
+
         $statusList = array();
         if(isset($this->lang->review->statusList)) $statusList = $this->lang->review->statusList;
 
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
-        $data->id            = $planID . '-point' . $point->category . '-' . $point->id;
-        $data->reviewID      = $point->reviewID;
-        $data->type          = 'point';
-        $data->text          = "<i class='icon-seal'></i> " . $point->title;
-        $data->name          = $point->title;
-        $data->attribute     = '';
-        $data->milestone     = '';
-        $data->owner_id      = '';
-        $data->rawStatus     = $point->status;
-        $data->status        = $point->status ? zget($statusList, $point->status) : $this->lang->programplan->wait;
-        $data->status        = "<span class='status-{$point->status}'>" . $data->status . '</span>';
-        $data->begin         = $end;
-        $data->deadline      = $end;
-        $data->realBegan     = $point->createdDate;
-        $data->realEnd       = $point->lastReviewedDate;;
-        $data->parent        = $planID;
-        $data->open          = true;
-        $data->start_date    = $end;
-        $data->endDate       = $end;
-        $data->duration      = 1;
-        $data->color         = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
-        $data->progressColor = $this->lang->execution->gantt->stage->progressColor;
-        $data->textColor     = $this->lang->execution->gantt->stage->textColor;
-        $data->bar_height    = $this->lang->execution->gantt->bar_height;
+        $data->id             = $planID . '-point' . $point->category . '-' . $point->id;
+        $data->reviewID       = $point->reviewID;
+        $data->type           = 'point';
+        $data->text           = "<i class='icon-seal'></i> " . $point->title;
+        $data->name           = $point->title;
+        $data->attribute      = '';
+        $data->milestone      = '';
+        $data->owner_id       = '';
+        $data->rawStatus      = $point->status;
+        $data->status         = $point->status ? zget($statusList, $point->status) : $this->lang->programplan->wait;
+        $data->status         = "<span class='status-{$point->status}'>" . $data->status . '</span>';
+        $data->begin          = $end;
+        $data->deadline       = $end;
+        $data->parent         = $planID;
+        $data->open           = true;
+        $data->start_date     = $end;
+        $data->endDate        = $end;
+        $data->duration       = 1;
+        $data->openedBy       = zget($users, $point->openedBy);
+        $data->lastEditedBy   = zget($users, $point->editedBy);
+        $data->openedDate     = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
+        $data->lastEditedDate = helper::isZeroDate($point->editedDate)        ? '' : substr($point->editedDate,  0, 10);
+        $data->realBegan      = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
+        $data->realEnd        = helper::isZeroDate($point->lastReviewedDate)  ? '' : substr($point->lastReviewedDate,  0, 10);
+        $data->color          = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
+        $data->progressColor  = $this->lang->execution->gantt->stage->progressColor;
+        $data->textColor      = $this->lang->execution->gantt->stage->textColor;
 
         if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
 
