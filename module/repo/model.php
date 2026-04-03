@@ -3006,9 +3006,6 @@ class repoModel extends model
      */
     public function getBugsByRepo($repoID = 0, $browseType = '', $executionID = 0, $bugs = array(), $orderBy = 'id_desc', $pager = null)
     {
-        $this->app->loadConfig('misc');
-        if(!$this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''))) return array();
-
         if($this->app->tab == 'project')
         {
             $executionIDList = $this->loadModel('execution')->fetchExecutionList($executionID, 'all');
@@ -3196,5 +3193,44 @@ class repoModel extends model
         foreach($diffs as $diff) $files[] = $diff->fileName;
 
         return $this->buildFileTree($files);
+    }
+
+    /**
+     * 获取应用列表。
+     * Get app list.
+     *
+     * @param  string $systemQuery
+     * @param  int    $space
+     * @access public
+     * @return array
+     */
+    public function getSystemList(string $systemQuery = '', int $space = 0): array
+    {
+        $spaceProducts = $this->loadModel('space')->getProductsBySpace($space);
+        return $this->dao->select('t1.`id` as id, t1.`name` as name, t1.`latestRelease` as latestRelease, t1.`product` as product, t1.`status` as status, t3.`status` as deployStatus, t3.`createdDate` as deployCreatedDate')->from(TABLE_SYSTEM)->alias('t1')
+            ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.`latestRelease` = t2.`release`')
+            ->leftJoin(TABLE_DEPLOY)->alias('t3')->on('t2.`deploy` = t3.`id` and t2.`release` > 0')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted', true)->eq('0')
+            ->orWhere('t3.id')->isNULL()
+            ->markRight(true)
+            ->beginIF(!empty($spaceProducts))->andWhere('t1.product')->in($spaceProducts)->fi()
+            ->beginIF(!empty($systemQuery))->andWhere($systemQuery)->fi()
+            ->orderBy('deployCreatedDate_asc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取GitFox代码库列表。
+     * Get gitfox repo list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGitFoxRepos(): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->fetchAll('id');
     }
 }

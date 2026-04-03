@@ -1,6 +1,8 @@
 <?php
 global $lang, $app;
 $app->loadLang('repo');
+$app->loadLang('deploy');
+$app->loadLang('system');
 
 $config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import', 'group');
 
@@ -183,3 +185,18 @@ $config->repo->searchCommits['fields']['committer'] = $lang->repo->committer;
 $config->repo->searchCommits['params']['commit']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->repo->searchCommits['params']['date']      = array('operator' => '=',       'control' => 'date',  'values' => '');
 $config->repo->searchCommits['params']['committer'] = array('operator' => 'include', 'control' => 'input', 'values' => '');
+
+/* Search config. */
+$config->repo->system = new stdClass();
+$config->repo->system->search['module']                 = 'systemSearch';
+$config->repo->system->search['fields']['id']           = $lang->idAB;
+$config->repo->system->search['fields']['name']         = $lang->repo->system->name;
+$config->repo->system->search['fields']['product']      = $lang->repo->system->product;
+$config->repo->system->search['fields']['status']       = $lang->repo->system->status;
+$config->repo->system->search['fields']['deployStatus'] = $lang->repo->system->deployStatus;
+
+$config->repo->system->search['params']['id']            = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->repo->system->search['params']['name']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->repo->system->search['params']['product']       = array('operator' => '=',       'control' => 'select', 'values' => array());
+$config->repo->system->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->system->statusList);
+$config->repo->system->search['params']['deployStatus']  = array('operator' => '=',       'control' => 'select', 'values' => $lang->deploy->statusList);

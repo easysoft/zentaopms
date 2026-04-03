@@ -1162,7 +1162,7 @@ class repo extends control
         $this->view->suffix      = 'c';
         $this->view->blames      = array();
         $this->view->showEditor  = true;
-        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
+        $this->view->canReview   = true;
         $this->display('repo', 'ajaxgeteditorcontent');
     }
 
@@ -1236,7 +1236,7 @@ class repo extends control
         $this->view->pathInfo    = $pathInfo;
         $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
-        $this->view->canReview   = $this->loadModel('common')->checkExtLicense('devops', zget($this->config->misc, 'featureLimit', ''));
+        $this->view->canReview   = true;
         $this->display();
     }
 
@@ -2297,6 +2297,64 @@ class repo extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->title      = $this->lang->repo->review;
         $this->view->browseType = $browseType;
+        $this->display();
+    }
+
+    /**
+     * 浏览分支列表。
+     * Browse branch list.
+     *
+     * @param  int    $space
+     * @param  string $type
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $keyword
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseSystem(int $space = 0, string $type = 'all',string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $param = 0)
+    {
+        $this->app->loadClass('pager', true);
+        $this->loadModel('space')->setMenu($space);
+
+        $queryID   = $type == 'bySearch' ? $param : 0;
+        $actionURL = $this->createLink('repo', 'browseSystem', "space={$space}&type=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $this->repoZen->buildSystemSearchForm($queryID, $actionURL);
+
+        $systemQuery = $type == 'bySearch' ? $this->repoZen->getSystemSearchQuery($queryID) : '';
+        $systems = $this->repo->getSystemList($systemQuery, $space);
+        foreach($systems as &$system)
+        {
+            $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
+        }
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($systems as $orderSystem)
+        {
+            $orderList[] = $orderSystem->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $systems);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $systemTotal = count($systems);
+        $pager       = new pager($systemTotal, $recPerPage, $pageID);
+        $systems     = array_chunk($systems, (int)$pager->recPerPage);
+        if($systems && !isset($systems[$pageID - 1])) $pageID = 1;
+
+        $this->view->title    = $this->lang->repo->browseSystem;
+        $this->view->appList  = empty($systems) ? $systems: $systems[$pageID - 1];
+        $this->view->releases = $this->loadModel('release')->getPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
+        $this->view->param    = $param;;
+        $this->view->type     = $type;
+        $this->view->inSpace  = !empty($space);
+        $this->view->spaceID  = $space;
         $this->display();
     }
 }
