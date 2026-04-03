@@ -177,9 +177,15 @@ $lang->programplan->error->emptyParentName = "包含子阶段，阶段名称不�
 $lang->programplan->error->noProject       = "系统中没有瀑布、融合瀑布{$lang->projectCommon}时，无法添加甘特图。";
 $lang->programplan->error->noProject4IPD   = "系统中没有瀑布、融合瀑布、ipd{$lang->projectCommon}时，无法添加甘特图。";
 
-$lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
-$lang->programplan->ganttBrowseType['assignedTo']  = '按指派给分组';
-$lang->programplan->ganttBrowseType['type']        = '按任务类型分组';
+$lang->programplan->ganttBrowseType['gantt']      = '按阶段分组';
+$lang->programplan->ganttBrowseType['assignedTo'] = '按指派给分组';
+$lang->programplan->ganttBrowseType['type']       = '按任务类型分组';
+$lang->programplan->ganttBrowseType['module']     = '按模块分组';
+$lang->programplan->ganttBrowseType['story']      = "按{$lang->SRCommon}分组";
+$lang->programplan->ganttBrowseType['status']     = '按状态分组';
+$lang->programplan->ganttBrowseType['pri']        = '按优先级分组';
+$lang->programplan->ganttBrowseType['finishedBy'] = '按完成者分组';
+$lang->programplan->ganttBrowseType['closedBy']   = '按关闭者分组';
 
 $lang->programplan->reviewColorList['draft']     = '#FC913F';
 $lang->programplan->reviewColorList['reviewing'] = '#CD6F27';
