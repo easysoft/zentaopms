@@ -23,10 +23,10 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
-    $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+    if(helper::hasFeature('OA')) $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' Feedback|feedback|browse|browseType=unclosed';
-    $lang->mainNav->oa       = $lang->navIcons['oa'] . ' OA|attend|personal|';
+    if(helper::hasFeature('OA')) $lang->mainNav->oa       = $lang->navIcons['oa'] . ' OA|attend|personal|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
