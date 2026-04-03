@@ -87,7 +87,7 @@ $lang->my->menuOrder[25] = 'contacts';
 
 $lang->my->dividerMenu = ',calendar,';
 
-$lang->project->target = 'Story';
+$lang->project->target = 'Goal';
 
 /* Scrum menu. */
 $lang->kanbanProject->menu            = new stdclass();
@@ -122,8 +122,8 @@ $lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "
 $lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 
-$lang->URCommon = 'Story';
-$lang->SRCommon = 'Story';
+$lang->URCommon = 'Goal';
+$lang->SRCommon = 'Goal';
 
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
@@ -142,6 +142,13 @@ $lang->doc->menuOrder[10] = 'quick';
 $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'custom';
 $lang->doc->menuOrder[25] = 'project';
+
+if(strpos(',max,ipd,', $config->edition) !== false)
+{
+    $lang->doc->menu->template = array('link' => "Template|doc|browseTemplate|", 'alias' => 'browsetemplate');
+    $lang->doc->menuOrder[30]  = 'template';
+    $lang->doc->dividerMenu   .= ',template,';
+}
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
