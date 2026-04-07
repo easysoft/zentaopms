@@ -43,7 +43,7 @@ class versiondiff extends wg
                 btn
                 (
                     setID('versionBox'),
-                    setClass('ghost gray-300-outline rounded-full', $this->prop('className')),
+                    setClass('ghost gray-300-outline rounded-full', $this->prop('appendClass')),
                     set::text($currentVersion),
                     set::hint($currentVersion),
                     set::caret(),

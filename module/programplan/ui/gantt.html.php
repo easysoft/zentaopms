@@ -133,7 +133,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setStyle(array('order' => '10010')),
             versiondiff
             (
-                set::className('fixed-item'),
+                set::appendClass('fixed-item'),
                 set::versionID($versionID),
                 set::currentVersion($currentVersion),
                 set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
