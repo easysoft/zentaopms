@@ -543,7 +543,7 @@ $lang->exportTypeList['selected'] = 'Ausgewählte';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operation Management Interface';
-$lang->visionList['devops'] = 'DevOps Interface';
+//$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';

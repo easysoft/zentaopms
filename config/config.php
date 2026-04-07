@@ -35,7 +35,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,or,devops,';     // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,lite,or,';     // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();

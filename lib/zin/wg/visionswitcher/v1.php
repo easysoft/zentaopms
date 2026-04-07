@@ -25,7 +25,7 @@ class visionSwitcher extends wg
         'or'      => 'or',
         'manager' => 'manager',
         'ipd'     => 'ipd',
-        'devops'  => 'devops'
+        //'devops'  => 'devops'
     );
 
     protected function getVisionIcon(string $vision): string
@@ -113,7 +113,9 @@ class visionSwitcher extends wg
         );
 
         $devopsItems = array();
-        $spaces = $app->control->loadModel('space')->getListByAccount($user->account);
+        $spaces = array();
+        $gitfoxServer = $app->control->loadModel('gitfox')->getServer();
+        if($gitfoxServer) $spaces = $app->control->loadModel('space')->getListByAccount($user->account);
         if(!empty($spaces))
         {
             foreach($spaces as $space)
