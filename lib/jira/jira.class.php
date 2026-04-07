@@ -493,7 +493,11 @@ class jira
         if(!$result) return array();
 
         $statusList = array();
-        foreach($result as $status) $statusList[$status['id']] = $status;
+        foreach($result as $status)
+        {
+            $status['name'] = $status['untranslatedName'];
+            $statusList[$status['id']] = $status;
+        }
 
         return $statusList;
     }
