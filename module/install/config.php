@@ -46,6 +46,8 @@ chmod +x "\${INSTALL_DIR}/gitfox"
 "\${INSTALL_DIR}/gitfox" install
 "\${INSTALL_DIR}/gitfox" status
 "\${INSTALL_DIR}/gitfox" help
+
+echo "GitFox has been installed to \${INSTALL_DIR}"
 EOT;
 
 $config->install->installGitfox['win'] = <<<EOT
@@ -90,4 +92,6 @@ del /f /q "%GITFOX_ZIP%"
 "%INSTALL_DIR%\gitfox.exe" install
 "%INSTALL_DIR%\gitfox.exe" status
 "%INSTALL_DIR%\gitfox.exe" help
+
+echo "GitFox has been installed to %INSTALL_DIR%"
 EOT;
