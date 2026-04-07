@@ -22,9 +22,7 @@ class versiondiff extends wg
 
     public static function getPageJS(): ?string
     {
-        global $app;
-        $js = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        return $js;
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     protected function build()
@@ -43,7 +41,7 @@ class versiondiff extends wg
                 btn
                 (
                     setID('versionBox'),
-                    setClass('ghost gray-300-outline rounded-full', $this->prop('className')),
+                    setClass('ghost gray-300-outline rounded-full', $this->prop('appendClass')),
                     set::text($currentVersion),
                     set::hint($currentVersion),
                     set::caret(),

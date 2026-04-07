@@ -3854,7 +3854,7 @@ class executionModel extends model
             ->andWhere($condition)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
@@ -3950,7 +3950,11 @@ class executionModel extends model
         if($action == 'putoff')       return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate')     return $execution->status == 'suspended' || $execution->status == 'closed';
         if($action == 'delete')       return empty($execution->isParent);
-        if($action == 'autoSchedule') return $this->loadModel('programplan')->checkLeafStage(isset($execution->rawID) ? $execution->rawID : $execution->id);
+        if($action == 'autoSchedule')
+        {
+            global $app;
+            return $app->control->loadModel('programplan')->checkLeafStage(isset($execution->rawID) ? $execution->rawID : $execution->id);
+        }
 
         return true;
     }

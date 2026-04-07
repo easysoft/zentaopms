@@ -933,7 +933,7 @@ class programplanModel extends model
                 ->andWhere('t1.status')->ne('cancel')
                 ->andWhere('t1.closedReason')->ne('cancel')
                 ->orderBy('execution_asc,estStarted_asc,id_asc')
-                ->fetchAll('id');
+                ->fetchAll('id', false);
         }
 
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
