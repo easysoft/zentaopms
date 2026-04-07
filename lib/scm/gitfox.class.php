@@ -809,7 +809,20 @@ class gitfoxRepo
             "Operator: {$app->user->account}",
             'Accept-Language: ' . $apiLanguage
         );
-        if(!empty($data)) $header[1] = 'Accept: */*';
+        if(!empty($data))
+        {
+            $header[1] = 'Accept: */*';
+            if(is_array($data) && isset($data['pageSize']) && isset($data['page']))
+            {
+                $data['pageSize'] = (int)$data['pageSize'];
+                $data['page']     = (int)$data['page'];
+            }
+            if(is_object($data) && isset($data->pageSize) && isset($data->page))
+            {
+                $data->pageSize = (int)$data->pageSize;
+                $data->page     = (int)$data->page;
+            }
+        }
 
         $api = ltrim($api, '/');
         $api = "{$this->root}{$api}?" . http_build_query($params);
