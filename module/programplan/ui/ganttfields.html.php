@@ -69,7 +69,7 @@ foreach($lang->programplan->ganttCustom as $field => $name)
     $ganttFields[$ganttField] = in_array($field, $notSort) ? $name : array('text' => $name);
 }
 
-list($orderField, $orderDirect) = $this->execution->parseOrderBy($orderBy);
+list($orderField, $orderDirect) = $this->loadModel('execution')->parseOrderBy($orderBy);
 foreach($ganttFields as $colName => $value)
 {
     $field = str_replace('column_', '', $colName);
