@@ -150,13 +150,21 @@ window.renderCell = function(result, info)
             {
                 result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
             }
-            else if(storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+
+            if(storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
             {
                 result[0]['props']['href'] = $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id);
             }
             else if(!storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
             {
                 result[0] = {html : '<a href=' + $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            }
+
+            if((!requirementAssignedToPriv && info.row.data.type == 'requirement') || (!epicAssignedToPriv && info.row.data.type == 'epic'))
+            {
+                delete result[0]['props']['data-toggle'];
+                delete result[0]['props']['href'];
+                result[0]['props']['className'] += ' disabled';
             }
         }
     }

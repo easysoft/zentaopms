@@ -116,7 +116,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
 
     if($isProjectStory && $config->vision != 'lite')
     {
-        if(!empty($productID)) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
+        if(!empty($productID) && common::hasPriv('story', 'batchCreate')) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
         if(str_contains($project->storyType, 'requirement') && $this->config->URAndSR)
         {
             if(common::hasPriv('requirement', 'create'))
