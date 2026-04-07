@@ -1022,5 +1022,28 @@ class programplanModel extends model
 
         /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
         if($type == 'execution') return $ganttVersions;
+
+        $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
+            ->where('t2.id')->eq($projectID)
+            ->fetch('disabledFeatures');
+
+        /* 2. 交付物的项目计划。 Project plan of deliverable. */
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t3.category')->eq('PP')
+            ->andWhere('t2.status')->eq('pass')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('deliverable')
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->fetchAll('id', false);
+
+        /* 4. 合并版本。 Merge versions. */
+        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        ksort($versions, SORT_NUMERIC);
+
+        return $versions;
     }
 }
