@@ -996,4 +996,31 @@ class programplanModel extends model
         }
         return count($days);
     }
+
+    /**
+     * 获取甘特图的版本。
+     * Get all versions for gantt.
+     *
+     * @param int    $projectID
+     * @param int    $productID
+     * @param string $type       project|execution
+     * @access public
+     * @return array
+     */
+    public function getGanttVersions(int $projectID, int $productID = 0, string $type = 'project'): array
+    {
+        /* 1. 甘特图创建的版本。 Gantt version. */
+        $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
+            ->where('type')->eq('taged')
+            ->andWhere('status')->eq('gantt')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'execution')->andWhere('execution')->eq($projectID)->fi()
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->orderBy('id_asc')
+            ->fetchAll('id', false);
+
+        /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
+        if($type == 'execution') return $ganttVersions;
+    }
 }
