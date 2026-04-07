@@ -940,7 +940,7 @@ function changeAppsLang(lang)
             app.iframe.contentWindow.changeAppLang(lang);
         }
     });
-    updateAppsMenu(true);
+    if(!$.apps.workspace) updateAppsMenu(true);
 }
 
 function changeAppsTheme(theme)
