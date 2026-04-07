@@ -2681,8 +2681,9 @@ eof;
         global $config;
         if($config->edition != 'open')
         {
-            $flowAction = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
-            if($flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions) && !$this->loadModel('flow')->checkConditions($flowAction->conditions, $data))
+            $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
+            $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);
+            if($isActionEnable && !$this->loadModel('flow')->checkConditions($flowAction->conditions, $data))
             {
                 return false;
             }
