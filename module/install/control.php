@@ -488,4 +488,42 @@ class install extends control
         $this->view->title = $this->lang->install->devopsIntroduction;
         $this->display();
     }
+
+    /**
+     * 安装GitFox.
+     * Install GitFox.
+     *
+     * @access public
+     * @return void
+     */
+    public function installGitFox()
+    {
+        if(strpos(PHP_OS, 'WIN'))
+        {
+            $os = 'win';
+        }
+        elseif (PHP_OS === 'Linux')
+        {
+            $os = 'linux';
+        }
+        elseif (PHP_OS === 'Darwin')
+        {
+            $os = 'mac';
+        }
+        else
+        {
+            $os = 'linux';
+        }
+
+        $gitfoxDir = $this->app->getAppRoot() . 'gitfox';
+
+        $type    = $os == 'mac' ? 'linux' : $os;
+        $command = sprintf($this->config->install->installGitfox[$type], $gitfoxDir);
+        $script  = $type == 'linux' ? $this->app->getTmpRoot() . 'installGitFox.sh' : $this->app->getTmpRoot() . 'installGitFox.bat';
+        file_put_contents($script, $command);
+
+        $this->view->title  = $this->lang->install->installGitFox;
+        $this->view->script = $script;
+        $this->display();
+    }
 }
