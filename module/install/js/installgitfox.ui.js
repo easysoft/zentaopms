@@ -1,7 +1,6 @@
 window.copyCommand = function(selector)
 {
     const command = $(selector).text();
-    console.log(command);
 
     // 首先尝试使用现代的 Clipboard API (仅在 HTTPS 下可用)
     if (navigator.clipboard && window.isSecureContext) {
