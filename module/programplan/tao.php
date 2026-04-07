@@ -746,7 +746,7 @@ class programplanTao extends programplanModel
         $data->start_date     = $end;
         $data->endDate        = $end;
         $data->duration       = 1;
-        $data->openedBy       = zget($users, $point->openedBy);
+        $data->openedBy       = zget($users, $point->createdBy);
         $data->lastEditedBy   = zget($users, $point->editedBy);
         $data->openedDate     = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
         $data->lastEditedDate = helper::isZeroDate($point->editedDate)        ? '' : substr($point->editedDate,  0, 10);
