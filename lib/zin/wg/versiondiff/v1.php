@@ -22,9 +22,7 @@ class versiondiff extends wg
 
     public static function getPageJS(): ?string
     {
-        global $app;
-        $js = file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
-        return $js;
+        return file_get_contents(__DIR__ . DS . 'js' . DS . 'v1.js');
     }
 
     protected function build()
