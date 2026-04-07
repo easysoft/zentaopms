@@ -996,4 +996,122 @@ class programplanModel extends model
         }
         return count($days);
     }
+
+    /**
+     * 获取甘特图的版本。
+     * Get all versions for gantt.
+     *
+     * @param int    $projectID
+     * @param int    $productID
+     * @param string $type       project|execution
+     * @access public
+     * @return array
+     */
+    public function getGanttVersions(int $projectID, int $productID = 0, string $type = 'project'): array
+    {
+        /* 1. 甘特图创建的版本。 Gantt version. */
+        $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
+            ->where('type')->eq('taged')
+            ->andWhere('status')->eq('gantt')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'execution')->andWhere('execution')->eq($projectID)->fi()
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->orderBy('id_asc')
+            ->fetchAll('id', false);
+
+        /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
+        if($type == 'execution') return $ganttVersions;
+
+        $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
+            ->where('t2.id')->eq($projectID)
+            ->fetch('disabledFeatures');
+
+        /* 2. 交付物的项目计划。 Project plan of deliverable. */
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t3.category')->eq('PP')
+            ->andWhere('t2.status')->eq('pass')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('deliverable')
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->fetchAll('id', false);
+        /* 3. 基线评审的版本。 Project plan of baseline. */
+        $baselineVersions = array();
+        if(strpos(",{$disabledFeatures},", ',cm,') === false)
+        {
+            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.category')->eq('PP')
+                ->fetchPairs();
+            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.status')->eq('pass')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.type')->eq('baseline')
+                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+                ->fetchAll('id', false);
+            foreach($baselineVersions as $baselineVersion)
+            {
+                if(isset($ppCategories[$baselineVersion->category])) continue;
+                foreach(explode(',', $baselineVersion->category) as $category)
+                {
+                    if(isset($ppCategories[$category])) continue 2;
+                }
+
+                unset($baselineVersions[$baselineVersion->id]);
+            }
+        }
+
+        /* 4. 合并版本。 Merge versions. */
+        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        ksort($versions, SORT_NUMERIC);
+
+        return $versions;
+    }
+
+    /**
+     * 获取甘特图的数据。
+     * Get gantt data.
+     *
+     * @param int    $versionID
+     * @access public
+     * @return array
+     */
+    public function getGanttDataByVersion(int $versionID): array
+    {
+        $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
+        if(empty($object)) return array();
+
+        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+
+        /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
+        if(empty($object->data) && !empty($object->categoryVersion))
+        {
+            $categoryVersion = json_decode($object->categoryVersion, true);
+            $object = $this->dao->select('t2.*')->from(TABLE_REVIEW)->alias('t1')
+                ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
+                ->where('t1.id')->in($categoryVersion)
+                ->andWhere('t2.data')->ne('')
+                ->orderBy('t2.id_desc')
+                ->fetch();
+        }
+
+        if(!empty($object->data))
+        {
+            /* 从docblock表中获取甘特图的数据。 From docblock table, get the gantt data. */
+            $blockID = zget(zget(json_decode($object->data), 'fetcherParams', array()), 'param2', 0);
+            $content = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch('content');
+
+            if(empty($content)) return array();
+            return (array)zget(json_decode($content), 'ganttOptions', array());
+        }
+
+        return array();
+    }
 }

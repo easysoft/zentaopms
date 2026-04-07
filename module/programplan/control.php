@@ -90,7 +90,7 @@ class programplan extends control
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
         $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID, (int)$versionID);
-        if($versionID == 'nowait')
+        if($versionID == 'nowait' && !empty($plans['data']))
         {
             $plans['data'] = array_values(array_filter($plans['data'], function($data)
             {
@@ -103,7 +103,7 @@ class programplan extends control
             $ganttBaseline = (int)$_POST['baselineVersion'];
             if($ganttBaseline)
             {
-                $baselinePlans = $this->project->getGanttDataByVersion($ganttBaseline);
+                $baselinePlans = $this->programplan->getGanttDataByVersion($ganttBaseline);
             }
             else
             {
@@ -126,7 +126,7 @@ class programplan extends control
         $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
         $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
-        $this->view->versions    = $this->project->getGanttVersions($projectID, $productID);
+        $this->view->versions    = $this->programplan->getGanttVersions($projectID, $productID);
         $this->view->versionID   = $versionID;
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;
