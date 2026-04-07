@@ -323,7 +323,8 @@ class installModel extends model
         if(dao::isError()) return false;
 
         /* Set admin. */
-        $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite,devops' : 'rnd,lite,devops';
+        //$visions = $this->config->edition == 'ipd' ? 'or,rnd,lite,devops' : 'rnd,lite,devops';
+        $visions = $this->config->edition == 'ipd' ? 'or,rnd,lite' : 'rnd,lite';
         $admin   = new stdclass();
         $admin->account  = $data->account;
         $admin->realname = $data->account;

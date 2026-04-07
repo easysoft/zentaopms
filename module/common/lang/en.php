@@ -545,7 +545,7 @@ $lang->exportTypeList['selected'] = 'Selected Data';
 $lang->visionList = array();
 $lang->visionList['rnd']    = 'Full Feature Interface';
 $lang->visionList['lite']   = 'Operations Interface';
-$lang->visionList['devops'] = 'DevOps Interface';
+//$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'To-Do';
 $lang->createObjects['effort']      = 'Effort';

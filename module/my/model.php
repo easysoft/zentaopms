@@ -1104,8 +1104,9 @@ class myModel extends model
      */
     public function getReviewingList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
-        $vision     = $this->config->vision;
-        $reviewList = array();
+        $vision       = $this->config->vision;
+        $gitfoxServer = $this->loadModel('gitfox')->getServer();
+        $reviewList   = array();
         if($browseType == 'all' || $browseType == 'demand')                                                                 $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' || $browseType == 'story')                                                                  $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' || $browseType == 'epic')                                                                   $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
@@ -1113,7 +1114,7 @@ class myModel extends model
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'ppm'))                                               $reviewList = array_merge($reviewList, $this->getReviewingMRs());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'ppm') && $gitfoxServer)                              $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if(empty($reviewList)) return array();
@@ -1338,6 +1339,9 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
+        $server = $this->loadModel('gitfox')->getServer();
+        if(!$server) return array();
+
         return $this->dao->select("`id`, `title`, IF(`flow`='1', 'pullreq', 'ppm') AS type, `createdDate` AS time, 0 AS product, 0 AS project")->from(TABLE_PPM)
             ->where('status')->ne('closed')
             ->andWhere('createdBy')->eq($this->app->user->account)
