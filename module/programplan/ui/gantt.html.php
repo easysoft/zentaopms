@@ -15,7 +15,7 @@ namespace zin;
 include './ganttfields.html.php';
 
 $showFields = str_replace('PM', 'owner_id', $showFields);
-$isHistory  = is_numeric($versionID) && $versionID > 0;
+$isHistory  = (is_numeric($versionID) && $versionID > 0) || $versionID == 'nowait';
 $isFromDoc  = $from === 'doc';
 if($isFromDoc)
 {
