@@ -31,6 +31,7 @@ div
             setClass('py-2'),
             set::title($title),
             set::titleClass('text-xl'),
+            on::init()->call('agreeChange'),
             form
             (
                 div
@@ -76,7 +77,6 @@ div
                         (
                             'text'     => $lang->install->next,
                             'type'     => 'primary',
-                            'disabled' => true,
                             'class'    => 'btn-install',
                             'url'      => inLink('step6')
                         )
