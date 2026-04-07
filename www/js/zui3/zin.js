@@ -649,6 +649,7 @@
             headers: headers,
             type:    requestMethod,
             data:    options.data,
+            convert: options.convert,
             type:    (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
@@ -708,6 +709,7 @@
                     ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
+                if(options.success && options.success.call(ajax, data, options) === false) return;
                 if(Array.isArray(data))
                 {
                     if(workspaceType)
