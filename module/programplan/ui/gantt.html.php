@@ -121,11 +121,12 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $langData['confirm']     = $lang->confirm;
     $langData['cancel']      = $lang->cancel;
 
+    $isLatestVersion = empty($versionID) && !isset($ganttBaseline);
     featureBar
     (
         btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
         $productDropdown,
-        $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
+        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
         li
         (
             setID('versionList'),
