@@ -47,7 +47,7 @@ class programTao extends programModel
         if($program->type == 'project') $modelClass = get_class($this->project);
         if($program->type == 'program') $modelClass = get_class($this);
 
-        if($config->edition != 'open')
+        if($this->config->edition != 'open')
         {
             $this->loadModel('flow');
             $flowActions = $this->loadModel('workflowaction')->getList($program->type);
@@ -65,7 +65,7 @@ class programTao extends programModel
             if($action == 'activate' && (!$canActivateProgram || $program->status != 'closed')) continue;
             if($action == 'start' && (!$canStartProgram || ($program->status != 'wait' && $program->status != 'suspended'))) continue;
 
-            if($config->edition != 'open')
+            if($this->config->edition != 'open')
             {
                 foreach($flowActions as $flowAction)
                 {
@@ -96,7 +96,7 @@ class programTao extends programModel
                 if(!common::hasPriv($program->type, $action, $program)) continue;
                 if($action == 'close' && $program->status == 'doing') continue;
 
-                if($config->edition != 'open')
+                if($this->config->edition != 'open')
                 {
                     foreach($flowActions as $flowAction)
                     {
