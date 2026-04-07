@@ -1043,7 +1043,7 @@ class programplanModel extends model
         $baselineVersions = array();
         if(strpos(",{$disabledFeatures},", ',cm,') === false)
         {
-            $PPcategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
                 ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.category')->eq('PP')
@@ -1058,10 +1058,10 @@ class programplanModel extends model
                 ->fetchAll('id', false);
             foreach($baselineVersions as $baselineVersion)
             {
-                if(isset($PPcategories[$baselineVersion->category])) continue;
+                if(isset($ppCategories[$baselineVersion->category])) continue;
                 foreach(explode(',', $baselineVersion->category) as $category)
                 {
-                    if(isset($PPcategories[$category])) continue 2;
+                    if(isset($ppCategories[$category])) continue 2;
                 }
 
                 unset($baselineVersions[$baselineVersion->id]);
@@ -1073,5 +1073,45 @@ class programplanModel extends model
         ksort($versions, SORT_NUMERIC);
 
         return $versions;
+    }
+
+    /**
+     * 获取甘特图的数据。
+     * Get gantt data.
+     *
+     * @param int    $versionID
+     * @access public
+     * @return array
+     */
+    public function getGanttDataByVersion(int $versionID): array
+    {
+        $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
+        if(empty($object)) return array();
+
+        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+
+        /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
+        if(empty($object->data) && !empty($object->categoryVersion))
+        {
+            $categoryVersion = json_decode($object->categoryVersion, true);
+            $object = $this->dao->select('t2.*')->from(TABLE_REVIEW)->alias('t1')
+                ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
+                ->where('t1.id')->in($categoryVersion)
+                ->andWhere('t2.data')->ne('')
+                ->orderBy('t2.id_desc')
+                ->fetch();
+        }
+
+        if(!empty($object->data))
+        {
+            /* 从docblock表中获取甘特图的数据。 From docblock table, get the gantt data. */
+            $blockID = zget(zget(json_decode($object->data), 'fetcherParams', array()), 'param2', 0);
+            $content = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch('content');
+
+            if(empty($content)) return array();
+            return (array)zget(json_decode($content), 'ganttOptions', array());
+        }
+
+        return array();
     }
 }
