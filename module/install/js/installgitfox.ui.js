@@ -54,7 +54,6 @@ window.copyCommand = function(selector)
 window.agreeChange = function(event)
 {
     const checked = typeof(event) == 'undefined' ? false : $(event.target).prop('checked');
-    console.log(checked);
     if(checked)
     {
         $('.btn-install').attr('href', nextLink);
