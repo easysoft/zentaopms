@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 projectModel->getGanttDataByVersion();
+title=测试 programplanModel->getGanttDataByVersion();
 timeout=0
 cid=1
 
@@ -38,15 +38,15 @@ su('admin');
 
 global $tester;
 
-$projectModel = $tester->loadModel('project');
-$projectModel->dao->update(TABLE_DOCBLOCK)->set('content')->eq(json_encode(array('ganttOptions' => $ganttData)))->where('id')->eq(1)->exec();
-$projectModel->dao->update(TABLE_OBJECT)->set('data')->eq(json_encode(array('fetcherParams' => array('param2' => '1'))))->where('id')->eq('1')->exec();
-$projectModel->dao->update(TABLE_OBJECT)->set('categoryVersion')->eq(json_encode(array('1' => 1)))->set('data')->eq('')->where('id')->eq('2')->exec();
-$projectModel->dao->update(TABLE_OBJECT)->set('data')->eq(json_encode($ganttData))->where('id')->eq(3)->exec();
+$programplanModel = $tester->loadModel('programplan');
+$programplanModel->dao->update(TABLE_DOCBLOCK)->set('content')->eq(json_encode(array('ganttOptions' => $ganttData)))->where('id')->eq(1)->exec();
+$programplanModel->dao->update(TABLE_OBJECT)->set('data')->eq(json_encode(array('fetcherParams' => array('param2' => '1'))))->where('id')->eq('1')->exec();
+$programplanModel->dao->update(TABLE_OBJECT)->set('categoryVersion')->eq(json_encode(array('1' => 1)))->set('data')->eq('')->where('id')->eq('2')->exec();
+$programplanModel->dao->update(TABLE_OBJECT)->set('data')->eq(json_encode($ganttData))->where('id')->eq(3)->exec();
 
-$deliverableVersionData = $projectModel->getGanttDataByVersion(1);
-$baselineVersionData    = $projectModel->getGanttDataByVersion(2);
-$ganttVersionData       = $projectModel->getGanttDataByVersion(3);
+$deliverableVersionData = $programplanModel->getGanttDataByVersion(1);
+$baselineVersionData    = $programplanModel->getGanttDataByVersion(2);
+$ganttVersionData       = $programplanModel->getGanttDataByVersion(3);
 $jsonedGanttData        = json_encode($ganttData);
 
 r(isset($deliverableVersionData['data']))             && p() && e('1');

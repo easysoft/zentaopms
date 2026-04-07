@@ -2,7 +2,7 @@
 <?php
 /**
 
-title=测试 projectModel->getGanttVersions();
+title=测试 programplanModel->getGanttVersions();
 timeout=0
 cid=1
 
@@ -52,9 +52,9 @@ su('admin');
 
 global $tester;
 
-$projectModel = $tester->loadModel('project');
+$programplanModel = $tester->loadModel('programplan');
 
-$versions = $projectModel->getGanttVersions(1);
+$versions = $programplanModel->getGanttVersions(1);
 r(count($versions)) && p() && e('10');
 r($versions[10]) && p('id,reviewType,version') && e('10,baseline,版本号10');
 r($versions[9]) && p('id,reviewType,type') && e('9,gantt,taged');
