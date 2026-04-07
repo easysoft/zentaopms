@@ -1039,6 +1039,34 @@ class programplanModel extends model
             ->andWhere('t2.type')->eq('deliverable')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->fetchAll('id', false);
+        /* 3. 基线评审的版本。 Project plan of baseline. */
+        $baselineVersions = array();
+        if(strpos(",{$disabledFeatures},", ',cm,') === false)
+        {
+            $PPcategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.category')->eq('PP')
+                ->fetchPairs();
+            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.status')->eq('pass')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.type')->eq('baseline')
+                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+                ->fetchAll('id', false);
+            foreach($baselineVersions as $baselineVersion)
+            {
+                if(isset($PPcategories[$baselineVersion->category])) continue;
+                foreach(explode(',', $baselineVersion->category) as $category)
+                {
+                    if(isset($PPcategories[$category])) continue 2;
+                }
+
+                unset($baselineVersions[$baselineVersion->id]);
+            }
+        }
 
         /* 4. 合并版本。 Merge versions. */
         $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
