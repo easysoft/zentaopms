@@ -1318,7 +1318,7 @@ class testcaseZen extends testcase
         if(!empty($case->project))
         {
             if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
-            if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
+            if(empty($project->multiple)) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
         return !empty($this->config->testcase->editor->create) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid) : $case;
     }
