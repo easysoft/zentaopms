@@ -573,7 +573,7 @@ $lang->devops->menu->repoCodeScan['subMenu']->overview = array('link' => "{$lang
 $lang->devops->menu->repoCodeScan['subMenu']->scanTask = array('link' => "{$lang->devops->scanTask}|codescan|task|repoID=%s", 'alias' => 'taskview,tasklog,issue,issueview', 'exclude' => 'codescan-plan,codescan-planview');
 $lang->devops->menu->repoCodeScan['subMenu']->scanPlan = array('link' => "{$lang->devops->scanPlan}|codescan|plan|repoID=%s", 'alias' => 'planview,createplan,editplan,trigger,tips');
 
-$lang->devops->menu->review = array('link' => '问题|repo|review|repoID=%s', 'subModule' => 'bug');
+$lang->devops->menu->review = array('link' => "{$lang->codereview->common}|repo|review|repoID=%s", 'subModule' => 'bug');
 $lang->devops->menu->review['subMenu'] = new stdclass();
 $lang->devops->menu->review['subMenu']->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
 $lang->devops->menu->review['subMenu']->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
