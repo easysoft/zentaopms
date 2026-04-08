@@ -686,7 +686,7 @@ class testcaseZen extends testcase
             ->get();
         if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
 
-        return $case;
+        return !empty($this->config->testcase->editor->edit) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid) : $case;
     }
 
     /**
@@ -1320,7 +1320,7 @@ class testcaseZen extends testcase
             if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
             if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
-        return $case;
+        return !empty($this->config->testcase->editor->create) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid) : $case;
     }
 
     /**
