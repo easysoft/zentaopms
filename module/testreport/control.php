@@ -103,7 +103,7 @@ class testreport extends control
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
-            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$extra}";
+            if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$extra}&begin=&end=";
             if($param)
             {
                 $url = $this->createLink('testreport', 'create', $param);
