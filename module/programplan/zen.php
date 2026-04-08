@@ -380,12 +380,12 @@ class programplanZen extends programplan
      * @param  string   $orderBy
      * @param  string   $browseType
      * @param  int      $queryID
-     * @param  int      $versionID
-     * j
+     * @param  string   $versionID
+     *
      * @access protected
      * @return array
      */
-    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0, int $versionID = 0): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0, string $versionID = '0'): array
     {
         /* Obtain user page configuration items. */
         $this->loadModel('setting');
@@ -404,9 +404,10 @@ class programplanZen extends programplan
         /* Get data for gantt. */
         if($versionID != 0)
         {
-            $stages = $this->loadModel('project')->getGanttDataByVersion((int)$versionID);
+            $stages = $this->programplan->getGanttDataByVersion((int)$versionID);
             if($stages) return $stages;
         }
+        if($versionID == 'nowait') $browseType = 'nowait';
         if($type == 'gantt') return $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
         if(isset($this->lang->programplan->ganttBrowseType[$type])) return $this->programplan->getDataForGanttGroup($type, $projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
         return array();

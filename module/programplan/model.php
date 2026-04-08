@@ -931,8 +931,9 @@ class programplanModel extends model
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
-                ->andWhere('t1.status')->ne('cancel')
-                ->andWhere('t1.closedReason')->ne('cancel')
+                ->beginIF($browseType == 'nowait')->andWhere('t1.status')->ne('wait')->fi()
+                ->beginIF($browseType != 'nowait')->andWhere('t1.status')->ne('cancel')->fi()
+                ->beginIF($browseType != 'nowait')->andWhere('t1.closedReason')->ne('cancel')->fi()
                 ->filterTpl('skip')
                 ->orderBy("{$type}_asc,beginDate_asc,id_asc")
                 ->fetchAll('id', false);
@@ -1115,5 +1116,67 @@ class programplanModel extends model
         }
 
         return array();
+    }
+
+    /**
+     * 处理实际进度的甘特图数据。
+     * Process nowait gantt data.
+     *
+     * @param array   $tasks
+     * @access public
+     * @return array
+     */
+    public function processNoWaitGanttData(array $tasks): array
+    {
+        $pausedTasks = array();
+        foreach($tasks as $task)
+        {
+            if($task->type != 'task') continue;
+            if(isset($task->rawStatus) && $task->rawStatus == 'pause')
+            {
+                $taskID = explode('-', $task->id)[1];
+                $pausedTasks[$taskID] = $taskID;
+            }
+        }
+
+        $pausedTasksDate = array();
+        if($pausedTasks)
+        {
+            $pausedTasksDate = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('task')
+                ->andWhere('action')->eq('paused')
+                ->andWhere('objectID')->in($pausedTasks)
+                ->orderBy('id')
+                ->fetchPairs('objectID', 'date');
+        }
+
+        $today = helper::today();
+        return array_values(array_filter($tasks, function($data) use($today, $pausedTasksDate)
+        {
+            if($data->type != 'task') return true;
+
+            $status = $data->status;
+            if(isset($data->rawStatus)) $status = $data->rawStatus;
+            if($status == 'wait') return false;
+            if(empty($data->realBegan)) return false;
+
+            $taskID    = explode('-', $data->id)[1];
+            $realBegan = $data->realBegan;
+            $realEnd   = $data->realEnd;
+            if($status == 'doing')  $realEnd = $data->deadline;
+            if($status == 'cancel') $realEnd = $data->canceledDate;
+            if($status == 'pause')  $realEnd = zget($pausedTasksDate, $taskID, '');
+
+            $useBegan = false;
+            if($realBegan > $realEnd)
+            {
+                $realEnd  = $realBegan;
+                $useBegan = true;
+            }
+            if($useBegan && $realBegan < $today) $realEnd = $today;
+            $data->start_date = date('d-m-Y', strtotime($realBegan));
+            $data->endDate    = date('d-m-Y', strtotime($realEnd));
+            $data->duration   = helper::diffDate($data->endDate, $data->start_date) + 1;
+            return true;
+        }));
     }
 }
