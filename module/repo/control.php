@@ -225,6 +225,8 @@ class repo extends control
     public function createBranch(int $objectID, int $repoID = 0)
     {
         $objectType = $this->app->rawModule;
+        if($objectType == 'repo') return $this->createRepoBranch($objectID, $repoID);
+
         $object     = $this->loadModel($objectType)->fetchByID($objectID);
         $productIds = array(zget($object, 'product', 0));
         if($objectType == 'task') $productIds = $this->loadModel('product')->getProductIDByProject($object->execution, false);
@@ -248,8 +250,8 @@ class repo extends control
         if(!empty($_POST))
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
-            $result = $this->scm->createBranch($branch->branchName, $branch->branchFrom);
-            if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $this->repoZen->parseErrorContent($result['message']));
+            $this->scm->createBranch($branch->branchName, $branch->branchFrom);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->repo->saveRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
@@ -2312,7 +2314,7 @@ class repo extends control
 
         $queryID   = $type == 'bySearch' ? $param : 0;
         $actionURL = $this->createLink('repo', 'browseSystem', "space={$space}&type=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
-        $this->repoZen->buildSystemSearchForm($queryID, $actionURL);
+        $this->repo->buildSystemSearchForm($queryID, $actionURL);
 
         $systemQuery = $type == 'bySearch' ? $this->repoZen->getSystemSearchQuery($queryID) : '';
         $systems = $this->repo->getSystemList($systemQuery, $space);
@@ -2346,5 +2348,250 @@ class repo extends control
         $this->view->inSpace  = !empty($space);
         $this->view->spaceID  = $space;
         $this->display();
+    }
+
+    /**
+     * 创建代码库分支。
+     * Create code repo branch.
+     *
+     * @param  int $objectID
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function createRepoBranch(int $objectID, int $repoID)
+    {
+        $repoPairs = array();
+        if($objectID != 0)
+        {
+            $repoGroup = $this->repo->getRepoGroup('project', $objectID,  $this->config->repo->notSyncSCM);
+            if($repoGroup)
+            {
+                foreach($repoGroup as $groups)
+                {
+                    if(empty($groups['items'])) continue;
+                    foreach ($groups['items'] as $groupItem) $repoPairs[$groupItem['id']] = $groupItem['text'];
+                }
+            }
+        }
+        else
+        {
+            $repoInfo = $this->repo->fetchByID($repoID);
+            $repoPairs[$repoID] = $repoInfo->name;
+        }
+
+        $repoList  = $this->repo->getListByPriv('haspriv');
+        $this->scm->setEngine($repoList[$repoID]);
+        if(!empty($_POST))
+        {
+            $branch = form::data($this->config->repo->form->createBranch)->get();
+            if(mb_strlen($branch->branchName, 'UTF-8') > 30)
+            {
+                return $this->sendError(array('branchName' => $this->lang->repo->error->branchNameTooLong));
+            }
+            $repoID = $branch->codeRepo ? $branch->codeRepo : $repoID;
+
+            if(!$this->loadModel('repobranchrule')->checkPrivToCreateBranch($repoID, $branch->branchName, $this->app->user->account))
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->notice->noPermissionToCreateBranch));
+            }
+
+            $this->scm->setEngine($repoList[$repoID]);
+
+            $this->scm->createBranch($branch->branchName, $branch->branchFrom);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->repo->saveRelation($repoID, $branch->branchName, $repoID, 'repo');
+            $this->loadModel('action')->create('repo', $repoID, 'createRepoBranch', '', $branch->branchName);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = $this->repo->createLink('browsebranch', "repoID={$repoID}&objectID={$objectID}", '', false);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        }
+
+        $this->view->repoID         = $repoID;
+        $this->view->objectID       = $objectID;
+        $this->view->objectType     = 'project';
+        $this->view->repoPairs      = $repoPairs;
+        $this->view->canCreate      = true;
+        $this->view->fromList       = $this->getBranchAndTagOptions($this->scm);
+        $this->view->linkedBranches = array();
+        $this->display();
+    }
+
+    /**
+     * 创建标签。
+     * Create a tag.
+     *
+     * @param  int    $objectID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createTag(int $objectID, int $repoID = 0)
+    {
+        $repoGroup = $this->repo->getRepoGroup('project', $objectID);
+        $repoPairs = [];
+        if($repoGroup)
+        {
+            foreach($repoGroup as $groups)
+            {
+                if(empty($groups['items'])) continue;
+                foreach ($groups['items'] as $groupItem) $repoPairs[$groupItem['id']] = $groupItem['text'];
+            }
+        }
+        $repoList  = $this->repo->getListByPriv('haspriv');
+        $this->scm->setEngine($repoList[$repoID]);
+        if(!empty($_POST))
+        {
+            $tag    = form::data($this->config->repo->form->createTag)->get();
+            $repoID = $tag->codeRepo ? $tag->codeRepo : $repoID;
+            $this->scm->setEngine($repoList[$repoID]);
+
+            $result = $this->scm->createTag($repoList[$repoID]->id, $tag->tagName, $tag->tagFrom, $tag->comment);
+
+            if(dao::isError()) return $this->sendError($this->lang->repo->error->createdFail . ': ' .  $this->parseErrorContent(dao::getError()['apiMessage']));
+            if(empty($result)) return $this->sendError($this->lang->repo->error->createdFail);
+
+            $this->repo->saveRelation($repoID, $tag->tagName, $repoID, 'repo', 'linkrepotag');
+            $this->loadModel('action')->create('repo', $repoID, 'createRepoTag', '', $tag->tagName);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = $this->repo->createLink('browsetag', "repoID={$repoID}&objectID={$objectID}", '', false);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        list($branchID, $branches, $tags) = $this->setBranchTag($repoList[$repoID], '');
+        unset($branches, $tags);
+
+        $branchID = helper::safe64Encode(base64_encode($branchID));
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 1, 1);
+
+        $pager->recPerPage      = 1;
+        $this->view->repoID     = $repoID;
+        $this->view->objectType = 'project';
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->canCreate  = common::hasPriv('repo', 'createTag');
+        $this->view->branchID   = $branchID;
+        $this->view->objectID   = $objectID;
+
+        $tagFrom = $this->getBranchAndTagOptions($this->scm);
+        if(isset($tagFrom[1])) unset($tagFrom[1]); /* Remove the tags. */
+        $this->view->fromList = $tagFrom;
+
+        $commits = $this->repo->getCommits($repoList[$repoID], '', $branchID, 'dir', $pager, '', '', null);
+        $commit  = new stdClass();
+        if(!empty($commits))
+        {
+            $commits = current($commits);
+            $commit->commitID = $commits->revision;
+            $commit->shortID  = substr($commits->revision, 0, 10);
+            $commit->message  = $commits->message;
+        }
+        $this->view->commit = $commit;
+        $this->display();
+    }
+
+    /**
+     * 删除指定分支。
+     * Delete specified branch.
+     *
+     * @param  int $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function deleteBranch(int $repoID, string $branch)
+    {
+        $branch = helper::safe64Decode($branch);
+
+        $this->loadModel('repobranchrule');
+        if(!$this->repobranchrule->checkPrivToDeleteBranch($repoID, $branch, $this->app->user->account))
+        {
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->notice->noPermissionToDeleteBranch));
+        }
+
+        $this->loadModel('gitfox')->apiDeleteBranch($repoID, $branch);
+        if(dao::isError()) return $this->sendError($this->parseErrorContent(dao::getError()));
+        $this->repo->unlinkObjectBranch($repoID, 'repo', $repoID, $branch);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->loadModel('action')->create('repobranch', $repoID, 'deleted', '', $branch);
+
+        $branchRule = $this->repobranchrule->getBranchRule(0, $repoID, $branch);
+        if(!empty($branchRule))
+        {
+             $this->repobranchrule->deleteBranchRule($branchRule->id);
+        }
+
+        return $this->sendSuccess(array('load' => true, 'message' => $this->lang->deleteSuccess));
+    }
+
+    /**
+     * 删除指定tag。
+     * Delete specified tag.
+     *
+     * @param  int    $repoID
+     * @param  string $tag
+     * @access public
+     * @return void
+     */
+    public function deleteTag(int $repoID, string $tag)
+    {
+        $tag  = helper::safe64Decode($tag);
+        $this->loadModel('gitfox')->apiDeleteTag($repoID, $tag);
+        $this->loadModel('action')->create('repotag', $repoID, 'deleted', '', $tag);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => true, 'message' => $this->lang->deleteSuccess));
+    }
+
+    /**
+     * 获取分支下提交记录。
+     * Commit records of branch.
+     *
+     * @param  int    $repoID
+     * @param  string $branchID
+     * @param  string $search
+     * @access public
+     * @return object
+     */
+    public function ajaxGetBranchCommits(int $repoID, string $branchID, string $search = '')
+    {
+        $repo = $this->repo->getByID($repoID);
+        list($branchID) = $this->repoZen->setBranchTag($repo, $branchID);
+        $branchID = helper::safe64Encode(base64_encode($branchID));
+        $pageSize = 10;
+
+        /* set pager */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $pageSize, 1);
+        $pager->recPerPage = $pageSize;
+
+        /* set query */
+        $query = new stdClass();
+        $query->begin = '';
+        $query->end = '';
+        $query->committer = '';
+        $query->commit = !empty($search) ? $search : '';
+        $commits    = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', $query);
+
+        /* packaging commits */
+        $retCommits = array();
+        if(!empty($commits))
+        {
+            foreach ($commits as $item)
+            {
+                $shortID      = substr($item->revision, 0, 10);
+                $commitDate   = isset($item->committed_date) ? date('Y-m-d H:i:s', strtotime($item->committed_date)) : '';
+                $commitDetail = sprintf($this->lang->repo->commitDetail, "{$shortID} {$item->message}", $commitDate, $item->committer);
+                array_push($retCommits, [
+                    'text'  => array('html' => "<div class='tagCommit font-mono' title='{$commitDetail}'><div class='commit'>" . $shortID . "</div><div class='message'>" . $item->message . "</div></div>"),
+                    'value' => $item->revision,
+                    'key'   => $shortID,
+                ] );
+            }
+        }
+        echo json_encode($retCommits);
     }
 }

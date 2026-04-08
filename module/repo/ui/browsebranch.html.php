@@ -49,6 +49,18 @@ featureBar
     )
 );
 
+toolBar
+(
+    hasPriv('repo', 'createBranch') ? item(set(array
+    (
+        'text'  => $lang->repo->createBranchAction,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => createLink('repo', 'createBranch', 'objectID=' . data('objectID') . '&repoID=' . data('repoID')),
+        'data-toggle'=>'modal'
+    ))) : null
+);
+
 $config->repo->dtable->branch->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->branch->fieldList['commitID']['link']);
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);

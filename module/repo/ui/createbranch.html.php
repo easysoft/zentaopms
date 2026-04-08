@@ -14,7 +14,7 @@ jsVar('module', $objectType);
 jsVar('linkParams', "objectID={$objectID}&repoID=%s");
 jsVar('branchLang', $lang->repo->branch);
 jsVar('tagLang', $lang->repo->tag);
-modalHeader
+$objectType == 'project' ? null : modalHeader
 (
     set::title($lang->repo->codeBranch),
     set::titleClass('panel-title text-lg')
@@ -142,7 +142,7 @@ $canCreate ? formPanel
         set::label($lang->repo->branchName),
         set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
         set::required(true),
-        set::value("{$objectType}-{$objectID}")
+        set::value($objectType == 'project' ? '' : "{$objectType}-{$objectID}")
     ),
     set::actions(array('submit'))
 ) : null;

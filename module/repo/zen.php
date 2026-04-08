@@ -1593,14 +1593,21 @@ class repoZen extends repo
      * @access public
      * @return void
      */
-    public function buildSystemSearchForm(int $queryID, string $actionURL)
+    public function buildSystemSearchForm(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
     {
+        $searchConfig = $this->config->repo->system->search;
+        if($cacheSearchFunc)
+        {
+            $this->repo->cacheSearchFunc($module, __METHOD__, func_get_args());
+            return $searchConfig;
+        }
         $this->config->repo->system->search['params']['product']['values'] = $this->loadModel('product')->getPairs('', 0, '', 'all');
 
         $this->config->repo->system->search['queryID']   = (int)$queryID;
         $this->config->repo->system->search['actionURL'] = $actionURL;
 
         $this->loadModel('search')->setSearchParams($this->config->repo->system->search);
+        return $searchConfig;
     }
 
     /**

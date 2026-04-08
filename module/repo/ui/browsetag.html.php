@@ -46,6 +46,18 @@ featureBar
     )
 );
 
+toolBar
+(
+    hasPriv('repo', 'createTag') ? item(set(array
+    (
+        'text'  => $lang->repo->createTagAction,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => createLink('repo', 'createTag', 'objectID=' . data('objectID') . '&repoID=' . data('repoID')),
+        'data-toggle'=>'modal'
+    ))) : null
+);
+
 $config->repo->dtable->tag->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->tag->fieldList['commitID']['link']);
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
