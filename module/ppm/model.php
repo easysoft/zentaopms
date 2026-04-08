@@ -1093,4 +1093,57 @@ class ppmModel extends model
         $response = json_decode(commonModel::http($url, $data, array(), $apiRoot->header, 'json', 'POST'));
         return $this->gitfox->getResponse($response);
     }
+
+    /**
+     * 获取合并请求的流水线。
+     * Get merge request pipelines.
+     *
+     * @param  object $ppm
+     * @access public
+     * @return array
+     */
+    public function getPipelinesByPPM(object $ppm): array
+    {
+        if(empty($ppm->sourceSHA) || empty($ppm->sourceBranch)) return array();
+
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $url     = sprintf($apiRoot->url, "/pipeline/executions/list-by-pr");
+
+        $params = array();
+        $params['ref']    = "refs/pullreq/{$ppm->id}/head";
+        $params['commit'] = $ppm->sourceSHA;
+
+        $response = json_decode(commonModel::http($url, $params, array(), $apiRoot->header, 'json', 'GET'));
+        $response = $this->gitfox->getResponse($response);
+        if(dao::isError()) return array();
+
+        if($ppm->status == 'merged')
+        {
+            $params['ref']    = 'refs/heads/' . $ppm->targetBranch;
+            $params['commit'] = $ppm->mergeSHA;
+
+            $mergeResponse = json_decode(commonModel::http($url, $params, array(), $apiRoot->header, 'json', 'GET'));
+            $mergeResponse = $this->gitfox->getResponse($mergeResponse);
+            if(dao::isError()) return $response;
+            $response = array_merge($response, $mergeResponse);
+        }
+        $scanTasks = $this->gitfox->request('/scan/tasks/list', 'POST', array('repoID' => $ppm->repoID));
+        $scanTasks = empty($scanTasks->data) ? array() : $scanTasks->data;
+
+        $tasks = array();
+        foreach($scanTasks as $scanTask)
+        {
+            $tasks[$scanTask->executionID] = $scanTask;
+        }
+
+        foreach($response as $key => $value)
+        {
+            if(isset($tasks[$value->id]))
+            {
+                $response[$key]->task = $tasks[$value->id];
+            }
+        }
+
+        return $response;
+    }
 }
