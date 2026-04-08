@@ -3233,4 +3233,31 @@ class repoModel extends model
             ->where('deleted')->eq(0)
             ->fetchAll('id');
     }
+
+    /**
+     * 构建应用搜索表单字段。
+     * Build system search form field.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return void
+     */
+    public function buildSystemSearchForm(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig = $this->config->repo->system->search;
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('systemSearch', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        $searchConfig['queryID']   = (int)$queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
 }

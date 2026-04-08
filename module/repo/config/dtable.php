@@ -318,6 +318,25 @@ $config->repo->dtable->tag->fieldList['message']['type']  = 'text';
 $config->repo->dtable->tag->fieldList['message']['order'] = 40;
 $config->repo->dtable->tag->fieldList['message']['group'] = 1;
 
+$config->repo->dtable->tag->fieldList['createdBy']['title']    = $lang->repo->createdBy;
+$config->repo->dtable->tag->fieldList['createdBy']['type']     = 'user';
+$config->repo->dtable->tag->fieldList['createdBy']['sortType'] = false;
+$config->repo->dtable->tag->fieldList['createdBy']['group']    = 1;
+$config->repo->dtable->tag->fieldList['createdBy']['order']    = 20;
+$config->repo->dtable->tag->fieldList['createdBy']['width']    = 100;
+
+$config->repo->dtable->tag->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->tag->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->tag->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->tag->fieldList['actions']['width'] = 60;
+$config->repo->dtable->tag->fieldList['actions']['menu']  = array('deleteTag');
+
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['icon']         = 'trash';
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['hint']         = $lang->repo->deleteTag;
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['url']          = helper::createLink('repo', 'deleteTag', 'repoID={repoID}&tagName={tagName}');
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['data-confirm'] = array('message' => $lang->repo->confirmTagDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['className']    = 'ajax-submit';
+
 $config->repo->dtable->branch = new stdclass();
 $config->repo->dtable->branch->fieldList['name']['title']    = $lang->repo->branch;
 $config->repo->dtable->branch->fieldList['name']['type']     = 'title';
@@ -352,6 +371,19 @@ $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
 $config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
+
+$config->repo->dtable->branch->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->branch->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->branch->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->branch->fieldList['actions']['width'] = 60;
+$config->repo->dtable->branch->fieldList['actions']['align'] = 'center';
+$config->repo->dtable->branch->fieldList['actions']['menu']  = array('deleteBranch');
+
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['icon']         = 'trash';
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['hint']         = $lang->repo->deleteBranch;
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['url']          = helper::createLink('repo', 'deleteBranch', 'repoID={repoID}&branchName={branchName}');
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['data-confirm'] = array('message' => $lang->repo->confirmBranchDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['className']    = 'ajax-submit';
 
 $config->repo->dtable->system = new stdclass();
 $config->repo->dtable->system->fieldList['id']['title']    = $lang->idAB;
