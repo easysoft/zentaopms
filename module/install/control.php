@@ -515,11 +515,27 @@ class install extends control
             $os = 'linux';
         }
 
+        $uname = php_uname('m');
+        $arch  = strtolower($uname);
+        if(strpos($arch, 'arm') === 0 || strpos($arch, 'aarch') != false)
+        {
+            $arch = 'arm';
+        }
+        elseif(strpos($arch, 'x86') === 0 || strpos($arch, 'i686') != false || strpos($arch, 'amd') != false)
+        {
+            $arch = 'amd';
+        }
+        else
+        {
+            $arch = 'amd';
+        }
+
         $gitfoxDir = $this->app->getAppRoot() . 'gitfox';
 
-        $type    = $os == 'mac' ? 'linux' : $os;
-        $command = sprintf($this->config->install->installGitfox[$type], $gitfoxDir);
-        $script  = $type == 'linux' ? $this->app->getTmpRoot() . 'installGitFox.sh' : $this->app->getTmpRoot() . 'installGitFox.bat';
+        $type        = $os == 'mac' ? 'linux' : $os;
+        $downloadURL = $this->config->install->downloadGitfoxURL[$type][$arch];
+        $command     = sprintf($this->config->install->installGitfox[$type], $gitfoxDir, $downloadURL);
+        $script      = $type == 'linux' ? $this->app->getTmpRoot() . 'installGitFox.sh' : $this->app->getTmpRoot() . 'installGitFox.bat';
         file_put_contents($script, $command);
 
         $this->view->title  = $this->lang->install->installGitFox;
