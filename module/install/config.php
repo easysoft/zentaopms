@@ -1,7 +1,9 @@
 <?php
 $config->install->downloadGitfoxURL = array();
-$config->install->downloadGitfoxURL['linux'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-2.0.beta1.zip';
-$config->install->downloadGitfoxURL['win']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-2.0.beta1.zip';
+$config->install->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-amd-2.0.beta1.zip';
+$config->install->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-arm-2.0.beta1.zip';
+$config->install->downloadGitfoxURL['win']['amd']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-2.0.beta1.zip';
+$config->install->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-2.0.beta1.zip';
 
 $config->install->installGitfox = array();
 $config->install->installGitfox['linux'] = <<<EOT
@@ -13,7 +15,7 @@ fi
 cd "\${INSTALL_DIR}" || { echo "Error: cd \${INSTALL_DIR} failed"; exit 1; }
 
 GITFOX_ZIP="gitfox_latest.zip"
-GITFOX_URL="{$config->install->downloadGitfoxURL['linux']}"
+GITFOX_URL="%s"
 
 if command -v wget >/dev/null 2>&1; then
     wget -O "\${GITFOX_ZIP}" "\${GITFOX_URL}"
@@ -66,7 +68,7 @@ cd /d "%INSTALL_DIR%" || (
 )
 
 set "GITFOX_ZIP=gitfox_latest.zip"
-set "GITFOX_URL={$config->install->downloadGitfoxURL['win']}"
+set "GITFOX_URL=%s"
 
 where certutil >nul 2>&1
 if %errorlevel% equ 0 (
