@@ -1118,6 +1118,14 @@ class programplanModel extends model
         return array();
     }
 
+    /**
+     * 处理实际进度的甘特图数据。
+     * Process nowait gantt data.
+     *
+     * @param array   $tasks
+     * @access public
+     * @return array
+     */
     public function processNoWaitGanttData(array $tasks): array
     {
         $pausedTasks = array();
