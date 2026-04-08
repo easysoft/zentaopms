@@ -1134,7 +1134,7 @@ class programplanModel extends model
             if($task->type != 'task') continue;
             if(isset($task->rawStatus) && $task->rawStatus == 'pause')
             {
-                list($planID, $taskID) = explode('-', $task->id);
+                $taskID = explode('-', $task->id)[1];
                 $pausedTasks[$taskID] = $taskID;
             }
         }
@@ -1159,7 +1159,7 @@ class programplanModel extends model
             if($status == 'wait') return false;
             if(empty($data->realBegan)) return false;
 
-            list($planID, $taskID) = explode('-', $data->id);
+            $taskID    = explode('-', $data->id)[1];
             $realBegan = $data->realBegan;
             $realEnd   = $data->realEnd;
             if($status == 'doing')  $realEnd = $data->deadline;
