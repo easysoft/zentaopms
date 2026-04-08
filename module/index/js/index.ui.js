@@ -785,27 +785,6 @@ function refreshMenu()
     });
     if($lastItem && $lastItem.hasClass('divider')) $lastItem.addClass('hidden');
 
-    /* The magic number "111" is the space between dropdown trigger btn and the bottom of screen */
-    let listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
-    if($list[0] && $list[0].getBoundingClientRect)
-    {
-        const btnBounding = $list.prev('a')[0].getBoundingClientRect();
-        if(btnBounding.height)
-        {
-            const winHeight = $(window).height();
-            if(winHeight < moreMenuHeight)
-            {
-                listStyle.maxHeight = winHeight;
-                listStyle.overflow = 'auto';
-                listStyle.top = 5 - btnBounding.top;
-            }
-            else if(moreMenuHeight > (winHeight - btnBounding.top))
-            {
-                listStyle.top = winHeight - btnBounding.top - moreMenuHeight + 5;
-            }
-        }
-    }
-    $list.css(listStyle);
     $menuNav.toggleClass('show-more-nav', showMoreMenu);
 
     if(showMoreMenu && !$list.data('listened-click'))
