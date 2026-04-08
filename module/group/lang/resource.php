@@ -1431,6 +1431,10 @@ $lang->resource->repo->createRepo   = 'createRepoAction';
 $lang->resource->repo->browseTag    = 'browseTag';
 $lang->resource->repo->browseBranch = 'browseBranch';
 $lang->resource->repo->browseSystem = 'browseSystem';
+$lang->resource->repo->createBranch = 'createBranch';
+$lang->resource->repo->deleteBranch = 'deleteBranch';
+$lang->resource->repo->createTag    = 'createTag';
+$lang->resource->repo->deleteTag    = 'deleteTag';
 
 $lang->resource->repo->review        = 'reviewAction';
 $lang->resource->repo->addBug        = 'addBug';
