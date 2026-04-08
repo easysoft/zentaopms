@@ -666,23 +666,13 @@ class repo extends control
     {
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo = $this->repo->getByID($repoID);
-
         $this->scm->setEngine($repo);
+
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision)
-        {
-            $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$revision} --");
 
-            array_shift($thisAndPrevRevisions);
-            if($thisAndPrevRevisions) $oldRevision = array_shift($thisAndPrevRevisions);
-        }
-
-        if(empty($oldRevision))
-        {
-            $oldRevision = '^';
-            if($revision) $oldRevision = "{$revision}^";
-        }
+        $oldRevision = '^';
+        if($revision) $oldRevision = "{$revision}^";
 
         $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
     }

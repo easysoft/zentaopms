@@ -389,3 +389,12 @@ $lang->repo->featureBar['review']['resolvedbyme'] = 'ResolvedByMe';
 $lang->repo->featureBar['review']['assigntonull'] = 'Unassigned';
 $lang->repo->featureBar['review']['unresolved']   = 'Active';
 $lang->repo->featureBar['review']['unclosed']     = 'Unclosed';
+
+$lang->repo->browseSystem = 'Application List';
+
+$lang->repo->system = new stdclass();
+$lang->repo->system->product       = 'Product';
+$lang->repo->system->name          = 'Application Name';
+$lang->repo->system->latestRelease = 'Latest Version';
+$lang->repo->system->deployStatus  = 'Latest Version Status';
+$lang->repo->system->status        = 'Application Status';

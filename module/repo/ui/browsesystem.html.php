@@ -16,7 +16,7 @@ featureBar
 
 $config->repo->dtable->system->fieldList['latestRelease']['map'] = $releases;
 $config->repo->dtable->system->fieldList['product']['map']       = $products;
-if(hasPriv('system', 'view')) $config->repo->dtable->system->fieldList['name']['link'] = createLink('system', 'view', "id={id}") . '#app=devops';
+if(hasPriv('system', 'view')) $config->repo->dtable->system->fieldList['name']['link'] = createLink('system', 'view', "id={id}&spaceID={$spaceID}") . '#app=devops';
 $tableData = initTableData($appList, $config->repo->dtable->system->fieldList);
 
 dtable

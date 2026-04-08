@@ -387,11 +387,3 @@ $config->repo->dtable->system->fieldList['latestRelease']['name']  = 'latestRele
 $config->repo->dtable->system->fieldList['latestRelease']['type']  = 'text';
 $config->repo->dtable->system->fieldList['latestRelease']['order'] = 25;
 $config->repo->dtable->system->fieldList['latestRelease']['width'] = 0.15;
-
-$config->repo->dtable->system->fieldList['deployStatus']['title']     = $lang->repo->system->deployStatus;
-$config->repo->dtable->system->fieldList['deployStatus']['type']      = 'status';
-$config->repo->dtable->system->fieldList['deployStatus']['name']      = 'deployStatus';
-$config->repo->dtable->system->fieldList['deployStatus']['statusMap'] = $lang->deploy->statusList;
-$config->repo->dtable->system->fieldList['deployStatus']['align']     = 'left';
-$config->repo->dtable->system->fieldList['deployStatus']['width']     = 0.15;
-$config->repo->dtable->system->fieldList['deployStatus']['order']     = 30;

@@ -748,4 +748,28 @@ class system extends control
         $this->view->backup = $this->loadModel('cne')->backupDetail($instance, $name);
         $this->display();
     }
+
+    /**
+     * 应用详情页。
+     * system view.
+     *
+     * @param  int $systemID
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function view(int $systemID, int $spaceID = 0)
+    {
+        $this->loadModel('space')->setMenu($spaceID);
+        $system = $this->system->getByID($systemID);
+
+        $this->view->title    = $this->lang->system->view;
+        $this->view->product  = $this->loadModel('product')->fetchByID($system->product);
+        $this->view->releases = $this->loadModel('release')->getPairs();
+        $this->view->system   = $system;
+        $this->view->actions  = $this->loadModel('action')->getList('system', $systemID);
+        $this->view->spaceID  = $spaceID;
+        $this->view->inSpace  = !empty($spaceID);
+        $this->display();
+    }
 }

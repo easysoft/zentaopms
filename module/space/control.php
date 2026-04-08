@@ -159,7 +159,7 @@ class space extends control
         $this->view->space            = $space;
         $this->view->spaceID          = $id;
         $this->view->repoList         = $this->space->getReposBySpace($id);
-        $this->view->artifactRepoList = $this->space->getArtifactReposBySpace($id);
+        //$this->view->artifactRepoList = $this->space->getArtifactReposBySpace($id);
         $this->view->managers         = $this->loadModel('user')->getListByAccounts($managers, 'account');
         $this->view->members          = $this->user->getListByAccounts($members, 'account');
         $this->view->systemList       = $this->space->getSystemBySpace($id);
@@ -180,7 +180,7 @@ class space extends control
     public function delete(int $id)
     {
         $repos         = $this->space->getReposBySpace($id);
-        $artifactRepos = $this->space->getArtifactReposBySpace($id);
+        //$artifactRepos = $this->space->getArtifactReposBySpace($id);
 
         if(!empty($repos) || !empty($artifactRepos)) $this->sendError($this->lang->space->notice->deleteFail);
 
@@ -222,6 +222,7 @@ class space extends control
         $link = $method == 'createrepo' ? $this->createLink('repo', 'createRepo', "objectID=0&spaceID=%s") : $link;
         $link = $module == 'pipeline' ? $this->createLink('pipeline', 'browse', "spaceID=%s") : $link;
         $link = $module == 'deploy' ? $this->createLink('deploy', $method, "spaceID=%s") : $link;
+        $link = $module == 'system' ? $this->createLink('repo', 'browsesystem', "spaceID=%s") : $link;
 
         $this->view->spaceID    = $spaceID;
         $this->view->spaceGroup = $spaceGroup;
@@ -512,6 +513,7 @@ class space extends control
      */
     public function ajaxTips(int $spaceID): void
     {
+        $this->space->setMenu($spaceID);
         $this->view->title   = $this->lang->space->create;
         $this->view->spaceID = $spaceID;
         $this->display();

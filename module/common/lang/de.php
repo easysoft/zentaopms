@@ -102,6 +102,7 @@ $lang->childrenAB         = 'C';
 $lang->branchName         = 'Branch/Platform';
 $lang->recommend          = 'Recommend';
 $lang->schedule           = 'Calendar';
+$lang->basicInfo          = 'Basic Info';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
