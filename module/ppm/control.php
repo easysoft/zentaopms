@@ -169,17 +169,17 @@ class ppm extends control
         $objectName = $this->app->tab == 'project' ? 'projectID' : 'executionID';
         $this->view->{$objectName} = $projectID;
 
-        $this->view->title       = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
-        $this->view->ppmList     = $ppmList;
-        $this->view->pager       = $pager;
-        $this->view->mode        = $mode;
-        $this->view->repoID      = $repoID;
-        $this->view->param       = $param;
-        $this->view->objectID    = $projectID;
-        $this->view->repoList    = $repoList;
-        $this->view->repoPairs   = $repoPairs;
-        $this->view->orderBy     = $orderBy;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title     = $this->lang->ppm->common . $this->lang->hyphen . $this->lang->ppm->browse;
+        $this->view->ppmList   = $ppmList;
+        $this->view->pager     = $pager;
+        $this->view->mode      = $mode;
+        $this->view->repoID    = $repoID;
+        $this->view->param     = $param;
+        $this->view->objectID  = $projectID;
+        $this->view->repoList  = $repoList;
+        $this->view->repoPairs = $repoPairs;
+        $this->view->orderBy   = $orderBy;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -384,29 +384,30 @@ class ppm extends control
         $reviewers    = !empty($reviewID) ? array() : $this->ppm->getReviewers($id);
         $reviewResult = $this->ppm->getReviewResult($reviewers, empty($flow) ? array() : $flow);
 
-        $this->view->title             = $this->lang->ppm->view;
-        $this->view->ppm               = $ppm;
-        $this->view->reviewers         = $reviewers;
-        $this->view->reviewResult      = $reviewResult;
-        $this->view->repo              = $repo;
-        $this->view->repoID            = $repo->id;
-        $this->view->flow              = $flow;
-        $this->view->commitLogs        = $this->ppm->apiGetMRCommits($ppm->targetRepoID, $ppm->id, $commitPager);
-        $this->view->bugs              = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, 'bug', $bugPager);
-        $this->view->linkObjects       = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, $param, $objectPager);
-        $this->view->commitPager       = $commitPager;
-        $this->view->bugPager          = $bugPager;
-        $this->view->objectPager       = $objectPager;
-        $this->view->type              = $type;
-        $this->view->encoding          = $encoding;
-        $this->view->diffs             = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
-        $this->view->users             = $this->loadModel('user')->getPairs('noletter');
-        $this->view->checkResult       = $this->ppmZen->getCheckResult($ppm, $reviewResult);
-        $this->view->oldRevision       = $ppm->targetBranch;
-        $this->view->newRevision       = $ppm->sourceBranch;
-        $this->view->defaultMergeType  = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
-        $this->view->param             = $param;
-        $this->view->rule              = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
+        $this->view->title            = $this->lang->ppm->view;
+        $this->view->ppm              = $ppm;
+        $this->view->reviewers        = $reviewers;
+        $this->view->reviewResult     = $reviewResult;
+        $this->view->repo             = $repo;
+        $this->view->repoID           = $repo->id;
+        $this->view->flow             = $flow;
+        $this->view->commitLogs       = $this->ppm->apiGetMRCommits($ppm->targetRepoID, $ppm->id, $commitPager);
+        $this->view->bugs             = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, 'bug', $bugPager);
+        $this->view->linkObjects      = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, $param, $objectPager);
+        $this->view->commitPager      = $commitPager;
+        $this->view->bugPager         = $bugPager;
+        $this->view->objectPager      = $objectPager;
+        $this->view->type             = $type;
+        $this->view->encoding         = $encoding;
+        $this->view->diffs            = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter');
+        $this->view->checkResult      = $this->ppmZen->getCheckResult($ppm, $reviewResult);
+        $this->view->oldRevision      = $ppm->targetBranch;
+        $this->view->newRevision      = $ppm->sourceBranch;
+        $this->view->defaultMergeType = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
+        $this->view->param            = $param;
+        $this->view->rule             = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
+        $this->view->pipelines        = $this->ppm->getPipelinesByPPM($ppm);
         $this->display();
     }
 
