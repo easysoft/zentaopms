@@ -9,6 +9,9 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+global $app;
+$app->loadLang('pipeline');
+$app->loadLang('codescan');
 
 $AICodeScore     = 3;     // AI评审代码分数
 $AISevereIssue   = 0;     // AI评审高危问题
@@ -25,38 +28,43 @@ $config->ppm->scanSevereIssue   = 0;   // 合格的代码扫描高危问题
 $config->ppm->scanOrdinaryIssue = 3;   // 合格的代码扫描一般问题
 $config->ppm->scanPassRate      = 100; // 合格的代码扫描安全门禁通过率
 
-$pipelines = array();
-$pipeline1 = new stdclass();
-$pipeline1->title  = 'a0001';
-$pipeline1->status = 'success';
-$pipelines[] = $pipeline1;
+$canViewExecution = hasPriv('pipeline', 'execView');
+$canViewTask      = hasPriv('codescan', 'taskView');
+$checkPipeline    = true;
+$pipelineBox      = array();
+$codeScanBox      = array();
 
-$checkPipeline = true;
-$pipelineBox   = array();
+\a($pipelines);
 foreach($pipelines as $pipeline)
 {
     if($pipeline->status != 'success') $checkPipeline = false;
-    $pipelineBox[] = section
-    (
-        div
+    if(empty($pipeline->task))
+    {
+        $pipelineBox[] = section
         (
-            setClass('border px-4 h-12 flex items-center'),
-            span(setClass('font-bold'), "{$lang->ppm->pipeline}: {$pipeline->title}"),
-            $pipeline->status == 'success' ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail'])
-        ),
-        div
-        (
-            setClass('border px-4 py-4'),
-            setStyle(array('margin-top' => '-1px')),
             div
             (
-                setClass('flex items-center py-1'),
-                $pipeline->status == 'success' ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                span("{$lang->ppm->runResult}: ", $lang->ppm->pipelineStatus[$pipeline->status]),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$lang->ppm->pipelineStatus['success']})"))
+                setClass('border px-4 h-12 flex items-center'),
+                span(setClass('font-bold'), "{$lang->ppm->pipeline}: {$pipeline->name}#{$pipeline->id}"),
+                $pipeline->status == 'success' ? label(setClass('success ml-4'), $lang->pipeline->execStatusList['success']) : label(setClass('danger ml-4'), $lang->pipeline->execStatusList[$pipeline->status]),
+                $canViewExecution ? div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView), set::url('pipeline', 'execView', "id={$pipeline->id}&spaceID=0&repoID={$repoID}&type=repo"), set::target('_blank'))) : null
             )
-        )
-    );
+        );
+    }
+    else
+    {
+        $taskName = $pipeline->task->repoName . sprintf($lang->codescan->scanNo, $pipeline->task->repoNumber);
+        $codeScanBox[] = section
+        (
+            div
+            (
+                setClass('border px-4 h-12 flex items-center'),
+                span(setClass('font-bold'), "{$lang->ppm->codeScan}: {$taskName}"),
+                $pipeline->task->result == 'pass' ? label(setClass('success ml-4'), $lang->codescan->latestScanResultList['pass']) : label(setClass('danger ml-4'), $lang->codescan->latestScanResultList[$pipeline->task->result]),
+                $canViewTask ? div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView), set::url('codescan', 'taskView', "repoID={$repoID}&id={$pipeline->task->id}&serviceRepoID={$repoID}&type=view"), set::target('_blank'))) : null
+            )
+        );
+    }
 }
 
 $checkAI     = true;
@@ -201,40 +209,6 @@ $domBox = div
             )
         )
     ),
-    section
-    (
-        div
-        (
-            setClass('border px-4 h-12 flex items-center'),
-            span(setClass('font-bold'), $lang->ppm->codeScan),
-            $checkScan ? label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['fail'])
-        ),
-        div
-        (
-            setClass('border px-4 py-4'),
-            setStyle(array('margin-top' => '-1px')),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $scanSevereIssue <= $config->ppm->scanSevereIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                span("{$lang->ppm->scanSevereIssue}: ", $scanSevereIssue),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->scanSevereIssue})"))
-            ),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $scanOrdinaryIssue <= $config->ppm->scanOrdinaryIssue ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-warning font-bold mr-1'), 'about'),
-                span("{$lang->ppm->scanOrdinaryIssue}: ", $scanOrdinaryIssue),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: ≤{$config->ppm->scanOrdinaryIssue})"))
-            ),
-            div
-            (
-                setClass('flex items-center py-1'),
-                $scanPassRate >= $config->ppm->scanPassRate ? icon(setClass('text-success font-bold mr-1'), 'check') : icon(setClass('text-danger font-bold mr-1'), 'close'),
-                span("{$lang->ppm->scanPassRate}: ", "{$scanPassRate} %"),
-                div(setClass('flex flex-auto justify-end'), span(setClass('mr-2'), "({$lang->ppm->request}: {$config->ppm->scanPassRate}%)"))
-            )
-        )
-    ),
+    $codeScanBox,
     $pipelineBox
 );
