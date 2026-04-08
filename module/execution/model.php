@@ -3831,6 +3831,7 @@ class executionModel extends model
         }, explode(',', $orderBy));
         $orderBy = str_replace('t1.storyTitle', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
+        $orderBy = str_replace('t1.beginDate', 'beginDate', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
@@ -3846,17 +3847,20 @@ class executionModel extends model
             t2.version AS latestStoryVersion,
             t2.status AS storyStatus,
             t3.realname AS assignedToRealName,
-            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
+            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder,
+            IF(t1.estStarted IS NULL, t4.`begin`, t1.estStarted) as beginDate')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
+            ->filterTpl('skip')
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id', false);
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
+        if(strpos($orderBy, 'beginDate') === false) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
         return $this->processTasks($tasks);
     }

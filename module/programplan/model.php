@@ -214,7 +214,7 @@ class programplanModel extends model
 
         $plans      = $this->getStage($executionID, $productID);
         $planIdList = array_column($plans, 'id');
-        $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID);
+        $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID, null, $type);
         $tasksGroup = $this->programplanTao->buildTaskGroup($tasks, $type);
 
         /* Judge whether to display tasks under the stage. */
@@ -243,7 +243,6 @@ class programplanModel extends model
         if($type == 'module') $objects = $this->loadModel('tree')->getModulesName(array_keys($tasksGroup));
         if($type == 'story')  $objects = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in(array_keys($tasksGroup))->fetchPairs('id', 'title');
 
-        if($type == 'pri') ksort($tasksGroup);
         if(in_array($type, array('finishedBy', 'closedBy')))
         {
             $unDoneTasks = !empty($tasksGroup['']) ? $tasksGroup[''] : array();
@@ -306,7 +305,7 @@ class programplanModel extends model
         }
 
         /* 根据排序字段手动排序。 Manually sort by order field. */
-        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
+        if(!empty($datas['data']) && $orderBy != 'id_asc') $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
         $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
@@ -892,10 +891,11 @@ class programplanModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null)
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null, string $type = 'execution')
     {
         $tasks = array();
         if($browseType == 'bysearch')
@@ -921,18 +921,20 @@ class programplanModel extends model
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,estStarted_asc,id_asc', $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus')->from(TABLE_TASK)->alias('t1')
+            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.estStarted IS NULL, t3.`begin`, t1.estStarted) as beginDate')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
                 ->andWhere('t1.status')->ne('cancel')
                 ->andWhere('t1.closedReason')->ne('cancel')
-                ->orderBy('execution_asc,estStarted_asc,id_asc')
+                ->filterTpl('skip')
+                ->orderBy("{$type}_asc,beginDate_asc,id_asc")
                 ->fetchAll('id', false);
         }
 
