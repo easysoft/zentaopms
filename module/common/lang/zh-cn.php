@@ -102,6 +102,7 @@ $lang->childrenAB         = '子';
 $lang->branchName         = '分支/平台';
 $lang->recommend          = '推荐';
 $lang->schedule           = '日历';
+$lang->basicInfo          = '基本信息';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';

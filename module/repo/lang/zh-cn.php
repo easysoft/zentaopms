@@ -386,3 +386,12 @@ $lang->repo->featureBar['review']['resolvedbyme'] = '由我解决';
 $lang->repo->featureBar['review']['assigntonull'] = '未指派';
 $lang->repo->featureBar['review']['unresolved']   = '未解决';
 $lang->repo->featureBar['review']['unclosed']     = '未关闭';
+
+$lang->repo->browseSystem = '应用列表';
+
+$lang->repo->system = new stdclass();
+$lang->repo->system->product       = '所属产品';
+$lang->repo->system->name          = '应用名称';
+$lang->repo->system->latestRelease = '最新版本';
+$lang->repo->system->deployStatus  = '最新版本状态';
+$lang->repo->system->status        = '应用状态';

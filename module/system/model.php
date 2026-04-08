@@ -613,4 +613,17 @@ class systemModel extends model
 
         return dao::isError();
     }
+
+    /**
+     * 根据ID获取应用信息。
+     * Get app info by id.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return object
+     */
+    public function getByID(int $systemID): object
+    {
+        return $this->fetchByID($systemID);
+    }
 }

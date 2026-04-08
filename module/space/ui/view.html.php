@@ -21,8 +21,8 @@ dropmenu
 $repoBrowseURL = common::hasPriv('repo', 'browse') ? $this->createLink('repo', 'browse', "repoID=%s") : '';
 $repoDom       = common::hasPriv('repo', 'browse') ? initLinkTable($repoList, $repoBrowseURL) : null;
 
-$artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
-$artifactRepoDom = common::hasPriv('artifactrepo', 'view') ? initLinkTable($artifactRepoList, $artifactRepoURL) : null;
+//$artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
+//$artifactRepoDom = common::hasPriv('artifactrepo', 'view') ? initLinkTable($artifactRepoList, $artifactRepoURL) : null;
 
 function initLinkTable(array $listData, string $url): array
 {
@@ -75,7 +75,7 @@ foreach($spaceMembers as $user)
 $repoCount         = empty($repoList) ? 0 : count($repoList);
 $systemCount       = empty($systemList) ? 0 : count($systemList);
 $pipelineCount     = empty($pipelineList) ? 0 : count($pipelineList);
-$artifactRepoCount = empty($artifactRepoList) ? 0 : count($artifactRepoList);
+//$artifactRepoCount = empty($artifactRepoList) ? 0 : count($artifactRepoList);
 
 div
 (
@@ -158,12 +158,12 @@ div
                             div(setClass('text-3xl h-10'), $pipelineCount),
                             div($lang->space->pipeline)
                         ),
-                        cell
-                        (
-                            set::title($artifactRepoCount),
-                            div(setClass('text-3xl h-10'), $artifactRepoCount),
-                            div($lang->space->artifactrepo)
-                        ),
+                        //cell
+                        //(
+                        //    set::title($artifactRepoCount),
+                        //    div(setClass('text-3xl h-10'), $artifactRepoCount),
+                        //    div($lang->space->artifactrepo)
+                        //),
                         cell
                         (
                             set::title($systemCount),

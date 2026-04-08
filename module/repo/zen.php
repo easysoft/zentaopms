@@ -1583,4 +1583,55 @@ class repoZen extends repo
 
         return $query;
     }
+
+    /**
+     * 构建应用搜索表单字段。
+     * Build system search form field.
+     *
+     * @param  int $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSystemSearchForm(int $queryID, string $actionURL)
+    {
+        $this->config->repo->system->search['params']['product']['values'] = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        $this->config->repo->system->search['queryID']   = (int)$queryID;
+        $this->config->repo->system->search['actionURL'] = $actionURL;
+
+        $this->loadModel('search')->setSearchParams($this->config->repo->system->search);
+    }
+
+    /**
+     * 获取应用列表的搜索条件。
+     * getSystemSearchQuery
+     *
+     * @param  int $queryID
+     * @access public
+     * @return string
+     */
+    public function getSystemSearchQuery(int $queryID): string
+    {
+        $queryName = 'systemSearchQuery';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set('systemSearchForm', $query->form);
+            }
+        }
+        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+        $systemQuery = $this->session->$queryName;
+        $systemQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $systemQuery);
+        if(strpos($systemQuery, 't1.`deployStatus`') !== false)
+        {
+            $systemQuery = str_replace('t1.`deployStatus`', 't3.`status`', $systemQuery);
+            if(strpos($systemQuery, "t3.`status` = ''") !== false) $systemQuery = str_replace("t3.`status` = ''", "t3.`status` is null", $systemQuery);
+        }
+
+        return $systemQuery;
+    }
 }

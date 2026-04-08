@@ -25,13 +25,13 @@ class spaceZen extends space
 
         $group         = $this->loadModel('group')->getList(0, $spaceID);
         $spaceRepos    = $this->space->getReposBySpace($spaceID, 'private');
-        $artifactRepos = $this->space->getArtifactReposBySpace($spaceID);
+        //$artifactRepos = $this->space->getArtifactReposBySpace($spaceID);
 
         $fields['account']['options']      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $fields['role']['options']         = $this->lang->space->roleList;
         $fields['group']['options']        = empty($group)         ? array() : array_column($group, 'name', 'id');
         $fields['repo']['options']         = empty($spaceRepos)    ? array() : array_column($spaceRepos, 'name', 'id');
-        $fields['artifactrepo']['options'] = empty($artifactPairs) ? array() : array_column($artifactRepos, 'name', 'id');
+        //$fields['artifactrepo']['options'] = empty($artifactPairs) ? array() : array_column($artifactRepos, 'name', 'id');
 
         return $fields;
     }
