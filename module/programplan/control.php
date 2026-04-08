@@ -89,14 +89,8 @@ class programplan extends control
 
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
-        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID, (int)$versionID);
-        if($versionID == 'nowait' && !empty($plans['data']))
-        {
-            $plans['data'] = array_values(array_filter($plans['data'], function($data)
-            {
-                return !($data->type == 'task' && isset($data->rawStatus) && $data->rawStatus == 'wait');
-            }));
-        }
+        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID, $versionID);
+        if($versionID == 'nowait' && !empty($plans['data'])) $plans['data'] = $this->programplan->processNoWaitGanttData($plans['data']);
 
         if(isset($_POST['baselineVersion']) && !empty($plans['data']))
         {
