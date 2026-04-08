@@ -179,7 +179,7 @@ gantt
     set('showFields', $showFields),
     set::root($projectID),
     set::settingLink(createLink('programplan', 'ajaxcustom')),
-    set::toolbar(array('criticalPath', 'fullscreen', 'setting')),
+    set::toolbar($isFromDoc ? array() : array('criticalPath', 'fullscreen', 'setting')),
     set::exportFileName('gantt-export-' . $projectID),
     set::weekend(array('weekend' => zget($config->execution, 'weekend', 2), 'restDay' => zget($config->execution, 'restDay', 0))),
     set::holidays($holidays),
