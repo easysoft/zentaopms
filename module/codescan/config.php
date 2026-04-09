@@ -90,13 +90,11 @@ $config->codescan->ruleset->search['fields']['id']        = $lang->idAB;
 $config->codescan->ruleset->search['fields']['plugin']    = $lang->codescan->tool;
 $config->codescan->ruleset->search['fields']['lang']      = $lang->codescan->language;
 $config->codescan->ruleset->search['fields']['status']    = $lang->codescan->status;
-$config->codescan->ruleset->search['fields']['type']      = $lang->codescan->type;
 
 $config->codescan->ruleset->search['params']['name']      = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->ruleset->search['params']['id']        = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->ruleset->search['params']['plugin']    = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->codescan->ruleset->search['params']['lang']      = array('operator' => '=', 'control' => 'select', 'values' => array());
-$config->codescan->ruleset->search['params']['type']      = array('operator' => '=', 'control' => 'select', 'values' => array());
 $config->codescan->ruleset->search['params']['status']    = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->statusList);
 
 $config->codescan->actions = new stdclass();
