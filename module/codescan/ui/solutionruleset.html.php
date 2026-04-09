@@ -22,7 +22,7 @@ unset($cols['createdAt']);
 unset($cols['rulesCount']['link']);
 foreach($cols as &$col) $col['sortType'] = false;
 
-$rulesets    = zget($solution, 'rulesets', array());
+$rulesets    = zget($solution, 'ruleSets', array());
 $rulesetList = initTableData($rulesets, $cols);
 
 modalHeader(set::title($lang->codescan->ruleset), set::entityText($solution->name), set::entityID($solutionID));
