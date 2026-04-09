@@ -61,7 +61,7 @@ div
                 btn
                 (
                     setClass('px-4'),
-                    set::url($adminRegisterLink),
+                    set::url($devopsLink),
                     set::type('primary'),
                     $lang->install->next
                 )

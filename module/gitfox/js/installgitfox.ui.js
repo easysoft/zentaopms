@@ -65,3 +65,18 @@ window.agreeChange = function(event)
         $('.btn-install').addClass('disabled');
     }
 }
+
+window.checkGitFoxServer = function()
+{
+    $.getJSON($.createLink('gitfox', 'ajaxCheckGitfoxHealth', '_single=1'), function(res)
+    {
+        if(res.result != 'success')
+        {
+            zui.Messager.fail(res.message);
+        }
+        else
+        {
+            openUrl(adminRegisterLink);
+        }
+    })
+}

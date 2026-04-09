@@ -231,6 +231,9 @@ $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.sendcode';
 $config->openMethods[] = 'admin.planmodal';
 $config->openMethods[] = 'im.authorize';
+$config->openMethods[] = 'gitfox.devopsintroduction';
+$config->openMethods[] = 'gitfox.installgitfox';
+$config->openMethods[] = 'gitfox.ajaxcheckgitfoxhealth';
 
 /* 登录用户可以使用的方法。The methods that can be used by the logged users. */
 $config->logonMethods = array();

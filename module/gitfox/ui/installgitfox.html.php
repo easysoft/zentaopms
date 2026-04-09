@@ -13,10 +13,12 @@ namespace zin;
 set::zui(true);
 global $app;
 $app->loadLang('upgrade');
+$app->loadLang('install');
 
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
-jsVar('nextLink', inlink('step6'));
+jsVar('nextLink', 'javascript:checkGitFoxServer();');
+jsVar('adminRegisterLink', $adminRegisterLink);
 
 div
 (
@@ -42,12 +44,12 @@ div
                         div
                         (
                             setClass('text-danger mt-2 mb-4'),
-                            $lang->install->installGitFoxTip
+                            $lang->gitfox->installGitFoxTip
                         ),
                         div
                         (
                             setClass('mb-2'),
-                            p(setClass('font-semibold mb-2'), $lang->install->execScript),
+                            p(setClass('font-semibold mb-2'), $lang->gitfox->execScript),
                             h::pre
                             (
                                 setID('script'),
@@ -64,7 +66,7 @@ div
                                 on::change('agreeChange'),
                                 set::primary(false),
                                 set::checked(false),
-                                html($lang->install->checkInstall)
+                                html($lang->gitfox->checkInstall)
                             )
                         )
                     )
@@ -75,10 +77,16 @@ div
                     (
                         array
                         (
-                            'text'     => $lang->install->next,
-                            'type'     => 'primary',
-                            'class'    => 'btn-install',
-                            'url'      => inLink('step6')
+                            'text'  => $lang->install->solution->skip,
+                            'class' => 'gray-200',
+                            'url'   => $adminRegisterLink
+                        ),
+                        array
+                        (
+                            'text'  => $lang->install->next,
+                            'type'  => 'primary',
+                            'class' => 'btn-install',
+                            'url'   => 'javascript:checkGitFoxServer();'
                         )
                     )
                 )

@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+global $app;
+$app->loadLang('install');
 
 set::zui(true);
 
@@ -30,7 +32,7 @@ div
                 div
                 (
                     setClass('block overflow-hidden h-96 p-3 progress'),
-                    html($lang->install->devopsDescription)
+                    html($lang->gitfox->devopsDescription)
                 ),
                 set::actions
                 (
@@ -40,13 +42,13 @@ div
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
-                            'url'   => inLink('step6')
+                            'url'   => $adminRegisterLink
                         ),
                         array
                         (
                             'text'  => $lang->install->start,
                             'class' => 'primary',
-                            'url'   => inLink('installGitFox')
+                            'url'   => inLink('installGitFox', '&_single=1')
                         )
                     )
                 )
