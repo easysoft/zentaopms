@@ -26,6 +26,22 @@ class gitfoxModel extends model
     }
 
     /**
+     * 检查服务是否健康。
+     * Check service health.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkHealth(): bool
+    {
+        $url = $this->config->devops->gitfoxURL . ':' . $this->config->devops->gitfoxPort;
+        $url = rtrim($url, '/') . '/public/health';
+
+        $result = json_decode(common::http($url));
+        return !empty($result) && !empty($result->status) && $result->status == 'healthy';
+    }
+
+    /**
      * 获取gitfox 服务器信息。
      * Get gitfox server info.
      *
@@ -84,8 +100,10 @@ class gitfoxModel extends model
         if(in_array($method, array('DELETE', 'PUT', 'PATCH'))) $options = array(CURLOPT_CUSTOMREQUEST => $method);
 
         $apiRoot = $this->getApiRoot();
-        $url     = sprintf($apiRoot->url, $url);
-        $result  = json_decode(common::http($url, $data, $options, $apiRoot->header, 'json', $method));
+        if(!$apiRoot) return false;
+
+        $url    = sprintf($apiRoot->url, $url);
+        $result = json_decode(common::http($url, $data, $options, $apiRoot->header, 'json', $method));
         return $this->getResponse($result);
     }
 

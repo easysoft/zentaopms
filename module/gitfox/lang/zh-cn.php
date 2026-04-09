@@ -135,3 +135,23 @@ $lang->gitfox->errorResonse['Username has already been taken'] = '用户名已�
 $lang->gitfox->featureBar['binduser']['all']     = $lang->gitfox->all;
 $lang->gitfox->featureBar['binduser']['notBind'] = $lang->gitfox->notBind;
 $lang->gitfox->featureBar['binduser']['binded']  = $lang->gitfox->binded;
+
+$lang->gitfox->devopsIntroduction = '禅道DevOps解决方案：全面重构，智领未来';
+$lang->gitfox->devopsDescription  = <<<EOD
+<p class="intro-text">
+  为了应对日益复杂的业务挑战并拥抱智能化变革，DevOps 解决方案迎来 <span class="text-danger">4.0 Beta</span> 版本的革命性重构。这是我们迈向智能研发的一个起点，<span class="text-danger">为未来的 AI 深度赋能打造了一个轻量化、一体化研发基座</span>，能够完美承载后续 AI 代码评审、辅助编程、自动化测试及智能运维等核心AI能力的落地。
+</p>
+<ul class="feature-list">
+  <li class="m-2">采用自研代码托管平台，功能全面，支持一站式安装，提供从代码提交到交付的全生命周期管理。</li>
+  <li class="m-2">支持全面的研发流程配置，提供分支分类、代码提交、合并流程等精细化权限管控，让大规模协作回归简洁有序。</li>
+  <li class="m-2">多层级代码库、制品库与Webhook配置，与公司组织架构更好的适配，结构更清晰、可扩展。</li>
+  <li class="m-2">流水线支持可视化编排能力，提供更简洁易用的界面，让部署像画图一样简单。</li>
+</ul>
+EOD;
+
+$lang->gitfox->installGitFox    = '安装 GitFox';
+$lang->gitfox->installGitFoxTip = '使用DevOps解决方案需要安装GitFox，请运行下面脚本安装GitFox，安装完成后点击下一步继续。';
+$lang->gitfox->checkInstall     = '我已完成上述安装步骤';
+$lang->gitfox->execScript       = '执行安装脚本';
+$lang->gitfox->copySuccess      = '复制成功';
+$lang->gitfox->copyFail         = '浏览器不支持复制功能，请手动复制';

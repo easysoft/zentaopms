@@ -387,23 +387,3 @@ $lang->install->solution->title       = 'DevOps platform application settings';
 $lang->install->solution->progress    = 'Installing of DevOps platform';
 $lang->install->solution->desc        = 'Welcome to the DevOps platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
 $lang->install->solution->overMemory  = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';
-
-$lang->install->devopsIntroduction = 'Zentao DevOps Solution: Comprehensive Refactoring, Leading the Future';
-$lang->install->devopsDescription  = <<<EOD
-<p class="intro-text">
-  To address increasingly complex business challenges and embrace intelligent transformation, the DevOps solution welcomes the revolutionary refactoring of version <span class="text-danger">4.0 Beta</span>. This is a starting point for intelligent R&D, creating a lightweight, integrated R&D base for <span class="text-danger">future AI deep empowerment<span> that can perfectly support the implementation of core AI capabilities such as subsequent AI code review, assisted programming, automated testing, and intelligent operations.
-</p>
-<ul class="feature-list">
-  <li class="m-2">Using self-developed code hosting platform with comprehensive features, supporting one-click installation, providing full lifecycle management from code submission to delivery.</li>
-  <li class="m-2">Supporting comprehensive R&D process configuration, providing fine-grained permission control such as branch classification, code submission, and merge processes, making large-scale collaboration return to simplicity and order.</li>
-  <li class="m-2">Multi-level code repository, artifact repository, and Webhook configuration, better adapted to company organizational structure, clearer and more scalable.</li>
-  <li class="m-2">Pipeline supports visual orchestration capability, providing a more concise and easy-to-use interface, making deployment as simple as drawing.</li>
-</ul>
-EOD;
-
-$lang->install->installGitFox    = 'Install GitFox';
-$lang->install->installGitFoxTip = 'DevOps solution requires GitFox installation. Please run the script below to install GitFox, then click Next to continue.';
-$lang->install->checkInstall     = 'I have completed the above installation steps';
-$lang->install->execScript       = 'Execute installation script';
-$lang->install->copySuccess      = 'Copy successful';
-$lang->install->copyFail         = 'Browser does not support copy function, please copy manually';

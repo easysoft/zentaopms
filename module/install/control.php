@@ -399,7 +399,7 @@ class install extends control
 
             $this->install->execPostInstallSQL();
 
-            return $this->send(array('result' => 'success', 'load' => inlink('devopsIntroduction')));
+            return $this->send(array('result' => 'success', 'load' => inlink('step6')));
         }
 
         if($this->config->inQuickon) $this->installZen->saveConfigFile();
@@ -460,86 +460,12 @@ class install extends control
             if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
         }
 
-        if($this->app->cookie->lang == 'zh-cn')
-        {
-            $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
-            $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
-        }
-        else
-        {
-            $this->view->adminRegisterLink  = helper::createLink('index');
-        }
+        $devopsLink = helper::createLink('gitfox', 'devopsIntroduction', '&_single=1');
+        $this->view->devopsLink = str_replace('install.php', 'index.php', $devopsLink);
 
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
-        $this->display();
-    }
-
-    /**
-     * DevOps 介绍页面。
-     * DevOps introduction page.
-     *
-     * @access public
-     * @return void
-     */
-    public function devopsIntroduction()
-    {
-        $this->view->title = $this->lang->install->devopsIntroduction;
-        $this->display();
-    }
-
-    /**
-     * 安装GitFox.
-     * Install GitFox.
-     *
-     * @access public
-     * @return void
-     */
-    public function installGitFox()
-    {
-        if(strpos(PHP_OS, 'WIN'))
-        {
-            $os = 'win';
-        }
-        elseif (PHP_OS === 'Linux')
-        {
-            $os = 'linux';
-        }
-        elseif (PHP_OS === 'Darwin')
-        {
-            $os = 'mac';
-        }
-        else
-        {
-            $os = 'linux';
-        }
-
-        $uname = php_uname('m');
-        $arch  = strtolower($uname);
-        if(strpos($arch, 'arm') === 0 || strpos($arch, 'aarch') != false)
-        {
-            $arch = 'arm';
-        }
-        elseif(strpos($arch, 'x86') === 0 || strpos($arch, 'i686') != false || strpos($arch, 'amd') != false)
-        {
-            $arch = 'amd';
-        }
-        else
-        {
-            $arch = 'amd';
-        }
-
-        $gitfoxDir = $this->app->getAppRoot() . 'gitfox';
-
-        $type        = $os == 'mac' ? 'linux' : $os;
-        $downloadURL = $this->config->install->downloadGitfoxURL[$type][$arch];
-        $command     = sprintf($this->config->install->installGitfox[$type], $gitfoxDir, $downloadURL);
-        $script      = $type == 'linux' ? $this->app->getTmpRoot() . 'installGitFox.sh' : $this->app->getTmpRoot() . 'installGitFox.bat';
-        file_put_contents($script, $command);
-
-        $this->view->title  = $this->lang->install->installGitFox;
-        $this->view->script = $script;
         $this->display();
     }
 }

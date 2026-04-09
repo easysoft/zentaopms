@@ -240,4 +240,89 @@ class gitfox extends control
         foreach($files as $key => $file) $files[$key]->editTime = empty($file->updated) ? '' : date('Y-m-d H:i:s', intVal($file->updated / 1000));
         return $this->send(array('files' => $files, 'type' => $this->post->format, 'serverUrl' => $gitfox->url));
     }
+
+    /**
+     * DevOps 介绍页面。
+     * DevOps introduction page.
+     *
+     * @access public
+     * @return void
+     */
+    public function devopsIntroduction()
+    {
+        $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
+        $this->view->title             = $this->lang->gitfox->devopsIntroduction;
+        $this->display();
+    }
+
+    /**
+     * 安装GitFox.
+     * Install GitFox.
+     *
+     * @access public
+     * @return void
+     */
+    public function installGitFox()
+    {
+        if(strpos(PHP_OS, 'WIN'))
+        {
+            $os = 'win';
+        }
+        elseif (PHP_OS === 'Linux')
+        {
+            $os = 'linux';
+        }
+        elseif (PHP_OS === 'Darwin')
+        {
+            $os = 'mac';
+        }
+        else
+        {
+            $os = 'linux';
+        }
+
+        $uname = php_uname('m');
+        $arch  = strtolower($uname);
+        if(strpos($arch, 'arm') === 0 || strpos($arch, 'aarch') != false)
+        {
+            $arch = 'arm';
+        }
+        elseif(strpos($arch, 'x86') === 0 || strpos($arch, 'i686') != false || strpos($arch, 'amd') != false)
+        {
+            $arch = 'amd';
+        }
+        else
+        {
+            $arch = 'amd';
+        }
+
+        $gitfoxDir = $this->app->getAppRoot() . 'gitfox';
+
+        $type        = $os == 'mac' ? 'linux' : $os;
+        $downloadURL = $this->config->gitfox->downloadGitfoxURL[$type][$arch];
+        $command     = sprintf($this->config->gitfox->installGitfox[$type], $gitfoxDir, $downloadURL);
+        $script      = $type == 'linux' ? $this->app->getTmpRoot() . 'installgitfox.sh' : $this->app->getTmpRoot() . 'installgitfox.bat';
+        file_put_contents($script, $command);
+        if(file_exists($script)) chmod($script, 0755);
+
+        $this->view->title             = $this->lang->gitfox->installGitFox;
+        $this->view->script            = $script;
+        $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
+        $this->display();
+    }
+
+    /**
+     * 检查 GitFox 服务器是否可用。
+     * Check if GitFox server is available.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckGitFoxHealth()
+    {
+        $result = $this->gitfox->checkHealth();
+        if(!$result || dao::isError()) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitfox->serverFail));
+
+        return $this->send(array('result' => 'success'));
+    }
 }
