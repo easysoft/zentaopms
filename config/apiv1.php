@@ -186,3 +186,5 @@ $routes['/gitlab/webhook'] = 'gitlabWebhook';
 $routes['/ciresults'] = 'ciresults';
 
 $routes['/branchrules'] = 'branchrules';
+
+$routes['/repomemberspriv'] = 'repomemberspriv';
