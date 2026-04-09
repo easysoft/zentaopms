@@ -260,9 +260,6 @@ class programplanModel extends model
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, (string)$group, $type, $objects);
 
-            $realStartDate = array();
-            $realEndDate   = array();
-            $totalTask     = count($tasks);
             foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
@@ -287,9 +284,6 @@ class programplanModel extends model
 
                     $datas['data'][$task->id] = $data;
                 }
-
-                if(!empty($dateLimit['start'])) $realStartDate[] = strtotime($dateLimit['start']);
-                if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
 
                 if(!isset($stageIndex[$groupKey]['totalConsumed'])) $stageIndex[$groupKey]['totalConsumed'] = 0;
                 if(!isset($stageIndex[$groupKey]['totalLeft']))     $stageIndex[$groupKey]['totalLeft']     = 0;
