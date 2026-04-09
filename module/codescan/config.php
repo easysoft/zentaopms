@@ -144,9 +144,7 @@ $config->codescan->solution->search['fields']['name']      = $lang->codescan->na
 $config->codescan->solution->search['fields']['id']        = $lang->idAB;
 $config->codescan->solution->search['fields']['status']    = $lang->codescan->status;
 $config->codescan->solution->search['fields']['createdBy'] = $lang->codescan->created_by;
-$config->codescan->solution->search['fields']['createdAt'] = $lang->codescan->created_at;
 $config->codescan->solution->search['fields']['updatedBy'] = $lang->codescan->updated_by;
-$config->codescan->solution->search['fields']['updatedAt'] = $lang->codescan->updated_at;
 
 $config->codescan->solution->search['params']['name']      = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->solution->search['params']['id']        = array('operator' => '=', 'control' => 'input', 'values' => '');
@@ -272,10 +270,7 @@ $config->codescan->issue->search['params']['plan']       = array('operator' => '
 $config->codescan->issue->search['params']['ruleID']     = array('operator' => '=', 'control' => 'input',  'values' => '');
 
 $config->codescan->remoteFields = array();
-$config->codescan->remoteFields['createdBy']        = 'created_by';
-$config->codescan->remoteFields['updatedBy']        = 'updated_by';
-$config->codescan->remoteFields['createdAt']        = 'created_at';
-$config->codescan->remoteFields['updatedAt']        = 'updated_at';
+$config->codescan->remoteFields['updatedBy']        = 'editedBy';
 $config->codescan->remoteFields['setCount']         = 'rulesets_count';
 $config->codescan->remoteFields['scanType']         = 'scan_type';
 $config->codescan->remoteFields['repo']             = 'repo_id';
