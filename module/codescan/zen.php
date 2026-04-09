@@ -227,6 +227,11 @@ class codescanZen extends codescan
         if(empty($errors))     $errors = dao::getError();
         if(!is_array($errors)) $errors = array($errors);
 
+        if(count($errors) === 1 && isset($errors['apiMessage']) && is_string($errors['apiMessage']))
+        {
+            return $this->sendError($errors['apiMessage'], $locate);
+        }
+
         return $this->sendError($errors, $locate);
     }
 
