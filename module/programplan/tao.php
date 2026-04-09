@@ -764,10 +764,10 @@ class programplanTao extends programplanModel
         $data->canceledBy     = '';
         $data->closedDate     = '';
         $data->canceledDate   = '';
-        $data->openedDate     = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
-        $data->lastEditedDate = helper::isZeroDate($point->editedDate)        ? '' : substr($point->editedDate,  0, 10);
-        $data->realBegan      = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
-        $data->realEnd        = helper::isZeroDate($point->lastReviewedDate)  ? '' : substr($point->lastReviewedDate,  0, 10);
+        $data->openedDate     = helper::isZeroDate($point->createdDate) ? '' : substr($point->createdDate,  0, 10);
+        $data->lastEditedDate = helper::isZeroDate($point->editedDate)  ? '' : substr($point->editedDate,   0, 10);
+        $data->realBegan      = (empty($point->status) || helper::isZeroDate($point->createdDate))       ? '' : substr($point->createdDate,  0, 10);
+        $data->realEnd        = (empty($point->status) || helper::isZeroDate($point->lastReviewedDate))  ? '' : substr($point->lastReviewedDate,  0, 10);
         $data->color          = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
         $data->progressColor  = $this->lang->execution->gantt->stage->progressColor;
         $data->textColor      = $this->lang->execution->gantt->stage->textColor;
