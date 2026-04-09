@@ -160,7 +160,7 @@ class codescanZen extends codescan
                 if(isset($search['value']) && $search['value'])
                 {
                     if(isset($this->config->codescan->remoteFields[$search['field']])) $search['field'] = $this->config->codescan->remoteFields[$search['field']];
-                    if($search['field'] == 'id' && $method == 'task') $search['field'] = 'task_id';
+                    if($search['field'] == 'id' && $method == 'task') $search['field'] = 'taskID';
                     if(in_array($search['field'], array('started', 'finished')))
                     {
                         $search['field'] = in_array($search['operator'], array('<', '<=')) ? 'started_lt' : 'started_gt';
