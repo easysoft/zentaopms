@@ -305,7 +305,7 @@ class codescan extends control
             $ruleList = $this->codescan->getScanRulesetRules($setID, $params);
 
             $this->app->loadClass('pager', true);
-            $pager->recTotal = zget($ruleList, 'total', 0);
+            $pager->recTotal = $ruleList->pager->total ?? 0;
 
             $ruleList = zget($ruleList, 'data', array());
             foreach($ruleList as &$rule)
@@ -413,7 +413,7 @@ class codescan extends control
         $ruleList = $this->codescan->getScanRulesetUnlinkRules($setID, $params);
 
         $this->app->loadClass('pager', true);
-        $pager->recTotal = zget($ruleList, 'total', 0);
+        $pager->recTotal = $ruleList->pager->total ?? 0;
 
         $ruleList = zget($ruleList, 'data', array());
         foreach($ruleList as &$rule)
