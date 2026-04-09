@@ -274,7 +274,6 @@ $config->codescan->remoteFields['updatedBy']        = 'editedBy';
 $config->codescan->remoteFields['setCount']         = 'rulesets_count';
 $config->codescan->remoteFields['scanType']         = 'scan_type';
 $config->codescan->remoteFields['repo']             = 'repo_id';
-$config->codescan->remoteFields['plan']             = 'plan_id';
 $config->codescan->remoteFields['latestScanTime']   = 'latest_task_created';
 $config->codescan->remoteFields['latestExecStatus'] = 'latest_task_status';
 $config->codescan->remoteFields['latestExecResult'] = 'latest_task_result';
