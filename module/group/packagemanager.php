@@ -1224,7 +1224,6 @@ $config->group->package->manageTask->privs['task-batchCancel']            = arra
 $config->group->package->manageTask->privs['task-confirmdesignchange']    = array('edition' => 'max,ipd',          'vision' => 'rnd',      'order' => 19, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
 $config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
 $config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
-$config->group->package->manageTask->privs['task-autoSchedule']           = array('edition' => 'max,ipd',          'vision' => 'rnd',      'order' => 24, 'depend' => array(), 'recommend' => array());
 
 $config->group->package->deleteTask = new stdclass();
 $config->group->package->deleteTask->order  = 20;

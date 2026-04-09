@@ -97,6 +97,7 @@ $lang->project->backToKanban        = '返回看板';
 $lang->project->backToExecutionList = '返回项目%s列表';
 $lang->project->backToProjectList   = '返回项目列表';
 $lang->project->deletedTip          = "抱歉，您访问的{$lang->projectCommon}已被删除。";
+$lang->project->executionView       = "{$lang->execution->common}视图";
 
 $lang->project->manDay          = '人天';
 $lang->project->day             = '天';
