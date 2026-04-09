@@ -7,16 +7,16 @@ title=测试 programZen::buildProgramForCreate();
 timeout=0
 cid=17724
 
-- 执行programTest模块的buildProgramForCreateTest方法
+- 执行programTest模块的buildProgramForCreateTest方法 
  - 属性type @program
  - 属性name @测试项目集
  - 属性openedBy @admin
 - 执行programTest模块的buildProgramForCreateTest方法 属性end @2059-12-31
 - 执行programTest模块的buildProgramForCreateTest方法 属性type @program
-- 执行programTest模块的buildProgramForCreateTest方法
+- 执行programTest模块的buildProgramForCreateTest方法 
  - 属性name @新项目集
  - 属性PM @user1
-- 执行programTest模块的buildProgramForCreateTest方法
+- 执行programTest模块的buildProgramForCreateTest方法 
  - 属性openedBy @admin
  - 属性type @program
 

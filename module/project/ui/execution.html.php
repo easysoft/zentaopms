@@ -72,14 +72,14 @@ if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')))
 }
 if(!$this->cookie->showStage && !$this->cookie->showTask)
 {
-    $fieldList['name']['type'] = 'title';
-    if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['name']['nestedToggle']);
+    $fieldList['nameCol']['type'] = 'title';
+    if(!in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) unset($fieldList['nameCol']['nestedToggle']);
 }
 if(!$project->hasProduct) unset($fieldList['productName']);
 
 $config->project->execution->dtable->fieldList = $fieldList;
 $fieldList = $this->loadModel('datatable')->getSetting('project', 'execution');
-$fieldList['name']['name'] = 'nameCol';
+$fieldList['nameCol']['name'] = 'nameCol';
 $fieldList['actions']['width'] = '160';
 
 foreach(array_keys($fieldList['actions']['actionsMap']) as $actionKey) unset($fieldList['actions']['actionsMap'][$actionKey]['text']);

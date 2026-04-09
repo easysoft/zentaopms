@@ -18,7 +18,6 @@ class activateTaskTester extends tester
         $form = $this->initForm('task', 'view', array('taskID' => $id), 'appIframe-execution');
 
         $form->dom->xpath['taskAssignedTo'] = "//*[@title='{$this->lang->task->assignedTo}']/../div[2]";
-        $form->dom->xpath['taskStatus']     = "//*[@title='{$this->lang->task->status}']/..//span";
         $form->dom->xpath['taskLeft']       = "//*[@title='{$this->lang->task->left}']/../div[2]";
         $form->dom->xpath['activateBtn']    = "//a[@title='{$this->lang->task->activate}']";
 
@@ -42,7 +41,7 @@ class activateTaskTester extends tester
             if($form->dom->leftTip->getText() != sprintf($this->lang->error->notempty, $this->lang->task->left)) return $this->failed('预计剩余为空或0时提示错误');
             return $this->success('预计剩余为空或0时提示正确');
         }
-        $form->wait(1);
+        $form->wait(3);
         if($form->dom->taskAssignedTo->getText() != $assignedTo)                      return $this->failed('激活任务后指派给错误');
         if(floatval($form->dom->taskLeft->getText()) != $left)                        return $this->failed('激活任务后预计剩余错误');
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->doing) return $this->failed('激活任务后任务状态错误');

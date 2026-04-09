@@ -29,6 +29,7 @@ $config->testcase->dtable->fieldList['pri']['type']     = 'pri';
 $config->testcase->dtable->fieldList['pri']['sortType'] = true;
 $config->testcase->dtable->fieldList['pri']['show']     = true;
 $config->testcase->dtable->fieldList['pri']['group']    = 2;
+$config->testcase->dtable->fieldList['pri']['priList']  = $lang->testcase->priList;
 
 $config->testcase->dtable->fieldList['scene']['title']      = $lang->testcase->scene;
 $config->testcase->dtable->fieldList['scene']['type']       = 'category';
@@ -146,6 +147,7 @@ if($config->edition != 'open')
     $config->testcase->dtable->fieldList['relatedObject']['group']       = 5;
     $config->testcase->dtable->fieldList['relatedObject']['flex']        = false;
     $config->testcase->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($app->getClientLang() == 'en') $config->testcase->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->testcase->dtable->fieldList['version']['title']    = $lang->testcase->version;

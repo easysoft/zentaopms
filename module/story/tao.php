@@ -2006,26 +2006,26 @@ class storyTao extends storyModel
         $createCaseLink          = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params");
 
         /* If the story cannot be changed, render the close button. */
-        $canClose    = common::hasPriv($story->type, 'close')    && $this->isClickable($story, 'close', $taskGroups, $caseGroups) && $this->checkConditions('close', $story);
-        $canActivate = common::hasPriv($story->type, 'activate') && $this->isClickable($story, 'activate', $taskGroups, $caseGroups) && $this->checkConditions('activate', $story);
+        $canClose    = common::hasPriv($story->type, 'close', $story)    && $this->isClickable($story, 'close', $taskGroups, $caseGroups) && $this->checkConditions('close', $story);
+        $canActivate = common::hasPriv($story->type, 'activate', $story) && $this->isClickable($story, 'activate', $taskGroups, $caseGroups) && $this->checkConditions('activate', $story);
         if(!common::canBeChanged($story->type, $story)) return array(array('name' => 'close', 'hint' => $lang->close, 'data-toggle' => 'modal', 'url' => $canClose ? $closeLink : null, 'disabled' => !$canClose));
-        $canProcessChange = common::hasPriv($story->type, 'processStoryChange');
+        $canProcessChange = common::hasPriv($story->type, 'processStoryChange', $story);
         if(!empty($story->parentChanged) || !empty($story->demandChanged)) return array(array('name' => 'processStoryChange', 'url' => $canProcessChange ? $processStoryChangeLink : null, 'disabled' => !$canProcessChange, 'innerClass' => 'ajax-submit'));
 
         /* Change button. */
-        $canChange = common::hasPriv($story->type, 'change') && $this->isClickable($story, 'change', $taskGroups, $caseGroups) && $this->checkConditions('change', $story);
+        $canChange = common::hasPriv($story->type, 'change', $story) && $this->isClickable($story, 'change', $taskGroups, $caseGroups) && $this->checkConditions('change', $story);
         $title     = $canChange ? $lang->story->change : $this->lang->story->changeTip;
-        if(common::hasPriv($story->type, 'change')) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => empty($story->frozen) ? $title : sprintf($this->lang->story->frozenTip, $this->lang->story->change), 'disabled' => !$canChange, 'class' => 'story-change-btn');
+        if(common::hasPriv($story->type, 'change', $story)) $actions[] = array('name' => 'change', 'url' => $canChange ? $changeLink : null, 'hint' => empty($story->frozen) ? $title : sprintf($this->lang->story->frozenTip, $this->lang->story->change), 'disabled' => !$canChange, 'class' => 'story-change-btn');
 
         /* Submitreview, review, recall buttons. */
         if(strpos('draft,changing', $story->status) !== false)
         {
-            $canSubmitReview = common::hasPriv($story->type, 'submitReview');
+            $canSubmitReview = common::hasPriv($story->type, 'submitReview', $story);
             $actSubmitreview = array('name' => 'submitreview', 'data-toggle' => 'modal', 'url' => $canSubmitReview ? $submitReviewLink : null, 'disabled' => !$canSubmitReview, 'hint' => $canSubmitReview ? $this->lang->story->submitReview : $this->lang->story->reviewTip['noPriv']);
         }
         else
         {
-            $canReview = common::hasPriv($story->type, 'review') && $this->isClickable($story, 'review', $taskGroups, $caseGroups) && $this->checkConditions('review', $story);
+            $canReview = common::hasPriv($story->type, 'review', $story) && $this->isClickable($story, 'review', $taskGroups, $caseGroups) && $this->checkConditions('review', $story);
             $title     = $this->lang->story->review;
             if(!$canReview && $story->status != 'closed')
             {
@@ -2046,7 +2046,7 @@ class storyTao extends storyModel
             $actReview = array('name' => 'review', 'url' => $canReview ? $reviewLink : null, 'hint' => $title, 'disabled' => !$canReview, 'class' => 'story-review-btn');
         }
 
-        $canRecall = common::hasPriv($story->type, 'recall') && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall', $taskGroups, $caseGroups);
+        $canRecall = common::hasPriv($story->type, 'recall', $story) && $this->isClickable($story, $story->status == 'changing' ? 'recallchange' : 'recall', $taskGroups, $caseGroups);
         $title     = $story->status == 'changing' ? $this->lang->story->recallChange : $this->lang->story->recall;
         if(!$canRecall) $title = $this->lang->story->recallTip['actived'];
         $actRecall = array('name' => $story->status == 'changing' ? 'recalledchange' : 'recall', 'url' => $canRecall ? $recallLink : null, 'hint' => $title, 'disabled' => !$canRecall);
@@ -2068,15 +2068,15 @@ class storyTao extends storyModel
             $actions[] = array('name' => 'dropdown', 'type' => 'dropdown', 'items' => array($actRecall + array('innerClass' => 'ajax-submit')));
         }
 
-        if($this->config->vision != 'lite' && $story->status != 'closed' && common::hasPriv($story->type, 'close'))    $actions[] = array('name' => 'close',    'url' => $canClose ? $closeLink : null,       'data-toggle' => 'modal',  'disabled' => !$canClose);
-        if($this->config->vision != 'lite' && $story->status == 'closed' && common::hasPriv($story->type, 'activate')) $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
+        if($this->config->vision != 'lite' && $story->status != 'closed' && common::hasPriv($story->type, 'close', $story))    $actions[] = array('name' => 'close',    'url' => $canClose ? $closeLink : null,       'data-toggle' => 'modal',  'disabled' => !$canClose);
+        if($this->config->vision != 'lite' && $story->status == 'closed' && common::hasPriv($story->type, 'activate', $story)) $actions[] = array('name' => 'activate', 'url' => $canActivate ? $activateLink : null, 'data-toggle' => 'modal');
 
         /* Render divider line. */
         if(!empty($actions)) $actions[] = array('name' => 'divider', 'type'=>'divider');
 
         /* Edit button. */
         $canEdit = common::hasPriv($story->type, 'edit') && $this->isClickable($story, 'edit', $taskGroups, $caseGroups) && $this->checkConditions('edit', $story);
-        if(common::hasPriv($story->type, 'edit')) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit', $taskGroups, $caseGroups) ? $editLink : null, 'disabled' => !$canEdit, 'hint' => empty($story->frozen) ? $this->lang->story->edit : sprintf($this->lang->story->frozenTip, $this->lang->story->edit));
+        if(common::hasPriv($story->type, 'edit', $story)) $actions[] = array('name' => 'edit', 'url' => $this->isClickable($story, 'edit', $taskGroups, $caseGroups) ? $editLink : null, 'disabled' => !$canEdit, 'hint' => empty($story->frozen) ? $this->lang->story->edit : sprintf($this->lang->story->frozenTip, $this->lang->story->edit));
 
         /* Create test case button. */
         if($story->type == 'story' && $this->config->vision != 'lite' && common::hasPriv('testcase', 'create')) $actions[] = array('name' => 'testcase', 'url' => $story->isParent == '0' ? $createCaseLink : null, 'disabled' => $story->isParent == '1', 'data-toggle' => 'modal', 'data-size' => 'lg');
@@ -2133,7 +2133,7 @@ class storyTao extends storyModel
 
                 $canCreateTask      = common::hasPriv('task', 'create') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
                 $canBatchCreateTask = common::hasPriv('task', 'batchCreate') && $story->status == 'active' && $story->isParent == '0' && $story->type == 'story';
-                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate') && $story->type == 'story';
+                $canStoryEstimate   = common::hasPriv('execution', 'storyEstimate', $story) && $story->type == 'story';
 
                 $actions[] = array('name' => 'createTask',      'url' => $canCreateTask      ? $createTaskLink      : null, 'disabled' => !$canCreateTask, 'className' => 'create-task-btn');
                 $actions[] = array('name' => 'batchCreateTask', 'url' => $canBatchCreateTask ? $batchCreateTaskLink : null, 'disabled' => !$canBatchCreateTask, 'className' => 'batchcreate-task-btn');
@@ -2142,8 +2142,8 @@ class storyTao extends storyModel
 
             if($this->config->vision != 'lite' && $execution->hasProduct)
             {
-                $unlinkModule    = 'execution';
-                $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory');
+                $unlinkModule    = $execution->type == 'project' ? 'projectstory' : 'execution';
+                $canUnlinkStory  = common::hasPriv($unlinkModule, 'unlinkStory', $story);
                 $unlinkStoryLink = helper::createLink($unlinkModule, 'unlinkStory', "projectID={$execution->id}&$params&confirm=yes");
                 $unlinkStoryTip  = $this->lang->execution->confirmUnlinkStory;
                 $unlinkHint      = $this->lang->story->unlink;

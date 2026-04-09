@@ -215,6 +215,24 @@ class reportModelTest extends baseTest
     }
 
     /**
+     * 测试获取用户的看板卡片。
+     * Test get user kanban cards.
+     *
+     * @access public
+     * @return array
+     */
+    public function getUserKanbanCardsTest(): array
+    {
+        $objects = $this->instance->getUserKanbanCards();
+
+        if(dao::isError()) return dao::getError();
+
+        $result = array();
+        foreach($objects as $user => $cards) $result[$user] = $cards;
+        return $result;
+    }
+
+    /**
      * 测试获取当前年的用户登录次数。
      * Test get user login count in this year.
      *

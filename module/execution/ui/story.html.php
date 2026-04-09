@@ -209,7 +209,7 @@ if(!empty($product->id))
     {
         $createItems[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->story->batchCreate) : '');
     }
-    else
+    elseif($batchItems)
     {
         $batchItems[0]['text'] = $lang->story->batchCreate;
         $createItems = array_merge($createItems, $batchItems);

@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('isInModal', isInModal());
-jsVar('appTab', $config->vision == 'or' ? 'charter' : 'project');
 div
 (
     setClass('modal-header justify-center font-bold p-0 pb-2'),
@@ -67,7 +65,6 @@ div
             setClass('border text-gray text-center'),
             $lang->project->moreModelTitle
         )
-    )
+    ),
+    on::click('.model-item')->call('window.openCreateProjectLink', jsRaw('$this'), $config->vision == 'or' ? 'charter' : 'project', isInModal())
 );
-
-render();

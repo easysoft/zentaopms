@@ -67,6 +67,7 @@ $lang->custom->limitTaskDateAction  = 'Set start and end date required';
 $lang->custom->closeSetting         = 'Close Setting';
 $lang->custom->gradeRule            = 'Allow cross-level segmentation';
 $lang->custom->setExecutionClose    = 'Execution Close Setting';
+$lang->custom->feature              = 'feature';
 
 $lang->custom->gradeRuleList['cross']    = 'Yes';
 $lang->custom->gradeRuleList['stepwise'] = 'No';
@@ -302,7 +303,7 @@ $lang->custom->features['execution']            = 'Execution';
 $lang->custom->features['qa']                   = 'QA';
 $lang->custom->features['devops']               = 'DevOps';
 $lang->custom->features['kanban']               = 'Kanban';
-$lang->custom->features['doc']                  = 'Doc';
+$lang->custom->features['doc']                  = 'Document';
 $lang->custom->features['report']               = 'BI';
 $lang->custom->features['system']               = 'System';
 $lang->custom->features['assetlib']             = 'Asset Lib';
@@ -345,7 +346,7 @@ $lang->custom->conceptQuestions['storypoint'] = "Which of the following units is
 
 $lang->custom->conceptOptions             = new stdclass;
 $lang->custom->conceptOptions->story      = array();
-$lang->custom->conceptOptions->story['0'] = 'Requirement';
+$lang->custom->conceptOptions->story['0'] = 'Feature';
 $lang->custom->conceptOptions->story['1'] = 'Story';
 
 $lang->custom->conceptOptions->URAndSR = array();

@@ -193,7 +193,7 @@ $lang->product->viewByUser     = 'By User';
 $lang->product->assignedByMe   = 'AssignedByMe';
 
 /* Product Kanban. */
-$lang->product->myProduct             = "{$lang->productCommon}s Ownedbyme";
+$lang->product->myProduct             = "{$lang->productCommon}s Owned by Me";
 $lang->product->otherProduct          = "Other {$lang->productCommon}s";
 $lang->product->unclosedProduct       = "Open {$lang->productCommon}s";
 $lang->product->unexpiredPlan         = 'Unexpired Plans';

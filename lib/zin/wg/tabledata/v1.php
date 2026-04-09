@@ -23,6 +23,8 @@ class tableData extends wg
 
     private function buildItemWithTr($item): node
     {
+        global $app;
+
         $required = $item->prop('required');
         return h::tr
         (

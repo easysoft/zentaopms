@@ -328,7 +328,7 @@ $lang->projectreview->common        = '评审';
 $lang->projecttrack->common         = '矩阵';
 $lang->projectqa->common            = '测试';
 $lang->holidayseason->common        = '节假日';
-$lang->codereview->common           = '问题';
+$lang->codereview->common           = '代码问题';
 $lang->repocode->common             = '代码';
 $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
@@ -690,5 +690,9 @@ $lang->aiapp->zentaoAgent  = '禅道智能体';
 $lang->aiapp->generalAgent = '通用智能体';
 $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include(dirname(__FILE__) . '/menu.php');

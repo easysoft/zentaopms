@@ -690,4 +690,8 @@ $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Model List';
 $lang->aiapp->config       = 'ZAI Setting';
 
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
+
 include (dirname(__FILE__) . '/menu.php');

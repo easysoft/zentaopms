@@ -85,6 +85,7 @@ $lang->report->bugTitle     = 'Bug Name';
 $lang->report->taskName     = 'Task Name';
 $lang->report->todoName     = 'Todo Name';
 $lang->report->testTaskName = 'Request Name';
+$lang->report->cardName   = 'Kanban Card Name';
 $lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
@@ -93,6 +94,7 @@ $lang->report->mailTitle->bug      = " Bug (%s),";
 $lang->report->mailTitle->task     = " Task (%s),";
 $lang->report->mailTitle->todo     = " Todo (%s),";
 $lang->report->mailTitle->testTask = " Request (%s),";
+$lang->report->mailTitle->card     = " Kanban Card (%s),";
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
@@ -220,7 +222,7 @@ $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 $lang->report->contributionCountObject = array();
 $lang->report->contributionCountObject['task']        = "Tasks: Create, Complete, Close, Cancel, Assign";
 $lang->report->contributionCountObject['story']       = "Stories: Create, Review, Close, Assign";
-$lang->report->contributionCountObject['requirement'] = "User Requirements: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['requirement'] = "Features: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['epic']        = "Epics: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['bug']         = "Bugs: Create, Solve, Close, Assign";
 $lang->report->contributionCountObject['testcase']    = "Testcases: Create";

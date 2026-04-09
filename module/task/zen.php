@@ -272,6 +272,11 @@ class taskZen extends task
         {
             $stories[0][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
             if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+
+            foreach($tasks as $task)
+            {
+                if($task->module) $stories[$task->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+            }
         }
 
         $manageLinkList['project']   = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={projectID}") : '';
@@ -712,6 +717,11 @@ class taskZen extends task
             $formConfig['story']['skipRequired'] = true;
             $formConfig['module']['skipRequired'] = true;
             if($this->post->selectTestStory == 'on') $formConfig['estStarted']['skipRequired'] = $formConfig['deadline']['skipRequired'] = $formConfig['estimate']['skipRequired'] = true;
+        }
+
+        if($this->post->multiple && strpos($this->config->task->create->requiredFields, 'assignedTo') !== false)
+        {
+            $this->config->task->create->requiredFields = str_replace(',assignedTo', '', $this->config->task->create->requiredFields);
         }
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();

@@ -1231,6 +1231,7 @@ eof;
             {
                 if($this->app->tab == 'project' || $this->app->tab == 'execution')
                 {
+                    static::$userPrivs = array();
                     $this->resetProjectPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
@@ -1451,8 +1452,35 @@ eof;
      */
     public function resetProjectPriv(int $projectID = 0)
     {
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if($this->app->isFlow)
+        {
+            $module = $this->app->rawModule;
+            $method = $this->app->rawMethod;
+        }
+
+        if($this->app->tab == 'execution')
+        {
+            if($module == 'execution' && $method == 'all') return;
+            $executionID = $this->session->execution;
+            if(!empty($_GET['executionID'])) $executionID = $_GET['executionID'];
+            if(!empty($_GET['execution']))   $executionID = $_GET['execution'];
+            if(empty($executionID)) return;
+
+            $execution = $this->dao->findByID($executionID)->from(TABLE_PROJECT)->fetch();
+            if(empty($execution)) return;
+            $projectID = $execution->project;
+        }
+        else
+        {
+            if(($module == 'project' && $method == 'browse') || ($module == 'project' && $method == 'template')) return;
+            if(empty($projectID) && !empty($_GET['projectID'])) $projectID = $_GET['projectID'];
+            if(empty($projectID) && !empty($_GET['project']))   $projectID = $_GET['project'];
+        }
+
         /* Get user program priv. */
-        if(empty($projectID) and $this->session->project) $projectID = $this->session->project;
+        if(empty($projectID) && $this->session->project) $projectID = $this->session->project;
         if(empty($projectID)) return;
 
         $program = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
@@ -1505,10 +1533,6 @@ eof;
             if(isset($projectRights['browse']) and !isset($rights['project']['browse'])) $rights['project']['browse'] = 1;
             if(isset($projectRights['kanban']) and !isset($rights['project']['kanban'])) $rights['project']['kanban'] = 1;
             if(isset($projectRights['index'])  and !isset($rights['project']['index']))  $rights['project']['index']  = 1;
-
-            if(isset($projectPrivs->execution->linkStory))      $rights['execution']['linkstory']      = 1;
-            if(isset($projectPrivs->execution->batchLinkStory)) $rights['execution']['batchlinkstory'] = 1;
-            if(isset($projectPrivs->execution->unLinkStory))    $rights['execution']['unlinkstory']    = 1;
 
             $this->app->user->rights['rights'] = $rights;
         }
@@ -1578,6 +1602,15 @@ eof;
                 if($method == 'start' && in_array($object->status, array('wait', 'doing')) && $currentTeam && $currentTeam->status == 'wait') return true;
                 if($method == 'finish' && (empty($currentTeam) || $currentTeam->status == 'done')) return false;
             }
+        }
+        if($module == 'story')
+        {
+            $reviewer = $app->control->dao->select('*')->from(TABLE_STORYREVIEW)
+                ->where('story')->eq($object->id)
+                ->andWhere('version')->eq($object->version)
+                ->andWhere('reviewer')->eq($account)
+                ->fetch();
+            if(!empty($reviewer)) return true;
         }
 
         if(!empty($object->openedBy)     && $object->openedBy     == $account) return true;
@@ -2303,6 +2336,7 @@ eof;
         $varsReplaced = true;
         foreach($lang->menu as $menu)
         {
+            if(!is_array($menu)) continue;
             if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
             if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
             if(!$varsReplaced) break;
@@ -2643,6 +2677,18 @@ eof;
         if(!empty($actionData['notLoadModel']) && $moduleName != $rawModule) $moduleName = $rawModule;
         if(!isset($this->$moduleName)) $this->loadModel($moduleName);
         if(empty($actionData['isClickable']) && isset($this->$moduleName) && method_exists($this->{$moduleName}, 'isClickable') && false === $this->{$moduleName}->isClickable($data, $action)) return false;
+
+        global $config;
+        if($config->edition != 'open')
+        {
+            $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
+            $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);
+            if($isActionEnable && !$this->loadModel('flow')->checkConditions($flowAction->conditions, $data))
+            {
+                return false;
+            }
+        }
+
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
 
         if($menu == 'suffixActions' && !empty($actionData['text']) && empty($actionData['showText'])) $actionData['text'] = '';
@@ -3945,7 +3991,7 @@ EOF;
 
         if(isset($app->workspaceInfo)) return $app->workspaceInfo;
 
-        if(!empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
+        if($config->vision != 'rnd' || !empty($config->noWorkspace) || (!empty($_SERVER['HTTP_USER_AGENT']) && str_contains($_SERVER['HTTP_USER_AGENT'], 'xuanxuan')))
         {
             $app->workspaceInfo = array('enabled' => false, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;

@@ -1,5 +1,4 @@
 :root {
-
   /* https://tints.catou.se/palette/v1:cHJpbWFyeXwxMDc4ZjN8NTAwfHB8MHwwfDB8MTAwfGF-c2Vjb25kYXJ5fDEyMWUzMXw5NTB8cHwwfDB8MHwxMDB8YX5kYW5nZXJ8RkY1RDVEfDUwMHxwfDB8MHwwfDEwMHxtfmltcG9ydGFudHxmZjk2NWR8NTAwfHB8MHwwfDB8MTAwfG1-c3VjY2Vzc3w0M2EwNDd8NTAwfHB8MHwwfDB8MTAwfG1-d2FybmluZ3xmZmM4MDB8NTAwfHB8MHwwfDB8MTAwfG1-c3BlY2lhbHw2RDE0RDJ8ODAwfHB8MHwwfDB8MTAwfGF-Z3JheXxmNGY2Zjl8NTB8cHwwfDB8MHwxMDB8YQ */
   --color-primary-50: #ecf0ff;
   --color-primary-100: #dae2ff;
@@ -208,11 +207,10 @@
 #menu #menuNav {background-color: var(--color-secondary-900); border-radius: 6px 6px 0 0; position: static; margin: 8px 8px 0;}
 #menuFooter {position: static!important; background-color: var(--color-secondary-900); margin: 0 8px 8px; border-radius: 0 0 6px 6px; border-top: 1px solid rgba(var(--color-canvas-rgb), .12)}
 #menu .nav > li > a.active {background-color: var(--color-primary-500)!important}
-#menu .nav > li > a > .icon {color: var(--color-gray-400); margin-right: 2px; transform: scale(90%);}
+#menu .nav > li > a > .icon, #menuMoreList > .menu-item > a > .icon {color: var(--color-gray-400);}
 #menu .nav > li > a.active > .icon {color: var(--color-canvas);}
 #menuToggleMenu .menu-toggle .icon-menu-arrow-left::before {content: "\e980"}
 
-#toolbar > .toolbar {gap: 8px!important}
 #toolbar > #pageToolbar + .toolbar > .btn {box-shadow: none!important; border-radius: var(--radius-xl)!important; min-width: 36px; background-color: var(--color-secondary-50); color: var(--color-secondary-500)}
 #pageToolbar > .btn {color: var(--color-secondary-500)}
 #quickAddMenu-toggle > .icon::before {content: "\e974"}
@@ -240,9 +238,8 @@
 .dtable-check-info {color: var(--color-secondary-600)}
 .pager {color: var(--color-secondary-600)}
 
-.in-workspace #header {position: sticky; top: 0; z-index: 10; background-color: var(--zt-menu-bg); color: var(--color-canvas);}
-.in-workspace #header::before, .in-workspace #header::after {content: ' '; display: block; position: absolute; left: 0; bottom: -9px; width: 8px; height: 8px; background-color: var(--zt-menu-bg);
-}
+.in-workspace #header {position: sticky; top: 0; z-index: 25; background-color: var(--zt-menu-bg); color: var(--color-canvas);}
+.in-workspace #header::before, .in-workspace #header::after {content: ' '; display: block; position: absolute; left: 0; bottom: -9px; width: 8px; height: 8px; background-color: var(--zt-menu-bg);}
 .in-workspace #header::after {z-index: 1; border-top-left-radius: 9999px; background-color: var(--zt-page-bg);}
 .in-workspace #toolbar > #pageToolbar + .toolbar > .btn {background-color: var(--color-secondary-800); color: var(--color-secondary-200)}
 .in-workspace #pageToolbar > .btn {color: var(--color-secondary-200)}

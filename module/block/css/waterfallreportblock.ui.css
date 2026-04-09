@@ -9,7 +9,7 @@
 .waterfallreport-block .project-statistic-table table td {padding-left: 0px; margin-top: 1rem;}
 .waterfallreport-block .tab-pane .nav-tabs>.nav-item>a:after {border-bottom: none;}
 .waterfallreport-block .scrum table th, .projectstatistic-block .scrum table td {width: 50%}
-.waterfallreport-block .waterfall table th {width: 100px;}
+.waterfallreport-block .waterfall table th {width: 140px;}
 .waterfallreport-block .table-data {overflow: hidden;}
 .waterfallreport-block .table-data td {white-space: nowrap;}
 .waterfallreport-block .progress-circle text {font-size: 35px;}

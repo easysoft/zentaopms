@@ -447,32 +447,29 @@ class install extends control
         if(file_exists($errorFile))   unlink($errorFile);
         if(file_exists($successFile)) unlink($successFile);
 
-        $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-        if(!file_exists($installFile))
-        {
-            global $oldRequestType;
-            if($oldRequestType == 'PATH_INFO')
-            {
-                $this->config->requestType = 'PATH_INFO';
-                $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-                $this->config->requestType = 'GET';
-            }
-            if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
-        }
+        global $oldRequestType;
+        if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
 
+        $sendEventLink     = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
+        $adminRegisterLink = helper::createLink('index');
         if($this->app->cookie->lang == 'zh-cn')
         {
-            $adminRegisterLink = helper::createLink('admin', 'register', '&_single=1');
-            $this->view->adminRegisterLink  = str_replace('install.php', 'index.php', $adminRegisterLink);
+            $adminRegisterLink  = helper::createLink('admin', 'register');
+            $adminRegisterLink .= $oldRequestType != 'PATH_INFO' ? '&_single=1' : '?_single=1';
         }
-        else
+        if($oldRequestType != 'PATH_INFO')
         {
-            $this->view->adminRegisterLink  = helper::createLink('index');
+            $sendEventLink     = str_replace('install.php', 'index.php', $sendEventLink);
+            $adminRegisterLink = str_replace('install.php', 'index.php', $adminRegisterLink);
         }
+
+        $this->config->requestType = 'GET';
+        if(file_exists($installFile)) $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
 
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
+        $this->view->adminRegisterLink  = $adminRegisterLink;
         $this->display();
     }
 }

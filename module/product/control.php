@@ -726,10 +726,22 @@ class product extends control
             return $this->send($response);
         }
 
-        $this->view->title    = $this->lang->product->manageLine;
-        $this->view->programs = array(0 => $this->lang->null) + $this->loadModel('program')->getTopPairs();
-        $this->view->lines    = $this->product->getLines();
-        $this->view->fields   = $this->config->product->form->manageLine;
+        $this->loadModel('program');
+        $linePrograms = array();
+        $lines        = $this->product->getLines();
+        $userPrograms = array(0 => $this->lang->null) + $this->program->getTopPairs();
+        $allPrograms  = $this->program->getTopPairs('', false, array_column($lines, 'root'));
+        foreach($lines as $line)
+        {
+            $linePrograms[$line->id] = $userPrograms;
+            if(!isset($userPrograms[$line->root])) $linePrograms[$line->id][$line->root] = $allPrograms[$line->root];
+        }
+
+        $this->view->title        = $this->lang->product->manageLine;
+        $this->view->programs     = $userPrograms;
+        $this->view->linePrograms = $linePrograms;
+        $this->view->lines        = $lines;
+        $this->view->fields       = $this->config->product->form->manageLine;
         $this->display();
     }
 

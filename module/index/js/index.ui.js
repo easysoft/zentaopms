@@ -711,7 +711,7 @@ function refreshMenu()
         return $ele.css('display') !== 'none' && !$ele.hasClass('divider');
     }).first().outerHeight();
     const maxHeight      = $('#menu').outerHeight() - ($('body').hasClass('has-space') ? (($('#spaceHeading').outerHeight() || 0) + 8) : 0) - 24 - $('#menuToggleNav').outerHeight();
-    const dividerHeight  = 13;
+    const dividerHeight  = 5;
     let showMoreMenu     = false;
     let currentHeight    = 0;
     let $firstHiddenItem = null;
@@ -785,27 +785,6 @@ function refreshMenu()
     });
     if($lastItem && $lastItem.hasClass('divider')) $lastItem.addClass('hidden');
 
-    /* The magic number "111" is the space between dropdown trigger btn and the bottom of screen */
-    let listStyle = {maxHeight: 'initial', top: moreMenuHeight > 111 ? 111 - moreMenuHeight : ''};
-    if($list[0] && $list[0].getBoundingClientRect)
-    {
-        const btnBounding = $list.prev('a')[0].getBoundingClientRect();
-        if(btnBounding.height)
-        {
-            const winHeight = $(window).height();
-            if(winHeight < moreMenuHeight)
-            {
-                listStyle.maxHeight = winHeight;
-                listStyle.overflow = 'auto';
-                listStyle.top = 5 - btnBounding.top;
-            }
-            else if(moreMenuHeight > (winHeight - btnBounding.top))
-            {
-                listStyle.top = winHeight - btnBounding.top - moreMenuHeight + 5;
-            }
-        }
-    }
-    $list.css(listStyle);
     $menuNav.toggleClass('show-more-nav', showMoreMenu);
 
     if(showMoreMenu && !$list.data('listened-click'))
@@ -821,6 +800,16 @@ function refreshMenu()
 /** Init apps menu list. */
 function initAppsMenu(items)
 {
+    if($.cookie.get('workspace'))
+    {
+        $('#menu').addClass('waiting-workspace');
+        $(document).on('openapp', () =>
+        {
+            if($.cookie.get('workspace') === getLastAppCode()) return;
+            $('#menu').removeClass('waiting-workspace');
+        });
+    }
+
     apps.map.help =
     {
         code:     'help',
@@ -848,14 +837,17 @@ function initAppsMenu(items)
 
         item.icon = item.icon || ($link.find('.icon').attr('class') || '').replace('icon ', '');
         item.text = $link.text().trim();
-        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+        $link.html('<i class="icon icon-app-empty ' + item.icon + '"></i><span class="text"></span>', false);
+        $link.find('.text').toggleClass('font-brand', ['devops', 'bi', 'safe'].includes(item.code)).attr('title', item.text).text(item.text);
         apps.map[item.code] = item;
 
         $('<li class="hint-right is-original"></li>')
             .attr({'data-app': item.code, 'data-hint': item.text})
             .append($link)
             .appendTo($menuMainNav);
+
+        const hasLongText = $link.find('.text').width() > ($link.outerWidth() - 24);
+        $link.toggleClass('has-long-text', hasLongText).find('.text').attr('title', hasLongText ? item.text : null);
 
         if(!apps.defaultCode) apps.defaultCode = item.code;
     });
@@ -927,7 +919,7 @@ function changeAppsLang(lang)
             app.iframe.contentWindow.changeAppLang(lang);
         }
     });
-    updateAppsMenu(true);
+    if(!$.apps.workspace) updateAppsMenu(true);
 }
 
 function changeAppsTheme(theme)
@@ -1036,20 +1028,19 @@ function restoreMenuNavToServer()
  * @param {(item: string) => void} onClick click handler of menu item.
  * @returns {Array<{icon: string; text: string; onClick: () => void;}>}
  */
-function generateAddMenuNavItems($item, onClick)
+function generateAddMenuNavItems($item)
 {
-    const items = canAddDivider($item)
-        ? [
-            {
-                icon: 'icon-minus',
-                text: langData.divider,
-                onClick: () => {
-                    onClick('divider');
-                    saveMenuNavToServer();
-                }
-            }
-        ]
-        : [];
+    const onClick = addMenuToMainNavCb($item);
+    const items = [];
+    const $li = $item.closest('li');
+    if(canAddDivider($li)) items.push({
+        icon: 'icon-minus',
+        text: langData.divider,
+        onClick: () => {
+            onClick('divider');
+            saveMenuNavToServer();
+        }
+    });
 
     const data = getMenuNavData();
     const allAppCodeSet = new Set(allAppsItemsMap.keys());
@@ -1063,17 +1054,94 @@ function generateAddMenuNavItems($item, onClick)
     for(const name of allAppCodeSet)
     {
         const [icon, title] = getAppItemIconAndTitle(name);
-        items.push(
-            {
-                icon,
-                text: title,
-                onClick: () => {
-                    onClick(name);
-                    saveMenuNavToServer();
-                }
+        items.push({
+            icon,
+            text: title,
+            onClick: () => {
+                onClick(name);
+                saveMenuNavToServer();
             }
-        );
+        });
     }
+    return items;
+}
+
+function addMenuToSpaceNavCb($li, info)
+{
+    return (name) => {
+        if(name === 'divider')
+        {
+            $li.after('<li class="divider"></li>');
+            refreshMenu();
+            return
+        }
+
+        const fromName = $li.attr('data-name');
+        const item = info.itemMap.get(name);
+        if(!item) return;
+        if(name === 'divider')
+        {
+            const index = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(index, 0, {type: 'divider'});
+            $li.after('<li class="divider is-space"></li>');
+        }
+        else
+        {
+            const oldIndex = info.items.findIndex(item => item.code === name);
+            info.items.splice(oldIndex, 1);
+            const newIndex = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(newIndex, 0, item);
+            item.hidden = false;
+            updateSpaceMenu(info);
+        }
+    };
+}
+
+function generateAddSpaceNavItems($ele)
+{
+    const currentApp = getLastApp();
+    const info       = currentApp.workspace;
+    const $li        = $ele.closest('li');
+    if(!info || !$li.length) return [];
+
+    const handleItemClick = (name) => {
+        const fromName = $li.attr('data-name');
+        if(name === 'divider')
+        {
+            const index = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(index, 0, {type: 'divider'});
+            $li.after('<li class="divider is-space"></li>');
+        }
+        else
+        {
+            const item = info.itemMap.get(name);
+            if(!item) return;
+            const oldIndex = info.items.findIndex(item => item.code === name);
+            info.items.splice(oldIndex, 1);
+            const newIndex = info.items.findIndex(item => item.code === fromName);
+            info.items.splice(newIndex + 1, 0, item);
+            item.hidden = false;
+            updateSpaceMenu(info);
+        }
+
+        saveMenuNavToServer();
+    };
+    const items = [];
+    if(canAddDivider($li)) items.push({
+        icon: 'icon-minus',
+        text: langData.divider,
+        onClick: () => handleItemClick('divider')
+    });
+
+    info.items.forEach((item) => {
+        if(!item.hidden) return;
+        items.push({
+            icon: `icon-app-empty ${item.icon || `icon-${item.code}`}`,
+            text: item.text,
+            onClick: () => handleItemClick(item.code)
+        });
+    });
+
     return items;
 }
 
@@ -1084,16 +1152,18 @@ function updateSpaceMenu(info)
     const currentCode  = currentApp.code;
     const hasSpaceNav  = spaceType === currentCode;
     const $menuMainNav = $('#menuMainNav');
+    const $menu        = $('#menu');
 
     $.apps.workspace = spaceType;
     currentApp.workspace = info;
-    $('#menu').attr('data-space', spaceType);
+    $menu.attr('data-space', spaceType);
     $('body').toggleClass('has-space', hasSpaceNav);
 
     $menuMainNav.children('.is-space').remove();
     if(!hasSpaceNav)
     {
         refreshMenu();
+        if(info !== undefined) $menu.removeClass('waiting-workspace');
         return;
     }
 
@@ -1102,9 +1172,8 @@ function updateSpaceMenu(info)
     {
         const $dropmenu = $('<div id="spaceDropmenu"></div>');
         $spaceHeading.find('.text').empty().append($dropmenu);
-        const $label = $spaceHeading.find('.label');
         const options = zui.evalValue(info.dropmenu, ['_element', $dropmenu[0]], ['_$dropmenu', $dropmenu]);
-        zui.create('dropmenu', $dropmenu[0], $.extend({icon: info.icon || spaceType, display: zui.jsx`<span class="text" title=${info.name}>${info.name}</span><span class=${$label.attr('class')}>${$label.text()}</span>`}, options, {leadingAngle: false}));
+        zui.create('dropmenu', $dropmenu[0], $.extend({icon: info.icon || spaceType, display: zui.jsx`<span class="text" title=${info.name}>${info.name}</span>`}, options, {leadingAngle: false}));
     }
     else
     {
@@ -1112,15 +1181,10 @@ function updateSpaceMenu(info)
     }
     $spaceHeading.find('.icon').attr('class', `icon icon-${info.icon || spaceType}`);
 
-    if(info.items[info.items.length -1]['data-id'] === 'more')
-    {
-        info.items.pop();
-        if(info.items[info.items.length -1]['type'] === 'divider') info.items.pop();
-    }
-
     info.items.forEach(function(item)
     {
         item.code = item['data-id'];
+        if(item.code === 'more') return;
         if(item === 'divider' || item.type === 'divider') return $menuMainNav.append('<li class="divider is-space"></li>');
 
         const $link= $('<a data-pos="menu"></a>')
@@ -1131,8 +1195,8 @@ function updateSpaceMenu(info)
             .addClass('rounded' + (item.notApp ? '' : ' open-in-app'));
 
         item.icon = item.icon || `icon-${item.code}`;
-        $link.html('<i class="icon ' + item.icon + '"></i><span class="text">' + item.text + '</span>', false);
-        if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
+        $link.html('<i class="icon icon-app-empty ' + item.icon + '"></i><span class="text"></span>', false);
+        $link.find('.text').toggleClass('font-brand', ['devops', 'bi', 'safe'].includes(item.code)).attr('title', item.text).text(item.text);
 
         $('<li class="hint-right is-space"></li>')
             .attr({'data-app': currentCode, 'data-hint': item.text, 'data-name': item.code})
@@ -1142,6 +1206,7 @@ function updateSpaceMenu(info)
             .appendTo($menuMainNav);
     });
     refreshMenu();
+    $menu.removeClass('waiting-workspace');
 }
 
 $(document).on('contextmenu', '#menuMainNav .divider', function(event)
@@ -1182,11 +1247,8 @@ $(document).on('contextmenu', '#menuMainNav .divider', function(event)
             saveMenuNavToServer();
         }
     });
-    const toAddedItems = $.apps.workspace ? [] : generateAddMenuNavItems($divider, addMenuToMainNavCb($divider));
-    if(toAddedItems.length)
-    {
-        items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
-    }
+    const toAddedItems = $.apps.workspace ? generateAddSpaceNavItems($divider) : generateAddMenuNavItems($divider);
+    items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
     items.push({text: langData.restore, onClick: () => restoreMenuNavToServer()});
 
     items = items.filter(Boolean);
@@ -1263,7 +1325,14 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             onClick: hideDisabled ? null : () => {
                 const $li = $btn.closest('li');
                 $li.hide().attr('data-hidden', '1');
-                if(!$.apps.workspace)
+                if($.apps.workspace)
+                {
+                    const info = app.workspace;
+                    const name = $li.attr('data-name');
+                    const item = info.items.find(x => x.code === name);
+                    if(item) item.hidden = true;
+                }
+                else
                 {
                     closeApp(code);
                     refreshMenu();
@@ -1273,7 +1342,7 @@ $(document).on('click', '.open-in-app,.show-in-app', function(e)
             },
             disabled: hideDisabled,
         });
-        const toAddedItems = inWorkspace ? [] : generateAddMenuNavItems($btn, addMenuToMainNavCb($btn));
+        const toAddedItems = inWorkspace ? generateAddSpaceNavItems($btn) : generateAddMenuNavItems($btn);
         if(toAddedItems.length)
         {
             items.push(toAddedItems.length ? {text: langData.add, items: toAddedItems} : {text: langData.add, disabled: true});
@@ -1559,8 +1628,9 @@ function getAppItemIconAndTitle(name)
  * @param {Cash} $li menu item li
  * @returns {(name: string) => void}
  */
-function addMenuToMainNavCb($li) {
+function addMenuToMainNavCb($ele) {
     return (name) => {
+        const $li = $ele.closest('li');
         if(name === 'divider')
         {
             $li.after('<li class="divider"></li>');
@@ -1586,7 +1656,7 @@ function addMenuToMainNavCb($li) {
         if(['devops', 'bi', 'safe'].includes(item.code)) $link.find('.text').addClass('font-brand');
         apps.map[item.code] = item;
 
-        $('<li class="hint-right"></li>')
+        $('<li class="hint-right is-original"></li>')
             .attr({'data-app': item.code, 'data-hint': item.text})
             .append($link)
             .insertAfter($li);
@@ -1604,8 +1674,8 @@ function addMenuToMainNavCb($li) {
 function canAddDivider($item)
 {
     $item = $item.closest('li');
-    if($item.is('.divider'))        return false;
-    if($item.next().is('.divider')) return false;
-    if($item.is(':last-child'))     return false;
+    if($item.is('.divider'))                       return false;
+    if($item.next().not('.hidden').is('.divider')) return false;
+    if($item.is(':last-child'))                    return false;
     return true;
 }

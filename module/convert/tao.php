@@ -741,6 +741,7 @@ class convertTao extends convertModel
                 $user->gender   = 'm';
                 $user->type     = 'inside';
                 $user->join     = !empty($data->join) ? $data->join : helper::now();
+                $user->jira     = 1;
 
                 $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 

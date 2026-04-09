@@ -21,7 +21,7 @@ class pauseTaskTester extends tester
             return $this->success('没有显示暂停按钮');
         }
         $form->dom->pauseBtn->click();
-        $form->wait(1);
+        $form->wait(3);
         $form->dom->submitBtn->click();
         $form->wait(3);
         if($form->dom->taskStatus->getText() != $this->lang->task->statusList->pause) return $this->failed('暂停任务后状态错误');

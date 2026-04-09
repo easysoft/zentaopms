@@ -202,7 +202,7 @@ $lang->convert->jira->restore            = 'The last import of information was n
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = 'Epic';
-$lang->convert->jira->zentaoObjectList['requirement'] = 'Requirement';
+$lang->convert->jira->zentaoObjectList['requirement'] = 'Feature';
 $lang->convert->jira->zentaoObjectList['story']       = 'Story';
 $lang->convert->jira->zentaoObjectList['task']        = 'Task';
 $lang->convert->jira->zentaoObjectList['testcase']    = 'Case';

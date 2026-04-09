@@ -7,12 +7,17 @@ title=测试 programZen::buildTree();
 timeout=0
 cid=17726
 
-- 测试步骤1:空数组输入 >> 返回空数组
-- 测试步骤2:单层顶级项目集(parent=0) >> 返回包含所有顶级项目集
-- 测试步骤3:多层嵌套项目集树形结构 >> 正确构建父子关系和递归子节点
-- 测试步骤4:指定父ID构建子树 >> 返回指定父ID的子项目集
-- 测试步骤5:包含project类型的混合数组 >> 过滤掉project类型只保留program
-- 测试步骤6:树节点属性完整性 >> 包含id、text、label、keys等必需属性
+- 查看空数组输入 @0
+- 查看单层顶级项目集(parent=0)第0条的id属性 @1
+- 查看树节点属性完整性第0条的text属性 @顶级项目集A
+- 查看多层嵌套项目集树形结构 正确构建父子关系和递归子节点第0条的id属性 @3
+- 查看指定父ID构建子树 返回指定父ID的子项目集
+ - 第0条的id属性 @5
+ - 第0条的text属性 @孙项目集E
+- 查看树节点属性完整性 包含id、text、label、keys等必需属性
+ - 第0条的id属性 @1
+ - 第0条的text属性 @顶级项目集A
+ - 第0条的keys属性 @dingjixiangmujia djxmja
 
 */
 
@@ -67,9 +72,9 @@ $project2->parent = 0;
 
 $programs = array(1 => $program1, 2 => $program2, 3 => $program3, 4 => $program4, 5 => $program5, 8 => $project1, 9 => $project2);
 
-r($programTest->buildTreeTest(array(), 0)) && p() && e('0');
-r($programTest->buildTreeTest($programs, 0)) && p('0:id;1:id') && e('1;2');
-r($programTest->buildTreeTest($programs, 0)) && p('0:text') && e('顶级项目集A');
-r($programTest->buildTreeTest($programs, 1)) && p('0:id;1:id') && e('3;4');
-r($programTest->buildTreeTest($programs, 3)) && p('0:id,text') && e('5,孙项目集E');
-r($programTest->buildTreeTest($programs, 0)) && p('0:id,text,keys') && e('1,顶级项目集A,dingjixiangmujia djxmja');
+r($programTest->buildTreeTest(array(), 0)) && p() && e('0'); // 查看空数组输入
+r($programTest->buildTreeTest($programs, 0)) && p('0:id') && e('1'); // 查看单层顶级项目集(parent=0)
+r($programTest->buildTreeTest($programs, 0)) && p('0:text') && e('顶级项目集A'); // 查看树节点属性完整性
+r($programTest->buildTreeTest($programs, 1)) && p('0:id') && e('3'); // 查看多层嵌套项目集树形结构 正确构建父子关系和递归子节点
+r($programTest->buildTreeTest($programs, 3)) && p('0:id,text') && e('5,孙项目集E'); // 查看指定父ID构建子树 返回指定父ID的子项目集
+r($programTest->buildTreeTest($programs, 0)) && p('0:id,text,keys') && e('1,顶级项目集A,dingjixiangmujia djxmja'); // 查看树节点属性完整性 包含id、text、label、keys等必需属性

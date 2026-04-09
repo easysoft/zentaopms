@@ -16,6 +16,11 @@ $progress = ($execution->totalConsumed + $execution->totalLeft) ? floor($executi
 $isKanban = isset($execution->type) && $execution->type == 'kanban';
 $chartURL = createLink('execution', $isKanban ? 'ajaxGetCFD' : 'ajaxGetBurn', "executionID={$execution->id}");
 
+$isEn       = $app->getClientLang() == 'en';
+$storyTitle = $isEn ? $lang->common->stories : $lang->common->story;
+$taskTitle  = $isEn ? $lang->task->plural : $lang->task->common;
+$bugTitle   = $isEn ? $lang->bug->plural : $lang->bug->common;
+
 /* Construct suitable actions for the current execution. */
 $execution->rawID = $execution->id;
 
@@ -195,7 +200,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->storyCount
                     ),
-                    $lang->common->story
+                    $storyTitle
                 ) : null,
                 div
                 (
@@ -205,7 +210,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->taskCount
                     ),
-                    $lang->task->common
+                    $taskTitle
                 ),
                 $features['qa'] ? div
                 (
@@ -215,7 +220,7 @@ div
                         setClass('text-lg font-bold'),
                         $statData->bugCount
                     ),
-                    $lang->bug->common
+                    $bugTitle
                 ) : null
             )
         ),
@@ -335,7 +340,7 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
 
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             setClass('primary-outline'),
@@ -360,7 +365,7 @@ foreach($teamMembers as $teamMember)
 
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             set::size('36'),
@@ -386,7 +391,7 @@ if(common::hasPriv('execution', 'manageMembers'))
     $membersDom[] = a
     (
         set::href(createLink('execution', 'manageMembers', "executionID={$execution->id}")),
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             setClass('mb-2'),

@@ -579,6 +579,7 @@
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
         $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
+        if(isLoading) setTimeout(() => $target.find('.load-indicator.loading').removeClass('loading'), loadingIndicatorDelay || 0);
         $target.toggleClass(loadingClass, isLoading);
     }
 
@@ -648,6 +649,7 @@
             headers: headers,
             type:    requestMethod,
             data:    options.data,
+            convert: options.convert,
             type:    (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
@@ -707,6 +709,7 @@
                     ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
+                if(options.success && options.success.call(ajax, data, options) === false) return;
                 if(Array.isArray(data))
                 {
                     if(workspaceType)

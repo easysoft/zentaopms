@@ -58,7 +58,7 @@ pipeline {
               env.ZENTAOEXT_GIT_REPO = sh(returnStdout: true,script: 'jq -r .pkg.zentaoext.gitRepo < ci.json').trim()
               env.ZDOO_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdoo.gitVersion < ci.json').trim()
               env.ZDOOEXT_VERSION = sh(returnStdout: true,script: 'jq -r .pkg.zdooext.gitVersion < ci.json').trim()
-              
+
             }
 
             dir('xuansrc') {
@@ -87,7 +87,7 @@ pipeline {
                 userRemoteConfigs: [[credentialsId: 'git-zcorp-cc-jenkins-bot-http', url: "${env.ZENTAOEXT_GIT_REPO}"]]
               )
             }
-          
+
           }
         }
 
@@ -111,9 +111,8 @@ pipeline {
               env.BIZ_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/BIZVERSION').trim()
               env.MAX_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/MAXVERSION').trim()
               env.IPD_VERSION = sh(returnStdout: true, script: 'cat ${SRC_ZENTAOEXT_PATH}/IPDVERSION').trim()
-              
+
               env.CI_DOWNGRADE_ENABLED = sh(returnStdout: true, script: 'test -n "${DOWNGRADE_ENABLED}" && echo ${DOWNGRADE_ENABLED} || (jq -r .downgrade.enabled < ci.json)').trim()
-              env.QINIU_BUCKET = sh(returnStdout: true, script: 'jq -r .upload.bucket < ci.json').trim()
               env.ARTIFACT_REPOSITORY = sh(returnStdout: true, script: 'misc/parse_tag.sh $TAG_NAME type | grep release >/dev/null && echo easycorp || echo easycorp-snapshot').trim()
               env.ARTIFACT_HOST = "nexus.qc.oop.cc"
               env.ARTIFACT_PROTOCOL = "https"
@@ -214,7 +213,7 @@ pipeline {
             }
 
             stages {
-              
+
               stage("ZIP") {
                 environment {
                   ARTIFACT_NAME = """${sh(
@@ -291,11 +290,11 @@ pipeline {
                               [artifactId: env.ARTIFACT_NAME,
                                 classifier: 'update.' + env.PHPVERSION,
                                 file: env.ZENTAO_RELEASE_PATH + '/' + ExtName + '.update.zip',
-                                type: 'zip'] 
+                                type: 'zip']
                             ]
                           )
                           sh 'mkdir ${OUTPUT_PKG_PATH}/' + Zversion
-                          def moveCmd1 = String.format('mv ${ZENTAO_RELEASE_PATH}/%s.zip ${OUTPUT_PKG_PATH}/%s/${ARTIFACT_NAME}-%s-${PHPVERSION}.zip', ExtName, Zversion, Zversion) 
+                          def moveCmd1 = String.format('mv ${ZENTAO_RELEASE_PATH}/%s.zip ${OUTPUT_PKG_PATH}/%s/${ARTIFACT_NAME}-%s-${PHPVERSION}.zip', ExtName, Zversion, Zversion)
                           sh moveCmd1
 
                           def moveCmd2 = String.format('mv ${ZENTAO_RELEASE_PATH}/%s.update.zip ${OUTPUT_PKG_PATH}/%s/${ARTIFACT_NAME}-%s-update.${PHPVERSION}.zip', ExtName, Zversion, Zversion)
@@ -304,7 +303,7 @@ pipeline {
                         } // End for loop
                       }
 
-                      
+
                     }
                   } // End upload zip
 
@@ -332,27 +331,6 @@ pipeline {
                       sh 'mv ${ZENTAO_RELEASE_PATH}/zentao.deb ${OUTPUT_PKG_PATH}/${PMS_VERSION}/${ARTIFACT_NAME}_${PMS_VERSION}-${PHPVERSION}-1_all.deb'
                     }
                   } // End upload syspack cn
-
-                  stage("Upload Qiniu") {
-                    when {
-                      environment name: 'GIT_TAG_BUILD_TYPE', value: 'release'
-                    }
-
-                    environment {
-                      OBJECT_KEY_PREFIX = "zentao/"
-                      QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-                      QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
-                    }
-
-                    steps {
-                      sh 'ls -l ${OUTPUT_PKG_PATH}'
-                      container('jnlp') {
-                        sh 'qshell account $QINIU_ACCESS_KEY $QINIU_SECRET_KEY uploader'
-                        sh 'qshell qupload2 --bucket $QINIU_BUCKET --overwrite --src-dir $OUTPUT_PKG_PATH --key-prefix $OBJECT_KEY_PREFIX'
-                      }    
-                    }
-                  }
-
                 } // end stages
               } // end stage frame
 

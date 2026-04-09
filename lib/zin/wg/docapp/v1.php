@@ -297,9 +297,9 @@ class docApp extends wg
 
         $app->control->loadModel('file');
 
-        $canDownload   = common::hasPriv('file', 'download');
         $fileListProps = array();
-        if($canDownload)
+        $canDownloadFile = common::hasPriv('file', 'download');
+        if($canDownloadFile)
         {
             $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
             jsVar('previewLang', $lang->file->preview);
@@ -319,7 +319,7 @@ class docApp extends wg
             $fileUrl = '';
         }
 
-        $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+        $canPreviewOffice  = common::hasPriv('file', 'preview') && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
@@ -340,6 +340,10 @@ class docApp extends wg
                 'type' => 'heading',
             )], $this->convertZentaoListMenu($zentaoListMenu))
             : array();
+
+        $privs = $this->prop('privs', []);
+        if(!isset($privs['downloadFile'])) $privs['downloadFile'] = $canDownloadFile;
+        if(!isset($privs['previewFile']))  $privs['previewFile'] = $canPreviewOffice;
 
         return zui::docApp
         (
@@ -374,12 +378,12 @@ class docApp extends wg
             set::height('100%'),
             set::userMap(data('users')),
             set::currentUser($app->user->account),
-            set::privs(array()),
             set::uploadUrl($uploadUrl),
             set::downloadUrl($downloadUrl),
             set::sessionStr($sessionStr),
             set('$options', jsRaw('window.setDocAppOptions')),
             set($this->props),
+            set::privs($privs),
             set::fileUrl($fileUrl),
             set::viewModeUrl($viewModeUrl),
             set::langData($langData),

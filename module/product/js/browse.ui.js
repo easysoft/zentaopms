@@ -121,24 +121,83 @@ window.renderCell = function(result, info)
             }
         }
 
-        if((story.type == 'story' && !storyViewPriv) ||
-           (story.type == 'requirement' && !requirementViewPriv) ||
-           (story.type == 'epic' && !epicViewPriv)) result[0] = result[0].props.children;
+        if(result[0].props && ((story.type == 'story' && !storyViewPriv) || (story.type == 'requirement' && !requirementViewPriv) || (story.type == 'epic' && !epicViewPriv))) result[0] = result[0].props.children;
+
         if(html) result.unshift({html});
     }
     if(info.col.name == 'status' && result)
     {
         result[0] = {html: `<span class='status-${info.row.data.rawStatus}'>` + info.row.data.status + "</span>"};
     }
-    if(info.col.name == 'assignedTo' && info.row.data.status == 'closed')
+    if(info.col.name == 'assignedTo')
     {
-        delete result[0]['props']['data-toggle'];
-        delete result[0]['props']['href'];
-        result[0]['props']['className'] += ' disabled';
+        if(info.row.data.rawStatus == 'closed' && result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+            result[0]['props']['className'] += ' disabled';
+        }
+        else
+        {
+            let assignToClass = info.row.data.assignedTo == userAccount ? 'is-me' : '';
+            if(!info.row.data.assignedTo) assignToClass = 'is-unassigned';
+
+            if(storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
+            {
+                result[0]['props']['href'] = $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id);
+            }
+            else if(!storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
+            {
+                result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            }
+
+            if(storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+            {
+                result[0]['props']['href'] = $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id);
+            }
+            else if(!storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+            {
+                result[0] = {html : '<a href=' + $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+            }
+
+            if((!requirementAssignedToPriv && info.row.data.type == 'requirement') || (!epicAssignedToPriv && info.row.data.type == 'epic'))
+            {
+                delete result[0]['props']['data-toggle'];
+                delete result[0]['props']['href'];
+                result[0]['props']['className'] += ' disabled';
+            }
+        }
     }
     if(info.col.name == 'childItem')
     {
         result[1]['attrs']['title'] = info.row.data?.childItemTitle;
+    }
+    if(info.col.name == 'taskCount' && !info.row.data.taskCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'bugCount' && !info.row.data.bugCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
+    }
+    if(info.col.name == 'caseCount' && !info.row.data.caseCount)
+    {
+        if(result[0]['type']) result[0]['type'] = 'text';
+        if(result[0]['props'])
+        {
+            delete result[0]['props']['data-toggle'];
+            delete result[0]['props']['href'];
+        }
     }
     return result;
 };

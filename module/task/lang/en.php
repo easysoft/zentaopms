@@ -81,6 +81,7 @@ $lang->task->addSub              = 'Add Child';
 $lang->task->otherExecution      = 'Other Execution';
 
 $lang->task->common            = 'Task';
+$lang->task->plural            = 'Tasks';
 $lang->task->id                = 'ID';
 $lang->task->project           = $lang->projectCommon;
 $lang->task->execution         = 'Execution';
@@ -188,6 +189,7 @@ $lang->task->teamMember        = 'Team Member';
 $lang->task->addMember         = 'Add Member';
 $lang->task->to                = 'To';
 $lang->task->suffixHour        = 'h';
+$lang->task->labelSuffixHour   = '(h)';
 $lang->task->update            = 'Update';
 $lang->task->isParent          = 'Is Parent';
 $lang->task->path              = 'Path';

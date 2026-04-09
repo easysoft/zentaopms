@@ -160,6 +160,7 @@ $fnEmptyTip = function() use($allExecutionsNum, $lang, $projectID)
         setClass('dtable-empty-tip'),
         p
         (
+            $this->app->getClientLang() == 'en' ? setClass( 'flex items-center gap-4') : null,
             span(setClass('text-muted'), $lang->execution->noExecution),
             (common::hasPriv('execution', 'create') && $allExecutionsNum) ? a(set::href(createLink('execution', 'create', "projectID=$projectID")), setClass('btn primary-pale border-primary'), set('data-app', 'project'), icon('plus'),  $lang->project->createKanban) : null
         )

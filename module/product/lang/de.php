@@ -10,9 +10,9 @@
  * @link        https://www.zentao.net
  */
 $lang->product->index            = $lang->productCommon . 'Home';
-$lang->product->browse           = 'Story Liste';
-$lang->product->requirement      = 'Requirement Liste';
-$lang->product->epic             = "{$lang->ERCommon} Liste";
+$lang->product->browse           = 'Story List';
+$lang->product->requirement      = 'Feature List';
+$lang->product->epic             = "{$lang->ERCommon} List";
 $lang->product->dynamic          = 'Verlauf';
 $lang->product->view             = 'Übersicht';
 $lang->product->edit             = "{$lang->productCommon} bearbeiten";

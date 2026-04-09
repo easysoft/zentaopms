@@ -100,6 +100,40 @@ class convertModelTest extends baseTest
     }
 
     /**
+     * Test quickImportJiraData method.
+     *
+     * @param  string $step
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function quickImportJiraDataTest()
+    {
+        $result = $this->invokeArgs('quickImportJiraData');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test batchImportJiraData method.
+     *
+     * @param  string $step
+     * @param  array  $postData
+     * @access public
+     * @return mixed
+     */
+    public function batchImportJiraDataTest()
+    {
+        $this->instance->session->set('jiraApi',    '');
+        $this->instance->session->set('jiraDB',     '');
+        $this->instance->session->set('jiraMethod', 'api');
+
+        $result = $this->invokeArgs('batchImportJiraData');
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test convertStage method.
      *
      * @param  string $jiraStatus

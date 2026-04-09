@@ -196,7 +196,7 @@ $lang->second      = 'Second';
 $lang->workingHour = 'Hours';
 
 $lang->idAB         = 'ID';
-$lang->priAB        = 'P';
+$lang->priAB        = 'Priority';
 $lang->statusAB     = 'Status';
 $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
@@ -216,6 +216,7 @@ $lang->contactUs->wechat = 'Wechat';
 
 $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
+$lang->common->stories      = 'Stories';
 $lang->cache->common        = 'Cache';
 $lang->my->common           = 'My';
 $lang->todo->common         = 'Todo';
@@ -318,13 +319,13 @@ $lang->executioncfd->common         = 'Cumulative Flow Diagram';
 $lang->executionstory->common       = 'Story';
 $lang->executionqa->common          = 'QA';
 $lang->executionbuild->common       = 'Build';
-$lang->executionsettings->common    = 'Setting';
-$lang->generalcomment->common       = 'Comment';
-$lang->generalping->common          = 'Timeout prevention';
-$lang->generaltemplate->common      = 'Template';
-$lang->generaleffort->common        = 'General log';
-$lang->productsettings->common      = 'Product setting';
-$lang->projectreview->common        = 'Review';
+$lang->executionsettings->common    = 'Settings';
+$lang->generalcomment->common       = 'Comments';
+$lang->generalping->common          = 'Keep-alive';
+$lang->generaltemplate->common      = 'Templates';
+$lang->generaleffort->common        = 'General logs';
+$lang->productsettings->common      = 'Product settings';
+$lang->projectreview->common        = 'Reviews';
 $lang->projecttrack->common         = 'Matrix';
 $lang->projectqa->common            = 'QA';
 $lang->holidayseason->common        = 'Holiday';
@@ -689,5 +690,9 @@ $lang->aiapp->zentaoAgent  = 'ZenTao Agent';
 $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Model List';
 $lang->aiapp->config       = 'ZAI Setting';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include (dirname(__FILE__) . '/menu.php');

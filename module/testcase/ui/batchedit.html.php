@@ -23,7 +23,7 @@ if(isset($suhosinInfo))
     div
     (
         set::className('alert warning'),
-        $suhosinInfo
+        html($suhosinInfo)
     );
 }
 else

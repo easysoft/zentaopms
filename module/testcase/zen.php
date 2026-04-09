@@ -686,7 +686,7 @@ class testcaseZen extends testcase
             ->get();
         if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
 
-        return $case;
+        return !empty($this->config->testcase->editor->edit['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid) : $case;
     }
 
     /**
@@ -1318,9 +1318,9 @@ class testcaseZen extends testcase
         if(!empty($case->project))
         {
             if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
-            if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
+            if(empty($project->multiple)) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
-        return $case;
+        return !empty($this->config->testcase->editor->create['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid) : $case;
     }
 
     /**
@@ -2830,7 +2830,7 @@ class testcaseZen extends testcase
 
         if(!isset($case->stepDesc))   $case->stepDesc  = '';
         if(!isset($case->stepExpect)) $case->stepExpect = '';
-        if(isset($case->id) && isset($relatedSteps[$case->id]))
+        if(!empty($case->id) && !empty($relatedSteps[$case->id]))
         {
             $preGrade      = 1;
             $parentSteps   = array();
@@ -2945,7 +2945,7 @@ class testcaseZen extends testcase
      */
     protected function processStepsAndExpectsForBatchEdit(array $cases): array
     {
-        $relatedSteps = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedSteps = $this->testcase->getRelatedSteps(array_column($cases, 'id'));
         foreach($cases as $case)
         {
             $this->processStepForExport($case, array(), $relatedSteps);

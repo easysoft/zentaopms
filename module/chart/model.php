@@ -203,6 +203,8 @@ class chartModel extends model
         foreach($groups as $group)
         {
             if(empty($chartGroups[$group->id])) continue;
+            if(!helper::hasFeature('program') && strpos($group->name, $this->lang->program->common) !== false) continue;
+            if(!helper::hasFeature('devops')  && strpos($group->name, $this->lang->devops->common)  !== false) continue;
 
             /* 菜单树中只显示二级分组名称。*/
             /* Only the name of the second-level group is displayed in the menu tree. */

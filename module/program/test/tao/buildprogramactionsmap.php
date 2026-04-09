@@ -29,10 +29,21 @@ cid=17715
 
 $objectIdList = array(1, 2, 3, 4, 5);
 
-$programTester = new programTaoTest();
-$programTester->program->app->user->admin = true;
-r($programTester->buildProgramActionsMapTest($objectIdList[0])) && p('0:name') && e('close'); // 测试生成项目集id为1的操作按钮数据。
-r($programTester->buildProgramActionsMapTest($objectIdList[1])) && p('0:name') && e('close'); // 测试生成项目集id为2的操作按钮数据。
-r($programTester->buildProgramActionsMapTest($objectIdList[2])) && p('0:name') && e('close'); // 测试生成敏捷项目的操作按钮数据。
-r($programTester->buildProgramActionsMapTest($objectIdList[3])) && p('0:name') && e('close'); // 测试生成瀑布项目的操作按钮数据。
-r($programTester->buildProgramActionsMapTest($objectIdList[4])) && p('0:name') && e('close'); // 测试生成看板项目的操作按钮数据。
+global $tester;
+$tester->loadModel('program');
+
+$program = $tester->program->getByID($objectIdList[0]);
+
+r($tester->program->buildProgramActionsMap($program)) && p('0:name') && e('close'); // 测试生成项目集id为1的操作按钮数据。
+
+$program = $tester->program->getByID($objectIdList[1]);
+r($tester->program->buildProgramActionsMap($program)) && p('0:name') && e('close'); // 测试生成项目集id为2的操作按钮数据。
+
+$program = $tester->program->getByID($objectIdList[2]);
+r($tester->program->buildProgramActionsMap($program)) && p('0:name') && e('close'); // 测试生成敏捷项目的操作按钮数据。
+
+$program = $tester->program->getByID($objectIdList[3]);
+r($tester->program->buildProgramActionsMap($program)) && p('0:name') && e('close'); // 测试生成瀑布项目的操作按钮数据。
+
+$program = $tester->program->getByID($objectIdList[4]);
+r($tester->program->buildProgramActionsMap($program)) && p('0:name') && e('close'); // 测试生成看板项目的操作按钮数据。

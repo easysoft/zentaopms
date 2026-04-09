@@ -32,7 +32,7 @@ $lang->dev->branch      = 'Branch';
 $lang->dev->apiBaseUrl  = 'Base URL';
 
 $lang->dev->fields = array();
-$lang->dev->fields['id']     = 'ID';
+$lang->dev->fields['id']     = 'No.';
 $lang->dev->fields['name']   = 'Feild';
 $lang->dev->fields['desc']   = 'Description';
 $lang->dev->fields['type']   = 'Type';
@@ -46,7 +46,7 @@ $lang->dev->tableList = array();
 $lang->dev->tableList['action']                = 'Action';
 $lang->dev->tableList['bug']                   = 'Bug';
 $lang->dev->tableList['build']                 = 'Build';
-$lang->dev->tableList['burn']                  = 'Burndown Chart';
+$lang->dev->tableList['burn']                  = 'Burndown';
 $lang->dev->tableList['case']                  = 'Test Case';
 $lang->dev->tableList['casestep']              = 'Case Step';
 $lang->dev->tableList['company']               = 'Company';

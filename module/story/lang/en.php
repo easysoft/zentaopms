@@ -10,7 +10,7 @@
  * @link        https://www.zentao.net
  */
 global $config;
-$lang->story->create            = "Create Story";
+$lang->story->create            = "Create {$lang->SRCommon}";
 
 $lang->story->requirement       = 'UR';
 $lang->story->story             = zget($lang, 'SRCommon', "Story");

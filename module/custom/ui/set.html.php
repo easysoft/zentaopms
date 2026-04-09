@@ -18,6 +18,7 @@ $formItems   = array();
 $formActions = array('submit');
 $headingTips = null;
 $actionWidth = 'w-1/2';
+$isEn        = $app->getClientLang() == 'en';
 if($module == 'project' && $field == 'unitList')
 {
     $checkedUnitList = array();
@@ -362,7 +363,7 @@ elseif($module == 'user' && $field == 'deleted')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        $isEn ? null : set::labelWidth('100px'),
         set::label($lang->custom->user->fields['deleted']),
         set::name('showDeleted'),
         set::value($showDeleted),
@@ -372,10 +373,11 @@ elseif($module == 'user' && $field == 'deleted')
 }
 elseif($module == 'feedback' && $field == 'review')
 {
+    $labelWidth = $isEn ? '140px' : '100px';
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::label($lang->custom->feedback->fields['review']),
         set::name('needReview'),
         set::value($needReview),
@@ -386,7 +388,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::hidden($needReview),
         set::label($lang->custom->forceReview),
         set::name('forceReview[]'),
@@ -399,7 +401,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::hidden(!$needReview),
         set::label($lang->custom->forceNotReview),
         set::name('forceNotReview[]'),
@@ -413,7 +415,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::label($lang->feedback->reviewedByAB),
         set::name('reviewer'),
         set::value(empty($reviewer) ? ' ' : $reviewer),
@@ -476,6 +478,7 @@ else
             $system   = isset($dbFields[$key]) ? $dbFields[$key]->system : 1;
             $keyLabel = $key === '' ? 'NULL' : $key;
             if($key === 0) $keyLabel = '0';
+            if($app->getClientLang() == 'en' && $key == 'requirement') $keyLabel = $lang->custom->feature;
 
             $formItems[] = formRow
             (

@@ -50,6 +50,7 @@ class navbar extends wg
         $showViewSwitcher = ($isTaskViews || $isTaskReport) && !empty($config->sanplexVersion) && $config->vision === 'rnd';
         $items            = static::getWorkspaceItems($showViewSwitcher);
         $activeID         = data('activeMenu');
+        $menuGroup        = data('mainNavbarGroup');
         $activeItem       = array('data-id' => $activeID);
 
         foreach($originItems as $item)
@@ -71,14 +72,13 @@ class navbar extends wg
             new nav
             (
                 setData('workspace', $workspace),
-                setData('navbarGroup', data('mainNavbarGroup')),
+                setData('navbarGroup', $menuGroup),
                 setData('mainNavbarGroup', $app->tab . '-' . $activeID),
-                on::init()->call('initPageNavbar', $originItems, $workspace, $activeID, "__WORKSPACE_{$workspace}__"),
+                on::init()->call('initPageNavbar', $originItems, $workspace, $activeID, "__WORKSPACE_{$workspace}__", empty($config->customMenu->{$menuGroup}) ? [] : json_decode($config->customMenu->{$menuGroup})),
                 set::items($items),
                 $this->children()
             ),
-            $showViewSwitcher ? css('#actionBar>a[href^="' . str_replace('.html', '', createLink('task', 'report')) . '"]{display: none;}') : null,
-            commonModel::isTutorialMode() ? null : on::contextmenu('.nav-item:not(.nav-dropdown) > a, .nav-divider')->call('handleNavbarContextmenu', jsRaw('event'), jsRaw('this')),
+            $showViewSwitcher ? css('#actionBar>a[href^="' . str_replace('.html', '', createLink('task', 'report')) . '"]{display: none;}') : null
         );
     }
 
@@ -106,6 +106,7 @@ class navbar extends wg
         $responsiveNavOptions['container']        = 'parent';
         $responsiveNavOptions['more']             = ['text' => $lang->other, 'caret' => true];
         $responsiveNavOptions['moreDropdown']     = ['trigger' => 'hover'];
+        $responsiveNavOptions['watch']            = ['container', '#toolbar', '#heading'];
         $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => ($(container).width() - 20 - (2 * Math.max(($("#heading").outerWidth() || 0), $("#toolbar").outerWidth() || 0)))');
 
         return h::nav
