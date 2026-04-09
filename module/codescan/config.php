@@ -276,7 +276,6 @@ $config->codescan->remoteFields['createdBy']        = 'created_by';
 $config->codescan->remoteFields['updatedBy']        = 'updated_by';
 $config->codescan->remoteFields['createdAt']        = 'created_at';
 $config->codescan->remoteFields['updatedAt']        = 'updated_at';
-$config->codescan->remoteFields['rulesCount']       = 'rules_count';
 $config->codescan->remoteFields['setCount']         = 'rulesets_count';
 $config->codescan->remoteFields['scanType']         = 'scan_type';
 $config->codescan->remoteFields['repo']             = 'repo_id';

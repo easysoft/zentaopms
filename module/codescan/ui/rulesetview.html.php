@@ -149,7 +149,7 @@ $isModal ? $ruleTable : panel
                     item
                     (
                         set::name($lang->codescan->ruleNum),
-                        span(zget($ruleSet, 'rules_count', 0))
+                        span(zget($ruleSet, 'rulesCount', 0))
                     ),
                     item
                     (
