@@ -269,7 +269,7 @@ class programplanTao extends programplanModel
             }
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0, 'path' => $plan->path);
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'totalReal' => 0, 'path' => $plan->path);
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }
@@ -329,6 +329,7 @@ class programplanTao extends programplanModel
 
                 $stageIndex[$index]['totalEstimate'] += $task->estimate;
                 $stageIndex[$index]['totalConsumed'] += $task->consumed;
+                $stageIndex[$index]['totalLeft']     += $task->left;
                 $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                 foreach(explode(',', $stage['path']) as $planID)
@@ -337,6 +338,7 @@ class programplanTao extends programplanModel
 
                     $stageIndex[$planID]['totalEstimate'] += $task->estimate;
                     $stageIndex[$planID]['totalConsumed'] += $task->consumed;
+                    $stageIndex[$planID]['totalLeft']     += $task->left;
                     $stageIndex[$planID]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
                 }
             }
@@ -947,6 +949,7 @@ class programplanTao extends programplanModel
             $ganttData['data'][$index]->taskProgress = ($progress * 100) . '%';
             $ganttData['data'][$index]->estimate     = $stage['totalEstimate'];
             $ganttData['data'][$index]->consumed     = $stage['totalConsumed'];
+            $ganttData['data'][$index]->left         = $stage['totalLeft'];
         }
         return $ganttData;
     }

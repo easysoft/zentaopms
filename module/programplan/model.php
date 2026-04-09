@@ -292,16 +292,14 @@ class programplanModel extends model
                 if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
 
                 if(!isset($stageIndex[$groupKey]['totalConsumed'])) $stageIndex[$groupKey]['totalConsumed'] = 0;
+                if(!isset($stageIndex[$groupKey]['totalLeft']))     $stageIndex[$groupKey]['totalLeft']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalReal']))     $stageIndex[$groupKey]['totalReal']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalEstimate'])) $stageIndex[$groupKey]['totalEstimate'] = 0;
                 $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
+                $stageIndex[$groupKey]['totalLeft']     += $task->left;
                 $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
                 $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
             }
-
-            /* Calculate group realBegan and realEnd. */
-            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
-            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
         }
 
         /* 根据排序字段手动排序。 Manually sort by order field. */
