@@ -1123,11 +1123,11 @@ class programplanModel extends model
         $pausedTasks = array();
         foreach($tasks as $task)
         {
-            if($task->type != 'task') continue;
+            if(empty($task->type) || $task->type != 'task') continue;
             if(isset($task->rawStatus) && $task->rawStatus == 'pause')
             {
-                $taskID = $task->id;
-                if(strpos($taskID, '-') !== false) $taskID = explode('-', $task->id)[1];
+                $taskID = (string)$task->id;
+                if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
                 $pausedTasks[$taskID] = $taskID;
             }
         }
@@ -1145,15 +1145,15 @@ class programplanModel extends model
         $today = helper::today();
         return array_values(array_filter($tasks, function($data) use($today, $pausedTasksDate)
         {
-            if($data->type != 'task') return true;
+            if(empty($data->type) || $data->type != 'task') return true;
 
             $status = $data->status;
             if(isset($data->rawStatus)) $status = $data->rawStatus;
             if($status == 'wait') return false;
             if(empty($data->realBegan)) return false;
 
-            $taskID = $data->id;
-            if(strpos($taskID, '-') !== false) $taskID = explode('-', $data->id)[1];
+            $taskID = (string)$data->id;
+            if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
 
             $realBegan = $data->realBegan;
             $realEnd   = $data->realEnd;
