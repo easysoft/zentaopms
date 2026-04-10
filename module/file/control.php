@@ -646,4 +646,52 @@ class file extends control
         $text = str_ireplace('</li>', "\n", $text);
         return strip_tags($text, '<img>');
     }
+
+    /**
+     * View preview or download file by gid.
+     *
+     * @param  string $gid
+     * @param  string $mode  view|download|preview
+     * @access public
+     * @return void
+     */
+    public function viewdownload(string $gid = '', string $mode = 'view')
+    {
+        if(empty($gid)) return print($this->lang->file->fileNotFound);
+
+        $decodedGid = base64_decode($gid);
+        if(strpos($decodedGid, 'g-') === 0) $decodedGid = substr($decodedGid, 2);
+
+        $file = $this->file->getByGid($decodedGid);
+        if(empty($file)) return print($this->lang->file->fileNotFound);
+
+        if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+
+        switch($mode)
+        {
+            case 'preview':
+                return $this->preview($file->id, 'left');
+            case 'download':
+                return $this->download($file->id);
+            default:
+                return $this->readFileContent($file);
+        }
+    }
+
+    /**
+     * Read file content directly.
+     *
+     * @param  object $file
+     * @access private
+     */
+    private function readFileContent(object $file)
+    {
+        if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
+
+        if(empty($file) or !$this->file->fileExists($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
+        if(!$this->file->checkPriv($file)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
+
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+    }
 }
