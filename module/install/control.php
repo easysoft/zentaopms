@@ -460,7 +460,7 @@ class install extends control
             if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
         }
 
-        $devopsLink = helper::createLink('gitfox', 'devopsIntroduction', '&_single=1');
+        $devopsLink = helper::createLink('gitfox', 'devopsIntroduction', 'isInstall=1&_single=1');
         $this->view->devopsLink = str_replace('install.php', 'index.php', $devopsLink);
 
         $this->view->installFileDeleted = $installFileDeleted;

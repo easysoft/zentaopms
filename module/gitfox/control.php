@@ -246,12 +246,14 @@ class gitfox extends control
      * DevOps introduction page.
      *
      * @access public
+     * @param  int $isInstall
      * @return void
      */
-    public function devopsIntroduction()
+    public function devopsIntroduction(int $isInstall = 0)
     {
         $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
         $this->view->title             = $this->lang->gitfox->devopsIntroduction;
+        $this->view->isInstall         = $isInstall;
         $this->display();
     }
 
@@ -260,9 +262,10 @@ class gitfox extends control
      * Install GitFox.
      *
      * @access public
+     * @param  int $isInstall
      * @return void
      */
-    public function installGitFox()
+    public function installGitFox(int $isInstall = 0)
     {
         if(strpos(PHP_OS, 'WIN'))
         {
@@ -308,6 +311,7 @@ class gitfox extends control
         $this->view->title             = $this->lang->gitfox->installGitFox;
         $this->view->script            = $script;
         $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
+        $this->view->isInstall         = $isInstall;
         $this->display();
     }
 
