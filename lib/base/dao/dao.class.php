@@ -1825,9 +1825,7 @@ class baseDAO
         $errors = dao::$errors;
         dao::$errors = array();     // 清除dao的错误信息(Must clear errors)
 
-        if(!$join) return $errors;
-
-        if(is_array($errors))
+        if(is_array($errors) && $join)
         {
             $message = '';
             foreach($errors as $item)
@@ -1836,6 +1834,8 @@ class baseDAO
             }
             return $message;
         }
+
+        return $errors;
     }
 
     /**
