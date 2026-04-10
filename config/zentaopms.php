@@ -88,7 +88,7 @@ $config->executionCommonList['zh-tw'][2] = '階段';
 
 $config->executionCommonList['en'][0] = 'Execution';
 $config->executionCommonList['en'][1] = 'Sprint';
-$config->executionCommonList['en'][2] = 'Stage';
+$config->executionCommonList['en'][2] = 'Phase';
 
 $config->executionCommonList['de'][0] = 'Execution';
 $config->executionCommonList['de'][1] = 'Sprint';

@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang,$app;
+$isEn = $app->getClientLang() == 'en';
 $config->stakeholder->dtable = new stdclass();
 $config->stakeholder->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->stakeholder->dtable->fieldList['id']['type']     = 'idAB';
@@ -25,6 +26,7 @@ $config->stakeholder->dtable->fieldList['from']['sortType'] = true;
 $config->stakeholder->dtable->fieldList['from']['show']     = true;
 $config->stakeholder->dtable->fieldList['from']['group']    = 2;
 $config->stakeholder->dtable->fieldList['from']['width']    = '100px';
+if($isEn) $config->stakeholder->dtable->fieldList['from']['width'] = '150px';
 
 $config->stakeholder->dtable->fieldList['role']['title'] = $lang->stakeholder->role;
 $config->stakeholder->dtable->fieldList['role']['name']  = 'role';

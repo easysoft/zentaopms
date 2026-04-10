@@ -92,7 +92,7 @@ foreach($spaceList as $space)
 
             $kanbans[] = cell
             (
-                set::width('1/4'),
+                set::width($app->getClientLang() == 'en' ? '1/3' : '1/4'),
                 set::className('px-2 pb-4 overflow-hidden'),
                 div
                 (

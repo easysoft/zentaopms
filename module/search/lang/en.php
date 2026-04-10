@@ -59,7 +59,7 @@ $lang->search->null = 'Null';
 $lang->userquery        = new stdclass();
 $lang->userquery->title = 'Title';
 
-$lang->searchObjects['todo']      = 'Todo';
+$lang->searchObjects['todo']      = 'To-do';
 $lang->searchObjects['effort']    = 'Effort';
 $lang->searchObjects['testsuite'] = 'Test Suite';
 

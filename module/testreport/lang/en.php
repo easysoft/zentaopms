@@ -1,5 +1,5 @@
 <?php
-$lang->testreport->common       = 'Testing Report';
+$lang->testreport->common       = 'Test Report';
 $lang->testreport->id           = 'ID';
 $lang->testreport->browse       = 'Testing Reports';
 $lang->testreport->create       = 'Create Report';

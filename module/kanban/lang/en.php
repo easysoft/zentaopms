@@ -252,8 +252,8 @@ $lang->kanban->showWIPList[0] = 'Hide';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'Waiting';
-$lang->kanban->defaultColumn['doing']  = 'doing';
-$lang->kanban->defaultColumn['done']   = 'done';
+$lang->kanban->defaultColumn['doing']  = 'Doing';
+$lang->kanban->defaultColumn['done']   = 'Completed';
 $lang->kanban->defaultColumn['closed'] = 'Closed';
 
 $lang->kanban->laneTypeList = array();

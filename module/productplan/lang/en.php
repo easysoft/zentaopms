@@ -113,14 +113,14 @@ $lang->productplan->closedDate   = 'Cloased on';
 
 $lang->productplan->statusList['wait']   = 'Waiting';
 $lang->productplan->statusList['doing']  = 'Doing';
-$lang->productplan->statusList['done']   = 'Done';
+$lang->productplan->statusList['done']   = 'Completed';
 $lang->productplan->statusList['closed'] = 'Closed';
 
 $lang->productplan->closedReasonList['done']   = 'Completed';
 $lang->productplan->closedReasonList['cancel'] = 'Cancel';
 
 $lang->productplan->parentActionList['startedbychild']   = 'Plan status automatically set to <strong>Doing</strong> as a subplan has <strong>started</strong>.';
-$lang->productplan->parentActionList['finishedbychild']  = 'Plan status automatically set to <strong>Done</strong> as all subplans has been <strong>completed</strong>.';
+$lang->productplan->parentActionList['finishedbychild']  = 'Plan status automatically set to <strong>Completed</strong> as all subplans has been <strong>completed</strong>.';
 $lang->productplan->parentActionList['closedbychild']    = 'Plan status automatically set to <strong>Closed</strong> as all subplans has been <strong>closed</strong>.';
 $lang->productplan->parentActionList['activatedbychild'] = 'Plan status automatically set to <strong>Doing</strong> as a subplan has <strong>activated</strong>.';
 $lang->productplan->parentActionList['createchild']      = 'Plan status automatically set to <strong>Doing</strong> as a subplan has been <strong>created</strong>.';
@@ -154,7 +154,7 @@ $lang->productplan->featureBar['browse']['all']    = 'All';
 $lang->productplan->featureBar['browse']['undone'] = 'Uncompleted';
 $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
-$lang->productplan->featureBar['browse']['done']   = 'Done';
+$lang->productplan->featureBar['browse']['done']   = 'Completed';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
 
 $lang->productplan->orderList['begin_desc'] = 'Start Date Descending';

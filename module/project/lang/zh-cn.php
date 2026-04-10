@@ -510,9 +510,9 @@ $lang->project->featureBar['dynamic']['thisMonth'] = '本月';
 $lang->project->featureBar['dynamic']['lastMonth'] = '上月';
 
 $lang->project->moreSelects = array();
-$lang->project->moreSelects['suspended'] = '已挂起';
-$lang->project->moreSelects['delayed']   = '已延期';
-$lang->project->moreSelects['closed']    = '已关闭';
+$lang->project->moreSelects['browse']['more']['suspended'] = '已挂起';
+$lang->project->moreSelects['browse']['more']['delayed']   = '已延期';
+$lang->project->moreSelects['browse']['more']['closed']    = '已关闭';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

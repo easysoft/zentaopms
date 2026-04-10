@@ -11,8 +11,10 @@ declare(strict_types=1);
 
 namespace zin;
 
-$yesterdayClassName = $app->getClientLang() === 'en' ? 'items-center text-gray border-r pr-2 col-reverse' : 'items-center text-gray border-r pr-2';
-$todayClassName     = $app->getClientLang() === 'en' ? 'items-center text-success pl-2 col-reverse' : 'items-center text-success pl-2';
+$isEn               = $app->getClientLang() === 'en';
+$yesterdayClassName = $isEn ? 'items-center text-gray border-r pr-2 col-reverse' : 'items-center text-gray border-r pr-2';
+$todayClassName     = $isEn ? 'items-center text-success pl-2 col-reverse' : 'items-center text-success pl-2';
+
 
 blockPanel
 (
@@ -162,7 +164,7 @@ blockPanel
                     set::width('50%'),
                     setClass('item-hour px-1 w-1/2'),
                     div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
-                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->consumedHours . ($isEn ? ' ' : ' / ') . $lang->block->projectstatistic->hour),
                     div
                     (
                         setClass('mt-2 items-center flex pl-1'),

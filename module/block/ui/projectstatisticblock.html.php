@@ -13,6 +13,7 @@ namespace zin;
 
 $active  = isset($params['active']) ? $params['active'] : key($projects);
 $project = null;
+$isEn    = $app->getClientLang() == 'en';
 $items   = array();
 foreach($projects as $projectItem)
 {
@@ -202,7 +203,7 @@ if($project)
         );
         $cells[] = cell
         (
-            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1'),
+            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1' . ($isEn ? ' en-statistics' : '')),
             set::width($longBlock ? '32%' : 'calc(50% - 0.25rem)'),
             div
             (
@@ -300,7 +301,7 @@ if($project)
         );
         $cells[] = cell
         (
-            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1'),
+            setClass('project-statistic-table waterfall bg-gray-50 border border-1 pt-2 px-1' . ($isEn ? ' en-statistics' : '')),
             set::width($longBlock ? '32%' : 'calc(50% - 0.25rem)'),
             div
             (

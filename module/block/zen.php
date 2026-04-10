@@ -2117,6 +2117,7 @@ class blockZen extends block
             if($this->config->edition != 'open')
             {
                 $this->app->loadLang('approval');
+                $this->app->loadLang('projectchange');
                 $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
             }
         }

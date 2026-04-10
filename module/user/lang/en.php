@@ -138,7 +138,7 @@ $lang->user->testCase  = 'Test Cases';
 $lang->user->issue     = 'Issue';
 $lang->user->risk      = 'Risk';
 $lang->user->schedule  = 'Schedule';
-$lang->user->todo      = 'Todo';
+$lang->user->todo      = 'To-do';
 $lang->user->story     = 'Stories';
 $lang->user->dynamic   = 'Recents';
 

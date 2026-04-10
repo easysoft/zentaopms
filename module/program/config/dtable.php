@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang,$app;
+$isEn = $app->getClientLang() == 'en';
 $config->program->dtable = new stdclass();
 
 $config->program->dtable->fieldList['name']['name']         = 'name';
@@ -80,6 +81,7 @@ $config->program->productview->dtable->fieldList['PO']['title'] = $lang->program
 $config->program->productview->dtable->fieldList['PO']['type']  = 'avatarBtn';
 $config->program->productview->dtable->fieldList['PO']['show']  = true;
 $config->program->productview->dtable->fieldList['PO']['group'] = 'g2';
+if($isEn) $config->program->productview->dtable->fieldList['PO']['width'] = 150;
 
 $config->program->productview->dtable->fieldList['createdDate']['name']     = 'createdDate';
 $config->program->productview->dtable->fieldList['createdDate']['title']    = $lang->program->createdDate;
@@ -174,6 +176,7 @@ $config->program->productview->dtable->fieldList['totalReleases']['type']     = 
 $config->program->productview->dtable->fieldList['totalReleases']['show']     = true;
 $config->program->productview->dtable->fieldList['totalReleases']['sortType'] = false;
 $config->program->productview->dtable->fieldList['totalReleases']['group']    = 'g8';
+if($isEn) $config->program->productview->dtable->fieldList['totalReleases']['width'] = 140;
 
 $config->program->productview->dtable->fieldList['latestReleaseDate']['name']     = 'latestReleaseDate';
 $config->program->productview->dtable->fieldList['latestReleaseDate']['title']    = $lang->program->latestReleaseDate;
@@ -250,6 +253,7 @@ $config->program->browse->dtable->fieldList['invested']['align']    = 'right';
 $config->program->browse->dtable->fieldList['invested']['sortType'] = false;
 $config->program->browse->dtable->fieldList['invested']['show']     = true;
 $config->program->browse->dtable->fieldList['invested']['group']    = 3;
+if($isEn) $config->program->browse->dtable->fieldList['invested']['minWidth'] = 120;
 
 $config->program->browse->dtable->fieldList['openedDate']['name']     = 'openedDate';
 $config->program->browse->dtable->fieldList['openedDate']['title']    = $lang->program->openedDate;
@@ -257,6 +261,7 @@ $config->program->browse->dtable->fieldList['openedDate']['type']     = 'date';
 $config->program->browse->dtable->fieldList['openedDate']['sortType'] = true;
 $config->program->browse->dtable->fieldList['openedDate']['minWidth'] = 90;
 $config->program->browse->dtable->fieldList['openedDate']['group']    = 4;
+if($isEn) $config->program->browse->dtable->fieldList['openedDate']['minWidth'] = 120;
 
 $config->program->browse->dtable->fieldList['openedBy']['name']     = 'openedBy';
 $config->program->browse->dtable->fieldList['openedBy']['title']    = $lang->program->openedBy;
@@ -264,6 +269,7 @@ $config->program->browse->dtable->fieldList['openedBy']['type']     = 'user';
 $config->program->browse->dtable->fieldList['openedBy']['sortType'] = true;
 $config->program->browse->dtable->fieldList['openedBy']['minWidth'] = 80;
 $config->program->browse->dtable->fieldList['openedBy']['group']    = 4;
+if($isEn) $config->program->browse->dtable->fieldList['openedBy']['minWidth'] = 100;
 
 $config->program->browse->dtable->fieldList['begin']['name']     = 'begin';
 $config->program->browse->dtable->fieldList['begin']['title']    = $lang->program->begin;
@@ -310,6 +316,7 @@ if($config->edition != 'open')
     $config->program->browse->dtable->fieldList['workflowGroup']['type']  = 'user';
     $config->program->browse->dtable->fieldList['workflowGroup']['show']  = false;
     $config->program->browse->dtable->fieldList['workflowGroup']['group'] = 6;
+    if($isEn) $config->program->browse->dtable->fieldList['workflowGroup']['minWidth'] = 200;
 }
 
 $config->program->browse->dtable->fieldList['actions']['name']       = 'actions';

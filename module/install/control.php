@@ -447,25 +447,25 @@ class install extends control
         if(file_exists($errorFile))   unlink($errorFile);
         if(file_exists($successFile)) unlink($successFile);
 
+        global $oldRequestType;
+        if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+
         $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-        if(!file_exists($installFile))
+        $devopsLink    = helper::createLink('gitfox', 'devopsIntroduction', 'isInstall=1');
+        $devopsLink    .= $oldRequestType != 'PATH_INFO' ? '&_single=1' : '?_single=1';
+        if($oldRequestType != 'PATH_INFO')
         {
-            global $oldRequestType;
-            if($oldRequestType == 'PATH_INFO')
-            {
-                $this->config->requestType = 'PATH_INFO';
-                $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-                $this->config->requestType = 'GET';
-            }
-            if($oldRequestType == 'GET') $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
+            $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
+            $devopsLink    = str_replace('install.php', 'index.php', $devopsLink);
         }
 
-        $devopsLink = helper::createLink('gitfox', 'devopsIntroduction', 'isInstall=1&_single=1');
-        $this->view->devopsLink = str_replace('install.php', 'index.php', $devopsLink);
+        $this->config->requestType = 'GET';
+        if(file_exists($installFile)) $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
 
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
+        $this->view->devopsLink         = $devopsLink;
         $this->display();
     }
 }

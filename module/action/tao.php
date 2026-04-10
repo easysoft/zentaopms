@@ -127,6 +127,7 @@ class actionTao extends actionModel
                 if(!empty($module) && $module->type == 'story') $product = array($module->root);
                 break;
             case 'review':
+            case 'cm':
             case 'projectchange':
                 list($product, $project) = $this->getReviewRelated($objectType, $objectID);
                 break;

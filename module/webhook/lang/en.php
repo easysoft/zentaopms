@@ -96,8 +96,8 @@ $lang->webhook->trimWords = '';
 $lang->webhook->note = new stdClass();
 $lang->webhook->note->async     = 'Asynchronous mode requires enabled scheduled tasks (Cron) in Admin-System.';
 $lang->webhook->note->bind      = 'User linking is only required for [DingTalk/WeCom] notification types.';
-$lang->webhook->note->product   = "If left empty, actions from all {$lang->productCommon}s will trigger the webhook. Otherwise, only actions from linked {$lang->productCommon} will trigger it.";
-$lang->webhook->note->execution = "If left empty, actions from all {$lang->execution->common}s will trigger the webhook. Otherwise, only actions from linked {$lang->execution->common} will trigger it.";
+$lang->webhook->note->product   = "If left empty, actions from all products will trigger the webhook. Otherwise, only actions from linked product will trigger it.";
+$lang->webhook->note->execution = "If left empty, actions from all executions will trigger the webhook. Otherwise, only actions from linked execution will trigger it.";
 
 $lang->webhook->note->dingHelp   = " <a href='http://www.zentao.net/book/zentaopmshelp/358.html' target='_blank'><i class='icon-help'></i></a>";
 $lang->webhook->note->wechatHelp = " <a href='http://www.zentao.net/book/zentaopmshelp/367.html' target='_blank'><i class='icon-help'></i></a>";

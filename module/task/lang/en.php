@@ -77,7 +77,7 @@ $lang->task->relatedBranch       = 'Related Branch';
 $lang->task->keywords            = 'Keywords';
 $lang->task->syncStory           = 'Sync to task';
 $lang->task->addSibling          = 'Add Sibling';
-$lang->task->addSub              = 'Add Child';
+$lang->task->addSub              = 'Add Subtasks';
 $lang->task->otherExecution      = 'Cross Execution';
 
 $lang->task->common            = 'Task';
@@ -177,7 +177,7 @@ $lang->task->teamSetting       = 'Team Settings';
 $lang->task->team              = 'Team';
 $lang->task->transfer          = 'Transfer';
 $lang->task->transferTo        = 'Transfer To';
-$lang->task->children          = 'Child Task';
+$lang->task->children          = 'Add Subtasks';
 $lang->task->childrenAB        = 'C';
 $lang->task->parent            = 'Parent Task';
 $lang->task->parentAB          = 'Parent';

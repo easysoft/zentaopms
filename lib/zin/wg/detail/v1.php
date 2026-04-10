@@ -352,6 +352,8 @@ CSS;
 
     protected function buildActions()
     {
+        global $app;
+
         $actions      = $this->prop('actions');
         $actionsBlock = $this->block('actions');
         $isSimple     = $this->prop('layout') === 'simple';
@@ -367,6 +369,8 @@ CSS;
         }
         if(empty($toolbarProps['items']) && empty($actions)) return null;
 
+        $toolbarClass = $app->getClientLang() == 'en' ? 'en-toolbar no-morph' : 'no-morph';
+
         return div
         (
             setClass('detail-actions center sticky mt-4 bottom-4 z-10'),
@@ -376,7 +380,7 @@ CSS;
                 setClass('bg-black text-fore-in-dark backdrop-blur bg-opacity-60 rounded p-1.5'),
                 $toolbarProps ? toolbar
                 (
-                    setClass('no-morph'),
+                    setClass($toolbarClass),
                     set::urlFormatter($this->prop('urlFormatter')),
                     set::btnType('ghost'),
                     is_array($toolbarProps) ? set($toolbarProps) : null

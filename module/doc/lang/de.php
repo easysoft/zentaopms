@@ -221,6 +221,8 @@ $lang->doc->needEditable = 'This document is not editable.';
 $lang->doc->needReadable = 'This document is not readable.';
 $lang->doc->groupLabel   = 'Gruppen';
 $lang->doc->userLabel    = 'Benutzer';
+$lang->doc->parent       = 'Parent';
+$lang->doc->rawContent   = 'Raw Content';
 
 $lang->doc->moduleDoc     = 'Nach Modulen';
 $lang->doc->searchDoc     = 'Suche';

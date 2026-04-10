@@ -174,13 +174,13 @@ $lang->convert->jira->zentaoAction     = 'Zentao %s Action';
 $lang->convert->jira->zentaoReason     = 'Zentao %s Closure Reason';
 $lang->convert->jira->zentaoResolution = 'Zentao %s Resolution';
 $lang->convert->jira->initJiraUser     = 'Set Jira Users';
-$lang->convert->jira->importJira       = 'Migrate From Jira';
+$lang->convert->jira->importJira       = 'Select Import Method';
 $lang->convert->jira->start            = 'Start Migration';
 
 $lang->convert->jira->dbNameEmpty        = 'Jira database name is required.';
 $lang->convert->jira->invalidDB          = 'Invalid database name.';
 $lang->convert->jira->invalidTable       = 'This database is not a Jira database.';
-$lang->convert->jira->notReadAndWrite    = 'The directory does not exist or insufficient permissions! Please create the directory %s and grant read and write permissions.';
+$lang->convert->jira->notReadAndWrite    = 'Directory not found or access denied. Please create %s with read/write access.';
 $lang->convert->jira->notExistEntities   = 'The %s file does not exist.';
 $lang->convert->jira->passwordNotice     = 'Set the default password for users migrated to ZenTao. Users can later update their passwords within ZenTao.';
 $lang->convert->jira->groupNotice        = 'Set the default permission group for users migrated to ZenTao.';

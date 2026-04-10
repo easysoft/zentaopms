@@ -649,6 +649,7 @@
             headers: headers,
             type:    requestMethod,
             data:    options.data,
+            convert: options.convert,
             type:    (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
@@ -751,6 +752,7 @@
                 }
                 else
                 {
+                    if(options.success && options.success.call(ajax, data, options) === false) return;
                     if(data.closeModal) zui.Modal.hide(typeof data.closeModal === 'string' ? data.closeModal : undefined);
                     if(data.autoLoad) autoLoad(data.autoLoad);
                     if(data.result === 'fail')

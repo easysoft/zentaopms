@@ -23,6 +23,7 @@ foreach($fields as $fieldName => $field)
     if($items[$fieldName]['control'] == 'select') $items[$fieldName]['control'] = 'picker';
 }
 $items['acl']['control'] = array('control' => $items['acl']['control'], 'inline' => true);
+if($app->getClientLang() == 'en') $items['acl']['width'] = '150px';
 
 /* Build form field value for batch edit. */
 $fieldNameList = array_keys($items);

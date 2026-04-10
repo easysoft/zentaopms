@@ -102,7 +102,7 @@ if(!empty($project->PM))
     {
         $membersDom[] = div
         (
-            setClass('w-1/8 center-y'),
+            setClass('w-1/6 center-y'),
             avatar(setClass('primary-outline'), set::text($user->realname), set::src($user->avatar)),
             span(setClass('my-2'), $user->realname),
             span(setClass('text-gray'), $lang->project->PM)
@@ -121,7 +121,7 @@ foreach($teamMembers as $teamMember)
     if(!$user) continue;
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar(set::text($user->realname), set::src($user->avatar)),
         span(setClass('my-2'), $user->realname),
         span(setClass('text-gray'), $lang->project->member)
@@ -133,7 +133,7 @@ if(common::hasPriv('project', 'manageMembers'))
 {
     $membersDom[] = a
     (
-        setClass('w-1/8 center-y cursor-pointer'),
+        setClass('w-1/6 center-y cursor-pointer'),
         set::href(createLink('project', 'manageMembers', "projectID={$project->id}")),
         avatar
         (
@@ -360,7 +360,7 @@ row
                                 div
                                 (
                                     setClass('flex items-center justify-between'),
-                                    span($lang->projectCommon . $lang->project->team),
+                                    span($lang->projectCommon . ($isEn ? ' ' : '') . $lang->project->team),
                                     hasPriv('project', 'team') ? btn
                                     (
                                         setClass('ghost text-gray'),

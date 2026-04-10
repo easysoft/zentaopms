@@ -105,7 +105,7 @@ class projectTao extends projectModel
      * @access protected
      * @return bool
      */
-    protected function doUpdate(int $projectID, object $project): bool
+    public function doUpdate(int $projectID, object $project): bool
     {
         $project->id = $projectID;
 

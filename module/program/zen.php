@@ -313,31 +313,72 @@ class programZen extends program
      * 构造1.5级导航的数据。
      * Build the data of 1.5 level navigation.
      *
+     * 当列表中缺少上级项目集时，将仍挂在该上级下的子项目集作为根节点展示，避免仅含子项目集时树为空。
+     * When parent programs are missing from the list, child programs whose parent is absent are shown as roots.
+     *
      * @param  array     $programs
      * @param  int       $parentID
      * @access protected
-     * @return void
+     * @return array
      */
     protected function buildTree(array $programs, int $parentID = 0): array
+    {
+        $programList = array();
+        foreach($programs as $program)
+        {
+            if($program->type != 'program') continue;
+            $programList[] = $program;
+        }
+
+        if(empty($programList)) return array();
+
+        $ids = array();
+        foreach($programList as $program) $ids[$program->id] = true;
+
+        $names     = array_column($programList, 'name');
+        $pinyinMap = common::convert2Pinyin($names);
+
+        return $this->buildTreeNodes($programList, $parentID, $ids, $pinyinMap);
+    }
+
+    /**
+     * 递归构造项目集树节点。
+     * Build program tree nodes recursively.
+     *
+     * @param  array     $programs
+     * @param  int       $parentID
+     * @param  array     $ids      program id => true
+     * @param  array     $pinyinMap name => pinyin (from batch convert2Pinyin)
+     * @access protected
+     * @return array
+     */
+    protected function buildTreeNodes(array $programs, int $parentID, array $ids, array $pinyinMap): array
     {
         $result = array();
         foreach($programs as $program)
         {
-            if($program->type != 'program') continue;
-            if($program->parent == $parentID)
+            if($parentID === 0)
             {
-                $itemArray = array
-                (
-                    'id'    => $program->id,
-                    'text'  => $program->name,
-                    'label' => false,
-                    'keys'  => zget(common::convert2Pinyin(array($program->name)), $program->name, ''),
-                    'items' => $this->buildTree($programs, $program->id)
-                );
-
-                if(empty($itemArray['items'])) unset($itemArray['items']);
-                $result[] = $itemArray;
+                $match = ($program->parent == $parentID) || !isset($ids[$program->parent]);
             }
+            else
+            {
+                $match = ($program->parent == $parentID);
+            }
+
+            if(!$match) continue;
+
+            $itemArray = array
+            (
+                'id'    => $program->id,
+                'text'  => $program->name,
+                'label' => false,
+                'keys'  => zget($pinyinMap, $program->name, ''),
+                'items' => $this->buildTreeNodes($programs, $program->id, $ids, $pinyinMap)
+            );
+
+            if(empty($itemArray['items'])) unset($itemArray['items']);
+            $result[] = $itemArray;
         }
         return $result;
     }

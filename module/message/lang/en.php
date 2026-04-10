@@ -1,5 +1,5 @@
 <?php
-$lang->message->common     = 'Notification';
+$lang->message->common     = 'System Notification';
 $lang->message->index      = 'Homepage';
 $lang->message->setting    = 'Settings';
 $lang->message->browser    = 'System Notification';

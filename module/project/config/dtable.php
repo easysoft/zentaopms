@@ -93,6 +93,7 @@ $config->project->dtable->fieldList['teamCount']['name']     = 'teamCount';
 $config->project->dtable->fieldList['teamCount']['type']     = 'number';
 $config->project->dtable->fieldList['teamCount']['group']    = 5;
 $config->project->dtable->fieldList['teamCount']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['teamCount']['width'] = '100px';
 
 $config->project->dtable->fieldList['invested']['title']    = $lang->project->invested;
 $config->project->dtable->fieldList['invested']['name']     = 'invested';
@@ -142,6 +143,7 @@ $config->project->dtable->fieldList['estimate']['name']     = 'estimate';
 $config->project->dtable->fieldList['estimate']['type']     = 'number';
 $config->project->dtable->fieldList['estimate']['sortType'] = true;
 $config->project->dtable->fieldList['estimate']['group']    = 7;
+if($isEn) $config->project->dtable->fieldList['estimate']['width'] = '120px';
 
 $config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
 $config->project->dtable->fieldList['consume']['name']     = 'consume';

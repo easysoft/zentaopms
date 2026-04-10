@@ -3936,7 +3936,7 @@ class executionModel extends model
         if(!empty($execution->frozen) && in_array($action, array('edit', 'createChildStage', 'delete', 'putoff'))) return false;
         if($action == 'createChildStage') return commonModel::hasPriv('programplan', 'create') && $execution->type == 'stage';
         if($action == 'createTask')  return commonModel::hasPriv('task', 'create') && commonModel::hasPriv('execution', 'create') && empty($execution->isParent);
-        if($action == 'edit') return in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd')) ? commonModel::hasPriv('programplan', 'edit') : commonModel::hasPriv('execution', 'edit');
+        if($action == 'edit') return isset($execution->projectModel) && in_array($execution->projectModel, array('waterfall', 'waterfallplus', 'ipd')) ? commonModel::hasPriv('programplan', 'edit') : commonModel::hasPriv('execution', 'edit');
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);

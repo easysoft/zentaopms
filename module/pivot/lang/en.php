@@ -188,7 +188,7 @@ $lang->pivot->overduePlan   = 'Expired Plans';
 $lang->pivot->idAB         = 'ID';
 $lang->pivot->bugTitle     = 'Bug Name';
 $lang->pivot->taskName     = 'Task Name';
-$lang->pivot->todoName     = 'Todo Name';
+$lang->pivot->todoName     = 'To-do Name';
 $lang->pivot->testTaskName = 'Request Name';
 $lang->pivot->deadline     = 'Deadline';
 

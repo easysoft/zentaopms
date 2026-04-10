@@ -510,9 +510,9 @@ $lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->project->moreSelects = array();
-$lang->project->moreSelects['suspended'] = 'Suspended';
-$lang->project->moreSelects['delayed']   = 'Delayed';
-$lang->project->moreSelects['closed']    = 'Closed';
+$lang->project->moreSelects['browse']['more']['suspended'] = 'Suspended';
+$lang->project->moreSelects['browse']['more']['delayed']   = 'Delayed';
+$lang->project->moreSelects['browse']['more']['closed']    = 'Closed';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';

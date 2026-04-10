@@ -34,6 +34,7 @@
 #spaceDropmenu {position: absolute; left: 0; top: 0; right: 0; bottom: 0;}
 #spaceDropmenu .dropmenu-btn {height: 40px; width: 100%;}
 #spaceDropmenu .dropmenu-btn > .text {min-width: 0; overflow: hidden; white-space: nowrap; flex: auto;}
+#spaceDropmenu .dropmenu-btn > .icon {font-size: 16px;}
 .dropmenu.popup {background: var(--color-surface-light);}
 .hide-menu #spaceHeading > .text, .hide-menu #spaceHeading > .label {display: none;}
 .hide-menu #spaceHeading > .icon {display: flex;}
@@ -60,6 +61,7 @@
 #menuMoreList {background: var(--zt-menu-bg); padding: 8px 0; min-width: 100px; list-style: none;}
 #menuMoreList > .menu-item {padding: 1px 12px!important; height: 32px!important;}
 #menuMoreList > .menu-item > a > .text {flex: auto;}
+#menuMoreList > .menu-item > a > .icon {font-size: 16px;}
 
 body.hide-menu {--zt-menu-width: var(--zt-menu-fold-width)!important;}
 .hide-menu #menu .nav > li {padding: 4px}

@@ -26,7 +26,7 @@ $lang->custom->convertFactor        = 'Conversion Factor';
 $lang->custom->region               = 'Range';
 $lang->custom->tips                 = 'Prompt: ';
 $lang->custom->setTips              = 'Set Prompt Text';
-$lang->custom->isRange              = 'Target Control Scope';
+$lang->custom->isRange              = 'Within Target Range';
 $lang->custom->concept              = "{$lang->projectCommon} Concept";
 $lang->custom->URStory              = "Feature";
 $lang->custom->SRStory              = "Story";
@@ -235,7 +235,7 @@ $lang->custom->notice->confirmReviewCase   = 'Do you want to change the status o
 $lang->custom->notice->storyReviewTip      = 'When users, roles, or departments are selected, the system takes the union of all included members.';
 $lang->custom->notice->selectAllTip        = 'When all users are selected, the reviewers will be cleared and disabled, and both the role and department filters will be hidden.';
 $lang->custom->notice->repeatKey           = 'Duplicate Key: %s';
-$lang->custom->notice->readOnlyOfCode      = "A code is a management alias used mainly for confidentiality or alternate identification. Once code is enabled, code will appear for ($lang->productCommon), {$lang->projectCommon}, and execution across the create, edit, detail, and list views.";
+$lang->custom->notice->readOnlyOfCode      = "Code serve as management aliases for confidentiality. Once enabled, codes will be displayed for products, projects, and executions across create, edit, detail, and list views.";
 $lang->custom->notice->readOnlyOfPercent   = "Workload Ratio is used to allocate workloads across multiple phases within a {$lang->projectCommon}. The total percentage among phases of the same level cannot exceed 100%. Once Workload Ratio is enabled, phase workload allocation must be maintained in both Waterfall {$lang->projectCommon} and Waterfall+ {$lang->projectCommon} models.";
 $lang->custom->notice->gradeRule           = 'Cross-level breakdown: You can create stories from any hierarchy level and establish parent-child links across layers. For example, you may create a Level 3 story directly under a Level 1 story.';
 

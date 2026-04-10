@@ -17,7 +17,7 @@ $lang->program->realEndAB      = 'Actual End';
 $lang->program->stage          = 'Stage';
 $lang->program->type           = 'Type';
 $lang->program->pri            = 'Priority';
-$lang->program->parent         = 'Parent';
+$lang->program->parent         = 'Parent Program';
 $lang->program->exchangeRate   = 'Exchange Rate';
 $lang->program->openedBy       = 'Opened by';
 $lang->program->openedDate     = 'Opened Date';
@@ -90,7 +90,7 @@ $lang->program->showNotCurrentProjects  = "Display {$lang->projectCommon} inform
 
 $lang->program->progress         = "{$lang->projectCommon}Progress";
 $lang->program->progressAB       = 'Progress';
-$lang->program->children         = 'Add Child';
+$lang->program->children         = 'Add a Program';
 $lang->program->allInvest        = 'Input';
 $lang->program->teamCount        = 'Team';
 $lang->program->longTime         = 'Long-Term';
@@ -151,12 +151,12 @@ $lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
-$lang->program->aclList['open']    = "Default(user who can visit the program can access it)";
-$lang->program->aclList['private'] = "Private (accessible to {$lang->projectCommon} portfolio holders and stakeholders, stakeholders can follow up maintenance)";
+$lang->program->aclList['open']    = "Public (Accessible to anyone with “Program” view permissions.)";
+$lang->program->aclList['private'] = "Private (Accessible to this program's leader and stakeholders.)";
 
-$lang->program->subAclList['open']    = "Default (user who can visit the program can access it)";
-$lang->program->subAclList['program'] = "Open within the program (accessible to all higher-level program directors and affiliates, as well as to this program director and affiliates)";
-$lang->program->subAclList['private'] = "Private (accessible to this program set leader and stakeholders, stakeholders can follow up maintenance)";
+$lang->program->subAclList['open']    = "Public (Accessible to anyone with “Program” view permissions.)";
+$lang->program->subAclList['program'] = "Internal (Accessible to all leaders and stakeholders of this program and its parent programs.)";
+$lang->program->subAclList['private'] = "Private (Accessible to this program's leader and stakeholders.)";
 
 $lang->program->subAcls['open']    = 'Default';
 $lang->program->subAcls['program'] = 'Open within the program';

@@ -10,7 +10,7 @@
  * @link        https://www.zentao.net
  */
 global $config;
-$lang->story->create            = "Create Story";
+$lang->story->create            = "Create {$lang->SRCommon}";
 
 $lang->story->requirement       = zget($lang, 'URCommon', "Feature");
 $lang->story->story             = zget($lang, 'SRCommon', "Story");
@@ -448,8 +448,8 @@ $lang->story->report->select = 'Select Report Type';
 $lang->story->report->create = 'Create Report';
 $lang->story->report->value  = 'Stories';
 
-$lang->story->report->charts['storiesPerProduct']      = "$lang->productCommon Stories";
-$lang->story->report->charts['storiesPerModule']       = 'Stories in Module';
+$lang->story->report->charts['storiesPerProduct']      = $lang->productCommon . ' ' . $lang->SRCommon;
+$lang->story->report->charts['storiesPerModule']       = "$lang->SRCommon in Module";
 $lang->story->report->charts['storiesPerSource']       = 'By Story Source';
 $lang->story->report->charts['storiesPerPlan']         = 'By Plan';
 $lang->story->report->charts['storiesPerStatus']       = 'By Status';

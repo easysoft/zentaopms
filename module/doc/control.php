@@ -1415,6 +1415,7 @@ class doc extends control
         }
         else
         {
+            if($this->app->tab === 'project' && $objectType === 'execution') $objectType = 'project';
             $objectID = $this->doc->getObjectIDByLib($lib, $objectType);
         }
 
