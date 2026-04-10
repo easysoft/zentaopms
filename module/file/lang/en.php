@@ -32,6 +32,7 @@ $lang->file->exportRange   = "Export Range";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
+$lang->file->cantPreview   = "Cannot preview this file";
 $lang->file->previewFile   = "Preview Attachments";
 $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'upload';

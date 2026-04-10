@@ -32,6 +32,7 @@ $lang->file->exportRange   = "要導出的數據";
 $lang->file->defaultTPL    = "預設模板";
 $lang->file->setExportTPL  = "設置";
 $lang->file->preview       = "預覽";
+$lang->file->cantPreview   = "無法預覽該檔案";
 $lang->file->addFile       = '添加檔案';
 $lang->file->beginUpload   = '開始上傳';
 $lang->file->uploadSuccess = '上傳成功';

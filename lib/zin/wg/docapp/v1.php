@@ -208,6 +208,7 @@ class docApp extends wg
         $app->loadLang('api');
         $langData = $lang->doc->docLang;
         $langData->filePreview       = $lang->file->preview;
+        $langData->cantPreview       = $lang->file->cantPreview;
         $langData->fileDownload      = $lang->file->download;
         $langData->fileDelete        = $lang->file->delete;
         $langData->fileRename        = $lang->file->edit;
