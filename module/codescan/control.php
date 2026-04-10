@@ -1044,7 +1044,7 @@ class codescan extends control
      * @access public
      * @return void
      */
-    public function taskView(int $serviceRepoID, int $taskID, int $repoID = 0, string $type = 'trigger')
+    public function taskView(int $serviceRepoID, int $taskID, int $repoID = 0, string $type = 'issue')
     {
         if($repoID) $this->loadModel('ci')->setMenu($repoID);
         $this->config->codescan->actionList = $this->config->codescan->task->actionList;
@@ -1519,7 +1519,7 @@ class codescan extends control
 
         $task = $this->codescan->getScanTask($taskID);
         $task = $this->codescanZen->processTaskData($task, $repoList);
-        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repoID}&taskID={$taskID}&repoID={$task->repoID}&type=view");
+        $this->loadModel('action')->create('codescantask', $taskID, 'resend', '', $task->name . "|serviceRepoID={$task->repoID}&taskID={$taskID}&repoID={$task->repoID}&type=issue");
         return $this->sendSuccess(array('load' => true, 'message' => $this->lang->codescan->notice->resendSuccess));
     }
 }
