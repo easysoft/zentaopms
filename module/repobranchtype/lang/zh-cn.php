@@ -5,7 +5,7 @@ $lang->repobranchtype->create        = '创建分支类型';
 $lang->repobranchtype->edit          = '编辑分支类型';
 $lang->repobranchtype->delete        = '删除分支类型';
 $lang->repobranchtype->import        = '导入分支类型';
-$lang->repobranchtype->setBranchRule = '设置分支规则';
+$lang->repobranchtype->setBranchRule = '设置评审流程';
 
 $lang->repobranchtype->name     = '名称';
 $lang->repobranchtype->key      = '键值';

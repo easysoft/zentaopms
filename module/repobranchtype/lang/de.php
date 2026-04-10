@@ -5,7 +5,7 @@ $lang->repobranchtype->create        = 'Create Branch Type';
 $lang->repobranchtype->edit          = 'Edit Branch Type';
 $lang->repobranchtype->delete        = 'Delete Branch Type';
 $lang->repobranchtype->import        = 'Import Branch Type';
-$lang->repobranchtype->setBranchRule = 'Set Branch Rule';
+$lang->repobranchtype->setBranchRule = 'Set review flow';
 
 $lang->repobranchtype->name     = 'Name';
 $lang->repobranchtype->key      = 'Key';
