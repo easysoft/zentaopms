@@ -108,7 +108,7 @@ $isModal ? $ruleTable : panel
         setID('rulesetMenu'),
         setClass('flex justify-between'),
         $headers,
-        $type == 'rule' && $ruleSet->is_custom && hasPriv('codescan', 'linkrule') ? btn
+        $type == 'rule' && $ruleSet->isCustom && hasPriv('codescan', 'linkrule') ? btn
         (
             set::icon('link'),
             set::type('primary'),

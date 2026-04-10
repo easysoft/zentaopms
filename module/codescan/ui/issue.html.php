@@ -29,7 +29,7 @@ if(!$isInModal && empty($taskID))
 $queryMenuLink = createLink('codescan', 'issue', "repoID={$repoID}&taskID={$taskID}&serviceRepoID={$serviceRepoID}&type=bysearch&queryID={queryID}");
 $cols = $this->loadModel('datatable')->getSetting('codescan');
 if(isset($cols['rulePlugin'])) $cols['rulePlugin']['map'] = $pluginList;
-if(isset($cols['actions']['list']['bug'])) $cols['actions']['list']['bug']['url']['params'] = "product={$productID}&branch=0&extra=from=codescan,fromID={id},fromServerID={$serverID},repoID={$realRepoID}";
+if(isset($cols['actions']['list']['bug'])) $cols['actions']['list']['bug']['url']['params'] = "product={$productID}&branch=0&extra=from=codescan,fromID={id},fromServerID={$realRepoID},repoID={$realRepoID}";
 if(hasPriv('codescan', 'issueview')) $cols['content']['link'] = array('module' => 'codescan', 'method' => 'issueview', 'params' => "issueID={id}&repoID={$realRepoID}");
 if($isInModal)
 {
@@ -125,7 +125,7 @@ $bugBtn = $canBug ? array(
     'text'      => $lang->codescan->createBug,
     'className' => 'btn batch-btn size-sm secondary bug-btn',
     'data-type' => 'bug',
-    'data-url'  => $this->createLink('bug', 'batchCreate', "productID={$productID}&branch=0&executionID=0&moduleID=0&extra=from=codescan,fromServerID={$serverID},repoID={$realRepoID}")
+    'data-url'  => $this->createLink('bug', 'batchCreate', "productID={$productID}&branch=0&executionID=0&moduleID=0&extra=from=codescan,fromServerID={$serviceRepoID},repoID={$realRepoID}")
 ) : null;
 
 $activeBtn = $canActive ? array(

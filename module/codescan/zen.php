@@ -209,7 +209,6 @@ class codescanZen extends codescan
         if(isset($searchConfig['params']['plugin'])) $searchConfig['params']['plugin']['values'] = $this->view->pluginList ? $this->view->pluginList : array();
         if(isset($searchConfig['params']['repo']))   $searchConfig['params']['repo']['values']   = $this->view->repoList   ? $this->view->repoList : array();
         if(isset($searchConfig['params']['plan']))   $searchConfig['params']['plan']['values']   = $this->view->planList   ? $this->view->planList : array();
-        if(isset($searchConfig['params']['type']))   $searchConfig['params']['type']['values']   = $this->view->typeList   ? $this->view->typeList : array();
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
