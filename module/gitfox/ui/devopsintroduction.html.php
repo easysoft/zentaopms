@@ -38,17 +38,17 @@ div
                 (
                     array
                     (
-                        array
+                        $isInstall ? array
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
                             'url'   => $adminRegisterLink
-                        ),
+                        ) : null,
                         array
                         (
                             'text'  => $lang->install->start,
                             'class' => 'primary',
-                            'url'   => inLink('installGitFox', '&_single=1')
+                            'url'   => inLink('installGitFox', "isInstall={$isInstall}&_single=1")
                         )
                     )
                 )

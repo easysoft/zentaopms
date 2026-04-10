@@ -155,3 +155,4 @@ $lang->gitfox->checkInstall     = '我已完成上述安装步骤';
 $lang->gitfox->execScript       = '执行安装脚本';
 $lang->gitfox->copySuccess      = '复制成功';
 $lang->gitfox->copyFail         = '浏览器不支持复制功能，请手动复制';
+$lang->gitfox->startUse         = '开始使用';

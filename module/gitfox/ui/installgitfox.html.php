@@ -75,15 +75,15 @@ div
                 (
                     array
                     (
-                        array
+                        $isInstall ? array
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
                             'url'   => $adminRegisterLink
-                        ),
+                        ) : null,
                         array
                         (
-                            'text'  => $lang->install->next,
+                            'text'  => $isInstall ? $lang->install->next : $lang->gitfox->startUse,
                             'type'  => 'primary',
                             'class' => 'btn-install',
                             'url'   => 'javascript:checkGitFoxServer();'
