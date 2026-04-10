@@ -39,11 +39,18 @@ class codescanZen extends codescan
                 $typePairs = array();
                 foreach($configTypeList as $config)
                 {
-                    $key = isset($config->id) ? $config->id : $config->$type;
+                    if($type === 'lang')
+                    {
+                        $key = $config->$type;
+                    }
+                    else
+                    {
+                        $key = isset($config->id) ? $config->id : $config->$type;
+                    }
                     if($key == 'PHPStan') $key = 'phpstan';
                     if($key == 'qlty')    $config->$type = 'Qlty';
                     if($key == 'phpstan') $config->$type = 'PHPStan';
-                    if($type == 'lang' && $key == 'Custom')
+                    if($type == 'lang' && $key == 'custom')
                     {
                         $config->$type = $this->lang->codescan->general;
                     }
