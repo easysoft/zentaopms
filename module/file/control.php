@@ -693,5 +693,47 @@ class file extends control
 
         $obLevel = ob_get_level();
         for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+        $mime = $this->getMimeType($file);
+        helper::header('Content-type', $mime);
+
+        $cacheMaxAge = 10 * 365 * 24 * 3600;
+        helper::header('Cache-Control', 'private');
+        helper::header('Pragma', 'cache');
+        helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
+        helper::header('Cache-Control', "max-age=$cacheMaxAge");
+
+        $handle = fopen($file->realPath, "r");
+        if($handle)
+        {
+            while(!feof($handle)) echo fgets($handle);
+            fclose($handle);
+        }
+    }
+
+    /**
+     * Get MIME type by file object.
+     *
+     * @param  object $file
+     * @access private
+     * @return string
+     */
+    private function getMimeType(object $file): string
+    {
+        if(function_exists('finfo_open'))
+        {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $file->realPath);
+            finfo_close($finfo);
+            if($mime && $mime !== 'application/octet-stream') return $mime;
+        }
+
+        if(function_exists('mime_content_type'))
+        {
+            $mime = mime_content_type($file->realPath);
+            if($mime) return $mime;
+        }
+
+        return 'application/octet-stream';
     }
 }
