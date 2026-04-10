@@ -3955,11 +3955,6 @@ class executionModel extends model
         if($action == 'putoff')       return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate')     return $execution->status == 'suspended' || $execution->status == 'closed';
         if($action == 'delete')       return empty($execution->isParent);
-        if($action == 'autoSchedule')
-        {
-            global $app;
-            return $app->control->loadModel('programplan')->checkLeafStage(isset($execution->rawID) ? $execution->rawID : $execution->id);
-        }
 
         return true;
     }
@@ -4965,12 +4960,6 @@ class executionModel extends model
             $execution->isParent    = !empty($execution->isParent) or !empty($execution->tasks);
             $execution->actions     = array();
 
-            if(in_array($this->config->edition, array('max', 'ipd')))
-            {
-                $hasConflict = $this->checkCircularDependencies($execution->projectID, $execution->rawID);
-                $execution->hasConflict = !empty($hasConflict) ? 1 : 0;
-            }
-
             $canModify = common::canModify('execution', $execution);
             if($canModify && isset($this->config->project->execution->dtable->actionsRule[$execution->projectModel]))
             {
@@ -4990,7 +4979,6 @@ class executionModel extends model
                         $action = array('name' => $actionName, 'disabled' => $this->isClickable($execution, $actionName) ? false : true);
 
                         if($actionName == 'createChildStage' && $action['disabled'] && $execution->type != 'stage') $action['hint'] = $this->lang->programplan->error->notStage;
-                        if($actionName == 'autoSchedule' && !commonModel::hasPriv('task', 'autoSchedule')) $action['disabled'] = true;
                         if(!$action['disabled']) break;
                         if($actionName == 'close' && $execution->status != 'closed') break;
                         if(!empty($execution->frozen) && in_array($actionName, array('edit', 'createChildStage', 'delete', 'putoff'))) $action['hint'] = sprintf($this->lang->execution->stageFrozenTip, $this->lang->execution->$actionName);
