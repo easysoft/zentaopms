@@ -82,6 +82,8 @@
 #mainContent.loading .scrollVer_cell {display: none;}
 #mainContent.loading #myCover {height: auto!important;}
 #mainContent.loading .gantt_grid_head_cell .sort:before {display: none!important;}
+#mainContent.loading [class^=pri-]{line-height: 3px;}
+#mainContent.loading .gantt-toolbar{display:none;}
 
 .gantt_task_cell.weekend, .gantt_scale_cell.weekend { background-color: #F2F2F2; }
 
