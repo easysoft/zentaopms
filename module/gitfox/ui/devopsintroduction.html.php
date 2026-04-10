@@ -48,7 +48,7 @@ div
                         (
                             'text'  => $lang->install->start,
                             'class' => 'primary',
-                            'url'   => inLink('installGitFox', "isInstall={$isInstall}&_single=1")
+                            'url'   => $devopsLink
                         )
                     )
                 )

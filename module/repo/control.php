@@ -22,8 +22,6 @@ class repo extends control
     public function __construct()
     {
         parent::__construct();
-        $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
 
         $this->scm = $this->app->loadClass('scm');
 
@@ -49,6 +47,9 @@ class repo extends control
      */
     public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
+        $serverHeath = $this->loadModel('gitfox')->checkHealth();
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
         $this->repos = $this->repo->getRepoPairs($tab, $objectID);

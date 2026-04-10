@@ -251,8 +251,18 @@ class gitfox extends control
      */
     public function devopsIntroduction(int $isInstall = 0)
     {
-        $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
+        $adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register') : helper::createLink('index');
+        $devopsLink        = helper::createLink('gitfox', 'installGitFox', 'isInstall=' . $isInstall);
+
+        if($isInstall)
+        {
+            $adminRegisterLink .= $this->config->requestType == 'GET' ? '&_single=1' : '?_single=1';
+            $devopsLink        .= $this->config->requestType == 'GET' ? '&_single=1' : '?_single=1';
+        }
+
+        $this->view->adminRegisterLink = $adminRegisterLink;
         $this->view->title             = $this->lang->gitfox->devopsIntroduction;
+        $this->view->devopsLink        = $devopsLink;
         $this->view->isInstall         = $isInstall;
         $this->display();
     }
@@ -267,6 +277,18 @@ class gitfox extends control
      */
     public function installGitFox(int $isInstall = 0)
     {
+        $nextLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register') : helper::createLink('index');
+
+        if($isInstall)
+        {
+            $nextLink .= $this->config->requestType == 'GET' ? '&_single=1' : '?_single=1';
+        }
+        else
+        {
+            list($devopsModule, $devopsMethod) = explode('-', $this->config->devopsLink);
+            $nextLink = helper::createLink($devopsModule, $devopsMethod);
+        }
+
         if(strpos(PHP_OS, 'WIN'))
         {
             $os = 'win';
@@ -308,10 +330,10 @@ class gitfox extends control
         file_put_contents($script, $command);
         if(file_exists($script)) chmod($script, 0755);
 
-        $this->view->title             = $this->lang->gitfox->installGitFox;
-        $this->view->script            = $script;
-        $this->view->adminRegisterLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register', '&_single=1') : helper::createLink('index');
-        $this->view->isInstall         = $isInstall;
+        $this->view->title     = $this->lang->gitfox->installGitFox;
+        $this->view->script    = $script;
+        $this->view->nextLink  = $nextLink;
+        $this->view->isInstall = $isInstall;
         $this->display();
     }
 
