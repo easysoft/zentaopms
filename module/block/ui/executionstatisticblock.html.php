@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 $active    = isset($params['active']) ? $params['active'] : key($executions);
+$isEn      = $app->getClientLang() == 'en';
 $execution = new stdclass();
 $execution->progress          = '';
 $execution->doneStory         = '';
@@ -86,7 +87,7 @@ if($execution->type == 'kanban')
                 )),
                 set::grid(array(
                     'top'          => !empty($chartData['labels']) ? '80px' : '40px',
-                    'left'         => !empty($chartData['labels']) ? '2px' : '15px',
+                    'left'         => !empty($chartData['labels']) ? '2px' : '24px',
                     'right'        => '2px',
                     'bottom'       => '2px',
                     'containLabel' => true
@@ -177,7 +178,6 @@ else
             )
         );
 
-    $isEn = $app->getClientLang() == 'en';
     /* 任务故事信息。Task story info. */
     $taskStoryInfo = col
         (
@@ -383,7 +383,7 @@ statisticBlock
         picker
         (
             setClass('font-normal gray-400-outline ml-3 text-base circle filter-project-pricker'),
-            set::width('120px'),
+            set::width($isEn ? '220px' : '120px'),
             set::placeholder($lang->block->filterProject),
             set::name('project'),
             set::items($projectItems),

@@ -28,7 +28,7 @@ cid=15445
  - 属性title @BUG2
  - 属性buildID @12
 - 执行bugTest模块的extractObjectFromExtrasTest方法，参数是clone $baseBug, array
- - 属性title @开发任务12
+ - 属性title @任务3的待办
  - 属性steps @这是一个待办的描述3
  - 属性pri @3
 
@@ -73,4 +73,4 @@ r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('testtask' => 1)))
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 1))) && p('title,steps,pri') && e('自定义1的待办,这是一个待办的描述1,1');
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 2))) && p('title,steps,pri') && e('BUG1,这是一个待办的描述2,2');
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('bugID' => 2, 'testtask' => 2))) && p('title,buildID') && e('BUG2,12');
-r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 3))) && p('title,steps,pri') && e('开发任务12,这是一个待办的描述3,3');
+r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 3))) && p('title,steps,pri') && e('任务3的待办,这是一个待办的描述3,3');

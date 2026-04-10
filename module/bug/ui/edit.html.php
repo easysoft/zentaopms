@@ -25,6 +25,8 @@ jsVar('edition',               $config->edition);
 jsVar('isShadowProduct',       !empty($product->shadow));
 jsVar('duplicateBugID',        !empty($bug->duplicateBug) ? $bug->duplicateBug : 0);
 
+$isEn = $app->getClientLang() == 'en';
+
 detailHeader
 (
     to::title
@@ -112,7 +114,7 @@ detailBody
         set::isForm(true),
         tableData
         (
-            setClass('mt-5'),
+            setClass('mt-5' . ($isEn ? ' en-table' : '')),
             set::title($lang->bug->legendBasicInfo),
             set::tdClass('w-64'),
             item
@@ -353,6 +355,7 @@ detailBody
         ),
         tableData
         (
+            $isEn ? setClass('en-table') : null,
             set::title(!empty($project->multiple) ? $lang->bug->legendPRJExecStoryTask : $lang->bug->legendExecStoryTask),
             set::tdClass('w-64'),
             item
@@ -419,6 +422,7 @@ detailBody
         ),
         tableData
         (
+            $isEn ? setClass('en-table') : null,
             set::title($lang->bug->legendLife),
             set::tdClass('w-64'),
             item
@@ -551,6 +555,7 @@ detailBody
         ),
         tableData
         (
+            $isEn ? setClass('en-table') : null,
             set::title($lang->bug->legendMisc),
             set::tdClass('w-64'),
             item

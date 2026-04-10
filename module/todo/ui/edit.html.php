@@ -473,7 +473,7 @@ formPanel
     (
         formGroup
         (
-            set::width('4/5'),
+            set::width('3/4'),
             set(array('id' => 'nameBox', 'required' => true, 'label' => (($todo->type == 'custom' || $config->vision == 'rnd') ? $lang->todo->name : $lang->todo->objectID), 'class' => 'name-box')),
             div
             (
@@ -484,7 +484,7 @@ formPanel
         ),
         formGroup
         (
-            set::width('1/5'),
+            set::width('1/4'),
             setClass('priBox'),
             set::label($lang->todo->pri),
             priPicker(setID('pri'), set::name('pri'), set::items($lang->todo->priList), set::value($todo->pri))

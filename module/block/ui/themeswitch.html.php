@@ -25,7 +25,7 @@ function printThemeSwitch()
         $image = $config->webRoot . "theme/default/images/guide/theme_{$themeKey}.png";
         $themes[] = cell
         (
-            set::width('172px'),
+            set::width($app->getClientLang() == 'en' ? '168px' : '172px'),
             setClass("p-1 pb-0 rounded-md block theme-{$themeKey}", $app->cookie->theme == $themeKey ? 'active' : ''),
             div
             (

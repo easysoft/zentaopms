@@ -122,15 +122,15 @@ $lang->programplan->emptyStageTip     = '请联系管理员，在后台的“项
 $lang->programplan->stageCustom['date'] = '显示日期';
 $lang->programplan->stageCustom['task'] = '显示任务';
 
-$lang->programplan->ganttCustom['owner_id']     ='负责人';
-$lang->programplan->ganttCustom['deadline']     ='计划完成';
-$lang->programplan->ganttCustom['status']       ='状态';
-$lang->programplan->ganttCustom['realBegan']    ='实际开始';
-$lang->programplan->ganttCustom['realEnd']      ='实际完成';
-$lang->programplan->ganttCustom['progress']     ='工作量占比';
-$lang->programplan->ganttCustom['taskProgress'] ='任务进度';
-$lang->programplan->ganttCustom['estimate']     ='工时';
-$lang->programplan->ganttCustom['consumed']     ='消耗工时';
+$lang->programplan->ganttCustom['owner_id']     = '负责人';
+$lang->programplan->ganttCustom['deadline']     = '计划完成';
+$lang->programplan->ganttCustom['status']       = '状态';
+$lang->programplan->ganttCustom['realBegan']    = '实际开始';
+$lang->programplan->ganttCustom['realEnd']      = '实际完成';
+$lang->programplan->ganttCustom['percent']      = '工作量占比';
+$lang->programplan->ganttCustom['taskProgress'] = '任务进度';
+$lang->programplan->ganttCustom['estimate']     = '工时';
+$lang->programplan->ganttCustom['consumed']     = '消耗工时';
 $lang->programplan->ganttCustom['delay']        = '是否延期';
 $lang->programplan->ganttCustom['delayDays']    = '延期天数';
 

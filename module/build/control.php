@@ -68,6 +68,11 @@ class build extends control
         {
             $build = $this->buildZen->buildBuildForCreate();
             if(!empty($_FILES['buildFiles'])) $_FILES['files'] = $_FILES['buildFiles'];
+            if(strpos($this->config->build->create->requiredFields, 'files') !== false && empty($_FILES['files']['name'][0]))
+            {
+                return $this->sendError(array('message' => sprintf($this->lang->error->notempty, $this->lang->build->files)));
+            }
+
             unset($_FILES['buildFiles']);
             if(dao::isError()) return $this->sendError(dao::getError());
             if(commonModel::isTutorialMode()) return $this->sendSuccess(array('closeModal' => true)); // Fix bug #21095.

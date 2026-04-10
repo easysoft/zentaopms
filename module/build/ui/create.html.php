@@ -272,6 +272,7 @@ formPanel
         set::id('buildFiles'),
         formGroup
         (
+            set::required(strpos($config->build->create->requiredFields, 'files') !== false),
             set::label($lang->build->files),
             upload(set::name('buildFiles[]'))
         )

@@ -317,8 +317,8 @@ class jira
                     $link = array();
                     $link['id']          = $issueLink['id'];
                     $link['linktype']    = $issueLink['type']['id'];
-                    $link['source']      = $issue['id'];
-                    $link['destination'] = $issueLink['outwardIssue']['id'];
+                    $link['source']      = $issueLink['outwardIssue']['id'];
+                    $link['destination'] = $issue['id'];
                     $links[$link['id']]  = $link;
                 }
                 $issue['links'] = $links;
@@ -473,7 +473,11 @@ class jira
         if(!$result) return array();
 
         $statusList = array();
-        foreach($result as $status) $statusList[$status['id']] = $status;
+        foreach($result as $status)
+        {
+            $status['name'] = $status['untranslatedName'];
+            $statusList[$status['id']] = $status;
+        }
 
         return $statusList;
     }

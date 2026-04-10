@@ -221,6 +221,8 @@ $lang->doc->needEditable = 'You don\'t have permission to edit this document.';
 $lang->doc->needReadable = 'You don\'t have permission to view this document.';
 $lang->doc->groupLabel   = 'Group';
 $lang->doc->userLabel    = 'User';
+$lang->doc->parent       = 'Parent';
+$lang->doc->rawContent   = 'Raw Content';
 
 $lang->doc->moduleDoc     = 'View by Module';
 $lang->doc->searchDoc     = 'Search';

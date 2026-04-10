@@ -11,6 +11,14 @@ class breadcrumb extends wg
         'labelWidth' => '?int=76'
     );
 
+    public static function getPageCSS(): ?string
+    {
+        return <<<CSS
+        .breadcrumb.flex-wrap{padding-inline-start:1.25rem;box-sizing:border-box}
+        .breadcrumb.flex-wrap>li:first-child{margin-inline-start:-1.25rem}
+        CSS;
+    }
+
     public function onBuildItem($item): node|null
     {
         if($item === null) return null;
@@ -75,7 +83,7 @@ class breadcrumb extends wg
     {
         return h::ol
         (
-            setClass('breadcrumb'),
+            setClass('breadcrumb flex-wrap min-w-0 flex-1'),
             setStyle('--breadcrumb-divider', $this->prop('divider')),
             set($this->getRestProps()),
             $this->buildItems(),

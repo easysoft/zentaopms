@@ -95,6 +95,7 @@ $config->task->dtable->fieldList['deadline']['type']     = 'date';
 $config->task->dtable->fieldList['deadline']['sortType'] = true;
 $config->task->dtable->fieldList['deadline']['show']     = true;
 $config->task->dtable->fieldList['deadline']['group']    = 5;
+if($isEn) $config->task->dtable->fieldList['deadline']['width'] = '100';
 
 $config->task->dtable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->task->dtable->fieldList['estimate']['type']     = 'number';

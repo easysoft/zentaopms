@@ -2718,16 +2718,19 @@ class screenModel extends model
     {
         $type = 'withdelay';
         $this->loadModel('execution');
-        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
 
         $executionData = array();
-
+        $executions    = $this->execution->getList(0, 'sprint', 'doing') + $this->execution->getList(0, 'stage', 'doing');
+        $projectIdList = array_column($executions, 'project');
+        $parents       = array_column($executions, 'parent');
+        $projectPairs  = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchPairs();
         foreach($executions as $executionID => $execution)
         {
-            $execution = $this->execution->getByID($executionID);
+            if(in_array($executionID, $parents)) continue; // 过滤父阶段
 
             /* Splice project name for the execution name. */
-            $execution->name = $this->loadModel('project')->getByID($execution->project)->name . '--' . $execution->name;
+            $projectName     = zget($projectPairs, $execution->project, '');
+            $execution->name = $projectName ? $projectName . '--' . $execution->name : $execution->name;
 
             /* Get date list. */
             if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)

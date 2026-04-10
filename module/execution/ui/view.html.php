@@ -340,7 +340,7 @@ foreach(array('PM', 'PO', 'QD', 'RD') as $field)
 
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             setClass('primary-outline'),
@@ -365,7 +365,7 @@ foreach($teamMembers as $teamMember)
 
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             set::size('36'),
@@ -391,7 +391,7 @@ if(common::hasPriv('execution', 'manageMembers'))
     $membersDom[] = a
     (
         set::href(createLink('execution', 'manageMembers', "executionID={$execution->id}")),
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar
         (
             setClass('mb-2'),

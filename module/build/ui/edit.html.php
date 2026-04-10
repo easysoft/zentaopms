@@ -215,6 +215,7 @@ formPanel
         set::id('buildFiles'),
         formGroup
         (
+            set::required(strpos($config->build->edit->requiredFields, 'files') !== false),
             set::label($lang->build->files),
             fileSelector($build->files ? set::defaultFiles(array_values($build->files)) : null)
         )

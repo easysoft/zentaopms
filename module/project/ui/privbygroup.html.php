@@ -206,7 +206,7 @@ else
     formBase
     (
         setID('managePrivForm'),
-        setClass('gap-0'),
+        setClass('gap-0' . ($app->getClientLang() == 'en' ? ' en-priv' : '')),
         formHidden('actions[][]', ''),
         formHidden('noChecked', ''),
         set::actions(array()),

@@ -373,10 +373,11 @@ elseif($module == 'user' && $field == 'deleted')
 }
 elseif($module == 'feedback' && $field == 'review')
 {
+    $labelWidth = $isEn ? '140px' : '100px';
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::label($lang->custom->feedback->fields['review']),
         set::name('needReview'),
         set::value($needReview),
@@ -387,7 +388,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::hidden($needReview),
         set::label($lang->custom->forceReview),
         set::name('forceReview[]'),
@@ -400,7 +401,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::hidden(!$needReview),
         set::label($lang->custom->forceNotReview),
         set::name('forceNotReview[]'),
@@ -414,7 +415,7 @@ elseif($module == 'feedback' && $field == 'review')
     $formItems[] = formGroup
     (
         set::width('1/2'),
-        set::labelWidth('100px'),
+        set::labelWidth($labelWidth),
         set::label($lang->feedback->reviewedByAB),
         set::name('reviewer'),
         set::value(empty($reviewer) ? ' ' : $reviewer),

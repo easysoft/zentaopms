@@ -5,7 +5,7 @@ unset($lang->execution->featureBar['all']['wait']);
 unset($lang->execution->featureBar['all']['suspended']);
 
 $lang->execution->createKanban    = 'Create Kanban';
-$lang->execution->noExecution     = "No Executions.";
+$lang->execution->noExecution     = "No Kanban.";
 $lang->execution->importTask      = 'Import Tsak';
 $lang->execution->batchCreateTask = 'Batch Create Task';
 $lang->execution->linkStory       = "Link {$lang->SRCommon}";

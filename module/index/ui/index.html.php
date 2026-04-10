@@ -160,9 +160,9 @@ div
                     set::href('#menuMoreList'),
                     icon('more-circle'),
                     span(setClass('text'), $lang->more),
-                    toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
+                    toggle::dropdown(array('placement' => 'right-end', 'offset' => 12, 'shift' => true))
                 ),
-                ul(setClass('dropdown-menu menu scrollbar-light'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu scrollbar-light overflow-y-auto'), setID('menuMoreList'))
             )
         ),
         ul
@@ -267,7 +267,7 @@ if($config->edition != 'open' && $zaiConfig)
     }
 }
 
-to::headBefore(h::css('.icon-app-empty::before{content: "\e919"}'));
+to::headBefore(h::css('.icon-app-empty::before{content: "\ea6e"}'));
 
 to::head
 (

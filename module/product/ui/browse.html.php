@@ -114,9 +114,10 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
         $items[] = array('text' => $lang->story->create, 'url' => $createLink);
     }
 
+    $batchItems = array();
     if($isProjectStory && $config->vision != 'lite')
     {
-        if(!empty($productID)) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
+        if(!empty($productID) && common::hasPriv('story', 'batchCreate')) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
         if(str_contains($project->storyType, 'requirement') && $this->config->URAndSR)
         {
             if(common::hasPriv('requirement', 'create'))
@@ -161,7 +162,7 @@ $fnBuildCreateStoryButton = function() use ($lang, $product, $isProjectStory, $s
             }
         }
 
-        if(!empty($productID)) $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
+        if(!empty($productID) && !empty($batchItems)) $items[] = array('text' => $lang->story->batchCreate, 'items' => $batchItems);
     }
     elseif(hasPriv($storyType, 'batchCreate'))
     {

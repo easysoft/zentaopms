@@ -1089,6 +1089,7 @@ $config->my->execution->dtable->fieldList['status']['type']      = 'status';
 $config->my->execution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList;
 $config->my->execution->dtable->fieldList['status']['group']     = '2';
 $config->my->execution->dtable->fieldList['status']['show']      = true;
+if($isEn) $config->my->execution->dtable->fieldList['status']['width'] = '130';
 
 $config->my->execution->dtable->fieldList['PM']['name']   = 'PM';
 $config->my->execution->dtable->fieldList['PM']['title']  = $lang->execution->PM;
@@ -1120,12 +1121,14 @@ $config->my->execution->dtable->fieldList['begin']['title'] = $lang->execution->
 $config->my->execution->dtable->fieldList['begin']['type']  = 'date';
 $config->my->execution->dtable->fieldList['begin']['group'] = '3';
 $config->my->execution->dtable->fieldList['begin']['show']  = true;
+if($isEn) $config->my->execution->dtable->fieldList['begin']['width'] = '120';
 
 $config->my->execution->dtable->fieldList['end']['name']  = 'end';
 $config->my->execution->dtable->fieldList['end']['title'] = $lang->execution->end;
 $config->my->execution->dtable->fieldList['end']['type']  = 'date';
 $config->my->execution->dtable->fieldList['end']['group'] = '3';
 $config->my->execution->dtable->fieldList['end']['show']  = true;
+if($isEn) $config->my->execution->dtable->fieldList['end']['width'] = '120';
 
 $config->my->execution->dtable->fieldList['join']['name']     = 'join';
 $config->my->execution->dtable->fieldList['join']['title']    = $lang->team->join;
@@ -1181,6 +1184,7 @@ $config->my->execution->dtable->fieldList['progress']['type']     = 'progress';
 $config->my->execution->dtable->fieldList['progress']['sortType'] = false;
 $config->my->execution->dtable->fieldList['progress']['group']    = '4';
 $config->my->execution->dtable->fieldList['progress']['show']     = true;
+if($isEn) $config->my->execution->dtable->fieldList['progress']['width'] = '130';
 
 $config->my->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
 $config->my->execution->dtable->fieldList['burn']['name']     = 'burn';

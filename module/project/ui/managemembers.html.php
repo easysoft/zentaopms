@@ -58,6 +58,7 @@ featureBar
         picker
         (
             set::id('dept'),
+            setClass('ml-2'),
             set::name('dept'),
             set::value($dept),
             set::items($depts),

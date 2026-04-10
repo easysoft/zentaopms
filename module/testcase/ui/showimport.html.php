@@ -19,7 +19,7 @@ if(!empty($suhosinInfo))
     div
     (
         setClass('alert secondary-pale'),
-        $suhosinInfo
+        html($suhosinInfo)
     );
 }
 elseif(empty($maxImport) && $allCount > $this->config->file->maxImport)

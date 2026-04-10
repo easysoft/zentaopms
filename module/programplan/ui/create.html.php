@@ -86,9 +86,10 @@ $fnGenerateSubPlanManageFields = function() use ($lang, $planID, $project, $canP
 };
 
 /* Generate form fields. */
-$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $executionType, $project, $syncData)
+$fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields, $PMUsers, $enableOptionalAttr, $programPlan, $planID, $project, $syncData, $app)
 {
     $items = array();
+    $isEn  = $app->getClientLang() == 'en';
 
     $fields['attribute']['required'] = $fields['acl']['required'] = true;
     if(isset($requiredFields['code'])) $fields['code']['required'] = true;
@@ -122,6 +123,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         {
             if(!$enableOptionalAttr) $field['disabled'] = true;
             if($programPlan)         $field['value']    = $programPlan->attribute;
+            if($isEn)                $field['width']    = '150px';
         }
 
         if($name == 'acl' && $planID)
@@ -135,6 +137,7 @@ $fnGenerateFields = function() use ($lang, $requiredFields, $showFields, $fields
         {
             $field['hidden'] = false;
             $field['items']  = $lang->execution->typeList;
+
             if($project->model == 'waterfallplus')
             {
                 $field['tipIcon']  = 'help';

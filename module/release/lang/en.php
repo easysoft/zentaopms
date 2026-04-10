@@ -27,7 +27,7 @@ $lang->release->addSystem        = 'Add ' . $lang->product->system;
 $lang->release->consumed         = 'Cost';
 
 $lang->release->confirmDelete      = 'Are you sure you want to delete this release?';
-$lang->release->syncFromBuilds     = "Link completed {$lang->SRCommon} and fixed bugs from the build to the release.";
+$lang->release->syncFromBuilds     = "Link completed stories and fixed bugs from the build to the release.";
 $lang->release->confirmUnlinkStory = 'Are you sure you want to unlink this story?';
 $lang->release->confirmUnlinkBug   = 'Are you sure you want to unlink this bug?';
 $lang->release->existBuild         = 'The 『build』 already contains the record 『%s』. You can change the 『release name』 or select a different 『build』.';

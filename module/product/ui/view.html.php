@@ -17,6 +17,8 @@ include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 /* Flag variable for hiding product code. */
 $hiddenCode    = (!isset($config->setCode) || $config->setCode == 0 || empty($product->code));
 $allStoryCount = array_sum($product->stories);
+$isEn          = $app->getClientLang() == 'en';
+$storiesClass  = $isEn ? 'px-2' : 'w-1/3';
 
 $membersDom = array();
 foreach($config->product->memberFields as $field)
@@ -90,10 +92,10 @@ div
                 ),
                 div
                 (
-                    setClass('border w-3/4 flex justify-center items-center pl-4 py-2'),
+                    setClass('border flex justify-center items-center pl-4 py-2' . ($isEn ? '' : ' w-3/4')),
                     div
                     (
-                        setClass('w-1/3'),
+                        setClass($storiesClass),
                         div
                         (
                             setClass('text-lg font-bold'),
@@ -103,7 +105,7 @@ div
                     ),
                     div
                     (
-                        setClass('w-1/3'),
+                        setClass($storiesClass),
                         div
                         (
                             setClass('text-lg font-bold'),
@@ -113,7 +115,7 @@ div
                     ),
                     div
                     (
-                        setClass('w-1/3'),
+                        setClass($storiesClass),
                         div
                         (
                             setClass('text-lg font-bold'),

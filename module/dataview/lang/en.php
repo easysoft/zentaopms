@@ -128,11 +128,11 @@ $lang->dataview->tables['task']        = array('name' => 'Task',  'desc' => '');
 $lang->dataview->tables['bug']         = array('name' => 'Bug', 'desc' => 'pri, severity, project, product...');
 $lang->dataview->tables['bugbuild']    = array('name' => 'Build Bug', 'desc' => 'pri, severity, project, build...');
 $lang->dataview->tables['story']       = array('name' => 'Story', 'desc' => '');
-$lang->dataview->tables['testcase']    = array('name' => 'Testcase', 'desc' => '');
-$lang->dataview->tables['casestep']    = array('name' => 'Testcase step', 'desc' => '');
-$lang->dataview->tables['testtask']    = array('name' => 'Testtask', 'desc' => '');
-$lang->dataview->tables['testrun']     = array('name' => 'Test run', 'desc' => '');
-$lang->dataview->tables['testresult']  = array('name' => 'Test result', 'desc' => '');
+$lang->dataview->tables['testcase']    = array('name' => 'Test Case', 'desc' => '');
+$lang->dataview->tables['casestep']    = array('name' => 'Test Case step', 'desc' => '');
+$lang->dataview->tables['testtask']    = array('name' => 'Test Task', 'desc' => '');
+$lang->dataview->tables['testrun']     = array('name' => 'Test Run', 'desc' => '');
+$lang->dataview->tables['testresult']  = array('name' => 'Test Result', 'desc' => '');
 
 $lang->dataview->typeList = array();
 $lang->dataview->typeList['view']  = 'Custom Table';

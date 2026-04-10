@@ -192,6 +192,7 @@ class testcaseModel extends model
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
 
+        $case = $this->loadModel('file')->replaceImgURL($case, 'steps');
         $case = $this->processDateField($case);
 
         /* Get project and execution. */

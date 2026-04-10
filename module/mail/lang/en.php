@@ -121,4 +121,4 @@ $lang->mail->forgetPassword = <<<EOT
 EOT;
 
 $lang->mail->placeholder = new stdclass();
-$lang->mail->placeholder->password = 'Some email providers require a generated authorization code (or App Password) instead of a login password. Please check your email provider\'s settings for details.';
+$lang->mail->placeholder->password = 'App Password may be required. Please check your email settings.';

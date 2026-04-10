@@ -3,7 +3,6 @@
 .pie-chart {position: relative;}
 .pie-chart .pie-chart-title {position: relative; top: -60%; left: 2%; height: 1rem;}
 
-.member-list > .center-y {width: 12.5%}
 .maxh-72{max-height:18rem;}
 
 .actions-menu {bottom: 12px;}
