@@ -419,3 +419,4 @@ $lang->repo->default             = '默认';
 $lang->repo->defaultBranch       = '默认分支';
 $lang->repo->committerTip        = '提交人具有代码库的写入权限';
 $lang->repo->commitDetail        = '%s 提交时间：%s，提交人：%s';
+$lang->repo->hasNoProduct        = '当前项目或者执行没有关联产品';

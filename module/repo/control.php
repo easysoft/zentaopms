@@ -191,6 +191,7 @@ class repo extends control
     {
         if($_POST)
         {
+            if($objectID && (!$this->post->product || empty(array_filter($this->post->product)))) $this->sendError($this->lang->repo->hasNoProduct);
             /* Prepare data. */
             $formData = form::data($this->config->repo->form->createRepo)->get();
             if($formData->acl == 'private' && empty($formData->members))
