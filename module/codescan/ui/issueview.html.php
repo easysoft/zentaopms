@@ -20,7 +20,9 @@ if(!empty($fileIssueList))
 {
     foreach($fileIssueList as $fileIssue)
     {
-        $issueRepoID = zget($repoPair, $fileIssue->repoID, 0);
+        $serviceRepoKey = (int)$fileIssue->repoID;
+        $issueRepoID    = isset($gitFoxRepos[$serviceRepoKey]) ? $serviceRepoKey : (int)zget($repoPair, $fileIssue->repoID, 0);
+        if(!$issueRepoID && !empty($repoID)) $issueRepoID = (int)$repoID;
 
         $setItems[] = div
         (
@@ -31,7 +33,7 @@ if(!empty($fileIssueList))
                 setClass('setting-box cursor-pointer border border-hover rounded-md px-2 h-16 open-url'),
                 $fileIssue->id == $issueID ? setClass('secondary-pale') : null,
                 set('data-id', $fileIssue->id),
-                set('data-url', inLink('issueview', "setID={$fileIssue->id}&repoID={$issueRepoID}")),
+                set('data-url', inLink('issueview', "issueID={$fileIssue->id}&repoID={$issueRepoID}")),
                 div
                 (
                     p
