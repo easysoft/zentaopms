@@ -102,6 +102,7 @@ class programplan extends control
             else
             {
                 $baselinePlans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $this->view->selectCustom, false, $browseType, $queryID);
+                if($_POST['baselineVersion'] == 'nowait' && !empty($baselinePlans['data'])) $baselinePlans['data'] = $this->programplan->processNoWaitGanttData($baselinePlans['data']);
             }
             $baselinePlans = empty($baselinePlans['data']) ? array() : array_column($baselinePlans['data'], null, 'id');
             foreach($plans['data'] as $key => $plan)
@@ -109,7 +110,7 @@ class programplan extends control
                 if(!isset($baselinePlans[$plan->id])) continue;
 
                 $plans['data'][$key]->planned_start = $baselinePlans[$plan->id]->start_date;
-                $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->deadline) + 86400);
+                $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->endDate) + 86400);
             }
 
             $this->view->ganttBaseline = $this->post->baselineVersion;
