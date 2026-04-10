@@ -833,7 +833,7 @@ class codescanModel extends model
         foreach($issueIdList as $issueID)
         {
             $issue = $this->getScanIssue($issueID, false);
-            $extra = empty($issue) || empty($repoPair[$issue->repoID]) ? '' : "{$issue->content}|issueID={$issueID}&repoID={$repoPair[$issue->repoID]}";
+            $extra = empty($issue) || empty($repoPair[$issue->repoID]) ? '' : "{$issue->message}|issueID={$issueID}&repoID={$repoPair[$issue->repoID]}";
             $this->action->create('codescanissue', $issueID, $status . 'ScanIssue', '', $extra);
         }
 
