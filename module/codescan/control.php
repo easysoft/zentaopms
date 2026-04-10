@@ -194,7 +194,6 @@ class codescan extends control
         if($_POST)
         {
             $oldRuleset = $this->codescan->getRuleset($setID);
-            if($oldRuleset) $oldRuleset->lang = $oldRuleset->lang_id;
 
             $formData = form::data($this->config->codescan->form->editRuleset)
                 ->skipSpecial('name,desc,type')
