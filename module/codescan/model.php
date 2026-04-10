@@ -863,7 +863,7 @@ class codescanModel extends model
         foreach($result->data as $issue)
         {
             $issue->bugID     = isset($bugList[$issue->id]) ? $bugList[$issue->id] : 0;
-            $issue->createdAt = date('Y-m-d H:i:s', intval($issue->created / 1000));
+            $issue->createdAt = $issue->createdDate;
             if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->trigger_type);
             if(!empty($issue->ignored) && $issue->ignored > 0 && $issue->ignored <= (time() * 1000)) $this->changeIssueState($issue->id, 'wait');
         }

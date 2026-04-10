@@ -622,6 +622,8 @@ class codescanZen extends codescan
             $params['page'] = $params['page'] + 1;
         }
 
+        foreach($list as $index => $item) $list[$index] = $this->processIssueData($item);
+
         return $list;
     }
 

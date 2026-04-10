@@ -1314,7 +1314,8 @@ class codescan extends control
         }
         $this->config->codescan->actionList = $this->config->codescan->issue->actionList;
 
-        $issue    = $this->codescan->getScanIssue($issueID);
+        $issue = $this->codescan->getScanIssue($issueID);
+        if($issue) $issue = $this->codescanZen->processIssueData($issue);
         $repo     = $this->loadModel('repo')->getByID($repoID);
         if(!$repo) $this->sendError($this->lang->codescan->notice->repoNotFound, true);
 
