@@ -50,6 +50,7 @@ class codescanModel extends model
      */
     public function getScanRulesets(array $params): array|object
     {
+        if(isset($params['id'])) $params['id'] = (int)$params['id'];
         return $this->loadModel('gitfox')->request('/scan/rulesets/list', 'POST', $params) ?: array();
     }
 
@@ -110,8 +111,7 @@ class codescanModel extends model
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/rulesets/{$rulesetID}");
-
-        $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json', 'GET'));
+        $result  = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json', 'GET'));
         return $this->gitfox->getResponse($result);
     }
 
@@ -168,6 +168,7 @@ class codescanModel extends model
      */
     public function getScanRules(array $params = array()): array|object
     {
+        if(isset($params['id'])) $params['id'] = (int)$params['id'];
         return $this->loadModel('gitfox')->request('/scan/rules/list', 'POST', $params) ?: array();
     }
 
@@ -275,12 +276,8 @@ class codescanModel extends model
      */
     public function getScanSolutions(array $params = array()): array|object
     {
-        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $url    = sprintf($apiRoot->url, '/scan/solutions/list');
-
-        $result = json_decode(common::http($url, $params, array(), $apiRoot->header, 'json', 'POST'));
-        $result = $this->gitfox->getResponse($result);
-
+        if(isset($params['id'])) $params['id'] = (int)$params['id'];
+        $result = $this->loadModel('gitfox')->request('/scan/solutions/list', 'POST', $params);
         if(empty($result) || !isset($result->data)) return array();
         if(empty($result->data) && isset($result->pager) && $result->pager->total != 0)
         {
@@ -698,6 +695,7 @@ class codescanModel extends model
     {
         $params['repoID'] = $repoID;
         $params['planID'] = $planID;
+        if(isset($params['taskID'])) $params['taskID'] = (int)$params['taskID'];
         return $this->loadModel('gitfox')->request('/scan/tasks/list', 'POST', $params);
     }
 

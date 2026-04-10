@@ -90,13 +90,11 @@ $config->codescan->ruleset->search['fields']['id']        = $lang->idAB;
 $config->codescan->ruleset->search['fields']['plugin']    = $lang->codescan->tool;
 $config->codescan->ruleset->search['fields']['lang']      = $lang->codescan->language;
 $config->codescan->ruleset->search['fields']['status']    = $lang->codescan->status;
-$config->codescan->ruleset->search['fields']['type']      = $lang->codescan->type;
 
 $config->codescan->ruleset->search['params']['name']      = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->ruleset->search['params']['id']        = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->ruleset->search['params']['plugin']    = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->codescan->ruleset->search['params']['lang']      = array('operator' => '=', 'control' => 'select', 'values' => array());
-$config->codescan->ruleset->search['params']['type']      = array('operator' => '=', 'control' => 'select', 'values' => array());
 $config->codescan->ruleset->search['params']['status']    = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->statusList);
 
 $config->codescan->actions = new stdclass();
@@ -146,9 +144,7 @@ $config->codescan->solution->search['fields']['name']      = $lang->codescan->na
 $config->codescan->solution->search['fields']['id']        = $lang->idAB;
 $config->codescan->solution->search['fields']['status']    = $lang->codescan->status;
 $config->codescan->solution->search['fields']['createdBy'] = $lang->codescan->created_by;
-$config->codescan->solution->search['fields']['createdAt'] = $lang->codescan->created_at;
 $config->codescan->solution->search['fields']['updatedBy'] = $lang->codescan->updated_by;
-$config->codescan->solution->search['fields']['updatedAt'] = $lang->codescan->updated_at;
 
 $config->codescan->solution->search['params']['name']      = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->solution->search['params']['id']        = array('operator' => '=', 'control' => 'input', 'values' => '');
@@ -274,15 +270,10 @@ $config->codescan->issue->search['params']['plan']       = array('operator' => '
 $config->codescan->issue->search['params']['ruleID']     = array('operator' => '=', 'control' => 'input',  'values' => '');
 
 $config->codescan->remoteFields = array();
-$config->codescan->remoteFields['createdBy']        = 'created_by';
-$config->codescan->remoteFields['updatedBy']        = 'updated_by';
-$config->codescan->remoteFields['createdAt']        = 'created_at';
-$config->codescan->remoteFields['updatedAt']        = 'updated_at';
-$config->codescan->remoteFields['rulesCount']       = 'rules_count';
+$config->codescan->remoteFields['updatedBy']        = 'editedBy';
 $config->codescan->remoteFields['setCount']         = 'rulesets_count';
 $config->codescan->remoteFields['scanType']         = 'scan_type';
 $config->codescan->remoteFields['repo']             = 'repo_id';
-$config->codescan->remoteFields['plan']             = 'plan_id';
 $config->codescan->remoteFields['latestScanTime']   = 'latest_task_created';
 $config->codescan->remoteFields['latestExecStatus'] = 'latest_task_status';
 $config->codescan->remoteFields['latestExecResult'] = 'latest_task_result';

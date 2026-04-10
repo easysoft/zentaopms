@@ -305,7 +305,7 @@ class codescan extends control
             $ruleList = $this->codescan->getScanRulesetRules($setID, $params);
 
             $this->app->loadClass('pager', true);
-            $pager->recTotal = zget($ruleList, 'total', 0);
+            $pager->recTotal = $ruleList->pager->total ?? 0;
 
             $ruleList = zget($ruleList, 'data', array());
             foreach($ruleList as &$rule)
@@ -413,7 +413,7 @@ class codescan extends control
         $ruleList = $this->codescan->getScanRulesetUnlinkRules($setID, $params);
 
         $this->app->loadClass('pager', true);
-        $pager->recTotal = zget($ruleList, 'total', 0);
+        $pager->recTotal = $ruleList->pager->total ?? 0;
 
         $ruleList = zget($ruleList, 'data', array());
         foreach($ruleList as &$rule)
@@ -467,8 +467,8 @@ class codescan extends control
             $solution->lang   = empty($solution->langs) ? array() : $solution->langs;
             $solution->plugin = zget($solution, 'plugins', array());
 
-            $solution->setCount  = empty($solution->rulesets_count) ? 0 : $solution->rulesets_count;
-            $solution->ruleCount = empty($solution->rules_count) ? 0 : $solution->rules_count;
+            $solution->setCount  = empty($solution->rulesetsCount) ? 0 : $solution->rulesetsCount;
+            $solution->ruleCount = empty($solution->rulesCount) ? 0 : $solution->rulesCount;
 
             if(common::checkNotCN() && isset($solution->descEn)) $solution->desc = $solution->descEn;
             $solution->desc = strip_tags(htmlspecialchars_decode($solution->desc));

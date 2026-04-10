@@ -409,11 +409,11 @@ $config->codescan->task->dtable->fieldList['branch']['hint']     = true;
 $config->codescan->task->dtable->fieldList['branch']['show']     = true;
 $config->codescan->task->dtable->fieldList['branch']['sortType'] = false;
 
-$config->codescan->task->dtable->fieldList['plan_id']['title']    = $lang->codescan->plan;
-$config->codescan->task->dtable->fieldList['plan_id']['width']    = '100';
-$config->codescan->task->dtable->fieldList['plan_id']['hint']     = true;
-$config->codescan->task->dtable->fieldList['plan_id']['show']     = true;
-$config->codescan->task->dtable->fieldList['plan_id']['sortType'] = false;
+$config->codescan->task->dtable->fieldList['planID']['title']    = $lang->codescan->plan;
+$config->codescan->task->dtable->fieldList['planID']['width']    = '100';
+$config->codescan->task->dtable->fieldList['planID']['hint']     = true;
+$config->codescan->task->dtable->fieldList['planID']['show']     = true;
+$config->codescan->task->dtable->fieldList['planID']['sortType'] = false;
 
 $config->codescan->task->dtable->fieldList['status']['title']     = $lang->codescan->runStatus;
 $config->codescan->task->dtable->fieldList['status']['type']      = 'status';

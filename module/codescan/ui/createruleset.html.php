@@ -29,13 +29,6 @@ formPanel
     ),
     formGroup
     (
-        set::name('type'),
-        set::label($lang->codescan->type),
-        set::required(true),
-        set::items($typeList)
-    ),
-    formGroup
-    (
         set::name('desc'),
         set::label($lang->codescan->desc)
     )

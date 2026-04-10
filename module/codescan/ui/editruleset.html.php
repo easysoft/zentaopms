@@ -35,14 +35,6 @@ formPanel
     ),
     formGroup
     (
-        set::name('type'),
-        set::label($lang->codescan->type),
-        set::required(true),
-        set::items($typeList),
-        set::value(zget($ruleSet, 'type', ''))
-    ),
-    formGroup
-    (
         set::name('desc'),
         set::label($lang->codescan->desc),
         set::value(empty($ruleSet->desc) ? '' : strip_tags(htmlspecialchars_decode($ruleSet->desc)))
