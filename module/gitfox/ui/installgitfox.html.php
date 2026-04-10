@@ -18,7 +18,7 @@ $app->loadLang('install');
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
 jsVar('nextLink', 'javascript:checkGitFoxServer();');
-jsVar('adminRegisterLink', $adminRegisterLink);
+jsVar('adminRegisterLink', $nextLink);
 
 div
 (
@@ -79,7 +79,7 @@ div
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
-                            'url'   => $adminRegisterLink
+                            'url'   => $nextLink
                         ) : null,
                         array
                         (
