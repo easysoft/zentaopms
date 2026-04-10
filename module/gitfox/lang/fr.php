@@ -155,3 +155,4 @@ $lang->gitfox->checkInstall     = 'I have completed the above installation steps
 $lang->gitfox->execScript       = 'Execute installation script';
 $lang->gitfox->copySuccess      = 'Copy successful';
 $lang->gitfox->copyFail         = 'Browser does not support copy function, please copy manually';
+$lang->gitfox->startUse         = 'Start Use';
