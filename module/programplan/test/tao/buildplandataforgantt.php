@@ -18,7 +18,7 @@ cid=17763
  - 属性type @plan
  - 属性text @项目集1<icon class='icon icon-flag icon-sm red'></icon>
  - 属性start_date @28-09-2023
- - 属性percent @10
+ - 属性percent @10.00
 
 */
 
@@ -44,4 +44,4 @@ r(isset($planItem->percent)) && p() && e('0'); //检查是否存在percent字段
 
 $tester->programplan->config->setPercent = true;
 $plan->milestone = true;
-r((array)$tester->programplan->buildPlanDataForGantt($plan)) && p('id,type,text,start_date,percent') && e("1,plan,项目集1<icon class='icon icon-flag icon-sm red'></icon>,28-09-2023,10"); //里程碑阶段，并设置显示percent，检查构建数据。
+r((array)$tester->programplan->buildPlanDataForGantt($plan)) && p('id,type,text,start_date,percent') && e("1,plan,项目集1<icon class='icon icon-flag icon-sm red'></icon>,28-09-2023,10.00"); //里程碑阶段，并设置显示percent，检查构建数据。
