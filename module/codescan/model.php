@@ -406,7 +406,7 @@ class codescanModel extends model
         $rulesets = explode(',', $formData->rulesets);
         unset($formData->rulesets);
 
-        $formData->updated_by = $this->app->user->account;
+        $formData->updatedBy = $this->app->user->account;
         $result = json_decode(common::http($url, $formData, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $apiRoot->header, 'json', 'PUT'));
         $result = $this->gitfox->getResponse($result);
         if(dao::isError()) return false;
