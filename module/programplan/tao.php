@@ -269,7 +269,7 @@ class programplanTao extends programplanModel
             }
 
             $datas['data'][$plan->id] = $data;
-            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalReal' => 0, 'path' => $plan->path);
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => isset($plans[$plan->parent]) ? $plan->parent : $plan->project, 'totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'totalReal' => 0, 'path' => $plan->path);
         }
         return array('datas' => $datas, 'stageIndex' => $stageIndex, 'planIdList' => $planIdList, 'reviewDeadline' => $reviewDeadline);
     }
@@ -329,6 +329,7 @@ class programplanTao extends programplanModel
 
                 $stageIndex[$index]['totalEstimate'] += $task->estimate;
                 $stageIndex[$index]['totalConsumed'] += $task->consumed;
+                $stageIndex[$index]['totalLeft']     += $task->left;
                 $stageIndex[$index]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
 
                 foreach(explode(',', $stage['path']) as $planID)
@@ -337,6 +338,7 @@ class programplanTao extends programplanModel
 
                     $stageIndex[$planID]['totalEstimate'] += $task->estimate;
                     $stageIndex[$planID]['totalConsumed'] += $task->consumed;
+                    $stageIndex[$planID]['totalLeft']     += $task->left;
                     $stageIndex[$planID]['totalReal']     += ((($task->status == 'closed' || $task->status == 'cancel') ? 0 : $task->left) + $task->consumed);
                 }
             }
@@ -709,7 +711,6 @@ class programplanTao extends programplanModel
         /* Set default progress from database. */
         $data->progress       = $plan->progress / 100;
         $data->taskProgress   = $plan->progress . '%';
-        $data->frozen         = $plan->frozen;
 
         if($data->endDate > $data->start_date)                $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
         if(empty($data->start_date) || empty($data->endDate)) $data->duration = 1;
@@ -764,10 +765,10 @@ class programplanTao extends programplanModel
         $data->canceledBy     = '';
         $data->closedDate     = '';
         $data->canceledDate   = '';
-        $data->openedDate     = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
-        $data->lastEditedDate = helper::isZeroDate($point->editedDate)        ? '' : substr($point->editedDate,  0, 10);
-        $data->realBegan      = helper::isZeroDate($point->createdDate)       ? '' : substr($point->createdDate,  0, 10);
-        $data->realEnd        = helper::isZeroDate($point->lastReviewedDate)  ? '' : substr($point->lastReviewedDate,  0, 10);
+        $data->openedDate     = helper::isZeroDate($point->createdDate) ? '' : substr($point->createdDate,  0, 10);
+        $data->lastEditedDate = helper::isZeroDate($point->editedDate)  ? '' : substr($point->editedDate,   0, 10);
+        $data->realBegan      = (empty($point->status) || helper::isZeroDate($point->createdDate))       ? '' : substr($point->createdDate,  0, 10);
+        $data->realEnd        = (empty($point->status) || helper::isZeroDate($point->lastReviewedDate))  ? '' : substr($point->lastReviewedDate,  0, 10);
         $data->color          = isset($this->lang->programplan->reviewColorList[$point->status]) ? $this->lang->programplan->reviewColorList[$point->status] : '#FC913F';
         $data->progressColor  = $this->lang->execution->gantt->stage->progressColor;
         $data->textColor      = $this->lang->execution->gantt->stage->textColor;
@@ -947,6 +948,7 @@ class programplanTao extends programplanModel
             $ganttData['data'][$index]->taskProgress = ($progress * 100) . '%';
             $ganttData['data'][$index]->estimate     = $stage['totalEstimate'];
             $ganttData['data'][$index]->consumed     = $stage['totalConsumed'];
+            $ganttData['data'][$index]->left         = $stage['totalLeft'];
         }
         return $ganttData;
     }

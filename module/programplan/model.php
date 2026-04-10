@@ -260,9 +260,6 @@ class programplanModel extends model
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, (string)$group, $type, $objects);
 
-            $realStartDate = array();
-            $realEndDate   = array();
-            $totalTask     = count($tasks);
             foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
@@ -288,20 +285,15 @@ class programplanModel extends model
                     $datas['data'][$task->id] = $data;
                 }
 
-                if(!empty($dateLimit['start'])) $realStartDate[] = strtotime($dateLimit['start']);
-                if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
-
                 if(!isset($stageIndex[$groupKey]['totalConsumed'])) $stageIndex[$groupKey]['totalConsumed'] = 0;
+                if(!isset($stageIndex[$groupKey]['totalLeft']))     $stageIndex[$groupKey]['totalLeft']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalReal']))     $stageIndex[$groupKey]['totalReal']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalEstimate'])) $stageIndex[$groupKey]['totalEstimate'] = 0;
                 $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
+                $stageIndex[$groupKey]['totalLeft']     += $task->left;
                 $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
                 $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
             }
-
-            /* Calculate group realBegan and realEnd. */
-            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
-            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
         }
 
         /* 根据排序字段手动排序。 Manually sort by order field. */
@@ -1131,10 +1123,11 @@ class programplanModel extends model
         $pausedTasks = array();
         foreach($tasks as $task)
         {
-            if($task->type != 'task') continue;
+            if(empty($task->type) || $task->type != 'task') continue;
             if(isset($task->rawStatus) && $task->rawStatus == 'pause')
             {
-                $taskID = explode('-', $task->id)[1];
+                $taskID = (string)$task->id;
+                if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
                 $pausedTasks[$taskID] = $taskID;
             }
         }
@@ -1152,14 +1145,16 @@ class programplanModel extends model
         $today = helper::today();
         return array_values(array_filter($tasks, function($data) use($today, $pausedTasksDate)
         {
-            if($data->type != 'task') return true;
+            if(empty($data->type) || $data->type != 'task') return true;
 
             $status = $data->status;
             if(isset($data->rawStatus)) $status = $data->rawStatus;
             if($status == 'wait') return false;
             if(empty($data->realBegan)) return false;
 
-            $taskID    = explode('-', $data->id)[1];
+            $taskID = (string)$data->id;
+            if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
+
             $realBegan = $data->realBegan;
             $realEnd   = $data->realEnd;
             if($status == 'doing')  $realEnd = $data->deadline;
