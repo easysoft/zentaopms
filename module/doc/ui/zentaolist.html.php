@@ -91,7 +91,7 @@ if($type == 'gantt' && !empty($ganttData))
         set::data($ganttData['data']),
         set::links($ganttData['links']),
         set::ganttFields($ganttFields),
-        set::showFields('text,own_id,begin,deadline,status,duration'),
+        set::showFields('text,owner_id,begin,deadline,status,duration'),
         set::userList($userList),
         set::exts('zentao')
     );
