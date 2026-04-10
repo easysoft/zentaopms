@@ -29,15 +29,9 @@ panel
     div
     (
         setClass('mt-5 mb-5'),
-        hasPriv('codescan', 'createTrigger') ? btn
-        (
-            set::className('mr-2 tipBtn ml-1'),
-            $lang->codescan->setTrigger,
-            setData('toggle', 'modal'),
-            set::url(createLink('codescan', 'createTrigger', "planID={$planID}&serviceRepoID={$serviceRepoID}"))
-        ) : null,
         btn
         (
+            setID('tipBtn'),
             set::className('tipBtn'),
             $lang->codescan->goBackPlanList,
             set::target('_blank'),
