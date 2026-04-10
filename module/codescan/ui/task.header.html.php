@@ -22,6 +22,7 @@ detailHeader
 $headers = nav
 (
     setClass('flex-auto'),
+    /* li（扫描任务详情 tab）先注释掉。
     li
     (
         setClass('nav-item'),
@@ -33,7 +34,8 @@ $headers = nav
             set('data-app', $app->tab),
             $type == 'view' ? setClass('active') : null
         )
-    ),
+    )
+    */
     li
     (
         setClass('nav-item link'),

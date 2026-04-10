@@ -143,8 +143,8 @@ $config->codescan->solution->search['module']              = 'codeScanSolution';
 $config->codescan->solution->search['fields']['name']      = $lang->codescan->name;
 $config->codescan->solution->search['fields']['id']        = $lang->idAB;
 $config->codescan->solution->search['fields']['status']    = $lang->codescan->status;
-$config->codescan->solution->search['fields']['createdBy'] = $lang->codescan->created_by;
-$config->codescan->solution->search['fields']['updatedBy'] = $lang->codescan->updated_by;
+$config->codescan->solution->search['fields']['createdBy'] = $lang->codescan->createdBy;
+$config->codescan->solution->search['fields']['updatedBy'] = $lang->codescan->updatedBy;
 
 $config->codescan->solution->search['params']['name']      = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->codescan->solution->search['params']['id']        = array('operator' => '=', 'control' => 'input', 'values' => '');

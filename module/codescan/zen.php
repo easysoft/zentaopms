@@ -39,11 +39,18 @@ class codescanZen extends codescan
                 $typePairs = array();
                 foreach($configTypeList as $config)
                 {
-                    $key = isset($config->id) ? $config->id : $config->$type;
+                    if($type === 'lang')
+                    {
+                        $key = $config->$type;
+                    }
+                    else
+                    {
+                        $key = isset($config->id) ? $config->id : $config->$type;
+                    }
                     if($key == 'PHPStan') $key = 'phpstan';
                     if($key == 'qlty')    $config->$type = 'Qlty';
                     if($key == 'phpstan') $config->$type = 'PHPStan';
-                    if($type == 'lang' && $key == 'Custom')
+                    if($type == 'lang' && $key == 'custom')
                     {
                         $config->$type = $this->lang->codescan->general;
                     }
@@ -209,7 +216,6 @@ class codescanZen extends codescan
         if(isset($searchConfig['params']['plugin'])) $searchConfig['params']['plugin']['values'] = $this->view->pluginList ? $this->view->pluginList : array();
         if(isset($searchConfig['params']['repo']))   $searchConfig['params']['repo']['values']   = $this->view->repoList   ? $this->view->repoList : array();
         if(isset($searchConfig['params']['plan']))   $searchConfig['params']['plan']['values']   = $this->view->planList   ? $this->view->planList : array();
-        if(isset($searchConfig['params']['type']))   $searchConfig['params']['type']['values']   = $this->view->typeList   ? $this->view->typeList : array();
 
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
@@ -621,6 +627,8 @@ class codescanZen extends codescan
             if(count($result->data) < 100) break;
             $params['page'] = $params['page'] + 1;
         }
+
+        foreach($list as $index => $item) $list[$index] = $this->processIssueData($item);
 
         return $list;
     }

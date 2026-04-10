@@ -29,7 +29,7 @@ if(!hasPriv('codescan', 'issue')) unset($config->codescan->task->actionList['iss
 $cols = $this->loadModel('datatable')->getSetting('codescan', 'task');
 if(hasPriv('codescan', 'taskview'))
 {
-    $cols['name']['link']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=view";
+    $cols['name']['link']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=issue";
     if(isset($cols['actions']['list']['issue'])) $cols['actions']['list']['issue']['url']['params'] = "serviceRepoID={repoID}&taskID={id}&repoID={$repoID}&type=issue";
 }
 if(hasPriv('codescan', 'planview') && isset($cols['planID']))

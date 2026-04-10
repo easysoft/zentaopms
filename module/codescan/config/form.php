@@ -60,5 +60,4 @@ $config->codescan->form->createTrigger['metric']      = array('type' => 'array',
 $config->codescan->form->createTrigger['threshold']   = array('type' => 'array',  'required' => false, 'default' => array());
 
 $config->codescan->form->editTrigger = $config->codescan->form->createTrigger;
-$config->codescan->form->editTrigger['updated_at'] = array('type' => 'string', 'required' => false, 'default' => $now);
-unset($config->codescan->form->editTrigger['created_at']);
+$config->codescan->form->editTrigger['updatedDate'] = array('type' => 'string', 'required' => false, 'default' => $now);

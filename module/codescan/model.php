@@ -406,7 +406,7 @@ class codescanModel extends model
         $rulesets = explode(',', $formData->rulesets);
         unset($formData->rulesets);
 
-        $formData->updated_by = $this->app->user->account;
+        $formData->updatedBy = $this->app->user->account;
         $result = json_decode(common::http($url, $formData, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $apiRoot->header, 'json', 'PUT'));
         $result = $this->gitfox->getResponse($result);
         if(dao::isError()) return false;
@@ -833,7 +833,7 @@ class codescanModel extends model
         foreach($issueIdList as $issueID)
         {
             $issue = $this->getScanIssue($issueID, false);
-            $extra = empty($issue) || empty($repoPair[$issue->repoID]) ? '' : "{$issue->content}|issueID={$issueID}&repoID={$repoPair[$issue->repoID]}";
+            $extra = empty($issue) || empty($repoPair[$issue->repoID]) ? '' : "{$issue->message}|issueID={$issueID}&repoID={$repoPair[$issue->repoID]}";
             $this->action->create('codescanissue', $issueID, $status . 'ScanIssue', '', $extra);
         }
 
@@ -863,7 +863,7 @@ class codescanModel extends model
         foreach($result->data as $issue)
         {
             $issue->bugID     = isset($bugList[$issue->id]) ? $bugList[$issue->id] : 0;
-            $issue->createdAt = date('Y-m-d H:i:s', intval($issue->created / 1000));
+            $issue->createdAt = $issue->createdDate;
             if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->trigger_type);
             if(!empty($issue->ignored) && $issue->ignored > 0 && $issue->ignored <= (time() * 1000)) $this->changeIssueState($issue->id, 'wait');
         }
@@ -913,9 +913,18 @@ class codescanModel extends model
         $result->tool               = zget($result->payload, 'tool', '');
         $result->snippet            = zget($result->payload, 'snippet', '');
         $result->snippetWithContext = zget($result->payload, 'snippetWithContext', '');
-        $result->rangeStartLine     = zget($result->payload->location->range, 'startLine', 0);
-        $result->rangeEndLine       = zget($result->payload->location->range, 'endLine', 0);
+        $result->rangeStartLine     = (int)zget($result->payload->location->range, 'startLine', 0);
+        $result->rangeEndLine       = (int)zget($result->payload->location->range, 'endLine', 0);
         $result->commit             = zget($result->payload->location, 'commit', array());
+        if($result->rangeStartLine < 1 && !empty($result->line))
+        {
+            $result->rangeStartLine = (int)$result->line;
+            $result->rangeEndLine   = (int)$result->line;
+        }
+        elseif($result->rangeEndLine < $result->rangeStartLine || ($result->rangeEndLine === 0 && $result->rangeStartLine > 0))
+        {
+            $result->rangeEndLine = $result->rangeStartLine;
+        }
         $result = $this->processIssueSnipe($result);
 
         return $result;
@@ -931,27 +940,38 @@ class codescanModel extends model
      */
     public function processIssueSnipe(object $issue): object
     {
-        if(empty($issue->snippetWithContext) || empty($issue->snippet) || empty($issue->rangeStartLine) || empty($issue->rangeEndLine)) return $issue;
+        if(empty($issue->snippetWithContext) || empty($issue->snippet)) return $issue;
+
+        $startLine = (int)$issue->rangeStartLine;
+        $endLine   = (int)$issue->rangeEndLine;
+        if($startLine < 1 || $endLine < $startLine) return $issue;
 
         $snippetContext = $issue->snippetWithContext;
         $snippet        = $issue->snippet;
-        $startLine      = $issue->rangeStartLine;
-        $endLine        = $issue->rangeEndLine;
 
         $snippetContextLines = preg_split('/\r\n|\n|\r/', $snippetContext);
         $snippetLines        = preg_split('/\r\n|\n|\r/', $snippet);
 
         $snippetStartLineContext = $snippetLines[0];
 
-        $count = 1;
-        foreach($snippetContextLines as $line)
+        $matchedLineNo = 0;
+        foreach($snippetContextLines as $index => $line)
         {
-            if($line == $snippetStartLineContext) break;
-            $count++;
+            if($line == $snippetStartLineContext)
+            {
+                $matchedLineNo = $index + 1;
+                break;
+            }
+        }
+        if($matchedLineNo === 0)
+        {
+            $issue->snippetStartLine = 0;
+            $issue->snippetEndLine   = 0;
+            return $issue;
         }
 
-        $issue->snippetStartLine = $count == count($snippetContextLines) ? 0 : $startLine - $count + 1;
-        $issue->snippetEndLine   = $count == count($snippetContextLines) ? 0 : count($snippetContextLines) - $count - count($snippetLines) + 1 + $endLine;
+        $issue->snippetStartLine = $startLine - $matchedLineNo + 1;
+        $issue->snippetEndLine   = count($snippetContextLines) - $matchedLineNo - count($snippetLines) + 1 + $endLine;
         return $issue;
     }
 
