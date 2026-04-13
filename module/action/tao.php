@@ -828,7 +828,29 @@ class actionTao extends actionModel
         {
             $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
         }
-        if (empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|ppm)/', $objectType)) $action->objectName = $action->extra;
+        if(empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|ppm)/', $objectType)) $action->objectName = $action->extra;
+        if(empty($action->objectName) && substr($objectType, 0, 6) == 'gitfox') $action->objectName = $action->extra;
+        if(in_array($action->objectType, array('repotag', 'repobranch')) && $action->action == 'deleted') $action->objectName = $action->extra;
+        if(empty($action->objectName) && substr($objectType, 0, 8) == 'codescan')
+        {
+            $type = substr($objectType, 8);
+            if(strpos($action->extra, '|') !== false)
+            {
+                list($objectName, $params) = explode('|', $action->extra);
+            }
+            else
+            {
+                $objectName = $action->extra;
+                $params     = "{$type}ID={$action->objectID}";
+            }
+            $action->objectName = $objectName;
+
+            if(in_array($type, array('rule', 'ruleset', 'solution', 'plan', 'issue', 'task')) && strpos($action->action, 'delete') === false)
+            {
+                $method = $type == 'rule' ? 'view' : $type . 'View';
+                $action->objectLabel = "{$this->lang->action->objectTypes[$objectType]}|codescan|{$method}|{$params}";
+            }
+        }
     }
 
     /**
