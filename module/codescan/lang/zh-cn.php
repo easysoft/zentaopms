@@ -214,7 +214,7 @@ $lang->codescan->metricList['percent'] = '问题占比';
 
 $lang->codescan->triggerTypeList = array();
 $lang->codescan->triggerTypeList['manual'] = '手动触发';
-$lang->codescan->triggerTypeList['event']  = '动作触发';
+$lang->codescan->triggerTypeList['action'] = '事件触发';
 $lang->codescan->triggerTypeList['cron']   = '定时触发';
 
 $lang->codescan->operationList = array();
