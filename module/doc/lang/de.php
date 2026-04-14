@@ -324,6 +324,7 @@ $lang->doc->docSummary         = 'Total: <strong>%s</strong>.';
 $lang->doc->docCheckedSummary  = 'Seleted: <strong>%total%</strong>.';
 $lang->doc->showDoc            = 'Whether to display documents';
 $lang->doc->uploadFile         = 'Upload File';
+$lang->doc->docUrl             = 'Doc URL';
 $lang->doc->uploadDoc          = 'Upload Document';
 $lang->doc->uploadFormat       = 'Upload Format';
 $lang->doc->editedList         = 'File editor';

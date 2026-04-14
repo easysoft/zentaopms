@@ -324,6 +324,7 @@ $lang->doc->docSummary         = '<strong>%s</strong> docs on this page.';
 $lang->doc->docCheckedSummary  = '<strong>%s</strong> docs selected.';
 $lang->doc->showDoc            = 'Show Documents';
 $lang->doc->uploadFile         = 'Upload File';
+$lang->doc->docUrl             = 'Doc URL';
 $lang->doc->uploadDoc          = 'Import';
 $lang->doc->uploadFormat       = 'Upload Format';
 $lang->doc->editedList         = 'Document Editor';

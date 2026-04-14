@@ -324,6 +324,7 @@ $lang->doc->docSummary         = '本页共 <strong>%s</strong> 个文档。';
 $lang->doc->docCheckedSummary  = '共选中 <strong>%total%</strong> 个文档。';
 $lang->doc->showDoc            = '是否显示文档';
 $lang->doc->uploadFile         = '上传文件';
+$lang->doc->docUrl             = '文档 URL';
 $lang->doc->uploadDoc          = '导入';
 $lang->doc->uploadFormat       = '上传格式';
 $lang->doc->editedList         = '文档编辑者';
