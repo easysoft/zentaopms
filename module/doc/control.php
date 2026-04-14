@@ -2012,6 +2012,56 @@ class doc extends control
     }
 
     /**
+     * 复制文档
+     * Copy document.
+     *
+     * @param  int    $docID
+     * @param  int    $libID
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return void
+     */
+    public function copyDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
+    {
+        if($spaceType == 'quick')
+        {
+            $libID = 0;
+            $space = $spaceType = '';
+        }
+
+        $doc = $this->doc->getByID($docID);
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->notFound));
+        if(empty($libID)) $libID = (int)$doc->lib;
+        $lib = $this->doc->getLibByID($libID);
+
+        if(empty($space))
+        {
+            if($lib->parent)
+            {
+                $space = $lib->parent;
+            }
+            else
+            {
+                if($lib->product) $space = $lib->product;
+                if($lib->project) $space = $lib->project;
+            }
+        }
+
+        if(empty($spaceType))
+        {
+            if($lib->parent)
+            {
+                $spaceType = $this->doc->getSpaceType($space);
+            }
+            else
+            {
+                if($lib->product && $lib->type == 'product') $spaceType = 'product';
+                if($lib->project && $lib->type == 'project') $spaceType = 'project';
+            }
+        }
+
+    /**
      * 移动文档模板
      * Move document template.
      *
