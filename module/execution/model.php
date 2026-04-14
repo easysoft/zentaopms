@@ -2886,11 +2886,15 @@ class executionModel extends model
 
         $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
 
+        $hasFrozenStories = $this->loadModel('project')->hasFrozenObject($project->id, 'SRS');
+        if($hasFrozenStories) $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
+
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
             if(!isset($storyList[$storyID]))    continue;
             if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
+            if($hasFrozenStories && !isset($projectLinkedStories[$storyID])) continue;
 
             $storyID = (int)$storyID;
             $story   = zget($storyList, $storyID, '');
