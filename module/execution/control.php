@@ -2480,10 +2480,13 @@ class execution extends control
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
-        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $linkedStories    = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $hasFrozenStories = $this->project->hasFrozenObject($project->id, 'SRS');
+        if($hasFrozenStories) $projectLinkedStories = $this->story->getExecutionStoryPairs($project->id, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
+            if($hasFrozenStories && !isset($projectLinkedStories[$id])) unset($allStories[$id]);
 
             if(!isset($modules[$story->module]))
             {
