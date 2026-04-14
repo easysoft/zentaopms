@@ -2006,6 +2006,8 @@ class doc extends control
         $this->view->optionMenu = $chapterAndDocs;
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->view->title      = $this->lang->doc->moveDocAction;
+        $this->view->action     = 'moveDoc';
         $this->display();
     }
 

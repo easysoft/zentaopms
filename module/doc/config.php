@@ -102,6 +102,13 @@ $config->doc->actionList['movedoc']['url']         = helper::createLink('doc', '
 $config->doc->actionList['movedoc']['data-toggle'] = 'modal';
 $config->doc->actionList['movedoc']['data-size']   = 'sm';
 
+$config->doc->actionList['copyDoc']['icon']        = 'copy';
+$config->doc->actionList['copyDoc']['hint']        = $lang->doc->copyDocAction;
+$config->doc->actionList['copyDoc']['text']        = $lang->doc->copyDocAction;
+$config->doc->actionList['copyDoc']['url']         = helper::createLink('doc', 'copyDoc', 'docID={id}');
+$config->doc->actionList['copyDoc']['data-toggle'] = 'modal';
+$config->doc->actionList['copyDoc']['data-size']   = 'sm';
+
 $config->doc->actionList['edit']['icon']     = 'edit';
 $config->doc->actionList['edit']['hint']     = $lang->edit;
 $config->doc->actionList['edit']['text']     = $lang->edit;
