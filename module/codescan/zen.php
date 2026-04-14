@@ -26,11 +26,11 @@ class codescanZen extends codescan
         foreach($configList as $type => $configType)
         {
             if(!empty($includes) && !in_array($type, $includes)) continue;
-            $configTypeList          = $this->codescan->getScanRulesConfig($configType);
+            $configTypeList = $this->codescan->getScanRulesConfig($configType);
             foreach($configTypeList as $index => $config)
             {
                 if(!isset($config->$type) && !isset($config->id)) unset($configTypeList[$index]);
-                if($type == 'lang' && !isset($config->id)) $config->id = 'Custom';
+                if($type == 'lang' && (!isset($config->id) || $config->id == 0)) $config->id = 'Custom';
             }
             $this->view->$configType = $configTypeList;
 
