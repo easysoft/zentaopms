@@ -132,9 +132,6 @@ class gantt extends wg
         $options      = $this->prop('options');
         if(is_string($options) && $options == '[]') $options = array();
 
-        $firstData     = zget(zget($options, 'data', array()), 0, array());
-        $showBaselines = isset($firstData->planned_start);
-
         return div
         (
             jsVar('ganttID',         $id),
@@ -155,7 +152,6 @@ class gantt extends wg
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('appTab',          $app->tab),
             jsVar('options',         $options),
-            jsVar('showBaselines',   $showBaselines),
             jsVar('exportFileName',  $this->prop('exportFileName')),
             jsVar('weekend',         $this->prop('weekend')),
             jsVar('workingDays',     is_array($workingDays) ? array_values($workingDays) : array()),
