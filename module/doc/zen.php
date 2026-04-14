@@ -672,7 +672,7 @@ class docZen extends doc
             $action = 'Commented';
             if(!empty($changes))
             {
-                $newType = $_POST['status'];
+                $newType = $_POST['status'] ?? 'normal';
                 if($doc->status == 'draft' && $newType == 'normal')              $action = 'releasedDoc';
                 if($changes || $doc->status == $newType || $newType == 'normal') $action = 'Edited';
             }
@@ -731,7 +731,7 @@ class docZen extends doc
             $action = 'Commented';
             if(!empty($changes))
             {
-                $newType = $_POST['status'];
+                $newType = $_POST['status'] ?? 'normal';
                 if($doc->status == 'draft' && $newType == 'normal') $action = 'releasedDoc';
                 if($doc->status == 'normal' && $newType == 'draft') $action = 'savedDraft';
                 if($doc->status == $newType) $action = 'Edited';

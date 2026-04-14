@@ -1625,7 +1625,20 @@ class docModel extends model
         unset($doc->rawContent);
 
         $requiredFields = $isDraft ? 'title' : ($isDoc ? $this->config->doc->create->requiredFields : $this->config->doc->createTemplate->requiredFields);
-        if(strpos("url|word|ppt|excel", $doc->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+        if($doc->type == 'url') $requiredFields = $this->config->doc->createDocUrl->requiredFields;
+        if(strpos("url|word|ppt|excel", $doc->type) !== false && $doc->type != 'url') $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+
+        if($doc->type == 'url')
+        {
+            if(empty($doc->content))
+            {
+                return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
+            }
+            if(!filter_var($doc->content, FILTER_VALIDATE_URL))
+            {
+                return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
+            }
+        }
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
         if($checkContent && strpos("url|word|ppt|excel|", $lib->type) === false)

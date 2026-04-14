@@ -2517,22 +2517,39 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
         $isCreate = empty($docID);
 
         if($docID) $doc = $this->doc->getByID($docID);
+        if(isset($doc->type)) $docType = $doc->type;
+        elseif(isset($this->get->docType)) $docType = $this->get->docType;
 
-        $title = $this->lang->settings;
-        if($modalType == 'doc')
+        $this->view->docType = $docType;
+
+        if($modalType == 'doc' && $docType == 'url')
+        {
+            $title = $isCreate ? $this->lang->doc->create : $this->lang->settings;
+        }
+        elseif($modalType == 'doc' && $isDraft != 'no')
         {
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
             if($objectType == 'template') $title = $parentID ? $this->lang->docTemplate->addSubDocTemplate : $this->lang->docTemplate->create;
-            if($isDraft == 'no') $title = $this->lang->settings;
         }
-        if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
+        elseif($modalType == 'doc')
+        {
+            $title = $this->lang->settings;
+        }
+        elseif($modalType == 'chapter')
+        {
+            $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
+        }
+        else
+        {
+            $title = $this->lang->settings;
+        }
 
         if($isCreate)
         {
@@ -2621,6 +2638,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->parentID   = $parentID;
         $this->view->isDraft    = $isDraft == 'yes';
+        $this->view->docType    = $docType;
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;

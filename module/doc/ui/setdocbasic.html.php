@@ -18,12 +18,15 @@ if($objectType == 'template')
 
 if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
-formPanel
-(
+$docType = $this->view->docType ?? '';
+$submitUrl = ($docType == 'url' && isset($doc) && $doc->id) ? $this->createLink('doc', 'edit', "docID={$doc->id}") : '';
+
+formPanel(
+    set::title($title),
     setID('setDocBasicForm'),
     setData('officeTypes', $this->config->doc->officeTypes),
     setData('docType', isset($doc) ? $doc->type : 'undefined'),
-    set::title($title),
+    set::url($submitUrl),
     set::submitBtnText($lang->save),
     on::change('[name=space],[name=product],[name=execution]')->call('loadObjectModules', jsRaw('event'), $docID),
     on::change('[name=lib]')->call('loadLibModules', jsRaw('event'), $docID),
@@ -40,6 +43,17 @@ formPanel
        set::required(true),
        set::value($docTitle)
     ),
+    $docType == 'url' ? formGroup
+    (
+        set::width('1/2'),
+        set::label($lang->doc->docUrl),
+        set::name('content'),
+        set::required(true),
+        set::control(array('control' => 'input', 'name' => 'content', 'type' => 'url', 'value' => isset($doc) ? $doc->content : ''))
+    ) : null,
+    input(set::type('hidden'), set::name('docID'), set::value(isset($doc) && $doc->id ? $doc->id : '')),
+    input(set::type('hidden'), set::name('type'), set::value($docType ?: 'text')),
+    input(set::type('hidden'), set::name('contentType'), set::value($docType == 'url' ? 'url' : 'doc')),
     $this->app->tab == 'doc' && $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
         formGroup
@@ -106,7 +120,7 @@ formPanel
         set::label($lang->doc->mailto),
         mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
     ) : null,
-    isset($doc) && $doc->contentType != 'doc' ? formGroup
+    isset($doc) && !in_array($doc->contentType ?? '', array('url', 'attachment', 'word', 'ppt', 'excel')) && $docType != 'url' ? formGroup
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),

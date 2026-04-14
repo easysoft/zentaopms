@@ -9,11 +9,14 @@ $config->doc->createTemplate    = new stdclass();
 $config->doc->edit      = new stdclass();
 $config->doc->showfiles = new stdclass();
 
-$config->doc->createlib->requiredFields = 'name';
-$config->doc->editlib->requiredFields   = 'name';
-$config->doc->create->requiredFields    = 'lib,title';
-$config->doc->createTemplate->requiredFields    = 'lib,title';
-$config->doc->edit->requiredFields      = 'lib,title';
+$config->doc->createlib->requiredFields      = 'name';
+$config->doc->editlib->requiredFields        = 'name';
+$config->doc->create->requiredFields         = 'lib,title';
+$config->doc->createDocUrl                   = new stdclass();
+$config->doc->createDocUrl->requiredFields   = 'lib,title,content';
+$config->doc->createTemplate->requiredFields = 'lib,title';
+$config->doc->edit->requiredFields           = 'lib,title';
+$config->doc->edit->requiredFields           = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
 $config->doc->notArticleType    = 'chapter';
