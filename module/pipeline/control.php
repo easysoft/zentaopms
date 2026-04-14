@@ -740,7 +740,7 @@ class pipeline extends control
     {
         $this->pipeline->delete(TABLE_PIPELINE, $pipelineID);
         if(dao::isError()) return $this->sendError(dao::getError());
-        $this->sendSuccess(array('load' => true));
+        $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 
     /**
