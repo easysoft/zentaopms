@@ -4,7 +4,7 @@ window.refreshApproval = function()
     {
         $('[name^=flow]').each(function()
         {
-            $(this).zui('picker').render({items: data});
+            $(this).zui('picker').render(data);
         });
     });
 }
