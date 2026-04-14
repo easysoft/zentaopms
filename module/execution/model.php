@@ -3861,7 +3861,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id', false);
 
-        if(strpos($orderBy, 'beginDate') === false) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
+        if(strpos($orderBy, 'beginDate') === false) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         return $this->processTasks($tasks);
     }
