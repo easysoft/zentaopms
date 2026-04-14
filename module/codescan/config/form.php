@@ -5,12 +5,10 @@ $now = time();
 
 $config->codescan->form->createRuleset['name'] = array('type' => 'string', 'required' => true);
 $config->codescan->form->createRuleset['lang'] = array('type' => 'array',  'required' => true,  'default' => array(), 'filter' => 'join');
-$config->codescan->form->createRuleset['type'] = array('type' => 'string', 'required' => true);
 $config->codescan->form->createRuleset['desc'] = array('type' => 'string', 'required' => false, 'default' => '');
 
 $config->codescan->form->editRuleset['name'] = array('type' => 'string', 'required' => true);
 $config->codescan->form->editRuleset['lang'] = array('type' => 'array',  'required' => true,  'default' => array(), 'filter' => 'join');
-$config->codescan->form->editRuleset['type'] = array('type' => 'string', 'required' => true);
 $config->codescan->form->editRuleset['desc'] = array('type' => 'string', 'required' => false, 'default' => '');
 
 $config->codescan->form->createSolution['name']        = array('type' => 'string', 'required' => true);
