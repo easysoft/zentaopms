@@ -180,7 +180,7 @@ r($tester->checkTab('needconfirm', '1'))  && p('status,message') && e('SUCCESS,n
 r($tester->checkTab('wait', '3'))         && p('status,message') && e('SUCCESS,wait下显示条数正确');         //检查未开始标签下显示条数
 r($tester->checkTab('doing', '3'))        && p('status,message') && e('SUCCESS,doing下显示条数正确');        //检查进行中标签下显示条数
 r($tester->checkTab('undone', '7'))       && p('status,message') && e('SUCCESS,undone下显示条数正确');       //检查未完成标签下显示条数
-r($tester->checkTab('finishedbyme', '2')) && p('status,message') && e('SUCCESS,finushedbyme下显示条数正确'); //检查我完成标签下显示条数
+r($tester->checkTab('finishedbyme', '2')) && p('status,message') && e('SUCCESS,finishedbyme下显示条数正确'); //检查我完成标签下显示条数
 r($tester->checkTab('done', '2'))         && p('status,message') && e('SUCCESS,done下显示条数正确');         //检查已完成标签下显示条数
 r($tester->checkTab('closed', '2'))       && p('status,message') && e('SUCCESS,closed下显示条数正确');       //检查已关闭标签下显示条数
 r($tester->checkTab('cancel', '1'))       && p('status,message') && e('SUCCESS,cancel下显示条数正确');       //检查已取消标签下显示条数

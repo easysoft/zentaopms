@@ -67,7 +67,7 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
-        $result = $this->invokeArgs('createTask', [$projectID, $executionID, $data, $relations]);
+        $result = $this->invokeArgs('createTask', [$projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -552,7 +552,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec($sql);
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
-        $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations]);
+        $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -628,7 +628,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
 
-        $result = $this->invokeArgs('createCase', [$productID, $projectID, $executionID, $data, $relations]);
+        $result = $this->invokeArgs('createCase', [$productID, $projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1401,7 +1401,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec($sql);
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
-        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
+        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, array(), $buildinFlow]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1552,7 +1552,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
 
-        $result = $this->invokeArgs('createFeedback', array($productID, $data, $relations));
+        $result = $this->invokeArgs('createFeedback', array($productID, $data, $relations, array()));
         if(dao::isError()) return dao::getError();
         return $result;
     }

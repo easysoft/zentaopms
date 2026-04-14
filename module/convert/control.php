@@ -568,7 +568,16 @@ class convert extends control
      */
     public function quickImportJiraData()
     {
-        $this->convert->quickImportJiraData();
+        $status = 'success';
+        try
+        {
+            $this->convert->quickImportJiraData();
+            $status = dao::isError() ? 'fail' : 'success';
+        }
+        catch(Exception $e)
+        {
+            $status = 'fail';
+        }
 
         $websiteUrl = isset($this->config->sanplexWebsite->url) ? $this->config->sanplexWebsite->url : '';
         if(!empty($websiteUrl))
@@ -580,7 +589,7 @@ class convert extends control
             (
                 'domain' => $currentDomain,
                 'admin'  => !empty($admins) ? current(explode(',', trim($admins, ','))) : '',
-                'status' => dao::isError() ? 'fail' : 'success'
+                'status' => $status
             );
             common::http($websiteUrl . '/convert-importResult.json', $postData);
         }

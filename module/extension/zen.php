@@ -264,7 +264,31 @@ class extensionZen extends extension
         $files      = $zip->listContent();
         $pathinfo   = pathinfo($files[0]['filename']);
         $removePath = isset($pathinfo['dirname']) && $pathinfo['dirname'] != '.' ? $pathinfo['dirname'] : $pathinfo['basename'];
-        if($zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
+
+        /* 修复漏洞：过滤不安全的文件。 Fix vulnerability: filter unsafe files. */
+        $unsafePatterns = '/\.\.[\/\\\]|^[^\w]|\w:[\/\\\]/'; // 非法路径包括： ../ | ..\ | /opt/ | c:/ | c:\
+        $filteredFiles  = array();
+        $lastIndex      = 0;
+        foreach($files as $file)
+        {
+            $filename  = $file['filename'];
+            $lastIndex = $file['index'];
+
+            if(preg_match($unsafePatterns, $filename)) $filteredFiles[] = $lastIndex;
+        }
+        $indexes    = array();
+        $startIndex = 0;
+        foreach($filteredFiles as $index)
+        {
+            $preIndex = $index - 1;
+            if($preIndex < 0) return $return;
+
+            $indexes[]  = $preIndex == $startIndex ? $startIndex : $startIndex . '-' . $preIndex;
+            $startIndex = $index + 1;
+        }
+        if($startIndex <= $lastIndex) $indexes[] = $startIndex == $lastIndex ? $startIndex : $startIndex . '-' . $lastIndex;
+
+        if($indexes && $zip->extract(PCLZIP_OPT_PATH, $extensionPath, PCLZIP_OPT_BY_INDEX, $indexes, PCLZIP_OPT_REMOVE_PATH, $removePath) == 0)
         {
             $return->result = 'fail';
             $return->error  = $zip->errorInfo(true);
