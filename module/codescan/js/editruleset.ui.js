@@ -4,7 +4,7 @@ window.checkLanguage = function()
     if(!lang) return;
 
     const langList    = lang.split(',');
-    const oldLangList = ruleset.lang_id.toString().split(',');
+    const oldLangList = ruleset.langID.toString().split(',');
 
     const diff = oldLangList.filter(item => !langList.includes(item));
     if(diff.length < 1) return;
