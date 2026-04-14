@@ -3813,6 +3813,7 @@ class executionModel extends model
                 $subQuery = $this->dao->select('1')->from(TABLE_TASKTEAM)
                     ->where('task = t1.id')
                     ->andWhere('account' . $matches[1][$matchIndex])
+                    ->andWhere('status')->notin('done,closed')
                     ->get();
 
                 $condition = str_replace(
