@@ -40,7 +40,6 @@ class codescan extends control
 
         $params   = $this->codescanZen->buildParams($type, "lang=$language", (int)$queryID, $orderBy, $recPerPage, $pageID);
         $ruleList = $this->codescan->getScanRules($params);
-        a($ruleList);
         $pager->recTotal = $ruleList->pager->total ?? 0;
 
         $ruleList = zget($ruleList, 'data', array());

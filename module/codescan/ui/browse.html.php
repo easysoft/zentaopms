@@ -28,8 +28,7 @@ foreach($langs as $index => $lang)
 
     $lang->parent = 0;
     $lang->name   = $lang->lang;
-    $lang->id     = $lang->lang;
-    $lang->url    = inLink('browse', "type=all&language={$lang->lang}&queryID=0&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+    $lang->url    = inLink('browse', "type=all&language={$lang->id}&queryID=0&orderBy={$orderBy}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 }
 
 sidebar

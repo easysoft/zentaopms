@@ -169,6 +169,11 @@ class codescanModel extends model
     public function getScanRules(array $params = array()): array|object
     {
         if(isset($params['id'])) $params['id'] = (int)$params['id'];
+        if(isset($params['lang']) && is_numeric($params['lang']))
+        {
+            $params['langID'] = (int)$params['lang'];
+            unset($params['lang']);
+        }
         return $this->loadModel('gitfox')->request('/scan/rules/list', 'POST', $params) ?: array();
     }
 
