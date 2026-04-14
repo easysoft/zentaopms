@@ -15,7 +15,7 @@ $content = common::checkNotCN() ? zget($rule, 'content_en') : zget($rule, 'conte
 $sections = array();
 $sections[] = setting()
     ->control('html')
-    ->content(empty($rule->content) ? zget($rule, 'description', $lang->noDesc) : common::processMarkdown($content));
+    ->content(empty($rule->content) ? zget($rule, 'desc', $lang->noDesc) : common::processMarkdown($content));
 
 /* 基本信息。Legend basic items. */
 $items[] = array(
@@ -46,7 +46,7 @@ $items[] = array(
 $items[] = array(
     'label'   => $lang->codescan->synopsis,
     'control' => 'html',
-    'content' => "<p>{$rule->description}</p>"
+    'content' => "<p>{$rule->desc}</p>"
 );
 
 $tabs[] = setting()
