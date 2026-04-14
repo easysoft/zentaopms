@@ -152,7 +152,6 @@ class gantt extends wg
             jsVar('zooming',         $this->prop('zooming')),
             jsVar('appTab',          $app->tab),
             jsVar('options',         $options),
-            jsVar('showBaselines',   $showBaselines),
             jsVar('exportFileName',  $this->prop('exportFileName')),
             jsVar('weekend',         $this->prop('weekend')),
             jsVar('workingDays',     is_array($workingDays) ? array_values($workingDays) : array()),
