@@ -34,7 +34,6 @@ $checkPipeline    = true;
 $pipelineBox      = array();
 $codeScanBox      = array();
 
-\a($pipelines);
 foreach($pipelines as $pipeline)
 {
     if($pipeline->status != 'success') $checkPipeline = false;
