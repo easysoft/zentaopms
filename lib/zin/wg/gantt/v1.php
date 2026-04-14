@@ -132,9 +132,6 @@ class gantt extends wg
         $options      = $this->prop('options');
         if(is_string($options) && $options == '[]') $options = array();
 
-        $firstData     = zget(zget($options, 'data', array()), 0, array());
-        $showBaselines = isset($firstData->planned_start);
-
         return div
         (
             jsVar('ganttID',         $id),
