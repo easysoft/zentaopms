@@ -3018,7 +3018,7 @@ class executionModel extends model
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
         $storyFrozen = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('frozen');
-        if(!empty($storyFrozen))
+        if(!empty($storyFrozen) && $this->app->tab != 'execution')
         {
             $this->app->loadLang('story');
             dao::$errors[] = sprintf($this->lang->story->frozenTip, $this->lang->story->unlink);
