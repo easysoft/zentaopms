@@ -1342,11 +1342,33 @@ class myModel extends model
         $server = $this->loadModel('gitfox')->getServer();
         if(!$server) return array();
 
-        return $this->dao->select("`id`, `title`, IF(`flow`='1', 'pullreq', 'ppm') AS type, `createdDate` AS time, 0 AS product, 0 AS project")->from(TABLE_PPM)
-            ->where('status')->ne('closed')
-            ->andWhere('createdBy')->eq($this->app->user->account)
+        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
+            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.requestID')
+            ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.repoID')
+            ->where('t1.status')->ne('closed')
+            ->andWhere('(t2.account')->eq($this->app->user->account)
+            ->orWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewers`)")->markRight(1)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
+
+        $this->loadModel('ppm');
+        foreach($ppms as $ppm)
+        {
+            if($ppm->reviewStatus)
+            {
+                $ppm->status = $ppm->reviewStatus;
+            }
+            else
+            {
+                $reviewers   = $this->ppm->getReviewers($ppm->id);
+                $definition  = empty($ppm->definition) ? array() : json_decode($ppm->definition);
+
+                $flow = new stdClass();
+                $flow->definition = $definition;
+                $ppm->status = $this->ppm->getReviewResult($reviewers, empty($flow->definition) ? array() : $flow);
+            }
+        }
+        return $ppms;
     }
 
     /**
