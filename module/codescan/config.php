@@ -271,12 +271,10 @@ $config->codescan->issue->search['params']['ruleID']     = array('operator' => '
 
 $config->codescan->remoteFields = array();
 $config->codescan->remoteFields['updatedBy']        = 'editedBy';
-$config->codescan->remoteFields['setCount']         = 'rulesets_count';
-$config->codescan->remoteFields['scanType']         = 'scan_type';
-$config->codescan->remoteFields['repo']             = 'repo_id';
-$config->codescan->remoteFields['latestScanTime']   = 'latest_task_created';
-$config->codescan->remoteFields['latestExecStatus'] = 'latest_task_status';
-$config->codescan->remoteFields['latestExecResult'] = 'latest_task_result';
+$config->codescan->remoteFields['repo']             = 'repoID';
+$config->codescan->remoteFields['latestScanTime']   = 'latestTaskCreated';
+$config->codescan->remoteFields['latestExecStatus'] = 'latestTaskStatus';
+$config->codescan->remoteFields['latestExecResult'] = 'latestTaskResult';
 $config->codescan->remoteFields['scanBranch']       = 'branch';
 $config->codescan->remoteFields['ruleID']           = 'rule_id';
 $config->codescan->remoteFields['rulePriority']     = 'rule_priority';

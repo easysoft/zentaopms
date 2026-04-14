@@ -40,6 +40,7 @@ class codescan extends control
 
         $params   = $this->codescanZen->buildParams($type, "lang=$language", (int)$queryID, $orderBy, $recPerPage, $pageID);
         $ruleList = $this->codescan->getScanRules($params);
+        a($ruleList);
         $pager->recTotal = $ruleList->pager->total ?? 0;
 
         $ruleList = zget($ruleList, 'data', array());
@@ -833,7 +834,7 @@ class codescan extends control
 
         $pager  = $this->codescanZen->setPager($recPerPage, $pageID);
         $params = $this->codescanZen->buildParams('all', '', 0, $orderBy, $pager->recPerPage, $pager->pageID);
-        if($status != 'all') $params['latest_task_status'] = $status;
+        if($status != 'all') $params['latestTaskStatus'] = $status;
 
         $planList = $this->codescan->getScanPlans($repoID, (array)$params);
         $repoList = $this->repo->getRepoPairs();
