@@ -654,6 +654,7 @@ class pipeline extends control
             $pipeline->editedDate = helper::now();
             $this->pipeline->update($pipelineID, $pipeline);
             if(dao::isError()) return $this->sendError(dao::getError());
+            if($type == 'active') $this->loadModel('action')->create('pipeline', $pipelineID, 'published');
 
             return $this->sendSuccess(array('load' => true));
         }
