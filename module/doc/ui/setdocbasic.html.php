@@ -18,8 +18,9 @@ if($objectType == 'template')
 
 if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
-$docType = $this->view->docType ?? '';
+$docType   = $this->view->docType ?? '';
 $submitUrl = ($docType == 'url' && isset($doc) && $doc->id) ? $this->createLink('doc', 'edit', "docID={$doc->id}") : '';
+$urlValue  = isset($doc) ? $doc->content : '';
 
 formPanel(
     set::title($title),
@@ -49,7 +50,7 @@ formPanel(
         set::label($lang->doc->docUrl),
         set::name('content'),
         set::required(true),
-        set::control(array('control' => 'input', 'name' => 'content', 'type' => 'url', 'value' => isset($doc) ? $doc->content : ''))
+        set::control(array('control' => 'input', 'name' => 'content', 'type' => 'url', 'value' => $urlValue))
     ) : null,
     input(set::type('hidden'), set::name('docID'), set::value(isset($doc) && $doc->id ? $doc->id : '')),
     input(set::type('hidden'), set::name('type'), set::value($docType ?: 'text')),
