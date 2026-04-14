@@ -2108,6 +2108,23 @@ class doc extends control
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
+        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $spaceType, $docID);
+        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
+        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
+        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
+
+        $this->view->docID      = $docID;
+        $this->view->libID      = $libID;
+        $this->view->spaceType  = $spaceType;
+        $this->view->space      = $space;
+        $this->view->doc        = $doc;
+        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
+        $this->view->libPairs   = $libPairs;
+        $this->view->optionMenu = $chapterAndDocs;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->view->title      = $this->lang->doc->copyDocAction;
+        $this->view->action     = 'copyDoc';
         $this->display('doc', 'movedoc');
     }
 
