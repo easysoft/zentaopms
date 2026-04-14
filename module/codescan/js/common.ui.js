@@ -110,7 +110,7 @@ window.updateTriggerType = function()
     const scanTypePicker = $('[name=scanType]').zui('picker');
     const scanTypeList   = scanTypePicker.options.items;
 
-    if(type == 'event')
+    if(type == 'action')
     {
         $('.operation').removeClass('hidden');
         scanTypePicker.render({disabled: true, items: scanTypeList});
