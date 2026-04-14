@@ -2061,6 +2061,56 @@ class doc extends control
             }
         }
 
+        if(!empty($_POST))
+        {
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
+            $data = form::data()
+                ->setIF($this->post->acl == 'open', 'groups', '')
+                ->setIF($this->post->acl == 'open', 'users', '')
+                ->setIF($this->post->acl == 'open', 'readGroups', '')
+                ->setIF($this->post->acl == 'open', 'readUsers', '')
+                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
+                ->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $newDocID = $this->doc->copyDoc($docID, $data);
+            if(!$newDocID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $originalLink = html::a(helper::createLink('doc', 'view', "docID={$docID}"), $doc->title);
+            $this->action->create('doc', $newDocID, 'Copied', '', $originalLink);
+
+            $newDoc = $this->doc->getByID($newDocID);
+            if($newDoc)
+            {
+                $newDoc->hasContent = !empty($newDoc->content);
+                unset($newDoc->content);
+                unset($newDoc->draft);
+            }
+            return $this->send(array(
+                'result'     => 'success',
+                'message'    => $this->lang->saveSuccess,
+                'closeModal' => true,
+                'docApp'     => array('executeCommand', 'startEditDoc', array($newDoc))
+            ));
+        }
+
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $products   = $this->loadModel('product')->getPairs();
+        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
+
+        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
+        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
+
+        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
+
+        $this->display('doc', 'movedoc');
+    }
+
     /**
      * 移动文档模板
      * Move document template.
