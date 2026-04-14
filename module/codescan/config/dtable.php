@@ -121,7 +121,7 @@ $config->codescan->ruleset->dtable->fieldList['status']['width']    = '40';
 
 $config->codescan->ruleset->dtable->fieldList['desc']['title']    = $lang->codescan->desc;
 $config->codescan->ruleset->dtable->fieldList['desc']['type']     = 'html';
-$config->codescan->ruleset->dtable->fieldList['desc']['sortType'] = true;
+$config->codescan->ruleset->dtable->fieldList['desc']['sortType'] = false;
 $config->codescan->ruleset->dtable->fieldList['desc']['width']    = '180';
 $config->codescan->ruleset->dtable->fieldList['desc']['hint']     = true;
 $config->codescan->ruleset->dtable->fieldList['desc']['show']     = true;
@@ -267,14 +267,14 @@ $config->codescan->plan->dtable->fieldList['latestExecResult']['sortType']  = tr
 $config->codescan->plan->dtable->fieldList['latestExecResult']['statusMap'] = $lang->codescan->latestScanResultList;
 $config->codescan->plan->dtable->fieldList['latestExecResult']['order']     = 30;
 
-$config->codescan->plan->dtable->fieldList['repo_id']['title']    = $lang->codescan->repo;
-$config->codescan->plan->dtable->fieldList['repo_id']['name']     = 'repoID';
-$config->codescan->plan->dtable->fieldList['repo_id']['width']    = '100';
-$config->codescan->plan->dtable->fieldList['repo_id']['show']     = true;
-$config->codescan->plan->dtable->fieldList['repo_id']['hint']     = true;
-$config->codescan->plan->dtable->fieldList['repo_id']['required'] = false;
-$config->codescan->plan->dtable->fieldList['repo_id']['sortType'] = false;
-$config->codescan->plan->dtable->fieldList['repo_id']['order']    = 40;
+$config->codescan->plan->dtable->fieldList['repoID']['title']    = $lang->codescan->repo;
+$config->codescan->plan->dtable->fieldList['repoID']['name']     = 'repoID';
+$config->codescan->plan->dtable->fieldList['repoID']['width']    = '100';
+$config->codescan->plan->dtable->fieldList['repoID']['show']     = true;
+$config->codescan->plan->dtable->fieldList['repoID']['hint']     = true;
+$config->codescan->plan->dtable->fieldList['repoID']['required'] = false;
+$config->codescan->plan->dtable->fieldList['repoID']['sortType'] = false;
+$config->codescan->plan->dtable->fieldList['repoID']['order']    = 40;
 
 $config->codescan->plan->dtable->fieldList['scanBranch']['title']    = $lang->codescan->branch;
 $config->codescan->plan->dtable->fieldList['scanBranch']['width']    = '200';

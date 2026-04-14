@@ -29,7 +29,7 @@ hasPriv('codescan', 'createplan') ? toolbar
         'icon'        => 'plus'
     )))
 ) : null;
-$config->codescan->plan->dtable->fieldList['repo_id']['map']         = $repoList;
+$config->codescan->plan->dtable->fieldList['repoID']['map']         = $repoList;
 $config->codescan->plan->dtable->fieldList['solutions']['delemiter'] = ',';
 $config->codescan->plan->dtable->fieldList['solutions']['map']       = $solutionList;
 if($repoID) unset($config->codescan->plan->dtable->fieldList['repo_id']);
