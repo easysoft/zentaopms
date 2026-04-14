@@ -583,7 +583,15 @@ class repoModel extends model
         $repo = $this->fetchByID($repoID);
         if(!$repo) return false;
 
-        $repo->members = $repo->acl == 'private' ? $this->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->spaceID);
+        if($repo->acl == 'private')
+        {
+            $repo->members = $this->getRepoUsers($repo->id);
+        }
+        else
+        {
+            $space = $this->loadModel('space')->getByID($repo->spaceID);
+            $repo->members = $space->acl == 'private' ? zget($space, 'members', array()) : $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        }
 
         $repo = $this->processGitService($repo);
         return $repo;
