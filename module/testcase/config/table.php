@@ -216,7 +216,7 @@ $config->testcase->group->dtable->fieldList['lastRunDate']   = $config->testcase
 $config->testcase->group->dtable->fieldList['actions']       = $config->testcase->dtable->fieldList['actions'];
 
 $config->testcase->group->dtable->fieldList['actions']['fixed'] = false;
-$config->testcase->group->dtable->fieldList['actions']['menu']  = array(array('confirmStoryChange'), array('review', 'runCase|ztfRun', 'runResult', 'edit', 'createBug', 'create', 'showScript'));;
+$config->testcase->group->dtable->fieldList['actions']['menu']  = array(array('confirmStoryChange'), array('review', 'runCase|ztfRun', 'runResult', 'edit', 'createBug', 'create', 'showScript'));
 
 $config->testcase->bug = new stdclass();
 $config->testcase->bug->dtable = new stdclass();
