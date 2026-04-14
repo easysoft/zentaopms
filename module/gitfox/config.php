@@ -130,10 +130,10 @@ $config->gitfox->escapeUserList = array();
 
 $setLang = common::checkNotCN() ? 'en' : 'zh-cn';
 $config->gitfox->downloadGitfoxURL = array();
-$config->gitfox->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-amd-2.0.beta1.zip';
-$config->gitfox->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-arm-2.0.beta1.zip';
-$config->gitfox->downloadGitfoxURL['win']['amd']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-2.0.beta1.zip';
-$config->gitfox->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-2.0.beta1.zip';
+$config->gitfox->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-amd64.zip';
+$config->gitfox->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-arm64.zip';
+$config->gitfox->downloadGitfoxURL['win']['amd']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-amd64.zip';
+$config->gitfox->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/gitfox/2.0_beta1/windows-amd64.zip';
 
 $config->gitfox->installGitfox = array();
 $config->gitfox->installGitfox['linux'] = <<<EOT
