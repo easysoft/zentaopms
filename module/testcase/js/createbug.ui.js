@@ -8,8 +8,10 @@ $(function()
         success : function()
         {
             var $resultTrs = $('#resultsContainer').find('#casesResults tr');
-            if($resultTrs.length == 0) return false;
-            if($resultTrs.first().data('status') == 'ready') $resultTrs.first().trigger('click');
+            if($resultTrs.length != 0 && $resultTrs.first().data('status') == 'ready')
+            {
+                $resultTrs.first().trigger('click');
+            }
         }
     });
 

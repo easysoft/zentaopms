@@ -793,7 +793,7 @@ class user extends control
             $menu = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
-            if(!isset($acls['views'][$menu])) $denyType = 'noview';
+            if(!empty($acls['views']) && !isset($acls['views'][$menu])) $denyType = 'noview';
 
             $this->view->menu = $menu;
         }

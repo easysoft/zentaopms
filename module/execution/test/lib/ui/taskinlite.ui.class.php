@@ -17,11 +17,13 @@ class taskExecutionTester extends tester
         if(!isset($currentVision) || $currentVision != 'lite') $this->switchVision('lite');
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-project');
         $form->wait(1);
-        $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab', 'assignedByMeTab', 'changedByMeTab');
-        if(!in_array($tab, $params)) $form->dom->MoreTab->click();
+        $params = array('all', 'unclosed', 'assignedtome', 'myinvolved', 'assignedbyme', 'needconfirm');
+        if(!in_array($tab, $params)) $form->dom->more->click();
         $form->wait(1);
         $form->dom->$tab->click();
         $form->wait(1);
+        $form->dom->xpath['numInLite'] = $form->dom->xpath[$tab] . '/span[2]';
+        if(!in_array($tab, $params)) $form->dom->xpath['numInLite'] =  "//*[@id='featureBar']/menu/li[7]/a/span[2]";
         if($form->dom->numInLite->getText() == $expectNum) return $this->success($tab . '下显示条数正确');
         return $this->failed($tab . '下显示条数不正确');
     }

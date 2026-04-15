@@ -190,7 +190,7 @@ else
                     setClass('flex-auto'),
                     cell
                     (
-                        setClass($isEn ? 'w-1/6' : 'w-1/3'),
+                        setClass('w-1/3'),
                         span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalTask),
                         strong(setClass('num ml-2'), $execution->totalTask)
                     ),
@@ -200,9 +200,9 @@ else
                         span(setClass('text-sm text-gray'), $lang->block->executionstatistic->undoneTask),
                         strong(setClass('num ml-2'), $execution->undoneTask)
                     ),
-                    cell
+                    $isEn ? null : cell
                     (
-                        setClass($isEn ? 'w-1/2' : 'w-1/3'),
+                        setClass('w-1/3'),
                         span(setClass('text-sm text-gray'), $lang->block->executionstatistic->yesterdayDoneTask),
                         strong(setClass('num ml-2'), $execution->yesterdayDoneTask)
                     )
@@ -216,7 +216,7 @@ else
                     setClass('flex-auto'),
                     cell
                     (
-                        setClass($isEn ? 'w-1/6' : 'w-1/3'),
+                        setClass('w-1/3'),
                         span(setClass('text-sm text-gray'), $lang->block->executionstatistic->totalStory),
                         strong(setClass('num ml-2'), $execution->totalStory)
                     ),

@@ -15,8 +15,8 @@ class taskExecutionTester extends tester
     {
         $form = $this->initForm('execution', 'task', array('execution' => '2'), 'appIframe-execution');
         $form->wait(1);
-        $params = array('allTab', 'unclosedTab', 'myTab', 'involvedTab', 'assignedByMeTab', 'changedByMeTab');
-        if(!in_array($tab, $params)) $form->dom->MoreTab->click();
+        $params = array('all', 'unclosed', 'my', 'involved', 'assignedbyme', 'changedbyme');
+        if(!in_array($tab, $params)) $form->dom->more->click();
         $form->wait(1);
         $form->dom->$tab->click();
         $form->wait(1);

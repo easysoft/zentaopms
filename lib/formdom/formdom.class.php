@@ -438,7 +438,10 @@ class formdom
             elseif(is_array($data[$key]) && is_array($val))
             {
                 /* 递归合并数组 */
-                foreach($val as $v) $data[$key][] = $v;
+                foreach($val as $v)
+                {
+                    if(!in_array($v, $data[$key])) $data[$key][] = $v;
+                }
             }
             else
             {

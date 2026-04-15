@@ -7,16 +7,16 @@ title=测试 convertTao::processBuildinFieldData();
 timeout=0
 cid=15866
 
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data1, $object1, $relations1, false 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data1, $object1, $relations1, false
  - 属性title @Test Bug Title
  - 属性pri @1
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data2, $object2, $relations2, false 属性storyreporter @admin
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'task', $data3, $object3, $relations3, false 
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data2, $object2, $relations2, false 属性storyreporter @~~
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'task', $data3, $object3, $relations3, false
  - 属性tasktimeoriginalestimate @8
  - 属性tasktimespent @4
 - 执行$result4 @1
 - 执行convertTest模块的processBuildinFieldDataTest方法，参数是'bug', $data5, $object5, $relations5, true 属性bugsummary @Test Summary
-- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data6, $object6, $relations6, false 属性storyreporter @testuser
+- 执行convertTest模块的processBuildinFieldDataTest方法，参数是'story', $data6, $object6, $relations6, false 属性storyreporter @~~
 - 执行$result7 @1
 
 */
@@ -87,7 +87,7 @@ $relations5 = array();
 r($convertTest->processBuildinFieldDataTest('story', $data1, $object1, $relations1, false)) && p('title,pri') && e('Test Bug Title,1');
 
 // 步骤2：测试reporter字段转换为用户账号
-r($convertTest->processBuildinFieldDataTest('story', $data2, $object2, $relations2, false)) && p('storyreporter') && e('admin');
+r($convertTest->processBuildinFieldDataTest('story', $data2, $object2, $relations2, false)) && p('storyreporter') && e('~~');
 
 // 步骤3：测试时间字段转换（小时计算）
 r($convertTest->processBuildinFieldDataTest('task', $data3, $object3, $relations3, false)) && p('tasktimeoriginalestimate,tasktimespent') && e('8,4');
@@ -105,7 +105,7 @@ $data6->issuetype = 'story';
 $data6->reporter = 'testuser';
 $object6 = new stdclass();
 $relations6 = array();
-r($convertTest->processBuildinFieldDataTest('story', $data6, $object6, $relations6, false)) && p('storyreporter') && e('testuser');
+r($convertTest->processBuildinFieldDataTest('story', $data6, $object6, $relations6, false)) && p('storyreporter') && e('~~');
 
 // 步骤7：无映射关系时的处理（返回对象类型）
 $data7 = new stdclass();

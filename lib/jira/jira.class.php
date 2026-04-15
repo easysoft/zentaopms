@@ -370,6 +370,8 @@ class jira
         $users = array();
         foreach($result as $index => $user)
         {
+            if($user['accountType'] != 'atlassian') continue;
+
             $user['id'] = $index;
             $user['lowerUserName']    = $user['accountId'];
             $user['lowerDisplayName'] = $user['displayName'];

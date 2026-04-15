@@ -568,7 +568,7 @@ class programplanTao extends programplanModel
         $plan->openedDate    = helper::now();
         $plan->openedVersion = $this->config->version;
         if(!isset($plan->acl)) $plan->acl = $this->dao->findByID($plan->parent)->from(TABLE_PROJECT)->fetch('acl');
-        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->exec();
+        $this->dao->insert(TABLE_PROJECT)->data($plan, 'point,defaultPoint')->autoCheck()->exec();
 
         if(dao::isError()) return false;
 

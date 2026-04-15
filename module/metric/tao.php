@@ -502,7 +502,7 @@ class metricTao extends metricModel
         $table = TABLE_METRICLIB;
 
         $sql  = " UPDATE $table AS t1";
-        $sql .= " SET t1.deleted = 0";
+        $sql .= " SET t1.deleted = '0'";
         $sql .= " WHERE id IN (";
         $sql .= "    SELECT maxid FROM (";
         $sql .= "        SELECT MAX(id) AS maxid";

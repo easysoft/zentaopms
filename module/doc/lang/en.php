@@ -253,7 +253,7 @@ $lang->doc->docStatistic  = 'Docs Summary';
 $lang->doc->docCreated    = 'Created';
 $lang->doc->docEdited     = 'Edited';
 $lang->doc->docViews      = 'Views';
-$lang->doc->docCollects   = 'Favorites';
+$lang->doc->docCollects   = 'Collection';
 $lang->doc->todayUpdated  = "Updated Today";
 $lang->doc->daysUpdated   = 'Updated %s day(s) ago';
 $lang->doc->monthsUpdated = 'Updated %s month(s) ago';
@@ -315,7 +315,7 @@ $lang->doc->batchMoveDocAction = 'Batch Move Docs';
 $lang->doc->fixedMenu          = 'Pin to Menu';
 $lang->doc->removeMenu         = 'Unpin from Menu';
 $lang->doc->search             = 'Search';
-$lang->doc->allCollections     = 'View All Favorites';
+$lang->doc->allCollections     = 'View All Collection';
 $lang->doc->keywordsTips       = 'Separate multiple keywords with commas.';
 $lang->doc->sortLibs           = 'Sort Libs';
 $lang->doc->titlePlaceholder   = 'Enter title here.';
@@ -477,7 +477,7 @@ $lang->doc->browseTypeList['grid'] = 'Directory';
 $lang->doc->fastMenuList['byediteddate']  = 'Recent Updates';
 //$lang->doc->fastMenuList['visiteddate']   = 'Recently Visited';
 $lang->doc->fastMenuList['openedbyme']    = 'My Documents';
-$lang->doc->fastMenuList['collectedbyme'] = 'My Favorites';
+$lang->doc->fastMenuList['collectedbyme'] = 'My Collection';
 
 $lang->doc->fastMenuIconList['byediteddate']  = 'icon-folder-upload';
 //$lang->doc->fastMenuIconList['visiteddate']   = 'icon-folder-move';
@@ -601,7 +601,7 @@ $lang->doc->whitelistDeny['doc']       = "<i class='icon pr-1 text-important ico
 
 $lang->doc->filterTypes[] = array('all', 'All');
 $lang->doc->filterTypes[] = array('draft', 'Draft');
-$lang->doc->filterTypes[] = array('collect', 'My Favorites');
+$lang->doc->filterTypes[] = array('collect', 'My Collection');
 $lang->doc->filterTypes[] = array('createdByMe', 'Created by Me');
 $lang->doc->filterTypes[] = array('editedByMe', 'Edited by Me');
 

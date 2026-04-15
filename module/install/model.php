@@ -544,4 +544,19 @@ class installModel extends model
 
         return true;
     }
+
+    /**
+     * 更新数据库所有序列。
+     * Update Database sequence.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateDbSeq()
+    {
+        if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        {
+            $this->dao->exec('SELECT update_tables_seq()');
+        }
+    }
 }
