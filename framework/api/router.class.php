@@ -636,7 +636,7 @@ class api extends router
         $this->checkAccess();
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
-        if(!in_array($this->methodName, ['create', 'edit'])) return;
+        if(!in_array($this->methodName, ['create', 'edit', 'change'])) return;
 
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
         /* Get form data by get request. */

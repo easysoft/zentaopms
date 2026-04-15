@@ -723,7 +723,7 @@ function refreshMenu()
         let isDivider = $item.hasClass('divider');
         let height    = isDivider ? dividerHeight : itemHeight;
 
-        if((currentHeight + height) > maxHeight)
+        if(showMoreMenu || (currentHeight + height) > maxHeight)
         {
             if(!$firstHiddenItem) $firstHiddenItem = $item;
             $item.addClass('hidden');

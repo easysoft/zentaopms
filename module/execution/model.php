@@ -3851,7 +3851,7 @@ class executionModel extends model
             ->page($pager, 't1.id')
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         return $this->processTasks($tasks);
     }

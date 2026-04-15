@@ -100,40 +100,6 @@ class convertModelTest extends baseTest
     }
 
     /**
-     * Test quickImportJiraData method.
-     *
-     * @param  string $step
-     * @param  array  $postData
-     * @access public
-     * @return mixed
-     */
-    public function quickImportJiraDataTest()
-    {
-        $result = $this->invokeArgs('quickImportJiraData');
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test batchImportJiraData method.
-     *
-     * @param  string $step
-     * @param  array  $postData
-     * @access public
-     * @return mixed
-     */
-    public function batchImportJiraDataTest()
-    {
-        $this->instance->session->set('jiraApi',    '');
-        $this->instance->session->set('jiraDB',     '');
-        $this->instance->session->set('jiraMethod', 'api');
-
-        $result = $this->invokeArgs('batchImportJiraData');
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test convertStage method.
      *
      * @param  string $jiraStatus
@@ -972,5 +938,29 @@ class convertModelTest extends baseTest
         } catch (Error $e) {
             return 'error: ' . $e->getMessage();
         }
+    }
+
+    /**
+     * Test formatDatetime method.
+     *
+     * @param  string $datetime
+     * @access public
+     * @return string
+     */
+    public function formatDatetimeTest(string $datetime): string
+    {
+        return $this->instance->formatDatetime($datetime);
+    }
+
+    /**
+     * Test formatDate method.
+     *
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function formatDateTest(string $date): string
+    {
+        return $this->instance->formatDate($date);
     }
 }

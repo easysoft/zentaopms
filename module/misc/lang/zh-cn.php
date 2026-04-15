@@ -115,7 +115,7 @@ $lang->misc->feature->promptExecImage   = 'theme/default/images/main/prompt_exec
 $lang->misc->feature->promptLearnMore   = 'https://www.zentao.net/book/zentaopms/1097.html';
 
 /* Release Date. */
-$lang->misc->releaseDate['22.1']        = '2026-03-26';
+$lang->misc->releaseDate['22.1']        = '2026-04-13';
 $lang->misc->releaseDate['22.0']        = '2026-03-05';
 $lang->misc->releaseDate['22.0.beta']   = '2026-01-27';
 $lang->misc->releaseDate['21.7.9']      = '2026-03-02';
@@ -261,6 +261,7 @@ $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
+$lang->misc->feature->all['22.1'][]        = array('title' => '.兼容开源版。.兼容旗舰版。', 'desc' => '');
 $lang->misc->feature->all['22.1'][]        = array('title' => '.兼容开源版。.兼容旗舰版。', 'desc' => '');
 $lang->misc->feature->all['22.0'][]        = array('title' => '新增了空间功能；功能开关新增部分功能；jira增加接口导入的方式；二级菜单根据屏幕大小自适应展开收起；检索标签根据屏幕大小自适应收起。功能开关和jira迁移优化。一些功能重构。基线和变更的审批流优化。一些功能重构。', 'desc' => '');
 $lang->misc->feature->all['21.7.9'][]      = array('title' => '修复Bug修复Bug修复Bug修复Bug', 'desc' => '');

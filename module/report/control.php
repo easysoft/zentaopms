@@ -53,6 +53,9 @@ class report extends control
      */
     public function remind()
     {
+        /* Get reminder, and send email. */
+        $reminder = $this->reportZen->getReminder();
+
         /* Check mail turnon, if the system doesn't turn on the e-mail function, return the tip. */
         $this->loadModel('mail');
         if(!$this->config->mail->turnon)
@@ -61,8 +64,6 @@ class report extends control
             return false;
         }
 
-        /* Get reminder, and send email. */
-        $reminder = $this->reportZen->getReminder();
         foreach($reminder as $user => $mail)
         {
             /* Reset $this->output. */

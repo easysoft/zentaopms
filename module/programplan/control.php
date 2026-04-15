@@ -108,12 +108,7 @@ class programplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->programplan->create($plans, $projectID, $this->productID, $planID, $syncData);
-            if(dao::isError())
-            {
-                $errors = dao::getError();
-                if(isset($errors['message']))  $this->send(array('result' => 'fail', 'message' => $errors));
-                if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
             if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");

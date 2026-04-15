@@ -568,7 +568,32 @@ class convert extends control
      */
     public function quickImportJiraData()
     {
-        $this->convert->quickImportJiraData();
+        $status = 'success';
+        try
+        {
+            $this->convert->quickImportJiraData();
+            $status = dao::isError() ? 'fail' : 'success';
+        }
+        catch(Exception $e)
+        {
+            $status = 'fail';
+        }
+
+        $websiteUrl = isset($this->config->sanplexWebsite->url) ? $this->config->sanplexWebsite->url : '';
+        if(!empty($websiteUrl))
+        {
+            $admins        = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch('admins');
+            $currentDomain = $this->loadModel('user')->getCurrentDomain();
+
+            $postData = array
+            (
+                'domain' => $currentDomain,
+                'admin'  => !empty($admins) ? current(explode(',', trim($admins, ','))) : '',
+                'status' => $status
+            );
+            common::http($websiteUrl . '/convert-importResult.json', $postData);
+        }
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $this->send(array('result' => 'success'));
     }

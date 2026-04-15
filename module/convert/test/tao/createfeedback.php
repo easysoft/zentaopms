@@ -7,11 +7,11 @@ title=测试 convertTao::createFeedback();
 timeout=0
 cid=15839
 
-- 执行convertTest模块的createFeedbackTest方法，参数是1, $normalData, $relations  @0
-- 执行convertTest模块的createFeedbackTest方法，参数是1, $priorityData, $relations  @0
-- 执行convertTest模块的createFeedbackTest方法，参数是2, $resolvedData, $relations  @0
-- 执行convertTest模块的createFeedbackTest方法，参数是1, $noCreatorData, $relations  @0
-- 执行convertTest模块的createFeedbackTest方法，参数是3, $noDescData, $relations  @0
+- 执行convertTest模块的createFeedbackTest方法，参数是1, $normalData, $relations  @1
+- 执行convertTest模块的createFeedbackTest方法，参数是1, $priorityData, $relations  @1
+- 执行convertTest模块的createFeedbackTest方法，参数是2, $resolvedData, $relations  @1
+- 执行convertTest模块的createFeedbackTest方法，参数是1, $noCreatorData, $relations  @1
+- 执行convertTest模块的createFeedbackTest方法，参数是3, $noDescData, $relations  @1
 
 */
 
@@ -92,8 +92,8 @@ $relations = array(
     'zentaoReasontask' => array('done' => 'done')
 );
 
-r($convertTest->createFeedbackTest(1, $normalData, $relations)) && p() && e('0');
-r($convertTest->createFeedbackTest(1, $priorityData, $relations)) && p() && e('0');
-r($convertTest->createFeedbackTest(2, $resolvedData, $relations)) && p() && e('0');
-r($convertTest->createFeedbackTest(1, $noCreatorData, $relations)) && p() && e('0');
-r($convertTest->createFeedbackTest(3, $noDescData, $relations)) && p() && e('0');
+r($convertTest->createFeedbackTest(1, $normalData, $relations))    && p() && e('1');
+r($convertTest->createFeedbackTest(1, $priorityData, $relations))  && p() && e('1');
+r($convertTest->createFeedbackTest(2, $resolvedData, $relations))  && p() && e('1');
+r($convertTest->createFeedbackTest(1, $noCreatorData, $relations)) && p() && e('1');
+r($convertTest->createFeedbackTest(3, $noDescData, $relations))    && p() && e('1');

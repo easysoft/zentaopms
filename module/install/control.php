@@ -345,6 +345,8 @@ class install extends control
     {
         if(!empty($_POST))
         {
+            $this->install->updateDbSeq();
+
             if(!isset($this->config->installed) || !$this->config->installed) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->install->errorNotSaveConfig}').then((res) => {loadPage('" . $this->createLink('install', 'step3') . "')});"));
 
             $this->loadModel('common');

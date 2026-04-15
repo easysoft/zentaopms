@@ -1963,6 +1963,8 @@ class doc extends control
                 ->setIF($this->post->acl == 'open', 'readGroups', '')
                 ->setIF($this->post->acl == 'open', 'readUsers', '')
                 ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
+                ->setIF($spaceType != 'project', 'project', 0)
+                ->setIF($spaceType != 'product', 'product', 0)
                 ->get();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

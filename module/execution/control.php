@@ -3172,7 +3172,7 @@ class execution extends control
             $project = $this->project->getByID($this->session->project);
             if(!empty($project->model) && $project->model == 'waterfall') $executionConcept = $this->lang->project->stage;
             if(!empty($project->model) && $project->model == 'scrum')     $executionConcept = $this->lang->executionCommon;
-            $fileName = $project->name . ' - ' . $executionConcept;
+            $fileName = isset($project->name) ? $project->name . ' - ' . $executionConcept : $executionConcept;
         }
 
         if($lowerStatus != 'bysearch') $fileName = (in_array($status, array('all', 'undone', 'delayed')) ? zget($this->lang->execution, $status, '') : zget($this->lang->execution->statusList, $status, '')) . $executionConcept;

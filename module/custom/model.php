@@ -225,7 +225,8 @@ class customModel extends model
         $group   = 0;
         foreach($menu as $item)
         {
-            if($module == 'main' && isset($item->name) && $item->name != 'other' && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
+            $isNormalItem = $module == 'main' && isset($item->name) && $item->name != 'other';
+            if($isNormalItem && isset($dividerOrders[$item->name]) && $dividerOrders[$item->name] > $group)
             {
                 $menu[$item->order]->divider = $isFirst ? false : true;
                 $group = $dividerOrders[$item->name];
@@ -271,7 +272,16 @@ class customModel extends model
         }
         elseif($module)
         {
-            $menuOrder = ($module == 'main' && isset($lang->menuOrder)) ? $lang->menuOrder : (isset($lang->menu->{$module}['menuOrder']) ? $lang->menu->{$module}['menuOrder'] : array());
+            $menuOrder = array();
+            if($module == 'main' && isset($lang->menuOrder))
+            {
+                $menuOrder = $lang->menuOrder;
+            }
+            elseif(isset($lang->menu->{$module}))
+            {
+                $moduleMenu = is_object($lang->menu->$module) ? (array)$lang->menu->$module : $lang->menu->$module;
+                if(is_array($moduleMenu) && isset($moduleMenu['menuOrder'])) $menuOrder = $moduleMenu['menuOrder'];
+            }
             if($menuOrder)
             {
                 ksort($menuOrder);
@@ -458,7 +468,11 @@ class customModel extends model
 
         $allMenu = new stdclass();
         if($module == 'main' and !empty($lang->menu)) $allMenu = $lang->menu;
-        if($module != 'main' and isset($lang->menu->$module) and isset($lang->menu->{$module}['subMenu'])) $allMenu = $lang->menu->{$module}['subMenu'];
+        if($module != 'main' and isset($lang->menu->$module))
+        {
+            $moduleMenu = is_object($lang->menu->$module) ? (array)$lang->menu->$module : $lang->menu->$module;
+            if(is_array($moduleMenu) && isset($moduleMenu['subMenu'])) $allMenu = $moduleMenu['subMenu'];
+        }
         if($module == 'product' and isset($allMenu->branch)) $allMenu->branch = str_replace('@branch@', $lang->custom->branch, $allMenu->branch);
 
         /* 获取自定义过的导航。 */

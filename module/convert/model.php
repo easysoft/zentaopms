@@ -987,14 +987,17 @@ EOT;
      *
      * @param  string $url
      * @param  int    $start
+     * @param  bool   $rawData
      * @access public
      * @return array
      */
-    public function callJiraAPI($url, $start = 0)
+    public function callJiraAPI($url, $start = 0, $rawData = false)
     {
         if(empty($_SESSION['jiraApi'])) return array();
         $jiraApi = json_decode($this->session->jiraApi, true);
         if(empty($jiraApi['domain'])) return array();
+
+        if(strpos($url, $jiraApi['domain']) === 0) $url = str_replace($jiraApi['domain'], '', $url);
 
         $token   = base64_encode("{$jiraApi['admin']}:{$jiraApi['token']}");
         $httpURL = $jiraApi['domain'] . $url . "&startAt=$start";
@@ -1020,7 +1023,7 @@ EOT;
 
         if(!empty($result->projects)) return $result->projects;
 
-        return array();
+        return $rawData ? $result : array();
     }
 
     /**
@@ -1330,11 +1333,30 @@ EOT;
      * 获取Jira项目角色与成员。
      * Get jira project role actor.
      *
+     * @param  array  $projectList
      * @access public
      * @return array
      */
-    public function getJiraProjectRoleActor(): array
+    public function getJiraProjectRoleActor(array $projectList): array
     {
+        if($this->session->jiraMethod == 'api')
+        {
+            $projectMember = array();
+            foreach($projectList as $project)
+            {
+                $projectRoles = $this->callJiraAPI("/rest/api/2/project/{$project->id}/role?maxResults=1000", 0, true);
+                foreach($projectRoles as $role)
+                {
+                    if(!is_string($role)) continue;
+
+                    $users = $this->callJiraAPI($role . '?maxResults=1000', 0 , true);
+                    if(empty($users->actors)) continue;
+
+                    foreach($users->actors as $user) $projectMember[$project->id][$user->actorUser->accountId] = $user->actorUser->accountId;
+                }
+            }
+            return $projectMember;
+        }
         $projectRoleActor = $this->getJiraData($this->session->jiraMethod, 'projectroleactor');
         $memberShip       = $this->getJiraData($this->session->jiraMethod, 'membership');
 
@@ -1519,5 +1541,39 @@ EOT;
         if(!empty($result['finished'])) return true;
 
         return $this->batchImportJiraData($result['type'], $result['lastID'], false);
+    }
+
+    /**
+     * 将日期转成对应时区的日期。
+     * Format date.
+     *
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function formatDate(string $date): string
+    {
+        if($this->session->jiraMethod == 'api') return $date;
+
+        $dateUTC = new DateTime($date, new DateTimeZone('UTC'));
+        $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
+        return $dateUTC->format('Y-m-d');
+    }
+
+    /**
+     * 将日期转成对应时区的日期。
+     * Format date.
+     *
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function formatDatetime(string $datetime): string
+    {
+        if($this->session->jiraMethod == 'api') return $datetime;
+
+        $dateUTC = new DateTime($datetime, new DateTimeZone('UTC'));
+        $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
+        return $dateUTC->format('Y-m-d H:i:s');
     }
 }

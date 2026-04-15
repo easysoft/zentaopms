@@ -583,12 +583,12 @@ pipeline {
               j.SaveHeadReport('./.head.md')
               ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
 
-              if (env.BUILD_KIND=='release') {
-                stage("离线镜像包") {
-                  offlineImage.save()
-                  offlineImage.release()
-                }
-              }
+            //   if (env.BUILD_KIND=='release') {
+            //     stage("离线镜像包") {
+            //       offlineImage.save()
+            //       offlineImage.release()
+            //     }
+            //   }
 
               if (env.DEPLOY_ZENTAOPAAS=='true') {
                 deploy.upgradePaas(env.ZENTAOPAAS_SERVER, env.CNE_API_TOKEN)
