@@ -150,11 +150,11 @@ $config->spaceMember->dtable->fieldList['repo']['sort']  = true;
 $config->spaceMember->dtable->fieldList['repo']['group'] = 4;
 $config->spaceMember->dtable->fieldList['repo']['width'] = 300;
 
-$config->spaceMember->dtable->fieldList['artifactRepo']['title'] = $lang->space->accessArtifact;
-$config->spaceMember->dtable->fieldList['artifactRepo']['name']  = 'artifactRepo';
-$config->spaceMember->dtable->fieldList['artifactRepo']['sort']  = true;
-$config->spaceMember->dtable->fieldList['artifactRepo']['group'] = 5;
-$config->spaceMember->dtable->fieldList['artifactRepo']['width'] = 300;
+//$config->spaceMember->dtable->fieldList['artifactRepo']['title'] = $lang->space->accessArtifact;
+//$config->spaceMember->dtable->fieldList['artifactRepo']['name']  = 'artifactRepo';
+//$config->spaceMember->dtable->fieldList['artifactRepo']['sort']  = true;
+//$config->spaceMember->dtable->fieldList['artifactRepo']['group'] = 5;
+//$config->spaceMember->dtable->fieldList['artifactRepo']['width'] = 300;
 
 $config->spaceMember->dtable->fieldList['actions']['name']     = 'actions';
 $config->spaceMember->dtable->fieldList['actions']['title']    = $lang->actions;

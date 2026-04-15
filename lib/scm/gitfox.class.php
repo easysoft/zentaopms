@@ -925,7 +925,7 @@ class gitfoxRepo
      */
     public function getDownloadUrl($branch = 'main', $savePath = '', $ext = 'zip')
     {
-        $url  = "{$this->repo->client}/api/v2/na/repos/{$this->repo->gitfoxID}/archive";
+        $url  = "{$this->repo->client}/api/v2/na/repos/{$this->repo->id}/archive";
         return "{$url}/{$branch}.{$ext}";
     }
 
