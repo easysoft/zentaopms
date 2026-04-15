@@ -608,7 +608,7 @@ class storyZen extends story
         $product      = $this->view->product;
         $users        = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $stories      = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
-        $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : $story->branch, '', true);
+        $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : array($story->branch), '', true);
         $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
 
         $reviewers = $product->reviewer;
