@@ -387,14 +387,14 @@ class docZenTest
         if(!isset($config->doc->form->movedoc))
         {
             $config->doc->form->movedoc = array(
-                'lib'        => array('type' => 'int',      'required' => true,  'default' => ''),
-                'module'     => array('type' => 'int',      'required' => false, 'default' => 0),
-                'acl'        => array('type' => 'string',   'required' => true,  'default' => 'default'),
-                'groups'     => array('type' => 'array',    'required' => false, 'default' => ''),
-                'users'      => array('type' => 'array',    'required' => false, 'default' => ''),
-                'readGroups' => array('type' => 'array',    'required' => false, 'default' => ''),
-                'readUsers'  => array('type' => 'array',    'required' => false, 'default' => ''),
-                'parent'     => array('type' => 'int',      'required' => false, 'default' => 0),
+                'lib'        => array('type' => 'int',    'required' => true,  'default' => ''),
+                'module'     => array('type' => 'int',    'required' => false, 'default' => 0),
+                'acl'        => array('type' => 'string', 'required' => true,  'default' => 'default'),
+                'groups'     => array('type' => 'array',  'required' => false, 'default' => ''),
+                'users'      => array('type' => 'array',  'required' => false, 'default' => ''),
+                'readGroups' => array('type' => 'array',  'required' => false, 'default' => ''),
+                'readUsers'  => array('type' => 'array',  'required' => false, 'default' => ''),
+                'parent'     => array('type' => 'int',    'required' => false, 'default' => 0),
             );
         }
 
