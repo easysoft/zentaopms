@@ -213,6 +213,7 @@ class router extends baseRouter
     }
 
     /**
+     * 初始化工作流导航。
      * Merge workflow mainNav Lang.
      *
      * @access public
@@ -226,10 +227,44 @@ class router extends baseRouter
 	    /* When upgrading from version 12 to the paid version, the workflow table does not exist. */
         try
         {
-            $flows = $this->dbQuery('SELECT `module`, `name`, `navigator` FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND type = 'flow'")->fetchAll();
+            $flows = $this->dbQuery('SELECT * FROM ' . TABLE_WORKFLOW . " WHERE `buildin` = 0 AND `vision` = '{$this->config->vision}' AND status = 'normal' AND `group` = '0' AND type = 'flow'")->fetchAll();
+
+            $primaryFlows   = array();
+            $secondaryFlows = array();
             foreach($flows as $flow)
             {
-                if($flow->navigator == 'primary') $this->lang->mainNav->{$flow->module} = "{$this->lang->navIcons['workflow']} {$flow->name}|{$flow->module}|browse|";
+                if($flow->navigator == 'primary')
+                {
+                    $primaryFlows[$flow->module] = $flow;
+                    $this->lang->navGroup->{$flow->module} = $flow->module;
+                }
+                elseif($flow->navigator == 'secondary')
+                {
+                    $flowApp = $flow->app;
+                    if($flowApp == 'scrum' || $flowApp == 'waterfall' || $flowApp == 'kanbanProject') $flowApp = 'project';
+                    $this->lang->navGroup->{$flow->module} = $flowApp;
+                    $secondaryFlows[$flow->module] = $flow;
+                }
+            }
+
+            foreach($primaryFlows as $flow)
+            {
+                if(!isset($this->lang->{$flow->module})) $this->lang->{$flow->module} = new stdclass();
+                $this->lang->{$flow->module}->common     = $flow->name;
+                $this->lang->mainNav->{$flow->module}    = "<i class='icon icon-{$flow->icon}'></i> {$flow->name}|{$flow->module}|browse|";
+                $this->lang->navIconNames[$flow->module] = $flow->icon;
+            }
+
+            foreach($secondaryFlows as $flow)
+            {
+                $flowApp = $flow->app;
+                if($flowApp == 'scrum' || $flowApp == 'waterfall' || $flowApp == 'kanbanProject') $flowApp = 'project';
+                if(!isset($this->lang->{$flow->module})) $this->lang->{$flow->module} = new stdclass();
+
+                $this->lang->{$flow->module}->common = $flow->name;
+                if(!isset($this->lang->{$flowApp})) $this->lang->{$flowApp} = new stdclass();
+                if(!isset($this->lang->{$flowApp}->menu)) $this->lang->{$flowApp}->menu = new stdclass();
+                if(strpos($flow->position, '|') === false) $this->lang->{$flowApp}->menu->{$flow->module} = array('link' => "{$flow->name}|{$flow->module}|browse|");
             }
         }
         catch(PDOException){}
