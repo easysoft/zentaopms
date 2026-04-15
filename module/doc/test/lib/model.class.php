@@ -5529,4 +5529,36 @@ class docModelTest extends baseTest
     {
         return docModel::forEachDocBlock($rawContent, $callback, $data, $flavours, $types, $props, $level, $index);
     }
+
+    /**
+     * Test copyDoc method.
+     *
+     * @param  int    $docID
+     * @param  object $targetData
+     * @access public
+     * @return int|false
+     */
+    public function copyDocTest(int $docID, object $targetData): int|false
+    {
+        $result = $this->instance->copyDoc($docID, $targetData);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * Test copyDocFiles method.
+     *
+     * @param  array $fileIDs
+     * @param  int   $newDocID
+     * @access public
+     * @return bool
+     */
+    public function copyDocFilesTest(array $fileIDs, int $newDocID): bool
+    {
+        $result = $this->instance->copyDocFiles($fileIDs, $newDocID);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
 }

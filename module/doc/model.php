@@ -5030,6 +5030,12 @@ class docModel extends model
 
     /**
      * 复制文档附件
+     * Copy document files.
+     *
+     * @param  array $fileIDs
+     * @param  int   $newDocID
+     * @access public
+     * @return bool
      */
     public function copyDocFiles(array $fileIDs, int $newDocID): bool
     {
