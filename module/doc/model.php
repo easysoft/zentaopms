@@ -4951,4 +4951,104 @@ class docModel extends model
 
         return static::forEachDocBlock($children, $callback, $data, $flavours, $types, $props, $level + 1);
     }
+
+    /**
+     * 复制文档
+     * Copy document.
+     *
+     * @param  int    $docID
+     * @param  object $targetData
+     * @access public
+     * @return int|false
+     */
+    public function copyDoc(int $docID, object $targetData): int|false
+    {
+        $originalDoc = $this->getByID($docID);
+        if(!$originalDoc || $originalDoc->deleted) return false;
+
+        $targetLib = $this->getLibByID($targetData->lib);
+
+        $newDoc = new stdClass();
+        $newDoc->project    = $targetLib ? $targetLib->product : 0;
+        $newDoc->product    = $targetLib ? $targetLib->product : 0;
+        $newDoc->execution  = $targetLib ? $targetLib->execution : 0;
+        $newDoc->lib        = $targetData->lib;
+        $newDoc->module     = $targetData->module;
+        $newDoc->parent     = $targetData->parent ?? 0;
+        $newDoc->title      = $originalDoc->title;
+        $newDoc->keywords   = $originalDoc->keywords;
+        $newDoc->type       = $originalDoc->type;
+        $newDoc->status     = $originalDoc->status;
+        $newDoc->frozen     = $originalDoc->frozen ?? '';
+        $newDoc->acl        = $targetData->acl;
+        $newDoc->groups     = $targetData->groups ?? '';
+        $newDoc->users      = $targetData->users ?? '';
+        $newDoc->readGroups = $targetData->readGroups ?? '';
+        $newDoc->readUsers  = $targetData->readUsers ?? '';
+        $newDoc->vision     = $originalDoc->vision;
+        $newDoc->addedBy    = $this->app->user->account;
+        $newDoc->addedDate  = helper::now();
+        $newDoc->editedBy   = '';
+        $newDoc->editedDate = null;
+        $newDoc->version    = 1;
+        $newDoc->deleted    = $originalDoc->deleted ?? 0;
+
+        $this->dao->insert(TABLE_DOC)->data($newDoc)->autoCheck()->exec();
+        $newDocID = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
+
+        $originalContent = $this->getContent($docID, $originalDoc->version);
+        if(!$originalContent) return $newDocID;
+
+        $newContent = new stdClass();
+        $newContent->doc        = $newDocID;
+        $newContent->title      = $originalContent->title;
+        $newContent->digest     = $originalContent->digest;
+        $newContent->content    = $originalContent->content;
+        $newContent->rawContent = $originalContent->rawContent;
+        $newContent->files      = $originalContent->files;
+        $newContent->type       = $originalContent->type;
+        $newContent->version    = 1;
+        $newContent->addedBy    = $this->app->user->account;
+        $newContent->addedDate  = helper::now();
+        $newContent->editedBy   = '';
+        $newContent->editedDate = null;
+
+        $this->dao->insert(TABLE_DOCCONTENT)->data($newContent)->exec();
+
+        if($originalContent->files)
+        {
+            $fileIDs = array_filter(explode(',', trim($originalContent->files, ',')));
+            if(!empty($fileIDs))
+            {
+                $this->copyDocFiles($fileIDs, $newDocID);
+            }
+        }
+
+        return $newDocID;
+    }
+
+    /**
+     * 复制文档附件
+     */
+    public function copyDocFiles(array $fileIDs, int $newDocID): bool
+    {
+        if(empty($fileIDs)) return true;
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIDs)->andWhere('deleted')->eq(0)->fetchAll();
+        foreach($files as $file)
+        {
+            $newFile = clone $file;
+            unset($newFile->id, $newFile->addedDate, $newFile->downloads);
+            $newFile->objectID   = $newDocID;
+            $newFile->objectType = 'doc';
+            $newFile->gid        = helper::createSID();
+            $newFile->addedBy    = $this->app->user->account;
+            $newFile->addedDate  = helper::now();
+
+            $this->dao->insert(TABLE_FILE)->data($newFile)->exec();
+        }
+
+        return !dao::isError();
+    }
 }
