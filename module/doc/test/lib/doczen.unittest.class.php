@@ -346,9 +346,9 @@ class docZenTest
         $spaceTypeRef = $spaceType;
         $spaceRef     = $space;
 
-        $zenTest = $app->loadTarget('doc', '', 'zen');
+        $zenTest    = $app->loadTarget('doc', '', 'zen');
         $reflection = new ReflectionClass($zenTest);
-        $method = $reflection->getMethod('initDocContext');
+        $method     = $reflection->getMethod('initDocContext');
         $method->setAccessible(true);
 
         ob_start();
@@ -362,7 +362,7 @@ class docZenTest
         $resultObj->libID     = $libIDRef;
         $resultObj->spaceType = $spaceTypeRef;
         $resultObj->space     = $spaceRef;
-        $resultObj->hasDoc   = isset($result->id) ? 1 : 0;
+        $resultObj->hasDoc    = isset($result->id) ? 1 : 0;
 
         return $resultObj;
     }
@@ -408,8 +408,8 @@ class docZenTest
 
         $resultObj = new stdclass();
         $resultObj->acl        = isset($result->acl) ? $result->acl : '';
-        $resultObj->groups    = isset($result->groups) ? $result->groups : '';
-        $resultObj->users     = isset($result->users) ? $result->users : '';
+        $resultObj->groups     = isset($result->groups) ? $result->groups : '';
+        $resultObj->users      = isset($result->users) ? $result->users : '';
         $resultObj->readGroups = isset($result->readGroups) ? $result->readGroups : '';
         $resultObj->readUsers  = isset($result->readUsers) ? $result->readUsers : '';
 
@@ -434,15 +434,15 @@ class docZenTest
         if(is_null($doc))
         {
             $doc = new stdclass();
-            $doc->id = $docID;
+            $doc->id    = $docID;
             $doc->title = 'Test Document';
-            $doc->lib = $libID;
+            $doc->lib   = $libID;
         }
 
-        $libIDRef = $libID;
-        $zenTest = $app->loadTarget('doc', '', 'zen');
+        $libIDRef   = $libID;
+        $zenTest    = $app->loadTarget('doc', '', 'zen');
         $reflection = new ReflectionClass($zenTest);
-        $method = $reflection->getMethod('prepareDocViewData');
+        $method     = $reflection->getMethod('prepareDocViewData');
         $method->setAccessible(true);
         ob_start();
         $method->invokeArgs($zenTest, array($spaceType, $space, &$libIDRef, $docID, $doc));
@@ -455,15 +455,15 @@ class docZenTest
         $view = $viewProperty->getValue($zenTest);
 
         $resultObj = new stdclass();
-        $resultObj->docID      = $docID;
-        $resultObj->libID     = $libIDRef;
-        $resultObj->spaceType = $spaceType;
-        $resultObj->space     = $space;
-        $resultObj->hasSpaces = isset($view->spaces) ? 1 : 0;
-        $resultObj->hasLibPairs = isset($view->libPairs) ? 1 : 0;
+        $resultObj->docID         = $docID;
+        $resultObj->libID         = $libIDRef;
+        $resultObj->spaceType     = $spaceType;
+        $resultObj->space         = $space;
+        $resultObj->hasSpaces     = isset($view->spaces) ? 1 : 0;
+        $resultObj->hasLibPairs   = isset($view->libPairs) ? 1 : 0;
         $resultObj->hasOptionMenu = isset($view->optionMenu) ? 1 : 0;
-        $resultObj->hasGroups = isset($view->groups) ? 1 : 0;
-        $resultObj->hasUsers  = isset($view->users) ? 1 : 0;
+        $resultObj->hasGroups     = isset($view->groups) ? 1 : 0;
+        $resultObj->hasUsers      = isset($view->users) ? 1 : 0;
 
         return $resultObj;
     }
