@@ -427,4 +427,44 @@ class docZenTest
      * @access public
      * @return object
      */
+    public function prepareDocViewDataTest(string $spaceType = '', string $space = '', int $libID = 0, int $docID = 0, ?object $doc = null): object
+    {
+        global $app;
+
+        if(is_null($doc))
+        {
+            $doc = new stdclass();
+            $doc->id = $docID;
+            $doc->title = 'Test Document';
+            $doc->lib = $libID;
+        }
+
+        $libIDRef = $libID;
+        $zenTest = $app->loadTarget('doc', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('prepareDocViewData');
+        $method->setAccessible(true);
+        ob_start();
+        $method->invokeArgs($zenTest, array($spaceType, $space, &$libIDRef, $docID, $doc));
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $viewProperty = $reflection->getProperty('view');
+        $viewProperty->setAccessible(true);
+        $view = $viewProperty->getValue($zenTest);
+
+        $resultObj = new stdclass();
+        $resultObj->docID      = $docID;
+        $resultObj->libID     = $libIDRef;
+        $resultObj->spaceType = $spaceType;
+        $resultObj->space     = $space;
+        $resultObj->hasSpaces = isset($view->spaces) ? 1 : 0;
+        $resultObj->hasLibPairs = isset($view->libPairs) ? 1 : 0;
+        $resultObj->hasOptionMenu = isset($view->optionMenu) ? 1 : 0;
+        $resultObj->hasGroups = isset($view->groups) ? 1 : 0;
+        $resultObj->hasUsers  = isset($view->users) ? 1 : 0;
+
+        return $resultObj;
+    }
 }
