@@ -21,6 +21,13 @@ if($repoID)
     unset($config->pipeline->execution->dtable->fieldList['repo']);
     unset($config->pipeline->execution->dtable->fieldList['type']);
 }
+
+if($type == 'space')
+{
+    unset($config->pipeline->execution->dtable->fieldList['ref']);
+    unset($config->pipeline->execution->dtable->fieldList['type']);
+}
+
 featureBar
 (
     backBtn
@@ -33,7 +40,7 @@ featureBar
     ),
     div(searchToggle(set::module('pipelineexec'), set::open($type == 'bySearch')))
 );
-$config->pipeline->execution->dtable->fieldList['repo']['map'] = $repos;
+if(isset($config->pipeline->execution->dtable->fieldList['repo'])) $config->pipeline->execution->dtable->fieldList['repo']['map'] = $repos;
 $config->pipeline->execution->dtable->fieldList['actions']['list']['view']['url'] = array('module' => 'pipeline', 'method' => 'execview', 'params' => "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
 $tableData = initTableData($executionList, $config->pipeline->execution->dtable->fieldList, $this->pipeline);
 dtable
