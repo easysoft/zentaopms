@@ -68,6 +68,10 @@ class branchRulesEntry extends baseEntry
         $rule->forcePushUser = !empty($rule->forcePushUser) ? explode(',', $rule->forcePushUser) : array();
         $rule->ppmCreateUser = !empty($rule->ppmCreateUser) ? explode(',', $rule->ppmCreateUser) : array();
         $rule->ppmHandleUser = !empty($rule->ppmHandleUser) ? explode(',', $rule->ppmHandleUser) : array();
+        $rule->commitLine    = (int)$rule->commitLine;
+        $rule->pushLine      = (int)$rule->pushLine;
+        $rule->forceReview   = (int)$rule->forceReview;
+        $rule->reviewFlowID  = (int)$rule->reviewFlowID;
 
         /* 将 sourceBranch 和 targetBranch 字段的 '1,2' 解析为 ID 数组，再获取分支类型的 prefix 合并。 */
         $sourceBranchIDs = !empty($rule->sourceBranch) ? explode(',', $rule->sourceBranch) : array();
