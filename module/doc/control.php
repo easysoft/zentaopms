@@ -1005,7 +1005,7 @@ class doc extends control
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 
             $changes = $files = array();
-            if($comment == false)
+            if(!$comment)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
@@ -1018,9 +1018,9 @@ class doc extends control
                     ->setIF(!isset($_POST['readUsers']), 'readUsers', $doc->readUsers)
                     ->setIF(!isset($_POST['readGroups']), 'readGroups', $doc->readGroups)
                     ->setIF(!isset($_POST['fromVersion']), 'fromVersion', $doc->fromVersion)
-                    ->removeIF($this->post->project === false, 'project')
-                    ->removeIF($this->post->product === false, 'product')
-                    ->removeIF($this->post->execution === false, 'execution')
+                    ->removeIF(!$this->post->project, 'project')
+                    ->removeIF(!$this->post->product, 'product')
+                    ->removeIF(!$this->post->execution, 'execution')
                     ->get();
                 $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
@@ -1312,8 +1312,7 @@ class doc extends control
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         helper::setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
+        list($libs, , , $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
         $object = $this->doc->getObjectByID($type, $objectID);
         if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
@@ -1324,7 +1323,7 @@ class doc extends control
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
         $this->app->rawMethod = 'showFiles';
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
