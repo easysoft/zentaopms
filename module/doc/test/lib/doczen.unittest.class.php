@@ -327,4 +327,52 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test initDocContext method.
+     *
+     * @param  int    $docID
+     * @param  int    $libID
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return object
+     */
+    public function initDocContextTest(int $docID = 0, int $libID = 0, string $spaceType = '', string $space = ''): object
+    {
+        global $app;
+
+        $libIDRef     = $libID;
+        $spaceTypeRef = $spaceType;
+        $spaceRef     = $space;
+
+        $zenTest = $app->loadTarget('doc', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method = $reflection->getMethod('initDocContext');
+        $method->setAccessible(true);
+
+        ob_start();
+        $result = $method->invokeArgs($zenTest, array($docID, &$libIDRef, &$spaceTypeRef, &$spaceRef));
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $resultObj = new stdclass();
+        $resultObj->docID     = isset($result->id) ? (int)$result->id : 0;
+        $resultObj->libID     = $libIDRef;
+        $resultObj->spaceType = $spaceTypeRef;
+        $resultObj->space     = $spaceRef;
+        $resultObj->hasDoc   = isset($result->id) ? 1 : 0;
+
+        return $resultObj;
+    }
+
+    /**
+     * Test prepareDocFormData method.
+     *
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return object
+     */
 }
