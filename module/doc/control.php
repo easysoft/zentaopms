@@ -1911,60 +1911,17 @@ class doc extends control
      */
     public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
-        if($spaceType == 'quick')
-        {
-            $libID = 0;
-            $space = $spaceType = '';
-        }
-
-        $doc = $this->doc->getByID($docID);
-        if(empty($libID)) $libID = (int)$doc->lib;
-        $lib = $this->doc->getLibByID($libID);
-
-        if(empty($space))
-        {
-            if($lib->parent)
-            {
-                $space = $lib->parent;
-            }
-            else
-            {
-                if($lib->product) $space = $lib->product;
-                if($lib->project) $space = $lib->project;
-            }
-        }
-
-        if(empty($spaceType))
-        {
-            if($lib->parent)
-            {
-                $spaceType = $this->doc->getSpaceType($space);
-            }
-            else
-            {
-                if($lib->product && $lib->type == 'product') $spaceType = 'product';
-                if($lib->project && $lib->type == 'project') $spaceType = 'project';
-            }
-        }
+        $doc = $this->docZen->initDocContext($docID, $libID, $spaceType, $space);
 
         if(!empty($_POST))
         {
-            /* parent带‘m_’前缀为目录。*/
             if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
             {
                 $_POST['module'] = str_replace('m_', '', $_POST['parent']);
                 $_POST['parent'] = 0;
             }
 
-            $data = form::data()
-                ->setIF($this->post->acl == 'open', 'groups', '')
-                ->setIF($this->post->acl == 'open', 'users', '')
-                ->setIF($this->post->acl == 'open', 'readGroups', '')
-                ->setIF($this->post->acl == 'open', 'readUsers', '')
-                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
-                ->setIF($spaceType != 'project', 'project', 0)
-                ->setIF($spaceType != 'product', 'product', 0)
-                ->get();
+            $data = $this->docZen->prepareDocFormData($spaceType, $space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = common::createChanges($doc, $data);
@@ -1977,88 +1934,21 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $lib = $this->doc->getLibByID($libID);
             $spaceTypeChanged = $spaceType != $lib->type;
             return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged);
         }
 
-        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
-        $products   = $this->loadModel('product')->getPairs();
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
-
-        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
-
-        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
-
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $spaceType, $docID);
-        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-
-        $this->view->docID      = $docID;
-        $this->view->libID      = $libID;
-        $this->view->spaceType  = $spaceType;
-        $this->view->space      = $space;
-        $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
-        $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $chapterAndDocs;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
-        $this->view->title      = $this->lang->doc->moveDocAction;
-        $this->view->action     = 'moveDoc';
+        $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
+        $this->view->title = $this->lang->doc->moveDocAction;
+        $this->view->action = 'moveDoc';
         $this->display();
     }
 
-    /**
-     * 复制文档
-     * Copy document.
-     *
-     * @param  int    $docID
-     * @param  int    $libID
-     * @param  string $spaceType
-     * @param  string $space
-     * @access public
-     * @return void
-     */
     public function copyDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
-        if($spaceType == 'quick')
-        {
-            $libID = 0;
-            $space = $spaceType = '';
-        }
-
-        $doc = $this->doc->getByID($docID);
+        $doc = $this->docZen->initDocContext($docID, $libID, $spaceType, $space);
         if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->notFound));
-        if(empty($libID)) $libID = (int)$doc->lib;
-        $lib = $this->doc->getLibByID($libID);
-
-        if(empty($space))
-        {
-            if($lib->parent)
-            {
-                $space = $lib->parent;
-            }
-            else
-            {
-                if($lib->product) $space = $lib->product;
-                if($lib->project) $space = $lib->project;
-            }
-        }
-
-        if(empty($spaceType))
-        {
-            if($lib->parent)
-            {
-                $spaceType = $this->doc->getSpaceType($space);
-            }
-            else
-            {
-                if($lib->product && $lib->type == 'product') $spaceType = 'product';
-                if($lib->project && $lib->type == 'project') $spaceType = 'project';
-            }
-        }
 
         if(!empty($_POST))
         {
@@ -2068,13 +1958,7 @@ class doc extends control
                 $_POST['parent'] = 0;
             }
 
-            $data = form::data()
-                ->setIF($this->post->acl == 'open', 'groups', '')
-                ->setIF($this->post->acl == 'open', 'users', '')
-                ->setIF($this->post->acl == 'open', 'readGroups', '')
-                ->setIF($this->post->acl == 'open', 'readUsers', '')
-                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
-                ->get();
+            $data = $this->docZen->prepareDocFormData($spaceType, $space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $newDocID = $this->doc->copyDoc($docID, $data);
@@ -2098,32 +1982,9 @@ class doc extends control
             ));
         }
 
-        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
-        $products   = $this->loadModel('product')->getPairs();
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
-
-        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
-
-        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
-
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $spaceType, $docID);
-        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-
-        $this->view->docID      = $docID;
-        $this->view->libID      = $libID;
-        $this->view->spaceType  = $spaceType;
-        $this->view->space      = $space;
-        $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
-        $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $chapterAndDocs;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
-        $this->view->title      = $this->lang->doc->copyDocAction;
-        $this->view->action     = 'copyDoc';
+        $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
+        $this->view->title = $this->lang->doc->copyDocAction;
+        $this->view->action = 'copyDoc';
         $this->display('doc', 'movedoc');
     }
 
