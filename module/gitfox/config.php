@@ -128,7 +128,7 @@ $config->gitfox->menus['user']    = 'browseUser';
 
 $config->gitfox->escapeUserList = array();
 
-$setLang = common::checkNotCN() ? 'en' : 'zh-cn';
+$setLang = common::checkNotCN() ? 'en-US' : 'zh-CN';
 $config->gitfox->downloadGitfoxURL = array();
 $config->gitfox->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-amd64.zip';
 $config->gitfox->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/2.0_beta1/linux-arm64.zip';
@@ -175,9 +175,7 @@ fi
 rm -f "\${GITFOX_ZIP}"
 
 chmod +x "\${INSTALL_DIR}/gitfox"
-GITFOX_LANG={$setLang}; "\${INSTALL_DIR}/gitfox" install
-GITFOX_LANG={$setLang}; "\${INSTALL_DIR}/gitfox" status
-GITFOX_LANG={$setLang}; "\${INSTALL_DIR}/gitfox" help
+GITFOX_LANG={$setLang} "\${INSTALL_DIR}/gitfox" install
 
 echo "GitFox has been installed to \${INSTALL_DIR}"
 EOT;
@@ -222,8 +220,6 @@ cscript //nologo "%temp%\unzip.vbs"
 del /f /q "%GITFOX_ZIP%"
 
 "%INSTALL_DIR%\gitfox.exe" install
-"%INSTALL_DIR%\gitfox.exe" status
-"%INSTALL_DIR%\gitfox.exe" help
 
 echo "GitFox has been installed to %INSTALL_DIR%"
 EOT;

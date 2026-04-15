@@ -15,6 +15,7 @@ global $app;
 $app->loadLang('runner');
 
 jsVar('repoID', $repoID);
+jsVar('type', $type);
 
 if($repoID)
 {
