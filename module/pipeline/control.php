@@ -223,7 +223,12 @@ class pipeline extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $result = $this->pipeline->exec($pipelineID, $formData);
-            if(dao::isError()) return $this->sendError(dao::getError());
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                $error = isset($error['apiMessage']) ? $error['apiMessage'] : $this->lang->fail;
+                return $this->sendError($error);
+            }
 
             $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
             $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
