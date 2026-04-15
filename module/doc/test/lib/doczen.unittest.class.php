@@ -375,4 +375,56 @@ class docZenTest
      * @access public
      * @return object
      */
+    public function prepareDocFormDataTest(string $spaceType = '', string $space = ''): object
+    {
+        global $app, $config;
+
+        $app->setModuleName('doc');
+        $app->setMethodName('moveDoc');
+
+        if(!isset($config->doc)) $config->doc = new stdClass();
+        if(!isset($config->doc->form)) $config->doc->form = new stdClass();
+        if(!isset($config->doc->form->movedoc))
+        {
+            $config->doc->form->movedoc = array(
+                'lib'        => array('type' => 'int',      'required' => true,  'default' => ''),
+                'module'     => array('type' => 'int',      'required' => false, 'default' => 0),
+                'acl'        => array('type' => 'string',   'required' => true,  'default' => 'default'),
+                'groups'     => array('type' => 'array',    'required' => false, 'default' => ''),
+                'users'      => array('type' => 'array',    'required' => false, 'default' => ''),
+                'readGroups' => array('type' => 'array',    'required' => false, 'default' => ''),
+                'readUsers'  => array('type' => 'array',    'required' => false, 'default' => ''),
+                'parent'     => array('type' => 'int',      'required' => false, 'default' => 0),
+            );
+        }
+
+        $_POST['acl'] = 'default';
+
+        $result = callZenMethod('doc', 'prepareDocFormData', array($spaceType, $space));
+
+        unset($_POST['acl']);
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $resultObj = new stdclass();
+        $resultObj->acl        = isset($result->acl) ? $result->acl : '';
+        $resultObj->groups    = isset($result->groups) ? $result->groups : '';
+        $resultObj->users     = isset($result->users) ? $result->users : '';
+        $resultObj->readGroups = isset($result->readGroups) ? $result->readGroups : '';
+        $resultObj->readUsers  = isset($result->readUsers) ? $result->readUsers : '';
+
+        return $resultObj;
+    }
+
+    /**
+     * Test prepareDocViewData method.
+     *
+     * @param  string $spaceType
+     * @param  string $space
+     * @param  int    $libID
+     * @param  int    $docID
+     * @param  object $doc
+     * @access public
+     * @return object
+     */
 }
