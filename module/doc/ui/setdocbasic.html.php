@@ -121,7 +121,7 @@ formPanel(
         set::label($lang->doc->mailto),
         mailto(set::items($users), set::value(isset($doc) ? $doc->mailto : null))
     ) : null,
-    isset($doc) && !in_array($doc->contentType ?? '', array('url', 'attachment', 'word', 'ppt', 'excel')) && $docType != 'url' ? formGroup
+    isset($doc) && $doc->contentType != 'doc' ? formGroup
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
