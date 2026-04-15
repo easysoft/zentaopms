@@ -735,12 +735,13 @@ class repoZen extends repo
     protected function getLinkStories(int $repoID, string $revision, string $browseType, array $products, string $orderBy, object $pager, int $queryID): array
     {
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
+        $linkedStories = empty($linkedStories) ? array() : array_column($linkedStories, 'id');
         $allStories    = array();
         if($browseType == 'bySearch')
         {
             foreach($products as $productID => $product)
             {
-                $productStories = $this->loadModel('story')->getBySearch($productID, 'all', $queryID, $orderBy, 0, 'story', array_keys($linkedStories));
+                $productStories = $this->loadModel('story')->getBySearch($productID, 'all', $queryID, $orderBy, 0, 'story', $linkedStories);
                 $allStories     = array_merge($allStories, $productStories);
             }
 
@@ -750,7 +751,7 @@ class repoZen extends repo
         {
             foreach($products as $productID => $product)
             {
-                $productStories = $this->loadModel('story')->getProductStories($productID, 'all', '0', 'draft,active,changed', 'story', $orderBy, true, array_keys($linkedStories));
+                $productStories = $this->loadModel('story')->getProductStories($productID, 'all', '0', 'draft,active,changed', 'story', $orderBy, true, $linkedStories);
                 $allStories     = array_merge($allStories, $productStories);
             }
         }
@@ -836,11 +837,13 @@ class repoZen extends repo
      */
     protected function getLinkBugs(int $repoID, string $revision, string $browseType, array $products, string $orderBy, object $pager, int $queryID): array
     {
+        $this->loadModel('bug');
         $linkedBugs = $this->repo->getRelationByCommit($repoID, $revision, 'bug');
+        $linkedBugs = empty($linkedBugs) ? array() : array_column($linkedBugs, 'id');
         $allBugs    = array();
         if($browseType == 'bySearch')
         {
-                $allBugs = $this->loadModel('bug')->getBySearch('bug', array_keys($products), 0, 0, 0, $queryID, implode(',', array_keys($linkedBugs)), $orderBy);
+                $allBugs = $this->bug->getBySearch('bug', array_keys($products), 0, 0, 0, $queryID, implode(',', $linkedBugs), $orderBy);
                 foreach($allBugs as $bugID => $bug)
                 {
                     if($bug->status != 'active') unset($allBugs[$bugID]);
@@ -848,9 +851,9 @@ class repoZen extends repo
         }
         else
         {
-            foreach($products as $productID => $product)
+            foreach($products as $product)
             {
-                $productBugs = $this->loadModel('bug')->getActiveBugs($product->id, 0, '0', array_keys($linkedBugs), null, $orderBy);
+                $productBugs = $this->bug->getActiveBugs($product->id, 0, '0', $linkedBugs, null, $orderBy);
                 $allBugs     = array_merge($allBugs, $productBugs);
             }
         }
@@ -926,7 +929,7 @@ class repoZen extends repo
 
         /* Filter linked tasks. */
         $linkedTasks   = $this->repo->getRelationByCommit($repoID, $revision, 'task');
-        $linkedTaskIDs = array_keys($linkedTasks);
+        $linkedTaskIDs = empty($linkedTasks) ? array() : array_column($linkedTasks, 'id');
         foreach($allTasks as $key => $task)
         {
             if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
