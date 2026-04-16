@@ -123,6 +123,7 @@ $lang->programplan->childrenAB        = '子';
 $lang->programplan->confirmDelete     = '确定要删除当前计划吗？';
 $lang->programplan->confirmChangeAttr = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”，是否保存？';
 $lang->programplan->noticeChangeAttr  = '修改后子阶段的类型将根据父阶段类型同步调整为“%s”';
+$lang->programplan->noticeDiffVersion = '对比时，左侧版本以正常颜色显示，右侧版本以深灰色显示。';
 $lang->programplan->workloadTips      = '子阶段工作量占比按百分百的比例进行拆分';
 $lang->programplan->emptyStageTip     = '请联系管理员，在后台的“项目流程配置”中设置IPD阶段列表。';
 

@@ -38,10 +38,12 @@ class versiondiff extends wg
             jsVar('browseTemplate', $browseTemplate),
             div
             (
+                setClass($this->prop('class')),
                 btn
                 (
                     setID('versionBox'),
                     setClass('ghost gray-300-outline rounded-full', $this->prop('appendClass')),
+                    setData('initmode', $diffMode ? 'diff' : 'normal'),
                     set::text($currentVersion),
                     set::hint($currentVersion),
                     set::caret(),
