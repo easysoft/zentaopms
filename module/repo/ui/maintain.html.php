@@ -79,34 +79,39 @@ featureBar
     li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
 );
 
-toolBar
+//toolBar
+//(
+//    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
+//    (
+//        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
+//        dropDown
+//        (
+//            btn(setClass('btn primary dropdown-toggle'),
+//            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+//            set::placement('bottom-end'),
+//            set::items(array($createItem, $batchCreateItem))
+//        )
+//    ) : null,
+//);
+
+toolbar
 (
-    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
-    (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
-    (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
-    (
-        'icon'  => 'plus',
-        'class' => 'btn primary'
-    ))) : null,
-    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
-    (
-        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
-        dropDown
-        (
-            btn(setClass('btn primary dropdown-toggle'),
-            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::placement('bottom-end'),
-            set::items(array($createItem, $batchCreateItem))
-        )
-    ) : null,
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array('icon' => 'plus', 'class' => 'btn primary'))) : null
 );
 
 dtable
