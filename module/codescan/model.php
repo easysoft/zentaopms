@@ -65,7 +65,7 @@ class codescanModel extends model
      */
     public function getScanRulesetRules(int $rulesetID, array $param): array|object
     {
-        return $this->loadModel('gitfox')->request("/scan/rulesets/{$rulesetID}/rules/bind", 'GET', $param) ?: array();
+        return $this->loadModel('gitfox')->request("/scan/rulesets/{$rulesetID}/rules/bind/list", 'POST', $param) ?: array();
     }
 
     /**
@@ -79,9 +79,9 @@ class codescanModel extends model
      */
     public function getScanRulesetUnlinkRules(int $rulesetID, array $param): array|object
     {
-        $url = "/scan/rulesets/{$rulesetID}/rules/unbind";
+        $url = "/scan/rulesets/{$rulesetID}/rules/unbind/list";
 
-        return $this->loadModel('gitfox')->request($url, 'GET', $param) ?: array();
+        return $this->loadModel('gitfox')->request($url, 'POST', $param) ?: array();
     }
 
     /**
