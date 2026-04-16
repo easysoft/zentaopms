@@ -222,7 +222,7 @@ class pipeline extends control
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $result = $this->pipeline->exec($pipelineID, $formData);
+            $result = $this->pipeline->exec((int)$pipelineID, $formData);
             if(dao::isError())
             {
                 $error = dao::getError();
