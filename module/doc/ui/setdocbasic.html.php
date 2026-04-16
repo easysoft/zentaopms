@@ -21,6 +21,7 @@ if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclL
 $docType   = $this->view->docType ?? '';
 $submitUrl = ($docType == 'url' && isset($doc) && $doc->id) ? $this->createLink('doc', 'edit', "docID={$doc->id}") : '';
 $urlValue  = isset($doc) ? $doc->content : '';
+$files     = !empty($doc->files) ? array_values($doc->files) : null;
 
 formPanel(
     set::title($title),
@@ -125,7 +126,7 @@ formPanel(
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
-        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null))
+        fileSelector(set::defaultFiles($files))
     ) : null,
     formGroup
     (
