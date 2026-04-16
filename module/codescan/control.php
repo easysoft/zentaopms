@@ -993,7 +993,7 @@ class codescan extends control
         $params   = $this->codescanZen->buildParams($type, '', (int)$queryID, $orderBy, $pager->recPerPage, $pager->pageID);
         $taskList = $this->codescan->getScanTasks(!empty($repo) ? (int)$repo->id : 0, (int)$planID, (array)$params);
 
-        $pager->recTotal = zget($taskList, 'total', 0);
+        $pager->recTotal = empty($taskList->pager) ? 0 : zget($taskList->pager, 'total', 0);
 
         $taskList = zget($taskList, 'data', array());
         foreach($taskList as $task) $task = $this->codescanZen->processTaskData($task, $this->view->repoList);
