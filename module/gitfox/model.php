@@ -91,6 +91,7 @@ class gitfoxModel extends model
      */
     public function request($url, $method = 'GET', $data = array()): object|array|bool
     {
+        $originURL = $url;
         if($method == 'GET')
         {
             $url .= '?' . http_build_query($data);
@@ -104,7 +105,20 @@ class gitfoxModel extends model
 
         $url    = sprintf($apiRoot->url, $url);
         $result = json_decode(common::http($url, $data, $options, $apiRoot->header, 'json', $method));
-        return $this->getResponse($result);
+        $result = $this->getResponse($result);
+        if(isset($result->pager) && $result->pager->total > 0 && empty($result->data))
+        {
+            if(is_array($data))
+            {
+                $data['page'] = 1;
+            }
+            else
+            {
+                $data->page = 1;
+            }
+            $result = $this->request($originURL, $method, $data);
+        }
+        return $result;
     }
 
     /**
