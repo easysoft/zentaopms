@@ -74,7 +74,7 @@ if($canMoveDoc && ($lib->type === 'custom' || $lib->type === 'mine'))
     );
 }
 $canCopyDoc = $isCreator && hasPriv('doc', 'copyDoc');
-if($canCopyDoc && ($lib->type === 'custom' || $lib->type === 'mine' || $lib->type === 'product' || $lib->type === 'project' || $lib->type === 'execution' || $lib->type === 'api'))
+if($canCopyDoc && in_array($lib->type, array('custom', 'mine', 'product', 'project', 'execution', 'api')))
 {
     $docMoreActions[] = array
     (
@@ -179,7 +179,7 @@ $docHeader = div
                 set::url('javascript:$("#docPanel").fullscreen()')
             ),
             $canCollect ? html($starBtn) : null,
-            ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
+            ($config->vision == 'rnd' && in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project') ? $importLibBtn : null,
             common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
             (
                 set::type('ghost'),
