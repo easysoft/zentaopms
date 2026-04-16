@@ -556,7 +556,7 @@ class storyZen extends story
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
         $fields['grade']['options']    = $grades;
-        $fields['grade']['default']    = current($grades);
+        $fields['grade']['default']    = key($grades);
         $fields['reviewer']['options'] = $reviewers;
         $fields['parent']['options']   = array_filter($stories);
 
