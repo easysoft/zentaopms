@@ -685,14 +685,14 @@ class storyZenTest
      * @access public
      * @return string
      */
-    public function getAfterCreateLocationTest(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
+    public function getAfterCreateLocationTest(int $productID, string $branch, int $objectID, int $storyID, string $storyType, int $planID, string $extra = ''): string
     {
         global $app;
 
         $method = $this->storyZenTest->getMethod('getAfterCreateLocation');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $objectID, $storyID, $storyType, $extra]);
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $objectID, $storyID, $storyType, $planID, $extra]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1055,14 +1055,14 @@ class storyZenTest
      * @access public
      * @return string
      */
-    public function getAfterBatchCreateLocationTest(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    public function getAfterBatchCreateLocationTest(int $productID, string $branch, int $executionID, int $storyID, string $storyType, int $plan): string
     {
         global $app;
 
         $method = $this->storyZenTest->getMethod('getAfterBatchCreateLocation');
         $method->setAccessible(true);
 
-        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $executionID, $storyID, $storyType]);
+        $result = $method->invokeArgs($this->storyZenTest->newInstance(), [$productID, $branch, $executionID, $storyID, $storyType, $plan]);
         if(dao::isError()) return implode(', ', dao::getError());
 
         return $result;
