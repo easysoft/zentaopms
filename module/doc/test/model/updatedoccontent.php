@@ -20,26 +20,18 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $docTester = new docModelTest();
-$now = helper::now();
 global $tester;
 
-$tester->dao->delete()->from(TABLE_DOCLIB)->exec();
-$tester->dao->delete()->from(TABLE_DOC)->exec();
-$tester->dao->delete()->from(TABLE_DOCCONTENT)->exec();
-
-$tester->dao->insert(TABLE_DOCLIB)->set('id')->eq(1)->set('name')->eq('lib1')->set('type')->eq('product')->set('acl')->eq('open')->set('deleted')->eq(0)->exec();
+zenData('doclib')->gen(1);
+zenData('doc')->gen(0);
+zenData('doccontent')->gen(0);
 
 $rawContent1 = '{"props":{"sourceId":"oldGid1"}},{"props":{"sourceId":"oldGid2"}}';
 $htmlContent1 = '<p><img src="fileID=oldGid1&"/>text<img src="fileID=oldGid2&"/></p>';
 
-$tester->dao->insert(TABLE_DOC)->set('id')->eq(1)->set('lib')->eq(1)->set('title')->eq('文档1')->set('type')->eq('text')->set('version')->eq(1)->set('status')->eq('normal')->set('acl')->eq('open')->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
-$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(1)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档1')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
-
-$tester->dao->insert(TABLE_DOC)->set('id')->eq(2)->set('lib')->eq(1)->set('title')->eq('文档2')->set('type')->eq('text')->set('version')->eq(1)->set('status')->eq('normal')->set('acl')->eq('open')->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
-$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(2)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档2')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
-
-$tester->dao->insert(TABLE_DOC)->set('id')->eq(3)->set('lib')->eq(1)->set('title')->eq('文档3')->set('type')->eq('text')->set('version')->eq(1)->set('status')->eq('normal')->set('acl')->eq('open')->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
-$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(3)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档3')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq($now)->exec();
+$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(1)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档1')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq(helper::now())->exec();
+$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(2)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档2')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq(helper::now())->exec();
+$tester->dao->insert(TABLE_DOCCONTENT)->set('doc')->eq(3)->set('version')->eq(1)->set('type')->eq('text')->set('title')->eq('文档3')->set('rawContent')->eq($rawContent1)->set('content')->eq($htmlContent1)->set('addedBy')->eq('admin')->set('addedDate')->eq(helper::now())->exec();
 
 $r1 = $docTester->updateDocContentTest(1, 'text', array());
 $unchanged = strpos($r1->rawContent, 'oldGid1') !== false ? '1' : '0';
