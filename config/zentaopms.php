@@ -379,6 +379,8 @@ $config->logonMethods[] = 'repo.apigetrepobyurl';
 $config->logonMethods[] = 'repo.showsynccommit';
 $config->logonMethods[] = 'ppm.submit';
 $config->logonMethods[] = 'ppm.recall';
+$config->logonMethods[] = 'codescan.refresh';
+$config->logonMethods[] = 'codescan.tips';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
