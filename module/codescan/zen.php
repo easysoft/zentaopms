@@ -45,7 +45,7 @@ class codescanZen extends codescan
                     }
                     else
                     {
-                        $key = isset($config->id) ? $config->id : $config->$type;
+                        $key = !empty($config->id) ? $config->id : $config->$type;
                     }
                     if($key == 'PHPStan') $key = 'phpstan';
                     if($key == 'qlty')    $config->$type = 'Qlty';
