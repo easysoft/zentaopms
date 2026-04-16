@@ -125,7 +125,7 @@ formPanel(
     (
         setStyle('min-height', 'auto'),
         set::label($lang->doc->files),
-        fileSelector()
+        fileSelector(set::defaultFiles(!empty($doc->files) ? array_values($doc->files) : null))
     ) : null,
     formGroup
     (

@@ -5549,16 +5549,37 @@ class docModelTest extends baseTest
     /**
      * Test copyDocFiles method.
      *
-     * @param  array $fileIDs
-     * @param  int   $newDocID
+     * @param  int   $newDocID         新文档ID
+     * @param  object $originalContent 原始文档内容
      * @access public
      * @return bool
      */
-    public function copyDocFilesTest(array $fileIDs, int $newDocID): bool
+    public function copyDocFilesTest(int $newDocID, string $docType, object $originalContent): bool
     {
-        $result = $this->instance->copyDocFiles($fileIDs, $newDocID);
+        $result = $this->instance->copyDocFiles($newDocID, $docType, $originalContent);
         if(dao::isError()) return false;
 
         return $result;
+    }
+
+    /**
+     * Test updateDocContent method.
+     *
+     * @param  int    $newDocID 新文档ID
+     * @param  string $docType  文档类型
+     * @param  array  $gidMap   gid映射表
+     * @access public
+     * @return object|false
+     */
+    public function updateDocContentTest(int $newDocID, string $docType, array $gidMap): object|false
+    {
+        $this->invokeArgs('updateDocContent', [$newDocID, $docType, $gidMap]);
+        if(dao::isError()) return false;
+
+        return $this->instance->dao->select('*')->from(TABLE_DOCCONTENT)
+            ->where('doc')->eq($newDocID)
+            ->orderBy('version_desc')
+            ->limit(1)
+            ->fetch();
     }
 }

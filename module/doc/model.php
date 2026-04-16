@@ -5154,6 +5154,21 @@ class docModel extends model
                 }
                 if($newRawContent !== $docContent->rawContent) $updateData['rawContent'] = $newRawContent;
             }
+
+            if(!empty($docContent->content))
+            {
+                $newContent = $docContent->content;
+                foreach($gidMap as $oldGid => $newGid)
+                {
+                    $newContent = str_replace('fileID=' . $oldGid . '&', 'fileID=' . $newGid . '&', $newContent);
+                }
+                if($newContent !== $docContent->content) $updateData['content'] = $newContent;
+            }
+        }
+
+        if(!empty($updateData))
+        {
+            $this->dao->update(TABLE_DOCCONTENT)->data($updateData)->where('id')->eq($docContent->id)->exec();
         }
     }
 }
