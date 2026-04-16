@@ -73,7 +73,14 @@ class repobranchtype extends control
     public function create(int $repoID = 0)
     {
         /* 设置菜单。 */
-        if($repoID) $this->loadModel('ci')->setMenu($repoID);
+        if($repoID)
+        {
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->loadModel('space')->setMenu(0);
+        }
 
         $repo = $this->loadModel('repo')->getByID($repoID);
         if($repo === false) $repo = null;
