@@ -267,6 +267,7 @@ $lang->doc->createAB         = '创建';
 $lang->doc->create           = '创建文档';
 $lang->doc->createOrUpload   = '创建文档';
 $lang->doc->edit             = '编辑文档';
+$lang->doc->copyDoc          = '复制文档';
 $lang->doc->effort           = '日志';
 $lang->doc->delete           = '删除文档';
 $lang->doc->createBook       = '创建手册';

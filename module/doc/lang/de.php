@@ -267,6 +267,7 @@ $lang->doc->createAB         = 'Create';
 $lang->doc->create           = 'Dokument hinzufügen';
 $lang->doc->createOrUpload   = 'Create/Upload Document';
 $lang->doc->edit             = 'Bearbeiten';
+$lang->doc->copyDoc          = 'Dokument kopieren';
 $lang->doc->effort           = 'Effort';
 $lang->doc->delete           = 'Löschen';
 $lang->doc->createBook       = 'Create Book';

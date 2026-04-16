@@ -73,6 +73,19 @@ if($canMoveDoc && ($lib->type === 'custom' || $lib->type === 'mine'))
         'data-size'   => 'sm'
     );
 }
+$canCopyDoc = $isCreator && hasPriv('doc', 'copyDoc');
+if($canCopyDoc && ($lib->type === 'custom' || $lib->type === 'mine' || $lib->type === 'product' || $lib->type === 'project' || $lib->type === 'execution' || $lib->type === 'api'))
+{
+    $docMoreActions[] = array
+    (
+        'icon'        => 'copy',
+        'hint'        => $lang->doc->copyDocAction,
+        'text'        => $lang->doc->copyDocAction,
+        'url'         => createLink('doc', 'copyDoc', "docID=$doc->id&libID=&space=&locate=true"),
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
+    );
+}
 if(hasPriv('doc', 'delete') && !$doc->deleted)
 {
     $docMoreActions[] = array
