@@ -5016,14 +5016,7 @@ class docModel extends model
 
         $this->dao->insert(TABLE_DOCCONTENT)->data($newContent)->exec();
 
-        if($originalContent->files)
-        {
-            $fileIDs = array_filter(explode(',', trim($originalContent->files, ',')));
-            if(!empty($fileIDs))
-            {
-                $this->copyDocFiles($fileIDs, $newDocID);
-            }
-        }
+        $this->copyDocFiles($newDocID, $originalDoc->type, $originalContent);
 
         return $newDocID;
     }
@@ -5032,29 +5025,135 @@ class docModel extends model
      * 复制文档附件
      * Copy document files.
      *
-     * @param  array $fileIDs
-     * @param  int   $newDocID
+     * @param  int     $newDocID        新文档ID
+     * @param  string  $docType         原始文档类型
+     * @param  object  $originalContent 原始文档内容对象
      * @access public
      * @return bool
      */
-    public function copyDocFiles(array $fileIDs, int $newDocID): bool
+    public function copyDocFiles(int $newDocID, string $docType, object $originalContent): bool
     {
-        if(empty($fileIDs)) return true;
-
-        $files   = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIDs)->andWhere('deleted')->eq(0)->fetchAll();
         $addedBy = $this->app->user->account;
         $now     = helper::now();
-        foreach($files as $file)
-        {
-            unset($file->id, $file->downloads);
-            $file->objectID  = $newDocID;
-            $file->gid       = base64_encode(random_bytes(32));
-            $file->addedBy   = $addedBy;
-            $file->addedDate = $now;
 
-            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        if($docType == 'text')
+        {
+            $gids = array();
+            if(!empty($originalContent->rawContent))
+            {
+                preg_match_all('/sourceId":"([^"]+)"/', $originalContent->rawContent, $matches);
+                if(!empty($matches[1])) $gids = $matches[1];
+            }
+
+            $fileRecords = array();
+            if(!empty($gids))
+            {
+                $gids = array_unique($gids);
+                $fileRecords = $this->dao->select('*')->from(TABLE_FILE)
+                    ->where('gid')->in($gids)
+                    ->andWhere('objectID')->eq($originalContent->doc)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchAll();
+            }
+
+            $gidMap = array();
+
+            foreach($fileRecords as $file)
+            {
+                $oldGid = $file->gid;
+
+                unset($file->id, $file->downloads);
+                $file->objectID  = $newDocID;
+                $file->gid       = base64_encode(random_bytes(32));
+                $file->addedBy   = $addedBy;
+                $file->addedDate = $now;
+
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+
+                $gidMap[$oldGid] = $file->gid;
+            }
+
+            $this->updateDocContent($newDocID, $docType, $gidMap);
+        }
+        else
+        {
+            $fileIds = array();
+            if(!empty($originalContent->files))
+            {
+                $fileIds = array_filter(explode(',', trim($originalContent->files, ',')));
+            }
+
+            $fileRecords = array();
+            if(!empty($fileIds))
+            {
+                $fileIds = array_unique($fileIds);
+                $fileRecords = $this->dao->select('*')->from(TABLE_FILE)
+                    ->where('id')->in($fileIds)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchAll();
+            }
+
+            $newFileIds = array();
+            foreach($fileRecords as $file)
+            {
+                unset($file->id, $file->downloads);
+                $file->objectID  = $newDocID;
+                $file->addedBy   = $addedBy;
+                $file->addedDate = $now;
+
+                $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                $newFileIds[] = $this->dao->lastInsertID();
+            }
+
+            if(!empty($newFileIds))
+            {
+                $this->dao->update(TABLE_DOCCONTENT)
+                    ->set('files')->eq(',' . implode(',', $newFileIds) . ',')
+                    ->where('doc')->eq($newDocID)
+                    ->orderBy('version_desc')
+                    ->limit(1)
+                    ->exec();
+            }
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * 更新文档内容中的附件引用
+     * Update gid references in document content.
+     *
+     * @param  int     $newDocID  新文档ID
+     * @param  string  $docType   文档类型
+     * @param  array   $gidMap    gid 映射表 [旧gid => 新gid]
+     * @access protected
+     * @return void
+     */
+    protected function updateDocContent(int $newDocID, string $docType, array $gidMap): void
+    {
+        if(empty($gidMap)) return;
+
+        $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)
+            ->where('doc')->eq($newDocID)
+            ->orderBy('version_desc')
+            ->limit(1)
+            ->fetch();
+
+        if(empty($docContent)) return;
+
+        $updateData = array();
+
+        if($docType == 'text')
+        {
+            if(!empty($docContent->rawContent))
+            {
+                $newRawContent = $docContent->rawContent;
+                foreach($gidMap as $oldGid => $newGid)
+                {
+                    $newRawContent = str_replace('sourceId":"' . $oldGid . '"', 'sourceId":"' . $newGid . '"', $newRawContent);
+                }
+                if($newRawContent !== $docContent->rawContent) $updateData['rawContent'] = $newRawContent;
+            }
+        }
     }
 }
