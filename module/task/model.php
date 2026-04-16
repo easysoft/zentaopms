@@ -3574,10 +3574,9 @@ class taskModel extends model
         $parentPath = $parentTask ? $parentTask->path : ',';
         $path       = $parentPath . $task->id . ',';
 
-        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
         if($parentTask && !$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
 
-        /* 更新所有子任务的path. */
+        /* 先更新所有子任务的path.再更新父任务的path */
         $childIdList = $this->getAllChildId($task->id, false);
         if($childIdList)
         {
@@ -3588,6 +3587,8 @@ class taskModel extends model
                 $this->dao->update(TABLE_TASK)->set('path')->eq($newChildPath)->where('id')->eq($child->id)->exec();
             }
         }
+
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
 
         $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
         if($task->parent) $this->computeBeginAndEnd($task->parent);
