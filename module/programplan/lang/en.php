@@ -123,6 +123,7 @@ $lang->programplan->childrenAB        = 'Child';
 $lang->programplan->confirmDelete     = 'Do you want to delete the current plan?';
 $lang->programplan->confirmChangeAttr = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification. Do you want to save?';
 $lang->programplan->noticeChangeAttr  = 'The type of the sub-stage will be adjusted to "%s" synchronously according to the type of the parent stage after modification.';
+$lang->programplan->noticeDiffVersion = 'When comparing versions, the left version is displayed in normal color, and the right version is displayed in dark gray color.';
 $lang->programplan->workloadTips      = 'The workload of the sub stage is divided by 100%.';
 $lang->programplan->emptyStageTip     = 'Please contact the administrator to set up the IPD stage list in the "Project Process Configuration" in the backend.';
 

@@ -14,6 +14,7 @@ namespace zin;
 
 include './ganttfields.html.php';
 
+$isDiffMode = isset($ganttBaseline);
 $showFields = str_replace('PM', 'owner_id', $showFields);
 $isHistory  = (is_numeric($versionID) && $versionID > 0) || $versionID == 'nowait';
 $isFromDoc  = $from === 'doc';
@@ -113,7 +114,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '');
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
-    if($versionID == '0' && isset($ganttBaseline)) $currentVersion = $lang->project->latestVersion;
+    if($versionID == '0' && $isDiffMode) $currentVersion = $lang->project->latestVersion;
 
     $langData = [];
     $langData['allVersions'] = $lang->project->allVersions;
@@ -121,7 +122,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $langData['confirm']     = $lang->confirm;
     $langData['cancel']      = $lang->cancel;
 
-    $isLatestVersion = empty($versionID) && !isset($ganttBaseline);
+    $isLatestVersion = empty($versionID) && !$isDiffMode;
     featureBar
     (
         btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
@@ -134,15 +135,23 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setStyle(array('order' => '10010')),
             versiondiff
             (
+                setClass('inline-block'),
                 set::appendClass('fixed-item'),
                 set::versionID($versionID),
                 set::currentVersion($currentVersion),
                 set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
-                set::diffMode(isset($ganttBaseline)),
+                set::diffMode($isDiffMode),
                 set::versionItems($versionItems),
                 set::diffLang($langData),
                 set::browseTemplate(createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
-                set::baseline(isset($ganttBaseline) ? $ganttBaseline : null)
+                set::baseline($isDiffMode ? $ganttBaseline : null)
+            ),
+            icon
+            (
+                'help',
+                setID('diffNotice'),
+                setClass($isDiffMode ? '' : 'hidden'),
+                set::title($lang->programplan->noticeDiffVersion)
             )
         )
     );

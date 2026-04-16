@@ -84,6 +84,11 @@
 #mainContent.loading #myCover {height: auto!important;}
 #mainContent.loading .gantt_grid_head_cell .sort:before {display: none!important;}
 #mainContent.loading [class^=pri-]{line-height: 3px;}
+#mainContent.loading .gantt_tree_content {line-height: 20px; position: relative;}
+#mainContent.loading .gantt_tree_content [class^=pri-] {left: 0px; top: 8px; position: absolute;}
+#mainContent.loading .gantt_tree_content .gantt_title{left: 20px; top: 0px; position: absolute;}
+#mainContent.loading .gantt_task_content {position: absolute; left: 0px; top: -5px;}
+#mainContent.loading .gantt_task_content [class^=pri-] {margin-left: -15px; top: 8px; position: absolute;}
 #mainContent.loading .gantt-toolbar{display:none;}
 
 .gantt_task_cell.weekend, .gantt_scale_cell.weekend { background-color: #F2F2F2; }
