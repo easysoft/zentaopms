@@ -59,7 +59,9 @@ $basicItems[] = item(set::name($lang->ppm->description),  !empty($ppm->desc) ? s
 
 $canMerge = zget($checkResult, 'canMerge', false);
 
-$mergeTypeList = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
+$mergeTypeList    = empty($flow) ? array('merge', 'squash', 'rebase', 'fast') : $flow->definition->reviewFlow->merge->options;
+$defaultMergeType = in_array($defaultMergeType, $mergeTypeList) ? $defaultMergeType : $mergeTypeList[0];
+
 $mergeBtnItems = array();
 foreach($mergeTypeList as $mergeType)
 {
