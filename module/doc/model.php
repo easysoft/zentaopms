@@ -5041,17 +5041,16 @@ class docModel extends model
     {
         if(empty($fileIDs)) return true;
 
-        $files = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIDs)->andWhere('deleted')->eq(0)->fetchAll();
+        $files   = $this->dao->select('*')->from(TABLE_FILE)->where('id')->in($fileIDs)->andWhere('deleted')->eq(0)->fetchAll();
+        $addedBy = $this->app->user->account;
+        $now     = helper::now();
         foreach($files as $file)
         {
-            $addedBy = $this->app->user->account;
-            $now     = helper::now();
-
             unset($file->id, $file->downloads);
-            $file->objectID   = $newDocID;
-            $file->gid        = base64_encode(random_bytes(32));
-            $file->addedBy    = $addedBy;
-            $file->addedDate  = $now;
+            $file->objectID  = $newDocID;
+            $file->gid       = base64_encode(random_bytes(32));
+            $file->addedBy   = $addedBy;
+            $file->addedDate = $now;
 
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
         }
