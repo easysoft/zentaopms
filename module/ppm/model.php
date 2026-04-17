@@ -862,6 +862,7 @@ class ppmModel extends model
         if(empty($ppm->id)) return false;
 
         $this->loadModel('action');
+        $users = $this->loadModel('user')->getPairs('noletter');
         foreach($reviewers as $reviewer)
         {
             $reviewData = new stdClass();
@@ -875,7 +876,7 @@ class ppmModel extends model
             $this->dao->insert(TABLE_PPMREVIEWERS)->data($reviewData)->exec();
             if(dao::isError()) return false;
 
-            $this->action->create('ppm', $ppm->id, 'addReviewer', '', $reviewer);
+            $this->action->create('ppm', $ppm->id, 'addReviewer', '', zget($users, $reviewer));
             if(dao::isError()) return false;
         }
 
