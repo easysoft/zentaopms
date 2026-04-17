@@ -86,13 +86,14 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     }
 
     /* Build versions for dropdown. */
+    $browseTemplate = createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s");
     $versionItems   = array();
     $currentVersion = $lang->project->version;
     foreach($versions as $version)
     {
         $item = array('title' => $version->version, 'value' => $version->id, 'hint' => $version->version);
-        if($version->reviewType == 'deliverable') $item['text'] = "[{$lang->project->deliverableAbbr}]";
-        if($version->reviewType == 'baseline')    $item['text'] = "[{$lang->project->baseline}]";
+        if($version->reviewType == 'deliverable') $item['actions'][] = array('text' => $lang->project->deliverableAbbr, 'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
+        if($version->reviewType == 'baseline')    $item['actions'][] = array('text' => $lang->project->baseline,        'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
         if($version->reviewType == 'gantt')
         {
             $item['hint']    = $version->items;
@@ -109,9 +110,9 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         $versionItems[$version->id] = $item;
     }
 
-    $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '');
+    $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '', 'className' => 'sticky canvas', 'style' => array('bottom' => '-8px', 'height' => '32px'));
     if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}&type={$type}"), 'data-toggle' => 'modal'));
-    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '');
+    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
     $versionItems['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
     if($versionID == '0' && $isDiffMode) $currentVersion = $lang->project->latestVersion;
@@ -143,7 +144,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 set::diffMode($isDiffMode),
                 set::versionItems($versionItems),
                 set::diffLang($langData),
-                set::browseTemplate(createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s")),
+                set::browseTemplate($browseTemplate),
                 set::baseline($isDiffMode ? $ganttBaseline : null)
             ),
             icon
