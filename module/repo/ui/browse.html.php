@@ -76,9 +76,8 @@ foreach($paths as $index => $pathName)
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
-
 /* zin: Define the set::module('repo') feature bar on main menu. */
-\zin\featureBar(
+featureBar(
     formGroup
     (
         set::className('repo-select'),
@@ -102,8 +101,8 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
 );
 
 /* zin: Define the toolbar on main menu. */
-$refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
-$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
+$refreshLink = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
+$refreshItem = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
 
 $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
