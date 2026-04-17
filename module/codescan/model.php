@@ -858,6 +858,7 @@ class codescanModel extends model
     {
         if(isset($params['repoID'])) $params['repoID'] = (int)$params['repoID'];
         if(isset($params['ruleID'])) $params['ruleID'] = (int)$params['ruleID'];
+        if(isset($params['taskID'])) $params['taskID'] = (int)$params['taskID'];
 
         $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues/list';
         $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
