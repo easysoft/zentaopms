@@ -648,21 +648,31 @@ class file extends control
     }
 
     /**
-     * View preview or download file by gid.
+     * View preview or download file by id or gid.
      *
+     * @param  int    $id
      * @param  string $gid
      * @param  string $mode  view|download|preview
      * @access public
      * @return void
      */
-    public function viewdownload(string $gid = '', string $mode = 'view')
+    public function viewdownload(int $id = 0, string $gid = '0', string $mode = 'view')
     {
-        if(empty($gid)) return print($this->lang->file->fileNotFound);
+        if($id != 0 && $gid != '0') return print($this->lang->file->fileNotFound);
 
-        $decodedGid = base64_decode($gid);
-        if(strpos($decodedGid, 'g-') === 0) $decodedGid = substr($decodedGid, 2);
+        $file = null;
+        if($id != 0)
+        {
+            $file = $this->file->getById($id);
+        }
+        elseif($gid != '0')
+        {
+            $decodedGid = base64_decode($gid);
+            if(strpos($decodedGid, 'g-') === 0) $decodedGid = substr($decodedGid, 2);
 
-        $file = $this->file->getByGid($decodedGid);
+            $file = $this->file->getByGid($decodedGid);
+        }
+
         if(empty($file)) return print($this->lang->file->fileNotFound);
 
         if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
