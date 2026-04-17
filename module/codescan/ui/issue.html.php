@@ -116,72 +116,15 @@ if($taskID && !$isInModal)
     );
 }
 
-$canBug     = hasPriv('bug', 'batchCreate');
-$canActive  = hasPriv('codescan', 'activeIssue');
-$canConfirm = hasPriv('codescan', 'confirmIssue');
-$canIgnore  = hasPriv('codescan', 'ignoreIssue');
-
-$bugBtn = $canBug ? array(
-    'text'      => $lang->codescan->createBug,
-    'className' => 'btn batch-btn size-sm secondary bug-btn',
-    'data-type' => 'bug',
-    'data-url'  => $this->createLink('bug', 'batchCreate', "productID={$productID}&branch=0&executionID=0&moduleID=0&extra=from=codescan,fromServerID={$serviceRepoID},repoID={$realRepoID}")
-) : null;
-
-$activeBtn = $canActive ? array(
-    'text'      => $lang->codescan->activeIssue,
-    'className' => 'btn batch-btn size-sm secondary ajax-btn',
-    'data-type' => 'active',
-    'data-url'  => $this->createLink('codescan', 'activeIssue')
-) : null;
-
-$confirmBtn = $canConfirm ? array(
-    'text'      => $lang->codescan->confirmIssue,
-    'className' => 'btn batch-btn size-sm secondary ajax-btn',
-    'data-type' => 'confirm',
-    'data-url'  => $this->createLink('codescan', 'confirmIssue')
-) : null;
-
-$ignoreBtn = $canIgnore ? array(
-    'text'      => $lang->codescan->ignoreIssue,
-    'className' => 'btn batch-btn size-sm secondary',
-    'data-type' => 'ignore',
-    'data-size' => 'sm',
-    'data-url'  => $this->createLink('codescan', 'ignoreIssue')
-) : null;
-
-$footToolbar = array('items' => array());
-if($browseType == 'wait')
-{
-    if($canBug)     $footToolbar['items'][] = $bugBtn;
-    if($canConfirm) $footToolbar['items'][] = $confirmBtn;
-    if($canIgnore)  $footToolbar['items'][] = $ignoreBtn;
-}
-elseif($browseType == 'todo')
-{
-    if($canBug)    $footToolbar['items'][] = $bugBtn;
-    if($canIgnore) $footToolbar['items'][] = $ignoreBtn;
-}
-elseif($browseType == 'closed')
-{
-    if($canActive) $footToolbar['items'][] = $activeBtn;
-}
-elseif($browseType == 'all')
-{
-    if($canBug)     $footToolbar['items'][] = $bugBtn;
-    if($canConfirm) $footToolbar['items'][] = $confirmBtn;
-    if($canActive)  $footToolbar['items'][] = $activeBtn;
-    if($canIgnore)  $footToolbar['items'][] = $ignoreBtn;
-}
-
 $table = dtable
 (
+    setID('issueTable'),
     set::customCols(!$isInModal),
     set::cols($cols),
     set::data($issueList),
-    set::checkable(!$isInModal && ($canBug || $canActive || $canConfirm || $canIgnore) && !empty($footToolbar['items'])),
+    //set::checkable(!$isInModal && ($canBug || $canActive || $canConfirm || $canIgnore) && !empty($footToolbar['items'])),
     set::sortLink(createLink('codescan', 'issue', $urlParams)),
-    set::footToolbar($footToolbar),
+    //set::footToolbar($footToolbar),
     set::orderBy($orderBy),
     set::loadPartial(true),
     $taskID ? set::extraHeight('+144') : null,
