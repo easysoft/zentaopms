@@ -63,7 +63,7 @@ class workflowfield extends wg
         return div
         (
             setClass('workflowfield'),
-            checkbox(set::name($mode), set::rootClass('mb-1'), set::text($lang->workflowfield->$mode), set::checked(!empty($checkedFields)), setData(array('on' => 'change', 'call' => 'changeMode', 'params' => 'event'))),
+            checkbox(set::name("{$mode}[$module]"), set::rootClass('mb-1'), set::text($lang->workflowfield->$mode), set::checked(!empty($checkedFields)), setData(array('on' => 'change', 'call' => 'changeMode', 'params' => 'event'))),
             div
             (
                 setClass('fieldBox', empty($checkedFields) ? 'hidden' : ''),
