@@ -59,7 +59,7 @@ class reporeviewflow extends control
             $formData->definition = $this->reporeviewflowZen->buildDefinition($formData);
 
             $flowID = $this->reporeviewflow->create($repoID, $formData);
-            if($flowID) $this->loadModel('action')->create('ops_review_flow', $flowID, 'created');
+            if($flowID) $this->loadModel('action')->create('review_flow', $flowID, 'created');
 
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => inLink('browse', "repoID=$repoID")));
@@ -97,7 +97,7 @@ class reporeviewflow extends control
             $formData->definition = $this->reporeviewflowZen->buildDefinition($formData);
 
             $result = $this->reporeviewflow->update($reviewFlow, $formData);
-            if($result) $this->loadModel('action')->create('ops_review_flow', $flowID, 'edited');
+            if($result) $this->loadModel('action')->create('review_flow', $flowID, 'edited');
 
             if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('load' => inLink('browse', "repoID=$repoID")));
@@ -129,7 +129,7 @@ class reporeviewflow extends control
         $this->reporeviewflow->updateStatus($flowID, $status);
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        $this->loadModel('action')->create('ops_review_flow', $flowID, $status . 'reviewflow');
+        $this->loadModel('action')->create('review_flow', $flowID, $status . 'reviewflow');
         return $this->sendSuccess(array('message' => $this->lang->reporeviewflow->{$status . 'Success'}, 'load' => true));
     }
 

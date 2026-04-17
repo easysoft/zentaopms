@@ -76,8 +76,8 @@ $config->action->objectNameFields['deliverable']  = 'name';
 $config->action->objectNameFields['space']        = 'name';
 $config->action->objectNameFields['artifact']     = 'name';
 
-$config->action->objectNameFields['ops_review_flow'] = 'name';
-$config->action->objectNameFields['repobranchtype']  = 'name';
+$config->action->objectNameFields['review_flow']    = 'name';
+$config->action->objectNameFields['repobranchtype'] = 'name';
 
 $config->action->objectNameFields['cm']           = 'title';
 $config->action->objectNameFields['baseline']     = 'title';
@@ -98,7 +98,7 @@ $config->action->majorList['doc']       = array('releaseddoc');
 
 $config->action->needGetProjectType       = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField       = ',branch,story,epic,requirement,productplan,release,task,build,bug,testcase,case,testtask,testreport,design,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,review,projectchange,nc,cm,';
-$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,productline,chapter,doc,caselib,space,ops_review_flow,artifact,';
+$config->action->noLinkModules            = ',doclib,module,webhook,gitlab,instance,gitea,gogs,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,pivot,scene,boardspace,auditplan,auditresult,productline,chapter,doc,caselib,space,review_flow,artifact,';
 $config->action->ignoreObjectType4Dynamic = 'kanbanregion,kanbanlane,kanbancolumn';
 $config->action->ignoreActions4Dynamic    = 'disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan,editppm,removeppm,syncdoingbyticket,syncdoingbystory,syncdoingbyuserstory,syncdoingbyepic,syncdoingbytask,syncdoingbybug,syncdoingbytodo,syncdoingbydemand';
 if(in_array($config->edition, array('open', 'biz'))) $config->action->ignoreObjectType4Dynamic .= ',reporttemplate';
@@ -141,4 +141,4 @@ $config->action->multipleObjectFields['testtask']['type'] = 'typeList';
 $config->action->approvalFields['reviewStatus'] = 'reviewStatusList';
 $config->action->approvalFields['reviewResult'] = 'reviewResultList';
 
-$config->action->hiddenTrashObjects = 'object,cm,stage,ops_review_flow';
+$config->action->hiddenTrashObjects = 'object,cm,stage,review_flow';
