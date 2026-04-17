@@ -533,6 +533,7 @@ $config->codescan->issue->dtable->fieldList['status']['show']      = true;
 $config->codescan->issue->dtable->fieldList['status']['sortType']  = true;
 $config->codescan->issue->dtable->fieldList['status']['required']  = false;
 $config->codescan->issue->dtable->fieldList['status']['fixed']     = 'right';
+$config->codescan->issue->dtable->fieldList['status']['width']     = 150;
 $config->codescan->issue->dtable->fieldList['status']['statusMap'] = $lang->codescan->issueStatusList;
 
 $app->loadLang('bug');
