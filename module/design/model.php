@@ -43,6 +43,13 @@ class designModel extends model
         $spec->docs    = isset($design->docs) ? $design->docs : '';
         $this->dao->insert(TABLE_DESIGNSPEC)->data($spec)->exec();
 
+        $this->dao->update(TABLE_PROJECTDELIVERABLE)
+            ->set('submittedBy')->eq($design->createdBy)
+            ->set('submittedDate')->eq($design->createdDate)
+            ->where('project')->eq($design->project)
+            ->andWhere('deliverable')->eq($design->type)
+            ->exec();
+
         return $designID;
     }
 
@@ -62,6 +69,7 @@ class designModel extends model
 
         $stories = is_array($_POST['story']) ? $this->loadModel('story')->getByList($this->post->story) : array();
 
+        $designTypes = array();
         foreach($designs as $rowID => $design)
         {
             $design->product   = $productID;
@@ -92,7 +100,16 @@ class designModel extends model
             }
 
             $this->action->create('design', $designID, 'created');
+
+            $designTypes[$design->type] = $design->type;
         }
+
+        $this->dao->update(TABLE_PROJECTDELIVERABLE)
+            ->set('submittedBy')->eq($this->app->user->account)
+            ->set('submittedDate')->eq(helper::now())
+            ->where('project')->eq($projectID)
+            ->andWhere('deliverable')->in($designTypes)
+            ->exec();
 
         return true;
     }
