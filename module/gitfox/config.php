@@ -149,9 +149,9 @@ GITFOX_ZIP="gitfox_latest.zip"
 GITFOX_URL="%s"
 
 if command -v wget >/dev/null 2>&1; then
-    wget -O "\${GITFOX_ZIP}" "\${GITFOX_URL}"
+    wget --no-check-certificate -O "\${GITFOX_ZIP}" "\${GITFOX_URL}"
 elif command -v curl >/dev/null 2>&1; then
-    curl -L -o "\${GITFOX_ZIP}" "\${GITFOX_URL}"
+    curl -k -L -o "\${GITFOX_ZIP}" "\${GITFOX_URL}"
 else
     echo "Error: wget or curl is required"
     exit 1

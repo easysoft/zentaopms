@@ -17,7 +17,7 @@ featureBar
 (
     set::current($status),
     set::linkParams("repoID={$repoID}&status={key}"),
-    set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
+    //set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
 );
 
 hasPriv('codescan', 'createplan') ? toolbar
