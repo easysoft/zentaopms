@@ -1310,7 +1310,7 @@ class codescan extends control
 
             $this->loadModel('ci')->setMenu($repoID);
         }
-        $this->config->codescan->actionList = $this->config->codescan->issue->actionList;
+        if(isset($this->config->codescan->issue->actionList)) $this->config->codescan->actionList = $this->config->codescan->issue->actionList;
 
         $issue = $this->codescan->getScanIssue($issueID);
         if($issue) $issue = $this->codescanZen->processIssueData($issue);
