@@ -4336,6 +4336,18 @@ class storyModel extends model
         $projectStory->version = 1;
         $projectStory->order   = $lastOrder + 1;
         $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
+
+        $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.category')->eq('SRS')
+            ->fetch('id');
+
+        $this->dao->update(TABLE_PROJECTDELIVERABLE)
+            ->set('submittedBy')->eq($this->app->user->account)
+            ->set('submittedDate')->eq(helper::now())
+            ->where('id')->eq($projectDeliverableID)
+            ->exec();
     }
 
     /**

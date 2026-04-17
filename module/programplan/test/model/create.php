@@ -27,10 +27,12 @@ su('admin');
 $project = zenData('project');
 $project->type->range('project');
 $project->gen(10);
+
 zenData('task')->gen(10);
+zenData('projectspec')->gen(0);
 
 $names    = array('新阶段31', '新阶段121', '阶段211', '新增的阶段');
-$parent    = array('2', '2', '2', '2');
+$parent   = array('2', '2', '2', '2');
 $begin    = array();
 $end      = array();
 $idList   = array(11, 12);
@@ -38,7 +40,7 @@ $create   = array('name' => $names, 'parent' => $parent, 'begin' => $begin, 'end
 
 $programplan = new programplanModelTest();
 
-$programplan->objectModel->create(array());
+$programplan->instance->create(array());
 r(dao::getError()) && p('message:0') && e('『阶段名称』不能为空。'); // 传入空数据
 
 r($programplan->createTest(array(), 0, 0, 101)) && p('0:attribute') && e('request'); // 分解任务
