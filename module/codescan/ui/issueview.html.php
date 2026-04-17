@@ -146,7 +146,7 @@ div
                     ),
                     h::tr
                     (
-                        h::td(zget($issue->payload->location->commit, 'author', '')),
+                        h::td(zget($users, zget($issue->payload->location->commit, 'author', ''))),
                         h::td(empty($issue->payload->location->commit->committer_date) ? '' : date('Y-m-d', intval($issue->payload->location->commit->committer_date) / 1000)),
                         h::td
                         (
