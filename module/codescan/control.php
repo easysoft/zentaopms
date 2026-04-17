@@ -1220,7 +1220,7 @@ class codescan extends control
 
         if($taskID)
         {
-            $task = $this->codescan->getScanTask($taskID, $serviceRepoID);
+            $task = $this->codescan->getScanTask((int)$taskID, $serviceRepoID);
             $this->view->task = $this->codescanZen->processTaskData($task, $repoList);
 
             unset($this->config->codescan->issue->search['fields']['plan']);
@@ -1266,7 +1266,7 @@ class codescan extends control
 
         $conditions = $this->codescanZen->buildParams($type, $condition, (int)$queryID, $orderBy, $pager->recPerPage, $pager->pageID);
         $conditions = $type == 'bySearch' && $repoID ? array_merge($conditions, array('repoID' => $serviceRepoID)) : array_merge($conditions, array('taskID' => $taskID));
-        $issueList  = $this->codescan->getScanIssueList($taskID, $conditions);
+        $issueList  = $this->codescan->getScanIssueList((int)$taskID, $conditions);
         $pager->recTotal = zget(zget($issueList, 'pager', array()), 'total', 0);
 
         $taskList = $this->codescanZen->getListByQuery('task', (int)$serviceRepoID);

@@ -241,7 +241,6 @@ $config->codescan->task->search['params']['finished'] = array('operator' => '<',
 
 $config->codescan->issue = new stdclass();
 
-$config->codescan->actions->issueview['mainActions']   = array('confirmissue', 'bug', 'ignoreissue', 'activeissue');
 $config->codescan->actions->issueview['suffixActions'] = array();
 
 $config->codescan->issue->search['module'] = 'codeScanIssue';
