@@ -538,6 +538,8 @@ class repo extends control
 
         /* Synchronous commit only in root path. */
         if(empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
+        if($branchOrTag == 'tag' && !in_array($branchID, $tags) && in_array($branchID, $branches)) $branchOrTag = 'branch';
+        if($branchOrTag == 'branch' && in_array($branchID, $tags) && !in_array($branchID, $branches)) $branchOrTag = 'tag';
 
         $this->view->title          = $this->lang->repo->common;
         $this->view->repo           = $repo;

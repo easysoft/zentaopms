@@ -17,7 +17,7 @@ $fields->field('sourceBranch')->required(true)->value($ppm->sourceBranch)->disab
 $fields->field('targetBranch')->required(true)->value($ppm->targetBranch)->disabled(true)->width('1/2');
 $fields->field('title')->required(true)->value($ppm->title)->width('1/2');
 $fields->field('reviewer')->control(array('control' => 'picker', 'multiple' => true))->items($users)->required(true)->value($reviewers)->disabled(true)->width('1/2');
-$fields->field('desc')->label($lang->ppm->description)->control('editor')->value($ppm->desc)->width('full');
+$fields->field('desc')->label($lang->ppm->description)->control(array('control' => 'editor', 'upload-url' => 'disabled', 'placeholder' => $lang->ppm->description))->value($ppm->desc)->width('full');
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
