@@ -1974,12 +1974,9 @@ class doc extends control
                 unset($newDoc->content);
                 unset($newDoc->draft);
             }
-            return $this->send(array(
-                'result'     => 'success',
-                'message'    => $this->lang->saveSuccess,
-                'closeModal' => true,
-                'docApp'     => array('executeCommand', 'startEditDoc', array($newDoc))
-            ));
+            $newLib = $this->doc->getLibByID($data->lib);
+            $space  = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project ?: $newLib->custom);
+            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false);
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
