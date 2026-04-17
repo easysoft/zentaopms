@@ -1731,7 +1731,7 @@ class storyZen extends story
      * @access public
      * @return string
      */
-    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
+    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, int $planID, string $extra = ''): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 
@@ -1745,6 +1745,7 @@ class storyZen extends story
 
         if($this->app->tab == 'product')
         {
+            if($planID > 0) return $this->createLink('productplan', 'view', "planID=$planID");
             $storyProductID = $this->story->fetchByID($storyID)->product;
             return $this->createLink('product', 'browse', "productID=$storyProductID&branch=$branch&browseType=unclosed&param=0&storyType=$storyType");
         }
@@ -1768,7 +1769,7 @@ class storyZen extends story
      * @access protected
      * @return string
      */
-    protected function getAfterBatchCreateLocation(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    protected function getAfterBatchCreateLocation(int $productID, string $branch, int $executionID, int $storyID, string $storyType, int $plan): string
     {
         if($storyID)
         {
@@ -1789,6 +1790,7 @@ class storyZen extends story
 
         if($this->app->tab == 'product')
         {
+            if($plan > 0) return $this->createLink('productplan', 'view', "planID=$plan");
             return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
         }
 
