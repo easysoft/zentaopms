@@ -1352,10 +1352,15 @@ class myModel extends model
             ->fetchAll('id');
 
         $this->loadModel('ppm');
-        foreach($ppms as $ppm)
+        foreach($ppms as $ppmID => $ppm)
         {
             if($ppm->reviewStatus)
             {
+                if($ppm->reviewStatus == 'pass')
+                {
+                    unset($ppms[$ppmID]);
+                    continue;
+                }
                 $ppm->status = $ppm->reviewStatus;
             }
             else
@@ -1365,7 +1370,13 @@ class myModel extends model
 
                 $flow = new stdClass();
                 $flow->definition = $definition;
-                $ppm->status = $this->ppm->getReviewResult($reviewers, empty($flow->definition) ? array() : $flow);
+                $reviewResult = $this->ppm->getReviewResult($reviewers, empty($flow->definition) ? array() : $flow);
+                if(!in_array($reviewResult, array('pending', 'inProgress')))
+                {
+                    unset($ppms[$ppmID]);
+                    continue;
+                }
+                $ppm->status = $reviewResult;
             }
         }
         return $ppms;

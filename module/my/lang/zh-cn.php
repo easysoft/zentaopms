@@ -177,7 +177,7 @@ $lang->my->featureBar['audit']['story']       = $lang->SRCommon;
 $lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
 $lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
 $lang->my->featureBar['audit']['testcase']    = '用例';
-$lang->my->featureBar['audit']['ppm']         = '合并请求';
+$lang->my->featureBar['audit']['ppm']         = '评审请求';
 if(in_array($config->edition, array('max', 'ipd')) and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = '反馈';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = '办公';
