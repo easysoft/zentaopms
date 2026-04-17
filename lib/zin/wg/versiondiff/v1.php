@@ -74,7 +74,7 @@ class versiondiff extends wg
             set::menu([
                'checkOnClick' => '.has-checkbox .item',
                'items' => array_values($versionItems),
-               'width' => 200,
+               'width' => 300,
                'header' => jsRaw('setVersionDropdownHeader'),
                'footer' => jsRaw('setVersionDropdownFooter'),
                'getItem' => jsRaw('getVersionItem'),
