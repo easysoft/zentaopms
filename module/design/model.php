@@ -534,9 +534,10 @@ class designModel extends model
     {
         return $this->dao->select('t1.deliverable')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
             ->where('t1.project')->eq($projectID)
             ->andWhere('t1.frozen')->ne('')
-            ->andWhere('t2.category')->in('HLDS,DDS,DBDS,ADS')
+            ->andWhere('t3.extra')->eq('design')
             ->fetchPairs();
     }
 
