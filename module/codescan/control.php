@@ -1215,8 +1215,7 @@ class codescan extends control
             $this->loadModel('ci')->setMenu($repoID);
         }
 
-        $gitfoxRepos = $this->loadModel('repo')->getGitFoxRepos();
-        $repoList    = array_column($gitfoxRepos, 'name', 'serviceProject');
+        $repoList = $this->loadModel('repo')->getRepoPairs();
 
         if($taskID)
         {

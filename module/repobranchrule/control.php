@@ -145,7 +145,7 @@ class repobranchrule extends control
         $this->view->originRule   = !$originRule ? array() : $originRule;
         $this->view->users        = $this->repo->getRepoMembers($repo);
         $this->view->branchTypes  = $branchTypes;
-        $this->view->reviewFlows  = $this->loadModel('reporeviewflow')->getPairs($repoID);
+        $this->view->reviewFlows  = $this->loadModel('reporeviewflow')->getPairs($repoID, 'enable');
         $this->display();
     }
 

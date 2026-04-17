@@ -174,11 +174,12 @@ class reporeviewflowModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(int $repoID = 0): array
+    public function getPairs(int $repoID = 0, string $status = ''): array
     {
         return $this->dao->select('id, name')->from(TABLE_REVIEWFLOW)
             ->where('deleted')->eq(0)
             ->beginIF($repoID)->andWhere('repo')->eq($repoID)->fi()
+            ->beginIF($status)->andWhere('status')->eq($status)->fi()
             ->fetchPairs();
     }
 }
