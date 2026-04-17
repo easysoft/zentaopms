@@ -1333,6 +1333,7 @@ class codescan extends control
         $this->view->repoPair      = array_column($gitFoxRepos, 'id', 'serviceProject');
         $this->view->gitFoxRepos   = $gitFoxRepos;
         $this->view->actions       = $issue ? $this->loadModel('action')->getList('codescanissue', $issueID) : array();
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

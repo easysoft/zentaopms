@@ -788,8 +788,7 @@ class repoModel extends model
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
-            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->orderBy('t1.`time` desc')
             ->fetch();
         if(empty($lastComment)) return false;
@@ -800,7 +799,7 @@ class repoModel extends model
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->fetch('count');
 
         if($repo->SCM == 'Git' && $lastComment->commit != $count)
