@@ -549,7 +549,7 @@ $config->codescan->issue->dtable->fieldList['createdAt']['show']     = true;
 $config->codescan->issue->dtable->fieldList['createdAt']['sortType'] = true;
 $config->codescan->issue->dtable->fieldList['createdAt']['required'] = false;
 
-$config->codescan->issue->dtable->fieldList['planName']['title']    = $lang->codescan->plan;
+$config->codescan->issue->dtable->fieldList['planName']['title']    = $lang->codescan->scanPlan;
 $config->codescan->issue->dtable->fieldList['planName']['width']    = 150;
 $config->codescan->issue->dtable->fieldList['planName']['show']     = false;
 $config->codescan->issue->dtable->fieldList['planName']['sortType'] = false;

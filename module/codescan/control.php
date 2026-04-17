@@ -743,7 +743,7 @@ class codescan extends control
         $this->view->title        = $this->lang->codescan->createPlan;
         $this->view->repoID       = $repoID;
         $this->view->repoList     = $this->loadModel('repo')->getRepoPairs();
-        $this->view->solutionList = $this->codescanZen->getListByQuery('solution');
+        $this->view->solutionList = $this->codescanZen->getListByQuery('solution', 0, 0, 'enabled');
         $this->display();
     }
 

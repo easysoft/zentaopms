@@ -248,10 +248,11 @@ class codescanZen extends codescan
      * @param  string    $query
      * @param  int       $serviceRepoID
      * @param  int       $taskID
+     * @param  string    $status
      * @access protected
      * @return array
      */
-    protected function getListByQuery(string $query = 'ruleset', int $serviceRepoID = 0, int $taskID = 0): array
+    protected function getListByQuery(string $query = 'ruleset', int $serviceRepoID = 0, int $taskID = 0, string $status = ''): array
     {
         $list   = array();
         $page   = 1;
@@ -275,7 +276,9 @@ class codescanZen extends codescan
             }
             else
             {
-                $result = $this->codescan->$method(array('page' => $page, 'limit' => 100));
+                $params = array('page' => $page, 'limit' => 100);
+                if($status) $params['status'] = $status;
+                $result = $this->codescan->$method($params);
             }
             if(empty($result) || empty($result->data)) break;
 
