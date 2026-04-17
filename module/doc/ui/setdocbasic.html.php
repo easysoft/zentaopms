@@ -51,7 +51,7 @@ formPanel(
         set::label($lang->doc->docUrl),
         set::name('content'),
         set::required(true),
-        set::control(array('control' => 'input', 'name' => 'content', 'type' => 'url', 'value' => $urlValue))
+        set::value($urlValue)
     ) : null,
     input(set::type('hidden'), set::name('docID'), set::value(isset($doc) && $doc->id ? $doc->id : '')),
     input(set::type('hidden'), set::name('type'), set::value($docType ?: 'text')),

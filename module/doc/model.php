@@ -1634,7 +1634,7 @@ class docModel extends model
             {
                 return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
             }
-            if(!filter_var($doc->content, FILTER_VALIDATE_URL))
+            if(!preg_match($this->config->doc->urlValidator, $doc->content))
             {
                 return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
             }
@@ -1745,6 +1745,18 @@ class docModel extends model
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
+        }
+
+        if($doc->type == 'url')
+        {
+            if(empty($doc->content))
+            {
+                return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
+            }
+            if(!preg_match($this->config->doc->urlValidator, $doc->content))
+            {
+                return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
+            }
         }
 
         $files = $this->loadModel('file')->saveUpload('doc', $docID);

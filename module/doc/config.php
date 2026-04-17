@@ -25,6 +25,9 @@ $config->doc->textTypes         = 'html,markdown,text';
 $config->doc->docTypes          = 'text,word,ppt,excel,url,article,attachment';
 $config->doc->saveDraftInterval = '60';
 
+/* URL 验证正则：http|https（可选） + hostname + 路径（可选） */
+$config->doc->urlValidator = '/^(https?:\/\/)?[a-zA-Z0-9][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}(\/.*)?$/i';
+
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
 $config->doc->custom->showLibs   = 'zero,children';
