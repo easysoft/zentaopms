@@ -23,10 +23,8 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
-    $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' Feedback|feedback|browse|browseType=unclosed';
-    $lang->mainNav->oa       = $lang->navIcons['oa'] . ' OA|attend|personal|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
@@ -42,9 +40,8 @@ $lang->mainNav->menuOrder[65] = 'admin';
 
 if($config->edition != 'open')
 {
-    $lang->mainNav->menuOrder[21] = 'oa';
     $lang->mainNav->menuOrder[25] = 'feedback';
-    $lang->dividerMenu = ',oa,admin,';
+    $lang->dividerMenu = ',admin,';
 
     if($config->visions == ',lite,') unset($lang->mainNav->menuOrder[25]);
 }
@@ -142,6 +139,13 @@ $lang->doc->menuOrder[10] = 'quick';
 $lang->doc->menuOrder[15] = 'my';
 $lang->doc->menuOrder[20] = 'custom';
 $lang->doc->menuOrder[25] = 'project';
+
+if(strpos(',max,ipd,', $config->edition) !== false)
+{
+    $lang->doc->menu->template = array('link' => "Template|doc|browseTemplate|", 'alias' => 'browsetemplate');
+    $lang->doc->menuOrder[30]  = 'template';
+    $lang->doc->dividerMenu   .= ',template,';
+}
 
 /* Admin menu. */
 $lang->admin->menu = new stdclass();
