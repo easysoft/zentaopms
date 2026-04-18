@@ -120,6 +120,7 @@ $config->project->noSprintPriv['projectstory'] = array();
 $config->project->noSprintPriv['build']        = array();
 
 $config->project->includedPriv = $config->project->noSprintPriv;
+unset($config->project->includedPriv['execution']);
 $config->project->includedPriv['project'][]   = 'execution';
 $config->project->includedPriv['execution']   = array('task', 'create', 'view', 'dynamic', 'updateOrder', 'all', 'doc', 'effortCalendar', 'create', 'edit', 'batchedit', 'batchchangestatus', 'start', 'activate', 'putoff', 'suspend', 'close', 'manageProducts', 'delete', 'export', 'whitelist', 'addWhitelist', 'unbindWhitelist', 'deliverable', 'gantt', 'ganttsetting', 'importtask', 'importplanstories', 'importBug', 'team', 'manageMembers', 'unlinkMember', 'taskKanban', 'printKanban', 'executionkanban', 'kanban', 'setKanban', 'grouptask', 'burn', 'computeBurn', 'fixFirst', 'linkStory', 'unlinkStory', 'batchUnlinkStory', 'storySort', 'storyEstimate', 'effort', 'testcase', 'bug', 'testtask', 'testreport', 'relation', 'createrelation', 'editrelation', 'batcheditrelation', 'deleterelation', 'batchdeleterelation', 'build', 'story', 'storyKanban', 'storyView', 'tree', 'treeTask', 'treeStory', 'taskEffort', 'computeTaskEffort', 'calendar');
 $config->project->includedPriv['story']       = array('create', 'batchCreate', 'edit', 'delete', 'view', 'change', 'review', 'recall', 'close', 'batchChangeStage', 'batchEdit', 'batchClose', 'assignTo', 'activate', 'zeroCase', 'importToLib', 'batchImportToLib', 'tasks', 'bugs', 'cases', 'submitReview', 'batchChangeBranch', 'processStoryChange', 'relieved', 'createBranch', 'unlinkBranch', 'batchToTask');
@@ -150,6 +151,9 @@ $config->project->projectPriv['build']       = array();
 if($config->edition != 'max') $config->project->projectPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect', 'userIssue');
 unset($config->project->includedPriv['projectstory']);
 unset($config->project->includedPriv['build']);
+
+$config->project->noProductPriv['productplan'] = array('linkStory', 'unlinkStory', 'batchUnlinkStory', 'linkBug', 'unlinkBug', 'batchUnlinkBug', 'batchEdit', 'start', 'finish', 'close', 'activate', 'batchChangeStatus', 'delete');
+$config->project->noProductPriv['projectplan'] = array('browse', 'create', 'edit', 'view');
 
 $config->project->noProductPriv['productplan'] = array('linkStory', 'unlinkStory', 'batchUnlinkStory', 'linkBug', 'unlinkBug', 'batchUnlinkBug', 'batchEdit', 'start', 'finish', 'close', 'activate', 'batchChangeStatus', 'delete');
 $config->project->noProductPriv['projectplan'] = array('browse', 'create', 'edit', 'view');

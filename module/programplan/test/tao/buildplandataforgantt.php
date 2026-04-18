@@ -18,7 +18,7 @@ cid=17763
  - 属性type @plan
  - 属性text @项目集1<icon class='icon icon-flag icon-sm red'></icon>
  - 属性start_date @28-09-2023
- - 属性percent @10
+ - 属性percent @10.00
 
 */
 

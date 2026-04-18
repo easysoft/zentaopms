@@ -84,6 +84,7 @@ if(!$isTemplate && $type != 'gantt' && !$noSupport)
 $ganttView = null;
 if($type == 'gantt' && !empty($ganttData))
 {
+    foreach($ganttFields as $field => $name) $ganttFields[$field] = strip_tags($name);
     $ganttView = zui::gantt
     (
         set::onInit(jsRaw('window.onInitGantt')),

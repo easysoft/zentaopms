@@ -146,6 +146,7 @@ class executionTao extends executionModel
             if(isset($postData->project))                 $executions[$executionID]->project   = zget($postData->project, $executionID, 0);
             if(isset($postData->attribute[$executionID])) $executions[$executionID]->attribute = zget($postData->attribute, $executionID, '');
             if(isset($postData->lifetime[$executionID]))  $executions[$executionID]->lifetime  = $postData->lifetime[$executionID];
+            if(isset($postData->schedule[$executionID]))  $executions[$executionID]->schedule  = $postData->schedule[$executionID];
 
             $oldExecution = $oldExecutions[$executionID];
             $projectID    = isset($executions[$executionID]->project) ? (int)$executions[$executionID]->project : (int)$oldExecution->project;

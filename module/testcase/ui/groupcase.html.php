@@ -24,6 +24,7 @@ if(!empty($cols['actions']['list']))
         $cols['actions']['list'][$method]['url'] = str_replace('%executionID%', (string)$executionID, $methodParams['url']);
     }
 }
+if(!$this->config->testcase->needReview && empty($config->testcase->forceReview)) unset($cols['actions']['menu'][1][0]);
 foreach($cols as $colName => $col) $cols[$colName]['sortType'] = false;
 
 $cases = initTableData(array_values($cases), $cols);

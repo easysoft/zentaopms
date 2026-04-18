@@ -133,10 +133,11 @@ class programplanModel extends model
      * @param  bool    $returnJson
      * @param  string  $browseType
      * @param  int     $queryID
+     * @param  string  $orderBy
      * @access public
      * @return string|array
      */
-    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, $browseType = '', $queryID = 0): string|array
+    public function getDataForGantt(int $projectID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0, string $orderBy = ''): string|array
     {
         $plans   = $this->getStage($projectID, $productID, 'all', 'order');
         $project = $this->loadModel('project')->getById($projectID);
@@ -162,7 +163,6 @@ class programplanModel extends model
         /* Set plan for gantt view. */
         $result = $this->programplanTao->initGanttPlans($plans, $browseType);
         $datas          = $result['datas'];
-        $planIdList     = $result['planIdList'];
         $stageIndex     = $result['stageIndex'];
         $reviewDeadline = $result['reviewDeadline'];
 
@@ -173,6 +173,9 @@ class programplanModel extends model
         $result     = $this->programplanTao->setTask($tasks, $plans, $selectCustom, $datas, $stageIndex);
         $datas      = $result['datas'];
         $stageIndex = $result['stageIndex'];
+
+        /* 根据排序字段手动排序。 Manually sort by order field. */
+        if(!empty($datas['data'])) $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         /* Build data for ipd. */
         if($project->model == 'ipd' and $datas) $datas = $this->programplanTao->buildGanttData4IPD($datas, $projectID, $productID, $selectCustom, $reviewDeadline);
@@ -189,9 +192,10 @@ class programplanModel extends model
     }
 
     /**
-     * 获取按照指派给分组甘特图相关数据。
+     * 获取分组后的甘特图相关数据。
      * Gets Gantt chart related data as assigned to the group.
      *
+     * @param  string  $type
      * @param  int     $executionID
      * @param  int     $productID
      * @param  int     $baselineID
@@ -199,19 +203,19 @@ class programplanModel extends model
      * @param  bool    $returnJson
      * @param  string  $browseType
      * @param  int     $queryID
+     * @param  string  $orderBy
      * @access public
      * @return string|array
      */
-    public function getDataForGanttGroupByAssignedTo(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0): string|array
+    public function getDataForGanttGroup(string $type, int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true, string $browseType = '', int $queryID = 0, string $orderBy = ''): string|array
     {
         $datas       = array();
         $stageIndex  = array();
 
         $plans      = $this->getStage($executionID, $productID);
         $planIdList = array_column($plans, 'id');
-        $users      = $this->loadModel('user')->getPairs('noletter');
-        $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID);
-        $tasksGroup = $this->programplanTao->buildTaskGroup($tasks);
+        $tasks      = $this->getGanttTasks($executionID, $planIdList, $browseType, $queryID, null, $type);
+        $tasksGroup = $this->programplanTao->buildTaskGroup($tasks, $type);
 
         /* Judge whether to display tasks under the stage. */
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=programplan&section=browse&key=stageCustom");
@@ -233,16 +237,29 @@ class programplanModel extends model
         $groupID = 0;
         $datas['data'] = array();
         $workingDays   = $this->loadModel('holiday')->getActualWorkingDays($begin, $end);
+
+        $objects = array();
+        if(in_array($type, array('assignedTo', 'finishedBy', 'closedBy'))) $objects = $this->loadModel('user')->getPairs('noletter');
+        if($type == 'module') $objects = $this->loadModel('tree')->getModulesName(array_keys($tasksGroup));
+        if($type == 'story')  $objects = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in(array_keys($tasksGroup))->fetchPairs('id', 'title');
+
+        if(in_array($type, array('finishedBy', 'closedBy')))
+        {
+            $unDoneTasks = !empty($tasksGroup['']) ? $tasksGroup[''] : array();
+            if(!empty($unDoneTasks))
+            {
+                unset($tasksGroup['']);
+                $tasksGroup[''] = $unDoneTasks;
+            }
+        }
+
         foreach($tasksGroup as $group => $tasks)
         {
             if(!$group) $group = '/'; // 未指派
             $groupID ++;
             $groupKey = $groupID . $group;
-            $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, $group, $users);
+            $datas['data'][$groupKey] = $this->programplanTao->buildGroupDataForGantt($groupID, (string)$group, $type, $objects);
 
-            $realStartDate = array();
-            $realEndDate   = array();
-            $totalTask     = count($tasks);
             foreach($tasks as $taskID => $task)
             {
                 $dateLimit = $this->programplanTao->getTaskDateLimit($task, zget($plans, $task->execution, null));
@@ -268,21 +285,19 @@ class programplanModel extends model
                     $datas['data'][$task->id] = $data;
                 }
 
-                if(!empty($dateLimit['start'])) $realStartDate[] = strtotime($dateLimit['start']);
-                if(!empty($dateLimit['end']))   $realEndDate[]   = strtotime($dateLimit['end']);
-
                 if(!isset($stageIndex[$groupKey]['totalConsumed'])) $stageIndex[$groupKey]['totalConsumed'] = 0;
+                if(!isset($stageIndex[$groupKey]['totalLeft']))     $stageIndex[$groupKey]['totalLeft']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalReal']))     $stageIndex[$groupKey]['totalReal']     = 0;
                 if(!isset($stageIndex[$groupKey]['totalEstimate'])) $stageIndex[$groupKey]['totalEstimate'] = 0;
                 $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
+                $stageIndex[$groupKey]['totalLeft']     += $task->left;
                 $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
                 $stageIndex[$groupKey]['totalEstimate'] += $task->estimate;
             }
-
-            /* Calculate group realBegan and realEnd. */
-            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d', min($realStartDate));
-            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d', max($realEndDate));
         }
+
+        /* 根据排序字段手动排序。 Manually sort by order field. */
+        if(!empty($datas['data']) && $orderBy != 'id_asc') $datas['data'] = $this->programplanTao->sortForGantt($datas['data'], $orderBy);
 
         $datas = $this->programplanTao->setStageSummary($datas, $stageIndex);
         $datas['links'] = $this->programplanTao->buildGanttLinks($executionID, $datas['data']);
@@ -387,6 +402,12 @@ class programplanModel extends model
         $prevLevel            = 0;
         foreach($plans as $plan)
         {
+            if(!empty($plan->schedule))
+            {
+                $schedule = json_decode($plan->schedule, true);
+                if(!empty($schedule['calendar'])) $plan->days = count($schedule['calendar']);
+            }
+
             $level    = isset($plan->level) ? $plan->level : 0;
             $syncData = isset($plan->syncData) ? $plan->syncData : null;
             unset($plan->level, $plan->syncData);
@@ -862,10 +883,11 @@ class programplanModel extends model
      * @param  string $browseType
      * @param  int    $queryID
      * @param  object $pager
+     * @param  string $type
      * @access public
      * @return array
      */
-    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null)
+    public function getGanttTasks(int $projectID, array $planIdList, string $browseType, int $queryID, ?object $pager = null, string $type = 'execution')
     {
         $tasks = array();
         if($browseType == 'bysearch')
@@ -886,21 +908,27 @@ class programplanModel extends model
             $projectTaskQuery = $this->session->projectTaskQuery;
             $projectTaskQuery .= " AND `project` = '$projectID'";
             $projectTaskQuery .= " AND `execution` " . helper::dbIN($planIdList);
+            $projectTaskQuery .= " AND `status` != 'cancel' AND `closedReason` != 'cancel'";
 
             $this->session->set('projectTaskQueryCondition', $projectTaskQuery, $this->app->tab);
             $this->session->set('projectTaskOnlyCondition', true, $this->app->tab);
 
-            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, 'execution_asc,order_asc,id_asc', $pager, 'projectTask');
+            $tasks = $this->loadModel('execution')->getSearchTasks($projectTaskQuery, "{$type}_asc,beginDate_asc,id_asc", $pager, 'projectTask');
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus')->from(TABLE_TASK)->alias('t1')
+            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.estStarted IS NULL, t3.`begin`, t1.estStarted) as beginDate')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.project')->eq($projectID)
                 ->andWhere('t1.execution')->in($planIdList)
-                ->orderBy('execution_asc, order_asc, id_asc')
-                ->fetchAll('id');
+                ->beginIF($browseType == 'nowait')->andWhere('t1.status')->ne('wait')->fi()
+                ->beginIF($browseType != 'nowait')->andWhere('t1.status')->ne('cancel')->fi()
+                ->beginIF($browseType != 'nowait')->andWhere('t1.closedReason')->ne('cancel')->fi()
+                ->filterTpl('skip')
+                ->orderBy("{$type}_asc,beginDate_asc,id_asc")
+                ->fetchAll('id', false);
         }
 
         $isGantt = $this->app->rawModule == 'programplan' && $this->app->rawMethod == 'browse';
@@ -928,6 +956,7 @@ class programplanModel extends model
             /* Story changed or not. */
             $task->storyVersion = zget($storyVersionPairs, $task->id, $task->storyVersion);
             $task->needConfirm  = false;
+            $task->rawStatus    = $task->status;
             if(!empty($task->storyStatus) && $task->storyStatus == 'active' && !in_array($task->status, array('cancel', 'closed')) && $task->latestStoryVersion > $task->storyVersion)
             {
                 $task->needConfirm = true;
@@ -961,5 +990,188 @@ class programplanModel extends model
             if(($weekend == 2 && $weekDay == 6) || $weekDay == 7) unset($days[$key]);
         }
         return count($days);
+    }
+
+    /**
+     * 获取甘特图的版本。
+     * Get all versions for gantt.
+     *
+     * @param int    $projectID
+     * @param int    $productID
+     * @param string $type       project|execution
+     * @access public
+     * @return array
+     */
+    public function getGanttVersions(int $projectID, int $productID = 0, string $type = 'project'): array
+    {
+        /* 1. 甘特图创建的版本。 Gantt version. */
+        $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
+            ->where('type')->eq('taged')
+            ->andWhere('status')->eq('gantt')
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF($type == 'execution')->andWhere('execution')->eq($projectID)->fi()
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->orderBy('id_asc')
+            ->fetchAll('id', false);
+
+        /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
+        if($type == 'execution') return $ganttVersions;
+
+        $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
+            ->where('t2.id')->eq($projectID)
+            ->fetch('disabledFeatures');
+
+        /* 2. 交付物的项目计划。 Project plan of deliverable. */
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t3.category')->eq('PP')
+            ->andWhere('t2.status')->eq('pass')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('deliverable')
+            ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->fetchAll('id', false);
+        /* 3. 基线评审的版本。 Project plan of baseline. */
+        $baselineVersions = array();
+        if(strpos(",{$disabledFeatures},", ',cm,') === false)
+        {
+            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.category')->eq('PP')
+                ->fetchPairs();
+            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+                ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.status')->eq('pass')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t2.type')->eq('baseline')
+                ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+                ->fetchAll('id', false);
+            foreach($baselineVersions as $baselineVersion)
+            {
+                if(isset($ppCategories[$baselineVersion->category])) continue;
+                foreach(explode(',', $baselineVersion->category) as $category)
+                {
+                    if(isset($ppCategories[$category])) continue 2;
+                }
+
+                unset($baselineVersions[$baselineVersion->id]);
+            }
+        }
+
+        /* 4. 合并版本。 Merge versions. */
+        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        ksort($versions, SORT_NUMERIC);
+
+        return $versions;
+    }
+
+    /**
+     * 获取甘特图的数据。
+     * Get gantt data.
+     *
+     * @param int    $versionID
+     * @access public
+     * @return array
+     */
+    public function getGanttDataByVersion(int $versionID): array
+    {
+        $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
+        if(empty($object)) return array();
+
+        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+
+        /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
+        if(empty($object->data) && !empty($object->categoryVersion))
+        {
+            $categoryVersion = json_decode($object->categoryVersion, true);
+            $object = $this->dao->select('t2.*')->from(TABLE_REVIEW)->alias('t1')
+                ->leftJoin(TABLE_OBJECT)->alias('t2')->on('t1.object=t2.id')
+                ->where('t1.id')->in($categoryVersion)
+                ->andWhere('t2.data')->ne('')
+                ->orderBy('t2.id_desc')
+                ->fetch();
+        }
+
+        if(!empty($object->data))
+        {
+            /* 从docblock表中获取甘特图的数据。 From docblock table, get the gantt data. */
+            $blockID = zget(zget(json_decode($object->data), 'fetcherParams', array()), 'param2', 0);
+            $content = $this->dao->select('*')->from(TABLE_DOCBLOCK)->where('id')->eq($blockID)->fetch('content');
+
+            if(empty($content)) return array();
+            return (array)zget(json_decode($content), 'ganttOptions', array());
+        }
+
+        return array();
+    }
+
+    /**
+     * 处理实际进度的甘特图数据。
+     * Process nowait gantt data.
+     *
+     * @param array   $tasks
+     * @access public
+     * @return array
+     */
+    public function processNoWaitGanttData(array $tasks): array
+    {
+        $pausedTasks = array();
+        foreach($tasks as $task)
+        {
+            if(empty($task->type) || $task->type != 'task') continue;
+            if(isset($task->rawStatus) && $task->rawStatus == 'pause')
+            {
+                $taskID = (string)$task->id;
+                if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
+                $pausedTasks[$taskID] = $taskID;
+            }
+        }
+
+        $pausedTasksDate = array();
+        if($pausedTasks)
+        {
+            $pausedTasksDate = $this->dao->select('objectID,`date`')->from(TABLE_ACTION)->where('objectType')->eq('task')
+                ->andWhere('action')->eq('paused')
+                ->andWhere('objectID')->in($pausedTasks)
+                ->orderBy('id')
+                ->fetchPairs('objectID', 'date');
+        }
+
+        $today = helper::today();
+        return array_values(array_filter($tasks, function($data) use($today, $pausedTasksDate)
+        {
+            if(empty($data->type) || $data->type != 'task') return true;
+
+            $status = $data->status;
+            if(isset($data->rawStatus)) $status = $data->rawStatus;
+            if($status == 'wait') return false;
+            if(empty($data->realBegan)) return false;
+
+            $taskID = (string)$data->id;
+            if(strpos($taskID, '-') !== false) $taskID = explode('-', $taskID)[1];
+
+            $realBegan = $data->realBegan;
+            $realEnd   = $data->realEnd;
+            if($status == 'doing')  $realEnd = $data->deadline;
+            if($status == 'cancel') $realEnd = $data->canceledDate;
+            if($status == 'pause')  $realEnd = zget($pausedTasksDate, $taskID, '');
+
+            $useBegan = false;
+            if($realBegan > $realEnd)
+            {
+                $realEnd  = $realBegan;
+                $useBegan = true;
+            }
+            if($useBegan && $realBegan < $today) $realEnd = $today;
+            $data->start_date = date('d-m-Y', strtotime($realBegan));
+            $data->endDate    = date('d-m-Y', strtotime($realEnd));
+            $data->duration   = helper::diffDate($data->endDate, $data->start_date) + 1;
+            return true;
+        }));
     }
 }

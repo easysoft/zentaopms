@@ -36,7 +36,6 @@ cid=16297
 - 不是超级超级管理员账号，判断执行数据。 @~~
 
 */
-
 $executionTester = new executionModelTest();
 $executionTester->instance->app->user->admin = true;
 

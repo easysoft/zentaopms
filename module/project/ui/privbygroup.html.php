@@ -169,6 +169,7 @@ else
         foreach($packages[$subsetName] as $packageID => $package)
         {
             $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
+            if($subsetName == 'executionview') $subsetTitle = $lang->project->executionView;
 
             $privBodyHtml[] = "<tr zui-key='$packageID'>";
             if($i == 1)

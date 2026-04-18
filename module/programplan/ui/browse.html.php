@@ -26,5 +26,5 @@ if(empty($plans))
 }
 else
 {
-    if($type == 'gantt' or $type == 'assignedTo') include './gantt.html.php';
+    if(isset($lang->programplan->ganttBrowseType[$type])) include './gantt.html.php';
 }

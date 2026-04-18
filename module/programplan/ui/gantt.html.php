@@ -14,7 +14,9 @@ namespace zin;
 
 include './ganttfields.html.php';
 
+$isDiffMode = isset($ganttBaseline);
 $showFields = str_replace('PM', 'owner_id', $showFields);
+$isHistory  = (is_numeric($versionID) && $versionID > 0) || $versionID == 'nowait';
 $isFromDoc  = $from === 'doc';
 if($isFromDoc)
 {
@@ -74,19 +76,85 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     if($project->stageBy == 'product' && empty($project->isTpl))
     {
         $viewName = $productID != 0 ? zget($productList, $productID) : $lang->product->allProduct;
-        $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0&type=gantt"), 'active' => $productID == 'all' || $productID == '0'));
-        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key&type=gantt"), 'active' => ($productID == $key || ($key == 0 && $productID == 'all')));
+        $items    = array(array('text' => $lang->product->allProduct, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=0"), 'active' => $productID == 'all' || $productID == '0'));
+        foreach($productList as $key => $productName) $items[] = array('text' => $productName, 'url' => $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$key"), 'active' => ($productID == $key || ($key == 0 && $productID == 'all')));
         $productDropdown = dropdown
         (
             btn(set::type('link'), setClass('no-underline'), $viewName),
             set::items($items)
         );
     }
+
+    /* Build versions for dropdown. */
+    $browseTemplate = createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s");
+    $versionItems   = array();
+    $currentVersion = $lang->project->version;
+    foreach($versions as $version)
+    {
+        $item = array('title' => $version->version, 'value' => $version->id, 'hint' => $version->version);
+        if($version->reviewType == 'deliverable') $item['actions'][] = array('text' => $lang->project->deliverableAbbr, 'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
+        if($version->reviewType == 'baseline')    $item['actions'][] = array('text' => $lang->project->baseline,        'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
+        if($version->reviewType == 'gantt')
+        {
+            $item['hint']    = $version->items;
+            $item['actions'] = array();
+            if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'hint' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
+            if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'hint' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
+        }
+
+        if($version->id == $versionID)
+        {
+            $currentVersion = $version->version;
+            $item['class']  = 'selected';
+        }
+        $versionItems[$version->id] = $item;
+    }
+
+    $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '', 'className' => 'sticky canvas', 'style' => array('bottom' => '-8px', 'height' => '32px'));
+    if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}&type={$type}"), 'data-toggle' => 'modal'));
+    $versionItems['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
+    $versionItems['0']      = $item;
+    if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
+    if($versionID == '0' && $isDiffMode) $currentVersion = $lang->project->latestVersion;
+
+    $langData = [];
+    $langData['allVersions'] = $lang->project->allVersions;
+    $langData['compare']     = $lang->project->diffVersion;
+    $langData['confirm']     = $lang->confirm;
+    $langData['cancel']      = $lang->cancel;
+
+    $isLatestVersion = empty($versionID) && !$isDiffMode;
     featureBar
     (
-        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->programplan->gantt, set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=gantt"))),
+        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
         $productDropdown,
-        $hasSearch ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null
+        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
+        li
+        (
+            setID('versionList'),
+            setClass('ml-2'),
+            setStyle(array('order' => '10010')),
+            versiondiff
+            (
+                setClass('inline-block'),
+                set::appendClass('fixed-item'),
+                set::versionID($versionID),
+                set::currentVersion($currentVersion),
+                set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
+                set::diffMode($isDiffMode),
+                set::versionItems($versionItems),
+                set::diffLang($langData),
+                set::browseTemplate($browseTemplate),
+                set::baseline($isDiffMode ? $ganttBaseline : null)
+            ),
+            icon
+            (
+                'help',
+                setID('diffNotice'),
+                setClass($isDiffMode ? '' : 'hidden'),
+                set::title($lang->programplan->noticeDiffVersion)
+            )
+        )
     );
     toolbar
     (
@@ -95,8 +163,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             btn(setClass('square switchBtn text-primary'), set::title($lang->programplan->gantt), icon('gantt-alt')),
             btn(setClass('square switchBtn'), set::title($lang->project->bylist), set::url($this->createLink('project', 'execution', "status=all&projectID=$projectID")), icon('list'))
         ),
-        btn(setClass('no-underline text-primary'), set::type('link'), setID('criticalPath'), $lang->execution->gantt->showCriticalPath, set::url('javascript:updateCriticalPath()')),
-        btn(setClass('no-underline'), set::type('link'), setID('fullScreenBtn'), set::icon('fullscreen'), $lang->programplan->full),
         dropdown
         (
             btn(set::type('link'), setClass('no-underline'), set::icon('export'), $lang->export),
@@ -106,7 +172,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 array('text' => $lang->execution->gantt->exportPDF, 'url' => 'javascript:exportGantt("pdf")')
             ))
         ),
-        btn(set::url($this->createLink('programplan', 'ajaxcustom')), set::icon('cog-outline'), $lang->settings, setClass('no-underline'), set::type('link'), set('data-toggle', 'modal'), set('data-size', 'sm')),
         common::hasPriv('programplan', 'relation') ? btn(set::url($this->createLink('programplan', 'relation', "projectID={$projectID}")), set::icon('list-alt'), $lang->programplan->setTaskRelation, setClass('no-underline'), set::type('link')) : null,
         (common::canModify('project', $project) && common::hasPriv('programplan', 'create') && empty($product->deleted)) ? btn(set::url($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID")), set::icon('plus'), $lang->programplan->create, setClass('primary programplan-create-btn')) : null
     );
@@ -116,14 +181,19 @@ gantt
 (
     set('ganttLang', $ganttLang),
     set('ganttFields', $ganttFields),
-    set('canEdit', $isFromDoc ? false : hasPriv('programplan', 'ganttEdit')),
-    set('canEditDeadline', $isFromDoc ? false : hasPriv('review', 'edit')),
+    set('canEdit', $isFromDoc || $isHistory ? false : hasPriv('programplan', 'ganttEdit')),
+    set('canEditDeadline', $isFromDoc || $isHistory ? false : hasPriv('review', 'edit')),
     set('zooming', isset($zooming) ? $zooming : 'day'),
     set('showChart', !$dateDetails),
     set('users', $users),
     set('showFields', $showFields),
+    set::root($projectID),
+    set::settingLink(createLink('programplan', 'ajaxcustom')),
+    set::toolbar($isFromDoc ? array() : array('criticalPath', 'fullscreen', 'setting')),
     set::exportFileName('gantt-export-' . $projectID),
     set::weekend(array('weekend' => zget($config->execution, 'weekend', 2), 'restDay' => zget($config->execution, 'restDay', 0))),
+    set::holidays($holidays),
+    set::workingDays($workingDays),
     set('options', $plans)
 );
 

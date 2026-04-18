@@ -1587,6 +1587,26 @@ class actionModel extends model
                 }
             }
         }
+        if($action->objectType == 'ganttversion')
+        {
+            $ganttversion = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($action->objectID)->fetch();
+            if(empty($ganttversion))
+            {
+                $action->objectName = $action->extra;
+                return $action;
+            }
+
+            $project    = $this->loadModel('project')->fetchById($action->project);
+            $moduleName = 'programplan';
+            $methodName = 'browse';
+            $params     = "projectID={$ganttversion->project}&productID={$ganttversion->product}&type={$ganttversion->category}&orderBy=id_asc&baselineID=0&browseType=&queryID=0&from=project&blockID=0&version={$ganttversion->id}";
+            if(!empty($ganttversion->execution))
+            {
+                $moduleName = 'execution';
+                $methodName = 'gantt';
+                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bySearch=0&param=&version={$ganttversion->id}";
+            }
+        }
 
         if($action->objectType == 'team') list($moduleName, $methodName, $params) = $this->getObjectTypeTeamParams($action);
         if($action->objectType == 'story' && $this->config->vision == 'lite') list($moduleName, $methodName, $params) = array('projectstory', 'view', "storyID={$action->objectID}");
