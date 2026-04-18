@@ -459,42 +459,6 @@ $config->group->subset->feedbackpriv = new stdclass();
 $config->group->subset->feedbackpriv->order = 1820;
 $config->group->subset->feedbackpriv->nav   = 'feedback';
 
-$config->group->subset->attend = new stdclass();
-$config->group->subset->attend->order = 1830;
-$config->group->subset->attend->nav   = 'oa';
-
-$config->group->subset->leave = new stdclass();
-$config->group->subset->leave->order = 1840;
-$config->group->subset->leave->nav   = 'oa';
-
-$config->group->subset->makeup = new stdclass();
-$config->group->subset->makeup->order = 1850;
-$config->group->subset->makeup->nav   = 'oa';
-
-$config->group->subset->overtime = new stdclass();
-$config->group->subset->overtime->order = 1860;
-$config->group->subset->overtime->nav   = 'oa';
-
-$config->group->subset->lieu = new stdclass();
-$config->group->subset->lieu->order = 1870;
-$config->group->subset->lieu->nav   = 'oa';
-
-$config->group->subset->officeapproval = new stdclass();
-$config->group->subset->officeapproval->order = 1880;
-$config->group->subset->officeapproval->nav   = 'oa';
-
-$config->group->subset->officesetting = new stdclass();
-$config->group->subset->officesetting->order = 1890;
-$config->group->subset->officesetting->nav   = 'oa';
-
-$config->group->subset->datapermission = new stdclass();
-$config->group->subset->datapermission->order = 1900;
-$config->group->subset->datapermission->nav   = 'oa';
-
-$config->group->subset->officeexport = new stdclass();
-$config->group->subset->officeexport->order = 1910;
-$config->group->subset->officeexport->nav   = 'oa';
-
 $config->group->subset->traincourse = new stdclass();
 $config->group->subset->traincourse->order = 2000;
 $config->group->subset->traincourse->nav   = 'traincourse';
@@ -1568,100 +1532,6 @@ $config->group->package->importCaseLib->privs['caselib-exportTemplate'] = array(
 $config->group->package->importCaseLib->privs['caselib-import']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('caselib-browse', 'caselib->exportTemplate', 'caselib-exportTemplate', 'caselib-showImport'), 'recommend' => array());
 $config->group->package->importCaseLib->privs['caselib-showImport']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array('caselib-import'), 'recommend' => array());
 
-$config->group->package->officeApproval = new stdclass();
-$config->group->package->officeApproval->order  = 5;
-$config->group->package->officeApproval->subset = 'officeapproval';
-$config->group->package->officeApproval->privs  = array();
-$config->group->package->officeApproval->privs['attend-review']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('attend-browseReview', 'attend-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['leave-browseReview']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['leave-review']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-personal', 'leave-browseReview', 'leave-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['leave-back']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['makeup-browseReview']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['makeup-review']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('attend-personal', 'makeup-browseReview', 'makeup-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['overtime-browseReview'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['overtime-review']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('attend-personal', 'overtime-browseReview', 'overtime-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['lieu-browseReview']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 8, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array());
-$config->group->package->officeApproval->privs['lieu-review']           = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('attend-personal', 'lieu-browseReview', 'lieu-personal'), 'recommend' => array());
-
-$config->group->package->attend = new stdclass();
-$config->group->package->attend->order  = 10;
-$config->group->package->attend->subset = 'attend';
-$config->group->package->attend->privs  = array();
-$config->group->package->attend->privs['attend-browseReview'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->attend->privs['attend-detail']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->attend->privs['attend-personal']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array(), 'recommend' => array('attend-edit'));
-$config->group->package->attend->privs['attend-edit']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-personal'), 'recommend' => array('attend-browseReview'));
-
-$config->group->package->officeSetting = new stdclass();
-$config->group->package->officeSetting->order  = 5;
-$config->group->package->officeSetting->subset = 'officesetting';
-$config->group->package->officeSetting->privs  = array();
-$config->group->package->officeSetting->privs['attend-settings']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['attend-personalSettings'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['attend-setManager']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['leave-setReviewer']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['leave-personalAnnual']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['makeup-setReviewer']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['overtime-setReviewer']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array());
-$config->group->package->officeSetting->privs['lieu-setReviewer']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('attend-personal'), 'recommend' => array());
-
-$config->group->package->dataPermission = new stdclass();
-$config->group->package->dataPermission->order  = 5;
-$config->group->package->dataPermission->subset = 'datapermission';
-$config->group->package->dataPermission->privs  = array();
-$config->group->package->dataPermission->privs['attend-department'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['attend-company']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['attend-stat']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 35, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['attend-saveStat']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('attend-personal', 'attend-stat'), 'recommend' => array());
-$config->group->package->dataPermission->privs['leave-company']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['makeup-company']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['overtime-company']  = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('attend-personal'), 'recommend' => array());
-$config->group->package->dataPermission->privs['lieu-company']      = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('attend-personal'), 'recommend' => array());
-
-$config->group->package->leave = new stdclass();
-$config->group->package->leave->order  = 5;
-$config->group->package->leave->subset = 'leave';
-$config->group->package->leave->privs  = array();
-$config->group->package->leave->privs['leave-personal']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('attend-personal'), 'recommend' => array('leave-create', 'leave-edit', 'leave-view'));
-$config->group->package->leave->privs['leave-create']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array('leave-delete', 'leave-edit', 'leave-switchstatus', 'leave-view'));
-$config->group->package->leave->privs['leave-edit']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array('leave-create', 'leave-delete', 'leave-switchstatus', 'leave-view'));
-$config->group->package->leave->privs['leave-delete']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array('leave-create', 'leave-edit', 'leave-switchstatus', 'leave-view'));
-$config->group->package->leave->privs['leave-view']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->leave->privs['leave-switchstatus'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array('leave-create', 'leave-delete', 'leave-edit', 'leave-view'));
-
-$config->group->package->makeup = new stdclass();
-$config->group->package->makeup->order  = 5;
-$config->group->package->makeup->subset = 'makeup';
-$config->group->package->makeup->privs  = array();
-$config->group->package->makeup->privs['makeup-personal']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('attend-personal'), 'recommend' => array('makeup-create', 'makeup-edit', 'makeup-view'));
-$config->group->package->makeup->privs['makeup-create']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 35, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array('makeup-delete', 'makeup-edit', 'makeup-switchstatus', 'makeup-view'));
-$config->group->package->makeup->privs['makeup-edit']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array('makeup-create', 'makeup-delete', 'makeup-switchstatus', 'makeup-view'));
-$config->group->package->makeup->privs['makeup-view']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 45, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array());
-$config->group->package->makeup->privs['makeup-delete']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array('makeup-create', 'makeup-edit', 'makeup-switchstatus', 'makeup-view'));
-$config->group->package->makeup->privs['makeup-switchstatus'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 55, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array('makeup-create', 'makeup-delete', 'makeup-edit', 'makeup-view'));
-
-$config->group->package->overtime = new stdclass();
-$config->group->package->overtime->order  = 5;
-$config->group->package->overtime->subset = 'overtime';
-$config->group->package->overtime->privs  = array();
-$config->group->package->overtime->privs['overtime-personal']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('attend-personal'), 'recommend' => array('overtime-create', 'overtime-edit', 'overtime-view'));
-$config->group->package->overtime->privs['overtime-create']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 35, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array('overtime-delete', 'overtime-edit', 'overtime-switchstatus', 'overtime-view'));
-$config->group->package->overtime->privs['overtime-edit']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array('overtime-create', 'overtime-delete', 'overtime-switchstatus', 'overtime-view'));
-$config->group->package->overtime->privs['overtime-view']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 45, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array());
-$config->group->package->overtime->privs['overtime-delete']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array('overtime-create', 'overtime-edit', 'overtime-switchstatus', 'overtime-view'));
-$config->group->package->overtime->privs['overtime-switchstatus'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 55, 'depend' => array('attend-personal', 'overtime-personal'), 'recommend' => array('overtime-create', 'overtime-delete', 'overtime-edit', 'overtime-view'));
-
-$config->group->package->lieu = new stdclass();
-$config->group->package->lieu->order  = 5;
-$config->group->package->lieu->subset = 'lieu';
-$config->group->package->lieu->privs  = array();
-$config->group->package->lieu->privs['lieu-personal']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 25, 'depend' => array('attend-personal'), 'recommend' => array('lieu-create', 'lieu-edit', 'lieu-view'));
-$config->group->package->lieu->privs['lieu-create']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 30, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array('lieu-delete', 'lieu-edit', 'lieu-switchstatus', 'lieu-view'));
-$config->group->package->lieu->privs['lieu-edit']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 35, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array('lieu-create', 'lieu-delete', 'lieu-switchstatus', 'lieu-view'));
-$config->group->package->lieu->privs['lieu-delete']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array('lieu-create', 'lieu-edit', 'lieu-switchstatus', 'lieu-view'));
-$config->group->package->lieu->privs['lieu-view']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 45, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array());
-$config->group->package->lieu->privs['lieu-switchstatus'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('attend-personal', 'lieu-personal'), 'recommend' => array('lieu-create', 'lieu-delete', 'lieu-edit', 'lieu-view'));
-
 $config->group->package->holiday = new stdclass();
 $config->group->package->holiday->order  = 10;
 $config->group->package->holiday->subset = 'featureconfig';
@@ -1671,17 +1541,6 @@ $config->group->package->holiday->privs['holiday-create'] = array('edition' => '
 $config->group->package->holiday->privs['holiday-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('holiday-browse'), 'recommend' => array('holiday-create'));
 $config->group->package->holiday->privs['holiday-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('holiday-browse'), 'recommend' => array('holiday-create', 'holiday-edit'));
 $config->group->package->holiday->privs['holiday-import'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('holiday-browse'), 'recommend' => array('holiday-create'));
-
-$config->group->package->exportOffice = new stdclass();
-$config->group->package->exportOffice->order  = 5;
-$config->group->package->exportOffice->subset = 'officeexport';
-$config->group->package->exportOffice->privs  = array();
-$config->group->package->exportOffice->privs['attend-export']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('attend-department', 'attend-personal'), 'recommend' => array());
-$config->group->package->exportOffice->privs['attend-exportStat']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('attend-personal', 'attend-stat'), 'recommend' => array());
-$config->group->package->exportOffice->privs['attend-exportDetail'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('attend-detail', 'attend-personal'), 'recommend' => array());
-$config->group->package->exportOffice->privs['leave-export']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('attend-personal', 'leave-personal'), 'recommend' => array());
-$config->group->package->exportOffice->privs['makeup-export']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('attend-personal', 'makeup-personal'), 'recommend' => array());
-$config->group->package->exportOffice->privs['overtime-export']     = array('edition' => 'biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 4, 'depend' => array('attend-personal'), 'recommend' => array());
 
 $config->group->package->browseFeedback = new stdclass();
 $config->group->package->browseFeedback->order  = 5;

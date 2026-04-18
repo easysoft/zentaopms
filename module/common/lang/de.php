@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -125,6 +126,8 @@ $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
 $lang->delFiles        = 'Deleted Files ';
 $lang->deleteSuccess   = 'Gelöscht';
+$lang->confirmDelete   = 'Do you want to delete it?';
+$lang->deleteing       = 'Deleting...';
 $lang->deleted         = 'Gelöscht';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
