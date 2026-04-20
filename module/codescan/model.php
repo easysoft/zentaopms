@@ -856,9 +856,15 @@ class codescanModel extends model
      */
     public function getScanIssueList(int $taskID, array $params = array()): object|array
     {
-        if(isset($params['repoID'])) $params['repoID'] = (int)$params['repoID'];
-        if(isset($params['ruleID'])) $params['ruleID'] = (int)$params['ruleID'];
-        if(isset($params['taskID'])) $params['taskID'] = (int)$params['taskID'];
+        if(isset($params['repoID']))   $params['repoID'] = (int)$params['repoID'];
+        if(isset($params['ruleID']))   $params['ruleID'] = (int)$params['ruleID'];
+        if(isset($params['taskID']))   $params['taskID'] = (int)$params['taskID'];
+
+        if(isset($params['priority']))  $params['rulePriority'] = $params['priority'];
+        if(isset($params['type']))      $params['ruleType']     = $params['type'];
+        if(isset($params['plugin']))    $params['tool']         = $params['plugin'];
+        if(isset($params['createdAt'])) $params['createDate']   = $params['createdAt'];
+        if(isset($params['plan']))      $params['planID']       = (int)$params['plan'];
 
         $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues/list';
         $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
