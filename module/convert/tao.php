@@ -89,9 +89,9 @@ class convertTao extends convertModel
             $customFieldKey = str_replace('customfield_', '', $fieldKey);
             if(is_array($fieldValue))
             {
-                if(!empty($fieldValue['content']) && !empty($fieldValue['renderedFields'][$fieldKey]))
+                if(!empty($fieldValue['content']) && !empty($data['renderedFields'][$fieldKey]))
                 {
-                    $issue->{$customFieldKey} = $fieldValue['renderedFields'][$fieldKey];
+                    $issue->{$customFieldKey} = $data['renderedFields'][$fieldKey];
                 }
                 elseif(!empty($fieldValue['id']))
                 {
@@ -597,7 +597,7 @@ class convertTao extends convertModel
         $worklog->author      = zget($data, 'author',     '');
         $worklog->worklogbody = zget($data, 'body',       '');
         $worklog->timeworked  = zget($data, 'timeworked', 0);
-        $worklog->created     = zget($data, 'created',    NULL);
+        $worklog->created     = zget($data, 'created',    null);
 
         return $worklog;
     }
@@ -847,7 +847,7 @@ class convertTao extends convertModel
                     $zentaoBuild = new stdclass();
                     $zentaoBuild->id           = $version['id'];
                     $zentaoBuild->vname        = $version['name'];
-                    $zentaoBuild->releasedDate = isset($version['releasedDate']) ? $version['releasedDate'] : null;
+                    $zentaoBuild->releasedate  = isset($version['releaseDate'])  ? $version['releaseDate'] : null;
                     $zentaoBuild->archived     = isset($version['archived'])     ? $version['archived']     : 0;
                     $zentaoBuild->released     = isset($version['released'])     ? $version['released']     : 0;
                     $zentaoBuild->startdate    = isset($version['startDate'])    ? $version['startDate']    : null;
@@ -918,7 +918,7 @@ class convertTao extends convertModel
                     {
                         if(!empty($fieldValue->datevalue))
                         {
-                            $data->{$fieldValue->customfield} = date('Y-m-d H:i:s', strtotime($fieldValue->datevalue)); // 日期类型是datevalue
+                            $data->{$fieldValue->customfield} = $this->formatDatetime(date('Y-m-d H:i:s', strtotime($fieldValue->datevalue))); // 日期类型是datevalue
                         }
                         elseif(!empty($fieldValue->numbervalue))
                         {
@@ -1157,7 +1157,7 @@ class convertTao extends convertModel
             $effort = new stdclass();
             $effort->vision     = $this->config->vision;
             $effort->objectID   = $objectID;
-            $effort->date       = !empty($data->created) ? substr($data->created, 0, 10) : null;
+            $effort->date       = !empty($data->created) ? $this->formatDate(substr($data->created, 0, 10)) : null;
             $effort->account    = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $effort->consumed   = round($data->timeworked / 3600, 2);
             $effort->work       = $data->worklogbody;
@@ -1206,7 +1206,7 @@ class convertTao extends convertModel
             $action->objectID   = $objectID;
             $action->actor      = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $action->action     = 'commented';
-            $action->date       = isset($data->created) ? substr($data->created, 0, 19) : '';
+            $action->date       = isset($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : '';
             $action->comment    = $comment;
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1250,7 +1250,7 @@ class convertTao extends convertModel
             $action->objectID   = $objectID;
             $action->actor      = $this->getJiraAccount(isset($group->author) ? $group->author : '');
             $action->action     = 'commented';
-            $action->date       = isset($group->created) ? substr($group->created, 0, 19) : '';
+            $action->date       = isset($group->created) ? $this->formatDatetime(substr($group->created, 0, 19)) : '';
             $action->comment    = sprintf($this->lang->convert->jira->changeItems, $data->field, $data->oldstring, $data->newstring);
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1326,7 +1326,7 @@ class convertTao extends convertModel
             $file->objectID   = $objectID;
             $file->extra      = in_array($file->objectType, array('epic', 'requirement', 'story')) ? '1' : '';
             $file->addedBy    = $this->getJiraAccount(isset($fileAttachment->author) ? $fileAttachment->author : '');
-            $file->addedDate  = !empty($fileAttachment->created) ? substr($fileAttachment->created, 0, 19) : null;
+            $file->addedDate  = !empty($fileAttachment->created) ? $this->formatDatetime(substr($fileAttachment->created, 0, 19)) : null;
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             $fileID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1424,7 +1424,7 @@ class convertTao extends convertModel
         $project->grade         = 1;
         $project->acl           = 'open';
         $project->auth          = 'extend';
-        $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : helper::now();
+        $project->begin         = !empty($data->created) ? $this->formatDate(substr($data->created, 0, 10)) : helper::now();
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
         $project->days          = helper::diffDate($project->end, $project->begin) + 1;
         $project->PM            = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
@@ -1550,8 +1550,8 @@ class convertTao extends convertModel
                 $execution->desc          = !empty($sprint->goal) ? $sprint->goal : '';
                 $execution->type          = 'sprint';
                 $execution->acl           = 'open';
-                $execution->begin         = !empty($sprint->startDate) ? substr($sprint->startDate, 0, 10) : helper::now();
-                $execution->end           = !empty($sprint->endDate)   ? substr($sprint->endDate, 0, 10)   : date('Y-m-d', time() + 24 * 3600);
+                $execution->begin         = !empty($sprint->startDate) ? $this->formatDate(substr($sprint->startDate, 0, 10)) : helper::now();
+                $execution->end           = !empty($sprint->endDate)   ? $this->formatDate(substr($sprint->endDate, 0, 10))   : date('Y-m-d', time() + 24 * 3600);
                 $execution->days          = helper::diffDate($execution->end, $execution->begin) + 1;
                 $execution->PM            = $project->PM;
                 $execution->openedBy      = $project->openedBy;
@@ -1678,7 +1678,15 @@ class convertTao extends convertModel
             {
                 $fields      = $this->session->jiraMethod == 'api' ? zget($customFields, $data->issuetype, array()) : $customFields;
                 $controlCode = !empty($fields[$jiraField]->customfieldtypekey) ? $fields[$jiraField]->customfieldtypekey : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
-                if(strpos($controlCode, 'userpicker') !== false || strpos($controlCode, 'people') !== false)
+
+                if(strpos($controlCode, 'multiuserpicker') !== false || strpos($controlCode, 'people') !== false)
+                {
+                    $users = explode(',', $data->{$jiraField});
+
+                    $object->{$zentaoField} = '';
+                    foreach($users as $user) $object->{$zentaoField} .= $this->getJiraAccount($user) . ',';
+                }
+                elseif(strpos($controlCode, 'userpicker') !== false)
                 {
                     $object->{$zentaoField} = $this->getJiraAccount($data->{$jiraField});
                 }
@@ -1739,7 +1747,7 @@ class convertTao extends convertModel
         $story->stage      = $this->convertStage($data->issuestatus, $data->issuetype, $relations);
         $story->status     = $this->convertStatus('story', $data->issuestatus, $data->issuetype, $relations);
         $story->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $story->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $story->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
         if($story->assignedTo) $story->assignedDate = helper::now();
@@ -1839,9 +1847,9 @@ class convertTao extends convertModel
         $task->status     = $this->convertStatus('task', $data->issuestatus, $data->issuetype, $relations);
         $task->desc       = isset($data->description) ? $data->description : '';
         $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $task->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $task->deadline   = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $task->deadline   = !empty($data->duedate) ? $this->formatDate(substr($data->duedate, 0, 10)) : null;
 
         if($task->assignedTo) $task->assignedDate = helper::now();
 
@@ -1905,10 +1913,10 @@ class convertTao extends convertModel
         $bug->status      = $this->convertStatus('bug', $data->issuestatus, $data->issuetype, $relations);
         $bug->steps       = isset($data->description) ? $data->description : '';
         $bug->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $bug->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $bug->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $bug->openedBuild = 'trunk';
         $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $bug->deadline    = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $bug->deadline    = !empty($data->duedate) ? $this->formatDate(substr($data->duedate, 0, 10)) : null;
 
         if($bug->assignedTo) $bug->assignedDate = helper::now();
 
@@ -1981,7 +1989,7 @@ class convertTao extends convertModel
         $case->pri        = $data->priority ? $data->priority : 3;
         $case->status     = $this->convertStatus('testcase', $data->issuestatus, $data->issuetype, $relations);
         $case->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $case->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $case->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
 
         $case = $this->processBuildinFieldData('testcase', $data, $case, $relations, $customFields);
 
@@ -2039,7 +2047,7 @@ class convertTao extends convertModel
         $feedback->status      = $this->convertStatus('feedback', $data->issuestatus, $data->issuetype, $relations);
         $feedback->desc        = isset($data->description) ? $data->description : '';
         $feedback->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $feedback->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $feedback->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $feedback->assignedTo  = $feedback->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
         if($feedback->assignedTo) $feedback->assignedDate = helper::now();
@@ -2098,7 +2106,7 @@ class convertTao extends convertModel
         $ticket->status      = $this->convertStatus('ticket', $data->issuestatus, $data->issuetype, $relations, $relations);
         $ticket->desc        = isset($data->description) ? $data->description : '';
         $ticket->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $ticket->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $ticket->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $ticket->assignedTo  = $ticket->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
         $ticket->openedBuild = 'trunk';
 
@@ -2154,7 +2162,7 @@ class convertTao extends convertModel
         $build->project     = $projectID;
         $build->system      = $systemID;
         $build->name        = $data->vname;
-        $build->date        = !empty($data->releasedate) ? substr($data->releasedate, 0, 10) : null;
+        $build->date        = !empty($data->releasedate) ? $this->formatDate(substr($data->releasedate, 0, 10)) : null;
         $build->builder     = $this->app->user->account;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
@@ -2221,10 +2229,10 @@ class convertTao extends convertModel
         $release->system       = $build->system;
         $release->build        = $build->id;
         $release->name         = $build->name;
-        $release->date         = helper::isZeroDate($data->startdate) ? NULL : substr($data->startdate, 0, 10);
+        $release->date         = helper::isZeroDate($data->startdate) ? null : $this->formatDate(substr($data->startdate, 0, 10));
         $release->desc         = isset($data->description) ? $data->description : '';
         $release->status       = $status;
-        $release->releasedDate = !empty($data->released) && !empty($data->releasedDate) ? substr($data->releasedDate, 0, 10) : null;
+        $release->releasedDate = !empty($data->released) && !empty($data->releasedate) ? $this->formatDate(substr($data->releasedate, 0, 10)) : null;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();

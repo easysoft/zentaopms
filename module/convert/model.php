@@ -1542,4 +1542,38 @@ EOT;
 
         return $this->batchImportJiraData($result['type'], $result['lastID'], false);
     }
+
+    /**
+     * 将日期转成对应时区的日期。
+     * Format date.
+     *
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function formatDate(string $date): string
+    {
+        if($this->session->jiraMethod == 'api') return $date;
+
+        $dateUTC = new DateTime($date, new DateTimeZone('UTC'));
+        $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
+        return $dateUTC->format('Y-m-d');
+    }
+
+    /**
+     * 将日期转成对应时区的日期。
+     * Format date.
+     *
+     * @param  string $date
+     * @access public
+     * @return string
+     */
+    public function formatDatetime(string $datetime): string
+    {
+        if($this->session->jiraMethod == 'api') return $datetime;
+
+        $dateUTC = new DateTime($datetime, new DateTimeZone('UTC'));
+        $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
+        return $dateUTC->format('Y-m-d H:i:s');
+    }
 }

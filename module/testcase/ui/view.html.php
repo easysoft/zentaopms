@@ -228,6 +228,6 @@ detail
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
-    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version={$version}&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
+    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version=0&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
     $versionBtn
 );

@@ -38,6 +38,52 @@ class convertTaoTest extends baseTest
     }
 
     /**
+     * Test createExecution method.
+     *
+     * @param  int   $jiraProjectID
+     * @param  array $sprintGroup
+     * @param  array $projectRoleActor
+     * @access public
+     * @return mixed
+     */
+    public function createExecutionTest(int $jiraProjectID, array $sprintGroup, array $projectRoleActor)
+    {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
+        $this->instance->app->loadLang('doc');
+
+        $project = new stdclass();
+        $project->id       = 1;
+        $project->name     = '项目A';
+        $project->code     = 'projectA';
+        $project->PM       = 'admin';
+        $project->openedBy = 'admin';
+        $project->desc     = '项目描述';
+        $project->begin    = '2026-04-11';
+        $project->end      = '2026-05-11';
+
+        $result = $this->invokeArgs('createExecution', array($jiraProjectID, $project, $sprintGroup, $projectRoleActor));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test processWorkflowHooks method.
      *
      * @param  array  $jiraAction
@@ -742,8 +788,8 @@ class convertTaoTest extends baseTest
         $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : date('Y-m-d');
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
         $project->days          = abs(strtotime($project->end) - strtotime($project->begin)) / (24 * 3600) + 1;
-        $project->PM            = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
-        $project->openedBy      = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->PM            = isset($data->lead) ? $data->lead : '';
+        $project->openedBy      = isset($data->lead) ? $data->lead : '';
         $project->openedDate    = date('Y-m-d H:i:s');
         $project->openedVersion = '18.0';
         $project->storyType     = 'story,epic,requirement';

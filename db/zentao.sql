@@ -1585,6 +1585,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `realBegan` date DEFAULT NULL,
   `realEnd` date DEFAULT NULL,
   `days` smallint unsigned NOT NULL DEFAULT 0,
+  `schedule` mediumtext DEFAULT NULL,
   `status` varchar(10) NOT NULL DEFAULT '',
   `subStatus` varchar(30) NOT NULL DEFAULT '',
   `pri` tinyint unsigned NOT NULL DEFAULT 1,

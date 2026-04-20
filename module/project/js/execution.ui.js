@@ -95,6 +95,7 @@ window.onRenderCell = function(result, {col, row})
     if(col.name == 'rawID' && data.parent && !data.isExecution) result.push({className: 'ml-5'});
     if(['estimate', 'consumed', 'left', 'totalEstimate', 'totalConsumed', 'totalLeft'].includes(col.name) && result && typeof result[0] != 'undefined') result[0] = data.type == 'point' ? '' : {html: result[0] + ' h'};
     if(col.name == 'progress' && data.type == 'point') result[0] = '';
+    if(col.name == 'taskSchedule' && row.data.taskSchedule == 'exception') result[0] = {html: '<span class="text-warning">' + result[0].props.children + '</span>'};
 
     return result;
 }

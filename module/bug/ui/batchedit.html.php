@@ -165,7 +165,8 @@ formBatchPanel
         set::control('picker'),
         set::items(array()),
         set::width('200px'),
-        set::multiple(true)
+        set::multiple(true),
+        set::required(true)
     ),
     /* Field of plan. */
     formBatchItem

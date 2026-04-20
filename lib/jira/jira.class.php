@@ -76,6 +76,11 @@ class jira
             $projects[$project['id']] = $project;
         }
 
+        foreach($projects as $index => $project)
+        {
+            $projects[$index]['versions'] = $this->getBuilds($project['id']);
+        }
+
         return $projects;
     }
 

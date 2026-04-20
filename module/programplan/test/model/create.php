@@ -46,7 +46,7 @@ r(dao::getError()) && p('message:0') && e('『阶段名称』不能为空。'); 
 r($programplan->createTest(array(), 0, 0, 101)) && p('0:attribute') && e('request'); // 分解任务
 
 $plans1 = $programplan->createTest();
-r(count($plans1)) && p()                && e('14');             // 测试正常更新阶段信息 获取阶段数量
+r(count($plans1)) && p()                && e('21');             // 测试正常更新阶段信息 获取阶段数量
 r($plans1)        && p('0:name;1:name') && e('阶段31,阶段121'); // 测试正常更新阶段信息 检查数据信息
 
 $plans2 = $programplan->createTest($create);

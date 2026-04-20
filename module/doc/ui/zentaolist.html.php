@@ -84,14 +84,14 @@ if(!$isTemplate && $type != 'gantt' && !$noSupport)
 $ganttView = null;
 if($type == 'gantt' && !empty($ganttData))
 {
-    if($showFields[0] == '"') $showFields = json_decode($showFields);
+    foreach($ganttFields as $field => $name) $ganttFields[$field] = strip_tags($name);
     $ganttView = zui::gantt
     (
         set::onInit(jsRaw('window.onInitGantt')),
         set::data($ganttData['data']),
         set::links($ganttData['links']),
         set::ganttFields($ganttFields),
-        set::showFields('text,begin,duration,' . $showFields),
+        set::showFields('text,owner_id,begin,deadline,status,duration'),
         set::userList($userList),
         set::exts('zentao')
     );
