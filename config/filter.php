@@ -566,3 +566,14 @@ $filter->admin->register->cookie['zentaosid']    = 'reg::any';
 $filter->admin->getcaptcha->cookie['zentaosid']  = 'reg::any';
 $filter->admin->sendcode->cookie['zentaosid']    = 'reg::any';
 $filter->admin->giftpackage->cookie['zentaosid'] = 'reg::any';
+
+$filter->codescan = new stdclass();
+$filter->codescan->issue       = new stdclass();
+$filter->codescan->ignoreissue = new stdclass();
+$filter->codescan->issue->cookie['issueFile']         = 'string';
+$filter->codescan->ignoreissue->cookie['issueIdList'] = 'reg::any';
+
+$filter->bug->batchcreate->cookie['issueIdList']      = 'reg::any';
+
+$filter->codescan->taskview = new stdclass();
+$filter->codescan->taskview->cookie['scanIssueUrlParams'] = 'string';
