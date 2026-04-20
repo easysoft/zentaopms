@@ -442,6 +442,7 @@ pipeline {
                         container('package') {
                           sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
                         }
+                      }
                     } // End Upload
                   }
                 } // End Zbox win
@@ -486,6 +487,7 @@ pipeline {
                         container('package') {
                           sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
                         }
+                      }
                     } // End Upload
                   }
                 } // End Zbox linux
@@ -686,6 +688,7 @@ pipeline {
               container('package') {
                 sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
               }
+            }
           }
         } // End Upload rongpm
 
@@ -703,3 +706,4 @@ pipeline {
   }
 
 }
+
