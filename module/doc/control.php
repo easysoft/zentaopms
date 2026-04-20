@@ -2505,9 +2505,10 @@ class doc extends control
 
         $this->view->docType = $docType;
 
-        if($modalType == 'doc' && $docType == 'url')
+        if($modalType == 'doc')
         {
-            $title = $isCreate ? $this->lang->doc->create : $this->lang->settings;
+            $editTitle = $docType == 'url' ? $this->lang->doc->edit : $this->lang->settings;
+            $title     = $isCreate ? $this->lang->doc->create : $editTitle;
         }
         elseif($modalType == 'doc' && $isDraft != 'no')
         {
