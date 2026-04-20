@@ -1,0 +1,7 @@
+title: module data
+author: daitingting
+version: 1.0.0
+
+fields:
+  - field: extra
+    range: 'design'
