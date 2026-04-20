@@ -239,6 +239,7 @@ $lang->project->linkType           = 'Link Type';
 $lang->project->colWidth           = 'Column Width';
 $lang->project->minColWidth        = 'Minimum Column Width';
 $lang->project->maxColWidth        = 'Maximum Column Width';
+$lang->project->syncStory          = 'Stage Story Settings';
 
 /* Project Category. */
 $lang->project->projectTypeList = array();
@@ -543,3 +544,7 @@ $lang->project->disabledHint->linkedStory             = "{$lang->projectCommon} 
 $lang->project->disabledHint->createdStage            = "{$lang->productCommon} contains created stages. To unlink it from {$lang->projectCommon}, please remove the created stages first.";
 $lang->project->disabledHint->linkedStoryAndStage     = "{$lang->productCommon} contains created stages and linked {$lang->SRCommon}. To disconnect it from {$lang->projectCommon}, please unlink {$lang->SRCommon} first and then delete the created stages.";
 $lang->project->disabledHint->linkedStoryAndExecution = "{$lang->SRCommon} in{$lang->productCommon} is currently linked to {$lang->projectCommon} and {$lang->execution->common}. Please unlink {$lang->SRCommon} from {$lang->projectCommon} and {$lang->execution->common} first.";
+
+$lang->project->syncStoryList = array();
+$lang->project->syncStoryList[1] = 'Auto-sync with project stories (Stage stories always match project stories exactly.)';
+$lang->project->syncStoryList[0] = 'Manually link stage stories (Stage stories are linked manually and may differ from project stories.)';
