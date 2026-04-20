@@ -12,3 +12,18 @@ window.actionItemCreator = function (item, {row})
     }
     return item;
 };
+
+window.renderTaskCell = function (result, {col, row})
+{
+    if(col.name == 'planName')
+    {
+        const planID = String(row.data.planID);
+
+        if(!Object.keys(planList).includes(planID))
+        {
+            result[0] = row.data.planName;
+        }
+    }
+
+    return result;
+};
