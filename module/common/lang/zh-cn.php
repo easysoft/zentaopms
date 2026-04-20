@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = '和';
 $lang->to        = '至';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -125,6 +126,8 @@ $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->delFiles        = '删除了附件 ';
 $lang->deleteSuccess   = '删除成功';
+$lang->confirmDelete   = '您确定要执行删除操作吗？';
+$lang->deleteing       = '删除中';
 $lang->deleted         = '已删除';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';

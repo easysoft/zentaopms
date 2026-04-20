@@ -23,10 +23,8 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
-    if(helper::hasFeature('OA')) $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' Feedback|feedback|browse|browseType=unclosed';
-    if(helper::hasFeature('OA')) $lang->mainNav->oa       = $lang->navIcons['oa'] . ' OA|attend|personal|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
@@ -42,9 +40,8 @@ $lang->mainNav->menuOrder[65] = 'admin';
 
 if($config->edition != 'open')
 {
-    $lang->mainNav->menuOrder[21] = 'oa';
     $lang->mainNav->menuOrder[25] = 'feedback';
-    $lang->dividerMenu = ',oa,admin,';
+    $lang->dividerMenu = ',admin,';
 
     if($config->visions == ',lite,') unset($lang->mainNav->menuOrder[25]);
 }

@@ -1511,8 +1511,14 @@ class myModel extends model
     {
         if($this->config->edition == 'open') return array();
 
+        /* Check attend exist or not. */
+        $this->loadModel('dept');
+        $this->loadModel('attend');
+        if(!method_exists($this->dept, 'getDeptManagedByMe')) return array();
+        if(!isset($this->attend)) return array();
+
         /* Get dept info. */
-        $allDeptList = $this->loadModel('dept')->getDeptPairs();
+        $allDeptList = $this->dept->getDeptPairs();
         $allDeptList['0'] = '/';
         $managedDeptList = array();
         $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);
