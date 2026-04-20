@@ -439,9 +439,9 @@ pipeline {
                         script {
                           buildZboxWin.copyToPreUploadDir()
                         }
-                        container('package') {
-                          sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
-                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
                       }
                     } // End Upload
                   }
@@ -484,9 +484,9 @@ pipeline {
                         script {
                           buildZboxLinux.copyToPreUploadDir()
                         }
-                        container('package') {
-                          sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
-                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
                       }
                     } // End Upload
                   }
@@ -683,9 +683,6 @@ pipeline {
               container('package') {
                 sh 'mkdir -p output/rongpm/${PMS_VERSION}'
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
-              }
-
-              container('package') {
                 sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
               }
             }
