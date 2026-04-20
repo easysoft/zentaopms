@@ -200,6 +200,20 @@ window.checkRelated = function(name, type)
                 return false;
             }
         }
+        // 开启 质量保证 时，需要确保 过程 已开启
+        else if(name.includes('projectAuditplan'))
+        {
+            if(!isModuleEnabled('projectProcess'))
+            {
+                const message = openDependFeature.replace('{source}', auditplanLang).replace('{target}', processLang);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('projectProcess', true),
+                    () => setModuleState('projectAuditplan', false)
+                );
+                return false;
+            }
+        }
     }
     else
     {
@@ -258,6 +272,19 @@ window.checkRelated = function(name, type)
                     message,
                     () => setModuleState('projectChange', false),
                     () => setModuleState('projectCm', true)
+                );
+            }
+        }
+        // 关闭 过程 时，如果 质量保证 已开启，需要提示关闭 质量保证
+        else if(name.includes('projectProcess'))
+        {
+            if(isModuleEnabled('projectAuditplan'))
+            {
+                const message = closeDependFeature.replace('{source}', processLang).replace('{target}', auditplanLang);
+                showDependencyConfirm(
+                    message,
+                    () => setModuleState('projectAuditplan', false),
+                    () => setModuleState('projectProcess', true)
                 );
             }
         }
