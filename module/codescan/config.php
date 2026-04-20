@@ -226,7 +226,7 @@ $config->codescan->task->search['fields']['repo']     = $lang->codescan->repo;
 $config->codescan->task->search['fields']['branch']   = $lang->codescan->branch;
 $config->codescan->task->search['fields']['status']   = $lang->codescan->runStatus;
 $config->codescan->task->search['fields']['result']   = $lang->codescan->result;
-$config->codescan->task->search['fields']['plan']     = $lang->codescan->plan;
+$config->codescan->task->search['fields']['plan']     = $lang->codescan->scanPlan;
 $config->codescan->task->search['fields']['started']  = $lang->codescan->startTime;
 $config->codescan->task->search['fields']['finished'] = $lang->codescan->endTime;
 
@@ -253,7 +253,7 @@ $config->codescan->issue->search['fields']['type']       = $lang->codescan->type
 $config->codescan->issue->search['fields']['plugin']     = $lang->codescan->tool;
 $config->codescan->issue->search['fields']['status']     = $lang->codescan->status;
 $config->codescan->issue->search['fields']['createdAt']  = $lang->codescan->createTime;
-$config->codescan->issue->search['fields']['plan']       = $lang->codescan->plan;
+$config->codescan->issue->search['fields']['plan']       = $lang->codescan->scanPlan;
 $config->codescan->issue->search['fields']['ruleID']     = $lang->codescan->ruleID;
 
 $config->codescan->issue->search['params']['issueID']    = array('operator' => '=', 'control' => 'input',  'values' => '');
@@ -275,10 +275,6 @@ $config->codescan->remoteFields['latestScanTime']   = 'latestTaskCreated';
 $config->codescan->remoteFields['latestExecStatus'] = 'latestTaskStatus';
 $config->codescan->remoteFields['latestExecResult'] = 'latestTaskResult';
 $config->codescan->remoteFields['scanBranch']       = 'branch';
-$config->codescan->remoteFields['ruleID']           = 'rule_id';
-$config->codescan->remoteFields['rulePriority']     = 'rule_priority';
-$config->codescan->remoteFields['ruleType']         = 'rule_type';
-$config->codescan->remoteFields['issueID']          = 'issue_id';
 
 $config->codescan->apiError = array();
 $config->codescan->apiError[] = 'failed to create solution, solution already exists';

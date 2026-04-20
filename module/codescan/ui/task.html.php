@@ -10,6 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 $isInPlanView = $type == 'task';
+jsVar('planList', $planList);
 if($repoID && !$isInPlanView) dropmenu(set::objectID($repoID), set::tab('repo'));
 if($isInPlanView) include 'plan.header.html.php';
 
@@ -17,8 +18,7 @@ $isInPlanView ? null : featureBar
 (
     div(searchToggle(set::module('codeScanTask'), set::open($type == 'bySearch')))
 );
-$config->codescan->task->dtable->fieldList['repo']['map']    = $repoList;
-$config->codescan->task->dtable->fieldList['planID']['map'] = $planList;
+$config->codescan->task->dtable->fieldList['repo']['map']   = $repoList;
 if($repoID) unset($config->codescan->task->dtable->fieldList['repoID']);
 if($isInPlanView)
 {
@@ -73,6 +73,7 @@ $table = dtable
     set::sortLink(createLink('codescan', $isInPlanView ? 'planview' : 'task', $urlParams)),
     set::orderBy($orderBy),
     set::actionItemCreator(jsRaw('window.actionItemCreator')),
+    set::onRenderCell(jsRaw('window.renderTaskCell')),
     set::footPager(usePager())
 );
 

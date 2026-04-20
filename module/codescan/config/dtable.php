@@ -409,7 +409,8 @@ $config->codescan->task->dtable->fieldList['branch']['hint']     = true;
 $config->codescan->task->dtable->fieldList['branch']['show']     = true;
 $config->codescan->task->dtable->fieldList['branch']['sortType'] = false;
 
-$config->codescan->task->dtable->fieldList['planID']['title']    = $lang->codescan->plan;
+$config->codescan->task->dtable->fieldList['planID']['title']    = $lang->codescan->scanPlan;
+$config->codescan->task->dtable->fieldList['planID']['name']     = 'planName';
 $config->codescan->task->dtable->fieldList['planID']['width']    = '100';
 $config->codescan->task->dtable->fieldList['planID']['hint']     = true;
 $config->codescan->task->dtable->fieldList['planID']['show']     = true;
