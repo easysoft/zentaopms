@@ -711,7 +711,7 @@ class pipeline extends control
             $trigger = new stdClass();
             $trigger->trigger    = $events;
             $trigger->id         = $triggerID;
-            $trigger->pipelineID = $pipelineID;
+            $trigger->pipelineID = (int)$pipelineID;
             $trigger->cron       = $cron;
             $trigger->repoID     = empty($repo) ? 0 : (int)$repo->id;
 
@@ -719,13 +719,13 @@ class pipeline extends control
             {
                 $trigger->editedBy   = $this->app->user->account;
                 $trigger->editedDate = helper::now();
-                $this->pipeline->apiUpdateTrigger($pipelineID, $triggerID, $trigger);
+                $this->pipeline->apiUpdateTrigger((int)$pipelineID, $triggerID, $trigger);
             }
             else
             {
                 $trigger->createdBy   = $this->app->user->account;
                 $trigger->createdDate = helper::now();
-                $this->pipeline->apiCreateTrigger($pipelineID, $trigger);
+                $this->pipeline->apiCreateTrigger((int)$pipelineID, $trigger);
             }
             if(dao::isError()) return $this->sendError(dao::getError());
 

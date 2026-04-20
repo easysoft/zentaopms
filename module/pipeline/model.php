@@ -58,6 +58,7 @@ class pipelineModel extends model
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.name')->ne('_codescan')
             ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
             ->beginIF(!empty($pipelineQuery))->andWhere($pipelineQuery)->fi()
             ->beginIF($spaceID)->andWhere('t1.spaceID')->eq($spaceID)->fi()

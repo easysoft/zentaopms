@@ -833,7 +833,6 @@ class actionTao extends actionModel
         if(in_array($action->objectType, array('repotag', 'repobranch')) && $action->action == 'deleted') $action->objectName = $action->extra;
         if(empty($action->objectName) && substr($objectType, 0, 8) == 'codescan')
         {
-            $type = substr($objectType, 8);
             if(strpos($action->extra, '|') !== false)
             {
                 list($objectName, $params) = explode('|', $action->extra);
@@ -841,15 +840,8 @@ class actionTao extends actionModel
             else
             {
                 $objectName = $action->extra;
-                $params     = "{$type}ID={$action->objectID}";
             }
             $action->objectName = $objectName;
-
-            if(in_array($type, array('rule', 'ruleset', 'solution', 'plan', 'issue', 'task')) && strpos($action->action, 'delete') === false)
-            {
-                $method = $type == 'rule' ? 'view' : $type . 'View';
-                $action->objectLabel = "{$this->lang->action->objectTypes[$objectType]}|codescan|{$method}|{$params}";
-            }
         }
     }
 

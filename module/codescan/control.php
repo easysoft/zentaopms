@@ -934,7 +934,7 @@ class codescan extends control
             $this->view->repoID        = $repoID;
             $this->view->plan          = $plan;
             $this->view->solutionList  = $solutionList;
-            $this->view->repoList      = array_column($this->loadModel('repo')->getGitFoxRepos(), 'name', 'serviceProject');
+            $this->view->repoList      = $this->loadModel('repo')->getRepoPairs();
             $this->view->actions       = $this->loadModel('action')->getList('codescanplan', $planID);
             $this->display();
         }
@@ -1517,8 +1517,7 @@ class codescan extends control
         $result = $this->codescan->resendTask($taskID);
         if(!$result) return $this->sendError($this->lang->codescan->notice->resendFailed);
 
-        $gitfoxRepoList = $this->loadModel('repo')->getGitFoxRepos();
-        $repoList       = array_column($gitfoxRepoList, 'name', 'serviceProject');
+        $repoList = $this->loadModel('repo')->getRepoPairs();
 
         $task = $this->codescan->getScanTask($taskID);
         $task = $this->codescanZen->processTaskData($task, $repoList);
