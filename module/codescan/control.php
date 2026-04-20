@@ -934,7 +934,7 @@ class codescan extends control
             $this->view->repoID        = $repoID;
             $this->view->plan          = $plan;
             $this->view->solutionList  = $solutionList;
-            $this->view->repoList      = array_column($this->loadModel('repo')->getGitFoxRepos(), 'name', 'serviceProject');
+            $this->view->repoList      = $this->loadModel('repo')->getRepoPairs();
             $this->view->actions       = $this->loadModel('action')->getList('codescanplan', $planID);
             $this->display();
         }
