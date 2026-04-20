@@ -2515,10 +2515,6 @@ class doc extends control
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
             if($objectType == 'template') $title = $parentID ? $this->lang->docTemplate->addSubDocTemplate : $this->lang->docTemplate->create;
         }
-        elseif($modalType == 'doc')
-        {
-            $title = $this->lang->settings;
-        }
         elseif($modalType == 'chapter')
         {
             $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
