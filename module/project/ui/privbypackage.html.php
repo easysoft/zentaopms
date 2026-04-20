@@ -145,6 +145,7 @@ else
     {
         if($subset->allCount == 0) continue;
         $subsetTitle = isset($lang->$subsetName) && isset($lang->$subsetName->common) ? $lang->$subsetName->common : $subsetName;
+        if($subsetName == 'executionview') $subsetTitle = $lang->project->executionView;
 
         $privBodyHtml[] = "<tr zui-key='$subsetName'>";
 

@@ -198,6 +198,8 @@ $config->product->all->dtable->fieldList['createdDate']['type']     = 'date';
 $config->product->all->dtable->fieldList['createdDate']['sortType'] = true;
 $config->product->all->dtable->fieldList['createdDate']['group']    = '1';
 
+$isEn = $app->getClientLang() == 'en';
+
 if($config->enableER)
 {
     $config->product->all->dtable->fieldList['draftEpics']['name']        = 'draftEpics';

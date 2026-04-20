@@ -2989,4 +2989,111 @@ class projectModel extends model
             ->fetch('1');
         return !empty($frozenObject);
     }
+
+    /**
+     * 生成新的排期日历。
+     * Compute schedule.
+     *
+     * @param  string $begin
+     * @param  string $end
+     * @param  array  $schedule
+     * @param  object $project
+     * @access public
+     * @return object
+     */
+    public function computeSchedule(string $begin, string $end, array $schedule, object $project = null): object
+    {
+        $calendar        = array();
+        $weekends        = array(1, 2);
+        $begin           = date('Y-m-d', strtotime($begin));
+        $end             = date('Y-m-d', strtotime($end));
+        $workingDays     = $this->getWorkingDays($begin, $end);
+        $projectSchedule = $project ? json_decode($project->schedule, true) : array();
+        $hasSaturday     = $hasSunday = false;
+        for($start = $begin; $start <= $end; $start = date('Y-m-d', strtotime('+1 day', strtotime($start))))
+        {
+            if(!empty($schedule['begin']) && !empty($schedule['end']) && $start >= $schedule['begin'] && $start <= $schedule['end'])
+            {
+                if(isset($schedule['calendar'][$start])) $calendar[$start] = $start;
+            }
+            elseif(!empty($projectSchedule['begin']) && !empty($projectSchedule['end']) && $start >= $projectSchedule['begin'] && $start <= $projectSchedule['end'])
+            {
+                if(isset($projectSchedule['calendar'][$start])) $calendar[$start] = $start;
+            }
+            elseif(isset($workingDays[$start]))
+            {
+                $calendar[$start] = $start;
+            }
+
+            $week = date('w', strtotime($start));
+            if($week == '6') $hasSaturday = true;
+            if($week == '0') $hasSunday = true;
+            if((!isset($calendar[$start]) && $week == '6') || !$hasSaturday) unset($weekends[0]);
+            if((!isset($calendar[$start]) && $week == '0') || !$hasSunday) unset($weekends[1]);
+        }
+
+        $scheduleData = new stdclass();
+        $scheduleData->begin        = $begin;
+        $scheduleData->end          = $end;
+        $scheduleData->minWorkHours = isset($schedule['minWorkHours']) ? $schedule['minWorkHours'] : sprintf('%.1f', $this->config->execution->defaultWorkhours);
+        $scheduleData->maxWorkHours = isset($schedule['maxWorkHours']) ? $schedule['maxWorkHours'] : sprintf('%.1f', $this->config->execution->defaultWorkhours + 1);
+        $scheduleData->workDays     = implode(',', $weekends);
+        $scheduleData->calendar     = $calendar;
+
+        return $scheduleData;
+    }
+
+    /**
+     * 获取某个时间段内的工作日。
+     * Get working days.
+     *
+     * @param  string     $begin
+     * @param  string     $end
+     * @access public
+     * @return array|bool
+     */
+    public function getWorkingDays(string $begin, string $end): array|bool
+    {
+        if(helper::isZeroDate($begin) || helper::isZeroDate($end)) return array();
+
+        /* Get holidays, working days and weekend days .*/
+        $holidays    = $this->loadModel('holiday')->getHolidays($begin, $end);
+        $workingDays = $this->holiday->getWorkingDays($begin, $end);
+        $weekend     = zget($this->config->execution, 'weekend', '2');
+        $restDay     = zget($this->config->execution, 'restDay', '0');
+
+        $actualDays = array();
+        if($begin == $end)
+        {
+            if(in_array($begin, $workingDays)) return array($begin => $begin);
+            if(in_array($begin, $holidays))    return array();
+
+            $week = date('w', strtotime($begin));
+            if($weekend == '2') return $week == '0' || $week == '6';
+            if($weekend == '1') return $week == $restDay;
+
+            return array($begin => $begin);
+        }
+
+        /* Process actual working days. */
+        for($i = 0, $currentDay = $begin; $currentDay < $end; $i ++)
+        {
+            $currentDay = date('Y-m-d', strtotime("{$begin} + {$i} days"));
+            if(in_array($currentDay, $workingDays))
+            {
+                $actualDays[$currentDay] = $currentDay;
+                continue;
+            }
+
+            if(in_array($currentDay, $holidays)) continue;
+
+            $week = date('w', strtotime($currentDay));
+            if($weekend == '2' && ($week == '0' || $week == '6')) continue;
+            if($weekend == '1' && $week == $restDay)              continue;
+
+            $actualDays[$currentDay] = $currentDay;
+        }
+
+        return $actualDays;
+    }
 }

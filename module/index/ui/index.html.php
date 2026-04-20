@@ -132,6 +132,8 @@ h::jsVar('window.appsItems', $appsItems, setID('appsItemsData'));
 h::jsVar('window.searchItems', $searchItems, setID('searchItemsData'));
 h::jsVar('window.userVisions', explode(',', $app->user->visions), setID('userVisionData'));
 
+requireWg('visionSwitcher', '2'); // Use v2 of the versionSwitcher widget
+
 /* The menu fixed on left */
 div
 (

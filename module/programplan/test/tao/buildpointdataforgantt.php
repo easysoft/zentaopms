@@ -43,7 +43,10 @@ $normalPoint->title = '评审点标题1';
 $normalPoint->status = 'pass';
 $normalPoint->reviewID = 1;
 $normalPoint->lastReviewedDate = '2023-06-01 14:00:00';
+$normalPoint->createdBy   = 'admin';
 $normalPoint->createdDate = '2023-01-01 09:00:00';
+$normalPoint->editedBy   = 'admin';
+$normalPoint->editedDate = '2023-01-01 09:00:00';
 $normalPoint->end = '2023-12-31';
 
 $pointWithoutEnd = new stdclass();
@@ -53,7 +56,10 @@ $pointWithoutEnd->title = '基线评审点2';
 $pointWithoutEnd->status = 'reviewing';
 $pointWithoutEnd->reviewID = 2;
 $pointWithoutEnd->lastReviewedDate = '';
+$pointWithoutEnd->createdBy   = 'admin';
 $pointWithoutEnd->createdDate = '2023-02-01 10:00:00';
+$pointWithoutEnd->editedBy   = 'admin';
+$pointWithoutEnd->editedDate = '2023-02-01 10:00:00';
 $pointWithoutEnd->end = '';
 
 $trPoint = new stdclass();
@@ -63,7 +69,10 @@ $trPoint->title = '测试评审点3';
 $trPoint->status = 'wait';
 $trPoint->reviewID = 3;
 $trPoint->lastReviewedDate = '';
+$trPoint->createdBy   = 'admin';
 $trPoint->createdDate = '2023-03-01 11:00:00';
+$trPoint->editedBy   = 'admin';
+$trPoint->editedDate = '2023-03-01 11:00:00';
 $trPoint->end = '';
 
 $dcpPoint = new stdclass();
@@ -73,7 +82,10 @@ $dcpPoint->title = '设计评审点4';
 $dcpPoint->status = 'fail';
 $dcpPoint->reviewID = 4;
 $dcpPoint->lastReviewedDate = '2023-07-01 15:00:00';
+$dcpPoint->createdBy = 'admin';
 $dcpPoint->createdDate = '2023-01-15 09:30:00';
+$dcpPoint->editedBy = 'admin';
+$dcpPoint->editedDate = '2023-01-15 09:30:00';
 $dcpPoint->end = '';
 
 // 5. 准备reviewDeadline数据

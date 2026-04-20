@@ -1,0 +1,5 @@
+.menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}
+.menu-item .item-content {overflow:hidden; text-overflow:clip;}
+.menu-item .item-title {flex:none;}
+#versionBox, #nextBox{max-width:150px;}
+#versionBox .text, #nextBox .text{overflow:hidden}

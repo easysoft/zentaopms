@@ -3813,6 +3813,7 @@ class executionModel extends model
                 $subQuery = $this->dao->select('1')->from(TABLE_TASKTEAM)
                     ->where('task = t1.id')
                     ->andWhere('account' . $matches[1][$matchIndex])
+                    ->andWhere('status')->notin('done,closed')
                     ->get();
 
                 $condition = str_replace(
@@ -3831,6 +3832,7 @@ class executionModel extends model
         }, explode(',', $orderBy));
         $orderBy = str_replace('t1.storyTitle', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
+        $orderBy = str_replace('t1.beginDate', 'beginDate', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
@@ -3846,17 +3848,20 @@ class executionModel extends model
             t2.version AS latestStoryVersion,
             t2.status AS storyStatus,
             t3.realname AS assignedToRealName,
-            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder')
+            IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder,
+            IF(t1.estStarted IS NULL, t4.`begin`, t1.estStarted) as beginDate')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
+            ->filterTpl('skip')
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
-            ->fetchAll('id');
+            ->fetchAll('id', false);
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
+        if(strpos($orderBy, 'beginDate') === false) $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
         return $this->processTasks($tasks);
     }
@@ -3945,12 +3950,12 @@ class executionModel extends model
         if(!commonModel::hasPriv('execution', $action)) return false;
 
         $action = strtolower($action);
-        if($action == 'start')    return $execution->status == 'wait';
-        if($action == 'close')    return $execution->status != 'closed' && (empty($execution->isParent) || !empty($execution->parentCanClose));
-        if($action == 'suspend')  return $execution->status == 'wait' || $execution->status == 'doing';
-        if($action == 'putoff')   return $execution->status == 'wait' || $execution->status == 'doing';
-        if($action == 'activate') return $execution->status == 'suspended' || $execution->status == 'closed';
-        if($action == 'delete')   return empty($execution->isParent);
+        if($action == 'start')        return $execution->status == 'wait';
+        if($action == 'close')        return $execution->status != 'closed' && (empty($execution->isParent) || !empty($execution->parentCanClose));
+        if($action == 'suspend')      return $execution->status == 'wait' || $execution->status == 'doing';
+        if($action == 'putoff')       return $execution->status == 'wait' || $execution->status == 'doing';
+        if($action == 'activate')     return $execution->status == 'suspended' || $execution->status == 'closed';
+        if($action == 'delete')       return empty($execution->isParent);
 
         return true;
     }
@@ -4198,15 +4203,16 @@ class executionModel extends model
      * Build task search form.
      *
      * @param  int    $executionID
-     * @param  int    $productID
      * @param  array  $executions
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $module
      * @param  bool   $cacheSearchFunc 是否缓存构造搜索参数的方法。默认缓存可以提高性能，构造搜索表单时再加载真实值。
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true)
+    public function buildTaskSearchForm(int $executionID, array $executions, int $queryID, string $actionURL, string $module = 'task', bool $cacheSearchFunc = true, int $productID = 0)
     {
         $searchConfig = $this->config->execution->search;
         if($cacheSearchFunc)
@@ -4227,7 +4233,7 @@ class executionModel extends model
         }
         $execution = $this->getByID($executionID);
 
-        $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed', 'story', false);
+        $searchConfig['params']['story']['values'] = $this->loadModel('story')->getExecutionStoryPairs($executionID, $productID, 'all', '', 'full', 'unclosed', 'story', false);
 
         if($module == 'task')
         {

@@ -658,6 +658,7 @@
                     ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
+                if(options.success && options.success.call(ajax, data, options) === false) return;
                 if(Array.isArray(data))
                 {
                     if(workspaceType)
