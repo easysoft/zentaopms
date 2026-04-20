@@ -78,7 +78,7 @@ class story extends control
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Insert story data. */
-            $createFunction = empty($storyData->branches) ? 'create' : 'createTwins';
+            $createFunction = (!empty($storyData->branches) && $storyData->type == 'story') ? 'createTwins' : 'create'; // 只有软件需求才有孪生需求
             $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
             if(empty($storyID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

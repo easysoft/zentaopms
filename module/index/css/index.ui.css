@@ -51,10 +51,6 @@
 .has-space #menuMainNav .is-original {display: none;}
 .has-space #menuMainNav .is-space {display: block;}
 
-#menuMainNav .is-space,
-.has-space #menuMainNav .is-original {display: none;}
-.has-space #menuMainNav .is-space {display: block;}
-
 #menuMoreNav {display: none;}
 .show-more-nav #menuMoreNav {display: block;}
 #menuMoreNav > li > a.with-popover-show {background-color: rgba(255,255,255,.1);}

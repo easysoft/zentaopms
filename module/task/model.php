@@ -250,6 +250,8 @@ class taskModel extends model
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->config->edition != 'open' && in_array(strtolower($action), array('started', 'finished'))) $this->sendMessageForRelationTask($task->id, strtolower($action), $actionID);
         }
         return !dao::isError();
     }
@@ -3393,17 +3395,14 @@ class taskModel extends model
                 }
             }
 
-            $oldObject->estStarted = $postData->startDate;
-            $oldObject->deadline   = $postData->endDate;
-            unset($oldObject->openedDate);
-            unset($oldObject->assignedDate);
-            unset($oldObject->realStarted);
-            unset($oldObject->finishedDate);
-            unset($oldObject->canceledDate);
-            unset($oldObject->closedDate);
-            unset($oldObject->lastEditedDate);
-            unset($oldObject->activatedDate);
-            $this->loadModel('task')->update($oldObject);
+            $task = new stdclass();
+            $task->estStarted   = $postData->startDate;
+            $task->deadline     = $postData->endDate;
+            $task->execution    = $oldObject->execution;
+            $task->status       = $oldObject->status;
+            $task->id           = $oldObject->id;
+            $task->closedReason = $oldObject->closedReason;
+            $this->taskTao->doUpdate($task, $oldObject, 'estStarted,deadline');
         }
         elseif($postData->type == 'plan')
         {
@@ -3430,7 +3429,7 @@ class taskModel extends model
      */
     public function updateExecutionEsDateByGantt(object $postData): bool
     {
-        $stage = $this->dao->select('project,parent,frozen')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
+        $stage = $this->dao->select('project,parent,frozen,days,schedule')->from(TABLE_EXECUTION)->where('id')->eq($postData->id)->fetch();
         if(!empty($stage->frozen))
         {
             $this->app->loadLang('execution');
@@ -3451,9 +3450,20 @@ class taskModel extends model
         if(helper::diffDate($end, $postData->endDate) < 0) dao::$errors[] = sprintf($this->lang->task->overEsEndDate, $typeLang, $typeLang);
         if(dao::isError()) return false;
 
+        /* 拖动阶段时，需要更新自动排期以及可用工日数据。*/
+        $postData->schedule = $stage->schedule;
+        $postData->days     = $stage->days;
+        if(!empty($stage->schedule))
+        {
+            $schedule = $this->loadModel('project')->computeSchedule($postData->startDate, $postData->endDate, json_decode($stage->schedule, true));
+            if(!empty($schedule)) $postData->schedule = json_encode($schedule);
+            if(!empty($schedule->calendar)) $postData->days = count($schedule->calendar);
+        }
         $this->dao->update(TABLE_PROJECT)
             ->set('begin')->eq($postData->startDate)
             ->set('end')->eq($postData->endDate)
+            ->set('schedule')->eq($postData->schedule)
+            ->set('days')->eq($postData->days)
             ->set('lastEditedBy')->eq($this->app->user->account)
             ->where('id')->eq($postData->id)
             ->exec();
@@ -3574,10 +3584,9 @@ class taskModel extends model
         $parentPath = $parentTask ? $parentTask->path : ',';
         $path       = $parentPath . $task->id . ',';
 
-        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
         if($parentTask && !$parentTask->isParent) $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq((int)$task->parent)->exec();
 
-        /* 更新所有子任务的path. */
+        /* 先更新所有子任务的path.再更新父任务的path */
         $childIdList = $this->getAllChildId($task->id, false);
         if($childIdList)
         {
@@ -3588,6 +3597,8 @@ class taskModel extends model
                 $this->dao->update(TABLE_TASK)->set('path')->eq($newChildPath)->where('id')->eq($child->id)->exec();
             }
         }
+
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($task->id)->exec();
 
         $this->updateParentStatus($task->id, $task->parent, !$isParentChanged);
         if($task->parent) $this->computeBeginAndEnd($task->parent);
@@ -3970,5 +3981,213 @@ class taskModel extends model
         }
 
         return $task;
+    }
+
+    /**
+     * 发送消息给依赖任务。
+     * Send message for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @param  int    $actionID
+     * @access public
+     * @return bool
+     */
+    public function sendMessageForRelationTask(int $taskID, string $action, int $actionID): bool
+    {
+        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo,t2.mode')->from(TABLE_RELATIONOFTASKS)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
+            ->where('t1.pretask')->eq($taskID)
+            ->beginIF($action == 'started')->andWhere('t1.condition')->eq('begin')->fi()
+            ->beginIF($action == 'finished')->andWhere('t1.condition')->eq('end')->fi()
+            ->fetchAll('id');
+        if(empty($relationTasks)) return true;
+
+        $taskTeam = $this->dao->select('task,`account`')->from(TABLE_TASKTEAM)->where('task')->in(array_keys($relationTasks))->fetchGroup('task');
+        foreach($relationTasks as $relationTask)
+        {
+            if(!isset($taskTeam[$relationTask->id]) || $relationTask->mode != 'multi')
+            {
+                if($relationTask->assignedTo) $relationTask->assignedTo = array($relationTask->assignedTo => $relationTask->assignedTo);
+                continue;
+            }
+
+            $relationTask->assignedTo = array();
+            foreach($taskTeam[$relationTask->id] as $member) $relationTask->assignedTo[$member->account] = $member->account;
+        }
+
+        $this->loadModel('message');
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+
+        $task = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        if(isset($messageSetting['mail']['setting']['task']) && in_array($action, $messageSetting['mail']['setting']['task']))
+        {
+            $this->sendMailForRelationTask($task, $relationTasks, $action);
+        }
+
+        if(isset($messageSetting['webhook']['setting']['task']) && in_array($action, $messageSetting['webhook']['setting']['task']))
+        {
+            $this->sendWebhookForRelationTask($task, $relationTasks, $action, $actionID);
+        }
+
+        if(isset($messageSetting['message']['setting']['task']) && in_array($action, $messageSetting['message']['setting']['task']))
+        {
+            $notify = new stdclass();
+            $notify->objectType  = 'message';
+            $notify->action      = $actionID;
+            $notify->status      = 'wait';
+            $notify->createdBy   = $this->app->user->account;
+            $notify->createdDate = helper::now();
+            foreach($relationTasks as $relationTask)
+            {
+                if(empty($relationTask->assignedTo)) continue;
+
+                if($action == 'started')
+                {
+                    $messageTextVar = $relationTask->action == 'begin' ? 'SSMessageText' : 'SFMessageText';
+                }
+                else
+                {
+                    $messageTextVar = $relationTask->action == 'begin' ? 'FSMessageText' : 'FFMessageText';
+                }
+
+                $currentLink  = helper::createLink('task', 'view', "id={$task->id}");
+                $relationLink = helper::createLink('task', 'view', "id={$relationTask->id}");
+                $notify->data = sprintf($this->lang->task->$messageTextVar, $this->app->user->realname, $currentLink, $task->name, $relationLink, $relationTask->name);
+
+                foreach($relationTask->assignedTo as $taskAssignedTo)
+                {
+                    $notify->toList = ",{$taskAssignedTo},";
+                    $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                }
+            }
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 发送邮件给依赖任务。
+     * Send mail for relation task.
+     *
+     * @param  object $task
+     * @param  array $relationTasks
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendMailForRelationTask(object $task, array $relationTasks, string $action): bool
+    {
+        $this->loadModel('mail');
+        $domain = zget($this->config->mail, 'domain', common::getSysURL());
+        $domain = rtrim($domain, '/');
+        foreach($relationTasks as $relationTask)
+        {
+            if(empty($relationTask->assignedTo)) continue;
+
+            $subjectVar  = $relationTask->action == 'begin' ? 'startSubjectText' : 'finishSubjectText';
+            $subjectText = sprintf($this->lang->task->$subjectVar, $relationTask->id, $relationTask->name);
+            if($action == 'started')
+            {
+                $mailContentVar = $relationTask->action == 'begin' ? 'SSMailContentText' : 'SFMailContentText';
+            }
+            else
+            {
+                $mailContentVar = $relationTask->action == 'begin' ? 'FSMailContentText' : 'FFMailContentText';
+            }
+
+            $currentLink  = $domain . helper::createLink('task', 'view', "id={$task->id}");
+            $relationLink = $domain . helper::createLink('task', 'view', "id={$relationTask->id}");
+            $mailContent  = sprintf($this->lang->task->$mailContentVar, $currentLink, $task->name, $relationLink, $relationTask->name);
+
+            $toList = implode(',', $relationTask->assignedTo);
+            $this->mail->send(",{$toList},", $subjectText, $mailContent, '', true);
+        }
+        return true;
+    }
+
+    /**
+     * 发送Webhook给依赖任务。
+     * Send webhook for relation task.
+     *
+     * @param  object $task
+     * @param  array  $relationTasks
+     * @param  string $action
+     * @param  int    $actionID
+     * @access public
+     * @return bool
+     */
+    public function sendWebhookForRelationTask(object $task, array $relationTasks, string $action, int $actionID): bool
+    {
+        $this->loadModel('webhook');
+        static $webhooks = array();
+        if(!$webhooks) $webhooks = $this->webhook->getList();
+        if(!$webhooks) return true;
+
+        $users = $this->dao->select('`account`,mobile,email')->from(TABLE_USER)->fetchAll('account');
+        foreach($relationTasks as $relationTask)
+        {
+            if(empty($relationTask->assignedTo)) continue;
+
+            if($action == 'started')
+            {
+                $webhookTextVar = $relationTask->action == 'begin' ? 'SSWebhookText' : 'SFWebhookText';
+            }
+            else
+            {
+                $webhookTextVar = $relationTask->action == 'begin' ? 'FSWebhookText' : 'FFWebhookText';
+            }
+
+            $host         = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+            $currentLink  = $host . helper::createLink('task', 'view', "id={$task->id}");
+            $relationLink = $host . helper::createLink('task', 'view', "id={$relationTask->id}");
+            $title        = $task->name;
+            $text         = sprintf($this->lang->task->$webhookTextVar, $this->app->user->realname, $task->name, $currentLink, $relationTask->name, $relationLink);
+            foreach($relationTask->assignedTo as $taskAssignedTo)
+            {
+                if(!isset($users[$taskAssignedTo])) continue;
+
+                $user   = zget($users, $taskAssignedTo);
+                $mobile = $user->mobile;
+                $email  = $user->email;
+                foreach($webhooks as $id => $webhook)
+                {
+                    if($webhook->type == 'dinggroup' || $webhook->type == 'dinguser')
+                    {
+                        $data = $this->webhook->getDingdingData($title, $text, $webhook->type == 'dinguser' ? '' : $mobile);
+                    }
+                    elseif($webhook->type == 'bearychat')
+                    {
+                        $data = $this->webhook->getBearychatData($text, $mobile, $email, 'task', $task->id);
+                    }
+                    elseif($webhook->type == 'wechatgroup' || $webhook->type == 'wechatuser')
+                    {
+                        $data = $this->webhook->getWeixinData($text, $mobile);
+                    }
+                    elseif($webhook->type == 'feishuuser' || $webhook->type == 'feishugroup')
+                    {
+                        $data = $this->webhook->getFeishuData($title, $text);
+                    }
+                    else
+                    {
+                        $data = new stdclass();
+                        $data->text = $text;
+                    }
+
+                    $postData = json_encode($data);
+                    if(!$postData) continue;
+
+                    if($webhook->sendType == 'async')
+                    {
+                        $this->webhook->saveData($id, '0', $postData);
+                        continue;
+                    }
+
+                    $result = $this->webhook->fetchHook($webhook, $postData, 0, $user->account);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $postData, $result);
+                }
+            }
+        }
+        return true;
     }
 }

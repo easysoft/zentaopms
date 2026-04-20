@@ -13,6 +13,7 @@ cid=17780
  - 第1条的taskProgress属性 @60%
  - 第1条的estimate属性 @110
  - 第1条的consumed属性 @60
+ - 第1条的left属性 @10
 
 */
 
@@ -26,10 +27,11 @@ $stages = array();
 $stages['1']['totalReal']     = 100;
 $stages['1']['totalEstimate'] = 110;
 $stages['1']['totalConsumed'] = 60;
+$stages['1']['totalLeft']     = 10;
 
 $ganttData = array();
 $ganttData['data'][1] = new stdclass;
 
 r($tester->programplan->setStageSummary(array(), array()))    && p() && e('0'); //传入空数据
 r($tester->programplan->setStageSummary(array(), $stages))    && p() && e('0'); //传入gantt空数据
-r($tester->programplan->setStageSummary($ganttData, $stages)['data']) && p('1:progress,taskProgress,estimate,consumed') && e('0.6,60%,110,60'); //传入正常数据
+r($tester->programplan->setStageSummary($ganttData, $stages)['data']) && p('1:progress,taskProgress,estimate,consumed,left') && e('0.6,60%,110,60,10'); //传入正常数据

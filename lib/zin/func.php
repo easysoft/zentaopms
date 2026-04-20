@@ -168,6 +168,7 @@ function imgCutter(): imgCutter {return createWg('imgCutter', func_get_args());}
 function modalNextStep(): modalNextStep {return createWg('modalNextStep', func_get_args());}
 function navigator(): navigator {return createWg('navigator', func_get_args());}
 function gantt(): gantt {return createWg('gantt', func_get_args());}
+function versiondiff(): versiondiff {return createWg('versiondiff', func_get_args());}
 function roadMap(): roadMap {return createWg('roadmap', func_get_args());}
 function progressBar(): progressBar {return createWg('progressBar', func_get_args());}
 function progressCircle(): progressCircle {return createWg('progressCircle', func_get_args());}

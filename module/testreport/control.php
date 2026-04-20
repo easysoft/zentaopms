@@ -103,6 +103,7 @@ class testreport extends control
         if(empty($reports) && common::hasPriv('testreport', 'create'))
         {
             $param = '';
+            if($objectType == 'product' && $extra) $param = "objectID={$extra}&objectType=testtask";
             if(in_array($objectType, array('project', 'execution')) && ($extra || !empty($_POST['taskIdList']))) $param = "objectID={$objectID}&objectType={$objectType}&extra={$extra}&begin=&end=";
             if($param)
             {
@@ -186,6 +187,7 @@ class testreport extends control
 
         $this->testreportZen->assignReportData($reportData, 'create');
         if($this->app->tab == 'project') $this->view->projectID = $this->session->project;
+        if($this->app->tab == 'qa')      $this->view->productID = $this->session->product;
 
         $this->view->objectID   = $objectID;
         $this->view->objectType = $objectType;

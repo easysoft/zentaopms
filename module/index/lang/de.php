@@ -32,3 +32,11 @@ $lang->index->chat->goConfigureFormat   = 'To configure the function, click to n
 $lang->index->chat->contactAdminForHelp = 'Please contact an administrator for assistance';
 $lang->index->chat->unauthorized        = 'You are not authorized to access AI chatting. Please contact an administrator for permission.';
 $lang->index->chat->reloadTip           = 'You may <a class="text-primary" id="reload-ai-chat">reload this page</a> if you believe that the configuration has been completed.';
+
+$lang->index->switchVision = 'Switch Vision';
+$lang->index->switchWorkspace = 'Switch Workspace';
+
+$lang->index->workspaceList = [];
+$lang->index->workspaceList['product']   = "{$lang->productCommon} space";
+$lang->index->workspaceList['project']   = "{$lang->projectCommon} space";
+$lang->index->workspaceList['execution'] = "{$lang->executionCommon} space";

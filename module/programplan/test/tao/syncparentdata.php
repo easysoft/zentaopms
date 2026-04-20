@@ -41,10 +41,23 @@ zenData('team')->loadYaml('team')->gen(5);
 $executionIdList = array(0, 3, 6, 7);
 $parentIdList    = array(0, 2, 5);
 
-$programplanTester = new programPlanTest();
-r($programplanTester->syncParentDataTest($executionIdList[0], $parentIdList[0])) && p()            && e('0');         // 测试同步父阶段ID为0的数据给ID为0的子阶段
-r($programplanTester->syncParentDataTest($executionIdList[0], $parentIdList[1])) && p()            && e('0');         // 测试同步父阶段ID为2的数据给ID为0的子阶段
-r($programplanTester->syncParentDataTest($executionIdList[1], $parentIdList[0])) && p()            && e('0');         // 测试同步父阶段ID为0的数据给ID为3的子阶段
-r($programplanTester->syncParentDataTest($executionIdList[1], $parentIdList[1])) && p('4:id,name') && e('9,任务9');   // 测试同步父阶段ID为2的数据给ID为3的子阶段
-r($programplanTester->syncParentDataTest($executionIdList[2], $parentIdList[2])) && p('4:id,name') && e('10,任务10'); // 测试同步父阶段ID为5的数据给ID为6的子阶段
-r($programplanTester->syncParentDataTest($executionIdList[3], $parentIdList[2])) && p()            && e('0');         // 测试同步父阶段ID为5的数据给ID为7的子阶段
+global $tester;
+$tester->loadModel('programplan');
+
+$tester->programplan->syncParentData($executionIdList[0], $parentIdList[0]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[0])->fetchAll()) && p() && e('0'); // 测试同步父阶段ID为0的数据给ID为0的子阶段
+
+$tester->programplan->syncParentData($executionIdList[0], $parentIdList[1]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[0])->fetchAll()) && p() && e('0'); // 测试同步父阶段ID为2的数据给ID为0的子阶段
+
+$tester->programplan->syncParentData($executionIdList[1], $parentIdList[0]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[1])->fetchAll()) && p() && e('0'); // 测试同步父阶段ID为0的数据给ID为3的子阶段
+
+$tester->programplan->syncParentData($executionIdList[1], $parentIdList[1]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[1])->fetchAll()) && p('4:id,name') && e('9,任务9'); // 测试同步父阶段ID为2的数据给ID为3的子阶段
+
+$tester->programplan->syncParentData($executionIdList[2], $parentIdList[2]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[2])->fetchAll()) && p('4:id,name') && e('10,任务10'); // 测试同步父阶段ID为5的数据给ID为6的子阶段
+
+$tester->programplan->syncParentData($executionIdList[3], $parentIdList[2]);
+r($tester->programplan->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionIdList[3])->fetchAll()) && p() && e('0'); // 测试同步父阶段ID为5的数据给ID为7的子阶段

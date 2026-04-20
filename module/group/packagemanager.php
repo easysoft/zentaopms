@@ -1141,16 +1141,17 @@ $config->group->package->manageExecution = new stdclass();
 $config->group->package->manageExecution->order  = 10;
 $config->group->package->manageExecution->subset = 'execution';
 $config->group->package->manageExecution->privs  = array();
-$config->group->package->manageExecution->privs['execution-create']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-edit', 'execution-manageProducts', 'execution-putoff', 'execution-start', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-edit']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-batchedit', 'execution-close', 'execution-create', 'execution-manageProducts', 'execution-putoff', 'execution-start', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-batchedit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('execution-all'), 'recommend' => array('execution-edit'));
-$config->group->package->manageExecution->privs['execution-batchchangestatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 4, 'depend' => array('execution-all'), 'recommend' => array('execution-edit'));
-$config->group->package->manageExecution->privs['execution-start']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-activate']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6, 'depend' => array('execution-all'), 'recommend' => array('execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-putoff']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-start', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-suspend']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 8, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start'));
-$config->group->package->manageExecution->privs['execution-close']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9, 'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start', 'execution-suspend'));
-$config->group->package->manageExecution->privs['execution-manageProducts']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array('execution-all'), 'recommend' => array('execution-create', 'execution-edit'));
+$config->group->package->manageExecution->privs['execution-create']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-edit', 'execution-manageProducts', 'execution-putoff', 'execution-start', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-edit']              = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-batchedit', 'execution-close', 'execution-create', 'execution-manageProducts', 'execution-putoff', 'execution-start', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-batchedit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('execution-all'), 'recommend' => array('execution-edit'));
+$config->group->package->manageExecution->privs['execution-batchchangestatus'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd',      'order' => 4,  'depend' => array('execution-all'), 'recommend' => array('execution-edit'));
+$config->group->package->manageExecution->privs['execution-start']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 5,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-activate']          = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 6,  'depend' => array('execution-all'), 'recommend' => array('execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-putoff']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 7,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-start', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-suspend']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 8,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-close', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start'));
+$config->group->package->manageExecution->privs['execution-close']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 9,  'depend' => array('execution-all'), 'recommend' => array('execution-activate', 'execution-create', 'execution-edit', 'execution-putoff', 'execution-start', 'execution-suspend'));
+$config->group->package->manageExecution->privs['execution-manageProducts']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd',      'order' => 1,  'depend' => array('execution-all'), 'recommend' => array('execution-create', 'execution-edit'));
+$config->group->package->manageExecution->privs['execution-autoSchedule']      = array('edition' => 'max,ipd',          'vision' => 'rnd',      'order' => 10, 'depend' => array(),                'recommend' => array());
 
 $config->group->package->deleteExecution = new stdclass();
 $config->group->package->deleteExecution->order  = 20;
@@ -1223,8 +1224,8 @@ $config->group->package->manageTask->privs['task-deleteWorkhour']         = arra
 $config->group->package->manageTask->privs['task-batchChangeModule']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 23, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
 $config->group->package->manageTask->privs['task-batchCancel']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 11, 'depend' => array('execution-task'), 'recommend' => array('task-cancel'));
 $config->group->package->manageTask->privs['task-confirmdesignchange']    = array('edition' => 'max,ipd',          'vision' => 'rnd',      'order' => 19, 'depend' => array('execution-task'), 'recommend' => array('task-edit'));
-$config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
-$config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3, 'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
+$config->group->package->manageTask->privs['task-createBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('task-view'), 'recommend' => array('task-unlinkBranch'));
+$config->group->package->manageTask->privs['task-unlinkBranch']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 3,  'depend' => array('task-view', 'task-createBranch'), 'recommend' => array());
 
 $config->group->package->deleteTask = new stdclass();
 $config->group->package->deleteTask->order  = 20;
@@ -3550,8 +3551,23 @@ $config->group->package->gantt = new stdclass();
 $config->group->package->gantt->order  = 10;
 $config->group->package->gantt->subset = 'programplan';
 $config->group->package->gantt->privs  = array();
-$config->group->package->gantt->privs['programplan-browse']    = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
-$config->group->package->gantt->privs['programplan-ganttEdit'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('programplan-browse'), 'recommend' => array());
+$config->group->package->gantt->privs['programplan-browse']      = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0, 'depend' => array('project-index'), 'recommend' => array('programplan-ganttEdit'));
+$config->group->package->gantt->privs['programplan-ganttEdit']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('programplan-browse'), 'recommend' => array());
+
+$config->group->package->exportGantt = new stdclass();
+$config->group->package->exportGantt->order  = 10;
+$config->group->package->exportGantt->subset = 'programplan';
+$config->group->package->exportGantt->privs  = array();
+$config->group->package->exportGantt->privs['programplan-ganttExport'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array());
+
+$config->group->package->ganttVersion = new stdclass();
+$config->group->package->ganttVersion->order  = 10;
+$config->group->package->ganttVersion->subset = 'programplan';
+$config->group->package->ganttVersion->privs  = array();
+$config->group->package->ganttVersion->privs['programplan-createGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 0,  'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-deleteGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-editGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('programplan-browse'), 'recommend' => array('programplan-createGanttVersion', 'programplan-deleteGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-deleteGanttVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion', 'programplan-diffGanttVersion'));
+$config->group->package->ganttVersion->privs['programplan-diffGanttVersion']   = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('programplan-browse'), 'recommend' => array('programplan-editGanttVersion', 'programplan-createGanttVersion', 'programplan-deleteGanttVersion'));
 
 $config->group->package->projectRelation = new stdclass();
 $config->group->package->projectRelation->order  = 10;

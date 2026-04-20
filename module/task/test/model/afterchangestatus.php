@@ -6,6 +6,7 @@ su('admin');
 
 zenData('project')->loadYaml('execution')->gen(6);
 zenData('task')->loadYaml('task')->gen(6);
+zenData('relationoftasks')->gen(0);
 
 /**
 
@@ -19,7 +20,7 @@ cid=18760
  - 第0条的new属性 @done
 - 测试任务状态为进行中的任务
  - 第0条的field属性 @status
- - 第0条的old属性 @changed
+ - 第0条的old属性 @doing
  - 第0条的new属性 @done
 - 测试任务状态为已完成的任务 @0
 - 测试任务状态为已完成的任务
@@ -40,8 +41,8 @@ cid=18760
 $taskIDList = range(1, 6);
 $taskTester = new taskModelTest();
 
-r($taskTester->afterChangeStatusTest($taskIDList[0], 'done')) && p('0:field,old,new') && e('status,wait,done');    // 测试任务状态为未开始的任务
-r($taskTester->afterChangeStatusTest($taskIDList[1], 'done')) && p('0:field,old,new') && e('status,changed,done'); // 测试任务状态为进行中的任务
+r($taskTester->afterChangeStatusTest($taskIDList[0], 'done')) && p('0:field,old,new') && e('status,wait,done');  // 测试任务状态为未开始的任务
+r($taskTester->afterChangeStatusTest($taskIDList[1], 'done')) && p('0:field,old,new') && e('status,doing,done'); // 测试任务状态为进行中的任务
 r($taskTester->afterChangeStatusTest($taskIDList[2], 'done')) && p()                  && e('0');                   // 测试任务状态为已完成的任务
 r($taskTester->afterChangeStatusTest($taskIDList[3], 'done')) && p('0:field,old,new') && e('status,pause,done');   // 测试任务状态为已完成的任务
 r($taskTester->afterChangeStatusTest($taskIDList[4], 'done')) && p('0:field,old,new') && e('status,cancel,done');  // 测试任务状态为已取消的任务

@@ -496,27 +496,6 @@ class programplanTaoTest extends baseTest
     }
 
     /**
-     * 测试获取按照指派给分组甘特图相关数据。
-     * The test gets Gantt chart related data as assigned to the group.
-     *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $baselineID
-     * @param  string $selectCustom
-     * @param  bool   $returnJson
-     * @access public
-     * @return array
-     */
-    public function getDataForGanttGroupByAssignedToTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
-    {
-        $gantt = $this->objectModel->getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID, $selectCustom, $returnJson);
-
-        if($returnJson) $gantt = json_decode($gantt, true);
-
-        return $gantt['data'];
-    }
-
-    /**
      * 测试获取甘特图的任务。
      * Test get tasks for gantt.
      *

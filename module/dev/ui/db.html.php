@@ -68,6 +68,7 @@ h::css("
 sidebar
 (
     setClass('bg-white'),
+    $app->getClientLang() == 'en' ? setCssVar('--sidebar-left-width', '240px') : null,
     h::header
     (
         setClass('h-10 flex items-center pl-4 flex-none gap-3'),
