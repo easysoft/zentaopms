@@ -22,9 +22,12 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 
 if($config->edition != 'open')
 {
+    $hasOAModule = file_exists(dirname(__FILE__, 6) . DS . $config->edition . DS . 'attend' . DS . 'control.php');
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
+    if(helper::hasFeature('OA') && $hasOAModule) $lang->navIcons['oa'] = "<i class='icon icon-oa'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . ' 反馈|feedback|browse|browseType=unclosed';
+    if(helper::hasFeature('OA') && $hasOAModule) $lang->mainNav->oa = $lang->navIcons['oa'] . ' 办公|attend|personal|';
 
     if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
@@ -40,8 +43,9 @@ $lang->mainNav->menuOrder[65] = 'admin';
 
 if($config->edition != 'open')
 {
+    $lang->mainNav->menuOrder[21] = 'oa';
     $lang->mainNav->menuOrder[25] = 'feedback';
-    $lang->dividerMenu = ',admin,';
+    $lang->dividerMenu = ',oa,admin,';
 
     if($config->visions == ',lite,') unset($lang->mainNav->menuOrder[25]);
 }
