@@ -23,3 +23,8 @@ $fields->field('budget')->value(data('project.budget') !== null && data('project
 $fields->field('acl')->control(array('control' => 'aclBox', 'aclItems' => data('project.parent') ? $lang->project->subAclList : $lang->project->aclList, 'aclValue' => data('project.acl'), 'whitelistLabel' => $lang->project->whitelist, 'userValue' => data('project.whitelist')));
 $fields->field('taskDateLimit')->width('full')->value(data('project.taskDateLimit'));
 $fields->field('storyType')->width('full')->value(data('project.storyType'));
+
+if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
+{
+    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value(data('project.syncStory'))->disabled(true);
+}

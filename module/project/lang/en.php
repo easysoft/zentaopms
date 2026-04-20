@@ -239,6 +239,7 @@ $lang->project->linkType           = 'Link Type';
 $lang->project->colWidth           = 'Column Width';
 $lang->project->minColWidth        = 'Minimum Column Width';
 $lang->project->maxColWidth        = 'Maximum Column Width';
+$lang->project->syncStory          = 'Stage Story Settings';
 
 /* Project Category. */
 $lang->project->projectTypeList = array();
@@ -543,3 +544,7 @@ $lang->project->disabledHint->linkedStory             = "{$lang->projectCommon} 
 $lang->project->disabledHint->createdStage            = "{$lang->productCommon} has existing phases. To unlink it from {$lang->projectCommon}, please delete the existing phases first.";
 $lang->project->disabledHint->linkedStoryAndStage     = "{$lang->productCommon} has existing phases and linked {$lang->SRCommon}. To unlink it from {$lang->projectCommon}, please remove the {$lang->SRCommon} associations first and then delete the existing phased.";
 $lang->project->disabledHint->linkedStoryAndExecution = "{$lang->SRCommon} under {$lang->productCommon} is currently linked to {$lang->projectCommon} and {$lang->execution->common}. Please remove the {$lang->SRCommon} associations from {$lang->projectCommon} and {$lang->execution->common} first before proceeding.";
+
+$lang->project->syncStoryList = array();
+$lang->project->syncStoryList[1] = 'Auto-sync with project stories (Stage stories always match project stories exactly.)';
+$lang->project->syncStoryList[0] = 'Manually link stage stories (Stage stories are linked manually and may differ from project stories.)';

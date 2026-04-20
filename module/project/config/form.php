@@ -30,6 +30,7 @@ $config->project->form->create['taskDateLimit'] = array('type' => 'string', 'req
 $config->project->form->create['storyType']     = array('type' => 'array',  'required' => false, 'default' => '');
 $config->project->form->create['model']         = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['vision']        = array('type' => 'string', 'required' => false, 'default' => $config->vision);
+$config->project->form->create['syncStory']     = array('type' => 'int',    'required' => false, 'default' => 0);
 if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => false,  'filter'  => 'trim');
 
 $config->project->form->edit = $config->project->form->create;
