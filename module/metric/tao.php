@@ -289,7 +289,7 @@ class metricTao extends metricModel
      * @access protected
      * @return object
      */
-    protected function processDAOWithDate($stmt, $query, $dateType)
+    public function processDAOWithDate($stmt, $query, $dateType)
     {
         $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
         $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
