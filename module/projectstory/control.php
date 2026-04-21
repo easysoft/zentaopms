@@ -317,7 +317,8 @@ class projectStory extends control
         if(empty($storyIdList)) $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
 
         $this->loadModel('execution');
-        $executionStories = $this->projectstory->getExecutionStories($projectID, $storyIdList);
+        $project          = $this->dao->findByID($projectID)->from(TABLE_PROJECT)->fetch();
+        $executionStories = empty($project->syncStory) ? $this->projectstory->getExecutionStories($projectID, $storyIdList) : array();
         $errors           = array();
         foreach($storyIdList as $storyID)
         {

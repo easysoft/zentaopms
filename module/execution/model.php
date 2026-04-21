@@ -373,6 +373,12 @@ class executionModel extends model
                 ->set('submittedDate')->eq(helper::now())
                 ->where('id')->eq($projectDeliverableID)
                 ->exec();
+
+            if(!empty($project->syncStory))
+            {
+                $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
+                $this->linkStory($project->id, $projectLinkedStories);
+            }
         }
 
         return $executionID;
@@ -2886,21 +2892,33 @@ class executionModel extends model
     {
         if(empty($executionID) || empty($stories)) return false;
 
+        $execution = $this->getByID($executionID);
+        $project   = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
+        $storyList = $this->loadModel('story')->getByList(array_values($stories));
+
+        if($execution->type == 'project' && !empty($project->syncStory))
+        {
+            $projectStages = $this->dao->select('id,attribute')->from(TABLE_PROJECT)
+                ->where('project')->eq($project->id)
+                ->andWhere('type')->eq('stage')
+                ->andWhere('attribute')->ne('review')
+                ->fetchPairs('id');
+            foreach($projectStages as $stageID => $stageAttribute)
+            {
+                $this->linkStory($stageID, $stories, $extra, $lanes, $storyType);
+            }
+        }
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
         $this->loadModel('action');
         $this->loadModel('kanban');
-        $this->loadModel('story');
         $versions         = $this->story->getVersions($stories);
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
-        $storyList        = $this->story->getByList(array_values($stories));
-        $execution        = $this->getByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
-
-        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
 
         $hasFrozenStories = $this->loadModel('project')->hasFrozenObject($project->id, 'SRS');
         if($hasFrozenStories) $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
@@ -2909,7 +2927,7 @@ class executionModel extends model
         {
             if(isset($linkedStories[$storyID])) continue;
             if(!isset($storyList[$storyID]))    continue;
-            if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
+            if(empty($project->syncStory) && strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
             if($hasFrozenStories && !isset($projectLinkedStories[$storyID])) continue;
 
             $storyID = (int)$storyID;
@@ -3080,7 +3098,9 @@ class executionModel extends model
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-            if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
+            if(!empty($executionStories) && empty($execution->syncStory)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
+
+            foreach($executionStories as $linkedStory) $this->unlinkStory($linkedStory->project, $linkedStory->story);
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->exec();
 

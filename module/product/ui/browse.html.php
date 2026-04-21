@@ -291,8 +291,9 @@ $data    = array();
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $project, 'roadmaps' => $roadmaps, 'reports' => $reports);
 foreach($stories as $story)
 {
-    $story->rawModule    = $story->module;
-    $story->from         = $app->tab;
+    $story->rawModule = $story->module;
+    $story->from      = $app->tab;
+    $story->syncStory = $project->syncStory ?: 0;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }
