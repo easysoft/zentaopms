@@ -237,15 +237,15 @@ toolbar
             array($downloadWg)
         )
     ),
-    hasPriv('repo', 'create') && $app->tab == 'project' ? item
-    (
-        set($createItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        )),
-        set('data-app', $this->app->tab)
-    ) : null
+    //hasPriv('repo', 'create') && $app->tab == 'project' ? item
+    //(
+    //    set($createItem + array
+    //    (
+    //        'icon'  => 'plus',
+    //        'class' => 'btn primary'
+    //    )),
+    //    set('data-app', $this->app->tab)
+    //) : null
 );
 
 jsVar('tableData', $tableData);
