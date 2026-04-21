@@ -1975,7 +1975,14 @@ class doc extends control
                 unset($newDoc->draft);
             }
             $newLib = $this->doc->getLibByID($data->lib);
-            $space  = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project ?: $newLib->custom);
+            if(in_array($newLib->type, array('mine', 'custom')))
+            {
+                $space = $newLib->type . '.' . $newLib->parent;
+            }
+            else
+            {
+                $space = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project);
+            }
             return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false);
         }
 
