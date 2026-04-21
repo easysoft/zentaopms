@@ -1238,6 +1238,7 @@ eof;
 
                 if($this->app->tab == 'devops')
                 {
+                    static::$userPrivs = array();
                     $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
@@ -3997,7 +3998,14 @@ EOF;
      */
     public function resetDevOpsPriv(int $spaceID = 0)
     {
-        if(empty($spaceID) and $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if(($module == 'space' && $method == 'browse') || ($module == 'repo' && $method == 'maintain')) return;
+
+        if(empty($spaceID) && !empty($_GET['spaceID'])) $spaceID = $_GET['spaceID'];
+        if(empty($spaceID) && !empty($_GET['space']))   $spaceID = $_GET['space'];
+
+        if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
         if(empty($spaceID)) return;
 
         $space = $this->loadModel('space')->getByID($spaceID);
