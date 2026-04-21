@@ -184,7 +184,12 @@ class install extends control
      */
     public function showTableProgress()
     {
-        $this->view->title = $this->lang->install->dbProgress;
+        $installPlan = $this->installZen->getInstallPlan();
+
+        $this->session->set('installSqls', $installPlan['sqls']);
+
+        $this->view->title      = $this->lang->install->dbProgress;
+        $this->view->sqlChanges = $installPlan['changes'];
         $this->display();
     }
 
@@ -197,21 +202,40 @@ class install extends control
      */
     public function ajaxCreateTable()
     {
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
+        $executedCount = 0;
+        $installSqls   = $this->session->installSqls;
 
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-        if(file_exists($logFile))     unlink($logFile);
-        if(file_exists($errorFile))   unlink($errorFile);
-        if(file_exists($successFile)) unlink($successFile);
+        if(empty($installSqls)) return print(json_encode(['result' => 'success', 'executedCount' => 0, 'allChangesExecuted' => true]));
 
-        $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
-        $this->config->db = $config->db;
-        $isClearDB        = isset($config->post->clearDB) ? $config->post->clearDB : 0;
-        if($this->install->createTable(true, $isClearDB)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
+        try
+        {
+            $this->installZen->setDBParam((object)$this->session->myConfig);
+
+            $dbh = $this->install->connectDB();
+            $dbh->exec("USE `{$this->config->db->name}`");
+
+            foreach($installSqls as $sql)
+            {
+                if($executedCount >= 10) break;
+
+                $dbh->exec($sql);
+
+                $executedCount++;
+            }
+        }
+        catch(Exception $e)
+        {
+            if($executedCount > 0) $this->session->set('installSqls', array_slice($installSqls, $executedCount));
+
+            return print(json_encode(['result' => 'fail', 'executedCount' => $executedCount, 'message' => $e->getMessage()]));
+        }
+
+        if($executedCount > 0) $this->session->set('installSqls', array_slice($installSqls, $executedCount));
+
+        $leftSqls = array_slice($installSqls, $executedCount);
+        if(empty($leftSqls)) unset($_SESSION['installSqls']);
+
+        return print(json_encode(['result' => 'success', 'executedCount' => $executedCount, 'allChangesExecuted' => empty($leftSqls)]));
     }
 
     /**

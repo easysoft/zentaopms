@@ -1,30 +1,80 @@
-window.showProgress = function(offset)
+$(function()
 {
-    $.getJSON($.createLink('install', 'ajaxShowProgress', 'offset=' + offset), function(data)
+    function setStatus(type, text)
     {
-        if(!$('.toolbar .toolbar-item.next').hasClass('disabled')) return;
-        if(data.log) $('#progress').append(data.log);
+        const $statusBox = $('#statusBox');
+        $statusBox.removeClass('hidden success-pale text-success danger-pale text-danger');
+        if(type === 'success') $statusBox.addClass('success-pale text-success');
+        if(type === 'danger') $statusBox.addClass('danger-pale text-danger');
+        $statusBox.html(String(text).replace(/\n/g, '<br />'));
+        $('#changesBox').height($('#changesBox').height() - $statusBox.outerHeight());
+    }
 
-        var element = document.getElementById('progress');
-        if(element.scrollHeight > 20000) element.innerHTML = element.innerHTML.substr(60000); // Remove old log.
-        element.scrollTop = element.scrollHeight;
-
-        if(data.error == '' && data.finish == '') return window.showProgress(data.offset);
-
-        if(data.error) $('#progress').append("<div class='text-danger text-lg font-bold'>" + data.error + '</div>');
-        if(data.finish)
+    function updateProgress(executedCount)
+    {
+        let executed = 0;
+        $('#changesBox .change-item').not('.executed').each(function()
         {
-            $('#progress').append("<div class='text-success text-lg font-bold'>" + dbFinish + "</div>");
-            $('.toolbar .toolbar-item.next').removeClass('disabled');
+            if(executed >= executedCount) return false;
+
+            const $item  = $(this);
+            const $label = $item.find('.label');
+            $item.addClass('executed');
+            $label.text($label.data('text'));
+            $label.removeClass('gray-pale text-gray-400').addClass('primary-pale text-primary');
+
+            executed++;
+        });
+
+        const $executedItems = $('#changesBox .change-item.executed');
+        const $lastExecuted  = $executedItems.last();
+        if($lastExecuted.length)
+        {
+            const $nextItem  = $lastExecuted.next('.change-item');
+            const scrollItem = $nextItem.length ? $nextItem[0] : $lastExecuted[0];
+            scrollItem.scrollIntoView({behavior: 'smooth', block: 'nearest'});
         }
-        element.scrollTop = element.scrollHeight;
-    });
-}
 
-$(document).on('click', '.next:not(.disabled)', function()
+        const totalCount      = $('#changesBox .change-item').length;
+        const totalExecuted   = $executedItems.length;
+        const progressPercent = totalCount ? Math.round((totalExecuted / totalCount) * 100) : 100;
+        $('#changesProgressText').text(totalExecuted + ' / ' + totalCount);
+        $('#changesProgressBar .progress-bar').css('width', progressPercent + '%');
+    }
+
+    function runInstall()
+    {
+        $.getJSON($.createLink('install', 'ajaxCreateTable'))
+            .done(function(response)
+            {
+                const executedCount = response.executedCount || 0;
+                updateProgress(executedCount);
+
+                if(response.result === 'fail' || response.error)
+                {
+                    setStatus('danger', response.message || 'Install failed.');
+                    return;
+                }
+
+                if(response.allChangesExecuted)
+                {
+                    setStatus('success', dbFinish);
+                    $('#nextBtn').removeClass('disabled').attr('href', $.createLink('install', 'step3'));
+                    return;
+                }
+
+                setTimeout(runInstall, 200);
+            })
+            .fail(function()
+            {
+                setStatus('danger', 'Failed to execute installation.');
+            });
+    }
+
+    runInstall();
+});
+
+window.showSQL = function(sql)
 {
-    location.href = $.createLink('install', 'step3');
-})
-
-$.get($.createLink('install', 'ajaxCreateTable'));
-window.showProgress(0);
+    zui.Modal.alert({size: 'lg', title: 'SQL', content: {html: sql, className: 'leading-6'}});
+}

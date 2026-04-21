@@ -196,6 +196,29 @@ class installModel extends model
     }
 
     /**
+     * 获取单条 SQL 对应的语义化变更。
+     * Get semantic changes by sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getSemanticChangesBySQL(string $sql): array
+    {
+        $changes = [];
+        $items   = helper::parseSqlToSemantic($sql);
+        foreach($items as $item)
+        {
+            $search  = ['%TABLE%', '%FIELD%', '%INDEX%', '%VIEW%', '%OLD%', '%NEW%'];
+            $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
+            $subject = $this->lang->install->changeActions[$item['action']] ?? $this->lang->install->changeActions['other'];
+            $changes[] = ['mode' => $item['mode'], 'content' => str_replace($search, $replace, $subject), 'sql' => $sql];
+        }
+
+        return $changes;
+    }
+
+    /**
      * 执行安装前的SQL语句。
      * Exec pre install SQL.
      *

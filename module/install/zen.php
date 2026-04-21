@@ -362,10 +362,10 @@ EOT;
      * Set database params.
      *
      * @param  object $data
-     * @access private
+     * @access public
      * @return bool
      */
-    private function setDBParam(object $data): bool
+    public function setDBParam(object $data): bool
     {
         $this->config->db->driver = $data->dbDriver;
         if($this->config->inQuickon)
@@ -459,5 +459,46 @@ EOT;
         }
 
         return $components;
+    }
+
+    /**
+     * 获取安装计划，包括安装SQL和语义化变更。
+     * Get install plan, include install SQLs and semantic changes.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getInstallPlan(): array
+    {
+        $this->setDBParam((object)$this->session->myConfig);
+
+        $changes = [];
+        $clearDB = $this->session->myConfig->clearDB ?? 0;
+        $dbFile  = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+        $sqls    = explode(';', file_get_contents($dbFile));
+
+        foreach($sqls as $key => $sql)
+        {
+            $sql = trim($sql);
+            if(empty($sql))
+            {
+                unset($sqls[$key]);
+                continue;
+            }
+
+            if(strpos($sql, '-- DROP') !== false && $clearDB) $sql = trim(str_replace('--', '', $sql));
+            if(strpos($sql, '--') === 0)
+            {
+                unset($sqls[$key]);
+                continue;
+            }
+
+            $sql     = $this->install->replaceContantsInSQL($sql);
+            $sql     = $this->install->appendMySQLTableOptions($sql);
+            $changes = array_merge($changes, $this->install->getSemanticChangesBySQL($sql));
+
+            $sqls[$key] = $sql;
+        }
+        return ['sqls' => array_values($sqls), 'changes' => $changes];
     }
 }
