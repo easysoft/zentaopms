@@ -137,7 +137,7 @@ foreach($hasViewPriv as $type => $bool)
 
             if(in_array($reviewType, array('ppm', 'pullreq')))
             {
-                $typeName = $lang->devops->ppm;
+                $typeName = $lang->ppm->common;
                 if(empty($review->status)) $review->status = 'notReviewed';
 
                 $this->app->loadLang('ppm');

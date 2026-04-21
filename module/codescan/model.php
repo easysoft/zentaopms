@@ -28,8 +28,8 @@ class codescanModel extends model
         if($action == 'disable') return $codeScan->status != 'disabled';
 
         if($action == 'task') return common::hasPriv('codescan', 'task');
-        if($action == 'exec' && empty($codeScan->isInner) && !in_array($this->app->rawMethod, array('plan', 'planview'))) return false;
-        if($action == 'issue' && empty($codeScan->isInner) && $this->app->rawMethod != 'task') return false;
+        if($action == 'exec' && !in_array($this->app->rawMethod, array('plan', 'planview'))) return false;
+        if($action == 'issue' && $this->app->rawMethod != 'task') return false;
 
         if($action == 'bug')          return empty($codeScan->bugID) && $codeScan->status != 'closed';
         if($action == 'confirmissue') return $codeScan->status == 'wait';
@@ -821,7 +821,7 @@ class codescanModel extends model
      * @access public
      * @return void
      */
-    public function changeIssueState(int|array $issueIdList, string $status, string $solution = null, string $solutionDate = null, int $ignoreDate = 0): bool
+    public function changeIssueState(int|array $issueIdList, string $status, ?string $solution = null, ?string $solutionDate = null, int $ignoreDate = 0): bool
     {
         if(is_numeric($issueIdList)) $issueIdList = array($issueIdList);
         foreach($issueIdList as $index => $issueID) $issueIdList[$index] = (int)$issueID;
@@ -829,12 +829,15 @@ class codescanModel extends model
         $data = new stdclass();
         $data->status = $status;
         $data->ids    = $issueIdList;
+        if(!is_null($solution))     $data->resolution = $solution;
+        if(!is_null($solutionDate)) $data->resolved   = strtotime($solutionDate) * 1000;
+        if(!empty($ignoreDate))     $data->ignored    = $ignoreDate == -1 ? -1 : $ignoreDate * 1000;
         $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
         if(dao::isError()) return false;
 
         $this->loadModel('action');
         $status = !empty($ignoreDate) ? 'ignore' : $data->status;
-        $repoPair = array_column($this->loadModel('repo')->getGitFoxRepos(), 'id', 'serviceProject');
+        $repoPair = $this->loadModel('repo')->getRepoPairs();
         foreach($issueIdList as $issueID)
         {
             $issue = $this->getScanIssue($issueID, false);
