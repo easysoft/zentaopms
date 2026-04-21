@@ -934,8 +934,9 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
         if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
-        $vision = '';
-        if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
+        $vision    = '';
+        $installed = $this->config->installed ?? false;
+        if($installed && validater::checkAccount($account) && !$this->upgrading)
         {
             if(!empty($_COOKIE['vision']))
             {
