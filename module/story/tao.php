@@ -952,7 +952,7 @@ class storyTao extends storyModel
      * @access protected
      * @return void
      */
-    protected function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
+    public function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
     {
         if(empty($executionID) || empty($storyID)) return;
 
