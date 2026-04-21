@@ -101,96 +101,93 @@ empty($setItems) ? null : $sections = div
     $setItems
 );
 
-panel
+div
 (
-    div
+    setID('planMenu'),
+    setClass('flex justify-between'),
+    $headers
+);
+detailBody
+(
+    sectionList
     (
-        setID('planMenu'),
-        setClass('flex justify-between'),
-        $headers
+        setID('solution'),
+        setClass('border-r'),
+        section
+        (
+            set::title($lang->codescan->solution),
+            empty($sections) ? div(setClass('text-center'), $lang->noData) : $sections
+        )
     ),
-    detailBody
+    detailSide
     (
-        sectionList
+        tabs
         (
-            setID('solution'),
-            setClass('border-r'),
-            section
+            setID('basicInfo'),
+            set::collapse(true),
+            tabPane
             (
-                set::title($lang->codescan->solution),
-                empty($sections) ? div(setClass('text-center'), $lang->noData) : $sections
-            )
-        ),
-        detailSide
-        (
-            tabs
-            (
-                setID('basicInfo'),
-                set::collapse(true),
-                tabPane
+                set::key('basicInfo'),
+                set::active(true),
+                set::title($lang->basicInfo),
+                tableData
                 (
-                    set::key('basicInfo'),
-                    set::active(true),
-                    set::title($lang->basicInfo),
-                    tableData
+                    item
                     (
-                        item
+                        set::name($lang->codescan->name),
+                        $plan->name
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->repo),
+                        zget($repoList, $plan->repoID)
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->branch),
+                        html
                         (
-                            set::name($lang->codescan->name),
-                            $plan->name
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->repo),
-                            zget($repoList, $plan->repoID)
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->branch),
-                            html
+                            p
                             (
-                                p
-                                (
-                                    setClass('w-48 line-clamp-3'),
-                                    set::title(empty($plan->scanBranch) ? '' : $plan->scanBranch),
-                                    empty($plan->scanBranch) ? '' : $plan->scanBranch
-                                )
+                                setClass('w-48 line-clamp-3'),
+                                set::title(empty($plan->scanBranch) ? '' : $plan->scanBranch),
+                                empty($plan->scanBranch) ? '' : $plan->scanBranch
                             )
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->branchReg),
-                            html(p(setClass('w-48 line-clamp-3'), set::title(empty($plan->branchReg) ? '' : $plan->branchReg), empty($plan->branchReg) ? '' : zget($plan, 'branchReg', '')))
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->scope),
-                            zget($lang->codescan->scopeList, $plan->scanType)
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->latestScanTime),
-                            $plan->latestScanTime
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->latestExecStatus),
-                            empty($plan->latestExecStatus) ? '' : zget($lang->codescan->latestExecStatusList, $plan->latestExecStatus)
-                        ),
-                        item
-                        (
-                            set::name($lang->codescan->latestScanResult),
-                            empty($plan->latestExecResult) ? '' : zget($lang->codescan->latestScanResultList, $plan->latestExecResult)
                         )
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->branchReg),
+                        html(p(setClass('w-48 line-clamp-3'), set::title(empty($plan->branchReg) ? '' : $plan->branchReg), empty($plan->branchReg) ? '' : zget($plan, 'branchReg', '')))
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->scope),
+                        zget($lang->codescan->scopeList, $plan->scanType)
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->latestScanTime),
+                        $plan->latestScanTime
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->latestExecStatus),
+                        empty($plan->latestExecStatus) ? '' : zget($lang->codescan->latestExecStatusList, $plan->latestExecStatus)
+                    ),
+                    item
+                    (
+                        set::name($lang->codescan->latestScanResult),
+                        empty($plan->latestExecResult) ? '' : zget($lang->codescan->latestScanResultList, $plan->latestExecResult)
                     )
                 )
             )
-        ),
-        $actions ? history
-        (
-            set::objectType('codescanplan'),
-            set::objectID($planID),
-            set::commentUrl(createLink('action', 'comment', array('objectType' => 'codescanplan', 'objectID' => $planID)))
-        ) : null
-    )
+        )
+    ),
+    $actions ? history
+    (
+        set::objectType('codescanplan'),
+        set::objectID($planID),
+        set::commentUrl(createLink('action', 'comment', array('objectType' => 'codescanplan', 'objectID' => $planID)))
+    ) : null
 );
