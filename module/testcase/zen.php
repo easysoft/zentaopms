@@ -1309,7 +1309,7 @@ class testcaseZen extends testcase
         if(!empty($case->execution) && empty($case->project))
         {
             $execution = $this->loadModel('execution')->fetchByID($case->execution);
-            $case->project = $execution->project;
+            $case->project = !empty($execution->project) ? $execution->project : 0;
         }
 
         /* 如果用例产品是影子产品，同步用例到项目中。 */
