@@ -28,8 +28,8 @@ class codescanModel extends model
         if($action == 'disable') return $codeScan->status != 'disabled';
 
         if($action == 'task') return common::hasPriv('codescan', 'task');
-        if($action == 'exec' && empty($codeScan->isInner) && !in_array($this->app->rawMethod, array('plan', 'planview'))) return false;
-        if($action == 'issue' && empty($codeScan->isInner) && $this->app->rawMethod != 'task') return false;
+        if($action == 'exec' && !in_array($this->app->rawMethod, array('plan', 'planview'))) return false;
+        if($action == 'issue' && $this->app->rawMethod != 'task') return false;
 
         if($action == 'bug')          return empty($codeScan->bugID) && $codeScan->status != 'closed';
         if($action == 'confirmissue') return $codeScan->status == 'wait';
