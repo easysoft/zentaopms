@@ -294,6 +294,7 @@ class metricTao extends metricModel
         $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
         $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
         $calcDate   = $this->processRecordQuery($query, 'calcDate', 'date');
+        if(is_object($calcDate)) $calcDate = isset($calcDate->day) ? date('Y-m-d', strtotime($calDate->day)) : '';
 
         list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
