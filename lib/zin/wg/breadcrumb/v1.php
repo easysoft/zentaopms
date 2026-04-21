@@ -14,7 +14,7 @@ class breadcrumb extends wg
     public static function getPageCSS(): ?string
     {
         return <<<CSS
-        .breadcrumb.flex-wrap{padding-inline-start:1.25rem;box-sizing:border-box}
+        .breadcrumb.flex-wrap{padding-inline-start:1.25rem;box-sizing:border-box;column-gap:1.25rem;row-gap:0.25rem;}
         .breadcrumb.flex-wrap>li:first-child{margin-inline-start:-1.25rem}
         CSS;
     }
