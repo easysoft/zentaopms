@@ -362,6 +362,7 @@ class spaceModel extends model
      */
     public function setMenu(int $spaceID = 0)
     {
+        $this->session->set('devopsSpace', $spaceID);
         $this->loadModel('common')->resetDevOpsPriv($spaceID);
         if($spaceID)
         {
@@ -410,7 +411,6 @@ class spaceModel extends model
         }
         else
         {
-            $this->session->set('devopsSpace', 0);
             unset($this->lang->devops->homeMenu->pipeline);
             unset($this->lang->devops->homeMenu->spaceSetting);
         }

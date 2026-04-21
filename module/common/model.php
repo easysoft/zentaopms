@@ -4000,7 +4000,7 @@ EOF;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if(($module == 'space' && $method == 'browse') || ($module == 'repo' && $method == 'maintain')) return;
+        if(($module == 'space' && $method == 'browse') || ($module == 'repo' && $method == 'maintain') || ($module == 'repo' && $method == 'browse')) return;
 
         if(empty($spaceID) && !empty($_GET['spaceID'])) $spaceID = $_GET['spaceID'];
         if(empty($spaceID) && !empty($_GET['space']))   $spaceID = $_GET['space'];

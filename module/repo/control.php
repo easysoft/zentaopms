@@ -511,7 +511,7 @@ class repo extends control
 
         /* Set menu and session. */
         $repo = $this->repo->getByID($repoID);
-        $this->commonAction($repoID, $objectID);
+        $this->commonAction($repoID, $objectID, $repo->spaceID);
         $this->repoZen->setBrowseSession($repo);
 
         /* Get repo and synchronous commit. */
