@@ -3013,7 +3013,7 @@ class repoModel extends model
      */
     public function getBugsByRepo($repoID = 0, $browseType = '', $executionID = 0, $bugs = array(), $orderBy = 'id_desc', $pager = null)
     {
-        if($this->app->tab == 'project')
+        if($this->app->tab == 'project' && $executionID)
         {
             $executionIDList = $this->loadModel('execution')->fetchExecutionList($executionID, 'all');
             if(!empty($executionIDList)) $executionID = array_keys($executionIDList);
@@ -3055,7 +3055,7 @@ class repoModel extends model
     {
         if($bug->execution)
         {
-            $execution     = $this->loadModel('execution')->getByID($bug->execution);
+            $execution    = $this->loadModel('execution')->getByID($bug->execution);
             $bug->project = $execution->project;
         }
 
