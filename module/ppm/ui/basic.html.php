@@ -59,7 +59,7 @@ foreach($pipelines as $pipeline)
             (
                 setClass('border px-4 h-12 flex items-center'),
                 span(setClass('font-bold'), "{$lang->ppm->codeScan}: {$taskName}"),
-                $pipeline->task->result == 'pass' ? label(setClass('success ml-4'), $lang->codescan->latestScanResultList['pass']) : label(setClass('danger ml-4'), $lang->codescan->latestScanResultList[$pipeline->task->result]),
+                !empty($pipeline->task) && $pipeline->task->result == 'pass' ? label(setClass('success ml-4'), $lang->codescan->latestScanResultList['pass']) : label(setClass('danger ml-4'), $lang->codescan->latestScanResultList[$pipeline->task->result]),
                 $canViewTask ? div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView), set::url('codescan', 'taskView', "repoID={$repoID}&id={$pipeline->task->id}&serviceRepoID={$repoID}&type=issue"), set::target('_blank'))) : null
             )
         );
