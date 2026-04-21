@@ -239,39 +239,6 @@ class install extends control
     }
 
     /**
-     * 获取数据库表创建进度并显示在页面。
-     * AJAX: Get progress and show in showTableProgress page.
-     *
-     * @param  int    $offset
-     * @access public
-     * @return void
-     */
-    public function ajaxShowProgress(int $offset = 0)
-    {
-        session_write_close();
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-
-        $error  = !file_exists($errorFile)   ? '' : file_get_contents($errorFile);
-        $finish = !file_exists($successFile) ? '' : file_get_contents($successFile);
-        $log    = !file_exists($logFile)     ? '' : file_get_contents($logFile, false, null, $offset);
-        $size   = 10 * 1024;
-        if(!empty($log) && mb_strlen($log) > $size)
-        {
-            $left     = mb_substr($log, $size);
-            $log      = mb_substr($log, 0, $size);
-            $position = strpos($left, "\n");
-            if($position !== false) $log .= substr($left, 0, $position + 1);
-        }
-
-        $offset += strlen($log);
-        $log     = trim($log);
-        if(!empty($log)) $error = $finish = '';
-        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'error' => $error, 'finish' => $finish, 'offset' => $offset)));
-    }
-
-    /**
      * 安装第三步：保存配置文件。
      * Step3: Save the config file.
      *
@@ -465,13 +432,6 @@ class install extends control
         unset($_SESSION['installing']);
         unset($_SESSION['myConfig']);
         session_destroy();
-
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-        if(file_exists($logFile))     unlink($logFile);
-        if(file_exists($errorFile))   unlink($errorFile);
-        if(file_exists($successFile)) unlink($successFile);
 
         global $oldRequestType;
         if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';

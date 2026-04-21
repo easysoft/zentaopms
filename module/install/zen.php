@@ -387,8 +387,6 @@ EOT;
         $this->config->db->name   = $data->dbName;
         $this->config->db->prefix = $data->dbPrefix;
 
-        file_put_contents($this->install->buildDBLogFile('config'), json_encode(array('db' => $this->config->db, 'post' => $data)));
-
         return true;
     }
 
