@@ -1774,7 +1774,7 @@ class storyModel extends model
             $productType = $products[$oldStory->product]->type;
             if($oldStory->type != 'story')
             {
-                $story->plan = trim("{$oldStory->plan},{$planID}", ',');
+                $story->plan = empty($oldStory->plan) ? $planID : trim("{$oldStory->plan},{$planID}", ',');
             }
             else
             {
