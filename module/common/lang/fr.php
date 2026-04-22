@@ -580,6 +580,7 @@ $lang->error->tutorialData    = "Aucune donnée ne peut être importée en mode 
 $lang->error->noCurlExt       = 'Aucun module Curl installé';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
 $lang->error->httpServerError = 'Server error';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();

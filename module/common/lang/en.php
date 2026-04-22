@@ -582,6 +582,7 @@ $lang->error->tutorialData    = 'Data cannot be inserted in tutorial mode. Pleas
 $lang->error->noCurlExt       = 'The server does not have the Curl module installed.';
 $lang->error->loginTimeout    = 'Session timed out. Please log in again.';
 $lang->error->httpServerError = 'Server error.';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();
