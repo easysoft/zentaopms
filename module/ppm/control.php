@@ -198,6 +198,9 @@ class ppm extends control
      */
     public function create(int $repoID = 0, int $objectID = 0, string $sourceBranch = '', string $targetBranch = '')
     {
+        $sourceBranch = helper::safe64Encode($sourceBranch);
+        $targetBranch = helper::safe64Encode($targetBranch);
+
         $repoID = $this->loadModel('repo')->saveState($repoID);
         if($repoID) $this->ci->setMenu($repoID);
         $repo   = $this->repo->getByID($repoID);
@@ -832,6 +835,9 @@ class ppm extends control
      */
     public function ajaxGetCreateCheckList(int $repoID, string $sourceBranch, string $targetBranch, int $recPerPage = 20, int $pageID = 1)
     {
+        $sourceBranch = helper::safe64Decode($sourceBranch);
+        $targetBranch = helper::safe64Decode($targetBranch);
+
         $repo = $this->loadModel('repo')->getByID($repoID);
         $scm  = $this->app->loadClass('scm');
         $scm->setEngine($repo);

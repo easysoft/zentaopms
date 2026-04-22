@@ -4008,7 +4008,7 @@ EOF;
         if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
         if(empty($spaceID)) return;
 
-        $space = $this->loadModel('space')->getByID($spaceID);
+        $space = $this->loadModel('space')->getByID((int)$spaceID);
         if(empty($space)) return;
 
         $spaceRights = $this->dao->select('t1.name, t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
