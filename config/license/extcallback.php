@@ -12,7 +12,7 @@ function ioncube_event_handler($err_code, $params)
     if(!empty($params['license_file']) && preg_match('/([a-zA-Z]+)(\d+\.\d+)/', basename($params['license_file']), $matches))
     {
         $extensionInfo = !empty($matches[1]) ? $app->dao->select('*')->from(TABLE_EXTENSION)->where('code')->like( "%$matches[1]%")->fetch() : [];
-        $pluginName    = !empty($extensionInfo->name) ? $extensionInfo->name : '';
+        $pluginName    = !empty($extensionInfo->name) ?  htmlspecialchars($extensionInfo->name, ENT_QUOTES) : '';
         $pluginNotice  = !empty($pluginName) ? "<h3 style='margin: 30px 30px 0px;'><span class='icon icon-exclamation-sign warning-pale rounded-full icon-2x' style='margin-right:10px;'></span>“{$pluginName}”插件暂无授权</h3>" : '';
 
         $isPlugin = commonModel::hasPriv('extension', 'uninstall');
