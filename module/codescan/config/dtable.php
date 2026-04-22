@@ -388,6 +388,7 @@ $config->codescan->trigger->dtable->fieldList['actions']['list']  = $config->cod
 $config->codescan->task->dtable = new stdclass();
 $config->codescan->task->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->codescan->task->dtable->fieldList['id']['type']  = 'id';
+$config->codescan->task->dtable->fieldList['id']['order']  = 10;
 
 $config->codescan->task->dtable->fieldList['name']['title']    = $lang->codescan->name;
 $config->codescan->task->dtable->fieldList['name']['type']     = 'shortTitle';
@@ -395,6 +396,7 @@ $config->codescan->task->dtable->fieldList['name']['show']     = true;
 $config->codescan->task->dtable->fieldList['name']['sortType'] = false;
 $config->codescan->task->dtable->fieldList['name']['required'] = true;
 $config->codescan->task->dtable->fieldList['name']['link']     = array('module' => 'codescan', 'method' => 'taskView', 'params' => 'taskID={id}');
+$config->codescan->task->dtable->fieldList['name']['order']    = 20;
 
 $config->codescan->task->dtable->fieldList['repo']['title']    = $lang->codescan->repo;
 $config->codescan->task->dtable->fieldList['repo']['width']    = '100';
@@ -402,12 +404,14 @@ $config->codescan->task->dtable->fieldList['repo']['show']     = true;
 $config->codescan->task->dtable->fieldList['repo']['hint']     = true;
 $config->codescan->task->dtable->fieldList['repo']['required'] = false;
 $config->codescan->task->dtable->fieldList['repo']['sortType'] = true;
+$config->codescan->task->dtable->fieldList['repo']['order']    = 30;
 
 $config->codescan->task->dtable->fieldList['branch']['title']    = $lang->codescan->branch;
 $config->codescan->task->dtable->fieldList['branch']['width']    = '100';
 $config->codescan->task->dtable->fieldList['branch']['hint']     = true;
 $config->codescan->task->dtable->fieldList['branch']['show']     = true;
 $config->codescan->task->dtable->fieldList['branch']['sortType'] = false;
+$config->codescan->task->dtable->fieldList['branch']['order']    = 40;
 
 $config->codescan->task->dtable->fieldList['planID']['title']    = $lang->codescan->scanPlan;
 $config->codescan->task->dtable->fieldList['planID']['name']     = 'planName';
@@ -415,6 +419,7 @@ $config->codescan->task->dtable->fieldList['planID']['width']    = '100';
 $config->codescan->task->dtable->fieldList['planID']['hint']     = true;
 $config->codescan->task->dtable->fieldList['planID']['show']     = true;
 $config->codescan->task->dtable->fieldList['planID']['sortType'] = false;
+$config->codescan->task->dtable->fieldList['planID']['order']    = 50;
 
 $config->codescan->task->dtable->fieldList['status']['title']     = $lang->codescan->runStatus;
 $config->codescan->task->dtable->fieldList['status']['type']      = 'status';
@@ -422,12 +427,14 @@ $config->codescan->task->dtable->fieldList['status']['width']     = '100';
 $config->codescan->task->dtable->fieldList['status']['show']      = true;
 $config->codescan->task->dtable->fieldList['status']['required']  = false;
 $config->codescan->task->dtable->fieldList['status']['statusMap'] = $lang->codescan->latestExecStatusList;
+$config->codescan->task->dtable->fieldList['status']['order']     = 60;
 
 $config->codescan->task->dtable->fieldList['result']['title']     = $lang->codescan->result;
 $config->codescan->task->dtable->fieldList['result']['type']      = 'status';
 $config->codescan->task->dtable->fieldList['result']['show']      = true;
 $config->codescan->task->dtable->fieldList['result']['required']  = false;
 $config->codescan->task->dtable->fieldList['result']['statusMap'] = $lang->codescan->latestScanResultList;
+$config->codescan->task->dtable->fieldList['result']['order']     = 70;
 
 $config->codescan->task->dtable->fieldList['issueCount']['title']       = $lang->codescan->issueCount;
 $config->codescan->task->dtable->fieldList['issueCount']['width']       = '70';
@@ -437,6 +444,7 @@ $config->codescan->task->dtable->fieldList['issueCount']['sortType']    = false;
 $config->codescan->task->dtable->fieldList['issueCount']['link']        = array('module' => 'codescan', 'method' => 'issue', 'params' => 'repoID={repo}&taskID={id}&serviceRepoID={repo_id}&type=all');
 $config->codescan->task->dtable->fieldList['issueCount']['data-toggle'] = 'modal';
 $config->codescan->task->dtable->fieldList['issueCount']['data-size']   = 'lg';
+$config->codescan->task->dtable->fieldList['issueCount']['order']       = 80;
 
 $config->codescan->task->dtable->fieldList['triggerType']['title']     = $lang->codescan->triggerType;
 $config->codescan->task->dtable->fieldList['triggerType']['hint']      = true;
@@ -444,6 +452,7 @@ $config->codescan->task->dtable->fieldList['triggerType']['width']     = '100';
 $config->codescan->task->dtable->fieldList['triggerType']['show']      = true;
 $config->codescan->task->dtable->fieldList['triggerType']['required']  = false;
 $config->codescan->task->dtable->fieldList['triggerType']['map']       = $lang->codescan->triggerTypeList;
+$config->codescan->task->dtable->fieldList['triggerType']['order']     = 90;
 
 $config->codescan->task->dtable->fieldList['scanType']['title']    = $lang->codescan->scope;
 $config->codescan->task->dtable->fieldList['scanType']['hint']     = true;
@@ -451,30 +460,28 @@ $config->codescan->task->dtable->fieldList['scanType']['width']    = '100';
 $config->codescan->task->dtable->fieldList['scanType']['show']     = true;
 $config->codescan->task->dtable->fieldList['scanType']['required'] = false;
 $config->codescan->task->dtable->fieldList['scanType']['map']      = $lang->codescan->scopeList;
+$config->codescan->task->dtable->fieldList['scanType']['order']    = 100;
 
 $config->codescan->task->dtable->fieldList['startTime']['title']    = $lang->codescan->startTime;
 $config->codescan->task->dtable->fieldList['startTime']['type']     = 'datetime';
 $config->codescan->task->dtable->fieldList['startTime']['hint']     = true;
 $config->codescan->task->dtable->fieldList['startTime']['show']     = true;
 $config->codescan->task->dtable->fieldList['startTime']['required'] = false;
+$config->codescan->task->dtable->fieldList['startTime']['order']    = 110;
 
 $config->codescan->task->dtable->fieldList['runTime']['title']    = $lang->codescan->runTime;
 $config->codescan->task->dtable->fieldList['runTime']['width']    = '50';
 $config->codescan->task->dtable->fieldList['runTime']['hint']     = true;
 $config->codescan->task->dtable->fieldList['runTime']['show']     = true;
 $config->codescan->task->dtable->fieldList['runTime']['required'] = false;
+$config->codescan->task->dtable->fieldList['runTime']['order']    = 120;
 
 $config->codescan->task->dtable->fieldList['endTime']['title']    = $lang->codescan->endTime;
 $config->codescan->task->dtable->fieldList['endTime']['type']     = 'datetime';
 $config->codescan->task->dtable->fieldList['endTime']['hint']     = true;
 $config->codescan->task->dtable->fieldList['endTime']['show']     = false;
 $config->codescan->task->dtable->fieldList['endTime']['required'] = false;
-
-$config->codescan->task->dtable->fieldList['trigger']['title']    = $lang->codescan->triggerName;
-$config->codescan->task->dtable->fieldList['trigger']['width']    = '100';
-$config->codescan->task->dtable->fieldList['trigger']['show']     = false;
-$config->codescan->task->dtable->fieldList['trigger']['required'] = false;
-$config->codescan->task->dtable->fieldList['trigger']['sortType'] = false;
+$config->codescan->task->dtable->fieldList['endTime']['order']    = 130;
 
 $config->codescan->task->dtable->fieldList['actions']['name']  = 'actions';
 $config->codescan->task->dtable->fieldList['actions']['title'] = $lang->actions;

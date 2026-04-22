@@ -993,13 +993,13 @@ class repoZen extends repo
             foreach($tmpLinkBranches as $type => $value)
             {
                 $error .= sprintf($this->lang->repo->error->linkedBranch, $this->lang->$type->common, html::a(
-                    $this->createLink('repo', 'browse', 'repoID=' . $repoID),
+                    $this->createLink('repo', 'browseBranch', 'repoID=' . $repoID),
                     implode(', ', $value), '_blank', '', false
                 ));
             }
         }
         $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('repoID')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
-        if($pipeline) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('pipeline', 'browse'), implode(', ', array_column($pipeline, 'id')), '_blank', '', false));
+        if($pipeline) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('pipeline', 'browse', 'space=0&repoID=' . $repoID . '&type=repo'), implode(', ', array_column($pipeline, 'id')), '_blank', '', false));
         return $error;
     }
 
