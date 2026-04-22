@@ -2694,6 +2694,8 @@ class repoModel extends model
     public function getListByCondition(string $repoQuery, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
+        if(empty($userSpaces)) return array();
+
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
             ->beginIF($space)->andWhere('spaceID')->eq($space)->fi()
