@@ -581,6 +581,7 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
 $lang->error->httpServerError = '服务器错误';
+$lang->error->action          = '没有满足该操作的条件，无法执行该操作。';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();
