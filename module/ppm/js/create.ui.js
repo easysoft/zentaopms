@@ -1,10 +1,13 @@
 window.loadReviewers = function()
 {
-    const targetBranch  = $('[name="targetBranch"]').val();
-    const sourceBranch  = $('[name="sourceBranch"]').val();
+    var targetBranch  = $('[name="targetBranch"]').val();
+    var sourceBranch  = $('[name="sourceBranch"]').val();
     const canMerge      = $('[data-name=message]').data('canMerge');
     const conflictFiles = $('[data-name=message]').data('conflictFiles');
     var repo = $('[name="repoID"]').val() ? $('[name="repoID"]').val() : repoID;
+
+    var targetBranch = btoa(encodeURIComponent(targetBranch));
+    var sourceBranch = btoa(encodeURIComponent(sourceBranch));
 
     if(!canMerge)
     {

@@ -40,7 +40,7 @@ formGridPanel
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     set::fields($fields),
-    set::loadUrl(createLink('ppm', 'create', "repoID={repoID}&objectID={$objectID}&sourceBranch={sourceBranch}&targetBranch={targetBranch}")),
+    set::loadUrl(createLink('ppm', 'create', "repoID={repoID}&objectID={$objectID}&sourceBranch={sourceBranch|base64}&targetBranch={targetBranch|base64}")),
     on::formloaded()->call('loadReviewers', '>>> formload', jsRaw('event'), jsRaw('args'))
 );
 
