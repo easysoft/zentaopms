@@ -32,7 +32,6 @@ $lang->file->exportRange   = "Export Range";
 $lang->file->defaultTPL    = "Default Template";
 $lang->file->setExportTPL  = "Settings";
 $lang->file->preview       = "Preview";
-$lang->file->cantPreview   = "Cannot preview this file";
 $lang->file->previewFile   = "Preview Attachments";
 $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'upload';
@@ -41,6 +40,10 @@ $lang->file->batchExport   = 'Export in batches';
 $lang->file->downloadFile  = 'Download';
 $lang->file->playFailed    = 'Video preview failed. Please contact your admin.';
 $lang->file->exportData    = "Export Data";
+
+$lang->file->cantPreview        = "Cannot preview this file";
+$lang->file->officeNotSupported = 'Sorry, only ZenTao Biz and ZenTao Max versions supports preview Office files. To try these advanced versions, please contact us at support@zentao.pm.';
+$lang->file->officeNotInstalled = 'To preview Office files, you need to <a href="https://www.zentao.net/book/zentaopms/1609.html" target="_blank">Install and Config Office Support</a>';
 
 $lang->file->pathname  = 'Path';
 $lang->file->title     = 'Title';

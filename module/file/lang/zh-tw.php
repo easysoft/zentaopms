@@ -32,11 +32,18 @@ $lang->file->exportRange   = "要導出的數據";
 $lang->file->defaultTPL    = "預設模板";
 $lang->file->setExportTPL  = "設置";
 $lang->file->preview       = "預覽";
-$lang->file->cantPreview   = "無法預覽該檔案";
+$lang->file->previewFile   = "預覽附件";
 $lang->file->addFile       = '添加檔案';
 $lang->file->beginUpload   = '開始上傳';
 $lang->file->uploadSuccess = '上傳成功';
 $lang->file->batchExport   = '分批導出';
+$lang->file->downloadFile  = '下載';
+$lang->file->playFailed    = '視頻預覽失敗，請聯繫管理員';
+$lang->file->exportData    = "導出數據";
+
+$lang->file->cantPreview        = "無法預覽該檔案";
+$lang->file->officeNotSupported = '對不起，企業版才能預覽 Office 文檔。試用企業版，請聯繫我們：4006-8899-23 &nbsp; 0532-86893032。';
+$lang->file->officeNotInstalled = '預覽 Office 文檔，需要 <a href="https://www.zentao.net/book/zentaopms/1609.html" target="_blank">安裝和配置 Office 功能</a>';
 
 $lang->file->pathname  = '路徑';
 $lang->file->title     = '標題';

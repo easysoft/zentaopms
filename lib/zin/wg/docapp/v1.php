@@ -208,7 +208,6 @@ class docApp extends wg
         $app->loadLang('api');
         $langData = $lang->doc->docLang;
         $langData->filePreview       = $lang->file->preview;
-        $langData->cantPreview       = $lang->file->cantPreview;
         $langData->fileDownload      = $lang->file->download;
         $langData->fileDelete        = $lang->file->delete;
         $langData->fileRename        = $lang->file->edit;
@@ -231,6 +230,10 @@ class docApp extends wg
         $langData->labelDiff         = $lang->doc->diff;
         $langData->labelConfirm      = $lang->doc->confirm;
         $langData->labelCancelDiff   = $lang->doc->cancelDiff;
+
+        $langData->cantPreview        = $lang->file->cantPreview;
+        $langData->officeNotSupported = $lang->file->officeNotSupported;
+        $langData->officeNotInstalled = $lang->file->officeNotInstalled;
 
         /**
          * 通过语言项定义文档表格列显示名称。

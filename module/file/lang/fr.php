@@ -32,7 +32,6 @@ $lang->file->exportRange   = "Données";
 $lang->file->defaultTPL    = "Défaut";
 $lang->file->setExportTPL  = "Paramétrages";
 $lang->file->preview       = "Apperçu";
-$lang->file->cantPreview   = "Impossible de prévisualiser ce fichier";
 $lang->file->previewFile   = "aperçu de la pièce jointe";
 $lang->file->addFile       = 'Ajouter';
 $lang->file->beginUpload   = 'Clic pour Charger';
@@ -41,6 +40,10 @@ $lang->file->batchExport   = 'Export in batches';
 $lang->file->downloadFile  = 'Download';
 $lang->file->playFailed    = 'Video preview failed, please contact admin';
 $lang->file->exportData    = "Exporter Données";
+
+$lang->file->cantPreview        = "Impossible de prévisualiser ce fichier";
+$lang->file->officeNotSupported = 'Désolé, seules les versions ZenTao Biz et ZenTao Max prennent en charge la prévisualisation des fichiers Office. Pour essayer ces versions avancées, veuillez nous contacter à l\'adresse support@zentao.pm.';
+$lang->file->officeNotInstalled = 'Pour prévisualiser les fichiers Office, vous devez <a href="https://www.zentao.net/book/zentaopms/1609.html" target="_blank">installer et configurer le support Office</a>';
 
 $lang->file->pathname  = 'Nom Chemin';
 $lang->file->title     = 'Titre';

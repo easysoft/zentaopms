@@ -32,7 +32,6 @@ $lang->file->exportRange   = "导出范围";
 $lang->file->defaultTPL    = "默认模板";
 $lang->file->setExportTPL  = "设置";
 $lang->file->preview       = "预览";
-$lang->file->cantPreview   = "无法预览该文件";
 $lang->file->previewFile   = "预览附件";
 $lang->file->addFile       = '添加文件';
 $lang->file->beginUpload   = '开始上传';
@@ -41,6 +40,10 @@ $lang->file->batchExport   = '分批导出';
 $lang->file->downloadFile  = '下载';
 $lang->file->playFailed    = '视频预览失败，请联系管理员';
 $lang->file->exportData    = "导出数据";
+
+$lang->file->cantPreview        = "无法预览该文件";
+$lang->file->officeNotSupported = '对不起，企业版才能预览 Office 文档。试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。';
+$lang->file->officeNotInstalled = '预览 Office 文档，需要 <a href="https://www.zentao.net/book/zentaopms/1609.html" target="_blank">安装和配置 Office 功能</a>';
 
 $lang->file->pathname  = '路径';
 $lang->file->title     = '标题';
