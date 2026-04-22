@@ -192,6 +192,15 @@ class treeModel extends model
                 $modules[$module->id] = $module;
             }
 
+            if($type == 'deliverable')
+            {
+                $projectModel = $this->dao->findById($rootID)->from(TABLE_WORKFLOWGROUP)->fetch('projectModel');
+                foreach($modules as $moduleID => $module)
+                {
+                    if(strpos(',scrum,agileplus,', ",$projectModel,") !== false && $module->extra == 'design') unset($modules[$moduleID]);
+                }
+            }
+
             foreach($modules as $module)
             {
                 $branchName = (isset($product) && $product->type != 'normal' && (string)$module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
@@ -498,6 +507,15 @@ class treeModel extends model
 
             $data = $this->buildTree($module, $type, '0', $userFunc, $extra, $branch);
             if($data) $modules[] = $data;
+        }
+
+        if($type == 'deliverable')
+        {
+            $projectModel = $this->dao->findById($rootID)->from(TABLE_WORKFLOWGROUP)->fetch('projectModel');
+            foreach($modules as $moduleID => $module)
+            {
+                if(strpos(',scrum,agileplus,', ",$projectModel,") !== false && $module->extra == 'design') unset($modules[$moduleID]);
+            }
         }
 
         return $modules;
