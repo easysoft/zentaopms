@@ -302,6 +302,7 @@ $lang->install->dbProgress      = "Installing Database Tables";
 $lang->install->dbProgressLabel = 'Progress';
 $lang->install->dbExecutingTips = 'Please wait. Do not refresh, power off, or shut down.';
 $lang->install->dbFinish        = "Database tables installed successfully";
+$lang->install->dbFail          = 'Database table installation failed. Please check if the network connection is stable, if the database configuration is correct, and if the database user has permission to create the table. Alternatively, return to the previous page, select "Clear up existing data," and try again.';
 $lang->install->success         = "Installed!";
 $lang->install->login           = 'ZenTao Login';
 $lang->install->register        = 'ZenTao Community Signup';

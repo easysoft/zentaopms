@@ -14,6 +14,7 @@ namespace zin;
 set::zui(true);
 
 jsVar('dbFinish', $lang->install->dbFinish);
+jsVar('dbFail', $lang->install->dbFail);
 
 $isEn  = $app->getClientLang() == 'en';
 $width = $isEn ? 'w-14' : 'w-11';

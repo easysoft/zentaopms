@@ -295,6 +295,7 @@ $lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定�
 $lang->install->dbProgress      = "正在安装数据库表";
 $lang->install->dbProgressLabel = '进度';
 $lang->install->dbExecutingTips = '请耐心等待，切勿刷新页面、断电、关机！';
+$lang->install->dbFail          = "安装数据库表失败。请检查网络请求是否畅通，数据库配置是否正确，数据库用户是否有权限创建表，或者返回前页选择清空数据后重试。";
 $lang->install->dbFinish        = "数据库表安装完毕";
 $lang->install->success         = "安装成功";
 $lang->install->login           = '登录禅道项目管理软件';

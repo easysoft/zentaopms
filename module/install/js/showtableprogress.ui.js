@@ -67,7 +67,7 @@ $(function()
             })
             .fail(function()
             {
-                setStatus('danger', 'Failed to execute installation.');
+                setStatus('danger', dbFail);
             });
     }
 
