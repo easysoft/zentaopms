@@ -34,6 +34,7 @@ if(hasPriv('codescan', 'taskview'))
 }
 if(hasPriv('codescan', 'planview') && isset($cols['planID']))
 {
+    $cols['planID']['name'] = 'planName';
     $cols['planID']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repoID}&planID={planID}&repoID={$repoID}&type=view");
 }
 
