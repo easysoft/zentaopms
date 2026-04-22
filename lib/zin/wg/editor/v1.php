@@ -132,9 +132,9 @@ class editor extends wg
             $editor->setProp('mentions', $mentions);
             $addCss .= <<<CSS
             .mention-label {
-                --mention-label-bg: var(--color-primary-50);
+                --mention-label-bg: transparent;
                 --mention-label-text: var(--color-primary-600);
-                --mention-label-border: var(--color-primary-100);
+                --mention-label-border: transparent;
                 align-items: center;
                 background-color: var(--mention-label-bg);
                 border-color: var(--mention-label-border);
