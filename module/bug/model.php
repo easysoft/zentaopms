@@ -1151,7 +1151,7 @@ class bugModel extends model
         /* 获取产品的bugs。 */
         /* Get product bugs. */
         $productID = (int)$productID;
-        return $this->dao->select("id, CONCAT(IF(product = $productID, '', CONCAT('{$this->lang->product->common}#', product, '@')), id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
+        return $this->dao->select("id, CONCAT(id, ':', title) AS title, IF(product = $productID, 0, product) AS `order`")->from(TABLE_BUG)
             ->where('deleted')->eq(0)
             ->beginIF($range == 'single' && $productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -1162,7 +1162,6 @@ class bugModel extends model
             ->orWhere('id')->like('%' . $search . '%')
             ->markRight(1)
             ->fi()
-            ->andWhere('deleted')->eq(0)
             ->orderBy('`order`, id desc')
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchPairs('id', 'title');

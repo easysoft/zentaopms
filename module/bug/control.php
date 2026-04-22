@@ -1563,11 +1563,12 @@ class bug extends control
      *
      * @param  int     $productID
      * @param  int     $bugID
-     * @param  string  $type
+     * @param  string  $search
+     * @param  int     $duplicateBug
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs(int $productID, int $bugID, string $search = '', string $type = 'html')
+    public function ajaxGetProductBugs(int $productID, int $bugID, string $search = '', int $duplicateBug = 0)
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
@@ -1575,7 +1576,14 @@ class bug extends control
         $productBugs = $this->bug->getProductBugPairs($productID, '', $search, $limit, $productID ? 'single' : 'all');
 
         unset($productBugs[$bugID]);
-        if($type == 'json') return print(helper::jsonEncode($productBugs));
+
+        /* 编辑页已选的重复 bug 需出现在下拉中。 */
+        /* Ensure the selected duplicate bug is present for the edit page picker. */
+        if($duplicateBug && empty($productBugs[$duplicateBug]))
+        {
+            $duplicateInfo = $this->bug->fetchByID($duplicateBug);
+            if($duplicateInfo) $productBugs[$duplicateBug] = $duplicateInfo->id . ':' . $duplicateInfo->title;
+        }
 
         $bugList = array();
         foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);
