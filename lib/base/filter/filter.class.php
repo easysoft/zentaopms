@@ -1088,6 +1088,8 @@ class baseFixer
         if(!$usePurifier) return strip_tags($data, $allowedTags);
 
         static $purifier;
+        static $htmlDef;
+        static $registeredAttributes = array();
         if(empty($purifier))
         {
             $app->loadClass('purifier', true);
@@ -1101,16 +1103,45 @@ class baseFixer
             $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
 
             $purifier = new HTMLPurifier($purifierConfig);
-            $def      = $purifierConfig->getHTMLDefinition(true);
-            $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+            $htmlDef  = $purifierConfig->getHTMLDefinition(true);
 
-            if(!empty($attributes))
+            /* Keep mention metadata on span.mention-label. */
+            $defaultAttributes = array(
+                'a|target|Enum#_blank,_self,_target,_top',
+            );
+
+            foreach($defaultAttributes as $attribute)
             {
-                foreach($attributes as $attribute)
+                list($element, $name, $values) = explode('|', $attribute);
+                $htmlDef->addAttribute($element, $name, $values);
+                $registeredAttributes[$attribute] = true;
+            }
+        }
+
+        /* Allow all data-* attributes that appear on span.mention-label. */
+        if(preg_match_all('/<span\b[^>]*class=(["\'])[^"\']*\bmention-label\b[^"\']*\1[^>]*>/i', $data, $spanMatches))
+        {
+            foreach($spanMatches[0] as $spanTag)
+            {
+                if(!preg_match_all('/\s(data-[a-z0-9:_-]+)\s*=/i', $spanTag, $dataAttributes)) continue;
+                foreach($dataAttributes[1] as $dataAttribute)
                 {
-                    list($element, $attribute, $values) = explode('|', $attribute);
-                    $def->addAttribute($element, $attribute, $values);
+                    $attribute = "span|{$dataAttribute}|Text";
+                    if(isset($registeredAttributes[$attribute])) continue;
+                    $htmlDef->addAttribute('span', $dataAttribute, 'Text');
+                    $registeredAttributes[$attribute] = true;
                 }
+            }
+        }
+
+        if(!empty($attributes))
+        {
+            foreach($attributes as $attribute)
+            {
+                if(isset($registeredAttributes[$attribute])) continue;
+                list($element, $name, $values) = explode('|', $attribute);
+                $htmlDef->addAttribute($element, $name, $values);
+                $registeredAttributes[$attribute] = true;
             }
         }
 
