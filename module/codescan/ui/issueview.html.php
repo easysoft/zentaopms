@@ -56,7 +56,7 @@ if(!empty($issue->payload->snippet))
     $startCol = strlen($matches[0]) + 1;
 }
 
-$ruleContent = common::checkNotCN() ? zget($rule, 'content_en') : zget($rule, 'content');
+$ruleContent = common::checkNotCN() ? zget($rule, 'contentEn') : zget($rule, 'content');
 
 detailHeader
 (
