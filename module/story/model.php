@@ -1776,7 +1776,7 @@ class storyModel extends model
             {
                 $story->plan = trim("{$oldStory->plan},{$planID}", ',');
             }
-            elseif($productType == 'normal' || empty($oldStory->plan) || $oldStory->branch)
+            else
             {
                 $story->plan = $planID;
             }
@@ -1787,7 +1787,6 @@ class storyModel extends model
                 if($oldStory->stage == 'wait') $story->stage = 'planned';
                 if($productType != 'normal' and $oldStory->branch == 0)
                 {
-                    if(!empty($oldPlanID) && $oldStory->type == 'story') $story->plan = trim("{$story->plan},{$planID}", ',');
                     foreach(explode(',', $plan->branch) as $planBranch)
                     {
                         if(isset($oldStoryStages[$storyID][$planBranch])) continue;
