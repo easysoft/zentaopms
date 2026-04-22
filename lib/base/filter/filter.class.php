@@ -718,8 +718,9 @@ class baseValidater
 
         if($type == 'cookie')
         {
-            $pagerCookie                           = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
+            $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
             $filter->default->cookie[$pagerCookie] = 'int';
+            $filter->default->cookie[$pagerCookie . '-block-'] = 'int';
         }
         foreach($var as $key => $value)
         {
@@ -737,6 +738,17 @@ class baseValidater
             elseif(isset($filter->default->{$type}[$key]))
             {
                 $rules = $filter->default->{$type}[$key];
+            }
+            else
+            {
+                foreach($filter->default->{$type} ?? array() as $filterKey => $filterRule)
+                {
+                    if(strpos($filterKey, '-') !== false && strpos($key, $filterKey) === 0)
+                    {
+                        $suffix = substr($key, strlen($filterKey));
+                        if($suffix !== '' && ctype_digit($suffix)) $rules = $filterRule;
+                    }
+                }
             }
 
             if(!self::checkByRule($value, $rules)) unset($var[$key]);

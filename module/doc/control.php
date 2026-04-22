@@ -226,7 +226,7 @@ class doc extends control
             $this->view->idList = (array)zget($blockData->content, 'idList', array());
             $this->view->cols   = (array)zget($blockData->content, 'cols', array());
             $this->view->data   = $data;
-            $this->view->pager  = new pager(count($data), 10);
+            $this->view->pager  = new pager(count($data), 10, 1, 'block-' . $blockID);
         }
 
         $this->view->type         = $type;
