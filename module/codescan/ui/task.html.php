@@ -37,7 +37,7 @@ if(hasPriv('codescan', 'planview') && isset($cols['planID']))
     $cols['planID']['link'] = array('module' => 'codescan', 'method' => 'planView', 'params' => "serviceRepoID={repoID}&planID={planID}&repoID={$repoID}&type=view");
 }
 
-if(isset($cols['issueCount'])) $cols['issueCount']['link']['params'] = "repoID=$repoID&taskID={id}&serviceRepoID={repoID}&type=all";
+if(isset($cols['issueCount'])) $cols['issueCount']['link']['params'] = "repoID={repoID}&taskID={id}&serviceRepoID={repoID}&type=all";
 $urlParams = array
 (
     'repoID'        => $repoID,
