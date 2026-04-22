@@ -471,7 +471,7 @@ EOT;
         $this->setDBParam((object)$this->session->myConfig);
 
         $changes = [];
-        $clearDB = $this->session->myConfig->clearDB ?? 0;
+        $clearDB = $this->session->myConfig['clearDB'] ?? 0;
         $dbFile  = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
         $sqls    = explode(';', file_get_contents($dbFile));
 
