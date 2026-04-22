@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 global $app;
-if(!isset($system->latestDeployStatus)) $app->loadLang('deploy');
+if(isset($system->latestDeployStatus)) $app->loadLang('deploy');
 $latestDeploy = zget($system, 'latestDeploy', '');
 detailHeader(to::title(entityLabel(set(array('entityID' => $system->id, 'level' => 1, 'text' => $system->name, 'className' => 'clip', 'title' => $system->name)))));
 div
