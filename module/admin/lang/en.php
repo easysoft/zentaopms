@@ -130,6 +130,7 @@ $lang->admin->setModule->componentlib   = 'Component Lib';
 $lang->admin->setModule->devops         = 'CI&CD';
 $lang->admin->setModule->deliverable    = 'Deliverable';
 $lang->admin->setModule->kanban         = 'Kanban';
+$lang->admin->setModule->OA             = 'OA';
 $lang->admin->setModule->deploy         = 'OPS';
 $lang->admin->setModule->traincourse    = 'Academy';
 $lang->admin->setModule->setCode        = 'Code';
