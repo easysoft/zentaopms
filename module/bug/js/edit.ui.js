@@ -40,9 +40,3 @@ function linkBug()
 
     openUrl(link, {load: 'modal', size: 'lg'});
 }
-
-function setDuplicateBug()
-{
-    const productID = $('[name=product]').val();
-    loadProductBugs(productID, bug.id);
-}
