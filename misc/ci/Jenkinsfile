@@ -32,6 +32,7 @@ pipeline {
     string description: '指定喧喧分支', name: 'xuanxuan_version', trim: true
     string description: '指定开源版全量降级 revision', name: 'fulldown_pms_version', trim: true
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
+    string description: '指定 gitfox 版本', name: 'gitfox_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: true, description: '制作英文版', name: 'publish_en'
@@ -410,6 +411,7 @@ pipeline {
                           }
                         }
                         script {
+                          env.GITFOX_VERSION = params.gitfox_version
                           buildZboxWin.doBuild()
                           buildZboxWin.doUploadInternal()
                         }
@@ -439,6 +441,7 @@ pipeline {
                     stage("Build") {
                       steps {
                         script {
+                          env.GITFOX_VERSION = params.gitfox_version
                           buildZboxLinux.doBuild()
                           // buildZboxLinux.test()
                           buildZboxLinux.doUploadInternal()
