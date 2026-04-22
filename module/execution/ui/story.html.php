@@ -317,8 +317,8 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory && empty($project->syncStory) ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory && empty($project->syncStory) ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
 if(!$isFromDoc && !$isFromAI) sidebar

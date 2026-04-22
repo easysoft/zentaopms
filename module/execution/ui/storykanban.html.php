@@ -77,7 +77,7 @@ $product ? toolbar
         'data-toggle' => 'modal'
     ))) : null,
 
-    $canCreate && $canBatchCreate ? btngroup
+    $canCreate && $canBatchCreate && empty($project->syncStory) ? btngroup
     (
         btn
         (
@@ -95,10 +95,10 @@ $product ? toolbar
         )
     ) : null,
 
-    $canCreate && !$canBatchCreate ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
-    $canBatchCreate && !$canCreate ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canCreate && !$canBatchCreate && empty($project->syncStory) ? item(set($createItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
+    $canBatchCreate && !$canCreate && empty($project->syncStory) ? item(set($batchCreateItem + array('class' => 'btn primary', 'icon' => 'plus'))) : null,
 
-    $canLinkStory && $canBeChanged ? btngroup
+    $canLinkStory && $canBeChanged && empty($project->syncStory) ? btngroup
     (
         btn(
             setClass('btn primary'),

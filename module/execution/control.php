@@ -2221,6 +2221,7 @@ class execution extends control
         $this->view->productID    = $productID;
         $this->view->total        = count($stories);
         $this->view->product      = $this->product->getByID($productID);
+        $this->view->project      = $this->execution->fetchByID($execution->project);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
