@@ -1110,13 +1110,20 @@ class user extends control
      * @access public
      * @return void
      */
-    public function ajaxGetItems($params = '')
+    public function ajaxGetItems(string $params = '', string $search = '', int $maxCount = 0)
     {
         $items = array();
         $users = $this->user->getPairs($params);
+
+        if(!empty($search)) $search = base64_decode($search);
+
         foreach($users as $account => $realname)
         {
+            if(!empty($search) && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+
             $items[] = array('text' => $realname, 'value' => $account);
+
+            if($maxCount && count($items) >= $maxCount) break;
         }
 
         return print(json_encode($items));
