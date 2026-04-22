@@ -698,9 +698,12 @@ class codescanModel extends model
      */
     public function getScanTasks(int $repoID, int $planID, array $params): array|object
     {
-        $params['repoID'] = $repoID;
-        $params['planID'] = $planID;
+        if(!isset($params['repoID'])) $params['repoID'] = (int)$repoID;
+        if(!isset($params['planID'])) $params['planID'] = (int)$planID;
+
         if(isset($params['taskID'])) $params['taskID'] = (int)$params['taskID'];
+        if(isset($params['repoID'])) $params['repoID'] = (int)$params['repoID'];
+        if(isset($params['planID'])) $params['planID'] = (int)$params['planID'];
         return $this->loadModel('gitfox')->request('/scan/tasks/list', 'POST', $params);
     }
 
@@ -830,7 +833,7 @@ class codescanModel extends model
         $data->status = $status;
         $data->ids    = $issueIdList;
         if(!is_null($solution))     $data->resolution = $solution;
-        if(!is_null($solutionDate)) $data->resolved   = strtotime($solutionDate) * 1000;
+        if(!is_null($solutionDate)) $data->resolved   = $solutionDate;
         if(!empty($ignoreDate))     $data->ignored    = $ignoreDate == -1 ? -1 : $ignoreDate * 1000;
         $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
         if(dao::isError()) return false;
@@ -868,6 +871,7 @@ class codescanModel extends model
         if(isset($params['plugin']))    $params['tool']         = $params['plugin'];
         if(isset($params['createdAt'])) $params['createDate']   = $params['createdAt'];
         if(isset($params['plan']))      $params['planID']       = (int)$params['plan'];
+        if(isset($params['sort']) && $params['sort'] == 'createdAt') $params['sort'] = 'createDate';
 
         $api    = $taskID ? "/scan/tasks/{$taskID}/issues" : '/scan/issues/list';
         $result = $this->loadModel('gitfox')->request($api, 'POST', $params);
@@ -879,7 +883,7 @@ class codescanModel extends model
         {
             $issue->bugID     = isset($bugList[$issue->id]) ? $bugList[$issue->id] : 0;
             $issue->createdAt = $issue->createdDate;
-            if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->trigger_type);
+            if(!empty($issue->trigger)) $issue->triggerName = isset($issue->trigger->name) ? $issue->trigger->name : zget($this->lang->codescan->triggerTypeList, $issue->trigger->type);
             if(!empty($issue->ignored) && $issue->ignored > 0 && $issue->ignored <= (time() * 1000)) $this->changeIssueState($issue->id, 'wait');
         }
 

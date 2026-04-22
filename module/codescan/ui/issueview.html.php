@@ -258,7 +258,7 @@ div
                     item
                     (
                         set::name($lang->bug->resolvedDate),
-                        empty($issue->resolved) ? '' : date('Y-m-d H:i:s', intval($issue->resolved / 1000))
+                        empty($issue->resolved) ? '' : $issue->resolved
                     )
                 )
             ),
