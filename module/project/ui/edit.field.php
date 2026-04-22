@@ -26,5 +26,5 @@ $fields->field('storyType')->width('full')->value(data('project.storyType'));
 
 if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
 {
-    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value(data('project.syncStory'))->disabled(true);
+    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value(data('project.syncStory'))->disabled(true)->width('full');
 }
