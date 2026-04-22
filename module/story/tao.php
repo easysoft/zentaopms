@@ -952,7 +952,7 @@ class storyTao extends storyModel
      * @access protected
      * @return void
      */
-    protected function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
+    public function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
     {
         if(empty($executionID) || empty($storyID)) return;
 
@@ -960,10 +960,22 @@ class storyTao extends storyModel
         if(in_array($this->config->systemMode, array('ALM', 'PLM')) && $this->session->project && $executionID != $this->session->project) $this->linkStory((int)$this->session->project, $story->product, $storyID);
 
         $this->loadModel('action');
-        $extra  = $this->parseExtra($extra);
-        $object = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        $extra     = $this->parseExtra($extra);
+        $object    = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
+        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
         if($object->type == 'project')
         {
+            if(!empty($object->syncStory))
+            {
+                $projectStages = $this->dao->select('id,attribute')->from(TABLE_PROJECT)->where('project')->eq($object->id)->andWhere('type')->eq('stage')->andWhere('attribute')->ne('review')->fetchPairs('id');
+                foreach($projectStages as $stageID => $stageAttribute)
+                {
+                    if(!in_array($stageAttribute, array('mix', 'request', 'design')) && $storyType != 'story') continue;
+
+                    $this->linkStory($stageID, $story->product, $storyID);
+                    $this->action->create('story', $storyID, 'linked2execution', '', (string)$stageID);
+                }
+            }
             $this->action->create('story', $storyID, 'linked2project', '', $object->id);
             return;
         }
@@ -2159,7 +2171,7 @@ class storyTao extends storyModel
                         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->id)->andWhere('type')->ne('project')->fetchAll('id');
                         $executionStories[$execution->id] = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs('story', 'story');
                     }
-                    if(isset($executionStories[$execution->id][$story->id]))
+                    if(empty($story->syncStory) && isset($executionStories[$execution->id][$story->id]))
                     {
                         $disabled   = true;
                         $unlinkHint = $this->lang->execution->notAllowedUnlinkStory;
@@ -2192,9 +2204,12 @@ class storyTao extends storyModel
                     }
                 }
 
-                if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
-                $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
-                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled || (!empty($story->frozen) && $this->app->tab != 'execution'), 'hint' => !empty($story->frozen) ? sprintf($this->lang->story->frozenTip, $this->lang->story->unlink) : $unlinkHint);
+                if(empty($story->syncStory) || $this->app->tab != 'execution')
+                {
+                    if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
+                    $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
+                    $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled || (!empty($story->frozen) && $this->app->tab != 'execution'), 'hint' => !empty($story->frozen) ? sprintf($this->lang->story->frozenTip, $this->lang->story->unlink) : $unlinkHint);
+                }
             }
         }
 

@@ -231,7 +231,7 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if(!$isFromDoc && !$isFromAI)
+if(!$isFromDoc && !$isFromAI && empty($project->syncStory))
 {
     if($canOpreate['create'])
     {
@@ -300,7 +300,7 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
 
     $createBtnGroup,
 
-    $canLinkStory && $canlinkPlanStory ? btngroup
+    $canLinkStory && $canlinkPlanStory && empty($project->syncStory) ? btngroup
     (
         btn(
             setClass('btn primary'),
@@ -420,7 +420,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution');
+$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution') && empty($project->syncStory);
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
@@ -575,8 +575,9 @@ if($config->edition == 'ipd')
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
 {
-    $story->moduleID = $story->module;
-    $story->from     = 'execution';
+    $story->moduleID  = $story->module;
+    $story->from      = 'execution';
+    $story->syncStory = $project->syncStory;
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
     if(!isset($story->children)) continue;
 }

@@ -71,5 +71,5 @@ $fields->field('storyType')->width('full')->foldable()->value($storyType);
 
 if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
 {
-    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value(1);
+    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value($copyProject ? data('copyProject.syncStory') : 1);
 }
