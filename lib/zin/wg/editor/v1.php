@@ -27,7 +27,8 @@ class editor extends wg
         'preferHardBreak?: bool=false',         // 是否优先使用硬回车而不是新段落
         'value?: string',                       // 初始内容
         'templateType?: string',                // 模板类型
-        'uid?: string'                          // 图片上传 uid
+        'uid?: string',                         // 图片上传 uid
+        'mentions?: bool|array=true',           // 提及用户列表，如果为 true，则使用默认的提及用户列表，如果为数组，则使用指定的提及用户列表
     );
 
     protected static string $css = <<<CSS
@@ -120,6 +121,31 @@ class editor extends wg
             $height = $this->prop('maxHeight');
             $addCss = <<<CSS
             .editor {max-height: $height;}
+            CSS;
+        }
+
+        /* Set mentions. */
+        $mentions = $this->prop('mentions');
+        if($mentions)
+        {
+            $editor->setProp('extensions', 'getZenEditorExtensions');
+            $editor->setProp('mentions', $mentions);
+            $addCss .= <<<CSS
+            .mention-label {
+                --mention-label-bg: var(--color-primary-50);
+                --mention-label-text: var(--color-primary-600);
+                --mention-label-border: var(--color-primary-100);
+                align-items: center;
+                background-color: var(--mention-label-bg);
+                border-color: var(--mention-label-border);
+                border-radius: var(--radius);
+                border-width: 1px;
+                border-style: solid;
+                color: var(--mention-label-text);
+                display: inline-flex;
+                line-height: 1;
+                padding: .125rem .25rem;
+            }
             CSS;
         }
 
