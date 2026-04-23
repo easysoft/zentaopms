@@ -70,7 +70,7 @@ class programTao extends programModel
             $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
             if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
 
-            if($config->edition != 'open' && empty($item->disabled))
+            if($this->config->edition != 'open' && empty($item->disabled))
             {
                 foreach($flowActions as $flowAction)
                 {
@@ -102,7 +102,7 @@ class programTao extends programModel
                 $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
                 if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
 
-                if($config->edition != 'open' && empty($item->disabled))
+                if($this->config->edition != 'open' && empty($item->disabled))
                 {
                     foreach($flowActions as $flowAction)
                     {
