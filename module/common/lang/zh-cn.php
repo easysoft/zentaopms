@@ -217,6 +217,14 @@ $lang->contactUs->email  = '邮箱';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = '微信';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = '选择用户';
+$lang->userSelector->deptTitle     = '按部门筛选';
+$lang->userSelector->userTitle     = '选择用户';
+$lang->userSelector->selectedTitle = '已选择';
+$lang->userSelector->allText       = '全部用户';
+$lang->userSelector->emptyText     = '暂无可选用户';
+
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
 $lang->cache->common        = '缓存';
