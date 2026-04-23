@@ -168,12 +168,8 @@ class codescanZen extends codescan
                 {
                     if(isset($this->config->codescan->remoteFields[$search['field']])) $search['field'] = $this->config->codescan->remoteFields[$search['field']];
                     if($search['field'] == 'id' && $method == 'task') $search['field'] = 'taskID';
-                    if(in_array($search['field'], array('started', 'finished')))
-                    {
-                        $search['field'] = in_array($search['operator'], array('<', '<=')) ? $search['field'] . 'Lt' : $search['field'] . 'Gt';
-                    }
 
-                    if(strpos($search['field'], '_at'))
+                    if(strpos($search['field'], 'Date') || in_array($search['field'], array('started', 'finished')))
                     {
                         $fields     = explode('_', $search['field']);
                         $dateFilter = $this->getDateFilter($search['value']);

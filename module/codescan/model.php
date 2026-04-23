@@ -824,7 +824,7 @@ class codescanModel extends model
      * @access public
      * @return void
      */
-    public function changeIssueState(int|array $issueIdList, string $status, ?string $solution = null, ?string $solutionDate = null, int $ignoreDate = 0): bool
+    public function changeIssueState(int|array $issueIdList, string $status, string $solution = '', string $solutionDate = '', int $ignoreDate = 0): bool
     {
         if(is_numeric($issueIdList)) $issueIdList = array($issueIdList);
         foreach($issueIdList as $index => $issueID) $issueIdList[$index] = (int)$issueID;
@@ -832,9 +832,9 @@ class codescanModel extends model
         $data = new stdclass();
         $data->status = $status;
         $data->ids    = $issueIdList;
-        if(!is_null($solution))     $data->resolution = $solution;
-        if(!is_null($solutionDate)) $data->resolved   = $solutionDate;
-        if(!empty($ignoreDate))     $data->ignored    = $ignoreDate == -1 ? -1 : $ignoreDate * 1000;
+        if(!empty($solution))     $data->resolution = $solution;
+        if(!empty($solutionDate)) $data->resolved   = $solutionDate;
+        if(!empty($ignoreDate))   $data->ignored    = $ignoreDate == -1 ? -1 : $ignoreDate * 1000;
         $this->loadModel('gitfox')->request('/scan/issues/status', 'PUT', $data);
         if(dao::isError()) return false;
 
