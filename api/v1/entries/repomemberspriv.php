@@ -45,14 +45,16 @@ class repomembersprivEntry extends baseEntry
         $repo   = $this->loadModel('repo')->fetchByID($repoID);
         if(!$repo) return $this->sendError(404, 'Repo not found');
 
+        $space = $this->loadModel('space')->fetchByID($repo->spaceID);
+        if(!$space) return $this->sendError(404, 'Space not found');
+
         $this->loadModel('user');
         if($repo->acl == 'private')
         {
-            $repo->members = $this->getRepoUsers($repo->id);
+            $repo->members = $this->repo->getRepoUsers($repo->id);
         }
         else
         {
-            $space = $this->loadModel('space')->getByID($repo->spaceID);
             $repo->members = $space->acl == 'private' ? zget($space, 'members', array()) : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
         }
 
