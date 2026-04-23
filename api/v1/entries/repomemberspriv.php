@@ -42,16 +42,26 @@ class repomembersprivEntry extends baseEntry
         }
 
         $repoID = $this->param('id');
-        $repo   = $this->loadModel('repo')->getByID($repoID);
+        $repo   = $this->loadModel('repo')->fetchByID($repoID);
         if(!$repo) return $this->sendError(404, 'Repo not found');
 
-        $privs     = array();
-        $members   = $this->repo->getRepoMembers($repo);
-        $userModel = $this->loadModel('user');
+        $this->loadModel('user');
+        if($repo->acl == 'private')
+        {
+            $repo->members = $this->getRepoUsers($repo->id);
+        }
+        else
+        {
+            $space = $this->loadModel('space')->getByID($repo->spaceID);
+            $repo->members = $space->acl == 'private' ? zget($space, 'members', array()) : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+        }
+
+        $privs   = array();
+        $members = $this->repo->getRepoMembers($repo);
         foreach(array_keys($members) as $account)
         {
-            $canCreateRepo = $userModel->hasRepoPrivByAccount($account, 'createRepo');
-            $canEditRepo   = $userModel->hasRepoPrivByAccount($account, 'edit');
+            $canCreateRepo = $this->user->hasRepoPrivByAccount($account, 'createRepo');
+            $canEditRepo   = $this->user->hasRepoPrivByAccount($account, 'edit');
 
             $privs[$account] = array(
                 'pull' => true,
