@@ -42,9 +42,8 @@ class repomembersprivEntry extends baseEntry
         }
 
         $repoID = $this->param('id');
-        $repo   = $this->loadModel('repo')->fetchByID($repoID);
+        $repo   = $this->loadModel('repo')->getByID($repoID);
         if(!$repo) return $this->sendError(404, 'Repo not found');
-        $repo->members = $repo->acl == 'private' ? $this->repo->getRepoUsers($repo->id) : $this->loadModel('space')->getSpaceMembers($repo->spaceID);
 
         $privs     = array();
         $members   = $this->repo->getRepoMembers($repo);
