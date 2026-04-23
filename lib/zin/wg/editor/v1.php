@@ -144,7 +144,7 @@ class editor extends wg
                 color: var(--mention-label-text);
                 display: inline-flex;
                 line-height: 1;
-                padding: .125rem .25rem;
+                padding: .125rem 0;
             }
             CSS;
         }
