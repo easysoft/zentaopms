@@ -173,15 +173,21 @@ class codescanZen extends codescan
                         $search['field'] = in_array($search['operator'], array('<', '<=')) ? $search['field'] . 'Lt' : $search['field'] . 'Gt';
                     }
 
-                    if(strpos($search['field'], '_at'))
+                    if(strpos($search['field'], 'Date'))
                     {
                         $fields     = explode('_', $search['field']);
                         $dateFilter = $this->getDateFilter($search['value']);
 
-                        $param["{$fields[0]}Lt"] = $dateFilter['begin'];
-                        $param["{$fields[0]}Gt"] = $dateFilter['end'];
-
-                        $search['value'] = $dateFilter['begin'];
+                        if($search['operator'] == '=')
+                        {
+                            $search['value'] = $dateFilter['begin'];
+                        }
+                        else
+                        {
+                            $param["{$fields[0]}Gt"] = $dateFilter['begin'];
+                            $param["{$fields[0]}Lt"] = $dateFilter['end'];
+                            continue;
+                        }
                     }
                     if($search['field'] == 'lang' && $search['value'] == 'all') $search['value'] = '';
 

@@ -236,8 +236,8 @@ $config->codescan->task->search['params']['branch']   = array('operator' => '=',
 $config->codescan->task->search['params']['status']   = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->latestExecStatusList);
 $config->codescan->task->search['params']['result']   = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->latestScanResultList);
 $config->codescan->task->search['params']['plan']     = array('operator' => '=', 'control' => 'select', 'values' => array());
-$config->codescan->task->search['params']['started']  = array('operator' => '=', 'control' => 'date', 'values' => '');
-$config->codescan->task->search['params']['finished'] = array('operator' => '=', 'control' => 'date', 'values' => '');
+$config->codescan->task->search['params']['started']  = array('operator' => '>', 'control' => 'datetime', 'values' => '');
+$config->codescan->task->search['params']['finished'] = array('operator' => '>', 'control' => 'datetime', 'values' => '');
 
 $config->codescan->issue = new stdclass();
 
