@@ -839,6 +839,12 @@ function initTableData(array $items, array &$fieldList, ?object $model = null): 
                         if(in_array($otherActionName, array_column($item->actions, 'name'))) continue;
 
                         if(method_exists($model, 'isClickable') && !$model->isClickable($item, $otherActionName)) $otherAction .= '-';
+
+                        if(substr($otherAction, -1) != '-' && $model->config->edition != 'open')
+                        {
+                            if(!checkFlowActionCondition(zget($actionList, $otherActionName, array()), $otherActionName, $item, $model)) $otherAction .= '-';
+                        }
+
                         $otherAction .= $otherActionName . ',';
                     }
                 }
@@ -850,7 +856,13 @@ function initTableData(array $items, array &$fieldList, ?object $model = null): 
                 foreach($actionMenu as $moreActionName)
                 {
                     if(!checkOtherPriv(zget($actionList, $moreActionName, array()), $moreActionName, $item, $model)) continue;
+
                     if(method_exists($model, 'isClickable') && !$model->isClickable($item, $moreActionName)) $moreAction .= '-';
+
+                    if(substr($moreAction, -1) != '-' && $model->config->edition != 'open')
+                    {
+                        if(!checkFlowActionCondition(zget($actionList, $moreActionName, array()), $moreActionName, $item, $model)) $moreAction .= '-';
+                    }
                     $moreAction .= $moreActionName . ',';
                 }
 
@@ -1022,24 +1034,49 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     if(!$method || !common::hasPriv($module, $method, $item)) return $isClickable;
 
     /* Check flow conditions for this object. */
-    if($model->config->edition != 'open')
-    {
-        static $flowActions = [];
-        if(empty($flowActions[$module])) $flowActions[$module] = $model->loadModel('workflowaction')->getList($module);
-
-        $model->loadModel('flow');
-        foreach($flowActions[$module] as $flowAction)
-        {
-            if($flowAction->action == $method && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
-            {
-                $isClickable = $model->flow->checkConditions($flowAction->conditions, $item);
-            }
-        }
-    }
+    if($model->config->edition != 'open') $isClickable = checkFlowActionCondition($actionConfig, $method, $item, $model);
 
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 
     return $isClickable;
+}
+
+/**
+ * Check flow action conditions.
+ *
+ * @param  array  $actionConfig
+ * @param  string $action
+ * @param  object $item
+ * @param  object $model
+ * @access public
+ * @return bool
+ */
+function checkFlowActionCondition(array $actionConfig, string $action, object $item, object $model): bool
+{
+    global $app;
+
+    $module = $model->getModuleName();
+    if($module == 'flow') $module = $app->rawModule;
+    if(!empty($actionConfig['url']['module']) && $module != $actionConfig['url']['module']) $module = $actionConfig['url']['module'];
+
+    $method = $action;
+    if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
+
+    static $flowActions = [];
+    if(empty($flowActions[$module])) $flowActions[$module] = $model->loadModel('workflowaction')->getList($module);
+
+    if(empty($flowActions[$module])) return true;
+
+    $model->loadModel('flow');
+    foreach($flowActions[$module] as $flowAction)
+    {
+        if($flowAction->action == $method && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+        {
+            if(!$model->flow->checkConditions($flowAction->conditions, $item)) return false;
+        }
+    }
+
+    return true;
 }
 
 /**

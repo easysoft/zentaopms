@@ -65,21 +65,22 @@ class programTao extends programModel
             if($action == 'activate' && (!$canActivateProgram || $program->status != 'closed')) continue;
             if($action == 'start' && (!$canStartProgram || ($program->status != 'wait' && $program->status != 'suspended'))) continue;
 
-            if($this->config->edition != 'open')
+            $item = new stdclass();
+            $item->name   = $action;
+            $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
+            if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
+
+            if($config->edition != 'open' && empty($item->disabled))
             {
                 foreach($flowActions as $flowAction)
                 {
                     if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
                     {
-                        if(!$this->flow->checkConditions($flowAction->conditions, $data)) continue 2;
+                        if(!$this->flow->checkConditions($flowAction->conditions, $program)) $item->disabled = true;
                     }
                 }
             }
 
-            $item = new stdclass();
-            $item->name   = $action;
-            $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
-            if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
             $actionsMap[] = $item;
             break;
         }
@@ -96,21 +97,21 @@ class programTao extends programModel
                 if(!common::hasPriv($program->type, $action, $program)) continue;
                 if($action == 'close' && $program->status == 'doing') continue;
 
-                if($this->config->edition != 'open')
+                $item = new stdclass();
+                $item->name     = $action;
+                $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
+                if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
+
+                if($config->edition != 'open' && empty($item->disabled))
                 {
                     foreach($flowActions as $flowAction)
                     {
                         if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
                         {
-                            if(!$this->flow->checkConditions($flowAction->conditions, $data)) continue 2;
+                            if(!$this->flow->checkConditions($flowAction->conditions, $program)) $item->disabled = true;
                         }
                     }
                 }
-
-                $item = new stdclass();
-                $item->name     = $action;
-                $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
-                if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
 
                 if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->{$program->type}->tip->closed;
                 if($action == 'activate' && $program->status == 'doing')    $item->hint = $this->lang->{$program->type}->tip->actived;
