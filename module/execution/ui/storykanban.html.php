@@ -18,7 +18,7 @@ jsVar('hourUnit',    $config->hourUnit);
 jsVar('executionID', $executionID);
 jsVar('priv', array(
     'canViewStory'        => common::hasPriv('execution', 'storyView'),
-    'canUnlinkStory'      => (common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct),
+    'canUnlinkStory'      => common::hasPriv('execution', 'unlinkStory') && $execution->hasProduct && empty($project->syncStory),
     'canBatchChangeStage' => common::hasPriv('story', 'batchChangeStage')
 ));
 
