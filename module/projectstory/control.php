@@ -380,6 +380,7 @@ class projectStory extends control
      */
     public function export(int $productID, string $orderBy, int $executionID = 0, string $browseType = '', string $storyType = 'story')
     {
+        if($_POST) $_POST['headerName'] = $this->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('name');
         echo $this->fetch('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$executionID&browseType=$browseType&storyType=$storyType");
     }
 
