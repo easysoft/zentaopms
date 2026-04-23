@@ -138,14 +138,14 @@ $lang->gitfox->featureBar['binduser']['binded']  = $lang->gitfox->binded;
 
 $lang->gitfox->devopsIntroduction = 'Zentao DevOps Solution: Comprehensive Refactoring, Leading the Future';
 $lang->gitfox->devopsDescription  = <<<EOD
-<p class="intro-text">
-  To address increasingly complex business challenges and embrace intelligent transformation, the DevOps solution welcomes the revolutionary refactoring of version <span class="text-danger">4.0 Beta</span>. This is a starting point for intelligent R&D, creating a lightweight, integrated R&D base for <span class="text-danger">future AI deep empowerment</span> that can perfectly support the implementation of core AI capabilities such as subsequent AI code review, assisted programming, automated testing, and intelligent operations.
+<p class="leading-relaxed mb-2">
+  To address increasingly complex business challenges and embrace intelligent transformation, the DevOps solution welcomes the revolutionary refactoring of version <span class="font-black">4.0 Beta</span>. This is a starting point for intelligent R&D, creating a lightweight, integrated R&D base for <span class="font-black">future AI deep empowerment</span> that can perfectly support the implementation of core AI capabilities such as subsequent AI code review, assisted programming, automated testing, and intelligent operations.
 </p>
-<ul class="feature-list">
-  <li class="m-2">Using self-developed code hosting platform with comprehensive features, supporting one-click installation, providing full lifecycle management from code submission to delivery.</li>
-  <li class="m-2">Supporting comprehensive R&D process configuration, providing fine-grained permission control such as branch classification, code submission, and merge processes, making large-scale collaboration return to simplicity and order.</li>
-  <li class="m-2">Multi-level code repository, artifact repository, and Webhook configuration, better adapted to company organizational structure, clearer and more scalable.</li>
-  <li class="m-2">Pipeline supports visual orchestration capability, providing a more concise and easy-to-use interface, making deployment as simple as drawing.</li>
+<ul class="feature-list leading-relaxed">
+  <li>Using self-developed code hosting platform with comprehensive features, supporting one-click installation, providing full lifecycle management from code submission to delivery.</li>
+  <li>Supporting comprehensive R&D process configuration, providing fine-grained permission control such as branch classification, code submission, and merge processes, making large-scale collaboration return to simplicity and order.</li>
+  <li>Multi-level code repository, artifact repository, and Webhook configuration, better adapted to company organizational structure, clearer and more scalable.</li>
+  <li>Pipeline supports visual orchestration capability, providing a more concise and easy-to-use interface, making deployment as simple as drawing.</li>
 </ul>
 EOD;
 

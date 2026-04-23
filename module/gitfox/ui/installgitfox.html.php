@@ -38,18 +38,17 @@ div
             (
                 div
                 (
-                    setClass('block overflow-hidden h-96 p-3'),
+                    setClass('block overflow-hidden h-auto p-3'),
                     col
                     (
                         div
                         (
-                            setClass('text-danger mt-2 mb-4'),
+                            setClass('font-bold mt-2 mb-4'),
                             $lang->gitfox->installGitFoxTip
                         ),
                         div
                         (
                             setClass('mb-2'),
-                            p(setClass('font-semibold mb-2'), $lang->gitfox->execScript),
                             h::pre
                             (
                                 setID('script'),

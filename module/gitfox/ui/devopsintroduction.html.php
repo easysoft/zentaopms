@@ -21,7 +21,7 @@ div
     div
     (
         setID('mainContent'),
-        setClass('px-1 mt-2 w-full max-w-7xl'),
+        setClass('px-auto mt-2 w-full max-w-7xl'),
         panel
         (
             setClass('py-2'),
@@ -31,7 +31,7 @@ div
             (
                 div
                 (
-                    setClass('block overflow-hidden h-96 p-3 progress'),
+                    setClass('block overflow-hidden h-auto p-5 progress text-md'),
                     html($lang->gitfox->devopsDescription)
                 ),
                 set::actions
