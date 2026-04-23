@@ -30,7 +30,7 @@ $queryMenuLink = createLink('codescan', 'issue', "repoID={$repoID}&taskID={$task
 $cols = $this->loadModel('datatable')->getSetting('codescan');
 if(isset($cols['rulePlugin'])) $cols['rulePlugin']['map'] = $pluginList;
 if(isset($cols['actions']['list']['bug'])) $cols['actions']['list']['bug']['url']['params'] = "product={$productID}&branch=0&extra=from=codescan,fromID={id},fromServerID={$realRepoID},repoID={$realRepoID}";
-if(hasPriv('codescan', 'issueview')) $cols['content']['link'] = array('module' => 'codescan', 'method' => 'issueview', 'params' => "issueID={id}&repoID={$realRepoID}");
+if(hasPriv('codescan', 'issueview')) $cols['content']['link'] = array('module' => 'codescan', 'method' => 'issueview', 'params' => "issueID={id}&repoID={repoID}");
 if($isInModal)
 {
     if($task) modalHeader(set::title($title), set::entityText($task->name), set::entityID($taskID));
