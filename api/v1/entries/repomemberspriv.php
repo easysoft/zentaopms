@@ -55,7 +55,8 @@ class repomembersprivEntry extends baseEntry
         }
         else
         {
-            $repo->members = $space->acl == 'private' ? zget($space, 'members', array()) : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
+            $spaceMembers  = $this->space->getSpaceMembers($space->id);
+            $repo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
         }
 
         $privs   = array();
