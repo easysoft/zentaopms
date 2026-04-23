@@ -198,8 +198,8 @@ class ppm extends control
      */
     public function create(int $repoID = 0, int $objectID = 0, string $sourceBranch = '', string $targetBranch = '')
     {
-        $sourceBranch = helper::safe64Encode($sourceBranch);
-        $targetBranch = helper::safe64Encode($targetBranch);
+        $sourceBranch = helper::safe64Decode($sourceBranch);
+        $targetBranch = helper::safe64Decode($targetBranch);
 
         $repoID = $this->loadModel('repo')->saveState($repoID);
         if($repoID) $this->ci->setMenu($repoID);
