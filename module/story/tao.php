@@ -967,7 +967,13 @@ class storyTao extends storyModel
         {
             if(!empty($object->syncStory))
             {
-                $projectStages = $this->dao->select('id,attribute')->from(TABLE_PROJECT)->where('project')->eq($object->id)->andWhere('type')->eq('stage')->andWhere('attribute')->ne('review')->fetchPairs('id');
+                $projectStages = $this->dao->select('t1.id, t1.attribute')->from(TABLE_PROJECT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+                    ->where('t1.project')->eq($object->id)
+                    ->andWhere('t1.type')->eq('stage')
+                    ->andWhere('t1.attribute')->ne('review')
+                    ->andWhere('t2.product')->eq($story->product)
+                    ->fetchPairs('id');
                 foreach($projectStages as $stageID => $stageAttribute)
                 {
                     if(!in_array($stageAttribute, array('mix', 'request', 'design')) && $storyType != 'story') continue;

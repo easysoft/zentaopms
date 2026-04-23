@@ -2919,6 +2919,7 @@ class executionModel extends model
         $lastOrder        = (int)reset($linkedStories);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
+        $linkedPorducts   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs();
 
         $hasFrozenStories = $this->loadModel('project')->hasFrozenObject($project->id, 'SRS');
         if($hasFrozenStories) $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
@@ -2934,6 +2935,7 @@ class executionModel extends model
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false && $this->config->vision == 'rnd') continue;
+            if(!isset($linkedPorducts[$story->product])) continue;
 
             if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
