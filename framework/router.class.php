@@ -582,6 +582,7 @@ class router extends baseRouter
                 $this->rawMethod = $this->methodName;
                 $this->isFlow    = true;
 
+                $this->loadLang('workflowaction');
                 $this->loadModuleConfig('workflowaction');
 
                 $moduleName = 'flow';
