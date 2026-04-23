@@ -63,7 +63,10 @@ class monaco extends wg
             jsVar('selectedLines', $selectedLines),
             jsVar('selectedClass', $selectedClass),
             jsVar('+lineMap', empty($lineMap) ? null : $lineMap),
-            setID($id)
+            jsVar('height', $this->prop('height')),
+            setID($id),
+            set($this->getRestProps()),
+            textarea(set::name($id), setClass('hidden'))
         );
     }
 }
