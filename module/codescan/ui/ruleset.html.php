@@ -49,6 +49,7 @@ dtable
     set::cols($cols),
     set::data($rulesetList),
     set::sortLink(createLink('codescan', 'ruleset', $urlParams)),
+    set::userMap($users),
     set::orderBy($orderBy),
     set::footPager(usePager())
 );

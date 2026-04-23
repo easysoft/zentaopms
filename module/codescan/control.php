@@ -104,6 +104,7 @@ class codescan extends control
         $this->view->orderBy  = $orderBy;
         $this->view->type     = $type;
         $this->view->queryID  = $queryID;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -479,6 +480,7 @@ class codescan extends control
         $this->view->orderBy   = $orderBy;
         $this->view->type      = $type;
         $this->view->queryID   = $queryID;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

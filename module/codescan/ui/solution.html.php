@@ -42,5 +42,6 @@ dtable
     set::data($solutionList),
     set::sortLink(createLink('codescan', 'solution', "type={$type}&queryID={$queryID}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
+    set::userMap($users),
     set::footPager(usePager())
 );

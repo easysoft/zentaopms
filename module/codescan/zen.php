@@ -113,7 +113,7 @@ class codescanZen extends codescan
             $end   = $query . ' 23:59:59';
             break;
         }
-        return array('begin' => strtotime($begin) * 1000,  'end' => strtotime($end) * 1000);
+        return array('begin' => $begin,  'end' => $end);
     }
 
     /**
@@ -170,8 +170,7 @@ class codescanZen extends codescan
                     if($search['field'] == 'id' && $method == 'task') $search['field'] = 'taskID';
                     if(in_array($search['field'], array('started', 'finished')))
                     {
-                        $search['field'] = in_array($search['operator'], array('<', '<=')) ? 'started_lt' : 'started_gt';
-                        $search['value'] = strtotime($search['value']) * 1000;
+                        $search['field'] = in_array($search['operator'], array('<', '<=')) ? $search['field'] . 'Lt' : $search['field'] . 'Gt';
                     }
 
                     if(strpos($search['field'], '_at'))
@@ -179,8 +178,8 @@ class codescanZen extends codescan
                         $fields     = explode('_', $search['field']);
                         $dateFilter = $this->getDateFilter($search['value']);
 
-                        $param["{$fields[0]}_lt"] = $dateFilter['begin'];
-                        $param["{$fields[0]}_gt"] = $dateFilter['end'];
+                        $param["{$fields[0]}Lt"] = $dateFilter['begin'];
+                        $param["{$fields[0]}Gt"] = $dateFilter['end'];
 
                         $search['value'] = $dateFilter['begin'];
                     }
