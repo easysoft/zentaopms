@@ -104,6 +104,7 @@ class codescan extends control
         $this->view->orderBy  = $orderBy;
         $this->view->type     = $type;
         $this->view->queryID  = $queryID;
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -479,6 +480,7 @@ class codescan extends control
         $this->view->orderBy   = $orderBy;
         $this->view->type      = $type;
         $this->view->queryID   = $queryID;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 
@@ -515,7 +517,7 @@ class codescan extends control
         if($_POST)
         {
             $formData = form::data($this->config->codescan->form->createSolution)
-                ->add('created_by', $this->app->user->account)
+                ->add('createdBy', $this->app->user->account)
                 ->skipSpecial('name,description')
                 ->get();
             if(dao::isError()) return $this->codescanZen->responseError();
@@ -528,7 +530,7 @@ class codescan extends control
         }
 
         $this->view->title   = $this->lang->codescan->createSolution;
-        $this->view->setList = $this->codescanZen->getListByQuery('ruleset');
+        $this->view->setList = $this->codescanZen->getListByQuery('ruleset', 0, 0, 'enabled');
         $this->display();
     }
 
