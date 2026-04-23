@@ -31,11 +31,7 @@ tabs
             set::data($commits),
             set::userMap($users),
             set::loadPartial(true),
-            set::footPager(usePager('commitPager', '', array(
-                'recPerPage'  => $commitPager->recPerPage,
-                'recTotal'    => $commitPager->recTotal,
-                'linkCreator' => helper::createLink('mr', 'ajaxgetcreatechecklist', "repoID={$repoID}&sourceBranch={$sourceBranch}&targetBranch={$targetBranch}&type=commit&recPerPage={$commitPager->recPerPage}&pageID={$commitPager->pageID}")
-            )))
+            set::footPager(usePager('commitPager'))
         )
     ),
     tabPane
