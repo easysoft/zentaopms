@@ -37,33 +37,9 @@ $tester->dao->insert(TABLE_DOCLIB)
     ->set('acl')->eq('open')
     ->exec();
 
-$tester->dao->insert(TABLE_DOC)
-    ->set('id')->eq(1)
-    ->set('lib')->eq(1)
-    ->set('title')->eq('测试文档1')
-    ->set('type')->eq('text')
-    ->set('status')->eq('normal')
-    ->set('deleted')->eq(0)
-    ->set('vision')->eq('rnd')
-    ->set('addedBy')->eq('admin')
-    ->exec();
-
-$tester->dao->insert(TABLE_DOC)
-    ->set('id')->eq(2)
-    ->set('lib')->eq(1)
-    ->set('title')->eq('测试文档2')
-    ->set('type')->eq('text')
-    ->set('status')->eq('draft')
-    ->set('deleted')->eq(0)
-    ->set('vision')->eq('rnd')
-    ->set('addedBy')->eq('admin')
-    ->exec();
-
-$tester->dao->insert(TABLE_DOCACTION)
-    ->set('doc')->eq(1)
-    ->set('action')->eq('collect')
-    ->set('actor')->eq('admin')
-    ->exec();
+$tester->dao->insert(TABLE_DOC)->set('id')->eq(1)->set('lib')->eq(1)->set('title')->eq('测试文档1')->set('type')->eq('text')->set('status')->eq('normal')->set('deleted')->eq(0)->set('vision')->eq('rnd')->set('addedBy')->eq('admin')->exec();
+$tester->dao->insert(TABLE_DOC)->set('id')->eq(2)->set('lib')->eq(1)->set('title')->eq('测试文档2')->set('type')->eq('text')->set('status')->eq('draft')->set('deleted')->eq(0)->set('vision')->eq('rnd')->set('addedBy')->eq('admin')->set('editedBy')->eq('admin')->exec();
+$tester->dao->insert(TABLE_DOCACTION)->set('doc')->eq(1)->set('action')->eq('collect')->set('actor')->eq('admin')->exec();
 
 $libs = array(1);
 $result = $docTest->getDocCountWithPagerTest($libs);
