@@ -310,7 +310,7 @@ class testcaseTao extends testcaseModel
         $relatedCaseIdList  = array();
         foreach($cases as $case)
         {
-            if($case->linkCase)
+            if(!empty($case->linkCase))
             {
                 $linkCases = explode(',', $case->linkCase);
                 foreach($linkCases as $linkCaseID)
@@ -319,7 +319,7 @@ class testcaseTao extends testcaseModel
                 }
             }
 
-            if($case->fromCaseID) $relatedCaseIdList[$case->fromCaseID] = $case->fromCaseID;
+            if(!empty($case->fromCaseID)) $relatedCaseIdList[$case->fromCaseID] = $case->fromCaseID;
         }
 
         return $this->dao->select('id, title')->from(TABLE_CASE)->where('id')->in($relatedCaseIdList)->fetchPairs();
