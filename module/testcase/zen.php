@@ -2778,7 +2778,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles, array $relatedScenes): void
+    protected function processCaseForExport(object $case, array $products = array(), array $branches = array(), array $users = array(), array $results = array(), array $relatedModules = array(), array $relatedStories = array(),  array $relatedCases = array(), array $relatedSteps = array(), array $relatedFiles = array(), array $relatedScenes = array()): void
     {
         $case->stepDesc       = '';
         $case->stepExpect     = '';

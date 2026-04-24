@@ -4120,4 +4120,22 @@ class testcaseZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 处理导出的某个用例。
+     * Process export case.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return array|object
+     */
+    public function processCaseForExportTest(int $caseID): array|object
+    {
+        global $tester;
+        $case = $tester->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+        $case->bugs = $case->results = $case->stepNumber = '';
+        $this->invokeArgs('processCaseForExport', [$case]);
+        if(dao::isError()) return dao::getError();
+        return $case;
+    }
 }
