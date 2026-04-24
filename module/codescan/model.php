@@ -864,7 +864,9 @@ class codescanModel extends model
     {
         if(isset($params['repoID']))   $params['repoID'] = (int)$params['repoID'];
         if(isset($params['ruleID']))   $params['ruleID'] = (int)$params['ruleID'];
+        if(isset($params['planID']))   $params['planID'] = (int)$params['planID'];
         if(isset($params['taskID']))   $params['taskID'] = (int)$params['taskID'];
+        if(isset($params['issueID']))  $params['id']     = (int)$params['issueID'];
 
         if(isset($params['priority']))  $params['rulePriority'] = $params['priority'];
         if(isset($params['type']))      $params['ruleType']     = $params['type'];

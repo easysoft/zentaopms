@@ -260,7 +260,7 @@ $config->codescan->issue->search['params']['issueID']      = array('operator' =>
 $config->codescan->issue->search['params']['message']      = array('operator' => '=', 'control' => 'input',  'values' => '');
 $config->codescan->issue->search['params']['scanBranch']   = array('operator' => '=', 'control' => 'select', 'values' => array());
 $config->codescan->issue->search['params']['file']         = array('operator' => 'include', 'control' => 'input', 'values' => '');
-$config->codescan->issue->search['params']['rulePriority'] = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->severityList);
+$config->codescan->issue->search['params']['rulePriority'] = array('operator' => '=', 'control' => 'select', 'values' => array_diff_key($lang->codescan->severityList, array_flip(array('all'))));
 $config->codescan->issue->search['params']['type']         = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->typeList);
 $config->codescan->issue->search['params']['plugin']       = array('operator' => '=', 'control' => 'select', 'values' => array());
 $config->codescan->issue->search['params']['status']       = array('operator' => '=', 'control' => 'select', 'values' => $lang->codescan->issueStatusList);
