@@ -2388,6 +2388,7 @@ class doc extends control
      * @param string $search     搜索关键词
      * @param string $searchType 搜索范围
      * @access public
+     * @return void
      */
     public function ajaxFetchSpaceData(
         string $type       = 'custom',
@@ -2406,7 +2407,7 @@ class doc extends control
 
         if($type == 'template')
         {
-            return $this->ajaxGetSpaceData($type, $spaceID, $picks, $libID);
+            $this->ajaxGetSpaceData($type, $spaceID, $picks, $libID);
         }
 
         $noPicks = empty($picks);
