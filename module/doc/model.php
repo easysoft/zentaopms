@@ -891,44 +891,8 @@ class docModel extends model
             if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "t1.keywords LIKE '%{$search}%'";
         }
 
-        $docs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
-            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
-            ->where('t1.lib')->in($libs)
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
-            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere("(t2.deleted = '0' or t1.parent != '0')")
-            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
-            ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
-            ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
-            ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
-            ->orderBy($sqlOrderBy)
-            ->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage)
-            ->fetchAll('id', false);
-
-        $rootDocs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
-            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
-            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
-            ->where('t1.lib')->in($libs)
-            ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
-            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
-            ->andWhere('t1.module')->in(array('0', ''))
-            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
-            ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
-            ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
-            ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
-            ->orderBy($sqlOrderBy)
-            ->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage)
-            ->fetchAll('id', false);
+        $docs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, true);
+        $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, false);
 
         $docs = arrayUnion($docs, $rootDocs);
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -951,6 +915,57 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * 构建文档查询。
+     * Build doc query.
+     *
+     * @param  array  $libs
+     * @param  bool   $queryTemplate
+     * @param  int    $excludeID
+     * @param  string $filterType
+     * @param  array  $searchCond
+     * @param  string $sqlOrderBy
+     * @param  object $pager
+     * @param  bool   $hasModule
+     * @access private
+     * @return array
+     */
+    private function buildDocQuery(array $libs, bool $queryTemplate, int $excludeID, string $filterType, array $searchCond, string $sqlOrderBy, ?object $pager, bool $hasModule): array
+    {
+        $query = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
+            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
+            ->where('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))");
+
+        if($hasModule)
+        {
+            $query->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+                  ->beginIF(!$queryTemplate)->andWhere('t2.type')->eq('doc')->fi()
+                  ->beginIF($queryTemplate)->andWhere('t2.type')->eq('docTemplate')->fi()
+                  ->andWhere("(t2.deleted = '0' or t1.parent != '0')");
+        }
+        else
+        {
+            $query->andWhere('t1.module')->in(array('0', ''));
+        }
+
+        $query->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
+              ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
+              ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
+              ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+              ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+              ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
+              ->orderBy($sqlOrderBy);
+
+        if($pager) $query->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage);
+
+        return $query->fetchAll('id', false);
     }
 
     /**
