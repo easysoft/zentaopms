@@ -660,6 +660,25 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 获取带分页的文档数量。
+     * Get doc count with pager.
+     *
+     * @param  array  $libs
+     * @param  string $filterType
+     * @param  string $search
+     * @param  string $searchType
+     * @access public
+     * @return int
+     */
+    public function getDocCountWithPagerTest(array $libs, string $filterType = '', string $search = '', string $searchType = 'all'): int
+    {
+        $count = $this->instance->getDocCountWithPager($libs, $filterType, $search, $searchType);
+
+        if(dao::isError()) return 0;
+        return $count;
+    }
+
+    /**
      * 处理文档的收藏者信息。
      * Process collector to account.
      *
