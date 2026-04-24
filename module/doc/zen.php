@@ -491,15 +491,17 @@ class docZen extends doc
      * Return after upload files.
      *
      * @param  array|string $docResult
+     * @param  string       $from      deliverable
      * @access protected
      * @return bool|int
      */
-    protected function responseAfterUploadDocs(array|string $docResult): bool|int
+    protected function responseAfterUploadDocs(array|string $docResult, string $from = ''): bool|int
     {
         if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('action');
-        $link = '';
+        $link     = true;
+        $newDocID = 0;
         if($this->post->uploadFormat == 'combinedDocs')
         {
             $docID = $docResult['id'];
@@ -513,6 +515,7 @@ class docZen extends doc
 
             $params   = "docID=" . $docResult['id'];
             $link     = isInModal() ? true : $this->createLink('doc', 'view', $params);
+            $newDocID = $docID;
         }
         else
         {
@@ -523,14 +526,17 @@ class docZen extends doc
                 {
                     $fileAction = $this->lang->addFiles . $fileTitle->title . "\n";
                     $this->action->create('doc', $docID, 'created', $fileAction);
+                    $newDocID = $docID;
                 }
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
         }
 
-        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc')));
-        if($link) $response['load'] = $link;
+        $newDoc   = $this->dao->select('id,title,version')->from(TABLE_DOC)->where('id')->eq($newDocID)->fetch();
+        $load     = $from == 'deliverable' ? '' : $link;
+        $callback = $from == 'deliverable' ? "selectNewDoc(" . json_encode($newDoc) . ")" : null;
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $load, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc')), 'callback' => $callback);
         return $this->send($response);
     }
 

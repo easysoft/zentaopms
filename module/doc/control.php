@@ -816,10 +816,11 @@ class doc extends control
      * @param  int|string $libID
      * @param  int        $moduleID
      * @param  string     $docType    html|word|ppt|excel|attachment
+     * @param  string     $from       deliverable
      * @access public
      * @return void
      */
-    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', $from = '')
     {
         if(!empty($_POST))
         {
@@ -869,7 +870,7 @@ class doc extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'], $docResult['deletedFiles'])) : $this->docZen->responseAfterUploadDocs($docResult);
+            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'], $docResult['deletedFiles'])) : $this->docZen->responseAfterUploadDocs($docResult, $from);
         }
 
         if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
