@@ -10,6 +10,10 @@ window.onRenderRow = function(row, rowIdx, data)
             info[0].options.required = true;
         }
     });
+    if(data.role == 'manager')
+    {
+        row.find('[data-type="delete"]').addClass('hidden');
+    }
 }
 
 window.getMenu = function(item)
