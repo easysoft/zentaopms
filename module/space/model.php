@@ -740,4 +740,21 @@ class spaceModel extends model
         if(!$hasPairs || empty($productIdList)) return $productIdList;
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchPairs('id', 'name');
     }
+
+    /**
+     * 判断按钮是否可点击。
+     * Judge an action is clickable or not.
+     *
+     * @param  object $space
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public static function isClickable(object $space, string $action): bool
+    {
+        $action = strtolower($action);
+        if($action == 'removemember') return $space->role != 'manager';
+
+        return true;
+    }
 }
