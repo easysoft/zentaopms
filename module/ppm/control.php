@@ -375,7 +375,7 @@ class ppm extends control
             $encoding = empty($param) ? 'utf-8' : $param;
             $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
         }
-        $diffs   = $scm->diff('', $ppm->mergeTargetSHA, $ppm->sourceSHA, 'yes');
+        $diffs   = $scm->diff('', $ppm->mergeTargetSHA, $ppm->sourceSHA, 'yes', 'isBranchOrTag', true);
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST')
         {
@@ -847,7 +847,7 @@ class ppm extends control
         $objectPager = new pager(0, $recPerPage, $pageID);
 
         $commits = $this->ppm->getCommitListByBranch($repo, $sourceBranch, $targetBranch, $commitPager);
-        $diffs   = $scm->diff('', $targetBranch, $sourceBranch, 'yes', 'isBranchOrTag');
+        $diffs   = $scm->diff('', $targetBranch, $sourceBranch, 'yes', 'isBranchOrTag', true);
         $objects = $this->ppm->getRelationByBranch($repo, $sourceBranch, $targetBranch, '', $objectPager);
 
         $this->view->commits      = $commits;

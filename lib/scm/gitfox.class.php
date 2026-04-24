@@ -369,10 +369,11 @@ class gitfoxRepo
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $extra
+     * @param  bool   $isMr
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision, $extra = '')
+    public function diff($path, $fromRevision, $toRevision, $extra = '', $isMr = false)
     {
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
@@ -380,8 +381,9 @@ class gitfoxRepo
         $sameVersion = $fromRevision == '^' || strpos($fromRevision, $toRevision) === 0;
         if($toRevision == 'HEAD' and $this->branch) $toRevision = $this->branch;
 
-        $api   = $sameVersion ? "commits/$toRevision/diff" : 'diff';
-        $diffs = $this->fetch($api, array(), false, array('range' => "{$fromRevision}..{$toRevision}", 'files' => array()));
+        $api        = $sameVersion ? "commits/$toRevision/diff" : 'diff';
+        $comparator = $isMr ? '...' : '..';
+        $diffs      = $this->fetch($api, array(), false, array('range' => "{$fromRevision}{$comparator}{$toRevision}", 'files' => array()));
         if(!$diffs || isset($diffs->message)) return array();
 
         return explode("\n", trim($diffs));
