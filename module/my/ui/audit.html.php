@@ -30,12 +30,12 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
 }
 $reviewPrivs['review']  = hasPriv('review', 'access');
 $reviewPrivs['ppm']     = hasPriv('ppm', 'view');
-$reviewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$reviewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 $viewPrivs['review']  = hasPriv('review', 'view');
 $viewPrivs['task']    = hasPriv('task', 'view');
 $viewPrivs['ppm']     = hasPriv('ppm', 'view');
-$viewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$viewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));
@@ -112,6 +112,7 @@ foreach($reviewList as $review)
     if(in_array($type, array('ppm', 'pullreq')))
     {
         $this->app->loadLang('ppm');
+        $this->review->module = 'ppm';
 
         if(empty($review->status)) $review->status = 'notReviewed';
         $statusList = $lang->ppm->approvalStatusList;
