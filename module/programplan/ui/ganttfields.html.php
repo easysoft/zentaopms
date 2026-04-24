@@ -77,7 +77,7 @@ foreach($ganttFields as $colName => $value)
     {
         list($fieldOrderBy, $fieldClass) = $this->execution->buildKanbanOrderBy($field, $orderField, $orderDirect);
         $text  = (is_array($value) && !empty($value['text'])) ? $value['text'] : $lang->execution->ganttCustom[$field];
-        $value = \html::a(createLink('programplan', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&orderBy={$fieldOrderBy}&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID=$blockID"), $text, '', "class='$fieldClass'");
+        $value = \html::a(createLink('programplan', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&orderBy={$fieldOrderBy}&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID=$blockID&versionID=$versionID"), $text, '', "class='$fieldClass'");
         if($versionID != 0) $value = $text;
     }
 

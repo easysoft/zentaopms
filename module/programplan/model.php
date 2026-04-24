@@ -998,17 +998,19 @@ class programplanModel extends model
      *
      * @param int    $projectID
      * @param int    $productID
+     * @param string $category
      * @param string $type       project|execution
      * @access public
      * @return array
      */
-    public function getGanttVersions(int $projectID, int $productID = 0, string $type = 'project'): array
+    public function getGanttVersions(int $projectID, int $productID = 0, string $category = '', string $type = 'project'): array
     {
         /* 1. 甘特图创建的版本。 Gantt version. */
         $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
             ->where('type')->eq('taged')
             ->andWhere('status')->eq('gantt')
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type == 'execution')->andWhere('execution')->eq($projectID)->fi()
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
