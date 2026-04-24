@@ -836,6 +836,105 @@ class docModel extends model
     }
 
     /**
+     * 获取文档列表数据（支持分页/搜索/排序/筛选）
+     * Get doc list with pagination, search, sort and filter.
+     *
+     * 独立于 getDocsOfLibs，不破坏现有功能。
+     *
+     * @param array  $libs          文档库ID数组
+     * @param string $spaceType     空间类型
+     * @param int    $excludeID     排除的文档ID
+     * @param bool   $queryTemplate 是否查询模板
+     * @param string $filterType    筛选类型
+     * @param string $orderBy       排序
+     * @param object $pager         分页对象
+     * @param string $search        搜索关键词
+     * @param string $searchType    搜索范围
+     * @access public
+     * @return array
+     */
+    public function getDocsWithPager(
+        array  $libs,
+        string $spaceType,
+        int    $excludeID     = 0,
+        bool   $queryTemplate = false,
+        string $filterType    = '',
+        string $orderBy       = 'id_desc',
+        object $pager         = null,
+        string $search        = '',
+        string $searchType    = 'all'
+    ): array
+    {
+        if($pager)
+        {
+            $recTotal = $this->getDocCountWithPager($libs, $filterType, $search, $searchType);
+            $pager->recTotal  = $recTotal;
+            $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
+        }
+
+        $docs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
+            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
+            ->where('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->andWhere("(t2.deleted = '0' or t1.parent != '0')")
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
+            ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
+            ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
+            ->orderBy($sqlOrderBy)
+            ->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage)
+            ->fetchAll('id', false);
+
+        $rootDocs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
+            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
+            ->where('t1.lib')->in($libs)
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->andWhere('t1.module')->in(array('0', ''))
+            ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
+            ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
+            ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
+            ->orderBy($sqlOrderBy)
+            ->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage)
+            ->fetchAll('id', false);
+
+        $docs = arrayUnion($docs, $rootDocs);
+        $docs = $this->docTao->filterDeletedDocs($docs);
+        $docs = $this->filterPrivDocs($docs, $spaceType);
+        $docs = $this->processCollector($docs);
+
+        foreach($docs as &$doc)
+        {
+            $doc->lib         = (int)$doc->lib;
+            $doc->module      = (int)$doc->module;
+            $doc->deleted     = boolval($doc->deleted);
+            $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
+            $doc->title       = htmlspecialchars_decode($doc->title);
+            $doc->hasContent  = !empty($doc->content) ? true : false;
+
+            if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
+
+            unset($doc->content);
+            unset($doc->draft);
+        }
+
+        return $docs;
+    }
+
+    /**
      * 获取文档总数（用于分页）
      * Get doc count for pagination.
      *
