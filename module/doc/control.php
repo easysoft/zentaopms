@@ -2355,22 +2355,42 @@ class doc extends control
         }
         else
         {
-            $noPicks = empty($picks);
-            $picks   = $noPicks ? '' : ",$picks,";
-
-            list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-            $data   = array('spaceID' => (int)$spaceID);
-            $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-            $libIds = array_keys($libs);
-            foreach($libs as $lib) $lib->order = (int)$lib->order;
-
-            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
-            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
-            if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+            $data   = $this->buildSpaceDataBase($type, $spaceID, $picks);
+            $libIds = $data['libIds'] ?? array();
+            unset($data['libIds']);
+            $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
         }
 
         $this->send($data);
+    }
+
+    /**
+     * Ajax: 构建文档空间基础数据。
+     * Build doc space base data.
+     *
+     * @param  string $type    空间类型
+     * @param  int    $spaceID 空间ID
+     * @param  string $picks   需要加载的数据项
+     * @access private
+     * @return array
+     */
+    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = ''): array
+    {
+        $noPicks = empty($picks);
+        $picks   = $noPicks ? '' : ",$picks,";
+
+        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+        $data   = array('spaceID' => (int)$spaceID);
+        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        $libIds = array_keys($libs);
+        foreach($libs as $lib) $lib->order = (int)$lib->order;
+
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
+        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+        $data['libIds'] = $libIds;
+
+        return $data;
     }
 
     /**
@@ -2410,19 +2430,11 @@ class doc extends control
             $this->ajaxGetSpaceData($type, $spaceID, $picks, $libID);
         }
 
+        $data   = $this->buildSpaceDataBase($type, $spaceID, $picks);
+        $libIds = $data['libIds'] ?? array();
+        unset($data['libIds']);
+
         $noPicks = empty($picks);
-        $picks   = $noPicks ? '' : ",$picks,";
-
-        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-
-        $data   = array('spaceID' => (int)$spaceID);
-        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
-        foreach($libs as $lib) $lib->order = (int)$lib->order;
-
-        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
-        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
-        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
         if($noPicks || strpos($picks, ',doc,') !== false)
         {
             $pager = new stdClass();
