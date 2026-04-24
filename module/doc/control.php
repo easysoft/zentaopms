@@ -2388,7 +2388,6 @@ class doc extends control
      * @param string $search     搜索关键词
      * @param string $searchType 搜索范围
      * @access public
-     * @return void
      */
     public function ajaxFetchSpaceData(
         string $type       = 'custom',
