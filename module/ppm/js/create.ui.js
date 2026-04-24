@@ -1,3 +1,8 @@
+function safe64Encode(value)
+{
+    return btoa(unescape(encodeURIComponent(value))).replace(/\//g, '.');
+}
+
 window.loadReviewers = function()
 {
     var targetBranch  = $('[name="targetBranch"]').val();
@@ -6,8 +11,8 @@ window.loadReviewers = function()
     const conflictFiles = $('[data-name=message]').data('conflictFiles');
     var repo = $('[name="repoID"]').val() ? $('[name="repoID"]').val() : repoID;
 
-    var targetBranch = btoa(encodeURIComponent(targetBranch));
-    var sourceBranch = btoa(encodeURIComponent(sourceBranch));
+    var targetBranch = safe64Encode(targetBranch);
+    var sourceBranch = safe64Encode(sourceBranch);
 
     if(!canMerge)
     {

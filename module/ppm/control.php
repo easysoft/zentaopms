@@ -875,6 +875,9 @@ class ppm extends control
      */
     public function ajaxGetConflictFiles(int $repoID, string $sourceBranch, string $targetBranch)
     {
+        $sourceBranch = helper::safe64Decode($sourceBranch);
+        $targetBranch = helper::safe64Decode($targetBranch);
+
         $mergeCheckMessage = $this->loadModel('gitfox')->apiGetMergeCheckMessage($repoID, $sourceBranch, $targetBranch);
         $conflictFiles     = empty($mergeCheckMessage) ? array() : zget($mergeCheckMessage, 'conflictFiles', array());
 

@@ -1627,14 +1627,38 @@ class repo extends control
         $repo  = $this->repo->getByID((int)$this->post->repoID);
         $entry = $this->repo->decodePath($this->post->entry);
 
-        $revision       = $this->post->revision == 'HEAD' ? 'HEAD' : helper::safe64Decode(urldecode($this->post->revision));
-        $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : helper::safe64Decode(urldecode($this->post->sourceRevision));
+        $revision       = $this->post->revision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->revision);
+        $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->sourceRevision);
 
         $this->scm->setEngine($repo);
         $blames = $this->scm->blame($entry, $revision);
         if(!$blames) $blames =$this->scm->blame($entry, $sourceRevision);
 
         return $this->send(array('result' => 'success', 'blames' => $blames));
+    }
+
+    /**
+     * Decode revision values posted by editor pages.
+     *
+     * Some editor entry points post raw branch names, while others post
+     * base64/safe64 encoded values. Only decode when the input can round-trip
+     * as a valid encoded revision; otherwise keep the raw value.
+     *
+     * @param  string $revision
+     * @access protected
+     * @return string
+     */
+    protected function decodeEditorRevision(string $revision): string
+    {
+        $revision = urldecode($revision);
+        if($revision === '') return $revision;
+
+        $decoded = helper::safe64Decode($revision);
+        if($decoded === false || $decoded === '') return $revision;
+
+        if(helper::safe64Encode($decoded) === $revision || base64_encode($decoded) === $revision) return urldecode($decoded);
+
+        return $revision;
     }
 
     /**
