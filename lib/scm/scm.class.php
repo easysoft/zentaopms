@@ -152,10 +152,12 @@ class scm
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $parse
+     * @param  string $extra
+     * @param  bool   $isMr
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '')
+    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '', $isMr = true)
     {
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
@@ -164,7 +166,7 @@ class scm
         if($extra)
         {
             if(get_class($this->engine) == 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, '', $extra);
-            if(get_class($this->engine) != 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra);
+            if(get_class($this->engine) != 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra, $isMr);
         }
 
         if($parse  != 'yes') return implode("\n", $diffs);
