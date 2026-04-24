@@ -694,10 +694,14 @@ class bug extends control
                 /* In execution, set data source. */
                 if($executionID)
                 {
-                    $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-                    $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                    $object    = $this->loadModel('execution')->fetchByID($executionID);
+                    $projectID = $object->type == 'project' ? $object->id : $object->project;
+
                     $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => array('projectIdList' => array($projectID)));
                     $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['story']['dataSource']     = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => $projectID);
+
+                    $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = array('type' => 'bug', 'rootIdList' => $productIdList);
                 }
             }
             $this->config->bug->dtable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getPairs', 'params' => array());
