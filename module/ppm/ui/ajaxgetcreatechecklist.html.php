@@ -6,13 +6,15 @@ $entry        = count($diffs) ? $diffs[0]->fileName : '';
 $fileInfo     = $entry ? pathinfo($entry) : array();
 $currentEntry = $this->repo->encodePath($entry);
 $tree         = $this->repo->getFileTree($repo, '', $diffs);
+$oldRevision  = helper::safe64Encode($sourceBranch);
+$newRevision  = helper::safe64Encode($targetBranch);
 jsVar('repoID', $repoID);
 jsVar('diffs', $diffs);
 jsVar('tree', $tree);
 jsVar('currentFile', $currentEntry);
 jsVar('file', $currentEntry);
 jsVar('entry', $entry);
-jsVar('urlParams', "repoID=$repoID&objectID=0&entry=%s&oldRevision=$sourceBranch&newRevision=$targetBranch&showBug=0");
+jsVar('urlParams', "repoID=$repoID&objectID=0&entry=%s&oldRevision=$oldRevision&newRevision=$newRevision&showBug=0");
 h:css("#monacoTree .text-clip {overflow: visible;}");
 
 if(!hasPriv('repo', 'diff')) unset($config->ppm->createCheck->commit->dtable->fieldList['id']['link']);
