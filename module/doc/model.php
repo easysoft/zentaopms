@@ -836,6 +836,64 @@ class docModel extends model
     }
 
     /**
+     * 获取文档总数（用于分页）
+     * Get doc count for pagination.
+     *
+     * @param array  $libs       文档库ID数组
+     * @param string $filterType 筛选类型
+     * @param string $search     搜索关键词
+     * @param string $searchType 搜索范围
+     * @access public
+     * @return int
+     */
+    public function getDocCountWithPager(
+        array  $libs,
+        string $filterType = '',
+        string $search     = '',
+        string $searchType = 'all'
+    ): int
+    {
+        $docIdList = $this->getPrivDocs($libs, 0, 'children');
+        if(empty($docIdList)) return 0;
+
+        $searchCond = array();
+        if(!empty($search))
+        {
+            if($searchType === 'all' || $searchType === 'title')    $searchCond[] = "title LIKE '%{$search}%'";
+            if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "keywords LIKE '%{$search}%'";
+        }
+
+        if($filterType === 'collect')
+        {
+            $collectDocIds = $this->dao->select('doc')->from(TABLE_DOCACTION)
+                ->where('action')->eq('collect')
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->andWhere('doc')->in($docIdList)
+                ->fetchAll('doc');
+
+            $collectDocIds = array_column($collectDocIds, 'doc');
+            if(empty($collectDocIds)) return 0;
+
+            $docIdList = array_intersect($docIdList, array_flip(array_flip($collectDocIds)));
+            if(empty($docIdList)) return 0;
+        }
+
+        $count = $this->dao->select('COUNT(*) as cnt')
+            ->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('templateType')->eq('')
+            ->andWhere('id')->in($docIdList)
+            ->beginIF($filterType === 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'createdByMe')->andWhere('addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType === 'editedByMe')->andWhere('editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
+            ->fetch('cnt');
+
+        return (int)$count;
+    }
+
+    /**
      * 过滤出有权限的文档列表。
      * Filter docs which has privilege.
      *
