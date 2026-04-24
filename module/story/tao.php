@@ -2103,7 +2103,8 @@ class storyTao extends storyModel
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
 
         $canBatchCreateStory = (common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild)) || common::isTutorialMode();
-        if(!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow)
+        $canShowBatchCreate  = $this->app->tab != 'execution' || empty($story->syncStory);
+        if($canShowBatchCreate && (!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow))
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
             if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($story->id)->fetch('id');
