@@ -18,7 +18,7 @@ window.onRenderCell = function(result, {row, col})
             }
             else if(['ppm', 'pullreq'].includes(row.data.module))
             {
-                link = $.createLink(row.data.module, 'view', 'id=' + row.data.id);
+                link = $.createLink('ppm', 'view', 'id=' + row.data.id);
                 result[0].props.items[0]['disabled'] = viewPrivs[row.data.module];
                 delete result[0].props.items[0]['data-toggle'];
             }
