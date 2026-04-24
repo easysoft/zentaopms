@@ -73,7 +73,8 @@ class docApp extends wg
         'getDocViewSidebarTabs' => '?string',              // 获取文档视图侧边栏选项。
         'formatDataItem'        => '?string',              // 格式化数据条目。
         'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
-        'hasZentaoSlashMenu'    => '?boolean'              // 是否显示禅道数据。
+        'hasZentaoSlashMenu'    => '?boolean',             // 是否显示禅道数据。
+        'fetcherWithPager'      => '?string|array'         // 服务端分页 fetcher。
     );
 
     public static function getPageJS(): ?string
@@ -180,6 +181,11 @@ class docApp extends wg
          * Define the fetcher links for doc app.
          */
         $fetcher             = createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}');
+        $fetcherWithPager    = createLink('doc', 'ajaxFetchSpaceData',
+            'type={spaceType}&spaceID={spaceID}&picks={picks}&libID={libID}' .
+            '&orderBy={orderBy}&recPerPage={recPerPage}&pageID={pageID}' .
+            '&filterType={filterType}&search={search}&searchType={searchType}'
+        );
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
@@ -375,6 +381,7 @@ class docApp extends wg
             set::orderBy(data('orderBy')),
             set::pager(array('recTotal' => 0, 'recPerPage' => 20, 'page' => 1)),
             set::fetcher($fetcher),
+            set::fetcherWithPager($fetcherWithPager),
             set::docFetcher($docFetcher),
             set::filesFetcher($filesFetcher),
             set::libSummariesFetcher($libSummariesFetcher),

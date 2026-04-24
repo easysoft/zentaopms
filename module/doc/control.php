@@ -2374,6 +2374,88 @@ class doc extends control
     }
 
     /**
+     * Ajax: 获取文档空间数据（支持分页/搜索/排序/筛选）
+     * Fetch doc space data with pagination, search, sort and filter.
+     *
+     * @param string $type       空间类型
+     * @param int    $spaceID    空间ID
+     * @param string $picks      需要加载的数据
+     * @param int    $libID      文档库ID
+     * @param string $orderBy    排序
+     * @param int    $recPerPage 每页数量
+     * @param int    $pageID     页码
+     * @param string $filterType 筛选类型
+     * @param string $search     搜索关键词
+     * @param string $searchType 搜索范围
+     * @access public
+     * @return void
+     */
+    public function ajaxFetchSpaceData(
+        string $type       = 'custom',
+        int    $spaceID    = 0,
+        string $picks      = '',
+        int    $libID      = 0,
+        string $orderBy    = 'id_desc',
+        int    $recPerPage = 20,
+        int    $pageID     = 1,
+        string $filterType = '',
+        string $search     = '',
+        string $searchType = 'all'
+    )
+    {
+        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+
+        if($type == 'template')
+        {
+            return $this->ajaxGetSpaceData($type, $spaceID, $picks, $libID);
+        }
+
+        $noPicks = empty($picks);
+        $picks   = $noPicks ? '' : ",$picks,";
+
+        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+
+        $data   = array('spaceID' => (int)$spaceID);
+        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        $libIds = array_keys($libs);
+        foreach($libs as $lib) $lib->order = (int)$lib->order;
+
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
+        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+        if($noPicks || strpos($picks, ',doc,') !== false)
+        {
+            $pager = new stdClass();
+            $pager->page       = $pageID;
+            $pager->recPerPage = $recPerPage;
+
+            $data['docs'] = array_values($this->doc->getDocsWithPager(
+                $libIds + array($spaceID),
+                $type,
+                0,
+                false,
+                $filterType,
+                $orderBy,
+                $pager,
+                $search,
+                $searchType
+            ));
+
+            $data['pager'] = array(
+                'page'       => $pager->page,
+                'recPerPage' => $pager->recPerPage,
+                'recTotal'   => $pager->recTotal ?? 0,
+                'pageTotal'  => $pager->pageTotal ?? 0
+            );
+            $data['filterType'] = $filterType;
+            $data['search']     = $search;
+            $data['searchType'] = $searchType;
+        }
+
+        $this->send($data);
+    }
+
+    /**
      * Ajax: Get doc data.
      * Ajax: 获取文档数据。
      *
