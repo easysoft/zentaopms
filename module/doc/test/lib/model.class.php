@@ -679,6 +679,40 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 获取带分页的文档列表。
+     * Get docs with pager.
+     *
+     * @param  array  $libs
+     * @param  string $spaceType
+     * @param  int    $excludeID
+     * @param  bool   $queryTemplate
+     * @param  string $filterType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $search
+     * @param  string $searchType
+     * @access public
+     * @return array
+     */
+    public function getDocsWithPagerTest(
+        array  $libs,
+        string $spaceType,
+        int    $excludeID     = 0,
+        bool   $queryTemplate = false,
+        string $filterType    = '',
+        string $orderBy       = 'id_desc',
+        object $pager         = null,
+        string $search        = '',
+        string $searchType    = 'all'
+    ): array
+    {
+        $docs = $this->instance->getDocsWithPager($libs, $spaceType, $excludeID, $queryTemplate, $filterType, $orderBy, $pager, $search, $searchType);
+
+        if(dao::isError()) return array();
+        return $docs;
+    }
+
+    /**
      * 处理文档的收藏者信息。
      * Process collector to account.
      *

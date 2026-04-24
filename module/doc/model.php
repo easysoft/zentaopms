@@ -872,6 +872,25 @@ class docModel extends model
             $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
         }
 
+        $orderByMaps = array(
+            'id_desc'         => 't1.id DESC',
+            'id_asc'          => 't1.id ASC',
+            'editedDate_desc' => 't1.editedDate DESC',
+            'editedDate_asc'  => 't1.editedDate ASC',
+            'title_asc'       => 't1.title ASC',
+            'title_desc'      => 't1.title DESC',
+            'order_asc'       => 't1.`order` ASC, t1.id ASC',
+            'order_desc'      => 't1.`order` DESC, t1.id DESC',
+        );
+        $sqlOrderBy = zget($orderByMaps, $orderBy, 't1.id DESC');
+
+        $searchCond = array();
+        if(!empty($search))
+        {
+            if($searchType === 'all' || $searchType === 'title')    $searchCond[] = "t1.title LIKE '%{$search}%'";
+            if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "t1.keywords LIKE '%{$search}%'";
+        }
+
         $docs = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
