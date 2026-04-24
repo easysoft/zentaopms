@@ -891,7 +891,7 @@ class docModel extends model
             if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "t1.keywords LIKE '%{$search}%'";
         }
 
-        $docs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, true);
+        $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, true);
         $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, false);
 
         $docs = arrayUnion($docs, $rootDocs);
@@ -936,8 +936,11 @@ class docModel extends model
     {
         $query = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
-            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'')
-            ->where('t1.lib')->in($libs)
+            ->leftJoin(TABLE_DOCACTION)->alias('t4')->on('t1.id=t4.doc and t4.action=\'collect\'');
+
+        if($hasModule) $query->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id');
+
+        $query->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
             ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->fi()
@@ -945,8 +948,7 @@ class docModel extends model
 
         if($hasModule)
         {
-            $query->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
-                  ->beginIF(!$queryTemplate)->andWhere('t2.type')->eq('doc')->fi()
+            $query->beginIF(!$queryTemplate)->andWhere('t2.type')->eq('doc')->fi()
                   ->beginIF($queryTemplate)->andWhere('t2.type')->eq('docTemplate')->fi()
                   ->andWhere("(t2.deleted = '0' or t1.parent != '0')");
         }
