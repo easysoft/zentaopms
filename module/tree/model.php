@@ -29,10 +29,12 @@ class treeModel extends model
      * 获取模块列表(全路径名称)
      * Get all module pairs with path.
      *
+     * @param  string     $type
+     * @param  int|string $rootIdList
      * @access public
      * @return object
      */
-    public function getAllModulePairs(string $type = 'task')
+    public function getAllModulePairs(string $type = 'task', int|array $rootIdList = 0)
     {
         $modules = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('(type')->eq('story')
@@ -42,6 +44,7 @@ class treeModel extends model
             ->beginIF($type == 'ticket')->orWhere('type')->eq('ticket')->fi()
             ->beginIF($type == 'feedback')->orWhere('type')->eq('feedback')->fi()
             ->markRight(1)
+            ->beginIF(!empty($rootIdList))->andWhere('root')->in($rootIdList)->fi()
             ->andWhere('deleted')->eq('0')
             ->orderBy('grade asc')
             ->fetchAll();
