@@ -560,7 +560,7 @@ $lang->devops->homeMenu->codescan['menuOrder'][25] = 'ruleset';
 $lang->devops->homeMenu->codescan['menuOrder'][30] = 'scanRule';
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code         = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'repo,my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repo-browsewebhooks');
+$lang->devops->menu->code         = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
 $lang->devops->menu->commit       = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->devops->menu->branch       = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag          = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
@@ -578,7 +578,7 @@ $lang->devops->menu->review['subMenu'] = new stdclass();
 $lang->devops->menu->review['subMenu']->review   = array('link' => "{$lang->devops->reviewIssue}|repo|review|repoID=%s", 'subModule' => 'bug');
 $lang->devops->menu->review['subMenu']->codescan = array('link' => "{$lang->devops->scanIssue}|codescan|issue|repoID=%s", 'alias' => 'issueview', 'subModule' => 'bug', 'exclude' => 'bug-view');
 
-$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype,repo', 'alias' => 'setprrule,setsaferule,setownerrule,setstrategyrule,browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,createrule,editrule,setarchive');
+$lang->devops->menu->settings = array('link' => "{$lang->repoSettings->common}|repobranchtype|browse|repoID=%s", 'subModule' => 'reporeviewflow,repobranchtype', 'alias' => 'browsewebhooks,browserule,createwebhook,editwebhook,logwebhook,setarchive');
 
 $lang->devops->menu->settings['subMenu'] = new stdclass();
 $lang->devops->menu->settings['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|repoID=%s", 'alias' => 'create,edit,delete,import');
