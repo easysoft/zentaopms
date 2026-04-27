@@ -1365,10 +1365,37 @@ class blockZen extends block
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
+        $this->loadModel('reporttemplate');
         $this->app->loadLang('execution');
 
         $projectID     = $this->session->project;
         $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
+
+        $progresses = $this->dao->select('t2.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCBLOCK)->alias('t2')->on('t1.id = t2.doc')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.reportModule')->eq('week')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project_progress_summary')
+            ->fetchAll('id', false);
+        foreach($progresses as $block)
+        {
+            $content = json_decode($block->content, true);
+            if(!isset($content['chart']))
+            {
+                list($module) = explode('_', $block->type);
+                $content['chart'] = $this->reporttemplate->getChartOptions($module, $block->type, $projectID, $content);
+                $this->dao->update(TABLE_DOCBLOCK)->set('content')->eq(json_encode($content))->where('id')->eq($block->id)->exec();
+            }
+
+            $dataset = zget($content['chart']['options'], 'dataset', array());
+            $weekly  = new stdclass();
+            $weekly->weekStart = substr($content['date']['begin'], 0, 10);
+            $weekly->pv        = $dataset[1][1];
+            $weekly->ev        = $dataset[2][1];
+            $weekly->ac        = $dataset[3][1];
+            $projectWeekly[$weekly->weekStart] = $weekly;
+        }
 
         $charts = array('pv' => array(), 'ev' => array(), 'ac' => array());
         foreach($projectWeekly as $weekStart => $data)
