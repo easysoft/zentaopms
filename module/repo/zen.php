@@ -1480,6 +1480,70 @@ class repoZen extends repo
     }
 
     /**
+     * 构建 webhook 数据。
+     * Build webhook payload.
+     *
+     * @param  object      $webhookFormData
+     * @param  object      $repo
+     * @param  object|null $editWebhook
+     * @access public
+     * @return object
+     */
+    public function buildWebhook(object $webhookFormData, object $repo, object $editWebhook = null): object
+    {
+        $name        = zget($webhookFormData, 'name');
+        $webhookList = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id);
+        if(!empty($webhookList))
+        {
+            foreach($webhookList as $hook)
+            {
+                if($hook->displayName == $name && (!$editWebhook || $editWebhook->displayName != $name))
+                {
+                    dao::$errors['name'][] = sprintf($this->lang->repo->webhook->nameExists, $name);
+                }
+            }
+        }
+
+        $url = zget($webhookFormData, 'targetURL');
+        if(!filter_var($url, FILTER_VALIDATE_URL)) dao::$errors['targetURL'][] = $this->lang->repo->webhook->urlError;
+
+        if(mb_strlen((string)zget($webhookFormData, 'desc', '')) > 100) dao::$errors['desc'][] = sprintf($this->lang->repo->webhook->lengthError, $this->lang->repo->webhook->desc, 100);
+
+        $triggerEvent = zget($webhookFormData, 'triggerEvent');
+        $customEvent  = zget($webhookFormData, 'customEvent');
+        if(!$triggerEvent) $customEvent = array();
+        if($triggerEvent && empty($customEvent)) dao::$errors['customEvent'][] = $this->lang->repo->webhook->customEventError;
+
+        $webhook              = new stdClass();
+        $webhook->displayName = zget($webhookFormData, 'name');
+        $webhook->url         = $url;
+        $webhook->description = zget($webhookFormData, 'desc');
+        $webhook->insecure    = empty($webhookFormData->SSL);
+        $webhook->triggers    = $customEvent;
+        $webhook->enabled     = zget($webhookFormData, 'enable', true);
+        if(isset($webhookFormData->key)) $webhook->secret = zget($webhookFormData, 'key');
+
+        if(!empty($editWebhook))
+        {
+            foreach($editWebhook as $key => $value)
+            {
+                if(!isset($webhook->$key)) continue;
+
+                if($key == 'triggers')
+                {
+                    $value = $value ? $value : array();
+                    if(empty(array_diff($customEvent, $value)) && empty(array_diff($value, $customEvent))) unset($webhook->triggers);
+                    continue;
+                }
+
+                if($webhook->$key == $value) unset($webhook->$key);
+            }
+        }
+
+        return $webhook;
+    }
+
+    /**
      * 构建提交页面搜索表单。
      * Build commit search form.
      *

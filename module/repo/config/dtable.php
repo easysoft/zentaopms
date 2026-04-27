@@ -259,6 +259,99 @@ $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
 $config->repo->reviewDtable->fieldList['revisionA']['hint']  = true;
 $config->repo->reviewDtable->fieldList['revisionA']['link']  = array('module' => 'repo', 'method' => 'revision', 'params' => 'repoID={repo}&objectID=0&revision={v2}');
 
+$config->repo->dtable->webhook = new stdclass();
+$config->repo->dtable->webhook->fieldList['name']['title'] = $lang->repo->name;
+$config->repo->dtable->webhook->fieldList['name']['type']  = 'title';
+$config->repo->dtable->webhook->fieldList['name']['width'] = 300;
+
+$config->repo->dtable->webhook->fieldList['status']['title']     = $lang->repo->status;
+$config->repo->dtable->webhook->fieldList['status']['type']      = 'status';
+$config->repo->dtable->webhook->fieldList['status']['name']      = 'status';
+$config->repo->dtable->webhook->fieldList['status']['statusMap'] = $lang->repo->webhook->statusList;
+$config->repo->dtable->webhook->fieldList['status']['sortType']  = true;
+$config->repo->dtable->webhook->fieldList['status']['order']     = 20;
+
+$config->repo->dtable->webhook->fieldList['url']['title'] = $lang->repo->targetURL;
+$config->repo->dtable->webhook->fieldList['url']['type']  = 'text';
+$config->repo->dtable->webhook->fieldList['url']['order'] = 30;
+
+$config->repo->dtable->webhook->fieldList['desc']['title'] = $lang->repo->desc;
+$config->repo->dtable->webhook->fieldList['desc']['type']  = 'desc';
+$config->repo->dtable->webhook->fieldList['desc']['name']  = 'description';
+$config->repo->dtable->webhook->fieldList['desc']['order'] = 40;
+
+$config->repo->dtable->webhook->fieldList['latestStatus']['title']     = $lang->repo->latestStatus;
+$config->repo->dtable->webhook->fieldList['latestStatus']['type']      = 'status';
+$config->repo->dtable->webhook->fieldList['latestStatus']['statusMap'] = $lang->repo->webhook->latestStatusList;
+$config->repo->dtable->webhook->fieldList['latestStatus']['flex']      = 0;
+$config->repo->dtable->webhook->fieldList['latestStatus']['sortType']  = true;
+$config->repo->dtable->webhook->fieldList['latestStatus']['order']     = 50;
+$config->repo->dtable->webhook->fieldList['latestStatus']['width']     = 150;
+
+$config->repo->dtable->webhook->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->webhook->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->webhook->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->webhook->fieldList['actions']['width'] = 60;
+$config->repo->dtable->webhook->fieldList['actions']['menu']  = array('edit', 'enable|disable', 'log', 'delete');
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['icon']      = 'start';
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['hint']      = $lang->repo->enable;
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['url']       = array('module' => 'repo', 'method' => 'enableWebhook', 'params' => 'repoID={repoID}&webhookID={id}&isEnable=1');
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['className'] = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['icon']      = 'off';
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['hint']      = $lang->repo->disable;
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['url']       = array('module' => 'repo', 'method' => 'enableWebhook', 'params' => 'repoID={repoID}&webhookID={id}&isEnable=0');
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['className'] = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['hint']         = $lang->repo->deleteWebhook;
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['url']          = array('module' => 'repo', 'method' => 'deleteWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->webhook->confirmWebhookDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['icon'] = 'history';
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['hint'] = $lang->repo->log;
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['url']  = array('module' => 'repo', 'method' => 'logWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+
+$config->repo->dtable->logWebhook = new stdclass();
+$config->repo->dtable->logWebhook->fieldList['createdDate']['title']      = $lang->repo->webhook->requestDate;
+$config->repo->dtable->logWebhook->fieldList['createdDate']['type']       = 'datetime';
+$config->repo->dtable->logWebhook->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+
+$config->repo->dtable->logWebhook->fieldList['status']['title']     = $lang->repo->status;
+$config->repo->dtable->logWebhook->fieldList['status']['type']      = 'status';
+$config->repo->dtable->logWebhook->fieldList['status']['name']      = 'result';
+$config->repo->dtable->logWebhook->fieldList['status']['statusMap'] = $lang->repo->webhook->logStatusList;
+$config->repo->dtable->logWebhook->fieldList['status']['sortType']  = true;
+$config->repo->dtable->logWebhook->fieldList['status']['order']     = 20;
+
+$config->repo->dtable->logWebhook->fieldList['triggerType']['title'] = $lang->repo->webhook->triggerType;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['type']  = 'type';
+$config->repo->dtable->logWebhook->fieldList['triggerType']['map']   = $lang->repo->webhook->customEventList;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['width'] = 150;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['order'] = 30;
+
+$config->repo->dtable->logWebhook->fieldList['url']['title'] = $lang->repo->webhook->requestURL;
+$config->repo->dtable->logWebhook->fieldList['url']['type']  = 'text';
+$config->repo->dtable->logWebhook->fieldList['url']['order'] = 40;
+
+$config->repo->dtable->logWebhook->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->logWebhook->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->logWebhook->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->logWebhook->fieldList['actions']['width'] = 60;
+$config->repo->dtable->logWebhook->fieldList['actions']['menu']  = array('requestData');
+
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['icon']        = 'audit';
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['hint']        = $lang->repo->webhook->requestData;
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['url']         = array('module' => 'repo', 'method' => 'viewWebhookRequest', 'params' => 'repoID={repoID}&webhookID={webhookID}&executionID={id}');
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['data-toggle'] = 'modal';
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['data-size']   = 'lg';
+
 $app->loadLang('bug');
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
 $config->repo->reviewDtable->fieldList['type']['name']  = 'type';

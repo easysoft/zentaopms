@@ -1834,6 +1834,263 @@ class repo extends control
     }
 
     /**
+     * 浏览 webhook 列表。
+     * Browse webhook list.
+     *
+     * @param  int    $repoID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseWebhooks(int $repoID, string $orderBy = 'createdDate_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo     = $this->repo->getByID($repoID);
+        $webhooks = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id);
+        if(!$webhooks) $webhooks = array();
+
+        foreach($webhooks as &$webhook)
+        {
+            $webhook->repoID = $repoID;
+            $webhook->name   = zget($webhook, 'displayName', '');
+            $webhook->status = !empty($webhook->enabled) ? 'enabled' : 'disabled';
+
+            if(isset($webhook->latestExecutionResult))
+            {
+                $webhook->latestStatus = $webhook->latestExecutionResult == 'success' ? 'success' : 'fail';
+            }
+            else
+            {
+                $webhook->latestStatus = 'pending';
+            }
+        }
+
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($webhooks as $orderWebhook)
+        {
+            if(!isset($orderWebhook->$order)) continue;
+            $orderList[] = $orderWebhook->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $webhooks);
+
+        $this->app->loadClass('pager', true);
+        $webhookTotal = count($webhooks);
+        $pager        = new pager($webhookTotal, $recPerPage, $pageID);
+        $webhooks     = array_chunk($webhooks, (int)$pager->recPerPage);
+        if($webhooks && !isset($webhooks[$pageID - 1])) $pageID = 1;
+
+        $this->view->title    = $this->lang->repo->browseWebhooks;
+        $this->view->repoID   = $repoID;
+        $this->view->repo     = $repo;
+        $this->view->pager    = $pager;
+        $this->view->webhooks = empty($webhooks) ? array() : $webhooks[$pageID - 1];
+        $this->view->orderBy  = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * 创建 webhook。
+     * Create a webhook.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createWebhook(int $repoID)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        if($_POST)
+        {
+            $repo = $this->repo->getByID($repoID);
+
+            $formData = form::data($this->config->repo->form->createWebhook)->get();
+            $webhook  = $this->repoZen->buildWebhook($formData, $repo);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $result = $this->loadModel('gitfox')->apiCreateHook((int)$repo->id, $webhook);
+            if(empty($result) || empty($result->id)) $this->sendError($this->lang->fail);
+
+            $this->loadModel('action')->create('repo', $repoID, 'createwebhook');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+        }
+
+        $this->view->title  = $this->lang->repo->createWebhook;
+        $this->view->repoID = $repoID;
+        $this->display();
+    }
+
+    /**
+     * 编辑 webhook。
+     * Edit a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @access public
+     * @return void
+     */
+    public function editWebhook(int $repoID, int $webhookID)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo    = $this->repo->getByID($repoID);
+        $webhook = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id, $webhookID);
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->editWebhook)->get();
+            if($formData->key == $this->lang->repo->webhook->defaultShowSecret) unset($formData->key);
+            if(empty($formData->key)) unset($formData->key);
+
+            $newWebhook = $this->repoZen->buildWebhook($formData, $repo, $webhook);
+            if(empty(get_object_vars($newWebhook))) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $result = $this->loadModel('gitfox')->apiUpdateWebhook((int)$repo->id, $webhookID, $newWebhook);
+            if(!$result) $this->sendError($this->lang->fail);
+
+            $this->loadModel('action')->create('repo', $repoID, 'editwebhook');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+        }
+
+        $this->view->title   = $this->lang->repo->editWebhook;
+        $this->view->repoID  = $repoID;
+        $this->view->webhook = $webhook;
+        $this->display();
+    }
+
+    /**
+     * 浏览 webhook 日志列表。
+     * Browse webhook execution logs.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function logWebhook(int $repoID, int $webhookID, string $orderBy = 'created_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo = $this->repo->getByID($repoID);
+        $logs = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID);
+        if(!$logs) $logs = array();
+
+        foreach($logs as &$log)
+        {
+            $log->createdDate = zget($log, 'createdDate', '');
+            $log->triggerType = zget($log, 'triggerType', '');
+            $log->url         = zget($log, 'reqUrl', '');
+            $log->result      = zget($log, 'result', '') == 'fatal_error' ? 'fail' : zget($log, 'result', '');
+            $log->repoID      = $repoID;
+            $log->webhookID   = $webhookID;
+        }
+
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($logs as $orderLog)
+        {
+            if(!isset($orderLog->$order)) continue;
+            $orderList[] = $orderLog->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $logs);
+
+        $this->app->loadClass('pager', true);
+        $logTotal = count($logs);
+        $pager    = new pager($logTotal, $recPerPage, $pageID);
+        $logs     = array_chunk($logs, (int)$pager->recPerPage);
+        if($logs && !isset($logs[$pageID - 1])) $pageID = 1;
+
+        $this->view->title     = $this->lang->repo->logWebhook;
+        $this->view->repoID    = $repoID;
+        $this->view->repo      = $repo;
+        $this->view->webhookID = $webhookID;
+        $this->view->pager     = $pager;
+        $this->view->logs      = empty($logs) ? array() : $logs[$pageID - 1];
+        $this->view->orderBy   = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * 启用或关闭 webhook。
+     * Enable or disable a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  int    $isEnable
+     * @access public
+     * @return void
+     */
+    public function enableWebhook(int $repoID, int $webhookID, int $isEnable)
+    {
+        $repo = $this->repo->getByID($repoID);
+
+        $webhook          = new stdClass();
+        $webhook->enabled = $isEnable == 1;
+        $result = $this->loadModel('gitfox')->apiUpdateWebhook((int)$repo->id, $webhookID, $webhook);
+        if(!$result) $this->sendError($isEnable == 1 ? $this->lang->repo->webhook->enabledFail : $this->lang->repo->webhook->disabledFail);
+
+        $this->loadModel('action')->create('repo', $repoID, $isEnable == 1 ? 'enablewebhook' : 'disablewebhook');
+        return $this->send(array('result' => 'success', 'message' => $isEnable == 1 ? $this->lang->repo->webhook->enabledSuccess : $this->lang->repo->webhook->disabledSuccess, 'load' => true));
+    }
+
+    /**
+     * 删除 webhook。
+     * Delete a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @access public
+     * @return void
+     */
+    public function deleteWebhook(int $repoID, int $webhookID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $logs = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID);
+        if(!empty($logs)) $this->sendError($this->lang->repo->webhook->deleteFail);
+
+        $this->gitfox->apiDeleteWebhook((int)$repo->id, $webhookID);
+
+        $this->loadModel('action')->create('repo', $repoID, 'deletewebhook');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->repo->webhook->deleteSuccess, 'load' => true));
+    }
+
+    /**
+     * 查看 webhook 请求数据。
+     * View webhook request data.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function viewWebhookRequest(int $repoID, int $webhookID, int $executionID)
+    {
+        $repo    = $this->repo->getByID($repoID);
+        $execLog = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID, $executionID);
+        if(!$execLog) $execLog = array();
+
+        $this->view->title     = $this->lang->repo->logWebhook;
+        $this->view->repoID    = $repoID;
+        $this->view->repo      = $repo;
+        $this->view->webhookID = $webhookID;
+        $this->view->execLog   = $execLog;
+        $this->display();
+    }
+
+    /**
      * 浏览分支列表。
      * Browse branch list.
      *
