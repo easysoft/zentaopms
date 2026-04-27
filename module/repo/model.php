@@ -163,6 +163,12 @@ class repoModel extends model
         }
 
         $repo = $this->getByID($repoID);
+        $res  = $this->loadModel('gitfox')->addPushWebhook($repo);
+        if(!$res)
+        {
+            dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
+            return false;
+        }
         $this->rmClientVersionFile();
 
         return $repoID;
@@ -197,6 +203,17 @@ class repoModel extends model
             $members = array_filter(explode(',', $repo->members ?? ''));
             if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
             $this->updateMembers($repoID, $members);
+        }
+
+        if($repoID)
+        {
+            $repo->id = $repoID;
+            $res = $this->loadModel('gitfox')->addPushWebhook($repo);
+            if(!$res)
+            {
+                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
         }
 
         return $repoID;
