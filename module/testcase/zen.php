@@ -2778,7 +2778,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles, array $relatedScenes): void
+    protected function processCaseForExport(object $case, array $products = array(), array $branches = array(), array $users = array(), array $results = array(), array $relatedModules = array(), array $relatedStories = array(),  array $relatedCases = array(), array $relatedSteps = array(), array $relatedFiles = array(), array $relatedScenes = array()): void
     {
         $case->stepDesc       = '';
         $case->stepExpect     = '';
@@ -2813,7 +2813,7 @@ class testcaseZen extends testcase
         $this->processStepForExport($case, zget($results, $case->id, array()), $relatedSteps);
         $this->processStageForExport($case);
         $this->processFileForExport($case, $relatedFiles);
-        if($case->linkCase) $this->processLinkCaseForExport($case);
+        if($case->linkCase || $case->fromCaseID) $this->processLinkCaseForExport($case, $relatedCases);
     }
 
     /**
@@ -2905,18 +2905,27 @@ class testcaseZen extends testcase
      * Process link case of the case for export.
      *
      * @param  object    $case
+     * @param  array     $relatedCases
      * @access protected
      * @return void
      */
-    protected function processLinkCaseForExport(object $case): void
+    protected function processLinkCaseForExport(object $case, array $relatedCases = array()): void
     {
         $tmpLinkCases   = array();
-        $linkCaseIdList = explode(',', $case->linkCase);
-        foreach($linkCaseIdList as $linkCaseID)
+        $hasFromCase    = false;
+        if($case->linkCase)
         {
-            $linkCaseID = trim($linkCaseID);
-            $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+            $linkCaseIdList = explode(',', $case->linkCase);
+            foreach($linkCaseIdList as $linkCaseID)
+            {
+                if($linkCaseID == $case->fromCaseID) $hasFromCase = true;
+
+                $linkCaseID = trim($linkCaseID);
+                if(empty($linkCaseID)) continue;
+                $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+            }
         }
+        if(!$hasFromCase && $case->fromCaseID) $tmpLinkCases[] = isset($relatedCases[$case->fromCaseID]) ? $relatedCases[$case->fromCaseID] . "(#$case->fromCaseID)" : $case->fromCaseID;
         $case->linkCase = join("; \n", $tmpLinkCases);
     }
 
