@@ -836,8 +836,8 @@ class docModel extends model
     }
 
     /**
-     * 获取文档列表数据（支持分页/搜索/排序/筛选）
-     * Get doc list with pagination, search, sort and filter.
+     * 获取文档列表数据（支持分页/搜索/筛选）
+     * Get doc list with pagination, search and filter.
      *
      * 独立于 getDocsOfLibs，不破坏现有功能。
      *
@@ -846,7 +846,6 @@ class docModel extends model
      * @param int    $excludeID     排除的文档ID
      * @param bool   $queryTemplate 是否查询模板
      * @param string $filterType    筛选类型
-     * @param string $orderBy       排序
      * @param object $pager         分页对象
      * @param string $search        搜索关键词
      * @param string $searchType    搜索范围
@@ -916,7 +915,6 @@ class docModel extends model
      * @param  int    $excludeID
      * @param  string $filterType
      * @param  array  $searchCond
-     * @param  string $sqlOrderBy
      * @param  object $pager
      * @param  bool   $hasModule
      * @access private
