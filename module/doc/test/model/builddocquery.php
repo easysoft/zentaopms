@@ -32,7 +32,7 @@ $pager->page = 1;
 $pager->recPerPage = 20;
 
 $libs = array(11);
-$result = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, '', 'id_desc', $pager);
+$result = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, '', $pager, '');
 r(gettype($result)) && p() && e('array');
 
 $totalCount = count($result);
@@ -40,19 +40,19 @@ $totalCount = count($result);
 $pager2 = new stdClass();
 $pager2->page = 1;
 $pager2->recPerPage = 20;
-$result2 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, 'createdByMe', 'id_desc', $pager2);
+$result2 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, 'createdByMe', $pager2, '');
 r(count($result2) <= $totalCount) && p() && e('1');
 
 $pager3 = new stdClass();
 $pager3->page = 1;
 $pager3->recPerPage = 20;
-$result3 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, 'editedByMe', 'id_desc', $pager3);
+$result3 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, 'editedByMe', $pager3, '');
 r(count($result3) <= $totalCount) && p() && e('1');
 
 $pager4 = new stdClass();
 $pager4->page = 1;
 $pager4->recPerPage = 20;
-$result4 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, '', 'id_desc', $pager4, '文档标题1');
+$result4 = $docTest->getDocsWithPagerTest($libs, 'product', 0, false, '', $pager4, '文档标题1');
 r(count($result4) <= $totalCount) && p() && e('1');
 
 r(!dao::isError()) && p() && e('1');
