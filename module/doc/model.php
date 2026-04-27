@@ -1081,15 +1081,18 @@ class docModel extends model
      * 获取我的空间下的文档列表数据。
      * Get mine list.
      *
-     * @param  string $type       view|collect|createdby|editedby
-     * @param  string $browseType all|draft|bysearch
-     * @param  int    $queryID
+     * @param  string $type        view|collect|createdby|editedby
+     * @param  string $browseType  all|draft|bysearch|bykeyword
+     * @param  int|string $queryID queryID or search keyword (for bykeyword)
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $appendDocs
+     * @param  string $filterDocs
+     * @param  string $filterType   额外筛选：draft/collect/createdByMe/editedByMe（与 $type 取交集）
      * @access public
      * @return array
      */
-    public function getMineList(string $type, string $browseType, int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getMineList(string $type, string $browseType, int|string $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = '', string $filterType = ''): array
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -1097,7 +1100,8 @@ class docModel extends model
             $query = $this->buildQuery($type, $queryID);
             $query = preg_replace('/(`\w+`)/', 't1.$1', $query);
         }
-        if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $docs = $this->getMySpaceDocs($type, $browseType, $query, $orderBy, $pager);
+        if($browseType == 'bykeyword' && is_string($queryID)) $query = $queryID;
+        if(in_array($type, array('view', 'collect', 'createdby', 'editedby'))) $docs = $this->getMySpaceDocs($type, $browseType, $query, $orderBy, $pager, '', '', $filterType);
 
         $this->loadModel('tree');
         $currentAccount = $this->app->user->account;
@@ -1140,19 +1144,20 @@ class docModel extends model
 
     /**
      * 获取我的空间下的文档列表数据。
-     * Get doc list under the my space.
+     * Get my space docs.
      *
      * @param  string $type       view|collect|createdby|editedby
-     * @param  string $browseType all|draft|bysearch
-     * @param  string $orderBy
+     * @param  string $browseType all|draft|bysearch|bykeyword
      * @param  string $query
+     * @param  string $orderBy
      * @param  object $pager
      * @param  string $appendDocs
      * @param  string $filterDocs
+     * @param  string $filterType 额外筛选：draft/collect/createdByMe/editedByMe
      * @access public
      * @return array
      */
-    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = ''): array
+    public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = '', string $filterType = ''): array
     {
         if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
@@ -1184,6 +1189,8 @@ class docModel extends model
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
                 ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
+                ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
                 ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
@@ -1205,10 +1212,13 @@ class docModel extends model
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
+                ->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
                 ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
                 ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
                 ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
+                ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
                 ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
                 ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
                 ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()

@@ -2297,20 +2297,27 @@ class doc extends control
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
-        $currentUser = $this->app->user->account;
-        $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
-        $order       = 0;
-        foreach($docs as $doc)
+        if(empty($this->config->doc->quickFetchRemote))
         {
-            $order++;
-            unset($doc->draft);
-            $doc->originLIb   = $doc->lib;
-            $doc->lib         = $menu['id'];
-            $doc->order       = $order;
-            $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+            $currentUser = $this->app->user->account;
+            $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
+            $order       = 0;
+            foreach($docs as $doc)
+            {
+                $order++;
+                unset($doc->draft);
+                $doc->originLib   = $doc->lib;
+                $doc->lib         = $menu['id'];
+                $doc->order       = $order;
+                $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+            }
+            $this->view->docs = $docs;
+        }
+        else
+        {
+            $this->view->docs = array();
         }
 
-        $this->view->docs       = $docs;
         $this->view->menu       = $menu;
         $this->view->type       = $type;
         $this->view->docID      = $docID;
@@ -2320,6 +2327,61 @@ class doc extends control
         $this->view->users      = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title      = $this->lang->doc->quick;
         $this->display();
+    }
+
+    /**
+     * Ajax: 获取快捷访问文档数据（支持分页/搜索/筛选）
+     * Fetch quick access docs with pagination, search and filter.
+     *
+     * @param string $type       快速访问类型：view/createdby/collect/editedby（主筛选）
+     * @param int    $pageID     页码
+     * @param int    $recPerPage 每页数量
+     * @param string $search     搜索关键词
+     * @param string $filterType 额外筛选：draft（与 $type 取交集）
+     * @access public
+     * @return void
+     */
+    public function ajaxQuick(string $type = 'view', int $pageID = 1, int $recPerPage = 20, string $search = '', string $filterType = '')
+    {
+        if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
+        if($pageID < 1)     $pageID = 1;
+        if($recPerPage < 1) $recPerPage = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager       = new pager(0, $recPerPage, $pageID);
+        $currentUser = $this->app->user->account;
+        $browseType  = !empty($search) ? 'bykeyword' : 'all';
+        $queryID     = $search;
+
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+
+        $order = 0;
+        $menu = $this->config->doc->quickMenu[$type];
+        foreach($docs as $doc)
+        {
+            $order++;
+            unset($doc->draft);
+            $doc->originLib   = $doc->lib;
+            $doc->lib         = $menu['id'];
+            $doc->order       = $order;
+            $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+        }
+
+        $data = array(
+            'spaceID'    => 1,
+            'docs'       => array_values($docs),
+            'pager'      => array(
+                'page'       => $pager->pageID,
+                'recPerPage' => $pager->recPerPage,
+                'recTotal'   => $pager->recTotal,
+                'pageTotal'  => $pager->pageTotal
+            ),
+            'type'       => $type,
+            'search'     => $search,
+            'filterType' => $filterType
+        );
+
+        $this->send($data);
     }
 
     /**

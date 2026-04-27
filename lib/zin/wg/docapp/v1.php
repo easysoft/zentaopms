@@ -74,7 +74,8 @@ class docApp extends wg
         'formatDataItem'        => '?string',              // 格式化数据条目。
         'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
         'hasZentaoSlashMenu'    => '?boolean',             // 是否显示禅道数据。
-        'fetcherWithPager'      => '?string|array'         // 服务端分页 fetcher。
+        'fetcherWithPager'      => '?string|array',        // 服务端分页 fetcher。
+        'quickFetcher'          => '?string|array'         // 快捷访问视图 fetcher。
     );
 
     public static function getPageJS(): ?string
@@ -185,6 +186,9 @@ class docApp extends wg
             'type={spaceType}&spaceID={spaceID}&picks={picks}&libID={libID}' .
             '&recPerPage={recPerPage}&pageID={pageID}' .
             '&filterType={filterType}&search={search}&searchType={searchType}'
+        );
+        $quickFetcher         = createLink('doc', 'ajaxQuick',
+            'type={type}&pageID={pageID}&recPerPage={recPerPage}&search={search}&filterType={filterType}'
         );
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
@@ -382,6 +386,7 @@ class docApp extends wg
             set::pager(array('recTotal' => 0, 'recPerPage' => 20, 'page' => 1)),
             set::fetcher($fetcher),
             set::fetcherWithPager($fetcherWithPager),
+            set::quickFetcher($quickFetcher),
             set::docFetcher($docFetcher),
             set::filesFetcher($filesFetcher),
             set::libSummariesFetcher($libSummariesFetcher),
