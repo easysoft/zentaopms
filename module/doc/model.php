@@ -871,8 +871,8 @@ class docModel extends model
             if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "t1.keywords LIKE '%{$search}%'";
         }
 
-        $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, '', null, true);
-        $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, '', null, false);
+        $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, null, true);
+        $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, null, false);
 
         $docs = arrayUnion($docs, $rootDocs);
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -922,7 +922,7 @@ class docModel extends model
      * @access private
      * @return array
      */
-    private function buildDocQuery(array $libs, bool $queryTemplate, int $excludeID, string $filterType, array $searchCond, string $sqlOrderBy, ?object $pager, bool $hasModule): array
+    private function buildDocQuery(array $libs, bool $queryTemplate, int $excludeID, string $filterType, array $searchCond, ?object $pager, bool $hasModule): array
     {
         $query = $this->dao->select('t1.*,t3.content')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
@@ -952,8 +952,7 @@ class docModel extends model
               ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
               ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
               ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
-              ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi()
-              ->orderBy($sqlOrderBy);
+              ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi();
 
         if($pager) $query->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage);
 

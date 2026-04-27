@@ -687,7 +687,6 @@ class docModelTest extends baseTest
      * @param  int    $excludeID
      * @param  bool   $queryTemplate
      * @param  string $filterType
-     * @param  string $orderBy
      * @param  object $pager
      * @param  string $search
      * @param  string $searchType
