@@ -381,9 +381,10 @@ class gitfoxRepo
         $sameVersion = $fromRevision == '^' || strpos($fromRevision, $toRevision) === 0;
         if($toRevision == 'HEAD' and $this->branch) $toRevision = $this->branch;
 
-        $api        = $sameVersion ? "commits/$toRevision/diff" : 'diff';
+        $api        = $sameVersion ? "commits/diff" : 'diff';
         $comparator = $isMr ? '...' : '..';
-        $diffs      = $this->fetch($api, array(), false, array('range' => "{$fromRevision}{$comparator}{$toRevision}", 'files' => array()));
+        $params     = $sameVersion ? array('sha' => $toRevision) : array('range' => "{$fromRevision}{$comparator}{$toRevision}", 'files' => array());
+        $diffs      = $this->fetch($api, array(), false, $params);
         if(!$diffs || isset($diffs->message)) return array();
 
         return explode("\n", trim($diffs));
