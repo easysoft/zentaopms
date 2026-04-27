@@ -423,3 +423,76 @@ $lang->repo->defaultBranch       = 'Default Branch';
 $lang->repo->committerTip        = 'Committer has write permission on code repository';
 $lang->repo->commitDetail        = '%s committed at %s by %s';
 $lang->repo->hasNoProduct        = 'The project or execution does not have a product';
+
+$lang->repo->browseWebhooks     = 'Webhook List';
+$lang->repo->createWebhook      = 'Create Webhook';
+$lang->repo->editWebhook        = 'Edit Webhook';
+$lang->repo->logWebhook         = 'Webhook Log';
+$lang->repo->viewWebhookRequest = 'Request Data';
+$lang->repo->deleteWebhook      = 'Delete Webhook';
+$lang->repo->targetURL          = 'Target URL';
+$lang->repo->latestStatus       = 'Latest Status';
+$lang->repo->enable             = 'Enable';
+$lang->repo->disable            = 'Disable';
+
+$lang->repo->webhook = new stdclass();
+$lang->repo->webhook->statusList = array();
+$lang->repo->webhook->statusList['enabled']  = 'Enabled';
+$lang->repo->webhook->statusList['disabled'] = 'Disabled';
+
+$lang->repo->webhook->latestStatusList = array();
+$lang->repo->webhook->latestStatusList['success'] = 'success';
+$lang->repo->webhook->latestStatusList['fail']    = 'fail';
+$lang->repo->webhook->latestStatusList['pending'] = 'pending';
+
+$lang->repo->webhook->logStatusList = array();
+$lang->repo->webhook->logStatusList['success'] = 'Success';
+$lang->repo->webhook->logStatusList['fail']    = 'Fail';
+
+$lang->repo->webhook->key                  = 'Key';
+$lang->repo->webhook->desc                 = 'Description';
+$lang->repo->webhook->SSL                  = 'Enable SSL';
+$lang->repo->webhook->triggerEvent         = 'Trigger Event';
+$lang->repo->webhook->customEvent          = 'Custom Event';
+$lang->repo->webhook->urlError             = 'Target URL format is incorrect';
+$lang->repo->webhook->customEventError     = 'Custom Event can not be empty';
+$lang->repo->webhook->nameExists           = 'Name %s already exists';
+$lang->repo->webhook->defaultShowSecret    = '******';
+$lang->repo->webhook->enabledSuccess       = 'Enabled successfully';
+$lang->repo->webhook->disabledSuccess      = 'Disabled successfully';
+$lang->repo->webhook->enabledFail          = 'Enabled failed';
+$lang->repo->webhook->disabledFail         = 'Disabled failed';
+$lang->repo->webhook->requestData          = 'Request Data';
+$lang->repo->webhook->requestDate          = 'Request Date';
+$lang->repo->webhook->triggerType          = 'Trigger Type';
+$lang->repo->webhook->requestURL           = 'Request URL';
+$lang->repo->webhook->requestHeaders       = 'Request Headers';
+$lang->repo->webhook->requestBody          = 'Request Data';
+$lang->repo->webhook->responseHeaders      = 'Response Headers';
+$lang->repo->webhook->responseBody         = 'Response Data';
+$lang->repo->webhook->emptyData            = 'No data';
+$lang->repo->webhook->deleteSuccess        = 'Delete successfully';
+$lang->repo->webhook->confirmWebhookDelete = "Are you sure to delete '%s', it will not be able to recover?";
+$lang->repo->webhook->lengthError          = "『%s』length should be <=『%s』";
+$lang->repo->webhook->deleteFail           = 'Webhook has been used, it can not be deleted';
+
+$lang->repo->webhook->triggerEventList = array();
+$lang->repo->webhook->triggerEventList[0] = 'All events';
+$lang->repo->webhook->triggerEventList[1] = 'Custom Event';
+
+$lang->repo->webhook->customEventList = array();
+$lang->repo->webhook->customEventList['branch_created']           = 'Branch created';
+$lang->repo->webhook->customEventList['branch_updated']           = 'Branch updated';
+$lang->repo->webhook->customEventList['branch_deleted']           = 'Branch deleted';
+$lang->repo->webhook->customEventList['tag_created']              = 'Tag created';
+$lang->repo->webhook->customEventList['tag_updated']              = 'Tag updated';
+$lang->repo->webhook->customEventList['tag_deleted']              = 'Tag deleted';
+$lang->repo->webhook->customEventList['pullreq_created']          = 'Create Pull Request';
+$lang->repo->webhook->customEventList['pullreq_reopened']         = 'Reopen Pull Request';
+$lang->repo->webhook->customEventList['pullreq_branch_updated']   = 'Update Pull Request Branch';
+$lang->repo->webhook->customEventList['pullreq_closed']           = 'Close Pull Request';
+$lang->repo->webhook->customEventList['pullreq_comment_created']  = 'Create Pull Request Comment';
+$lang->repo->webhook->customEventList['pullreq_merged']           = 'Merge Pull Request';
+$lang->repo->webhook->customEventList['pullreq_reviewer_created'] = 'Add Pull Request Reviewer';
+$lang->repo->webhook->customEventList['pullreq_reviewer_deleted'] = 'Delete Pull Request Reviewer';
+$lang->repo->webhook->customEventList['pullreq_review_submitted'] = 'Submit Pull Request Review';
