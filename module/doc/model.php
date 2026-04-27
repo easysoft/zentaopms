@@ -839,8 +839,6 @@ class docModel extends model
      * 获取文档列表数据（支持分页/搜索/筛选）
      * Get doc list with pagination, search and filter.
      *
-     * 独立于 getDocsOfLibs，不破坏现有功能。
-     *
      * @param array  $libs          文档库ID数组
      * @param string $spaceType     空间类型
      * @param int    $excludeID     排除的文档ID
