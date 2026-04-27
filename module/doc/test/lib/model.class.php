@@ -700,13 +700,12 @@ class docModelTest extends baseTest
         int    $excludeID     = 0,
         bool   $queryTemplate = false,
         string $filterType    = '',
-        string $orderBy       = 'id_desc',
         object $pager         = null,
         string $search        = '',
         string $searchType    = 'all'
     ): array
     {
-        $docs = $this->instance->getDocsWithPager($libs, $spaceType, $excludeID, $queryTemplate, $filterType, $orderBy, $pager, $search, $searchType);
+        $docs = $this->instance->getDocsWithPager($libs, $spaceType, $excludeID, $queryTemplate, $filterType, $pager, $search, $searchType);
 
         if(dao::isError()) return array();
         return $docs;

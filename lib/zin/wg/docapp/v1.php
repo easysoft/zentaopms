@@ -183,7 +183,7 @@ class docApp extends wg
         $fetcher             = createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}');
         $fetcherWithPager    = createLink('doc', 'ajaxFetchSpaceData',
             'type={spaceType}&spaceID={spaceID}&picks={picks}&libID={libID}' .
-            '&orderBy={orderBy}&recPerPage={recPerPage}&pageID={pageID}' .
+            '&recPerPage={recPerPage}&pageID={pageID}' .
             '&filterType={filterType}&search={search}&searchType={searchType}'
         );
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');

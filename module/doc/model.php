@@ -859,31 +859,11 @@ class docModel extends model
         int    $excludeID     = 0,
         bool   $queryTemplate = false,
         string $filterType    = '',
-        string $orderBy       = 'id_desc',
         object $pager         = null,
         string $search        = '',
         string $searchType    = 'all'
     ): array
     {
-        if($pager)
-        {
-            $recTotal = $this->getDocCountWithPager($libs, $filterType, $search, $searchType);
-            $pager->recTotal  = $recTotal;
-            $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
-        }
-
-        $orderByMaps = array(
-            'id_desc'         => 't1.id DESC',
-            'id_asc'          => 't1.id ASC',
-            'editedDate_desc' => 't1.editedDate DESC',
-            'editedDate_asc'  => 't1.editedDate ASC',
-            'title_asc'       => 't1.title ASC',
-            'title_desc'      => 't1.title DESC',
-            'order_asc'       => 't1.`order` ASC, t1.id ASC',
-            'order_desc'      => 't1.`order` DESC, t1.id DESC',
-        );
-        $sqlOrderBy = zget($orderByMaps, $orderBy, 't1.id DESC');
-
         $searchCond = array();
         if(!empty($search))
         {
@@ -891,8 +871,8 @@ class docModel extends model
             if($searchType === 'all' || $searchType === 'keywords') $searchCond[] = "t1.keywords LIKE '%{$search}%'";
         }
 
-        $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, true);
-        $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, $sqlOrderBy, $pager, false);
+        $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, '', null, true);
+        $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, '', null, false);
 
         $docs = arrayUnion($docs, $rootDocs);
         $docs = $this->docTao->filterDeletedDocs($docs);
@@ -912,6 +892,16 @@ class docModel extends model
 
             unset($doc->content);
             unset($doc->draft);
+        }
+
+        if($pager)
+        {
+            $recTotal = $this->getDocCountWithPager($libs, $filterType, $search, $searchType);
+            $pager->recTotal  = $recTotal;
+            $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
+
+            $offset = ($pager->page - 1) * $pager->recPerPage;
+            $docs   = array_slice($docs, $offset, $pager->recPerPage, true);
         }
 
         return $docs;
@@ -1263,7 +1253,7 @@ class docModel extends model
         {
             $libID = current($libIdList);
             $lib   = $this->getLibByID((int)$libID);
-            if($lib->type == 'custom' && $lib->parent == 0)
+            if($lib !== false && $lib->type == 'custom' && $lib->parent == 0)
             {
                 $libs = $this->dao->select('*')->from(TABLE_DOCLIB)->where('parent')->eq($libID)->andWhere('deleted')->eq('0')->fetchAll();
                 foreach($libs as $subLib)

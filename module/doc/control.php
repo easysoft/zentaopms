@@ -2401,7 +2401,6 @@ class doc extends control
      * @param int    $spaceID    空间ID
      * @param string $picks      需要加载的数据
      * @param int    $libID      文档库ID
-     * @param string $orderBy    排序
      * @param int    $recPerPage 每页数量
      * @param int    $pageID     页码
      * @param string $filterType 筛选类型
@@ -2415,7 +2414,6 @@ class doc extends control
         int    $spaceID    = 0,
         string $picks      = '',
         int    $libID      = 0,
-        string $orderBy    = 'id_desc',
         int    $recPerPage = 20,
         int    $pageID     = 1,
         string $filterType = '',
@@ -2431,8 +2429,16 @@ class doc extends control
         }
 
         $data   = $this->buildSpaceDataBase($type, $spaceID, $picks);
-        $libIds = $data['libIds'] ?? array();
-        unset($data['libIds']);
+        if($libID > 0)
+        {
+            $libIds = array($libID);
+            unset($data['libIds']);
+        }
+        else
+        {
+            $libIds = $data['libIds'] ?? array();
+            unset($data['libIds']);
+        }
 
         $noPicks = empty($picks);
         if($noPicks || strpos($picks, ',doc,') !== false)
@@ -2441,13 +2447,13 @@ class doc extends control
             $pager->page       = $pageID;
             $pager->recPerPage = $recPerPage;
 
+            $queryLibs = $libID > 0 ? $libIds : $libIds + array($spaceID);
             $data['docs'] = array_values($this->doc->getDocsWithPager(
-                $libIds + array($spaceID),
+                $queryLibs,
                 $type,
                 0,
                 false,
                 $filterType,
-                $orderBy,
                 $pager,
                 $search,
                 $searchType
