@@ -2409,17 +2409,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function ajaxFetchSpaceData(
-        string $type       = 'custom',
-        int    $spaceID    = 0,
-        string $picks      = '',
-        int    $libID      = 0,
-        int    $recPerPage = 20,
-        int    $pageID     = 1,
-        string $filterType = '',
-        string $search     = '',
-        string $searchType = 'all'
-    )
+    public function ajaxFetchSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', string $searchType = 'all')
     {
         $this->doc->setMenuByType($type, (int)$spaceID, 0);
 
@@ -2448,16 +2438,7 @@ class doc extends control
             $pager->recPerPage = $recPerPage;
 
             $queryLibs = $libID > 0 ? $libIds : $libIds + array($spaceID);
-            $data['docs'] = array_values($this->doc->getDocsWithPager(
-                $queryLibs,
-                $type,
-                0,
-                false,
-                $filterType,
-                $pager,
-                $search,
-                $searchType
-            ));
+            $data['docs'] = array_values($this->doc->getDocsWithPager($queryLibs, $type, 0, false, $filterType, $pager, $search, $searchType));
 
             $data['pager'] = array(
                 'page'       => $pager->page,

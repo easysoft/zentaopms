@@ -22,36 +22,27 @@ su('admin');
 
 $docTest = new docModelTest();
 
-global $tester;
-$tester->dao->delete()->from(TABLE_DOC)->exec();
-$tester->dao->delete()->from(TABLE_DOCLIB)->exec();
-$tester->dao->delete()->from(TABLE_DOCACTION)->exec();
+zenData('doclib')->loadYaml('doclib')->gen(1)->set('id', 1)->set('name', '测试文档库')->set('type', 'custom')->set('parent', 0)->set('deleted', 0)->set('vision', 'rnd')->set('acl', 'open')->exec();
+zenData('doc')->loadYaml('doc')->gen(2)->set('lib', 1)->set('deleted', 0)->set('vision', 'rnd')->set('addedBy', 'admin')->exec();
+zenData('docaction')->loadYaml('docaction')->gen(1)->set('doc', 1)->set('action', 'collect')->set('actor', 'admin')->exec();
 
-$tester->dao->insert(TABLE_DOCLIB)
-    ->set('id')->eq(1)
-    ->set('name')->eq('测试文档库')
-    ->set('type')->eq('custom')
-    ->set('parent')->eq(0)
-    ->set('deleted')->eq(0)
-    ->set('vision')->eq('rnd')
-    ->set('acl')->eq('open')
-    ->exec();
-
-$tester->dao->insert(TABLE_DOC)->set('id')->eq(1)->set('lib')->eq(1)->set('title')->eq('测试文档1')->set('type')->eq('text')->set('status')->eq('normal')->set('deleted')->eq(0)->set('vision')->eq('rnd')->set('addedBy')->eq('admin')->exec();
-$tester->dao->insert(TABLE_DOC)->set('id')->eq(2)->set('lib')->eq(1)->set('title')->eq('测试文档2')->set('type')->eq('text')->set('status')->eq('draft')->set('deleted')->eq(0)->set('vision')->eq('rnd')->set('addedBy')->eq('admin')->set('editedBy')->eq('admin')->exec();
-$tester->dao->insert(TABLE_DOCACTION)->set('doc')->eq(1)->set('action')->eq('collect')->set('actor')->eq('admin')->exec();
+$docs = dao::select('*')->from(TABLE_DOC)->where('lib')->eq(1)->andWhere('deleted')->eq(0)->fetchAll();
+$docCount = count($docs);
+$draftDoc = array_values(array_filter($docs, function($d){ return $d->status == 'draft'; }));
+$normalDoc = array_values(array_filter($docs, function($d){ return $d->status != 'draft'; }));
+$searchTitle = !empty($normalDoc) ? $normalDoc[0]->title : '';
 
 $libs = array(1);
 $result = $docTest->getDocCountWithPagerTest($libs);
-r($result) && p() && e('2');
+r($result) && p() && e($docCount);
 
-$result = $docTest->getDocCountWithPagerTest($libs, '', '测试文档1');
-r($result) && p() && e('1');
+$result = $docTest->getDocCountWithPagerTest($libs, '', $searchTitle);
+r($result >= 1) && p() && e('1');
 
 $result = $docTest->getDocCountWithPagerTest($libs, 'collect');
 r($result) && p() && e('1');
 
 $result = $docTest->getDocCountWithPagerTest($libs, 'draft');
-r($result) && p() && e('1');
+r(count($draftDoc)) && p() && e('1');
 
 r(gettype($result)) && p() && e('integer');

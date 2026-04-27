@@ -693,16 +693,7 @@ class docModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function getDocsWithPagerTest(
-        array  $libs,
-        string $spaceType,
-        int    $excludeID     = 0,
-        bool   $queryTemplate = false,
-        string $filterType    = '',
-        object $pager         = null,
-        string $search        = '',
-        string $searchType    = 'all'
-    ): array
+    public function getDocsWithPagerTest(array $libs, string $spaceType, int $excludeID = 0, bool $queryTemplate = false, string $filterType = '', object $pager = null, string $search = '', string $searchType = 'all'): array
     {
         $docs = $this->instance->getDocsWithPager($libs, $spaceType, $excludeID, $queryTemplate, $filterType, $pager, $search, $searchType);
 
