@@ -110,6 +110,23 @@ class webhookModelTest extends baseTest
     }
 
     /**
+     * 获取绑定用户
+     * Get bound users Test
+     * @param  int    $id
+     * @param  array  $userList
+     * @access public
+     * @return array
+     */
+    public function getBoundUsersTest(int $id, array|string $userList)
+    {
+        $users = $this->instance->getBoundUsers($id, $userList);
+
+        if(dao::isError()) return dao::getError();
+
+        return $users;
+    }
+
+    /**
      * Get bound users Test
      *
      * @param  string $assignedTo
