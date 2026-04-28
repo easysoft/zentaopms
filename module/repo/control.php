@@ -330,6 +330,9 @@ class repo extends control
             $check = $this->repo->checkName($formData->name);
             if(!$check) return $this->sendError(array('name' => $this->lang->repo->error->repoNameInvalid));
 
+            $res = $this->loadModel('gitfox')->addPushWebhook($repo);
+            if(!$res) return $this->sendError(array('webhook' => isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook));
+
             if($formData->acl == 'private' && empty($formData->members))
             {
                 $this->sendError(array('members' => sprintf($this->lang->error->notempty, $this->lang->repo->members)));

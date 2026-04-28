@@ -470,8 +470,7 @@ class gitfoxModel extends model
         $result = $this->apiCreateHook((int)$repo->id, $hook);
 
         if(!empty($result->id)) return true;
-        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
-        return false;
+        return !dao::isError();
     }
 
     /**

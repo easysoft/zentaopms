@@ -112,7 +112,7 @@ foreach($reviewList as $review)
     if(in_array($type, array('ppm', 'pullreq')))
     {
         $this->app->loadLang('ppm');
-        $this->review->module = 'ppm';
+        $review->module = 'ppm';
 
         if(empty($review->status)) $review->status = 'notReviewed';
         $statusList = $lang->ppm->approvalStatusList;
