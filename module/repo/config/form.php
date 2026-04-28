@@ -57,6 +57,17 @@ $config->repo->form->import['encoding']       = array('required' => false, 'type
 $config->repo->form->import['encrypt']        = array('required' => false, 'type' => 'string', 'default' => 'base64');
 $config->repo->form->import['acl']            = array('required' => false, 'type' => 'string', 'default' => '{"acl":"open","groups":[""],"users":[""]}');
 
+$config->repo->form->createWebhook = array();
+$config->repo->form->createWebhook['name']         = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->createWebhook['targetURL']    = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->createWebhook['SSL']          = array('required' => false, 'type' => 'array');
+$config->repo->form->createWebhook['key']          = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->createWebhook['triggerEvent'] = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->repo->form->createWebhook['customEvent']  = array('required' => false, 'type' => 'array',  'default' => array());
+$config->repo->form->createWebhook['desc']         = array('required' => false, 'type' => 'text',   'default' => '');
+
+$config->repo->form->editWebhook = $config->repo->form->createWebhook;
+
 $now = helper::now();
 $config->repo->form->addBug = array();
 $config->repo->form->addBug['file']          = array('required' => true,  'type' => 'string');

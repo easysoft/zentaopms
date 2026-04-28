@@ -381,22 +381,21 @@ class gitfoxModel extends model
     }
 
     /**
-     * 通过api获取项目 hooks。
-     * Get hooks.
+     * 通过 api 获取 webhook。
+     * Get webhooks by api.
      *
-     * @param  int    $gitfoxID
-     * @param  int    $repoID
+     * @param  int   $repoID
+     * @param  int   $hookID
+     * @param  array $params
      * @access public
-     * @link   https://docs.gitfox.com/ee/api/projects.html#list-project-hooks
-     * @return object|array|null
+     * @return object|array|false
      */
-    public function apiGetHooks(int $gitfoxID, int $repoID, int $hookID = 0): object|array|null
+    public function apiGetHooks(int $repoID, int $hookID = 0, array $params = array()): object|array|false
     {
-        $apiRoot  = $this->getApiRoot($gitfoxID, false);
-        $apiPath  = "/repos/{$repoID}/webhooks" . ($hookID ? "/{$hookID}" : '');
-        $url      = sprintf($apiRoot->url, $apiPath);
-
-        return json_decode(common::http($url, null, array(), $apiRoot->header));
+        $apiPath = "/repos/{$repoID}/webhooks" . ($hookID ? "/{$hookID}" : '');
+        $result  = $this->request($apiPath, 'GET', $params);
+        if(!$hookID && is_object($result) && isset($result->data)) return $result->data;
+        return $result;
     }
 
     /**
@@ -430,29 +429,20 @@ class gitfoxModel extends model
     }
 
     /**
-     * 通过api创建hook。
-     * Create hook by api.
+     * 通过 api 创建 webhook。
+     * Create webhook by api.
      *
-     * @param  int    $gitfoxID
      * @param  int    $repoID
      * @param  object $hook
      * @access public
-     * @link   https://docs.gitfox.com/ee/api/projects.html#add-project-hook
-     * @return object|array|null|false
+     * @return object|array|false
      */
-    public function apiCreateHook(int $gitfoxID, int $repoID, object $hook): object|array|null|false
+    public function apiCreateHook(int $repoID, object $hook): object|array|false
     {
         if(!isset($hook->url)) return false;
+        if(!isset($hook->insecure)) $hook->insecure = true;
 
-        $newHook = new stdclass;
-        if(!isset($hook->insecure)) $newHook->insecure = true; /* Disable ssl verification for every hook. */
-
-        foreach($hook as $index => $item) $newHook->$index= $item;
-
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks");
-
-        return json_decode(common::http($url, $newHook, array(), $apiRoot->header, 'json'));
+        return $this->request("/repos/{$repoID}/webhooks", 'POST', $hook);
     }
 
     /**
@@ -469,20 +459,18 @@ class gitfoxModel extends model
         $systemURL = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
 
         $hook = new stdClass;
-        $hook->url     = $systemURL . '/api.php/v1/gitfox/webhook?repoID='. $repo->id;
-        $hook->display_name = "zentao_{$repo->id}_" . date('Ymd');
-        $hook->enabled = true;
+        $hook->url         = $systemURL . '/api.php/v1/gitfox/webhook?repoID='. $repo->id;
+        $hook->displayName = "zentao_{$repo->id}_" . date('Ymd');
+        $hook->enabled     = true;
         if($token) $hook->secret = $token;
 
         /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return true;
 
-        $result = $this->apiCreateHook($repo->gitService, (int)$repo->serviceProject, $hook);
+        $result = $this->apiCreateHook((int)$repo->id, $hook);
 
         if(!empty($result->id)) return true;
-
-        if(!empty($result->message)) return array('result' => 'fail', 'message' => $result->message);
-        return false;
+        return !dao::isError();
     }
 
     /**
@@ -495,7 +483,7 @@ class gitfoxModel extends model
      */
     public function isWebhookExists(object $repo, string $url = ''): bool
     {
-        $hookList = $this->apiGetHooks($repo->gitService, (int)$repo->serviceProject);
+        $hookList = $this->apiGetHooks((int)$repo->id);
         foreach($hookList as $hook)
         {
             if(empty($hook->url)) continue;
@@ -1415,65 +1403,53 @@ class gitfoxModel extends model
     }
 
     /**
-     * 通过api更新webhook。
-     * Update webhook info by api.
+     * 通过 api 更新 webhook。
+     * Update webhook by api.
      *
-     * @param  int    $gitfoxID
+     * @param  int    $repoID
      * @param  int    $webhookID
      * @param  object $data
      * @access public
-     * @return object|false
+     * @return object|array|false
      */
-    public function apiUpdateWebhook(int $gitfoxID, int $repoID, int $webhookID, object $data): object|false
+    public function apiUpdateWebhook(int $repoID, int $webhookID, object $data): object|array|false
     {
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks/{$webhookID}");
-        $result  = json_decode(common::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'PATCH'), $apiRoot->header, 'json', 'PATCH'));
-
-        if(empty($result) || empty($result->id)) return false;
-        return $result;
+        return $this->request("/repos/{$repoID}/webhooks/{$webhookID}", 'PUT', $data);
     }
 
     /**
-     * 通过api获取webhook执行记录。
+     * 通过 api 获取 webhook 执行记录。
      * Get webhook execution info by api.
      *
-     * @param  int    $gitfoxID
-     * @param  int    $repoID
-     * @param  int    $webhookID
-     * @param  int    $executionID
+     * @param  int   $repoID
+     * @param  int   $webhookID
+     * @param  int   $executionID
+     * @param  array $params
      * @access public
      * @return array|object|false
      */
-    public function apiGetWebhookExecution(int $gitfoxID, int $repoID, int $webhookID, int $executionID = 0): array|object|false
+    public function apiGetWebhookExecution(int $repoID, int $webhookID, int $executionID = 0, array $params = array()): array|object|false
     {
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks/{$webhookID}/executions");
-        if($executionID) $url .= "/{$executionID}";
-        $result  = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
-
-        if(empty($result) || empty($executionID ? $result->id : $result[0]->id)) return false;
+        $apiPath = "/repos/{$repoID}/webhooks/{$webhookID}/executions";
+        if($executionID) $apiPath .= "/{$executionID}";
+        $result = $this->request($apiPath, 'GET', $params);
+        if(!$executionID && is_object($result) && isset($result->data)) return $result->data;
         return $result;
     }
 
     /**
-     * 通过API删除Webhook。
-     * Api delete webhook.
+     * 通过 API 删除 webhook。
+     * Delete webhook by api.
      *
-     * @param  int    $gitfoxID
-     * @param  int    $repoID
-     * @param  int    $webhookID
+     * @param  int $repoID
+     * @param  int $webhookID
      * @access public
-     * @return object|null|false
+     * @return object|array|bool
      */
-    public function apiDeleteWebhook(int $gitfoxID, int $repoID, int $webhookID): object|null|false
+    public function apiDeleteWebhook(int $repoID, int $webhookID): object|array|bool
     {
         if(empty($repoID)) return false;
-
-        $apiRoot = $this->getApiRoot($gitfoxID, false);
-        $url = sprintf($apiRoot->url, "/repos/{$repoID}/webhooks/{$webhookID}");
-
-        return json_decode(common::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header, 'json', 'DELETE'));
+        return $this->request("/repos/{$repoID}/webhooks/{$webhookID}", 'DELETE');
     }
 
     /**

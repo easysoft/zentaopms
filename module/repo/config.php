@@ -184,7 +184,7 @@ $config->repo->searchCommits['fields']['committer'] = $lang->repo->committer;
 
 $config->repo->searchCommits['params']['commit']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->repo->searchCommits['params']['date']      = array('operator' => '=',       'control' => 'date',  'values' => '');
-$config->repo->searchCommits['params']['committer'] = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->searchCommits['params']['committer'] = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 
 /* Search config. */
 $config->repo->system = new stdClass();

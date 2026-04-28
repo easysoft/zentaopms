@@ -420,3 +420,71 @@ $lang->repo->defaultBranch       = '默认分支';
 $lang->repo->committerTip        = '提交人具有代码库的写入权限';
 $lang->repo->commitDetail        = '%s 提交时间：%s，提交人：%s';
 $lang->repo->hasNoProduct        = '当前项目或者执行没有关联产品';
+
+$lang->repo->browseWebhooks     = 'Webhook列表';
+$lang->repo->createWebhook      = '创建Webhook';
+$lang->repo->editWebhook        = '编辑Webhook';
+$lang->repo->logWebhook         = 'Webhook日志';
+$lang->repo->viewWebhookRequest = '请求数据';
+$lang->repo->deleteWebhook      = '删除Webhook';
+$lang->repo->targetURL          = '目标URL';
+$lang->repo->latestStatus       = '最近状态';
+$lang->repo->enable             = '启用';
+$lang->repo->disable            = '关闭';
+
+$lang->repo->webhook = new stdclass();
+$lang->repo->webhook->statusList = array();
+$lang->repo->webhook->statusList['enabled']  = '启用';
+$lang->repo->webhook->statusList['disabled'] = '关闭';
+
+$lang->repo->webhook->latestStatusList = array();
+$lang->repo->webhook->latestStatusList['success'] = '成功';
+$lang->repo->webhook->latestStatusList['fail']    = '失败';
+$lang->repo->webhook->latestStatusList['pending'] = '未发送';
+
+$lang->repo->webhook->logStatusList = array();
+$lang->repo->webhook->logStatusList['success'] = '成功';
+$lang->repo->webhook->logStatusList['fail']    = '失败';
+
+$lang->repo->webhook->key                  = '密钥';
+$lang->repo->webhook->desc                 = '描述';
+$lang->repo->webhook->SSL                  = '启用 SSL 验证';
+$lang->repo->webhook->triggerEvent         = '触发事件';
+$lang->repo->webhook->customEvent          = '自定义事件';
+$lang->repo->webhook->urlError             = '目标URL格式不正确';
+$lang->repo->webhook->customEventError     = '自定义事件不能为空';
+$lang->repo->webhook->nameExists           = '名称为%s的Webhook已经存在';
+$lang->repo->webhook->defaultShowSecret    = '******';
+$lang->repo->webhook->enabledSuccess       = '启用成功';
+$lang->repo->webhook->disabledSuccess      = '关闭成功';
+$lang->repo->webhook->enabledFail          = '启用失败';
+$lang->repo->webhook->disabledFail         = '关闭失败';
+$lang->repo->webhook->requestData          = '请求数据';
+$lang->repo->webhook->requestDate          = '请求时间';
+$lang->repo->webhook->triggerType          = '触发类型';
+$lang->repo->webhook->requestURL           = '请求地址';
+$lang->repo->webhook->requestHeaders       = '请求头';
+$lang->repo->webhook->requestBody          = '请求数据';
+$lang->repo->webhook->responseHeaders      = '响应头';
+$lang->repo->webhook->responseBody         = '响应数据';
+$lang->repo->webhook->emptyData            = '无数据';
+$lang->repo->webhook->deleteSuccess        = '删除成功';
+$lang->repo->webhook->confirmWebhookDelete = "确定要删除 '%s' 吗，删除后不可恢复";
+$lang->repo->webhook->lengthError          = "『%s』长度应当不超过『%s』";
+$lang->repo->webhook->deleteFail           = 'Webhook已经有触发记录，不允许删除';
+
+$lang->repo->webhook->triggerEventList = array();
+$lang->repo->webhook->triggerEventList[0] = '发送所有事件';
+$lang->repo->webhook->triggerEventList[1] = '自定义事件';
+
+$lang->repo->webhook->customEventList = array();
+$lang->repo->webhook->customEventList['branch_created']           = '分支创建';
+$lang->repo->webhook->customEventList['branch_updated']           = '分支更新';
+$lang->repo->webhook->customEventList['branch_deleted']           = '分支删除';
+$lang->repo->webhook->customEventList['tag_created']              = '标签创建';
+$lang->repo->webhook->customEventList['tag_deleted']              = '标签删除';
+$lang->repo->webhook->customEventList['pullreq_created']          = '创建推送请求';
+$lang->repo->webhook->customEventList['pullreq_reopened']         = '重新打开推送请求';
+$lang->repo->webhook->customEventList['pullreq_branch_updated']   = '更新推送请求分支';
+$lang->repo->webhook->customEventList['pullreq_closed']           = '关闭推送请求';
+$lang->repo->webhook->customEventList['pullreq_merged']           = '合并推送请求';

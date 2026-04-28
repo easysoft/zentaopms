@@ -59,6 +59,18 @@ window.switchBranch = function(branchID)
     location.href=location.href;
 }
 
+window.onChangeTriggerEvent = function()
+{
+    const allEvent    = $('#triggerEvent0').is(':checked');
+    const customEvent = $('#triggerEvent1').is(':checked');
+
+    setTimeout(function()
+    {
+        if(allEvent)    $('#customEvent').addClass('hidden');
+        if(customEvent) $('#customEvent').removeClass('hidden');
+    }, 100);
+}
+
 var distance = 0;
 
 /**
