@@ -1346,8 +1346,9 @@ class myModel extends model
             ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.requestID')
             ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.repoID')
             ->where('t1.status')->ne('closed')
-            ->andWhere('(t2.account')->eq($this->app->user->account)
-            ->orWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewers`)")->markRight(1)->fi()
+            ->andWhere('((t2.account')->eq($this->app->user->account)
+            ->andWhere('t2.decision')->eq('pending')->markRight(1)
+            ->orWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewers`)")->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id');
 
@@ -1362,21 +1363,6 @@ class myModel extends model
                     continue;
                 }
                 $ppm->status = $ppm->reviewStatus;
-            }
-            else
-            {
-                $reviewers   = $this->ppm->getReviewers($ppm->id);
-                $definition  = empty($ppm->definition) ? array() : json_decode($ppm->definition);
-
-                $flow = new stdClass();
-                $flow->definition = $definition;
-                $reviewResult = $this->ppm->getReviewResult($reviewers, empty($flow->definition) ? array() : $flow);
-                if(!in_array($reviewResult, array('pending', 'inProgress')))
-                {
-                    unset($ppms[$ppmID]);
-                    continue;
-                }
-                $ppm->status = $reviewResult;
             }
         }
         return $ppms;
