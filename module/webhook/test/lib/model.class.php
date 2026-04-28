@@ -112,18 +112,17 @@ class webhookModelTest extends baseTest
     /**
      * Get bound users Test
      *
-     * @param  int   $webhookID
-     * @param  array $users
+     * @param  string $assignedTo
      * @access public
-     * @return int
+     * @return string
      */
-    public function getBoundUsersTest($webhookID, $users = array())
+    public function getFeishuBoundOpenIdTest(string $assignedTo)
     {
-        $objects = $this->instance->getBoundUsers($webhookID, $users);
+        $openID = $this->instance->getFeishuBoundOpenId($assignedTo);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $openID;
     }
 
     public function createTest($webhook)
