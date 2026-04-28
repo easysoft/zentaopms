@@ -467,9 +467,11 @@ EOT;
      * @access protected
      * @return array
      */
-    protected function getInstallPlan(string $file = 'zentao.sql'): array
+    protected function getInstallPlan(string $file = ''): array
     {
         $this->setDBParam((object)$this->session->myConfig);
+
+        if(empty($file)) $file = $this->config->db->fileName;
 
         $changes = [];
         $clearDB = $this->session->myConfig['clearDB'] ?? 0;
