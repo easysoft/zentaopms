@@ -137,7 +137,7 @@ $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->my
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
-$config->doc->quickFetchRemote = true;
+$config->doc->quickFetchRemote = false;
 
 $config->doc->zentaoListMenuPosition = 22;
 

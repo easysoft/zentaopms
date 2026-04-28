@@ -406,16 +406,17 @@ class docZen extends doc
      * @param  int        $libID
      * @param  int        $docID
      * @param  bool       $spaceTypeChanged
+     * @param  string     $docType
      *
      * @access protected
      * @return void
      */
-    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false)
+    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false, string $docType = '')
     {
         list($spaceType, $spaceID) = explode('.', $space);
         if($docID)
         {
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $spaceID, $libID));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $spaceID, $libID, $docType));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 
@@ -1881,7 +1882,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function prepareDocViewData(string $spaceType, string $space, int &$libID, int $docID, object $doc): void
+    protected function prepareDocViewData(string $spaceType, int|string $space, int &$libID, int $docID, object $doc): void
     {
         $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
         $products   = $this->loadModel('product')->getPairs();

@@ -1936,7 +1936,7 @@ class doc extends control
 
             $lib = $this->doc->getLibByID($libID);
             $spaceTypeChanged = $spaceType != $lib->type;
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
@@ -1983,7 +1983,7 @@ class doc extends control
             {
                 $space = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project);
             }
-            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false);
+            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type);
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
