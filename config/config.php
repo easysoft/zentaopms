@@ -66,13 +66,13 @@ $config->default->method = 'index';       //默认方法。 Default method.
 
 /* 数据库设置。Database settings. */
 $config->db = new stdclass();
-$config->slaveDB = new stdclass();
 $config->db->persistent      = false;     // 是否为持续连接。       Pconnect or not.
 $config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Must be MySQL. Don't support other database server yet.
 $config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
 $config->db->strictMode      = true;      // 默认开启MySQL的严格模式。  Turn on the strict mode of MySQL.
 $config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
 $config->db->enableSqlite    = false;     // 是否启用SQLite         Enable SQLite or not.
+$config->slaveDB = new stdclass();
 $config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
 
 $config->enableDuckdb = false;
