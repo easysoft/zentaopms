@@ -64,7 +64,7 @@ class repoModel extends model
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
-        if($this->app->methodName == 'setarchive') $this->lang->devops->menu->settings['subModule'] .= ',repo';
+        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';
     }
 
     /**
@@ -1168,8 +1168,9 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function createLink(string $method, string $params = '', string $viewType = '')
+    public function createLink(string $method, string $params = '', string $viewType = 'html')
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && isset($this->config->originRequestType)) $this->config->requestType = $this->config->originRequestType;
         if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType);
 
         $parsedParams = array();
@@ -1608,8 +1609,12 @@ class repoModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
+                $path = $this->encodePath($file);
+                $viewURL = $this->createLink('view', "repoID={$log->repo->id}&objectID=0&entry={$path}&revision={$log->revision}");
+                $diffURL = $this->createLink('diff', "repoID={$log->repo->id}&objectID=0&entry={$path}&oldRevision={$log->revision}&revision={$log->revision}");
+
+                $catLink  = trim(html::a($viewURL, 'view', 'modal', "data-toggle='modal' data-size='lg'"));
+                $diffLink = trim(html::a($diffURL, 'diff', 'modal', "data-toggle='modal' data-size='lg'"));
 
                 $catLink  = str_replace('+', '%2B', $catLink);
                 $diffLink = str_replace('+', '%2B', $diffLink);
@@ -1700,7 +1705,6 @@ class repoModel extends model
      */
     public function processGitService(object $repo): object
     {
-
         $server = $this->loadModel('gitfox')->getServer();
 
         $singleRepo = $this->gitfox->apiGetSingleRepo((int)$repo->id);
@@ -1729,19 +1733,10 @@ class repoModel extends model
         if(!in_array($event, array('Push Hook', 'Merge Request Hook', 'branch_updated'))) return false;
         if(empty($data->commits)) return false;
 
-        /* Update code commit history. */
-        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $jobs = zget($commentGroup, $repo->id, array());
-
-        $accountPairs   = array();
-        $userList       = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
-        $accountIDPairs = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($accountIDPairs, $gitlabUser->id, '');
+        $accountPairs = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
 
         foreach($data->commits as $commit)
         {
@@ -1772,19 +1767,8 @@ class repoModel extends model
             }
 
             $objects = $this->parseComment($log->msg);
-            $this->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
+            $this->saveAction2PMS($objects, $log, '', 'utf-8', 'git', $accountPairs);
 
-            foreach($jobs as $job)
-            {
-                foreach(explode(',', $job->comment) as $comment)
-                {
-                    if(strpos($log->msg, $comment) !== false)
-                    {
-                        $this->loadModel('job')->exec($job->id, array(), 'commit');
-                        continue 2;
-                    }
-                }
-            }
             if(!empty($objects['stories']) || !empty($objects['tasks']) || !empty($objects['bugs']))
             {
                 $historyLog = new stdclass();
