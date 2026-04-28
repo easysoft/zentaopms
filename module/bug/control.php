@@ -64,7 +64,9 @@ class bug extends control
         {
             $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
             $mode     = (strpos(',create,edit,', ",{$this->app->methodName},") !== false and empty($this->config->CRProduct)) ? 'noclosed' : '';
-            $objectID = ($tab == 'project' or $tab == 'execution') ? $this->session->{$tab} : 0;
+            $objectID = ($tab == 'project' or $tab == 'execution') ? zget($this->session, $tab, 0) : 0;
+            if($objectID === false || $objectID === null) $objectID = 0;
+            if(is_string($objectID) && $objectID === '') $objectID = 0;
             if($tab == 'project' or $tab == 'execution')
             {
                 if(common::isTutorialMode())
