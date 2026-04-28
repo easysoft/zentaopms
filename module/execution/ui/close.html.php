@@ -30,13 +30,17 @@ $beforeSubmit = jsRaw("() =>
     return false;
 }");
 
+$ajaxOptions = array();
+if(!empty($unclosedTasks)) $ajaxOptions['beforeSubmit'] = $beforeSubmit;
+$ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
+
 $space = common::checkNotCN() ? ' ' : '';
 modalHeader(set::title($lang->execution->close . $space . $lang->executionCommon));
 formPanel
 (
     set::formID('zin_execution_close_' . $executionID . '_form'),
     set::submitBtnText($lang->execution->close . $space . $lang->executionCommon),
-    !empty($unclosedTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
+    set::ajax($ajaxOptions),
     formGroup
     (
         set::width('1/2'),
