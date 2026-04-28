@@ -586,11 +586,11 @@ $lang->devops->menu->settings['subMenu']->reviewFlow = array('link' => "{$lang->
 $lang->devops->menu->settings['subMenu']->webhooks   = array('link' => "Webhooks|repo|browsewebhooks|repoID=%s", 'alias' => 'createwebhook,editwebhook,logwebhook');
 
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
-//$lang->devops->homeMenu->configure['subMenu']->rules = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 $lang->devops->homeMenu->configure['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|", 'alias' => 'create,edit,delete,import');
+$lang->devops->homeMenu->configure['subMenu']->rules      = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
 
-//$lang->devops->homeMenu->configure['menuOrder'][5] = 'rules';
-$lang->devops->homeMenu->configure['menuOrder'][10] = 'branchType';
+$lang->devops->homeMenu->configure['menuOrder'][5]  = 'branchType';
+$lang->devops->homeMenu->configure['menuOrder'][10] = 'rules';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[5]   = 'space';

@@ -1168,8 +1168,9 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function createLink(string $method, string $params = '', string $viewType = '')
+    public function createLink(string $method, string $params = '', string $viewType = 'html')
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && isset($this->config->originRequestType)) $this->config->requestType = $this->config->originRequestType;
         if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType);
 
         $parsedParams = array();
@@ -1604,17 +1605,16 @@ class repoModel extends model
         $this->server->set('PHP_SELF', $this->config->webRoot, '', false, true);
 
         $diff = '';
-        $hasViewPriv = common::hasPriv('repo', 'view');
-        $hasDiffPriv = common::hasPriv('repo', 'diff');
         foreach($log->files as $action => $actionFiles)
         {
             foreach($actionFiles as $file)
             {
-                $viewURL = helper::createLink('repo', 'view', "repoID={$log->repo->id}&objectID=0&entry=&revision={$log->revision}");
-                $diffURL = helper::createLink('repo', 'diff', "repoID={$log->repo->id}&objectID=0&entry=&oldRevision={$log->revision}&revision={$log->revision}");
+                $path = $this->encodePath($file);
+                $viewURL = $this->createLink('view', "repoID={$log->repo->id}&objectID=0&entry={$path}&revision={$log->revision}");
+                $diffURL = $this->createLink('diff', "repoID={$log->repo->id}&objectID=0&entry={$path}&oldRevision={$log->revision}&revision={$log->revision}");
 
-                $catLink  = trim(html::a($hasViewPriv ? $viewURL : '#', 'view', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
-                $diffLink = trim(html::a($hasDiffPriv ? $diffURL : '#', 'diff', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
+                $catLink  = trim(html::a($viewURL, 'view', 'modal', "data-toggle='modal' data-size='lg'"));
+                $diffLink = trim(html::a($diffURL, 'diff', 'modal', "data-toggle='modal' data-size='lg'"));
 
                 $catLink  = str_replace('+', '%2B', $catLink);
                 $diffLink = str_replace('+', '%2B', $diffLink);
