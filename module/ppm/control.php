@@ -507,8 +507,8 @@ class ppm extends control
         $scm->setEngine($repo);
 
         $branches = $scm->branch();
-        if(!in_array($ppm->targetBranch, $branches)) return $this->sendError($this->lang->ppm->sourceBranchNotExist);
-        if(!in_array($ppm->sourceBranch, $branches)) return $this->sendError($this->lang->ppm->targetBranchNotExist);
+        if(!$ppm->flow && !in_array($ppm->targetBranch, $branches)) return $this->sendError($this->lang->ppm->targetBranchNotExist);
+        if(!$ppm->flow && !in_array($ppm->sourceBranch, $branches)) return $this->sendError($this->lang->ppm->sourceBranchNotExist);
 
         $checkSameOpened = $this->ppm->checkSameOpened($ppm->repoID, $ppm->sourceRepoID, $ppm->sourceBranch, $ppm->targetRepoID, $ppm->targetBranch);
         if($checkSameOpened['result'] == 'fail') return $this->sendError($checkSameOpened['message']);
