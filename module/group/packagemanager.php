@@ -403,9 +403,9 @@ $config->group->subset->codereview = new stdclass();
 $config->group->subset->codereview->order = 2450;
 $config->group->subset->codereview->nav   = 'devops';
 
-$config->group->subset->artifactrepo = new stdclass();
-$config->group->subset->artifactrepo->order = 2460;
-$config->group->subset->artifactrepo->nav   = 'devops';
+$config->group->subset->artifact = new stdclass();
+$config->group->subset->artifact->order = 2460;
+$config->group->subset->artifact->nav   = 'devops';
 
 $config->group->subset->systemManage = new stdclass();
 $config->group->subset->systemManage->order = 2470;
@@ -4525,19 +4525,19 @@ $config->group->package->browseSystem->privs['system-view']       = array('editi
 
 $config->group->package->browseArtifactrepo = new stdclass();
 $config->group->package->browseArtifactrepo->order  = 2780;
-$config->group->package->browseArtifactrepo->subset = 'artifactrepo';
+$config->group->package->browseArtifactrepo->subset = 'artifact';
 $config->group->package->browseArtifactrepo->privs  = array();
-$config->group->package->browseArtifactrepo->privs['artifactrepo-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->browseArtifactrepo->privs['artifact-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->manageArtifactrepo = new stdclass();
 $config->group->package->manageArtifactrepo->order  = 2800;
-$config->group->package->manageArtifactrepo->subset = 'artifactrepo';
+$config->group->package->manageArtifactrepo->subset = 'artifact';
 $config->group->package->manageArtifactrepo->privs  = array();
-$config->group->package->manageArtifactrepo->privs['artifactrepo-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
-$config->group->package->manageArtifactrepo->privs['artifactrepo-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageArtifactrepo->privs['artifact-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->manageArtifactrepo->privs['artifact-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-maintain'), 'recommend' => array());
 
 $config->group->package->deleteArtifactrepo = new stdclass();
 $config->group->package->deleteArtifactrepo->order  = 2820;
-$config->group->package->deleteArtifactrepo->subset = 'artifactrepo';
+$config->group->package->deleteArtifactrepo->subset = 'artifact';
 $config->group->package->deleteArtifactrepo->privs  = array();
-$config->group->package->deleteArtifactrepo->privs['artifactrepo-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
+$config->group->package->deleteArtifactrepo->privs['artifact-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain'), 'recommend' => array());
