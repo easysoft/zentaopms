@@ -12,18 +12,23 @@ namespace zin;
 
 jsVar('window.confirmShown', false);
 modalHeader();
+
+$ajaxOptions = array();
+if(!empty($confirmTip)) $ajaxOptions['beforeSubmit'] = jsRaw("() => {
+    if(window.confirmShown) return true;
+    window.confirmShown = true;
+    return zui.Modal.confirm('$confirmTip').then((confirmed) => {
+        if(!confirmed) window.confirmShown = false;
+        return confirmed;
+    });
+}");
+$ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
+
 formPanel
 (
     set::formID("zin_project_close_{$project->id}_form"),
     /* 确认弹窗只展示一次，表单可能会被必填项拦截。*/
-    !empty($confirmTip) ? set::ajax(array('beforeSubmit' => jsRaw("() => {
-        if(window.confirmShown) return true;
-        window.confirmShown = true;
-        return zui.Modal.confirm('$confirmTip').then((confirmed) => {
-            if(!confirmed) window.confirmShown = false;
-            return confirmed;
-        });
-    }"))) : null,
+    set::ajax($ajaxOptions),
     formGroup
     (
         set::width('1/2'),
