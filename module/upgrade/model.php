@@ -486,7 +486,7 @@ class upgradeModel extends model
         preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
-        $table  = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $out[1][0]);
+        $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $out[1][0]);
         if($table == $this->config->db->prefix . 'metriclib') return $changes; // 度量库表数据量过大，检查到表结构不一致执行升级会导致长时间卡死，跳过检查。Skip checking metriclib table because it has too much data and checking it will cause long time stuck.
 
         $fields = array();
@@ -1297,7 +1297,6 @@ class upgradeModel extends model
 
         return $sqls;
     }
-
 
     /**
      * Add priv for version 4.0.1
@@ -5794,7 +5793,6 @@ class upgradeModel extends model
         /** @var array[] $chatTablePairs Associations of chats and partition tables, without main table. */
         $chatTablePairs = array();
 
-
         ini_set('memory_limit', '-1');
         set_time_limit(0);
 
@@ -7516,7 +7514,6 @@ class upgradeModel extends model
                     $fieldSettings = $this->getFieldSettings($chart->sql);
                     $data->fields = json_encode($fieldSettings);
                 }
-
 
                 $settings = json_decode($chart->settings);
 
@@ -11906,7 +11903,6 @@ class upgradeModel extends model
         }
         return true;
     }
-
 
     /**
      * 升级项目和迭代的交付物配置。

@@ -198,7 +198,6 @@ class installModel extends model
             $tables = explode('--', file_get_contents($dbFile));
         }
 
-
         foreach($tables as $table)
         {
             $table = $this->replaceContantsInSQL($table);
