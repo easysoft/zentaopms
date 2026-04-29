@@ -396,6 +396,8 @@ class installModel extends model
     {
         $demoDataFile = $this->app->clientLang == 'en' ? 'endemo.sql' : 'demo.sql';
         $demoDataFile = $this->app->getAppRoot() . 'db' . DS . $demoDataFile;
+        if(!is_file($demoDataFile)) return false;
+
         $insertTables = explode(";\n", file_get_contents($demoDataFile));
         foreach($insertTables as $table)
         {
