@@ -116,9 +116,9 @@ class installModel extends model
     public function replaceContantsInSQL(string $sql): string
     {
         $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-        $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+        $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
         $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
-        $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+        $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
         $sql    = str_replace('__DATABASE__', $this->config->db->name, $sql);
         return $sql;
     }
@@ -201,7 +201,7 @@ class installModel extends model
             $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
 
             $table = trim($table);
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
+            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->prefix}", $table);
             $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
             if($table) $this->dbh->exec($table);
         }
@@ -237,7 +237,7 @@ class installModel extends model
             $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
 
             $table = trim($table);
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
+            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->prefix}", $table);
             $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
             if($table) $this->dbh->exec($table);
         }
@@ -410,8 +410,8 @@ class installModel extends model
 
             $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
 
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
+            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $table);
+            $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
 
             /* Make the deleted user of demo data undeleted.*/
@@ -462,7 +462,7 @@ class installModel extends model
                 $table = trim($table);
                 if(empty($table)) continue;
 
-                $table = str_replace('zt_', $this->config->db->prefix, $table);
+                $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $table);
                 if(!$this->dbh->query($table)) return false;
             }
         }

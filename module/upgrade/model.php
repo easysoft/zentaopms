@@ -409,7 +409,7 @@ class upgradeModel extends model
             }
         }
 
-        return str_replace('zt_', $this->config->db->prefix, $confirmContent);
+        return str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $confirmContent);
     }
 
     /**
@@ -486,7 +486,7 @@ class upgradeModel extends model
         preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
-        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        $table  = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $out[1][0]);
         if($table == $this->config->db->prefix . 'metriclib') return $changes; // 度量库表数据量过大，检查到表结构不一致执行升级会导致长时间卡死，跳过检查。Skip checking metriclib table because it has too much data and checking it will cause long time stuck.
 
         $fields = array();
@@ -8122,13 +8122,13 @@ class upgradeModel extends model
         $beta1SQL  = explode(";", file_get_contents($beta1File));
 
         $execSQL = array();
-        foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
-        foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+        foreach($alpha1SQL as $sql) if(strpos($sql, "`{$this->config->db->defaultPrefix}pivot`") !== false) $execSQL[] = $sql;
+        foreach($beta1SQL  as $sql) if(strpos($sql, "`{$this->config->db->defaultPrefix}pivot`") !== false) $execSQL[] = $sql;
 
         /* Update stage to published and update sql. */
         foreach($execSQL as $sql)
         {
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
             $sql = trim($sql);
 
             $this->dbh->exec($sql);
@@ -9226,8 +9226,8 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
-                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+                $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
+                $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
@@ -9271,8 +9271,8 @@ class upgradeModel extends model
                 $this->saveLogs($sql);
 
                 $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
-                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+                $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
+                $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
@@ -10099,11 +10099,11 @@ class upgradeModel extends model
         {
             $setting = json_decode($setting, true);
 
-            if($setting['from']['table'] && strpos($setting['from']['table'], 'zt_') === false) $setting['from']['table'] = $prefix . $setting['from']['table'];
+            if($setting['from']['table'] && strpos($setting['from']['table'], $this->config->db->defaultPrefix) === false) $setting['from']['table'] = $prefix . $setting['from']['table'];
 
             foreach($setting['joins'] as $index => $join)
             {
-                if($setting['joins'][$index]['table'] && strpos($setting['joins'][$index]['table'], 'zt_') === false) $setting['joins'][$index]['table'] = $prefix . $join['table'];
+                if($setting['joins'][$index]['table'] && strpos($setting['joins'][$index]['table'], $this->config->db->defaultPrefix) === false) $setting['joins'][$index]['table'] = $prefix . $join['table'];
             }
 
             $this->dao->update(TABLE_SQLBUILDER)->set('setting')->eq(json_encode($setting))->where('id')->eq($id)->exec();

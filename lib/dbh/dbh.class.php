@@ -784,7 +784,7 @@ class dbh
     public function processDmTableIndex($sql)
     {
         if(strpos($sql, 'DROP INDEX') === FALSE) return $sql;
-        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`/', 'DROP INDEX IF EXISTS `$2_$1`', $sql);
+        return preg_replace("/DROP INDEX `(\w+)` ON `{$this->dbConfig->prefix}(\w+)`/", 'DROP INDEX IF EXISTS `$2_$1`', $sql);
     }
 
     /**
