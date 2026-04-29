@@ -1,5 +1,7 @@
 <?php
 global $lang;
+$config->setSpaceMenu = array('spaceSetting', 'pipeline', 'artifact');
+
 $config->space->create = new stdclass();
 $config->space->create->requiredFields = 'name,manager';
 $config->space->edit = new stdclass();
