@@ -35,25 +35,25 @@ $app->project = 0;
 // 步骤1：测试有storyID且在product tab场景
 $app->tab = 'product';
 $app->session->storyList = '';
-r($storyTest->getAfterBatchCreateLocationTest(1, '0', 0, 1, 'story')) && p() && e('getafterbatchcreatelocation.php?m=projectstory&f=view&storyID=1&projectID=0'); // 步骤1：有storyID无session返回projectstory链接
+r($storyTest->getAfterBatchCreateLocationTest(1, '0', 0, 1, 'story', 1)) && p() && e('getafterbatchcreatelocation.php?m=projectstory&f=view&storyID=1&projectID=0'); // 步骤1：有storyID无session返回projectstory链接
 
 // 步骤2：测试有storyID且不在product tab场景（有session storyList）
 $app->tab = 'project';
 $app->project = 5;
 $app->session->storyList = 'projectstory-story-5.html';
-r($storyTest->getAfterBatchCreateLocationTest(1, '0', 0, 2, 'story')) && p() && e('projectstory-story-5.html'); // 步骤2：有storyID且不在project tab（有session）
+r($storyTest->getAfterBatchCreateLocationTest(1, '0', 0, 2, 'story', 2)) && p() && e('projectstory-story-5.html'); // 步骤2：有storyID且不在project tab（有session）
 
 // 步骤3：测试有executionID且无storyID场景
 $app->tab = 'execution';
 $app->session->storyList = 'execution-story-10.html';
-r($storyTest->getAfterBatchCreateLocationTest(1, '0', 10, 0, 'story')) && p() && e('execution-story-10.html'); // 步骤3：有executionID且无storyID场景
+r($storyTest->getAfterBatchCreateLocationTest(1, '0', 10, 0, 'story', 3)) && p() && e('execution-story-10.html'); // 步骤3：有executionID且无storyID场景
 
 // 步骤4：测试无executionID无storyID且在product tab场景
 $app->tab = 'product';
 $app->session->storyList = '';
-r($storyTest->getAfterBatchCreateLocationTest(2, 'all', 0, 0, 'requirement')) && p() && e('getafterbatchcreatelocation.php?m=product&f=browse&productID=2&branch=all&browseType=unclosed&queryID=0&storyType=requirement'); // 步骤4：product tab返回browse链接
+r($storyTest->getAfterBatchCreateLocationTest(2, 'all', 0, 0, 'requirement', 4)) && p() && e('getafterbatchcreatelocation.php?m=product&f=browse&productID=2&branch=all&browseType=unclosed&queryID=0&storyType=requirement'); // 步骤4：product tab返回browse链接
 
 // 步骤5：测试无executionID无storyID且不在product tab且有session的场景
 $app->tab = 'execution';
 $app->session->storyList = 'execution-story-8.html';
-r($storyTest->getAfterBatchCreateLocationTest(3, '0', 0, 0, 'story')) && p() && e('execution-story-8.html'); // 步骤5：有session返回storyList
+r($storyTest->getAfterBatchCreateLocationTest(3, '0', 0, 0, 'story', 5)) && p() && e('execution-story-8.html'); // 步骤5：有session返回storyList

@@ -1304,4 +1304,38 @@ class projectModelTest extends baseTest
     {
         return $this->instance->fetchProjectList($status, 'id_desc', $involved, null);
     }
+
+    /**
+     * 获取某个时间段内的工作日。
+     * Get working days.
+     *
+     * @param  string     $begin
+     * @param  string     $end
+     * @access public
+     * @return array|bool
+     */
+    public function getWorkingDaysTest(string $begin, string $end): array|bool
+    {
+        $result = $this->instance->getWorkingDays($begin, $end);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 生成新的排期日历。
+     * Compute schedule.
+     *
+     * @param  string       $begin
+     * @param  string       $end
+     * @param  array        $schedule
+     * @param  object       $project
+     * @access public
+     * @return array|object
+     */
+    public function computeScheduleTest(string $begin, string $end, array $schedule, object $project = null): array|object
+    {
+        $result = $this->instance->computeSchedule($begin, $end, $schedule, $project);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

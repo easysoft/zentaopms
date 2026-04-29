@@ -270,7 +270,7 @@ class navbar extends wg
         if($app->tab == 'admin')
         {
             $groupID = data('groupID') ? data('groupID') : 0;
-            $app->control->loadModel('admin')->setMenu($groupID);
+            $app->control->loadModel('admin')->setMenu((int)$groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
         }
 

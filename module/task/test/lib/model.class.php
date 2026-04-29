@@ -2882,4 +2882,54 @@ class taskModelTest extends baseTest
             return array('error' => $e->getMessage());
         }
     }
+
+    /**
+     * 发送消息给依赖任务。
+     * Send message for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendMessageForRelationTaskTest(int $taskID, string $action): bool
+    {
+        $result = $this->instance->sendMessageForRelationTask($taskID, $action, 0);
+        if(!$result) return false;
+        return true;
+    }
+
+    /**
+     * 发送邮件给依赖任务。
+     * Send mail for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendMailForRelationTaskTest(int $taskID, string $action): bool
+    {
+        $task   = $this->instance->getByID($taskID);
+        $result = $this->instance->sendMailForRelationTask($task, array(), $action);
+        if(!$result) return false;
+        return true;
+    }
+
+    /**
+     * 发送Webhook给依赖任务。
+     * Send webhook for relation task.
+     *
+     * @param  int    $taskID
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function sendWebhookForRelationTaskTest(int $taskID, string $action): bool
+    {
+        $task   = $this->instance->getByID($taskID);
+        $result = $this->instance->sendWebhookForRelationTask($task, array(), $action, 0);
+        if(!$result) return false;
+        return true;
+    }
 }

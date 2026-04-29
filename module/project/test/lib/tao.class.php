@@ -1072,7 +1072,8 @@ class projectTaoTest extends baseTest
      */
     public function buildBatchUpdateProjectsTest(array $projectIdList): array
     {
-        $oldProjects = $this->objectModel->getByIdList($projectIdList);
+        $instance    = $this->getInstance($this->moduleName, $this->className);
+        $oldProjects = $instance->loadModel('project')->getByIdList($projectIdList);
         $newProjects = array();
         foreach($oldProjects as $projectID => $project)
         {
@@ -1080,7 +1081,9 @@ class projectTaoTest extends baseTest
             $newProjects[$projectID]->name = '更新' . $project->name;
             $newProjects[$projectID]->PM   = 'admin';
         }
-        return $this->objectModel->buildBatchUpdateProjects($newProjects, $oldProjects);
+        $result = $this->invokeArgs('buildBatchUpdateProjects', [$newProjects, $oldProjects]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

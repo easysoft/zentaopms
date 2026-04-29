@@ -56,20 +56,30 @@ else
     $typeHtml .= '</menu>';
 }
 
-$ganttFields = array();
-$ganttFields['column_text']         = $typeHtml;
-$ganttFields['column_owner_id']     = $lang->programplan->PMAB;
-$ganttFields['column_status']       = $lang->statusAB;
-$ganttFields['column_percent']      = $lang->programplan->percentAB;
-$ganttFields['column_taskProgress'] = $lang->programplan->taskProgress;
-$ganttFields['column_begin']        = $lang->programplan->begin;
-$ganttFields['column_start_date']   = $lang->programplan->begin;
-$ganttFields['column_deadline']     = $lang->programplan->end;
-$ganttFields['column_end_date']     = $lang->programplan->end;
-$ganttFields['column_realBegan']    = $lang->programplan->realBegan;
-$ganttFields['column_realEnd']      = $lang->programplan->realEnd;
-$ganttFields['column_duration']     = $lang->programplan->duration;
-$ganttFields['column_estimate']     = $lang->programplan->estimate;
-$ganttFields['column_consumed']     = $lang->programplan->consumed;
-$ganttFields['column_delay']        = $lang->programplan->delay;
-$ganttFields['column_delayDays']    = $lang->programplan->delayDays;
+$notSort = array('delay', 'delayDays');
+$ganttFields = [];
+$ganttFields['column_text']       = $typeHtml;
+$ganttFields['column_percent']    = $lang->programplan->ganttCustom['progress'];
+$ganttFields['column_start_date'] = array('text' => $lang->programplan->ganttCustom['begin']);
+$ganttFields['column_end_date']   = array('text' => $lang->programplan->ganttCustom['deadline']);
+foreach($lang->programplan->ganttCustom as $field => $name)
+{
+    $ganttField = "column_{$field}";
+    if(isset($ganttFields[$ganttField])) continue;
+    $ganttFields[$ganttField] = in_array($field, $notSort) ? $name : array('text' => $name);
+}
+
+list($orderField, $orderDirect) = $this->loadModel('execution')->parseOrderBy($orderBy);
+foreach($ganttFields as $colName => $value)
+{
+    $field = str_replace('column_', '', $colName);
+    if(is_null($value) || is_array($value))
+    {
+        list($fieldOrderBy, $fieldClass) = $this->execution->buildKanbanOrderBy($field, $orderField, $orderDirect);
+        $text  = (is_array($value) && !empty($value['text'])) ? $value['text'] : $lang->execution->ganttCustom[$field];
+        $value = \html::a(createLink('programplan', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&orderBy={$fieldOrderBy}&baselineID=&browseType={$browseType}&queryID={$queryID}&from=$from&blockID=$blockID&versionID=$versionID"), $text, '', "class='$fieldClass'");
+        if($versionID != 0) $value = $text;
+    }
+
+    $ganttFields[$colName] = $value;
+}

@@ -87,6 +87,6 @@ $config->programplan->customAgilePlus = new stdclass();
 $config->programplan->customAgilePlus->createFields  = 'code,PM,milestone,acl,desc,attribute';
 $config->programplan->customAgilePlus->defaultFields = $config->programplan->customAgilePlus->createFields;
 
-$config->programplan->custom->customGanttFields = 'owner_id,deadline,status,realBegan,realEnd,percent,taskProgress,estimate,consumed,delay,delayDays';
+$config->programplan->custom->customGanttFields = 'ownerID,status,begin,deadline,realBegan,realEnd,duration,progress,taskProgress,estimate,consumed,left,delay,delayDays,taskType,openedBy,openedDate,assignedDate,finishedBy,closedBy,closedDate,closedReason,lastEditedBy,lastEditedDate,activatedDate,story,keywords,mailto';
 $config->programplan->ganttCustom = new stdclass();
-$config->programplan->ganttCustom->ganttFields = 'owner_id,deadline';
+$config->programplan->ganttCustom->ganttFields = 'ownerID,deadline';

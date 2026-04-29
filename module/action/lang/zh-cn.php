@@ -194,6 +194,7 @@ $lang->action->objectTypes['repobranchtype']   = '分支类型';
 $lang->action->objectTypes['deliverable']      = '交付物类型';
 $lang->action->objectTypes['cm']               = '基线';
 $lang->action->objectTypes['baseline']         = '基线';
+$lang->action->objectTypes['ganttversion']     = '甘特图版本';
 $lang->action->objectTypes['projectchange']    = '项目变更';
 $lang->action->objectTypes['artifact']         = '制品库';
 $lang->action->objectTypes['gitfox']           = 'GitFox服务器';

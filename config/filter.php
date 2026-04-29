@@ -55,6 +55,7 @@ $filter->task         = new stdclass();
 $filter->execution    = new stdclass();
 $filter->testcase     = new stdclass();
 $filter->program      = new stdclass();
+$filter->programplan  = new stdclass();
 $filter->project      = new stdclass();
 $filter->projectstory = new stdclass();
 $filter->testreport   = new stdclass();
@@ -138,6 +139,7 @@ $filter->program->export                = new stdclass();
 $filter->program->pgmbrowse             = new stdclass();
 $filter->program->export                = new stdclass();
 $filter->program->ajaxgetdropmenu       = new stdclass();
+$filter->programplan->browse            = new stdclass();
 $filter->project->default               = new stdclass();
 $filter->project->browse                = new stdclass();
 $filter->project->story                 = new stdclass();
@@ -322,6 +324,8 @@ $filter->program->product->cookie['showProductBatchEdit'] = 'int';
 $filter->program->browse->cookie['showClosed']            = 'code';
 $filter->program->export->cookie['checkedItem']           = 'reg::checked';
 $filter->program->ajaxgetdropmenu->cookie['showClosed']   = 'code';
+
+$filter->programplan->browse->cookie['ganttType'] = 'reg::any';
 
 $filter->project->default->cookie['lastProject']           = 'int';
 $filter->project->default->cookie['lastPRJ']               = 'int';

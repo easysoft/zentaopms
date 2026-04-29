@@ -295,11 +295,14 @@ $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Creat
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
 
-$lang->install->dbProgress = "Installing Database Table";
-$lang->install->dbFinish   = "Database tables installed successfully";
-$lang->install->success    = "Installed!";
-$lang->install->login      = 'ZenTao Login';
-$lang->install->register   = 'ZenTao Community Signup';
+$lang->install->dbProgress      = "Installing Database Tables";
+$lang->install->dbProgressLabel = 'Progress';
+$lang->install->dbExecutingTips = 'Please wait. Do not refresh, power off, or shut down.';
+$lang->install->dbFinish        = "Database tables installed successfully";
+$lang->install->dbFail          = 'Database table installation failed. Please check if the network connection is stable, if the database configuration is correct, and if the database user has permission to create the table. Alternatively, return to the previous page, select "Clear up existing data," and try again.';
+$lang->install->success         = "Installed!";
+$lang->install->login           = 'ZenTao Login';
+$lang->install->register        = 'ZenTao Community Signup';
 
 $lang->install->successLabel       = "<p>You have installed ZenTao successfully %s.</p>";
 $lang->install->successNoticeLabel = "<p>You have installed ZenTao %s.<strong class='text-danger'> Please delete install.php</strong>.</p>";
@@ -372,3 +375,25 @@ $lang->install->solution->title       = 'CI&CD platform application settings';
 $lang->install->solution->progress    = 'CI&CD platform Installation';
 $lang->install->solution->desc        = 'Welcome to the CI&CD platform. We will install the following applications simultaneously when you install the platform to help you get started quickly!';
 $lang->install->solution->overMemory  = 'Insufficient memory prevents simultaneous installation. It is recommended to install applications manually after the platform is started.';
+
+$lang->install->changeModes = [];
+$lang->install->changeModes['create'] = 'Add';
+$lang->install->changeModes['update'] = 'Update';
+$lang->install->changeModes['delete'] = 'Delete';
+
+$lang->install->changeActions = [];
+$lang->install->changeActions['createView']  = 'Create database view %VIEW%';
+$lang->install->changeActions['dropView']    = 'Drop database view %VIEW%';
+$lang->install->changeActions['createTable'] = 'Create database table %TABLE%';
+$lang->install->changeActions['dropTable']   = 'Drop database table %TABLE%';
+$lang->install->changeActions['renameTable'] = 'Rename database table %OLD% to %NEW%';
+$lang->install->changeActions['addField']    = 'Add field %FIELD% to database table %TABLE%';
+$lang->install->changeActions['modifyField'] = 'Modify field %FIELD% in database table %TABLE%';
+$lang->install->changeActions['dropField']   = 'Drop field %FIELD% from database table %TABLE%';
+$lang->install->changeActions['renameField'] = 'Rename field %OLD% in table %TABLE% to %NEW%';
+$lang->install->changeActions['addIndex']    = 'Add index %INDEX% to database table %TABLE%';
+$lang->install->changeActions['dropIndex']   = 'Drop index %INDEX% from database table %TABLE%';
+$lang->install->changeActions['insertValue'] = 'Insert data into database table %TABLE%';
+$lang->install->changeActions['updateValue'] = 'Update data in database table %TABLE%';
+$lang->install->changeActions['deleteValue'] = 'Delete data from database table %TABLE%';
+$lang->install->changeActions['other']       = 'Other operations';

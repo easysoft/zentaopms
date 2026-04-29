@@ -234,7 +234,7 @@ $lang->convert->jira->importSteps['file'][6] = "After the above steps are comple
 
 $lang->convert->jira->importSteps['api'][1] = 'Backup ZenTao database.';
 $lang->convert->jira->importSteps['api'][2] = 'Using ZenTao when importing data will cause performance pressure on the server, please try to ensure that no one is using ZenTao when importing data.';
-$lang->convert->jira->importSteps['api'][3] = 'Enter the domain name, administrator account, password/Token of the current Jira environment.';
+$lang->convert->jira->importSteps['api'][3] = 'Enter the domain name, administrator account, Token of the current Jira environment.';
 $lang->convert->jira->importSteps['api'][4] = "After the above steps are completed, click Next.";
 
 $lang->convert->jira->objectList['user']       = 'User';

@@ -161,7 +161,7 @@ class featureBar extends wg
         $responsiveNavOptions['container']        = 'parent';
         $responsiveNavOptions['mergeDropdown']    = true;
         $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => (Array.from($(container).children()).reduce((acc, item) => acc - (item.hasAttribute("z-use-responsivenavhelper") ? 0 : (item.clientWidth + 20)), container.clientWidth - 32))');
-        $responsiveNavOptions['fixedItems']       = jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle").length) {$(ele).css("order", 10000);return true} return false}');
+        $responsiveNavOptions['fixedItems']       = jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle,.fixed-item").length) {$(ele).css("order", 10000);return true} return false}');
 
         return new nav
         (

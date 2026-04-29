@@ -100,9 +100,6 @@ class docViewer extends wg
             $viewModeUrl = createLink($app->rawModule, '{mode}', 'docID={docID}');
         }
 
-        $hasZentaoSlashMenu = $this->prop('hasZentaoSlashMenu');
-        if($hasZentaoSlashMenu === null ) $hasZentaoSlashMenu = true;
-
         $app->control->loadModel('file');
 
         $canDownload   = common::hasPriv('file', 'download');
@@ -163,7 +160,8 @@ class docViewer extends wg
             set::homeName(false),
             set::noDocSwitcher(true),
             set('$options', jsRaw('window.setDocAppOptions')),
-            set($this->props)
+            set($this->props),
+            jsCall('resetZentaoSlashMenu')
         );
     }
 }

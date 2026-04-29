@@ -583,7 +583,7 @@ class testcaseTaoTest extends baseTest
             $cases[] = $case;
         }
 
-        return $this->objectModel->getRelatedCases($cases);
+        return $this->invokeArgs('getRelatedCases', [$cases]);
     }
 
     /**

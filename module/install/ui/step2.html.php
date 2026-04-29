@@ -188,22 +188,6 @@ div
                                 )
                             )
                         ),
-                        h::td()
-                    ),
-                    h::tr
-                    (
-                        h::th(setClass('text-right'), $lang->install->dbPrefix),
-                        h::td
-                        (
-                            formGroup
-                            (
-                                input
-                                (
-                                    set::name('dbPrefix'),
-                                    set::value('zt_')
-                                )
-                            )
-                        ),
                         h::td
                         (
                             checkbox
@@ -213,8 +197,9 @@ div
                                 set::value(1)
                             )
                         )
-                    )
+                    ),
                 ),
+                 formHidden('dbPrefix', 'zt_'),
                 contactUs()
             )
         )
