@@ -24,10 +24,10 @@ class artifactModel extends model
     public function getList(int $space = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc'): array
     {
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
-            ->where('spaceID')->eq($space)
-            ->andWhere('repoID')->eq($repoID)
-            ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)
+            ->andWhere('spaceID')->eq($space)
+            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
@@ -44,7 +44,7 @@ class artifactModel extends model
     public function create(object $data, string $type): int|false
     {
         $check = '';
-        if($type == 'space')  $check = "spaceID = {$data->spaceID}";
+        if($type == 'space')  $check = "spaceID = {$data->spaceID} and repoID = 0";
         if($type == 'repo')   $check = "repoID = {$data->repoID}";
         if($type == 'system') $check = "spaceID = 0 and repoID = 0";
 

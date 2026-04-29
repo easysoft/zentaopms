@@ -51,11 +51,13 @@ class artifact extends control
     public function browse(int $space = 0, int $repoID = 0, string $type = 'space')
     {
         $this->commonAction($space, $repoID);
+        $repo = $this->loadModel('repo')->fetchByID($repoID);
 
         $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
-        $this->view->repo         = $this->loadModel('repo')->fetchByID($repoID);
+        $this->view->repo         = $repo;
+        $this->view->repoID       = $repoID;
         $this->view->type         = $type;
-        $this->view->artifactList = $this->artifact->getList($space, $repoID, $type, 'createdDate_asc');
+        $this->view->artifactList = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc');
 
         $this->display();
     }
@@ -74,10 +76,14 @@ class artifact extends control
     {
         if($_POST)
         {
+            $repo = $this->loadModel('repo')->fetchByID($repoID);
+
+            $type = $repoID ? 'repo' : 'space';
+
             $formData = form::data($this->config->artifact->form->create)
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
-                ->add('spaceID', $space)
+                ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : $space)
                 ->add('type', $type)
                 ->get();
 
@@ -85,7 +91,8 @@ class artifact extends control
             if(dao::isError()) $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('artifact', $id, 'created');
-            $this->sendSuccess(array('load' => true));
+            $loadURL = $this->createLink('artifact', 'browse', "space={$space}&repoID={$repoID}&type={$type}");
+            $this->sendSuccess(array('locate' => $loadURL));
         }
 
         $this->view->title = $this->lang->artifact->create;

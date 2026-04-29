@@ -9,6 +9,21 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+if($repoID)
+{
+    dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
+    unset($lang->artifact->featureBar);
+}
+else
+{
+    /* zin: Define the set::module('pipeline') feature bar on main menu. */
+    featureBar
+    (
+        set::current($type),
+        set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$repo->id}&type={key}")),
+    );
+}
+
 $canCreate = hasPriv('artifact', 'create');
 $canEdit   = hasPriv('artifact', 'edit');
 $canDelete = hasPriv('artifact', 'delete');
@@ -80,7 +95,8 @@ if(!empty($artifactList))
                         (
                             setClass('clip font-bold text-md my-2'),
                             set::title($artifact->name),
-                            $artifact->name
+                            $artifact->name,
+                            $type == 'all' ? label(setClass('ml-2 font-thin secondary-pale rounded'), zget($lang->artifact->typeList, $artifact->type)) : null
                         ),
                     ),
                     div
