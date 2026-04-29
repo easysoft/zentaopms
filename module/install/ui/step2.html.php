@@ -199,7 +199,7 @@ div
                         )
                     ),
                 ),
-                formHidden('dbPrefix', $config->db->prefix),
+                formHidden('dbPrefix', $config->db->defaultPrefix),
                 contactUs()
             )
         )
