@@ -201,11 +201,7 @@ class installModel extends model
 
         foreach($tables as $table)
         {
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = trim($table);
-            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->prefix}", $table);
-            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
+            $table = $this->replaceContantsInSQL($table);
             if($table) $this->dbh->exec($table);
         }
 
@@ -237,11 +233,7 @@ class installModel extends model
 
         foreach($tables as $table)
         {
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = trim($table);
-            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->prefix}", $table);
-            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
+            $table = $this->replaceContantsInSQL($table);
             if($table) $this->dbh->exec($table);
         }
 
@@ -408,13 +400,9 @@ class installModel extends model
         $insertTables = explode(";\n", file_get_contents($demoDataFile));
         foreach($insertTables as $table)
         {
-            $table = trim($table);
+            $table = $this->replaceContantsInSQL($table);
             if(empty($table)) continue;
 
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $table);
-            $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
 
             /* Make the deleted user of demo data undeleted.*/
@@ -462,10 +450,9 @@ class installModel extends model
         {
             foreach($insertTables as $table)
             {
-                $table = trim($table);
+                $table = $this->replaceContantsInSQL($table);
                 if(empty($table)) continue;
 
-                $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $table);
                 if(!$this->dbh->query($table)) return false;
             }
         }

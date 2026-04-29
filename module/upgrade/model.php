@@ -8115,6 +8115,7 @@ class upgradeModel extends model
      */
     public function updateBISQL()
     {
+        $this->loadModel('install');
         $alpha1File = $this->getUpgradeFile('18.4.alpha1');
         $beta1File  = $this->getUpgradeFile('18.4.beta1');
 
@@ -8128,8 +8129,8 @@ class upgradeModel extends model
         /* Update stage to published and update sql. */
         foreach($execSQL as $sql)
         {
-            $sql = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
-            $sql = trim($sql);
+            $sql = $this->install->replaceContantsInSQL($sql);
+            if(empty($sql)) continue;
 
             $this->dbh->exec($sql);
         }
@@ -9207,6 +9208,7 @@ class upgradeModel extends model
      */
     public function upgradeScreenAndMetricData(): bool
     {
+        $this->loadModel('install');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
@@ -9220,14 +9222,10 @@ class upgradeModel extends model
         {
             foreach($upgradeSqls as $sql)
             {
-                $sql = trim($sql);
+                $sql = $this->install->replaceContantsInSQL($sql);
                 if(empty($sql)) continue;
 
                 $this->saveLogs($sql);
-
-                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
-                $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
@@ -9250,12 +9248,12 @@ class upgradeModel extends model
      */
     public function upgradeBIData(): bool
     {
-        $this->loadModel('bi');
+        $this->loadModel('install');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
+        $chartSQLs   = $this->loadModel('bi')->prepareBuiltinChartSQL('update');
         $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
         $upgradeSqls = array_merge($chartSQLs, $pivotSQLs);
 
@@ -9265,14 +9263,10 @@ class upgradeModel extends model
         {
             foreach($upgradeSqls as $sql)
             {
-                $sql = trim($sql);
+                $sql = $this->install->replaceContantsInSQL($sql);
                 if(empty($sql)) continue;
 
                 $this->saveLogs($sql);
-
-                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
-                $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
