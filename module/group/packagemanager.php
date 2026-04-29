@@ -4021,12 +4021,12 @@ $config->group->package->browseBranchSettings->subset = 'repo';
 $config->group->package->browseBranchSettings->privs  = array();
 $config->group->package->browseBranchSettings->privs['repobranchtype-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('repobranchtype-create', 'repobranchtype-edit', 'repobranchtype-delete', 'repobranchtype-import'));
 
-//$config->group->package->browseWebhooks = new stdclass();
-//$config->group->package->browseWebhooks->order  = 2425;
-//$config->group->package->browseWebhooks->subset = 'repo';
-//$config->group->package->browseWebhooks->privs  = array();
-//$config->group->package->browseWebhooks->privs['repo-browseWebhooks'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
-//$config->group->package->browseWebhooks->privs['repo-logWebhook']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'deleteWebhook'));
+$config->group->package->browseWebhooks = new stdclass();
+$config->group->package->browseWebhooks->order  = 2425;
+$config->group->package->browseWebhooks->subset = 'repo';
+$config->group->package->browseWebhooks->privs  = array();
+$config->group->package->browseWebhooks->privs['repo-browseWebhooks'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('repo-browse'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
+$config->group->package->browseWebhooks->privs['repo-logWebhook']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'deleteWebhook'));
 
 $config->group->package->manageRepo = new stdclass();
 $config->group->package->manageRepo->order  = 2440;
@@ -4074,14 +4074,14 @@ $config->group->package->setReviewFlow->privs['reporeviewflow-delete']       = a
 //$config->group->package->setCommitFlow->privs['repo-setOwnerRule']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browse', 'repo-setCMrule'), 'recommend' => array());
 //$config->group->package->setCommitFlow->privs['repo-setStrategyRule'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browse', 'repo-setCMrule'), 'recommend' => array());
 //
-//$config->group->package->manageWebhooks = new stdclass();
-//$config->group->package->manageWebhooks->order  = 2470;
-//$config->group->package->manageWebhooks->subset = 'repo';
-//$config->group->package->manageWebhooks->privs  = array();
-//$config->group->package->manageWebhooks->privs['repo-createWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('editWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
-//$config->group->package->manageWebhooks->privs['repo-editWebhook']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
-//$config->group->package->manageWebhooks->privs['repo-enableWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'logWebhook', 'deleteWebhook'));
-//$config->group->package->manageWebhooks->privs['repo-deleteWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'logWebhook'));
+$config->group->package->manageWebhooks = new stdclass();
+$config->group->package->manageWebhooks->order  = 2470;
+$config->group->package->manageWebhooks->subset = 'repo';
+$config->group->package->manageWebhooks->privs  = array();
+$config->group->package->manageWebhooks->privs['repo-createWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('editWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
+$config->group->package->manageWebhooks->privs['repo-editWebhook']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'enableWebhook', 'logWebhook', 'deleteWebhook'));
+$config->group->package->manageWebhooks->privs['repo-enableWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'logWebhook', 'deleteWebhook'));
+$config->group->package->manageWebhooks->privs['repo-deleteWebhook']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('repo-browseWebhooks'), 'recommend' => array('createWebhook', 'editWebhook', 'enableWebhook', 'logWebhook'));
 
 $config->group->package->browseCode = new stdclass();
 $config->group->package->browseCode->order  = 2540;
