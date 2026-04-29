@@ -1034,7 +1034,7 @@ function initItemActions(object &$item, string $actionMenu, array $actionList, o
     if(!$method || !common::hasPriv($module, $method, $item)) return $isClickable;
 
     /* Check flow conditions for this object. */
-    if($model->config->edition != 'open') $isClickable = checkFlowActionCondition($actionConfig, $method, $item, $model);
+    if($model->config->edition != 'open' && $isClickable) $isClickable = checkFlowActionCondition($actionConfig, $method, $item, $model);
 
     $item->actions[] = array('name' => $action, 'disabled' => !$isClickable);
 
