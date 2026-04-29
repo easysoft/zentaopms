@@ -16,3 +16,11 @@ $lang->artifact->placeholder->name = 'Enter Artifact Repository Name';
 $lang->artifact->notice = new stdclass();
 $lang->artifact->notice->deleteConfirm = 'Are you sure to delete this Artifact Repository?';
 $lang->artifact->notice->noArtifact    = 'No Artifact Repository';
+
+$lang->artifact->featureBar['browse']['all']   = 'All';
+$lang->artifact->featureBar['browse']['space'] = 'Space Artifact Repository';
+$lang->artifact->featureBar['browse']['repo']  = 'Repo Artifact Repository';
+
+$lang->artifact->typeList = array();
+$lang->artifact->typeList['repo']  = 'Repo';
+$lang->artifact->typeList['space'] = 'Space';
