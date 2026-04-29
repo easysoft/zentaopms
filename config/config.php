@@ -66,14 +66,15 @@ $config->default->method = 'index';       //默认方法。 Default method.
 
 /* 数据库设置。Database settings. */
 $config->db = new stdclass();
-$config->db->persistent   = false;        // 是否为持续连接。          Pconnect or not.
-$config->db->driver       = 'mysql';      // 目前只支持MySQL数据库。   Must be MySQL. Don't support other database server yet.
-$config->db->encoding     = 'UTF8';       // 数据库编码。              Encoding of database.
-$config->db->strictMode   = true;         // 默认开启MySQL的严格模式。 Turn on the strict mode of MySQL.
-$config->db->name         = 'zentao';     // 数据库名称。              The database name.
-$config->db->fileName     = 'zentao.sql'; // 数据库文件名称。          The database file name.
-$config->db->prefix       = 'zt_';        // 数据库表名前缀。          The prefix of the table name.
-$config->db->enableSqlite = false;        // 是否启用SQLite            Enable SQLite or not.
+$config->db->persistent    = false;        // 是否为持续连接。                                   Whether use persistent connection or not.
+$config->db->driver        = 'mysql';      // 默认使用的数据库驱动。                             The default database driver.
+$config->db->encoding      = 'UTF8';       // 数据库编码。                                       The database encoding.
+$config->db->strictMode    = true;         // 是否开启MySQL的严格模式。                          Whether enable MySQL strict mode or not.
+$config->db->defaultName   = 'zentao';     // 默认数据库名称，安装时的推荐值。                   The default database name, recommended when install.
+$config->db->fileName      = 'zentao.sql'; // 默认数据库文件名称。                               The default database file name.
+$config->db->defaultPrefix = 'zt_';        // 默认数据库表名前缀，安装时的推荐值。               The default prefix of the table name, recommended when install.
+$config->db->prefix        = 'zt_';        // 实际数据库表名前缀，安装完成后以my.php中的值为准。 The actual prefix of the table name, the value in my.php will override it after installation.
+$config->db->enableSqlite  = false;        // 是否启用SQLite                                     Whether enable SQLite or not.
 
 $config->slaveDB      = new stdclass();
 $config->slaveDBList  = array();   // 支持多个从库。         Support multiple slave dbs.
