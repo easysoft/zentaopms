@@ -16,3 +16,11 @@ $lang->artifact->placeholder->name = '请输入制品库名称';
 $lang->artifact->notice = new stdclass();
 $lang->artifact->notice->deleteConfirm = '您确定要删除该制品库吗？';
 $lang->artifact->notice->noArtifact    = '暂无制品库';
+
+$lang->artifact->featureBar['browse']['all']   = '全部';
+$lang->artifact->featureBar['browse']['space'] = '空间制品库';
+$lang->artifact->featureBar['browse']['repo']  = '代码库制品库';
+
+$lang->artifact->typeList = array();
+$lang->artifact->typeList['repo']  = '代码库';
+$lang->artifact->typeList['space'] = '空间';

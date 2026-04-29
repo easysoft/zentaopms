@@ -533,6 +533,7 @@ $lang->devops->homeMenu = new stdclass();
 $lang->devops->homeMenu->space    = array('link' => "{$lang->space->common}|space|browse", 'alias' => 'create,edit', 'exclude' => 'space-view');
 $lang->devops->homeMenu->repos    = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit,import,createrepo,binduser', 'exclude' => 'repo-setrules');
 $lang->devops->homeMenu->pipeline = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'pipeline,runner');
+$lang->devops->homeMenu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=%s&repoID=0&type=space", 'subModule' => 'artifact');
 $lang->devops->homeMenu->codescan = array('link' => "{$lang->devops->codescan}|codescan|task", 'subModule' => 'codescan');
 $lang->devops->homeMenu->system   = array('link' => "{$lang->devops->system}|repo|browsesystem", 'subModule' => 'system', 'exclude' => 'system-dashboard,system-dblist,system-domainview,system-ossview');
 
@@ -566,7 +567,7 @@ $lang->devops->menu->branch       = array('link' => "{$lang->repo->branch}|repo|
 $lang->devops->menu->tag          = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
 $lang->devops->menu->ppm          = array('link' => "{$lang->devops->ppm}|ppm|browse|repoID=%s");
 $lang->devops->menu->pipeline     = array('link' => "{$lang->pipeline->common}|pipeline|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'pipeline');
-//$lang->devops->menu->artifact = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
+$lang->devops->menu->artifact     = array('link' => "{$lang->artifact->common}|artifact|browse|spaceID=0&repoID=%s&type=repo", 'subModule' => 'artifact');
 $lang->devops->menu->repoCodeScan = array('link' => "{$lang->devops->codescan}|codescan|task|repoID=%s", 'alias' => 'planview,createplan,editplan', 'subModule' => 'codescan');
 $lang->devops->menu->repoCodeScan['subMenu'] = new stdclass();
 //$lang->devops->menu->repoCodeScan['subMenu']->overview = array('link' => "{$lang->devops->overview}|codescan|overview|repoID=%s");

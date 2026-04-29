@@ -372,13 +372,10 @@ class spaceModel extends model
             unset($this->lang->devops->homeMenu->space);
             unset($this->lang->devops->homeMenu->configure);
             unset($this->lang->devops->homeMenu->codescan);
-            if(isset($this->lang->devops->homeMenu->spaceSetting))
+
+            foreach($this->config->setSpaceMenu as $menu)
             {
-                $this->lang->devops->homeMenu->spaceSetting = common::setMenuVarsEx($this->lang->devops->homeMenu->spaceSetting, $spaceID);
-            }
-            if(isset($this->lang->devops->homeMenu->pipeline))
-            {
-                $this->lang->devops->homeMenu->pipeline = common::setMenuVarsEx($this->lang->devops->homeMenu->pipeline, $spaceID);
+                if(isset($this->lang->devops->homeMenu->$menu)) $this->lang->devops->homeMenu->$menu = common::setMenuVarsEx($this->lang->devops->homeMenu->$menu, $spaceID);
             }
 
             foreach($this->lang->devops->homeMenu as $label => &$menu)
@@ -412,6 +409,7 @@ class spaceModel extends model
         else
         {
             unset($this->lang->devops->homeMenu->pipeline);
+            unset($this->lang->devops->homeMenu->artifact);
             unset($this->lang->devops->homeMenu->spaceSetting);
         }
     }
