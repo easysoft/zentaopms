@@ -29,7 +29,7 @@ class messageModel extends model
             ->where('t1.objectType')->eq('message')
             ->andWhere('t1.toList')->eq(",{$this->app->user->account},")
             ->beginIF(!empty($status) && $status != 'all')->andWhere('t1.status')->eq($status)->fi()
-            ->andWhere('(t1.sendTime IS NULL OR t1.sendTime <= "' . $now . '")')
+            ->andWhere("(t1.sendTime IS NULL OR t1.sendTime <= '{$now}')")
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }

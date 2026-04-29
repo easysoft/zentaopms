@@ -499,6 +499,7 @@ class docZen extends doc
         if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->loadModel('action');
+        $link = '';
         if($this->post->uploadFormat == 'combinedDocs')
         {
             $docID = $docResult['id'];
@@ -526,10 +527,11 @@ class docZen extends doc
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            $link = true;
         }
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc'))));
+        $response = array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'closeModal' => true, 'docApp' => array('load', null, null, null, array('noLoading' => true, 'picks' => 'doc')));
+        if($link) $response['load'] = $link;
+        return $this->send($response);
     }
 
     /**

@@ -765,6 +765,7 @@ $config->objectTables['system']         = TABLE_SYSTEM;
 $config->objectTables['mark']           = TABLE_MARK;
 $config->objectTables['cm']             = TABLE_OBJECT;
 $config->objectTables['baseline']       = TABLE_OBJECT;
+$config->objectTables['ganttversion']   = TABLE_OBJECT;
 $config->objectTables['projectchange']  = TABLE_PROJECTCHANGE;
 
 $config->objectTables['reporeviewflow']  = TABLE_REVIEWFLOW;

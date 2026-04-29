@@ -120,6 +120,7 @@ class extensionModel extends model
         {
             if(isset($data->$key)) $data->$key = is_null($value) ? '' : $value;
         }
+        $data->name = htmlspecialchars($data->name, ENT_QUOTES);
 
         if(isset($info->zentaoversion))        $data->zentaoCompatible = $info->zentaoversion;
         if(isset($info->zentao['compatible'])) $data->zentaoCompatible = $info->zentao['compatible'];

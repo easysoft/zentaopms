@@ -1442,11 +1442,11 @@ $lang->resource->repo->addComment    = 'addComment';
 $lang->resource->repo->editComment   = 'editComment';
 $lang->resource->repo->deleteComment = 'deleteComment';
 
-//$lang->resource->artifactrepo = new stdclass();
-//$lang->resource->artifactrepo->browse = 'browse';
-//$lang->resource->artifactrepo->create = 'create';
-//$lang->resource->artifactrepo->edit   = 'edit';
-//$lang->resource->artifactrepo->delete = 'delete';
+$lang->resource->artifact = new stdclass();
+$lang->resource->artifact->browse = 'browse';
+$lang->resource->artifact->create = 'create';
+$lang->resource->artifact->edit   = 'edit';
+$lang->resource->artifact->delete = 'delete';
 
 $lang->resource->repobranchrule = new stdclass();
 $lang->resource->repobranchrule->setBranchRule = 'setBranchRule';

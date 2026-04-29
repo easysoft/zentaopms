@@ -262,7 +262,6 @@ $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
 /* Release Detail. */
 $lang->misc->feature->all['22.1'][]        = array('title' => '.兼容开源版。.兼容旗舰版。', 'desc' => '');
-$lang->misc->feature->all['22.1'][]        = array('title' => '.兼容开源版。.兼容旗舰版。', 'desc' => '');
 $lang->misc->feature->all['22.0'][]        = array('title' => '新增了空间功能；功能开关新增部分功能；jira增加接口导入的方式；二级菜单根据屏幕大小自适应展开收起；检索标签根据屏幕大小自适应收起。功能开关和jira迁移优化。一些功能重构。基线和变更的审批流优化。一些功能重构。', 'desc' => '');
 $lang->misc->feature->all['21.7.9'][]      = array('title' => '修复Bug修复Bug修复Bug修复Bug', 'desc' => '');
 $lang->misc->feature->all['21.7.8'][]      = array('title' => 'API 2.0AI知识库兼容企业版兼容旗舰版。', 'desc' => '');

@@ -527,9 +527,9 @@ detailBody
                 set::name($lang->bug->duplicateBug),
                 picker
                 (
-                    on::click('setDuplicateBug'),
-                    set::items($duplicateBugs),
                     set::name('duplicateBug'),
+                    set::items(createLink('bug', 'ajaxGetProductBugs', 'productID=&bugID=' . (int)$bug->id . '&search={search}' . (!empty($bug->duplicateBug) ? '&duplicateBug=' . (int)$bug->duplicateBug : ''))),
+                    set::placeholder($lang->bug->placeholder->duplicate),
                     set::value($bug->duplicateBug)
                 )
             ),
