@@ -192,8 +192,6 @@ function computeTotalLeft()
 
 $('#teamTable').on('change', '.picker-box [name^=team]', function()
 {
-    $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
-
     disableMembers();
 
     let $teamSource = $(this).siblings('[name^=teamSource]');
