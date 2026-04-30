@@ -17,7 +17,8 @@ class workflowFieldCondition extends wg
         'hasLogicalOperator?: bool',
         'datasources?: array',
         'fields?: array',
-        'module?: string'
+        'module?: string',
+        'data?: array'
     );
 
     public static function getPageJS(): ?string
@@ -29,7 +30,7 @@ class workflowFieldCondition extends wg
     {
         global $app, $lang, $config;
 
-        list($title, $hasLogicalOperator, $name, $datasources, $fields, $module) = $this->prop(array('title', 'hasLogicalOperator', 'name', 'datasources', 'fields', 'module'));
+        list($title, $hasLogicalOperator, $name, $datasources, $fields, $module, $data) = $this->prop(array('title', 'hasLogicalOperator', 'name', 'datasources', 'fields', 'module', 'data'));
 
         $fieldItems = array();
         foreach($fields as $code => $label) $fieldItems[] = array('text' => $label, 'value' => $code);
@@ -54,8 +55,8 @@ class workflowFieldCondition extends wg
         $items = array();
         $items[] = array('label' => $title, 'name' => $hasLogicalOperator ? 'inputGroup' : "{$name}[field]", 'control' => $fieldControl, 'width' => '250px');
         $items[] = array('label' => '',     'name' => "{$name}[operator]",                                   'control' => 'picker', 'items' => $config->workflowhook->operatorList, 'value' => 'equal');
-        $items[] = array('label' => '',     'name' => "{$name}[paramType]",                                  'control' => array('control' => 'picker', 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event'), 'items' => $datasources, 'value' => 'custom');
-        $items[] = array('label' => '',     'name' => "{$name}[param]",                                      'control' => 'input');
+        $items[] = array('label' => '',     'name' => "{$name}[paramType]",                                  'control' => array('control' => 'picker', 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event'), 'items' => $datasources, 'value' => $name == 'wheres' ? 'record' : 'custom');
+        $items[] = array('label' => '',     'name' => "{$name}[param]",                                      'control' => $name == 'wheres' ? 'picker' : 'input', 'items' => $fields);
 
         return formBatch
         (
@@ -65,6 +66,7 @@ class workflowFieldCondition extends wg
             set::actions(array()),
             set::actionsText(''),
             set::items($items),
+            set::data($data),
             set::onRenderRow(jsRaw('renderRowData'))
         );
     }
