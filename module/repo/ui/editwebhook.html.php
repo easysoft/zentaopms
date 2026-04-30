@@ -42,7 +42,8 @@ formPanel
         set::width('1/2'),
         set::name('key'),
         set::label($lang->repo->webhook->key),
-        set::control(array('type' => 'password'))
+        set::control(array('type' => 'password')),
+        set::value($webhook->secret)
     ),
     formGroup
     (
