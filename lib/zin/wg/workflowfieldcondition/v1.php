@@ -52,6 +52,8 @@ class workflowFieldCondition extends wg
             $fieldControl = array('control' => 'picker', 'items' => $fields, 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event');
         }
 
+        if($name == 'sqls') $fieldControl = array('control' => 'input', 'data-on' => 'change', 'data-call' => 'changeVarName', 'data-params' => 'event');
+
         $items = array();
         $items[] = array('label' => $title, 'name' => $hasLogicalOperator ? 'inputGroup' : "{$name}[field]", 'control' => $fieldControl, 'width' => '250px');
         $items[] = array('label' => '',     'name' => "{$name}[operator]",                                   'control' => 'picker', 'items' => $config->workflowhook->operatorList, 'value' => 'equal');
