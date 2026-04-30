@@ -1950,8 +1950,6 @@ class repo extends control
         if($_POST)
         {
             $formData = form::data($this->config->repo->form->editWebhook)->get();
-            if($formData->key == $this->lang->repo->webhook->defaultShowSecret) unset($formData->key);
-            if(empty($formData->key)) unset($formData->key);
 
             $newWebhook = $this->repoZen->buildWebhook($formData, $repo, $webhook);
             if(empty(get_object_vars($newWebhook))) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
