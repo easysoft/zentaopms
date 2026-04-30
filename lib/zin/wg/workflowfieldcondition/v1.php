@@ -36,7 +36,7 @@ class workflowFieldCondition extends wg
         foreach($fields as $code => $label) $fieldItems[] = array('text' => $label, 'value' => $code);
 
         jsVar('fieldItems', $fieldItems);
-        jsVar('module', $module);
+        jsVar('moduleName', $module);
         jsVar('setFormula', $lang->workflowhook->formula->set);
         jsVar('datasources', $datasources);
 
@@ -59,6 +59,24 @@ class workflowFieldCondition extends wg
         $items[] = array('label' => '',     'name' => "{$name}[operator]",                                   'control' => 'picker', 'items' => $config->workflowhook->operatorList, 'value' => 'equal');
         $items[] = array('label' => '',     'name' => "{$name}[paramType]",                                  'control' => array('control' => 'picker', 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event'), 'items' => $datasources, 'value' => $name == 'wheres' ? 'record' : 'custom');
         $items[] = array('label' => '',     'name' => "{$name}[param]",                                      'control' => $name == 'wheres' ? 'picker' : 'input', 'items' => $fields);
+
+        if($data)
+        {
+            foreach($data as $dataItem)
+            {
+                $fieldCode           = "{$name}[field]";
+                $logicalOperatorCode = "{$name}[logicalOperator]";
+                $operatorCode        = "{$name}[operatorCode]";
+                $paramTypeCode       = "{$name}[paramType]";
+                $paramCode           = "{$name}[param]";
+
+                $dataItem->{$fieldCode}           = zget($dataItem, $name != 'sqls' ? 'field' : 'varName', '');
+                $dataItem->{$logicalOperatorCode} = zget($dataItem, 'logicalOperator',                     '');
+                $dataItem->{$operatorCode}        = zget($dataItem, 'operator',                            '');
+                $dataItem->{$paramTypeCode}       = zget($dataItem, 'paramType',                           '');
+                $dataItem->{$paramCode}           = zget($dataItem, 'param',                               '');
+            }
+        }
 
         return formBatch
         (

@@ -62,17 +62,17 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
-            setClass('mt-2'),
+            setClass('mt-2', $data->conditionType != 'data' ? 'hidden' : false),
             div
             (
                 setClass('form-group-warpper'),
                 setData(array('name' => 'conditionsBox')),
-                workflowFieldCondition(set::title($lang->workflowhook->field), set::name('conditions'), set::hasLogicalOperator(true), set::datasources($dataConditionDatasources), set::fields($fields), set::module($module))
+                workflowFieldCondition(set::title($lang->workflowhook->field), set::name('conditions'), set::hasLogicalOperator(true), set::datasources($dataConditionDatasources), set::fields($fields), set::module($module), set::data(!empty($data->conditions && $data->conditionType == 'data') ? $data->conditions : array()))
             )
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', $data->conditionType != 'sql' ? 'hidden' : false),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->sql)),
             div
             (
@@ -83,23 +83,23 @@ class workflowCondition extends wg
                     set::name('sql'),
                     set::rows(5),
                     set::placeholder($lang->workflowhook->placeholder->sql),
-                    set::value(!empty($data->sql) ? $data->sql : '')
+                    set::value(!empty($data->conditions->sql) ? $data->conditions->sql : '')
                 )
             )
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', $data->conditionType != 'sql' ? 'hidden' : false),
             div
             (
                 setClass('form-group-warpper'),
                 setData(array('name' => 'sqlsBox')),
-                workflowFieldCondition(set::title($lang->workflowhook->varName), set::name('sqls'), set::hasLogicalOperator(false), set::datasources($sqlConditionDatasources), set::fields($fields), set::module($module))
+                workflowFieldCondition(set::title($lang->workflowhook->varName), set::name('sqls'), set::hasLogicalOperator(false), set::datasources($sqlConditionDatasources), set::fields($fields), set::module($module), set::data($data->conditionType == 'sql' && !empty($data->conditions->sqlVars) ? $data->conditions->sqlVars : array()))
             )
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', $data->conditionType != 'sql' ? 'hidden' : false),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->result)),
             div
             (
@@ -109,7 +109,7 @@ class workflowCondition extends wg
                 (
                     set::name('sqlResult'),
                     set::items($lang->workflowhook->resultList),
-                    set::value(!empty($data->sqlResult) ? $data->sqlResult : 'empty'),
+                    set::value(!empty($data->conditions->sqlResult) ? $data->conditions->sqlResult : 'empty'),
                     set::required(true)
                 )
             )
