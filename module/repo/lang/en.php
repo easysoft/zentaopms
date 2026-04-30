@@ -436,6 +436,8 @@ $lang->repo->targetURL          = 'Target URL';
 $lang->repo->latestStatus       = 'Latest Status';
 $lang->repo->enable             = 'Enable';
 $lang->repo->disable            = 'Disable';
+$lang->repo->enableWebhook      = 'Enable/Disable Webhook';
+$lang->repo->deleteWebhook      = 'Delete Webhook';
 
 $lang->repo->webhook = new stdclass();
 $lang->repo->webhook->statusList = array();

@@ -432,6 +432,8 @@ $lang->repo->targetURL          = '目标URL';
 $lang->repo->latestStatus       = '最近状态';
 $lang->repo->enable             = '启用';
 $lang->repo->disable            = '关闭';
+$lang->repo->enableWebhook      = '启用/关闭Webhook';
+$lang->repo->deleteWebhook      = '删除Webhook';
 
 $lang->repo->webhook = new stdclass();
 $lang->repo->webhook->statusList = array();
