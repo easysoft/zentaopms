@@ -526,6 +526,21 @@ class groupModel extends model
 
         $actions = empty($actions) ? '' : json_encode($actions);
         $this->dao->update(TABLE_GROUP)->set('acl')->eq($actions)->where('id')->eq($groupID)->exec();
+
+        if(!dao::isError())
+        {
+            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->fetchPairs();
+            $this->loadModel('setting')->setItem('system.common.userview.relatedTablesUpdateTime', time());
+            $this->loadModel('user');
+            foreach($accounts as $account)
+            {
+                if(!$account) continue;
+                $rights   = $this->user->authorize($account);
+                $userView = $this->user->grantUserView($account, zget($rights, 'acls', array()), zget($rights, 'projects', ''));
+                $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
+            }
+        }
+
         return !dao::isError();
     }
 
@@ -654,7 +669,6 @@ class groupModel extends model
         $delUsers   = array_diff($groupUsers, $members);
 
         if(!empty($delUsers)) $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($groupID)->andWhere('account')->in($delUsers)->exec();
-        if(empty($newUsers)) return !dao::isError();
 
         $data = new stdclass();
         $data->group   = $groupID;
@@ -663,6 +677,23 @@ class groupModel extends model
         {
             $data->account = $account;
             $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+        }
+
+        if(!dao::isError())
+        {
+            $affectedUsers = array_merge($newUsers, $delUsers);
+            if(!empty($affectedUsers))
+            {
+                $this->loadModel('setting')->setItem('system.common.userview.relatedTablesUpdateTime', time());
+                $this->loadModel('user');
+                foreach($affectedUsers as $account)
+                {
+                    if(!$account) continue;
+                    $rights   = $this->user->authorize($account);
+                    $userView = $this->user->grantUserView($account, zget($rights, 'acls', array()), zget($rights, 'projects', ''));
+                    $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
+                }
+            }
         }
 
         return !dao::isError();
