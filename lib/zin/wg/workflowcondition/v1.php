@@ -62,6 +62,7 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
+            setClass('mt-2'),
             div
             (
                 setClass('form-group-warpper'),
@@ -71,7 +72,7 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden'),
+            setClass('hidden mt-2'),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->sql)),
             div
             (
@@ -88,7 +89,7 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden'),
+            setClass('hidden mt-2'),
             div
             (
                 setClass('form-group-warpper'),
@@ -98,7 +99,7 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden'),
+            setClass('hidden mt-2'),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->result)),
             div
             (
