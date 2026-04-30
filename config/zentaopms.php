@@ -381,6 +381,7 @@ $config->logonMethods[] = 'ppm.submit';
 $config->logonMethods[] = 'ppm.recall';
 $config->logonMethods[] = 'codescan.refresh';
 $config->logonMethods[] = 'codescan.tips';
+$config->logonMethods[] = 'repo.viewwebhookrequest';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
