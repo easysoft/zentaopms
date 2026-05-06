@@ -223,7 +223,8 @@ class baseControl
          * 检查用户是否登录，如果没有登录，跳转到登录页面。
          * Check the user has logon or not, if not, goto the login page.
          */
-        if($this->config->installed && !in_array($this->moduleName, $this->config->openModules) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
+        $installed = $this->config->installed ?? false;
+        if($installed && !in_array($this->moduleName, $this->config->openModules) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
         {
             $uri = $this->app->getURI(true);
             if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
@@ -1026,7 +1027,9 @@ class baseControl
         $context->data    = (array)$this->view;
         $context->data['zinDebug'] = array();
 
-        if($this->config->debug && $this->config->debug >= 2 && $this->config->installed && $this->config->db->driver == 'mysql')
+        $debug     = $this->config->debug ?? 0;
+        $installed = $this->config->installed ?? false;
+        if($debug >= 2 && $installed && $this->config->db->driver == 'mysql')
         {
             $context->data['zinDebug']['trace'] = $this->app->loadClass('trace')->getTrace();
         }

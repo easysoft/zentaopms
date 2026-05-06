@@ -217,6 +217,14 @@ $lang->contactUs->email  = 'Email';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = 'Wechat';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = 'Sélectionner des utilisateurs';
+$lang->userSelector->deptTitle     = 'Filtrer par département';
+$lang->userSelector->userTitle     = 'Sélectionner des utilisateurs';
+$lang->userSelector->selectedTitle = 'Sélectionné';
+$lang->userSelector->allText       = 'Tous les utilisateurs';
+$lang->userSelector->emptyText     = 'Aucun utilisateur disponible';
+
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';
 $lang->cache->common        = 'Cache';
@@ -580,6 +588,7 @@ $lang->error->tutorialData    = "Aucune donnée ne peut être importée en mode 
 $lang->error->noCurlExt       = 'Aucun module Curl installé';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
 $lang->error->httpServerError = 'Server error';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();

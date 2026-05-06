@@ -184,7 +184,12 @@ class install extends control
      */
     public function showTableProgress()
     {
-        $this->view->title = $this->lang->install->dbProgress;
+        $installPlan = $this->installZen->getInstallPlan();
+
+        $this->session->set('installSqls', $installPlan['sqls']);
+
+        $this->view->title      = $this->lang->install->dbProgress;
+        $this->view->sqlChanges = $installPlan['changes'];
         $this->display();
     }
 
@@ -197,54 +202,40 @@ class install extends control
      */
     public function ajaxCreateTable()
     {
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
+        $executedCount = 0;
+        $installSqls   = $this->session->installSqls;
 
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-        if(file_exists($logFile))     unlink($logFile);
-        if(file_exists($errorFile))   unlink($errorFile);
-        if(file_exists($successFile)) unlink($successFile);
+        if(empty($installSqls)) return print(json_encode(['result' => 'success', 'executedCount' => 0, 'allChangesExecuted' => true]));
 
-        $config           = json_decode(file_get_contents($this->install->buildDBLogFile('config')));
-        $this->config->db = $config->db;
-        $isClearDB        = isset($config->post->clearDB) ? $config->post->clearDB : 0;
-        if($this->install->createTable(true, $isClearDB)) file_put_contents($this->install->buildDBLogFile('success'), 'success');
-    }
-
-    /**
-     * 获取数据库表创建进度并显示在页面。
-     * AJAX: Get progress and show in showTableProgress page.
-     *
-     * @param  int    $offset
-     * @access public
-     * @return void
-     */
-    public function ajaxShowProgress(int $offset = 0)
-    {
-        session_write_close();
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-
-        $error  = !file_exists($errorFile)   ? '' : file_get_contents($errorFile);
-        $finish = !file_exists($successFile) ? '' : file_get_contents($successFile);
-        $log    = !file_exists($logFile)     ? '' : file_get_contents($logFile, false, null, $offset);
-        $size   = 10 * 1024;
-        if(!empty($log) && mb_strlen($log) > $size)
+        try
         {
-            $left     = mb_substr($log, $size);
-            $log      = mb_substr($log, 0, $size);
-            $position = strpos($left, "\n");
-            if($position !== false) $log .= substr($left, 0, $position + 1);
+            $this->installZen->setDBParam((object)$this->session->myConfig);
+
+            $dbh = $this->install->connectDB();
+            $dbh->exec("USE `{$this->config->db->name}`");
+
+            foreach($installSqls as $sql)
+            {
+                if($executedCount >= 10) break;
+
+                $dbh->exec($sql);
+
+                $executedCount++;
+            }
+        }
+        catch(Exception $e)
+        {
+            if($executedCount > 0) $this->session->set('installSqls', array_slice($installSqls, $executedCount));
+
+            return print(json_encode(['result' => 'fail', 'executedCount' => $executedCount, 'message' => $e->getMessage()]));
         }
 
-        $offset += strlen($log);
-        $log     = trim($log);
-        if(!empty($log)) $error = $finish = '';
-        return print(json_encode(array('log' => str_replace("\n", "<br />", $log) . ($log ? '<br />' : ''), 'error' => $error, 'finish' => $finish, 'offset' => $offset)));
+        if($executedCount > 0) $this->session->set('installSqls', array_slice($installSqls, $executedCount));
+
+        $leftSqls = array_slice($installSqls, $executedCount);
+        if(empty($leftSqls)) unset($_SESSION['installSqls']);
+
+        return print(json_encode(['result' => 'success', 'executedCount' => $executedCount, 'allChangesExecuted' => empty($leftSqls)]));
     }
 
     /**
@@ -441,13 +432,6 @@ class install extends control
         unset($_SESSION['installing']);
         unset($_SESSION['myConfig']);
         session_destroy();
-
-        $logFile     = $this->install->buildDBLogFile('progress');
-        $errorFile   = $this->install->buildDBLogFile('error');
-        $successFile = $this->install->buildDBLogFile('success');
-        if(file_exists($logFile))     unlink($logFile);
-        if(file_exists($errorFile))   unlink($errorFile);
-        if(file_exists($successFile)) unlink($successFile);
 
         global $oldRequestType;
         if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';

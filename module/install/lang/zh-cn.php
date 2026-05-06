@@ -292,11 +292,14 @@ $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = '同�
 $lang->install->cronList['moduleName=ci&methodName=exec']               = '执行Jenkins任务';
 $lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定时同步GitLabMR信息';
 
-$lang->install->dbProgress = "正在安装数据库表";
-$lang->install->dbFinish   = "数据库表安装完毕";
-$lang->install->success    = "安装成功";
-$lang->install->login      = '登录禅道项目管理软件';
-$lang->install->register   = '禅道社区注册';
+$lang->install->dbProgress      = "正在安装数据库表";
+$lang->install->dbProgressLabel = '进度';
+$lang->install->dbExecutingTips = '请耐心等待，切勿刷新页面、断电、关机！';
+$lang->install->dbFail          = "安装数据库表失败。请检查网络请求是否畅通，数据库配置是否正确，数据库用户是否有权限创建表，或者返回前页选择清空数据后重试。";
+$lang->install->dbFinish        = "数据库表安装完毕";
+$lang->install->success         = "安装成功";
+$lang->install->login           = '登录禅道项目管理软件';
+$lang->install->register        = '禅道社区注册';
 
 $lang->install->successLabel       = "<p>您已经成功安装禅道项目管理软件%s。</p>";
 $lang->install->successNoticeLabel = "<p>您已经成功安装禅道项目管理软件%s，<strong class='text-danger'>请及时删除install.php</strong>。</p>";
@@ -382,3 +385,25 @@ $lang->install->solution->title       = 'DevOps平台应用设置';
 $lang->install->solution->progress    = 'DevOps平台应用安装';
 $lang->install->solution->desc        = '欢迎使用DevOps平台，我们将在您安装平台时同步安装以下应用，帮助您快速上手!';
 $lang->install->solution->overMemory  = '内存不足，无法同时安装，建议平台启动后手动安装应用。';
+
+$lang->install->changeModes = [];
+$lang->install->changeModes['create'] = '新增';
+$lang->install->changeModes['update'] = '更新';
+$lang->install->changeModes['delete'] = '删除';
+
+$lang->install->changeActions = [];
+$lang->install->changeActions['createView']  = '创建数据库视图 %VIEW%';
+$lang->install->changeActions['dropView']    = '删除数据库视图 %VIEW%';
+$lang->install->changeActions['createTable'] = '创建数据库表 %TABLE%';
+$lang->install->changeActions['dropTable']   = '删除数据库表 %TABLE%';
+$lang->install->changeActions['renameTable'] = '修改数据库表 %OLD% 的名称为 %NEW%';
+$lang->install->changeActions['addField']    = '给数据库表 %TABLE% 添加 %FIELD% 字段';
+$lang->install->changeActions['modifyField'] = '修改数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->install->changeActions['dropField']   = '删除数据库表 %TABLE% 的 %FIELD% 字段';
+$lang->install->changeActions['renameField'] = '修改数据库表 %TABLE% 的 %OLD% 字段的名称为 %NEW%';
+$lang->install->changeActions['addIndex']    = '给数据库表 %TABLE% 添加 %INDEX% 索引';
+$lang->install->changeActions['dropIndex']   = '删除数据库表 %TABLE% 的 %INDEX% 索引';
+$lang->install->changeActions['insertValue'] = '给数据库表 %TABLE% 插入数据';
+$lang->install->changeActions['updateValue'] = '更新数据库表 %TABLE% 的数据';
+$lang->install->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除数据';
+$lang->install->changeActions['other']       = '其他操作';

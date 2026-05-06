@@ -210,7 +210,7 @@ class file extends control
 
                     if(isset($row->$fieldName) && is_numeric($row->$fieldName)) $row->$fieldName = $row->$fieldName . "\t";
                     if(isset($row->$fieldName)) $row->$fieldName = str_replace('&quot;', '“', $row->$fieldName);
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString($this->getCsvPlainText((string)$row->$fieldName))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";
@@ -627,5 +627,23 @@ class file extends control
     {
         $path = "{$this->app->user->account}.{$moduleName}.closeBizGuide@rnd";
         $this->loadModel('setting')->setItem($path, 1);
+    }
+
+    /**
+     * 将富文本中的换行标签换为换行符再剥离标签，保持 CSV 单元格与 Excel 单元格中换行效果一致。
+     * Turn editor HTML into plain text with line breaks for CSV export.
+     *
+     * @param  string $html
+     * @access private
+     * @return string
+     */
+    private function getCsvPlainText(string $html): string
+    {
+        if($html === '') return '';
+        $text = $html;
+        $text = preg_replace('#<br\s*/?>#i', "\n", $text);
+        $text = preg_replace('#</(p|div|tr|table|h[1-6])>\s*#i', "\n", $text);
+        $text = str_ireplace('</li>', "\n", $text);
+        return strip_tags($text, '<img>');
     }
 }

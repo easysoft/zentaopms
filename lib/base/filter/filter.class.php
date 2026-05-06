@@ -374,7 +374,7 @@ class baseValidater
      */
     public static function checkCode($var)
     {
-        return self::checkREG($var, '|^[A-Za-z0-9_]+$|');
+        return self::checkREG($var, '|^[A-Za-z0-9_]+$|') !== false;
     }
 
     /**

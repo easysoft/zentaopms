@@ -122,7 +122,7 @@ class programplan extends control
         $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
         $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
         $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
-        $this->view->versions    = $this->programplan->getGanttVersions($projectID, $productID);
+        $this->view->versions    = $this->programplan->getGanttVersions($projectID, $productID, $type);
         $this->view->versionID   = $versionID;
         $this->view->from        = $from;
         $this->view->blockID     = $blockID;

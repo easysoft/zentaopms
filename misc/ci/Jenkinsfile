@@ -343,6 +343,20 @@ pipeline {
                       }
                     }
                   }
+
+                  stage("Upload External Path") {
+                    when {
+                      environment name: 'BUILD_KIND', value: 'release'
+                    }
+
+                    steps {
+                      sh 'ls -l ${OUTPUT_PKG_PATH}'
+                      container('package') {
+                        sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                      }
+                    }
+                  }
+
                 } // end stages
               } // end stage frame
 
@@ -415,6 +429,21 @@ pipeline {
                         }
                       }
                     }
+
+                    stage("Upload External Path") {
+                      when {
+                        environment name: 'BUILD_KIND', value: 'release'
+                      }
+
+                      steps {
+                        script {
+                          buildZboxWin.copyToPreUploadDir()
+                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
+                      }
+                    } // End Upload
                   }
                 } // End Zbox win
 
@@ -445,6 +474,21 @@ pipeline {
                         }
                       }
                     }
+
+                    stage("Upload External Path") {
+                      when {
+                        environment name: 'BUILD_KIND', value: 'release'
+                      }
+
+                      steps {
+                        script {
+                          buildZboxLinux.copyToPreUploadDir()
+                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
+                      }
+                    } // End Upload
                   }
                 } // End Zbox linux
 
@@ -464,6 +508,9 @@ pipeline {
                     }
                     script {
                       buildPkg.doConvertTarXz()
+                    }
+                    container('package') {
+                      sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
                     }
                   }
                 }
@@ -636,6 +683,7 @@ pipeline {
               container('package') {
                 sh 'mkdir -p output/rongpm/${PMS_VERSION}'
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
+                sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
               }
             }
           }
@@ -655,5 +703,4 @@ pipeline {
   }
 
 }
-
 

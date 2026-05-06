@@ -243,6 +243,7 @@ class program extends control
     {
         $this->loadModel('action');
         $program = $this->program->getByID($programID);
+        if(!$this->program->isClickable($program, 'close')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->action));
 
         if(!empty($_POST))
         {
@@ -288,6 +289,7 @@ class program extends control
     {
         $this->loadModel('action');
         $program = $this->project->getByID($programID);
+        if(!$this->program->isClickable($program, 'start')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->action));
 
         if(!empty($_POST))
         {
@@ -326,6 +328,7 @@ class program extends control
     {
         $this->loadModel('action');
         $program = $this->program->getByID($programID);
+        if(!$this->program->isClickable($program, 'activate')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->action));
 
         if(!empty($_POST))
         {
@@ -365,6 +368,8 @@ class program extends control
     public function suspend(int $programID)
     {
         $this->loadModel('action');
+        $program = $this->program->getByID($programID);
+        if(!$this->program->isClickable($program, 'suspend')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->action));
 
         $this->extendRequireFields($programID);
         if(!empty($_POST))
@@ -388,7 +393,7 @@ class program extends control
         $this->view->title   = $this->lang->program->suspend;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->action->getList('program', $programID);
-        $this->view->program = $this->program->getByID($programID);
+        $this->view->program = $program;
 
         $this->display();
     }

@@ -217,6 +217,14 @@ $lang->contactUs->email  = '邮箱';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = '微信';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = '选择用户';
+$lang->userSelector->deptTitle     = '按部门筛选';
+$lang->userSelector->userTitle     = '选择用户';
+$lang->userSelector->selectedTitle = '已选择';
+$lang->userSelector->allText       = '全部用户';
+$lang->userSelector->emptyText     = '暂无可选用户';
+
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
 $lang->cache->common        = '缓存';
@@ -581,6 +589,7 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
 $lang->error->httpServerError = '服务器错误';
+$lang->error->action          = '没有满足该操作的条件，无法执行该操作。';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();

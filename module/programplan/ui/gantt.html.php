@@ -15,7 +15,6 @@ namespace zin;
 include './ganttfields.html.php';
 
 $isDiffMode = isset($ganttBaseline);
-$showFields = str_replace('PM', 'owner_id', $showFields);
 $isHistory  = (is_numeric($versionID) && $versionID > 0) || $versionID == 'nowait';
 $isFromDoc  = $from === 'doc';
 if($isFromDoc)
@@ -92,8 +91,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     foreach($versions as $version)
     {
         $item = array('title' => $version->version, 'value' => $version->id, 'hint' => $version->version);
-        if($version->reviewType == 'deliverable') $item['actions'][] = array('text' => $lang->project->deliverableAbbr, 'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
-        if($version->reviewType == 'baseline')    $item['actions'][] = array('text' => $lang->project->baseline,        'class' => 'btn size-sm danger-outline rounded-full border border-gray w-12 overflow-hidden', 'url' => sprintf($browseTemplate, $version->id));
+        if($version->reviewType == 'deliverable') $item['text'] = $lang->project->deliverableAbbr;
+        if($version->reviewType == 'baseline')    $item['text'] = $lang->project->baseline;
         if($version->reviewType == 'gantt')
         {
             $item['hint']    = $version->items;
