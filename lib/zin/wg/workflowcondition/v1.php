@@ -15,7 +15,8 @@ class workflowCondition extends wg
         'data?: object',
         'datasources?: array',
         'fields?: array',
-        'module?: string'
+        'module?: string',
+        'hasVarName?: bool=true'
     );
 
     public static function getPageJS(): ?string
@@ -27,12 +28,13 @@ class workflowCondition extends wg
     {
         global $app, $lang, $config;
 
-        $app->loadLang('workflowhook');
+        $app->control->loadModel('workflowhook');
 
         $data        = $this->prop('data');
         $datasources = $this->prop('datasources');
         $fields      = $this->prop('fields');
         $module      = $this->prop('module');
+        $hasVarName  = $this->prop('hasVarName');
 
         $sqlConditionDatasources = $datasources;
         unset($sqlConditionDatasources['formula']);
@@ -62,17 +64,17 @@ class workflowCondition extends wg
         );
         $conditionHTML[] = formRow
         (
-            setClass('mt-2'),
+            setClass('mt-2', !empty($data->conditionType) && $data->conditionType != 'data' ? 'hidden' : ''),
             div
             (
                 setClass('form-group-warpper'),
                 setData(array('name' => 'conditionsBox')),
-                workflowFieldCondition(set::title($lang->workflowhook->field), set::name('conditions'), set::hasLogicalOperator(true), set::datasources($dataConditionDatasources), set::fields($fields), set::module($module))
+                workflowFieldCondition(set::title($lang->workflowhook->field), set::name('conditions'), set::hasLogicalOperator(true), set::datasources($dataConditionDatasources), set::fields($fields), set::module($module), set::data(!empty($data->conditionType) && !empty($data->conditions) && $data->conditionType == 'data' ? $data->conditions : array()))
             )
         );
         $conditionHTML[] = formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', !empty($data->conditionType) && $data->conditionType == 'sql' ? '' : 'hidden'),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->sql)),
             div
             (
@@ -83,23 +85,23 @@ class workflowCondition extends wg
                     set::name('sql'),
                     set::rows(5),
                     set::placeholder($lang->workflowhook->placeholder->sql),
-                    set::value(!empty($data->sql) ? $data->sql : '')
+                    set::value(!empty($data->conditions->sql) ? $data->conditions->sql : '')
                 )
             )
         );
-        $conditionHTML[] = formRow
+        $conditionHTML[] = $hasVarName ? formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', !empty($data->conditionType) && $data->conditionType == 'sql' ? '' : 'hidden'),
             div
             (
                 setClass('form-group-warpper'),
                 setData(array('name' => 'sqlsBox')),
-                workflowFieldCondition(set::title($lang->workflowhook->varName), set::name('sqls'), set::hasLogicalOperator(false), set::datasources($sqlConditionDatasources), set::fields($fields), set::module($module))
+                workflowFieldCondition(set::title($lang->workflowhook->varName), set::name('sqls'), set::hasLogicalOperator(false), set::datasources($sqlConditionDatasources), set::fields($fields), set::module($module), set::data(!empty($data->conditionType) && $data->conditionType == 'sql' && !empty($data->conditions->sqlVars) ? $data->conditions->sqlVars : array()))
             )
-        );
+        ) : null;
         $conditionHTML[] = formRow
         (
-            setClass('hidden mt-2'),
+            setClass('mt-2', !empty($data->conditionType) && $data->conditionType == 'sql' ? '' : 'hidden'),
             div(setClass('form-label required'), span(setClass('text'), $lang->workflowhook->result)),
             div
             (
@@ -109,7 +111,7 @@ class workflowCondition extends wg
                 (
                     set::name('sqlResult'),
                     set::items($lang->workflowhook->resultList),
-                    set::value(!empty($data->sqlResult) ? $data->sqlResult : 'empty'),
+                    set::value(!empty($data->conditions->sqlResult) ? $data->conditions->sqlResult : 'empty'),
                     set::required(true)
                 )
             )
