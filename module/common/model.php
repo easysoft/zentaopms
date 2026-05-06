@@ -2683,10 +2683,7 @@ eof;
         {
             $flowAction     = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $action);
             $isActionEnable = $flowAction && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions);
-            if($isActionEnable && !$this->loadModel('flow')->checkConditions($flowAction->conditions, $data))
-            {
-                return false;
-            }
+            if($isActionEnable && !$this->loadModel('flow')->checkConditions($flowAction->conditions, $data)) return false;
         }
 
         if(!empty($actionData['hint']) && !isset($actionData['text'])) $actionData['text'] = $actionData['hint'];
