@@ -2692,7 +2692,7 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `createdBy`, `createdDate`, 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
 ('',   'system', 'common',      '',       'CRProduct',       '1'),
 ('',   'system', 'common',      '',       'CRExecution',     '1'),
-('',   'system', 'common',      '',       'closedFeatures',  'otherOA'),
+('',   'system', 'common',      '',       'disabledFeatures', 'otherOA'),
 ('',   'system', 'common',      'global', 'mode',            'ALM'),
 ('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}'),
 ('',   'system', 'common',      'global', 'installedDate',   CURDATE()),

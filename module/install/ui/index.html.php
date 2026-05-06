@@ -15,6 +15,9 @@ set::zui(true);
 $langItems = array();
 foreach($app->config->langs as $key => $value) $langItems[] = array('text' => $value, 'value' => $key, 'data-on' => 'click', 'data-call' => 'switchLang', 'data-params' => $key);
 
+$qrCodePath = 'theme/default/images/main/weixin.jpg';
+$showQrCode = $this->app->clientLang != 'en' && empty($config->sanplexVersion) && is_file($this->app->getAppRoot() . $qrCodePath);
+
 div
 (
     setID('main'),
@@ -53,9 +56,9 @@ div
                 cell
                 (
                     setClass('flex'),
-                    $this->app->clientLang != 'en' && empty($config->sanplexVersion) ? img
+                    $showQrCode ? img
                     (
-                        set::src($this->app->getWebRoot() . 'theme/default/images/main/weixin.jpg'),
+                        set::src($this->app->getWebRoot() . $qrCodePath),
                         width('200px'),
                         height('200px')
                     ) : null

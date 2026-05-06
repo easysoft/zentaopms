@@ -218,6 +218,14 @@ $lang->contactUs->email  = 'Email';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = 'Wechat';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = 'Select Users';
+$lang->userSelector->deptTitle     = 'Filter by Department';
+$lang->userSelector->userTitle     = 'Select Users';
+$lang->userSelector->selectedTitle = 'Selected';
+$lang->userSelector->allText       = 'All Users';
+$lang->userSelector->emptyText     = 'No users available';
+
 $lang->common->common       = 'Common Module';
 $lang->common->story        = 'Story';
 $lang->common->stories      = 'Stories';
@@ -582,6 +590,7 @@ $lang->error->tutorialData    = 'Data cannot be inserted in tutorial mode. Pleas
 $lang->error->noCurlExt       = 'The server does not have the Curl module installed.';
 $lang->error->loginTimeout    = 'Session timed out. Please log in again.';
 $lang->error->httpServerError = 'Server error.';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();

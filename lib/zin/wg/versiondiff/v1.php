@@ -28,6 +28,14 @@ class versiondiff extends wg
     protected function build()
     {
         list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline'));
+
+        /* 如果版本不存在，调整到最新版本。 If the version does not exist, adjust to the latest version. */
+        if(!isset($versionItems[$versionID]))
+        {
+            global $app;
+            return $app->control->send(array('load' => sprintf($browseTemplate, 0)));
+        }
+
         return dropdown
         (
             jsVar('versionLangData', $diffLang),

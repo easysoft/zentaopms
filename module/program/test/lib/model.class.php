@@ -1002,8 +1002,7 @@ class programModelTest extends baseTest
         if($config->edition != 'open')
         {
             $flow = $this->program->loadModel('workflow')->getByModule($moduleName);
-            if($flow && in_array($flow->app, array('scrum', 'waterfall'))) $flow->app = 'project';
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName") . "#app=$flow->app";
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=$programID&moduleName=$moduleName");
         }
         if($moduleName == 'project')
         {
