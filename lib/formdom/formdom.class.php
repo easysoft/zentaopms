@@ -68,7 +68,7 @@ class formdom
 
         $dom = new DOMDocument();
         libxml_use_internal_errors(true);
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+        @$dom->loadHTML($this->encodeHtmlForDom($html));
         libxml_clear_errors();
 
         $xpath = new DOMXPath($dom);
@@ -109,6 +109,25 @@ class formdom
         /* 提取表单数据 */
         $result = $this->extractFormData($xpath, $form);
         return $result;
+    }
+
+    /**
+     * Encode non-ASCII characters before passing HTML to DOMDocument.
+     *
+     * PHP 8.2+ deprecates mb_convert_encoding(..., 'HTML-ENTITIES', ...).
+     *
+     * @param  string $html
+     * @access private
+     * @return string
+     */
+    private function encodeHtmlForDom($html)
+    {
+        if(function_exists('mb_encode_numericentity'))
+        {
+            return mb_encode_numericentity($html, array(0x80, 0x10FFFF, 0, 0x10FFFF), 'UTF-8');
+        }
+
+        return mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
     }
 
     /**
