@@ -12,7 +12,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader(set::title($lang->doc->moveDocAction));
+modalHeader(set::title($title));
 
 $defaultAcl = $doc->acl;
 if($spaceType == 'mine')
@@ -25,6 +25,8 @@ jsVar('spaceType', $spaceType);
 jsVar('space', $space);
 jsVar('libID', $libID);
 jsVar('docID', $docID);
+jsVar('modalAction', $action);
+
 formPanel
 (
     on::change('[name=space]', 'changeSpace'),

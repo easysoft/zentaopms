@@ -73,7 +73,9 @@ class docApp extends wg
         'getDocViewSidebarTabs' => '?string',              // 获取文档视图侧边栏选项。
         'formatDataItem'        => '?string',              // 格式化数据条目。
         'viewModeUrl'           => '?string',              // 应用视图 URL 格式。
-        'hasZentaoSlashMenu'    => '?boolean'              // 是否显示禅道数据。
+        'hasZentaoSlashMenu'    => '?boolean',             // 是否显示禅道数据。
+        'fetcherWithPager'      => '?string|array',        // 服务端分页 fetcher。
+        'quickFetcher'          => '?string|array'         // 快捷访问视图 fetcher。
     );
 
     public static function getPageJS(): ?string
@@ -180,6 +182,14 @@ class docApp extends wg
          * Define the fetcher links for doc app.
          */
         $fetcher             = createLink('doc', 'ajaxGetSpaceData', 'type={spaceType}&spaceID={spaceID}&picks={picks}');
+        $fetcherWithPager    = createLink('doc', 'ajaxFetchSpaceData',
+            'type={spaceType}&spaceID={spaceID}&picks={picks}&libID={libID}' .
+            '&recPerPage={recPerPage}&pageID={pageID}' .
+            '&filterType={filterType}&search={search}&searchType={searchType}'
+        );
+        $quickFetcher         = createLink('doc', 'ajaxQuick',
+            'type={type}&pageID={pageID}&recPerPage={recPerPage}&search={search}&filterType={filterType}'
+        );
         $docFetcher          = createLink('doc', 'ajaxGetDoc', 'docID={docID}&version={version}');
         $filesFetcher        = createLink('doc', 'ajaxGetFiles', 'type={objectType}&objectID={objectID}');
         $libSummariesFetcher = createLink('doc', 'ajaxGetLibSummaries', 'spaceType={spaceType}&spaceList={spaceList}');
@@ -230,6 +240,10 @@ class docApp extends wg
         $langData->labelDiff         = $lang->doc->diff;
         $langData->labelConfirm      = $lang->doc->confirm;
         $langData->labelCancelDiff   = $lang->doc->cancelDiff;
+
+        $langData->cantPreview        = $lang->file->cantPreview;
+        $langData->officeNotSupported = $lang->file->officeNotSupported;
+        $langData->officeNotInstalled = $lang->file->officeNotInstalled;
 
         /**
          * 通过语言项定义文档表格列显示名称。
@@ -371,6 +385,8 @@ class docApp extends wg
             set::orderBy(data('orderBy')),
             set::pager(array('recTotal' => 0, 'recPerPage' => 20, 'page' => 1)),
             set::fetcher($fetcher),
+            set::fetcherWithPager($fetcherWithPager),
+            set::quickFetcher($quickFetcher),
             set::docFetcher($docFetcher),
             set::filesFetcher($filesFetcher),
             set::libSummariesFetcher($libSummariesFetcher),
