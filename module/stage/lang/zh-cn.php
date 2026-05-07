@@ -26,13 +26,14 @@ $lang->stage->id        = 'ID';
 $lang->stage->name      = '阶段名称';
 $lang->stage->type      = '阶段类型';
 $lang->stage->percent   = '工作量占比';
-$lang->stage->setType   = '阶段类型';
+$lang->stage->setType   = '瀑布阶段类型';
 $lang->stage->TRpoint   = 'TR评审点';
 $lang->stage->DCPpoint  = 'DCP评审点';
 $lang->stage->TRname    = 'TR评审点名称';
 $lang->stage->DCPname   = 'DCP评审点名称';
 $lang->stage->pointFlow = '审批流';
 $lang->stage->order     = '排序';
+$lang->stage->ipdType   = 'IPD阶段类型';
 
 $lang->stage->typeList['mix']     = '综合';
 $lang->stage->typeList['request'] = '需求';
@@ -43,12 +44,11 @@ $lang->stage->typeList['release'] = '发布';
 $lang->stage->typeList['review']  = '总结评审';
 $lang->stage->typeList['other']   = '其他';
 
-$lang->stage->ipdTypeList['concept']   = '概念';
-$lang->stage->ipdTypeList['plan']      = '计划';
-$lang->stage->ipdTypeList['develop']   = '开发';
-$lang->stage->ipdTypeList['qualify']   = '验证';
-$lang->stage->ipdTypeList['launch']    = '发布';
-$lang->stage->ipdTypeList['lifecycle'] = '生命周期';
+$lang->stage->ipdTypeList['concept'] = '概念';
+$lang->stage->ipdTypeList['plan']    = '计划';
+$lang->stage->ipdTypeList['develop'] = '开发';
+$lang->stage->ipdTypeList['qualify'] = '验证';
+$lang->stage->ipdTypeList['launch']  = '发布';
 
 $lang->stage->viewList      = '浏览列表';
 $lang->stage->noStage       = '暂时没有阶段';
