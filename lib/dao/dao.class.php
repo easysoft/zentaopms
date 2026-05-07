@@ -109,6 +109,7 @@ class dao extends baseDAO
 
         $this->app->loadLang('flow');
         $this->app->loadLang('workflowfield');
+        $this->app->loadLang('workflowlinkage');
         $this->app->loadConfig('flow');
         $this->app->loadConfig('workflowfield');
         $this->app->loadConfig('workflowlinkage');
