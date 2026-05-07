@@ -1,0 +1,1 @@
+UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `control` = 'multi-selec';
