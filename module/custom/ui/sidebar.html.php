@@ -52,6 +52,12 @@ if(!empty($lang->custom->{$module}->fields) && $module != 'reviewcl')
             }
         }
 
+        if($module == 'stage' && $key == 'setType')
+        {
+            $currentModule = 'stage';
+            $method        = 'setType';
+            $params        = '';
+        }
 
         if(common::hasPriv($currentModule, $method))
         {
