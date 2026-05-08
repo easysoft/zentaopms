@@ -220,6 +220,7 @@ class repoModel extends model
             $artifact->repoID      = $repoID;
             $artifact->type        = 'repo';
             $artifact->name        = $this->lang->repo->defaultArtifact;
+            $artifact->isDefault   = 1;
             $artifact->createdBy   = $this->app->user->account;
             $artifact->createdDate = helper::now();
             $this->loadModel('artifact')->create($artifact, 'repo');
