@@ -56,9 +56,9 @@ class workflowFieldCondition extends wg
 
         $items = array();
         $items[] = array('label' => $title, 'name' => $hasLogicalOperator ? 'inputGroup' : "{$name}[field]", 'control' => $fieldControl, 'width' => '250px');
-        $items[] = array('label' => '',     'name' => "{$name}[operator]",                                   'control' => 'picker', 'items' => $config->workflowhook->operatorList, 'value' => 'equal');
-        if($datasources) $items[] = array('label' => '', 'name' => "{$name}[paramType]", 'control' => array('control' => 'picker', 'required' => true, 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event'), 'items' => $datasources, 'value' => $name == 'wheres' ? 'record' : 'custom');
-        $items[] = array('label' => '', 'name' => "{$name}[param]", 'control' => $name == 'wheres' ? 'picker' : 'input', 'items' => $fields);
+        $items[] = array('label' => '',     'name' => "{$name}[operator]",  'control' => 'picker', 'items' => $config->workflowhook->operatorList, 'value' => 'equal', 'disabled' => $name == 'fields');
+        $items[] = array('label' => '',     'name' => "{$name}[paramType]", 'control' => array('control' => 'picker', 'required' => true, 'data-on' => 'change', 'data-call' => 'changeFields', 'data-params' => 'event'), 'items' => $datasources ? $datasources : array('custom' => ''), 'value' => $name == 'wheres' ? 'record' : 'custom', 'className' => $datasources ? '' : 'hidden');
+        $items[] = array('label' => '',     'name' => "{$name}[param]",     'control' => 'picker', 'items' => $fields);
 
         if($data)
         {
@@ -68,14 +68,14 @@ class workflowFieldCondition extends wg
 
                 $fieldCode           = "{$name}[field]";
                 $logicalOperatorCode = "{$name}[logicalOperator]";
-                $operatorCode        = "{$name}[operatorCode]";
+                $operatorCode        = "{$name}[operator]";
                 $paramTypeCode       = "{$name}[paramType]";
                 $paramCode           = "{$name}[param]";
 
                 if(empty($dataItem->{$fieldCode}))           $dataItem->{$fieldCode}           = zget($dataItem, $name != 'sqls' ? 'field' : 'varName', '');
-                if(empty($dataItem->{$logicalOperatorCode})) $dataItem->{$logicalOperatorCode} = zget($dataItem, 'logicalOperator',                     '');
-                if(empty($dataItem->{$operatorCode}))        $dataItem->{$operatorCode}        = zget($dataItem, 'operator',                            '');
-                if(empty($dataItem->{$paramTypeCode}))       $dataItem->{$paramTypeCode}       = zget($dataItem, 'paramType',                           '');
+                if(empty($dataItem->{$logicalOperatorCode})) $dataItem->{$logicalOperatorCode} = zget($dataItem, 'logicalOperator',                     'and');
+                if(empty($dataItem->{$operatorCode}))        $dataItem->{$operatorCode}        = zget($dataItem, 'operator',                            'equal');
+                if(empty($dataItem->{$paramTypeCode}))       $dataItem->{$paramTypeCode}       = zget($dataItem, 'paramType',                           'custom');
                 if(empty($dataItem->{$paramCode}))           $dataItem->{$paramCode}           = zget($dataItem, 'param',                               '');
             }
         }
