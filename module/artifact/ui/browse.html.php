@@ -16,11 +16,11 @@ if($repoID)
 }
 else
 {
-    /* zin: Define the set::module('pipeline') feature bar on main menu. */
+    $linkRepoID = empty($repo) ? 0 : $repo->id;
     featureBar
     (
         set::current($type),
-        set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$repo->id}&type={key}")),
+        set::link($this->createLink('artifact', 'browse', "spaceID={$spaceID}&repoID={$linkRepoID}&type={key}")),
     );
 }
 
@@ -70,7 +70,7 @@ if(!empty($artifactList))
                 (
                     setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer', 'open-url'),
                     set('data-id', $artifact->id),
-                    set('data-url', inLink('view', "setID={$artifact->id}")),
+                    set('data-url', inLink('view', "artifactID={$artifact->id}")),
                     div
                     (
                         setClass('flex justify-between items-center'),

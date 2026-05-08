@@ -63,6 +63,41 @@ class artifact extends control
     }
 
     /**
+     * 浏览制品库制品。
+     * Browse artifact repo.
+     *
+     * @param  int $artifactID
+     * @param  string $selectPath
+     * @access public
+     * @return void
+     */
+    public function view(int $artifactID, string $selectPath = '')
+    {
+        $selectPath = helper::safe64Decode($selectPath);
+
+        $artifact = $this->artifact->fetchByID($artifactID);
+        if(empty($artifact)) return print(js::error($this->lang->artifact->notice->noArtifact));
+
+        $this->commonAction((int)$artifact->spaceID, (int)$artifact->repoID);
+        $selectPathList = explode('/', trim($selectPath, '/'));
+
+        $selectNode = new stdclass();
+        foreach($selectPathList as $path)
+        {
+            $path = helper::safe64Encode('/' . $path);
+            $selectNode->$path = true;
+        }
+
+        $this->view->title      = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
+        $this->view->artifact   = $artifact;
+        $this->view->browseLink = $this->createLink('artifact', 'browse', "space={$artifact->spaceID}&repoID={$artifact->repoID}&type={$artifact->type}");
+        $this->view->treeItems  = $this->artifact->getArtifactTreeData($artifact, '/', $selectPath);
+        $this->view->selectNode = $selectNode;
+
+        $this->display();
+    }
+
+    /**
      * 创建制品库。
      * create artifact repo.
      *
@@ -141,5 +176,47 @@ class artifact extends control
         if(dao::isError()) $this->sendError(dao::getError());
 
         $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * 创建制品库目录。
+     * Create artifact repo directory.
+     *
+     * @param  int    $artifactID
+     * @param  string $path
+     * @access public
+     * @return void
+     */
+    public function createDir(int $artifactID, string $path = '')
+    {
+        if($_POST)
+        {
+            $formData = form::data($this->config->artifact->form->createDir)->get();
+            $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $formData->format));
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('artifact', $artifactID, 'createdDir', $formData->name);
+            $this->sendSuccess(array('load' => true));
+        }
+        $this->view->title = $this->lang->artifact->createDir;
+        $this->display();
+    }
+
+    /**
+     * 获取目录树.
+     * Get directory tree.
+     *
+     * @param  int $artifactID
+     * @param  string $path
+     * @param  string $selectPath
+     * @access public
+     * @return void
+     */
+    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '')
+    {
+        $artifact   = $this->artifact->fetchByID($artifactID);
+        $path       = helper::safe64Decode($path);
+        $selectPath = helper::safe64Decode($selectPath);
+        return print(json_encode($this->artifact->getArtifactTreeData($artifact, $path, $selectPath)));
     }
 }
