@@ -86,4 +86,58 @@ class artifactModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 获取制品库目录结构。
+     * Get artifact folder structure.
+     *
+     * @param  object $artifact
+     * @param  string $path
+     * @param  string $selectPath
+     * @access public
+     * @return array
+     */
+    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = ''): array
+    {
+        $items = array();
+        if(empty($artifact->id)) return $items;
+
+        $param = array();
+        $param['artifactID'] = $artifact->id;
+        $param['format']     = $artifact->format;
+        $param['level']      = 'asset';
+        $param['path']       = $path;
+        $param['type']       = $artifact->type;
+        $param['spaceID']    = $artifact->spaceID;
+        $param['repoID']     = $artifact->repoID;
+
+        $nodes = $this->loadModel('gitfox')->request('/artifacts/nodes', 'POST', $param);
+        if(empty($nodes)) return $items;
+
+        $items = array();
+        if(empty($selectNode)) $selectNode = array();
+        foreach($nodes as $node)
+        {
+            if(!isset($node->metadata)) continue;
+            $path = helper::safe64Encode($node->path);
+            $item = new stdclass();
+            $item->id     = $path;
+            $item->name   = $node->name;
+            $item->text   = $node->name;
+            $item->path   = $node->path;
+            $item->format = $node->format;
+            $item->kind   = $node->metadata->type == 'group' ? 'dir' : 'file';
+            $item->active = $node->path == $selectPath;
+
+            $item->url = helper::createLink('artifact', 'view', "artifactID={$artifact->id}&selectPath={$path}");
+            if($item->kind == 'dir')
+            {
+                $baseSelectPath = helper::safe64Encode($selectPath);
+                $item->items = array('url' => helper::createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}"));
+            }
+            $items[] = $item;
+        }
+
+        return $items;
+    }
 }
