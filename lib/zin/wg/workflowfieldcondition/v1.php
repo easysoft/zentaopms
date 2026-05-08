@@ -73,7 +73,7 @@ class workflowFieldCondition extends wg
                 $paramCode           = "{$name}[param]";
 
                 if(empty($dataItem->{$fieldCode}))           $dataItem->{$fieldCode}           = zget($dataItem, $name != 'sqls' ? 'field' : 'varName', '');
-                if(empty($dataItem->{$logicalOperatorCode})) $dataItem->{$logicalOperatorCode} = zget($dataItem, 'logicalOperator',                     '');
+                if(empty($dataItem->{$logicalOperatorCode})) $dataItem->{$logicalOperatorCode} = zget($dataItem, 'logicalOperator',                     'and');
                 if(empty($dataItem->{$operatorCode}))        $dataItem->{$operatorCode}        = zget($dataItem, 'operator',                            'equal');
                 if(empty($dataItem->{$paramTypeCode}))       $dataItem->{$paramTypeCode}       = zget($dataItem, 'paramType',                           'custom');
                 if(empty($dataItem->{$paramCode}))           $dataItem->{$paramCode}           = zget($dataItem, 'param',                               '');
