@@ -606,7 +606,7 @@ class project extends control
         }
 
         $projectIdList = $this->post->projectIdList;
-        $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+        $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id', false);
 
         /* Get program list. */
         $programs           = $this->loadModel('program')->getParentPairs('', '');
