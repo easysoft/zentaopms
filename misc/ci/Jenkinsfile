@@ -561,7 +561,7 @@ pipeline {
           }
 
           steps {
-            checkout scmGit(branches: [[name: "main"]],
+            checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                   userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/app/zentao.git"]]
                 )
