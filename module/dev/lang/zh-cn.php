@@ -206,8 +206,9 @@ $lang->dev->endGroupList['admin']  = '后台';
 $lang->dev->endGroupList['system'] = '系统';
 $lang->dev->endGroupList['other']  = '其他';
 
-$lang->dev->featureBar['api']['restapi'] = 'RESTful接口';
-$lang->dev->featureBar['api']['index']   = '内置页面接口';
+$lang->dev->featureBar['api']['v2']    = 'RESTful v2接口';
+$lang->dev->featureBar['api']['v1']    = 'RESTful v1接口';
+$lang->dev->featureBar['api']['index'] = '内置页面接口';
 
 $lang->dev->featureBar['langItem']['common']  = '公共';
 $lang->dev->featureBar['langItem']['first']   = '一级菜单';
