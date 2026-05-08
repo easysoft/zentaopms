@@ -463,6 +463,7 @@ $lang->doc->typeList['excel']    = 'Excel';
 
 $lang->doc->createList['template']   = 'Wiki文档';
 $lang->doc->createList['word']       = 'Word';
+$lang->doc->createList['url']        = '链接';
 $lang->doc->createList['ppt']        = 'PPT';
 $lang->doc->createList['excel']      = 'Excel';
 $lang->doc->createList['attachment'] = $lang->doc->uploadDoc;
