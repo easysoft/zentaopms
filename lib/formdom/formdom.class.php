@@ -68,7 +68,17 @@ class formdom
 
         $dom = new DOMDocument();
         libxml_use_internal_errors(true);
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        if(function_exists('mb_encode_numericentity'))
+        {
+            $htmlStr = mb_encode_numericentity($html, array(0x80, 0x10FFFF, 0, 0x10FFFF), 'UTF-8');
+        }
+        else
+        {
+            $htmlStr = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        }
+        @$dom->loadHTML($htmlStr);
+
         libxml_clear_errors();
 
         $xpath = new DOMXPath($dom);

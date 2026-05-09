@@ -56,7 +56,7 @@ if($fromReport) $emptyTip = $lang->docTemplate->emptyDataTip;
 $listText  = $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list;
 $emptyText = $isTemplate ? sprintf($lang->docTemplate->configTip, $listText) : $emptyTip;
 
-$pagerSetting = usePager();
+$pagerSetting = usePager('pager', '', null, null, '', 'block-' . $blockID);
 unset($pagerSetting['linkCreator']);
 
 $dataTable = null;

@@ -14,6 +14,7 @@ $privs = array();
 $privs['edit']         = hasPriv('doc', 'edit');
 $privs['delete']       = hasPriv('doc', 'delete');
 $privs['moveDoc']      = hasPriv('doc', 'moveDoc');
+$privs['copyDoc']      = hasPriv('doc', 'copyDoc');
 $privs['collect']      = hasPriv('doc', 'collect');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
 $privs['view']         = hasPriv('doc', 'view');
