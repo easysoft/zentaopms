@@ -99,7 +99,7 @@ class backBtn extends btn
             'program'        => 'program-browse,program-productview',
             'workflowgroup'  => 'workflowgroup-project,workflowgroup-deliverable',
             'cm'             => 'cm-browse,cm-view,my-contribute',
-            'deliverable'    => 'deliverable-browse,project-deliverable,action-trash',
+            'deliverable'    => 'deliverable-browse,project-deliverable,action-trash,activity-view',
             'weekly'         => 'weekly-browse',
             'milestone'      => 'weekly-browse',
             'nc'             => 'nc-browse',
