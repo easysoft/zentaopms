@@ -94,6 +94,16 @@ $lang->aiapp->toolkitItems['cli']['intro']    = <<<'MARKDOWN'
 禅道全新发布了命令行工具，支持通过命令行的方式来访问禅道数据和操作禅道。
 命令行工具同时提供开箱即用的技能供Agents使用，安装禅道命令行技能后，您可以让AI Agent（如Cursor、Claude Code等）直接查询项目进度、分析Bug风险，甚至自动生成需求文档。技能会调用禅道命令行工具读写禅道数据，让大模型变身您的研发管理助手。
 
+#### 主要特性
+
+* 基于禅道"RESTful API 2.0"
+* 一行命令即可运行：`npx zentao-cli`
+* 安全认证，支持多用户切换
+* 支持数据筛选、过滤、排序，自动将HTML转为Markdown
+* 对AI Agent友好，内置完善帮助信息，原生支持Markdown输出
+* 支持作为AI技能使用，`zentao add-skill`一键安装到Agent
+* 内置MCP服务，`npx zentao-cli mcp`即可启动
+
 #### 支持的Agents工具
 
 禅道CLI可在所有支持技能或MCP的Agent工具中使用。下表按上手难度从易到难列出常见选择：

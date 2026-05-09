@@ -94,6 +94,16 @@ ZenTao vient de publier l'outil ZenTao CLI — ce n'est pas seulement un outil e
 
 Après avoir installé cette compétence, vous pouvez demander aux Agents IA (tels que Cursor, Claude Code, etc.) de consulter directement l'avancement du projet, d'analyser les risques liés aux bugs, ou même de générer automatiquement des documents de exigences. La compétence utilise ZenTao CLI pour lire et écrire les données ZenTao, transformant les grands modèles en votre assistant de gestion de développement.
 
+#### Principales caractéristiques
+
+* Basé sur l'API RESTful 2.0 de ZenTao
+* Démarrage instantané avec une seule commande : `npx zentao-cli`
+* Authentification sécurisée avec prise en charge de plusieurs utilisateurs
+* Filtrage, tri et traitement des données avec conversion automatique HTML vers Markdown
+* Compatible avec les Agents IA, documentation d'aide intégrée et sortie Markdown native
+* Utilisable comme compétence IA — installation dans tout Agent via `zentao add-skill`
+* Service MCP intégré — démarrage avec `npx zentao-cli mcp`
+
 #### Outils Agents pris en charge
 
 ZenTao CLI peut être utilisé dans tous les outils Agents qui prennent en charge les compétences ou MCP. Le tableau ci-dessous résume les options courantes, triées par facilité d'utilisation :

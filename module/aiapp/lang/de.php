@@ -94,6 +94,16 @@ ZenTao hat das ZenTao CLI-Tool neu veröffentlicht — es ist nicht nur ein Komm
 
 Nach der Installation dieses Skills können Sie KI-Agents (wie Cursor, Claude Code usw.) direkt Projektfortschritte abfragen, Bug-Risiken analysieren oder sogar automatisch Anforderungsdokumente erstellen lassen. Der Skill nutzt ZenTao CLI zum Lesen und Schreiben von ZenTao-Daten und verwandelt große Sprachmodelle in Ihren Entwicklungsmanagement-Assistenten.
 
+#### Hauptmerkmale
+
+* Basiert auf der ZenTao RESTful API 2.0
+* Sofort startklar mit einem einzigen Befehl: `npx zentao-cli`
+* Sichere Authentifizierung mit Benutzerwechsel
+* Daten filtern, sortieren und verarbeiten — HTML wird automatisch zu Markdown konvertiert
+* KI-Agent-freundlich mit integrierter Hilfe und nativer Markdown-Ausgabe
+* Als KI-Skill verwendbar — Installation per `zentao add-skill` in jeden Agent
+* Integrierter MCP-Dienst — starten mit `npx zentao-cli mcp`
+
 #### Unterstützte Agent-Tools
 
 ZenTao CLI kann in allen Agent-Tools verwendet werden, die Skills oder MCP unterstützen. Die folgende Tabelle listet gängige Optionen nach Benutzerfreundlichkeit sortiert auf:

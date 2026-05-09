@@ -94,6 +94,16 @@ ZenTao CLI is more than a command-line tool. It connects AI agents with your R&D
 
 After installing the ZenTao skill, AI agents such as Cursor and Claude Code can check project status, assess bug risks, and even generate requirements documents. The skill reads and writes ZenTao data through ZenTao CLI, turning your LLM-powered tools into practical R&D management assistants.
 
+#### Key Features
+
+* Built on ZenTao RESTful API 2.0
+* Run instantly with a single command: `npx zentao-cli`
+* Secure authentication with multi-user switching
+* Filter, sort, and process data with automatic HTML-to-Markdown conversion
+* AI Agent-friendly with built-in help documentation and native Markdown output
+* Use as an AI skill — install to any Agent with `zentao add-skill`
+* Built-in MCP service — start with `npx zentao-cli mcp`
+
 #### Supported Agent Tools
 
 ZenTao CLI can be used in all agent tools that support skills or MCP. The table below lists common options sorted by ease of use, from easiest to most advanced:
