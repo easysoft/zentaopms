@@ -1,5 +1,8 @@
 <?php
 declare(strict_types=1);
+
+use function zin\img;
+
 /**
  * The model file of artifact module of ZenTaoPMS.
  *
@@ -97,21 +100,10 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = ''): array
+    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space'): array
     {
         $items = array();
-        if(empty($artifact->id)) return $items;
-
-        $param = array();
-        $param['artifactID'] = $artifact->id;
-        $param['format']     = $artifact->format;
-        $param['level']      = 'asset';
-        $param['path']       = $path;
-        $param['type']       = $artifact->type;
-        $param['spaceID']    = $artifact->spaceID;
-        $param['repoID']     = $artifact->repoID;
-
-        $nodes = $this->loadModel('gitfox')->request('/artifacts/nodes', 'POST', $param);
+        $nodes = $this->getArtifactNodes($artifact, $path);
         if(empty($nodes)) return $items;
 
         $items = array();
@@ -129,15 +121,61 @@ class artifactModel extends model
             $item->kind   = $node->metadata->type == 'group' ? 'dir' : 'file';
             $item->active = $node->path == $selectPath;
 
-            $item->url = helper::createLink('artifact', 'view', "artifactID={$artifact->id}&selectPath={$path}");
+            $item->url = helper::createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
             if($item->kind == 'dir')
             {
                 $baseSelectPath = helper::safe64Encode($selectPath);
-                $item->items = array('url' => helper::createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}"));
+                $item->items = array('url' => helper::createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
             }
+            $item->actions = array
+            (
+                array
+                (
+                    'key'      => 'more',
+                    'icon'     => 'ellipsis-v',
+                    'hint'     => $this->lang->more,
+                    'type'     => 'dropdown',
+                    'dropdown' => array
+                    (
+                        'items' => array
+                        (
+                            array('key' => 'createDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->createDir, 'url' => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path={$path}&isSubDir=0&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
+                        )
+                    )
+                )
+            );
             $items[] = $item;
         }
 
         return $items;
+    }
+
+    /**
+     * 获取制品库节点。
+     * Get artifact nodes.
+     *
+     * @param  object $artifact
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getArtifactNodes(object $artifact, string $path): array
+    {
+        $nodes = array();
+        if(empty($artifact->id)) return $nodes;
+
+        $param = array();
+        $param['artifactID'] = $artifact->id;
+        $param['format']     = $artifact->format;
+        $param['level']      = 'asset';
+        $param['path']       = $path;
+        $param['type']       = $artifact->type;
+        $param['spaceID']    = $artifact->spaceID;
+        $param['repoID']     = $artifact->repoID;
+
+        $nodes = $this->loadModel('gitfox')->request('/artifacts/nodes', 'POST', $param);
+        if(dao::isError()) return array();
+
+        return $nodes;
     }
 }
