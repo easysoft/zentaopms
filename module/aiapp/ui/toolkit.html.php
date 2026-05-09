@@ -46,9 +46,9 @@ div
             setClass('absolute right-0 top-0'),
             style::marginTop('-8px'),
             set::src($config->webRoot . $current['image']),
-            set::width('180px')
+            set::width(214)
         ),
-        h3(setClass('text-aurora pt-2 mb-2'), style::animationDuration('10s'), $current['title']),
+        h3(setClass('text-aurora mb-2'), style::animationDuration('10s'), $current['title']),
         p(setClass('text-gray mb-5'), $current['subtitle']),
         hr(),
         markdown
