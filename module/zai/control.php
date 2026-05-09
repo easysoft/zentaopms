@@ -233,4 +233,17 @@ class zai extends control
 
         return $this->send(array('result' => 'success', 'data' => $results));
     }
+
+    /**
+     * 推广禅道技能。
+     * Promote zentao skill.
+     *
+     * @access public
+     * @return void
+     */
+    public function promoteZentaoSkill()
+    {
+        $this->view->title = $this->lang->zai->zentaoSkill;
+        $this->display();
+    }
 }
