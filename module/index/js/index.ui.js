@@ -711,7 +711,7 @@ function refreshMenu()
         return $ele.css('display') !== 'none' && !$ele.hasClass('divider');
     }).first().outerHeight();
     const maxHeight      = $('#menu').outerHeight() - ($('body').hasClass('has-space') ? (($('#spaceHeading').outerHeight() || 0) + 8) : 0) - 24 - $('#menuToggleNav').outerHeight();
-    const dividerHeight  = 5;
+    const dividerHeight  = 13;
     let showMoreMenu     = false;
     let currentHeight    = 0;
     let $firstHiddenItem = null;

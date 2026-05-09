@@ -206,8 +206,9 @@ $lang->dev->endGroupList['admin']  = 'Admin';
 $lang->dev->endGroupList['system'] = 'System';
 $lang->dev->endGroupList['other']  = 'Others';
 
-$lang->dev->featureBar['api']['restapi'] = 'RESTful';
-$lang->dev->featureBar['api']['index']   = 'Buit-in API';
+$lang->dev->featureBar['api']['v2']    = 'RESTful v2';
+$lang->dev->featureBar['api']['v1']    = 'RESTful v1';
+$lang->dev->featureBar['api']['index'] = 'Buit-in API';
 
 $lang->dev->featureBar['langItem']['common']  = 'Common';
 $lang->dev->featureBar['langItem']['first']   = 'Primary Menu';

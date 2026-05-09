@@ -98,6 +98,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $executions, $chart
                 set::bordered(true),
                 set::cols($cols),
                 set::data($executions),
+                set::plugins(array('selectable')),
                 set::emptyTip($lang->error->noData),
             ),
             div

@@ -73,6 +73,19 @@ if($canMoveDoc && ($lib->type === 'custom' || $lib->type === 'mine'))
         'data-size'   => 'sm'
     );
 }
+$canCopyDoc = $isCreator && hasPriv('doc', 'copyDoc');
+if($canCopyDoc && in_array($lib->type, array('custom', 'mine', 'product', 'project', 'execution', 'api')))
+{
+    $docMoreActions[] = array
+    (
+        'icon'        => 'copy',
+        'hint'        => $lang->doc->copyDocAction,
+        'text'        => $lang->doc->copyDocAction,
+        'url'         => createLink('doc', 'copyDoc', "docID=$doc->id&libID=&space=&locate=true"),
+        'data-toggle' => 'modal',
+        'data-size'   => 'sm'
+    );
+}
 if(hasPriv('doc', 'delete') && !$doc->deleted)
 {
     $docMoreActions[] = array
@@ -166,7 +179,7 @@ $docHeader = div
                 set::url('javascript:$("#docPanel").fullscreen()')
             ),
             $canCollect ? html($starBtn) : null,
-            ($config->vision == 'rnd' and ($config->edition == 'max' or $config->edition == 'ipd') and $app->tab == 'project') ? $importLibBtn : null,
+            ($config->vision == 'rnd' && in_array($config->edition, array('max', 'ipd')) && $app->tab == 'project') ? $importLibBtn : null,
             common::hasPriv('doc', 'edit') && !$doc->deleted ? btn
             (
                 set::type('ghost'),

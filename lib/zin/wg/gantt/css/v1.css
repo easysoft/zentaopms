@@ -2,7 +2,7 @@
 
 #ganttContainer .gantt_container, #ganttContainer .gantt_tooltip {font-family: Figtree,-apple-system,Noto Sans,Helvetica Neue,Helvetica,Nimbus Sans L,Arial,Liberation Sans,PingFang SC,Hiragino Sans GB,Noto Sans CJK SC,Source Han Sans SC,Source Han Sans CN,Microsoft YaHei,Wenquanyi Micro Hei,WenQuanYi Zen Hei,ST Heiti,SimHei,WenQuanYi Zen Hei Sharp,sans-serif;}
 #ganttContainer .gantt_message_area{display:none;}
-#ganttContainer .gantt_grid_head_owner_id {text-align: left}
+#ganttContainer .gantt_grid_head_ownerID {text-align: left}
 #ganttContainer .gantt_grid_head_cell.gantt_grid_head_text{overflow:visible;}
 #ganttContainer .gantt_grid_head_cell, .gantt_scale_cell{color:#000000 !important;}
 #ganttContainer .gantt_grid_scale, .gantt_task_scale, .gantt_task_vscroll{background-color: #F2F7FF;}

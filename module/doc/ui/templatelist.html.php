@@ -102,6 +102,7 @@ docApp
     set::moduleIcon('fields'),
     set::homeName(array('hint' => $lang->doc->template, 'url' => $homeUrl, 'command' => '')),
     set::mode($mode),
+    set::spaceType('template'),
     set::fetcher(createLink('doc', 'ajaxGetSpaceData', 'type=template&spaceID=1&picks={picks}')),
     set::historyFetcher(createLink('action', 'ajaxGetList', 'objectType=docTemplate&objectID={objectID}')),
     set::historyPanel(array('commentUrl' => createLink('action', 'comment', "objectType=doctemplate&objectID={$docID}"), 'objectType' => 'doctemplate')),

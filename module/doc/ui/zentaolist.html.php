@@ -56,7 +56,7 @@ if($fromReport) $emptyTip = $lang->docTemplate->emptyDataTip;
 $listText  = $type == 'gantt' ? $lang->docTemplate->zentaoList['gantt'] : $lang->doc->list;
 $emptyText = $isTemplate ? sprintf($lang->docTemplate->configTip, $listText) : $emptyTip;
 
-$pagerSetting = usePager();
+$pagerSetting = usePager('pager', '', null, null, '', 'block-' . $blockID);
 unset($pagerSetting['linkCreator']);
 
 $dataTable = null;
@@ -85,13 +85,15 @@ $ganttView = null;
 if($type == 'gantt' && !empty($ganttData))
 {
     foreach($ganttFields as $field => $name) $ganttFields[$field] = strip_tags($name);
+    $ownerField = 'ownerID';
+    if(isset($ganttFields['column_owner_id'])) $ownerField = 'owner_id';
     $ganttView = zui::gantt
     (
         set::onInit(jsRaw('window.onInitGantt')),
         set::data($ganttData['data']),
         set::links($ganttData['links']),
         set::ganttFields($ganttFields),
-        set::showFields('text,owner_id,begin,deadline,status,duration'),
+        set::showFields("text,{$ownerField},begin,deadline,status,duration"),
         set::userList($userList),
         set::exts('zentao')
     );

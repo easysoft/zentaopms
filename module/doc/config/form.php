@@ -125,3 +125,5 @@ $config->doc->form->batchmovedoc['users']  = array('type' => 'array',  'required
 $config->doc->form->addTemplateType['name']   = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->doc->form->addTemplateType['root']   = array('type' => 'int',    'required' => true,  'default' => 1);
 $config->doc->form->addTemplateType['parent'] = array('type' => 'int',    'required' => false, 'default' => 0);
+
+$config->doc->form->copydoc = $config->doc->form->movedoc;

@@ -1,4 +1,4 @@
-FROM hub.qucheng.com/ci/zentao-ztf-uitest
+FROM hub.zentao.net/ci/zentao-ztf-uitest
 
 # Install zentao
 ARG VERSION
