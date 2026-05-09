@@ -88,7 +88,7 @@ $lang->aiapp->toolkitItems = array();
 $lang->aiapp->toolkitItems['cli']    = array('title' => 'CLI Skill');
 $lang->aiapp->toolkitItems['mcp']    = array('title' => 'MCP Service');
 $lang->aiapp->toolkitItems['cli']['image']    = 'static/images/zentao-cli.png';
-$lang->aiapp->toolkitItems['cli']['subtitle'] = 'Let Agents tools use ZenTao through command line';
+$lang->aiapp->toolkitItems['cli']['subtitle'] = 'Agents-Tools über die Kommandozeile ZenTao nutzen lassen';
 $lang->aiapp->toolkitItems['cli']['intro']    = <<<'MARKDOWN'
 ZenTao hat das ZenTao CLI-Tool neu veröffentlicht — es ist nicht nur ein Kommandozeilen-Tool, sondern auch eine Brücke zwischen KI- und Entwicklungsmanagementdaten.
 
@@ -214,6 +214,206 @@ A: Das CLI stützt sich derzeit auf die ZenTao API 2.0, und einige Schnittstelle
 
 #### Verwandte Ressourcen
 
-* Offizielle ZenTao Skill-Bibliothek: <https://github.com/easysoft/zentao-skills>
-* ZenTao CLI Open-Source-Repository: <https://github.com/easysoft/zentao-cli>
+* Offizielle ZenTao Skill-Bibliothek: https://github.com/easysoft/zentao-skills
+* ZenTao CLI Open-Source-Repository: https://github.com/easysoft/zentao-cli
+MARKDOWN;
+
+$lang->aiapp->toolkitItems['mcp']['image']    = 'static/images/zentao-mcp.png';
+$lang->aiapp->toolkitItems['mcp']['subtitle'] = 'Agents-Tools über das MCP-Protokoll ZenTao nutzen lassen';
+$lang->aiapp->toolkitItems['mcp']['intro']    = <<<'MARKDOWN'
+ZenTao MCP ist ein Bridge-Proxy-Dienst, der auf dem MCP-Protokoll (Model Context Protocol) basiert. Er konvertiert automatisch ZenTao API 2.0 und andere OpenAPI-konforme REST-Schnittstellen in Standard-MCP-Tools, sodass KI-Assistenten wie Claude, Cursor und CodeBuddy diese einheitlich aufrufen können – für eine bidirektionale Interaktion mit ZenTao-Daten (Daten aus ZenTao lesen und in ZenTao schreiben).
+
+#### Kernfunktionen
+
+* **Automatische Konvertierung**: Generiert MCP-Tools automatisch aus OpenAPI/Swagger-Dokumenten, ohne manuellen Adapter-Code. Kompatibel mit allen REST-APIs, die dieser Spezifikation entsprechen.
+* **Transportprotokoll-Unterstützung**: Unterstützt sowohl Streamable HTTP als auch SSE (Server-Sent Events) – für Kompatibilität (HTTP) und Echtzeit (SSE) bei verschiedenen KI-Clients.
+* **Verteiltes Tracing**: Integriertes OpenTelemetry-Tracing und Metrik-Erfassung zur Überwachung von Serviceaufrufketten und Laufzeitmetriken, um Fehler einfacher zu beheben und Dienste zu optimieren.
+* **Multi-Service-Proxy**: Eine einzige ZenTao MCP-Instanz kann mehrere verschiedene API-Dienste gleichzeitig vermitteln – nicht nur die ZenTao API, sondern jedes andere OpenAPI-konforme System. Hochgradig erweiterbar.
+* **Plattformübergreifend**: Unterstützt Linux, macOS und Windows.
+
+#### Schnellstart
+
+##### (1) MCP-Dienst konfigurieren (eine von vier Optionen wählen)
+
+###### 1. Windows-Konfiguration
+
+**Schritt 1: Paket herunterladen**
+
+* [AMD 64-Bit-Paket](https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-windows-amd64.zip)
+* [ARM 64-Bit-Paket](https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-windows-arm64.zip)
+
+**Schritt 2: Paket entpacken**
+
+Am Beispiel AMD-64: Das heruntergeladene Paket nach `D:\zentao-mcp` entpacken.
+
+**Schritt 3: MCP-Konfiguration anpassen**
+
+```sh
+# Konfigurationsvorlage kopieren:
+copy D:\zentao-mcp\config.example.yaml D:\zentao-mcp\config.yaml
+
+# Konfigurationsdatei bearbeiten:
+D:\zentao-mcp\config.yaml
+schema_url: "D:/zentao-mcp/docs/zentao-openapi.json" # Auf tatsächlichen Dateipfad aktualisieren
+base_url: "https://ihre-zentao-domain/api.php/v2"    # Ihre ZenTao-Domain eintragen
+```
+
+**Schritt 4: MCP-Dienst starten**
+
+```sh
+# Folgenden Befehl in der cmd-Konsole ausführen:
+D:\zentao-mcp\bin\zentao-mcp-windows-amd64.exe -config D:\zentao-mcp\config.yaml
+```
+
+###### 2. Linux-Konfiguration
+
+**Schritt 1: Paket herunterladen**
+
+```sh
+# AMD-64:
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-linux-amd64.tar.gz
+# ARM-64:
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-linux-arm64.tar.gz
+```
+
+**Schritt 2: Paket entpacken**
+
+Am Beispiel AMD-64:
+
+```sh
+# Verzeichnis erstellen:
+mkdir -p /opt/zentao-mcp
+# Paket entpacken:
+tar -zxvf zentao-mcp-linux-amd64.tar.gz -C /opt/zentao-mcp
+```
+
+**Schritt 3: MCP-Konfiguration anpassen**
+
+```sh
+# Konfigurationsvorlage kopieren:
+cp /opt/zentao-mcp/config.example.yaml /opt/zentao-mcp/config.yaml
+
+# Konfigurationsdatei bearbeiten:
+/opt/zentao-mcp/config.yaml
+schema_url: "/opt/zentao-mcp/docs/zentao-openapi.json" # Auf tatsächlichen Dateipfad aktualisieren
+base_url: "https://ihre-zentao-domain/api.php/v2"       # Ihre ZenTao-Domain eintragen
+```
+
+**Schritt 4: MCP-Dienst starten**
+
+```sh
+/opt/zentao-mcp/bin/zentao-mcp-linux-amd64 -config /opt/zentao-mcp/config.yaml
+```
+
+###### 3. macOS-Konfiguration
+
+**Schritt 1: Paket herunterladen**
+
+```sh
+# AMD-64:
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-darwin-amd64.tar.gz
+# ARM-64:
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-darwin-arm64.tar.gz
+```
+
+**Schritt 2: Paket entpacken**
+
+Am Beispiel AMD-64:
+
+```sh
+# Verzeichnis erstellen:
+mkdir /opt/zentao-mcp
+# Paket entpacken:
+tar -zxvf zentao-mcp-darwin-amd64.tar.gz -C /opt/zentao-mcp
+```
+
+**Schritt 3: MCP-Konfiguration anpassen**
+
+```sh
+# Konfigurationsvorlage kopieren:
+cp /opt/zentao-mcp/config.example.yaml /opt/zentao-mcp/config.yaml
+
+# Konfigurationsdatei bearbeiten:
+/opt/zentao-mcp/config.yaml
+schema_url: "/opt/zentao-mcp/docs/zentao-openapi.json" # Auf tatsächlichen Dateipfad aktualisieren
+base_url: "https://ihre-zentao-domain/api.php/v2"       # Ihre ZenTao-Domain eintragen
+```
+
+**Schritt 4: MCP-Dienst starten**
+
+```sh
+/opt/zentao-mcp/bin/zentao-mcp-darwin-amd64 -config /opt/zentao-mcp/config.yaml
+```
+
+###### 4. Aus dem Quellcode starten (für Entwickler)
+
+**Schritt 1: Repository klonen**
+
+```sh
+git clone https://github.com/easysoft/zentao-mcp.git
+```
+
+**Schritt 2: Projekt starten**
+
+```sh
+# Projektverzeichnis aufrufen:
+cd zentao-mcp
+# Abhängigkeiten herunterladen:
+go mod tidy
+# Kompilieren:
+go build -o zentao-mcp ./cmd/app
+```
+
+##### (2) MCP-Client (KI-Assistent) konfigurieren
+
+**Schritt 1: Token über die ZenTao API V2 abrufen**
+
+```sh
+curl -X POST "http://ihre-zentao-domain/api.php/v2/user/login" \
+   -H "Content-Type: application/json" \
+   -d '{"account":"Benutzername","password":"Passwort"}'
+```
+
+Das Feld `token` im zurückgegebenen JSON-Objekt ist der Token.
+
+**Schritt 2: MCP im KI-Assistenten konfigurieren**
+
+```json
+{
+  "mcpServers": {
+    "zentao": {
+      "disabled": false,
+      "type": "mcp",
+      "url": "http://127.0.0.1:9090/zentao/mcp",
+      "timeout": 60000,
+      "headers": {
+        "token": "ZenTao API V2 Token",
+        "Authorization": ""
+      }
+    },
+    "gitfox": {
+      "disabled": false,
+      "type": "sse",
+      "url": "http://127.0.0.1:9090/gitfox/sse",
+      "timeout": 60000,
+      "headers": {
+        "Authorization": "GitFox Token"
+      }
+    }
+  }
+}
+```
+
+#### Anwendungsbeispiele
+
+* **Produkt erstellen**: Ein Produkt mit dem Namen „Betriebsüberwachungsplattform" in ZenTao erstellen.
+* **Anforderung erstellen**: Eine Anforderung in einem bestimmten ZenTao-Produkt erstellen.
+* **Repository erstellen**: Ein Repository mit dem Namen example-repo in GitFox erstellen.
+* **Code generieren und pushen**: Scaffold-Code in einem GitFox-Repository generieren und pushen.
+
+#### Verwandte Links
+
+* ZenTao API-Dokumentation: https://www.zentao.net/book/api/2309.html
+* GitFox-Einführung: https://www.gitfox.net/
+* Projektquellcode: https://github.com/easysoft/zentao-mcp
 MARKDOWN;

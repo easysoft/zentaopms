@@ -214,8 +214,8 @@ A：CLI目前依赖禅道API 2.0，部分接口还在完善中，敬请期待后
 
 #### 相关内容
 
-* 禅道官方技能库：<https://github.com/easysoft/zentao-skills>
-* 禅道CLI开源仓库：<https://github.com/easysoft/zentao-cli>
+* 禅道官方技能库：https://github.com/easysoft/zentao-skills
+* 禅道CLI开源仓库：https://github.com/easysoft/zentao-cli
 MARKDOWN;
 
 $lang->aiapp->toolkitItems['mcp']['image']    = 'static/images/zentao-mcp.png';
@@ -413,7 +413,7 @@ curl -X POST "http://您的禅道域名/api.php/v2/user/login" \
 
 #### 相关链接
 
-* 禅道API手册：<https://www.zentao.net/book/api/2309.html>
-* GitFox介绍：<https://www.gitfox.net/>
-* 项目源码：<https://github.com/easysoft/zentao-mcp>
+* 禅道API手册：https://www.zentao.net/book/api/2309.html
+* GitFox介绍：https://www.gitfox.net/
+* 项目源码：https://github.com/easysoft/zentao-mcp
 MARKDOWN;
