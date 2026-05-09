@@ -41,6 +41,10 @@ $lang->file->downloadFile  = 'Download';
 $lang->file->playFailed    = 'Video preview failed, please contact admin';
 $lang->file->exportData    = "Daten exportieren";
 
+$lang->file->cantPreview        = "Diese Datei kann nicht angezeigt werden";
+$lang->file->officeNotSupported = 'Nur ZenTao Biz und ZenTao Max unterstützen die Vorschau von Office-Dateien. Um diese erweiterten Versionen auszuprobieren, kontaktieren Sie uns bitte unter support@zentao.pm.';
+$lang->file->officeNotInstalled = 'Um Office-Dateien anzuzeigen, müssen Sie die <a href="https://www.zentao.net/book/zentaopms/1609.html" target="_blank">Office-Unterstützung installieren und konfigurieren</a>';
+
 $lang->file->pathname  = 'Pfadname';
 $lang->file->title     = 'Titel';
 $lang->file->fileName  = 'Dateiname';

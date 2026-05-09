@@ -8,9 +8,12 @@ namespace zin;
  * @param string|array $pagerName
  * @param string $extra
  * @param ?array $userSetting
+ * @param ?array $sizeMenuItems
+ * @param ?string $customLink
+ * @param ?string $cookieSuffix Cookie 后缀，生成独立的分页偏好（如 'block-3'）
  * @return array
  */
-function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null, ?array $sizeMenuItems = null, ?string $customLink = ''): ?array
+function usePager(string|array $pagerName = 'pager', string $extra = '', ?array $userSetting = null, ?array $sizeMenuItems = null, ?string $customLink = '', ?string $cookieSuffix = null): ?array
 {
     if(is_array($pagerName))
     {
@@ -37,6 +40,9 @@ function usePager(string|array $pagerName = 'pager', string $extra = '', ?array 
     $setting['items']       = array();
     $setting['gap']         = 0;
 
+    $pageCookie = $pager->pageCookie;
+    if($cookieSuffix && strpos($pageCookie, $cookieSuffix) === false) $pageCookie .= '-' . $cookieSuffix;
+
     if($pager->recTotal == 0)
     {
         $setting['items'][] = array('type' => 'info', 'text' => $pager->lang->pager->noRecord);
@@ -49,7 +55,7 @@ function usePager(string|array $pagerName = 'pager', string $extra = '', ?array 
     }
     elseif($extra == 'shortPageSize')
     {
-        $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->shortPageSize)), 'dropdown' => array('placement' => 'top'), 'itemProps' => array('onClick' => jsRaw("(e, item) => $.cookie.set('$pager->pageCookie', item.key)")));
+        $setting['items'][] = array('type' => 'size-menu', 'text' => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->shortPageSize)), 'dropdown' => array('placement' => 'top'), 'itemProps' => array('onClick' => jsRaw("(e, item) => $.cookie.set('$pageCookie', item.key)")));
         $setting['items'][] = array('type' => 'link', 'page' => 'prev', 'hint' => $pager->lang->pager->previousPage, 'icon' => 'icon-angle-left');
         $setting['items'][] = array('type' => 'info', 'text' => '{page}/{pageTotal}');
         $setting['items'][] = array('type' => 'link', 'page' => 'next', 'hint' => $pager->lang->pager->nextPage, 'icon' => 'icon-angle-right');
@@ -74,7 +80,7 @@ function usePager(string|array $pagerName = 'pager', string $extra = '', ?array 
                 'type'      => 'size-menu',
                 'text'      => str_replace('<strong>', '', str_replace('</strong>', '', $pager->lang->pager->pageSize)),
                 'dropdown'  => array('placement' => 'top'),
-                'itemProps' => array('onClick' => jsRaw("(e, item) => $.cookie.set('$pager->pageCookie', item.key)"))
+                'itemProps' => array('onClick' => jsRaw("(e, item) => $.cookie.set('$pageCookie', item.key)"))
             );
             if($sizeMenuItems) $sizeMenuSetting['items'] = $sizeMenuItems;
             $setting['items'][] = $sizeMenuSetting;

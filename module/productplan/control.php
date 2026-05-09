@@ -141,6 +141,9 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         if(!empty($_POST))
         {
+            if(!$this->post->future && empty($_POST['begin'])) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+            if(!$this->post->future && empty($_POST['end']))   dao::$errors['end']   = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+
             $planData = form::data($this->config->productplan->form->edit, $planID)
                 ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
                 ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)

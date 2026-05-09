@@ -1147,7 +1147,7 @@ class devModel extends model
      * @access public
      * @return int
      */
-    public function getAPIData($apiID = 0, $version = '16.0')
+    public function getAPIData($apiID = 0, $version = 'v2')
     {
         $modules = $this->loadModel('api')->getDemoData('module', $version);
         foreach($modules as $index => $module)
@@ -1198,7 +1198,7 @@ class devModel extends model
                 $child->id     = $moduleAPI->id;
                 $child->icon   = 'icon-file-text';
                 $child->name   = $moduleAPI->title;
-                $child->url    = helper::createLink('dev', 'api', "module=restapi&apiID={$moduleAPI->id}");
+                $child->url    = helper::createLink('dev', 'api', "module=$version&apiID={$moduleAPI->id}");
                 $child->active = $apiID == $moduleAPI->id ? 1 : 0;
                 if($child->active) $treeNode->active = 1;
 

@@ -318,7 +318,7 @@ class programplanTao extends programplanModel
             }
 
             /* If multi task then show the teams. */
-            if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->owner_id = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
+            if($task->mode == 'multi' && !empty($taskTeams[$task->id])) $data->ownerID = implode(',', array_map(function($assignedTo) use($users){return zget($users, $assignedTo);}, array_keys($taskTeams[$task->id])));
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             if($task->isParent) continue;
@@ -681,7 +681,7 @@ class programplanTao extends programplanModel
         $data->attribute      = zget($this->lang->stage->typeList, $plan->attribute);
         $data->milestone      = zget($this->lang->programplan->milestoneList, $plan->milestone);
         $data->milestonecode  = $plan->milestone;
-        $data->owner_id       = $plan->PM;
+        $data->ownerID        = $plan->PM;
         $data->rawStatus      = $plan->status;
         $data->status         = $this->processStatus('execution', $plan);
         $data->begin          = $start;
@@ -747,7 +747,7 @@ class programplanTao extends programplanModel
         $data->name           = $point->title;
         $data->attribute      = '';
         $data->milestone      = '';
-        $data->owner_id       = '';
+        $data->ownerID        = '';
         $data->rawStatus      = $point->status;
         $data->status         = $point->status ? zget($statusList, $point->status) : $this->lang->programplan->wait;
         $data->status         = "<span class='status-{$point->status}'>" . $data->status . '</span>';
@@ -810,7 +810,7 @@ class programplanTao extends programplanModel
         $dataGroup->percent       = '';
         $dataGroup->attribute     = '';
         $dataGroup->milestone     = '';
-        $dataGroup->owner_id      = '';
+        $dataGroup->ownerID       = '';
         $dataGroup->status        = '';
         $dataGroup->begin         = '';
         $dataGroup->deadline      = '';
@@ -856,7 +856,7 @@ class programplanTao extends programplanModel
         $data->text           = $priIcon . "<span class='gantt_title'>#{$task->id} {$task->name}</span>";
         $data->story          = $task->story ? '#' . $task->story : '';
         $data->status         = $task->status == 'changed' ? $this->lang->task->storyChange : $this->processStatus('task', $task);
-        $data->owner_id       = $task->assignedTo;
+        $data->ownerID        = $task->assignedTo;
         $data->keywords       = $task->keywords;
         $data->attribute      = '';
         $data->milestone      = '';
