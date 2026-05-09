@@ -77,17 +77,17 @@ $lang->zai->vectorizedPanelLang = $vectorizedPanelLang;
 
 $lang->zai->zentaoSkill          = 'ZenTao Skill';
 $lang->zai->zentaoSkillPromotion = '<div class="text-md text-fore">Want to use ZenTao in external Agents?</div><div class="text-gray mt-2">Zentao CLI is ready.</div><div class="text-primary font-bold flex gap-1 items-center mt-2">Get Started<i class="icon icon-arrow-right"></i></div>';
-$lang->zai->zentaoSkillLeading   = 'With ZenTao CLI';
-$lang->zai->zentaoSkillTitle     = 'Use ZenTao in External Agent Tools';
+$lang->zai->zentaoSkillLeading   = 'Powered by ZenTao CLI';
+$lang->zai->zentaoSkillTitle     = 'Connect ZenTao to Your AI Agent Tools';
 $lang->zai->zentaoSkillSubtitle  = 'Supports Claude Code, Codex, VSCode, Cursor, OpenClaw, Hermes...';
 $lang->zai->zentaoSkillGuide     = <<<'MARKDOWN'
-ZenTao has newly released the ZenTao CLI tool — it is not just a command-line tool, but also a bridge between AI and R&D management data.
+ZenTao CLI is more than a command-line tool. It connects AI agents with your R&D management data.
 
-After installing this skill, you can have AI Agents (such as Cursor, Claude Code, etc.) directly query project progress, analyze bug risks, or even automatically generate requirement documents. The skill uses ZenTao CLI to read and write ZenTao data, turning large language models into your R&D management assistant.
+After installing the ZenTao skill, AI agents such as Cursor and Claude Code can check project status, assess bug risks, and even generate requirements documents. The skill reads and writes ZenTao data through ZenTao CLI, turning your LLM-powered tools into practical R&D management assistants.
 
 #### Supported Agent Tools
 
-ZenTao CLI can be used in all Agent tools that support skills or MCP. The table below lists common options sorted by ease of use, from easiest to most advanced:
+ZenTao CLI can be used in all agent tools that support skills or MCP. The table below lists common options sorted by ease of use, from easiest to most advanced:
 
 | Beginner-Friendly | Developer-Friendly | Advanced/Premium |
 |:-----------------:|:------------------:|:----------------:|
@@ -100,10 +100,10 @@ ZenTao CLI can be used in all Agent tools that support skills or MCP. The table 
 
 ##### Step 1: Install the Skill
 
-**1. Let the Agent install automatically**: Most modern Agent tools support automatic discovery and installation of skills. Simply send the following message to the Agent:
+**1. Let your agent install it automatically**: Most modern Agent tools support automatic discovery and installation of skills. Simply send the following message to the Agent:
 
 ```
-Install the https://cn.clawhub-mirror.com/catouse/zentao-cli skill and install the zentao-cli command-line tool required by the skill.
+Please install the ZenTao CLI skill from https://cn.clawhub-mirror.com/catouse/zentao-cli and set up the required zentao-cli command-line tool.
 ```
 
 **2. Manual installation**: Developers can also install directly via the terminal:
@@ -177,21 +177,21 @@ You can also ask the Agent to help you upgrade:
 
 #### FAQ
 
-##### Q: How is this CLI skill different from the previously released ZenTao API skill? Which one should I use?
+##### Q: How is the ZenTao CLI skill different from the earlier ZenTao API skill? Which one should I use?
 
-A: We strongly recommend the CLI skill. It encapsulates complex API details, supports more features (such as data filtering, Markdown conversion), and is more token-efficient. Large models don't need to worry about API calls and can focus on solving real problems; whereas the ZenTao API skill requires the model to handle APIs directly, which is prone to errors.
+A: We strongly recommend the ZenTao CLI skill. It wraps the lower-level API details, supports more capabilities such as data filtering and Markdown conversion, and uses tokens more efficiently. With the CLI skill, LLMs can focus on solving real tasks instead of managing API calls directly. The ZenTao API skill gives the model direct access to the APIs, but that approach is more error-prone.
 
-##### Q: I'm not familiar with Agents or skills. How do I get started?
+##### Q: I'm not familiar with agents or skills. How should I get started?
 
-A: Don't worry — before AI takes over the world, there's no rush. Due to current Agent limitations, they cannot fully replace the ZenTao GUI. We suggest starting with simple queries, or trying the built-in ZenTao Tour skill, which will guide you through in an engaging way.
+A: No worries. You don't need to master everything on day one. Given the current limitations of AI agents, they cannot fully replace the ZenTao GUI yet. We recommend starting with simple queries first, or trying the built-in ZenTao Tour skill, which guides you through common workflows step by step.
 
 ##### Q: Can I use this in ZenTao AI?
 
-A: Direct CLI usage within ZenTao is not supported yet, but we are actively developing the ZAI Agents platform, which will support skill installation directly inside ZenTao in the future.
+A: Direct CLI usage inside ZenTao AI is not supported yet. We are actively developing the ZAI Agents platform, which will support installing skills directly inside ZenTao in the future.
 
-##### Q: Why can't I perform certain operations (e.g., module operations, reading/writing documents)?
+##### Q: Why can't I perform certain operations, such as module operations or reading and writing documents?
 
-A: The CLI currently relies on ZenTao API 2.0, and some interfaces are still being improved. Stay tuned for future updates.
+A: The CLI currently relies on ZenTao API 2.0, and some API endpoints are still being improved. More capabilities will be added in future updates.
 
 #### Related Resources
 
