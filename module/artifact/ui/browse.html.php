@@ -70,7 +70,7 @@ if(!empty($artifactList))
                 (
                     setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer', 'open-url'),
                     set('data-id', $artifact->id),
-                    set('data-url', inLink('view', "artifactID={$artifact->id}")),
+                    set('data-url', inLink('view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
                     div
                     (
                         setClass('flex justify-between items-center'),
