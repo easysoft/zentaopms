@@ -40,6 +40,8 @@ $lang->aiapp->view               = 'View General Agent Details';
 $lang->aiapp->browseConversation = 'Browse Conversation';
 $lang->aiapp->manageGeneralAgent = 'Manage General Agent';
 $lang->aiapp->models             = 'Browse Model List';
+$lang->aiapp->toolkit            = 'AI Toolkit';
+$lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';

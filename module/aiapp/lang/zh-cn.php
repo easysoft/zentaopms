@@ -40,6 +40,8 @@ $lang->aiapp->view               = '查看通用智能体详情';
 $lang->aiapp->browseConversation = '浏览智能会话';
 $lang->aiapp->manageGeneralAgent = '管理通用智能体';
 $lang->aiapp->models             = '浏览模型列表';
+$lang->aiapp->toolkit            = '智能工具';
+$lang->aiapp->viewAiToolkit      = '查看智能工具';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = '模型名称';

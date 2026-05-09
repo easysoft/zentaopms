@@ -40,6 +40,8 @@ $lang->aiapp->view               = 'View General Agent Details';
 $lang->aiapp->browseConversation = 'Browse Conversation';
 $lang->aiapp->manageGeneralAgent = 'Manage General Agent';
 $lang->aiapp->models             = 'Browse Model List';
+$lang->aiapp->toolkit            = 'AI Toolkit';
+$lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
@@ -80,3 +82,17 @@ $lang->aiapp->langData->searchingKLibs     = 'Searching knowledge libraries...';
 $lang->aiapp->langData->recentChats        = 'Recent Chats';
 $lang->aiapp->langData->aiTeammateTasks    = 'Digital Teammate Tasks';
 $lang->aiapp->langData->searchTasks        = 'Search Digital Teammate Tasks';
+
+$lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
+$lang->aiapp->toolkitItems = array();
+$lang->aiapp->toolkitItems['cli']    = array('title' => 'CLI Skill');
+$lang->aiapp->toolkitItems['mcp']    = array('title' => 'MCP Service');
+$lang->aiapp->toolkitItems['cli']['image']    = 'static/images/zentao-cli.png';
+$lang->aiapp->toolkitItems['cli']['subtitle'] = 'Let Agents tools use ZenTao through command line';
+$lang->aiapp->toolkitItems['cli']['intro']    = <<<'MARKDOWN'
+ZenTao has released a new command line tool, supporting access to ZenTao data and operations through command line.
+The command line tool also provides ready-to-use skills for Agents, after installing the ZenTao CLI skill, you can let AI Agent (such as Cursor, Claude Code, etc.) directly query project progress, analyze Bug risks, even automatically generate demand documents. The skill will call the ZenTao CLI tool to read and write ZenTao data, making the large model a研发管理 assistant for you.
+
+#### Supported Agents Tools
+
+ZenTao CLI can be used in all Agent tools that support skills or MCP. The table below lists common choices from easiest to hardest by difficulty level:
