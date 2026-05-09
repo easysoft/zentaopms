@@ -38,6 +38,7 @@ $privs['effort']       = $this->config->edition != 'open' && hasPriv('effort', '
 $privs['exportDoc']    = $this->config->edition != 'open' && hasPriv('doc', $type . '2export') && !$projectTemplate;
 $privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
 $privs['moveDoc']      = hasPriv('doc', 'moveDoc') && !$projectTemplate;
+$privs['copyDoc']      = hasPriv('doc', 'copyDoc') && !$projectTemplate;
 $privs['collect']      = hasPriv('doc', 'collect');
 $privs['createLib']    = hasPriv('doc', 'createLib');
 $privs['editLib']      = hasPriv('doc', 'editLib');
@@ -59,6 +60,8 @@ $privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
 $privs['sortDoc']      = hasPriv('doc', 'sortDoc');
 $privs['batchMoveDoc'] = hasPriv('doc', 'batchMoveDoc');
 $privs['showFiles']    = hasPriv('doc', 'showFiles');
+$privs['downloadFile'] = hasPriv('file', 'download');
+$privs['previewFile']  = hasPriv('file', 'preview');
 $privs['createApi']    = hasPriv('api', 'create');
 $privs['editApi']      = hasPriv('api', 'edit');
 $privs['viewApi']      = hasPriv('api', 'view');

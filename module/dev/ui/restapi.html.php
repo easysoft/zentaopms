@@ -16,7 +16,7 @@ foreach($lang->dev->featureBar['api'] as $key => $label)
     $featureBarItems[] = array
     (
         'text'   => $label,
-        'active' => ($selectedModule == $key || ($key == 'index' and $selectedModule != 'restapi')),
+        'active' => $selectedModule == $key,
         'url'    => inlink('api', "module=$key")
     );
 }
@@ -185,7 +185,7 @@ $fnGetResponseContent = function($api) use($parseTree, $typeList)
     return $content;
 };
 
-$fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryContent, $fnGetParamsContent, $fnGetResponseContent)
+$fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryContent, $fnGetParamsContent, $fnGetResponseContent, $selectedModule)
 {
     global $lang, $app;
 
@@ -193,7 +193,7 @@ $fnBuildAPIContent = function() use($api, $fnGetHeaderContent, $fnGetQueryConten
     $content[] = div
     (
         setClass('pb-3 font-bold'),
-        $lang->dev->apiBaseUrl . ': ' . commonModel::getSysURL() . $app->config->webRoot . 'api.php/v1'
+        $lang->dev->apiBaseUrl . ': ' . commonModel::getSysURL() . $app->config->webRoot . 'api.php/' . $selectedModule
     );
     $content[] = div
     (
