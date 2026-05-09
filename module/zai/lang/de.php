@@ -172,7 +172,7 @@ zentao add-skill
 Sie können auch den Agent bitten, beim Upgrade zu helfen:
 
 ```
-„Helfen Sie mir, zentao-cli zu aktualisieren und den neuesten Skill mit dem Befehl zentao add-skill neu zu installieren."
+Helfen Sie mir, zentao-cli zu aktualisieren und den neuesten Skill mit dem Befehl zentao add-skill neu zu installieren.
 ```
 
 #### FAQ

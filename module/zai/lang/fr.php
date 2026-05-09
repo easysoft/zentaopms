@@ -172,7 +172,7 @@ zentao add-skill
 Vous pouvez également demander à l'Agent de vous aider à mettre à niveau :
 
 ```
-« Aidez-moi à mettre à niveau zentao-cli et à réinstaller la dernière compétence avec la commande zentao add-skill. »
+Aidez-moi à mettre à niveau zentao-cli et à réinstaller la dernière compétence avec la commande zentao add-skill.
 ```
 
 #### FAQ
