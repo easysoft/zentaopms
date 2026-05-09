@@ -56,7 +56,7 @@ formPanel(
     input(set::type('hidden'), set::name('docID'), set::value(isset($doc) && $doc->id ? $doc->id : '')),
     input(set::type('hidden'), set::name('type'), set::value($docType ?: 'text')),
     input(set::type('hidden'), set::name('contentType'), set::value($docType == 'url' ? 'url' : 'doc')),
-    $this->app->tab == 'doc' && $objectType == 'project' && $modalType != 'chapter' ? formRow
+    $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
         formGroup
         (
