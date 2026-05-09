@@ -76,7 +76,7 @@ $vectorizedPanelLang->confirmResetSync     = $lang->zai->confirmResetSync;
 $lang->zai->vectorizedPanelLang = $vectorizedPanelLang;
 
 $lang->zai->zentaoSkill          = 'ZenTao Skill';
-$lang->zai->zentaoSkillPromotion = '<div class="text-md text-fore">Want to use ZenTao in external Agents?</div><div class="text-gray mt-2">Zentao CLI is ready.</div><div class="text-primary font-bold flex gap-1 items-center mt-2">Get Started<i class="icon icon-arrow-right"></i></div>';
+$lang->zai->zentaoSkillPromotion = '<div class="text-md text-fore">Connect ZenTao to your AI agents</div><div class="text-gray mt-2">ZenTao CLI makes it easy.</div><div class="text-primary font-bold flex gap-1 items-center mt-2">Get Started<i class="icon icon-arrow-right"></i></div>';
 $lang->zai->zentaoSkillLeading   = 'Powered by ZenTao CLI';
 $lang->zai->zentaoSkillTitle     = 'Connect ZenTao to Your AI Agent Tools';
 $lang->zai->zentaoSkillSubtitle  = 'Supports Claude Code, Codex, VSCode, Cursor, OpenClaw, Hermes...';
