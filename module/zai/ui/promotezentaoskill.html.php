@@ -40,5 +40,5 @@ div
         '.markdown-content h4{color:var(--color-primary-500)}',
         '.markdown-content .markdown-code-block{max-height:200px}'
     ),
-    zui::markdown($lang->zai->zentaoSkillGuide)
+    markdown($lang->zai->zentaoSkillGuide)
 );
