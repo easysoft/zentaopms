@@ -11,7 +11,7 @@
  */
 $lang->aiapp->common           = 'AI';
 $lang->aiapp->squareCategories = array('collection' => '我的收藏', 'discovery' => '发现', 'latest' => '最新');
-$lang->aiapp->newVersionTip    = '小程序已于 %s 更新，以上为过往记录';
+$lang->aiapp->newVersionTip    = '小程序已于%s更新，以上为过往记录';
 $lang->aiapp->noMiniProgram    = '您访问的小程序不存在';
 $lang->aiapp->title            = '小程序';
 $lang->aiapp->unpublishedTip   = '您使用的小程序没有发布';
@@ -46,7 +46,7 @@ $lang->aiapp->viewAiToolkit      = '查看智能工具';
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = '模型名称';
 $lang->aiapp->converse           = '开始会话';
-$lang->aiapp->pageSummary        = '共 %s 项';
+$lang->aiapp->pageSummary        = '共%s项';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = '暂无数据';
@@ -56,7 +56,7 @@ $lang->aiapp->langData->name                = '禅道';
 $lang->aiapp->langData->storyReview         = '需求评审';
 $lang->aiapp->langData->storyReviewHint     = '对当前页面需求进行评审';
 $lang->aiapp->langData->storyReviewMessage  = "下面是要进行评审的需求：\n\n### 需求标题\n\n{title}\n\n### 需求描述\n\n{spec}\n\n### 需求验收标准\n\n{verify}";
-$lang->aiapp->langData->aiReview            = 'AI 评审';
+$lang->aiapp->langData->aiReview            = 'AI评审';
 $lang->aiapp->langData->currentPage         = '当前页面';
 $lang->aiapp->langData->story               = '需求';
 $lang->aiapp->langData->demand              = '需求池需求';
@@ -67,7 +67,7 @@ $lang->aiapp->langData->feedback            = '反馈';
 $lang->aiapp->langData->currentDocContent   = '当前文档';
 $lang->aiapp->langData->globalMemoryTitle   = '禅道';
 $lang->aiapp->langData->zaiConfigNotValid   = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
-$lang->aiapp->langData->unauthorizedError   = '授权失败，无效的 API 密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
+$lang->aiapp->langData->unauthorizedError   = '授权失败，无效的API密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->processDataPrefix   = "要进行处理的数据如下：\n{data}";
 $lang->aiapp->langData->processedDataResult = "处理后的数据如下：\n```json\n{data}\n```";
 $lang->aiapp->langData->agentResultSummary  = '对方案中数据的变化进行解释，尽量对变化的属性分别进行说明。';
@@ -76,7 +76,7 @@ $lang->aiapp->langData->promptExtraLimit    = '通常工具 `{toolName}` 只需�
 $lang->aiapp->langData->promptResultReturn  = '已经在界面展示处理后的数据，无需对处理后的数据进行重复展示，也不需要进一步描述和解释，提醒我可以通过点击“应用到{formName}表单”按钮来使用这些数据。';
 $lang->aiapp->langData->goTesting           = '去调试';
 $lang->aiapp->langData->notSupportPreview   = '暂不支持预览该内容';
-$lang->aiapp->langData->dataListSizeInfo    = '共 %s 条数据';
+$lang->aiapp->langData->dataListSizeInfo    = '共%s条数据';
 $lang->aiapp->langData->promptTestDataIntro = '下面是要进行{name}的示例{type}：';
 $lang->aiapp->langData->searchingKLibs      = '正在查找知识库...';
 $lang->aiapp->langData->recentChats         = '最近聊天';
@@ -128,12 +128,12 @@ $lang->aiapp->toolkitItems['cli']['intro']    = <<<'MARKDOWN'
 **2. 手动安装**：开发者也可以直接在终端里执行命令安装：
 
 ```
-# 全局安装 zentao-cli 工具
+# 全局安装zentao-cli工具
 $ npm install -g zentao-cli
 # 其他安装与运行方式
-# bun install -g zentao-cli  # ← 使用 bun 安装
-# npx zentao-cli             # ← 通过 npx 免安装运行
-# pnpm dlx zentao-cli        # ← 通过 pnpm 免安装运行
+# bun install -g zentao-cli  # ← 使用bun安装
+# npx zentao-cli             # ← 通过npx免安装运行
+# pnpm dlx zentao-cli        # ← 通过pnpm免安装运行
 
 # 安装完成后，一键把技能装到Agent中
 $ zentao add-skill
@@ -170,7 +170,7 @@ zentao login -s https://zentao.example.com -u admin -p 123456
 
 ##### 第三步：对话与实战
 
-配置好后，您就能在对应的 Agent 工具里像和同事聊天一样使用禅道了。下面是几个实战示例：
+配置好后，您就能在对应的Agent工具里像和同事聊天一样使用禅道了。下面是几个实战示例：
 
 * 需求与规划：“我想创建一个产品，用来在线收集用户信息，请帮我整理思路，并生成第一版需求和计划，有问题尽管问我。”
 * 进度追踪：“上周新增了哪些需求？哪些比较难？我想针对难点提前制定方案。”
@@ -191,7 +191,7 @@ zentao add-skill
 也可以直接让Agent帮您升级：
 
 ```
-请帮我升级 zentao-cli，并通过 zentao add-skill 命令重新安装最新的技能。
+请帮我升级zentao-cli，并通过zentao add-skill命令重新安装最新的技能。
 ```
 
 #### 常见问题 (FAQ)
@@ -216,4 +216,204 @@ A：CLI目前依赖禅道API 2.0，部分接口还在完善中，敬请期待后
 
 * 禅道官方技能库：<https://github.com/easysoft/zentao-skills>
 * 禅道CLI开源仓库：<https://github.com/easysoft/zentao-cli>
+MARKDOWN;
+
+$lang->aiapp->toolkitItems['mcp']['image']    = 'static/images/zentao-mcp.png';
+$lang->aiapp->toolkitItems['mcp']['subtitle'] = '让Agents工具通过MCP协议来使用禅道';
+$lang->aiapp->toolkitItems['mcp']['intro']    = <<<'MARKDOWN'
+禅道MCP是基于MCP模型上下文协议实现的桥接代理服务。可将禅道API2.0等遵循OpenAPI规范的REST接口，自动转为MCP标准工具，供Claude、Cursor、CodeBuddy等AI助手统一调用，实现跟禅道数据的相互调用（可以从禅道中获取数据，也可以更新禅道中的数据）。
+
+#### 核心特性
+
+* **自动转换能力**：从OpenAPI/Swagger文档自动生成MCP工具，无需人工编写适配逻辑，适配所有遵循该规范的REST API。
+* **传输协议支持**：同时兼容Streamable HTTP和SSE（Server-Sent Events），兼顾兼容（HTTP）和实时性（SSE），适配不同AI客户端的通信需求。
+* **链路追踪**：内置OpenTelemetry链路追踪和指标收集，能监控服务调用链路、收集运行指标，方便问题排查和服务优化。
+* **多服务代理**：单个禅道MCP实例可同时代理多个不同的API服务，不仅支持禅道API，还能适配其他遵循OpenAPI规范的系统API，扩展性强。
+* **跨平台部署**：支持Linux、macOS、Windows主流系统，部署灵活。
+
+#### 快速开始
+
+##### （一）配置MCP服务（四选一即可）
+
+###### 1. Windows用户配置方式
+
+**第一步：下载安装包**
+
+* [AMD 64位包](https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-windows-amd64.zip)
+* [ARM 64位包](https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-windows-arm64.zip)
+
+**第二步：解压包**
+
+以AMD-64位为例，将下载的包解压到目录 `D:\zentao-mcp`。
+
+**第三步：修改MCP配置**
+
+```sh
+# 复制配置模板：
+copy D:\zentao-mcp\config.example.yaml D:\zentao-mcp\config.yaml
+
+# 修改配置文件：
+D:\zentao-mcp\config.yaml
+schema_url: "D:/zentao-mcp/docs/zentao-openapi.json" # 更新为实际文件路径
+base_url: "https://禅道域名/api.php/v2"               # 修改您的禅道访问域名
+```
+
+**第四步：启动MCP服务**
+
+```sh
+# 在cmd命令行执行启动命令：
+D:\zentao-mcp\bin\zentao-mcp-windows-amd64.exe -config D:\zentao-mcp\config.yaml
+```
+
+###### 2. Linux用户配置方式
+
+**第一步：下载包**
+
+```sh
+# AMD-64位：
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-linux-amd64.tar.gz
+# ARM-64位：
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-linux-arm64.tar.gz
+```
+
+**第二步：解压包**
+
+以AMD-64位为例：
+
+```sh
+# 建目录：
+mkdir -p /opt/zentao-mcp
+# 解压包：
+tar -zxvf zentao-mcp-linux-amd64.tar.gz -C /opt/zentao-mcp
+```
+
+**第三步：修改MCP配置**
+
+```sh
+# 复制配置模板：
+cp /opt/zentao-mcp/config.example.yaml /opt/zentao-mcp/config.yaml
+
+# 修改配置文件：
+/opt/zentao-mcp/config.yaml
+schema_url: "/opt/zentao-mcp/docs/zentao-openapi.json" # 更新为实际文件路径
+base_url: "https://禅道域名/api.php/v2"                 # 修改您的禅道访问域名
+```
+
+**第四步：启动MCP服务**
+
+```sh
+/opt/zentao-mcp/bin/zentao-mcp-linux-amd64 -config /opt/zentao-mcp/config.yaml
+```
+
+###### 3. Mac用户配置方式
+
+**第一步：下载包**
+
+```sh
+# AMD-64位：
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-darwin-amd64.tar.gz
+# ARM-64位：
+curl -k -L -O https://pkg.zentao.net/zentao-mcp/1.0.1/zentao-mcp-darwin-arm64.tar.gz
+```
+
+**第二步：解压包**
+
+以AMD-64位为例：
+
+```sh
+# 建目录：
+mkdir /opt/zentao-mcp
+# 解压包：
+tar -zxvf zentao-mcp-darwin-amd64.tar.gz -C /opt/zentao-mcp
+```
+
+**第三步：修改MCP配置**
+
+```sh
+# 复制配置模板：
+cp /opt/zentao-mcp/config.example.yaml /opt/zentao-mcp/config.yaml
+
+# 修改配置文件：
+/opt/zentao-mcp/config.yaml
+schema_url: "/opt/zentao-mcp/docs/zentao-openapi.json" # 更新为实际文件路径
+base_url: "https://禅道域名/api.php/v2"                 # 修改您的禅道访问域名
+```
+
+**第四步：启动MCP服务**
+
+```sh
+/opt/zentao-mcp/bin/zentao-mcp-darwin-amd64 -config /opt/zentao-mcp/config.yaml
+```
+
+###### 4. 源代码启动（面向开发者）
+
+**第一步：克隆代码**
+
+```sh
+git clone https://github.com/easysoft/zentao-mcp.git
+```
+
+**第二步：启动项目**
+
+```sh
+# 进入项目：
+cd zentao-mcp
+# 下载依赖：
+go mod tidy
+# 启动命令：
+go build -o zentao-mcp ./cmd/app
+```
+
+##### （二）配置MCP客户端（AI助手）
+
+**第一步：调用禅道API V2接口获取Token**
+
+```sh
+curl -X POST "http://您的禅道域名/api.php/v2/user/login" \
+   -H "Content-Type: application/json" \
+   -d '{"account":"用户名","password":"密码"}'
+```
+
+该请求返回的 JSON 对象中 `token` 属性即为 Token。
+
+**第二步：在AI助手中配置MCP**
+
+```json
+{
+  "mcpServers": {
+    "zentao": {
+      "disabled": false,
+      "type": "mcp",
+      "url": "http://127.0.0.1:9090/zentao/mcp",
+      "timeout": 60000,
+      "headers": {
+        "token": "禅道API V2 Token",
+        "Authorization": ""
+      }
+    },
+    "gitfox": {
+      "disabled": false,
+      "type": "sse",
+      "url": "http://127.0.0.1:9090/gitfox/sse",
+      "timeout": 60000,
+      "headers": {
+        "Authorization": "GitFox Token"
+      }
+    }
+  }
+}
+```
+
+#### 场景示例
+
+* **创建产品**：在禅道中创建一个名为“运维监控平台”的产品。
+* **创建需求**：在禅道xxx产品中的产品创建一个xxxx需求。
+* **创建代码库**：在GitFox创建名为example-repo的代码库。
+* **生成代码并推送至仓库**：在GitFox代码库生成一份脚手架代码并推送。
+
+#### 相关链接
+
+* 禅道API手册：<https://www.zentao.net/book/api/2309.html>
+* GitFox介绍：<https://www.gitfox.net/>
+* 项目源码：<https://github.com/easysoft/zentao-mcp>
 MARKDOWN;
