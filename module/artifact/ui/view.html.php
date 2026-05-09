@@ -10,16 +10,57 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+if($repoID)
+{
+    dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
+    unset($lang->artifact->featureBar);
+}
+
+$breadCrumbsBox = array();
+if(!empty($breadCrumbs))
+{
+    foreach($breadCrumbs as $pathName => $pathItems)
+    {
+        $breadCrumbsBox[] = span('>', setStyle('margin', '0 5px'));
+        $breadCrumbsBox[] = picker
+        (
+            setClass('picker-btn state'),
+            setStyle('box-shadow', 'none'),
+            set::items($pathItems),
+            set::search(false),
+            set::required(true),
+            set::menu(jsRaw('{searchBox: true, search: undefined}')),
+            set::display(jsRaw("(value, selections) => {
+            return {html: `<div>\${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
+            set::value(helper::safe64Encode('/' . $pathName))
+        );
+    }
+}
 
 div
 (
-    setClass('surface-light row items-center border-b py-1.5 pl-1 pr-2'),
+    setClass('surface-light row items-center border py-1.5 pl-1 pr-2'),
     btn
     (
         setClass('ghost text-primary square size-md'),
         set::title('home'),
         set::icon('home'),
-    )
+        set::url($browseLink)
+    ),
+    span('>', setStyle('margin', '0 5px')),
+    picker
+    (
+        setClass('picker-btn state'),
+        setStyle('box-shadow', 'none'),
+        set::items($artifactList),
+        set::search(false),
+        set::required(true),
+        set::menu(jsRaw('{searchBox: true, search: undefined}')),
+        set::display(jsRaw("(value, selections) => {
+        return {html: `<div>{$lang->artifact->common}: \${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
+        set::value($artifact->id)
+    ),
+    empty($breadCrumbsBox) ? null : $breadCrumbsBox
 );
 
 div
@@ -37,16 +78,14 @@ div
             setClass('p-2 h-full min-h-0'),
             tree
             (
-                set::id('filesTree'),
+                setClass('filesTree'),
                 set::items($treeItems),
-                set::canSplit(false),
                 set::collapsedIcon('folder text-warning'),
                 set::expandedIcon('folder-open text-warning'),
                 set::normalIcon('stack'),
                 set::preserve(false),
                 set::hover(true),
                 set::defaultNestedShow($selectNode),
-                set::onClickItem(jsRaw('window.treeClick'))
             ),
             div
             (
@@ -54,13 +93,14 @@ div
                 setClass('mt-auto shrink-0 flex justify-end bottom-0 gap-2 px-3 py-2'),
                 setStyle('position', 'absolute'),
                 setStyle('right', '0'),
-                btn
-                (
-                    setID('artifactViewToggleAll'),
-                    setClass('btn ghost size-sm'),
-                    set::title($lang->artifact->expandAll),
-                    set::icon('icon-list-collapse')
-                ),
+                //btn
+                //(
+                //    setID('artifactViewToggleAll'),
+                //    setClass('btn ghost size-sm'),
+                //    set::title($lang->artifact->expandAll),
+                //    set::icon('icon-list-collapse'),
+                //    on::click()->call('window.isExpand', jsRaw('$this'))
+                //),
                 dropdown
                 (
                     set::placement('top-end'),
@@ -75,7 +115,7 @@ div
                                 'text'        => $lang->artifact->addDirectory,
                                 'icon'        => 'plus',
                                 'data-toggle' => 'modal',
-                                'url'         => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}")
+                                'url'         => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path=&isSubDir=0&spaceID={$spaceID}&repoID={$repoID}&type={$type}"),
                             )
                         )
                     ),
