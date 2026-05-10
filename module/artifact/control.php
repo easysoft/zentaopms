@@ -71,7 +71,7 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function view(int $artifactID, string $selectPath = '')
+    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0)
     {
         $selectPath = helper::safe64Decode($selectPath);
 
@@ -79,20 +79,36 @@ class artifact extends control
         if(empty($artifact)) return print(js::error($this->lang->artifact->notice->noArtifact));
 
         $this->commonAction((int)$artifact->spaceID, (int)$artifact->repoID);
-        $selectPathList = explode('/', trim($selectPath, '/'));
+        $selectPathList = empty($selectPath) ? array() : explode('/', trim($selectPath, '/'));
+        $breadCrumbs    = $this->artifactZen->getBreadCrumbs($artifact, $selectPathList, $spaceID, $repoID, $type);
 
-        $selectNode = new stdclass();
+        $selectNode = empty($selectPathList) ? false : new stdclass();
         foreach($selectPathList as $path)
         {
             $path = helper::safe64Encode('/' . $path);
             $selectNode->$path = true;
         }
 
-        $this->view->title      = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
-        $this->view->artifact   = $artifact;
-        $this->view->browseLink = $this->createLink('artifact', 'browse', "space={$artifact->spaceID}&repoID={$artifact->repoID}&type={$artifact->type}");
-        $this->view->treeItems  = $this->artifact->getArtifactTreeData($artifact, '/', $selectPath);
-        $this->view->selectNode = $selectNode;
+        $repo = $this->loadModel('repo')->fetchByID($repoID);
+        $artifacts = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $spaceID, $repoID, $type, 'createdDate_asc');
+        $artifactList = array();
+        foreach($artifacts as $artifactRepo)
+        {
+            $artifactList[] = array('text' => $artifactRepo->name, 'value' => $artifactRepo->id, 'keys' => $artifactRepo->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifactRepo->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
+        }
+
+        $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
+        $this->view->artifact     = $artifact;
+        $this->view->browseLink   = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
+        $this->view->treeItems    = $this->artifact->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type);
+        $this->view->selectNode   = $selectNode;
+        $this->view->spaceID      = $spaceID;
+        $this->view->repoID       = $repoID;
+        $this->view->type         = $type;
+        $this->view->repo         = $repo;
+        $this->view->artifactList = empty($artifactList) ? array() : $artifactList;
+        $this->view->breadCrumbs  = $breadCrumbs;
+        $this->view->isExpand     = $isExpand;
 
         $this->display();
     }
@@ -184,19 +200,36 @@ class artifact extends control
      *
      * @param  int    $artifactID
      * @param  string $path
+     * @param  int    $isSubDir
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function createDir(int $artifactID, string $path = '')
+    public function createDir(int $artifactID, string $path = '', int $isSubDir = 0, int $spaceID = 0, int $repoID = 0, string $type = 'space')
     {
         if($_POST)
         {
+            $artifact = $this->artifact->fetchByID($artifactID);
+
+            $path = helper::safe64Decode($path);
+            if(!$isSubDir) $path = dirname($path);
+            $base64Path = $path ? helper::safe64Encode($path) : '';
+
             $formData = form::data($this->config->artifact->form->createDir)->get();
-            $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $formData->format));
+            if($path)
+            {
+                $path = str_replace('/', '.', $path);
+                $formData->name = ltrim($path . '.' . $formData->name, '.');
+            }
+            $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
             if(dao::isError()) $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('artifact', $artifactID, 'createdDir', $formData->name);
-            $this->sendSuccess(array('load' => true));
+
+            $url = $this->createLink('artifact', 'view', "artifactID={$artifactID}&space={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$base64Path}");
+            $this->sendSuccess(array('locate' => $url));
         }
         $this->view->title = $this->lang->artifact->createDir;
         $this->display();
@@ -209,14 +242,17 @@ class artifact extends control
      * @param  int $artifactID
      * @param  string $path
      * @param  string $selectPath
+     * @param  int $spaceID
+     * @param  int $repoID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '')
+    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '', int $spaceID = 0, int $repoID = 0, string $type = 'space')
     {
         $artifact   = $this->artifact->fetchByID($artifactID);
         $path       = helper::safe64Decode($path);
         $selectPath = helper::safe64Decode($selectPath);
-        return print(json_encode($this->artifact->getArtifactTreeData($artifact, $path, $selectPath)));
+        return print(json_encode($this->artifact->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type)));
     }
 }
