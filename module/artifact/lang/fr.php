@@ -29,7 +29,8 @@ $lang->artifact->move          = 'Move';
 $lang->artifact->switch        = 'Switch';
 $lang->artifact->actionMockTip = 'Mock action: %s';
 $lang->artifact->dirName       = 'Directory Name';
-$lang->artifact->format        = 'Directory Type';
+$lang->artifact->format        = 'Artifact Type';
+$lang->artifact->hasVersion    = 'Need to do version control';
 
 $lang->artifact->okBtn = 'OK';
 
@@ -52,6 +53,8 @@ $lang->artifact->typeList['repo']  = 'Repo';
 $lang->artifact->typeList['space'] = 'Space';
 
 $lang->artifact->formatList = array();
-$lang->artifact->formatList['raw']       = 'Raw File';
-$lang->artifact->formatList['container'] = 'Docker Image';
-$lang->artifact->formatList['helm']      = 'K8S';
+$lang->artifact->formatList['file']      = 'Common File Repository';
+$lang->artifact->formatList['container'] = 'Image Repository';
+$lang->artifact->formatList['helm']      = 'Helm Repository';
+$lang->artifact->formatList['maven']     = 'Maven Repository';
+$lang->artifact->formatList['npm']       = 'NPM Repository';

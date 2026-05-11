@@ -13,8 +13,15 @@ namespace zin;
 formPanel
 (
     set::title($title),
-    set::labelWidth('60px'),
+    set::labelWidth('100px'),
     set::submitBtnText($lang->artifact->okBtn),
+    formGroup
+    (
+        set::label($lang->artifact->format),
+        set::name('format'),
+        set::required(true),
+        set::items($lang->artifact->formatList)
+    ),
     formGroup
     (
         set::label($lang->artifact->name),

@@ -137,6 +137,10 @@ class artifact extends control
                 ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : $space)
                 ->add('type', $type)
                 ->get();
+            if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            {
+                return $this->sendError(array('name' => $this->lang->artifact->nameNotSupportChinese));
+            }
 
             $id = $this->artifact->create($formData, $type);
             if(dao::isError()) $this->sendError(dao::getError());
@@ -160,11 +164,18 @@ class artifact extends control
      */
     public function edit(int $id)
     {
+        $artifact = $this->artifact->fetchByID($id);
+
         if($_POST)
         {
             $formData = form::data($this->config->artifact->form->edit)
                 ->add('editedBy', $this->app->user->account)
                 ->get();
+
+            if(in_array($artifact->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            {
+                return $this->sendError(array('name' => $this->lang->artifact->nameNotSupportChinese));
+            }
 
             $this->artifact->update($id, $formData);
             if(dao::isError()) $this->sendError(dao::getError());
@@ -174,7 +185,7 @@ class artifact extends control
         }
 
         $this->view->title    = $this->lang->artifact->edit;
-        $this->view->artifact = $this->artifact->fetchByID($id);
+        $this->view->artifact = $artifact;
         $this->display();
     }
 
