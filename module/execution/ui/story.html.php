@@ -29,6 +29,10 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
+jsVar('createTaskTip1',     $lang->execution->createTaskTip1);
+jsVar('createTaskTip2',     $lang->execution->createTaskTip2);
+jsVar('hasCreateTaskPriv',      hasPriv('task', 'create'));
+jsVar('hasBatchCreateTaskPriv', hasPriv('task', 'batchcreate'));
 
 $isFromDoc = $from === 'doc';
 $isFromAI  = $from === 'ai';
