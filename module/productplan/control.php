@@ -73,13 +73,6 @@ class productplan extends control
     {
         if(!empty($_POST))
         {
-            /* 如果开始日期是待定且后台设置结束日期必填校验，清除结束日期必填性。*/
-            if($this->post->future && strpos($this->config->productplan->create->requiredFields, 'end') !== false)
-            {
-                $requiredFields = array_filter(explode(',', $this->config->productplan->create->requiredFields), function($value){ return $value !== 'end'; });
-                $this->config->productplan->create->requiredFields = implode(',', $requiredFields);
-            }
-
             $planData = form::data()
                 ->add('createdBy', $this->app->user->account)
                 ->add('createdDate', helper::now())
@@ -141,6 +134,9 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         if(!empty($_POST))
         {
+            if(!$this->post->future && empty($_POST['begin'])) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+            if(!$this->post->future && empty($_POST['end']))   dao::$errors['end']   = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+
             $planData = form::data($this->config->productplan->form->edit, $planID)
                 ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
                 ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)

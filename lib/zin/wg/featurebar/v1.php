@@ -95,7 +95,7 @@ class featureBar extends wg
                     $subItem['text']   = $text;
                     $subItem['hint']   = $text;
                     $subItem['active'] = $rawItem->name == 'QUERY' ? $key == $param : $key == $current;
-                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => jsRaw("() => zui.updateSearchForm('$searchModule')")];
                     $subItem['url']    = $isModal ? '#featureBar' : $url;
 
                     if($isModal) $subItem['onClick'] = jsRaw("() => loadModal('{$url}')");

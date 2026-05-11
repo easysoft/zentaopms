@@ -327,4 +327,144 @@ class docZenTest
 
         return $result;
     }
+
+    /**
+     * Test initDocContext method.
+     *
+     * @param  int    $docID
+     * @param  int    $libID
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return object
+     */
+    public function initDocContextTest(int $docID = 0, int $libID = 0, string $spaceType = '', string $space = ''): object
+    {
+        global $app;
+
+        $libIDRef     = $libID;
+        $spaceTypeRef = $spaceType;
+        $spaceRef     = $space;
+
+        $zenTest    = $app->loadTarget('doc', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method     = $reflection->getMethod('initDocContext');
+        $method->setAccessible(true);
+
+        ob_start();
+        $result = $method->invokeArgs($zenTest, array($docID, &$libIDRef, &$spaceTypeRef, &$spaceRef));
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $resultObj = new stdclass();
+        $resultObj->docID     = isset($result->id) ? (int)$result->id : 0;
+        $resultObj->libID     = $libIDRef;
+        $resultObj->spaceType = $spaceTypeRef;
+        $resultObj->space     = $spaceRef;
+        $resultObj->hasDoc    = isset($result->id) ? 1 : 0;
+
+        return $resultObj;
+    }
+
+    /**
+     * Test prepareDocFormData method.
+     *
+     * @param  string $spaceType
+     * @param  string $space
+     * @access public
+     * @return object
+     */
+    public function prepareDocFormDataTest(string $spaceType = '', string $space = ''): object
+    {
+        global $app, $config;
+
+        $app->setModuleName('doc');
+        $app->setMethodName('moveDoc');
+
+        if(!isset($config->doc)) $config->doc = new stdClass();
+        if(!isset($config->doc->form)) $config->doc->form = new stdClass();
+        if(!isset($config->doc->form->movedoc))
+        {
+            $config->doc->form->movedoc = array(
+                'lib'        => array('type' => 'int',    'required' => true,  'default' => ''),
+                'module'     => array('type' => 'int',    'required' => false, 'default' => 0),
+                'acl'        => array('type' => 'string', 'required' => true,  'default' => 'default'),
+                'groups'     => array('type' => 'array',  'required' => false, 'default' => ''),
+                'users'      => array('type' => 'array',  'required' => false, 'default' => ''),
+                'readGroups' => array('type' => 'array',  'required' => false, 'default' => ''),
+                'readUsers'  => array('type' => 'array',  'required' => false, 'default' => ''),
+                'parent'     => array('type' => 'int',    'required' => false, 'default' => 0),
+            );
+        }
+
+        $_POST['acl'] = 'default';
+
+        $result = callZenMethod('doc', 'prepareDocFormData', array($spaceType, $space));
+
+        unset($_POST['acl']);
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $resultObj = new stdclass();
+        $resultObj->acl        = isset($result->acl) ? $result->acl : '';
+        $resultObj->groups     = isset($result->groups) ? $result->groups : '';
+        $resultObj->users      = isset($result->users) ? $result->users : '';
+        $resultObj->readGroups = isset($result->readGroups) ? $result->readGroups : '';
+        $resultObj->readUsers  = isset($result->readUsers) ? $result->readUsers : '';
+
+        return $resultObj;
+    }
+
+    /**
+     * Test prepareDocViewData method.
+     *
+     * @param  string $spaceType
+     * @param  string $space
+     * @param  int    $libID
+     * @param  int    $docID
+     * @param  object $doc
+     * @access public
+     * @return object
+     */
+    public function prepareDocViewDataTest(string $spaceType = '', string $space = '', int $libID = 0, int $docID = 0, ?object $doc = null): object
+    {
+        global $app;
+
+        if(is_null($doc))
+        {
+            $doc = new stdclass();
+            $doc->id    = $docID;
+            $doc->title = 'Test Document';
+            $doc->lib   = $libID;
+        }
+
+        $libIDRef   = $libID;
+        $zenTest    = $app->loadTarget('doc', '', 'zen');
+        $reflection = new ReflectionClass($zenTest);
+        $method     = $reflection->getMethod('prepareDocViewData');
+        $method->setAccessible(true);
+        ob_start();
+        $method->invokeArgs($zenTest, array($spaceType, $space, &$libIDRef, $docID, $doc));
+        ob_end_clean();
+
+        if(dao::isError()) return (object)dao::getError();
+
+        $viewProperty = $reflection->getProperty('view');
+        $viewProperty->setAccessible(true);
+        $view = $viewProperty->getValue($zenTest);
+
+        $resultObj = new stdclass();
+        $resultObj->docID         = $docID;
+        $resultObj->libID         = $libIDRef;
+        $resultObj->spaceType     = $spaceType;
+        $resultObj->space         = $space;
+        $resultObj->hasSpaces     = isset($view->spaces) ? 1 : 0;
+        $resultObj->hasLibPairs   = isset($view->libPairs) ? 1 : 0;
+        $resultObj->hasOptionMenu = isset($view->optionMenu) ? 1 : 0;
+        $resultObj->hasGroups     = isset($view->groups) ? 1 : 0;
+        $resultObj->hasUsers      = isset($view->users) ? 1 : 0;
+
+        return $resultObj;
+    }
 }
