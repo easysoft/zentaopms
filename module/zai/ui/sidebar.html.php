@@ -21,7 +21,6 @@ if(hasPriv('zai', 'vectorized'))
 sidebar
 (
     set::toggleBtn(false),
-    set::width(240),
     set::preserve('zaiSetting'),
     div
     (

@@ -11,8 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $menuItems = array();
-$menuItems[] = array('text' => $lang->aiapp->toolkitTitle, 'type' => 'heading');
-foreach($lang->aiapp->toolkitItems as $key => $item) $menuItems[] = array('text' => $item['title'], 'url' => createLink('aiapp', 'toolkit', "tab=$key"), 'selected' => $key == $tab);
+foreach($lang->aiapp->toolkitItems as $key => $item) $menuItems[] = array('text' => $item['title'], 'url' => createLink('aiapp', 'toolkit', "tab=$key"), 'selected' => $key == $tab, 'icon' => isset($item['icon']) ? $item['icon'] : $key);
 
 sidebar
 (
@@ -20,8 +19,7 @@ sidebar
     set::width(160),
     div
     (
-        setClass('cell canvas rounded ring shadow'),
-        style::height('calc(100vh - 72px)'),
+        setClass('cell canvas rounded p-2.5'),
         menu
         (
             setClass('--menu-bg', 'transparent'),
@@ -32,7 +30,7 @@ sidebar
 
 div
 (
-    setClass('cell canvas rounded ring shadow'),
+    setClass('cell canvas rounded'),
     setClass('p-5 max-h-full overflow-y-auto scrollbar-hover'),
     style::height('calc(100vh - 72px)'),
     style::backgroundImage('linear-gradient(to bottom left, transparent 0%, #fff 40%), repeating-radial-gradient(circle at 0 0, transparent 0, #fff 27px), repeating-linear-gradient(#D9EAFF55, #D9EAFF)'),
