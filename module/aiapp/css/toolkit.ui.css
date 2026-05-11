@@ -1,0 +1,3 @@
+.markdown-content h4 {color: var(--color-primary-500)}
+.markdown-content .markdown-code-block {max-height: 200px}
+.markdown-content img {width: 203px; float: right; margin: 0 0 1rem 1rem;}

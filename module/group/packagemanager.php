@@ -4013,6 +4013,12 @@ $config->group->package->zai->privs  = array();
 $config->group->package->zai->privs['zai-setting']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 60, 'depend' => array(), 'recommend' => array());
 $config->group->package->zai->privs['zai-vectorized'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 61, 'depend' => array('zai-setting'), 'recommend' => array());
 
+$config->group->package->aiToolkit = new stdclass();
+$config->group->package->aiToolkit->order  = 2100;
+$config->group->package->aiToolkit->subset = 'aiapp';
+$config->group->package->aiToolkit->privs  = array();
+$config->group->package->aiToolkit->privs['aiapp-toolkit'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 70, 'depend' => array(), 'recommend' => array());
+
 $config->group->package->component = new stdclass();
 $config->group->package->component->order  = 2300;
 $config->group->package->component->subset = 'configure';
