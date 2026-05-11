@@ -131,7 +131,7 @@ class testcaseTao extends testcaseModel
      */
     public function getBySuite(int $productID, int|string $branch = 0, int $suiteID = 0, array|int $moduleIdList = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.title AS storyTitle, t3.version AS version')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_SUITECASE)->alias('t3')->on('t1.id = t3.case')
             ->where('t1.product')->eq($productID)
