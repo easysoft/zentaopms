@@ -226,7 +226,7 @@ class doc extends control
             $this->view->idList = (array)zget($blockData->content, 'idList', array());
             $this->view->cols   = (array)zget($blockData->content, 'cols', array());
             $this->view->data   = $data;
-            $this->view->pager  = new pager(count($data), 10);
+            $this->view->pager  = new pager(count($data), 10, 1, 'block-' . $blockID);
         }
 
         $this->view->type         = $type;
@@ -1005,7 +1005,7 @@ class doc extends control
             if($doc->type == 'chapter') $this->lang->doc->title = $this->lang->doc->chapterName;
 
             $changes = $files = array();
-            if($comment == false)
+            if(!$comment)
             {
                 $docData = form::data()
                     ->setDefault('editedBy', $this->app->user->account)
@@ -1018,9 +1018,9 @@ class doc extends control
                     ->setIF(!isset($_POST['readUsers']), 'readUsers', $doc->readUsers)
                     ->setIF(!isset($_POST['readGroups']), 'readGroups', $doc->readGroups)
                     ->setIF(!isset($_POST['fromVersion']), 'fromVersion', $doc->fromVersion)
-                    ->removeIF($this->post->project === false, 'project')
-                    ->removeIF($this->post->product === false, 'product')
-                    ->removeIF($this->post->execution === false, 'execution')
+                    ->removeIF(!$this->post->project, 'project')
+                    ->removeIF(!$this->post->product, 'product')
+                    ->removeIF(!$this->post->execution, 'execution')
                     ->get();
                 $result = $this->doc->update($docID, $docData);
                 if(dao::isError())
@@ -1312,8 +1312,7 @@ class doc extends control
         if(empty($viewType)) $viewType = !empty($_COOKIE['docFilesViewType']) ? $this->cookie->docFilesViewType : 'list';
         helper::setcookie('docFilesViewType', $viewType, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
-        $objects = $this->doc->getOrderedObjects($type, 'nomerge', $objectID);
-        list($libs, $libID, $object, $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
+        list($libs, , , $objectID, $objectDropdown) = $this->doc->setMenuByType($type, $objectID, 0);
 
         $object = $this->doc->getObjectByID($type, $objectID);
         if(empty($_POST) && !empty($searchTitle)) $this->post->title = $searchTitle;
@@ -1324,7 +1323,7 @@ class doc extends control
         /* Load pager. */
         $rawMethod = $this->app->rawMethod;
         $this->app->rawMethod = 'showFiles';
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->app->rawMethod = $rawMethod;
 
@@ -1400,7 +1399,7 @@ class doc extends control
         }
         unset($_SESSION["doc_{$doc->id}_nopriv"]);
 
-        if($doc->templateType)
+        if(!empty($doc->templateType))
         {
             echo $this->fetch('doc', 'browseTemplate', "libID=$doc->lib&type=all&docID=$docParam&orderBy=id_desc&recPerPage=20&pageID=1&mode=view");
             return;
@@ -1415,6 +1414,7 @@ class doc extends control
         }
         else
         {
+            if($this->app->tab === 'project' && $objectType === 'execution') $objectType = 'project';
             $objectID = $this->doc->getObjectIDByLib($lib, $objectType);
         }
 
@@ -1911,58 +1911,17 @@ class doc extends control
      */
     public function moveDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
     {
-        if($spaceType == 'quick')
-        {
-            $libID = 0;
-            $space = $spaceType = '';
-        }
-
-        $doc = $this->doc->getByID($docID);
-        if(empty($libID)) $libID = (int)$doc->lib;
-        $lib = $this->doc->getLibByID($libID);
-
-        if(empty($space))
-        {
-            if($lib->parent)
-            {
-                $space = $lib->parent;
-            }
-            else
-            {
-                if($lib->product) $space = $lib->product;
-                if($lib->project) $space = $lib->project;
-            }
-        }
-
-        if(empty($spaceType))
-        {
-            if($lib->parent)
-            {
-                $spaceType = $this->doc->getSpaceType($space);
-            }
-            else
-            {
-                if($lib->product && $lib->type == 'product') $spaceType = 'product';
-                if($lib->project && $lib->type == 'project') $spaceType = 'project';
-            }
-        }
+        $doc = $this->docZen->initDocContext($docID, $libID, $spaceType, $space);
 
         if(!empty($_POST))
         {
-            /* parent带‘m_’前缀为目录。*/
             if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
             {
                 $_POST['module'] = str_replace('m_', '', $_POST['parent']);
                 $_POST['parent'] = 0;
             }
 
-            $data = form::data()
-                ->setIF($this->post->acl == 'open', 'groups', '')
-                ->setIF($this->post->acl == 'open', 'users', '')
-                ->setIF($this->post->acl == 'open', 'readGroups', '')
-                ->setIF($this->post->acl == 'open', 'readUsers', '')
-                ->setIF(in_array($spaceType, array('project', 'product')), $spaceType, $space)
-                ->get();
+            $data = $this->docZen->prepareDocFormData($spaceType, $space);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $changes = common::createChanges($doc, $data);
@@ -1975,35 +1934,62 @@ class doc extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
+            $lib = $this->doc->getLibByID($libID);
             $spaceTypeChanged = $spaceType != $lib->type;
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged);
+            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
         }
 
-        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
-        $products   = $this->loadModel('product')->getPairs();
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
-
-        $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
-
-        if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
-
-        $chapterAndDocs = $this->doc->getDocsOfLibs(array($libID), $spaceType, $docID);
-        $modulePairs    = empty($libID) ? array() : $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
-        if(isset($doc) && !empty($doc->parent) && !isset($chapterAndDocs[$doc->parent])) $chapterAndDocs[$doc->parent] = $this->doc->fetchByID($doc->parent);
-        $chapterAndDocs = $this->doc->buildNestedDocs($chapterAndDocs, $modulePairs);
-
-        $this->view->docID      = $docID;
-        $this->view->libID      = $libID;
-        $this->view->spaceType  = $spaceType;
-        $this->view->space      = $space;
-        $this->view->doc        = $doc;
-        $this->view->spaces     = $this->doc->getAllSubSpaces($this->app->tab != 'doc' ? $this->app->tab : 'all');
-        $this->view->libPairs   = $libPairs;
-        $this->view->optionMenu = $chapterAndDocs;
-        $this->view->groups     = $this->loadModel('group')->getPairs();
-        $this->view->users      = $this->loadModel('user')->getPairs('nocode|noclosed');
+        $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
+        $this->view->title = $this->lang->doc->moveDocAction;
+        $this->view->action = 'moveDoc';
         $this->display();
+    }
+
+    public function copyDoc(int $docID, int $libID = 0, string $spaceType = '', string $space = '')
+    {
+        $doc = $this->docZen->initDocContext($docID, $libID, $spaceType, $space);
+        if(empty($doc)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->notFound));
+
+        if(!empty($_POST))
+        {
+            if(isset($_POST['parent']) && strpos($_POST['parent'], 'm_') !== false)
+            {
+                $_POST['module'] = str_replace('m_', '', $_POST['parent']);
+                $_POST['parent'] = 0;
+            }
+
+            $data = $this->docZen->prepareDocFormData($spaceType, $space);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $newDocID = $this->doc->copyDoc($docID, $data);
+            if(!$newDocID) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $originalLink = html::a(helper::createLink('doc', 'view', "docID={$docID}"), $doc->title);
+            $this->action->create('doc', $newDocID, 'Copied', '', $originalLink);
+
+            $newDoc = $this->doc->getByID($newDocID);
+            if($newDoc)
+            {
+                $newDoc->hasContent = !empty($newDoc->content);
+                unset($newDoc->content);
+                unset($newDoc->draft);
+            }
+            $newLib = $this->doc->getLibByID($data->lib);
+            if(in_array($newLib->type, array('mine', 'custom')))
+            {
+                $space = $newLib->type . '.' . $newLib->parent;
+            }
+            else
+            {
+                $space = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project);
+            }
+            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type);
+        }
+
+        $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
+        $this->view->title = $this->lang->doc->copyDocAction;
+        $this->view->action = 'copyDoc';
+        $this->display('doc', 'movedoc');
     }
 
     /**
@@ -2311,17 +2297,27 @@ class doc extends control
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
-        $currentUser = $this->app->user->account;
-        $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
-        foreach($docs as $doc)
+        if(empty($this->config->doc->quickFetchRemote))
         {
-            unset($doc->draft);
-            $doc->originLIb   = $doc->lib;
-            $doc->lib         = $menu['id'];
-            $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+            $currentUser = $this->app->user->account;
+            $docs        = $this->doc->getMineList($type, 'all', 0, $orderBy);
+            $order       = 0;
+            foreach($docs as $doc)
+            {
+                $order++;
+                unset($doc->draft);
+                $doc->originLib   = $doc->lib;
+                $doc->lib         = $menu['id'];
+                $doc->order       = $order;
+                $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+            }
+            $this->view->docs = $docs;
+        }
+        else
+        {
+            $this->view->docs = array();
         }
 
-        $this->view->docs       = $docs;
         $this->view->menu       = $menu;
         $this->view->type       = $type;
         $this->view->docID      = $docID;
@@ -2331,6 +2327,61 @@ class doc extends control
         $this->view->users      = $this->dao->select('account,realname,avatar')->from(TABLE_USER)->where('deleted')->eq('0')->fetchAll('account');
         $this->view->title      = $this->lang->doc->quick;
         $this->display();
+    }
+
+    /**
+     * Ajax: 获取快捷访问文档数据（支持分页/搜索/筛选）
+     * Fetch quick access docs with pagination, search and filter.
+     *
+     * @param string $type       快速访问类型：view/createdby/collect/editedby（主筛选）
+     * @param int    $pageID     页码
+     * @param int    $recPerPage 每页数量
+     * @param string $search     搜索关键词
+     * @param string $filterType 额外筛选：draft（与 $type 取交集）
+     * @access public
+     * @return void
+     */
+    public function ajaxQuick(string $type = 'view', int $pageID = 1, int $recPerPage = 20, string $search = '', string $filterType = '')
+    {
+        if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
+        if($pageID < 1)     $pageID = 1;
+        if($recPerPage < 1) $recPerPage = 20;
+
+        $this->app->loadClass('pager', true);
+        $pager       = new pager(0, $recPerPage, $pageID);
+        $currentUser = $this->app->user->account;
+        $browseType  = !empty($search) ? 'bykeyword' : 'all';
+        $queryID     = $search;
+
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+
+        $order = 0;
+        $menu = $this->config->doc->quickMenu[$type];
+        foreach($docs as $doc)
+        {
+            $order++;
+            unset($doc->draft);
+            $doc->originLib   = $doc->lib;
+            $doc->lib         = $menu['id'];
+            $doc->order       = $order;
+            $doc->isCollector = strpos($doc->collector, ',' . $currentUser . ',') !== false;
+        }
+
+        $data = array(
+            'spaceID'    => 1,
+            'docs'       => array_values($docs),
+            'pager'      => array(
+                'page'       => $pager->pageID,
+                'recPerPage' => $pager->recPerPage,
+                'recTotal'   => $pager->recTotal,
+                'pageTotal'  => $pager->pageTotal
+            ),
+            'type'       => $type,
+            'search'     => $search,
+            'filterType' => $filterType
+        );
+
+        $this->send($data);
     }
 
     /**
@@ -2366,19 +2417,100 @@ class doc extends control
         }
         else
         {
-            $noPicks = empty($picks);
-            $picks   = $noPicks ? '' : ",$picks,";
+            $data   = $this->buildSpaceDataBase($type, $spaceID, $picks);
+            $libIds = $data['libIds'] ?? array();
+            unset($data['libIds']);
+            $data['docs'] = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+        }
 
-            list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
-            $data   = array('spaceID' => (int)$spaceID);
-            $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-            $libIds = array_keys($libs);
-            foreach($libs as $lib) $lib->order = (int)$lib->order;
+        $this->send($data);
+    }
 
-            if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
-            if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
-            if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
-            if($noPicks || strpos($picks, ',doc,') !== false)    $data['docs']    = array_values($this->doc->getDocsOfLibs($libIds + array($spaceID), $type));
+    /**
+     * Ajax: 构建文档空间基础数据。
+     * Build doc space base data.
+     *
+     * @param  string $type    空间类型
+     * @param  int    $spaceID 空间ID
+     * @param  string $picks   需要加载的数据项
+     * @access private
+     * @return array
+     */
+    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = ''): array
+    {
+        $noPicks = empty($picks);
+        $picks   = $noPicks ? '' : ",$picks,";
+
+        list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
+        $data   = array('spaceID' => (int)$spaceID);
+        $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
+        $libIds = array_keys($libs);
+        foreach($libs as $lib) $lib->order = (int)$lib->order;
+
+        if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
+        if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
+        if($noPicks || strpos($picks, ',module,') !== false) $data['modules'] = array_values($this->doc->getModulesOfLibs($libIds));
+        $data['libIds'] = $libIds;
+
+        return $data;
+    }
+
+    /**
+     * Ajax: 获取文档空间数据（支持分页/搜索/排序/筛选）
+     * Fetch doc space data with pagination, search, sort and filter.
+     *
+     * @param string $type       空间类型
+     * @param int    $spaceID    空间ID
+     * @param string $picks      需要加载的数据
+     * @param int    $libID      文档库ID
+     * @param int    $recPerPage 每页数量
+     * @param int    $pageID     页码
+     * @param string $filterType 筛选类型
+     * @param string $search     搜索关键词
+     * @param string $searchType 搜索范围
+     * @access public
+     * @return void
+     */
+    public function ajaxFetchSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0, int $recPerPage = 20, int $pageID = 1, string $filterType = '', string $search = '', string $searchType = 'all')
+    {
+        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+
+        if($type == 'template')
+        {
+            $this->ajaxGetSpaceData($type, $spaceID, $picks, $libID);
+        }
+
+        $data   = $this->buildSpaceDataBase($type, $spaceID, $picks);
+        if($libID > 0)
+        {
+            $libIds = array($libID);
+            unset($data['libIds']);
+        }
+        else
+        {
+            $libIds = $data['libIds'] ?? array();
+            unset($data['libIds']);
+        }
+
+        $noPicks = empty($picks);
+        if($noPicks || strpos($picks, ',doc,') !== false)
+        {
+            $pager = new stdClass();
+            $pager->page       = $pageID;
+            $pager->recPerPage = $recPerPage;
+
+            $queryLibs = $libID > 0 ? $libIds : $libIds + array($spaceID);
+            $data['docs'] = array_values($this->doc->getDocsWithPager($queryLibs, $type, 0, false, $filterType, $pager, $search, $searchType));
+
+            $data['pager'] = array(
+                'page'       => $pager->page,
+                'recPerPage' => $pager->recPerPage,
+                'recTotal'   => $pager->recTotal ?? 0,
+                'pageTotal'  => $pager->pageTotal ?? 0
+            );
+            $data['filterType'] = $filterType;
+            $data['search']     = $search;
+            $data['searchType'] = $searchType;
         }
 
         $this->send($data);
@@ -2511,22 +2643,36 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
         $isCreate = empty($docID);
 
         if($docID) $doc = $this->doc->getByID($docID);
+        if(isset($doc->type)) $docType = $doc->type;
+        elseif(isset($this->get->docType)) $docType = $this->get->docType;
 
-        $title = $this->lang->settings;
+        $this->view->docType = $docType;
+
         if($modalType == 'doc')
+        {
+            $editTitle = $docType == 'url' ? $this->lang->doc->edit : $this->lang->settings;
+            $title     = $isCreate ? $this->lang->doc->create : $editTitle;
+        }
+        elseif($modalType == 'doc' && $isDraft != 'no')
         {
             $title = $parentID ? $this->lang->doc->addSubDoc : $this->lang->doc->create;
             if($objectType == 'template') $title = $parentID ? $this->lang->docTemplate->addSubDocTemplate : $this->lang->docTemplate->create;
-            if($isDraft == 'no') $title = $this->lang->settings;
         }
-        if($modalType == 'chapter') $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
+        elseif($modalType == 'chapter')
+        {
+            $title = $isCreate ? $this->lang->doc->addChapter : $this->lang->doc->editChapter;
+        }
+        else
+        {
+            $title = $this->lang->settings;
+        }
 
         if($isCreate)
         {
@@ -2615,6 +2761,7 @@ class doc extends control
         $this->view->libs       = $libPairs;
         $this->view->parentID   = $parentID;
         $this->view->isDraft    = $isDraft == 'yes';
+        $this->view->docType    = $docType;
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;

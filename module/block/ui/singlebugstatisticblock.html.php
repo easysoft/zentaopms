@@ -12,6 +12,7 @@ declare(strict_types=1);
 namespace zin;
 
 $uniqid = uniqid();
+$isEn = $app->getClientLang() == 'en';
 
 panel
 (
@@ -25,7 +26,7 @@ panel
                 array
                 (
                     'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
-                    'placement' => 'bottom',
+                    'placement' => $isEn ? 'bottom-end' : 'bottom',
                     'type'      => 'white',
                     'className' => 'text-dark border border-light leading-5'
                 )
@@ -49,7 +50,7 @@ panel
                 progressCircle
                 (
                     set::percent($resolvedRate),
-                    set::size(112),
+                    set::size($isEn ? 140 : 112),
                     set::text(false),
                     set::circleWidth(0.06),
                     div(span(setClass('text-2xl font-bold'), $resolvedRate), '%'),

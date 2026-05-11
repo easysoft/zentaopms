@@ -29,6 +29,12 @@ foreach($feedbacks as $feedback)
 
 $cols = $this->loadModel('datatable')->getSetting($this->moduleName);
 $cols['actions']['list']['edit']['data-toggle'] = 'modal';
+
+foreach($cols['actions']['list'] as $key => $value)
+{
+    if(in_array($key, array('toBug', 'toStory', 'toStory', 'toUserStory', 'toEpic', 'toTicket', 'toDemand')) && !common::hasPriv('feedback', $key)) unset($cols['actions']['list'][$key]);
+}
+
 $feedbacks = initTableData($feedbacks, $cols, $this->feedback);
 
 if(!empty($cols['product'])) $cols['product']['map'] = $allProducts;

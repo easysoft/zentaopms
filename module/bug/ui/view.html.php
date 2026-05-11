@@ -61,7 +61,11 @@ if(!$bug->deleted && $canModify)
 {
     /* Construct common actions for bug. */
     $actions = $operateList['mainActions'];
-    if(!empty($operateList['suffixActions'])) $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
+    if(!empty($operateList['suffixActions']))
+    {
+        if($app->getClientLang() == 'en')  $actions = array_merge($actions, $operateList['suffixActions']);
+        if($app->getClientLang() != 'en') $actions = array_merge($actions, array(array('type' => 'divider')), $operateList['suffixActions']);
+    }
 
     $this->loadModel('repo');
     $hasRepo = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);

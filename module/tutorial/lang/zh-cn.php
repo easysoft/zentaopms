@@ -1501,7 +1501,7 @@ $lang->tutorial->productManage->releaseManage->step12->desc = '保存后，Bug�
 
 $lang->tutorial->productManage->releaseManage->step13 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step13->name = '点击遗留的Bug';
-$lang->tutorial->productManage->releaseManage->step13->desc = '点击查看管理本次发布解决的Bug';
+$lang->tutorial->productManage->releaseManage->step13->desc = '点击查看管理本次发布遗留的Bug';
 
 $lang->tutorial->productManage->releaseManage->step14 = new stdClass();
 $lang->tutorial->productManage->releaseManage->step14->name = '点击关联Bug';

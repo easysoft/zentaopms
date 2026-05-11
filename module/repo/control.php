@@ -53,7 +53,9 @@ class repo extends control
 
         if($tab == 'project')
         {
-            $project = $this->loadModel('project')->getByID($objectID);
+            $projects = $this->loadModel('project')->getPairsByProgram();
+            $objectID = $this->project->checkAccess($objectID, $projects);
+            $project  = $this->project->getByID($objectID);
             if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
 
             $this->loadModel('project')->setMenu($objectID);
@@ -61,7 +63,9 @@ class repo extends control
         }
         elseif($tab == 'execution')
         {
-            $execution = $this->loadModel('execution')->getByID($objectID);
+            $executions = $this->loadModel('execution')->getPairs(0, 'all', "nocode,noprefix,multiple");
+            $objectID   = $this->execution->checkAccess($objectID, $executions);
+            $execution  = $this->execution->getByID($objectID);
             if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
 
             if($execution)

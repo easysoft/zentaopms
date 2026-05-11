@@ -47,6 +47,12 @@ class programTao extends programModel
         if($program->type == 'project') $modelClass = get_class($this->project);
         if($program->type == 'program') $modelClass = get_class($this);
 
+        if($this->config->edition != 'open')
+        {
+            $this->loadModel('flow');
+            $flowActions = $this->loadModel('workflowaction')->getList($program->type);
+        }
+
         $actionsMap         = array();
         $canStartProgram    = common::hasPriv($program->type, 'start',    $program);
         $canSuspendProgram  = common::hasPriv($program->type, 'suspend',  $program);
@@ -63,6 +69,18 @@ class programTao extends programModel
             $item->name   = $action;
             $item->url    = helper::createLink($program->type, $action, "programID={$program->id}");
             if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
+
+            if($this->config->edition != 'open' && empty($item->disabled))
+            {
+                foreach($flowActions as $flowAction)
+                {
+                    if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+                    {
+                        if(!$this->flow->checkConditions($flowAction->conditions, $program)) $item->disabled = true;
+                    }
+                }
+            }
+
             $actionsMap[] = $item;
             break;
         }
@@ -83,6 +101,17 @@ class programTao extends programModel
                 $item->name     = $action;
                 $item->url      = helper::createLink($program->type, $action, "programID={$program->id}");
                 if($modelClass && !call_user_func_array(array($modelClass, 'isClickable'), array($program, $action))) $item->disabled = true;
+
+                if($this->config->edition != 'open' && empty($item->disabled))
+                {
+                    foreach($flowActions as $flowAction)
+                    {
+                        if($flowAction->action == $action && $flowAction->extensionType != 'none' && $flowAction->status == 'enable' && !empty($flowAction->conditions))
+                        {
+                            if(!$this->flow->checkConditions($flowAction->conditions, $program)) $item->disabled = true;
+                        }
+                    }
+                }
 
                 if($action == 'close' && $program->status == 'closed')      $item->hint = $this->lang->{$program->type}->tip->closed;
                 if($action == 'activate' && $program->status == 'doing')    $item->hint = $this->lang->{$program->type}->tip->actived;

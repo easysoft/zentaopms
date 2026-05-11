@@ -34,6 +34,7 @@ if($app->rawMethod == 'work')
     mainNavbar
     (
         set::active($mode),
-        set::badgeMap($badgeMap)
+        set::badgeMap($badgeMap),
+        css('#mainNavbar {--nav-item-padding: 12px}')
     );
 }

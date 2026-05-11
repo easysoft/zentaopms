@@ -1,2 +1,3 @@
 [data-group='related'] .tabs-nav {margin-right: 26px;}
 [data-group='related'] .tabs-nav > li {max-width: 80%; overflow: hidden; white-space: nowrap;}
+.detail-actions .en-toolbar .btn {padding-left: 8px; padding-right: 8px;}

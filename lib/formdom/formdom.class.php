@@ -68,7 +68,17 @@ class formdom
 
         $dom = new DOMDocument();
         libxml_use_internal_errors(true);
-        @$dom->loadHTML(mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8'));
+
+        if(function_exists('mb_encode_numericentity'))
+        {
+            $htmlStr = mb_encode_numericentity($html, array(0x80, 0x10FFFF, 0, 0x10FFFF), 'UTF-8');
+        }
+        else
+        {
+            $htmlStr = mb_convert_encoding($html, 'HTML-ENTITIES', 'UTF-8');
+        }
+        @$dom->loadHTML($htmlStr);
+
         libxml_clear_errors();
 
         $xpath = new DOMXPath($dom);
@@ -364,11 +374,11 @@ class formdom
             if(preg_match($valuePattern, $pickerConfig, $valueMatches))
             {
                 /* 匹配优先级：数组 > 双引号字符串 > 单引号字符串 > 数字 > 布尔/null */
-                $defaultValue = !empty($valueMatches[5]) ? $valueMatches[5] // 优先级1：数组内容
-                    : (!empty($valueMatches[1]) ? $valueMatches[1]          // 优先级2：双引号字符串
-                    : (!empty($valueMatches[2]) ? $valueMatches[2]          // 优先级3：单引号字符串
-                    : (!empty($valueMatches[3]) ? $valueMatches[3]          // 优先级4：数字
-                    : $valueMatches[4] ?? null)));                           // 优先级5：布尔/null
+                $defaultValue = !empty($valueMatches[5]) ? $valueMatches[5]                    // 优先级1：数组内容
+                    : (!empty($valueMatches[1]) ? $valueMatches[1]                             // 优先级2：双引号字符串
+                    : (!empty($valueMatches[2]) ? $valueMatches[2]                             // 优先级3：单引号字符串
+                    : (!empty($valueMatches[3]) || $valueMatches[3] === '0' ? $valueMatches[3] // 优先级4：数字
+                    : $valueMatches[4] ?? null)));                                             // 优先级5：布尔/null
 
 
                 /* 转换类型（如"true"→true，"123"→123）*/
@@ -438,7 +448,10 @@ class formdom
             elseif(is_array($data[$key]) && is_array($val))
             {
                 /* 递归合并数组 */
-                foreach($val as $v) $data[$key][] = $v;
+                foreach($val as $v)
+                {
+                    if(!in_array($v, $data[$key])) $data[$key][] = $v;
+                }
             }
             else
             {

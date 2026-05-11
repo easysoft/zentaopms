@@ -37,6 +37,11 @@ if(!empty($story->stages) && isset($fields['stage']['options']))
     }
 }
 
+if(!empty($story->files))
+{
+    foreach($story->files as $file) $file->extra = $story->version;
+}
+
 if($story->type == 'story')
 {
     unset($fields['stage']['options']['delivered']);
@@ -129,7 +134,7 @@ detailBody
             !$canEditContent ? set::hidden(true) : null,
             inputGroup
             (
-                picker
+                $story->status != 'reviewing' ? picker
                 (
                     setID('reviewer'),
                     set::name('reviewer[]'),
@@ -137,7 +142,7 @@ detailBody
                     set::value($fields['reviewer']['default']),
                     set::multiple(true),
                     on::change('changeReviewer')
-                ),
+                ) : null,
                 $forceReview ? null : span
                 (
                     setClass('input-group-addon'),
@@ -193,9 +198,9 @@ detailBody
         section
         (
             setID('files'),
-            setClass(!$canEditContent && !$story->files ? 'hidden' : ''),
+            setClass(!$canEditContent ? 'hidden' : ''),
             set::title($lang->story->legendAttach),
-            $canEditContent ? fileSelector(set::defaultFiles($story->files)) : null
+            $canEditContent ? fileSelector(set::defaultFiles($story->files), set::extra($story->version)) : null
         ),
         section
         (

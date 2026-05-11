@@ -160,7 +160,7 @@ else
                     set::formID('joinForm'),
                     setClass('bg-canvas m-auto mw-auto font-normal'),
                     set::headingClass('w-96 m-auto'),
-                    set::submitBtnText($lang->admin->community->registerTitle),
+                    $app->getClientLang() == 'en' ? null : set::submitBtnText($lang->admin->community->registerTitle),
                     set::cancelBtnText(),
                     div(
                         setClass('label-text-mobile'),

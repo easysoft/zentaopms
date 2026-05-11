@@ -196,6 +196,7 @@ $lang->action->objectTypes['system']           = $lang->product->system;
 $lang->action->objectTypes['deliverable']      = '交付物类型';
 $lang->action->objectTypes['cm']               = '基线';
 $lang->action->objectTypes['baseline']         = '基线';
+$lang->action->objectTypes['ganttversion']     = '甘特图版本';
 $lang->action->objectTypes['projectchange']    = '项目变更';
 
 /* 用来描述操作历史记录。*/
@@ -222,6 +223,7 @@ $lang->action->desc->commented            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->activated            = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->blocked              = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动。' . "\n";
+$lang->action->desc->copied               = '$date, 由 <strong>$actor</strong> 从 $extra 复制而来。' . "\n";
 $lang->action->desc->confirmed            = '$date, 由 <strong>$actor</strong> 确认' . $lang->SRCommon . '变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->bugconfirmed         = '$date, 由 <strong>$actor</strong> 确认Bug。' . "\n";
@@ -419,6 +421,7 @@ $lang->action->label->reviewed                = '评审了';
 $lang->action->label->recalled                = '撤销了评审';
 $lang->action->label->recalledchange          = '撤销了变更';
 $lang->action->label->moved                   = '移动了';
+$lang->action->label->copied                  = '复制了';
 $lang->action->label->confirmed               = "确认了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed            = '确认了';
 $lang->action->label->tostory                 = "转了{$lang->SRCommon}";

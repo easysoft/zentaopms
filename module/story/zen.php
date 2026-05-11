@@ -406,7 +406,6 @@ class storyZen extends story
         if(empty($bugID)) return $initStory;
 
         $bug = $this->loadModel('bug')->getByID($bugID);
-        $initStory->product  = $bug->product;
         $initStory->source   = 'bug';
         $initStory->title    = $bug->title;
         $initStory->keywords = $bug->keywords;
@@ -557,7 +556,7 @@ class storyZen extends story
         $fields['plan']['options']     = $plans;
         $fields['plans']['options']    = $plans;
         $fields['grade']['options']    = $grades;
-        $fields['grade']['default']    = current($grades);
+        $fields['grade']['default']    = key($grades);
         $fields['reviewer']['options'] = $reviewers;
         $fields['parent']['options']   = array_filter($stories);
 
@@ -609,7 +608,7 @@ class storyZen extends story
         $product      = $this->view->product;
         $users        = $this->loadModel('user')->getPairs('pofirst|nodeleted|noclosed', "$story->assignedTo,$story->openedBy,$story->closedBy");
         $stories      = $this->story->getParentStoryPairs($story->product, $story->parent, $story->type, $storyID);
-        $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : $story->branch, '', true);
+        $plans        = $this->loadModel('productplan')->getPairs($story->product, $story->branch == 0 ? 'all' : (string)$story->branch, '', true);
         $reviewerList = $this->story->getReviewerPairs($story->id, $story->version);
 
         $reviewers = $product->reviewer;
@@ -1732,7 +1731,7 @@ class storyZen extends story
      * @access public
      * @return string
      */
-    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, string $extra = ''): string
+    public function getAfterCreateLocation(int $productID, string $branch, int $objectID, int $storyID, string $storyType, int $planID, string $extra = ''): string
     {
         if($this->app->getViewType() == 'xhtml') return $this->createLink('story', 'view', "storyID=$storyID", 'html');
 
@@ -1746,6 +1745,7 @@ class storyZen extends story
 
         if($this->app->tab == 'product')
         {
+            if($planID > 0) return $this->createLink('productplan', 'view', "planID=$planID");
             $storyProductID = $this->story->fetchByID($storyID)->product;
             return $this->createLink('product', 'browse', "productID=$storyProductID&branch=$branch&browseType=unclosed&param=0&storyType=$storyType");
         }
@@ -1769,7 +1769,7 @@ class storyZen extends story
      * @access protected
      * @return string
      */
-    protected function getAfterBatchCreateLocation(int $productID, string $branch, int $executionID, int $storyID, string $storyType): string
+    protected function getAfterBatchCreateLocation(int $productID, string $branch, int $executionID, int $storyID, string $storyType, int $plan): string
     {
         if($storyID)
         {
@@ -1790,6 +1790,7 @@ class storyZen extends story
 
         if($this->app->tab == 'product')
         {
+            if($plan > 0) return $this->createLink('productplan', 'view', "planID=$plan");
             return $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&storyType=$storyType");
         }
 
@@ -2126,5 +2127,44 @@ class storyZen extends story
         if(empty($rightConditions)) return implode('', $leftConditions);
 
         return sprintf($this->lang->story->report->tpl->multi, implode('', $leftConditions), zget($this->lang->search->andor, $groupAndOr), implode('', $rightConditions));
+    }
+
+    /**
+     * 检查数据是否有变化。
+     * Check if data has changed.
+     *
+     * @param  int    $storyID
+     * @param  object $storyData
+     * @access public
+     * @return bool
+     */
+    public function checkDataChanged(int $storyID, object $storyData): bool
+    {
+        if($this->post->comment) return true;
+        if(!empty($storyData->docs)) return true;
+        if(!empty($_FILES['files']['name'][0]) || !empty($_POST['renameFiles']) || !empty($_POST['deleteFiles'])) return true;
+
+        $oldStory = $this->story->getByID($storyID);
+        if(!empty($oldStory->docs) && empty($_POST['oldDocs'])) return true;
+
+        $changes  = common::createChanges($oldStory, $storyData);
+        foreach($changes as $index => $change)
+        {
+            if(in_array($change['field'], array('status', 'version', 'reviewedBy', 'changedBy', 'changedDate', 'reviewedDate', 'docs'))) unset($changes[$index]);
+        }
+        if(!empty($changes)) return true;
+
+        $reviewers = $this->story->getReviewerPairs($storyID, $oldStory->version);
+        $oldStory->reviewer = array_keys($reviewers);
+        $diff = array_diff($oldStory->reviewer, $storyData->reviewer) || array_diff($storyData->reviewer, $oldStory->reviewer);
+        if($diff) return true;
+
+        $docVersions = !empty($_POST['docVersions']) ? $_POST['docVersions'] : array();
+        foreach($docVersions as $docID => $version)
+        {
+            if(empty($oldStory->docVersions[$docID]) || $oldStory->docVersions[$docID] != $version) return true;
+        }
+
+        return false;
     }
 }

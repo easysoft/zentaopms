@@ -78,7 +78,7 @@ class story extends control
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Insert story data. */
-            $createFunction = empty($storyData->branches) ? 'create' : 'createTwins';
+            $createFunction = (!empty($storyData->branches) && $storyData->type == 'story') ? 'createTwins' : 'create'; // 只有软件需求才有孪生需求
             $storyID        = $this->story->{$createFunction}($storyData, $objectID, $bugID, $extra, $todoID);
             if(empty($storyID) || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -106,7 +106,7 @@ class story extends control
                 return $this->send($response);
             }
 
-            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType, $extra);
+            $response['load'] = $this->storyZen->getAfterCreateLocation((int)$productID, $branch, $objectID, $storyID, $storyType, $planID, $extra);
             return $this->send($response);
         }
 
@@ -180,7 +180,7 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
             if(isInModal()) return $this->send($this->storyZen->getResponseInModal($this->lang->saveSuccess));
 
-            $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType);
+            $locateLink = $this->storyZen->getAfterBatchCreateLocation($productID, $branch, $executionID, $storyID, $storyType, $plan);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
@@ -425,6 +425,10 @@ class story extends control
             $storyData = $this->storyZen->buildStoryForChange($storyID);
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
+            $dataChanged = $this->storyZen->checkDataChanged($storyID, $storyData);
+            if(!$dataChanged) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $location));
+
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -446,7 +450,6 @@ class story extends control
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
 
-            $location = $this->storyZen->getAfterChangeLocation($storyID, $storyType);
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
         }
 

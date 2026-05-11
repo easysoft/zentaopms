@@ -294,7 +294,7 @@ class backup extends control
                 $zfile->removeDir($backupFile);
                 $this->backup->processSummary($backupFile, 0, 0, array(), 0, 'delete');
             }
-            elseif(!unlink($backupFile))
+            elseif(file_exists($backupFile) && !unlink($backupFile))
             {
                 return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->backup->error->noDelete, $backupFile)));
             }

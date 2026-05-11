@@ -145,7 +145,7 @@ $lang->repo->viewBugs           = 'View Bugs';
 $lang->repo->lastSubmitTime     = 'Final submission time';
 $lang->repo->lastCommitter      = 'Committer';
 $lang->repo->lastUpdateTime     = 'Last update time';
-$lang->repo->createdBy          = 'Created by';
+$lang->repo->createdBy          = 'Creator';
 $lang->repo->sourceCommit       = 'Commit';
 $lang->repo->relations          = 'Relations';
 $lang->repo->story              = 'story';
@@ -156,9 +156,9 @@ $lang->repo->task               = 'Task';
 
 $lang->repo->title      = 'Title';
 $lang->repo->status     = 'Status';
-$lang->repo->openedBy   = 'CreatedBy';
-$lang->repo->assignedTo = 'AssignedTo';
-$lang->repo->openedDate = 'CreatedDate';
+$lang->repo->openedBy   = 'Created by';
+$lang->repo->assignedTo = 'Assigned to';
+$lang->repo->openedDate = 'Created Date';
 
 $lang->repo->actionInfo     = "Add by %s in %s";
 $lang->repo->changes        = "Change Log";
@@ -200,7 +200,7 @@ if(!$config->inQuickon && !$config->inCompose)
 }
 
 $lang->repo->aclList['private'] = 'Private(The product personnel can access it)';
-$lang->repo->aclList['open']    = 'Open(Users with privileges to DevOps can access it)';
+$lang->repo->aclList['open']    = 'Open(Users with privileges to CI&CD can access it)';
 $lang->repo->aclList['custom']  = 'Custom';
 
 $lang->repo->gitlabHost    = 'GitLab Host';

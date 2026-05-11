@@ -82,6 +82,7 @@ foreach($fields as $field => $attr)
         $notice ? formGroup
         (
             $field == 'url' ? setID('urlNote') : null,
+            set::style(array('align-items' => 'center')),
             html($notice)
         ) : null
     );

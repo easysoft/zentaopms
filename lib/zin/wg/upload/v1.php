@@ -109,6 +109,8 @@ class upload extends wg
         $name = $this->prop('name');
         if($this->prop('multiple') && strpos($name, '[]') === false) $this->setProp('name', $name . '[]');
 
+        if($app->getClientLang() == 'en') $this->setProp('uploadText', $lang->uploadFiles);
+
         $otherProps = $this->getRestProps();
         return zui::upload(inherit($this), set('_props', $otherProps));
     }

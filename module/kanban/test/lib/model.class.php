@@ -1577,6 +1577,26 @@ class kanbanModelTest extends baseTest
     }
 
     /**
+     * Test save card notice.
+     *
+     * @param  array $cards
+     * @access public
+     * @return array
+     */
+    public function saveCardNoticeTest(array $cards): array
+    {
+        global $tester;
+
+        $maxID = (int)$tester->dao->select('MAX(id) AS id')->from(TABLE_NOTIFY)->fetch('id');
+
+        $this->instance->saveCardNotice($cards);
+
+        if(dao::isError()) return dao::getError();
+
+        return $tester->dao->select('*')->from(TABLE_NOTIFY)->where('id')->gt($maxID)->orderBy('id')->fetchAll('id');
+    }
+
+    /**
      * Test get cards to import.
      *
      * @param  int     $kanbanID

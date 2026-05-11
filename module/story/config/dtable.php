@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+$isEn = $app->getClientLang() == 'en';
 $config->story->dtable = new stdclass();
 
 $config->story->dtable->defaultField = array('id', 'title', 'pri', 'plan', 'roadmap', 'status', 'openedBy', 'estimate', 'reviewedBy', 'stage', 'assignedTo', 'taskCount', 'actions');
@@ -22,6 +23,7 @@ if($app->tab == 'execution')
     $config->story->dtable->fieldList['order']['sortType'] = true;
     $config->story->dtable->fieldList['order']['width']    = '45';
     $config->story->dtable->fieldList['order']['show']     = true;
+    if($isEn) $config->story->dtable->fieldList['order']['width'] = '60';
 }
 
 $config->story->dtable->fieldList['title']['name']         = 'title';
@@ -46,6 +48,7 @@ $config->story->dtable->fieldList['pri']['type']     = 'pri';
 $config->story->dtable->fieldList['pri']['priList']  = $lang->story->priList;
 $config->story->dtable->fieldList['pri']['show']     = true;
 $config->story->dtable->fieldList['pri']['group']    = 2;
+if($isEn) $config->story->dtable->fieldList['pri']['width'] = '80';
 
 $config->story->dtable->fieldList['branch']['name']       = 'branch';
 $config->story->dtable->fieldList['branch']['title']      = $lang->story->branch;
@@ -130,6 +133,7 @@ $config->story->dtable->fieldList['estimate']['sortType'] = true;
 $config->story->dtable->fieldList['estimate']['type']     = 'number';
 $config->story->dtable->fieldList['estimate']['show']     = true;
 $config->story->dtable->fieldList['estimate']['group']    = 5;
+if($isEn) $config->story->dtable->fieldList['estimate']['width'] = '90';
 
 $config->story->dtable->fieldList['reviewer']['name']     = 'reviewer';
 $config->story->dtable->fieldList['reviewer']['type']     = 'text';
@@ -138,6 +142,7 @@ $config->story->dtable->fieldList['reviewer']['width']    = '100';
 $config->story->dtable->fieldList['reviewer']['sortType'] = false;
 $config->story->dtable->fieldList['reviewer']['show']     = true;
 $config->story->dtable->fieldList['reviewer']['group']    = 5;
+if($isEn) $config->story->dtable->fieldList['reviewer']['width'] = '120';
 
 $config->story->dtable->fieldList['reviewedDate']['name']     = 'reviewedDate';
 $config->story->dtable->fieldList['reviewedDate']['title']    = $lang->story->reviewedDate;
@@ -153,6 +158,7 @@ $config->story->dtable->fieldList['stage']['type']      = 'status';
 $config->story->dtable->fieldList['stage']['statusMap'] = $lang->story->stageList + $lang->requirement->stageList;
 $config->story->dtable->fieldList['stage']['show']      = true;
 $config->story->dtable->fieldList['stage']['group']     = 6;
+if($isEn) $config->story->dtable->fieldList['stage']['width'] = '120';
 
 $config->story->dtable->fieldList['assignedTo']['name']        = 'assignedTo';
 $config->story->dtable->fieldList['assignedTo']['title']       = $lang->story->assignedTo;
@@ -162,6 +168,7 @@ $config->story->dtable->fieldList['assignedTo']['assignLink']  = array('module' 
 $config->story->dtable->fieldList['assignedTo']['type']        = 'assign';
 $config->story->dtable->fieldList['assignedTo']['show']        = true;
 $config->story->dtable->fieldList['assignedTo']['group']       = 6;
+if($isEn) $config->story->dtable->fieldList['assignedTo']['width'] = '120';
 
 $config->story->dtable->fieldList['assignedDate']['name']     = 'assignedDate';
 $config->story->dtable->fieldList['assignedDate']['title']    = $lang->story->assignedDate;
@@ -186,7 +193,7 @@ $config->story->dtable->fieldList['taskCount']['title']       = 'T';
 $config->story->dtable->fieldList['taskCount']['sortType']    = false;
 $config->story->dtable->fieldList['taskCount']['width']       = '30';
 $config->story->dtable->fieldList['taskCount']['type']        = 'text';
-$config->story->dtable->fieldList['taskCount']['link']        = "RAWJS<function(info){ if(info.row.data.taskCount == 0) return 0; else return '" . helper::createLink('story', 'tasks', 'storyID={id}') . "'; }>RAWJS";
+$config->story->dtable->fieldList['taskCount']['link']        = array('module' => 'story', 'method' => 'tasks', 'params' => 'storyID={id}');
 $config->story->dtable->fieldList['taskCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['taskCount']['show']        = true;
 $config->story->dtable->fieldList['taskCount']['group']       = 7;
@@ -196,7 +203,7 @@ $config->story->dtable->fieldList['bugCount']['title']       = 'B';
 $config->story->dtable->fieldList['bugCount']['sortType']    = false;
 $config->story->dtable->fieldList['bugCount']['width']       = '30';
 $config->story->dtable->fieldList['bugCount']['type']        = 'text';
-$config->story->dtable->fieldList['bugCount']['link']        = "RAWJS<function(info){ if(info.row.data.bugCount == 0) return 0; else return '" . helper::createLink('story', 'bugs', 'storyID={id}') . "'; }>RAWJS";
+$config->story->dtable->fieldList['bugCount']['link']        = array('module' => 'story', 'method' => 'bugs', 'params' => 'storyID={id}');
 $config->story->dtable->fieldList['bugCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['bugCount']['group']       = 7;
 
@@ -205,7 +212,7 @@ $config->story->dtable->fieldList['caseCount']['title']       = 'C';
 $config->story->dtable->fieldList['caseCount']['sortType']    = false;
 $config->story->dtable->fieldList['caseCount']['width']       = '30';
 $config->story->dtable->fieldList['caseCount']['type']        = 'text';
-$config->story->dtable->fieldList['caseCount']['link']        = "RAWJS<function(info){ if(info.row.data.caseCount == 0) return 0; else return '" . helper::createLink('story', 'cases', 'storyID={id}') . "'; }>RAWJS";
+$config->story->dtable->fieldList['caseCount']['link']        = array('module' => 'story', 'method' => 'cases', 'params' => 'storyID={id}');
 $config->story->dtable->fieldList['caseCount']['data-toggle'] = 'modal';
 $config->story->dtable->fieldList['caseCount']['group']       = 7;
 
@@ -223,6 +230,7 @@ if($config->edition != 'open')
     $config->story->dtable->fieldList['relatedObject']['group']       = 7;
     $config->story->dtable->fieldList['relatedObject']['flex']        = false;
     $config->story->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($isEn) $config->story->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->story->dtable->fieldList['childItem']['name']     = 'childItem';

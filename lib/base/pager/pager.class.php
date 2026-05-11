@@ -121,10 +121,11 @@ class basePager
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $cookieSuffix Cookie 后缀，生成独立的分页偏好（如 'block-7'）
      * @access public
      * @return void
      */
-    public function __construct($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function __construct($recTotal = 0, $recPerPage = 20, $pageID = 1, $cookieSuffix = '')
     {
         $this->setApp();
         $this->setLang();
@@ -132,7 +133,7 @@ class basePager
         $this->setMethodName();
 
         $this->setRecTotal((int)$recTotal);
-        $this->setRecPerPage((int)$recPerPage);
+        $this->setRecPerPage((int)$recPerPage, $cookieSuffix);
         $this->setPageTotal();
         $this->setPageID((int)$pageID);
     }
@@ -144,12 +145,13 @@ class basePager
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $cookieSuffix Cookie 后缀，生成独立的分页偏好（如 'block-7'）
      * @access public
      * @return object
      */
-    public static function init($recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public static function init($recTotal = 0, $recPerPage = 20, $pageID = 1, $cookieSuffix = '')
     {
-        return new pager($recTotal, $recPerPage, $pageID);
+        return new pager($recTotal, $recPerPage, $pageID, $cookieSuffix);
     }
 
     /**
@@ -170,15 +172,17 @@ class basePager
      * Set the recPerPage property.
      *
      * @param  int    $recPerPage
+     * @param  string $cookieSuffix Cookie 后缀，用于生成独立的分页偏好（如 'block-7'）
      * @access public
      * @return void
      */
-    public function setRecPerPage($recPerPage)
+    public function setRecPerPage($recPerPage, $cookieSuffix = '')
     {
         /* Set the cookie name. */
         if(!(defined('RUN_MODE') and RUN_MODE == 'api') && $this->app->getViewType() != 'json')
         {
             $this->pageCookie = 'pager' . ucfirst($this->app->rawModule) . ucfirst($this->app->rawMethod);
+            if($cookieSuffix) $this->pageCookie .= '-' . $cookieSuffix;
 
             if(isset($_COOKIE[$this->pageCookie])) $recPerPage = $_COOKIE[$this->pageCookie];
         }

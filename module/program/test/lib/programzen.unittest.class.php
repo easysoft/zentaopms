@@ -81,6 +81,39 @@ class programTest
     }
 
     /**
+     * Test buildTreeNodes method (same programList / ids / pinyin preparation as buildTree).
+     *
+     * @param  array $programs
+     * @param  int   $parentID
+     * @access public
+     * @return array
+     */
+    public function buildTreeNodesTest(array $programs, int $parentID = 0)
+    {
+        $programList = array();
+        foreach($programs as $program)
+        {
+            if($program->type != 'program') continue;
+            $programList[] = $program;
+        }
+
+        if(empty($programList)) return array();
+
+        $ids = array();
+        foreach($programList as $program) $ids[$program->id] = true;
+
+        $names = array_column($programList, 'name');
+        $pinyinMap = common::convert2Pinyin($names);
+
+        $method = $this->objectZen->getMethod('buildTreeNodes');
+        $method->setAccessible(true);
+        $result = $method->invokeArgs($this->objectZen->newInstance(), array($programList, $parentID, $ids, $pinyinMap));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getKanbanList method.
      *
      * @param  string $browseType

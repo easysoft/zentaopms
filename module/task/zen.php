@@ -231,6 +231,8 @@ class taskZen extends task
         {
             if(!empty($execution) && $execution->type == 'stage' && strpos('estStarted,deadline', $field) !== false) continue;
             $customFields[$field] = $this->lang->task->$field;
+
+            if($this->app->getClientLang() == 'en' && $field == 'record') $customFields['record'] = $this->lang->task->consumedAB;
         }
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
@@ -272,6 +274,11 @@ class taskZen extends task
         {
             $stories[0][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
             if($story->module) $stories[$story->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+
+            foreach($tasks as $task)
+            {
+                if($task->module) $stories[$task->module][] = array('value' => $story->id, 'text' => $storyPairs[$story->id]);
+            }
         }
 
         $manageLinkList['project']   = common::hasPriv('project', 'manageMembers') ? $this->createLink('project', 'manageMembers', "projectID={projectID}") : '';
@@ -712,6 +719,11 @@ class taskZen extends task
             $formConfig['story']['skipRequired'] = true;
             $formConfig['module']['skipRequired'] = true;
             if($this->post->selectTestStory == 'on') $formConfig['estStarted']['skipRequired'] = $formConfig['deadline']['skipRequired'] = $formConfig['estimate']['skipRequired'] = true;
+        }
+
+        if($this->post->multiple && strpos($this->config->task->create->requiredFields, 'assignedTo') !== false)
+        {
+            $this->config->task->create->requiredFields = str_replace(',assignedTo', '', $this->config->task->create->requiredFields);
         }
 
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
@@ -1416,14 +1428,18 @@ class taskZen extends task
      * @param  object    $task
      * @param  int       $executionID
      * @param  string    $afterChoose continueAdding|toTaskList|toStoryList
+     * @param  array     $response
      * @access public
      * @return array
      */
-    public function generalCreateResponse(object $task, int $executionID, string $afterChoose): array
+    public function generalCreateResponse(object $task, int $executionID, string $afterChoose, array $response = array()): array
     {
         /* Set the universal return value. */
-        $response['result']  = 'success';
-        $response['message'] = $this->lang->saveSuccess;
+        if(empty($response))
+        {
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+        }
 
         /* Set the response to continue adding task to story. */
         $executionID = $task->execution;
@@ -1714,15 +1730,16 @@ class taskZen extends task
      * @param  int       $taskID
      * @param  string    $from    ''|taskkanban
      * @param  array[]   $changes
+     * @param  string    $message
      * @access protected
      * @return array
      */
-    protected function responseAfterEdit(int $taskID, string $from, array $changes): array
+    protected function responseAfterEdit(int $taskID, string $from, array $changes, string $message = ''): array
     {
         if(defined('RUN_MODE') && RUN_MODE == 'api') return array('status' => 'success', 'data' => $taskID);
 
         $response['result']     = 'success';
-        $response['message']    = $this->lang->saveSuccess;
+        $response['message']    = $message ?: $this->lang->saveSuccess;
         $response['closeModal'] = true;
 
         $task = $this->task->getById($taskID);
@@ -1738,7 +1755,7 @@ class taskZen extends task
             }
         }
 
-        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from, $message);
 
         $response['load'] = $this->createLink('task', 'view', "taskID=$taskID");
         return $response;
@@ -1784,17 +1801,19 @@ class taskZen extends task
      *
      * @param  int       $taskID
      * @param  string    $from   ''|taskkanban
+     * @param  string    $message
      * @access protected
      * @return array
      */
-    protected function responseAfterAssignTo(int $taskID, string $from): array
+    protected function responseAfterAssignTo(int $taskID, string $from, string $message = ''): array
     {
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
 
         $task = $this->task->getById($taskID);
-        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from);
+        if(helper::isAjaxRequest('modal')) return $this->responseModal($task, $from, $message);
 
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
+        $message = $message ?: $this->lang->saveSuccess;
+        return array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => $this->createLink('task', 'view', "taskID=$taskID"));
     }
 
     /**
@@ -1803,13 +1822,14 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  string    $from     ''|taskkanban
+     * @param  string    $message
      * @access protected
      * @return array
      */
-    protected function responseModal(object $task, string $from): array
+    protected function responseModal(object $task, string $from, string $message = ''): array
     {
         $response['result']     = 'success';
-        $response['message']    = $this->lang->saveSuccess;
+        $response['message']    = $message ?: $this->lang->saveSuccess;
         $response['closeModal'] = $this->app->rawMethod != 'recordworkhour';
 
         if($this->app->rawMethod == 'recordworkhour')
@@ -1845,12 +1865,11 @@ class taskZen extends task
         /* If there is a database error, return the error message. */
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
-        $response['result']     = 'success';
-        $response['message']    = $this->lang->saveSuccess;
-        $response['closeModal'] = true;
-
         $message = $this->executeHooks($task->id);
-        if($message) $response['message'] = $message;
+
+        $response['result']     = 'success';
+        $response['message']    = $message ?: $this->lang->saveSuccess;
+        $response['closeModal'] = true;
 
         /* Return task id when call the API. */
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $task->id);
@@ -1882,7 +1901,7 @@ class taskZen extends task
         if($afterChoose != 'continueAdding' && $execution->type == 'kanban') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('execution', 'kanban', "executionID={$execution->id}"));
 
         /* Process the return information for selecting a jump after creation. */
-        return $this->generalCreateResponse($task, $execution->id, $afterChoose);
+        return $this->generalCreateResponse($task, $execution->id, $afterChoose, $response);
     }
 
     /**
@@ -1928,14 +1947,16 @@ class taskZen extends task
      *
      * @param  object    $task
      * @param  string    $from ''|taskkanban
+     * @param  string    $message
      * @access protected
      * @return array
      */
-    protected function responseAfterChangeStatus(object $task, string $from): array
+    protected function responseAfterChangeStatus(object $task, string $from, string $message = ''): array
     {
+        $message = $message ?: $this->lang->saveSuccess;
         if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success');
-        if(isInModal()) return $this->responseModal($task, $from);
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true);
+        if(isInModal()) return $this->responseModal($task, $from, $message);
+        return array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true);
     }
 
     /**

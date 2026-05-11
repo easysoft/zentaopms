@@ -30,10 +30,11 @@ $fnProcessTreeData = function($moduleTree, $level = 0, $parent = null) use (&$fn
     return $moduleTree;
 };
 $moduleTree = $fnProcessTreeData($moduleTree);
+$isEn       = $app->getClientLang() == 'en';
 
 jsVar('moduleTree', $moduleTree);
 
-if(common::hasPriv('editor', 'turnon')) div(setID('mainMenu'), set::style(array('display' => 'block', 'padding-top' => '0')), $lang->editor->turnOff, btn(set::url($this->createLink('editor', 'turnon', 'status=0')), set::size('sm'), $lang->dev->switchList[0]));
+if(common::hasPriv('editor', 'turnon')) div(setID('mainMenu'), set::style(array('display' => 'block', 'padding-top' => '0')), $lang->editor->turnOff, btn(set::url($this->createLink('editor', 'turnon', 'status=0')), set::size('sm'), $isEn ? setClass('ml-2') : null, $lang->dev->switchList[0]));
 div
 (
     setClass('flex'),

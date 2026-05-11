@@ -21,10 +21,11 @@ if(hasPriv('zai', 'vectorized'))
 sidebar
 (
     set::toggleBtn(false),
+    set::width(240),
     set::preserve('zaiSetting'),
     div
     (
-        setClass('cell p-2.5 bg-white'),
+        setClass('cell p-2.5 canvas'),
         menu
         (
             set::items($menuItems)

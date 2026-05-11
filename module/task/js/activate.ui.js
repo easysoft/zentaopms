@@ -192,8 +192,6 @@ function computeTotalLeft()
 
 $('#teamTable').on('change', '.picker-box [name^=team]', function()
 {
-    $(this).closest('tr').find('input[name^=teamLeft]').closest('td').toggleClass('required', $(this).val() != '')
-
     disableMembers();
 
     let $teamSource = $(this).siblings('[name^=teamSource]');
@@ -226,7 +224,7 @@ window.clickSubmit = function()
             }
         }
 
-        var estimate = parseInt($('#left').val());
+        var estimate = parseFloat($('#left').val());
         if(isNaN(estimate) || estimate <= 0)
         {
             zui.Modal.alert(multiple ? teamLeftEmpty : leftNotEmpty);

@@ -66,7 +66,7 @@ $lang->release->stories        = 'Abgeschlossene Story';
 $lang->release->bugs           = 'Gelöste Bugs';
 $lang->release->leftBugs       = 'Verbleibende Bugs';
 $lang->release->generatedBugs  = 'Gemeldete Bugs';
-$lang->release->createdBy      = 'Created By';
+$lang->release->createdBy      = 'Creator';
 $lang->release->createdDate    = 'Created Date';
 $lang->release->finishStories  = 'Abgeschlossene %s Storys';
 $lang->release->resolvedBugs   = 'Gelöste %s Bugs';
@@ -117,7 +117,7 @@ $lang->release->action->changestatus = array('main' => '$date, $extra by  <stron
 $lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
 $lang->release->action->published    = array('main' => '$date, published by <strong>$actor</strong>, result is <strong>$extra</strong>.', 'extra' => 'resultList');
 
-$lang->release->notifyList['FB'] = "Feedback By";
+$lang->release->notifyList['FB'] = "Feedback by";
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
 $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';

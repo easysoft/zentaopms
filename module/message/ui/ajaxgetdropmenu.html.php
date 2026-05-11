@@ -52,6 +52,10 @@ $buildMessageList = function($messageGroup) use ($lang)
 };
 
 $browserSetting = $config->message->browser;
+$isEn           = $app->getClientLang() == 'en';
+$enLabelWidth   = $isEn ? set::labelWidth('130px') : null;
+$menuWidth      = $isEn ? 'w-72' : 'w-52';
+$menuLeft       = $isEn ? '-250px' : '-170px';
 tabs
 (
     setID('messageTabs'),
@@ -73,14 +77,15 @@ tabs
             btn(set::icon('cog-outline'), setID('messageSettingDropdown-toggle'), set::hint($lang->message->browserSetting->more), setClass('ghost'), set::caret(false), setData(array('on' => 'click', 'call' => 'toggleSettingDropdown'))),
             menu
             (
-                setClass('dropdown-menu w-52 absolute popup in'),
+                setClass('dropdown-menu absolute popup in ' . $menuWidth),
                 setID('messageSettingDropdown'),
-                setStyle(array('left' => '-170px', 'top' => '25px')),
+                setStyle(array('left' => $menuLeft, 'top' => '25px')),
                 form
                 (
                     setClass('gap-1'),
                     set::url(inlink('ajaxSetOneself')),
                     set::actions(false),
+                    $enLabelWidth,
                     formRow(setClass('font-bold border-b pb-2 pl-2 pt-2'), $lang->message->browserSetting->more),
                     formGroup
                     (

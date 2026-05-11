@@ -47,19 +47,19 @@ $config->projectCommonList['zh-tw'][1] = '迭代';
 $config->projectCommonList['zh-tw'][2] = '冲刺';
 
 $config->projectCommonList['en'][0] = 'Project';
-$config->projectCommonList['en'][1] = 'Iteration';
+$config->projectCommonList['en'][1] = 'Execution';
 $config->projectCommonList['en'][2] = 'Sprint';
 
 $config->projectCommonList['de'][0] = 'Project';
-$config->projectCommonList['de'][1] = 'Iteration';
+$config->projectCommonList['de'][1] = 'Execution';
 $config->projectCommonList['de'][2] = 'Sprint';
 
 $config->projectCommonList['fr'][0] = 'Project';
-$config->projectCommonList['fr'][1] = 'Iteration';
+$config->projectCommonList['fr'][1] = 'Execution';
 $config->projectCommonList['fr'][2] = 'Sprint';
 
 $config->projectCommonList['vi'][0] = 'Project';
-$config->projectCommonList['vi'][1] = 'Iteration';
+$config->projectCommonList['vi'][1] = 'Execution';
 $config->projectCommonList['vi'][2] = 'Sprint';
 
 $config->projectCommonList['ru'][0] = 'Проект';
@@ -86,15 +86,15 @@ $config->executionCommonList['zh-tw'][0] = '迭代';
 $config->executionCommonList['zh-tw'][1] = '冲刺';
 $config->executionCommonList['zh-tw'][2] = '階段';
 
-$config->executionCommonList['en'][0] = 'Iteration';
+$config->executionCommonList['en'][0] = 'Execution';
 $config->executionCommonList['en'][1] = 'Sprint';
-$config->executionCommonList['en'][2] = 'Stage';
+$config->executionCommonList['en'][2] = 'Phase';
 
-$config->executionCommonList['de'][0] = 'Iteration';
+$config->executionCommonList['de'][0] = 'Execution';
 $config->executionCommonList['de'][1] = 'Sprint';
 $config->executionCommonList['de'][2] = 'Bühne';
 
-$config->executionCommonList['fr'][0] = 'Iteration';
+$config->executionCommonList['fr'][0] = 'Execution';
 $config->executionCommonList['fr'][1] = 'Sprint';
 $config->executionCommonList['fr'][2] = 'Phase';
 
@@ -750,6 +750,7 @@ $config->objectTables['system']         = TABLE_SYSTEM;
 $config->objectTables['mark']           = TABLE_MARK;
 $config->objectTables['cm']             = TABLE_OBJECT;
 $config->objectTables['baseline']       = TABLE_OBJECT;
+$config->objectTables['ganttversion']   = TABLE_OBJECT;
 $config->objectTables['projectchange']  = TABLE_PROJECTCHANGE;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
@@ -762,8 +763,8 @@ $config->pgsqlDriverList  = array('postgres', 'highgo', 'kingbase');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testtask', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'meeting', 'pssp', 'auditplan', 'nc', 'review', 'reviewissue', 'weekly');
-$config->programPriv->scrum         = array('story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity', 'weekly', 'review', 'reviewissue', 'report', 'mr');
+$config->programPriv->noSprint      = array('task', 'story', 'requirement', 'epic', 'productplan', 'tree', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testtask', 'testreport', 'doc', 'repo', 'stakeholder', 'projectrelease', 'issue', 'risk', 'opportunity', 'meeting', 'pssp', 'auditplan', 'nc', 'review', 'reviewissue', 'weekly', 'projectdeliverable', 'build', 'testcase', 'approval');
+$config->programPriv->scrum         = array('task', 'story', 'requirement', 'epic', 'productplan', 'tree', 'projectplan', 'projectstory', 'projectrelease', 'project', 'execution', 'projectbuild', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'pssp', 'stakeholder', 'testtask', 'issue', 'risk', 'opportunity', 'weekly', 'review', 'reviewissue', 'report', 'mr', 'projectdeliverable', 'build', 'testcase', 'approval');
 $config->programPriv->waterfall     = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'cm', 'projectchange', 'milestone', 'design', 'measrecord', 'auditplan', 'nc', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport', 'report', 'mr'));
 $config->programPriv->agileplus     = $config->programPriv->scrum;
 $config->programPriv->waterfallplus = $config->programPriv->waterfall;

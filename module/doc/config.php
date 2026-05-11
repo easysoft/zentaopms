@@ -9,11 +9,14 @@ $config->doc->createTemplate    = new stdclass();
 $config->doc->edit      = new stdclass();
 $config->doc->showfiles = new stdclass();
 
-$config->doc->createlib->requiredFields = 'name';
-$config->doc->editlib->requiredFields   = 'name';
-$config->doc->create->requiredFields    = 'lib,title';
-$config->doc->createTemplate->requiredFields    = 'lib,title';
-$config->doc->edit->requiredFields      = 'lib,title';
+$config->doc->createlib->requiredFields      = 'name';
+$config->doc->editlib->requiredFields        = 'name';
+$config->doc->create->requiredFields         = 'lib,title';
+$config->doc->createDocUrl                   = new stdclass();
+$config->doc->createDocUrl->requiredFields   = 'lib,title,content';
+$config->doc->createTemplate->requiredFields = 'lib,title';
+$config->doc->edit->requiredFields           = 'lib,title';
+$config->doc->edit->requiredFields           = 'lib,title';
 
 $config->doc->customObjectLibs  = 'files,customFiles';
 $config->doc->notArticleType    = 'chapter';
@@ -21,6 +24,9 @@ $config->doc->officeTypes       = 'word,ppt,excel,attachment';
 $config->doc->textTypes         = 'html,markdown,text';
 $config->doc->docTypes          = 'text,word,ppt,excel,url,article,attachment';
 $config->doc->saveDraftInterval = '60';
+
+/* URL 验证正则：http|https（可选） + hostname + 路径（可选） */
+$config->doc->urlValidator = '/^(https?:\/\/)?[a-zA-Z0-9][a-zA-Z0-9.-]*\.[a-zA-Z]{2,}(\/.*)?$/i';
 
 $config->doc->custom = new stdclass();
 $config->doc->custom->objectLibs = $config->doc->customObjectLibs;
@@ -99,6 +105,13 @@ $config->doc->actionList['movedoc']['url']         = helper::createLink('doc', '
 $config->doc->actionList['movedoc']['data-toggle'] = 'modal';
 $config->doc->actionList['movedoc']['data-size']   = 'sm';
 
+$config->doc->actionList['copyDoc']['icon']        = 'copy';
+$config->doc->actionList['copyDoc']['hint']        = $lang->doc->copyDocAction;
+$config->doc->actionList['copyDoc']['text']        = $lang->doc->copyDocAction;
+$config->doc->actionList['copyDoc']['url']         = helper::createLink('doc', 'copyDoc', 'docID={id}');
+$config->doc->actionList['copyDoc']['data-toggle'] = 'modal';
+$config->doc->actionList['copyDoc']['data-size']   = 'sm';
+
 $config->doc->actionList['edit']['icon']     = 'edit';
 $config->doc->actionList['edit']['hint']     = $lang->edit;
 $config->doc->actionList['edit']['text']     = $lang->edit;
@@ -124,6 +137,7 @@ $config->doc->quickMenu['createdby'] = array('id' => 2, 'name' => $lang->doc->my
 $config->doc->quickMenu['collect']   = array('id' => 3, 'name' => $lang->doc->myCollection);
 $config->doc->quickMenu['editedby']  = array('id' => 4, 'name' => $lang->doc->myEdited);
 
+$config->doc->quickFetchRemote       = false;
 $config->doc->zentaoListMenuPosition = 22;
 
 $config->doc->templateTypeParents = array();

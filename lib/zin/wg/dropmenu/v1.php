@@ -204,11 +204,20 @@ class dropmenu extends wg
             $object = data($tab);
             if(isset($object->id)) $objectID = $object->id;
         }
+        /*
+         * 在lite模式下,执行合并到项目视图。所以获取不到项目的时候，尝试获取执行。
+         * If the lite mode, the execution is merged into the project view. So try to get the execution when the project is not found.
+         */
+        if($tab == 'project' && $config->vision == 'lite' && empty($objectID))
+        {
+            $object   = data('execution');
+            $objectID = isset($object->id) ? $object->id : data('executionID');
+        }
         if($method == 'showerrornone' && empty($object) && empty($objectID)) return array();
 
         if($module == 'testcase' && in_array($method, array('view', 'edit')) && data('isLibCase')) $tab = 'caselib';
 
-        if(strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = data('storyType');
+        if($config->vision != 'lite' && strpos(',story-create,story-batchcreate,product-browse,projectstory-story,', ",$module-$method,") !== false) $extra = data('storyType');
 
         if($tab == 'dimension' && $module == 'tree' && $method == 'browsegroup') $extra = data('viewType');
 
@@ -229,12 +238,12 @@ class dropmenu extends wg
         }
 
         if($tab == 'caselib')    $objectID = data('libID');
+        if($tab == 'demandpool') $objectID = data('poolID');
         if($tab == 'feedback')
         {
             $objectID = data('productID');
             $extra    = data('viewType') ? data('viewType') : '';
         }
-        if($tab == 'demandpool') $objectID = data('poolID');
         if($tab == 'market')
         {
             $objectID = data('marketID');

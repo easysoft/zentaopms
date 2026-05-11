@@ -19,19 +19,7 @@
 .table .c-side {border-right: 10px solid #efefef !important;}
 .table .divider-top {border-top: 10px solid #efefef;}
 
-.table .c-id{width: 60px}
-.table .c-pri{width: 70px}
-.table .c-user{width: 100px}
-.table .c-actions{width: 100px}
-.table .c-progress {width: 60px;}
-.table .c-type{width: 60px;}
-.table .c-date{width: 100px;}
-.table .c-hours{width: 60px;}
-.table .c-status{width: 100px;}
-.table .text-center {text-align: center}
-.table .text-right {text-align: right}
 .table th{text-align: left}
-.table td.c-name {max-width: 120px; white-space: nowrap; overflow: hidden;}
 
 .group-menu > .dropdown > .dropdown-menu {right: 0; width: 100%;}
 .summaryBtn, .groupBtn {color: #2e7fff;}

@@ -647,6 +647,22 @@ class searchModel extends model
             $table = "SELECT *, ts_rank(to_tsvector('pg_catalog.english', coalesce(title, '') || ' ' || coalesce(content, '')), to_tsquery('pg_catalog.english', '{$againstCond}'))  AS score FROM " . TABLE_SEARCHINDEX;
             $score = '0.02';
         }
+        elseif($this->config->db->driver == 'dm')
+        {
+            $spliter = $this->app->loadClass('spliter');
+            $labels  = array('_', '、', ' ', '-', '\n', '?', '@', '&', '%', '~', '`', '+', '*', '/', '\\', '。', '，');
+            $words   = str_replace($labels, ' ', $words);
+            $words   = explode(' ', trim($words));
+
+            $conditions = [];
+            foreach($words as $word)
+            {
+                $trimmedWord  = trim($word);
+                $conditions[] = "title LIKE '%" . $trimmedWord . "%' OR content LIKE '%" . $trimmedWord . "%'";
+            }
+            $table = "SELECT *, (CASE WHEN (" . implode(' OR ', $conditions) . ") THEN 1 ELSE 0 END) AS score FROM " . TABLE_SEARCHINDEX;
+            $score = '1';
+        }
         else
         {
             $table = "SELECT *, (MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE)) AS score FROM " . TABLE_SEARCHINDEX;

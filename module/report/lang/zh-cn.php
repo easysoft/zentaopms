@@ -85,6 +85,7 @@ $lang->report->bugTitle     = 'Bug标题';
 $lang->report->taskName     = '任务名称';
 $lang->report->todoName     = '待办名称';
 $lang->report->testTaskName = '版本名称';
+$lang->report->cardName     = '卡片名称';
 $lang->report->deadline     = '截止日期';
 
 $lang->report->mailTitle           = new stdclass();
@@ -93,6 +94,7 @@ $lang->report->mailTitle->bug      = " Bug(%s),";
 $lang->report->mailTitle->task     = " 任务(%s),";
 $lang->report->mailTitle->todo     = " 待办(%s),";
 $lang->report->mailTitle->testTask = " 测试版本(%s),";
+$lang->report->mailTitle->card     = " 看板卡片(%s),";
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s %s年工作汇总";

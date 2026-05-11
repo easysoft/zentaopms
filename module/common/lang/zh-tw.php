@@ -256,6 +256,14 @@ $lang->calendar        = '日程';
 
 $lang->my->work = '待處理';
 
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = '選擇用戶';
+$lang->userSelector->deptTitle     = '按部門篩選';
+$lang->userSelector->userTitle     = '選擇用戶';
+$lang->userSelector->selectedTitle = '已選擇';
+$lang->userSelector->allText       = '全部用戶';
+$lang->userSelector->emptyText     = '暫無可選用戶';
+
 $lang->project->list   = '項目列表';
 $lang->project->kanban = '項目看板';
 

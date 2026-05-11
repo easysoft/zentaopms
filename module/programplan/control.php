@@ -24,10 +24,10 @@ class programplan extends control
     {
         $this->loadModel('product');
         $this->loadModel('project');
-        $products  = $this->product->getProductPairsByProject($projectID);
+        $products = $this->product->getProductPairsByProject($projectID);
 
         $productID = $this->product->checkAccess($productID, $products);
-        $project = $this->project->getByID($projectID);
+        $project   = $this->project->getByID($projectID);
 
         $this->session->set('hasProduct', $project->hasProduct);
         $this->project->setMenu($projectID);
@@ -48,10 +48,11 @@ class programplan extends control
      * @param  int    $queryID
      * @param  string $from
      * @param  int    $blockID
+     * @param  string $versionID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'gantt', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0)
+    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '0')
     {
         if($type == 'lists') return $this->locate($this->createLink('project', 'execution', "status=undone&projectID={$projectID}"));
         if($from == 'doc')
@@ -65,8 +66,20 @@ class programplan extends control
         }
 
         $this->app->loadLang('stage');
-        $this->session->set('projectPlanList', $this->app->getURI(true), 'project');
+        $uri = $this->app->getURI(true);
+        $this->session->set('projectPlanList', $uri, 'project');
+        $this->session->set('projectGanttLink', $uri, 'project');
         $this->commonAction($projectID, $productID);
+
+        if(empty($type))
+        {
+            $cookieGanttType = $this->cookie->ganttType;
+            if(!empty($cookieGanttType)) $cookieGanttType = json_decode($cookieGanttType);
+            if(empty($cookieGanttType))  $cookieGanttType = array();
+
+            $type = zget(zget($cookieGanttType, $this->app->tab, array()), $projectID, 'gantt');
+        }
+        setcookie('ganttType', json_encode(array($this->app->tab => array($projectID => $type))), $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
 
@@ -76,10 +89,43 @@ class programplan extends control
 
         /* Generate stage list page data. */
         $browseType = strtolower($browseType);
-        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+        $plans = $this->programplanZen->buildStages($projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID, $versionID);
+        if($versionID == 'nowait' && !empty($plans['data'])) $plans['data'] = $this->programplan->processNoWaitGanttData($plans['data']);
 
-        $this->view->from    = $from;
-        $this->view->blockID = $blockID;
+        if(isset($_POST['baselineVersion']) && !empty($plans['data']))
+        {
+            $ganttBaseline = (int)$_POST['baselineVersion'];
+            if($ganttBaseline)
+            {
+                $baselinePlans = $this->programplan->getGanttDataByVersion($ganttBaseline);
+            }
+            else
+            {
+                $baselinePlans = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $this->view->selectCustom, false, $browseType, $queryID);
+                if($_POST['baselineVersion'] == 'nowait' && !empty($baselinePlans['data'])) $baselinePlans['data'] = $this->programplan->processNoWaitGanttData($baselinePlans['data']);
+            }
+            $baselinePlans = empty($baselinePlans['data']) ? array() : array_column($baselinePlans['data'], null, 'id');
+            foreach($plans['data'] as $key => $plan)
+            {
+                if(!isset($baselinePlans[$plan->id])) continue;
+
+                $plans['data'][$key]->bar_height    = 20;
+                $plans['data'][$key]->planned_start = $baselinePlans[$plan->id]->start_date;
+                $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->endDate) + 86400);
+            }
+
+            $this->view->ganttBaseline = $this->post->baselineVersion;
+        }
+
+        $project     = $this->loadModel('project')->fetchByID($projectID);
+        $minBegin    = empty($plans['data']) ? $project->begin : min(array_column($plans['data'], 'begin'));
+        $maxDeadline = empty($plans['data']) ? $project->end   : max(array_column($plans['data'], 'deadline'));
+        $this->view->holidays    = $this->loadModel('execution')->getHolidays($project, $minBegin, $maxDeadline);
+        $this->view->workingDays = $this->loadModel('holiday')->getWorkingDays($minBegin, $maxDeadline);
+        $this->view->versions    = $this->programplan->getGanttVersions($projectID, $productID, $type);
+        $this->view->versionID   = $versionID;
+        $this->view->from        = $from;
+        $this->view->blockID     = $blockID;
 
         /* Build gantt browse view. */
         $this->programplanZen->buildBrowseView($projectID, $productID, $plans, $type, $orderBy, $baselineID, $browseType, $queryID);
@@ -108,14 +154,26 @@ class programplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->programplan->create($plans, $projectID, $this->productID, $planID, $syncData);
-            if(dao::isError())
-            {
-                $errors = dao::getError();
-                if(isset($errors['message']))  $this->send(array('result' => 'fail', 'message' => $errors));
-                if(!isset($errors['message'])) $this->send(array('result' => 'fail', 'callback' => array('name' => 'addRowErrors', 'params' => array($errors))));
-            }
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $locate = $this->session->projectPlanList ? $this->session->projectPlanList : $this->createLink('project', 'execution', "status=all&projectID={$projectID}&orderBy=order_asc&productID={$productID}");
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $executionList = array();
+                foreach($_POST['id'] as $index => $planID)
+                {
+                    if(!$planID) continue;
+                    if(!isset($_POST['enable']) || (isset($_POST['enable'][$index]) && $_POST['enable'][$index] == 'on')) $executionList[] = $planID;
+                }
+
+                $conflictExecutions = $this->loadModel('execution')->checkDateConflict($executionList);
+                if(!empty($conflictExecutions))
+                {
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . current($conflictExecutions));
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){openPage('$locate'); openPage('$taskScheduleLink')} else {openPage('$locate')}});"));
+                }
+            }
+
             if($from == 'projectCreate') $locate = $this->createLink('project', 'create', "model=&programID=0&copyProjectID=0&extra=showTips=1,project=$projectID");
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));
         }
@@ -205,6 +263,16 @@ class programplan extends control
             }
 
             if($this->app->rawModule == 'marketresearch') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->marketstageList));
+
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $conflictExecutions = $this->loadModel('execution')->checkDateConflict(array($planID));
+                if(!empty($conflictExecutions))
+                {
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . $planID);
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){zui.Modal.hide(); loadCurrentPage(); openPage('$taskScheduleLink')} else {zui.Modal.hide(); loadCurrentPage();}});"));
+                }
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'loadCurrentPage', 'closeModal' => true));
         }
 
@@ -412,5 +480,100 @@ class programplan extends control
         $this->loadModel('execution');
         foreach($this->post->relationIdList as $relationID) $this->execution->deleteRelation((int)$relationID);
         return $this->sendSuccess(array('load' => inlink('relation', "projectID=$projectID")));
+    }
+
+    /**
+     * 甘特图下创建版本。
+     * Create a version of Gantt.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function createGanttVersion(int $projectID = 0, int $productID = 0, string $type = '')
+    {
+        if($_POST)
+        {
+            $project = $this->loadModel('project')->fetchByID($projectID);
+            $version = form::data($this->config->programplan->form->createGanttVersion)
+                ->add('title', $this->post->version)
+                ->setIF($project->type == 'project', 'project', $projectID)
+                ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
+                ->get();
+            $version->data = $this->post->data;
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!isset($this->lang->object)) $this->lang->object = new stdclass();
+            $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
+
+            $condition = $project->type == 'project' ? "project={$projectID}" : "execution={$projectID}";
+            $this->dao->insert(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND {$condition}")->exec();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $versionID = $this->dao->lastInsertID();
+            $this->loadModel('action')->create('ganttversion', $versionID, 'created', '', $version->title);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
+        }
+
+        $this->view->productID = $productID;
+        $this->view->type      = $type;
+        $this->display();
+    }
+
+    /**
+     * 甘特图下编辑版本。
+     * Edit a version of Gantt.
+     *
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function editGanttVersion(int $versionID)
+    {
+        if($_POST)
+        {
+            $version = form::data($this->config->programplan->form->editGanttVersion)->add('title', $this->post->version)->get();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!isset($this->lang->object)) $this->lang->object = new stdclass();
+            $this->lang->object->version = $this->lang->programplan->version;
+            $this->lang->error->unique   = $this->lang->error->repeat;
+
+            $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+            $changes    = common::createChanges($oldVersion, $version);
+            if(empty($changes)) return $this->send(array('result' => 'success', 'closeModal' => true));
+
+            $condition  = $oldVersion->project ? "project={$oldVersion->project}" : "execution={$oldVersion->execution}";
+            $this->dao->update(TABLE_OBJECT)->data($version)->check('version', 'unique', "status = 'gantt' AND id != {$versionID} AND {$condition}")->where('id')->eq($versionID)->exec();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('ganttversion', $versionID, 'edited', '', $version->title);
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
+        }
+
+        $this->view->version = $this->programplan->fetchByID($versionID, 'ganttversion');
+        $this->display();
+    }
+
+    /**
+     * 甘特图下删除版本。
+     * Delete a version of Gantt.
+     *
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function deleteGanttVersion(int $versionID)
+    {
+        $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+        $this->loadModel('action')->create('ganttversion', $versionID, 'deleted', '', $oldVersion->title);
+
+        $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'callback' => "loadCurrentPage('#versionList')"));
     }
 }

@@ -1075,13 +1075,16 @@ class groupModel extends model
                 {
                     /* Show related privs when select. */
                     if($type == 'recommend' && in_array($privCode, $recommendSelect)) $relatedPrivs[$type][$privCode] = $privCode;
-                    if($type == 'depend') $depends[$privCode] = $priv['depend'];
 
                     if(!in_array($privCode, $selectedPrivList) || !isset($priv[$type])) continue;
 
-                    foreach($priv[$type] as $relatedPriv)
+                    foreach($priv[$type] as $code => $relatedPriv)
                     {
-                        if(!in_array($relatedPriv, $selectedPrivList) && in_array($relatedPriv, $allPrivList)) $relatedPrivs[$type][$relatedPriv] = $relatedPriv;
+                        if(!in_array($relatedPriv, $selectedPrivList) && in_array($relatedPriv, $allPrivList))
+                        {
+                            $relatedPrivs[$type][$relatedPriv] = $relatedPriv;
+                            if($type == 'depend') $depends[$privCode][$code] = $relatedPriv;
+                        }
                     }
                 }
             }

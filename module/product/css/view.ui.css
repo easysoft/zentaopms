@@ -7,7 +7,6 @@
 .pie-chart {position: relative;}
 .pie-chart .pie-chart-title {position: relative; top: -60%; left: 2%; height: 1rem;}
 
-.member-list > .center-y {width: 12.5%}
 .memberBox .panel-heading, .otherInfoBox .panel-heading{background-color: var(--color-gray-100); color: var(--color-gray-900)}
 #mainContainer{margin-bottom: 60px;}
 

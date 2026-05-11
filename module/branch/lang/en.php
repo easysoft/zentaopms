@@ -1,7 +1,7 @@
 <?php
 $lang->branch->common = 'Branch';
 $lang->branch->manage = 'Manage Branch';
-$lang->branch->sort   = 'Rank Branch';
+$lang->branch->sort   = 'Sort Branch';
 $lang->branch->delete = 'Delete Branch';
 $lang->branch->add    = 'Add';
 
@@ -20,8 +20,8 @@ $lang->branch->createAction      = 'Create Branch';
 $lang->branch->merge             = 'Merge';
 $lang->branch->batchEdit         = 'Batch Edit';
 $lang->branch->defaultBranch     = 'Default Branch';
-$lang->branch->setDefault        = 'Set Default';
-$lang->branch->setDefaultAction  = 'Set Default';
+$lang->branch->setDefault        = 'Set as Default';
+$lang->branch->setDefaultAction  = 'Set Default Branch';
 $lang->branch->mergeTo           = 'Merge to';
 $lang->branch->mergeBranch       = 'Merge branch';
 $lang->branch->mergeBranchAction = 'Merge branch';
@@ -30,33 +30,33 @@ $lang->branch->id          = 'ID';
 $lang->branch->product     = $lang->productCommon;
 $lang->branch->name        = 'Name';
 $lang->branch->status      = 'Status';
-$lang->branch->createdDate = 'Created Date';
-$lang->branch->closedDate  = 'Closed Date';
-$lang->branch->desc        = 'Desc';
-$lang->branch->order       = 'Order';
-$lang->branch->deleted     = 'Delete';
+$lang->branch->createdDate = 'Created on';
+$lang->branch->closedDate  = 'Closed on';
+$lang->branch->desc        = 'Description';
+$lang->branch->order       = 'Sort';
+$lang->branch->deleted     = 'Deleted';
 $lang->branch->closed      = 'Closed';
 $lang->branch->default     = 'Default';
 
-$lang->branch->confirmDelete     = 'Do you want to delete this @branch@?';
-$lang->branch->confirmSetDefault = 'Do you want to set @branch@ as default @branch@? After your setting, the default @branch@ will be selected and shown in its Plan/Release list.';
-$lang->branch->canNotDelete      = 'There is data in @branch@. It cannot be deleted.';
-$lang->branch->nameNotEmpty      = 'Name must not be empty！';
-$lang->branch->confirmClose      = 'Do you want to close this @branch@？';
-$lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
+$lang->branch->confirmDelete     = 'Are you sure you want to delete this @branch@?';
+$lang->branch->confirmSetDefault = 'Are you sure you want to set this @branch@ as the default? Once set, plans and releases will default to this @branch@.';
+$lang->branch->canNotDelete      = 'This @branch@ contains data and cannot be deleted.';
+$lang->branch->nameNotEmpty      = 'Name is required.';
+$lang->branch->confirmClose      = 'Are you sure you want to close this @branch@?';
+$lang->branch->confirmActivate   = 'Are you sure you want to activate this @branch@?';
 $lang->branch->existName         = '@branch@ name already exists.';
-$lang->branch->mergedMain        = 'Trunk does not support being merged.';
-$lang->branch->mergeTips         = 'After the branch is merged, the corresponding releases, plans, builds, modules, requirements, bugs, and cases under the branch will be merged into the new branch.';
-$lang->branch->targetBranchTips  = 'You can merge it into an existing branch, merge it into the trunk, or create a new branch.';
-$lang->branch->confirmMerge      = 'The data of "mergedBranch" will be merged into "targetBranch", please confirm whether you want to perform the branch merge operation, the data will not be restored after the merge!';
+$lang->branch->mergedMain        = 'Trunk cannot be merged.';
+$lang->branch->mergeTips         = 'After merging, all releases, plans, builds, modules, stories, bugs, and test cases under this @branch@ will be moved to the target @branch@.';
+$lang->branch->targetBranchTips  = 'You can merge it into an existing @branch@, into trunk, or create a new @branch@.';
+$lang->branch->confirmMerge      = 'Data from mergedBranch will be merged into targetBranch. Are you sure you want to proceed? This action cannot be undone.';
 
-$lang->branch->noData     = 'No branches.';
-$lang->branch->mainBranch = "The default main %s of the {$lang->productCommon}.";
+$lang->branch->noData     = 'No branches yet.';
+$lang->branch->mainBranch = "{$lang->productCommon} default trunk: %s.";
 
 $lang->branch->statusList = array();
-$lang->branch->statusList['active'] = 'Active';
+$lang->branch->statusList['active'] = 'Activate';
 $lang->branch->statusList['closed'] = 'Closed';
 
 $lang->branch->featureBar['manage']['all']    = 'All';
-$lang->branch->featureBar['manage']['active'] = 'Active';
+$lang->branch->featureBar['manage']['active'] = 'Activate';
 $lang->branch->featureBar['manage']['closed'] = 'Closed';

@@ -2,8 +2,6 @@
 declare(strict_types=1);
 namespace zin;
 
-require_once dirname(__DIR__) . DS . 'control' . DS . 'v1.php';
-
 class inputControl extends wg
 {
     protected static array $defineProps = array(
@@ -46,7 +44,7 @@ class inputControl extends wg
 
             if(is_array($prefix) && !empty($prefix['widget']))
             {
-                $prefix = new control(set($prefix));
+                $prefix = createWg('control', set($prefix));
             }
         }
         if(!empty($suffix))

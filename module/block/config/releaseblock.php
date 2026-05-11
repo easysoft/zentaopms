@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('release');
+$isEn = $app->getClientLang() == 'en';
 
 $config->block->release = new stdclass();
 $config->block->release->dtable = new stdclass();
@@ -11,3 +12,9 @@ $config->block->release->dtable->fieldList['productName'] = array('name' => 'pro
 $config->block->release->dtable->fieldList['build']       = array('name' => 'build',       'title' => $lang->release->build,   'type' => 'text',   'sort' => true,  'minWidth' => '100', 'delimiter' => ',');
 $config->block->release->dtable->fieldList['date']        = array('name' => 'date',        'title' => $lang->release->date,    'type' => 'date',   'sort' => 'date');
 $config->block->release->dtable->fieldList['status']      = array('name' => 'status',      'title' => $lang->release->status,  'type' => 'status', 'sort' => true,  'statusMap' => $lang->release->statusList);
+
+if($isEn)
+{
+    $config->block->release->dtable->fieldList['date']['minWidth']   = '150';
+    $config->block->release->dtable->fieldList['status']['minWidth'] = '140';
+}

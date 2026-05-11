@@ -16,9 +16,43 @@ class userZenTest extends baseTest
      */
     public function checkDirPermissionTest()
     {
-        $result = $this->invokeArgs('checkDirPermission');
+        $this->invokeArgs('checkDirPermission');
         if(dao::isError()) return dao::getError();
-        return $result;
+
+        return true;
+    }
+
+    /**
+     * Test checkDataRoot method.
+     *
+     * @param  string|null $overrideDataRoot 为 null 时使用应用默认 dataRoot，否则临时替换后检测再恢复
+     * @access public
+     * @return mixed
+     */
+    public function checkDataRootTest(?string $overrideDataRoot = null)
+    {
+        $app = $this->instance->app;
+        if($overrideDataRoot === null)
+        {
+            $result = $this->invokeArgs('checkDataRoot');
+            if(dao::isError()) return dao::getError();
+
+            return $result ? 1 : 0;
+        }
+
+        $saved = $app->dataRoot;
+        $app->dataRoot = $overrideDataRoot;
+        try
+        {
+            $result = $this->invokeArgs('checkDataRoot');
+        }
+        finally
+        {
+            $app->dataRoot = $saved;
+        }
+        if(dao::isError()) return dao::getError();
+
+        return $result ? 1 : 0;
     }
 
     /**

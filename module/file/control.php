@@ -68,7 +68,7 @@ class file extends control
     {
         $file = $this->file->getUpload($field);
 
-        if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat)));
+        if(!isset($file[0]) or strpos(",{$this->config->file->allowed},", ",{$file[0]['extension']},") === false) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormat));
 
         $file = $file[0];
         if($file)
@@ -76,7 +76,7 @@ class file extends control
             if($file['size'] == 0)
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
-                return print(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
+                return $this->send(array('error' => 1, 'message' => $this->lang->file->errorFileUpload));
             }
 
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
@@ -94,6 +94,10 @@ class file extends control
                 $this->dao->insert(TABLE_FILE)->data($file)->exec();
 
                 $fileID = $this->dao->lastInsertID();
+
+                /* Show story file from zt_storyspec, not zt_file. */
+                if($objectType == 'story') $this->file->updateStoryFiles($objectID);
+
                 $url    = $this->createLink('file', 'read', "fileID=$fileID", $file['extension']);
                 if($uid) $_SESSION['album'][$uid][] = $fileID;
                 if($api || (defined('RUN_MODE') && RUN_MODE == 'api'))
@@ -206,7 +210,7 @@ class file extends control
 
                     if(isset($row->$fieldName) && is_numeric($row->$fieldName)) $row->$fieldName = $row->$fieldName . "\t";
                     if(isset($row->$fieldName)) $row->$fieldName = str_replace('&quot;', '“', $row->$fieldName);
-                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString(strip_tags((string)$row->$fieldName, '<img>'))) : '';
+                    $output .= isset($row->$fieldName) ? str_replace(array('"', '&nbsp;', '&gt;'), array('“', ' ', '>'), htmlSpecialString($this->getCsvPlainText((string)$row->$fieldName))) : '';
                     $output .= '","';
                 }
                 $output .= '"' . "\n";
@@ -333,6 +337,7 @@ class file extends control
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
             if($file->objectType == 'charter')  $this->loadModel('charter')->updateFileByDelete($file);
+            if($file->objectType == 'story')    $this->file->updateStoryFiles($file->objectID);
 
             if(!helper::isAjaxRequest() && $this->viewType != 'json') return print(js::reload('parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -622,5 +627,123 @@ class file extends control
     {
         $path = "{$this->app->user->account}.{$moduleName}.closeBizGuide@rnd";
         $this->loadModel('setting')->setItem($path, 1);
+    }
+
+    /**
+     * 将富文本中的换行标签换为换行符再剥离标签，保持 CSV 单元格与 Excel 单元格中换行效果一致。
+     * Turn editor HTML into plain text with line breaks for CSV export.
+     *
+     * @param  string $html
+     * @access private
+     * @return string
+     */
+    private function getCsvPlainText(string $html): string
+    {
+        if($html === '') return '';
+        $text = $html;
+        $text = preg_replace('#<br\s*/?>#i', "\n", $text);
+        $text = preg_replace('#</(p|div|tr|table|h[1-6])>\s*#i', "\n", $text);
+        $text = str_ireplace('</li>', "\n", $text);
+        return strip_tags($text, '<img>');
+    }
+
+    /**
+     * View preview or download file by id or gid.
+     *
+     * @param  int    $id
+     * @param  string $gid
+     * @param  string $mode  view|download|preview
+     * @access public
+     * @return void
+     */
+    public function viewdownload(int $id = 0, string $gid = '0', string $mode = 'view')
+    {
+        if($id != 0 && $gid != '0') return print($this->lang->file->fileNotFound);
+
+        $file = null;
+        if($id != 0)
+        {
+            $file = $this->file->getById($id);
+        }
+        elseif($gid != '0')
+        {
+            $decodedGid = base64_decode($gid);
+            if(strpos($decodedGid, 'g-') === 0) $decodedGid = substr($decodedGid, 2);
+
+            $file = $this->file->getByGid($decodedGid);
+        }
+
+        if(empty($file)) return print($this->lang->file->fileNotFound);
+
+        if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
+
+        switch($mode)
+        {
+            case 'preview':
+                return $this->preview($file->id, 'left');
+            case 'download':
+                return $this->download($file->id);
+            default:
+                return $this->readFileContent($file);
+        }
+    }
+
+    /**
+     * Read file content directly.
+     *
+     * @param  object $file
+     * @access private
+     */
+    private function readFileContent(object $file)
+    {
+        if(!($this->app->company->guest and $this->app->user->account == 'guest') and !$this->loadModel('user')->isLogon()) return print(js::locate($this->createLink('user', 'login')));
+
+        if(empty($file) or !$this->file->fileExists($file)) return $this->send(array('result' => 'fail', 'message' => $this->lang->file->fileNotFound, 'load' => helper::createLink('my', 'index'), 'closeModal' => true));
+        if(!$this->file->checkPriv($file)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->file->accessDenied, 'locate' => helper::createLink('my', 'index')), 'closeModal' => true));
+
+        $obLevel = ob_get_level();
+        for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+        $mime = $this->getMimeType($file);
+        helper::header('Content-type', $mime);
+
+        $cacheMaxAge = 10 * 365 * 24 * 3600;
+        helper::header('Cache-Control', 'private');
+        helper::header('Pragma', 'cache');
+        helper::header('Expires', gmdate('D, d M Y H:i:s', time() + $cacheMaxAge) . ' GMT');
+        helper::header('Cache-Control', "max-age=$cacheMaxAge");
+
+        $handle = fopen($file->realPath, "r");
+        if($handle)
+        {
+            while(!feof($handle)) echo fgets($handle);
+            fclose($handle);
+        }
+    }
+
+    /**
+     * Get MIME type by file object.
+     *
+     * @param  object $file
+     * @access private
+     * @return string
+     */
+    private function getMimeType(object $file): string
+    {
+        if(function_exists('finfo_open'))
+        {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $file->realPath);
+            finfo_close($finfo);
+            if($mime && $mime !== 'application/octet-stream') return $mime;
+        }
+
+        if(function_exists('mime_content_type'))
+        {
+            $mime = mime_content_type($file->realPath);
+            if($mime) return $mime;
+        }
+
+        return 'application/octet-stream';
     }
 }

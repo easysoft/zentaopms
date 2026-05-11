@@ -1,29 +1,29 @@
 <?php
-$lang->store->appType          = 'Type';
+$lang->store->appType          = 'Category';
 $lang->store->appVersion       = 'Version';
-$lang->store->releaseDate      = 'Publish Time';
-$lang->store->author           = 'Author';
-$lang->store->empty            = 'Empty';
+$lang->store->releaseDate      = 'Release Date';
+$lang->store->author           = 'Publisher';
+$lang->store->empty            = 'No components found.';
 $lang->store->install          = 'Install';
 $lang->store->customInstall    = 'Custom Install';
-$lang->store->searchApp        = 'Search';
-$lang->store->testChannel      = 'Test Version';
+$lang->store->searchApp        = 'Search components...';
+$lang->store->testChannel      = 'Beta Version';
 $lang->store->stableChannel    = 'Stable Version';
 $lang->store->appBasicInfo     = 'Basic Info';
 $lang->store->screenshots      = 'Screenshots';
-$lang->store->appDynamic       = 'Dynamic';
-$lang->store->noDynamicArticle = 'Empty';
-$lang->store->noScreenshot     = 'Empty';
-$lang->store->cloudStore       = 'Component Store';
-$lang->store->browse           = 'Component Store';
-$lang->store->appView          = 'Component Detail';
+$lang->store->appDynamic       = 'Updates';
+$lang->store->noDynamicArticle = 'No updates yet.';
+$lang->store->noScreenshot     = 'No screenshots available.';
+$lang->store->cloudStore       = 'Marketplace';
+$lang->store->browse           = 'Marketplace';
+$lang->store->appView          = 'Component Details';
 
 $lang->store->support          = 'Support';
-$lang->store->gitUrl           = 'Git';
+$lang->store->gitUrl           = 'Git Repository';
 $lang->store->dockerfileUrl    = 'Dockerfile';
 $lang->store->forumUrl         = 'Forum';
-$lang->store->alreadyInstalled = 'The component has been installed on the platform, Are you sure you want to continue with the installation?';
+$lang->store->alreadyInstalled = 'This component is already installed. Continue with installation?';
 
 $lang->store->featureBar['browse']['id']          = 'Default';
-$lang->store->featureBar['browse']['create_time'] = 'Newest';
+$lang->store->featureBar['browse']['create_time'] = 'Recently Added';
 $lang->store->featureBar['browse']['update_time'] = 'Recently updated';

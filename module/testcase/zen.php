@@ -686,7 +686,7 @@ class testcaseZen extends testcase
             ->get();
         if(!empty($oldCase->lib) && empty($oldCase->product) && !empty($_POST['lib'])) $case->lib = $this->post->lib;
 
-        return $case;
+        return !empty($this->config->testcase->editor->edit['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid) : $case;
     }
 
     /**
@@ -1306,6 +1306,12 @@ class testcaseZen extends testcase
             ->setIF($this->post->story, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
             ->get();
 
+        if(!empty($case->execution) && empty($case->project))
+        {
+            $execution = $this->loadModel('execution')->fetchByID($case->execution);
+            $case->project = !empty($execution->project) ? $execution->project : 0;
+        }
+
         /* 如果用例产品是影子产品，同步用例到项目中。 */
         $product = $this->loadModel('product')->getById($case->product);
         if($product->shadow && empty($case->project))
@@ -1318,9 +1324,10 @@ class testcaseZen extends testcase
         if(!empty($case->project))
         {
             if(!isset($project)) $project = $this->loadModel('project')->fetchByID($case->project);
-            if(!$project->multiple) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
+            if(empty($project->multiple)) $case->execution = $this->loadModel('execution')->getNoMultipleID($case->project);
         }
-        return $case;
+
+        return !empty($this->config->testcase->editor->create['id']) ? $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid) : $case;
     }
 
     /**
@@ -2771,7 +2778,7 @@ class testcaseZen extends testcase
      * @access protected
      * @return void
      */
-    protected function processCaseForExport(object $case, array $products, array $branches, array $users, array $results, array $relatedModules, array $relatedStories,  array $relatedCases, array $relatedSteps, array $relatedFiles, array $relatedScenes): void
+    protected function processCaseForExport(object $case, array $products = array(), array $branches = array(), array $users = array(), array $results = array(), array $relatedModules = array(), array $relatedStories = array(),  array $relatedCases = array(), array $relatedSteps = array(), array $relatedFiles = array(), array $relatedScenes = array()): void
     {
         $case->stepDesc       = '';
         $case->stepExpect     = '';
@@ -2806,7 +2813,7 @@ class testcaseZen extends testcase
         $this->processStepForExport($case, zget($results, $case->id, array()), $relatedSteps);
         $this->processStageForExport($case);
         $this->processFileForExport($case, $relatedFiles);
-        if($case->linkCase) $this->processLinkCaseForExport($case);
+        if($case->linkCase || $case->fromCaseID) $this->processLinkCaseForExport($case, $relatedCases);
     }
 
     /**
@@ -2830,7 +2837,7 @@ class testcaseZen extends testcase
 
         if(!isset($case->stepDesc))   $case->stepDesc  = '';
         if(!isset($case->stepExpect)) $case->stepExpect = '';
-        if(isset($case->id) && isset($relatedSteps[$case->id]))
+        if(!empty($case->id) && !empty($relatedSteps[$case->id]))
         {
             $preGrade      = 1;
             $parentSteps   = array();
@@ -2898,18 +2905,27 @@ class testcaseZen extends testcase
      * Process link case of the case for export.
      *
      * @param  object    $case
+     * @param  array     $relatedCases
      * @access protected
      * @return void
      */
-    protected function processLinkCaseForExport(object $case): void
+    protected function processLinkCaseForExport(object $case, array $relatedCases = array()): void
     {
         $tmpLinkCases   = array();
-        $linkCaseIdList = explode(',', $case->linkCase);
-        foreach($linkCaseIdList as $linkCaseID)
+        $hasFromCase    = false;
+        if($case->linkCase)
         {
-            $linkCaseID = trim($linkCaseID);
-            $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+            $linkCaseIdList = explode(',', $case->linkCase);
+            foreach($linkCaseIdList as $linkCaseID)
+            {
+                if($linkCaseID == $case->fromCaseID) $hasFromCase = true;
+
+                $linkCaseID = trim($linkCaseID);
+                if(empty($linkCaseID)) continue;
+                $tmpLinkCases[] = isset($relatedCases[$linkCaseID]) ? $relatedCases[$linkCaseID] . "(#$linkCaseID)" : $linkCaseID;
+            }
         }
+        if(!$hasFromCase && $case->fromCaseID) $tmpLinkCases[] = isset($relatedCases[$case->fromCaseID]) ? $relatedCases[$case->fromCaseID] . "(#$case->fromCaseID)" : $case->fromCaseID;
         $case->linkCase = join("; \n", $tmpLinkCases);
     }
 
@@ -2945,7 +2961,7 @@ class testcaseZen extends testcase
      */
     protected function processStepsAndExpectsForBatchEdit(array $cases): array
     {
-        $relatedSteps = $this->testcase->getRelatedSteps(array_keys($cases));
+        $relatedSteps = $this->testcase->getRelatedSteps(array_column($cases, 'id'));
         foreach($cases as $case)
         {
             $this->processStepForExport($case, array(), $relatedSteps);

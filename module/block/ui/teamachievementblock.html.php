@@ -11,6 +11,11 @@ declare(strict_types=1);
 
 namespace zin;
 
+$isEn               = $app->getClientLang() === 'en';
+$yesterdayClassName = $isEn ? 'items-center text-gray border-r pr-2 col-reverse' : 'items-center text-gray border-r pr-2';
+$todayClassName     = $isEn ? 'items-center text-success pl-2 col-reverse' : 'items-center text-success pl-2';
+
+
 blockPanel
 (
     to::titleSuffix
@@ -54,13 +59,13 @@ blockPanel
                         setClass('mt-2 items-center flex pl-1'),
                         cell
                         (
-                            setClass('items-center text-gray border-r pr-2'),
+                            setClass($yesterdayClassName),
                             span(setClass('text-base'), $lang->yesterday),
                             span(setClass('text-md pl-1 font-bold num'), $yesterdayTasks)
                         ),
                         cell
                         (
-                            setClass('items-center text-success pl-2'),
+                            setClass($todayClassName),
                             span(setClass('text-base'), $lang->today),
                             span(setClass('text-md pl-1 font-bold num'), $finishedTasks)
                         )
@@ -78,13 +83,13 @@ blockPanel
                         setClass('mt-2 items-center flex pl-1'),
                         cell
                         (
-                            setClass('items-center text-gray border-r pr-2'),
+                            setClass($yesterdayClassName),
                             span(setClass('text-base'), $lang->yesterday),
                             span(setClass('text-md pl-1 font-bold num'), $yesterdayStories)
                         ),
                         cell
                         (
-                            setClass('items-center text-success pl-2'),
+                            setClass($todayClassName),
                             span(setClass('text-base'), $lang->today),
                             span(setClass('text-md pl-1 font-bold num'), $createdStories)
                         )
@@ -110,13 +115,13 @@ blockPanel
                         setClass('mt-2 items-center flex pl-1'),
                         cell
                         (
-                            setClass('items-center text-gray border-r pr-2'),
+                            setClass($yesterdayClassName),
                             span(setClass('text-base'), $lang->yesterday),
                             span(setClass('text-md pl-1 font-bold num'), $yesterdayBugs)
                         ),
                         cell
                         (
-                            setClass('items-center text-success pl-2'),
+                            setClass($todayClassName),
                             span(setClass('text-base'), $lang->today),
                             span(setClass('text-md pl-1 font-bold num'), $closedBugs)
                         )
@@ -133,13 +138,13 @@ blockPanel
                         setClass('mt-2 items-center flex pl-1'),
                         cell
                         (
-                            setClass('items-center text-gray border-r pr-2'),
+                            setClass($yesterdayClassName),
                             span(setClass('text-base'), $lang->yesterday),
                             span(setClass('text-md pl-1 font-bold num'), $yesterdayCases)
                         ),
                         cell
                         (
-                            setClass('items-center text-success pl-2'),
+                            setClass($todayClassName),
                             span(setClass('text-base'), $lang->today),
                             span(setClass('text-md pl-1 font-bold num'), $runCases)
                         )
@@ -159,19 +164,19 @@ blockPanel
                     set::width('50%'),
                     setClass('item-hour px-1 w-1/2'),
                     div(setClass('h-0 w-0'), div(setClass('item-icon h-9 w-9'))),
-                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->consumedHours . ' / ' . $lang->block->projectstatistic->hour),
+                    div(setClass('text-gray pl-1'), $lang->block->teamachievement->consumedHours . ($isEn ? ' ' : ' / ') . $lang->block->projectstatistic->hour),
                     div
                     (
                         setClass('mt-2 items-center flex pl-1'),
                         cell
                         (
-                            setClass('items-center text-gray border-r pr-2'),
+                            setClass($yesterdayClassName),
                             span(setClass('text-base'), $lang->yesterday),
                             span(setClass('text-md pl-1 font-bold num'), $yesterdayHours)
                         ),
                         cell
                         (
-                            setClass('items-center text-success pl-2'),
+                            setClass($todayClassName),
                             span(setClass('text-base'), $lang->today),
                             span(setClass('text-md pl-1 font-bold num'), $consumedHours)
                         )

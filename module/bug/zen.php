@@ -1165,17 +1165,8 @@ class bugZen extends bug
 
         $this->assignVarsForEdit($bug, $product);
 
-        $duplicateBugs = $this->bug->getProductBugPairs(0, $bug->branch, '', 0, 'all');
-        if(!empty($bug->duplicateBug))
-        {
-            $duplicateBug = $this->bug->fetchByID($bug->duplicateBug);
-            $duplicateBugs[$bug->duplicateBug] = $this->lang->productCommon . '#' . $duplicateBug->product . '@'. $duplicateBug->id . ':' . $duplicateBug->title;
-        }
-        unset($duplicateBugs[$bug->id]);
-
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
-        $this->view->duplicateBugs         = $duplicateBugs;
         $this->view->product               = $product;
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectID             = $bug->project;
@@ -2453,7 +2444,9 @@ class bugZen extends bug
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
                 'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
                 'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri),
-                'plan' => $bugInfo->plan
+                'plan' => $bugInfo->plan,
+                'injection' => $bugInfo->injection,
+                'identify' => $bugInfo->identify
             );
 
             $bug = $this->updateBug($bug, $fields);

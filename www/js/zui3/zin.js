@@ -361,58 +361,9 @@
         console.warn('ZIN: load an old page.');
     }
 
-    function layoutNavbar(immediate)
-    {
-        if(!immediate)
-        {
-            if(layoutNavbar.timer) clearTimeout(layoutNavbar.timer);
-            layoutNavbar.timer = setTimeout(() => layoutNavbar(true), 50);
-            return;
-        }
-
-        const $navbar = $('#navbar');
-        if(!$navbar.length) return;
-
-        const $nav = $navbar.children('.nav');
-        if(!$nav.length) return;
-
-        let layout        = $nav.data('_layout');
-        let itemPadding   = 12;
-        let dividerMargin = 8;
-        if(!layout)
-        {
-            layout = {itemCount: 0, contentWidth: 0, dividerCount: 0};
-            $nav.find('.nav-item,.nav-divider').each(function()
-            {
-                const $item = $(this);
-                if($item.hasClass('rsh-overflow-item')) return;
-                if($item.hasClass('nav-divider'))
-                {
-                    layout.dividerCount++;
-                }
-                else
-                {
-                    layout.itemCount++;
-                    layout.contentWidth += $item.width() - (itemPadding * 2);
-                }
-            });
-            $nav.data('_layout', layout);
-        }
-
-        const $heading   = $('#heading');
-        const totalWidth = $navbar.width();
-        const maxWidth   = totalWidth - (2 * itemPadding) - (2 * Math.max($heading.outerWidth() || 0, $('#toolbar').outerWidth() || 0));
-        let width = Math.ceil((layout.itemCount * 2 * itemPadding) + layout.contentWidth + layout.dividerCount + (layout.dividerCount * dividerMargin * 2));
-        const fixSize = width > maxWidth ? Math.ceil((width - maxWidth) / (2 * (layout.itemCount + layout.dividerCount))) : 0;
-        itemPadding -= Math.min(7, fixSize);
-        dividerMargin -= Math.min(7, fixSize);
-        $nav.css({'--nav-item-padding': itemPadding + 'px', '--nav-divider-margin': dividerMargin + 'px', '--nav-offset-left': 0}).toggleClass('compact', fixSize > 6).toggleClass('compact-extra', fixSize > 8);
-    }
-
     function updateNavbar(data)
     {
         $('#navbar').morphInner(`<div>${data}</div>`);
-        layoutNavbar();
     }
 
     function updateFeatureBar(data)
@@ -436,7 +387,6 @@
         if(!$heading.length) return;
         const selector = parseSelector(info.selector);
         renderWithHtml($heading, data, selector);
-        layoutNavbar();
     }
 
     function activeNav(activeID, nav)
@@ -555,7 +505,6 @@
         });
         if(updateFullPage)
         {
-            updatePageLayout();
             $('html').enableScroll();
         }
         if(window.afterPageRender) window.afterPageRender(list, options);
@@ -579,6 +528,7 @@
         if(isLoading === undefined) isLoading = !$target.hasClass(loadingClass);
         $target.css('--load-indicator-delay', isLoading && loadingIndicatorDelay ? loadingIndicatorDelay : null);
         if(!$target.hasClass('load-indicator')) $target.addClass('load-indicator');
+        if(isLoading) setTimeout(() => $target.find('.load-indicator.loading').removeClass('loading'), loadingIndicatorDelay || 0);
         $target.toggleClass(loadingClass, isLoading);
     }
 
@@ -648,6 +598,7 @@
             headers: headers,
             type:    requestMethod,
             data:    options.data,
+            convert: options.convert,
             type:    (options.method || 'GET').toUpperCase(),
             beforeSend: () =>
             {
@@ -707,6 +658,7 @@
                     ;
                     data = [{name: hasFatal ? 'fatal' : 'html', data: rawData}];
                 }
+                if(typeof options.success === 'function' && options.success.call(ajax, data, options) === false) return;
                 if(Array.isArray(data))
                 {
                     if(workspaceType)
@@ -750,6 +702,7 @@
                 }
                 else
                 {
+                    if(typeof options.success === 'function' && options.success.call(ajax, data, options) === false) return;
                     if(data.closeModal) zui.Modal.hide(typeof data.closeModal === 'string' ? data.closeModal : undefined);
                     if(data.autoLoad) autoLoad(data.autoLoad);
                     if(data.result === 'fail')
@@ -1850,11 +1803,6 @@
         $(obj).remove();
     }
 
-    function updatePageLayout()
-    {
-        layoutNavbar();
-    }
-
     function handleGlobalClick(e)
     {
         if(e.defaultPrevented) return;
@@ -2040,9 +1988,6 @@
         if(data.app)   return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data);
     });
-
-    /* Auto layout UI. */
-    $(window).on('resize', updatePageLayout);
 
     if(!isInAppTab && !isIndexPage)
     {

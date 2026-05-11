@@ -914,4 +914,17 @@ class upgradeModelTest extends baseTest
         $this->instance->upgradeProjectReport($data);
         return $this->instance->dao->select('*')->from(TABLE_DOC)->orderBy('id_desc')->limit(1)->fetch();
     }
+
+    /**
+     * 给项目和执行生成默认的日历数据。
+     * Compute default schedule.
+     *
+     * @access public
+     * @return bool
+     */
+    public function computeDefaultScheduleTest(): array
+    {
+        $this->instance->computeDefaultSchedule();
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->fetchAll();
+    }
 }

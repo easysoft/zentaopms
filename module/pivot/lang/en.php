@@ -63,7 +63,7 @@ $lang->pivot->metric      = 'Metric';
 $lang->pivot->column      = 'Column';
 $lang->pivot->field       = 'Related Field';
 $lang->pivot->operator    = 'Operator';
-$lang->pivot->orderby     = 'Order By';
+$lang->pivot->orderby     = 'Order by';
 $lang->pivot->order       = 'Order';
 $lang->pivot->add         = 'Add';
 $lang->pivot->valOrAgg    = 'Value/Aggregate';
@@ -188,7 +188,7 @@ $lang->pivot->overduePlan   = 'Expired Plans';
 $lang->pivot->idAB         = 'ID';
 $lang->pivot->bugTitle     = 'Bug Name';
 $lang->pivot->taskName     = 'Task Name';
-$lang->pivot->todoName     = 'Todo Name';
+$lang->pivot->todoName     = 'To-do Name';
 $lang->pivot->testTaskName = 'Request Name';
 $lang->pivot->deadline     = 'Deadline';
 

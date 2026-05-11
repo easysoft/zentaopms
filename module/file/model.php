@@ -1195,6 +1195,30 @@ class fileModel extends model
     }
 
     /**
+     * Update story files.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function updateStoryFiles(int $storyID): void
+    {
+        $storySpec = $this->dao->select('id')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->orderBy('id desc')->limit(1)->fetch();
+        if(empty($storySpec)) return;
+
+        $files = $this->dao->select('id')->from(TABLE_FILE)
+            ->where('objectType')->eq('story')
+            ->andWhere('objectID')->eq($storyID)
+            ->orderBy('id')
+            ->fetchAll();
+
+        $storyFiles = [];
+        foreach($files as $file) $storyFiles[] = $file->id;
+
+        $this->dao->update(TABLE_STORYSPEC)->set('files')->eq(implode(',', $storyFiles))->where('id')->eq($storySpec->id)->exec();
+    }
+
+    /**
      * Process file info for object.
      *
      * @param  string $objectType

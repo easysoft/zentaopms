@@ -28,6 +28,8 @@ if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= 
 if($config->systemMode != 'ALM' && $config->systemMode != 'PLM') $disabledFeatures .= ',otherProgram';
 if(!empty($config->hiddenFeature)) $disabledFeatures .= ',' . implode(',', $config->hiddenFeature);
 
+$isEn = $app->getClientLang() == 'en';
+
 $rows = array();
 foreach($config->featureGroup as $group => $features)
 {
@@ -110,7 +112,7 @@ formPanel
                 h::th
                 (
                     setClass('text-md p-2.5'),
-                    setStyle(array('width' => '100px')),
+                    setStyle(array('width' => $isEn ? '140px' : '100px')),
                     $lang->admin->setModule->module
                 ),
                 h::th

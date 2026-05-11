@@ -3,6 +3,7 @@ global $lang, $app;
 $app->loadLang('story');
 $app->loadLang('bug');
 $app->loadLang('build');
+$isEn = $app->getClientLang() == 'en';
 
 $config->release->dtable = new stdclass();
 $config->release->dtable->story   = new stdclass();
@@ -62,13 +63,13 @@ $config->release->dtable->fieldList['status']['show']      = true;
 $config->release->dtable->fieldList['date']['title']    = $lang->release->date;
 $config->release->dtable->fieldList['date']['name']     = 'date';
 $config->release->dtable->fieldList['date']['type']     = 'date';
-$config->release->dtable->fieldList['date']['minWidth'] = '100';
+$config->release->dtable->fieldList['date']['minWidth'] = $isEn ? '150' : '100';
 $config->release->dtable->fieldList['date']['show']     = true;
 
 $config->release->dtable->fieldList['releasedDate']['title']    = $lang->release->releasedDate;
 $config->release->dtable->fieldList['releasedDate']['name']     = 'releasedDate';
 $config->release->dtable->fieldList['releasedDate']['type']     = 'date';
-$config->release->dtable->fieldList['releasedDate']['minWidth'] = '100';
+$config->release->dtable->fieldList['releasedDate']['minWidth'] = $isEn ? '150' : '100';
 $config->release->dtable->fieldList['releasedDate']['show']     = true;
 
 $config->release->dtable->fieldList['desc']['title']    = $lang->release->desc;
@@ -100,9 +101,10 @@ $config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
 $config->release->dtable->story->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->story->fieldList['title']['data-app']    = $app->tab;
 
-$config->release->dtable->story->fieldList['pri']['title'] = $lang->priAB;
-$config->release->dtable->story->fieldList['pri']['name']  = 'pri';
-$config->release->dtable->story->fieldList['pri']['type']  = 'pri';
+$config->release->dtable->story->fieldList['pri']['title']   = $lang->priAB;
+$config->release->dtable->story->fieldList['pri']['name']    = 'pri';
+$config->release->dtable->story->fieldList['pri']['type']    = 'pri';
+$config->release->dtable->story->fieldList['pri']['priList'] = $lang->story->priList;
 
 $config->release->dtable->story->fieldList['status']['title']     = $lang->statusAB;
 $config->release->dtable->story->fieldList['status']['name']      = 'status';
@@ -120,11 +122,13 @@ $config->release->dtable->story->fieldList['openedBy']['type']  = 'user';
 $config->release->dtable->story->fieldList['estimate']['title'] = $lang->story->estimateAB;
 $config->release->dtable->story->fieldList['estimate']['name']  = 'estimate';
 $config->release->dtable->story->fieldList['estimate']['type']  = 'number';
+if($isEn) $config->release->dtable->story->fieldList['estimate']['width'] = 100;
 
 $config->release->dtable->story->fieldList['stage']['title'] = $lang->story->stageAB;
 $config->release->dtable->story->fieldList['stage']['name']  = 'stage';
 $config->release->dtable->story->fieldList['stage']['type']  = 'category';
 $config->release->dtable->story->fieldList['stage']['map']   = $lang->story->stageList;
+if($isEn) $config->release->dtable->story->fieldList['stage']['width'] = 100;
 
 $config->release->dtable->story->fieldList['actions']['title']    = $lang->actions;
 $config->release->dtable->story->fieldList['actions']['name']     = 'actions';
@@ -132,6 +136,7 @@ $config->release->dtable->story->fieldList['actions']['type']     = 'actions';
 $config->release->dtable->story->fieldList['actions']['minWidth'] = 60;
 $config->release->dtable->story->fieldList['actions']['menu']     = array('unlinkStory');
 $config->release->dtable->story->fieldList['actions']['list']     = $config->release->actionList;
+if($isEn) $config->release->dtable->story->fieldList['actions']['width'] = 80;
 
 $config->release->dtable->bug->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->bug->fieldList['id']['name']     = 'id';
@@ -146,13 +151,15 @@ $config->release->dtable->bug->fieldList['title']['data-toggle'] = 'modal';
 $config->release->dtable->bug->fieldList['title']['data-size']   = 'lg';
 $config->release->dtable->bug->fieldList['title']['data-app']    = $app->tab;
 
-$config->release->dtable->bug->fieldList['severity']['title'] = $lang->bug->severity;
-$config->release->dtable->bug->fieldList['severity']['name']  = 'severity';
-$config->release->dtable->bug->fieldList['severity']['type']  = 'severity';
+$config->release->dtable->bug->fieldList['severity']['title']        = $lang->bug->severity;
+$config->release->dtable->bug->fieldList['severity']['name']         = 'severity';
+$config->release->dtable->bug->fieldList['severity']['type']         = 'severity';
+$config->release->dtable->bug->fieldList['severity']['severityList'] = $lang->bug->severityList;
 
-$config->release->dtable->bug->fieldList['pri']['title'] = $lang->priAB;
-$config->release->dtable->bug->fieldList['pri']['name']  = 'pri';
-$config->release->dtable->bug->fieldList['pri']['type']  = 'pri';
+$config->release->dtable->bug->fieldList['pri']['title']   = $lang->priAB;
+$config->release->dtable->bug->fieldList['pri']['name']    = 'pri';
+$config->release->dtable->bug->fieldList['pri']['type']    = 'pri';
+$config->release->dtable->bug->fieldList['pri']['priList'] = $lang->bug->priList;
 
 $config->release->dtable->bug->fieldList['status']['title']     = $lang->statusAB;
 $config->release->dtable->bug->fieldList['status']['name']      = 'status';
@@ -174,6 +181,7 @@ $config->release->dtable->bug->fieldList['openedDate']['type']  = 'date';
 $config->release->dtable->bug->fieldList['resolvedBy']['title'] = $lang->bug->resolvedBy;
 $config->release->dtable->bug->fieldList['resolvedBy']['name']  = 'resolvedBy';
 $config->release->dtable->bug->fieldList['resolvedBy']['type']  = 'user';
+if($isEn) $config->release->dtable->bug->fieldList['resolvedBy']['width'] = 120;
 
 $config->release->dtable->bug->fieldList['resolvedDate']['title'] = $lang->bug->abbr->resolvedDate;
 $config->release->dtable->bug->fieldList['resolvedDate']['name']  = 'resolvedDate';
@@ -185,6 +193,7 @@ $config->release->dtable->bug->fieldList['actions']['type']     = 'actions';
 $config->release->dtable->bug->fieldList['actions']['minWidth'] = 60;
 $config->release->dtable->bug->fieldList['actions']['menu']     = array('unlinkBug');
 $config->release->dtable->bug->fieldList['actions']['list']     = $config->release->actionList;
+if($isEn) $config->release->dtable->bug->fieldList['actions']['width'] = 80;
 
 $config->release->dtable->leftBug = clone $config->release->dtable->bug;
 

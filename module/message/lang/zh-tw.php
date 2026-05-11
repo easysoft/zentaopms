@@ -44,3 +44,7 @@ $lang->message->label->blocked      = '阻塞';
 $lang->message->label->bugconfirmed = '確認';
 $lang->message->label->compilepass  = '構建通過';
 $lang->message->label->compilefail  = '構建失敗';
+$lang->message->label->archived     = '歸檔';
+$lang->message->label->restore      = '還原';
+$lang->message->label->moved        = '移動';
+$lang->message->label->nearing      = '到期提醒';

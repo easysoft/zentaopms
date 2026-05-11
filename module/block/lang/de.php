@@ -117,7 +117,7 @@ $lang->block->totalMember   = '%s members in total';
 
 $lang->block->totalInvestment = 'Have Invested';
 $lang->block->totalPeople     = 'Total';
-$lang->block->spent           = 'Has Been Spent';
+$lang->block->spent           = 'Has Been Cost';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
@@ -135,7 +135,7 @@ $lang->block->titleList['flowchart']      = 'Flow Chart';
 $lang->block->titleList['guide']          = 'Guides';
 $lang->block->titleList['statistic']      = 'Statistic';
 $lang->block->titleList['recentproject']  = "Recent {$lang->projectCommon}";
-$lang->block->titleList['assigntome']     = 'Assign to me';
+$lang->block->titleList['assigntome']     = 'Assigned to me';
 $lang->block->titleList['project']        = "{$lang->projectCommon} List";
 $lang->block->titleList['dynamic']        = 'Dynamic';
 $lang->block->titleList['list']           = 'Todo List';
@@ -174,12 +174,12 @@ $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productC
 $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Releases",          'module' => 'product', 'code' => 'release',          'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['product'][] = array('title' => "Unclosed {$lang->productCommon} Plans",             'module' => 'product', 'code' => 'plan',             'width' => '2', 'params' => array('type' => 'noclosed', 'count' => '20'));
 $lang->block->default['product'][] = array('title' => "{$lang->productCommon} Release Statistic",          'module' => 'product', 'code' => 'releasestatistic', 'width' => '1');
-$lang->block->default['product'][] = array('title' => "{$lang->SRCommon} Assigned To Me",                  'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['product'][] = array('title' => "{$lang->SRCommon} Assigned to Me",                  'module' => 'product', 'code' => 'story',            'width' => '1', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Statistic",                  'module' => 'singleproduct', 'code' => 'singlestatistic',        'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Bug Statistic",              'module' => 'singleproduct', 'code' => 'singlebugstatistic',     'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Roadmap",                    'module' => 'singleproduct', 'code' => 'roadmap',                'width' => '2');
-$lang->block->default['singleproduct'][] = array('title' => "{$lang->SRCommon} Assigned To Me",                  'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
+$lang->block->default['singleproduct'][] = array('title' => "{$lang->SRCommon} Assigned to Me",                  'module' => 'singleproduct', 'code' => 'singlestory',            'width' => '2', 'params' => array('type' => 'assignedTo', 'count' => '20', 'orderBy' => 'id_desc'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Plans",                      'module' => 'singleproduct', 'code' => 'singleplan',             'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "{$lang->productCommon} Releases",                   'module' => 'singleproduct', 'code' => 'singlerelease',          'width' => '2', 'params' => array('count' => '20'));
 $lang->block->default['singleproduct'][] = array('title' => "Dynamic",                                           'module' => 'singleproduct', 'code' => 'singledynamic',          'width' => '1');
@@ -225,14 +225,14 @@ $lang->block->availableBlocks['task']        = 'Tasks';
 $lang->block->availableBlocks['bug']         = 'Bugs';
 $lang->block->availableBlocks['case']        = 'Cases';
 $lang->block->availableBlocks['story']       = 'Stories';
-$lang->block->availableBlocks['requirement'] = 'Requirements';
+$lang->block->availableBlocks['requirement'] = 'Features';
 $lang->block->availableBlocks['product']     = $lang->productCommon . 's';
 $lang->block->availableBlocks['execution']   = $lang->execution->common . 's';
 $lang->block->availableBlocks['plan']        = 'Plans';
 $lang->block->availableBlocks['release']     = 'Releases';
 $lang->block->availableBlocks['build']       = 'Builds';
-$lang->block->availableBlocks['testcase']    = 'Testcase';
-$lang->block->availableBlocks['testtask']    = 'Testtask';
+$lang->block->availableBlocks['testcase']    = 'Test Cases';
+$lang->block->availableBlocks['testtask']    = 'Test Requests';
 $lang->block->availableBlocks['risk']        = 'Risks';
 $lang->block->availableBlocks['reviewissue'] = 'Review Issue';
 $lang->block->availableBlocks['issue']       = 'Issues';
@@ -243,7 +243,7 @@ $lang->block->availableBlocks['demand']      = 'Demands';
 
 $lang->block->modules['project'] = new stdclass();
 $lang->block->modules['project']->availableBlocks['overview']      = "{$lang->projectCommon} Overview";
-$lang->block->modules['project']->availableBlocks['recentproject'] = "Recent {$lang->projectCommon}";
+$lang->block->modules['project']->availableBlocks['recentproject'] = "My Recent {$lang->projectCommon}s";
 $lang->block->modules['project']->availableBlocks['statistic']     = "{$lang->projectCommon} Statistic";
 $lang->block->modules['project']->availableBlocks['project']       = "{$lang->projectCommon} List";
 
@@ -433,16 +433,16 @@ $lang->block->typeList->testtask['all']     = 'Alle';
 
 $lang->block->typeList->risk['all']      = 'All';
 $lang->block->typeList->risk['active']   = 'Active';
-$lang->block->typeList->risk['assignTo'] = 'Assign To';
-$lang->block->typeList->risk['assignBy'] = 'Assign By';
+$lang->block->typeList->risk['assignTo'] = 'Assigned to';
+$lang->block->typeList->risk['assignBy'] = 'Assign by';
 $lang->block->typeList->risk['closed']   = 'Closed';
 $lang->block->typeList->risk['hangup']   = 'Hangup';
 $lang->block->typeList->risk['canceled'] = 'Canceled';
 
 $lang->block->typeList->issue['all']      = 'All';
 $lang->block->typeList->issue['open']     = 'Open';
-$lang->block->typeList->issue['assignto'] = 'Assign To';
-$lang->block->typeList->issue['assignby'] = 'Assign By';
+$lang->block->typeList->issue['assignto'] = 'Assigned to';
+$lang->block->typeList->issue['assignby'] = 'Assign by';
 $lang->block->typeList->issue['closed']   = 'Closed';
 $lang->block->typeList->issue['resolved'] = 'Resolved';
 $lang->block->typeList->issue['canceled'] = 'Canceled';
@@ -543,11 +543,11 @@ $lang->block->welcome->reviewList['story']      = 'Story';
 $lang->block->welcome->reviewList['reviewByMe'] = 'Review';
 
 $lang->block->welcome->assignList = array();
-$lang->block->welcome->assignList['task'] = 'Task';
-if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'Bug';
+$lang->block->welcome->assignList['task'] = 'Tasks';
+if($config->vision != 'or') $lang->block->welcome->assignList['bug']   = 'Bugs';
 if($config->vision != 'or') $lang->block->welcome->assignList['story'] = 'SRStroy';
 $lang->block->welcome->assignList['testcase'] = 'TestCase';
-if($config->URAndSR && $config->vision != 'or')  $lang->block->welcome->assignList['requirement'] = "{$lang->URCommon}";
+if($config->URAndSR && $config->vision != 'or')  $lang->block->welcome->assignList['requirement'] = "Features";
 if($config->enableER && $config->vision != 'or') $lang->block->welcome->assignList['epic']        = "{$lang->ERCommon}";
 
 $lang->block->customModeTip = new stdClass();
@@ -593,7 +593,7 @@ $lang->block->projectstatistic->bugs             = 'Number';
 $lang->block->projectstatistic->closed           = 'Closed';
 $lang->block->projectstatistic->activated        = 'Activated';
 $lang->block->projectstatistic->unit             = 'unit';
-$lang->block->projectstatistic->SP               = 'SP';
+$lang->block->projectstatistic->SP               = $config->hourUnit;
 $lang->block->projectstatistic->personDay        = 'ManHour';
 $lang->block->projectstatistic->day              = 'day';
 $lang->block->projectstatistic->hour             = 'hour';
@@ -672,8 +672,8 @@ $lang->block->productoverview->thisWeek                = 'This Week';
 
 $lang->block->productlist = new stdclass();
 $lang->block->productlist->unclosedFeedback  = 'Number Of Feedback Not Closed';
-$lang->block->productlist->activatedStory    = 'Activate Requirements';
-$lang->block->productlist->storyCompleteRate = 'Requirement Completion Rate';
+$lang->block->productlist->activatedStory    = 'Activate Features';
+$lang->block->productlist->storyCompleteRate = 'Feature Completion Rate';
 $lang->block->productlist->activatedBug      = 'Activate Bugs';
 
 $lang->block->sprint = new stdclass();

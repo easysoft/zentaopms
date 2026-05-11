@@ -1,7 +1,7 @@
 <?php
 $lang->mail->index         = 'Home';
 $lang->mail->detect        = 'Testen';
-$lang->mail->detectAction  = 'Detect By Email Address';
+$lang->mail->detectAction  = 'Detect by Email Address';
 $lang->mail->edit          = 'Bearbeiten';
 $lang->mail->save          = 'Speichern';
 $lang->mail->saveAction    = 'Save Settings';

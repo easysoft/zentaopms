@@ -85,9 +85,10 @@ $config->build->story->dtable->fieldList['title']['data-toggle'] = 'modal';
 $config->build->story->dtable->fieldList['title']['data-size']   = 'lg';
 $config->build->story->dtable->fieldList['title']['data-app']    = $app->tab;
 
-$config->build->story->dtable->fieldList['pri']['title'] = $lang->priAB;
-$config->build->story->dtable->fieldList['pri']['name']  = 'pri';
-$config->build->story->dtable->fieldList['pri']['type']  = 'pri';
+$config->build->story->dtable->fieldList['pri']['title']   = $lang->priAB;
+$config->build->story->dtable->fieldList['pri']['name']    = 'pri';
+$config->build->story->dtable->fieldList['pri']['type']    = 'pri';
+$config->build->story->dtable->fieldList['pri']['priList'] = $lang->story->priList;
 
 $config->build->story->dtable->fieldList['status']['title']     = $lang->statusAB;
 $config->build->story->dtable->fieldList['status']['name']      = 'status';

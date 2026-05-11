@@ -83,20 +83,22 @@ $lang->report->overduePlan   = 'Expired Plans';
 $lang->report->idAB         = 'ID';
 $lang->report->bugTitle     = 'Bug Name';
 $lang->report->taskName     = 'Task Name';
-$lang->report->todoName     = 'Todo Name';
+$lang->report->todoName     = 'To-do Name';
 $lang->report->testTaskName = 'Request Name';
+$lang->report->cardName   = 'Kanban Card Name';
 $lang->report->deadline     = 'Deadline';
 
 $lang->report->mailTitle           = new stdclass();
 $lang->report->mailTitle->begin    = 'Notice: You have';
 $lang->report->mailTitle->bug      = " Bug (%s),";
 $lang->report->mailTitle->task     = " Task (%s),";
-$lang->report->mailTitle->todo     = " Todo (%s),";
+$lang->report->mailTitle->todo     = " To-do (%s),";
 $lang->report->mailTitle->testTask = " Request (%s),";
+$lang->report->mailTitle->card     = " Kanban Card (%s),";
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
-$lang->report->annualData->exportByZentao   = "Export By ZenTao";
+$lang->report->annualData->exportByZentao   = "Export by ZenTao";
 $lang->report->annualData->scope            = "Scope";
 $lang->report->annualData->allUser          = "All Users";
 $lang->report->annualData->allDept          = "Whole Company";
@@ -119,7 +121,7 @@ $lang->report->annualData->logins           = "Login times";
 $lang->report->annualData->actions          = "Number of operations";
 $lang->report->annualData->contributions    = "Number of contributions";
 $lang->report->annualData->consumed         = "Consumed";
-$lang->report->annualData->todos            = "Number of Todos";
+$lang->report->annualData->todos            = "Number of To-dos";
 
 $lang->report->annualData->storyStatusStat = "Story status distribution";
 $lang->report->annualData->taskStatusStat  = "Task status distribution";
@@ -220,7 +222,7 @@ $lang->report->projectOverview     = "截止目前{$lang->projectCommon}总览";
 $lang->report->contributionCountObject = array();
 $lang->report->contributionCountObject['task']        = "Tasks: Create, Complete, Close, Cancel, Assign";
 $lang->report->contributionCountObject['story']       = "Stories: Create, Review, Close, Assign";
-$lang->report->contributionCountObject['requirement'] = "User Requirements: Create, Review, Close, Assign";
+$lang->report->contributionCountObject['requirement'] = "Features: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['epic']        = "Epics: Create, Review, Close, Assign";
 $lang->report->contributionCountObject['bug']         = "Bugs: Create, Solve, Close, Assign";
 $lang->report->contributionCountObject['testcase']    = "Testcases: Create";
@@ -239,19 +241,19 @@ $lang->report->tips->basic['company'] = '
 1.Number of company: Sum the number of all users in the system and filter the deleted users. <br>
 2.Number of operations: Sum the number of operations performed by the system in a given year. <br>
 3.Consumed: Sum the time consumed by the system in a given year. <br>
-4.Number of Todos: Sum the todo for all users of the system. <br>
+4.Number of To-dos: Sum the todo for all users of the system. <br>
 5.Number of contributions: Sum the contributions of all users of the system.';
 $lang->report->tips->basic['dept'] = '
 1.Number of departments: Sum the number of all users in a department and filter the deleted users. <br>
 2.Number of operations: Sum the number of operations performed by users in a department in a given year. <br>
 3.Consumed: Sum the working hours consumed by a department user in a given year. <br>
-4.Number of Todos: Sum the todo for users in a department. <br>
+4.Number of To-dos: Sum the todo for users in a department. <br>
 5.Number of contributions: Sum the contribution data of users in a department.';
 $lang->report->tips->basic['user'] = '
 1.Login times: Sum the login times of a user in a given year. <br>
 2.Number of operations: Sum the number of operations performed by a user in a given year. <br>
 3.Consumed: Sum the hours consumed by a user in a given year. <br>
-4.Number of Todos: Sum the todo for a user. <br>
+4.Number of To-dos: Sum the todo for a user. <br>
 5.Number of contributions: Sum the contribution data for a user.';
 
 $lang->report->tips->contributionCount['company'] = "Contribution data of all user in the selected year, including:";

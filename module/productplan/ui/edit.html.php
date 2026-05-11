@@ -77,6 +77,7 @@ formPanel
         (
             set::width('1/4'),
             set::label($lang->productplan->begin),
+            set::required(true),
             datepicker
             (
                 setID('begin'),
@@ -107,6 +108,7 @@ formPanel
             set::width('1/4'),
             set::label($lang->productplan->end),
             set::control('date'),
+            set::required(true),
             setID('end'),
             set::name('end'),
             set::value($plan->end != $config->productplan->future ? formatTime($plan->end) : '')

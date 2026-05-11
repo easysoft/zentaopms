@@ -507,13 +507,13 @@ class header extends wg
         return array(
             btn
             (
-                set::type('ghost'),
+                setClass('rounded-full bg-gray bg-opacity-10 text-primary-900 text-opacity-70 ring-0 w-9'),
                 set::size('sm'),
                 set::icon($opened ? 'export rotate-90' : 'import rotate-270'),
                 set::hint($opened ? $lang->exitWorkspace : $lang->enterWorkspace),
                 on::click()->call($opened ? 'exitWorkspace' : 'enterWorkspace')
             ),
-            html('<div class="divider" style="margin:0;height:8px;align-self:center;"></div>')
+            html('<div class="divider h-2 self-center" style="margin:0 0 0 0.75rem"></div>')
         );
     }
 }

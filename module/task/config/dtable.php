@@ -1,4 +1,7 @@
 <?php
+global $app;
+$isEn = $app->getClientLang() == 'en';
+
 $config->task->dtable = new stdclass();
 
 $config->task->dtable->fieldList['id']['title']    = $lang->idAB;
@@ -61,6 +64,7 @@ $config->task->dtable->fieldList['assignedTo']['show']        = true;
 $config->task->dtable->fieldList['assignedTo']['group']       = 3;
 $config->task->dtable->fieldList['assignedTo']['control']     = 'select';
 $config->task->dtable->fieldList['assignedTo']['dataSource']  = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
+if($isEn) $config->task->dtable->fieldList['assignedTo']['width'] = '140';
 
 $config->task->dtable->fieldList['assignedDate']['type']     = 'date';
 $config->task->dtable->fieldList['assignedDate']['sortType'] = true;
@@ -79,6 +83,7 @@ $config->task->dtable->fieldList['finishedBy']['type']     = 'user';
 $config->task->dtable->fieldList['finishedBy']['sortType'] = true;
 $config->task->dtable->fieldList['finishedBy']['show']     = true;
 $config->task->dtable->fieldList['finishedBy']['group']    = 4;
+if($isEn) $config->task->dtable->fieldList['finishedBy']['width'] = '120';
 
 $config->task->dtable->fieldList['finishedDate']['title']    = $lang->task->finishedDateAB;
 $config->task->dtable->fieldList['finishedDate']['type']     = 'date';
@@ -90,12 +95,14 @@ $config->task->dtable->fieldList['deadline']['type']     = 'date';
 $config->task->dtable->fieldList['deadline']['sortType'] = true;
 $config->task->dtable->fieldList['deadline']['show']     = true;
 $config->task->dtable->fieldList['deadline']['group']    = 5;
+if($isEn) $config->task->dtable->fieldList['deadline']['width'] = '100';
 
 $config->task->dtable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->task->dtable->fieldList['estimate']['type']     = 'number';
 $config->task->dtable->fieldList['estimate']['sortType'] = true;
 $config->task->dtable->fieldList['estimate']['show']     = true;
 $config->task->dtable->fieldList['estimate']['group']    = 5;
+if($isEn) $config->task->dtable->fieldList['estimate']['width'] = '100';
 
 $config->task->dtable->fieldList['consumed']['title']    = $lang->task->consumedAB;
 $config->task->dtable->fieldList['consumed']['type']     = 'number';
@@ -129,6 +136,7 @@ if($config->edition != 'open')
     $config->task->dtable->fieldList['relatedObject']['group']       = 5;
     $config->task->dtable->fieldList['relatedObject']['flex']        = false;
     $config->task->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($isEn) $config->task->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->task->dtable->fieldList['closedBy']['type']     = 'user';

@@ -4,66 +4,66 @@ global $config;
 /* Method List。*/
 $lang->my->index           = 'Home';
 $lang->my->data            = 'My Data';
-$lang->my->todo            = 'My Todos';
+$lang->my->todo            = 'My To-do';
 $lang->my->todoAction      = 'Schedule List';
 $lang->my->calendar        = 'Schedule';
 $lang->my->work            = 'Work';
-$lang->my->contribute      = 'Contribute';
+$lang->my->contribute      = 'Contribution';
 $lang->my->task            = 'My Tasks';
 $lang->my->bug             = 'My Bugs';
-$lang->my->myTestTask      = 'My Builds';
-$lang->my->myTestCase      = 'My Cases';
+$lang->my->myTestTask      = 'My Test Requests';
+$lang->my->myTestCase      = 'My Test Cases';
 $lang->my->story           = 'My Stories';
 $lang->my->doc             = "My Docs";
 $lang->my->createProgram   = 'Create Program';
 $lang->my->project         = "My {$lang->projectCommon}s";
 $lang->my->execution       = "My {$lang->execution->common}s";
-$lang->my->audit           = 'Review';
+$lang->my->audit           = 'Reviews';
 $lang->my->issue           = 'My Issues';
 $lang->my->risk            = 'My Risks';
 $lang->my->reviewissue     = 'My Review Issue';
 $lang->my->profile         = 'My Profile';
-$lang->my->dynamic         = 'My Dynamics';
-$lang->my->team            = 'My Team';
-$lang->my->editProfile     = 'Edit';
-$lang->my->changePassword  = 'Edit Password';
+$lang->my->dynamic         = 'My Recents';
+$lang->my->team            = 'Team';
+$lang->my->editProfile     = 'Edit Profile';
+$lang->my->changePassword  = 'Change Oassword';
 $lang->my->preference      = 'Preference';
-$lang->my->unbind          = 'Unbind from Zdoo';
-$lang->my->manageContacts  = 'Manage Contact';
+$lang->my->unbind          = 'Unbind ZDOO';
+$lang->my->manageContacts  = 'Manage Contacts';
 $lang->my->createContacts  = 'Create Contact';
 $lang->my->deleteContacts  = 'Delete Contact';
 $lang->my->viewContacts    = 'View Contact';
-$lang->my->shareContacts   = 'Public';
-$lang->my->limited         = 'Limited Actions (Users can only edit what involves them.)';
+$lang->my->shareContacts   = 'Public Contacts';
+$lang->my->limited         = 'Permission restricted. You can only edit your own data.';
 $lang->my->score           = 'My Points';
 $lang->my->scoreRule       = 'Point Rules';
-$lang->my->noTodo          = 'No todos yet. ';
-$lang->my->noData          = 'No %s yet. ';
+$lang->my->noTodo          = 'No To-do yet.';
+$lang->my->noData          = 'No %s yet.';
 $lang->my->storyChanged    = "Story Changed";
 $lang->my->hours           = "Hours/day";
-$lang->my->uploadAvatar    = 'Upload Avatar';
+$lang->my->uploadAvatar    = 'Update Avatar';
 $lang->my->epic            = "My {$lang->ERCommon}";
 $lang->my->requirement     = "My {$lang->URCommon}";
-$lang->my->testtask        = 'My Test Task';
-$lang->my->testcase        = 'My Case';
+$lang->my->testtask        = 'Mt Test Request';
+$lang->my->testcase        = 'My Test Case';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->pri             = 'Priority';
-$lang->my->alert           = 'You can click on your profile at the top right and select "Preference" to modify your information. ';
-$lang->my->assignedToMe    = 'AssignedToMe';
+$lang->my->alert           = 'You can click your avatar in the upper-right corner and select Preference to update your information.';
+$lang->my->assignedToMe    = 'Assigned to Me';
 $lang->my->byQuery         = 'Search';
 $lang->my->contactHolder   = 'Contacts';
 $lang->my->contactList     = 'Contact List';
-$lang->my->myContact       = 'My Contact';
-$lang->my->publicContact   = 'Public Contact';
-$lang->my->manageSelf      = 'Only can manage contacts created by your self.';
-$lang->my->adminView       = 'The system administrator has the permission to delete public contacts';
+$lang->my->myContact       = 'My';
+$lang->my->publicContact   = 'Public';
+$lang->my->manageSelf      = 'You can only edit contacts you created.';
+$lang->my->adminView       = 'System administrators have permission to delete public contacts.';
 
-$lang->my->indexAction      = 'My Index';
+$lang->my->indexAction      = 'Dashboard Overview';
 $lang->my->calendarAction   = 'My Calendar';
 $lang->my->workAction       = 'My Work';
-$lang->my->contributeAction = 'My Contribute';
+$lang->my->contributeAction = 'My Contribution';
 $lang->my->profileAction    = 'Profile';
-$lang->my->dynamicAction    = 'Dynamic';
+$lang->my->dynamicAction    = 'Recents';
 
 $lang->my->myExecutions = "My Executions";
 $lang->my->name         = 'Name';
@@ -72,33 +72,33 @@ $lang->my->projects     = "{$lang->projectCommon}s";
 $lang->my->executions   = 'Executions';
 
 $lang->my->taskMenu = new stdclass();
-$lang->my->taskMenu->assignedToMe = 'AssignedToMe';
-$lang->my->taskMenu->openedByMe   = 'CreatedByMe';
-$lang->my->taskMenu->finishedByMe = 'FinishedByMe';
-$lang->my->taskMenu->closedByMe   = 'ClosedByMe';
-$lang->my->taskMenu->canceledByMe = 'CancelledByMe';
-$lang->my->taskMenu->assignedByMe = 'AssignedByMe';
+$lang->my->taskMenu->assignedToMe = 'Assigned to Me';
+$lang->my->taskMenu->openedByMe   = 'Created by Me';
+$lang->my->taskMenu->finishedByMe = 'Completed by Me';
+$lang->my->taskMenu->closedByMe   = 'Closed by Me';
+$lang->my->taskMenu->canceledByMe = 'Cancelled by Me';
+$lang->my->taskMenu->assignedByMe = 'Assigned by Me';
 
 $lang->my->storyMenu = new stdclass();
-$lang->my->storyMenu->assignedToMe = 'AssignedToMe';
-$lang->my->storyMenu->reviewByMe   = 'ReviewByMe';
-$lang->my->storyMenu->openedByMe   = 'CreatedByMe';
-$lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
-$lang->my->storyMenu->closedByMe   = 'ClosedByMe';
-$lang->my->storyMenu->assignedByMe = 'AssignedByMe';
+$lang->my->storyMenu->assignedToMe = 'Assigned to Me';
+$lang->my->storyMenu->reviewByMe   = 'My Pending Review';
+$lang->my->storyMenu->openedByMe   = 'Created by Me';
+$lang->my->storyMenu->reviewedByMe = 'Reviewed by Me';
+$lang->my->storyMenu->closedByMe   = 'Closed by Me';
+$lang->my->storyMenu->assignedByMe = 'Assigned by Me';
 
 $lang->my->auditField = new stdclass();
 $lang->my->auditField->title  = 'Title';
-$lang->my->auditField->time   = 'Time';
+$lang->my->auditField->time   = 'Submission Time';
 $lang->my->auditField->type   = 'Type';
 $lang->my->auditField->result = 'Result';
 $lang->my->auditField->status = 'Status';
 
-$lang->my->auditField->oaTitle['attend']   = '%s application for attend: %s';
-$lang->my->auditField->oaTitle['leave']    = '%s application for leave: %s';
-$lang->my->auditField->oaTitle['makeup']   = '%s application for makeup:%s';
-$lang->my->auditField->oaTitle['overtime'] = '%s application for overtime: %s';
-$lang->my->auditField->oaTitle['lieu']     = '%s application for lieu: %s';
+$lang->my->auditField->oaTitle['attend']   = '%ss Attendance Request: %s';
+$lang->my->auditField->oaTitle['leave']    = '%ss Leave Request: %s';
+$lang->my->auditField->oaTitle['makeup']   = '%ss Make-up Work Request: %s';
+$lang->my->auditField->oaTitle['overtime'] = '%ss Overtime Request: %s';
+$lang->my->auditField->oaTitle['lieu']     = '%ss Compensatory Leave Request: %s';
 
 $lang->my->form = new stdclass();
 $lang->my->form->lblBasic   = 'Basic Info';
@@ -112,44 +112,44 @@ $lang->my->executionLink = 'Execution Default Page';
 $lang->my->docLink       = 'Document Default Page';
 
 $lang->my->programLinkList = array();
-$lang->my->programLinkList['program-browse']  = 'Project Set List/View all project sets';
-$lang->my->programLinkList['program-kanban']  = 'Project Set Kanban/You can visually view the progress of all project sets';
-$lang->my->programLinkList['program-project'] = "{$lang->projectCommon} list of the most recent program/You can view all items under the current program";
+$lang->my->programLinkList['program-browse']  = 'Program List / View all programs.';
+$lang->my->programLinkList['program-kanban']  = 'Program Kanban / Visualize the progress of all programs.';
+$lang->my->programLinkList['program-project'] = "Recent Programs {$lang->projectCommon} List / View all {$lang->projectCommon} under the current program.";
 
 $lang->my->productLinkList = array();
-$lang->my->productLinkList['product-all']       = "{$lang->productCommon} List/Can view all {$lang->productCommon}s";
-$lang->my->productLinkList['product-kanban']    = "{$lang->productCommon} Kanban/You can visually view the progress of all {$lang->productCommon}s";
-$lang->my->productLinkList['product-index']     = "All {$lang->productCommon} dashboards/You can view the statistics of all {$lang->productCommon}s";
-$lang->my->productLinkList['product-dashboard'] = "Last {$lang->productCommon} dashboard/You can view the current {$lang->productCommon} overview";
-$lang->my->productLinkList['product-browse']    = "Demand list of the latest {$lang->productCommon}/You can view the demand information under the current {$lang->productCommon}";
+$lang->my->productLinkList['product-all']       = "{$lang->productCommon} List / View all {$lang->productCommon}.";
+$lang->my->productLinkList['product-kanban']    = "{$lang->productCommon} Kanban / Visualize the progress of all {$lang->productCommon}.";
+$lang->my->productLinkList['product-index']     = "All {$lang->productCommon} Dashboard / View statistics, summaries, and overviews of all {$lang->productCommon}.";
+$lang->my->productLinkList['product-dashboard'] = "Recent {$lang->productCommon} Dashboard / View the most recently accessed {$lang->productCommon} dashboard.";
+$lang->my->productLinkList['product-browse']    = "Recent {$lang->productCommon}s Story List / Access the story list under the most recently viewed {$lang->productCommon}.";
 
 $lang->my->projectLinkList = array();
-$lang->my->projectLinkList['project-browse']    = "{$lang->projectCommon} List/Can view all items";
-$lang->my->projectLinkList['project-kanban']    = "{$lang->projectCommon} Kanban/The {$lang->projectCommon} board can visually view the progress of all {$lang->projectCommon}s";
-$lang->my->projectLinkList['project-execution'] = "All execution lists under the {$lang->projectCommon}/View all execution information";
-$lang->my->projectLinkList['project-index']     = "Recent Project Dashboard/You can view the current {$lang->projectCommon} overview";
+$lang->my->projectLinkList['project-browse']    = "{$lang->projectCommon} List / View all {$lang->projectCommon}.";
+$lang->my->projectLinkList['project-kanban']    = "{$lang->projectCommon} Kanban / Visualize the progress of all {$lang->projectCommon}.";
+$lang->my->projectLinkList['project-execution'] = "Recent {$lang->projectCommon} Execution List / View all execution lists under the {$lang->projectCommon}.";
+$lang->my->projectLinkList['project-index']     = "Recent {$lang->projectCommon} Dashboard / Access the dashboard of the most recently viewed {$lang->projectCommon}.";
 
 $lang->my->executionLinkList = array();
-$lang->my->executionLinkList['execution-all']             = 'Execution list/You can view all executions';
-$lang->my->executionLinkList['execution-executionkanban'] = 'Execute Kanban/You can view the implementation status of projects in progress';
-$lang->my->executionLinkList['execution-task']            = 'List of recently executed tasks/You can view the task information under the current iteration';
+$lang->my->executionLinkList['execution-all']             = 'Execution List / View all executions.';
+$lang->my->executionLinkList['execution-executionkanban'] = 'Execution Kanban / Visualize the progress of all executions.';
+$lang->my->executionLinkList['execution-task']            = 'Recent Execution Task List / View the tasks under the most recently created execution.';
 
 $lang->my->docLinkList = array();
 $lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed space homepage';
 $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
 
-$lang->my->confirmReview['pass'] = 'Do you want to pass it?';
+$lang->my->confirmReview['pass'] = 'Are you sure you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
-<p class='theme-title'><span style='color: #0c60e1'>"Young Blue"</span> theme is available now!</p>
+<p class='theme-title'><span style='color: #0c60e1'>Young Blue</span>theme is available now!</p>
 <div>
-  <p>Just one step and you will have it.</p>
-  <p>Click <span style='color: #0c60e1'>Avatar-Theme-Young Blue</span>. It is done!</p>
+<p>With just one step, you can experience the brand new theme! Go ahead and set it up now!</p>
+<p>Simply hover over<span style='color: #0c60e1'>【Avatar - Theme - Young Blue】</span>, click on Young Blue, and you're all set!</p>
 </div>
 EOT;
 
-$lang->my->featureBar['todo']['all']       = 'Assigned To Yourself';
-$lang->my->featureBar['todo']['undone']    = 'Unfinished';
+$lang->my->featureBar['todo']['all']       = 'Assigned to Me';
+$lang->my->featureBar['todo']['undone']    = 'Uncompleted';
 $lang->my->featureBar['todo']['future']    = 'TBD';
 $lang->my->featureBar['todo']['today']     = 'Today';
 $lang->my->featureBar['todo']['thisWeek']  = 'This Week';
@@ -157,11 +157,11 @@ $lang->my->featureBar['todo']['thisMonth'] = 'This Month';
 $lang->my->featureBar['todo']['more']      = 'More';
 
 $lang->my->moreSelects['todo']['more']['thisYear']        = 'This Year';
-$lang->my->moreSelects['todo']['more']['assignedToOther'] = 'Assigned To Other';
-$lang->my->moreSelects['todo']['more']['cycle']           = 'Recurrence';
+$lang->my->moreSelects['todo']['more']['assignedToOther'] = 'Assigned to Others';
+$lang->my->moreSelects['todo']['more']['cycle']           = 'Duration';
 
 $lang->my->featureBar['audit']['all']         = 'All';
-$lang->my->featureBar['audit']['demand']      = 'Demand';
+$lang->my->featureBar['audit']['demand']      = 'Stories from Story Pool';
 $lang->my->featureBar['audit']['story']       = $lang->SRCommon;
 $lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
 $lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
@@ -173,12 +173,12 @@ if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBa
 
 $lang->my->featureBar['project']['doing']      = 'Doing';
 $lang->my->featureBar['project']['wait']       = 'Waiting';
-$lang->my->featureBar['project']['suspended']  = 'Suspended';
+$lang->my->featureBar['project']['suspended']  = 'On Hold';
 $lang->my->featureBar['project']['delayed']    = 'Delayed';
 $lang->my->featureBar['project']['closed']     = 'Closed';
-$lang->my->featureBar['project']['openedbyme'] = 'CreatedByMe';
+$lang->my->featureBar['project']['openedbyme'] = 'Created by Me';
 
-$lang->my->featureBar['execution']['undone']  = 'Undone';
+$lang->my->featureBar['execution']['undone']  = 'Uncompleted';
 $lang->my->featureBar['execution']['done']    = 'Done';
 $lang->my->featureBar['execution']['delayed'] = 'Delayed';
 
@@ -192,52 +192,52 @@ $lang->my->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->my->featureBar['work']['task']['assignedTo']     = $lang->my->assignedToMe;
 $lang->my->featureBar['work']['testcase']['assigntome'] = $lang->my->assignedToMe;
-$lang->my->featureBar['work']['testtask']['assignedTo'] = 'Test task';
+$lang->my->featureBar['work']['testtask']['assignedTo'] = 'Managed by Me';
 
 $lang->my->featureBar['work']['epic'] = $lang->my->featureBar['work']['task'];
-$lang->my->featureBar['work']['epic']['reviewBy'] = 'ReviewByMe';
+$lang->my->featureBar['work']['epic']['reviewBy'] = 'My Pending Review';
 
 $lang->my->featureBar['work']['requirement'] = $lang->my->featureBar['work']['task'];
-$lang->my->featureBar['work']['requirement']['reviewBy'] = 'ReviewByMe';
+$lang->my->featureBar['work']['requirement']['reviewBy'] = 'My Pending Review';
 
 $lang->my->featureBar['work']['story'] = $lang->my->featureBar['work']['requirement'];
 $lang->my->featureBar['work']['bug']   = $lang->my->featureBar['work']['task'];
 
-$lang->my->featureBar['contribute']['task']['openedBy']   = 'CreatedByMe';
-$lang->my->featureBar['contribute']['task']['finishedBy'] = 'FinishedByMe';
-$lang->my->featureBar['contribute']['task']['myInvolved'] = 'InvolvedByMe';
-$lang->my->featureBar['contribute']['task']['closedBy']   = 'ClosedByMe';
-$lang->my->featureBar['contribute']['task']['canceledBy'] = 'CancelledByMe';
-$lang->my->featureBar['contribute']['task']['assignedBy'] = 'AssignedByMe';
+$lang->my->featureBar['contribute']['task']['openedBy']   = 'Created by Me';
+$lang->my->featureBar['contribute']['task']['finishedBy'] = 'Completed by Me';
+$lang->my->featureBar['contribute']['task']['myInvolved'] = 'My Involvement';
+$lang->my->featureBar['contribute']['task']['closedBy']   = 'Closed by Me';
+$lang->my->featureBar['contribute']['task']['canceledBy'] = 'Cancelled by Me';
+$lang->my->featureBar['contribute']['task']['assignedBy'] = 'Assigned by Me';
 
-$lang->my->featureBar['contribute']['epic']['openedBy']   = 'CreatedByMe';
-$lang->my->featureBar['contribute']['epic']['reviewedBy'] = 'ReviewedByMe';
-$lang->my->featureBar['contribute']['epic']['closedBy']   = 'ClosedByMe';
-$lang->my->featureBar['contribute']['epic']['assignedBy'] = 'AssignedByMe';
+$lang->my->featureBar['contribute']['epic']['openedBy']   = 'Created by Me';
+$lang->my->featureBar['contribute']['epic']['reviewedBy'] = 'Reviewed by Me';
+$lang->my->featureBar['contribute']['epic']['closedBy']   = 'Closed by Me';
+$lang->my->featureBar['contribute']['epic']['assignedBy'] = 'Assigned by Me';
 
-$lang->my->featureBar['contribute']['requirement']['openedBy']   = 'CreatedByMe';
-$lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'ReviewedByMe';
-$lang->my->featureBar['contribute']['requirement']['closedBy']   = 'ClosedByMe';
-$lang->my->featureBar['contribute']['requirement']['assignedBy'] = 'AssignedByMe';
+$lang->my->featureBar['contribute']['requirement']['openedBy']   = 'Created by Me';
+$lang->my->featureBar['contribute']['requirement']['reviewedBy'] = 'Reviewed by Me';
+$lang->my->featureBar['contribute']['requirement']['closedBy']   = 'Closed by Me';
+$lang->my->featureBar['contribute']['requirement']['assignedBy'] = 'Assigned by Me';
 
-$lang->my->featureBar['contribute']['bug']['openedBy']   = 'CreatedByMe';
-$lang->my->featureBar['contribute']['bug']['resolvedBy'] = 'ResolvedByMe';
-$lang->my->featureBar['contribute']['bug']['closedBy']   = 'ClosedByMe';
-$lang->my->featureBar['contribute']['bug']['assignedBy'] = 'AssignedByMe';
+$lang->my->featureBar['contribute']['bug']['openedBy']   = 'Created by Me';
+$lang->my->featureBar['contribute']['bug']['resolvedBy'] = 'Fixed by Me';
+$lang->my->featureBar['contribute']['bug']['closedBy']   = 'Closed by Me';
+$lang->my->featureBar['contribute']['bug']['assignedBy'] = 'Assigned by Me';
 
 $lang->my->featureBar['contribute']['story'] = $lang->my->featureBar['contribute']['requirement'];
 
-$lang->my->featureBar['contribute']['testcase']['openedbyme'] = 'CreatedByMe';
+$lang->my->featureBar['contribute']['testcase']['openedbyme'] = 'Created by Me';
 
-$lang->my->featureBar['contribute']['testtask']['done'] = 'Tested';
+$lang->my->featureBar['contribute']['testtask']['done'] = 'Tested Test Requests';
 
-$lang->my->featureBar['contribute']['audit']['reviewedbyme'] = 'ReviewedByMe';
-$lang->my->featureBar['contribute']['audit']['createdbyme']  = 'CreatedByMe';
+$lang->my->featureBar['contribute']['audit']['reviewedbyme'] = 'Reviewed by Me';
+$lang->my->featureBar['contribute']['audit']['createdbyme']  = 'Created by Me';
 
-$lang->my->featureBar['contribute']['doc']['openedbyme'] = 'CreatedByMe';
-$lang->my->featureBar['contribute']['doc']['editedbyme'] = 'EditedByMe';
+$lang->my->featureBar['contribute']['doc']['openedbyme'] = 'Created by Me';
+$lang->my->featureBar['contribute']['doc']['editedbyme'] = 'Edited by Me';
 
-$lang->my->featureBar['score']['all'] = 'My Score';
+$lang->my->featureBar['score']['all'] = 'My Points';
 
 $lang->my->reviewResultList['pass'] = 'Pass';
-$lang->my->reviewResultList['fail'] = 'Fail';
+$lang->my->reviewResultList['fail'] = 'Reject';

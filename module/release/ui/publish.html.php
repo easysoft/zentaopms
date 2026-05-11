@@ -19,7 +19,7 @@ formPanel
     (
         formGroup
         (
-            set::label($lang->release->common . $lang->release->status),
+            set::label($lang->release->status),
             set::control('radioListInline'),
             set::name('status'),
             set::value('normal'),
@@ -38,7 +38,7 @@ formPanel
         formGroup
         (
             set::label($lang->release->releasedDate),
-            set::width('1/3'),
+            set::width($app->getClientLang() == 'en' ? '1/2' : '1/3'),
             set::required(true),
             datePicker
             (

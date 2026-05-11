@@ -14,7 +14,7 @@ $lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->U
 $lang->action->search->objectTypeList['task']        = 'Task';
 $lang->action->search->objectTypeList['user']        = 'User';
 $lang->action->search->objectTypeList['doc']         = 'Doc';
-$lang->action->search->objectTypeList['todo']        = 'Todo';
+$lang->action->search->objectTypeList['todo']        = 'To-do';
 
 unset($lang->action->dynamicAction->program);
 unset($lang->action->dynamicAction->product);

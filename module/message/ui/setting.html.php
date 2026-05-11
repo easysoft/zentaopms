@@ -57,6 +57,7 @@ foreach($config->message->objectTypes as $objectType => $actions)
             $availableActions = array();
             foreach($config->message->available[$type][$objectType] as $action)
             {
+                if(in_array($type, array('sms', 'webhook')) && $objectType == 'kanbancard' && $action == 'nearing') continue;
                 if(!isset($objectActions[$objectType][$action])) continue;
                 $availableActions[$action] = $objectActions[$objectType][$action];
             }
@@ -134,4 +135,3 @@ panel
 );
 
 render();
-

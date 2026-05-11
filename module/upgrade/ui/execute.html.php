@@ -14,6 +14,7 @@ set::zui(true);
 
 jsVar('fromVersion', $fromVersion);
 jsVar('upgradeVersions', array_keys($upgradeVersions));
+$isEn = $app->getClientLang() == 'en';
 
 $editionNames = [];
 foreach(['open', 'biz', 'max', 'ipd'] as $edition)
@@ -23,10 +24,15 @@ foreach(['open', 'biz', 'max', 'ipd'] as $edition)
 }
 
 $toVersionEdition = is_numeric($toVersion[0]) ? 'open' : substr($toVersion, 0, 3);
-$toVersionName    = !empty($config->sanplexVersion) ? $lang->upgrade->fromVersions[$toVersion] : ($editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion));
+$formatVersion    = static function(string $version): string
+{
+    return str_replace('_', '.', $version);
+};
+$toVersionName    = !empty($config->sanplexVersion) ? zget($lang->upgrade->fromVersions, $toVersion, $toVersion) : ($editionNames[$toVersionEdition] . str_ireplace($toVersionEdition, '', $toVersion));
+$toVersionName    = $formatVersion((string)$toVersionName);
 $versionCount     = count($upgradeVersions);
 
-$buildVersions = function() use ($upgradeVersions, $editionNames)
+$buildVersions = function() use ($upgradeVersions, $editionNames, $formatVersion)
 {
     global $config;
     $versions = [];
@@ -44,7 +50,7 @@ $buildVersions = function() use ($upgradeVersions, $editionNames)
             ),
             span
             (
-                !empty($config->sanplexVersion) ? $label : ($editionNames[$edition] . str_ireplace($edition, '', $label))
+                $formatVersion((string)(!empty($config->sanplexVersion) ? $label : ($editionNames[$edition] . str_ireplace($edition, '', $label))))
             )
         );
     }
@@ -184,7 +190,7 @@ div
             a
             (
                 setID('continueBtn'),
-                setClass('btn primary w-24 disabled'),
+                setClass('btn primary disabled ' . ($isEn ? 'w-28' : 'w-24')),
                 $lang->upgrade->continue
             )
         )

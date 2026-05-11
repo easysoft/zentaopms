@@ -59,7 +59,8 @@ window.loadAllUsers = function()
 window.changeKanbanSpace = function()
 {
     const spaceID = $('[name=space]').val();
-    if(spaceType == 'private')
+    const type    = $('[name=type]').length ?  $('[name=type]:checked').val() : spaceType;
+    if(type == 'private')
     {
         const url = $.createLink('kanban', 'ajaxLoadUsers', 'spaceID=' + spaceID + '&field=whitelist');
         $.getJSON(url, function(data)

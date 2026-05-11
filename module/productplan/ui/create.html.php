@@ -93,6 +93,7 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->productplan->begin),
+            set::required(true),
             datepicker
             (
                 setID('begin'),
@@ -120,6 +121,7 @@ formPanel
         (
             set::width('1/3'),
             set::label($lang->productplan->end),
+            set::required(true),
             set::control('date'),
             setID('end'),
             set::name('end')

@@ -66,7 +66,7 @@ foreach($lines as $line)
                 set::className('ml-4'),
                 set::control(array('control' => 'picker', 'id' => "programs_id{$line->id}", 'required' => true)),
                 set::name("programs[id$line->id]"),
-                set::items($programs),
+                set::items($linePrograms[$line->id]),
                 set::value($line->root),
                 on::change('isProductLineEmpty')
             ) : null
@@ -130,7 +130,7 @@ div
     set::className('flex'),
     cell
     (
-        set::width('1/3'),
+        set::width('232px'),
         set::className('lineTree mr-1'),
         panel
         (

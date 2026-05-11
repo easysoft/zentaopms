@@ -16,7 +16,9 @@ function printSystemMode()
     global $lang, $config, $app;
 
     $modes = array();
-    $usedMode = zget($config->global, 'mode', 'light');
+    $usedMode  = zget($config->global, 'mode', 'light');
+    $isEn      = $app->getClientLang() == 'en';
+    $modeClass = $isEn ? 'center pb-2' : 'pb-2';
     foreach($lang->block->customModes as $mode => $modeName)
     {
         $modes[] = cell
@@ -36,7 +38,7 @@ function printSystemMode()
                     div
                     (
                         set('class', 'px-4 pb-2'),
-                        div(set('class', 'pb-2'), span(set('class', 'font-bold text-black'), $modeName)),
+                        div(set('class', $modeClass), span(set('class', 'font-bold text-black'), $modeName)),
                         span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
                     )
                 ),
@@ -81,7 +83,7 @@ function printSystemMode()
                 div
                 (
                     set('class', 'px-4 pb-2'),
-                    div(set('class', 'pb-2'), span(set('class', 'font-bold'), $modeName)),
+                    div(set('class', $modeClass), span(set('class', 'font-bold'), $modeName)),
                     span(set('class', 'text-sm text-gray'), $lang->block->customModeTip->{$mode})
                 )
             )

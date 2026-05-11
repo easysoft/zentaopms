@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = '和';
 $lang->to        = '至';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -125,6 +126,8 @@ $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->delFiles        = '删除了附件 ';
 $lang->deleteSuccess   = '删除成功';
+$lang->confirmDelete   = '您确定要执行删除操作吗？';
+$lang->deleteing       = '删除中';
 $lang->deleted         = '已删除';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
@@ -213,6 +216,14 @@ $lang->contactUs->phone  = '电话';
 $lang->contactUs->email  = '邮箱';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = '微信';
+
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = '选择用户';
+$lang->userSelector->deptTitle     = '按部门筛选';
+$lang->userSelector->userTitle     = '选择用户';
+$lang->userSelector->selectedTitle = '已选择';
+$lang->userSelector->allText       = '全部用户';
+$lang->userSelector->emptyText     = '暂无可选用户';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
@@ -309,15 +320,16 @@ $lang->doctemplate->common          = '文档模板';
 $lang->notifysetting->common        = '通知设置';
 $lang->bidesign->common             = 'BI设计';
 $lang->personalsettings->common     = '个人设置';
-$lang->projectsettings->common      = '设置';
+$lang->projectsettings->common      = '项目设置';
 $lang->dataaccess->common           = '数据权限';
 $lang->executiongantt->common       = '甘特图';
 $lang->executionkanban->common      = '看板';
 $lang->executionburn->common        = '燃尽图';
 $lang->executioncfd->common         = '累积流图';
-$lang->executionstory->common       = '研发需求';
-$lang->executionqa->common          = '测试';
-$lang->executionsettings->common    = '设置';
+$lang->executionstory->common       = '执行研发需求';
+$lang->executionqa->common          = '执行测试';
+$lang->executionbuild->common       = '执行构建';
+$lang->executionsettings->common    = '执行设置';
 $lang->generalcomment->common       = '备注';
 $lang->generalping->common          = '防超时';
 $lang->generaltemplate->common      = '模板';
@@ -327,7 +339,7 @@ $lang->projectreview->common        = '评审';
 $lang->projecttrack->common         = '矩阵';
 $lang->projectqa->common            = '测试';
 $lang->holidayseason->common        = '节假日';
-$lang->codereview->common           = '问题';
+$lang->codereview->common           = '代码问题';
 $lang->repocode->common             = '代码';
 $lang->deliverable->common          = '交付物';
 $lang->projectDeliverable->common   = '项目交付物';
@@ -577,6 +589,7 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
 $lang->error->httpServerError = '服务器错误';
+$lang->error->action          = '没有满足该操作的条件，无法执行该操作。';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();
@@ -689,5 +702,10 @@ $lang->aiapp->zentaoAgent  = '禅道智能体';
 $lang->aiapp->generalAgent = '通用智能体';
 $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
+$lang->aiapp->toolkit      = '智能工具';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include(dirname(__FILE__) . '/menu.php');

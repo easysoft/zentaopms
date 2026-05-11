@@ -125,8 +125,8 @@ formPanel
     setID('exportPanel'),
     pageCSS('.form-horz .form-label.required:after{content:""}'), // Remove required tag.
     pageCSS('.modal-content{padding-top: 0.5rem; padding-left: 0.75rem; padding-right: 0.75rem; padding-bottom: 1.25rem;}'),
-    $isNotZh ? pageCSS('#exportPanel .form-label{width: 70px}') : null,
-    $isNotZh ? pageCSS('#exportPanel .form-group{padding-left: 70px}') : null,
+    $isNotZh ? pageCSS('#exportPanel .form-label{width: 86px}') : null,
+    $isNotZh ? pageCSS('#exportPanel .form-group{padding-left: 86px}') : null,
     $isNotZh ? pageCSS('#exportPanel .customFieldsBox .form-label{width: 100px}') : null,
     $isNotZh ? pageCSS('#exportPanel .customFieldsBox .form-group{padding-left: 100px}') : null,
     setCssVar('--form-horz-label-width', '4rem'),

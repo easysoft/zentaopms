@@ -793,7 +793,7 @@ class user extends control
             $menu = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : $module;
             $menu = strtolower($menu);
 
-            if(!isset($acls['views'][$menu])) $denyType = 'noview';
+            if(!empty($acls['views']) && !isset($acls['views'][$menu])) $denyType = 'noview';
 
             $this->view->menu = $menu;
         }
@@ -1110,13 +1110,26 @@ class user extends control
      * @access public
      * @return void
      */
-    public function ajaxGetItems($params = '')
+    public function ajaxGetItems(string $params = '', string $search = '', int $maxCount = 0)
     {
-        $items = array();
-        $users = $this->user->getPairs($params);
+        $items  = array();
+        $users  = $this->user->getPairs($params);
+        $search = empty($search) ? '' : base64_decode($search);
+
         foreach($users as $account => $realname)
         {
+            if(!empty($search) && stripos($account, $search) === false and stripos($realname, $search) === false) continue;
+
+            $nameParts = explode(':', $realname);
+            if(count($nameParts) > 1)
+            {
+                array_shift($nameParts);
+                $realname = implode(':', $nameParts);
+            }
+
             $items[] = array('text' => $realname, 'value' => $account);
+
+            if($maxCount && count($items) >= $maxCount) break;
         }
 
         return print(json_encode($items));

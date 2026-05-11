@@ -14,7 +14,7 @@ $config->project->form->manageProducts = array();
 $config->project->form->create['parent']        = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->project->form->create['name']          = array('type' => 'string', 'required' => true,  'filter'  => 'trim');
 $config->project->form->create['multiple']      = array('type' => 'string', 'required' => false);
-$config->project->form->create['hasProduct']    = array('type' => 'string', 'required' => false, 'default' => '');
+$config->project->form->create['hasProduct']    = array('type' => 'string', 'required' => false, 'default' => '0');
 $config->project->form->create['stageBy']       = array('type' => 'string', 'required' => false, 'default' => 'product');
 $config->project->form->create['PM']            = array('type' => 'string', 'required' => false, 'default' => '');
 $config->project->form->create['budget']        = array('type' => 'float',  'required' => false, 'default' => '');
@@ -33,10 +33,11 @@ $config->project->form->create['vision']        = array('type' => 'string', 'req
 if(isset($this->config->setCode) && $this->config->setCode == 1) $config->project->form->create['code'] = array('type' => 'string', 'required' => false,  'filter'  => 'trim');
 
 $config->project->form->edit = $config->project->form->create;
-$config->project->form->edit['products']      = array('type' => 'array',  'required' => false, 'default' => array());
-$config->project->form->edit['branch']        = array('type' => 'array',  'required' => false, 'default' => array());
-$config->project->form->edit['plans']         = array('type' => 'array',  'required' => false, 'default' => array());
-$config->project->form->edit['taskDateLimit'] = array('type' => 'string', 'required' => false, 'default' => '');
+$config->project->form->edit['products']           = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['branch']             = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['plans']              = array('type' => 'array',  'required' => false, 'default' => array());
+$config->project->form->edit['taskDateLimit']      = array('type' => 'string', 'required' => false, 'default' => '');
+$config->project->form->edit['coverExecutionPriv'] = array('type' => 'int',    'required' => false, 'default' => '1');
 unset($config->project->form->edit['hasProduct']);
 unset($config->project->form->edit['stageBy']);
 unset($config->project->form->edit['multiple']);

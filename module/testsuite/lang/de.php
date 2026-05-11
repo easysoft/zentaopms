@@ -35,7 +35,7 @@ $lang->testsuite->author         = 'Zugriffskontrolle';
 $lang->testsuite->addedBy        = 'Ersteller';
 $lang->testsuite->addedDate      = 'Create Date';
 $lang->testsuite->addedTime      = 'Create Time';
-$lang->testsuite->lastEditedBy   = 'Last Edited By';
+$lang->testsuite->lastEditedBy   = 'Last Edited by';
 $lang->testsuite->lastEditedDate = 'Last Edited Date';
 
 $lang->testsuite->legendDesc      = 'Beschreibung';

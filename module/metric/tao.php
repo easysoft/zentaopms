@@ -289,11 +289,12 @@ class metricTao extends metricModel
      * @access protected
      * @return object
      */
-    protected function processDAOWithDate($stmt, $query, $dateType)
+    public function processDAOWithDate($stmt, $query, $dateType)
     {
         $dateBegin  = $this->processRecordQuery($query, 'dateBegin', 'date');
         $dateEnd    = $this->processRecordQuery($query, 'dateEnd', 'date');
         $calcDate   = $this->processRecordQuery($query, 'calcDate', 'date');
+        if(is_object($calcDate)) $calcDate = isset($calcDate->day) ? date('Y-m-d', strtotime($calcDate->day)) : '';
 
         list($dateBegin, $dateEnd) = $this->processRecordQuery($query, 'dateLabel', 'date');
 
@@ -502,7 +503,7 @@ class metricTao extends metricModel
         $table = TABLE_METRICLIB;
 
         $sql  = " UPDATE $table AS t1";
-        $sql .= " SET t1.deleted = 0";
+        $sql .= " SET t1.deleted = '0'";
         $sql .= " WHERE id IN (";
         $sql .= "    SELECT maxid FROM (";
         $sql .= "        SELECT MAX(id) AS maxid";

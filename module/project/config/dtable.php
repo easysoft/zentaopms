@@ -1,5 +1,7 @@
 <?php
 global $lang,$app;
+$isEn = $app->getClientLang() == 'en';
+
 $config->project->dtable = new stdclass();
 $config->project->dtable->team = new stdclass();
 $config->project->dtable->testtask = new stdclass();
@@ -56,6 +58,7 @@ $config->project->dtable->fieldList['PM']['data-toggle'] = 'modal';
 $config->project->dtable->fieldList['PM']['data-size']   = 'sm';
 $config->project->dtable->fieldList['PM']['group']       = 3;
 $config->project->dtable->fieldList['PM']['show']        = true;
+if($isEn) $config->project->dtable->fieldList['PM']['width'] = '150';
 
 $config->project->dtable->fieldList['storyPoints']['title']    = $lang->project->storyPoints;
 $config->project->dtable->fieldList['storyPoints']['type']     = 'count';
@@ -76,6 +79,7 @@ $config->project->dtable->fieldList['executionCount']['type']     = 'count';
 $config->project->dtable->fieldList['executionCount']['group']    = 4;
 $config->project->dtable->fieldList['executionCount']['show']     = 4;
 $config->project->dtable->fieldList['executionCount']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['executionCount']['width'] = '120px';
 
 $config->project->dtable->fieldList['budget']['title']    = $lang->project->budget;
 $config->project->dtable->fieldList['budget']['name']     = 'budget';
@@ -89,6 +93,7 @@ $config->project->dtable->fieldList['teamCount']['name']     = 'teamCount';
 $config->project->dtable->fieldList['teamCount']['type']     = 'number';
 $config->project->dtable->fieldList['teamCount']['group']    = 5;
 $config->project->dtable->fieldList['teamCount']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['teamCount']['width'] = '100px';
 
 $config->project->dtable->fieldList['invested']['title']    = $lang->project->invested;
 $config->project->dtable->fieldList['invested']['name']     = 'invested';
@@ -96,6 +101,7 @@ $config->project->dtable->fieldList['invested']['type']     = 'count';
 $config->project->dtable->fieldList['invested']['group']    = 5;
 $config->project->dtable->fieldList['invested']['show']     = true;
 $config->project->dtable->fieldList['invested']['sortType'] = false;
+if($isEn) $config->project->dtable->fieldList['invested']['width'] = '120px';
 
 if(helper::hasFeature('deliverable') && in_array($config->edition, array('max', 'ipd')))
 {
@@ -114,6 +120,7 @@ $config->project->dtable->fieldList['begin']['type']     = 'date';
 $config->project->dtable->fieldList['begin']['sortType'] = true;
 $config->project->dtable->fieldList['begin']['group']    = 6;
 $config->project->dtable->fieldList['begin']['show']     = true;
+if($isEn) $config->project->dtable->fieldList['begin']['width'] = '120px';
 
 $config->project->dtable->fieldList['end']['title']    = $lang->project->end;
 $config->project->dtable->fieldList['end']['name']     = 'end';
@@ -121,6 +128,7 @@ $config->project->dtable->fieldList['end']['type']     = 'date';
 $config->project->dtable->fieldList['end']['sortType'] = true;
 $config->project->dtable->fieldList['end']['group']    = 6;
 $config->project->dtable->fieldList['end']['show']     = true;
+if($isEn) $config->project->dtable->fieldList['end']['width'] = '120px';
 
 $config->project->dtable->fieldList['realBegan']['title'] = $lang->project->realBeganAB;
 $config->project->dtable->fieldList['realBegan']['type']  = 'date';
@@ -135,6 +143,7 @@ $config->project->dtable->fieldList['estimate']['name']     = 'estimate';
 $config->project->dtable->fieldList['estimate']['type']     = 'number';
 $config->project->dtable->fieldList['estimate']['sortType'] = true;
 $config->project->dtable->fieldList['estimate']['group']    = 7;
+if($isEn) $config->project->dtable->fieldList['estimate']['width'] = '120px';
 
 $config->project->dtable->fieldList['consume']['title']    = $lang->project->consume;
 $config->project->dtable->fieldList['consume']['name']     = 'consume';
@@ -147,6 +156,7 @@ $config->project->dtable->fieldList['progress']['name']  = 'progress';
 $config->project->dtable->fieldList['progress']['type']  = 'progress';
 $config->project->dtable->fieldList['progress']['group'] = 7;
 $config->project->dtable->fieldList['progress']['show']  = true;
+if($isEn) $config->project->dtable->fieldList['progress']['width'] = '100px';
 
 if($config->edition != 'open')
 {
@@ -183,15 +193,15 @@ $config->project->execution->dtable->fieldList['rawID']['checkbox'] = true;
 $config->project->execution->dtable->fieldList['rawID']['width']    = '80';
 $config->project->execution->dtable->fieldList['rawID']['show']     = true;
 
-$config->project->execution->dtable->fieldList['name']['title']        = $lang->nameAB;
-$config->project->execution->dtable->fieldList['name']['name']         = 'nameCol';
-$config->project->execution->dtable->fieldList['name']['fixed']        = 'left';
-$config->project->execution->dtable->fieldList['name']['flex']         = 1;
-$config->project->execution->dtable->fieldList['name']['type']         = 'nestedTitle';
-$config->project->execution->dtable->fieldList['name']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
-$config->project->execution->dtable->fieldList['name']['nestedToggle'] = true;
-$config->project->execution->dtable->fieldList['name']['sortType']     = true;
-$config->project->execution->dtable->fieldList['name']['show']         = true;
+$config->project->execution->dtable->fieldList['nameCol']['title']        = $lang->nameAB;
+$config->project->execution->dtable->fieldList['nameCol']['name']         = 'nameCol';
+$config->project->execution->dtable->fieldList['nameCol']['fixed']        = 'left';
+$config->project->execution->dtable->fieldList['nameCol']['flex']         = 1;
+$config->project->execution->dtable->fieldList['nameCol']['type']         = 'nestedTitle';
+$config->project->execution->dtable->fieldList['nameCol']['link']         = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={rawID}');
+$config->project->execution->dtable->fieldList['nameCol']['nestedToggle'] = true;
+$config->project->execution->dtable->fieldList['nameCol']['sortType']     = true;
+$config->project->execution->dtable->fieldList['nameCol']['show']         = true;
 
 $config->project->execution->dtable->fieldList['productName']['title']    = $lang->execution->product;
 $config->project->execution->dtable->fieldList['productName']['name']     = 'productName';
@@ -228,6 +238,7 @@ $config->project->execution->dtable->fieldList['PM']['sortType'] = true;
 $config->project->execution->dtable->fieldList['PM']['width']    = '100';
 $config->project->execution->dtable->fieldList['PM']['group']    = '2';
 $config->project->execution->dtable->fieldList['PM']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['PM']['width'] = '150';
 
 $config->project->execution->dtable->fieldList['openedDate']['title']    = $lang->execution->openedDate;
 $config->project->execution->dtable->fieldList['openedDate']['name']     = 'openedDate';
@@ -236,6 +247,7 @@ $config->project->execution->dtable->fieldList['openedDate']['sortType'] = true;
 $config->project->execution->dtable->fieldList['openedDate']['width']    = '96';
 $config->project->execution->dtable->fieldList['openedDate']['group']    = '3';
 $config->project->execution->dtable->fieldList['openedDate']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['openedDate']['width'] = '120';
 
 $config->project->execution->dtable->fieldList['begin']['title']    = $lang->execution->begin;
 $config->project->execution->dtable->fieldList['begin']['name']     = 'begin';
@@ -244,6 +256,7 @@ $config->project->execution->dtable->fieldList['begin']['sortType'] = true;
 $config->project->execution->dtable->fieldList['begin']['width']    = '96';
 $config->project->execution->dtable->fieldList['begin']['group']    = '3';
 $config->project->execution->dtable->fieldList['begin']['show']     = true;
+if($isEn) $config->project->execution->dtable->fieldList['begin']['width'] = '120';
 
 $config->project->execution->dtable->fieldList['end']['title']    = $lang->execution->end;
 $config->project->execution->dtable->fieldList['end']['name']     = 'end';

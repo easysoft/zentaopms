@@ -94,6 +94,9 @@ class relatedObjectList extends relatedList
 
     protected function getCommonItem(string $type, array $group, object $item): array
     {
+        global $app;
+        $isEn = $app->getClientLang() == 'en';
+
         $title = '';
         if(isset($item->title)) $title = $item->title;
         if(isset($item->name))  $title = $item->name;
@@ -103,7 +106,7 @@ class relatedObjectList extends relatedList
             'title'      => $title,
             'hint'       => $title,
             'titleAttrs' => $item->titleAttrs,
-            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => array('max-width' => '45px'))))->render()),
+            'leading'    => array('html' => wg(idLabel::create($item->type, array('class' => 'text-clip text-left', 'style' => $isEn ? '' : array('max-width' => '45px'))))->render()),
             'url'        => $item->url,
             'class'      => 'objectItem',
             'actions'    => isset($item->actions) ? $item->actions : array()

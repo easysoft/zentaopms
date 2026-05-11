@@ -132,6 +132,8 @@ h::jsVar('window.appsItems', $appsItems, setID('appsItemsData'));
 h::jsVar('window.searchItems', $searchItems, setID('searchItemsData'));
 h::jsVar('window.userVisions', explode(',', $app->user->visions), setID('userVisionData'));
 
+requireWg('visionSwitcher', '2'); // Use v2 of the versionSwitcher widget
+
 /* The menu fixed on left */
 div
 (
@@ -140,8 +142,7 @@ div
     (
         setID('spaceHeading'),
         icon('space'),
-        div(setClass('text')),
-        span(setClass('label size-xs ring-0 bg-gray-500 bg-opacity-50 text-gray-400 scale-75'), $lang->workspaceAbbr)
+        div(setClass('text'))
     ),
     div
     (
@@ -161,9 +162,9 @@ div
                     set::href('#menuMoreList'),
                     icon('more-circle'),
                     span(setClass('text'), $lang->more),
-                    toggle::dropdown(array('placement' => 'right-end', 'offset' => 12))
+                    toggle::dropdown(array('placement' => 'right-end', 'offset' => 12, 'shift' => true))
                 ),
-                ul(setClass('dropdown-menu menu'), setID('menuMoreList'))
+                ul(setClass('dropdown-menu menu scrollbar-light overflow-y-auto'), setID('menuMoreList'))
             )
         ),
         ul
@@ -267,6 +268,8 @@ if($config->edition != 'open' && $zaiConfig)
         $zaiConfig->teammateMap = $this->loadModel('aiteammate')->getMap();
     }
 }
+
+to::headBefore(h::css('.icon-app-empty::before{content: "\ea6e"}'));
 
 to::head
 (

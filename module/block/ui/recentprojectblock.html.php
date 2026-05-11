@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace zin;
 
+$space = $app->getClientLang() == 'en' ? ' ' : '';
 $cards = array();
 foreach($projects as $projectID => $project)
 {
@@ -42,7 +43,7 @@ foreach($projects as $projectID => $project)
                     span
                     (
                         setClass('text-gray mr-1'),
-                        $lang->projectCommon . $lang->project->member . ': ',
+                        $lang->projectCommon . $space . $lang->project->member . ': ',
                     ),
                     sprintf($lang->block->totalMember, $project->teamCount)
                 ),

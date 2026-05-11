@@ -374,7 +374,7 @@ class baseValidater
      */
     public static function checkCode($var)
     {
-        return self::checkREG($var, '|^[A-Za-z0-9_]+$|');
+        return self::checkREG($var, '|^[A-Za-z0-9_]+$|') !== false;
     }
 
     /**
@@ -718,8 +718,9 @@ class baseValidater
 
         if($type == 'cookie')
         {
-            $pagerCookie                           = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
+            $pagerCookie = 'pager' . ucfirst($moduleName) . ucfirst($methodName);
             $filter->default->cookie[$pagerCookie] = 'int';
+            $filter->default->cookie[$pagerCookie . '-block-'] = 'int';
         }
         foreach($var as $key => $value)
         {
@@ -737,6 +738,17 @@ class baseValidater
             elseif(isset($filter->default->{$type}[$key]))
             {
                 $rules = $filter->default->{$type}[$key];
+            }
+            else
+            {
+                foreach($filter->default->{$type} ?? array() as $filterKey => $filterRule)
+                {
+                    if(strpos($filterKey, '-') !== false && strpos($key, $filterKey) === 0)
+                    {
+                        $suffix = substr($key, strlen($filterKey));
+                        if($suffix !== '' && ctype_digit($suffix)) $rules = $filterRule;
+                    }
+                }
             }
 
             if(!self::checkByRule($value, $rules)) unset($var[$key]);
@@ -1088,6 +1100,8 @@ class baseFixer
         if(!$usePurifier) return strip_tags($data, $allowedTags);
 
         static $purifier;
+        static $htmlDef;
+        static $registeredAttributes = array();
         if(empty($purifier))
         {
             $app->loadClass('purifier', true);
@@ -1101,16 +1115,45 @@ class baseFixer
             $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
 
             $purifier = new HTMLPurifier($purifierConfig);
-            $def      = $purifierConfig->getHTMLDefinition(true);
-            $def->addAttribute('a', 'target', 'Enum#_blank,_self,_target,_top');
+            $htmlDef  = $purifierConfig->getHTMLDefinition(true);
 
-            if(!empty($attributes))
+            /* Keep mention metadata on span.mention-label. */
+            $defaultAttributes = array(
+                'a|target|Enum#_blank,_self,_target,_top',
+            );
+
+            foreach($defaultAttributes as $attribute)
             {
-                foreach($attributes as $attribute)
+                list($element, $name, $values) = explode('|', $attribute);
+                $htmlDef->addAttribute($element, $name, $values);
+                $registeredAttributes[$attribute] = true;
+            }
+        }
+
+        /* Allow all data-* attributes that appear on span.mention-label. */
+        if(preg_match_all('/<span\b[^>]*class=(["\'])[^"\']*\bmention-label\b[^"\']*\1[^>]*>/i', $data, $spanMatches))
+        {
+            foreach($spanMatches[0] as $spanTag)
+            {
+                if(!preg_match_all('/\s(data-[a-z0-9:_-]+)\s*=/i', $spanTag, $dataAttributes)) continue;
+                foreach($dataAttributes[1] as $dataAttribute)
                 {
-                    list($element, $attribute, $values) = explode('|', $attribute);
-                    $def->addAttribute($element, $attribute, $values);
+                    $attribute = "span|{$dataAttribute}|Text";
+                    if(isset($registeredAttributes[$attribute])) continue;
+                    $htmlDef->addAttribute('span', $dataAttribute, 'Text');
+                    $registeredAttributes[$attribute] = true;
                 }
+            }
+        }
+
+        if(!empty($attributes))
+        {
+            foreach($attributes as $attribute)
+            {
+                if(isset($registeredAttributes[$attribute])) continue;
+                list($element, $name, $values) = explode('|', $attribute);
+                $htmlDef->addAttribute($element, $name, $values);
+                $registeredAttributes[$attribute] = true;
             }
         }
 

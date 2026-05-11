@@ -12,12 +12,12 @@
 /* Actions. */
 $lang->stage->browse      = 'Stage List';
 $lang->stage->browseAB    = 'Stage List';
-$lang->stage->create      = 'Create Stage';
+$lang->stage->create      = 'Create Phase';
 $lang->stage->batchCreate = 'Batch Create Stage';
 $lang->stage->edit        = 'Edit Stage';
 $lang->stage->delete      = 'Delete Stage';
 $lang->stage->view        = 'Details';
-$lang->stage->plusBrowse  = 'Waterfall Plus Stage List';
+$lang->stage->plusBrowse  = 'Waterfall + Phase List';
 $lang->stage->setTRpoint  = 'Set TR Point';
 $lang->stage->setDCPpoint = 'Set DCP Point';
 
@@ -40,20 +40,20 @@ $lang->stage->typeList['design']  = 'Design';
 $lang->stage->typeList['dev']     = 'Development';
 $lang->stage->typeList['qa']      = 'Test';
 $lang->stage->typeList['release'] = 'Release';
-$lang->stage->typeList['review']  = 'Review';
-$lang->stage->typeList['other']   = 'Other';
+$lang->stage->typeList['review']  = 'Summary and Review';
+$lang->stage->typeList['other']   = 'Others';
 
 $lang->stage->ipdTypeList['concept']   = 'Concept';
 $lang->stage->ipdTypeList['plan']      = 'Plan';
-$lang->stage->ipdTypeList['develop']   = 'Develop';
-$lang->stage->ipdTypeList['qualify']   = 'Qualify';
-$lang->stage->ipdTypeList['launch']    = 'Launch';
+$lang->stage->ipdTypeList['develop']   = 'Development';
+$lang->stage->ipdTypeList['qualify']   = 'Verify';
+$lang->stage->ipdTypeList['launch']    = 'Release';
 $lang->stage->ipdTypeList['lifecycle'] = 'Lifecycel';
 
-$lang->stage->viewList      = 'Stage List';
-$lang->stage->noStage       = 'No stage yet';
-$lang->stage->confirmDelete = 'Do you want to delete it?';
+$lang->stage->viewList      = 'Phase List';
+$lang->stage->noStage       = 'No phases available yet.';
+$lang->stage->confirmDelete = 'Are you are you want to delete it?';
 
 $lang->stage->error              = new stdclass();
 $lang->stage->error->percentOver = 'The sum of "Workload %" cannot exceed 100%.';
-$lang->stage->error->notNum      = 'The workload ratio should be numerical';
+$lang->stage->error->notNum      = 'The workload % must be a numeric value.';

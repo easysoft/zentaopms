@@ -496,8 +496,8 @@ class programplanModelTest extends baseTest
     }
 
     /**
-     * 测试获取按照指派给分组甘特图相关数据。
-     * The test gets Gantt chart related data as assigned to the group.
+     * 测试获取分组后的甘特图相关数据。
+     * Test get data for gantt view.
      *
      * @param  int    $executionID
      * @param  int    $productID
@@ -507,9 +507,9 @@ class programplanModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function getDataForGanttGroupByAssignedToTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
+    public function getDataForGanttGroupTest(int $executionID, int $productID, int $baselineID = 0, string $selectCustom = '', bool $returnJson = true): array
     {
-        $gantt = $this->instance->getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+        $gantt = $this->instance->getDataForGanttGroup('assignedTo', $executionID, $productID, $baselineID, $selectCustom, $returnJson);
 
         if($returnJson) $gantt = json_decode($gantt, true);
 

@@ -10,34 +10,104 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$expireDays = isset($config->kanban->reminder->expireDays) ? $config->kanban->reminder->expireDays : 1;
+$menuItems  = array(
+    li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('custom', 'kanban', 'type=closedSetting')),
+            $type == 'closedSetting' ? setClass('active') : null,
+            $lang->custom->closeSetting
+        )
+    ),
+    li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('custom', 'kanban', 'type=expireReminder')),
+            $type == 'expireReminder' ? setClass('active') : null,
+            $lang->custom->kanbanExpireReminder
+        )
+    )
+);
+
+if($type == 'closedSetting')
+{
+    $form[] = formGroup
+    (
+        set::width('2/3'),
+        set::label($lang->custom->closedKanban),
+        radioList
+        (
+            set::name('kanban'),
+            set::items($lang->custom->CRKanban),
+            set::value(isset($config->CRKanban) ? $config->CRKanban : 0),
+            set::inline(true)
+        )
+    );
+
+    $form[] = formGroup
+    (
+        set::label(''),
+        span
+        (
+            icon('info text-warning mr-2'),
+            $lang->custom->notice->readOnlyOfKanban
+        )
+    );
+}
+else
+{
+    $form[] = formGroup
+    (
+        set::width('1/3'),
+        set::label($lang->custom->kanbanExpireDays),
+        inputGroup
+        (
+            control
+            (
+                set::name('expireDays'),
+                set::type('number'),
+                set::min(0),
+                set::value($expireDays)
+            ),
+            $lang->custom->unitList['days']
+        )
+    );
+
+    $form[] = formGroup
+    (
+        set::label(''),
+        span
+        (
+            icon('info text-warning mr-2'),
+            $lang->custom->notice->kanbanReminder
+        )
+    );
+}
 div
 (
     setClass('flex'),
-    formPanel
+    sidebar
     (
-        setID('closedExecutionForm'),
-        set::actions(array('submit')),
-        setClass('flex-auto'),
-        formGroup
+        div
         (
-            set::width('2/3'),
-            set::label($lang->custom->closedKanban),
-            radioList
+            setClass('cell p-2.5 bg-white'),
+            menu
             (
-                set::name('kanban'),
-                set::items($lang->custom->CRKanban),
-                set::value(isset($config->CRKanban) ? $config->CRKanban : 0),
-                set::inline(true)
-            )
-        ),
-        formGroup
-        (
-            set::label(''),
-            span
-            (
-                icon('info text-warning mr-2'),
-                $lang->custom->notice->readOnlyOfKanban
+                $menuItems
             )
         )
+    ),
+    formPanel
+    (
+        set::actions(array('submit')),
+        set::labelWidth('120px'),
+        setClass('flex-auto'),
+        setClass('ml-4'),
+        $form
     )
 );

@@ -1,41 +1,41 @@
 <?php
 /* Field. */
-$lang->projectstory->project = "{$lang->projectCommon} ID";
+$lang->projectstory->project = "{$lang->projectCommon}ID";
 $lang->projectstory->product = "{$lang->productCommon} ID";
 $lang->projectstory->story   = "Story ID";
 $lang->projectstory->version = "Version";
-$lang->projectstory->order   = "Order";
+$lang->projectstory->order   = "Sort";
 
 $lang->projectstory->storyCommon = $lang->projectCommon . ' Story';
 $lang->projectstory->storyList   = $lang->projectCommon . ' Story List';
-$lang->projectstory->storyView   = $lang->projectCommon . ' Story Detail';
+$lang->projectstory->storyView   = $lang->projectCommon . ' Story Details';
 
-$lang->projectstory->common            = "{$lang->projectCommon} Requirement";
-$lang->projectstory->index             = "Requirement Home";
-$lang->projectstory->view              = "Requirement Detail";
-$lang->projectstory->story             = "Requirement List";
-$lang->projectstory->track             = 'Tracking Matrix';
-$lang->projectstory->linkStory         = 'Linked Requirement';
-$lang->projectstory->unlinkStory       = 'Unlinked Requirement';
-$lang->projectstory->report            = 'Requirement Report';
-$lang->projectstory->export            = 'Export Requirement';
-$lang->projectstory->batchReview       = 'Batch Review Requirement';
-$lang->projectstory->batchClose        = 'Batch Close Requirement';
-$lang->projectstory->batchChangePlan   = 'Batch Change Plan';
-$lang->projectstory->batchAssignTo     = 'Batch Assign Requirement';
-$lang->projectstory->batchEdit         = 'Batch Edit Requirement';
-$lang->projectstory->importToLib       = 'Import To Library';
-$lang->projectstory->batchImportToLib  = 'Batch Import To Library';
-$lang->projectstory->importCase        = 'Import Requirement';
+$lang->projectstory->common            = "{$lang->projectCommon} Story";
+$lang->projectstory->index             = "Story Homepage";
+$lang->projectstory->view              = "Story Details";
+$lang->projectstory->story             = "Story List";
+$lang->projectstory->track             = 'Traceability Matrix';
+$lang->projectstory->linkStory         = 'Link Story';
+$lang->projectstory->unlinkStory       = 'Unlink Story';
+$lang->projectstory->report            = 'Story Report';
+$lang->projectstory->export            = 'Export Stories';
+$lang->projectstory->batchReview       = 'Batch Review Stories';
+$lang->projectstory->batchClose        = 'Batch Close Stories';
+$lang->projectstory->batchChangePlan   = 'Batch Change Plans';
+$lang->projectstory->batchAssignTo     = 'Batch Assign Stories';
+$lang->projectstory->batchEdit         = 'Batch Edit Stories';
+$lang->projectstory->importToLib       = 'Import To Story Library';
+$lang->projectstory->batchImportToLib  = 'Batch Import To Story Library';
+$lang->projectstory->importCase        = 'Import Stories';
 $lang->projectstory->exportTemplate    = 'Export Template';
-$lang->projectstory->batchUnlinkStory  = 'Batch Unlink Requirement';
-$lang->projectstory->importplanstories = 'Import requirements by plan';
-$lang->projectstory->trackAction       = 'Matrix';
+$lang->projectstory->batchUnlinkStory  = 'Batch Unlink Stories';
+$lang->projectstory->importplanstories = 'Link Stories by Plan';
+$lang->projectstory->trackAction       = 'Traceability Matrix';
 $lang->projectstory->confirm           = 'Confirm';
 
 /* Notice. */
 $lang->projectstory->whyNoStories   = "No story can be linked. Please check whether there is any story in {$lang->projectCommon} which is linked to {$lang->productCommon} and make sure it has been reviewed.";
-$lang->projectstory->batchUnlinkTip = "Other requirements are removed. The following requirements are linked to the execution of this {$lang->projectCommon}. Please remove them from the execution first.";
+$lang->projectstory->batchUnlinkTip = "All other stories have been removed. The following ones are linked to executions under this {$lang->projectCommon}. Remove them before proceeding.";
 
 $lang->projectstory->featureBar['story']['allstory']  = 'All';
 $lang->projectstory->featureBar['story']['unclosed']  = 'Open';
@@ -45,5 +45,5 @@ $lang->projectstory->featureBar['story']['changing']  = 'Changing';
 $lang->projectstory->featureBar['story']['more']      = $lang->more;
 
 $lang->projectstory->moreSelects['story']['more']['closed']            = 'Closed';
-$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = 'Linked'   . $lang->execution->common;
-$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = 'Unlinked' . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['linkedexecution']   = 'Linked '   . $lang->execution->common;
+$lang->projectstory->moreSelects['story']['more']['unlinkedexecution'] = 'Unlinked ' . $lang->execution->common;

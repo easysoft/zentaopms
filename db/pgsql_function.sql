@@ -430,15 +430,15 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 CREATE OR REPLACE FUNCTION instr(
     str TEXT,
-    substr TEXT
+    sub_str TEXT
 )
 RETURNS INTEGER AS $$
 BEGIN
-    IF str IS NULL OR substr IS NULL OR substr = '' THEN
+    IF str IS NULL OR sub_str IS NULL OR sub_str = '' THEN
         RETURN 0;
     END IF;
 
-    RETURN strpos(LOWER(str), LOWER(substr));
+    RETURN strpos(LOWER(str), LOWER(sub_str));
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -529,3 +529,32 @@ BEGIN
     RETURN TO_CHAR(input_date, mapped_format);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION update_tables_seq ( )
+RETURNS void AS $$
+	DECLARE
+	seq_name_cursor CURSOR FOR
+	SELECT a.attname AS column_name, c.relname AS table_name, s.relname AS seq_name
+    FROM pg_class c
+    JOIN pg_depend d ON d.refobjid = c.oid
+    JOIN pg_class s ON d.objid = s.oid
+    JOIN pg_namespace n ON s.relnamespace = n.oid
+    JOIN pg_attribute a ON a.attrelid = c.oid AND a.attnum = d.refobjsubid
+    WHERE d.classid = 'pg_class'::regclass
+      AND d.refclassid = 'pg_class'::regclass
+      AND s.relkind = 'S'
+      AND n.nspname = 'public';
+
+	prepared_sql VARCHAR(255);
+
+BEGIN
+  FOR ref_record in seq_name_cursor LOOP
+	prepared_sql := 'SELECT setval( ''' || ref_record.seq_name;
+	prepared_sql := prepared_sql || ''','||'( SELECT MAX ( ' || ref_record.column_name || ' ) FROM "'||ref_record.table_name||'") );';
+	RAISE NOTICE '%', prepared_sql;
+	EXECUTE prepared_sql;
+	END LOOP;
+END;
+$$ LANGUAGE plpgsql;

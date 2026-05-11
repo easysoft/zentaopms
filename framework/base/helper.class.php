@@ -1248,7 +1248,7 @@ class baseHelper
 
         if(is_object($data))
         {
-            if(isset($data->$titleField)) $data->$titleField = htmlspecialchars_decode($data->$titleField, ENT_QUOTES);
+            if(isset($data->$titleField)) $data->$titleField = htmlspecialchars_decode((string)$data->$titleField, ENT_QUOTES);
             return $data;
         }
 

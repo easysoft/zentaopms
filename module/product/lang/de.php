@@ -10,9 +10,9 @@
  * @link        https://www.zentao.net
  */
 $lang->product->index            = $lang->productCommon . 'Home';
-$lang->product->browse           = 'Story Liste';
-$lang->product->requirement      = 'Requirement Liste';
-$lang->product->epic             = "{$lang->ERCommon} Liste";
+$lang->product->browse           = 'Story List';
+$lang->product->requirement      = 'Feature List';
+$lang->product->epic             = "{$lang->ERCommon} List";
 $lang->product->dynamic          = 'Verlauf';
 $lang->product->view             = 'Übersicht';
 $lang->product->edit             = "{$lang->productCommon} bearbeiten";
@@ -168,7 +168,7 @@ $lang->product->plan           = 'Plan';
 $lang->product->iteration      = 'Version Iteration';
 $lang->product->iterationInfo  = '%s Iterations';
 $lang->product->iterationView  = 'Details';
-$lang->product->createdBy      = 'Created By';
+$lang->product->createdBy      = 'Creator';
 $lang->product->createdDate    = 'Created Date';
 $lang->product->closedDate     = 'Closed Date';
 $lang->product->createdVersion = 'Created Version';

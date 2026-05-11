@@ -68,6 +68,11 @@ class build extends control
         {
             $build = $this->buildZen->buildBuildForCreate();
             if(!empty($_FILES['buildFiles'])) $_FILES['files'] = $_FILES['buildFiles'];
+            if(strpos($this->config->build->create->requiredFields, 'files') !== false && empty($_FILES['files']['name'][0]))
+            {
+                return $this->sendError(array('message' => sprintf($this->lang->error->notempty, $this->lang->build->files)));
+            }
+
             unset($_FILES['buildFiles']);
             if(dao::isError()) return $this->sendError(dao::getError());
             if(commonModel::isTutorialMode()) return $this->sendSuccess(array('closeModal' => true)); // Fix bug #21095.
@@ -157,6 +162,8 @@ class build extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'all'))));
         }
+        if(!$this->loadModel('common')->checkPrivByObject('project', $build->project)) return $this->sendError($this->lang->project->accessDenied, $this->createLink('project', 'browse'));
+        if($build->execution && !$this->loadModel('common')->checkPrivByObject('execution', $build->execution)) return $this->sendError($this->lang->execution->accessDenied, $this->createLink('execution', 'all'));
 
         /* Load pager. */
         $this->app->loadClass('pager', true);

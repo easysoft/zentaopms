@@ -1,10 +1,12 @@
 <?php
+global $app;
+
 $config->group = new stdclass();
 $config->group->create = new stdclass();
 $config->group->edit   = new stdclass();
 $config->group->create->requiredFields = 'name';
 $config->group->edit->requiredFields   = 'name';
-$config->group->maxToolBarCount        = 13;
+$config->group->maxToolBarCount        = $app->getClientLang() == 'en' ? 10 : 13;
 
 $config->group->setComposeDevOpsPriv = array();
 $config->group->setComposeDevOpsPriv['repo']     = array('priv' => 'repo-create,repo-import', 'exclude' => 'gitea,gogs,gitlab');

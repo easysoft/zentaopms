@@ -4,7 +4,7 @@ $lang->install->welcome  = 'Thanks for choosing ZenTao Lite!';
 $lang->install->desc     = <<<EOT
 ZenTao Lite is a lightweight project management software from Nature EasySoft.ltd, which is mainly designed to be a project management tool available for every single of us. ZenTao Lite covers project
 
-management, Kanban management, attendance management, Doc management, system management, custom workflow and many other practical features, tailored for small and medium-sized
+management, Kanban management, Doc management, system management, custom workflow and many other practical features, tailored for small and medium-sized
 
 enterprises. It enables every department and every employee in the company to manage projects well and improve efficiency.
 

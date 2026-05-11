@@ -10,12 +10,12 @@
  * @link        https://www.zentao.net
  */
 $lang->company->common   = 'Company';
-$lang->company->index    = "Company Home";
+$lang->company->index    = "Company Homepage";
 $lang->company->create   = "Add Company";
 $lang->company->edit     = "Edit Company";
-$lang->company->view     = "Company Information";
+$lang->company->view     = "Company Info";
 $lang->company->browse   = "User List";
-$lang->company->dynamic  = "Dynamics";
+$lang->company->dynamic  = "Recents";
 $lang->company->orgView  = 'View';
 
 $lang->company->id       = 'ID';
@@ -26,20 +26,20 @@ $lang->company->address  = 'Mailing Address';
 $lang->company->zipcode  = 'Zip Code';
 $lang->company->website  = 'Website';
 $lang->company->backyard = 'Intranet';
-$lang->company->guest    = 'Guest Login';
+$lang->company->guest    = 'Login as Guest';
 $lang->company->admins   = 'Administrator';
 $lang->company->deleted  = 'Deleted';
 
-$lang->company->manageRole = 'Role setting';
+$lang->company->manageRole = 'Role Settings';
 
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = $lang->projectCommon;
 $lang->company->execution = $lang->executionCommon;
 $lang->company->user      = 'User';
-$lang->company->empty     = 'No Dynamic';
+$lang->company->empty     = 'No recent activity.';
 
-$lang->company->guestOptions[0] = 'Deny';
-$lang->company->guestOptions[1] = 'Allow';
+$lang->company->guestOptions[0] = 'Enable';
+$lang->company->guestOptions[1] = 'Disable';
 
 $lang->company->order['date_desc'] = 'Descending';
 $lang->company->order['date_asc']  = 'Ascending';
@@ -52,5 +52,5 @@ $lang->company->featureBar['dynamic']['lastWeek']  = 'Last Week';
 $lang->company->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->company->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
-$lang->company->featureBar['browse']['inside']  = 'Internal';
-$lang->company->featureBar['browse']['outside'] = 'Outsiders';
+$lang->company->featureBar['browse']['inside']  = 'Internal Users';
+$lang->company->featureBar['browse']['outside'] = 'External Users';

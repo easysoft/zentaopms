@@ -1123,21 +1123,6 @@ class bugZenTest extends baseTest
     }
 
     /**
-     * Test assignProjectRelatedVars method.
-     *
-     * @param  array|null $bugs
-     * @param  array|null $products
-     * @access public
-     * @return object|array|string
-     */
-    public function assignProjectRelatedVarsTest($bugs = null, $products = null)
-    {
-        $result = $this->invokeArgs('assignProjectRelatedVars', [$bugs, $products]);
-        if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
-    }
-
-    /**
      * Test responseAfterOperate method.
      *
      * @param  int    $bugID

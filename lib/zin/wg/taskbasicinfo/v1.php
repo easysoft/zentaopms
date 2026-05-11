@@ -93,7 +93,15 @@ class taskBasicInfo extends wg
             );
         }
 
-        $items[$lang->task->assignedTo] = zget($users, $task->assignedTo, '');
+        if(!empty($task->team) || zget($task, 'mode') === 'multi')
+        {
+            $items[$lang->task->assignedTo] = $lang->task->team;
+        }
+        else
+        {
+            $items[$lang->task->assignedTo] = zget($users, $task->assignedTo, '');
+        }
+
         $items[$lang->task->type] = zget($lang->task->typeList, $task->type, $task->type);
 
         $items[$lang->task->status] = array

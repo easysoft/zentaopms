@@ -16,7 +16,7 @@ class userZen extends user
             $canModifyDIR = false;
             $folderPath   = $this->app->tmpRoot;
         }
-        elseif(!is_dir($this->app->dataRoot) || substr(decoct(fileperms($this->app->dataRoot)), -4) != '0777')
+        elseif(!$this->checkDataRoot())
         {
             $canModifyDIR = false;
             $folderPath   = $this->app->dataRoot;
@@ -31,6 +31,35 @@ class userZen extends user
 
             helper::end($message);
         }
+    }
+
+    /**
+     * 判断附件目录（dataRoot）对当前 PHP 进程是否可读写。
+     * Check whether the upload directory is readable and writable by the current PHP process.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function checkDataRoot(): bool
+    {
+        $dataRoot = $this->app->dataRoot;
+        if(!is_dir($dataRoot)) return false;
+
+        $isWin = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+        if($isWin) return is_readable($dataRoot) && is_writable($dataRoot);
+
+        if(is_readable($dataRoot) && is_writable($dataRoot)) return true;
+
+        $perms = @fileperms($dataRoot);
+        if($perms === false) return false;
+
+        $mode    = $perms & 07777;
+        $ownerId = @fileowner($dataRoot);
+        if($ownerId === false) return false;
+
+        if($ownerId === posix_geteuid()) return ($mode & 0700) === 0700;
+
+        return ($mode & 0007) === 0007;
     }
 
     /**

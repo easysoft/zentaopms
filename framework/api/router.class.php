@@ -337,15 +337,12 @@ class api extends router
         if(!$methodName) $methodName = $actionToMethod[$this->action];
 
         /* File is special. */
-        if($moduleName == 'file' && in_array($this->action, ['get', 'post']))
+        if($moduleName == 'file' && $this->action == 'post')
         {
-            if($this->action != 'get')
-            {
-                $methodName         = 'ajaxUpload';
-                $_GET['field']      = 'file';
-                $_GET['objectType'] = zget($_POST, 'objectType', '');
-                $_GET['objectID']   = zget($_POST, 'objectID', '');
-            }
+            $methodName         = 'ajaxUpload';
+            $_GET['field']      = 'file';
+            $_GET['objectType'] = zget($_POST, 'objectType', '');
+            $_GET['objectID']   = zget($_POST, 'objectID', '');
         }
 
         $this->setModuleName($moduleName);
@@ -639,7 +636,7 @@ class api extends router
         $this->checkAccess();
 
         /* 其他方法不需要从GET页面获取post data。Other request directly. */
-        if(!in_array($this->methodName, ['create', 'edit'])) return;
+        if(!in_array($this->methodName, ['create', 'edit', 'change'])) return;
 
         /* 更新操作的表单需要拼接原始的值。 Merge original values. */
         /* Get form data by get request. */

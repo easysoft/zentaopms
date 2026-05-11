@@ -167,7 +167,9 @@ else
 
     $getPackagesBoxHtml = function($subsetName, $packages, $groupPrivs)
     {
-        global $lang;
+        global $lang,$app;
+        $isEn = $app->getClientLang() == 'en';
+        $itemWidth = $isEn ? 'style="width: calc(33% - 5px);"' : '';
         $html = '';
         foreach($packages as $packageID => $package)
         {
@@ -177,7 +179,7 @@ else
             $checked = $packagePrivs == $packageSelect;
             $checkID = "allCheckerModule{$subsetName}Package{$packageID}";
 
-            $html .= "<div class='package' data-module='$subsetName' data-package='$packageID' all-privs='$packagePrivs' select-privs='$packageSelect' data-divid='{$subsetName}{$packageID}'>";
+            $html .= "<div class='package' data-module='$subsetName' $itemWidth data-package='$packageID' all-privs='$packagePrivs' select-privs='$packageSelect' data-divid='{$subsetName}{$packageID}'>";
             $html .= "<div class='checkbox-primary checkbox-inline checkbox-left check-all'>";
             $html .= "<input type='checkbox' id='$checkID' value='1'". ($checked ? ' checked' : '') . ">";
             $html .= "<label class='" . (!empty($packageSelect) && $packagePrivs != $packageSelect ? 'text-left checkbox-indeterminate-block' : 'text-left') . "' for='$checkID'>{$lang->group->package->$packageID}</label>";

@@ -115,7 +115,7 @@ if($block->width == 3)
                         array
                         (
                             'title'     => sprintf($lang->block->tooltips['metricTime'], $metricTime),
-                            'placement' => 'bottom',
+                            'placement' => $app->getClientLang() == 'en' ? 'bottom-end' : 'bottom',
                             'type'      => 'white',
                             'className' => 'text-dark border border-light leading-5'
                         )

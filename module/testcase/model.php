@@ -192,6 +192,7 @@ class testcaseModel extends model
         $case = $this->dao->findById($caseID)->from(TABLE_CASE)->fetch();
         if(!$case) return false;
 
+        $case = $this->loadModel('file')->replaceImgURL($case, 'steps');
         $case = $this->processDateField($case);
 
         /* Get project and execution. */
@@ -1730,7 +1731,8 @@ class testcaseModel extends model
      */
     protected function processStepsChanged(object $case, array $oldStep): bool
     {
-        $stepChanged = (count($oldStep) != count($case->steps));
+        $newSteps    = array_filter($case->steps);
+        $stepChanged = (count($oldStep) != count($newSteps));
         if(!$stepChanged)
         {
             $desc     = array_values($case->steps);

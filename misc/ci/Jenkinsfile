@@ -243,8 +243,6 @@ pipeline {
     stage("Publish") {
       environment {
         OUTPUT_PKG_PATH = "${ZENTAO_RELEASE_PATH}/output"
-        QINIU_ACCESS_KEY = credentials('qiniu-upload-ak')
-        QINIU_SECRET_KEY = credentials('qiniu-upload-sk')
       }
 
       stages {
@@ -253,7 +251,6 @@ pipeline {
           matrix {
             agent {
               kubernetes {
-                inheritFrom "upload-azure"
                 containerTemplate {
                     name "package"
                     image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
@@ -347,17 +344,15 @@ pipeline {
                     }
                   }
 
-                  stage("Upload Azure") {
+                  stage("Upload External Path") {
                     when {
                       environment name: 'BUILD_KIND', value: 'release'
                     }
 
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
-                      withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
-                        container('azcopy') {
-                          sh 'azcopy cp --recursive "$OUTPUT_PKG_PATH/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
-                        }
+                      container('package') {
+                        sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
                       }
                     }
                   }
@@ -405,7 +400,7 @@ pipeline {
                 stage("Zbox win") {
                   agent {
                     kubernetes {
-                      inheritFrom "upload-azure code-sign"
+                      inheritFrom "code-sign"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -435,7 +430,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload Azure") {
+                    stage("Upload External Path") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -444,20 +439,17 @@ pipeline {
                         script {
                           buildZboxWin.copyToPreUploadDir()
                         }
-                        withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
-                          container('azcopy') {
-                            sh 'azcopy cp --recursive "./_output/upload/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
-                          }
-                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
                       }
-                    } // End Upload Qiniu
+                    } // End Upload
                   }
                 } // End Zbox win
 
                 stage("Zbox linux") {
                   agent {
                     kubernetes {
-                      inheritFrom "upload-azure"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -483,7 +475,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload Azure") {
+                    stage("Upload External Path") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -492,13 +484,11 @@ pipeline {
                         script {
                           buildZboxLinux.copyToPreUploadDir()
                         }
-                        withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
-                          container('azcopy') {
-                            sh 'azcopy cp --recursive "./_output/upload/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
-                          }
-                        }
+                        // container('package') {
+                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                        // }
                       }
-                    } // End Upload Qiniu
+                    } // End Upload
                   }
                 } // End Zbox linux
 
@@ -508,7 +498,7 @@ pipeline {
                   }
                   agent {
                     kubernetes {
-                      inheritFrom "zentao-package upload-azure"
+                      inheritFrom "zentao-package"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -519,10 +509,8 @@ pipeline {
                     script {
                       buildPkg.doConvertTarXz()
                     }
-                    withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
-                      container('azcopy') {
-                        sh 'azcopy cp --recursive "$OUTPUT_PKG_PATH/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
-                      }
+                    container('package') {
+                      sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
                     }
                   }
                 }
@@ -553,7 +541,7 @@ pipeline {
 
           agent {
             kubernetes {
-              inheritFrom "dind2 xuanim upload-azure"
+              inheritFrom "dind2 xuanim"
               yamlFile 'misc/ci/publish-image.yaml'
             }
           }
@@ -642,12 +630,12 @@ pipeline {
               j.SaveHeadReport('./.head.md')
               ximNotify(title: "禅道镜像构建成功", contentFile: "report.md", contentHeaderFile: './.head.md')
 
-              if (env.BUILD_KIND=='release') {
-                stage("离线镜像包") {
-                  offlineImage.save()
-                  offlineImage.release()
-                }
-              }
+            //   if (env.BUILD_KIND=='release') {
+            //     stage("离线镜像包") {
+            //       offlineImage.save()
+            //       offlineImage.release()
+            //     }
+            //   }
 
               if (env.DEPLOY_ZENTAOPAAS=='true') {
                 deploy.upgradePaas(env.ZENTAOPAAS_SERVER, env.CNE_API_TOKEN)
@@ -674,7 +662,7 @@ pipeline {
         stage("Upload rongpm") {
           agent {
             kubernetes {
-              inheritFrom "zentao-package-test xuanim upload-azure"
+              inheritFrom "zentao-package-test xuanim"
               yamlFile 'misc/ci/normal.yaml'
             }
           }
@@ -695,12 +683,7 @@ pipeline {
               container('package') {
                 sh 'mkdir -p output/rongpm/${PMS_VERSION}'
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
-              }
-
-              withCredentials([string(credentialsId: env.AZURE_CRED_ID, variable: 'AZURE_SAS_TOKEN')]) {
-                container('azcopy') {
-                  sh 'azcopy cp --recursive "./output/*" "https://zentao.blob.core.windows.net/$AZURE_BUCKET/zentao/?$AZURE_SAS_TOKEN"'
-                }
+                sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
               }
             }
           }
@@ -720,5 +703,4 @@ pipeline {
   }
 
 }
-
 

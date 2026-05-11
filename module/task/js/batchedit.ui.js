@@ -325,7 +325,7 @@ function setStoryRelated(event)
             $.getJSON(link, function(data)
             {
                 const storyInfo = data['storyInfo'];
-                $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
+                if(!$module.val()) $module.zui('picker').$.setValue(parseInt(storyInfo.moduleID), true);
             });
         }
 

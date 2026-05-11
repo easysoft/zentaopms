@@ -38,6 +38,52 @@ class convertTaoTest extends baseTest
     }
 
     /**
+     * Test createExecution method.
+     *
+     * @param  int   $jiraProjectID
+     * @param  array $sprintGroup
+     * @param  array $projectRoleActor
+     * @access public
+     * @return mixed
+     */
+    public function createExecutionTest(int $jiraProjectID, array $sprintGroup, array $projectRoleActor)
+    {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
+        $this->instance->app->loadLang('doc');
+
+        $project = new stdclass();
+        $project->id       = 1;
+        $project->name     = '项目A';
+        $project->code     = 'projectA';
+        $project->PM       = 'admin';
+        $project->openedBy = 'admin';
+        $project->desc     = '项目描述';
+        $project->begin    = '2026-04-11';
+        $project->end      = '2026-05-11';
+
+        $result = $this->invokeArgs('createExecution', array($jiraProjectID, $project, $sprintGroup, $projectRoleActor));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test processWorkflowHooks method.
      *
      * @param  array  $jiraAction
@@ -67,7 +113,7 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
-        $result = $this->invokeArgs('createTask', [$projectID, $executionID, $data, $relations]);
+        $result = $this->invokeArgs('createTask', [$projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -552,7 +598,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec($sql);
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
-        $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations]);
+        $result = $this->invokeArgs('createBug', [$productID, $projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -610,7 +656,25 @@ class convertTaoTest extends baseTest
     {
         if($data === null) return false;
 
-        $result = $this->invokeArgs('createCase', [$productID, $projectID, $executionID, $data, $relations]);
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
+        $result = $this->invokeArgs('createCase', [$productID, $projectID, $executionID, $data, $relations, array()]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -724,8 +788,8 @@ class convertTaoTest extends baseTest
         $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : date('Y-m-d');
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
         $project->days          = abs(strtotime($project->end) - strtotime($project->begin)) / (24 * 3600) + 1;
-        $project->PM            = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
-        $project->openedBy      = $this->mockGetJiraAccount(isset($data->lead) ? $data->lead : '');
+        $project->PM            = isset($data->lead) ? $data->lead : '';
+        $project->openedBy      = isset($data->lead) ? $data->lead : '';
         $project->openedDate    = date('Y-m-d H:i:s');
         $project->openedVersion = '18.0';
         $project->storyType     = 'story,epic,requirement';
@@ -908,6 +972,24 @@ class convertTaoTest extends baseTest
         } catch (Error $e) {
             return false;
         }
+    }
+
+    /**
+     * Test createSystem method.
+     *
+     * @param  int         $productID
+     * @access public
+     * @return bool|object
+     */
+    public function createSystemTest(int $productID)
+    {
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('createSystem');
+        $method->setAccessible(true);
+
+        $result = $method->invoke($this->instance, $productID);
+        if(dao::isError()) return false;
+        return $this->instance->fetchByID($result, 'system');
     }
 
     /**
@@ -1280,6 +1362,23 @@ class convertTaoTest extends baseTest
      */
     public function importJiraUserTest($dataList = array(), $mode = 'account')
     {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=InnoDB;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
         $result = $this->invokeArgs('importJiraUser', [$dataList]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1348,7 +1447,7 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec($sql);
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
-        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, $buildinFlow]);
+        $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, array(), $buildinFlow]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1468,5 +1567,39 @@ class convertTaoTest extends baseTest
         } catch (Exception $e) {}
 
         return $this->invokeArgs('createWorkflowAction', array($relations, $actions));
+    }
+
+    /**
+     * Test createFeedback method.
+     *
+     * @param  int $productID
+     * @param  object $data
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function createFeedbackTest($productID = 1, $data = null, $relations = array())
+    {
+        $sql = <<<EOT
+            CREATE TABLE IF NOT EXISTS `jiratmprelation`(
+              `id` int(8) NOT NULL AUTO_INCREMENT,
+              `AType` char(30) NOT NULL,
+              `AID` char(100) NOT NULL,
+              `BType` char(30) NOT NULL,
+              `BID` char(100) NOT NULL,
+              `extra` char(100) NULL,
+              PRIMARY KEY (`id`),
+              UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
+            ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+            EOT;
+
+        try {
+            $this->instance->dbh->exec($sql);
+            $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
+        } catch (Exception $e) {}
+
+        $result = $this->invokeArgs('createFeedback', array($productID, $data, $relations, array()));
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 }

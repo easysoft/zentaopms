@@ -11,30 +11,31 @@
  */
 global $config;
 $lang->upgrade->common          = 'Upgrade';
-$lang->upgrade->welcome         = 'Welcome to upgrade ZenTao';
-$lang->upgrade->execute         = 'Upgrading';
-$lang->upgrade->versionTips     = 'The upgrade versions';
-$lang->upgrade->changeTips      = '%s change log';
+$lang->upgrade->welcome         = 'Welcome to ZenTao Upgrade';
+$lang->upgrade->execute         = 'Version Upgrade';
+$lang->upgrade->versionTips     = 'Upgrading to';
+$lang->upgrade->changeTips      = '%s data changes';
 $lang->upgrade->progress        = 'Progress';
 $lang->upgrade->executedChanges = "Executed: <span id='executedCount'>0</span> / %s";
 $lang->upgrade->start           = 'Start';
-$lang->upgrade->result          = 'Result';
+$lang->upgrade->result          = 'Update Status';
 $lang->upgrade->fail            = 'Upgrade failed. The current version of ZenTao is ';
 $lang->upgrade->successTip      = 'Successed';
-$lang->upgrade->success         = "<p>Congratulations! Your ZenTao is updated.</p>";
-$lang->upgrade->tohome          = 'Visit ZenTao';
+$lang->upgrade->success         = "<p>Congratulations! Your ZenTao has been successfully upgraded.</p>";
+$lang->upgrade->tohome          = 'Go to ZenTao';
 $lang->upgrade->notice          = 'Notice';
 $lang->upgrade->checkExtension  = 'Check Extensions';
-$lang->upgrade->consistency     = 'Check Consistency';
+$lang->upgrade->consistency     = 'Consistency Check';
 $lang->upgrade->backupNotice    = <<<EOT
-<p>Database upgrade requires high privileges. Please use the root user.</p>
-<p>Upgrade carries risks. Please back up your database first, just in case.</p>
+<p>Elevated database privileges are required. Please use an administrator account.</p>
+<p>Warning: Back up your database before proceeding to prevent potential data loss.</p>
 <pre class='leading-6 mt-1 p-3'>
-1. You can back up using phpMyAdmin..
-2. Use the mysql command-line tool:
-   $> mysqldump -u <span class='font-bold text-danger'>username</span> -p <span class='font-bold text-danger'>dbname</span> > <span class='font-bold text-danger'>filename</span>
-   Replace the red parts above with your actual username and database name.
-   <em>Example</em>: mysqldump -u root -p zentao > zentao.bak
+1. Backups can be performed via GUI management tools.
+2. Use the DIsql tool for backup.
+$> BACKUP DATABASE BACKUPSET <span class='font-bold text-danger'>'filename'</span>;
+The backup set directory "filename" will be generated in the default backup path upon completion.
+The default path is defined by BAK_PATH in dm.ini. If BAK_PATH is not configured, the bak directory under SYSTEM_PATH is used by default.
+This is the simplest backup command. For advanced options, please refer to the online backup syntax documentation.
 </pre>
 EOT;
 
@@ -55,40 +56,40 @@ EOT;
 }
 
 $lang->upgrade->confirmBackup      = 'I have backed up the database';
-$lang->upgrade->setStatusFileTitle = 'Please complete the following actions';
-$lang->upgrade->createWinFile      = 'Open command line and execute <span id="command" class="font-bold text-danger">echo > %s</span>';
-$lang->upgrade->createLinuxFile    = 'Execute <span id="command" class="font-bold text-danger">touch %s</span> in the command line';
-$lang->upgrade->deleteStatusFile   = 'Or delete <span class="font-bold text-danger">%s</span> and create <span class="font-bold text-danger">ok.txt</span> and leave it blank.';
-$lang->upgrade->confirmStatusFile  = 'I have read and done as instructed above.';
+$lang->upgrade->setStatusFileTitle = 'Please complete the following before upgrading';
+$lang->upgrade->createWinFile      = 'Open the terminal and run: <span id="command" class="font-bold text-danger">echo > %s</span>';
+$lang->upgrade->createLinuxFile    = 'Run <span id="command" class="font-bold text-danger">touch %s</span> in the terminal.';
+$lang->upgrade->deleteStatusFile   = 'Alternatively, delete <span class="font-bold text-danger">%s</span> and create a new <span class="font-bold text-danger">ok.txt</span> file (leave it empty).';
+$lang->upgrade->confirmStatusFile  = 'I have read and followed the instructions above.';
 $lang->upgrade->safeDeleteFile     = 'For system security, the files need to be deleted.';
 
-$lang->upgrade->selectVersion = 'Version';
-$lang->upgrade->copyCommand   = 'Copy';
-$lang->upgrade->copySuccess   = 'Copied to clipboard';
-$lang->upgrade->copyFail      = 'Your browser does not support the copy function; please copy manually.';
-$lang->upgrade->continue      = 'Continue';
-$lang->upgrade->noteVersion   = "Select the compatible version, or it might cause data loss.";
-$lang->upgrade->fromVersion   = 'From';
-$lang->upgrade->toVersion     = 'To';
+$lang->upgrade->selectVersion = 'Select Version';
+$lang->upgrade->copyCommand   = 'Copy Command';
+$lang->upgrade->copySuccess   = 'Copied';
+$lang->upgrade->copyFail      = 'Copying not supported by your browser. Please copy manually.';
+$lang->upgrade->continue      = 'Continue Upgrade';
+$lang->upgrade->noteVersion   = "Make sure to select the correct version, otherwise data loss may occur.";
+$lang->upgrade->fromVersion   = 'Current Version';
+$lang->upgrade->toVersion     = 'Upgrade to';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
-$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
-$lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
-$lang->upgrade->updateFile    = 'File information has to be updated.';
-$lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';
-$lang->upgrade->noticeErrSQL  = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
-$lang->upgrade->execCommand   = 'Please execute the above command on the server and refresh the page after execution.';
-$lang->upgrade->afterExec     = 'Please manually modify the database based on the above error message, and then refresh the page.';
-$lang->upgrade->mergeProgram  = 'Data Merge';
+$lang->upgrade->upgradingTips = 'Upgrading in progress. Please wait. Do not refresh, power off, or shut down!';
+$lang->upgrade->forbiddenExt  = 'The following extensions are incompatible with the new version and have been automatically disabled:';
+$lang->upgrade->updateFile    = 'Attachment information update required.';
+$lang->upgrade->showSQLLog    = 'Database inconsistencies detected. Attempting to fix. Below are the SQL statements for repair:';
+$lang->upgrade->noticeErrSQL  = 'Database inconsistencies detected, and automatic repair failed. Please run the following SQL statements manually, then refresh the page to re-check.';
+$lang->upgrade->execCommand   = 'Please run the above command on the server, then refresh the page.';
+$lang->upgrade->afterExec     = 'Please modify the database manually based on the error messages above, then refresh the page.';
+$lang->upgrade->mergeProgram  = 'Data import';
 $lang->upgrade->mergeTips     = 'Data Migration Tips';
-$lang->upgrade->toPMS15Guide  = 'ZenTao open source version 15 upgrade';
-$lang->upgrade->toPRO10Guide  = 'ZenTao profession version 10 upgrade';
-$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise version 5 upgrade';
+$lang->upgrade->toPMS15Guide  = 'ZenTao Open Source v15 Upgrade';
+$lang->upgrade->toPRO10Guide  = 'ZenTao profession v10 Upgrade ';
+$lang->upgrade->toBIZ5Guide   = 'ZenTao enterprise v5 Upgrade ';
 $lang->upgrade->toMAXGuide    = 'ZenTao ultimate version upgrade';
 
 $lang->upgrade->line            = 'Product Line';
 $lang->upgrade->allLines        = "All Product Lines";
-$lang->upgrade->program         = 'Merge Project';
+$lang->upgrade->program         = 'Target Program & Project';
 $lang->upgrade->existProgram    = 'Existing programs';
 $lang->upgrade->existProject    = 'Existing projects';
 $lang->upgrade->existLine       = 'Existing product lines';
@@ -96,84 +97,84 @@ $lang->upgrade->product         = $lang->productCommon;
 $lang->upgrade->project         = 'Iteration';
 $lang->upgrade->repo            = 'Repo';
 $lang->upgrade->mergeRepo       = 'Merge Repo';
-$lang->upgrade->setProgram      = 'Set the project to which the program belongs';
-$lang->upgrade->setProject      = "Set the {$lang->executionCommon} to which the project belongs";
+$lang->upgrade->setProgram      = 'Assign Project to Program';
+$lang->upgrade->setProject      = "Assign {$lang->executionCommon} to Project";
 $lang->upgrade->dataMethod      = 'Data migration method';
-$lang->upgrade->selectMergeMode = 'Please select the data merging method';
-$lang->upgrade->mergeMode       = 'Data consolidation method : ';
-$lang->upgrade->begin           = 'Begin Date';
-$lang->upgrade->end             = 'End Date';
-$lang->upgrade->unknownDate     = 'Unknown Date Project';
+$lang->upgrade->selectMergeMode = 'Please select a data merging method';
+$lang->upgrade->mergeMode       = 'Data Merging Method:';
+$lang->upgrade->begin           = 'Start on';
+$lang->upgrade->end             = 'End on';
+$lang->upgrade->unknownDate     = 'Unscheduled Projects';
 $lang->upgrade->selectProject   = 'The target project';
 $lang->upgrade->programName     = 'Program Name';
 $lang->upgrade->projectName     = 'Project Name';
 $lang->upgrade->projectManage   = 'Project Manage';
-$lang->upgrade->compatibleEXT   = 'Extension mechanism compatible';
+$lang->upgrade->compatibleEXT   = 'Extension Compatibility';
 $lang->upgrade->fileName        = 'File Name';
 $lang->upgrade->list            = ' List';
 $lang->upgrade->next            = 'Next';
 $lang->upgrade->back            = 'Back';
 
-$lang->upgrade->upgradeDocs     = 'Upgrade documents data';
-$lang->upgrade->upgradingDocs   = 'Upgrading documents data, please wait...';
-$lang->upgrade->upgradeDocsTip  = 'Detected %s document-related data requiring an upgrade'; // '检测到 %s 个文档相关数据需要升级';
+$lang->upgrade->upgradeDocs     = 'Upgrade Document Data';
+$lang->upgrade->upgradingDocs   = 'Upgrading documents, please wait...';
+$lang->upgrade->upgradeDocsTip  = 'Found %s document-related items to upgrade';
 
-$lang->upgrade->upgradeDocTemplates    = 'Upgrade templates data';
-$lang->upgrade->upgradingDocTemplates  = 'Upgrading templates data, please wait...';
-$lang->upgrade->upgradeDocTemplatesTip = 'We are upgrading the historical data of the template. After the upgrade, it can be viewed and maintained in the template square under the document.';
+$lang->upgrade->upgradeDocTemplates    = 'Upgrade Doc Template Data';
+$lang->upgrade->upgradingDocTemplates  = 'Upgrading document templates, please wait...';
+$lang->upgrade->upgradeDocTemplatesTip = 'Upgrading historical template data. You can view and manage them in the Template Plaza afterward.';
 
 $lang->upgrade->weeklyReportTitle        = 'Week % s (% s ~% s)';
 $lang->upgrade->milestoneTitle           = 'Milestone Report';
-$lang->upgrade->upgradeProjectReports    = "Upgrading {$lang->projectCommon} report data";
+$lang->upgrade->upgradeProjectReports    = "Upgrade {$lang->projectCommon} Report Data";
 $lang->upgrade->upgradingProjectReports  = "Upgrading {$lang->projectCommon} report data, please wait...";
-$lang->upgrade->upgradeProjectReportsTip = "Detected %s {$lang->projectCommon} report-related data requiring an upgrade";
+$lang->upgrade->upgradeProjectReportsTip = "Found %s {$lang->projectCommon} report-related items to upgrade";
 
 $lang->upgrade->newProgram        = 'Create';
-$lang->upgrade->editedName        = 'New Name';
-$lang->upgrade->projectEmpty      = 'Project must be not empty.';
-$lang->upgrade->mergeSummary      = "Dear users, there are %s in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
+$lang->upgrade->editedName        = 'Renamed To';
+$lang->upgrade->projectEmpty      = 'The project cannot be empty.';
+$lang->upgrade->mergeSummary      = "Dear user, there are %s items in your system waiting to be migrated.";
 $lang->upgrade->productCount      = "%s {$lang->productCommon}";
 $lang->upgrade->projectCount      = "%s {$lang->projectCommon}";
-$lang->upgrade->mergeByProject    = "Currently, the following two data migration methods are available. If the historical projects are long term, we suggest upgrading the historical projects as projects.</br>If the historical projects are short cycle, we suggest that the historical projects be upgraded as iterations.";
-$lang->upgrade->mergeRepoTips     = "Merge the selected version library under the selected product.";
-$lang->upgrade->needBuild4Add     = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
-$lang->upgrade->needChangeEngine  = 'The table engine needs to be replaced in this upgrade, Please go [Admin->System->TableEngine] page to replace engine.';
-$lang->upgrade->errorEngineInnodb = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
-$lang->upgrade->duplicateProject  = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
-$lang->upgrade->upgradeTips       = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
-$lang->upgrade->moveEXTFileFail   = 'The migration file failed, please execute the above command and refresh!';
-$lang->upgrade->deleteDirTip      = 'After the upgrade, the following folders will affect the use of system functions, please delete them.';
-$lang->upgrade->errorNoProduct    = "Select the {$lang->productCommon} that you want to merge.";
-$lang->upgrade->errorNoExecution  = "Select the {$lang->projectCommon} that you want to merge.";
+$lang->upgrade->mergeByProject    = "There are 2 data migration methods available. If your historical {$lang->projectCommon} are long-term, we recommend upgrading them as Projects.</br>If they are short-term, we recommend upgrading them as {$lang->executionCommon}.";
+$lang->upgrade->mergeRepoTips     = "Merge selected repositories into the selected product.";
+$lang->upgrade->needBuild4Add     = 'This upgrade requires new indexes. Please go to [Admin -> System -> Rebuild Index] to re-create them.';
+$lang->upgrade->needChangeEngine  = 'Database engine updates are required for this upgrade. Please change it at [Admin -> System -> Table Engine].';
+$lang->upgrade->errorEngineInnodb = 'The current database does not support the InnoDB engine. Please switch to MyISAM and try again.';
+$lang->upgrade->duplicateProject  = "Project names must be unique within a program. Please rename any duplicate projects.";
+$lang->upgrade->upgradeTips       = "Deleted historical data will not be migrated and cannot be restored after the upgrade.";
+$lang->upgrade->moveEXTFileFail   = 'File migration failed. Please run the command above and refresh.';
+$lang->upgrade->deleteDirTip      = 'The following folders will interfere with system functions after the upgrade. Please delete them.';
+$lang->upgrade->errorNoProduct    = "Please select the {$lang->productCommon} to be merged.";
+$lang->upgrade->errorNoExecution  = "Please select the {$lang->projectCommon} to be merged.";
 $lang->upgrade->moveExtFileTip    = <<<EOT
-<p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to extension/custom, otherwise the customization/plug-in function will not be available.</p>
-<p>Please confirm whether the system has been customized/plug-in. If no customization/plug-in has been done, you can uncheck the following files; Whether you have done customization/plug-in, you can also keep the file checked.</p>
+<p>The new version will apply extension compatibility to historical customizations and plugins. To ensure these functions remain active, the related files must be migrated to extension/custom; otherwise, they will no longer work.</p>
+<p>Please confirm if your system has any customizations or plugins. If not, you can uncheck the files below. If you are unsure, we recommend keeping them checked to avoid any issues.</p>
 EOT;
 
-$lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
-$lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
+$lang->upgrade->projectType['project']   = "Upgrade historical {$lang->projectCommon} as Projects";
+$lang->upgrade->projectType['execution'] = "Upgrade historical {$lang->projectCommon} as {$lang->executionCommon}";
 
 $lang->upgrade->createProjectTip = <<<EOT
-<p>After the upgrade, the existing {$lang->projectCommon} will be Project in the new version.</p>
-<p>ZenTao will create an item in Execute with the same name of {$lang->projectCommon} according to the data in {$lang->projectCommon}, and move the tasks, stories, and bugs in {$lang->projectCommon} to it.</p>
+<p>After the upgrade, each historical {$lang->projectCommon} will map directly to a new Project.</p>
+<p>The system will create an {$lang->executionCommon} with the same name for each historical {$lang->projectCommon}. Tasks, stories, bugs, and other data will then be migrated into these corresponding {$lang->executionCommon}.</p>
 EOT;
 
 $lang->upgrade->createExecutionTip = <<<EOT
-<p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
-<p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
+<p>The system will upgrade historical {$lang->projectCommon} as {$lang->executionCommon}.</p>
+<p>After the upgrade, the data from historical {$lang->projectCommon} will be mapped to {$lang->executionCommon} under the new Projects.</p>
 EOT;
 
 $lang->upgrade->mergeModes = array();
-$lang->upgrade->mergeModes['project']   = 'Automatically merge data and upgrade historical projects as projects';
-$lang->upgrade->mergeModes['execution'] = 'Automatically merge data and upgrade historical projects as executions';
+$lang->upgrade->mergeModes['project']   = "Auto-merge data: Upgrade historical {$lang->projectCommon} as Projects";
+$lang->upgrade->mergeModes['execution'] = "Auto-merge data: Upgrade historical {$lang->projectCommon} as {$lang->executionCommon}";
 $lang->upgrade->mergeModes['manually']  = 'Manually merge data';
 
-$lang->upgrade->mergeProjectTip   = 'The historical project will be synchronized directly to the new version of the project. At the same time, the system will create an iteration with the same name as the project according to the historical project, and migrate the tasks, requirements, bugs and other data under the previous project to the iteration.';
-$lang->upgrade->mergeExecutionTip = 'The system will automatically create projects by year, and merge the historical iteration data into the corresponding projects by year.';
-$lang->upgrade->createProgramTip  = 'At the same time, the system will automatically create a default project set and place all projects under the default project set.';
+$lang->upgrade->mergeProjectTip   = "Historical {$lang->projectCommon} will be synchronized directly to the new Projects. Meanwhile, the system will create an {$lang->executionCommon} with the same name for each, and migrate all tasks, stories, bugs, and other data into the corresponding {$lang->executionCommon}.";
+$lang->upgrade->mergeExecutionTip = "The system will automatically create Projects by year and merge historical {$lang->projectCommon} data into the corresponding Projects.";
+$lang->upgrade->createProgramTip  = "Meanwhile, a default Program will be created to contain all {$lang->projectCommon}.";
 $lang->upgrade->mergeManuallyTip  = 'You can manually select the data merging method.';
 
-$lang->upgrade->defaultGroup = 'Default';
+$lang->upgrade->defaultGroup = 'Default Group';
 
 include dirname(__FILE__) . '/version.php';
 
@@ -181,12 +182,12 @@ $lang->upgrade->recoveryActions = new stdclass();
 $lang->upgrade->recoveryActions->cancel = 'Cancel';
 $lang->upgrade->recoveryActions->review = 'Review';
 
-$lang->upgrade->remark     = 'Remark';
-$lang->upgrade->remarkDesc = 'You can also switch the mode in the Admin-System-Mode page of the system.';
+$lang->upgrade->remark     = 'Notes';
+$lang->upgrade->remarkDesc = 'You can also switch the mode in Admin -> System ->Mode.';
 
-$lang->upgrade->upgradingTip = 'The system is being upgraded, please wait patiently...';
+$lang->upgrade->upgradingTip = 'System upgrading, please wait...';
 
-$lang->upgrade->addTraincoursePrivTips = "In order to facilitate everyone's learning of project management-related knowledge, we have made the courses and practical repositories of the academy accessible to all permission groups by default. This ensures that everyone can easily access the resources. However, if you do not require this feature, you can disable it in the backend feature switch.";
+$lang->upgrade->addTraincoursePrivTips = "To help users better learn project management, we have granted all privilege groups access to Academy courses and practice libraries by default. If you do not need this feature, you can disable it in Admin -> System -> Feature Toggle.";
 
 $lang->upgrade->storyStageList['']           = '';
 $lang->upgrade->storyStageList['wait']       = 'Waiting';
@@ -199,7 +200,7 @@ $lang->upgrade->storyStageList['developed']  = 'Developed';
 $lang->upgrade->storyStageList['testing']    = 'Testing';
 $lang->upgrade->storyStageList['tested']     = 'Tested';
 $lang->upgrade->storyStageList['verified']   = 'Accepted';
-$lang->upgrade->storyStageList['rejected']   = 'Verify Rejected';
+$lang->upgrade->storyStageList['rejected']   = 'Acceptance Failed';
 $lang->upgrade->storyStageList['delivering'] = 'Delivering';
 $lang->upgrade->storyStageList['delivered']  = 'Delivered';
 $lang->upgrade->storyStageList['released']   = 'Released';
@@ -212,20 +213,20 @@ $lang->upgrade->flowFields['execution'] = 'Execution';
 
 $lang->upgrade->defaultCharterApprovalFlow = new stdclass();
 $lang->upgrade->defaultCharterApprovalFlow->projectApproval = new stdclass();
-$lang->upgrade->defaultCharterApprovalFlow->projectApproval->title = 'Project Approval Workflow';
-$lang->upgrade->defaultCharterApprovalFlow->projectApproval->desc  = 'You can design the approval process for initiating project approval.';
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->title = 'Project Initiation Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->projectApproval->desc  = 'Design the approval process for project initiation requests.';
 
 $lang->upgrade->defaultCharterApprovalFlow->completionApproval = new stdclass();
-$lang->upgrade->defaultCharterApprovalFlow->completionApproval->title = 'Project Completion Approval Workflow';
-$lang->upgrade->defaultCharterApprovalFlow->completionApproval->desc  = 'You can design the approval process for initiating project completion approval.';
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->title = 'Project Closure Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->completionApproval->desc  = 'Design the approval process for project closure requests.';
 
 $lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval = new stdclass();
-$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->title = 'Project Cancellation Approval Workflow';
-$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = 'You can design the approval process for canceling project approval.';
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->title = 'Project Cancellation Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->cancelProjectApproval->desc  = 'Design the approval process for canceling project initiations.';
 
 $lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval = new stdclass();
-$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Activation Approval Workflow';
-$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'You can design the approval process for activating project approval.';
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->title = 'Project Reactivation Workflow';
+$lang->upgrade->defaultCharterApprovalFlow->activateProjectApproval->desc  = 'Design the approval process for reactivating project initiations.';
 
 $lang->upgrade->deliverableModule['plan']   = 'Plan';
 $lang->upgrade->deliverableModule['story']  = 'Story';
@@ -238,7 +239,7 @@ $lang->upgrade->reviewObjectList['QAP']        = 'Quality Assurance Plan';
 $lang->upgrade->reviewObjectList['CMP']        = 'Configuration Management Plan';
 $lang->upgrade->reviewObjectList['ITP']        = 'Integration Test Plan';
 $lang->upgrade->reviewObjectList['ERS']        = 'Epic Statement';
-$lang->upgrade->reviewObjectList['URS']        = 'User Requirement Statement';
+$lang->upgrade->reviewObjectList['URS']        = 'Feature Statement';
 $lang->upgrade->reviewObjectList['SRS']        = 'Project Requirements Specification';
 $lang->upgrade->reviewObjectList['HLDS']       = 'High Level Design Statement';
 $lang->upgrade->reviewObjectList['DDS']        = 'Detailed Design Statement';
@@ -255,24 +256,24 @@ $lang->upgrade->baselineReview['baseline'] = 'Baseline Review';
 $lang->upgrade->baselineReview['change']   = 'Project Change Review';
 
 $lang->upgrade->changeModes = [];
-$lang->upgrade->changeModes['create'] = 'Create';
+$lang->upgrade->changeModes['create'] = 'Add';
 $lang->upgrade->changeModes['update'] = 'Update';
 $lang->upgrade->changeModes['delete'] = 'Delete';
 
 $lang->upgrade->changeActions = [];
 $lang->upgrade->changeActions['createView']  = 'Create database view %VIEW%';
-$lang->upgrade->changeActions['dropView']    = 'Delete database view %VIEW%';
+$lang->upgrade->changeActions['dropView']    = 'Drop database view %VIEW%';
 $lang->upgrade->changeActions['createTable'] = 'Create database table %TABLE%';
-$lang->upgrade->changeActions['dropTable']   = 'Delete database table %TABLE%';
+$lang->upgrade->changeActions['dropTable']   = 'Drop database table %TABLE%';
 $lang->upgrade->changeActions['renameTable'] = 'Rename database table %OLD% to %NEW%';
 $lang->upgrade->changeActions['addField']    = 'Add field %FIELD% to database table %TABLE%';
 $lang->upgrade->changeActions['modifyField'] = 'Modify field %FIELD% in database table %TABLE%';
-$lang->upgrade->changeActions['dropField']   = 'Delete field %FIELD% from database table %TABLE%';
-$lang->upgrade->changeActions['renameField'] = 'Rename field %OLD% to %NEW% in database table %TABLE%';
-$lang->upgrade->changeActions['createIndex'] = 'Create index %INDEX% on database table %TABLE%';
-$lang->upgrade->changeActions['dropIndex']   = 'Delete index %INDEX% from database table %TABLE%';
+$lang->upgrade->changeActions['dropField']   = 'Drop field %FIELD% from database table %TABLE%';
+$lang->upgrade->changeActions['renameField'] = 'Rename field %OLD% in table %TABLE% to %NEW%';
+$lang->upgrade->changeActions['createIndex'] = 'Add index %INDEX% to database table %TABLE%';
+$lang->upgrade->changeActions['dropIndex']   = 'Drop index %INDEX% from database table %TABLE%';
 $lang->upgrade->changeActions['insertValue'] = 'Insert data into database table %TABLE%';
 $lang->upgrade->changeActions['updateValue'] = 'Update data in database table %TABLE%';
 $lang->upgrade->changeActions['deleteValue'] = 'Delete data from database table %TABLE%';
-$lang->upgrade->changeActions['method']      = 'Execute the %METHOD% method of the %MODULE% module';
-$lang->upgrade->changeActions['other']       = 'Other';
+$lang->upgrade->changeActions['method']      = 'Execute method %METHOD% of module %MODULE%';
+$lang->upgrade->changeActions['other']       = 'Other operations';

@@ -188,6 +188,7 @@ $lang->task->teamMember        = '团队成员';
 $lang->task->addMember         = '添加成员';
 $lang->task->to                = '至';
 $lang->task->suffixHour        = 'h';
+$lang->task->labelSuffixHour   = '(h)';
 $lang->task->update            = '更新';
 $lang->task->isParent          = '是父任务';
 $lang->task->path              = '路径';
@@ -310,6 +311,20 @@ $lang->task->addChildTask              = '因该任务已经产生消耗，为�
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 $lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
 $lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新为父任务的相关{$lang->SRCommon}？";
+$lang->task->startSubjectText          = 'TASK #%s %s 可以开始了';
+$lang->task->finishSubjectText         = 'TASK #%s %s 可以完成了';
+$lang->task->SSMailContentText         = "前置任务 [<a href='%s'>%s</a>] 已开始，你负责的任务 [<a href='%s'>%s</a>] 可以开始了。";
+$lang->task->SFMailContentText         = "前置任务 [<a href='%s'>%s</a>] 已开始，你负责的任务 [<a href='%s'>%s</a>] 可以完成了。";
+$lang->task->FSMailContentText         = "前置任务 [<a href='%s'>%s</a>] 已完成，你负责的任务 [<a href='%s'>%s</a>] 可以开始了。";
+$lang->task->FFMailContentText         = "前置任务 [<a href='%s'>%s</a>] 已完成，你负责的任务 [<a href='%s'>%s</a>] 可以完成了。";
+$lang->task->SSWebhookText             = "%s 开始了前置任务 [[%s](%s)]，你负责的任务 [[%s](%s)] 可以开始了。";
+$lang->task->SFWebhookText             = "%s 开始了前置任务 [[%s](%s)]，你负责的任务 [[%s](%s)] 可以完成了。";
+$lang->task->FSWebhookText             = "%s 完成了前置任务 [[%s](%s)]，你负责的任务 [[%s](%s)] 可以开始了。";
+$lang->task->FFWebhookText             = "%s 完成了前置任务 [[%s](%s)]，你负责的任务 [[%s](%s)] 可以完成了。";
+$lang->task->SSMessageText             = "%s 开始了前置任务 [<a href='%s'>%s</a>]，你负责的任务 [<a href='%s'>%s</a>] 可以开始了。";
+$lang->task->SFMessageText             = "%s 开始了前置任务 [<a href='%s'>%s</a>]，你负责的任务 [<a href='%s'>%s</a>] 可以完成了。";
+$lang->task->FSMessageText             = "%s 完成了前置任务 [<a href='%s'>%s</a>]，你负责的任务 [<a href='%s'>%s</a>] 可以开始了。";
+$lang->task->FFMessageText             = "%s 完成了前置任务 [<a href='%s'>%s</a>]，你负责的任务 [<a href='%s'>%s</a>] 可以完成了。";
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"耗时"必须为数字';

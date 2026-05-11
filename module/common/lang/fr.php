@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -125,6 +126,8 @@ $lang->fail            = 'Echec';
 $lang->addFiles        = 'Fichiers ajoutés ';
 $lang->delFiles        = 'Deleted Files ';
 $lang->deleteSuccess   = 'Supprimé';
+$lang->confirmDelete   = 'Do you want to delete it?';
+$lang->deleteing       = 'Deleting...';
 $lang->deleted         = 'Supprimé';
 $lang->files           = 'Fichiers ';
 $lang->pasteText       = 'Collage Multi-lignes';
@@ -213,6 +216,14 @@ $lang->contactUs->phone  = 'Téléphone';
 $lang->contactUs->email  = 'Email';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = 'Wechat';
+
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = 'Sélectionner des utilisateurs';
+$lang->userSelector->deptTitle     = 'Filtrer par département';
+$lang->userSelector->userTitle     = 'Sélectionner des utilisateurs';
+$lang->userSelector->selectedTitle = 'Sélectionné';
+$lang->userSelector->allText       = 'Tous les utilisateurs';
+$lang->userSelector->emptyText     = 'Aucun utilisateur disponible';
 
 $lang->common->common       = 'Module Commun';
 $lang->common->story        = 'Story';
@@ -317,6 +328,7 @@ $lang->executionburn->common        = 'Burndown chart';
 $lang->executioncfd->common         = 'Cumulative Flow Diagram';
 $lang->executionstory->common       = 'Story';
 $lang->executionqa->common          = 'QA';
+$lang->executionbuild->common       = 'Build';
 $lang->executionsettings->common    = 'Setting';
 $lang->generalcomment->common       = 'Comment';
 $lang->generalping->common          = 'Timeout prevention';
@@ -466,7 +478,7 @@ $lang->admin->tableEngine = 'Table Engine';
 
 $lang->convert->importJira = 'Import Jira';
 
-$lang->storyConcept  = 'Story Concpet';
+$lang->storyConcept  = 'Story Concept';
 $lang->defaultERName = 'Epic';
 
 $lang->searchTips = '';
@@ -576,6 +588,7 @@ $lang->error->tutorialData    = "Aucune donnée ne peut être importée en mode 
 $lang->error->noCurlExt       = 'Aucun module Curl installé';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
 $lang->error->httpServerError = 'Server error';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();
@@ -688,5 +701,10 @@ $lang->aiapp->zentaoAgent  = 'ZenTao Agent';
 $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Model List';
 $lang->aiapp->config       = 'ZAI Setting';
+$lang->aiapp->toolkit      = 'Toolkit';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include (dirname(__FILE__) . '/menu.php');

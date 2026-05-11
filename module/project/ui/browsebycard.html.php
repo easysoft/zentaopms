@@ -205,7 +205,7 @@ if(!empty($projectStats))
                             setClass('row'),
                             div
                             (
-                                setClass('w-1/4'),
+                                setClass($app->getClientLang() == 'en' ? 'w-1/3' : 'w-1/4'),
                                 div
                                 (
                                     span

@@ -9,7 +9,7 @@ $fields = defineFieldList('project');
 $model          = data('model');
 $hasCode        = !empty($config->setCode);
 $currency       = data('parentProgram') ? data('parentProgram.budgetUnit') : $config->project->defaultCurrency;
-$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit' || !empty(data('copyProject'));
+$disableStageBy = !empty(data('executions')) || data('app.rawMethod') == 'edit';
 
 $fields->field('parent')
     ->control('picker', array('required' => true))
@@ -146,6 +146,13 @@ $fields->field('auth')
     ->wrapBefore()
     ->control('radioList')
     ->items($lang->project->authList);
+
+$fields->field('coverExecutionPriv')
+    ->width('full')
+    ->control('radioList')
+    ->items($lang->project->coverExecutionPrivList)
+    ->hidden(data('project.coverExecutionPriv') === null || !empty(data('project.coverExecutionPriv')))
+    ->wrapBefore();
 
 $storyTypeList = array();
 foreach($lang->story->typeList as $key => $text)

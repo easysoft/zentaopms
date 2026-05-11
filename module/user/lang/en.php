@@ -11,65 +11,65 @@
  */
 $lang->user->common           = 'User';
 $lang->user->id               = 'ID';
-$lang->user->inside           = 'Internal';
-$lang->user->outside          = 'Outsiders';
+$lang->user->inside           = 'Internal Users';
+$lang->user->outside          = 'External Users';
 $lang->user->company          = 'Company';
 $lang->user->dept             = 'Department';
 $lang->user->account          = 'Account';
 $lang->user->password         = 'Password';
 $lang->user->passwordfield    = 'Password';
 $lang->user->password1        = 'Password';
-$lang->user->password2        = 'Repeat Password';
+$lang->user->password2        = 'Confirm Password';
 $lang->user->role             = 'Role';
-$lang->user->group            = 'Privilege Group';
+$lang->user->group            = 'Permission Group';
 $lang->user->realname         = 'Name';
 $lang->user->nickname         = 'Nickname';
-$lang->user->commiter         = 'SVN/GIT Account';
+$lang->user->commiter         = 'SVN / GIT Account';
 $lang->user->birthyear        = 'DOB';
 $lang->user->gender           = 'Gender';
 $lang->user->email            = 'Email';
-$lang->user->basicInfo        = 'Basic Info.';
-$lang->user->accountInfo      = 'Account Info.';
+$lang->user->basicInfo        = 'Basic Info';
+$lang->user->accountInfo      = 'Account Info';
 $lang->user->verify           = 'Verification';
-$lang->user->contactInfo      = 'Contact';
+$lang->user->contactInfo      = 'Contact Info';
 $lang->user->skype            = 'Skype';
 $lang->user->qq               = 'QQ';
 $lang->user->mobile           = 'Mobile';
 $lang->user->phone            = 'Phone';
 $lang->user->weixin           = 'WeChat';
-$lang->user->dingding         = 'DingDing';
+$lang->user->dingding         = 'DingTalk';
 $lang->user->slack            = 'Slack';
 $lang->user->whatsapp         = 'WhatsApp';
-$lang->user->address          = 'Address';
-$lang->user->zipcode          = 'ZipCode';
-$lang->user->join             = 'Joined';
-$lang->user->priv             = 'Privilege';
-$lang->user->visits           = 'Visits';
-$lang->user->visions          = 'Version Type';
+$lang->user->address          = 'Mailing Address';
+$lang->user->zipcode          = 'Zip Code';
+$lang->user->join             = 'Join Date';
+$lang->user->priv             = 'Permission';
+$lang->user->visits           = 'Visit Count';
+$lang->user->visions          = 'Interface Type';
 $lang->user->ip               = 'Last IP';
 $lang->user->last             = 'Last Login';
 $lang->user->ranzhi           = 'Zdoo Account';
 $lang->user->ditto            = 'Ditto';
-$lang->user->originalPassword = 'Old Password';
+$lang->user->originalPassword = 'Current Password';
 $lang->user->newPassword      = 'New Password';
 $lang->user->verifyPassword   = 'Password';
-$lang->user->forgetPassword   = 'Forgotten Password?';
-$lang->user->score            = 'Score';
+$lang->user->forgetPassword   = 'Forgot Password';
+$lang->user->score            = 'Points';
 $lang->user->name             = 'Name';
 $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
-$lang->user->cropAvatarTip    = 'Drag and drop the box to crop the image.';
-$lang->user->cropImageTip     = 'The image is too small. The recommended image size is at least 48x48. The current image size is %s';
+$lang->user->cropAvatarTip    = 'Drag the frame to select the cropping area.';
+$lang->user->cropImageTip     = 'The selected image is too small. The recommended minimum size is 48x48. Current size: %s.';
 $lang->user->captcha          = 'Captcha';
 $lang->user->avatar           = 'Avatar';
-$lang->user->birthday         = 'Birthday';
-$lang->user->nature           = 'Nature';
-$lang->user->analysis         = 'Analysis';
-$lang->user->strategy         = 'Strategy';
-$lang->user->fails            = 'number of failures';
-$lang->user->locked           = 'Lock Time';
-$lang->user->scoreLevel       = 'Score Level';
-$lang->user->clientStatus     = 'Client Status';
+$lang->user->birthday         = 'DOB';
+$lang->user->nature           = 'Personality Traits';
+$lang->user->analysis         = 'Impact Analysis';
+$lang->user->strategy         = 'Response Strategy';
+$lang->user->fails            = 'Failed Attempts';
+$lang->user->locked           = 'Lock Date';
+$lang->user->scoreLevel       = 'Points Level';
+$lang->user->clientStatus     = 'Login Status';
 $lang->user->clientLang       = 'Client Language';
 $lang->user->programs         = 'Program';
 $lang->user->products         = $lang->productCommon;
@@ -79,53 +79,53 @@ $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
 $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
-$lang->user->resetPwdByAdmin  = 'Reset password via admin';
+$lang->user->resetPwdByAdmin  = 'Reset Password by Admin';
 $lang->user->resetPwdByMail   = 'Reset password via email';
 
 $lang->user->abbr = new stdclass();
-$lang->user->abbr->id        = 'ID';
-$lang->user->abbr->password2 = 'Repeat Password';
+$lang->user->abbr->id        = 'No.';
+$lang->user->abbr->password2 = 'Confirm Password';
 $lang->user->abbr->address   = 'Address';
-$lang->user->abbr->join      = 'Joined';
+$lang->user->abbr->join      = 'Join Date';
 
-$lang->user->legendBasic        = 'Basic Information';
+$lang->user->legendBasic        = 'Basic Info';
 $lang->user->legendContribution = 'Contribution';
 
-$lang->user->index         = "Home";
-$lang->user->view          = "User Detail";
+$lang->user->index         = "User Dashboard";
+$lang->user->view          = "User Details";
 $lang->user->create        = "Add User";
-$lang->user->batchCreate   = "Batch Add";
+$lang->user->batchCreate   = "Batch Add Users";
 $lang->user->edit          = "Edit User";
-$lang->user->batchEdit     = "Batch Edit";
+$lang->user->batchEdit     = "Batch Edit Users";
 $lang->user->unlock        = "Unlock User";
 $lang->user->delete        = "Delete User";
-$lang->user->unbind        = "Unbind from Zdoo";
+$lang->user->unbind        = "Unlink ZDO0";
 $lang->user->login         = "Login";
-$lang->user->bind          = "Bind User";
-$lang->user->oauthRegister = "Register a new account";
-$lang->user->mobileLogin   = "Mobile";
+$lang->user->bind          = "Link Existing Account";
+$lang->user->oauthRegister = "Register New Account";
+$lang->user->mobileLogin   = "Mobile Access";
 $lang->user->editProfile   = "Edit Profile";
 $lang->user->deny          = "Your access is denied.";
-$lang->user->confirmDelete = "Do you want to delete this user?";
-$lang->user->confirmUnlock = "Do you want to unlock this user?";
-$lang->user->confirmUnbind = "Do you want to unbind this user from Zdoo?";
+$lang->user->confirmDelete = "Are you sure you want to delete this user?";
+$lang->user->confirmUnlock = "Are you sure you want to unlock this user?";
+$lang->user->confirmUnbind = "Are you sure you want to unlink this user from Zdoo?";
 $lang->user->relogin       = "Login Again";
-$lang->user->asGuest       = "Guest";
-$lang->user->goback        = "Back";
+$lang->user->asGuest       = "Guest Access";
+$lang->user->goback        = "Return to previous page";
 $lang->user->deleted       = '(Deleted)';
 $lang->user->search        = 'Search';
-$lang->user->else          = 'Else';
+$lang->user->else          = 'Others';
 
 $lang->user->saveTemplate          = 'Save as Template';
 $lang->user->setPublic             = 'Set as Public Template';
 $lang->user->deleteTemplate        = 'Delete Template';
-$lang->user->setTemplateTitle      = 'Please enter the title of the template.';
-$lang->user->applyTemplate         = 'Templates';
-$lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
+$lang->user->setTemplateTitle      = 'Enter template title.';
+$lang->user->applyTemplate         = 'Apply Template';
+$lang->user->confirmDeleteTemplate = 'Are you sure you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
-$lang->user->tplContentNotEmpty    = 'The template content cannot be empty!';
-$lang->user->sendEmailSuccess      = 'An email has been sent to your mailbox. Please check it.';
-$lang->user->linkExpired           = 'The link has expired, please apply again.';
+$lang->user->tplContentNotEmpty    = 'Template content cannot be empty.';
+$lang->user->sendEmailSuccess      = 'An email has been sent to your inbox. Please check it.';
+$lang->user->linkExpired           = 'The link has expired. Please request a new one.';
 
 $lang->user->profile   = 'Profile';
 $lang->user->project   = $lang->executionCommon . 's';
@@ -133,46 +133,46 @@ $lang->user->execution = $lang->execution->common;
 $lang->user->task      = 'Tasks';
 $lang->user->bug       = 'Bugs';
 $lang->user->test      = 'Test';
-$lang->user->testTask  = 'Requests';
-$lang->user->testCase  = 'Cases';
+$lang->user->testTask  = 'Test Requests';
+$lang->user->testCase  = 'Test Cases';
 $lang->user->issue     = 'Issue';
 $lang->user->risk      = 'Risk';
 $lang->user->schedule  = 'Schedule';
-$lang->user->todo      = 'Todos';
+$lang->user->todo      = 'To-do';
 $lang->user->story     = 'Stories';
-$lang->user->dynamic   = 'Dynamics';
+$lang->user->dynamic   = 'Recents';
 
-$lang->user->openedBy    = 'CreatedBy%s';
-$lang->user->assignedTo  = 'AssignedTo%s';
-$lang->user->finishedBy  = 'FinishedBy%s';
-$lang->user->involved    = 'Involved By %s';
-$lang->user->resolvedBy  = 'ResolvedBy%s';
-$lang->user->closedBy    = 'ClosedBy%s';
-$lang->user->reviewedBy  = 'ReviewedBy%s';
-$lang->user->canceledBy  = 'CancelledBy%s';
+$lang->user->openedBy    = 'Created by %s';
+$lang->user->assignedTo  = 'Assigned to %s';
+$lang->user->finishedBy  = 'Completed by %s';
+$lang->user->involved    = '%s Involved';
+$lang->user->resolvedBy  = 'Fixed by %s';
+$lang->user->closedBy    = 'Closed by %s';
+$lang->user->reviewedBy  = 'Reviewed by %s';
+$lang->user->canceledBy  = 'Cancelled by %s';
 
-$lang->user->testTask2Him = 'RequestsAssignedTo%s';
-$lang->user->case2Him     = 'CasesAssignedTo%s';
-$lang->user->caseByHim    = 'CasesCreatedBy%s';
+$lang->user->testTask2Him = 'Managed by %s';
+$lang->user->case2Him     = 'Assigned to %s';
+$lang->user->caseByHim    = 'Created by %s';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%2\$s</b> of <b>%1\$s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
-$lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
-$lang->user->loginFailed  = "Login failed. Please check your account and password.";
-$lang->user->lockWarning  = "You can try %s times.";
-$lang->user->loginLocked  = "Please contact the administrator to unlock your account or try %s minutes later.";
-$lang->user->weakPassword = "Your password does not meet the requirements.";
-$lang->user->errorWeak    = "Passwords cannot use [%s] weak passwords.";
-$lang->user->errorCaptcha = "Captcha Error";
-$lang->user->loginExpired = 'System login has expired, please log in again :)';
+$lang->user->errorDeny    = "Sorry, you do not have permission to access the [<b>%s</b>] feature in the 『<b>%s</b>」 module. Please contact your administrator for assistance. You can return to the Dashboard or log in again.";
+$lang->user->errorView    = "Sorry, you do not have permission to access the [<b>%s</b>] view. Please contact your administrator for assistance. You can return to the Dashboard or log in again.";
+$lang->user->loginFailed  = "Login failed. Please check if your account and password are correct.";
+$lang->user->lockWarning  = "You have %s attempts remaining.";
+$lang->user->loginLocked  = "Too many failed login attempts. Please contact your administrator to unlock your account, or try again in %s minutes.";
+$lang->user->weakPassword = "Your password strength does not meet the system requirements.";
+$lang->user->errorWeak    = "Common weak passwords such as [%s] cannot be used.";
+$lang->user->errorCaptcha = "Incorrect Captcha.";
+$lang->user->loginExpired = 'Your session has expired. Please log in again.';
 
 $lang->user->roleList['']       = '';
-$lang->user->roleList['dev']    = 'Developer';
-$lang->user->roleList['qa']     = 'Tester';
-$lang->user->roleList['pm']     = 'Scrum Master';
+$lang->user->roleList['dev']    = 'Dev Engineer';
+$lang->user->roleList['qa']     = 'Test Engineer';
+$lang->user->roleList['pm']     = 'Project Manager';
 $lang->user->roleList['po']     = 'Product Owner';
 $lang->user->roleList['td']     = 'Technical Manager';
 $lang->user->roleList['pd']     = 'Product Manager';
-$lang->user->roleList['qd']     = 'QA Manager';
+$lang->user->roleList['qd']     = 'Test Manager';
 $lang->user->roleList['top']    = 'Senior Manager';
 $lang->user->roleList['others'] = 'Others';
 
@@ -186,32 +186,32 @@ $lang->user->typeList['inside']  = $lang->user->inside;
 $lang->user->typeList['outside'] = $lang->user->outside;
 
 $lang->user->passwordStrengthList[0] = "<span style='color:red'>Weak</span>";
-$lang->user->passwordStrengthList[1] = "<span style='color:#000'>Good</span>";
+$lang->user->passwordStrengthList[1] = "<span style='color:#000'>Medium</span>";
 $lang->user->passwordStrengthList[2] = "<span style='color:green'>Strong</span>";
 
-$lang->user->statusList['active'] = 'Active';
+$lang->user->statusList['active'] = 'Normal';
 $lang->user->statusList['delete'] = 'Deleted';
 
-$lang->user->personalData['createdTodos']        = 'Todos Created';
-$lang->user->personalData['createdRequirements'] = "Requirements Created";
-$lang->user->personalData['createdStories']      = "Stories Created";
-$lang->user->personalData['finishedTasks']       = 'Tasks Finished';
-$lang->user->personalData['createdBugs']         = 'Bugs Created';
-$lang->user->personalData['resolvedBugs']        = 'Bugs Resolved';
-$lang->user->personalData['createdCases']        = 'Cases Created';
-$lang->user->personalData['createdRisks']        = 'Risks Created';
-$lang->user->personalData['resolvedRisks']       = 'Risks Resolved';
-$lang->user->personalData['createdIssues']       = 'Issues Created';
-$lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
-$lang->user->personalData['createdDocs']         = 'Docs Created';
+$lang->user->personalData['createdTodos']        = 'Created To-dos';
+$lang->user->personalData['createdRequirements'] = "Created Features";
+$lang->user->personalData['createdStories']      = "Created Stories";
+$lang->user->personalData['finishedTasks']       = 'Completed Tasks';
+$lang->user->personalData['createdBugs']         = 'Reported Bugs';
+$lang->user->personalData['resolvedBugs']        = 'Fixed Bugs';
+$lang->user->personalData['createdCases']        = 'Created Test Cases';
+$lang->user->personalData['createdRisks']        = 'Created Risks';
+$lang->user->personalData['resolvedRisks']       = 'Resolved Risks';
+$lang->user->personalData['createdIssues']       = 'Created Issues';
+$lang->user->personalData['resolvedIssues']      = 'Resolved Issues';
+$lang->user->personalData['createdDocs']         = 'Created Docs';
 
-$lang->user->keepLogin['on']   = 'Keep Login';
-$lang->user->loginWithDemoUser = 'Login as Demo User:';
-$lang->user->scanToLogin       = 'Scan QR Code';
+$lang->user->keepLogin['on']   = 'Keep me logged in';
+$lang->user->loginWithDemoUser = 'Log in with Demo Account:';
+$lang->user->scanToLogin       = 'Scan QR Code to Log In';
 
 $lang->user->tpl = new stdclass();
 $lang->user->tpl->type    = 'Type';
-$lang->user->tpl->title   = 'TPL Title';
+$lang->user->tpl->title   = 'Template Name';
 $lang->user->tpl->content = 'Content';
 $lang->user->tpl->public  = 'Public';
 
@@ -220,54 +220,54 @@ $lang->usertpl->account = 'Creator';
 $lang->usertpl->type    = 'Template Type';
 $lang->usertpl->title   = 'Template Name';
 $lang->usertpl->content = 'Template Content';
-$lang->usertpl->public  = 'Public';
+$lang->usertpl->public  = 'Public Template';
 
 $lang->user->placeholder = new stdclass();
-$lang->user->placeholder->account   = '>= 3 letters, underline and numbers';
-$lang->user->placeholder->password1 = '>= 6 characters';
-$lang->user->placeholder->role      = "Role is related to content and user listing order.";
-$lang->user->placeholder->group     = "Group is related to user privileges.";
-$lang->user->placeholder->commiter  = 'SVN/Git account';
-$lang->user->placeholder->verify    = 'Please enter your ZenTao login password to verify..';
+$lang->user->placeholder->account   = 'A combination of letters, numbers, and underscores; at least 3 characters.';
+$lang->user->placeholder->password1 = 'At least 6 characters.';
+$lang->user->placeholder->role      = "Job title affects the sorting order of content and user lists.";
+$lang->user->placeholder->group     = "The group determines the user's permissions.";
+$lang->user->placeholder->commiter  = 'SVN / Git account.';
+$lang->user->placeholder->verify    = 'Enter your system login password.';
 
-$lang->user->placeholder->loginPassword = 'Enter your password';
-$lang->user->placeholder->loginAccount  = 'Enter your account';
-$lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
-$lang->user->placeholder->email         = 'Enter your email';
+$lang->user->placeholder->loginPassword = 'Enter your password.';
+$lang->user->placeholder->loginAccount  = 'Enter your account.';
+$lang->user->placeholder->loginUrl      = 'Enter your ZenTao site URL.';
+$lang->user->placeholder->email         = 'Enter your email.';
 
-$lang->user->placeholder->passwordStrength[0] = '≥6 letters.';
-$lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
-$lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
+$lang->user->placeholder->passwordStrength[0] = 'Password must be at least 6 characters.';
+$lang->user->placeholder->passwordStrength[1] = '≥6 characters:  A-Z, a-z, and 0-9.';
+$lang->user->placeholder->passwordStrength[2] = '≥10 characters: A-Z, a-z, 0-9, and symbols.';
 
-$lang->user->placeholder->passwordStrengthCheck[0] = 'The password should be ≥ 6 letters.';
-$lang->user->placeholder->passwordStrengthCheck[1] = 'The password should be ≥ 6 letters, combination of uppercase, lowercase letters and numbers.';
-$lang->user->placeholder->passwordStrengthCheck[2] = 'The password should be ≥ 10 letters, combination of uppercase, lowercase letters, numbers, and special symbols.';
+$lang->user->placeholder->passwordStrengthCheck[0] = 'Password must be at least 6 characters.';
+$lang->user->placeholder->passwordStrengthCheck[1] = 'Password must be at least 6 characters, containing uppercase letters, lowercase letters, and numbers.';
+$lang->user->placeholder->passwordStrengthCheck[2] = 'Password must be at least 10 characters, containing uppercase letters, lowercase letters, numbers, and special symbols.';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account        = 'account must be >= 3 letters, underline or numbers';
-$lang->user->error->accountDupl    = 'account is used.';
-$lang->user->error->realname       = 'must be real name';
-$lang->user->error->visions        = 'must be version type';
-$lang->user->error->password       = 'password must be >= 6 characters.';
-$lang->user->error->mail           = 'enter valid Email address';
-$lang->user->error->reserved       = 'account is reserved.';
-$lang->user->error->weakPassword   = 'the password strength is less than the system setting.';
-$lang->user->error->dangerPassword = "passwords cannot be used with [%s] these commonly used if-passwords.";
+$lang->user->error->account        = 'Account name must be a combination of letters, numbers, or underscores (at least 3 characters).';
+$lang->user->error->accountDupl    = 'Account name already exists.';
+$lang->user->error->realname       = 'Real Name is required.';
+$lang->user->error->visions        = 'Interface Type is required.';
+$lang->user->error->password       = 'Password must be at least 6 characters.';
+$lang->user->error->mail           = 'Invalid Email.';
+$lang->user->error->reserved       = 'The account name is reserved by the system.';
+$lang->user->error->weakPassword   = 'The password strength does not meet the system requirements.';
+$lang->user->error->dangerPassword = "Common weak passwords such as [%s] cannot be used.";
 
-$lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
-$lang->user->error->verify           = "Wrong account or password.";
-$lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
-$lang->user->error->originalPassword = "Old password is incorrect.";
-$lang->user->error->companyEmpty     = "Company name must be not empty.";
-$lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
-$lang->user->error->accountEmpty     = 'Account must be not empty !';
-$lang->user->error->emailEmpty       = 'Email must be not empty !';
-$lang->user->error->noUser           = 'Invalid account.';
-$lang->user->error->noEmail          = 'The user does not register email. Please get in touch with the administrator to reset the password.';
-$lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
-$lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
-$lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
-$lang->user->error->loginTimeoutTip  = 'Login failed, please check if the proxy service is normal.';
+$lang->user->error->url              = "Invalid URL. Please contact the administrator.";
+$lang->user->error->verify           = "Incorrect account or password.";
+$lang->user->error->verifyPassword   = "Verification failed. Please check if your system login password is correct.";
+$lang->user->error->originalPassword = "Incorrect current password.";
+$lang->user->error->companyEmpty     = "Company name cannot be empty.";
+$lang->user->error->noAccess         = "This user is not in the same department as you. You do not have permission to access their work information.";
+$lang->user->error->accountEmpty     = 'Account cannot be empty.';
+$lang->user->error->emailEmpty       = 'Email cannot be empty.';
+$lang->user->error->noUser           = 'User does not exist.';
+$lang->user->error->noEmail          = 'This user has no linked email address. Please contact the administrator to reset the password.';
+$lang->user->error->errorEmail       = 'The account and email do not match. Please try again.';
+$lang->user->error->emailSetting     = 'The system email is not configured. Please contact the administrator for a reset.';
+$lang->user->error->sendMailFail     = 'Failed to send email. Please try again.';
+$lang->user->error->loginTimeoutTip  = 'System login failed. Please check if the proxy service is working properly.';
 $lang->user->error->uploadAvatar     = 'Failed to upload avatar. Please upload an image in %s format.';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
@@ -279,7 +279,7 @@ $lang->user->contactFieldList['skype']    = $lang->user->skype;
 $lang->user->contactFieldList['slack']    = $lang->user->slack;
 $lang->user->contactFieldList['whatsapp'] = $lang->user->whatsapp;
 
-$lang->user->executionTypeList['stage']  = 'Stage';
+$lang->user->executionTypeList['stage']  = 'Phase';
 $lang->user->executionTypeList['sprint'] = $lang->iterationCommon;
 
 $lang->user->contacts = new stdclass();
@@ -291,61 +291,61 @@ $lang->usercontact = new stdclass;
 $lang->usercontact->account  = 'Creator';
 $lang->usercontact->listName = 'List Name';
 $lang->usercontact->userList = 'User List';
-$lang->usercontact->public   = 'Public';
+$lang->usercontact->public   = 'Public Contacts';
 
-$lang->user->contacts->manage        = 'Manage List';
-$lang->user->contacts->contactsList  = 'Contact List';
-$lang->user->contacts->selectedUsers = 'Users';
-$lang->user->contacts->selectList    = 'List';
-$lang->user->contacts->createList    = 'Create List';
-$lang->user->contacts->noListYet     = 'No contact list exists. Please create one first.';
-$lang->user->contacts->confirmDelete = 'Do you want to delete this list?';
+$lang->user->contacts->manage        = 'Manage Lists';
+$lang->user->contacts->contactsList  = 'Existing Lists';
+$lang->user->contacts->selectedUsers = 'Select Users';
+$lang->user->contacts->selectList    = 'Select Lists';
+$lang->user->contacts->createList    = 'Create Contacts';
+$lang->user->contacts->noListYet     = 'No lists have been created yet. Please create a contact list first.';
+$lang->user->contacts->confirmDelete = 'Are you sure you want to delete this list?';
 $lang->user->contacts->or            = ' or ';
 
-$lang->user->resetFail        = "Failed. Please check the account.";
-$lang->user->resetSuccess     = "Reset! Please use your new password to login.";
-$lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
-$lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
-$lang->user->noticeResetFile  = "<h5>Contact the Administrator to reset your password.</h5>
-    <h5>If you are, please login your Zentao host and create a file named <span> %s </span>.</h5>
-    <p>Note:</p>
-    <ol>
-    <li>Keep the file empty.</li>
-    <li>If the file exists, remove it and create it again.</li>
-    </ol>";
-$lang->user->notice4Safe = "Warning: Weak password of one click package detected";
-$lang->user->process4DIR = "It is detected that you might use the one-click installation package environment. Other sites in the environment are still using weak passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
-$lang->user->process4DB  = "It is detected that you might use the one-click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Please login database and modify password field of zt_user table of %s database. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
+$lang->user->resetFail        = "Failed to reset password. Please check if the account exists.";
+$lang->user->resetSuccess     = "Password reset successfully. Please log in with your new password.";
+$lang->user->noticeDelete     = 'Are you sure you want to delete "%s" from the system?';
+$lang->user->noticeHasDeleted = "This user has been deleted. To view their details, please restore them from the Recycle Bin first.";
+$lang->user->noticeResetFile  = "<h5>Standard users: Please contact your administrator to reset your password.</h5>
+<h5>Administrators: Please log in to the server where ZenTao is hosted and create the <span>%s </span> file. </h5>
+<p>Note:</p>
+<ol>
+<li>The file content should be empty.</li>
+<li>If the file already exists, delete it and create a new one.</li>
+</ol>";
+$lang->user->notice4Safe = "Warning: Weak password detected in the one-click installation package.";
+$lang->user->process4DIR = "It appears you are using a one-click installation environment where other sites are still using weak passwords. For security purposes, if you are not using these other sites, please address this immediately by deleting or renaming the %s directory.";
+$lang->user->process4DB  = "It appears you are using a one-click installation environment where other sites are still using weak passwords. For security purposes, if you are not using these other sites, please address this immediately. Please log in to the database and modify the 'password' field in the 'zt_user' table of the %s database.";
 $lang->user->mkdirWin = <<<EOT
-    <html><head><meta charset='utf-8'></head>
-    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
-    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
-    </td></tr></table></body></html>
+<html><head><meta charset="utf-8"></head>
+<body><table align="center" style="width:700px; margin-top:100px; border:1px solid gray; font-size:14px;"><tr><td style="padding:8px">
+<div style="margin-bottom:8px;"> Failed to create a temporary directory. Please verify that the directory <strong style="color:#ed980f">%s</strong> exists and has the necessary permissions.</div>
+<div>Can"t create tmp directory, make sure the directory <strong style="color:#ed980f">%s</strong> exists and has permission to operate.</div>
+</td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
-    <html><head><meta charset='utf-8'></head>
-    <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
-    <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod 777 -R %s</strong>。</div>
-    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
-    <div style='margin-bottom:8px;'>Command: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
-    </td></tr></table></body></html>
+<html><head><meta charset="utf-8"></head>
+<body><table align="center" style="width:700px; margin-top:100px; border:1px solid gray; font-size:14px;"><tr><td style="padding:8px">
+<div style="margin-bottom:8px;"> Failed to create a temporary directory. Please verify that the directory <strong style="color:#ed980f">%s</strong>exists and has the necessary permissions.</div>
+<div style="margin-bottom:8px;">Command: <strong style="color:#ed980f">chmod 777 -R %s</strong>。</div>
+<div>Can"t create tmp directory, make sure the directory <strong style="color:#ed980f">%s</strong> exists and has permission to operate.</div>
+<div style="margin-bottom:8px;">Command: <strong style="color:#ed980f">chmod 777 -R %s</strong>.</div>
+</td></tr></table></body></html>
 EOT;
 
-$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>10</span> seconds. <a href='%s' id='redirect' class='btn primary'>Redirect Now</a>";
+$lang->user->jumping = "You will be automatically redirected to the login page in  <span id='time'>10</span> seconds. <a href='%s' id='redirect' class='btn primary'>Redirect Now</a>";
 
 $lang->user->zentaoapp = new stdclass();
-$lang->user->zentaoapp->logout = 'Logout';
+$lang->user->zentaoapp->logout = 'Log Out';
 
-$lang->user->featureBar['todo']['all']             = 'Assigned To Yourself';
+$lang->user->featureBar['todo']['all']             = 'Assigned to Me';
 $lang->user->featureBar['todo']['before']          = 'Unfinished';
 $lang->user->featureBar['todo']['future']          = 'TBD';
 $lang->user->featureBar['todo']['thisWeek']        = 'This Week';
 $lang->user->featureBar['todo']['thisMonth']       = 'This Month';
 $lang->user->featureBar['todo']['thisYear']        = 'This Year';
-$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned To Other';
-$lang->user->featureBar['todo']['cycle']           = 'Recurrence';
+$lang->user->featureBar['todo']['assignedToOther'] = 'Assigned to Others';
+$lang->user->featureBar['todo']['cycle']           = 'Recurring';
 
 $lang->user->featureBar['dynamic']['all']       = 'All';
 $lang->user->featureBar['dynamic']['today']     = 'Today';

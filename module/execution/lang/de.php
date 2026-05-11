@@ -190,7 +190,7 @@ $lang->execution->lifeTimeList['ops']   = "DevOps";
 
 $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
-$lang->execution->cfdTypeList['bug']   = "View By bug";
+$lang->execution->cfdTypeList['bug']   = "View by bug";
 
 $lang->team->account    = 'Konto';
 $lang->team->realname   = 'Name';

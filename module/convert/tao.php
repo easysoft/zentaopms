@@ -89,20 +89,31 @@ class convertTao extends convertModel
             $customFieldKey = str_replace('customfield_', '', $fieldKey);
             if(is_array($fieldValue))
             {
-                if(!empty($fieldValue['content']) && !empty($fieldValue['renderedFields'][$fieldKey]))
+                if(!empty($fieldValue['content']) && !empty($data['renderedFields'][$fieldKey]))
                 {
-                    $issue->{$customFieldKey} = $fieldValue['renderedFields'][$fieldKey];
+                    $issue->{$customFieldKey} = $data['renderedFields'][$fieldKey];
                 }
                 elseif(!empty($fieldValue['id']))
                 {
                     $issue->{$customFieldKey} = $fieldValue['id'];
+                }
+                elseif(!empty($fieldValue['accountId']))
+                {
+                    $issue->{$customFieldKey} = $fieldValue['accountId'];
                 }
                 else
                 {
                     $issue->{$customFieldKey} = '';
                     foreach($fieldValue as $field)
                     {
-                        if(!empty($field['id'])) $issue->{$customFieldKey} .= $field['id'] . ',';
+                        if(!empty($field['id']))
+                        {
+                            $issue->{$customFieldKey} .= $field['id'] . ',';
+                        }
+                        elseif(!empty($field['accountId']))
+                        {
+                            $issue->{$customFieldKey} .= $field['accountId'] . ',';
+                        }
                     }
                     $issue->{$customFieldKey} = rtrim($issue->{$customFieldKey}, ',');
                 }
@@ -110,6 +121,7 @@ class convertTao extends convertModel
             else
             {
                 $issue->{$customFieldKey} = $fieldValue;
+                if(!empty($fieldValue) && preg_match('/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}[+-]\d{4}$/', (string)$fieldValue)) $issue->{$customFieldKey} = date('Y-m-d H:i:s', strtotime($fieldValue));
             }
         }
 
@@ -335,6 +347,7 @@ class convertTao extends convertModel
         $fieldValue->stringvalue = zget($data, 'stringvalue', '');
         $fieldValue->datevalue   = zget($data, 'datevalue', '');
         $fieldValue->numbervalue = zget($data, 'numbervalue', '');
+        $fieldValue->textvalue   = zget($data, 'textvalue', '');
 
         return $fieldValue;
     }
@@ -584,7 +597,7 @@ class convertTao extends convertModel
         $worklog->author      = zget($data, 'author',     '');
         $worklog->worklogbody = zget($data, 'body',       '');
         $worklog->timeworked  = zget($data, 'timeworked', 0);
-        $worklog->created     = zget($data, 'created',    NULL);
+        $worklog->created     = zget($data, 'created',    null);
 
         return $worklog;
     }
@@ -741,6 +754,7 @@ class convertTao extends convertModel
                 $user->gender   = 'm';
                 $user->type     = 'inside';
                 $user->join     = !empty($data->join) ? $data->join : helper::now();
+                $user->jira     = 1;
 
                 $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 
@@ -800,7 +814,7 @@ class convertTao extends convertModel
         $this->app->loadConfig('execution');
         $this->app->loadLang('doc');
 
-        $projectRoleActor    = $this->session->jiraMethod == 'api' ? array() : $this->getJiraProjectRoleActor();
+        $projectRoleActor    = $this->getJiraProjectRoleActor($dataList);
         $archivedProject     = $this->session->jiraMethod == 'api' ? array() : $this->getJiraArchivedProject($dataList);
         $sprintGroup         = $this->getJiraSprint(array_keys($dataList));
         $jiraProjectRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jproject')->fetchAll('AID');
@@ -819,6 +833,7 @@ class convertTao extends convertModel
             $project    = $this->createProject($data, $projectRoleActor);
             $executions = $this->createExecution($id, $project, $sprintGroup, $projectRoleActor);
             $productID  = $this->createProduct($project, $executions);
+            $systemID   = $this->createSystem($productID);
 
             $this->createTmpRelation('jproject', $id, 'zproject', $project->id);
             $this->createTmpRelation('jproject', $id, 'zproduct', $productID);
@@ -832,12 +847,12 @@ class convertTao extends convertModel
                     $zentaoBuild = new stdclass();
                     $zentaoBuild->id           = $version['id'];
                     $zentaoBuild->vname        = $version['name'];
-                    $zentaoBuild->releasedDate = isset($version['releasedDate']) ? $version['releasedDate'] : null;
-                    $zentaoBuild->archived     = isset($version['archived']) ? $version['archived'] : 0;
-                    $zentaoBuild->released     = isset($version['released']) ? $version['released'] : 0;
-                    $zentaoBuild->startdate    = null;
+                    $zentaoBuild->releasedate  = isset($version['releaseDate'])  ? $version['releaseDate'] : null;
+                    $zentaoBuild->archived     = isset($version['archived'])     ? $version['archived']     : 0;
+                    $zentaoBuild->released     = isset($version['released'])     ? $version['released']     : 0;
+                    $zentaoBuild->startdate    = isset($version['startDate'])    ? $version['startDate']    : null;
 
-                    $build = $this->createBuild((int)$productID, (int)$project->id, 0, $zentaoBuild, array(), array());
+                    $build = $this->createBuild((int)$productID, (int)$project->id, $systemID, $zentaoBuild, array(), array());
 
                     $this->createRelease($build, $zentaoBuild, array(), array());
                     $this->createTmpRelation('jversion', $version['id'], 'zversion', $build->id);
@@ -903,11 +918,15 @@ class convertTao extends convertModel
                     {
                         if(!empty($fieldValue->datevalue))
                         {
-                            $data->{$fieldValue->customfield} = date('Y-m-d H:i:s', strtotime($fieldValue->datevalue)); // 日期类型是datevalue
+                            $data->{$fieldValue->customfield} = $this->formatDatetime(date('Y-m-d H:i:s', strtotime($fieldValue->datevalue))); // 日期类型是datevalue
                         }
                         elseif(!empty($fieldValue->numbervalue))
                         {
                             $data->{$fieldValue->customfield} = $fieldValue->numbervalue; // 数字类型是numbervalue
+                        }
+                        elseif(!empty($fieldValue->textvalue))
+                        {
+                            $data->{$fieldValue->customfield} = $fieldValue->textvalue; // 文本类型是textvalue
                         }
                         elseif(isset($data->{$fieldValue->customfield}))
                         {
@@ -931,31 +950,31 @@ class convertTao extends convertModel
 
             if($zentaoObject == 'requirement' || $zentaoObject == 'story' || $zentaoObject == 'epic')
             {
-                $this->createStory((int)$productID, (int)$projectID, (int)$executionID, $zentaoObject, $data, $relations);
+                $this->createStory((int)$productID, (int)$projectID, (int)$executionID, $zentaoObject, $data, $relations, $customFields);
             }
             elseif($zentaoObject == 'task')
             {
-                $this->createTask((int)$projectID, (int)$executionID, $data, $relations);
+                $this->createTask((int)$projectID, (int)$executionID, $data, $relations, $customFields);
             }
             elseif($zentaoObject == 'bug')
             {
-                $this->createBug((int)$productID, (int)$projectID, (int)$executionID, $data, $relations);
+                $this->createBug((int)$productID, (int)$projectID, (int)$executionID, $data, $relations, $customFields);
             }
             elseif($zentaoObject == 'testcase')
             {
-                $this->createCase((int)$productID, (int)$projectID, (int)$executionID, $data, $relations);
+                $this->createCase((int)$productID, (int)$projectID, (int)$executionID, $data, $relations, $customFields);
             }
             elseif($zentaoObject == 'feedback')
             {
-                $this->createFeedback((int)$productID, $data, $relations);
+                $this->createFeedback((int)$productID, $data, $relations, $customFields);
             }
             elseif($zentaoObject == 'ticket')
             {
-                $this->createTicket((int)$productID, $data, $relations);
+                $this->createTicket((int)$productID, $data, $relations, $customFields);
             }
             else
             {
-                $this->createFlowData((int)$productID, (int)$projectID, $zentaoObject, $data, $relations, $workflows);
+                $this->createFlowData((int)$productID, (int)$projectID, $zentaoObject, $data, $relations, $customFields, $workflows);
             }
 
             $oldKey   = zget($projectKeys[$issueProject], 'AID', '');
@@ -989,6 +1008,7 @@ class convertTao extends convertModel
             $this->importJiraChangeItem($changeItems, $changeGroups);
             $this->importJiraFile($files);
         }
+
         return true;
     }
 
@@ -1137,7 +1157,7 @@ class convertTao extends convertModel
             $effort = new stdclass();
             $effort->vision     = $this->config->vision;
             $effort->objectID   = $objectID;
-            $effort->date       = !empty($data->created) ? substr($data->created, 0, 10) : null;
+            $effort->date       = !empty($data->created) ? $this->formatDate(substr($data->created, 0, 10)) : null;
             $effort->account    = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $effort->consumed   = round($data->timeworked / 3600, 2);
             $effort->work       = $data->worklogbody;
@@ -1186,7 +1206,7 @@ class convertTao extends convertModel
             $action->objectID   = $objectID;
             $action->actor      = $this->getJiraAccount(isset($data->author) ? $data->author : '');
             $action->action     = 'commented';
-            $action->date       = isset($data->created) ? substr($data->created, 0, 19) : '';
+            $action->date       = isset($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : '';
             $action->comment    = $comment;
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1230,7 +1250,7 @@ class convertTao extends convertModel
             $action->objectID   = $objectID;
             $action->actor      = $this->getJiraAccount(isset($group->author) ? $group->author : '');
             $action->action     = 'commented';
-            $action->date       = isset($group->created) ? substr($group->created, 0, 19) : '';
+            $action->date       = isset($group->created) ? $this->formatDatetime(substr($group->created, 0, 19)) : '';
             $action->comment    = sprintf($this->lang->convert->jira->changeItems, $data->field, $data->oldstring, $data->newstring);
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1306,7 +1326,7 @@ class convertTao extends convertModel
             $file->objectID   = $objectID;
             $file->extra      = in_array($file->objectType, array('epic', 'requirement', 'story')) ? '1' : '';
             $file->addedBy    = $this->getJiraAccount(isset($fileAttachment->author) ? $fileAttachment->author : '');
-            $file->addedDate  = !empty($fileAttachment->created) ? substr($fileAttachment->created, 0, 19) : null;
+            $file->addedDate  = !empty($fileAttachment->created) ? $this->formatDatetime(substr($fileAttachment->created, 0, 19)) : null;
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
             $fileID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1338,20 +1358,18 @@ class convertTao extends convertModel
      */
     protected function createTeamMember(int $objectID, string $createdBy, string $type): bool
     {
-        $account = $this->getJiraAccount($createdBy);
-        if($account)
-        {
-            $member = new stdclass();
-            $member->root    = $objectID;
-            $member->account = $account;
-            $member->role    = '';
-            $member->join    = helper::now();
-            $member->type    = $type;
-            $member->days    = 0;
-            $member->hours   = $this->config->execution->defaultWorkhours;
+        if(!$createdBy) return false;
 
-            $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
-        }
+        $member = new stdclass();
+        $member->root    = $objectID;
+        $member->account = $createdBy;
+        $member->role    = '';
+        $member->join    = helper::now();
+        $member->type    = $type;
+        $member->days    = 0;
+        $member->hours   = $this->config->execution->defaultWorkhours;
+
+        $this->dao->dbh($this->dbh)->replace(TABLE_TEAM)->data($member)->exec();
 
         return true;
     }
@@ -1406,7 +1424,7 @@ class convertTao extends convertModel
         $project->grade         = 1;
         $project->acl           = 'open';
         $project->auth          = 'extend';
-        $project->begin         = !empty($data->created) ? substr($data->created, 0, 10) : helper::now();
+        $project->begin         = !empty($data->created) ? $this->formatDate(substr($data->created, 0, 10)) : helper::now();
         $project->end           = date('Y-m-d', time() + 30 * 24 * 3600);
         $project->days          = helper::diffDate($project->end, $project->begin) + 1;
         $project->PM            = $this->getJiraAccount(isset($data->lead) ? $data->lead : '');
@@ -1532,8 +1550,8 @@ class convertTao extends convertModel
                 $execution->desc          = !empty($sprint->goal) ? $sprint->goal : '';
                 $execution->type          = 'sprint';
                 $execution->acl           = 'open';
-                $execution->begin         = !empty($sprint->startDate) ? substr($sprint->startDate, 0, 10) : helper::now();
-                $execution->end           = !empty($sprint->endDate)   ? substr($sprint->endDate, 0, 10)   : date('Y-m-d', time() + 24 * 3600);
+                $execution->begin         = !empty($sprint->startDate) ? $this->formatDate(substr($sprint->startDate, 0, 10)) : helper::now();
+                $execution->end           = !empty($sprint->endDate)   ? $this->formatDate(substr($sprint->endDate, 0, 10))   : date('Y-m-d', time() + 24 * 3600);
                 $execution->days          = helper::diffDate($execution->end, $execution->begin) + 1;
                 $execution->PM            = $project->PM;
                 $execution->openedBy      = $project->openedBy;
@@ -1596,6 +1614,29 @@ class convertTao extends convertModel
         $productID = $this->dao->dbh($this->dbh)->lastInsertID();
         $this->loadModel('action')->create('product', $productID, 'opened');
 
+        $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
+        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
+
+        $this->createDocLib($productID, 0, 0, $this->lang->doclib->main['product'], 'product');
+
+        /* 关联产品与迭代。 */
+        foreach($executions as $executionID) $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
+
+        return $productID;
+    }
+
+    /**
+     * 创建应用。
+     * Create system.
+     *
+     * @param  int       $productID
+     * @access protected
+     * @return int
+     */
+    protected function createSystem(int $productID): int
+    {
+        $product = $this->fetchByID($productID, 'product');
+
         /* 创建产品同名的应用。 */
         $system = new stdclass();
         $system->name        = substr($product->name, 0, 80);
@@ -1611,16 +1652,9 @@ class convertTao extends convertModel
         $systemID = $this->dao->lastInsertID();
         $this->loadModel('action')->create('system', $systemID, 'created');
 
-        $this->dao->dbh($this->dbh)->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
-        $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($project->id)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
-
-        $this->createDocLib($productID, 0, 0, $this->lang->doclib->main['product'], 'product');
-
-        /* 关联产品与迭代。 */
-        foreach($executions as $executionID) $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->set('branch')->eq('0')->exec();
-
-        return $productID;
+        return $systemID;
     }
+
 
     /**
      * 处理工作流内置字段数据。
@@ -1630,16 +1664,37 @@ class convertTao extends convertModel
      * @param  object $data
      * @param  object $object
      * @param  array  $relations
+     * @param  array  $customFields
      * @param  bool   $buildinFlow
      * @access public
      * @return object
      */
-    public function processBuildinFieldData(string $module, object $data, object $object, array $relations, bool $buildinFlow = false)
+    public function processBuildinFieldData(string $module, object $data, object $object, array $relations, array $customFields, bool $buildinFlow = false)
     {
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
         foreach($jiraFields as $jiraField => $zentaoField)
         {
-            if(!empty($data->{$jiraField})) $object->{$zentaoField} = $data->{$jiraField};
+            if(!empty($data->{$jiraField}))
+            {
+                $fields      = $this->session->jiraMethod == 'api' ? zget($customFields, $data->issuetype, array()) : $customFields;
+                $controlCode = !empty($fields[$jiraField]->customfieldtypekey) ? $fields[$jiraField]->customfieldtypekey : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
+
+                if(strpos($controlCode, 'multiuserpicker') !== false || strpos($controlCode, 'people') !== false)
+                {
+                    $users = explode(',', $data->{$jiraField});
+
+                    $object->{$zentaoField} = '';
+                    foreach($users as $user) $object->{$zentaoField} .= $this->getJiraAccount($user) . ',';
+                }
+                elseif(strpos($controlCode, 'userpicker') !== false)
+                {
+                    $object->{$zentaoField} = $this->getJiraAccount($data->{$jiraField});
+                }
+                else
+                {
+                    $object->{$zentaoField} = $data->{$jiraField};
+                }
+            }
         }
         foreach($this->lang->convert->jira->buildinFields as $fieldCode => $buildinField)
         {
@@ -1673,17 +1728,16 @@ class convertTao extends convertModel
      * @param  string    $type
      * @param  object    $data
      * @param  array     $reasonList
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, array $relations): bool
+    protected function createStory(int $productID, int $projectID, int $executionID, string $type, object $data, array $relations, array $customFields): bool
     {
         $this->app->loadLang('story');
         $this->loadModel('action');
 
         $story = new stdclass();
-        $story = $this->processBuildinFieldData('story', $data, $story, $relations);
-
         $story->title      = $data->summary;
         $story->type       = $type;
         $story->product    = $productID;
@@ -1693,7 +1747,7 @@ class convertTao extends convertModel
         $story->stage      = $this->convertStage($data->issuestatus, $data->issuetype, $relations);
         $story->status     = $this->convertStatus('story', $data->issuestatus, $data->issuetype, $relations);
         $story->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $story->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $story->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $story->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
         if($story->assignedTo) $story->assignedDate = helper::now();
@@ -1703,6 +1757,8 @@ class convertTao extends convertModel
             $story->closedReason = zget($relations["zentaoReason{$data->issuetype}"], $data->resolution, '');
             if($story->closedReason && !isset($this->lang->story->reasonList[$story->closedReason])) $story->closedReason = 'done';
         }
+
+        $story = $this->processBuildinFieldData('story', $data, $story, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_STORY)->data($story)->exec();
 
@@ -1770,17 +1826,16 @@ class convertTao extends convertModel
      * @param  int       $executionID
      * @param  object    $data
      * @param  array     $relations
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createTask(int $projectID, int $executionID, object $data, array $relations): bool
+    protected function createTask(int $projectID, int $executionID, object $data, array $relations, array $customFields): bool
     {
         $this->app->loadLang('task');
         $this->loadModel('action');
 
         $task = new stdclass();
-        $task = $this->processBuildinFieldData('task', $data, $task, $relations);
-
         $task->project    = $projectID;
         $task->execution  = $executionID;
         $task->name       = $data->summary;
@@ -1792,9 +1847,9 @@ class convertTao extends convertModel
         $task->status     = $this->convertStatus('task', $data->issuestatus, $data->issuetype, $relations);
         $task->desc       = isset($data->description) ? $data->description : '';
         $task->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $task->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $task->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $task->assignedTo = $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $task->deadline   = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $task->deadline   = !empty($data->duedate) ? $this->formatDate(substr($data->duedate, 0, 10)) : null;
 
         if($task->assignedTo) $task->assignedDate = helper::now();
 
@@ -1804,6 +1859,8 @@ class convertTao extends convertModel
             $task->closedReason = zget($reasonList, $data->resolution, '');
             if($task->closedReason && !isset($this->lang->task->reasonList[$task->closedReason])) $task->closedReason = 'cancel';
         }
+
+        $task = $this->processBuildinFieldData('task', $data, $task, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
         $taskID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1837,17 +1894,16 @@ class convertTao extends convertModel
      * @param  int       $executionID
      * @param  object    $data
      * @param  array     $relations
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createBug(int $productID, int $projectID, int $executionID, object $data, array $relations): bool
+    protected function createBug(int $productID, int $projectID, int $executionID, object $data, array $relations, array $customFields): bool
     {
         $this->app->loadLang('bug');
         $this->loadModel('action');
 
         $bug = new stdclass();
-        $bug = $this->processBuildinFieldData('bug', $data, $bug, $relations);
-
         $bug->product     = $productID;
         $bug->project     = $projectID;
         $bug->execution   = $executionID;
@@ -1857,10 +1913,10 @@ class convertTao extends convertModel
         $bug->status      = $this->convertStatus('bug', $data->issuestatus, $data->issuetype, $relations);
         $bug->steps       = isset($data->description) ? $data->description : '';
         $bug->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $bug->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $bug->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $bug->openedBuild = 'trunk';
         $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
-        $bug->deadline    = !empty($data->duedate) ? substr($data->duedate, 0, 10) : null;
+        $bug->deadline    = !empty($data->duedate) ? $this->formatDate(substr($data->duedate, 0, 10)) : null;
 
         if($bug->assignedTo) $bug->assignedDate = helper::now();
 
@@ -1870,6 +1926,8 @@ class convertTao extends convertModel
             $bug->resolution = zget($resolutionList, $data->resolution, '');
             if($bug->resolution && !isset($this->lang->bug->resolutionList[$bug->resolution])) $bug->resolution = 'fixed';
         }
+
+        $bug = $this->processBuildinFieldData('bug', $data, $bug, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec();
         $bugID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1913,16 +1971,15 @@ class convertTao extends convertModel
      * @param  int       $executionID
      * @param  object    $data
      * @param  array     $relations
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createCase(int $productID, int $projectID, int $executionID, object $data, array $relations): bool
+    protected function createCase(int $productID, int $projectID, int $executionID, object $data, array $relations, array $customFields): bool
     {
         $this->loadModel('action');
 
         $case = new stdclass();
-        $case = $this->processBuildinFieldData('testcase', $data, $case, $relations);
-
         $case->product    = $productID;
         $case->project    = $projectID;
         $case->execution  = $executionID;
@@ -1932,7 +1989,9 @@ class convertTao extends convertModel
         $case->pri        = $data->priority ? $data->priority : 3;
         $case->status     = $this->convertStatus('testcase', $data->issuestatus, $data->issuetype, $relations);
         $case->openedBy   = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $case->openedDate = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $case->openedDate = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
+
+        $case = $this->processBuildinFieldData('testcase', $data, $case, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_CASE)->data($case)->exec();
         $caseID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -1972,16 +2031,15 @@ class convertTao extends convertModel
      * @param  int       $productID
      * @param  object    $data
      * @param  array     $relations
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createFeedback(int $productID, object $data, array $relations): bool
+    protected function createFeedback(int $productID, object $data, array $relations, array $customFields): bool
     {
         $this->loadModel('action');
 
         $feedback = new stdclass();
-        $feedback = $this->processBuildinFieldData('feedback', $data, $feedback, $relations);
-
         $feedback->product     = $productID;
         $feedback->title       = $data->summary;
         $feedback->public      = '1';
@@ -1989,7 +2047,7 @@ class convertTao extends convertModel
         $feedback->status      = $this->convertStatus('feedback', $data->issuestatus, $data->issuetype, $relations);
         $feedback->desc        = isset($data->description) ? $data->description : '';
         $feedback->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $feedback->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $feedback->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $feedback->assignedTo  = $feedback->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
 
         if($feedback->assignedTo) $feedback->assignedDate = helper::now();
@@ -2000,6 +2058,8 @@ class convertTao extends convertModel
             $feedback->closedReason = zget($reasonList, $data->resolution, '');
             if($feedback->closedReason && !isset($this->lang->feedback->closedReasonList[$feedback->closedReason])) $feedback->closedReason = 'refuse';
         }
+
+        $feedback = $this->processBuildinFieldData('feedback', $data, $feedback, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_FEEDBACK)->data($feedback)->exec();
         $feedbackID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -2030,16 +2090,15 @@ class convertTao extends convertModel
      * @param  int       $productID
      * @param  object    $data
      * @param  array     $relations
+     * @param  array     $customFields
      * @access protected
      * @return bool
      */
-    protected function createTicket(int $productID, object $data, array $relations): bool
+    protected function createTicket(int $productID, object $data, array $relations, $customFields): bool
     {
         $this->loadModel('action');
 
         $ticket = new stdclass();
-        $ticket = $this->processBuildinFieldData('ticket', $data, $ticket, $relations);
-
         $ticket->product     = $productID;
         $ticket->title       = $data->summary;
         $ticket->type        = 'code';
@@ -2047,7 +2106,7 @@ class convertTao extends convertModel
         $ticket->status      = $this->convertStatus('ticket', $data->issuestatus, $data->issuetype, $relations, $relations);
         $ticket->desc        = isset($data->description) ? $data->description : '';
         $ticket->openedBy    = $this->getJiraAccount(isset($data->creator) ? $data->creator : '');
-        $ticket->openedDate  = !empty($data->created) ? substr($data->created, 0, 19) : null;
+        $ticket->openedDate  = !empty($data->created) ? $this->formatDatetime(substr($data->created, 0, 19)) : null;
         $ticket->assignedTo  = $ticket->status == 'closed' ? 'closed' : $this->getJiraAccount(isset($data->assignee) ? $data->assignee : '');
         $ticket->openedBuild = 'trunk';
 
@@ -2059,6 +2118,8 @@ class convertTao extends convertModel
             $ticket->closedReason = zget($reasonList, $data->resolution, '');
             if($ticket->closedReason && !isset($this->lang->ticket->closedReasonList[$ticket->closedReason])) $ticket->closedReason = 'refuse';
         }
+
+        $ticket = $this->processBuildinFieldData('ticket', $data, $ticket, $relations, $customFields);
 
         $this->dao->dbh($this->dbh)->insert(TABLE_TICKET)->data($ticket)->exec();
         $ticketID = $this->dao->dbh($this->dbh)->lastInsertID();
@@ -2101,7 +2162,7 @@ class convertTao extends convertModel
         $build->project     = $projectID;
         $build->system      = $systemID;
         $build->name        = $data->vname;
-        $build->date        = !empty($data->releasedate) ? substr($data->releasedate, 0, 10) : null;
+        $build->date        = !empty($data->releasedate) ? $this->formatDate(substr($data->releasedate, 0, 10)) : null;
         $build->builder     = $this->app->user->account;
         $build->createdBy   = $this->app->user->account;
         $build->createdDate = helper::now();
@@ -2168,10 +2229,10 @@ class convertTao extends convertModel
         $release->system       = $build->system;
         $release->build        = $build->id;
         $release->name         = $build->name;
-        $release->date         = helper::isZeroDate($data->startdate) ? NULL : substr($data->startdate, 0, 10);
+        $release->date         = helper::isZeroDate($data->startdate) ? null : $this->formatDate(substr($data->startdate, 0, 10));
         $release->desc         = isset($data->description) ? $data->description : '';
         $release->status       = $status;
-        $release->releasedDate = !empty($data->released) && !empty($data->releasedDate) ? substr($data->releasedate, 0, 10) : null;
+        $release->releasedDate = !empty($data->released) && !empty($data->releasedate) ? $this->formatDate(substr($data->releasedate, 0, 10)) : null;
         $release->createdBy    = $this->app->user->account;
         $release->createdDate  = helper::now();
         $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
@@ -2478,7 +2539,7 @@ class convertTao extends convertModel
                     $field->integerDigits = in_array($field->type, $this->config->workflowfield->numberTypes) ? '10' : '';
                     $field->decimalDigits = in_array($field->type, $this->config->workflowfield->numberTypes) ? '2'  : '';;
                     $field->expression    = '';
-                    $field->optionType    = strpos($controlCode, 'userpicker') === false ? 'custom' : 'user';
+                    $field->optionType    = (strpos($controlCode, 'userpicker') !== false || strpos($controlCode, 'people') !== false) ? 'user' : 'custom';
                     $field->sql           = '';
                     $field->options       = $options;
                     $field->default       = '';
@@ -2488,7 +2549,7 @@ class convertTao extends convertModel
                     $field->createdBy     = $this->app->user->account;
                     $field->createdDate   = helper::now();
 
-                    if(strpos(',select,multi-select,radio,checkbox,', ",$field->control,") !== false && empty($options['code'])) $field->control = 'text';
+                    if(strpos(',select,multi-select,radio,checkbox,', ",$field->control,") !== false && $field->optionType == 'custom' && empty($options['code'])) $field->control = 'text';
                     $result = $this->workflowfield->create($module, $field, null, true);
 
                     $relation = $this->createTmpRelation('jcustomfield', $jiraField, 'zworkflowfield', $field->field, $field->module);
@@ -2746,7 +2807,7 @@ class convertTao extends convertModel
                 if(empty($projectFieldList[$jiraProjectID][$flow->module])) continue;
                 $this->createDefaultLayout($projectFieldList[$jiraProjectID][$flow->module], $flow, $groupID);
             }
-            else if(!$flow->buildin)
+            elseif(!$flow->buildin)
             {
                 $disabledModules[] = $flow->module;
             }
@@ -3051,25 +3112,25 @@ class convertTao extends convertModel
                 $content = $this->processJiraContent($content, $fileList);
                 if($content) $this->dao->dbh($this->dbh)->update(TABLE_STORYSPEC)->set('`spec`')->eq($content)->where('`story`')->eq($objectID)->exec();
             }
-            else if($objectType == 'bug')
+            elseif($objectType == 'bug')
             {
                 $content = $this->dao->dbh($this->dbh)->select('`steps`')->from(TABLE_BUG)->where('id')->eq($objectID)->fetch('steps');
                 $content = $this->processJiraContent($content, $fileList);
                 if($content) $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('`steps`')->eq($content)->where('id')->eq($objectID)->exec();
             }
-            else if($objectType == 'task')
+            elseif($objectType == 'task')
             {
                 $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('desc');
                 $content = $this->processJiraContent($content, $fileList);
                 if($content) $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('`desc`')->eq($content)->where('id')->eq($objectID)->exec();
             }
-            else if($objectType == 'ticket')
+            elseif($objectType == 'ticket')
             {
                 $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_TICKET)->where('id')->eq($objectID)->fetch('desc');
                 $content = $this->processJiraContent($content, $fileList);
                 if($content) $this->dao->dbh($this->dbh)->update(TABLE_TICKET)->set('`desc`')->eq($content)->where('id')->eq($objectID)->exec();
             }
-            else if($objectType == 'feedback')
+            elseif($objectType == 'feedback')
             {
                 $content = $this->dao->dbh($this->dbh)->select('`desc`')->from(TABLE_FEEDBACK)->where('id')->eq($objectID)->fetch('desc');
                 $content = $this->processJiraContent($content, $fileList);

@@ -108,13 +108,12 @@ class testcase extends control
         $moduleID   = $browseType == 'bymodule' ? $param : 0;
         $suiteID    = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? (int)$this->cookie->caseSuite : 0) : 0);
         $queryID    = $browseType == 'bysearch' ? $param : 0;
-        if($browseType == 'bymodule' && $this->session->caseBrowseType) $browseType = $this->session->caseBrowseType == 'bysearch' ? 'all' : $this->session->caseBrowseType;
-
         $this->testcaseZen->setBrowseCookie($productID, $branch, $browseType, (string)$param);
 
         $moduleID = $browseType == 'bymodule' ? $param : (int)$this->cookie->caseModule;
         $suiteID  = $browseType == 'bysuite'  ? $param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? (int)$this->cookie->caseSuite : 0) : 0);
         $queryID  = $browseType == 'bysearch' ? $param : 0;
+        if($browseType == 'bymodule' && $this->session->caseBrowseType) $browseType = $this->session->caseBrowseType == 'bysearch' ? 'all' : $this->session->caseBrowseType;
         $this->testcaseZen->setBrowseSession($productID, $branch, $moduleID, $browseType, $orderBy);
         if($from != 'doc') list($productID, $branch) = $this->testcaseZen->setBrowseMenu($productID, $branch, $projectID);
 

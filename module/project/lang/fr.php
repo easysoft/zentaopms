@@ -86,7 +86,7 @@ $lang->project->manage              = 'Manage';
 $lang->project->market              = 'Market';
 $lang->project->tips                = 'Note';
 $lang->project->afterInfo           = "{$lang->projectCommon} is created. Next you can";
-$lang->project->setTeam             = 'Set Team';
+$lang->project->setTeam             = 'Manage Team';
 $lang->project->linkStory           = 'Link Stories';
 $lang->project->createStory         = "Create {$lang->SRCommon}";
 $lang->project->createTask          = "Create Task";
@@ -97,13 +97,15 @@ $lang->project->backToKanban        = 'Go Back to Kanban';
 $lang->project->backToExecutionList = 'Go Back to Project %s List';
 $lang->project->backToProjectList   = 'Go Back to Project List';
 $lang->project->deletedTip          = "Sorry, the {$lang->projectCommon} has been deleted";
+$lang->project->coverExecutionPriv  = "Execution Priv Control";
+$lang->project->executionView       = "{$lang->execution->common} View";
 
-$lang->project->manDay          = 'Man Day';
+$lang->project->manDay          = 'Man-Days';
 $lang->project->day             = 'Day';
 $lang->project->newProduct      = 'New Product';
 $lang->project->associatePlan   = 'Associate Plan';
 $lang->project->tenThousandYuan = '10k';
-$lang->project->planDate        = 'Schedule Date';
+$lang->project->planDate        = 'Planned Duration';
 $lang->project->delayInfo       = 'Delayed for %s days';
 
 /* Fields. */
@@ -136,6 +138,10 @@ $lang->project->output             = 'Output';
 $lang->project->path               = 'Path';
 $lang->project->grade              = 'Grade';
 $lang->project->version            = 'Version';
+$lang->project->latestVersion      = 'Latest Version';
+$lang->project->allVersions        = 'All Versions';
+$lang->project->diffVersion        = 'Compare';
+$lang->project->saveVersion        = 'Save as New Version';
 $lang->project->program            = 'Program';
 $lang->project->parentVersion      = 'Parent Version';
 $lang->project->planDuration       = 'Plan Duration';
@@ -165,6 +171,7 @@ $lang->project->estimate           = 'Estimates';
 $lang->project->consume            = 'Cost';
 $lang->project->surplus            = 'Left';
 $lang->project->progress           = 'Progress';
+$lang->project->realProgress       = 'Real Progress';
 $lang->project->allProgress        = 'All Progress';
 $lang->project->weekProgress       = 'This Week Progress';
 $lang->project->dateRange          = 'Plan Duration';
@@ -213,7 +220,7 @@ $lang->project->longTime           = 'Long-Term';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = "More {$lang->projectCommon}";
 $lang->project->days               = 'Days';
-$lang->project->daysUnit           = '(Unit: Days)';
+$lang->project->daysUnit           = ' (Unit: Days)';
 $lang->project->mailto             = 'Mailto';
 $lang->project->etc                = " , etc";
 $lang->project->product            = $lang->productCommon;
@@ -509,9 +516,9 @@ $lang->project->featureBar['dynamic']['thisMonth'] = 'This Month';
 $lang->project->featureBar['dynamic']['lastMonth'] = 'Last Month';
 
 $lang->project->moreSelects = array();
-$lang->project->moreSelects['suspended'] = 'Suspended';
-$lang->project->moreSelects['delayed']   = 'Delayed';
-$lang->project->moreSelects['closed']    = 'Closed';
+$lang->project->moreSelects['browse']['more']['suspended'] = 'Suspended';
+$lang->project->moreSelects['browse']['more']['delayed']   = 'Delayed';
+$lang->project->moreSelects['browse']['more']['closed']    = 'Closed';
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Stage';
@@ -522,6 +529,10 @@ $lang->project->executionList['waterfallplus'] = $lang->projectCommon . ' Stage'
 $lang->project->featureBar['team']['all'] = 'Members';
 
 $lang->project->featureBar['managemembers']['all'] = 'Manage Team';
+
+$lang->project->coverExecutionPrivList = array();
+$lang->project->coverExecutionPrivList[1] = 'Open (After enabling, you can control permissions for executing functions (such as tasks, burn-down charts, tests, etc.) in the "Project Custom Permissions" section. This action is irreversible.)';
+$lang->project->coverExecutionPrivList[0] = 'Close';
 
 $lang->project->api = new stdclass();
 $lang->project->api->error = new stdclass();

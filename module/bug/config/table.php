@@ -1,5 +1,6 @@
 <?php
 global $lang, $app;
+$isEn = $app->getClientLang() == 'en';
 $config->bug->dtable = new stdclass();
 $config->bug->dtable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'openedBy', 'openedDate', 'confirmed', 'assignedTo', 'resolution', 'actions');
 
@@ -26,17 +27,19 @@ $config->bug->dtable->fieldList['title']['group']    = 1;
 $config->bug->dtable->fieldList['title']['data-app'] = $app->tab;
 $config->bug->dtable->fieldList['title']['sortType'] = true;
 
-$config->bug->dtable->fieldList['severity']['title']    = $lang->bug->severity;
-$config->bug->dtable->fieldList['severity']['type']     = 'severity';
-$config->bug->dtable->fieldList['severity']['show']     = true;
-$config->bug->dtable->fieldList['severity']['group']    = 2;
-$config->bug->dtable->fieldList['severity']['sortType'] = true;
+$config->bug->dtable->fieldList['severity']['title']        = $lang->bug->severity;
+$config->bug->dtable->fieldList['severity']['type']         = 'severity';
+$config->bug->dtable->fieldList['severity']['show']         = true;
+$config->bug->dtable->fieldList['severity']['group']        = 2;
+$config->bug->dtable->fieldList['severity']['sortType']     = true;
+$config->bug->dtable->fieldList['severity']['severityList'] = $lang->bug->severityList;
 
 $config->bug->dtable->fieldList['pri']['title']    = $lang->bug->pri;
 $config->bug->dtable->fieldList['pri']['type']     = 'pri';
 $config->bug->dtable->fieldList['pri']['show']     = true;
 $config->bug->dtable->fieldList['pri']['group']    = 2;
 $config->bug->dtable->fieldList['pri']['sortType'] = true;
+$config->bug->dtable->fieldList['pri']['priList']  = $lang->bug->priList;
 
 $config->bug->dtable->fieldList['status']['title']     = $lang->bug->abbr->status;
 $config->bug->dtable->fieldList['status']['type']      = 'status';
@@ -93,8 +96,9 @@ $config->bug->dtable->fieldList['openedBy']['sortType'] = true;
 $config->bug->dtable->fieldList['openedDate']['title']    = $lang->bug->abbr->openedDate;
 $config->bug->dtable->fieldList['openedDate']['type']     = 'date';
 $config->bug->dtable->fieldList['openedDate']['show']     = true;
-$config->bug->dtable->fieldList['openedDate']['group'] = 4;
+$config->bug->dtable->fieldList['openedDate']['group']    = 4;
 $config->bug->dtable->fieldList['openedDate']['sortType'] = 'date';
+if($isEn) $config->bug->dtable->fieldList['openedDate']['width'] = '120';
 
 $config->bug->dtable->fieldList['confirmed']['title']    = $lang->bug->confirmed;
 $config->bug->dtable->fieldList['confirmed']['type']     = 'category';
@@ -103,6 +107,7 @@ $config->bug->dtable->fieldList['confirmed']['show']     = true;
 $config->bug->dtable->fieldList['confirmed']['flex']     = false;
 $config->bug->dtable->fieldList['confirmed']['group']    = 5;
 $config->bug->dtable->fieldList['confirmed']['sortType'] = true;
+if($isEn) $config->bug->dtable->fieldList['confirmed']['width'] = '150';
 
 $config->bug->dtable->fieldList['assignedTo']['title']      = $lang->bug->assignedTo;
 $config->bug->dtable->fieldList['assignedTo']['type']       = 'assign';
@@ -110,6 +115,7 @@ $config->bug->dtable->fieldList['assignedTo']['assignLink'] = array('module' => 
 $config->bug->dtable->fieldList['assignedTo']['show']       = true;
 $config->bug->dtable->fieldList['assignedTo']['group']      = 5;
 $config->bug->dtable->fieldList['assignedTo']['sortType']   = true;
+if($isEn) $config->bug->dtable->fieldList['assignedTo']['width'] = '120';
 
 $config->bug->dtable->fieldList['assignedDate']['title']    = $lang->bug->assignedDate;
 $config->bug->dtable->fieldList['assignedDate']['type']     = 'date';
@@ -132,6 +138,7 @@ $config->bug->dtable->fieldList['resolution']['map']      = $lang->bug->resoluti
 $config->bug->dtable->fieldList['resolution']['show']     = true;
 $config->bug->dtable->fieldList['resolution']['group']    = 6;
 $config->bug->dtable->fieldList['resolution']['sortType'] = true;
+if($isEn) $config->bug->dtable->fieldList['resolution']['width'] = '100';
 
 $config->bug->dtable->fieldList['toTask']['title']    = $lang->bug->toTask;
 $config->bug->dtable->fieldList['toTask']['type']     = 'text';
@@ -184,6 +191,7 @@ if($config->edition != 'open')
     $config->bug->dtable->fieldList['relatedObject']['group']       = 8;
     $config->bug->dtable->fieldList['relatedObject']['flex']        = false;
     $config->bug->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($isEn) $config->bug->dtable->fieldList['relatedObject']['width'] = '120';
 }
 
 $config->bug->dtable->fieldList['activatedDate']['title']    = $lang->bug->activatedDate;

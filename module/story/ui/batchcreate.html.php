@@ -67,10 +67,11 @@ $fnGenerateFields = function() use ($app, $lang, $type, $fields, $stories, $cust
         if($colName == 'plan' && $type != 'story') $cols[$index]['multiple'] = true;
         if($colName == 'grade' && $gradeRule == 'stepwise') $cols[$index]['disabled'] = true;
         if($colName == 'parent' && $storyID > 0 ) $cols[$index]['hidden'] = true;
-        if($colName == 'source')   $cols[$index]['items']    = $lang->{$type}->sourceList;
-        if($colName == 'category') $cols[$index]['items']    = $lang->{$type}->categoryList;
-        if($colName == 'roadmap')  $cols[$index]['items']    = $roadmaps;
-        if($colName == 'grade')    $cols[$index]['required'] = true;
+        if($colName == 'source')   $cols[$index]['items']        = $lang->{$type}->sourceList;
+        if($colName == 'category') $cols[$index]['items']        = $lang->{$type}->categoryList;
+        if($colName == 'roadmap')  $cols[$index]['items']        = $roadmaps;
+        if($colName == 'grade')    $cols[$index]['required']     = true;
+        if($colName == 'branch')   $cols[$index]['defaultDitto'] = false;
         if($colName == 'pri')
         {
             $cols[$index]['items']   = $lang->{$type}->priList;

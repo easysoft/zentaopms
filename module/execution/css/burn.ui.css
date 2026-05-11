@@ -2,7 +2,5 @@
 #burnYUnit {position: absolute; color: #CBD0DB; top: 85px; left: 185px;}
 #burnXUnit {position: absolute; color: #CBD0DB; bottom: 70px; right: 165px;}
 #featureBar .btn .icon {color: #fff !important}
-.burnByBox {width: 150px;}
-.intervalBox {width: 100px;}
 .text-gray {--tw-text-opacity: 1; color: rgba(var(--color-gray-500-rgb),var(--tw-text-opacity)) !important;}
 #featureBar .nav-item > a:hover {color: rgba(var(--color-link-rgb),var(--tw-text-opacity));}

@@ -20,5 +20,14 @@ class phpmailer extends baseDelegate
     public function __construct($exceptions = null)
     {
         $this->instance = new static::$className($exceptions);
+
+        // 修复 phpmailer 6.x SSL 验证失败的问题。详见https://www.php.net/manual/zh/context.ssl.php。Fix the SSL verification failure of phpmailer 6.x. See https://www.php.net/manual/en/context.ssl.php.
+        $this->instance->SMTPOptions = [
+            'ssl' => [
+                'verify_peer' => false,
+                'verify_peer_name' => false
+            ]
+        ];
+
     }
 }

@@ -15,6 +15,9 @@ $app->loadModuleConfig('testcase');
 $app->loadModuleConfig('company');
 $app->loadModuleConfig('project');
 
+$isEn  = $app->getClientLang() == 'en';
+$space = '';
+
 $config->my->todo = new stdclass();
 $config->my->todo->actionList = array();
 $config->my->todo->actionList['start']['icon']      = 'play';
@@ -110,7 +113,7 @@ $config->my->todo->dtable->fieldList['type']['flex']  = 2;
 $config->my->todo->dtable->fieldList['assignedBy']['name']  = 'assignedBy';
 $config->my->todo->dtable->fieldList['assignedBy']['title'] = $lang->todo->assignedBy;
 $config->my->todo->dtable->fieldList['assignedBy']['type']  = 'user';
-$config->my->todo->dtable->fieldList['assignedBy']['width'] = 90;
+$config->my->todo->dtable->fieldList['assignedBy']['width'] = $isEn ? 110 : 90;
 $config->my->todo->dtable->fieldList['assignedBy']['group'] = 'assignedBy';
 $config->my->todo->dtable->fieldList['assignedBy']['flex']  = 1;
 
@@ -228,6 +231,8 @@ if($config->vision != 'lite')
     $config->my->task->actionList['batchCreate']['data-toggle']   = 'modal';
     $config->my->task->actionList['batchCreate']['data-size']     = 'lg';
     $config->my->task->actionList['batchCreate']['data-position'] = 'center';
+
+    $space = ' ';
 }
 
 $config->my->task->dtable = new stdclass();
@@ -459,7 +464,7 @@ $config->my->epic->dtable->fieldList['id']['type']     = 'id';
 $config->my->epic->dtable->fieldList['id']['sortType'] = true;
 
 $config->my->epic->dtable->fieldList['title']['name']         = 'title';
-$config->my->epic->dtable->fieldList['title']['title']        = $lang->ERCommon . $lang->my->name;
+$config->my->epic->dtable->fieldList['title']['title']        = $lang->ERCommon . $space . $lang->my->name;
 $config->my->epic->dtable->fieldList['title']['type']         = 'title';
 $config->my->epic->dtable->fieldList['title']['link']         = array('module' => 'epic', 'method' => 'view', 'params' => 'id={id}&version=0&param=0&storyType=epic');
 $config->my->epic->dtable->fieldList['title']['fixed']        = 'left';
@@ -1084,6 +1089,7 @@ $config->my->execution->dtable->fieldList['status']['type']      = 'status';
 $config->my->execution->dtable->fieldList['status']['statusMap'] = $lang->execution->statusList;
 $config->my->execution->dtable->fieldList['status']['group']     = '2';
 $config->my->execution->dtable->fieldList['status']['show']      = true;
+if($isEn) $config->my->execution->dtable->fieldList['status']['width'] = '130';
 
 $config->my->execution->dtable->fieldList['PM']['name']   = 'PM';
 $config->my->execution->dtable->fieldList['PM']['title']  = $lang->execution->PM;
@@ -1115,12 +1121,14 @@ $config->my->execution->dtable->fieldList['begin']['title'] = $lang->execution->
 $config->my->execution->dtable->fieldList['begin']['type']  = 'date';
 $config->my->execution->dtable->fieldList['begin']['group'] = '3';
 $config->my->execution->dtable->fieldList['begin']['show']  = true;
+if($isEn) $config->my->execution->dtable->fieldList['begin']['width'] = '120';
 
 $config->my->execution->dtable->fieldList['end']['name']  = 'end';
 $config->my->execution->dtable->fieldList['end']['title'] = $lang->execution->end;
 $config->my->execution->dtable->fieldList['end']['type']  = 'date';
 $config->my->execution->dtable->fieldList['end']['group'] = '3';
 $config->my->execution->dtable->fieldList['end']['show']  = true;
+if($isEn) $config->my->execution->dtable->fieldList['end']['width'] = '120';
 
 $config->my->execution->dtable->fieldList['join']['name']     = 'join';
 $config->my->execution->dtable->fieldList['join']['title']    = $lang->team->join;
@@ -1176,6 +1184,7 @@ $config->my->execution->dtable->fieldList['progress']['type']     = 'progress';
 $config->my->execution->dtable->fieldList['progress']['sortType'] = false;
 $config->my->execution->dtable->fieldList['progress']['group']    = '4';
 $config->my->execution->dtable->fieldList['progress']['show']     = true;
+if($isEn) $config->my->execution->dtable->fieldList['progress']['width'] = '130';
 
 $config->my->execution->dtable->fieldList['burn']['title']    = $lang->execution->burn;
 $config->my->execution->dtable->fieldList['burn']['name']     = 'burn';
@@ -1253,3 +1262,19 @@ unset($config->my->team->dtable->fieldList['actions']);
 
 $config->my->project = new stdclass();
 $config->my->project->dtable = $config->project->dtable;
+
+if($isEn)
+{
+    $config->my->task->dtable->fieldList['finishedBy']['width'] = 120;
+    $config->my->task->dtable->fieldList['left']['width']       = 100;
+    $config->my->task->dtable->fieldList['assignedTo']['width'] = 100;
+    $config->my->task->dtable->fieldList['estimate']['width']   = 100;
+
+    $config->my->bug->dtable->fieldList['resolvedBy']['width'] = 100;
+    $config->my->bug->dtable->fieldList['assignedTo']['width'] = 120;
+
+    $config->my->project->dtable->fieldList['executionCount']['width'] = '120';
+    $config->my->project->dtable->fieldList['begin']['width']          = '110';
+    $config->my->project->dtable->fieldList['end']['width']            = '120';
+    $config->my->project->dtable->fieldList['progress']['width']       = '80';
+}

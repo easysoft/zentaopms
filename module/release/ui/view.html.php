@@ -75,6 +75,9 @@ if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' &&
     unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
+if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
+if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug']);
+
 /* Table data and setting for finished stories tab. */
 jsVar('storyCases', $storyCases);
 jsVar('confirmunlinkstory', $lang->release->confirmUnlinkStory);

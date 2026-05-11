@@ -445,8 +445,8 @@ class productplanModel extends model
             if($parentPlan->end != $this->config->productplan->future && $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreatThanParent, $parentPlan->end);
         }
 
-        if(!$isFuture && strpos($this->config->productplan->create->requiredFields, 'begin') !== false && empty($plan->begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
-        if(!$isFuture && strpos($this->config->productplan->create->requiredFields, 'end') !== false && empty($plan->end)) dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+        if(!$isFuture && empty($plan->begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+        if(!$isFuture && empty($plan->end))   dao::$errors['end']   = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
         if(dao::isError()) return false;
 
         $plan->begin = $isFuture || empty($plan->begin) ? $this->config->productplan->future : $plan->begin;
@@ -489,6 +489,11 @@ class productplanModel extends model
 
         $parentPlan = $this->getByID($plan->parent);
         $futureTime = $this->config->productplan->future;
+
+        if(!$this->post->future && empty($plan->begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+        if(!$this->post->future && empty($plan->end))   dao::$errors['end']   = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+        if(dao::isError()) return false;
+
         if($plan->parent > 0)
         {
             if($parentPlan->begin !== $futureTime && $plan->begin !== $futureTime && $plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLessThanParent, $parentPlan->begin);

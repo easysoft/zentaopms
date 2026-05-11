@@ -751,11 +751,12 @@ function loadProductBugs(productID, bugID)
 {
     if($('[name="duplicateBug"]').length == 0) return;
 
-    const link = $.createLink('bug', 'ajaxGetDuplicateBugs', `bugID=${bugID}&duplicateBugID=${duplicateBugID}`);
-    $.getJSON(link, function(data)
-    {
-        const $duplicateBugPicker = $('[name="duplicateBug"]').zui('picker');
-        $duplicateBugPicker.render({items: data});
-        $duplicateBugPicker.$.setValue(duplicateBugID);
-    });
+    const currentDup = typeof duplicateBugID != 'undefined' ? duplicateBugID : 0;
+    const selected   = $('[name="duplicateBug"]').val() || currentDup;
+    let params = 'productID=' + (productID || 0) + '&bugID=' + bugID + '&search={search}';
+    if(selected) params += '&duplicateBug=' + selected;
+
+    const $duplicateBugPicker = $('[name="duplicateBug"]').zui('picker');
+    $duplicateBugPicker.render({items: $.createLink('bug', 'ajaxGetProductBugs', params)});
+    $duplicateBugPicker.$.setValue(selected);
 }

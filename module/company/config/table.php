@@ -67,6 +67,7 @@ $config->company->user->dtable->fieldList['role']['type']     = 'category';
 $config->company->user->dtable->fieldList['role']['map']      = $lang->user->roleList;
 $config->company->user->dtable->fieldList['role']['sortType'] = true;
 $config->company->user->dtable->fieldList['role']['group']    = '3';
+if($app->getClientLang() == 'en') $config->company->user->dtable->fieldList['role']['width'] = '120';
 
 $config->company->user->dtable->fieldList['phone']['name']     = 'phone';
 $config->company->user->dtable->fieldList['phone']['title']    = $lang->user->phone;

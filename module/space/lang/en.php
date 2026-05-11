@@ -3,25 +3,25 @@ global $config;
 
 $lang->space->common          = 'Services';
 $lang->space->browse          = 'Service List';
-$lang->space->getStoreAppInfo = 'Get service information';
+$lang->space->getStoreAppInfo = 'Fetch Service Details';
 $lang->space->status          = 'Status';
-$lang->space->noApps          = 'No service';
+$lang->space->noApps          = 'No Services Found';
 $lang->space->defaultSpace    = 'Default space';
 $lang->space->systemSpace     = 'System space';
 $lang->space->searchInstance  = 'Search Services';
 $lang->space->upgrade         = 'Upgrade';
 $lang->space->install         = 'Add service';
 $lang->space->createdBy       = 'Creator';
-$lang->space->createdAt       = 'Creation time';
-$lang->space->handConfig      = 'Manual configuration';
-$lang->space->addType         = 'Add method';
+$lang->space->createdAt       = 'Created At';
+$lang->space->handConfig      = 'Manual Config';
+$lang->space->addType         = 'Addition Method';
 $lang->space->instanceType    = 'Instance type';
 
 $lang->space->notice =  new stdClass();
-$lang->space->notice->toInstall = 'Please go to the application market to install';
+$lang->space->notice->toInstall = 'Install via App Marketplace';
 
-$lang->space->byList = 'List';
-$lang->space->byCard = 'Card';
+$lang->space->byList = 'List View';
+$lang->space->byCard = 'Card View';
 
 $lang->space->featureBar['browse']['all'] = 'All';
 if($config->inQuickon) $lang->space->featureBar['browse']['running']  = 'Running';

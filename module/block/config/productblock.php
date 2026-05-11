@@ -1,6 +1,7 @@
 <?php
 global $lang, $app;
 $app->loadLang('product');
+$isEn = $app->getClientLang() == 'en';
 
 $config->block->product = new stdclass();
 $config->block->product->dtable = new stdclass();
@@ -13,3 +14,9 @@ $config->block->product->dtable->fieldList['progress']          = array('name' =
 $config->block->product->dtable->fieldList['plans']             = array('name' => 'plans',             'title' => $lang->product->plan,                         'type' => 'number',    'sort' => 'number');
 $config->block->product->dtable->fieldList['unresolvedBugs']    = array('name' => 'unresolvedBugs',    'title' => $lang->block->productlist->activatedBug,      'type' => 'number',    'sort' => 'number');
 $config->block->product->dtable->fieldList['releases']          = array('name' => 'releases',          'title' => $lang->product->release,                      'type' => 'number',    'sort' => 'number');
+
+if($isEn)
+{
+    $config->block->product->dtable->fieldList['activeStories']['minWidth'] = '80';
+    $config->block->product->dtable->fieldList['progress']['minWidth']      = '140';
+}

@@ -496,18 +496,39 @@ class blockZen extends block
         $reviewList = $this->loadModel('my')->getReviewingList('all');
         $reviewByMe['reviewByMe'] = array('number' => count($reviewList), 'href' => common::hasPriv('my', 'audit') && $this->config->vision != 'lite' ? helper::createLink('my', 'audit') : '');
 
+        $isEn = $this->app->getClientLang() == 'en';
         /* 生成欢迎语。 */
         $yesterdaySummary = '';
         if($finishTask || $fixBug)
         {
-            if($finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->finishTask, $finishTask) . ($fixBug ? '、' : $this->lang->comma);
-            if($fixBug)     $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug) . $this->lang->comma;
+
+            $separator = $isEn ? ', ' : '、';
+            $comma     = $isEn ? ' ' : $this->lang->comma;
+            if($finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->finishTask, $finishTask) . ($fixBug ? $separator : $comma);
+            if($isEn)
+            {
+                if($finishTask && $fixBug)  $yesterdaySummary .= sprintf($this->lang->block->summary->fixBugEn, $fixBug) ;
+                if($fixBug && !$finishTask) $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug);
+            }
+            else
+            {
+                if($fixBug) $yesterdaySummary .= sprintf($this->lang->block->summary->fixBug, $fixBug) . $this->lang->comma;
+            }
         }
         else
         {
             $yesterdaySummary .= $this->lang->block->summary->noWork;
         }
-        $yesterdaySummary = $this->lang->block->summary->yesterday . $yesterdaySummary;
+
+        if($isEn)
+        {
+            $yesterdaySummary = $yesterdaySummary . ' ' . $this->lang->block->summary->yesterday;
+        }
+        else
+        {
+            $yesterdaySummary = $this->lang->block->summary->yesterday . $yesterdaySummary;
+        }
+
         $welcomeSummary   = sprintf($this->lang->block->summary->welcome, $usageDays, $yesterdaySummary);
 
         $this->view->todaySummary   = date(DT_DATE3, time()) . ' ' . $this->lang->datepicker->dayNames[date('w', time())]; // 当前年月日 星期几。
@@ -1034,8 +1055,8 @@ class blockZen extends block
             ->andWhere('product')->in($productIdList)
             ->andWhere('begin')->ge(date('Y-m-d'))
             ->andWhere('status')->eq('wait')
-            ->orderBy('begin_desc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('begin_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
         /* Obtain the execution of the current in progress status closest to the actual start date based on the product list. */
@@ -1045,8 +1066,8 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->in($productIdList)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_asc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('realBegan_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
         /* Retrieve releases with the latest release date from the product list and a release date earlier than the current date. */
@@ -1054,20 +1075,20 @@ class blockZen extends block
             ->where('deleted')->eq('0')
             ->andWhere('product')->in($productIdList)
             ->andWhere('date')->le(date('Y-m-d'))
-            ->orderBy('date_asc')
-            ->fetchGroup('product', 'product');
+            ->orderBy('date_desc,id_desc')
+            ->fetchGroup('product');
 
         /* 将按照产品分组的统计数据放入产品列表中。 */
         /* Place statistical data grouped by product into the product list. */
         foreach($products as $productID => $product)
         {
             $product->storyDeliveryRate = isset($storyDeliveryRate[$productID]['value']) ? $storyDeliveryRate[$productID]['value'] * 100 : 0;
-            $product->totalStories      = isset($totalStories[$productID]['value']) ? $totalStories[$productID]['value'] : 0;
-            $product->closedStories     = isset($closedStories[$productID]['value']) ? $closedStories[$productID]['value'] : 0;
-            $product->unclosedStories   = isset($unclosedStories[$productID]['value']) ? $unclosedStories[$productID]['value'] : 0;
-            $product->newPlan           = isset($newPlan[$productID][$productID]) ? $newPlan[$productID][$productID] : '';
-            $product->newExecution      = isset($newExecution[$productID][$productID]) ? $newExecution[$productID][$productID] : '';
-            $product->newRelease        = isset($newRelease[$productID][$productID]) ? $newRelease[$productID][$productID] : '';
+            $product->totalStories      = isset($totalStories[$productID]['value'])      ? $totalStories[$productID]['value']            : 0;
+            $product->closedStories     = isset($closedStories[$productID]['value'])     ? $closedStories[$productID]['value']           : 0;
+            $product->unclosedStories   = isset($unclosedStories[$productID]['value'])   ? $unclosedStories[$productID]['value']         : 0;
+            $product->newPlan           = isset($newPlan[$productID])      ? current($newPlan[$productID])      : '';
+            $product->newExecution      = isset($newExecution[$productID]) ? current($newExecution[$productID]) : '';
+            $product->newRelease        = isset($newRelease[$productID])   ? current($newRelease[$productID])   : '';
 
             foreach($dates as $date)
             {
@@ -1344,10 +1365,37 @@ class blockZen extends block
     {
         $this->loadModel('milestone');
         $this->loadModel('weekly');
+        $this->loadModel('reporttemplate');
         $this->app->loadLang('execution');
 
         $projectID     = $this->session->project;
         $projectWeekly = $this->dao->select('*')->from(TABLE_WEEKLYREPORT)->where('project')->eq($projectID)->orderBy('weekStart_asc')->fetchAll('weekStart');
+
+        $progresses = $this->dao->select('t2.*')->from(TABLE_DOC)->alias('t1')
+            ->leftJoin(TABLE_DOCBLOCK)->alias('t2')->on('t1.id = t2.doc')
+            ->where('t1.project')->eq($projectID)
+            ->andWhere('t1.reportModule')->eq('week')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t2.type')->eq('project_progress_summary')
+            ->fetchAll('id', false);
+        foreach($progresses as $block)
+        {
+            $content = json_decode($block->content, true);
+            if(!isset($content['chart']))
+            {
+                list($module) = explode('_', $block->type);
+                $content['chart'] = $this->reporttemplate->getChartOptions($module, $block->type, $projectID, $content);
+                $this->dao->update(TABLE_DOCBLOCK)->set('content')->eq(json_encode($content))->where('id')->eq($block->id)->exec();
+            }
+
+            $dataset = zget($content['chart']['options'], 'dataset', array());
+            $weekly  = new stdclass();
+            $weekly->weekStart = substr($content['date']['begin'], 0, 10);
+            $weekly->pv        = $dataset[1][1];
+            $weekly->ev        = $dataset[2][1];
+            $weekly->ac        = $dataset[3][1];
+            $projectWeekly[$weekly->weekStart] = $weekly;
+        }
 
         $charts = array('pv' => array(), 'ev' => array(), 'ac' => array());
         foreach($projectWeekly as $weekStart => $data)
@@ -2096,6 +2144,7 @@ class blockZen extends block
             if($this->config->edition != 'open')
             {
                 $this->app->loadLang('approval');
+                $this->app->loadLang('projectchange');
                 $this->view->flows = $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('buildin')->eq(0)->fetchPairs('module', 'name');
             }
         }
@@ -3007,9 +3056,9 @@ class blockZen extends block
         $newPlan = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->andWhere('begin')->ge(date('Y-m-01'))
+            ->andWhere('begin')->ge(date('Y-m-d'))
             ->andWhere('status')->eq('wait')
-            ->orderBy('begin_desc')
+            ->orderBy('begin_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取实际开始日期距离当前最近的进行中状态的执行。 */
@@ -3020,7 +3069,7 @@ class blockZen extends block
             ->andWhere('execution.type')->eq('sprint')
             ->andWhere('relation.product')->eq($productID)
             ->andWhere('execution.status')->eq('doing')
-            ->orderBy('realBegan_asc')
+            ->orderBy('realBegan_desc,id_desc')
             ->fetch();
 
         /* 根据产品列表获取发布日期距离现在最近且发布日期小于当前日期的发布。 */
@@ -3028,8 +3077,8 @@ class blockZen extends block
         $newRelease = $this->dao->select('*')->from(TABLE_RELEASE)
             ->where('deleted')->eq('0')
             ->andWhere('product')->eq($productID)
-            ->andWhere('date')->lt(date('Y-m-01'))
-            ->orderBy('date_asc')
+            ->andWhere('date')->le(date('Y-m-d'))
+            ->orderBy('date_desc,id_desc')
             ->fetch();
 
         $product = $this->loadModel('product')->getByID($productID);

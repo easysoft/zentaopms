@@ -12,6 +12,11 @@ namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
+$isEn       = $app->getClientLang() == 'en';
+$storyTitle = $isEn ? $lang->common->stories : $lang->common->story;
+$taskTitle  = $isEn ? $lang->task->plural : $lang->task->common;
+$bugTitle   = $isEn ? $lang->bug->plural : $lang->bug->common;
+
 jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
 $programDom = array();
@@ -97,7 +102,7 @@ if(!empty($project->PM))
     {
         $membersDom[] = div
         (
-            setClass('w-1/8 center-y'),
+            setClass('w-1/6 center-y'),
             avatar(setClass('primary-outline'), set::text($user->realname), set::src($user->avatar)),
             span(setClass('my-2'), $user->realname),
             span(setClass('text-gray'), $lang->project->PM)
@@ -116,7 +121,7 @@ foreach($teamMembers as $teamMember)
     if(!$user) continue;
     $membersDom[] = div
     (
-        setClass('w-1/8 center-y'),
+        setClass('w-1/6 center-y'),
         avatar(set::text($user->realname), set::src($user->avatar)),
         span(setClass('my-2'), $user->realname),
         span(setClass('text-gray'), $lang->project->member)
@@ -128,7 +133,7 @@ if(common::hasPriv('project', 'manageMembers'))
 {
     $membersDom[] = a
     (
-        setClass('w-1/8 center-y cursor-pointer'),
+        setClass('w-1/6 center-y cursor-pointer'),
         set::href(createLink('project', 'manageMembers', "projectID={$project->id}")),
         avatar
         (
@@ -199,19 +204,19 @@ row
                     (
                         setClass('w-1/3 storyCount'),
                         div(setClass('text-md font-bold'), $statData->storyCount),
-                        span(setClass('text-gray'), $lang->common->story)
+                        span(setClass('text-gray'), $storyTitle)
                     ),
                     div
                     (
                         setClass('w-1/3 taskCount'),
                         div(setClass('text-md font-bold'), $statData->taskCount),
-                        span(setClass('text-gray'), $lang->task->common)
+                        span(setClass('text-gray'), $taskTitle)
                     ),
                     div
                     (
                         setClass('w-1/3 bugCount'),
                         div(setClass('text-md font-bold'), $statData->bugCount),
-                        span(setClass('text-gray'), $lang->bug->common)
+                        span(setClass('text-gray'), $bugTitle)
                     )
                 )
             ),
@@ -355,7 +360,7 @@ row
                                 div
                                 (
                                     setClass('flex items-center justify-between'),
-                                    span($lang->projectCommon . $lang->project->team),
+                                    span($lang->projectCommon . ($isEn ? ' ' : '') . $lang->project->team),
                                     hasPriv('project', 'team') ? btn
                                     (
                                         setClass('ghost text-gray'),

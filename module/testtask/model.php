@@ -326,7 +326,6 @@ class testtaskModel extends model
             ->andWhere('(t1.owner')->eq($account)
             ->orWhere("FIND_IN_SET('$account', t1.members)")
             ->markRight(1)
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
             ->orderBy($orderBy)
@@ -1879,8 +1878,9 @@ class testtaskModel extends model
                 if($suiteID) $this->linkImportedCaseToSuite($case, $caseID, $suiteCase);
 
                 $testresult = $results[$suiteIndex][$key];
-                $testresult->run  = $runID;
-                $testresult->case = $caseID;
+                $testresult->run     = $runID;
+                $testresult->case    = $caseID;
+                $testresult->version = isset($case->version) ? $case->version : 1;
                 $this->dao->insert(TABLE_TESTRESULT)->data($testresult)->exec();
             }
         }
@@ -1973,9 +1973,14 @@ class testtaskModel extends model
         $testRun->lastRunDate   = $case->lastRunDate;
         $testRun->lastRunResult = $case->lastRunResult;
 
-        $this->dao->replace(TABLE_TESTRUN)->data($testRun)->exec();
-
-        return $this->dao->lastInsertID();
+        $testRunInfo = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->eq($testRun->task)->fetch();
+        if(isset($testRunInfo->id))
+        {
+            $this->dao->update(TABLE_TESTRUN)->data($testRun)->where('id')->eq($testRunInfo->id)->exec();
+            return  $testRunInfo->id;
+        }
+        $this->dao->insert(TABLE_TESTRUN)->data($testRun)->exec();
+        return dao::isError() ? 0 : $this->dao->lastInsertID();
     }
 
     /**

@@ -76,6 +76,11 @@ class jira
             $projects[$project['id']] = $project;
         }
 
+        foreach($projects as $index => $project)
+        {
+            $projects[$index]['versions'] = $this->getBuilds($project['id']);
+        }
+
         return $projects;
     }
 
@@ -317,9 +322,9 @@ class jira
                     $link = array();
                     $link['id']          = $issueLink['id'];
                     $link['linktype']    = $issueLink['type']['id'];
-                    $link['source']      = $issue['id'];
-                    $link['destination'] = $issueLink['outwardIssue']['id'];
-                    $links[$link['id']] = $link;
+                    $link['source']      = $issueLink['outwardIssue']['id'];
+                    $link['destination'] = $issue['id'];
+                    $links[$link['id']]  = $link;
                 }
                 $issue['links'] = $links;
             }
@@ -370,6 +375,8 @@ class jira
         $users = array();
         foreach($result as $index => $user)
         {
+            if($user['accountType'] != 'atlassian') continue;
+
             $user['id'] = $index;
             $user['lowerUserName']    = $user['accountId'];
             $user['lowerDisplayName'] = $user['displayName'];
@@ -473,7 +480,11 @@ class jira
         if(!$result) return array();
 
         $statusList = array();
-        foreach($result as $status) $statusList[$status['id']] = $status;
+        foreach($result as $status)
+        {
+            $status['name'] = $status['untranslatedName'];
+            $statusList[$status['id']] = $status;
+        }
 
         return $statusList;
     }
