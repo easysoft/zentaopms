@@ -97,7 +97,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $products, $filters
                 set::data($products),
                 set::emptyTip($lang->error->noData),
                 set::height(jsRaw('getHeight')),
-                set::plugins(array('cellspan')),
+                set::plugins(array('cellspan', 'selectable')),
                 set::getCellSpan(jsRaw('getCellSpan')),
                 set::cellSpanOptions(array('name' => array(), 'PO' => array()))
             ),

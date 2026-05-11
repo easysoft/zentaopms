@@ -156,7 +156,7 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                 set::colHover(false),
                 set::onCellClick(jsRaw('clickCell')),
                 set::rowKey('ROW_ID'),
-                set::plugins(array('header-group', 'cellspan')),
+                set::plugins(array('header-group', 'cellspan', 'selectable')),
                 set::cellSpanOptions($cellSpan),
                 set::getCellSpan(jsRaw(<<<JS
                 function(cell)

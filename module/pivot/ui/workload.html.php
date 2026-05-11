@@ -86,7 +86,7 @@ $generateData = function() use ($lang, $title, $cols, $data, $workload, $depts, 
                 set::cols($cols),
                 set::data($workload),
                 set::emptyTip($lang->error->noData),
-                set::plugins(array('cellspan')),
+                set::plugins(array('cellspan', 'selectable')),
                 set::getCellSpan(jsRaw('getCellSpan')),
                 set::cellSpanOptions(array(
                     'user'        => array('rowspan' => 'userRowspan'),
