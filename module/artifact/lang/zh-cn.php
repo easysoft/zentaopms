@@ -29,8 +29,10 @@ $lang->artifact->move          = '移动';
 $lang->artifact->switch        = '切换当前层级';
 $lang->artifact->actionMockTip = '当前为模拟操作：%s';
 $lang->artifact->dirName       = '目录名称';
-$lang->artifact->format        = '目录类型';
+$lang->artifact->format        = '制品库类型';
 $lang->artifact->hasVersion    = '需要进行版本控制';
+
+$lang->artifact->nameNotSupportChinese = '目录名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
 
 $lang->artifact->okBtn = '确定';
 
@@ -53,6 +55,8 @@ $lang->artifact->typeList['repo']  = '代码库';
 $lang->artifact->typeList['space'] = '空间';
 
 $lang->artifact->formatList = array();
-$lang->artifact->formatList['raw']       = '通用文件';
-$lang->artifact->formatList['container'] = 'Docker 镜像';
-$lang->artifact->formatList['helm']      = 'K8S';
+$lang->artifact->formatList['file']      = '通用文件仓库';
+$lang->artifact->formatList['container'] = '镜像仓库';
+$lang->artifact->formatList['helm']      = 'Helm仓库';
+$lang->artifact->formatList['maven']     = 'Maven仓库';
+$lang->artifact->formatList['npm']       = 'NPM仓库';
