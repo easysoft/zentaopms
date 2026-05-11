@@ -64,6 +64,16 @@ class ztfSubmitEntry extends baseEntry
                     ->set('ZTFResult')->eq(json_encode($post))
                     ->where('id')->eq($post->task)
                     ->exec();
+
+                if(!empty($result['cases'][0][0]) && !empty($result['cases'][0][0]->id))
+                {
+                    $this->dao->update(TABLE_CASE)
+                        ->set('lastRunner')->eq($result['cases'][0][0]->lastRunner)
+                        ->set('lastRunDate')->eq($result['cases'][0][0]->lastRunDate)
+                        ->set('lastRunResult')->eq($result['cases'][0][0]->lastRunResult)
+                        ->where('id')->eq($result['cases'][0][0]->id)
+                        ->exec();
+                }
             }
             else
             {
