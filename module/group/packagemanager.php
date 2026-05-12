@@ -3141,14 +3141,6 @@ $config->group->package->classify->subset = 'featureconfig';
 $config->group->package->classify->privs  = array();
 $config->group->package->classify->privs['classify-browse'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array());
 
-$config->group->package->reviewcl = new stdclass();
-$config->group->package->reviewcl->order  = 45;
-$config->group->package->reviewcl->subset = 'featureconfig';
-$config->group->package->reviewcl->privs  = array();
-$config->group->package->reviewcl->privs['reviewcl-waterfallplusBrowse']       = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 1, 'depend' => array(), 'recommend' => array());
-$config->group->package->reviewcl->privs['reviewsetting-version']              = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array(), 'recommend' => array());
-$config->group->package->reviewcl->privs['reviewsetting-waterfallplusVersion'] = array('edition' => 'max,ipd', 'vision' => 'rnd', 'order' => 3, 'depend' => array(), 'recommend' => array());
-
 $config->group->package->executionSetting = new stdclass();
 $config->group->package->executionSetting->order  = 3;
 $config->group->package->executionSetting->subset = 'featureconfig';
