@@ -815,10 +815,11 @@ class upgrade extends control
      * 删除安装和升级文件。
      * Safe delete install and upgrade files.
      *
+     * @param string $referer
      * @access public
      * @return void
      */
-    public function safeDelete()
+    public function safeDelete(string $referer = '')
     {
         $files   = [];
         $wwwRoot = $this->app->getWwwRoot();
@@ -831,10 +832,10 @@ class upgrade extends control
         {
             $command = 'rm -f ' . implode(' ', $files);
             $tips    = $this->lang->upgrade->safeDeleteFile . ' ' . $this->lang->upgrade->execCommand;
-            return $this->displayCommand($command, $tips);
+            return $this->displayCommand($command, $tips, $referer);
         }
 
-        $this->locate($this->config->webRoot);
+        $this->locate($referer ?: $this->config->webRoot);
     }
 
     /**
