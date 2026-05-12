@@ -100,7 +100,7 @@ class artifact extends control
         $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact     = $artifact;
         $this->view->browseLink   = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
-        $this->view->treeItems    = $this->artifact->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type);
+        $this->view->treeItems    = $this->artifactZen->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type);
         $this->view->selectNode   = $selectNode;
         $this->view->spaceID      = $spaceID;
         $this->view->repoID       = $repoID;
@@ -108,6 +108,7 @@ class artifact extends control
         $this->view->repo         = $repo;
         $this->view->artifactList = empty($artifactList) ? array() : $artifactList;
         $this->view->breadCrumbs  = $breadCrumbs;
+        $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
         $this->view->isExpand     = $isExpand;
 
         $this->display();
@@ -212,13 +213,10 @@ class artifact extends control
      * @param  int    $artifactID
      * @param  string $path
      * @param  int    $isSubDir
-     * @param  int    $spaceID
-     * @param  int    $repoID
-     * @param  string $type
      * @access public
      * @return void
      */
-    public function createDir(int $artifactID, string $path = '', int $isSubDir = 0, int $spaceID = 0, int $repoID = 0, string $type = 'space')
+    public function createDir(int $artifactID, string $path = '', int $isSubDir = 0)
     {
         if($_POST)
         {
@@ -229,6 +227,7 @@ class artifact extends control
             $base64Path = $path ? helper::safe64Encode($path) : '';
 
             $formData = form::data($this->config->artifact->form->createDir)->get();
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->dirNameFormatError));
             if($path)
             {
                 $path = str_replace('/', '.', $path);
@@ -239,8 +238,12 @@ class artifact extends control
 
             $this->loadModel('action')->create('artifact', $artifactID, 'createdDir', $formData->name);
 
-            $url = $this->createLink('artifact', 'view', "artifactID={$artifactID}&space={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$base64Path}");
-            $this->sendSuccess(array('locate' => $url));
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['callback']   = "window.expandNode('{$base64Path}');";
+            $this->sendSuccess($response);
         }
         $this->view->title = $this->lang->artifact->createDir;
         $this->display();
@@ -264,6 +267,42 @@ class artifact extends control
         $artifact   = $this->artifact->fetchByID($artifactID);
         $path       = helper::safe64Decode($path);
         $selectPath = helper::safe64Decode($selectPath);
-        return print(json_encode($this->artifact->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type)));
+        return print(json_encode($this->artifactZen->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type)));
+    }
+
+    /**
+     * 上传制品.
+     * Upload artifact.
+     *
+     * @param  int $artifactID
+     * @param  string $path
+     * @access public
+     * @return void
+     */
+    public function uploadArtifact(int $artifactID, string $path = '')
+    {
+        $originalPath = $path;
+
+        if(!empty($_FILES))
+        {
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['callback']   = "window.expandNode('{$originalPath}');";
+            set_time_limit(0);
+
+            $path = helper::safe64Decode($path);
+
+            $file = $_FILES['file'];
+            $this->artifact->uploadArtifact($artifactID, $file, $path);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $path = helper::safe64Encode($path);
+            $this->sendSuccess($response);
+
+        }
+        $this->view->title = $this->lang->artifact->uploadArtifact;
+        $this->display();
     }
 }

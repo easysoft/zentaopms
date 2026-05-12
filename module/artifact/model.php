@@ -1,8 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use function zin\img;
-
 /**
  * The model file of artifact module of ZenTaoPMS.
  *
@@ -91,66 +89,6 @@ class artifactModel extends model
     }
 
     /**
-     * 获取制品库目录结构。
-     * Get artifact folder structure.
-     *
-     * @param  object $artifact
-     * @param  string $path
-     * @param  string $selectPath
-     * @access public
-     * @return array
-     */
-    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space'): array
-    {
-        $items = array();
-        $nodes = $this->getArtifactNodes($artifact, $path);
-        if(empty($nodes)) return $items;
-
-        $items = array();
-        if(empty($selectNode)) $selectNode = array();
-        foreach($nodes as $node)
-        {
-            if(!isset($node->metadata)) continue;
-            $path = helper::safe64Encode($node->path);
-            $item = new stdclass();
-            $item->id     = $path;
-            $item->name   = $node->name;
-            $item->text   = $node->name;
-            $item->path   = $node->path;
-            $item->format = $node->format;
-            $item->kind   = $node->metadata->type == 'group' ? 'dir' : 'file';
-            $item->active = $node->path == $selectPath;
-
-            $item->url = helper::createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
-            if($item->kind == 'dir')
-            {
-                $baseSelectPath = helper::safe64Encode($selectPath);
-                $item->items = array('url' => helper::createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
-            }
-            $item->actions = array
-            (
-                array
-                (
-                    'key'      => 'more',
-                    'icon'     => 'ellipsis-v',
-                    'hint'     => $this->lang->more,
-                    'type'     => 'dropdown',
-                    'dropdown' => array
-                    (
-                        'items' => array
-                        (
-                            array('key' => 'createDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->createDir, 'url' => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path={$path}&isSubDir=0&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
-                        )
-                    )
-                )
-            );
-            $items[] = $item;
-        }
-
-        return $items;
-    }
-
-    /**
      * 获取制品库节点。
      * Get artifact nodes.
      *
@@ -177,5 +115,31 @@ class artifactModel extends model
         if(dao::isError()) return array();
 
         return $nodes;
+    }
+
+    /**
+     * 上传制品.
+     * Upload artifact.
+     *
+     * @param  int $artifactID
+     * @param  array $file
+     * @param  string $path
+     * @access public
+     * @return bool
+     */
+    public function uploadArtifact(int $artifactID, array $file, string $path = ''): bool
+    {
+        $artifact = $this->fetchByID($artifactID);
+        if(empty($artifact)) return false;
+
+        $param = array();
+        $param['artifactID'] = $artifactID;
+        $param['group']      = str_replace('/', '.', ltrim($path, '/'));
+        $param['file']       = curl_file_create($file['tmp_name']);
+
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifact->format}"), $param, array(), $apiRoot->header, 'data', 'POST', 300));
+        $result  = $this->gitfox->getResponse($result);
+        return !dao::isError();
     }
 }

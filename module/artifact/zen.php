@@ -43,4 +43,84 @@ class artifactZen extends artifact
 
         return $breadCrumbs;
     }
+
+    /**
+     * 获取制品库目录结构。
+     * Get artifact folder structure.
+     *
+     * @param  object $artifact
+     * @param  string $path
+     * @param  string $selectPath
+     * @access public
+     * @return array
+     */
+    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space'): array
+    {
+        $items = array();
+        $nodes = $this->artifact->getArtifactNodes($artifact, $path);
+        if(empty($nodes)) return $items;
+
+        $items = array();
+        if(empty($selectNode)) $selectNode = array();
+        foreach($nodes as $node)
+        {
+            if(!isset($node->metadata)) continue;
+            $path = helper::safe64Encode($node->path);
+
+            $item = new stdclass();
+            $item->id         = $path;
+            $item->name       = $node->name;
+            $item->text       = $node->name;
+            $item->path       = $node->path;
+            $item->format     = $node->format;
+            $item->kind       = $node->metadata->type == 'group' ? 'dir' : 'file';
+            $item->active     = $node->path == $selectPath;
+            $item->artifactID = $artifact->id;
+            $item->spaceID    = $spaceID;
+            $item->repoID     = $repoID;
+            $item->viewType   = $type;
+            $item->basePath   = $path;
+
+            $item->url = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
+            if($item->kind == 'dir')
+            {
+                $baseSelectPath = helper::safe64Encode($selectPath);
+                $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
+            }
+            $item->actions = $this->buildTreeAction($item);
+            $items[] = $item;
+        }
+
+        return $items;
+    }
+
+    /**
+     * 构建树形菜单按钮。
+     * Build tree menu button.
+     *
+     * @param  object $item
+     * @access public
+     * @return array
+     */
+    function buildTreeAction(object $item): array
+    {
+        $actions = array();
+        if(empty($item->format) || empty($item->id)) return $actions;
+
+        $dropdownItems   = array();
+        $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
+        $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
+
+        $actions[] = array
+        (
+            'key'      => 'more',
+            'icon'     => 'ellipsis-v',
+            'hint'     => $this->lang->more,
+            'type'     => 'dropdown',
+            'caret'    => false,
+            'dropdown' => array('items' => $dropdownItems)
+        );
+
+        return $actions;
+    }
 }
