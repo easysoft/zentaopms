@@ -83,3 +83,4 @@ foreach($ganttFields as $colName => $value)
 
     $ganttFields[$colName] = $value;
 }
+if(empty($config->setPercent)) unset($ganttFields['column_percent']);

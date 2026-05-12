@@ -305,6 +305,7 @@ class programplan extends control
 
         /* Set Custom. */
         foreach(explode(',', $this->config->programplan->custom->customGanttFields) as $field) $customFields[$field] = $this->lang->programplan->ganttCustom[$field];
+        if(empty($this->config->setPercent)) unset($customFields['progress']);
 
         $this->programplanZen->buildAjaxCustomView($owner, $module, $customFields);
     }
