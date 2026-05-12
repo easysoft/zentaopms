@@ -16,19 +16,45 @@ class artifactModel extends model
      * 获取流水线列表。
      * Get pipeline list.
      *
-     * @param  int $space
+     * @param  int $spaceID
      * @param  int $repoID
      * @param  string $type
      * @access public
      * @return array
      */
-    public function getList(int $space = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc'): array
+    public function getList(int $spaceID = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc'): array
     {
+        $this->loadModel('space');
+        if($spaceID && !$this->app->user->admin)
+        {
+            $space = $this->space->getByID($spaceID);
+            if(empty($space->members) || !isset($space->members[$this->app->user->account])) return array();
+        }
+
+        $repos = array();
+        if($type == 'all' && !$this->app->user->admin)
+        {
+            $spaceRepos   = $this->space->getReposBySpace($spaceID);
+            $privateRepos = $this->dao->select('repo')->from(TABLE_DEVOPSREPOUSER)
+                ->where('account')->eq($this->app->user->account)
+                ->fetchPairs();
+            foreach($spaceRepos as $repo)
+            {
+                if($repo->acl == 'open')
+                {
+                    $repos[] = $repo->id;
+                    continue;
+                }
+                if(!isset($privateRepos[$repo->id])) continue;
+                $repos[] = $repo->id;
+            }
+        }
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
             ->beginIF($type != 'all')->andWhere('type')->eq($type)
-            ->andWhere('spaceID')->eq($space)
-            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
+            ->andWhere('spaceID')->eq($spaceID)
+            ->beginIF($repoID && $type != 'all')->andWhere('repoID')->eq($repoID)->fi()
+            ->beginIF($type == 'all' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
     }
