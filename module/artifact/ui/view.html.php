@@ -21,7 +21,7 @@ if(!empty($breadCrumbs))
 {
     foreach($breadCrumbs as $pathName => $pathItems)
     {
-        $breadCrumbsBox[] = span('>', setStyle('margin', '0 5px'));
+        $breadCrumbsBox[] = span('>', setStyle('margin', '5px'));
         $breadCrumbsBox[] = picker
         (
             setClass('picker-btn state'),
@@ -39,28 +39,49 @@ if(!empty($breadCrumbs))
 
 div
 (
-    setClass('surface-light row items-center border py-1.5 pl-1 pr-2'),
-    btn
+    setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
+    div
     (
-        setClass('ghost text-primary square size-md'),
-        set::title('home'),
-        set::icon('home'),
-        set::url($browseLink)
+        setClass('row'),
+        btn
+        (
+            setClass('ghost text-primary square size-md'),
+            set::title('home'),
+            set::icon('home'),
+            set::url($browseLink)
+        ),
+        span('>', setStyle('margin', '5px')),
+        picker
+        (
+            setClass('picker-btn state'),
+            setStyle('box-shadow', 'none'),
+            set::items($artifactList),
+            set::search(false),
+            set::required(true),
+            set::menu(jsRaw('{searchBox: true, search: undefined}')),
+            set::display(jsRaw("(value, selections) => {
+            return {html: `<div>{$lang->artifact->common}: \${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
+            set::value($artifact->id)
+        ),
+        empty($breadCrumbsBox) ? null : $breadCrumbsBox,
     ),
-    span('>', setStyle('margin', '0 5px')),
-    picker
+    div
     (
-        setClass('picker-btn state'),
-        setStyle('box-shadow', 'none'),
-        set::items($artifactList),
-        set::search(false),
-        set::required(true),
-        set::menu(jsRaw('{searchBox: true, search: undefined}')),
-        set::display(jsRaw("(value, selections) => {
-        return {html: `<div>{$lang->artifact->common}: \${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
-        set::value($artifact->id)
-    ),
-    empty($breadCrumbsBox) ? null : $breadCrumbsBox
+        btn
+        (
+            set
+            (
+                array
+                (
+                    'class'       => 'primary',
+                    'icon'        => 'plus',
+                    'data-toggle' => 'modal',
+                    'url'         => helper::createLink('artifact', 'uploadArtifact', "artifactID={$artifact->id}&path={$selectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"),
+                    'text'        => $lang->artifact->uploadArtifact
+                )
+            )
+        )
+    )
 );
 
 div
