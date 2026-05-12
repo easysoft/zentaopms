@@ -167,6 +167,8 @@ $lang->execution->stageFrozenTip     = 'After the stage are baselined, %s is not
 $lang->execution->createChildStage   = 'create child stage';
 $lang->execution->ganttDrag          = 'Drag';
 $lang->execution->frozenTip          = 'Stage %s has been frozen and will not be editable.';
+$lang->execution->createTaskTip1     = 'Tasks cannot be created for a parent story.';
+$lang->execution->createTaskTip2     = 'Tasks can only be created for active development stories.';
 
 $lang->execution->start    = 'Démarrer';
 $lang->execution->activate = 'Activer';
