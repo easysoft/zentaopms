@@ -5,7 +5,7 @@ $lang->artifact->edit           = 'Edit Artifact Repository';
 $lang->artifact->delete         = 'Delete Artifact Repository';
 $lang->artifact->repoBrowser    = 'Repository Content';
 $lang->artifact->createDir      = 'Add Directory';
-$lang->artifact->upLoadArtifact = 'Upload Artifact';
+$lang->artifact->uploadArtifact = 'Upload Artifact';
 $lang->artifact->addSubDir      = 'Add Sub Directory';
 $lang->artifact->addSiblingDir  = 'Add Sibling Directory';
 
