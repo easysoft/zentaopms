@@ -36,12 +36,13 @@ class holidayModel extends model
      */
     public function getList(string $year = '', string $type = 'all'): array
     {
+        $nextYear = $year + 1;
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('1=1')
             ->beginIf(!empty($year))
             ->andWhere('year', true)->eq($year)
-            ->orWhere("DATE_FORMAT(`begin`, 'YYYY')")->eq($year)
-            ->orWhere("DATE_FORMAT(`end`, 'YYYY')")->eq($year)
+            ->orWhere("(`begin` >= '{$year}-01-01' AND `begin` < '{$nextYear}-01-01')")
+            ->orWhere("(`end` >= '{$year}-01-01' AND `end` < '{$nextYear}-01-01')")
             ->markright(1)
             ->fi()
             ->beginIf($type != 'all' && $type)->andWhere('type')->eq($type)->fi()
@@ -455,6 +456,7 @@ class holidayModel extends model
                 $holiday = new stdClass();
                 $holiday->type  = $day->isOffDay ? 'holiday' : 'working';
                 $holiday->name  = $day->name . zget($this->lang->holiday->typeList, $holiday->type);
+                $holiday->year  = substr($day->date, 0, 4);
                 $holiday->begin = $day->date;
                 $holiday->end   = '';
                 $holidays[] = $holiday;

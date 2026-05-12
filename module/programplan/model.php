@@ -1038,6 +1038,7 @@ class programplanModel extends model
 
         /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
         if($type == 'execution') return $ganttVersions;
+        if($type == 'project' && $category != 'gantt') return $ganttVersions;
 
         $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
