@@ -1957,10 +1957,7 @@ class docModel extends model
             if(isset($doc->content) && empty($doc->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
         }
 
-        if($doc->type == 'url')
-        {
-            if(!$this->validateDocUrl($doc)) return false;
-        }
+        if($doc->type == 'url' && !$this->validateDocUrl($doc)) return false;
 
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
         if(dao::isError()) return false;
