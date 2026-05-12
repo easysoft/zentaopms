@@ -206,8 +206,8 @@ if(!$config->inQuickon && !$config->inCompose)
     $lang->repo->scmList['Subversion'] = 'Subversion';
 }
 
-$lang->repo->aclList['open']    = 'Open(Space members can access it)';
-$lang->repo->aclList['private'] = 'Private(Only repository members can access it)';
+$lang->repo->aclList['open']    = 'Open (Anyone with access to the space the repository belongs to can access the repository and its artifact)';
+$lang->repo->aclList['private'] = 'Private (Only repository members can access the repository and its artifact)';
 
 $lang->repo->showAclList['open']    = 'Open';
 $lang->repo->showAclList['private'] = 'Private';
