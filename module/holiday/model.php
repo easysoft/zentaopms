@@ -36,7 +36,7 @@ class holidayModel extends model
      */
     public function getList(string $year = '', string $type = 'all'): array
     {
-        $nextYear = $year + 1;
+        $nextYear = (int)$year + 1;
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('1=1')
             ->beginIf(!empty($year))
