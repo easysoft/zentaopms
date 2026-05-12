@@ -14,21 +14,29 @@ $confirmTip   = !empty($unclosedTasks) ? sprintf($this->lang->execution->confirm
 $confirmURL   = $this->createLink('execution', 'close', "executionID={$executionID}&from={$from}");
 $beforeSubmit = jsRaw("() =>
 {
+    if(window.confirmShown) return true;
+    window.confirmShown = true;
+
     let realBegan = '{$execution->realBegan}';
     let realEnd   = $('[name=realEnd]').val();
     let today     = zui.formatDate(zui.createDate(), 'yyyy-MM-dd');
     if(realBegan >= realEnd || realEnd > today) return true;
 
-    zui.Modal.confirm('{$confirmTip}').then((res) =>
+    return zui.Modal.confirm('{$confirmTip}').then((res) =>
     {
         if(res)
         {
             const formData = new FormData($('#zin_execution_close_{$executionID}_form')[0]);
             $.ajaxSubmit({url: '{$confirmURL}', data: formData});
         }
+        if(!res) window.confirmShown = false;
+        return res;
     });
-    return false;
 }");
+
+$ajaxOptions = array();
+if(!empty($unclosedTasks)) $ajaxOptions['beforeSubmit'] = $beforeSubmit;
+$ajaxOptions['onValidateField'] = jsRaw('showErrorTip');
 
 $space = common::checkNotCN() ? ' ' : '';
 modalHeader(set::title($lang->execution->close . $space . $lang->executionCommon));
@@ -36,7 +44,7 @@ formPanel
 (
     set::formID('zin_execution_close_' . $executionID . '_form'),
     set::submitBtnText($lang->execution->close . $space . $lang->executionCommon),
-    !empty($unclosedTasks) ? set::ajax(array('beforeSubmit' => $beforeSubmit)) : null,
+    set::ajax($ajaxOptions),
     formGroup
     (
         set::width('1/2'),

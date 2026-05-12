@@ -23,6 +23,8 @@ jsVar('deliverableLang', $lang->admin->setModule->deliverable);
 jsVar('cmLang', $lang->admin->setModule->cm);
 jsVar('openDependFeature', $lang->admin->notice->openDependFeature);
 jsVar('closeDependFeature', $lang->admin->notice->closeDependFeature);
+jsVar('processLang', $lang->admin->setModule->process);
+jsVar('auditplanLang', $lang->admin->setModule->auditplan);
 
 if(strpos(",$disabledFeatures,", ",productUR,") !== false) $disabledFeatures .= ',productER';
 if($config->systemMode != 'ALM' && $config->systemMode != 'PLM') $disabledFeatures .= ',otherProgram';

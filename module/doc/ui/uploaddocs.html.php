@@ -28,7 +28,7 @@ formPanel
             on::change('loadExecutions'),
             set::required(true)
         ),
-        $app->tab == 'doc' ? formGroup
+        formGroup
         (
             set::width('1/2'),
             setClass('executionBox'),
@@ -38,7 +38,7 @@ formPanel
             set::value(!empty($doc->execution) ? $doc->execution : 0),
             set::placeholder($lang->doc->placeholder->execution),
             on::change('loadObjectModules')
-        ) : null
+        )
     ) : null,
     $objectType == 'execution' ? formGroup
     (

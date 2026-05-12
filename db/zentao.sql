@@ -1703,6 +1703,8 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
+  `submittedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '提交人',
+  `submittedDate` datetime DEFAULT NULL COMMENT '提交时间',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `project` ON `zt_projectdeliverable` (`project`);

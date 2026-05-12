@@ -359,6 +359,22 @@ class executionModel extends model
         $this->updateProducts($executionID, $execution);
         $this->loadModel('programplan')->computeProgress($executionID, 'create');
         $this->loadModel('score')->create('program', 'createguide', $executionID);
+
+        if($execution->type == 'stage')
+        {
+            $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+                ->where('t1.project')->eq($execution->project)
+                ->andWhere('t2.category')->eq('PP')
+                ->fetch('id');
+
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('submittedBy')->eq($this->app->user->account)
+                ->set('submittedDate')->eq(helper::now())
+                ->where('id')->eq($projectDeliverableID)
+                ->exec();
+        }
+
         return $executionID;
     }
 
@@ -2870,27 +2886,30 @@ class executionModel extends model
     {
         if(empty($executionID) || empty($stories)) return false;
 
+        $execution = $this->getByID($executionID);
+        $project   = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
+        $storyList = $this->loadModel('story')->getByList(array_values($stories));
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
         $this->loadModel('action');
         $this->loadModel('kanban');
-        $this->loadModel('story');
         $versions         = $this->story->getVersions($stories);
         $linkedStories    = $this->dao->select('story,`order`')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder        = (int)reset($linkedStories);
-        $storyList        = $this->story->getByList(array_values($stories));
-        $execution        = $this->getByID($executionID);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
 
-        $project = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
+        $hasFrozenStories = $this->loadModel('project')->hasFrozenObject($project->id, 'SRS');
+        if($hasFrozenStories) $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
 
         foreach($stories as $storyID)
         {
             if(isset($linkedStories[$storyID])) continue;
             if(!isset($storyList[$storyID]))    continue;
             if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
+            if($hasFrozenStories && !isset($projectLinkedStories[$storyID])) continue;
 
             $storyID = (int)$storyID;
             $story   = zget($storyList, $storyID, '');
@@ -2922,6 +2941,19 @@ class executionModel extends model
         }
 
         if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID);
+
+        $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($project->id)
+            ->andWhere('t2.category')->eq('SRS')
+            ->fetch('id');
+
+        $this->dao->update(TABLE_PROJECTDELIVERABLE)
+            ->set('submittedBy')->eq($this->app->user->account)
+            ->set('submittedDate')->eq(helper::now())
+            ->where('id')->eq($projectDeliverableID)
+            ->exec();
+
         return true;
     }
 
@@ -2940,9 +2972,10 @@ class executionModel extends model
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : (int)reset($linkedCases);
-        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
+        $cases         = $this->dao->select('id, version, stage')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchAll('id');
         $execution     = $this->getByID($executionID);
-        foreach($cases as $caseID => $version)
+        $caseStages    = '';
+        foreach($cases as $caseID => $case)
         {
             if(isset($linkedCases[$caseID])) continue;
 
@@ -2950,12 +2983,28 @@ class executionModel extends model
             $object->project = $executionID;
             $object->product = $productID;
             $object->case    = $caseID;
-            $object->version = $version;
+            $object->version = $case->version;
             $object->order   = ++ $lastCaseOrder;
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
 
             $action = $execution->type == 'project' ? 'linked2project' : 'linked2execution';
             if($execution->multiple || $execution->type == 'project') $this->action->create('case', $caseID, $action, '', $executionID);
+
+            $caseStages .= $case->stage . ',';
+        }
+
+        $projectDeliverables = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.category')->in($caseStages)
+            ->fetchPairs('id');
+        if(!empty($projectDeliverables))
+        {
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('submittedBy')->eq($this->app->user->account)
+                ->set('submittedDate')->eq(helper::now())
+                ->where('id')->in($projectDeliverables)
+                ->exec();
         }
     }
 
@@ -3018,7 +3067,7 @@ class executionModel extends model
     public function unlinkStory(int $executionID, int $storyID, int $laneID = 0, int $columnID = 0): array|bool
     {
         $storyFrozen = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('frozen');
-        if(!empty($storyFrozen))
+        if(!empty($storyFrozen) && $this->app->tab != 'execution')
         {
             $this->app->loadLang('story');
             dao::$errors[] = sprintf($this->lang->story->frozenTip, $this->lang->story->unlink);

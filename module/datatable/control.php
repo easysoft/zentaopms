@@ -217,9 +217,16 @@ class datatable extends control
             if(!empty($project->isTpl)) unset($cols['deliverable']);
         }
 
-        if($module == 'deliverable')
+        if($module == 'deliverable' || ($module == 'project' && $method == 'deliverable'))
         {
-            $hasProcess = $this->loadModel('workflowgroup')->hasFeature((int)$extra, 'process');
+            $workflowGroup = (int)$extra;
+            if($module == 'project')
+            {
+                $project = $this->datatable->fetchByID($this->session->project, 'project');
+                $workflowGroup = $project->workflowGroup;
+            }
+
+            $hasProcess = $this->loadModel('workflowgroup')->hasFeature($workflowGroup, 'process');
             if(!$hasProcess) unset($cols['activity'], $cols['trimmable'], $cols['trimRule']);
         }
 

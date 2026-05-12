@@ -29,6 +29,10 @@ jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
 jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
+jsVar('createTaskTip1',     $lang->execution->createTaskTip1);
+jsVar('createTaskTip2',     $lang->execution->createTaskTip2);
+jsVar('hasCreateTaskPriv',      hasPriv('task', 'create'));
+jsVar('hasBatchCreateTaskPriv', hasPriv('task', 'batchcreate'));
 
 $isFromDoc = $from === 'doc';
 $isFromAI  = $from === 'ai';
@@ -227,8 +231,8 @@ if(commonModel::isTutorialMode())
     $canlinkPlanStory = false;
 }
 
-$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->story->linkStory) : '');
-$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm', 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->execution->linkStoryByPlan) : '');
+$linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl, 'data-app' => $app->tab);
+$linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
 if(!$isFromDoc && !$isFromAI)
@@ -306,12 +310,10 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             setClass('btn primary'),
             set::icon('link'),
             set::url($linkStoryUrl),
-            set::disabled(!empty($hasFrozenStories)),
-            $hasFrozenStories ? set::hint(sprintf($lang->story->frozenTip, $lang->story->linkStory)) : null,
             setData('app', $app->tab),
             $lang->story->linkStory
         ),
-        $hasFrozenStories ? null : dropdown
+        dropdown
         (
             btn(setClass('btn primary dropdown-toggle'),
             setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
@@ -319,8 +321,8 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn' . ($hasFrozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary' . ($hasFrozenStories ? ' disabled' : ''), 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
 if(!$isFromDoc && !$isFromAI) sidebar
@@ -422,7 +424,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = empty($hasFrozenStories) && ($execution->hasProduct || $app->tab == 'execution') && common::hasPriv('execution', 'batchUnlinkStory');
+$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
@@ -577,8 +579,8 @@ if($config->edition == 'ipd')
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules ?? array(), 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $execution, 'actionMenus' => $actionMenus, 'branches' => $branchPairs);
 foreach($stories as $story)
 {
-    $story->moduleID = $story->module;
-    $story->from     = 'execution';
+    $story->moduleID  = $story->module;
+    $story->from      = 'execution';
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
     if(!isset($story->children)) continue;
 }

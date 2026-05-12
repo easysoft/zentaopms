@@ -952,7 +952,7 @@ class storyTao extends storyModel
      * @access protected
      * @return void
      */
-    protected function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
+    public function linkToExecutionForCreate(int $executionID, int $storyID, object $story, string $extra = ''): void
     {
         if(empty($executionID) || empty($storyID)) return;
 
@@ -2085,7 +2085,7 @@ class storyTao extends storyModel
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
 
         $canBatchCreateStory = (common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild)) || common::isTutorialMode();
-        if(!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow)
+        if($this->app->tab != 'execution' && (!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow))
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
             if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($story->id)->fetch('id');
@@ -2192,9 +2192,12 @@ class storyTao extends storyModel
                     }
                 }
 
-                if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
-                $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
-                $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled || !empty($story->frozen), 'hint' => !empty($story->frozen) ? sprintf($this->lang->story->frozenTip, $this->lang->story->unlink) : $unlinkHint);
+                if($this->app->tab != 'execution')
+                {
+                    if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
+                    $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
+                    $actions[] = array('name' => 'unlink', 'className' => 'ajax-submit', 'data-confirm' => $unlinkStoryTip, 'url' => $canUnlinkStory ? $unlinkStoryLink : null, 'disabled' => $disabled || (!empty($story->frozen) && $this->app->tab != 'execution'), 'hint' => !empty($story->frozen) ? sprintf($this->lang->story->frozenTip, $this->lang->story->unlink) : $unlinkHint);
+                }
             }
         }
 
