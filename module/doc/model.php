@@ -800,23 +800,7 @@ class docModel extends model
             ->orderBy('`order` asc, id_asc')
             ->fetchAll('id', false);
 
-        $docs = arrayUnion($docs, $rootDocs);
-        $docs = $this->docTao->filterDeletedDocs($docs);
-        $docs = $this->filterPrivDocs($docs, $spaceType);
-        $docs = $this->processCollector($docs);
-
-        foreach($docs as &$doc)
-        {
-            $doc->lib         = (int)$doc->lib;
-            $doc->module      = (int)$doc->module;
-            $doc->deleted     = boolval($doc->deleted);
-            $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-            $doc->title       = htmlspecialchars_decode($doc->title);
-            if(!empty($doc->keywords) && is_string($doc->keywords)) $doc->keywords = htmlspecialchars_decode($doc->keywords);
-            $doc->hasContent = !empty($doc->content) ? true : false;
-            unset($doc->content);
-            unset($doc->draft);
-        }
+        $docs = $this->processDocList($docs, $rootDocs, $spaceType);
 
         $apis = $this->loadModel('api')->getApiListBySearch(0, 0, '', $libs);
         foreach($apis as &$api)
@@ -862,6 +846,33 @@ class docModel extends model
         $docs     = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, null, true);
         $rootDocs = $this->buildDocQuery($libs, $queryTemplate, $excludeID, $filterType, $searchCond, null, false);
 
+        $docs = $this->processDocList($docs, $rootDocs, $spaceType);
+
+        if($pager)
+        {
+            $recTotal = $this->getDocCountWithPager($libs, $filterType, $search, $searchType);
+            $pager->recTotal  = $recTotal;
+            $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
+
+            $offset = ($pager->page - 1) * $pager->recPerPage;
+            $docs   = array_slice($docs, $offset, $pager->recPerPage, true);
+        }
+
+        return $docs;
+    }
+
+    /**
+     * 处理文档列表数据。
+     * Process doc list data.
+     *
+     * @param  array  $docs
+     * @param  array  $rootDocs
+     * @param  string $spaceType
+     * @access private
+     * @return array
+     */
+    private function processDocList(array $docs, array $rootDocs, string $spaceType): array
+    {
         $docs = arrayUnion($docs, $rootDocs);
         $docs = $this->docTao->filterDeletedDocs($docs);
         $docs = $this->filterPrivDocs($docs, $spaceType);
@@ -880,16 +891,6 @@ class docModel extends model
 
             unset($doc->content);
             unset($doc->draft);
-        }
-
-        if($pager)
-        {
-            $recTotal = $this->getDocCountWithPager($libs, $filterType, $search, $searchType);
-            $pager->recTotal  = $recTotal;
-            $pager->pageTotal = ceil($recTotal / $pager->recPerPage);
-
-            $offset = ($pager->page - 1) * $pager->recPerPage;
-            $docs   = array_slice($docs, $offset, $pager->recPerPage, true);
         }
 
         return $docs;
@@ -1157,6 +1158,37 @@ class docModel extends model
      * @access public
      * @return array
      */
+    /**
+     * 追加文档过滤条件。
+     * Append doc filters.
+     *
+     * @param  object $dao
+     * @param  string $browseType
+     * @param  string $queryString
+     * @param  string $filterType
+     * @param  array  $hasPrivDocIdList
+     * @param  string $filterDocs
+     * @param  string $appendDocs
+     * @param  string $orderBy
+     * @access private
+     * @return object
+     */
+    private function appendDocFilters(object $dao, string $browseType, string $queryString, string $filterType, array $hasPrivDocIdList, string $filterDocs, string $appendDocs, string $orderBy): object
+    {
+        $dao->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
+            ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($queryString)->fi()
+            ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
+            ->beginIF($browseType == 'bykeyword' && $queryString)->andWhere('t1.title')->like("%$queryString%")->fi()
+            ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
+            ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
+            ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
+            ->orderBy($orderBy);
+        return $dao;
+    }
+
     public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = '', string $filterType = ''): array
     {
         if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
@@ -1172,7 +1204,7 @@ class docModel extends model
                 ->groupBy('doc')
                 ->get();
 
-            $docs = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
+            $dao = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
@@ -1183,25 +1215,15 @@ class docModel extends model
                 ->andWhere('t2.id')->subIn($docSQL)
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t3.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t3.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi()
-                ->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-                ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
-                ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
-                ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
-                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
-                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
-                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
-                ->orderBy($orderBy)
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t3.type')->ne('custom')->fi();
+            $docs = $this->appendDocFilters($dao, $browseType, $query, $filterType, $hasPrivDocIdList, $filterDocs, $appendDocs, $orderBy)
                 ->page($pager, 't1.id')
                 ->fetchAll('id', false);
         }
         else
         {
             $docIdList = $type == 'editedby' ? $this->docTao->getEditedDocIdList() : array();
-            $docs = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.templateType')->eq('')
@@ -1211,18 +1233,8 @@ class docModel extends model
                 ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
-                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi()
-                ->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
-                ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
-                ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
-                ->beginIF($browseType == 'bykeyword' && $query)->andWhere('t1.title')->like("%$query%")->fi()
-                ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
-                ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
-                ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
-                ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
-                ->orderBy($orderBy)
+                ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi();
+            $docs = $this->appendDocFilters($dao, $browseType, $query, $filterType, $hasPrivDocIdList, $filterDocs, $appendDocs, $orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);
         }
@@ -1764,6 +1776,31 @@ class docModel extends model
     }
 
     /**
+     * 验证文档URL。
+     * Validate doc URL.
+     *
+     * @param  object $doc
+     * @access private
+     * @return bool
+     */
+    private function validateDocUrl(object $doc): bool
+    {
+        if(empty($doc->content))
+        {
+            dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
+            return false;
+        }
+        if(!preg_match($this->config->doc->urlValidator, $doc->content))
+        {
+            dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
+            return false;
+        }
+
+        $doc->content = htmlspecialchars_decode($doc->content);
+        return true;
+    }
+
+    /**
      * 创建一个文档。
      * Create a doc.
      *
@@ -1809,16 +1846,7 @@ class docModel extends model
 
         if($doc->type == 'url')
         {
-            if(empty($doc->content))
-            {
-                return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
-            }
-            if(!preg_match($this->config->doc->urlValidator, $doc->content))
-            {
-                return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
-            }
-
-            $doc->content        = htmlspecialchars_decode($doc->content);
+            if(!$this->validateDocUrl($doc)) return false;
             $docContent->content = $doc->content;
         }
 
@@ -1931,16 +1959,7 @@ class docModel extends model
 
         if($doc->type == 'url')
         {
-            if(empty($doc->content))
-            {
-                return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->docUrl);
-            }
-            if(!preg_match($this->config->doc->urlValidator, $doc->content))
-            {
-                return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
-            }
-
-            $doc->content = htmlspecialchars_decode($doc->content);
+            if(!$this->validateDocUrl($doc)) return false;
         }
 
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
