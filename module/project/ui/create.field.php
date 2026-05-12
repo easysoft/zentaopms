@@ -68,8 +68,3 @@ $storyType = in_array($model, array('waterfall', 'waterfallplus', 'ipd')) ? 'sto
 if($copyProject) $storyType = data('copyProject.storyType');
 $fields->field('taskDateLimit')->width('full')->foldable()->value($copyProject ? data('copyProject.taskDateLimit') : 'auto');
 $fields->field('storyType')->width('full')->foldable()->value($storyType);
-
-if(in_array($model, array('waterfall', 'waterfallplus', 'ipd')))
-{
-    $fields->field('syncStory')->control('radioList')->foldable()->items($lang->project->syncStoryList)->value($copyProject ? data('copyProject.syncStory') : 1)->width('full');
-}

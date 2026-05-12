@@ -960,28 +960,10 @@ class storyTao extends storyModel
         if(in_array($this->config->systemMode, array('ALM', 'PLM')) && $this->session->project && $executionID != $this->session->project) $this->linkStory((int)$this->session->project, $story->product, $storyID);
 
         $this->loadModel('action');
-        $extra     = $this->parseExtra($extra);
-        $object    = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
-        $storyType = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('type');
+        $extra  = $this->parseExtra($extra);
+        $object = $this->dao->findById($executionID)->from(TABLE_PROJECT)->fetch();
         if($object->type == 'project')
         {
-            if(!empty($object->syncStory))
-            {
-                $projectStages = $this->dao->select('t1.id, t1.attribute')->from(TABLE_PROJECT)->alias('t1')
-                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
-                    ->where('t1.project')->eq($object->id)
-                    ->andWhere('t1.type')->eq('stage')
-                    ->andWhere('t1.attribute')->ne('review')
-                    ->andWhere('t2.product')->eq($story->product)
-                    ->fetchPairs('id');
-                foreach($projectStages as $stageID => $stageAttribute)
-                {
-                    if(!in_array($stageAttribute, array('mix', 'request', 'design')) && $storyType != 'story') continue;
-
-                    $this->linkStory($stageID, $story->product, $storyID);
-                    $this->action->create('story', $storyID, 'linked2execution', '', (string)$stageID);
-                }
-            }
             $this->action->create('story', $storyID, 'linked2project', '', $object->id);
             return;
         }
@@ -2103,8 +2085,7 @@ class storyTao extends storyModel
         $shadow = $this->dao->findByID($story->product)->from(TABLE_PRODUCT)->fetch('shadow');
 
         $canBatchCreateStory = (common::hasPriv($story->type, 'batchcreate') && $this->isClickable($story, 'batchcreate', $taskGroups, $caseGroups) && $story->grade < $maxGradeGroup[$story->type] && empty($story->hasOtherTypeChild)) || common::isTutorialMode();
-        $canShowBatchCreate  = $this->app->tab != 'execution' || empty($story->syncStory);
-        if($canShowBatchCreate && (!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow))
+        if($this->app->tab != 'execution' && (!($this->app->rawModule == 'projectstory' && $this->app->rawMethod == 'story') || $this->config->vision == 'lite' || $shadow))
         {
             if($shadow and empty($taskGroups[$story->id])) $taskGroups[$story->id] = $this->dao->select('id')->from(TABLE_TASK)->where('story')->eq($story->id)->fetch('id');
             if(empty($caseGroups[$story->id])) $caseGroups[$story->id] = $this->dao->select('id')->from(TABLE_CASE)->where('story')->eq($story->id)->fetch('id');
@@ -2178,7 +2159,7 @@ class storyTao extends storyModel
                         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($execution->id)->andWhere('type')->ne('project')->fetchAll('id');
                         $executionStories[$execution->id] = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('project')->in(array_keys($executions))->fetchPairs('story', 'story');
                     }
-                    if(empty($story->syncStory) && isset($executionStories[$execution->id][$story->id]))
+                    if(isset($executionStories[$execution->id][$story->id]))
                     {
                         $disabled   = true;
                         $unlinkHint = $this->lang->execution->notAllowedUnlinkStory;
@@ -2211,7 +2192,7 @@ class storyTao extends storyModel
                     }
                 }
 
-                if(empty($story->syncStory) || $this->app->tab != 'execution')
+                if($this->app->tab != 'execution')
                 {
                     if($story->type == 'requirement') $unlinkStoryTip = str_replace($this->lang->SRCommon, $this->lang->URCommon, $unlinkStoryTip);
                     $unlinkStoryTip = json_encode(array('message' => array('html' => "<i class='icon icon-exclamation-sign text-warning text-lg mr-2'></i>{$unlinkStoryTip}")));
