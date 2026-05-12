@@ -1266,6 +1266,30 @@ class projectModel extends model
     {
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
 
+        /* 检查产品名是否重复，如果重复则不创建项目。 Check product name is duplicated, if duplicated, do not create project. */
+        $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
+        $needCreateProduct   = (!$project->hasProduct || isset($postData->rawdata->newProduct) || empty($linkedProductsCount)) && empty($project->isTpl);
+        if($needCreateProduct)
+        {
+            $this->app->loadLang('product');
+            $productName = $project->hasProduct && !empty($postData->rawdata->productName) ? $postData->rawdata->productName : zget($project, 'name', '');
+            if(empty($productName))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->product->name);
+                return false;
+            }
+            else
+            {
+                $programID        = $project->parent ? current(array_filter(explode(',', zget($program, 'path', '')))) : 0;
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($productName)->andWhere('program')->eq($programID)->fetch('name');
+                if(!empty($existProductName))
+                {
+                    dao::$errors['name'] = sprintf($this->lang->error->repeat, $this->lang->product->name, $existProductName);
+                    return false;
+                }
+            }
+        }
+
         $this->projectTao->doCreate($project);
         if(dao::isError()) return false;
 
@@ -1279,14 +1303,7 @@ class projectModel extends model
         $this->addTeamMembers($projectID, $project, array($project->openedBy));
         if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->projectTao->createMilestoneReport($projectID);
 
-        if($project->hasProduct && empty($postData->rawdata->newProduct))
-        {
-            $this->updateProducts($projectID);
-            /* If $_POST has product name, create it. */
-            $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
-        }
-
-        $needCreateProduct = (!$project->hasProduct || isset($postData->rawdata->newProduct) || empty($linkedProductsCount)) && empty($project->isTpl);
+        if($project->hasProduct && empty($postData->rawdata->newProduct)) $this->updateProducts($projectID);
         if($needCreateProduct && !$this->projectTao->createProduct($projectID, $project, $postData, $program)) return false;
 
         /* Save order. */

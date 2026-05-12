@@ -394,12 +394,11 @@ class transferModel extends model
     public function initRequired(string $module, string $field)
     {
         if(!$field) return false;
-        $this->commonActions($module);
 
         /* 检查必填字段中是否存在该字段，如果存在返回yes，否则返回no。 */
         /* Check whether the required field contains the field. If yes, return true. Otherwise, return false. */
-        if(empty($this->moduleConfig->create->requiredFields)) return false;
-        $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
+        if(empty($this->config->{$module}->create->requiredFields)) return false;
+        $requiredFields = "," . $this->config->{$module}->create->requiredFields . ",";
         if(strpos($requiredFields, $field) !== false) return true;
 
         return false;
