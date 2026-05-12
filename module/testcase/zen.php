@@ -48,7 +48,6 @@ class testcaseZen extends testcase
     {
         $productChanged = $this->cookie->preProductID != $productID;
         $branchChanged  = $this->cookie->preBranch != $branch;
-
         if($productChanged || $branchChanged || $browseType == 'bysearch')
         {
             $_COOKIE['caseModule'] = 0;
