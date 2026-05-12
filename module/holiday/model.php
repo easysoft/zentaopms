@@ -168,8 +168,8 @@ class holidayModel extends model
     public function getWorkingDays(string $begin = '', string $end = ''): array
     {
         $records = $this->dao->select('*')->from(TABLE_HOLIDAY)->where('type')->eq('working')
-            ->andWhere('begin')->le($end)
-            ->andWhere('end')->ge($begin)
+            ->beginIF($end)->andWhere('begin')->le($end)->fi()
+            ->beginIF($begin)->andWhere('end')->ge($begin)->fi()
             ->fetchAll('id');
 
         $workingDays = array();
