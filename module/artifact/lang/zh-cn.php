@@ -8,6 +8,10 @@ $lang->artifact->createDir      = '添加目录';
 $lang->artifact->uploadArtifact = '上传制品';
 $lang->artifact->addSubDir      = '添加子目录';
 $lang->artifact->addSiblingDir  = '添加同级目录';
+$lang->artifact->editDir        = '编辑目录';
+$lang->artifact->deleteDir      = '删除目录';
+$lang->artifact->editArtifact   = '修改制品信息';
+$lang->artifact->deleteArtifact = '删除制品';
 
 $lang->artifact->name          = '名称';
 $lang->artifact->path          = '当前路径';

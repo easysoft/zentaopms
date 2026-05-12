@@ -8,6 +8,10 @@ $lang->artifact->createDir      = 'Add Directory';
 $lang->artifact->uploadArtifact = 'Upload Artifact';
 $lang->artifact->addSubDir      = 'Add Sub Directory';
 $lang->artifact->addSiblingDir  = 'Add Sibling Directory';
+$lang->artifact->editDir        = 'Edit Directory';
+$lang->artifact->deleteDir      = 'Delete Directory';
+$lang->artifact->editArtifact   = 'Edit Artifact';
+$lang->artifact->deleteArtifact = 'Delete Artifact';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->path          = 'Current Path';
