@@ -46,17 +46,17 @@ class testcaseZen extends testcase
      */
     protected function setBrowseCookie(int $productID, string|bool $branch, string $browseType = '', string $param = ''): void
     {
-        helper::setcookie('preProductID', $productID);
-        helper::setcookie('preBranch', $branch);
-
         $productChanged = $this->cookie->preProductID != $productID;
         $branchChanged  = $this->cookie->preBranch != $branch;
+
         if($productChanged || $branchChanged || $browseType == 'bysearch')
         {
             $_COOKIE['caseModule'] = 0;
             helper::setcookie('caseModule', '0');
         }
 
+        helper::setcookie('preProductID', $productID);
+        helper::setcookie('preBranch', $branch);
         if($browseType == 'bymodule') helper::setcookie('caseModule', $param);
         if($browseType == 'bysuite')  helper::setcookie('caseSuite', $param);
     }
