@@ -532,6 +532,7 @@ class executionModel extends model
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->user->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? (int)$execution->project : (int)$oldExecution->project;
+            if(isset($execution->schedule)) $execution->schedule = htmlspecialchars_decode($execution->schedule);
 
             if(isset($execution->project))
             {
