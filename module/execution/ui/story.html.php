@@ -235,7 +235,7 @@ $linkItem     = array('text' => $lang->story->linkStory, 'url' => $linkStoryUrl,
 $linkPlanItem = array('text' => $lang->execution->linkStoryByPlan, 'url' => '#linkStoryByPlan', 'data-toggle' => 'modal', 'data-size' => 'sm');
 
 $createBtnGroup = null;
-if(!$isFromDoc && !$isFromAI && empty($project->syncStory))
+if(!$isFromDoc && !$isFromAI)
 {
     if($canOpreate['create'])
     {
@@ -304,7 +304,7 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
 
     $createBtnGroup,
 
-    $canLinkStory && $canlinkPlanStory && empty($project->syncStory) ? btngroup
+    $canLinkStory && $canlinkPlanStory ? btngroup
     (
         btn(
             setClass('btn primary'),
@@ -321,8 +321,8 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             set::placement('bottom-end')
         )
     ) : null,
-    $canLinkStory && !$canlinkPlanStory && empty($project->syncStory) ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
-    $canlinkPlanStory && !$canLinkStory && empty($project->syncStory) ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
+    $canLinkStory && !$canlinkPlanStory ? item(set($linkItem + array('class' => 'btn primary link-story-btn', 'icon' => 'link'))) : null,
+    $canlinkPlanStory && !$canLinkStory ? item(set($linkPlanItem + array('class' => 'btn primary', 'icon' => 'link'))) : null
 );
 
 if(!$isFromDoc && !$isFromAI) sidebar
@@ -424,7 +424,7 @@ $checkObject->execution = $execution->id;
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
-$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution') && empty($project->syncStory);
+$canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
 $canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
@@ -581,7 +581,6 @@ foreach($stories as $story)
 {
     $story->moduleID  = $story->module;
     $story->from      = 'execution';
-    $story->syncStory = $project->syncStory;
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
     if(!isset($story->children)) continue;
 }
@@ -624,7 +623,7 @@ dtable
     ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
-    ($isFromDoc || $isFromAI || $hasFrozenStories || !empty($project->syncStory)) ? null : set::createLink($createStoryLink)
+    ($isFromDoc || $isFromAI || $hasFrozenStories) ? null : set::createLink($createStoryLink)
 );
 
 render();

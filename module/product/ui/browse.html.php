@@ -293,7 +293,6 @@ foreach($stories as $story)
 {
     $story->rawModule = $story->module;
     $story->from      = $app->tab;
-    $story->syncStory = $project->syncStory ?? 0;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }

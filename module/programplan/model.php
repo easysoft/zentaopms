@@ -463,12 +463,6 @@ class programplanModel extends model
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
 
-        if(!empty($project->syncStory))
-        {
-            $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->fetchPairs('story');
-            $this->loadModel('execution')->linkStory($projectID, $projectLinkedStories);
-        }
-
         if($addNewStage)
         {
             $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')

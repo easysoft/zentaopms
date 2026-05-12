@@ -1572,7 +1572,6 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `output` text DEFAULT NULL,
   `auth` varchar(30) NOT NULL DEFAULT '',
   `storyType` varchar(30) NOT NULL DEFAULT 'story',
-  `syncStory` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '阶段需求设置，0阶段手动关联需求，1自动同步项目需求',
   `parent` int unsigned NOT NULL DEFAULT 0,
   `path` varchar(255) NOT NULL DEFAULT '',
   `grade` tinyint unsigned NOT NULL DEFAULT 0,

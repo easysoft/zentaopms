@@ -239,7 +239,6 @@ $lang->project->linkType           = '关联类型';
 $lang->project->colWidth           = '列宽';
 $lang->project->minColWidth        = '最小列宽';
 $lang->project->maxColWidth        = '最大列宽';
-$lang->project->syncStory          = '阶段需求设置';
 
 /* Project Category. */
 $lang->project->projectTypeList = array();
@@ -544,7 +543,3 @@ $lang->project->disabledHint->linkedStory             = "{$lang->projectCommon}�
 $lang->project->disabledHint->createdStage            = "该{$lang->productCommon}已经创建了阶段，如需解除与{$lang->projectCommon}的关联，请删除已创建的阶段后再操作。";
 $lang->project->disabledHint->linkedStoryAndStage     = "该{$lang->productCommon}已经创建了阶段并关联了{$lang->SRCommon}，如需解除与{$lang->projectCommon}的关联，请先解除{$lang->SRCommon}的关联关系，然后删除已创建的阶段后再操作。";
 $lang->project->disabledHint->linkedStoryAndExecution = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到了{$lang->projectCommon}和{$lang->execution->common}中，请先解除{$lang->SRCommon}与{$lang->projectCommon}和{$lang->execution->common}的关联后再操作。";
-
-$lang->project->syncStoryList = array();
-$lang->project->syncStoryList[1] = '自动同步项目需求（阶段下的需求和项目需求完全一致）';
-$lang->project->syncStoryList[0] = '阶段手动关联需求（每个阶段手动进行需求的关联，可以与项目不一致）';

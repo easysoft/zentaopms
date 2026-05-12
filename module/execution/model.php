@@ -373,12 +373,6 @@ class executionModel extends model
                 ->set('submittedDate')->eq(helper::now())
                 ->where('id')->eq($projectDeliverableID)
                 ->exec();
-
-            if(!empty($project->syncStory))
-            {
-                $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
-                $this->linkStory($project->id, $projectLinkedStories);
-            }
         }
 
         return $executionID;
@@ -2896,19 +2890,6 @@ class executionModel extends model
         $project   = $execution->type == 'project' ? $execution : $this->loadModel('project')->getByID($execution->project);
         $storyList = $this->loadModel('story')->getByList(array_values($stories));
 
-        if($execution->type == 'project' && !empty($project->syncStory))
-        {
-            $projectStages = $this->dao->select('id,attribute')->from(TABLE_PROJECT)
-                ->where('project')->eq($project->id)
-                ->andWhere('type')->eq('stage')
-                ->andWhere('attribute')->ne('review')
-                ->fetchPairs('id');
-            foreach($projectStages as $stageID => $stageAttribute)
-            {
-                $this->linkStory($stageID, $stories, $extra, $lanes, $storyType);
-            }
-        }
-
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -2919,7 +2900,6 @@ class executionModel extends model
         $lastOrder        = (int)reset($linkedStories);
         $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,reviewing,closed';
         $laneID           = isset($output['laneID']) ? $output['laneID'] : 0;
-        $linkedPorducts   = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->fetchPairs();
 
         $hasFrozenStories = $this->loadModel('project')->hasFrozenObject($project->id, 'SRS');
         if($hasFrozenStories) $projectLinkedStories = $this->dao->select('story')->from(TABLE_PROJECTSTORY)->where('project')->eq($project->id)->fetchPairs('story');
@@ -2928,14 +2908,13 @@ class executionModel extends model
         {
             if(isset($linkedStories[$storyID])) continue;
             if(!isset($storyList[$storyID]))    continue;
-            if(empty($project->syncStory) && strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
+            if(strpos($notAllowedStatus, (string)$storyList[$storyID]->status) !== false) continue;
             if($hasFrozenStories && !isset($projectLinkedStories[$storyID])) continue;
 
             $storyID = (int)$storyID;
             $story   = zget($storyList, $storyID, '');
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false && $this->config->vision == 'rnd') continue;
-            if(!isset($linkedPorducts[$story->product])) continue;
 
             if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
@@ -3100,9 +3079,7 @@ class executionModel extends model
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-            if(!empty($executionStories) && empty($execution->syncStory)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
-
-            foreach($executionStories as $linkedStory) $this->unlinkStory($linkedStory->project, $linkedStory->story);
+            if(!empty($executionStories)) return dao::$errors[] = $this->lang->execution->notAllowedUnlinkStory;
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->exec();
 
