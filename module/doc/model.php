@@ -1817,6 +1817,9 @@ class docModel extends model
             {
                 return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
             }
+
+            $doc->content        = htmlspecialchars_decode($doc->content);
+            $docContent->content = $doc->content;
         }
 
         $checkContent = strpos(",$requiredFields,", ',content,') !== false;
@@ -1936,6 +1939,8 @@ class docModel extends model
             {
                 return dao::$errors['content'] = sprintf($this->lang->error->URL, $this->lang->doc->docUrl);
             }
+
+            $doc->content = htmlspecialchars_decode($doc->content);
         }
 
         $files = $this->loadModel('file')->saveUpload('doc', $docID);
