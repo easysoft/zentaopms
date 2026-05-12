@@ -1265,6 +1265,7 @@ class projectModel extends model
     public function create(object $project, object $postData): int|bool
     {
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
+        $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
 
         /* 检查产品名是否重复，如果重复则不创建项目。 Check product name is duplicated, if duplicated, do not create project. */
         $linkedProductsCount = $this->projectTao->getLinkedProductsCount($project, $postData->rawdata);
@@ -1298,7 +1299,6 @@ class projectModel extends model
         $whitelist = explode(',', $project->whitelist);
         $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
 
-        $program = $project->parent ? $this->getByID((int)$project->parent) : new stdclass();
         $this->projectTao->createDocLib($projectID, $project, $program);
         $this->addTeamMembers($projectID, $project, array($project->openedBy));
         if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->projectTao->createMilestoneReport($projectID);
