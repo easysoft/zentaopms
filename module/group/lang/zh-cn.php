@@ -680,8 +680,13 @@ $lang->group->package->reviewCodeIssue       = '评审问题';
 $lang->group->package->browseSystem          = '查看应用';
 $lang->group->package->browseDeploy          = '查看部署环境';
 $lang->group->package->artifactrepo          = '制品库';
-$lang->group->package->browseArtifactrepo    = '浏览制品库';
 $lang->group->package->manageArtifactrepo    = '创建维护制品库';
 $lang->group->package->deleteArtifactrepo    = '删除制品库';
+$lang->group->package->manageArtifactDir     = '创建维护目录';
+$lang->group->package->deleteArtifactDir     = '删除目录';
+$lang->group->package->uploadArtifact        = '上传制品';
+$lang->group->package->deleteArtifact        = '删除制品';
+$lang->group->package->manageArtifact        = '维护制品';
+
 
 include (dirname(__FILE__) . '/resource.php');

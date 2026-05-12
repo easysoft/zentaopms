@@ -250,6 +250,18 @@ class artifact extends control
     }
 
     /**
+     * 编辑制品库目录。
+     * Edit artifact repo directory.
+     *
+     * @access public
+     * @return void
+     */
+    public function editDir()
+    {
+        $this->display();
+    }
+
+    /**
      * 获取目录树.
      * Get directory tree.
      *

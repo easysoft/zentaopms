@@ -1449,10 +1449,15 @@ $lang->resource->repo->editComment   = 'editComment';
 $lang->resource->repo->deleteComment = 'deleteComment';
 
 $lang->resource->artifact = new stdclass();
-$lang->resource->artifact->browse = 'browse';
-$lang->resource->artifact->create = 'create';
-$lang->resource->artifact->edit   = 'edit';
-$lang->resource->artifact->delete = 'delete';
+$lang->resource->artifact->create         = 'create';
+$lang->resource->artifact->edit           = 'edit';
+$lang->resource->artifact->delete         = 'delete';
+$lang->resource->artifact->createDir      = 'createDir';
+$lang->resource->artifact->editDir        = 'editDir';
+$lang->resource->artifact->deleteDir      = 'deleteDir';
+$lang->resource->artifact->uploadArtifact = 'uploadArtifact';
+$lang->resource->artifact->editArtifact   = 'editArtifact';
+$lang->resource->artifact->deleteArtifact = 'deleteArtifact';
 
 $lang->resource->repobranchrule = new stdclass();
 $lang->resource->repobranchrule->setBranchRule = 'setBranchRule';
