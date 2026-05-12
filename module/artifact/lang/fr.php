@@ -1,10 +1,13 @@
 <?php
-$lang->artifact->browse      = 'Repo Artifact Repository';
-$lang->artifact->create      = 'Create Artifact Repository';
-$lang->artifact->edit        = 'Edit Artifact Repository';
-$lang->artifact->delete      = 'Delete Artifact Repository';
-$lang->artifact->repoBrowser = 'Repository Content';
-$lang->artifact->createDir   = 'Add Directory';
+$lang->artifact->browse         = 'Repo Artifact Repository';
+$lang->artifact->create         = 'Create Artifact Repository';
+$lang->artifact->edit           = 'Edit Artifact Repository';
+$lang->artifact->delete         = 'Delete Artifact Repository';
+$lang->artifact->repoBrowser    = 'Repository Content';
+$lang->artifact->createDir      = 'Add Directory';
+$lang->artifact->upLoadArtifact = 'Upload Artifact';
+$lang->artifact->addSubDir      = 'Add Sub Directory';
+$lang->artifact->addSiblingDir  = 'Add Sibling Directory';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->path          = 'Current Path';
@@ -31,6 +34,9 @@ $lang->artifact->actionMockTip = 'Mock action: %s';
 $lang->artifact->dirName       = 'Directory Name';
 $lang->artifact->format        = 'Artifact Type';
 $lang->artifact->hasVersion    = 'Need to do version control';
+
+$lang->artifact->nameNotSupportChinese = 'Name only supports English, numbers, underscores (_), dashes (-), and periods (.).';
+$lang->artifact->dirNameFormatError    = 'Directory name only supports Chinese, English, numbers, underscores (_), dashes (-).';
 
 $lang->artifact->okBtn = 'OK';
 

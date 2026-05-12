@@ -1,10 +1,13 @@
 <?php
-$lang->artifact->browse      = '代码库制品库';
-$lang->artifact->create      = '创建制品库';
-$lang->artifact->edit        = '编辑制品库';
-$lang->artifact->delete      = '删除制品库';
-$lang->artifact->repoBrowser = '制品库内容';
-$lang->artifact->createDir   = '添加目录';
+$lang->artifact->browse         = '代码库制品库';
+$lang->artifact->create         = '创建制品库';
+$lang->artifact->edit           = '编辑制品库';
+$lang->artifact->delete         = '删除制品库';
+$lang->artifact->repoBrowser    = '制品库内容';
+$lang->artifact->createDir      = '添加目录';
+$lang->artifact->uploadArtifact = '上传制品';
+$lang->artifact->addSubDir      = '添加子目录';
+$lang->artifact->addSiblingDir  = '添加同级目录';
 
 $lang->artifact->name          = '名称';
 $lang->artifact->path          = '当前路径';
@@ -32,7 +35,8 @@ $lang->artifact->dirName       = '目录名称';
 $lang->artifact->format        = '制品库类型';
 $lang->artifact->hasVersion    = '需要进行版本控制';
 
-$lang->artifact->nameNotSupportChinese = '目录名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
+$lang->artifact->nameNotSupportChinese = '名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
+$lang->artifact->dirNameFormatError    = '目录名称仅支持中文，英文，数字，下划线（_），中横线（-）';
 
 $lang->artifact->okBtn = '确定';
 
