@@ -202,8 +202,8 @@ if(!$config->inQuickon && !$config->inCompose)
     $lang->repo->scmList['Subversion'] = 'Subversion';
 }
 
-$lang->repo->aclList['open']    = '公开 (代码库所属空间内可访问)';
-$lang->repo->aclList['private'] = '私有 (仅代码库成员可访问)';
+$lang->repo->aclList['open']    = '公开 (拥有代码库所属空间访问权限，即可访问该代码库和代码库下制品库)';
+$lang->repo->aclList['private'] = '私有 (仅代码库成员可访问该代码库和代码库下制品库)';
 
 $lang->repo->showAclList['open']    = '公开';
 $lang->repo->showAclList['private'] = '私有';
