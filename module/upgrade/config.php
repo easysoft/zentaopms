@@ -1778,6 +1778,15 @@ $config->delete['22_0'][] = 'module/common/view/sparkline.html.php';
 $config->delete['22_0'][] = 'module/common/view/sortable.html.php';
 $config->delete['22_0'][] = 'module/common/view/treetable.html.php';
 $config->delete['22_0'][] = 'module/common/view/kindeditor.html.php';
+$config->delete['22_0'][] = 'module/common/view/datatable.fix.html.php';
+$config->delete['22_0'][] = 'module/common/view/datatable.html.php';
+$config->delete['22_0'][] = 'module/datatable/view/ajaxcustom.html.php';
+$config->delete['22_0'][] = 'module/datatable/view/ajaxoldcustom.html.php';
+$config->delete['22_0'][] = 'module/product/view/ajaxgetdropmenu.html.php';
+$config->delete['22_0'][] = 'module/product/view/ajaxgetolddropmenu.html.php';
+$config->delete['22_0'][] = 'module/product/view/dashboard.html.php';
+$config->delete['22_0'][] = 'module/project/view/ajaxgetdropmenu.html.php';
+$config->delete['22_0'][] = 'module/project/view/ajaxgetolddropmenu.html.php';
 
 $config->delete['22_0'][] = 'extension/lite/project/ext/view/execution.html.php';
 $config->delete['22_0'][] = 'extension/lite/task/ext/view/create.html.php';
