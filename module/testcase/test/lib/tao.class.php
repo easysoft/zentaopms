@@ -1073,9 +1073,9 @@ class testcaseTaoTest extends baseTest
      */
     public function updateStepTest(int $caseID, object $case): bool|array
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        $oldCase = $this->instance->getByID($caseID);
 
-        $this->objectModel->updateStep($case, $oldCase);
+        $this->instance->updateStep($case, $oldCase);
         if(dao::isError()) return false;
 
         global $tester;

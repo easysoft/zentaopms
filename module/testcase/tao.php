@@ -488,7 +488,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return bool
      */
-    protected function updateStep(object $case, object $oldCase): bool
+    public function updateStep(object $case, object $oldCase): bool
     {
         if($oldCase->lib && empty($oldCase->product))
         {

@@ -4,7 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
+zenData('case')->gen(10);
 zenData('casestep')->gen(10);
+zenData('story')->gen(10);
 
 /**
 
@@ -40,12 +42,14 @@ $caseIdList = array(1, 2, 3);
 $case1 = new stdclass();
 $case1->version = 2;
 $case1->steps   = array();
+$case1->id      = 1;
 
 $case2 = new stdclass();
 $case2->version  = 3;
 $case2->steps    = array('1' => 'step1Updated', '2' => 'step2Updated', '3' => 'step3Updated');
 $case2->expects  = array('1' => 'expect1Updated', '2' => 'expect2Updated', '3' => 'expect3Updated');
 $case2->stepType = array('1' => 'step', '2' => 'step', '3' => 'step');
+$case2->id       = 1;
 
 $testcase = new testcaseTaoTest();
 

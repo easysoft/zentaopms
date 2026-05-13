@@ -237,7 +237,7 @@ class testcaseModel extends model
         $case->currentVersion = $version ? $version : $case->version;
         $case->files          = $this->loadModel('file')->getByObject('testcase', $caseID);
 
-        $case->steps = $this->testcaseTao->getSteps($caseID, $case->currentVersion);
+        $case->steps = $this->getSteps($caseID, $case->currentVersion);
 
         $spec = $this->dao->select('title,precondition,files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($version)->fetch();
         if($spec)
