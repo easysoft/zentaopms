@@ -2544,6 +2544,10 @@ $config->delete['22_0'][] = 'extension/ipd/effort/js/common.js';
 $config->delete['22_0'][] = 'extension/ipd/effort/js/createforobject.js';
 $config->delete['22_0'][] = 'extension/ipd/effort/js/edit.js';
 $config->delete['22_0'][] = 'extension/ipd/effort/view/';
+$config->delete['22_0'][] = 'extension/ipd/user/ext/ui/todo.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/ipd/user/ext/view/effort.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/ipd/user/ext/view/effortcalendar.html.php';
+$config->delete['22_0'][] = 'extension/ipd/user/ext/view/todo.calendar.html.php';
 
 $config->delete['22_0'][] = 'extension/max/assetlib/view/';
 $config->delete['22_0'][] = 'extension/max/story/ext/control/submit.php';
@@ -2824,6 +2828,10 @@ $config->delete['22_0'][] = 'extension/max/effort/js/common.js';
 $config->delete['22_0'][] = 'extension/max/effort/js/createforobject.js';
 $config->delete['22_0'][] = 'extension/max/effort/js/edit.js';
 $config->delete['22_0'][] = 'extension/max/effort/view/';
+$config->delete['22_0'][] = 'extension/max/user/ext/ui/todo.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/max/user/ext/view/effort.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/max/user/ext/view/effortcalendar.html.php';
+$config->delete['22_0'][] = 'extension/max/user/ext/view/todo.calendar.html.php';
 
 $config->delete['22_0'][] = 'extension/biz/story/ext/view/submit.html.php';
 $config->delete['22_0'][] = 'extension/biz/assetlib/view/';
@@ -3104,6 +3112,10 @@ $config->delete['22_0'][] = 'extension/biz/effort/js/common.js';
 $config->delete['22_0'][] = 'extension/biz/effort/js/createforobject.js';
 $config->delete['22_0'][] = 'extension/biz/effort/js/edit.js';
 $config->delete['22_0'][] = 'extension/biz/effort/view/';
+$config->delete['22_0'][] = 'extension/biz/user/ext/ui/todo.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/biz/user/ext/view/effort.calendar.html.hook.php';
+$config->delete['22_0'][] = 'extension/biz/user/ext/view/effortcalendar.html.php';
+$config->delete['22_0'][] = 'extension/biz/user/ext/view/todo.calendar.html.php';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'holiday', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
