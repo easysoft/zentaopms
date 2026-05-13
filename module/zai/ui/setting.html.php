@@ -41,12 +41,14 @@ else
     $actions[] = 'submit';
     $actions[] = setting()->text($lang->cancel)->url('zai', 'setting')->toArray();
 }
+$actions[] = setting()->text($lang->testConnection)->id('testConnectionBtn')->onClick('startTestConnection()')->toArray();
 
 
 include './sidebar.html.php';
 
 formPanel
 (
+    setID('zaiSettingForm'),
     setCssVar('--zt-panel-form-max-width', '1400px'),
     set::formClass('max-w-lg', $readonly ? 'is-readonly' : ''),
     to::heading
@@ -66,5 +68,6 @@ formPanel
     ),
     set::data($setting),
     set::fields($fields),
-    set::actions($actions)
+    set::actions($actions),
+    to::footer(zui::zaiDoctor(set::_id('zaiDoctor'), set::showIcon(), set::_class('ring surface rounded py-3 px-6 w-full mx-6')))
 );
