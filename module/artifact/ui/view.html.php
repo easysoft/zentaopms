@@ -65,7 +65,7 @@ div
         ),
         empty($breadCrumbsBox) ? null : $breadCrumbsBox,
     ),
-    div
+    empty($node) || $node->type == 'asset' ? null : div
     (
         btn
         (
@@ -86,17 +86,19 @@ div
 
 div
 (
-    setClass('flex min-h-0 flex-1 row items-stretch'),
+    setClass('flex min-h-0 flex-1 row border h-auto items-stretch'),
+    setStyle('min-height', 'calc(100vh - 120px)'),
     sidebar
     (
         set::side('left'),
-        setClass('repo-sidebar canvas h-full min-h-0'),
-        setStyle('height', 'calc(100vh - 120px)'),
+        setClass('repo-sidebar canvas min-h-0 self-stretch'),
+        setStyle('min-height', 'calc(100vh - 120px)'),
         set::width(300),
         set::preserve(false),
         div
         (
-            setClass('p-2 h-full min-h-0'),
+            setID('artifactViewTreeBlock'),
+            setClass('p-2 relative min-h-full'),
             tree
             (
                 setClass('filesTree'),
@@ -108,12 +110,14 @@ div
                 set::hover(true),
                 set::defaultNestedShow($selectNode),
             ),
+            div(setClass('h-12 shrink-0')),
             div
             (
                 setID('artifactViewToolbar'),
-                setClass('mt-auto shrink-0 flex justify-end bottom-0 gap-2 px-3 py-2'),
+                setClass('flex justify-end gap-2 px-3 py-2'),
                 setStyle('position', 'absolute'),
                 setStyle('right', '0'),
+                setStyle('bottom', '0'),
                 //btn
                 //(
                 //    setID('artifactViewToggleAll'),
@@ -122,31 +126,19 @@ div
                 //    set::icon('icon-list-collapse'),
                 //    on::click()->call('window.isExpand', jsRaw('$this'))
                 //),
-                dropdown
+                btn
                 (
-                    set::placement('top-end'),
-                    set::staticMenu(true),
-                    set::hasIcons(true),
-                    set::items
+                    set
                     (
                         array
                         (
-                            array
-                            (
-                                'text'        => $lang->artifact->addDirectory,
-                                'icon'        => 'plus',
-                                'data-toggle' => 'modal',
-                                'url'         => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path=&isSubDir=0&spaceID={$spaceID}&repoID={$repoID}&type={$type}"),
-                            )
+                            'text'        => $lang->artifact->addDirectory,
+                            'class'       => 'ghost',
+                            'icon'        => 'plus',
+                            'data-toggle' => 'modal',
+                            'url'         => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path={$selectPath}&isSubDir=1"),
                         )
                     ),
-                    btn
-                    (
-                        setID('artifactViewSettingsToggle'),
-                        setClass('ghost size-sm'),
-                        set::title($lang->artifact->settings),
-                        set::icon('cog-outline')
-                    )
                 )
             )
         )
@@ -154,8 +146,8 @@ div
     panel
     (
         setID('artifactViewPage'),
-        setClass('h-full w-full min-h-0 flex ml-2'),
-        setStyle('height', 'calc(100vh - 120px)'),
+        setClass('w-full min-h-0 flex ml-2 self-stretch'),
+        setStyle('min-height', 'calc(100vh - 120px)'),
         div
         (
             setID('artifactViewList'),
