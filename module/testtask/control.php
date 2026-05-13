@@ -1268,4 +1268,20 @@ class testtask extends control
         $execution = $this->loadModel('execution')->getByBuild($buildID);
         return print($execution ? $execution->id : 0);
     }
+
+    /**
+     * 忽略用例的更新。
+     * Ignore case changed in testtask.
+     *
+     * @param  int    $caseID
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function ignoreCaseChange(int $caseID, int $taskID)
+    {
+        $testtaskCaseVersion = $this->dao->select('version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->eq($caseID)->fetch('version');
+        $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($testtaskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+    }
 }

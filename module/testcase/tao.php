@@ -497,6 +497,9 @@ class testcaseTao extends testcaseModel
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
         }
 
+        $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($case->id)->andWhere('task')->ne(0)->fetchPairs();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($case->version)->where('id')->in($testtaskCases)->exec();
+
         if($case->steps)
         {
             $this->insertSteps($oldCase->id, $case->steps, $case->expects, (array)$case->stepType, $case->version);

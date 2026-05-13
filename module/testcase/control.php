@@ -1013,7 +1013,11 @@ class testcase extends control
     public function confirmChange(int $caseID, int $taskID = 0, string $from = 'view')
     {
         $case = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
+        $this->dao->update(TABLE_TESTRUN)
+            ->set('version')->eq($case->version)
+            ->where('`case`')->eq($caseID)
+            ->beginIF(!empty($taskID))->andWhere('task')->eq($taskID)->fi()
+            ->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $from == 'view' ? inlink('view', "caseID={$caseID}&version={$case->version}&from=testtask&taskID={$taskID}") : true));
     }
 

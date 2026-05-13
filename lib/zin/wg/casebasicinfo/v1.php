@@ -140,7 +140,8 @@ class caseBasicInfo extends wg
                 set('title', $lang->testcase->fromTesttask),
                 ' (',
                 $lang->testcase->changed,
-                hasPriv('testcase', 'confirmchange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID")), $lang->testcase->sync) : '',
+                hasPriv('testcase', 'confirmchange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID")), $lang->testcase->sync, setData(array('confirm' => sprintf($lang->testtask->caseChangeTip, $case->version)))) : '',
+                hasPriv('testtask', 'ignoreCaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testtask', 'ignoreCaseChange', "caseID={$case->id}&taskID=$taskID")), $lang->testcase->ignore) : '',
                 ')'
             );
         }
