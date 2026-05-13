@@ -1153,6 +1153,8 @@ class commonModel extends model
      */
     public function checkSafeFile()
     {
+        if(PHP_SAPI == 'cli') return false;
+
         if($this->config->inContainer) return false;
 
         if($this->app->hasValidSafeFile()) return false;
