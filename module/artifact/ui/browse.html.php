@@ -9,6 +9,8 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+
+$linkRepoID = empty($repo) ? 0 : $repo->id;
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -16,7 +18,6 @@ if($repoID)
 }
 else
 {
-    $linkRepoID = empty($repo) ? 0 : $repo->id;
     featureBar
     (
         set::current($type),
@@ -44,6 +45,7 @@ if(!empty($artifactList))
 {
     foreach($artifactList as $artifact)
     {
+        $repoName = (!empty($artifact->repoID) && empty($linkRepoID)) ? zget($repoPairs, $artifact->repoID, '') : '';
         $childActions = array
         (
             $canEdit ? array
@@ -90,19 +92,30 @@ if(!empty($artifactList))
                     ),
                     div
                     (
-                        setClass('items-center'),
+                        setClass(!empty($repoName) ? 'items-center pb-6' : 'items-center'),
                         div
                         (
-                            setClass('clip font-bold text-md my-2'),
-                            set::title($artifact->name),
-                            $artifact->name,
-                            $type == 'all' ? label(setClass('ml-2 font-thin secondary-pale rounded'), zget($lang->artifact->typeList, $artifact->type)) : null
+                            setClass('flex flex-wrap items-center gap-2 my-2'),
+                            span
+                            (
+                                setClass('clip font-bold text-md max-w-full'),
+                                set::title($artifact->name),
+                                $artifact->name
+                            ),
+                            label(setClass('size-sm font-normal gray-pale shadow-sm rounded-full flex-none'), $artifact->format)
                         ),
-                    ),
-                    div
-                    (
-                        setClass('flex items-center mb-2'),
-                        p(sprintf($lang->artifact->countArtifact, 1))
+                        !empty($repoName) ? div
+                        (
+                            setClass('absolute bottom-2 right-3'),
+                            label
+                            (
+                                setClass('font-bold rounded text-black flex items-center gap-1 max-w-full'),
+                                set::style(array('background-color' => 'var(--color-primary-100)')),
+                                set::title($repoName),
+                                icon('file-code text-black'),
+                                span(setClass('clip'), $repoName)
+                            )
+                        ) : null
                     )
                 )
             );
