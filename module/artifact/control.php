@@ -52,11 +52,10 @@ class artifact extends control
     {
         $this->commonAction($space, $repoID);
         $repo = $this->loadModel('repo')->fetchByID($repoID);
-        $repoPair = $this->loadModel('repo')->getRepoPairs();
         $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
         $this->view->repo         = $repo;
         $this->view->repoID       = $repoID;
-        $this->view->repoPairs    = $repoPair;
+        $this->view->repoPairs    = $this->repo->getRepoPairs();
         $this->view->type         = $type;
         $this->view->artifactList = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc');
 
