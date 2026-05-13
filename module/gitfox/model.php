@@ -34,7 +34,9 @@ class gitfoxModel extends model
      */
     public function checkHealth(): bool
     {
-        $url = $this->config->devops->gitfoxURL . ':' . $this->config->devops->gitfoxPort;
+        $url = $this->config->devops->gitfoxURL;
+        if($this->config->devops->gitfoxPort) $url .= ':' . $this->config->devops->gitfoxPort;
+
         $url = rtrim($url, '/') . '/public/health';
 
         $result = json_decode(common::http($url));
@@ -53,7 +55,8 @@ class gitfoxModel extends model
         $server = $this->dao->select('*')->from(TABLE_ENTRY)->where('code')->eq('gitfox')->fetch();
         if(empty($server)) return false;
 
-        $server->url   = $this->config->devops->gitfoxURL . ':' . $this->config->devops->gitfoxPort;
+        $server->url   = $this->config->devops->gitfoxURL;
+        if($this->config->devops->gitfoxPort) $server->url .= ':' . $this->config->devops->gitfoxPort;
         $server->token = md5('zentao' . $this->app->user->account . $server->key);
         return $server;
     }
