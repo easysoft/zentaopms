@@ -40,8 +40,8 @@ else
 {
     $actions[] = 'submit';
     $actions[] = setting()->text($lang->cancel)->url('zai', 'setting')->toArray();
+    $actions[] = setting()->text($lang->zai->testConnection)->id('testConnectionBtn')->onClick('startTestConnection()')->toArray();
 }
-$actions[] = setting()->text($lang->testConnection)->id('testConnectionBtn')->onClick('startTestConnection()')->toArray();
 
 
 include './sidebar.html.php';
