@@ -416,7 +416,7 @@ class convert extends control
         $this->loadModel('bug');
         $this->loadModel('task');
         $objectRelation = !empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRelation['zentaoObject']));
-        $resolutionList = $objectRelation ? $this->convert->getJiraData($method, 'resolution')       : array();
+        $resolutionList = $objectRelation ? $this->convert->getJiraData($method, 'resolution') : array();
         $statusList     = $objectRelation ? $this->convert->getJiraStatusList($step) : array();
         $jiraFields     = $objectRelation ? zget($this->convert->getJiraCustomField(), $step, array()) : array();
         $issueTypeList  = $this->convert->getJiraTypeList();
@@ -515,27 +515,32 @@ class convert extends control
      * @param  string $type   user|issue|project|attachment
      * @param  int    $lastID
      * @param  bool   $createTable
+     * @param  bool   $getApiData
      * @access public
      * @return void
      */
-    public function importJira(string $method = 'db', string $mode = 'show', string $type = 'user', int $lastID = 0, bool $createTable = false)
+    public function importJira(string $method = 'db', string $mode = 'show', string $type = 'user', int $lastID = 0, bool $createTable = false, bool $getApiData = false)
     {
         set_time_limit(0);
 
         if($mode == 'import')
         {
-            $result = $this->convert->importJiraData($type, $lastID, $createTable);
+            $result = $this->convert->importJiraData($type, $lastID, $createTable, $getApiData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($result['finished'])) return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+            if(!empty($result['finished']))
+            {
+                if($getApiData) return $this->send(array('result' => 'unfinished', 'type' => 'user', 'count' => 0, 'message' => $this->lang->convert->jira->getDataSuccess, 'next' => inlink('importJira', "method={$method}&mode={$mode}&type=user&lastID=0&createTable=false&getApiData=false")));
+                return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+            }
 
             $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
 
             $response['result']  = 'unfinished';
-            $response['type']    = $type;
-            $response['count']   = $result['count'];
-            $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
-            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}");
+            $response['type']    = ($getApiData ? 'get' : '') . $type;
+            $response['count']   = !empty($result['count']) ? $result['count'] : 0;
+            $response['message'] = sprintf($getApiData ? $this->lang->convert->jira->getDataResult : $this->lang->convert->jira->importResult, $type, $response['type'], $result['count']);
+            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}&createTable=false&getApiData={$getApiData}");
             return $this->send($response);
         }
 
