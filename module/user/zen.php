@@ -141,7 +141,7 @@ class userZen extends user
 
         if($methodName != 'story')
         {
-            if($moduleName == 'user' && in_array($methodName, array('todocalendar', 'effortcalendar')))
+            if($moduleName == 'user' && in_array($methodName, array('todocalendar', 'effortcalendar', 'effort')))
             {
                 $featureBarMenus['todo']['active'] = true;
             }
