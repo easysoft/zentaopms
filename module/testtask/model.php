@@ -1010,7 +1010,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select("t2.*, t1.*, IF(t1.caseVersion = 0, t2.version, t1.caseVersion) AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')

@@ -15,6 +15,7 @@ $app->loadLang('zanode');
 jsVar('automation',     !empty($automation) ? $automation->id : 0);
 jsVar('runCaseConfirm', $lang->zanode->runCaseConfirm);
 jsVar('canImportToLib', helper::hasFeature('caselib'));
+jsVar('caseChangeTip', $lang->testtask->caseChangeTip);
 
 $canCreateSuite = hasPriv('testsuite', 'create') && helper::hasFeature('testsuite');
 $canGroupCase   = hasPriv('testtask', 'groupcase');

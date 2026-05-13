@@ -167,6 +167,7 @@ $lang->testtask->cannotBeParsed    = '导入的XML文件内容格式错误，无
 $lang->testtask->finishedDateLess  = '实际完成日期不能小于开始日期%s';
 $lang->testtask->finishedDateMore  = '实际完成日期不能大于今天';
 $lang->testtask->emptyUnitTip      = '暂时没有单元测试结果。';
+$lang->testtask->caseChangeTip     = '该用例的内容将被同步更新为用例列表中该用例 #%s 版本的内容，是否继续？';
 
 $lang->testtask->assignedToMe  = '指派给我';
 $lang->testtask->allCases      = '全部用例';

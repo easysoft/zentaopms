@@ -167,6 +167,7 @@ $lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in
 $lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
 $lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
 $lang->testtask->emptyUnitTip      = 'No unit test results.';
+$lang->testtask->caseChangeTip     = 'The content of this test case will be synchronized to version #%s in the test case list. Do you want to continue?';
 
 $lang->testtask->assignedToMe  = 'Affecté à Moi';
 $lang->testtask->allCases      = 'Tous les CasTests';

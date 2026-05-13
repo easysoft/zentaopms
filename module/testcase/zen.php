@@ -1190,6 +1190,7 @@ class testcaseZen extends testcase
             $case->lastRunResult = $run->lastRunResult;
             $case->caseStatus    = $case->status;
             $case->status        = $run->status;
+            $case->version       = $run->caseVersion ?: $case->version;
 
             $results = $this->testtask->getResults($run->id);
             $result  = array_shift($results);
