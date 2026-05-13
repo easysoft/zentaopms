@@ -2335,6 +2335,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
+  `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
