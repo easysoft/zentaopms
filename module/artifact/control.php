@@ -89,13 +89,15 @@ class artifact extends control
             $selectNode->$path = true;
         }
 
-        $repo = $this->loadModel('repo')->fetchByID($repoID);
+        $repo      = $this->loadModel('repo')->fetchByID($repoID);
         $artifacts = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $spaceID, $repoID, $type, 'createdDate_asc');
+
         $artifactList = array();
         foreach($artifacts as $artifactRepo)
         {
             $artifactList[] = array('text' => $artifactRepo->name, 'value' => $artifactRepo->id, 'keys' => $artifactRepo->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifactRepo->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
         }
+        $node = $this->artifactZen->getNodeByPath($artifact, $selectPath);
 
         $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact     = $artifact;
@@ -110,6 +112,8 @@ class artifact extends control
         $this->view->breadCrumbs  = $breadCrumbs;
         $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
         $this->view->isExpand     = $isExpand;
+        $this->view->assetList    = $this->artifact->getAssetListByNodeID(empty($node) ? 0 : $node->id);
+        $this->view->node         = $node;
 
         $this->display();
     }
@@ -230,9 +234,9 @@ class artifact extends control
             if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->dirNameFormatError));
             if($path)
             {
-                $path = str_replace('/', '.', $path);
-                $formData->name = ltrim($path . '.' . $formData->name, '.');
+                $formData->name = ltrim($path . '.' . $formData->name, '/');
             }
+            if(empty($path) && $isSubDir) $formData->name = '/' . $formData->name;
             $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
             if(dao::isError()) $this->sendError(dao::getError());
 

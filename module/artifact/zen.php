@@ -87,7 +87,7 @@ class artifactZen extends artifact
                 $baseSelectPath = helper::safe64Encode($selectPath);
                 $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
             }
-            $item->actions = $this->buildTreeAction($item);
+            $item->actions = $node->metadata->type == 'asset' ? array() : $this->buildTreeAction($item);
             $items[] = $item;
         }
 
@@ -122,5 +122,40 @@ class artifactZen extends artifact
         );
 
         return $actions;
+    }
+
+    /**
+     * 通过路径获取节点。
+     * Get node by path.
+     *
+     * @param  object $artifact
+     * @param  string $path
+     *
+     * @access public
+     * @return object|array
+     */
+    public function getNodeByPath(object $artifact, string $path): object|array
+    {
+        if(empty($path)) return array();
+
+        $parentPath = dirname($path);
+        if(empty($parentPath)) return array();
+
+        $nodes = $this->artifact->getArtifactNodes($artifact, $parentPath);
+        if(empty($nodes)) return array();
+
+        foreach($nodes as $node)
+        {
+            if($node->path == $path)
+            {
+                $node->id      = $node->metadata->id;
+                $node->type    = $node->metadata->type;
+                $node->nodeID  = isset($node->metadata->nodeId) ? $node->metadata->nodeId : 0;
+                $node->entryID = isset($node->metadata->entryId) ? $node->metadata->entryId : 0;
+                return $node;
+            }
+        }
+
+        return array();
     }
 }
