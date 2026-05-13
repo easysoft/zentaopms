@@ -7,6 +7,7 @@ $lang->zai->token      = 'Clé Application';
 $lang->zai->adminToken = 'Clé Admin';
 $lang->zai->addSetting = 'Ajouter Configuration ZAI';
 
+$lang->zai->testConnection           = 'Tester la connexion';
 $lang->zai->configurationUnavailable = 'Configuration ZAI non disponible.';
 $lang->zai->illegalZentaoUser        = 'Utilisateur Zentao illégal !';
 $lang->zai->onlyPostRequest          = 'Cette opération ne prend en charge que les requêtes POST.';

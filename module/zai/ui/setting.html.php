@@ -41,7 +41,7 @@ else
     $actions[] = 'submit';
     $actions[] = setting()->text($lang->cancel)->url('zai', 'setting')->toArray();
 }
-$actions[] = setting()->text('测试连接')->id('testConnectionBtn')->onClick('startTestConnection()')->toArray();
+$actions[] = setting()->text($lang->testConnection)->id('testConnectionBtn')->onClick('startTestConnection()')->toArray();
 
 
 include './sidebar.html.php';
