@@ -16,11 +16,11 @@ cid=19055
 
 - 测试更新步骤的版本号
  - 第0条的version属性 @2
- - 第0条的desc属性 @~~
+ - 第0条的desc属性 @用例步骤描述1
  - 第0条的type属性 @step
 - 测试更新新的步骤
  - 第0条的version属性 @3
- - 第0条的desc属性 @~~
+ - 第0条的desc属性 @step3Updated
  - 第0条的type属性 @step
 
 */
@@ -53,5 +53,5 @@ $case2->id       = 1;
 
 $testcase = new testcaseTaoTest();
 
-r($testcase->updateStepTest($caseIdList[0], $case1)) && p('0:version;0:desc;0:type') && e('2;~~;step'); // 测试更新步骤的版本号
-r($testcase->updateStepTest($caseIdList[0], $case2)) && p('0:version;0:desc;0:type') && e('3;~~;step'); // 测试更新新的步骤
+r($testcase->updateStepTest($caseIdList[0], $case1)) && p('1:version,desc,type') && e('2,用例步骤描述1,step'); // 测试更新步骤的版本号
+r($testcase->updateStepTest($caseIdList[0], $case2)) && p('1:version,desc,type') && e('3,step3Updated,step');  // 测试更新新的步骤

@@ -1078,8 +1078,7 @@ class testcaseTaoTest extends baseTest
         $this->instance->updateStep($case, $oldCase);
         if(dao::isError()) return false;
 
-        global $tester;
-        return $tester->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetchAll();
+        return $this->instance->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->fetchAll('case', false);
     }
 
     /**
