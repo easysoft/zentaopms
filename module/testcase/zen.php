@@ -1175,10 +1175,11 @@ class testcaseZen extends testcase
      * @param  object    $case
      * @param  string    $from
      * @param  int       $taskID
+     * @param  int       $suiteID
      * @access protected
      * @return void
      */
-    protected function assignCaseForView(object $case, string $from, int $taskID)
+    protected function assignCaseForView(object $case, string $from, int $taskID, int $suiteID = 0)
     {
         $case = $this->loadModel('story')->checkNeedConfirm($case);
         if($from == 'testtask')
@@ -1190,6 +1191,7 @@ class testcaseZen extends testcase
             $case->lastRunResult = $run->lastRunResult;
             $case->caseStatus    = $case->status;
             $case->status        = $run->status;
+            $case->version       = $run->caseVersion ?: $case->version;
 
             $results = $this->testtask->getResults($run->id);
             $result  = array_shift($results);
@@ -1199,6 +1201,13 @@ class testcaseZen extends testcase
                 $case->duration = $result->duration;
             }
         }
+
+        if($from == 'testsuite')
+        {
+            $suiteCaseVersion = $this->dao->select('caseVersion')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->fetch('caseVersion');
+            $case->version    = $suiteCaseVersion ?: $case->version;
+        }
+
         $case = $this->testcase->appendCaseFails($case, $from, $taskID);
         $case = $this->processStepsForMindMap($case);
 
@@ -1216,6 +1225,7 @@ class testcaseZen extends testcase
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList('case', $case->id);
         $this->view->scenes     = $sceneOptionMenu;
+        $this->view->suiteID    = $suiteID;
     }
 
     /**

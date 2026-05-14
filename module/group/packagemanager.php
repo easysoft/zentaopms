@@ -1846,11 +1846,12 @@ $config->group->package->browseTesttask = new stdclass();
 $config->group->package->browseTesttask->order  = 5;
 $config->group->package->browseTesttask->subset = 'testtask';
 $config->group->package->browseTesttask->privs  = array();
-$config->group->package->browseTesttask->privs['testtask-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('qa-index'), 'recommend' => array());
-$config->group->package->browseTesttask->privs['testtask-view']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
-$config->group->package->browseTesttask->privs['testtask-cases']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array('testtask-groupCase', 'testtask-report'));
-$config->group->package->browseTesttask->privs['testtask-groupCase'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testtask-cases'), 'recommend' => array());
-$config->group->package->browseTesttask->privs['testtask-report']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 90, 'depend' => array('testtask-cases'), 'recommend' => array());
+$config->group->package->browseTesttask->privs['testtask-browse']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('qa-index'), 'recommend' => array());
+$config->group->package->browseTesttask->privs['testtask-view']             = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array(), 'recommend' => array());
+$config->group->package->browseTesttask->privs['testtask-cases']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array(), 'recommend' => array('testtask-groupCase', 'testtask-report'));
+$config->group->package->browseTesttask->privs['testtask-groupCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('testtask-cases'), 'recommend' => array());
+$config->group->package->browseTesttask->privs['testtask-ignoreCaseChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('testcase-view'),  'recommend' => array());
+$config->group->package->browseTesttask->privs['testtask-report']           = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 90, 'depend' => array('testtask-cases'), 'recommend' => array());
 
 $config->group->package->manageTesttask = new stdclass();
 $config->group->package->manageTesttask->order  = 10;
@@ -1902,6 +1903,7 @@ $config->group->package->manageTestsuite->privs['testsuite-linkCase']          =
 $config->group->package->manageTestsuite->privs['testsuite-unlinkCase']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 40, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-linkCase'));
 $config->group->package->manageTestsuite->privs['testsuite-batchUnlinkCases']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 45, 'depend' => array('testsuite-view'), 'recommend' => array('testsuite-unlinkCase'));
 $config->group->package->manageTestsuite->privs['testsuite-confirmCaseChange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 50, 'depend' => array('testsuite-view'));
+$config->group->package->manageTestsuite->privs['testsuite-ignoreCaseChange']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 55, 'depend' => array('testcase-view'));
 
 $config->group->package->deleteTestsuite = new stdclass();
 $config->group->package->deleteTestsuite->order  = 15;

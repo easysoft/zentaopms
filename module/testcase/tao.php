@@ -488,7 +488,7 @@ class testcaseTao extends testcaseModel
      * @access protected
      * @return bool
      */
-    protected function updateStep(object $case, object $oldCase): bool
+    public function updateStep(object $case, object $oldCase): bool
     {
         if($oldCase->lib && empty($oldCase->product))
         {
@@ -496,6 +496,12 @@ class testcaseTao extends testcaseModel
             $fromcaseVersion = (int)$fromcaseVersion + 1;
             $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($case->id)->exec();
         }
+
+        $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($case->id)->andWhere('task')->ne(0)->fetchPairs();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($case->version)->where('id')->in($testtaskCases)->exec();
+
+        $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($case->id)->andWhere('suite')->ne(0)->fetchPairs();
+        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($case->version)->where('id')->in($testsuiteCases)->exec();
 
         if($case->steps)
         {

@@ -549,7 +549,7 @@ class testcase extends control
 
         if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
 
-        $this->testcaseZen->assignCaseForView($case, $from, $taskID);
+        $this->testcaseZen->assignCaseForView($case, $from, $taskID, $suiteID);
 
         $isLibCase = $case->lib && empty($case->product);
         /* 如果用例是在用例库内，指定相关变量。 */
@@ -582,7 +582,6 @@ class testcase extends control
             $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $case->branch, '');
         }
 
-        $this->view->suiteID   = $suiteID;
         $this->view->testcase  = $case;
         $this->view->stepsType = $stepsType;
         $this->view->version   = $version ? $version : $case->version;
@@ -1013,7 +1012,11 @@ class testcase extends control
     public function confirmChange(int $caseID, int $taskID = 0, string $from = 'view')
     {
         $case = $this->testcase->getById($caseID);
-        $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
+        $this->dao->update(TABLE_TESTRUN)
+            ->set('version')->eq($case->version)
+            ->where('`case`')->eq($caseID)
+            ->beginIF(!empty($taskID))->andWhere('task')->eq($taskID)->fi()
+            ->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $from == 'view' ? inlink('view', "caseID={$caseID}&version={$case->version}&from=testtask&taskID={$taskID}") : true));
     }
 
@@ -1084,6 +1087,12 @@ class testcase extends control
             $file->pathname = $newFileName;
             $this->dao->insert(TABLE_FILE)->data($file)->exec();
         }
+
+        $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->ne(0)->fetchPairs();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($version)->where('id')->in($testtaskCases)->exec();
+
+        $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($caseID)->andWhere('suite')->ne(0)->fetchPairs();
+        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($version)->where('id')->in($testsuiteCases)->exec();
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
