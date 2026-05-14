@@ -37,6 +37,7 @@ if(!empty($breadCrumbs))
     }
 }
 
+$data = initTableData($assetList, $config->artifact->dtable->fieldList);
 div
 (
     setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
@@ -74,7 +75,7 @@ div
                 array
                 (
                     'class'       => 'primary',
-                    'icon'        => 'plus',
+                    'icon'        => 'export',
                     'data-toggle' => 'modal',
                     'url'         => helper::createLink('artifact', 'uploadArtifact', "artifactID={$artifact->id}&path={$selectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"),
                     'text'        => $lang->artifact->uploadArtifact
@@ -146,11 +147,15 @@ div
     panel
     (
         setID('artifactViewPage'),
-        setClass('w-full min-h-0 flex ml-2 self-stretch'),
+        setClass('flex-1 min-w-0 min-h-0 flex flex-col overflow-hidden ml-2 self-stretch'),
         setStyle('min-height', 'calc(100vh - 120px)'),
-        div
+        set::bodyClass('w-full'),
+        dtable
         (
-            setID('artifactViewList'),
+            setID('artifactAssetsTable'),
+            set::cols($config->artifact->dtable->fieldList),
+            set::data($data),
+            set::emptyTip(empty($node) || !empty($node->type) && $node->type == 'asset' ? $lang->artifact->notice->emptyFolder : $lang->noData)
         )
     )
 );
