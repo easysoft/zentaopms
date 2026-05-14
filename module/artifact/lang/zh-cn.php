@@ -41,6 +41,8 @@ $lang->artifact->hasVersion    = '需要进行版本控制';
 $lang->artifact->checkValue    = '校验值';
 $lang->artifact->okBtn         = '确定';
 $lang->artifact->history       = '记录';
+$lang->artifact->artifactRepo  = '制品库';
+$lang->artifact->parent        = '所属上级';
 
 $lang->artifact->countArtifact = '共%s个制品';
 
@@ -65,7 +67,7 @@ $lang->artifact->typeList['repo']  = '代码库';
 $lang->artifact->typeList['space'] = '空间';
 
 $lang->artifact->formatList = array();
-$lang->artifact->formatList['file']      = '通用文件仓库';
+$lang->artifact->formatList['generic']   = '通用文件仓库';
 $lang->artifact->formatList['container'] = '镜像仓库';
 $lang->artifact->formatList['helm']      = 'Helm仓库';
 $lang->artifact->formatList['maven']     = 'Maven仓库';
