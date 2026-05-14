@@ -14090,7 +14090,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `status` char(30) NOT NULL DEFAULT '',
   `resolution` varchar(30) NOT NULL DEFAULT '',
   `resolutionBy` varchar(30) NOT NULL DEFAULT '',
-  `resolutionDate` DATE NULL,
+  `resolutionDate` datetime NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
