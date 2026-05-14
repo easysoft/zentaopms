@@ -721,7 +721,9 @@ class transferModel extends model
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : '') . ($orderBy ? " ORDER BY $orderBy" : ''));
+            $checkedItem = $checkedItem ? $checkedItem : '0';
+            if(strpos($queryCondition, 'GROUP BY') === false) $queryCondition .= ($this->post->exportType == 'selected' ? " AND $selectKey IN($checkedItem)" : '');
+            $stmt = $this->dbh->query($queryCondition . ($orderBy ? " ORDER BY $orderBy" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;
