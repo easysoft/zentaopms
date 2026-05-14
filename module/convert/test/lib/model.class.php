@@ -837,7 +837,7 @@ class convertModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function importJiraDataTest($type = '', $lastID = 0, $createTable = false)
+    public function importJiraDataTest($type = '', $lastID = 0, $createTable = 0)
     {
         try {
             $result = $this->instance->importJiraData($type, $lastID, $createTable);
