@@ -153,12 +153,13 @@ class caseBasicInfo extends wg
                 set('title', $lang->testcase->fromTestsuite),
                 ' (',
                 $lang->testcase->changed,
-                hasPriv('testsuite', 'confirmCaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testsuite', 'confirmCaseChange', "caseID=$case->id&suiteID=$suiteID&from=view")), $lang->testcase->sync) : '',
+                hasPriv('testsuite', 'confirmCaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testsuite', 'confirmCaseChange', "caseID=$case->id&suiteID=$suiteID&from=view")), $lang->testcase->sync, setData(array('confirm' => sprintf($lang->testtask->caseChangeTip, $case->version)))) : '',
+                hasPriv('testsuite', 'ignoreCaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testsuite', 'ignoreCaseChange', "caseID={$case->id}&suiteID=$suiteID")), $lang->testcase->ignore) : '',
                 ')'
             );
         }
 
-        if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $from != 'testtask' && !empty($case->product))
+        if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $from != 'testtask' && $from != 'testsuite' && !empty($case->product))
         {
             $status[] = span
             (

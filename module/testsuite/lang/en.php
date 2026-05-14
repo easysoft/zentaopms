@@ -22,6 +22,7 @@ $lang->testsuite->batchUnlinkCases  = "Batch Unlink Cases";
 $lang->testsuite->deleted           = 'Deleted';
 $lang->testsuite->successSaved      = 'Saved';
 $lang->testsuite->confirmCaseChange = 'Confirm Case Change';
+$lang->testsuite->ignoreCaseChange  = 'Ignore Case Change';
 
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->pri            = 'Priority';

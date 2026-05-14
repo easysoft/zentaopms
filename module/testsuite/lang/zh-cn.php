@@ -22,6 +22,7 @@ $lang->testsuite->batchUnlinkCases  = "批量移除用例";
 $lang->testsuite->deleted           = '已删除';
 $lang->testsuite->successSaved      = '保存成功';
 $lang->testsuite->confirmCaseChange = '确认用例变动';
+$lang->testsuite->ignoreCaseChange  = '忽略用例变动';
 
 $lang->testsuite->id             = '编号';
 $lang->testsuite->pri            = '优先级';

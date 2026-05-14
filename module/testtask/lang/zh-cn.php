@@ -58,14 +58,15 @@ $lang->testtask->compile          = '构建';
 $lang->testtask->duration         = '持续时间';
 $lang->testtask->myInvolved       = '由我参与';
 
-$lang->testtask->viewAction     = "测试单概况";
-$lang->testtask->casesAction    = '浏览用例列表';
-$lang->testtask->activateAction = "激活测试单";
-$lang->testtask->blockAction    = "阻塞测试单";
-$lang->testtask->closeAction    = "关闭测试单";
-$lang->testtask->startAction    = "开始测试单";
-$lang->testtask->resultsAction  = "用例结果";
-$lang->testtask->reportAction   = '用例报表统计';
+$lang->testtask->viewAction       = "测试单概况";
+$lang->testtask->casesAction      = '浏览用例列表';
+$lang->testtask->activateAction   = "激活测试单";
+$lang->testtask->blockAction      = "阻塞测试单";
+$lang->testtask->closeAction      = "关闭测试单";
+$lang->testtask->startAction      = "开始测试单";
+$lang->testtask->resultsAction    = "用例结果";
+$lang->testtask->reportAction     = '用例报表统计';
+$lang->testtask->ignoreCaseChange = '忽略用例变动';
 
 $lang->testtask->id                = '编号';
 $lang->testtask->common            = '测试单';

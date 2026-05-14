@@ -10,7 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('testtask');
+
 data('testsuite', $suite);
+jsVar('caseChangeTip', $lang->testtask->caseChangeTip);
 $config->testsuite->actionList['edit']['text'] = $config->testsuite->actionList['edit']['hint'] = $lang->edit;
 $config->testsuite->actionList['delete']['text'] = $config->testsuite->actionList['delete']['hint'] = $lang->delete;
 $actions = $this->loadModel('common')->buildOperateMenu($suite);
@@ -68,7 +71,7 @@ $config->testsuite->testcase->dtable->fieldList['status']['statusMap']['changed'
 
 foreach($cases as $case)
 {
-    if($case->version > $case->caseVersion) $case->status = 'changed';
+    if($case->version < $case->caseVersion) $case->status = 'changed';
 }
 
 $tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList);
@@ -85,7 +88,8 @@ detailBody
             set::orderBy($orderBy),
             set::sortLink(createLink('testsuite', 'view', "suiteID={$suite->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footToolbar($footToolbar),
-            set::footPager(usePager('pager'))
+            set::footPager(usePager('pager')),
+            set::onRenderCell(jsRaw('window.onRenderCell'))
         )
     ),
     history
