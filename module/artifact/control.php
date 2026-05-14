@@ -112,7 +112,7 @@ class artifact extends control
         $this->view->breadCrumbs  = $breadCrumbs;
         $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
         $this->view->isExpand     = $isExpand;
-        $this->view->assetList    = $this->artifact->getAssetListByNodeID(empty($node) ? 0 : $node->id);
+        $this->view->assetList    = $this->artifact->getAssetListByNodeID(empty($node) ? 0 : $node->id, $artifactID);
         $this->view->node         = $node;
 
         $this->display();
@@ -144,7 +144,7 @@ class artifact extends control
                 ->get();
             if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
-                return $this->sendError(array('name' => $this->lang->artifact->nameNotSupportChinese));
+                return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
 
             $id = $this->artifact->create($formData, $type);
@@ -179,7 +179,7 @@ class artifact extends control
 
             if(in_array($artifact->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
-                return $this->sendError(array('name' => $this->lang->artifact->nameNotSupportChinese));
+                return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
 
             $this->artifact->update($id, $formData);
@@ -231,7 +231,7 @@ class artifact extends control
             $base64Path = $path ? helper::safe64Encode($path) : '';
 
             $formData = form::data($this->config->artifact->form->createDir)->get();
-            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->dirNameFormatError));
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
             if($path)
             {
                 $formData->name = ltrim($path . '.' . $formData->name, '/');
@@ -240,7 +240,7 @@ class artifact extends control
             $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
             if(dao::isError()) $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('artifact', $artifactID, 'createdDir', $formData->name);
+            $this->loadModel('action')->create('artifactGroup', $artifactID, 'createdDir', $formData->name);
 
             $response = array();
             $response['result']     = 'success';
@@ -301,24 +301,86 @@ class artifact extends control
 
         if(!empty($_FILES))
         {
+            set_time_limit(0);
+
             $response = array();
             $response['result']     = 'success';
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
             $response['callback']   = "window.expandNode('{$originalPath}');";
-            set_time_limit(0);
 
             $path = helper::safe64Decode($path);
 
             $file = $_FILES['file'];
-            $this->artifact->uploadArtifact($artifactID, $file, $path);
+            $result = $this->artifact->uploadArtifact($artifactID, $file, $path);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            $path = helper::safe64Encode($path);
+            if($result && !empty($result[0]) && !empty($result[0]->Object))
+            {
+                $asset = $result[0]->Object;
+                $this->loadModel('action')->create('artifactAsset', $asset->id, 'uploaded', $asset->path);
+            }
             $this->sendSuccess($response);
 
         }
         $this->view->title = $this->lang->artifact->uploadArtifact;
         $this->display();
+    }
+
+    /**
+     * 删除制品库目录。
+     * Delete artifact repo directory.
+     *
+     * @param  int $artifactID
+     * @param  string $entityID
+     * @param  string $path
+     * @access public
+     * @return void
+     */
+    public function deleteDir(int $artifactID, string $entityID, string $path = '')
+    {
+        $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
+        if(dao::isError()) $this->sendError(dao::getError());
+
+
+        $path       = helper::safe64Decode($path);
+        $parentPath = dirname($path);
+        $base64Path = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
+        if($result) $this->loadModel('action')->create('artifactGroup', $artifactID, 'deletedDir', $path);
+
+        $response = array();
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->deleteSuccess;
+        $response['closeModal'] = true;
+        $response['callback']   = "window.expandNode('{$base64Path}');";
+        $this->sendSuccess($response);
+    }
+
+    /**
+     * 删除制品.
+     * Delete artifact.
+     *
+     * @param  int $artifactID
+     * @param  int $assetID
+     * @access public
+     * @return void
+     */
+    public function deleteArtifact(int $assetID)
+    {
+        $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        $entityID = 'asset.' . $assetID;
+        $result   = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deletedAsset', $asset->path);
+        if(dao::isError()) $this->sendError(dao::getError());
+        $response = array();
+        $response['result']     = 'success';
+        $response['message']    = $this->lang->deleteSuccess;
+        $response['closeModal'] = true;
+        $response['callback']   = "window.expandNode();";
+        $this->sendSuccess($response);
     }
 }
