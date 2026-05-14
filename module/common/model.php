@@ -402,12 +402,6 @@ class commonModel extends model
         $this->config->systemDB   = isset($config['system']) ? $config['system'] : array();
         $this->config->personalDB = isset($config[$account]) ? $config[$account] : array();
 
-        /* Web root cannot be changed by api request. */
-        if(!$this->app->apiVersion)
-        {
-            $this->commonTao->updateDBWebRoot($this->config->systemDB);
-        }
-
         /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->systemDB->common))   $this->app->mergeConfig($this->config->systemDB->common, 'common');
         if(isset($this->config->personalDB->common)) $this->app->mergeConfig($this->config->personalDB->common, 'common');
