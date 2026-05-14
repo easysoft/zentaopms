@@ -134,23 +134,18 @@ class artifact extends control
         {
             $repo = $this->loadModel('repo')->fetchByID($repoID);
 
-            $type = $repoID ? 'repo' : 'space';
-
             $formData = form::data($this->config->artifact->form->create)
-                ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
                 ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : $space)
-                ->add('type', $type)
                 ->get();
             if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
-
-            $id = $this->artifact->create($formData, $type);
+            $result = $this->loadModel('gitfox')->request('/artifacts/views', 'POST', $formData);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('artifact', $id, 'created');
+            if(!empty($result->id))$this->loadModel('action')->create('artifact', $result->id, 'created');
             $loadURL = $this->createLink('artifact', 'browse', "space={$space}&repoID={$repoID}&type={$type}");
             $this->sendSuccess(array('locate' => $loadURL));
         }
@@ -173,16 +168,16 @@ class artifact extends control
 
         if($_POST)
         {
-            $formData = form::data($this->config->artifact->form->edit)
-                ->add('editedBy', $this->app->user->account)
-                ->get();
+            $formData = form::data($this->config->artifact->form->edit)->get();
 
             if(in_array($artifact->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
 
-            $this->artifact->update($id, $formData);
+            $formData->artifactID = $id;
+            $formData->format     = $artifact->format;
+            $this->loadModel('gitfox')->request('/artifacts/views', 'POST', $formData);
             if(dao::isError()) $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('artifact', (int)$id, 'edited');
@@ -204,8 +199,9 @@ class artifact extends control
      */
     public function delete(int $id)
     {
-        $this->artifact->delete(TABLE_ARTIFACT, $id, 'artifact');
+        $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array("artifact.{$id}")));
         if(dao::isError()) $this->sendError(dao::getError());
+        if($result) $this->loadModel('action')->create('artifact', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         $this->sendSuccess(array('load' => true));
     }
