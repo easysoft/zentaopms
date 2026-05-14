@@ -79,7 +79,7 @@ class deliverable extends wg
         $createDocUrl     = $this->prop('createDocUrl');
         $createLinkDocUrl = $this->prop('createLinkDocUrl') ? $this->prop('createLinkDocUrl') : '';
         $uploadDocUrl     = $this->prop('uploadDocUrl');
-        $onRenderItem     = $this->prop('onRenderItem') ? $this->prop('onRenderItem') : jsRaw('window.handleRenderDeliverableItem');
+        $onRenderItem     = $this->prop('onRenderItem') ? $this->prop('onRenderItem') : null;
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('createDocUrl', $createDocUrl);
