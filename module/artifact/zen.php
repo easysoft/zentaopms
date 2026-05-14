@@ -80,6 +80,7 @@ class artifactZen extends artifact
             $item->repoID     = $repoID;
             $item->viewType   = $type;
             $item->basePath   = $path;
+            $item->entityID   = $node->metadata->entityID;
 
             $item->url = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
             if($item->kind == 'dir')
@@ -110,6 +111,7 @@ class artifactZen extends artifact
         $dropdownItems   = array();
         $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
         $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
+        $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
 
         $actions[] = array
         (
@@ -148,10 +150,10 @@ class artifactZen extends artifact
         {
             if($node->path == $path)
             {
-                $node->id      = $node->metadata->id;
-                $node->type    = $node->metadata->type;
-                $node->nodeID  = isset($node->metadata->nodeId) ? $node->metadata->nodeId : 0;
-                $node->entryID = isset($node->metadata->entryId) ? $node->metadata->entryId : 0;
+                $node->id       = $node->metadata->id;
+                $node->type     = $node->metadata->type;
+                $node->nodeID   = isset($node->metadata->nodeID) ? $node->metadata->nodeID : 0;
+                $node->entityID = isset($node->metadata->entityID) ? $node->metadata->entityID : 0;
                 return $node;
             }
         }

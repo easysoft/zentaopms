@@ -38,20 +38,27 @@ window.expandNode = function(node, retries)
     const $tree = treeContext.$tree;
     const tree  = treeContext.tree;
     const treeApi = tree && tree.$;
+    const viewUrl = treeContext.window.location.href;
+    const loadTarget = treeContext.window.loadTarget;
+    const refreshTarget = function(target, selector)
+    {
+        loadTarget(viewUrl, target, {selector: selector});
+    };
+
     if(!node)
     {
-        if(typeof treeContext.window.loadTarget !== 'function')
+        if(typeof loadTarget !== 'function')
         {
             if(retries > 0) setTimeout(function() { window.expandNode(node, retries - 1); }, 100);
             return;
         }
 
-        const viewUrl = treeContext.window.location.href;
-        treeContext.window.loadTarget(viewUrl, '#artifactViewTreeBlock', {selector: '#artifactViewTreeBlock>*'});
+        refreshTarget('#artifactViewTreeBlock', '#artifactViewTreeBlock>*');
+        refreshTarget('#artifactViewPage', '#artifactViewPage>*');
         return;
     }
 
-    if(!treeApi || typeof treeApi.toggle !== 'function')
+    if(typeof loadTarget !== 'function' || !treeApi || typeof treeApi.toggle !== 'function')
     {
         if(retries > 0) setTimeout(function() { window.expandNode(node, retries - 1); }, 100);
         return;
@@ -66,9 +73,14 @@ window.expandNode = function(node, retries)
     if(expanded)
     {
         treeApi.toggle(keyPath, false);
-        setTimeout(function() { treeApi.toggle(keyPath, true); }, 100);
+        setTimeout(function()
+        {
+            treeApi.toggle(keyPath, true);
+            refreshTarget('#artifactViewPage', '#artifactViewPage>*');
+        }, 100);
         return;
     }
 
     treeApi.toggle(keyPath, true);
+    refreshTarget('#artifactViewPage', '#artifactViewPage>*');
 }
