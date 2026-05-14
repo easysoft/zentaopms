@@ -5191,7 +5191,6 @@ class docModel extends model
         $newDoc->keywords   = $originalDoc->keywords;
         $newDoc->type       = $originalDoc->type;
         $newDoc->status     = $originalDoc->status;
-        $newDoc->frozen     = $originalDoc->frozen ?? '';
         $newDoc->acl        = $targetData->acl;
         $newDoc->groups     = $targetData->groups ?? '';
         $newDoc->users      = $targetData->users ?? '';
@@ -5202,6 +5201,7 @@ class docModel extends model
         $newDoc->addedDate  = helper::now();
         $newDoc->editedBy   = '';
         $newDoc->editedDate = null;
+        $newDoc->frozen     = '';
         $newDoc->version    = 1;
         $newDoc->deleted    = $originalDoc->deleted ?? 0;
 
