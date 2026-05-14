@@ -1227,6 +1227,7 @@ $lang->resource->testtask->report           = 'reportAction';
 $lang->resource->testtask->browseUnits      = 'browseUnits';
 $lang->resource->testtask->unitCases        = 'unitCases';
 $lang->resource->testtask->importUnitResult = 'importUnitResult';
+$lang->resource->testtask->ignoreCaseChange = 'ignoreCaseChange';
 
 $lang->testtask->methodOrder[0]   = 'index';
 $lang->testtask->methodOrder[5]   = 'create';
@@ -1251,6 +1252,7 @@ $lang->testtask->methodOrder[95]  = 'report';
 $lang->testtask->methodOrder[100] = 'browseUnits';
 $lang->testtask->methodOrder[105] = 'unitCases';
 $lang->testtask->methodOrder[110] = 'importUnitResult';
+$lang->testtask->methodOrder[115] = 'ignoreCaseChange';
 
 $lang->resource->testreport = new stdclass();
 $lang->resource->testreport->browse     = 'browse';
@@ -1275,6 +1277,7 @@ $lang->resource->testsuite->linkCase          = 'linkCase';
 $lang->resource->testsuite->unlinkCase        = 'unlinkCaseAction';
 $lang->resource->testsuite->batchUnlinkCases  = 'batchUnlinkCases';
 $lang->resource->testsuite->confirmCaseChange = 'confirmCaseChange';
+$lang->resource->testsuite->ignoreCaseChange  = 'ignoreCaseChange';
 
 $lang->testsuite->methodOrder[5]  = 'browse';
 $lang->testsuite->methodOrder[10] = 'create';
@@ -1285,6 +1288,7 @@ $lang->testsuite->methodOrder[30] = 'linkCase';
 $lang->testsuite->methodOrder[35] = 'unlinkCase';
 $lang->testsuite->methodOrder[40] = 'batchUnlinkCases';
 $lang->testsuite->methodOrder[45] = 'confirmCaseChange';
+$lang->testsuite->methodOrder[46] = 'ignoreCaseChange';
 
 $lang->resource->caselib = new stdclass();
 $lang->resource->caselib->browse           = 'browseAction';

@@ -58,14 +58,15 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 $lang->testtask->myInvolved       = 'Involved';
 
-$lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'Browse Cases List';
-$lang->testtask->activateAction = "Activate Request";
-$lang->testtask->blockAction    = "Block Request";
-$lang->testtask->closeAction    = "Close Request";
-$lang->testtask->startAction    = "Start Request";
-$lang->testtask->resultsAction  = "Case Result";
-$lang->testtask->reportAction   = 'Case Report';
+$lang->testtask->viewAction       = "View Request";
+$lang->testtask->casesAction      = 'Browse Cases List';
+$lang->testtask->activateAction   = "Activate Request";
+$lang->testtask->blockAction      = "Block Request";
+$lang->testtask->closeAction      = "Close Request";
+$lang->testtask->startAction      = "Start Request";
+$lang->testtask->resultsAction    = "Case Result";
+$lang->testtask->reportAction     = 'Case Report';
+$lang->testtask->ignoreCaseChange = 'Ignore Case Change';
 
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Testaufgabe';
