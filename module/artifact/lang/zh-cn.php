@@ -38,11 +38,9 @@ $lang->artifact->actionMockTip = '当前为模拟操作：%s';
 $lang->artifact->dirName       = '目录名称';
 $lang->artifact->format        = '制品库类型';
 $lang->artifact->hasVersion    = '需要进行版本控制';
-
-$lang->artifact->nameNotSupportChinese = '名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
-$lang->artifact->dirNameFormatError    = '目录名称仅支持中文，英文，数字，下划线（_），中横线（-）';
-
-$lang->artifact->okBtn = '确定';
+$lang->artifact->checkValue    = '校验值';
+$lang->artifact->okBtn         = '确定';
+$lang->artifact->history       = '记录';
 
 $lang->artifact->countArtifact = '共%s个制品';
 
@@ -50,9 +48,13 @@ $lang->artifact->placeholder = new stdclass();
 $lang->artifact->placeholder->name = '请输入制品库名称';
 
 $lang->artifact->notice = new stdclass();
-$lang->artifact->notice->deleteConfirm = '您确定要删除该制品库吗？';
-$lang->artifact->notice->noArtifact    = '暂无制品库';
-$lang->artifact->notice->emptyFolder   = '空目录';
+$lang->artifact->notice->deleteConfirm         = '您确定要删除该制品库吗？';
+$lang->artifact->notice->noArtifact            = '暂无制品库';
+$lang->artifact->notice->emptyFolder           = '空目录';
+$lang->artifact->notice->nameNotSupportChinese = '名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
+$lang->artifact->notice->dirNameFormatError    = '目录名称仅支持中文，英文，数字，下划线（_），中横线（-）';
+$lang->artifact->notice->confirmDelete         = '删除后文件将会在回收站保留30天，超时后将无法恢复。';
+$lang->artifact->notice->confirmDeleteDir      = '删除目录后，同步删除目录下的子目录和文件，确认要删除吗?';
 
 $lang->artifact->featureBar['browse']['all']   = '全部';
 $lang->artifact->featureBar['browse']['space'] = '空间制品库';

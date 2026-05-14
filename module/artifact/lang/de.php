@@ -38,11 +38,9 @@ $lang->artifact->actionMockTip = 'Mock action: %s';
 $lang->artifact->dirName       = 'Directory Name';
 $lang->artifact->format        = 'Artifact Type';
 $lang->artifact->hasVersion    = 'Need to do version control';
-
-$lang->artifact->nameNotSupportChinese = 'Name only supports English, numbers, underscores (_), dashes (-), and periods (.).';
-$lang->artifact->dirNameFormatError    = 'Directory name only supports Chinese, English, numbers, underscores (_), dashes (-).';
-
-$lang->artifact->okBtn = 'OK';
+$lang->artifact->checkValue    = 'Check Value';
+$lang->artifact->okBtn         = 'OK';
+$lang->artifact->history       = 'History';
 
 $lang->artifact->countArtifact = 'Total %s Artifact';
 
@@ -50,9 +48,13 @@ $lang->artifact->placeholder = new stdclass();
 $lang->artifact->placeholder->name = 'Enter Artifact Repository Name';
 
 $lang->artifact->notice = new stdclass();
-$lang->artifact->notice->deleteConfirm = 'Are you sure to delete this Artifact Repository?';
-$lang->artifact->notice->noArtifact    = 'No Artifact Repository';
-$lang->artifact->notice->emptyFolder   = 'Empty Folder';
+$lang->artifact->notice->deleteConfirm         = 'Are you sure to delete this Artifact Repository?';
+$lang->artifact->notice->noArtifact            = 'No Artifact Repository';
+$lang->artifact->notice->emptyFolder           = 'Empty Folder';
+$lang->artifact->notice->nameNotSupportChinese = 'Name only supports English, numbers, underscores (_), dashes (-), and periods (.).';
+$lang->artifact->notice->dirNameFormatError    = 'Directory name only supports Chinese, English, numbers, underscores (_), dashes (-).';
+$lang->artifact->notice->confirmDelete         = 'Delete after the file will be in the recycle bin for 30 days. After the timeout, the file will be unable to be restored.';
+$lang->artifact->notice->confirmDeleteDir      = 'Delete directory and all sub directories and files. Are you sure to delete it?';
 
 $lang->artifact->featureBar['browse']['all']   = 'All';
 $lang->artifact->featureBar['browse']['space'] = 'Space Artifact Repository';
