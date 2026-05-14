@@ -151,21 +151,46 @@ class artifactModel extends model
      * @param  array $file
      * @param  string $path
      * @access public
-     * @return bool
+     * @return bool|array|object
      */
-    public function uploadArtifact(int $artifactID, array $file, string $path = ''): bool
+    public function uploadArtifact(int $artifactID, array $file, string $path = ''): bool|array|object
     {
         $artifact = $this->fetchByID($artifactID);
         if(empty($artifact)) return false;
 
         $param = array();
         $param['artifactID'] = $artifactID;
+        $param['name']       = pathinfo($file['name'], PATHINFO_BASENAME);
         $param['group']      = str_replace('/', '.', ltrim($path, '/'));
         $param['file']       = curl_file_create($file['tmp_name']);
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifact->format}"), $param, array(), $apiRoot->header, 'data', 'POST', 300));
-        $result  = $this->gitfox->getResponse($result);
-        return !dao::isError();
+        return $this->gitfox->getResponse($result);
+    }
+
+    /**
+     * 获取制品列表。
+     * Get artifact list.
+     *
+     * @param  int $nodeID
+     * @param  int $artifactID
+     * @access public
+     * @return array
+     */
+    public function getAssetListByNodeID(int $nodeID, int $artifactID = 0): array
+    {
+        if(!$nodeID) return array();
+
+        $assetList = $this->loadModel('gitfox')->request('/artifacts/groups/' . $nodeID . '/assets');
+        foreach($assetList as $asset)
+        {
+            $asset->name       = $asset->path;
+            $asset->path       = str_replace('.', '/', $asset->group);
+            $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
+            $asset->size       = empty($asset->size) ? 0 : round($asset->size / 1024, 2) . 'KB';
+            $asset->artifactID = $artifactID;
+        }
+        return $assetList;
     }
 }
