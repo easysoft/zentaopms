@@ -214,17 +214,6 @@ class repoModel extends model
                 dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
                 return false;
             }
-
-            $artifact = new stdClass();
-            $artifact->spaceID     = $repo->space;
-            $artifact->repoID      = $repoID;
-            $artifact->type        = 'repo';
-            $artifact->name        = $this->lang->repo->defaultArtifact;
-            $artifact->isDefault   = 1;
-            $artifact->createdBy   = $this->app->user->account;
-            $artifact->createdDate = helper::now();
-            $this->loadModel('artifact')->create($artifact, 'repo');
-            if(dao::isError()) return false;
         }
 
         return $repoID;
