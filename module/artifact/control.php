@@ -342,7 +342,6 @@ class artifact extends control
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
         if(dao::isError()) $this->sendError(dao::getError());
 
-
         $path       = helper::safe64Decode($path);
         $parentPath = dirname($path);
         $base64Path = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
