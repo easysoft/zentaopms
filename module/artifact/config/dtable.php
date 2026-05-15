@@ -27,29 +27,29 @@ $config->artifact->dtable->fieldList['checkValue']['title']    = $lang->artifact
 $config->artifact->dtable->fieldList['checkValue']['sortType'] = false;
 $config->artifact->dtable->fieldList['checkValue']['hint']     = true;
 
-$config->artifact->dtable->fieldList['creator']['name']     = 'creatorName';
-$config->artifact->dtable->fieldList['creator']['title']    = $lang->artifact->creator;
-$config->artifact->dtable->fieldList['creator']['sortType'] = false;
-$config->artifact->dtable->fieldList['creator']['hint']     = true;
-$config->artifact->dtable->fieldList['creator']['type']     = 'user';
+$config->artifact->dtable->fieldList['createdBy']['name']     = 'createdBy';
+$config->artifact->dtable->fieldList['createdBy']['title']    = $lang->artifact->creator;
+$config->artifact->dtable->fieldList['createdBy']['sortType'] = false;
+$config->artifact->dtable->fieldList['createdBy']['hint']     = true;
+$config->artifact->dtable->fieldList['createdBy']['type']     = 'user';
 
-$config->artifact->dtable->fieldList['createdDate']['name']  = 'created';
+$config->artifact->dtable->fieldList['createdDate']['name']  = 'createdDate';
 $config->artifact->dtable->fieldList['createdDate']['title'] = $lang->artifact->createdDate;
 $config->artifact->dtable->fieldList['createdDate']['sortType'] = true;
 $config->artifact->dtable->fieldList['createdDate']['type']  = 'datetime';
 $config->artifact->dtable->fieldList['createdDate']['hint']  = true;
 
-$config->artifact->dtable->fieldList['editor']['name']     = 'editorName';
-$config->artifact->dtable->fieldList['editor']['title']    = $lang->artifact->editor;
-$config->artifact->dtable->fieldList['editor']['sortType'] = false;
-$config->artifact->dtable->fieldList['editor']['hint']     = true;
-$config->artifact->dtable->fieldList['editor']['type']     = 'user';
+$config->artifact->dtable->fieldList['editedBy']['name']     = 'editedBy';
+$config->artifact->dtable->fieldList['editedBy']['title']    = $lang->artifact->editor;
+$config->artifact->dtable->fieldList['editedBy']['sortType'] = false;
+$config->artifact->dtable->fieldList['editedBy']['hint']     = true;
+$config->artifact->dtable->fieldList['editedBy']['type']     = 'user';
 
-$config->artifact->dtable->fieldList['updated']['name']     = 'updated';
-$config->artifact->dtable->fieldList['updated']['title']    = $lang->artifact->editedDate;
-$config->artifact->dtable->fieldList['updated']['sortType'] = true;
-$config->artifact->dtable->fieldList['updated']['type']     = 'datetime';
-$config->artifact->dtable->fieldList['updated']['hint']     = true;
+$config->artifact->dtable->fieldList['editedDate']['name']     = 'editedDate';
+$config->artifact->dtable->fieldList['editedDate']['title']    = $lang->artifact->editedDate;
+$config->artifact->dtable->fieldList['editedDate']['sortType'] = true;
+$config->artifact->dtable->fieldList['editedDate']['type']     = 'datetime';
+$config->artifact->dtable->fieldList['editedDate']['hint']     = true;
 
 $config->artifact->dtable->fieldList['actions']['name']  = 'actions';
 $config->artifact->dtable->fieldList['actions']['title'] = $lang->actions;
