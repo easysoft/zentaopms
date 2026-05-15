@@ -896,7 +896,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0)
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0, string $from = '')
     {
         if(!empty($_POST))
         {
@@ -935,7 +935,7 @@ class doc extends control
 
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult);
+            return $this->docZen->responseAfterCreate($docResult, '', $from);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -2644,7 +2644,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text', string $from = '')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
@@ -2766,6 +2766,7 @@ class doc extends control
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;
+        $this->view->from       = $from;
         $this->display();
     }
 
