@@ -26,7 +26,7 @@ $config->artifact->actionList['move'] = array();
 $config->artifact->actionList['move']['icon']        = 'move';
 $config->artifact->actionList['move']['text']        = $lang->artifact->move;
 $config->artifact->actionList['move']['hint']        = $lang->artifact->move;
-$config->artifact->actionList['move']['url']         = array('module' => 'artifact', 'method' => 'moveArtifact', 'params' => "id={id}");
+$config->artifact->actionList['move']['url']         = array('module' => 'artifact', 'method' => 'moveArtifact', 'params' => "assetID={id}&artifactID={artifactID}");
 $config->artifact->actionList['move']['data-app']    = $app->tab;
 $config->artifact->actionList['move']['data-toggle'] = 'modal';
 
