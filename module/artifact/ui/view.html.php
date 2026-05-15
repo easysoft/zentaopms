@@ -37,7 +37,8 @@ if(!empty($breadCrumbs))
     }
 }
 
-$data = initTableData($assetList, $config->artifact->dtable->fieldList);
+$data     = initTableData($assetList, $config->artifact->dtable->fieldList);
+$viewLink = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 div
 (
     setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
@@ -103,6 +104,7 @@ div
             tree
             (
                 setClass('filesTree'),
+                set::_props(array('data-refresh-url' => $viewLink)),
                 set::items($treeItems),
                 set::collapsedIcon('folder text-warning'),
                 set::expandedIcon('folder-open text-warning'),

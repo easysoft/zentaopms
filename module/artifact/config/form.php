@@ -16,3 +16,10 @@ $config->artifact->form->editDir = array();
 $config->artifact->form->editDir['artifactID'] = array('type' => 'int', 'required' => true,  'default' => 0);
 $config->artifact->form->editDir['parent']     = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
 $config->artifact->form->editDir['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+
+$config->artifact->form->editArtifact = array();
+$config->artifact->form->editArtifact['name'] = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+
+$config->artifact->form->moveArtifact = array();
+$config->artifact->form->moveArtifact['artifactID'] = array('type' => 'int', 'required' => true,  'default' => 0);
+$config->artifact->form->moveArtifact['parent']     = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');

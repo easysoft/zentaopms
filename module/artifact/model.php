@@ -222,10 +222,10 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getAssetListByNodeID(string $entityID, int $artifactID = 0, string $orderBy = 'created_desc', ?object $pager = null): array
+    public function getAssetListByNodeID(string $entityID, int $artifactID = 0, string $orderBy = 'editedDate_desc', ?object $pager = null): array
     {
         if(!$entityID) return array();
-        list($sort, $order) = $this->getAssetSort($orderBy);
+        list($sort, $order) = explode('_', $orderBy);
 
         $params = array();
         $params['entityID'] = $entityID;
@@ -254,34 +254,5 @@ class artifactModel extends model
             $asset->artifactID = $artifactID;
         }
         return $assetList->data;
-    }
-
-    /**
-     * 获取制品排序字段。
-     * Get asset sort field.
-     *
-     * @param  string $orderBy
-     * @access protected
-     * @return array
-     */
-    protected function getAssetSort(string $orderBy): array
-    {
-        $sortMap = array();
-        $sortMap['name']        = 'path';
-        $sortMap['path']        = 'group';
-        $sortMap['size']        = 'size';
-        $sortMap['arch']        = 'arch';
-        $sortMap['created']     = 'created';
-        $sortMap['updated']     = 'updated';
-        $sortMap['creatorName'] = 'creatorName';
-        $sortMap['editorName']  = 'editorName';
-
-        $orderBy = strpos($orderBy, '_') === false ? 'updated_desc' : $orderBy;
-        list($field, $order) = explode('_', $orderBy, 2);
-
-        $sort  = zget($sortMap, $field, 'updated');
-        $order = in_array($order, array('asc', 'desc')) ? $order : 'desc';
-
-        return array($sort, $order);
     }
 }

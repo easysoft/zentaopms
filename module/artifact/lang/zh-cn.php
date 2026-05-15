@@ -11,6 +11,7 @@ $lang->artifact->addSiblingDir  = '添加同级目录';
 $lang->artifact->editDir        = '编辑目录';
 $lang->artifact->deleteDir      = '删除目录';
 $lang->artifact->editArtifact   = '修改制品信息';
+$lang->artifact->moveArtifact   = '移动制品';
 $lang->artifact->deleteArtifact = '删除制品';
 
 $lang->artifact->name          = '名称';
@@ -61,6 +62,7 @@ $lang->artifact->notice->nameNotSupportChinese = '名称仅支持英文，数字
 $lang->artifact->notice->dirNameFormatError    = '目录名称仅支持中文，英文，数字，下划线（_），中横线（-）';
 $lang->artifact->notice->confirmDelete         = '删除后文件将会在回收站保留30天，超时后将无法恢复。';
 $lang->artifact->notice->confirmDeleteDir      = '删除目录后，同步删除目录下的子目录和文件，确认要删除吗?';
+$lang->artifact->notice->rootNotAllowed        = '移动制品时不能选择根目录。';
 
 $lang->artifact->featureBar['browse']['all']   = '全部';
 $lang->artifact->featureBar['browse']['space'] = '空间制品库';
