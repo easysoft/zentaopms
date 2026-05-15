@@ -316,6 +316,44 @@ class artifact extends control
     }
 
     /**
+     * 编辑制品。
+     * Edit artifact.
+     *
+     * @param  int $assetID
+     * @access public
+     * @return void
+     */
+    public function editArtifact(int $assetID)
+    {
+        $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->artifact->form->editArtifact)->get();
+
+            $param = array();
+            $param['entityID'] = 'asset.' . $assetID;
+            $param['newName']  = $formData->name;
+
+            $result   = $this->gitfox->request('/artifacts/entities/rename', 'POST', $param);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'editAsset', $asset->path);
+            if(dao::isError()) $this->sendError(dao::getError());
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->deleteSuccess;
+            $response['closeModal'] = true;
+            $response['callback']   = "window.expandNode();";
+            $this->sendSuccess($response);
+        }
+
+        $this->view->title = $this->lang->artifact->editArtifact;
+        $this->view->asset = $asset;
+        $this->display();
+    }
+
+    /**
      * 获取编辑目录页所属上级选项。
      * Get parent directory options for edit dir page.
      *
@@ -436,7 +474,7 @@ class artifact extends control
         if(dao::isError()) $this->sendError(dao::getError());
 
         $entityID = 'asset.' . $assetID;
-        $result   = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
+        $result   = $this->gitfox->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
         if(dao::isError()) $this->sendError(dao::getError());
 
         if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deletedAsset', $asset->path);
