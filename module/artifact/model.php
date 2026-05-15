@@ -215,24 +215,78 @@ class artifactModel extends model
      * 获取制品列表。
      * Get artifact list.
      *
-     * @param  int $nodeID
-     * @param  int $artifactID
+     * @param  string  $entityID
+     * @param  int     $artifactID
+     * @param  string  $orderBy
+     * @param  ?object $pager
      * @access public
      * @return array
      */
-    public function getAssetListByNodeID(int $nodeID, int $artifactID = 0): array
+    public function getAssetListByNodeID(string $entityID, int $artifactID = 0, string $orderBy = 'created_desc', ?object $pager = null): array
     {
-        if(!$nodeID) return array();
+        if(!$entityID) return array();
+        list($sort, $order) = $this->getAssetSort($orderBy);
 
-        $assetList = $this->loadModel('gitfox')->request('/artifacts/groups/' . $nodeID . '/assets');
-        foreach($assetList as $asset)
+        $params = array();
+        $params['entityID'] = $entityID;
+        $params['page']     = is_null($pager) ? 1 : $pager->pageID;
+        $params['pageSize'] = is_null($pager) ? 20 : $pager->recPerPage;
+        $params['sort']     = $sort;
+        $params['order']    = $order;
+        $params['more']     = true;
+        $assetList = $this->loadModel('gitfox')->request('/artifacts/assets/list', 'POST', $params);
+        if(!empty($assetList) && !empty($assetList->pager) && !is_null($pager))
         {
+            $pager->recTotal   = $assetList->pager->total;
+            $pager->recPerPage = $assetList->pager->pageSize;
+            $pager->pageID     = $assetList->pager->page;
+        }
+        if(empty($assetList) || empty($assetList->data)) return array();
+
+        foreach($assetList->data as $asset)
+        {
+            $asset->group      = isset($asset->metadata) ? $asset->metadata->group : '';
             $asset->name       = $asset->path;
-            $asset->path       = str_replace('.', '/', $asset->group);
+            $asset->path       = $asset->group;
+            $asset->version    = isset($asset->metadata) ? $asset->metadata->version : '';
             $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
-            $asset->size       = empty($asset->size) ? 0 : round($asset->size / 1024, 2) . 'KB';
+            $asset->size       = empty($asset->size)     ? 0 : round($asset->size / 1024, 2) . 'KB';
             $asset->artifactID = $artifactID;
         }
-        return $assetList;
+        return $assetList->data;
+    }
+
+    /**
+     * 获取制品排序字段。
+     * Get asset sort field.
+     *
+     * @param  string $orderBy
+     * @access protected
+     * @return array
+     */
+    protected function getAssetSort(string $orderBy): array
+    {
+        $sortMap = array();
+        $sortMap['name']        = 'path';
+        $sortMap['path']        = 'group';
+        $sortMap['size']        = 'size';
+        $sortMap['arch']        = 'arch';
+        $sortMap['created']     = 'created';
+        $sortMap['updated']     = 'updated';
+        $sortMap['creatorName'] = 'creatorName';
+        $sortMap['editorName']  = 'editorName';
+
+        $orderBy = strpos($orderBy, '_') === false ? 'updated_desc' : $orderBy;
+        list($field, $order) = explode('_', $orderBy, 2);
+
+        $sort  = zget($sortMap, $field, 'updated');
+        $order = in_array($order, array('asc', 'desc')) ? $order : 'desc';
+
+        return array($sort, $order);
+    }
+
+    public function getEntityByID(string $entityID): ?object
+    {
+        return $this->dao->select('*')->from(TABLE_ENTITY)->where('entityID')->eq($entityID)->fetch();
     }
 }
