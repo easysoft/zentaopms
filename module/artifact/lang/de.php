@@ -11,6 +11,7 @@ $lang->artifact->addSiblingDir  = 'Add Sibling Directory';
 $lang->artifact->editDir        = 'Edit Directory';
 $lang->artifact->deleteDir      = 'Delete Directory';
 $lang->artifact->editArtifact   = 'Edit Artifact';
+$lang->artifact->moveArtifact   = 'Move Artifact';
 $lang->artifact->deleteArtifact = 'Delete Artifact';
 
 $lang->artifact->name          = 'Name';
@@ -61,6 +62,7 @@ $lang->artifact->notice->nameNotSupportChinese = 'Name only supports English, nu
 $lang->artifact->notice->dirNameFormatError    = 'Directory name only supports Chinese, English, numbers, underscores (_), dashes (-).';
 $lang->artifact->notice->confirmDelete         = 'Delete after the file will be in the recycle bin for 30 days. After the timeout, the file will be unable to be restored.';
 $lang->artifact->notice->confirmDeleteDir      = 'Delete directory and all sub directories and files. Are you sure to delete it?';
+$lang->artifact->notice->rootNotAllowed        = 'Root directory cannot be selected when moving an artifact.';
 
 $lang->artifact->featureBar['browse']['all']   = 'All';
 $lang->artifact->featureBar['browse']['space'] = 'Space Artifact Repository';
