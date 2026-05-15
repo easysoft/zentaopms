@@ -38,7 +38,7 @@ window.expandNode = function(node, retries)
     const $tree = treeContext.$tree;
     const tree  = treeContext.tree;
     const treeApi = tree && tree.$;
-    const viewUrl = treeContext.window.location.href;
+    const viewUrl = $tree.attr('data-refresh-url') || treeContext.window.location.href;
     const loadTarget = treeContext.window.loadTarget;
     const refreshTarget = function(target, selector)
     {
