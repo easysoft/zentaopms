@@ -109,7 +109,7 @@ class programplan extends control
             {
                 if(!isset($baselinePlans[$plan->id])) continue;
 
-                $plans['data'][$key]->bar_height    = 20;
+                $plans['data'][$key]->bar_height    = 22;
                 $plans['data'][$key]->planned_start = $baselinePlans[$plan->id]->start_date;
                 $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->endDate) + 86400);
             }
