@@ -284,9 +284,4 @@ class artifactModel extends model
 
         return array($sort, $order);
     }
-
-    public function getEntityByID(string $entityID): ?object
-    {
-        return $this->dao->select('*')->from(TABLE_ENTITY)->where('entityID')->eq($entityID)->fetch();
-    }
 }
