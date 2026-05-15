@@ -60,6 +60,48 @@ class artifactModel extends model
     }
 
     /**
+     * 获取制品库键值对。
+     * Get artifact repo pairs.
+     *
+     * @param  int $spaceID
+     * @param  int $repoID
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $type = '', string $format = '', string $account = ''): array
+    {
+        $spaceIdList = $repoIdList = array();
+        if($account && $type == 'space')
+        {
+            $spaceIdList = $this->dao->select('id')->from(TABLE_SPACE)->alias('t1')
+                ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')->on('t1.id', 't2.space')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('(t1.acl')->eq('open')
+                ->orWhere('t2.account')->eq($account)->markRight()
+                ->fetchPairs('id');
+        }
+
+        if($account && $type == 'repo')
+        {
+            $repoIdList = $this->dao->select('id')->from(TABLE_REPO)->alias('t1')
+                ->leftJoin(TABLE_DEVOPSREPOUSER)->alias('t2')->on('t1.id', 't2.repo')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('(t1.acl')->eq('open')
+                ->orWhere('t2.account')->eq($account)->markRight()
+                ->fetchPairs('id');
+        }
+
+        return $this->dao->select('id, name')->from(TABLE_ARTIFACT)
+            ->where('deleted')->eq(0)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
+            ->beginIF(!empty($repoIdList))->andWhere('repoID')->in($repoIdList)->fi()
+            ->beginIF($format)->andWhere('format')->eq($format)->fi()
+            ->fetchPairs('id');
+    }
+
+    /**
      * 创建制品库。
      * create artifact repo.
      *
