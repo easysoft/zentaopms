@@ -66,12 +66,20 @@ class artifact extends control
      * 浏览制品库制品。
      * Browse artifact repo.
      *
-     * @param  int $artifactID
+     * @param  int    $artifactID
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
      * @param  string $selectPath
+     * @param  int    $isExpand
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0)
+    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0, string $orderBy = 'created_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $selectPath = helper::safe64Decode($selectPath);
 
@@ -79,6 +87,9 @@ class artifact extends control
         if(empty($artifact)) return print(js::error($this->lang->artifact->notice->noArtifact));
 
         $this->commonAction((int)$artifact->spaceID, (int)$artifact->repoID);
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
         $selectPathList = empty($selectPath) ? array() : explode('/', trim($selectPath, '/'));
         $breadCrumbs    = $this->artifactZen->getBreadCrumbs($artifact, $selectPathList, $spaceID, $repoID, $type);
 
@@ -97,7 +108,8 @@ class artifact extends control
         {
             $artifactList[] = array('text' => $artifactRepo->name, 'value' => $artifactRepo->id, 'keys' => $artifactRepo->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifactRepo->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
         }
-        $node = $this->artifactZen->getNodeByPath($artifact, $selectPath);
+        $node      = $this->artifactZen->getNodeByPath($artifact, $selectPath);
+        $assetList = $this->artifact->getAssetListByNodeID(empty($node) || empty($node->entityID) ? '' : $node->entityID, $artifactID, $orderBy, $pager);
 
         $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact     = $artifact;
@@ -112,8 +124,10 @@ class artifact extends control
         $this->view->breadCrumbs  = $breadCrumbs;
         $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
         $this->view->isExpand     = $isExpand;
-        $this->view->assetList    = $this->artifact->getAssetListByNodeID(empty($node) ? 0 : $node->id, $artifactID);
+        $this->view->assetList    = $assetList;
         $this->view->node         = $node;
+        $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
 
         $this->display();
     }

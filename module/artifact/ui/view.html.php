@@ -155,6 +155,9 @@ div
             setID('artifactAssetsTable'),
             set::cols($config->artifact->dtable->fieldList),
             set::data($data),
+            set::orderBy($orderBy),
+            set::sortLink(createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+            set::footPager(usePager()),
             set::emptyTip(empty($node) || !empty($node->type) && $node->type == 'asset' ? $lang->artifact->notice->emptyFolder : $lang->noData)
         )
     )
