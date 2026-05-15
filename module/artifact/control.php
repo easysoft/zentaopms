@@ -338,7 +338,7 @@ class artifact extends control
             $result   = $this->gitfox->request('/artifacts/entities/rename', 'POST', $param);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'editAsset', $asset->path);
+            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'edited', $asset->path);
             if(dao::isError()) $this->sendError(dao::getError());
             $response = array();
             $response['result']     = 'success';
@@ -350,6 +350,65 @@ class artifact extends control
 
         $this->view->title = $this->lang->artifact->editArtifact;
         $this->view->asset = $asset;
+        $this->display();
+    }
+
+    /**
+     * 移动制品。
+     * Move artifact.
+     *
+     * @param  int $assetID
+     * @param  int $artifactID
+     * @access public
+     * @return void
+     */
+    public function moveArtifact(int $assetID, int $artifactID = 0)
+    {
+        $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        if(empty($artifactID))
+        {
+            if(!empty($asset->artifactID)) $artifactID = (int)$asset->artifactID;
+            if(empty($artifactID) && !empty($asset->metadata) && !empty($asset->metadata->artifactID)) $artifactID = (int)$asset->metadata->artifactID;
+        }
+
+        $artifact = $this->artifact->fetchByID($artifactID);
+        if(empty($artifact)) return $this->sendError($this->lang->artifact->notice->noArtifact);
+
+        $parentID = '/';
+        if(!empty($asset->metadata) && !empty($asset->metadata->groupID)) $parentID = (string)$asset->metadata->groupID;
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->artifact->form->moveArtifact)->get();
+            if($formData->parent == '/') return $this->sendError(array('parent' => $this->lang->artifact->notice->rootNotAllowed));
+
+            $params = array();
+            $params['entityID']         = 'asset.' . $assetID;
+            $params['targetArtifactID'] = $formData->artifactID;
+            $params['targetGroupID']    = $formData->parent == '/' ? 0 : (int)$formData->parent;
+
+            $result = $this->gitfox->request('/artifacts/entities/move', 'POST', $params);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'moved', $asset->path);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+            $response['callback']   = "window.expandNode();";
+            $this->sendSuccess($response);
+        }
+
+        $this->view->title              = $this->lang->artifact->moveArtifact;
+        $this->view->asset              = $asset;
+        $this->view->artifact           = $artifact;
+        $this->view->artifacts          = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->currentPathEncoded = '';
+        $this->view->parentPath         = $parentID;
         $this->display();
     }
 
