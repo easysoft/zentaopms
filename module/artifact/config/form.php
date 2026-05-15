@@ -11,3 +11,8 @@ $config->artifact->form->edit['editedDate'] = array('type' => 'string', 'require
 
 $config->artifact->form->createDir = array();
 $config->artifact->form->createDir['name'] = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+
+$config->artifact->form->editDir = array();
+$config->artifact->form->editDir['artifactID'] = array('type' => 'int', 'required' => true,  'default' => 0);
+$config->artifact->form->editDir['parent']     = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+$config->artifact->form->editDir['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
