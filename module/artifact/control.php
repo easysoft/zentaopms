@@ -175,9 +175,10 @@ class artifact extends control
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
 
-            $formData->artifactID = $id;
-            $formData->format     = $artifact->format;
-            $this->loadModel('gitfox')->request('/artifacts/views', 'POST', $formData);
+            $param = array();
+            $param['entityID'] = 'artifact.' . $id;
+            $param['newName']  = $formData->name;
+            $this->loadModel('gitfox')->request('/artifacts/entities/rename', 'POST', $param);
             if(dao::isError()) $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('artifact', (int)$id, 'edited');
@@ -242,7 +243,7 @@ class artifact extends control
             $response['result']     = 'success';
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
-            $response['callback']   = "window.expandNode('{$base64Path}');";
+            $response['callback']   = !$path || $path == '/' ? "window.expandNode();" : "window.expandNode('{$base64Path}');";
             $this->sendSuccess($response);
         }
         $this->view->title = $this->lang->artifact->createDir;
@@ -256,9 +257,64 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function editDir()
+    public function editDir(int $artifactID, string $path = '')
     {
+        $artifact    = $this->artifact->fetchByID($artifactID);
+        $currentPath = $path ? helper::safe64Decode($path) : '';
+        $parentPath  = $currentPath ? dirname($currentPath) : '/';
+        if($parentPath === '' || $parentPath === '.') $parentPath = '/';
+
+        if($_POST)
+        {
+            $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
+            if(empty($node)) return $this->sendError($this->lang->fail);
+
+            $formData = form::data($this->config->artifact->form->editDir)->get();
+
+            $params = array();
+            $params['entityID']         = $node->entityID;
+            $params['newName']          = $formData->name;
+            $params['targetArtifactID'] = $formData->artifactID;
+            $params['targetGroupID']    = $formData->parent == '/' ? 0 : (int)$formData->parent;
+            $result = $this->loadModel('gitfox')->request('/artifacts/entities/relocate', 'POST', $params);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            if($result) $this->loadModel('action')->create('artifactGroup', $artifactID, 'edited', $formData->name);
+
+            $response = array();
+            $response['result']     = 'success';
+            $response['message']    = $this->lang->saveSuccess;
+            $response['closeModal'] = true;
+
+            $base64Path = !$parentPath || $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
+            $response['callback'] = $base64Path ? "window.expandNode('{$base64Path}');" : "window.expandNode();";
+            $this->sendSuccess($response);
+        }
+
+        $this->view->title              = $this->lang->artifact->editDir;
+        $this->view->artifacts          = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->dirName            = $currentPath ? ltrim(baseName($currentPath), '/') : '';
+        $this->view->artifact           = $artifact;
+        $this->view->currentPath        = $currentPath;
+        $this->view->currentPathEncoded = $path;
+        $this->view->parentPath         = $parentPath;
         $this->display();
+    }
+
+    /**
+     * 获取编辑目录页所属上级选项。
+     * Get parent directory options for edit dir page.
+     *
+     * @param  int    $artifactID
+     * @param  string $path
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDirParentItems(int $artifactID, string $path = '')
+    {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $path     = helper::safe64Decode($path);
+        return print(json_encode($this->artifactZen->getParentPickerItems($artifact, $path)));
     }
 
     /**
