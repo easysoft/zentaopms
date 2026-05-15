@@ -1115,7 +1115,7 @@ class baseFixer
             $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
 
             /* Keep default URI schemes and append data for inline images. */
-            $allowedSchemes = $purifierConfig->get('URI.AllowedSchemes');
+            $allowedSchemes = HTMLPurifier_Config::createDefault()->get('URI.AllowedSchemes');
             $allowedSchemes['data'] = true;
             $purifierConfig->set('URI.AllowedSchemes', $allowedSchemes);
 
