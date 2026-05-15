@@ -81,6 +81,8 @@ class artifactZen extends artifact
             $item->viewType   = $type;
             $item->basePath   = $path;
             $item->entityID   = $node->metadata->entityID;
+            $item->className  = 'text-clip';
+            $item->hint       = $node->name;
 
             $item->url = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
             if($item->kind == 'dir')
@@ -89,6 +91,57 @@ class artifactZen extends artifact
                 $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
             }
             $item->actions = $node->metadata->type == 'asset' ? array() : $this->buildTreeAction($item);
+            $items[] = $item;
+        }
+
+        return $items;
+    }
+
+    /**
+     * 获取编辑目录页所属上级选项。
+     * Get parent picker items for edit dir page.
+     *
+     * @param  object $artifact
+     * @param  string $excludePath
+     * @access public
+     * @return array
+     */
+    public function getParentPickerItems(object $artifact, string $excludePath = ''): array
+    {
+        $items = array(array('text' => '/', 'value' => '/'));
+        if(empty($artifact->id)) return $items;
+
+        $children = $this->buildParentPickerChildren($artifact, '/', $excludePath);
+        if(!empty($children)) $items[0]['items'] = $children;
+
+        return $items;
+    }
+
+    /**
+     * 构建编辑目录页所属上级树。
+     * Build parent picker tree for edit dir page.
+     *
+     * @param  object $artifact
+     * @param  string $path
+     * @param  string $excludePath
+     * @access protected
+     * @return array
+     */
+    protected function buildParentPickerChildren(object $artifact, string $path = '/', string $excludePath = ''): array
+    {
+        $items = array();
+        $nodes = $this->artifact->getArtifactNodes($artifact, $path);
+        if(empty($nodes)) return $items;
+
+        foreach($nodes as $node)
+        {
+            if(empty($node->metadata) || $node->metadata->type != 'group') continue;
+            if($excludePath && $node->path == $excludePath) continue;
+
+            $item = array('text' => $node->name, 'value' => $node->metadata->id, 'keys' => $node->name);
+            $children = $this->buildParentPickerChildren($artifact, $node->path, $excludePath);
+            if(!empty($children)) $item['items'] = $children;
+
             $items[] = $item;
         }
 
@@ -111,6 +164,7 @@ class artifactZen extends artifact
         $dropdownItems   = array();
         $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
         $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
+        $dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
         $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
 
         $actions[] = array
