@@ -1984,7 +1984,7 @@ class doc extends control
             {
                 $space = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project);
             }
-            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type);
+            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type, 'copy');
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
