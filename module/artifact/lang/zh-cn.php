@@ -14,11 +14,15 @@ $lang->artifact->editArtifact   = '修改制品信息';
 $lang->artifact->deleteArtifact = '删除制品';
 
 $lang->artifact->name          = '名称';
-$lang->artifact->path          = '当前路径';
+$lang->artifact->path          = '所属目录';
 $lang->artifact->type          = '类型';
 $lang->artifact->size          = '大小';
+$lang->artifact->version       = '版本';
+$lang->artifact->arch          = '系统/架构';
 $lang->artifact->creator       = '创建者';
 $lang->artifact->createdDate   = '创建时间';
+$lang->artifact->editor        = '最后更新';
+$lang->artifact->editedDate    = '最后更新时间';
 $lang->artifact->action        = '操作';
 $lang->artifact->folder        = '文件夹';
 $lang->artifact->file          = '文件';
