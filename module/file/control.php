@@ -677,9 +677,14 @@ class file extends control
 
         if(!empty($this->lang->{$this->app->tab}->menu)) $this->lang->{$this->app->tab}->menu = array();
 
+        $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx';
+        $isOffice    = stripos($officeTypes, $file->extension) !== false;
+        $officeOn    = !empty($this->config->file->libreOfficeTurnon);
+
         switch($mode)
         {
             case 'preview':
+                if($isOffice && $officeOn) $this->locate(helper::createLink('file', 'download', "fileID={$file->id}&mouse=left"));
                 return $this->preview($file->id, 'left');
             case 'download':
                 return $this->download($file->id);
