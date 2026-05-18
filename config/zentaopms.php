@@ -384,6 +384,7 @@ $config->logonMethods[] = 'codescan.tips';
 $config->logonMethods[] = 'repo.viewwebhookrequest';
 $config->logonMethods[] = 'artifact.browse';
 $config->logonMethods[] = 'artifact.view';
+$config->logonMethods[] = 'artifact.downloadartifact';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
