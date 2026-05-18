@@ -13,6 +13,7 @@ $lang->artifact->deleteDir      = 'Delete Directory';
 $lang->artifact->editArtifact   = 'Edit Artifact';
 $lang->artifact->moveArtifact   = 'Move Artifact';
 $lang->artifact->deleteArtifact = 'Delete Artifact';
+$lang->artifact->batchDeleteArtifact = 'Batch Delete Artifacts';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->path          = 'Current Path';
