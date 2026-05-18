@@ -37,8 +37,9 @@ if(!empty($breadCrumbs))
     }
 }
 
-$data     = initTableData($assetList, $config->artifact->dtable->fieldList);
-$viewLink = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$data              = initTableData($assetList, $config->artifact->dtable->fieldList);
+$viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
 div
 (
     setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
@@ -158,6 +159,23 @@ div
             set::cols($config->artifact->dtable->fieldList),
             set::data($data),
             set::orderBy($orderBy),
+            set::checkable($canDeleteArtifact),
+            $canDeleteArtifact ? set::onCheckChange(jsRaw('window.toggleArtifactBatchDelete')) : null,
+            $canDeleteArtifact ? set::footToolbar(array
+            (
+                'type'  => 'btn-group',
+                'items' => array(array
+                (
+                    'text'         => $lang->artifact->batchDeleteArtifact,
+                    'btnType'      => 'secondary',
+                    'className'    => 'batch-btn artifact-batch-delete hidden',
+                    'data-on'      => 'click',
+                    'data-call'    => 'batchDeleteArtifact',
+                    'data-params'  => 'event',
+                    'data-url'     => helper::createLink('artifact', 'ajaxBatchDeleteArtifact'),
+                    'data-confirm' => $lang->artifact->notice->confirmDelete
+                ))
+            )) : null,
             set::sortLink(createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footPager(usePager()),
             set::emptyTip(empty($node) || !empty($node->type) && $node->type == 'asset' ? $lang->artifact->notice->emptyFolder : $lang->noData)
