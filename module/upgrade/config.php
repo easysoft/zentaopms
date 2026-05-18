@@ -613,8 +613,13 @@ $config->delete['22_0'][] = 'extension/ipd/user/ext/view/effortcalendar.html.php
 $config->delete['22_0'][] = 'extension/ipd/user/ext/view/todo.calendar.html.php';
 $config->delete['22_0'][] = 'extension/ipd/index/ext/config/ipd.php';
 
+$config->delete['22_0'][] = 'extension/or/market/js/';
 $config->delete['22_0'][] = 'extension/or/market/view/';
 $config->delete['22_0'][] = 'extension/or/market/view/ajaxgetdropmenu.html.php';
+$config->delete['22_0'][] = 'extension/or/marketreport/view/';
+$config->delete['22_0'][] = 'extension/or/marketreport/css/browse.css';
+$config->delete['22_0'][] = 'extension/or/marketreport/css/common.css';
+$config->delete['22_0'][] = 'extension/or/marketreport/css/view.css';
 
 $config->delete['22_0'][] = 'extension/max/assetlib/view/';
 $config->delete['22_0'][] = 'extension/max/story/ext/control/submit.php';
