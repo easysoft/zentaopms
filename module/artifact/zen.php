@@ -34,10 +34,11 @@ class artifactZen extends artifact
             $parentPath .= $key == 0 ? '/' : '/' . $selectPathList[$key - 1];
             $nodes      = $this->artifact->getArtifactNodes($artifact, '/'. ltrim($parentPath, '/'));
             if(empty($nodes)) continue;
+            $selectPath = '/' . ltrim($parentPath . '/' . $path, '/');
             foreach($nodes as $node)
             {
                 $nodePath = helper::safe64Encode($node->path);
-                $breadCrumbs[$path][] = array('text' => $node->name, 'value' => $nodePath, 'keys' => $node->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath=$nodePath"));
+                $breadCrumbs[$selectPath][] = array('text' => $node->name, 'path'=> $node->path, 'value' => $nodePath, 'keys' => $node->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath=$nodePath"));
             }
         }
 
@@ -83,8 +84,8 @@ class artifactZen extends artifact
             $item->entityID   = $node->metadata->entityID;
             $item->className  = 'text-clip';
             $item->hint       = $node->name;
+            $item->url        = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
 
-            $item->url = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
             if($item->kind == 'dir')
             {
                 $baseSelectPath = helper::safe64Encode($selectPath);

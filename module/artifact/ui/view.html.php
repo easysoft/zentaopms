@@ -32,7 +32,7 @@ if(!empty($breadCrumbs))
             set::menu(jsRaw('{searchBox: true, search: undefined}')),
             set::display(jsRaw("(value, selections) => {
             return {html: `<div>\${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
-            set::value(helper::safe64Encode('/' . $pathName))
+            set::value(helper::safe64Encode($pathName))
         );
     }
 }
