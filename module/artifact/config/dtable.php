@@ -5,6 +5,7 @@ $config->artifact->dtable->fieldList['path']['name']     = 'path';
 $config->artifact->dtable->fieldList['path']['title']    = $lang->artifact->path;
 $config->artifact->dtable->fieldList['path']['hint']     = true;
 $config->artifact->dtable->fieldList['path']['sortType'] = false;
+$config->artifact->dtable->fieldList['path']['checkbox'] = true;
 
 $config->artifact->dtable->fieldList['name']['name']     = 'name';
 $config->artifact->dtable->fieldList['name']['title']    = $lang->artifact->name;

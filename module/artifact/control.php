@@ -585,4 +585,55 @@ class artifact extends control
         $response['callback']   = "window.expandNode();";
         $this->sendSuccess($response);
     }
+
+    /**
+     * 批量删除制品。
+     * Batch delete artifacts.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxBatchDeleteArtifact()
+    {
+        if(!common::hasPriv('artifact', 'deleteArtifact')) return $this->sendError($this->lang->error->accessDenied);
+
+        $assetIDList = $this->post->assetIDList;
+        if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
+        if(!is_array($assetIDList)) $assetIDList = explode(',', (string)$assetIDList);
+
+        $assetIDList = array_values(array_unique(array_filter(array_map('intval', $assetIDList))));
+        if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
+
+        $entityIDs = array();
+        $assetList = array();
+        foreach($assetIDList as $assetID)
+        {
+            $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+            if(dao::isError()) $this->sendError(dao::getError());
+            if(empty($asset)) continue;
+
+            $assetList[$assetID] = $asset;
+            $entityIDs[] = 'asset.' . $assetID;
+        }
+
+        if(empty($entityIDs)) return $this->sendError($this->lang->artifact->notice->noArtifact);
+
+        $result = $this->gitfox->request('/artifacts/entities', 'DELETE', array('entityIDs' => $entityIDs));
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        if($result)
+        {
+            foreach($assetList as $assetID => $asset)
+            {
+                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deletedAsset', $asset->path);
+            }
+        }
+        if(dao::isError()) $this->sendError(dao::getError());
+
+        $response = array();
+        $response['result']   = 'success';
+        $response['message']  = $this->lang->deleteSuccess;
+        $response['callback'] = "window.expandNode();";
+        $this->sendSuccess($response);
+    }
 }

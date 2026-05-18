@@ -13,6 +13,7 @@ $lang->artifact->deleteDir      = '删除目录';
 $lang->artifact->editArtifact   = '修改制品信息';
 $lang->artifact->moveArtifact   = '移动制品';
 $lang->artifact->deleteArtifact = '删除制品';
+$lang->artifact->batchDeleteArtifact = '批量删除制品';
 
 $lang->artifact->name          = '名称';
 $lang->artifact->path          = '所属目录';
