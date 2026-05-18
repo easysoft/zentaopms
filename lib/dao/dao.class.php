@@ -222,7 +222,7 @@ class dao extends baseDAO
      * @access public
      * @return int
      */
-    public function getWorkflowGroupID($module, $data = NULL)
+    public function getWorkflowGroupID($module, $data = null)
     {
         $linkProductModules = array('productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
         $linkProjectModules = array('execution', 'build', 'task');
