@@ -19,7 +19,7 @@ $config->artifact->actionList['history']['data-app']    = $app->tab;
 $config->artifact->actionList['download']['icon']         = 'download';
 $config->artifact->actionList['download']['text']         = $lang->artifact->download;
 $config->artifact->actionList['download']['hint']         = $lang->artifact->download;
-$config->artifact->actionList['download']['url']          = array('module' => 'artifact', 'method' => 'downloadArtifact', 'params' => 'id={id}');
+$config->artifact->actionList['download']['url']          = array('module' => 'artifact', 'method' => 'downloadArtifact', 'params' => 'assetID={id}');
 $config->artifact->actionList['download']['className']    = 'ajax-submit';
 
 $config->artifact->actionList['move'] = array();
