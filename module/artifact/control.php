@@ -354,6 +354,46 @@ class artifact extends control
     }
 
     /**
+     * 下载制品。
+     * Download artifact.
+     *
+     * @param  int $assetID
+     * @access public
+     * @return void
+     */
+    public function downloadArtifact(int $assetID)
+    {
+        $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+        if(dao::isError()) $this->sendError(dao::getError());
+        if(empty($asset)) return $this->sendError($this->lang->notFound);
+
+        $fileName = '';
+        if(!empty($asset->metadata) && !empty($asset->metadata->name)) $fileName = $asset->metadata->name;
+        if(!$fileName && !empty($asset->name)) $fileName = $asset->name;
+        if(!$fileName && !empty($asset->path)) $fileName = basename($asset->path);
+        if(!$fileName) $fileName = 'artifact-' . $assetID;
+
+        $extension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return $this->sendError($this->lang->artifact->notice->noArtifact);
+
+        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/artifact/';
+        if(!is_dir($tempDownloadDir)) mkdir($tempDownloadDir, 0755, true);
+
+        $url      = sprintf($apiRoot->url, "/artifacts/assets/{$assetID}/download");
+        $context  = stream_context_create(array('http' => array('method' => 'GET', 'header' => implode("\r\n", $apiRoot->header), 'timeout' => 10)));
+        $filePath = $tempDownloadDir . $fileName;
+        file_put_contents($filePath, file_get_contents($url, false, $context));
+
+        $downArtifact = file_get_contents($filePath);
+        unlink($filePath);
+        if($downArtifact) $this->loadModel('action')->create('artifactAsset', $assetID, 'downloaded', $fileName);
+
+        $this->loadModel('file')->sendDownHeader($fileName, $extension, $downArtifact);
+    }
+
+    /**
      * 移动制品。
      * Move artifact.
      *
