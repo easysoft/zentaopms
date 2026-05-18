@@ -234,7 +234,24 @@ class artifactModel extends model
         $params['sort']     = $sort;
         $params['order']    = $order;
         $params['more']     = true;
-        $assetList = $this->loadModel('gitfox')->request('/artifacts/assets/list', 'POST', $params);
+
+        if(strpos($entityID, 'asset.') === 0)
+        {
+            $assetID = substr($entityID, 6);
+            $asset   = $this->loadModel('gitfox')->request("/artifacts/assets/{$assetID}");
+
+            $assetList = new stdclass();
+            $assetList->data = array($asset);
+
+            $assetList->pager = new stdclass();
+            $assetList->pager->total    = 1;
+            $assetList->pager->pageSize = $pager->recPerPage;
+            $assetList->pager->page     = $pager->pageID;
+        }
+        else
+        {
+            $assetList = $this->loadModel('gitfox')->request('/artifacts/assets/list', 'POST', $params);
+        }
         if(!empty($assetList) && !empty($assetList->pager) && !is_null($pager))
         {
             $pager->recTotal   = $assetList->pager->total;
