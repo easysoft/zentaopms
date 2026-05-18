@@ -3906,7 +3906,7 @@ class executionModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
-            ->filterTpl('skip')
+            ->filterTpl(false)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id', false);
