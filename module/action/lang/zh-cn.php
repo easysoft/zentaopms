@@ -240,6 +240,7 @@ $lang->action->desc->activated            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->blocked              = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动。' . "\n";
 $lang->action->desc->downloaded           = '$date, 由 <strong>$actor</strong> 下载。' . "\n";
+$lang->action->desc->uploaded             = '$date, 由 <strong>$actor</strong> 上传。' . "\n";
 $lang->action->desc->copied               = '$date, 由 <strong>$actor</strong> 从 $extra 复制而来。' . "\n";
 $lang->action->desc->confirmed            = '$date, 由 <strong>$actor</strong> 确认' . $lang->SRCommon . '变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
@@ -397,6 +398,9 @@ $lang->action->desc->autodeletebackups   = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> 保存备份设置。' . "\n";
 $lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
+
+$lang->action->desc->editedasset = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -661,6 +665,8 @@ $lang->action->label->editrule                = '编辑了规则';
 $lang->action->label->deleterule              = '删除了规则';
 $lang->action->label->enablerule              = '启用了规则';
 $lang->action->label->disablerule             = '关闭了规则';
+$lang->action->label->editedasset             = '编辑了';
+$lang->action->label->movedasset              = '移动了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

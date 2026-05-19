@@ -251,6 +251,7 @@ class actionModel extends model
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
             if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
+            if(strpos($action->objectType, 'artifact') == 0 && !empty($action->extra) && strpos($action->extra, '|') != false) $action->extra = explode('|', $action->extra)[1];
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
