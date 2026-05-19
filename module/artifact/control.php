@@ -79,7 +79,7 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0, string $orderBy = 'created_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $selectPath = helper::safe64Decode($selectPath);
 
@@ -251,7 +251,7 @@ class artifact extends control
             $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
             if(dao::isError()) $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('artifactGroup', $artifactID, 'createdDir', $formData->name);
+            $this->loadModel('action')->create('artifactDir', $artifactID, 'created', '', $artifactID . '|' . $formData->name);
 
             $response = array();
             $response['result']     = 'success';
@@ -278,6 +278,7 @@ class artifact extends control
         $parentPath  = $currentPath ? dirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
 
+        $artifacts = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
         if($_POST)
         {
             $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
@@ -293,7 +294,7 @@ class artifact extends control
             $result = $this->loadModel('gitfox')->request('/artifacts/entities/relocate', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result) $this->loadModel('action')->create('artifactGroup', $artifactID, 'edited', $formData->name);
+            if($result) $this->loadModel('action')->create('artifactDir', $artifactID, 'edited', '', $artifactID . '|' . $currentPath);
 
             $response = array();
             $response['result']     = 'success';
@@ -306,7 +307,7 @@ class artifact extends control
         }
 
         $this->view->title              = $this->lang->artifact->editDir;
-        $this->view->artifacts          = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->artifacts          = $artifacts;
         $this->view->dirName            = $currentPath ? ltrim(baseName($currentPath), '/') : '';
         $this->view->artifact           = $artifact;
         $this->view->currentPath        = $currentPath;
@@ -323,7 +324,7 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function editArtifact(int $assetID)
+    public function editArtifact(int $assetID, int $artifactID = 0)
     {
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
 
@@ -338,7 +339,12 @@ class artifact extends control
             $result   = $this->gitfox->request('/artifacts/entities/rename', 'POST', $param);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'edited', $asset->path);
+            if($result && $asset && !empty($asset->path))
+            {
+                $oldName = !empty($asset->metadata) && !empty($asset->metadata->name) ? $asset->metadata->name : basename($asset->path);
+                $extra   = sprintf($this->lang->artifact->actionComment->edited, $oldName, $formData->name);
+                $this->loadModel('action')->create('artifactAsset', $assetID, 'editedasset', '', "{$artifactID}|{$extra}");
+            }
             if(dao::isError()) $this->sendError(dao::getError());
             $response = array();
             $response['result']     = 'success';
@@ -358,10 +364,11 @@ class artifact extends control
      * Download artifact.
      *
      * @param  int $assetID
+     * @param  int $artifactID
      * @access public
      * @return void
      */
-    public function downloadArtifact(int $assetID)
+    public function downloadArtifact(int $assetID, int $artifactID = 0)
     {
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
@@ -388,9 +395,26 @@ class artifact extends control
 
         $downArtifact = file_get_contents($filePath);
         unlink($filePath);
-        if($downArtifact) $this->loadModel('action')->create('artifactAsset', $assetID, 'downloaded', $fileName);
+        if($downArtifact) $this->loadModel('action')->create('artifactAsset', $assetID, 'downloaded', '', $artifactID . '|' . $fileName);
 
         $this->loadModel('file')->sendDownHeader($fileName, $extension, $downArtifact);
+    }
+
+    /**
+     * 查看制品历史记录。
+     * View artifact history.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function history(int $id)
+    {
+        $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $id);
+
+        $this->view->title   = $asset->path . ' - ' . $this->lang->artifact->history;
+        $this->view->assetID = $id;
+        $this->display();
     }
 
     /**
@@ -424,6 +448,10 @@ class artifact extends control
             $formData = form::data($this->config->artifact->form->moveArtifact)->get();
             if($formData->parent == '/') return $this->sendError(array('parent' => $this->lang->artifact->notice->rootNotAllowed));
 
+            $fromRepo = $artifact->name;
+            $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
+            $toRepo   = zget($this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
+
             $params = array();
             $params['entityID']         = 'asset.' . $assetID;
             $params['targetArtifactID'] = $formData->artifactID;
@@ -432,7 +460,15 @@ class artifact extends control
             $result = $this->gitfox->request('/artifacts/entities/move', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'moved', $asset->path);
+            if($result && $asset && !empty($asset->path))
+            {
+                $movedAsset = $this->gitfox->request('/artifacts/assets/' . $assetID);
+                if(dao::isError()) $this->sendError(dao::getError());
+
+                $toPath = !empty($movedAsset->metadata) && !empty($movedAsset->metadata->group) ? $movedAsset->metadata->group : (!empty($movedAsset->path) ? dirname($movedAsset->path) : '/');
+                $extra  = $artifactID . '|' . sprintf($this->lang->artifact->actionComment->moved, $fromRepo, $fromPath, $toRepo, $toPath);
+                $this->loadModel('action')->create('artifactAsset', $assetID, 'movedasset', '', $extra);
+            }
             if(dao::isError()) $this->sendError(dao::getError());
 
             $response = array();
@@ -521,7 +557,7 @@ class artifact extends control
             if($result && !empty($result[0]) && !empty($result[0]->Object))
             {
                 $asset = $result[0]->Object;
-                $this->loadModel('action')->create('artifactAsset', $asset->id, 'uploaded', $asset->path);
+                $this->loadModel('action')->create('artifactAsset', $asset->id, 'uploaded', '', $artifactID . '|' . $asset->path);
             }
             $this->sendSuccess($response);
 
@@ -548,7 +584,7 @@ class artifact extends control
         $path       = helper::safe64Decode($path);
         $parentPath = dirname($path);
         $base64Path = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
-        if($result) $this->loadModel('action')->create('artifactGroup', $artifactID, 'deletedDir', $path);
+        if($result) $this->loadModel('action')->create('artifactDir', $artifactID, 'deleted', '', $artifactID . '|' . $path);
 
         $response = array();
         $response['result']     = 'success';
@@ -564,10 +600,11 @@ class artifact extends control
      *
      * @param  int $artifactID
      * @param  int $assetID
+     * @param  int $artifactID
      * @access public
      * @return void
      */
-    public function deleteArtifact(int $assetID)
+    public function deleteArtifact(int $assetID, int $artifactID = 0)
     {
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
@@ -576,7 +613,10 @@ class artifact extends control
         $result   = $this->gitfox->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
         if(dao::isError()) $this->sendError(dao::getError());
 
-        if($result && $asset && !empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deletedAsset', $asset->path);
+        if($result && $asset && !empty($asset->path))
+        {
+            $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', '', $artifactID . '|' . $asset->path);
+        }
         if(dao::isError()) $this->sendError(dao::getError());
         $response = array();
         $response['result']     = 'success';
@@ -598,6 +638,7 @@ class artifact extends control
         if(!common::hasPriv('artifact', 'deleteArtifact')) return $this->sendError($this->lang->error->accessDenied);
 
         $assetIDList = $this->post->assetIDList;
+        $artifactID  = $this->post->artifactID;
         if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
         if(!is_array($assetIDList)) $assetIDList = explode(',', (string)$assetIDList);
 
@@ -625,7 +666,7 @@ class artifact extends control
         {
             foreach($assetList as $assetID => $asset)
             {
-                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deletedAsset', $asset->path);
+                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', '',  $artifactID . '|' . $asset->path);
             }
         }
         if(dao::isError()) $this->sendError(dao::getError());
