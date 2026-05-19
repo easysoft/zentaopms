@@ -65,7 +65,6 @@ if($app->tab == 'project')
 }
 else
 {
-
     unset($fieldList['actions']['list']['linkProjectStory']);
 }
 
