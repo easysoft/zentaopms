@@ -474,12 +474,12 @@ EOT;
      *
      * @param  string $type user|project|issue|build|issuelink|action|file
      * @param  int    $lastID
-     * @param  bool   $createTable
-     * @param  bool   $getApiData
+     * @param  int    $createTable
+     * @param  int    $getApiData
      * @access public
      * @return array
      */
-    public function importJiraData(string $type = '', int $lastID = 0, bool $createTable = false, bool $getApiData = false): array
+    public function importJiraData(string $type = '', int $lastID = 0, int $createTable = 0, int $getApiData = 0): array
     {
         if($createTable) $this->createTmpTable4Jira();
 

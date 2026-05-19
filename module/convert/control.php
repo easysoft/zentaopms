@@ -514,12 +514,12 @@ class convert extends control
      * @param  string $mode   show|import
      * @param  string $type   user|issue|project|attachment
      * @param  int    $lastID
-     * @param  bool   $createTable
-     * @param  bool   $getApiData
+     * @param  int    $createTable
+     * @param  int    $getApiData
      * @access public
      * @return void
      */
-    public function importJira(string $method = 'db', string $mode = 'show', string $type = 'user', int $lastID = 0, bool $createTable = false, bool $getApiData = false)
+    public function importJira(string $method = 'db', string $mode = 'show', string $type = 'user', int $lastID = 0, int $createTable = 0, int $getApiData = 0)
     {
         set_time_limit(0);
 
@@ -530,7 +530,7 @@ class convert extends control
 
             if(!empty($result['finished']))
             {
-                if($getApiData) return $this->send(array('result' => 'unfinished', 'type' => 'user', 'count' => 0, 'message' => $this->lang->convert->jira->getDataSuccess, 'next' => inlink('importJira', "method={$method}&mode={$mode}&type=user&lastID=0&createTable=false&getApiData=false")));
+                if($getApiData) return $this->send(array('result' => 'unfinished', 'type' => 'user', 'count' => 0, 'message' => $this->lang->convert->jira->getDataSuccess, 'next' => inlink('importJira', "method={$method}&mode={$mode}&type=user&lastID=0")));
                 return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
             }
 
@@ -540,7 +540,7 @@ class convert extends control
             $response['type']    = ($getApiData ? 'get' : '') . $type;
             $response['count']   = !empty($result['count']) ? $result['count'] : 0;
             $response['message'] = sprintf($getApiData ? $this->lang->convert->jira->getDataResult : $this->lang->convert->jira->importResult, $type, $response['type'], $result['count']);
-            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}&createTable=false&getApiData={$getApiData}");
+            $response['next']    = inlink('importJira', "method={$method}&mode={$mode}&type={$result['type']}&lastID={$result['lastID']}&createTable=0&getApiData={$getApiData}");
             return $this->send($response);
         }
 
