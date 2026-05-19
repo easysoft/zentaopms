@@ -71,4 +71,4 @@ r($actionTester->processHistoryTest($idList[5])) && p('field,oldValue,newValue')
 r($actionTester->processHistoryTest($idList[6])) && p('field,oldValue,newValue') && e('resolution,~~,已解决'); // 测试处理ID为的版本历史记录
 r($actionTester->processHistoryTest($idList[7])) && p('field,oldValue,newValue') && e('type,单元测试,接口测试'); // 测试处理ID为的Bug历史记录
 r($actionTester->processHistoryTest($idList[8])) && p('field,oldValue,newValue') && e('lastRunner,~~,用户2'); // 测试处理ID为的用例历史记录
-r($actionTester->processHistoryTest($idList[9])) && p('field,oldValue,newValue') && e('stage,单元测试阶段,功能测试阶段'); // 测试处理ID为的用例历史记录
+r($actionTester->processHistoryTest($idList[9])) && p('field,oldValue,newValue') && e('stage,单元测试环节,功能测试环节'); // 测试处理ID为的用例历史记录
