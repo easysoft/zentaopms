@@ -52,6 +52,11 @@ $lang->artifact->parent        = '所属上级';
 
 $lang->artifact->countArtifact = '共%s个制品';
 
+$lang->artifact->actionComment = new stdclass();
+$lang->artifact->actionComment->moved     = '从制品库%s的目录%s移动到制品库%s的目录%s。';
+$lang->artifact->actionComment->editedDir = '从制品库%s的%s修改为制品库%s的%s。';
+$lang->artifact->actionComment->edited    = '从%s重命名为%s。';
+
 $lang->artifact->placeholder = new stdclass();
 $lang->artifact->placeholder->name = '请输入制品库名称';
 
