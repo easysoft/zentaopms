@@ -4,7 +4,7 @@ $config->artifact->actionList = array();
 $config->artifact->actionList['edit']['icon']        = 'edit';
 $config->artifact->actionList['edit']['text']        = $lang->artifact->editArtifact;
 $config->artifact->actionList['edit']['hint']        = $lang->artifact->editArtifact;
-$config->artifact->actionList['edit']['url']         = array('module' => 'artifact', 'method' => 'editArtifact', 'params' => 'id={id}');
+$config->artifact->actionList['edit']['url']         = array('module' => 'artifact', 'method' => 'editArtifact', 'params' => 'id={id}&artifactID={artifactID}');
 $config->artifact->actionList['edit']['data-toggle'] = 'modal';
 $config->artifact->actionList['edit']['data-app']    = $app->tab;
 
@@ -19,7 +19,7 @@ $config->artifact->actionList['history']['data-app']    = $app->tab;
 $config->artifact->actionList['download']['icon']         = 'download';
 $config->artifact->actionList['download']['text']         = $lang->artifact->download;
 $config->artifact->actionList['download']['hint']         = $lang->artifact->download;
-$config->artifact->actionList['download']['url']          = array('module' => 'artifact', 'method' => 'downloadArtifact', 'params' => 'assetID={id}');
+$config->artifact->actionList['download']['url']          = array('module' => 'artifact', 'method' => 'downloadArtifact', 'params' => 'assetID={id}&artifactID={artifactID}');
 $config->artifact->actionList['download']['className']    = 'ajax-submit';
 
 $config->artifact->actionList['move'] = array();
@@ -33,6 +33,6 @@ $config->artifact->actionList['move']['data-toggle'] = 'modal';
 $config->artifact->actionList['delete']['icon']         = 'trash';
 $config->artifact->actionList['delete']['text']         = $lang->artifact->deleteArtifact;
 $config->artifact->actionList['delete']['hint']         = $lang->artifact->deleteArtifact;
-$config->artifact->actionList['delete']['url']          = array('module' => 'artifact', 'method' => 'deleteArtifact', 'params' => 'assetID={id}');
+$config->artifact->actionList['delete']['url']          = array('module' => 'artifact', 'method' => 'deleteArtifact', 'params' => 'assetID={id}&artifactID={artifactID}');
 $config->artifact->actionList['delete']['className']    = 'ajax-submit';
 $config->artifact->actionList['delete']['data-confirm'] = array('message' => $lang->artifact->notice->confirmDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
