@@ -35,6 +35,11 @@ window.manageTeam = function()
     if(taskMode == 'multi') disableMembers();
 }
 
+window.clickTeamModal = function()
+{
+    if(taskMode == 'multi') disableMembers();
+}
+
 /**
  * 设置团队成员。
  * Set team members.

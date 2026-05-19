@@ -123,6 +123,7 @@ if($isMultiple)
         set::text($lang->task->team),
         setClass('team-group hidden'),
         set::url('#modalTeam'),
+        on::click('clickTeamModal'),
         setData(array('toggle' => 'modal'))
     );
 }
