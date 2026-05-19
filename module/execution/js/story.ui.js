@@ -158,6 +158,7 @@ window.renderStoryCell = function(result, info)
     }
     if(info.col.name == 'status' && result)
     {
+        result[0].props.class = 'status-' + info.row.data.rawStatus;
         if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
     }
     if(info.col.name == 'order')
