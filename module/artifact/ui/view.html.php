@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('artifactID', $artifact->id);
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));

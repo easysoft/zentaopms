@@ -29,6 +29,7 @@ $lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
 $lang->minus     = ' - ';
+$lang->in        = 'In';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';

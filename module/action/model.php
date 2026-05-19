@@ -251,6 +251,7 @@ class actionModel extends model
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
             if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
+            if(strpos($action->objectType, 'artifact') == 0 && !empty($action->extra) && strpos($action->extra, '|') != false) $action->extra = explode('|', $action->extra)[1];
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -1349,7 +1350,6 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
-            $this->loadModel($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
@@ -1375,6 +1375,15 @@ class actionModel extends model
             {
                 $action->objectLink  = helper::createLink('execution', 'view', "executionID={$action->objectID}"); // 交付物链接
             }
+
+            if(in_array($action->objectType, array('artifactasset', 'artifactdir')) && !empty($action->extra) && strpos($action->extra, '|') !== false)
+            {
+                list($artifactID, $objectName) = explode('|', $action->extra);
+                if(empty($artifactID) || !isset($objectNames[$action->objectType][$artifactID])) continue;
+
+                $action->actionLabel = $this->lang->in . $this->lang->artifact->common . $objectNames[$action->objectType][$artifactID] . ' ' . $action->actionLabel;
+                $action->objectLink  = '';
+            }
         }
         return $actions;
     }
@@ -1391,7 +1400,20 @@ class actionModel extends model
     {
         /* Init object type array. */
         $objectTypes = array();
-        foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
+        foreach($actions as $object)
+        {
+            if(in_array($object->objectType, array('artifactasset', 'artifactdir')))
+            {
+                if(empty($object->extra)) continue;
+
+                $artifactID = explode('|', $object->extra)[0];
+                if(empty($artifactID)) continue;
+
+                $objectTypes[$object->objectType][$artifactID] = $artifactID;
+                continue;
+            }
+            $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
+        }
 
         if(isset($objectTypes['todo']))   $this->app->loadLang('todo');
         if(isset($objectTypes['branch'])) $this->app->loadLang('branch');
@@ -1400,11 +1422,12 @@ class actionModel extends model
         $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,artifactasset,artifactdir,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
 
             if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
             if($objectType == 'makeup') $table = TABLE_OVERTIME;
             if($objectType == 'pivot')  $table = TABLE_PIVOTSPEC;
+            if(in_array($objectType, array('artifactasset', 'artifactdir'))) $table = TABLE_ARTIFACT;
             if($objectType == 'auditplan') continue;
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;

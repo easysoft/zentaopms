@@ -197,6 +197,8 @@ $lang->action->objectTypes['baseline']         = 'Baseline';
 $lang->action->objectTypes['ganttversion']     = 'Gantt Version';
 $lang->action->objectTypes['projectchange']    = 'Project Change';
 $lang->action->objectTypes['artifact']         = 'Artifact';
+$lang->action->objectTypes['artifactasset']    = 'Artifact Asset';
+$lang->action->objectTypes['artifactdir']      = 'Artifact Directory';
 $lang->action->objectTypes['gitfox']           = 'GitFox Server';
 $lang->action->objectTypes['gitfoxuser']       = 'GitFox User';
 $lang->action->objectTypes['repotag']          = 'Repo Tag';
@@ -395,6 +397,9 @@ $lang->action->desc->savebackupsettings  = '$date, Save backup settings backups 
 $lang->action->desc->deleteexpiredbackup = '$date, Clean up expired backups by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, Manually clean up backup by <strong>$actor</strong>.' . "\n";
 
+$lang->action->desc->editedasset = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = 'install ';
@@ -435,6 +440,7 @@ $lang->action->label->resolved                = 'resolved ';
 $lang->action->label->reviewed                = 'reviewed ';
 $lang->action->label->recalled                = 'recalled';
 $lang->action->label->recalledchange          = 'undo changes';
+$lang->action->label->uploaded                = 'uploaded ';
 $lang->action->label->moved                   = 'moved ';
 $lang->action->label->downloaded              = 'downloaded ';
 $lang->action->label->confirmed               = 'Confirm Story';
@@ -654,6 +660,8 @@ $lang->action->label->resend                  = 'Resend';
 $lang->action->label->resendCompile           = 'Replay';
 $lang->action->label->enabledrunner           = 'Enabled';
 $lang->action->label->disabledrunner          = 'Suspended';
+$lang->action->label->editedasset             = 'Edited';
+$lang->action->label->movedasset              = 'Moved';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

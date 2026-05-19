@@ -197,6 +197,8 @@ $lang->action->objectTypes['baseline']         = '基线';
 $lang->action->objectTypes['ganttversion']     = '甘特图版本';
 $lang->action->objectTypes['projectchange']    = '项目变更';
 $lang->action->objectTypes['artifact']         = '制品库';
+$lang->action->objectTypes['artifactasset']    = '制品';
+$lang->action->objectTypes['artifactdir']      = '制品库目录';
 $lang->action->objectTypes['gitfox']           = 'GitFox服务器';
 $lang->action->objectTypes['gitfoxuser']       = 'GitFox用户';
 $lang->action->objectTypes['repotag']          = '代码标签';
@@ -238,6 +240,7 @@ $lang->action->desc->activated            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->blocked              = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动。' . "\n";
 $lang->action->desc->downloaded           = '$date, 由 <strong>$actor</strong> 下载。' . "\n";
+$lang->action->desc->uploaded             = '$date, 由 <strong>$actor</strong> 上传。' . "\n";
 $lang->action->desc->copied               = '$date, 由 <strong>$actor</strong> 从 $extra 复制而来。' . "\n";
 $lang->action->desc->confirmed            = '$date, 由 <strong>$actor</strong> 确认' . $lang->SRCommon . '变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
@@ -396,6 +399,9 @@ $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
 
+$lang->action->desc->editedasset = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';
@@ -436,6 +442,7 @@ $lang->action->label->resolved                = '解决了';
 $lang->action->label->reviewed                = '评审了';
 $lang->action->label->recalled                = '撤销了评审';
 $lang->action->label->recalledchange          = '撤销了变更';
+$lang->action->label->uploaded                = '上传了';
 $lang->action->label->moved                   = '移动了';
 $lang->action->label->downloaded              = '下载了';
 $lang->action->label->copied                  = '复制了';
@@ -658,6 +665,8 @@ $lang->action->label->editrule                = '编辑了规则';
 $lang->action->label->deleterule              = '删除了规则';
 $lang->action->label->enablerule              = '启用了规则';
 $lang->action->label->disablerule             = '关闭了规则';
+$lang->action->label->editedasset             = '编辑了';
+$lang->action->label->movedasset              = '移动了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

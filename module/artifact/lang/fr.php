@@ -52,6 +52,11 @@ $lang->artifact->parent        = 'Parent';
 
 $lang->artifact->countArtifact = 'Total %s Artifact';
 
+$lang->artifact->actionComment = new stdclass();
+$lang->artifact->actionComment->moved     = 'Move from directory %s of the artifact repo %s to directory %s of the artifact repo %s.';
+$lang->artifact->actionComment->editedDir = 'Edit directory %s of the artifact repo %s to %s of the artifact repo %s.';
+$lang->artifact->actionComment->edited    = 'Rename %s to %s';
+
 $lang->artifact->placeholder = new stdclass();
 $lang->artifact->placeholder->name = 'Enter Artifact Repository Name';
 
