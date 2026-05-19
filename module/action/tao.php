@@ -843,6 +843,7 @@ class actionTao extends actionModel
             }
             $action->objectName = $objectName;
         }
+        if(in_array($objectType, array('artifactasset', 'artifactdir'))) $action->objectName = empty(explode('|', $action->extra)[1]) ? $action->extra : explode('|', $action->extra)[1];
     }
 
     /**
