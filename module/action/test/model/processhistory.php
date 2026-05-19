@@ -54,8 +54,8 @@ cid=14924
  - 属性newValue @用户2
 - 测试处理ID为的用例历史记录
  - 属性field @stage
- - 属性oldValue @单元测试阶段
- - 属性newValue @功能测试阶段
+ - 属性oldValue @单元测试环节
+ - 属性newValue @功能测试环节
 
 */
 
