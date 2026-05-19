@@ -56,7 +56,18 @@ if(($project->model == 'kanban' && $app->rawModule == 'projectbuild') || !$proje
     unset($fieldList['actions']['list']['createTest']['data-app']);
     $fieldList['actions']['list']['viewBug']['url'] = $config->build->actionList['projectBugList']['url'];
 }
-unset($fieldList['actions']['list'][$app->tab == 'project' ? 'linkStory' : 'linkProjectStory']);
+
+if($app->tab == 'project')
+{
+    unset($fieldList['actions']['list']['linkStory']);
+    $linkStoryKey = array_search('linkStory', $fieldList['actions']['menu']);
+    if($linkStoryKey) $fieldList['actions']['menu'][$linkStoryKey] = 'linkProjectStory';
+}
+else
+{
+    unset($fieldList['actions']['list']['linkProjectStory']);
+}
+
 if(!$project->multiple) unset($fieldList['executionName']);
 if(!$canModify) unset($fieldList['actions']['list']);
 $builds = initTableData($builds, $fieldList, $this->build);
