@@ -776,6 +776,12 @@ class projectZen extends project
         }
         if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
+        if(in_array($this->config->edition, array('max', 'ipd')) && in_array($project->model, array('scrum', 'kanban')))
+        {
+            unset($this->lang->resource->task->autoschedule);
+            unset($this->lang->resource->execution->taskAutoSchedule);
+        }
+
         if(!$project->multiple and !$project->hasProduct)
         {
             unset($this->lang->resource->story->batchChangePlan);
