@@ -134,7 +134,7 @@ detailBody
                     item
                     (
                         set::name($lang->design->type),
-                        zget($lang->design->typeList, $design->type)
+                        zget($designTypeList, $design->type)
                     ),
                     item
                     (
