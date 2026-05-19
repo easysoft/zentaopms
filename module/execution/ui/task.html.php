@@ -145,7 +145,7 @@ foreach($tableData as $task)
     $task->status      = $this->processStatus('task', $task);
     $task->rawStory    = $task->story;
     $task->story       = $task->storyTitle;
-    $task->canAssignTo = $canAssignTo && $task->rawStatus != 'closed' ? common::hasDBPriv($task, 'task', 'assignTo') : false;
+    $task->canAssignTo = $canAssignTo ? common::hasDBPriv($task, 'task', 'assignTo') : false;
     if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
     if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
 
