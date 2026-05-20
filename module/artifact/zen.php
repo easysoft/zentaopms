@@ -176,6 +176,7 @@ class artifactZen extends artifact
             'hint'     => $this->lang->more,
             'type'     => 'dropdown',
             'caret'    => false,
+            'trigger'  => 'hover',
             'dropdown' => array('items' => $dropdownItems)
         );
 
