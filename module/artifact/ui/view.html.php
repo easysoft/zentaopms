@@ -55,12 +55,11 @@ div
         setClass('row'),
         btn
         (
-            setClass('ghost text-primary square size-md'),
+            setClass('ghost text-primary square'),
             set::title('home'),
-            set::icon('home'),
+            set::icon('back'),
             set::url($browseLink)
         ),
-        span('>', setStyle('margin', '5px')),
         picker
         (
             setClass('picker-btn state'),
