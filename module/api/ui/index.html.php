@@ -14,6 +14,7 @@ $privs = array();
 $privs['collect']      = 'no';
 $privs['createApi']    = hasPriv('api', 'create');
 $privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
+$privs['exportopenapi']= $this->config->edition != 'open' && hasPriv('api', 'exportopenapi');
 $privs['edit']         = hasPriv('api', 'edit');
 $privs['editApi']      = hasPriv('api', 'edit');
 $privs['view']         = hasPriv('api', 'view');

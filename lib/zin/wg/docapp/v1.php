@@ -244,6 +244,13 @@ class docApp extends wg
         $langData->cantPreview        = $lang->file->cantPreview;
         $langData->officeNotSupported = $lang->file->officeNotSupported;
         $langData->officeNotInstalled = $lang->file->officeNotInstalled;
+        $langData->exportOpenAPI      = $lang->api->exportOpenAPI;
+        $langData->exportOpenAPITitle = $lang->api->exportOpenAPITitle;
+        $langData->exportScopeLabel   = $lang->api->exportScopeLabel;
+        $langData->exportVersionLabel = $lang->api->exportVersionLabel;
+        $langData->exportFormatLabel  = $lang->api->exportFormatLabel;
+        $langData->exportVersionList  = $lang->api->exportVersionList;
+        $langData->exportFormatList   = $lang->api->exportFormatList;
 
         /**
          * 通过语言项定义文档表格列显示名称。
