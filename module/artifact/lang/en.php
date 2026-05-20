@@ -49,6 +49,7 @@ $lang->artifact->okBtn         = 'OK';
 $lang->artifact->history       = 'History';
 $lang->artifact->artifactRepo  = 'Artifact Repo';
 $lang->artifact->parent        = 'Parent';
+$lang->artifact->repo          = 'Code Repo';
 
 $lang->artifact->countArtifact = 'Total %s Artifact';
 

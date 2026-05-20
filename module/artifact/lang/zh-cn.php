@@ -49,6 +49,7 @@ $lang->artifact->okBtn         = '确定';
 $lang->artifact->history       = '历史记录';
 $lang->artifact->artifactRepo  = '制品库';
 $lang->artifact->parent        = '所属上级';
+$lang->artifact->repo          = '所属代码库';
 
 $lang->artifact->countArtifact = '共%s个制品';
 
