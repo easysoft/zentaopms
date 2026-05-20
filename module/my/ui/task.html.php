@@ -66,7 +66,7 @@ if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']
 if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
 
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
-$cols  = array_values($config->my->task->dtable->fieldList);
+$cols = $this->loadModel('datatable')->getSetting('my', 'task');
 $lang->task->statusList['changed'] = $lang->task->storyChange;
 foreach($tasks as $task)
 {
@@ -112,6 +112,7 @@ dtable
     set::cols($cols),
     set::data($data),
     set::userMap($users),
+    set::customCols(true),
     set::fixedLeftWidth('44%'),
     set::noNestedCheck(true),
     set::onRenderCell(jsRaw('window.renderCell')),
