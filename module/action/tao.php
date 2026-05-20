@@ -843,7 +843,11 @@ class actionTao extends actionModel
             }
             $action->objectName = $objectName;
         }
-        if(in_array($objectType, array('artifactasset', 'artifactdir'))) $action->objectName = empty(explode('|', $action->extra)[1]) ? $action->extra : explode('|', $action->extra)[1];
+        if(in_array($objectType, array('artifactasset', 'artifactdir')))
+        {
+            $extra = $action->action == 'deleted' ? $action->comment : $action->extra;
+            $action->objectName = empty(explode('|', $extra)[1]) ? $action->extra : explode('|', $extra)[1];
+        }
     }
 
     /**

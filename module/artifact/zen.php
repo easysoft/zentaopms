@@ -139,7 +139,7 @@ class artifactZen extends artifact
             if(empty($node->metadata) || $node->metadata->type != 'group') continue;
             if($excludePath && $node->path == $excludePath) continue;
 
-            $item = array('text' => $node->name, 'value' => $node->metadata->id, 'keys' => $node->name);
+            $item = array('text' => $node->name, 'value' => $node->metadata->entityID, 'keys' => $node->name);
             $children = $this->buildParentPickerChildren($artifact, $node->path, $excludePath);
             if(!empty($children)) $item['items'] = $children;
 

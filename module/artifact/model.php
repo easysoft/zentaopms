@@ -272,4 +272,40 @@ class artifactModel extends model
         }
         return $assetList->data;
     }
+
+    /**
+     * 回收站恢复.
+     * Restore artifact from recycle.
+     *
+     * @param  object $action
+     * @access public
+     * @return bool
+     */
+    public function restoreEntity(object $action): bool
+    {
+        if(empty($action->objectType)) return false;
+
+        if($action->objectType == 'artifactasset')
+        {
+            $comments = explode('|', $action->comment);
+            if(empty($comments) || count($comments) < 2) return false;
+            $entityID = 'asset.' . $action->objectID;
+            list($artifactID, $name) = $comments;
+        }
+        else
+        {
+            $comments = explode('|', $action->comment);
+            if(empty($comments) || count($comments) < 3) return false;
+            list($artifactID, $name, $entityID) = $comments;
+        }
+
+        $result = $this->loadModel('gitfox')->request('/artifacts/recycle/restore', 'POST', array('entityIDs' => array($entityID)));
+        if(empty($result) || empty($result->success)) return false;
+
+        /* 在action表中更新action记录。 */
+        /* Update action record in action table. */
+        $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($action->id)->exec();
+        $this->loadModel('action')->create($action->objectType, $action->objectID, 'undeleted', '', $artifactID . '|' . $name . '|' . $entityID);
+        return !dao::isError();
+    }
 }

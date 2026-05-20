@@ -92,7 +92,7 @@ if(!empty($artifactList))
                     ),
                     div
                     (
-                        setClass(!empty($repoName) ? 'items-center pb-6' : 'items-center'),
+                        setClass('items-center pb-6'),
                         div
                         (
                             setClass('flex flex-wrap items-center gap-2 my-2'),
@@ -102,20 +102,18 @@ if(!empty($artifactList))
                                 set::title($artifact->name),
                                 $artifact->name
                             ),
-                            label(setClass('size-sm font-normal gray-pale shadow-sm rounded-full flex-none'), $artifact->format)
-                        ),
-                        !empty($repoName) ? div
-                        (
-                            setClass('absolute bottom-2 right-3'),
-                            label
+                            label(setClass('size-sm font-normal gray-pale shadow-sm rounded-full flex-none'), zget($lang->artifact->formatList, $artifact->format)),
+                            !empty($repoName) ? div
                             (
-                                setClass('font-bold rounded text-black flex items-center gap-1 max-w-full'),
-                                set::style(array('background-color' => 'var(--color-primary-100)')),
-                                set::title($repoName),
-                                icon('file-code text-black'),
-                                span(setClass('clip'), $repoName)
-                            )
-                        ) : null
+                                setClass('absolute bottom-2 ml-0'),
+                                label
+                                (
+                                    setClass('ghost flex clip text-sm'),
+                                    set::title($repoName),
+                                    $lang->artifact->repo . ' : ' . $repoName
+                                )
+                            ) : null
+                        ),
                     )
                 )
             );
