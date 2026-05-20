@@ -433,7 +433,7 @@ class projectTao extends projectModel
 
         if($this->config->edition != 'open') $product->workflowGroup = $this->dao->select('id')->from(TABLE_WORKFLOWGROUP)->where('code')->eq('productproject')->fetch('id');
 
-        $this->app->loadLang('product');
+        $this->loadModel('product');
         $this->dao->insert(TABLE_PRODUCT)->data($product)
             ->check('name', 'notempty')
             ->checkIF(!empty($product->name), 'name', 'unique', "`program` = {$product->program} and `deleted` = '0'")
@@ -466,6 +466,10 @@ class projectTao extends projectModel
 
         /* Create doc lib. */
         if($project->hasProduct) $this->createProductDocLib($productID);
+
+        /* Create system with the same name. */
+        $this->product->createSystem($productID, $product->name);
+
         return !dao::isError();
     }
 
@@ -477,7 +481,7 @@ class projectTao extends projectModel
      * @access protected
      * @return bool
      */
-    protected function createProductDocLib(int $productID): bool
+    public function createProductDocLib(int $productID): bool
     {
         $this->app->loadLang('doc');
         $lib = new stdclass();

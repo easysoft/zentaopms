@@ -387,6 +387,9 @@ class productModel extends model
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
 
+        /* Create system with same name. */
+        $this->createSystem($productID, $product->name);
+
         return $productID;
     }
 
@@ -2222,5 +2225,31 @@ class productModel extends model
         }
 
         return $searchConfig;
+    }
+
+    /**
+     * Create system for product.
+     * 创建同名应用.
+     *
+     * @param  int    $productID
+     * @param  string $productName
+     * @access public
+     * @return void
+     */
+    public function createSystem(int $productID, string $productName)
+    {
+        $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($productName)->fetch('name');
+
+        $systemData = new stdClass();
+        $systemData->name        = $productName;
+        $systemData->product     = $productID;
+        $systemData->createdBy   = $this->app->user->account;
+        $systemData->createdDate = helper::now();
+        $this->dao->insert(TABLE_SYSTEM)->data($systemData)->exec();
+
+        $systemID = $this->dao->lastInsertID();
+        if($hasSameName) $this->dao->update(TABLE_SYSTEM)->set('name')->eq($productName . $systemID)->where('id')->eq($systemID)->exec();
+
+        $this->loadModel('action')->create('system', $systemID, 'created', '', '', $this->app->user->account);
     }
 }

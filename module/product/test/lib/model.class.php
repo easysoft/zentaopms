@@ -3249,4 +3249,18 @@ class productModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test create system.
+     *
+     * @param  int    $productID
+     * @param  string $productName
+     * @access public
+     * @return object
+     */
+    public function createSystemTest(int $productID, string $productName)
+    {
+        $this->instance->createSystem($productID, $productName);
+        return $this->instance->dao->select('*')->from(TABLE_SYSTEM)->fetchAll('id');
+    }
 }
