@@ -10,7 +10,14 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     if($(this).hasClass('ajax-btn'))
     {
-        $.ajaxSubmit({url, data: form});
+        if($(this).hasClass('batch-unlink-btn'))
+        {
+            zui.Modal.confirm(confirmBatchUnlinkStory).then((res) => {if(res) $.ajaxSubmit({url, data:form});});
+        }
+        else
+        {
+            $.ajaxSubmit({url, data: form});
+        }
     }
     else
     {
