@@ -466,6 +466,19 @@ class projectTao extends projectModel
 
         /* Create doc lib. */
         if($project->hasProduct) $this->createProductDocLib($productID);
+
+        /* Create system with the same name. */
+        $hasSameName = $this->dao->select('name')->from(TABLE_SYSTEM)->where('name')->eq($product->name)->fetch('name');
+        $systemData = new stdClass();
+        $systemData->name        = $product->name;
+        $systemData->product     = $productID;
+        $systemData->createdBy   = $this->app->user->account;
+        $systemData->createdDate = helper::now();
+        $this->dao->insert(TABLE_SYSTEM)->data($systemData)->exec();
+        $systemID = $this->dao->lastInsertID();
+        if($hasSameName) $this->dao->update(TABLE_SYSTEM)->set('name')->eq($product->name . $systemID)->where('id')->eq($systemID)->exec();
+        $this->action->create('system', $systemID, 'created', '', '', $this->app->user->account);
+
         return !dao::isError();
     }
 
