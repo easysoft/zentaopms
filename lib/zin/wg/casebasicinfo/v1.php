@@ -159,7 +159,7 @@ class caseBasicInfo extends wg
             );
         }
 
-        if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && $from != 'testtask' && $from != 'testsuite' && !empty($case->product))
+        if(isset($case->fromCaseVersion) && $case->fromCaseVersion > $case->version && !in_array($from, array('testtask','testsuite')) && !empty($case->product))
         {
             $status[] = span
             (
