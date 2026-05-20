@@ -220,6 +220,7 @@ class space extends control
 
         if($method == 'managepriv')    $method = 'group';
         if($method == 'edit')          $method = 'browse';
+        if($module == 'artifact' && $method == 'view') $method = 'browse';
         if($module == 'deploy' && in_array($method, array('steps', 'managestep', 'cases', 'linkcases', 'artifact', 'view'))) $method = 'browse';
         $link = in_array($method, array('view', 'group', 'members', 'managemembers', 'browsesystem')) ? $this->createLink($module, $method, "spaceID=%s") : $this->createLink($module, $method, "inSpace=1&spaceID=%s");
         $link = $method == 'createrepo' ? $this->createLink('repo', 'createRepo', "objectID=0&spaceID=%s") : $link;

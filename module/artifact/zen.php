@@ -61,6 +61,12 @@ class artifactZen extends artifact
         $nodes = $this->artifact->getArtifactNodes($artifact, $path);
         if(empty($nodes)) return $items;
 
+        $privs = array();
+        foreach(array('createDir', 'editDir', 'deleteDir') as $action)
+        {
+            $privs[$action] = common::hasPriv('artifact', $action);
+        }
+
         $items = array();
         if(empty($selectNode)) $selectNode = array();
         foreach($nodes as $node)
@@ -74,7 +80,7 @@ class artifactZen extends artifact
             $item->text       = $node->name;
             $item->path       = $node->path;
             $item->format     = $node->format;
-            $item->kind       = $node->metadata->type == 'group' ? 'dir' : 'file';
+            $item->kind       = $node->leaf ? 'file' : 'dir';
             $item->active     = $node->path == $selectPath;
             $item->artifactID = $artifact->id;
             $item->spaceID    = $spaceID;
@@ -92,7 +98,7 @@ class artifactZen extends artifact
                 $baseSelectPath = helper::safe64Encode($selectPath);
                 $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
             }
-            $item->actions = $node->metadata->type == 'asset' ? array() : $this->buildTreeAction($item);
+            $item->actions = $node->metadata->type == 'asset' || $item->format != 'generic' ? array() : $this->buildTreeAction($item, $privs);
             $items[] = $item;
         }
 
@@ -155,19 +161,20 @@ class artifactZen extends artifact
      * Build tree menu button.
      *
      * @param  object $item
+     * @param  array $privs
      * @access public
      * @return array
      */
-    function buildTreeAction(object $item): array
+    function buildTreeAction(object $item, array $privs): array
     {
         $actions = array();
         if(empty($item->format) || empty($item->id)) return $actions;
 
         $dropdownItems   = array();
-        $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
-        $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
-        $dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
-        $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
+        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
+        if(!empty($privs['createDir']))$dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
+        if(!empty($privs['editDir']) )$dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
+        if(!empty($privs['deleteDir']) )$dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
 
         $actions[] = array
         (
@@ -176,6 +183,7 @@ class artifactZen extends artifact
             'hint'     => $this->lang->more,
             'type'     => 'dropdown',
             'caret'    => false,
+            'trigger'  => 'hover',
             'dropdown' => array('items' => $dropdownItems)
         );
 

@@ -1396,6 +1396,11 @@ class repo extends control
             $module = 'repo';
             $method = 'browse';
         }
+        if($module == 'artifact' and $method == 'view')
+        {
+            $module = 'artifact';
+            $method = 'browse';
+        }
 
         $params = '';
         if($projectID)
@@ -1408,6 +1413,7 @@ class repo extends control
         $repoGroup = $this->repo->getRepoGroup('project', $projectID);
         $link      = $this->createLink($module, $method, "repoID=%s" . $params);
         if($module == 'pipeline') $link = $this->createLink($module, $method, "space=0&repoID=%s&type=repo" . $params);
+        if($module == 'artifact') $link = $this->createLink($module, $method, "space=0&repoID=%s&type=repo");
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;

@@ -1,0 +1,18 @@
+.filesTree .tree-item .tree-item-inner .item-actions {margin-left: 0;}
+.filesTree .tree-item .tree-item-inner .item-actions > .btn
+{
+    visibility: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity .2s ease;
+}
+
+.filesTree .tree-item .tree-item-inner:hover .item-actions > .btn,
+.filesTree .tree-item .tree-item-inner .item-actions:hover > .btn,
+.filesTree .tree-item .tree-item-inner .item-actions:focus-within > .btn,
+.filesTree .tree-item .tree-item-inner .item-actions > .btn.with-popover-show
+{
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+}

@@ -45,6 +45,8 @@ if(!empty($breadCrumbs))
 $data              = initTableData($assetList, $config->artifact->dtable->fieldList);
 $viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
+$canCreateDir      = hasPriv('artifact', 'createDir');
+$canUploadArtifact = hasPriv('artifact', 'uploadArtifact');
 div
 (
     setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
@@ -73,7 +75,7 @@ div
         ),
         empty($breadCrumbsBox) ? null : $breadCrumbsBox,
     ),
-    empty($node) || $node->type == 'asset' ? null : div
+    empty($node) || $node->type == 'asset' || !$canUploadArtifact ? null : div
     (
         btn
         (
@@ -135,7 +137,7 @@ div
                 //    set::icon('icon-list-collapse'),
                 //    on::click()->call('window.isExpand', jsRaw('$this'))
                 //),
-                btn
+                $canCreateDir ? btn
                 (
                     set
                     (
@@ -148,7 +150,7 @@ div
                             'url'         => helper::createLink('artifact', 'createDir', "artifactID={$artifact->id}&path={$selectPath}&isSubDir=1"),
                         )
                     ),
-                )
+                ) : null
             )
         )
     ),
