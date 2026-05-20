@@ -3990,22 +3990,24 @@ EOF;
             return $app->workspaceInfo;
         }
 
-        if($app->tab === 'project' && $lang->project->common == $lang->project->template)
+        $tab = $app->tab;
+        if($lang->$tab->common == $lang->project->template)
         {
+            /* 项目模板不显示进入空间按钮: */
             $app->workspaceInfo = array('enabled' => false, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;
         }
 
-        if(empty($lang->workspaceList[$app->tab]) || commonModel::setMainMenu())
+        if(empty($lang->workspaceList[$tab]) || commonModel::setMainMenu())
         {
             $app->workspaceInfo = array('enabled' => true, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;
         }
 
         $cookieWorkspace = $app->cookie->workspace;
-        if($cookieWorkspace !== $app->tab)
+        if($cookieWorkspace !== $tab)
         {
-            $app->workspaceInfo = array('enabled' => true, 'type' => $app->tab, 'opened' => false);
+            $app->workspaceInfo = array('enabled' => true, 'type' => $tab, 'opened' => false);
             return $app->workspaceInfo;
         }
 
