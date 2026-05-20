@@ -125,6 +125,7 @@ window.showLink = function(type, params, onlyUpdateTable)
     }
 
     loadTarget({url: url, target: idName});
+    $('.detail-header .open-url').attr('href', $.createLink('release', 'view', 'releaseID=' + releaseID + '&type=' + type)).removeAttr('data-back');
 };
 
 $(function()
