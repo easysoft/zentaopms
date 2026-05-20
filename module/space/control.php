@@ -227,6 +227,7 @@ class space extends control
         $link = $module == 'pipeline' ? $this->createLink('pipeline', 'browse', "spaceID=%s") : $link;
         $link = $module == 'deploy' ? $this->createLink('deploy', $method, "spaceID=%s") : $link;
         $link = $module == 'system' ? $this->createLink('repo', 'browsesystem', "spaceID=%s") : $link;
+        $link = $module == 'artifact' ? $this->createLink('artifact', 'browse', "spaceID=%s&repoID=0&type=$space") : $link;
 
         $this->view->spaceID    = $spaceID;
         $this->view->spaceGroup = $spaceGroup;
