@@ -41,7 +41,7 @@ su('admin');
 
 zenData('product')->gen(50);
 
-$product = new productTest('admin');
+$product = new productModelTest('admin');
 
 $updateName      = array('name' => 'john');
 $updateCode      = array('code' => 'newcode1');
