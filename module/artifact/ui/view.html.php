@@ -49,7 +49,7 @@ $canCreateDir      = hasPriv('artifact', 'createDir');
 $canUploadArtifact = hasPriv('artifact', 'uploadArtifact');
 div
 (
-    setClass('surface-light row flex justify-between items-center border py-1.5 pl-1 pr-2'),
+    setClass('surface-light row flex justify-between items-center border-l border-t border-r py-1.5 pl-1 pr-2'),
     div
     (
         setClass('row'),
@@ -100,7 +100,7 @@ div
     sidebar
     (
         set::side('left'),
-        setClass('repo-sidebar canvas min-h-0 self-stretch'),
+        setClass('repo-sidebar canvas min-h-0 border-r self-stretch'),
         setStyle('min-height', 'calc(100vh - 120px)'),
         set::width(280),
         set::preserve(false),
@@ -156,7 +156,7 @@ div
     panel
     (
         setID('artifactViewPage'),
-        setClass('flex-1 min-w-0 min-h-0 flex flex-col overflow-hidden ml-2 self-stretch'),
+        setClass('flex-1 min-w-0 min-h-0 flex flex-col overflow-hidden self-stretch'),
         setStyle('min-height', 'calc(100vh - 120px)'),
         set::bodyClass('w-full'),
         dtable
