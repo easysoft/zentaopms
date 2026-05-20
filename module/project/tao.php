@@ -481,7 +481,7 @@ class projectTao extends projectModel
      * @access protected
      * @return bool
      */
-    protected function createProductDocLib(int $productID): bool
+    public function createProductDocLib(int $productID): bool
     {
         $this->app->loadLang('doc');
         $lib = new stdclass();
