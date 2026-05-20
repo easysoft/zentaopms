@@ -166,7 +166,7 @@ class caseBasicInfo extends wg
                 set('title', $lang->testcase->fromCaselib),
                 ' (',
                 $lang->testcase->changed,
-                hasPriv('testcase', 'confirmLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'confirmLibcaseChange', "caseID={$case->id}&libcaseID={$case->fromCaseID}")), $lang->testcase->sync, setData(array('confirm' => sprintf($lang->testcase->confirmLibcaseChangeTip, $case->fromCaseVersion)))) : '',
+                hasPriv('testcase', 'confirmLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'confirmLibcaseChange', "caseID={$case->id}&libcaseID={$case->fromCaseID}")), $lang->testcase->sync, setData(array('confirm' => sprintf($lang->testcase->confirmLibcaseChangeTip, $case->libCaseVersion)))) : '',
                 hasPriv('testcase', 'ignoreLibcaseChange') ? a(setClass('btn size-xs primary-pale mx-1 ajax-submit'), set::href(createLink('testcase', 'ignoreLibcaseChange', "caseID={$case->id}")), $lang->testcase->ignore) : '',
                 ')'
             );

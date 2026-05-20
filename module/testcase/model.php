@@ -247,6 +247,8 @@ class testcaseModel extends model
             $case->files        = $this->file->getByIdList($spec->files);
         }
 
+        if(!empty($case->fromCaseID)) $case->libCaseVersion = $this->dao->select('version')->from(TABLE_CASE)->where('id')->eq($case->fromCaseID)->fetch('version');
+
         return $case;
     }
 
