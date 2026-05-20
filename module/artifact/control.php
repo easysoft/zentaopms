@@ -215,7 +215,11 @@ class artifact extends control
     public function delete(int $id)
     {
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array("artifact.{$id}")));
-        if(dao::isError()) $this->sendError(dao::getError());
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            $this->sendError(!empty($error['apiMessage']) ? $error['apiMessage'] : $error);
+        }
         if($result) $this->loadModel('action')->create('artifact', $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         $this->sendSuccess(array('load' => true));
@@ -248,10 +252,10 @@ class artifact extends control
                 $formData->name = ltrim($path . '.' . $formData->name, '/');
             }
             if(empty($path) && $isSubDir) $formData->name = '/' . $formData->name;
-            $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
+            $result = $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
             if(dao::isError()) $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('artifactDir', $artifactID, 'created', '', $artifactID . '|' . $formData->name);
+            if($result) $this->loadModel('action')->create('artifactDir', $result->id, 'created', '', $artifactID . '|' . $formData->name . '|group.' . $result->id);
 
             $response = array();
             $response['result']     = 'success';
@@ -286,15 +290,16 @@ class artifact extends control
 
             $formData = form::data($this->config->artifact->form->editDir)->get();
 
+            $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
             $params['entityID']         = $node->entityID;
             $params['newName']          = $formData->name;
-            $params['targetArtifactID'] = $formData->artifactID;
-            $params['targetGroupID']    = $formData->parent == '/' ? 0 : (int)$formData->parent;
+            $params['targetArtifactID'] = (int)$formData->artifactID;
+            $params['targetGroupID']    = (int)$targetGroupID;
             $result = $this->loadModel('gitfox')->request('/artifacts/entities/relocate', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result) $this->loadModel('action')->create('artifactDir', $artifactID, 'edited', '', $artifactID . '|' . $currentPath);
+            if($result) $this->loadModel('action')->create('artifactDir', $node->id, 'edited', '', $artifactID . '|' . $currentPath . '|' . $node->entityID);
 
             $response = array();
             $response['result']     = 'success';
@@ -452,10 +457,11 @@ class artifact extends control
             $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
             $toRepo   = zget($this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
 
+            $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
             $params['entityID']         = 'asset.' . $assetID;
             $params['targetArtifactID'] = $formData->artifactID;
-            $params['targetGroupID']    = $formData->parent == '/' ? 0 : (int)$formData->parent;
+            $params['targetGroupID']    = (int)$targetGroupID;
 
             $result = $this->gitfox->request('/artifacts/entities/move', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
@@ -584,7 +590,11 @@ class artifact extends control
         $path       = helper::safe64Decode($path);
         $parentPath = dirname($path);
         $base64Path = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
-        if($result) $this->loadModel('action')->create('artifactDir', $artifactID, 'deleted', '', $artifactID . '|' . $path);
+        if($result)
+        {
+            list($type, $id) = explode('.', $entityID);
+            $this->loadModel('action')->create('artifactDir', (int)$id, 'deleted', $artifactID . '|' . $path . '|' . $entityID, ACTIONMODEL::CAN_UNDELETED);
+        }
 
         $response = array();
         $response['result']     = 'success';
@@ -615,7 +625,7 @@ class artifact extends control
 
         if($result && $asset && !empty($asset->path))
         {
-            $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', '', $artifactID . '|' . $asset->path);
+            $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
         }
         if(dao::isError()) $this->sendError(dao::getError());
         $response = array();
@@ -666,7 +676,7 @@ class artifact extends control
         {
             foreach($assetList as $assetID => $asset)
             {
-                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', '',  $artifactID . '|' . $asset->path);
+                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
             }
         }
         if(dao::isError()) $this->sendError(dao::getError());
