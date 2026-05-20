@@ -84,6 +84,7 @@ class artifactZen extends artifact
             $item->entityID   = $node->metadata->entityID;
             $item->className  = 'text-clip';
             $item->hint       = $node->name;
+            $item->hover      = true;
             $item->url        = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
 
             if($item->kind == 'dir')

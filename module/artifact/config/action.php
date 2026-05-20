@@ -12,7 +12,7 @@ $config->artifact->actionList['history'] = array();
 $config->artifact->actionList['history']['icon']        = 'history';
 $config->artifact->actionList['history']['text']        = $lang->artifact->history;
 $config->artifact->actionList['history']['hint']        = $lang->artifact->history;
-$config->artifact->actionList['history']['url']         = array('module' => 'artifact', 'method' => 'history', 'params' => "id={id}");
+$config->artifact->actionList['history']['url']         = array('module' => 'artifact', 'method' => 'history', 'params' => "id={id}&artifactID={artifactID}");
 $config->artifact->actionList['history']['data-toggle'] = 'modal';
 $config->artifact->actionList['history']['data-app']    = $app->tab;
 

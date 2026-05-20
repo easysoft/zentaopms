@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('artifactID', $artifact->id);
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -178,7 +177,7 @@ div
                     'data-on'      => 'click',
                     'data-call'    => 'batchDeleteArtifact',
                     'data-params'  => 'event',
-                    'data-url'     => helper::createLink('artifact', 'ajaxBatchDeleteArtifact'),
+                    'data-url'     => helper::createLink('artifact', 'ajaxBatchDeleteArtifact', "artifactID={$artifact->id}"),
                     'data-confirm' => $lang->artifact->notice->confirmDelete
                 ))
             )) : null,

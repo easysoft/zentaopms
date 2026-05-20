@@ -105,7 +105,6 @@ window.batchDeleteArtifact = function(event)
     if(!$button.hasClass('batch-btn')) $button = $button.closest('.batch-btn');
 
     const postData = new FormData();
-    postData.append('artifactID', artifactID);
     checkedList.forEach(function(id) {postData.append('assetIDList[]', id);});
 
     zui.Modal.confirm({message: $button.data('confirm'), icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then(function(res)

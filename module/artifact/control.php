@@ -11,6 +11,33 @@ declare(strict_types=1);
  */
 class artifact extends control
 {
+    public $spaces = array();
+    public $repos  = array();
+
+    function __construct($module = '', $method = '')
+    {
+        parent::__construct($module, $method);
+        $this->spaces = $this->loadModel('space')->getPairs($this->app->user->account);
+        $this->repos  = $this->loadModel('repo')->getRepoPairs($this->app->user->account);
+    }
+
+    /**
+     * 检查用户权限。
+     * Check user access.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    function checkAccess($spaceID = 0, $repoID = 0)
+    {
+        if($spaceID && isset($this->spaces[$spaceID])) return true;
+        if($repoID && isset($this->repos[$repoID])) return true;
+
+        return $this->sendError($this->lang->error->accessDenied);
+    }
+
     /**
      * 设置页面公共数据。
      * Common actions.
@@ -39,7 +66,7 @@ class artifact extends control
     }
 
     /**
-     * 流水线列表。
+     * 制品库列表。
      * Browse pipeline.
      *
      * @param  int    $space
@@ -81,6 +108,7 @@ class artifact extends control
      */
     public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
 
         $artifact = $this->artifact->fetchByID($artifactID);
@@ -144,6 +172,8 @@ class artifact extends control
      */
     public function create(int $space = 0, int $repoID = 0, string $type = 'space')
     {
+        $this->checkAccess($space, $repoID);
+
         if($_POST)
         {
             $repo = $this->loadModel('repo')->fetchByID($repoID);
@@ -179,6 +209,7 @@ class artifact extends control
     public function edit(int $id)
     {
         $artifact = $this->artifact->fetchByID($id);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
 
         if($_POST)
         {
@@ -214,6 +245,9 @@ class artifact extends control
      */
     public function delete(int $id)
     {
+        $artifact = $this->artifact->fetchByID($id);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array("artifact.{$id}")));
         if(dao::isError())
         {
@@ -237,10 +271,11 @@ class artifact extends control
      */
     public function createDir(int $artifactID, string $path = '', int $isSubDir = 0)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         if($_POST)
         {
-            $artifact = $this->artifact->fetchByID($artifactID);
-
             $path = helper::safe64Decode($path);
             if(!$isSubDir) $path = dirname($path);
             $base64Path = $path ? helper::safe64Encode($path) : '';
@@ -277,7 +312,9 @@ class artifact extends control
      */
     public function editDir(int $artifactID, string $path = '')
     {
-        $artifact    = $this->artifact->fetchByID($artifactID);
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $currentPath = $path ? helper::safe64Decode($path) : '';
         $parentPath  = $currentPath ? dirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
@@ -329,8 +366,11 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function editArtifact(int $assetID, int $artifactID = 0)
+    public function editArtifact(int $assetID, int $artifactID)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
 
         if($_POST)
@@ -375,6 +415,9 @@ class artifact extends control
      */
     public function downloadArtifact(int $assetID, int $artifactID = 0)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
         if(empty($asset)) return $this->sendError($this->lang->notFound);
@@ -410,11 +453,15 @@ class artifact extends control
      * View artifact history.
      *
      * @param  int $id
+     * @param  int $artifactID
      * @access public
      * @return void
      */
-    public function history(int $id)
+    public function history(int $id, int $artifactID)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $id);
 
         $this->view->title   = $asset->path . ' - ' . $this->lang->artifact->history;
@@ -431,19 +478,13 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function moveArtifact(int $assetID, int $artifactID = 0)
+    public function moveArtifact(int $assetID, int $artifactID)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
-
-        if(empty($artifactID))
-        {
-            if(!empty($asset->artifactID)) $artifactID = (int)$asset->artifactID;
-            if(empty($artifactID) && !empty($asset->metadata) && !empty($asset->metadata->artifactID)) $artifactID = (int)$asset->metadata->artifactID;
-        }
-
-        $artifact = $this->artifact->fetchByID($artifactID);
-        if(empty($artifact)) return $this->sendError($this->lang->artifact->notice->noArtifact);
 
         $parentID = '/';
         if(!empty($asset->metadata) && !empty($asset->metadata->groupID)) $parentID = (string)$asset->metadata->groupID;
@@ -542,8 +583,10 @@ class artifact extends control
      */
     public function uploadArtifact(int $artifactID, string $path = '')
     {
-        $originalPath = $path;
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
 
+        $originalPath = $path;
         if(!empty($_FILES))
         {
             set_time_limit(0);
@@ -584,6 +627,9 @@ class artifact extends control
      */
     public function deleteDir(int $artifactID, string $entityID, string $path = '')
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
         if(dao::isError()) $this->sendError(dao::getError());
 
@@ -616,6 +662,9 @@ class artifact extends control
      */
     public function deleteArtifact(int $assetID, int $artifactID = 0)
     {
+        $artifact = $this->artifact->fetchByID($artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
 
@@ -643,12 +692,15 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function ajaxBatchDeleteArtifact()
+    public function ajaxBatchDeleteArtifact(int $artifactID)
     {
         if(!common::hasPriv('artifact', 'deleteArtifact')) return $this->sendError($this->lang->error->accessDenied);
 
         $assetIDList = $this->post->assetIDList;
-        $artifactID  = $this->post->artifactID;
+
+        $artifact = $this->artifact->fetchByID((int)$artifactID);
+        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+
         if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
         if(!is_array($assetIDList)) $assetIDList = explode(',', (string)$assetIDList);
 
