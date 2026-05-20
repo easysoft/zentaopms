@@ -10,7 +10,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-modalHeader(set::title($title), set::titleClass('text-lg font-bold'));
 
 history(set::objectType('artifactasset'), set::objectID($assetID), set::commentBtn());
 h::css('.history-panel {box-shadow: none}');

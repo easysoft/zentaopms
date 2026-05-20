@@ -326,6 +326,7 @@ class artifact extends control
             if(empty($node)) return $this->sendError($this->lang->fail);
 
             $formData = form::data($this->config->artifact->form->editDir)->get();
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
@@ -376,6 +377,7 @@ class artifact extends control
         if($_POST)
         {
             $formData = form::data($this->config->artifact->form->editArtifact)->get();
+            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
 
             $param = array();
             $param['entityID'] = 'asset.' . $assetID;
