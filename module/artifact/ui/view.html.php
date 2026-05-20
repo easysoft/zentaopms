@@ -16,6 +16,11 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
     unset($lang->artifact->featureBar);
 }
+if($artifact->format == 'generic')
+{
+    unset($config->artifact->dtable->fieldList['version']);
+    unset($config->artifact->dtable->fieldList['arch']);
+}
 
 $breadCrumbsBox = array();
 if(!empty($breadCrumbs))
