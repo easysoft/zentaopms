@@ -523,6 +523,10 @@ class actionModel extends model
                 $realObjectType    = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectType : '';
                 $trash->objectName = isset($objectNames[$realObjectType][$realObjectID]) ? $objectNames[$realObjectType][$realObjectID] : '';
             }
+            elseif(in_array($trash->objectType, array('artifactasset', 'artifactdir')))
+            {
+                $trash->objectName = empty($trash->comment) ? '' : explode('|', $trash->comment)[1];
+            }
             else
             {
                 $trash->objectName = isset($objectNames[$trash->objectType][$trash->objectID]) ? $objectNames[$trash->objectType][$trash->objectID] : '';
@@ -1818,6 +1822,7 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
         if($action->objectType == 'space') return $this->loadModel('space')->restore($action->objectID, $actionID);
+        if(in_array($action->objectType, array('artifactasset', 'artifactdir'))) return $this->loadModel('artifact')->restoreEntity($action);
 
         list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
         if(empty($queryKey)) $queryKey = 'id';
