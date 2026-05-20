@@ -103,7 +103,7 @@ div
         set::side('left'),
         setClass('repo-sidebar canvas min-h-0 self-stretch'),
         setStyle('min-height', 'calc(100vh - 120px)'),
-        set::width(300),
+        set::width(280),
         set::preserve(false),
         div
         (
@@ -185,7 +185,7 @@ div
             )) : null,
             set::sortLink(createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footPager(usePager()),
-            set::emptyTip(empty($node) || !empty($node->type) && $node->type == 'asset' ? $lang->artifact->notice->emptyFolder : $lang->noData)
+            set::emptyTip($lang->artifact->notice->emptyAsset)
         )
     )
 );
