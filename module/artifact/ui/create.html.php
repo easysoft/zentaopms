@@ -15,6 +15,7 @@ formPanel
     set::title($title),
     set::labelWidth('100px'),
     set::submitBtnText($lang->artifact->okBtn),
+    on::change('[name=format]')->do("const \$name = \$element.find('[name=name]'); \$name.attr('placeholder', target.value === 'generic' ? '{$lang->artifact->placeholder->name}' : '{$lang->artifact->notice->nameNotSupportChinese}');"),
     formGroup
     (
         set::label($lang->artifact->format),

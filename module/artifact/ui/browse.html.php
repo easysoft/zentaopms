@@ -76,7 +76,13 @@ if(!empty($artifactList))
                     div
                     (
                         setClass('flex justify-between items-center'),
-                        icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))),
+                        $artifact->format == 'generic' ? icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))) :
+                        img
+                        (
+                            setClass('inline pr-1'),
+                            set::style(array('color' => 'var(--color-secondary-100)')),
+                            set('src', "static/svg/brand-docker.svg")
+                        ),
                         $canEdit || $canDelete ? dropdown
                         (
                             setClass('size-sm ghost w-4 flex-none'),
@@ -102,7 +108,6 @@ if(!empty($artifactList))
                                 set::title($artifact->name),
                                 $artifact->name
                             ),
-                            label(setClass('size-sm font-normal gray-pale shadow-sm rounded-full flex-none'), zget($lang->artifact->formatList, $artifact->format)),
                             !empty($repoName) ? div
                             (
                                 setClass('absolute bottom-2 ml-0'),
@@ -129,5 +134,10 @@ panel
     (
         setClass('flex flex-wrap artifact-block'),
         $setItems
+    ),
+    empty($setItems) ? null : pager
+    (
+        set::_className('flex justify-end items-center mt-4'),
+        set(usePager('pager'))
     )
 );
