@@ -373,7 +373,7 @@ class dao extends baseDAO
                     }
                     else
                     {
-                        if(is_numeric($this->sqlobj->data->{$field->field}) && $this->sqlobj->data->{$field->field} == 0 && $rule->rule == 'notempty' && !in_array($field->control, array('select', 'multi-select'))) continue;
+                        if(is_numeric($this->sqlobj->data->{$field->field}) && $this->sqlobj->data->{$field->field} == 0 && $rule->rule == 'notempty') continue;
                         $this->check($field->field, $rule->rule);
                     }
                 }
