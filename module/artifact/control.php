@@ -75,16 +75,21 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function browse(int $space = 0, int $repoID = 0, string $type = 'space')
+    public function browse(int $space = 0, int $repoID = 0, string $type = 'space', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($space, $repoID);
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $repo = $this->loadModel('repo')->fetchByID($repoID);
         $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
         $this->view->repo         = $repo;
         $this->view->repoID       = $repoID;
+        $this->view->spaceID      = $space;
         $this->view->repoPairs    = $this->repo->getRepoPairs();
         $this->view->type         = $type;
-        $this->view->artifactList = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc');
+        $this->view->artifactList = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc', $pager);
+        $this->view->pager        = $pager;
 
         $this->display();
     }

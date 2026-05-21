@@ -19,10 +19,11 @@ class artifactModel extends model
      * @param  int $spaceID
      * @param  int $repoID
      * @param  string $type
+     * @param  ?object $pager
      * @access public
      * @return array
      */
-    public function getList(int $spaceID = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc'): array
+    public function getList(int $spaceID = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('space');
         if($spaceID && !$this->app->user->admin)
@@ -51,11 +52,12 @@ class artifactModel extends model
         }
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->andWhere('spaceID')->eq($spaceID)
             ->beginIF($repoID && $type != 'all')->andWhere('repoID')->eq($repoID)->fi()
             ->beginIF($type == 'all' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 

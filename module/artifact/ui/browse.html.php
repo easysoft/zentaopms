@@ -134,5 +134,10 @@ panel
     (
         setClass('flex flex-wrap artifact-block'),
         $setItems
+    ),
+    empty($setItems) ? null : pager
+    (
+        set::_className('flex justify-end items-center mt-4'),
+        set(usePager('pager'))
     )
 );
