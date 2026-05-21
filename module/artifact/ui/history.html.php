@@ -11,5 +11,5 @@ declare(strict_types=1);
  */
 namespace zin;
 
-history(set::objectType('artifactasset'), set::objectID($assetID), set::commentBtn());
+history(set::panel(true), set::objectType('artifactasset'), set::objectID($assetID), set::commentBtn(true));
 h::css('.history-panel {box-shadow: none}');

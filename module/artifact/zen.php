@@ -214,7 +214,7 @@ class artifactZen extends artifact
         {
             if($node->path == $path)
             {
-                $node->id       = $node->metadata->id;
+                $node->id       = empty($node->metadata) && !empty($node->metadata->id) ? $node->metadata->id : $node->metadata->entityID;
                 $node->type     = $node->metadata->type;
                 $node->nodeID   = isset($node->metadata->nodeID) ? $node->metadata->nodeID : 0;
                 $node->entityID = isset($node->metadata->entityID) ? $node->metadata->entityID : 0;
