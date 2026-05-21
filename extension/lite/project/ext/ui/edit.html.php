@@ -18,16 +18,8 @@ jsVar('projectID', $project->id);
 jsVar('from', $from);
 jsVar('LONG_TIME', LONG_TIME);
 
-$labelClass     = $config->project->labelClass[$model];
-$delta          = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
-
-$checkDeltaChecked = jsCallback()->do(<<<'JS'
-    const beginDate = new Date($('[name=begin]').zui('datePicker').$.value);
-    const endDate   = new Date($('[name=end]').zui('datePicker').$.value);
-    const days      = parseInt((endDate.getTime() - beginDate.getTime()) / (24 * 60 * 60 * 1000)) + 1;
-    if(parseInt($('input[name=delta]:checked').val()) != 999) $('[name=delta]').prop('checked', false);
-    if($('#delta' + days).length > 0 && days != 999) $('#delta' + days).prop('checked', true);
-JS);
+$labelClass = $config->project->labelClass[$model];
+$delta      = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;
 
 formPanel
 (
@@ -83,7 +75,7 @@ formPanel
             set::required(true),
             inputGroup
             (
-                on::change('[name=end], [name=begin]', $checkDeltaChecked),
+                on::change('[name=end], [name=begin]', 'dateRangeChange'),
                 datePicker
                 (
                     set::name('begin'),
@@ -116,6 +108,14 @@ formPanel
                 set::items($lang->project->endList)
             )
         )
+    ),
+    formGroup
+    (
+        set::width('1/4'),
+        set::label($lang->project->days),
+        set::name('days'),
+        set::value($project->end != LONG_TIME ? $project->days : ''),
+        set::disabled($project->end == LONG_TIME),
     ),
     formGroup
     (
