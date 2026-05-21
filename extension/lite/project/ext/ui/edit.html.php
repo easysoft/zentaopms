@@ -115,7 +115,7 @@ formPanel
         set::label($lang->project->days),
         set::name('days'),
         set::value($project->end != LONG_TIME ? $project->days : ''),
-        set::disabled($project->end == LONG_TIME),
+        set::disabled($project->end == LONG_TIME)
     ),
     formGroup
     (
