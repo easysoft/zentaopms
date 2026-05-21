@@ -109,9 +109,14 @@ class programplan extends control
             {
                 if(!isset($baselinePlans[$plan->id])) continue;
 
+                $baselinePlan = $baselinePlans[$plan->id];
+                $endDate = zget($baselinePlan, 'endDate', '');
+                $endDate = empty($endDate) ? zget($baselinePlan, 'end_date', '') : date('d-m-Y', strtotime($endDate) + 86400);
+                if($endDate) continue;
+
                 $plans['data'][$key]->bar_height    = 22;
-                $plans['data'][$key]->planned_start = $baselinePlans[$plan->id]->start_date;
-                $plans['data'][$key]->planned_end   = date('d-m-Y', strtotime($baselinePlans[$plan->id]->endDate) + 86400);
+                $plans['data'][$key]->planned_start = $baselinePlan->start_date;
+                $plans['data'][$key]->planned_end   = $endDate;
             }
 
             $this->view->ganttBaseline = $this->post->baselineVersion;
