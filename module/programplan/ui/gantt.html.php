@@ -123,12 +123,10 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $langData['cancel']      = $lang->cancel;
 
     $isLatestVersion = empty($versionID) && !$isDiffMode;
-    featureBar
-    (
-        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
-        $productDropdown,
-        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
-        $project->isTpl ? null : li
+    $versionList     = null;
+    if(empty($project->isTpl))
+    {
+        $versionList = li
         (
             setID('versionList'),
             setClass('ml-2'),
@@ -153,7 +151,15 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 setClass($isDiffMode ? '' : 'hidden'),
                 set::title($lang->programplan->noticeDiffVersion)
             )
-        )
+        );
+    }
+
+    featureBar
+    (
+        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
+        $productDropdown,
+        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
+        $versionList
     );
     toolbar
     (
