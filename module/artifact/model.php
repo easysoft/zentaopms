@@ -55,7 +55,7 @@ class artifactModel extends model
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->andWhere('spaceID')->eq($spaceID)
             ->beginIF($repoID && $type != 'all')->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF($type == 'all' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
+            ->beginIF($type == 'all' && !empty($repos))->orWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -76,8 +76,8 @@ class artifactModel extends model
         $spaceIdList = $repoIdList = array();
         if($account && $type == 'space')
         {
-            $spaceIdList = $this->dao->select('id')->from(TABLE_SPACE)->alias('t1')
-                ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')->on('t1.id', 't2.space')
+            $spaceIdList = $this->dao->select('t1.id')->from(TABLE_SPACE)->alias('t1')
+                ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')->on('t1.id=t2.space')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('(t1.acl')->eq('open')
                 ->orWhere('t2.account')->eq($account)->markRight()
@@ -86,8 +86,8 @@ class artifactModel extends model
 
         if($account && $type == 'repo')
         {
-            $repoIdList = $this->dao->select('id')->from(TABLE_REPO)->alias('t1')
-                ->leftJoin(TABLE_DEVOPSREPOUSER)->alias('t2')->on('t1.id', 't2.repo')
+            $repoIdList = $this->dao->select('t1.id')->from(TABLE_REPO)->alias('t1')
+                ->leftJoin(TABLE_DEVOPSREPOUSER)->alias('t2')->on('t1.id=t2.repo')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('(t1.acl')->eq('open')
                 ->orWhere('t2.account')->eq($account)->markRight()
