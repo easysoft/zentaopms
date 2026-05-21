@@ -386,7 +386,7 @@ $config->logonMethods[] = 'artifact.browse';
 $config->logonMethods[] = 'artifact.view';
 $config->logonMethods[] = 'artifact.downloadartifact';
 $config->logonMethods[] = 'artifact.history';
-$config->logonMethods[] = 'artifact.moveArtifact';
+$config->logonMethods[] = 'artifact.moveartifact';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
