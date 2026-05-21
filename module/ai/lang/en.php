@@ -1092,10 +1092,14 @@ $lang->ai->formSchema['doc']['edit']->type  = 'object';
 $lang->ai->formSchema['doc']['edit']->properties = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->title   = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->content = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->contentType = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->title->type          = 'string';
 $lang->ai->formSchema['doc']['edit']->properties->title->description   = 'Title of the document';
 $lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string';
 $lang->ai->formSchema['doc']['edit']->properties->content->description = 'Content of the document';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->type        = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->description = 'Content type';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->enum        = array('html', 'markdown');
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
 $lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
