@@ -200,7 +200,8 @@ if(commonModel::isTutorialMode())
 $createItems = array();
 $batchItems  = array();
 if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
-if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
+if((in_array($execution->attribute, array('mix', 'request', 'design')) && $execution->type == 'stage') || !$execution->multiple)
+
 {
     if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');
     if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->epic->create) : '');
