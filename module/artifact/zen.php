@@ -37,6 +37,7 @@ class artifactZen extends artifact
             $selectPath = '/' . ltrim($parentPath . '/' . $path, '/');
             foreach($nodes as $node)
             {
+                if(!empty($node->leaf)) continue;
                 $nodePath = helper::safe64Encode($node->path);
                 $breadCrumbs[$selectPath][] = array('text' => $node->name, 'path'=> $node->path, 'value' => $nodePath, 'keys' => $node->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath=$nodePath"));
             }
