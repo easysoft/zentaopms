@@ -136,7 +136,7 @@ div
                 //    set::icon('icon-list-collapse'),
                 //    on::click()->call('window.isExpand', jsRaw('$this'))
                 //),
-                $canCreateDir ? btn
+                $canCreateDir && $artifact->format == 'generic' ? btn
                 (
                     set
                     (
