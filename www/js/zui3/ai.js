@@ -126,7 +126,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             const message =
             {
                 role: 'user',
-                content: [response.title, zui.formatString(langData.processedDataResult, {data: JSON.stringify(result)}), response.summary, zui.formatString(langData.promptResultReturn, {formName: info.targetFormName})].join('\n\n'),
+                content: [info.name + zui.formatString(langData.processedDataResult, {data: JSON.stringify(result)}), zui.formatString(langData.promptResultReturn, {formName: info.targetFormName})].join('\n\n'),
                 custom_data: {taskResults: [taskResult], asRole: 'assistant'}
             };
             return {message: message};
