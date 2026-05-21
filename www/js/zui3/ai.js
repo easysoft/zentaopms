@@ -114,7 +114,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 targetForm    : info.targetForm,
                 objectID      : info.objectID,
                 objectType    : info.objectType,
-                objectData    : info.objectData,
+                objectData    : info.objectData || info.object,
                 objectProps   : info.dataPropNames,
                 actions: info.promptAudit ? [{
                     text         : langData.goTesting,
