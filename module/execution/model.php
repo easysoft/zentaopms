@@ -4006,6 +4006,7 @@ class executionModel extends model
         if($action == 'putoff')       return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate')     return $execution->status == 'suspended' || $execution->status == 'closed';
         if($action == 'delete')       return empty($execution->isParent);
+        if($action == 'gantt')        return $execution->type != 'kanban';
 
         return true;
     }
