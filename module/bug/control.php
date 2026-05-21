@@ -73,7 +73,7 @@ class bug extends control
                 }
                 else
                 {
-                    $products = $this->product->getProducts($objectID, $mode, '', false);
+                    $products = $this->product->getProducts((int)$objectID, $mode, '', false);
                 }
             }
             else

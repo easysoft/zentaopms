@@ -113,7 +113,6 @@ dtable
     set::data($data),
     set::userMap($users),
     set::customCols(true),
-    set::fixedLeftWidth('44%'),
     set::noNestedCheck(true),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::checkable(true),
