@@ -128,7 +128,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
         $productDropdown,
         $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
-        li
+        $project->isTpl ? null : li
         (
             setID('versionList'),
             setClass('ml-2'),
