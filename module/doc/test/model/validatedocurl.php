@@ -12,6 +12,7 @@ cid=16189
 - 传入包含&amp;的URL解码后content @https://ipd.hjq.oop.cc/index.php?m=execution&f=task
 - 传入包含&amp;&amp;的URL解码后content @https://ipd.hjq.oop.cc/index.php?m=execution&f=task&page=1
 - 传入不包含&amp;的URL解码后content @https://example.com/index.php?m=execution&f=task
+- 传入 IPv4 hostname 的 URL 解码后content @http://192.168.1.1:8080/index.php?m=execution&f=task
 
 */
 
@@ -42,3 +43,8 @@ $doc5 = new stdclass();
 $doc5->content = 'https://example.com/index.php?m=execution&f=task';
 r($docTest->validateDocUrlTest($doc5));
 r($doc5->content) && p('解码后content') && e('https://example.com/index.php?m=execution&f=task');
+
+$doc6 = new stdclass();
+$doc6->content = 'http://192.168.1.1:8080/index.php?m=execution&amp;f=task';
+r($docTest->validateDocUrlTest($doc6));
+r($doc6->content) && p('解码后content') && e('http://192.168.1.1:8080/index.php?m=execution&f=task');
