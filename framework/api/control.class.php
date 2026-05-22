@@ -796,7 +796,7 @@ class control extends baseControl
         if(!$action || $action->extensionType != 'extend') return $fields;
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
-        $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $groupID);
+        $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $action->group);
 
         /* 复制项目时显示被复制项目的工作流字段值。*/
         if($moduleName == 'project' && $methodName == 'create')
@@ -836,7 +836,7 @@ class control extends baseControl
         if(!$action || $action->extensionType == 'none') return '';
 
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
-        $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID, $groupID);
+        $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID, $action->group);
 
         $html = '';
         if(!empty($flow->css))   $html .= "<style>$flow->css</style>";
@@ -881,8 +881,8 @@ class control extends baseControl
 
         $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
-        $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $groupID);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $groupID);
+        $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $flow->group);
+        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $flow->group);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         if($layouts)

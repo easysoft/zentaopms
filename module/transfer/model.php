@@ -244,7 +244,7 @@ class transferModel extends model
         if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
 
         $notEmptyRule   = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $groupID);
+        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $action->group);
         foreach($workflowFields as $field)
         {
             if(empty($fieldList[$field->field])) continue;
