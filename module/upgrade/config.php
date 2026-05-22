@@ -1804,6 +1804,10 @@ $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/js/common.js';
 $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/ext';
 $config->delete['22_2'][] = 'extension/ipd/flow/ext';
 $config->delete['22_2'][] = 'extension/ipd/workflow/ext';
+$config->delete['22_2'][] = 'extension/ipd/workflowaction/ext';
+$config->delete['22_2'][] = 'extension/ipd/workflowlayout/ext';
+$config->delete['22_2'][] = 'extension/ipd/workflowfield/ext';
+$config->delete['22_2'][] = 'extension/ipd/workflowdatasource/ext';
 
 $config->delete['22_2'][] = 'extension/max/workflow/view';
 $config->delete['22_2'][] = 'extension/max/workflow/js/browsedb.js';
@@ -1843,6 +1847,12 @@ $config->delete['22_2'][] = 'extension/max/workflowlinkage/css';
 $config->delete['22_2'][] = 'extension/max/workflowlinkage/js/browse.js';
 $config->delete['22_2'][] = 'extension/max/workflowlinkage/js/common.js';
 $config->delete['22_2'][] = 'extension/max/workflowlinkage/ext';
+$config->delete['22_2'][] = 'extension/max/flow/ext';
+$config->delete['22_2'][] = 'extension/max/workflow/ext';
+$config->delete['22_2'][] = 'extension/max/workflowaction/ext';
+$config->delete['22_2'][] = 'extension/max/workflowlayout/ext';
+$config->delete['22_2'][] = 'extension/max/workflowfield/ext';
+$config->delete['22_2'][] = 'extension/max/workflowdatasource/ext';
 
 $config->delete['22_2'][] = 'extension/biz/workflow/view';
 $config->delete['22_2'][] = 'extension/biz/workflow/js/browsedb.js';
@@ -1882,6 +1892,12 @@ $config->delete['22_2'][] = 'extension/biz/workflowlinkage/css';
 $config->delete['22_2'][] = 'extension/biz/workflowlinkage/js/browse.js';
 $config->delete['22_2'][] = 'extension/biz/workflowlinkage/js/common.js';
 $config->delete['22_2'][] = 'extension/biz/workflowlinkage/ext';
+$config->delete['22_2'][] = 'extension/biz/flow/ext';
+$config->delete['22_2'][] = 'extension/biz/workflow/ext';
+$config->delete['22_2'][] = 'extension/biz/workflowaction/ext';
+$config->delete['22_2'][] = 'extension/biz/workflowlayout/ext';
+$config->delete['22_2'][] = 'extension/biz/workflowfield/ext';
+$config->delete['22_2'][] = 'extension/biz/workflowdatasource/ext';
 
 $config->upgrade->openModules  = array('action', 'admin', 'ai', 'bi', 'aiapp', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'cache', 'caselib', 'chart', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dataview', 'dept', 'design', 'dev', 'dimension', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'metric', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectplan', 'projectrelease', 'projectstory', 'pivot', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'screen', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation', 'gitea', 'gogs', 'transfer', 'zahost', 'zanode', 'editor', 'charter', 'roadmap', 'account', 'cne', 'host', 'instance', 'ops', 'serverroom', 'space', 'store', 'system', 'solution', 'demand', 'gitfox', 'epic', 'requirement', 'mark', 'zai');
 $config->upgrade->unsetModules = array('design', 'program', 'programplan', 'projectbuild', 'projectrelease', 'stage', 'stakeholder', 'product', 'branch', 'productplan', 'release', 'build', 'qa', 'bug', 'testcase', 'testtask', 'testreport', 'testsuite', 'caselib', 'automation', 'repo', 'ci', 'compile', 'jenkins', 'job', 'svn', 'gitlab', 'sonarqube', 'mr', 'git', 'report', 'sqlbuilder', 'feedback', 'faq', 'holiday', 'ops', 'host', 'serverroom', 'account', 'domain', 'service', 'deploy', 'conference', 'traincourse', 'pssp', 'baseline', 'classify', 'cm', 'cmcl', 'auditcl', 'reviewcl', 'process', 'activity', 'zoutput', 'auditplan', 'nc', 'subject', 'weekly', 'workestimation', 'issue', 'durationestimation', 'risk', 'opportunity', 'trainplan', 'gapanalysis', 'researchplan', 'researchreport', 'meeting', 'meetingroom', 'budget', 'reviewissue', 'reviewsetting', 'review', 'milestone', 'measurement', 'measrecord', 'assetlib', 'setting', 'im', 'client', 'ldap', 'dev', 'api', 'gitea', 'gogs', 'zanode', 'zahost');
