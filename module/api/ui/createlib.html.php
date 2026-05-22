@@ -12,10 +12,30 @@ namespace zin;
 jsVar('productLang', $lang->productCommon);
 jsVar('projectLang', $lang->projectCommon);
 jsVar('window.libType', $type);
+if($this->config->edition != 'open')
+{
+    jsVar('hasImportOpenAPIPriv', hasPriv('api', 'importOpenApi'));
+    jsVar('importBtnText', $lang->import);
+    jsVar('saveBtnText', $lang->save);
+}
 formPanel
 (
     set::className('createLibForm'),
     set::title($lang->api->createLib),
+    set::labelWidth('100px'),
+    $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
+    ? formGroup
+    (
+        set::label($lang->api->createMode),
+        radioList
+        (
+            set::name('createMode'),
+            set::items($lang->api->createModeList),
+            set::value('create'),
+            set::inline(true),
+            on::change('toggleCreateMode')
+        )
+    ) : null,
     formGroup
     (
         set::label($lang->api->libType),
@@ -69,6 +89,16 @@ formPanel
         set::name('baseUrl'),
         set::placeholder($lang->api->baseUrlDesc)
     ),
+    $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
+    ? formGroup
+    (
+        setID('importFileBox'),
+        setClass('hidden'),
+        set::label($lang->api->importFile),
+        set::required(true),
+        fileSelector(setID('files'), set::name('files'), set::accept('.json,.yaml'), set::maxFileCount(1), set::multiple(false), set::required(true)),
+        set::tip($lang->api->importFileTip)
+    ) : null,
     formRow
     (
         setID('aclBox'),
@@ -120,7 +150,7 @@ formPanel
                 )
             )
         )
-    )
+    ),
 );
 /* ====== Render page ====== */
 render();

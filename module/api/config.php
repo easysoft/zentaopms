@@ -18,6 +18,7 @@ $config->api->edit->requiredFields = 'lib,title,path';
 
 $config->api->groupPrivs = array();
 $config->api->groupPrivs['exportOpenApi'] = 'export';
+$config->api->groupPrivs['importOpenApi'] = 'create';
 
 $config->api->createrelease = new stdclass();
 $config->api->createrelease->requiredFields = 'version';

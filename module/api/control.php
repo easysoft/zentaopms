@@ -588,6 +588,15 @@ class api extends control
     {
         if(!empty($_POST))
         {
+            if($this->post->createMode === 'import')
+            {
+                if($this->config->edition == 'open') return $this->send(array('result' => 'fail', 'message' => $this->lang->api->importError->editionLimited));
+
+                if(!common::hasPriv('api', 'importOpenApi')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
+                return $this->send($this->api->importOpenApiAndCreateLib());
+            }
+
             /* 组装formData。 */
             $fields  = $this->config->api->form->createLib;
             $libType = $this->post->libType;
