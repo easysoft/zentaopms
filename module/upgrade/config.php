@@ -1802,6 +1802,8 @@ $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/css';
 $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/js/browse.js';
 $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/js/common.js';
 $config->delete['22_2'][] = 'extension/ipd/workflowlinkage/ext';
+$config->delete['22_2'][] = 'extension/ipd/flow/ext';
+$config->delete['22_2'][] = 'extension/ipd/workflow/ext';
 
 $config->delete['22_2'][] = 'extension/max/workflow/view';
 $config->delete['22_2'][] = 'extension/max/workflow/js/browsedb.js';
