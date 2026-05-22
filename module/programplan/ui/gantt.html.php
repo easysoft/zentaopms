@@ -91,8 +91,12 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     foreach($versions as $version)
     {
         $item = array('title' => $version->version, 'value' => $version->id, 'hint' => $version->version);
-        if($version->reviewType == 'deliverable') $item['text'] = $lang->project->deliverableAbbr;
-        if($version->reviewType == 'baseline')    $item['text'] = $lang->project->baseline;
+        if($version->reviewType == 'deliverable')
+        {
+            $item['content'] = array('html' => "<span class='label rounded-full size-sm outline m-1'>{$lang->project->deliverableAbbr}</span>");
+            if(!empty($version->baselineList)) $item['content']['html'] .= "<span class='label rounded-full size-sm outline m-1' title='{$version->baselineList}'>{$lang->project->baseline}</span>";
+        }
+
         if($version->reviewType == 'gantt' && $version->status != 'tmpGantt')
         {
             $item['hint']    = $version->items;
