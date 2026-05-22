@@ -594,7 +594,8 @@ class api extends control
 
                 if(!common::hasPriv('api', 'importOpenApi')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
 
-                return $this->send($this->api->importOpenApiAndCreateLib());
+                $openApiImport = $this->api->loadExtension('openapiimport');
+                return $this->send($openApiImport->importOpenApiAndCreateLib());
             }
 
             /* 组装formData。 */
