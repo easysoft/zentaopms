@@ -103,6 +103,15 @@ class transferModel extends model
         /* 生成该模块的导出数据。 */
         /* Generate export datas. */
         $rows = $this->getRows($module, $fieldList);
+
+        /* Process duplicate story value. */
+        if(in_array($module, array('story', 'requirement', 'epic')) && in_array('duplicateStory', $fields))
+        {
+            $duplicateIdList  = array_unique(array_filter(array_column($rows, 'duplicateStory')));
+            $duplicateStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateStory = !empty($duplicateStories[$row->duplicateStory]) ? '#' . $row->duplicateStory . ' ' . $duplicateStories[$row->duplicateStory] : '';
+        }
+
         if($module == 'story')
         {
             $parentList  = array_unique(array_filter(array_column($rows, 'parent')));
@@ -114,12 +123,6 @@ class transferModel extends model
             $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
             $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-            if(in_array('duplicateStory', $fields))
-            {
-                $duplicateIdList  = array_unique(array_filter(array_column($rows, 'duplicateStory')));
-                $duplicateStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($duplicateIdList)->fetchPairs();
-            }
-
             foreach($rows as $row)
             {
                 $row->taskCountAB = zget($storyTasks, $row->id, 0);
@@ -127,7 +130,6 @@ class transferModel extends model
                 $row->caseCountAB = zget($storyCases, $row->id, 0);
                 $row->parent      = $row->parent ? '#' . $row->parent . ' ' . $parentPairs[$row->parent] : '';
                 if(!empty($product->shadow)) $row->product = '';
-                if(!empty($duplicateStories)) $row->duplicateStory = $row->duplicateStory ? '#' . $row->duplicateStory . ' ' . $duplicateStories[$row->duplicateStory] : '';
             }
         }
 
