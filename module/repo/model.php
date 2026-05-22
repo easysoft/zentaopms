@@ -1719,6 +1719,26 @@ class repoModel extends model
     }
 
     /**
+     * Check whether the webhook commit effort has been recorded.
+     *
+     * @param  object $commit
+     * @access protected
+     * @return bool
+     */
+    protected function isRecordedWebhookCommit(object $commit): bool
+    {
+        $revision = isset($commit->id) ? $commit->id : zget($commit, 'sha', '');
+        $message  = zget($commit, 'message', zget($commit, 'Message', ''));
+        if(empty($revision) || !is_string($message) || $message === '') return false;
+
+        $work = $this->lang->repo->revisionA . ': #' . substr($revision, 0, 10) . "\n" . htmlSpecialString($this->iconvComment($message, 'utf-8'));
+        return (bool)$this->dao->select('id')->from(TABLE_EFFORT)
+            ->where('deleted')->eq('0')
+            ->andWhere('work')->eq($work)
+            ->fetch('id');
+    }
+
+    /**
      * 处理webhook请求。
      * Handle received GitLab webhook.
      *
@@ -1740,6 +1760,8 @@ class repoModel extends model
 
         foreach($data->commits as $commit)
         {
+            if($this->isRecordedWebhookCommit($commit)) continue;
+
             $time = zget($commit, 'timestamp', '');
             if(isset($commit->author->when)) $time = $commit->author->when;
 
