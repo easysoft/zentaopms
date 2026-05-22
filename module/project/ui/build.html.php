@@ -61,7 +61,7 @@ if($app->tab == 'project')
 {
     unset($fieldList['actions']['list']['linkStory']);
     $linkStoryKey = array_search('linkStory', $fieldList['actions']['menu']);
-    if($linkStoryKey) $fieldList['actions']['menu'][$linkStoryKey] = 'linkProjectStory';
+    if($linkStoryKey !== false) $fieldList['actions']['menu'][$linkStoryKey] = 'linkProjectStory';
 }
 else
 {
