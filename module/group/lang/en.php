@@ -684,5 +684,10 @@ $lang->group->package->artifactrepo          = 'Artifact Repo';
 $lang->group->package->browseArtifactrepo    = 'Artifact Repo List';
 $lang->group->package->manageArtifactrepo    = 'Manage Artifact Repo';
 $lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
+$lang->group->package->manageArtifactDir     = 'Manage Artifact Directory';
+$lang->group->package->deleteArtifactDir     = 'Delete Artifact Directory';
+$lang->group->package->uploadArtifact        = 'Upload Artifact';
+$lang->group->package->deleteArtifact        = 'Delete Artifact';
+$lang->group->package->manageArtifact        = 'Manage Artifact';
 
 include (dirname(__FILE__) . '/resource.php');
