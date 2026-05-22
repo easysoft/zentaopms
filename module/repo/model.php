@@ -7,6 +7,8 @@ declare(strict_types=1);
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@cnezsoft.com>
  * @package     repo
+ * @property    dao     $dao
+ * @property    object  $lang
  * @property    repoTao $repoTao
  * @link        https://www.zentao.net
  */
@@ -1727,15 +1729,30 @@ class repoModel extends model
      */
     protected function isRecordedWebhookCommit(object $commit): bool
     {
-        $revision = isset($commit->id) ? $commit->id : zget($commit, 'sha', '');
-        $message  = zget($commit, 'message', zget($commit, 'Message', ''));
-        if(empty($revision) || !is_string($message) || $message === '') return false;
+        $revision = '';
+        if(isset($commit->id)  && is_scalar($commit->id))  $revision = (string)$commit->id;
+        if($revision === '' && isset($commit->sha) && is_scalar($commit->sha)) $revision = (string)$commit->sha;
 
-        $work = $this->lang->repo->revisionA . ': #' . substr($revision, 0, 10) . "\n" . htmlSpecialString($this->iconvComment($message, 'utf-8'));
-        return (bool)$this->dao->select('id')->from(TABLE_EFFORT)
+        $message = '';
+        if(isset($commit->message) && is_string($commit->message)) $message = $commit->message;
+        if($message === '' && isset($commit->Message) && is_string($commit->Message)) $message = $commit->Message;
+        if($revision === '' || $message === '') return false;
+
+        $shortRevision = substr($revision, 0, 10);
+        $workSuffix    = '#' . $shortRevision . "\n" . htmlspecialchars($this->iconvComment($message, 'utf-8'), ENT_QUOTES, 'UTF-8');
+
+        /* @phpstan-ignore-next-line */
+        $efforts = $this->dao->select('id,work')->from(TABLE_EFFORT)
             ->where('deleted')->eq('0')
-            ->andWhere('work')->eq($work)
-            ->fetch('id');
+            ->andWhere('work')->like("%#{$shortRevision}%")
+            ->fetchAll();
+
+        foreach($efforts as $effort)
+        {
+            if(isset($effort->work) && is_string($effort->work) && str_ends_with($effort->work, $workSuffix)) return true;
+        }
+
+        return false;
     }
 
     /**
