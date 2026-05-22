@@ -1027,7 +1027,7 @@ class programplanModel extends model
         /* 1. 甘特图创建的版本。 Gantt version. */
         $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
             ->where('type')->eq('taged')
-            ->andWhere('status')->eq('gantt')
+            ->andWhere('status')->in('gantt,tmpGantt')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
@@ -1104,7 +1104,7 @@ class programplanModel extends model
         $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
         if(empty($object)) return array();
 
-        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+        if($object->status == 'gantt' || $object->status == 'tmpGantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
 
         /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
         if(empty($object->data) && !empty($object->categoryVersion))
