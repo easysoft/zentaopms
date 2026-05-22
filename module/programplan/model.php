@@ -1045,7 +1045,7 @@ class programplanModel extends model
             ->fetch('disabledFeatures');
 
         /* 2. 交付物的项目计划。 Project plan of deliverable. */
-        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType, t2.deliverable, t2.id AS reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
             ->where('t1.project')->eq($projectID)
@@ -1055,16 +1055,13 @@ class programplanModel extends model
             ->andWhere('t2.type')->eq('deliverable')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->fetchAll('id', false);
+        $deliverableIdList = array_unique(array_column($deliverableVersions, 'deliverable'));
+
         /* 3. 基线评审的版本。 Project plan of baseline. */
         $baselineVersions = array();
         if(strpos(",{$disabledFeatures},", ',cm,') === false)
         {
-            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
-                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.category')->eq('PP')
-                ->fetchPairs();
-            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            $baselineVersions = $this->dao->select('t1.id, t1.title, t1.category, t1.categoryVersion')->from(TABLE_OBJECT)->alias('t1')
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.status')->eq('pass')
@@ -1074,18 +1071,27 @@ class programplanModel extends model
                 ->fetchAll('id', false);
             foreach($baselineVersions as $baselineVersion)
             {
-                if(isset($ppCategories[$baselineVersion->category])) continue;
                 foreach(explode(',', $baselineVersion->category) as $category)
                 {
-                    if(isset($ppCategories[$category])) continue 2;
-                }
+                    if(!in_array($category, $deliverableIdList))
+                    {
+                        unset($baselineVersions[$baselineVersion->id]);
+                        continue 2;
+                    }
 
-                unset($baselineVersions[$baselineVersion->id]);
+                    $categoryVersion     = json_decode($baselineVersion->categoryVersion, true);
+                    $deliverableReviewID = $categoryVersion[$category];
+                    foreach($deliverableVersions as $deliverable)
+                    {
+                        if(!isset($deliverable->baselineList)) $deliverable->baselineList = '';
+                        if($deliverable->reviewID == $deliverableReviewID) $deliverable->baselineList .= "$baselineVersion->title ";
+                    }
+                }
             }
         }
 
         /* 4. 合并版本。 Merge versions. */
-        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        $versions = arrayUnion($deliverableVersions, $ganttVersions);
         ksort($versions, SORT_NUMERIC);
 
         return $versions;
