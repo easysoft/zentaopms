@@ -2077,4 +2077,22 @@ class repoModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test isRecordedWebhookCommit method.
+     *
+     * @param  object $commit
+     * @access public
+     * @return bool|array
+     */
+    public function isRecordedWebhookCommitTest(object $commit): bool|array
+    {
+        $method = new ReflectionMethod($this->instance, 'isRecordedWebhookCommit');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $commit);
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
