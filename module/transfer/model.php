@@ -104,6 +104,14 @@ class transferModel extends model
         /* Generate export datas. */
         $rows = $this->getRows($module, $fieldList);
 
+        /* Process duplicate bug value. */
+        if($module == 'bug' && in_array('duplicateBug', $fields))
+        {
+            $duplicateIdList = array_unique(array_filter(array_column($rows, 'duplicateBug')));
+            $duplicateBugs   = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateBug = !empty($duplicateBugs[$row->duplicateBug]) ? '#' . $row->duplicateBug . ' ' . $duplicateBugs[$row->duplicateBug] : '';
+        }
+
         /* Process duplicate story value. */
         if(in_array($module, array('story', 'requirement', 'epic')) && in_array('duplicateStory', $fields))
         {
