@@ -25,14 +25,14 @@ if(!empty($execution->isTpl))
     /* 处理分组数据。Process grouped data. */
     foreach($projectExecutions as $projectID => $executions)
     {
-        $projectName = zget($projects, $projectID);
-        $projectKeys = zget($projectPinyinNames, $projectName, '');
+        $projectName       = zget($projects, $projectID);
+        $projectSearchKeys = trim(zget($projectPinyinNames, $projectName, '') . ' ' . $projectName);
 
         $projectItem = array();
         $projectItem['id']    = $projectID;
         $projectItem['type']  = 'project';
         $projectItem['text']  = $projectName;
-        $projectItem['keys']  = $projectKeys;
+        $projectItem['keys']  = $projectSearchKeys;
         $projectItem['items'] = array();
 
         foreach($executions as $index => $execution)
@@ -40,7 +40,7 @@ if(!empty($execution->isTpl))
             $item = array();
             $item['id']   = $execution->id;
             $item['text'] = $execution->name;
-            $item['keys'] = trim(zget($executionPinyinNames, $execution->name, '') . ' ' . $projectKeys);
+            $item['keys'] = trim(zget($executionPinyinNames, $execution->name, '') . ' ' . $projectSearchKeys);
             $item['url']  = sprintf($link, $execution->id);
 
             if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
@@ -94,14 +94,14 @@ else
     /* 处理分组数据。Process grouped data. */
     foreach($projectExecutions as $projectID => $executions)
     {
-        $projectName = zget($projects, $projectID);
-        $projectKeys = zget($projectPinyinNames, $projectName, '');
+        $projectName       = zget($projects, $projectID);
+        $projectSearchKeys = trim(zget($projectPinyinNames, $projectName, '') . ' ' . $projectName);
 
         $projectItem = array();
         $projectItem['id']    = $projectID;
         $projectItem['type']  = 'project';
         $projectItem['text']  = $projectName;
-        $projectItem['keys']  = $projectKeys;
+        $projectItem['keys']  = $projectSearchKeys;
         $projectItem['items'] = array();
 
         foreach($executions as $index => $execution)
@@ -111,7 +111,7 @@ else
             $item = array();
             $item['id']   = $execution->id;
             $item['text'] = $execution->name;
-            $item['keys'] = trim(zget($executionPinyinNames, $execution->name, '') . ' ' . $projectKeys);
+            $item['keys'] = trim(zget($executionPinyinNames, $execution->name, '') . ' ' . $projectSearchKeys);
             $item['url']  = sprintf($link, $execution->id);
 
             if($execution->type == 'stage') $item['url'] = helper::createLink('execution', 'task', "executionID={$execution->id}");
