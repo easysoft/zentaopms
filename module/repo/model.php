@@ -7,6 +7,8 @@ declare(strict_types=1);
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@cnezsoft.com>
  * @package     repo
+ * @property    dao     $dao
+ * @property    object  $lang
  * @property    repoTao $repoTao
  * @link        https://www.zentao.net
  */
@@ -1719,6 +1721,42 @@ class repoModel extends model
     }
 
     /**
+     * 检查webhook提交的工时是否已被记录。
+     * Check whether the webhook commit effort has been recorded.
+     *
+     * @param  object $commit
+     * @access protected
+     * @return bool
+     */
+    protected function isRecordedWebhookCommit(object $commit): bool
+    {
+        $revision = '';
+        if(isset($commit->id)  && is_scalar($commit->id))  $revision = (string)$commit->id;
+        if($revision === '' && isset($commit->sha) && is_scalar($commit->sha)) $revision = (string)$commit->sha;
+
+        $message = '';
+        if(isset($commit->message) && is_string($commit->message)) $message = $commit->message;
+        if($message === '' && isset($commit->Message) && is_string($commit->Message)) $message = $commit->Message;
+        if($revision === '' || $message === '') return false;
+
+        $shortRevision = substr($revision, 0, 10);
+        $workSuffix    = '#' . $shortRevision . "\n" . htmlspecialchars($this->iconvComment($message, 'utf-8'), ENT_QUOTES, 'UTF-8');
+
+        /* @phpstan-ignore-next-line */
+        $efforts = $this->dao->select('id,work')->from(TABLE_EFFORT)
+            ->where('deleted')->eq('0')
+            ->andWhere('work')->like("%#{$shortRevision}%")
+            ->fetchAll();
+
+        foreach($efforts as $effort)
+        {
+            if(isset($effort->work) && is_string($effort->work) && str_ends_with($effort->work, $workSuffix)) return true;
+        }
+
+        return false;
+    }
+
+    /**
      * 处理webhook请求。
      * Handle received GitLab webhook.
      *
@@ -1740,6 +1778,8 @@ class repoModel extends model
 
         foreach($data->commits as $commit)
         {
+            if($this->isRecordedWebhookCommit($commit)) continue;
+
             $time = zget($commit, 'timestamp', '');
             if(isset($commit->author->when)) $time = $commit->author->when;
 

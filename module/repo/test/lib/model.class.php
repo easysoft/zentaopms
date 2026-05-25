@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+/**
+ * @property repoModel $instance
+ */
 class repoModelTest extends baseTest
 {
     protected $moduleName = 'repo';
@@ -2073,6 +2076,25 @@ class repoModelTest extends baseTest
         $method = new ReflectionMethod($this->objectTao, 'processSearchQuery');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test isRecordedWebhookCommit method.
+     *
+     * @param  object $commit
+     * @access public
+     * @return bool|array<string, mixed>
+     */
+    public function isRecordedWebhookCommitTest(object $commit): bool|array
+    {
+        $method = new ReflectionMethod($this->instance, 'isRecordedWebhookCommit');
+        $method->setAccessible(true);
+        $result = (bool)$method->invoke($this->instance, $commit);
+
+        /* @phpstan-ignore-next-line */
         if(dao::isError()) return dao::getError();
 
         return $result;
