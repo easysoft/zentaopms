@@ -398,6 +398,7 @@ $lang->story->batchGradeGtParent     = 'The grade of %s requirements cannot be h
 $lang->story->batchParentError       = "The parent requirement of %s requirement cannot be itself or its child requirement, which has been ignored in this modification.";
 $lang->story->errorNoGradeSplit      = "There has no grade to split.";
 $lang->story->errorRecordMinus       = '『%s』should not be negative number.';
+$lang->story->closeParentTips        = 'There are still unclosed child stories under this parent story: %s. If the parent story is closed, the child stories will also be closed. Are you sure you want to close the parent story?';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Story Bereich';

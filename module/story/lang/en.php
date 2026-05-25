@@ -398,6 +398,7 @@ $lang->story->batchGradeGtParent     = 'The parent story of %s cannot be itself 
 $lang->story->batchParentError       = "%s cannot have itself or any of its descendants as its parent. This change was ignored.";
 $lang->story->errorNoGradeSplit      = "No story levels are available to split.";
 $lang->story->errorRecordMinus       = '[%s] must not be negative.';
+$lang->story->closeParentTips        = 'There are still unclosed child stories under this parent story: %s. If the parent story is closed, the child stories will also be closed. Are you sure you want to close the parent story?';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
