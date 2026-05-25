@@ -1127,10 +1127,11 @@ class repo extends control
      * @param  string $newRevision
      * @param  int    $showBug     // Used for biz.
      * @param  string $encoding
+     * @param  int    $showLinkObject
      * @access public
      * @return void
      */
-    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '')
+    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $showLinkObject = 1)
     {
         $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
@@ -1174,6 +1175,9 @@ class repo extends control
         $this->view->blames      = array();
         $this->view->showEditor  = true;
         $this->view->canReview   = true;
+        $this->view->showBug     = $showBug;
+
+        $this->view->showLinkObject = $showLinkObject;
         $this->display('repo', 'ajaxgeteditorcontent');
     }
 
@@ -1187,10 +1191,11 @@ class repo extends control
      * @param  string $revision
      * @param  int    $showBug
      * @param  string $encoding
+     * @param  int    $showLinkObject
      * @access public
      * @return void
      */
-    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
+    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '', int $showLinkObject = 1)
     {
         $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
@@ -1248,6 +1253,8 @@ class repo extends control
         $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
         $this->view->canReview   = true;
+
+        $this->view->showLinkObject = $showLinkObject;
         $this->display();
     }
 
