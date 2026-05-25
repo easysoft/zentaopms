@@ -112,7 +112,7 @@ class programplan extends control
                 $baselinePlan = $baselinePlans[$plan->id];
                 $endDate = zget($baselinePlan, 'endDate', '');
                 $endDate = empty($endDate) ? zget($baselinePlan, 'end_date', '') : date('d-m-Y', strtotime($endDate) + 86400);
-                if($endDate) continue;
+                if(empty($endDate)) continue;
 
                 $plans['data'][$key]->bar_height    = 22;
                 $plans['data'][$key]->planned_start = $baselinePlan->start_date;
