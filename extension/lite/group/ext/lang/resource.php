@@ -1069,7 +1069,7 @@ if($config->edition != 'open')
     $lang->resource->doc->custom2export    = 'custom2export';
     $lang->resource->doc->execution2export = 'execution2export';
 
-    $lang->resource->my->review = 'review';
+    if(helper::hasFeature('OA')) $lang->resource->my->review = 'review';
 
     /* workflow */
     $lang->resource->workflow = new stdclass();
