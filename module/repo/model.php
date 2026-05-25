@@ -1721,6 +1721,7 @@ class repoModel extends model
     }
 
     /**
+     * 检查webhook提交的工时是否已被记录。
      * Check whether the webhook commit effort has been recorded.
      *
      * @param  object $commit
