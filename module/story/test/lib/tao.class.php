@@ -592,6 +592,8 @@ class storyTaoTest extends baseTest
         $story = $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         if(empty($story)) $story = new stdclass();
 
+        global $app;
+        $app->upgrading = true;
         $this->instance->linkToExecutionForCreate($executionID, $storyID, $story, $extra);
         return array_filter((array)$this->instance->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch());
     }

@@ -26433,7 +26433,7 @@ a:120:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:4;s:
         "required": false,
         "desc": "文件访问地址"
     }
-]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:101;O:8:"stdClass":24:{s:2:"id";i:102;s:7:"product";s:0:"";s:3:"lib";i:4;s:6:"module";i:379;s:5:"title";s:36:"编辑附件，修改附件的名称";s:4:"path";s:6:"/files";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"POST";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";N;s:7:"version";i:1;s:6:"params";s:411:"{
+]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:101;O:8:"stdClass":24:{s:2:"id";i:102;s:7:"product";s:0:"";s:3:"lib";i:4;s:6:"module";i:379;s:5:"title";s:36:"编辑附件，修改附件的名称";s:4:"path";s:6:"/files/:fileID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:4:"PUT";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";N;s:7:"version";i:1;s:6:"params";s:411:"{
     "header": [
         {
             "field": "Token",
@@ -26462,30 +26462,6 @@ a:120:{i:0;O:8:"stdClass":24:{s:2:"id";i:1;s:7:"product";s:0:"";s:3:"lib";i:4;s:
         "paramsType": "string",
         "required": true,
         "desc": "状态(success 成功 | fail 失败)"
-    },
-    {
-        "field": "id",
-        "paramsType": "int",
-        "required": false,
-        "desc": "文件ID"
-    },
-    {
-        "field": "url",
-        "paramsType": "string",
-        "required": false,
-        "desc": "文件访问地址"
-    },
-    {
-        "field": "objectType",
-        "paramsType": "string",
-        "required": false,
-        "desc": "管理对象类型"
-    },
-    {
-        "field": "objectID",
-        "paramsType": "int",
-        "required": false,
-        "desc": "管理对象ID"
     }
 ]";s:12:"commonParams";N;s:7:"addedBy";s:5:"admin";s:9:"addedDate";s:19:"2026-01-01 00:00:00";s:8:"editedBy";s:5:"admin";s:10:"editedDate";s:19:"2026-01-01 00:00:00";s:7:"deleted";i:0;}i:102;O:8:"stdClass":24:{s:2:"id";i:103;s:7:"product";s:0:"";s:3:"lib";i:4;s:6:"module";i:372;s:5:"title";s:12:"删除任务";s:4:"path";s:14:"/tasks/:taskID";s:8:"protocol";s:4:"HTTP";s:6:"method";s:6:"DELETE";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:16:"application/json";s:6:"status";s:4:"done";s:5:"owner";s:0:"";s:4:"desc";N;s:7:"version";i:1;s:6:"params";s:240:"{
     "header": [

@@ -66,7 +66,7 @@ if($rawMethod != 'contribute' || $browseType != 'reviewedbyme') unset($config->m
 
 foreach($reviewList as $review)
 {
-    $type       = $review->type == 'projectreview' || $review->type == 'projectchange' ? 'review' : $review->type;
+    $type       = in_array($review->type, array('projectreview', 'projectchange', 'baseline')) ? 'review' : $review->type;
     $isOAObject =  strpos(",{$config->my->oaObjectType},", ",$type,") !== false ? true : false;
     $this->app->loadLang($type);
 

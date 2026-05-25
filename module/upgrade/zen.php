@@ -884,15 +884,17 @@ class upgradeZen extends upgrade
      *
      * @param  string    $command
      * @param  string    $tips
+     * @param  string    $referer
      * @access protected
      * @return void
      */
-    protected function displayCommand(string $command, string $tips = ''): void
+    protected function displayCommand(string $command, string $tips = '', string $referer = ''): void
     {
         $this->view->title   = $this->lang->upgrade->common;
         $this->view->result  = 'fail';
         $this->view->command = $command;
         $this->view->tips    = $tips ?: $this->lang->upgrade->execCommand;
+        $this->view->referer = $referer;
         $this->display('upgrade', 'command');
     }
 

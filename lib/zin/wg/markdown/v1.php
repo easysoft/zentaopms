@@ -13,6 +13,7 @@ class markdown extends wg
         'markedExts?: array',
         'highlight?: bool|array',
         'copyCode?: bool',
+        'fixQuote?: bool=true',
         'assetBaseUrl?: string|func'
     );
 
@@ -27,6 +28,10 @@ class markdown extends wg
 
     protected function build()
     {
-        return zui::markdown(inherit($this));
+        return zui::markdown
+        (
+            $this->prop('fixQuote') ?set('$options', jsRaw("(_,o) => ({content: o.content.replaceAll('&quot;', '\"').replaceAll('&#039;', \"'\")})")) : null,
+            set($this->props->skip('fixQuote'))
+        );
     }
 }

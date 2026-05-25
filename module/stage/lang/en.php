@@ -26,13 +26,14 @@ $lang->stage->id        = 'ID';
 $lang->stage->name      = 'Name';
 $lang->stage->type      = 'Type';
 $lang->stage->percent   = 'Workload %';
-$lang->stage->setType   = 'Stage Type';
+$lang->stage->setType   = 'Waterfall Stage Type';
 $lang->stage->TRpoint   = 'TR Point';
 $lang->stage->DCPpoint  = 'DCP Point';
 $lang->stage->TRname    = 'TR Point Name';
 $lang->stage->DCPname   = 'DCP Point Name';
 $lang->stage->pointFlow = 'Approval Flow';
 $lang->stage->order     = 'Order';
+$lang->stage->ipdType   = 'IPD Stage Type';
 
 $lang->stage->typeList['mix']     = 'Mix';
 $lang->stage->typeList['request'] = 'Story';
@@ -43,12 +44,11 @@ $lang->stage->typeList['release'] = 'Release';
 $lang->stage->typeList['review']  = 'Summary and Review';
 $lang->stage->typeList['other']   = 'Others';
 
-$lang->stage->ipdTypeList['concept']   = 'Concept';
-$lang->stage->ipdTypeList['plan']      = 'Plan';
-$lang->stage->ipdTypeList['develop']   = 'Development';
-$lang->stage->ipdTypeList['qualify']   = 'Verify';
-$lang->stage->ipdTypeList['launch']    = 'Release';
-$lang->stage->ipdTypeList['lifecycle'] = 'Lifecycel';
+$lang->stage->ipdTypeList['concept'] = 'Concept';
+$lang->stage->ipdTypeList['plan']    = 'Plan';
+$lang->stage->ipdTypeList['develop'] = 'Development';
+$lang->stage->ipdTypeList['qualify'] = 'Verify';
+$lang->stage->ipdTypeList['launch']  = 'Release';
 
 $lang->stage->viewList      = 'Phase List';
 $lang->stage->noStage       = 'No phases available yet.';

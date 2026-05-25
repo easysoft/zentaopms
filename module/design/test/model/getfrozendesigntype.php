@@ -29,7 +29,10 @@ $projectDeliverable->gen(5);
 $deliverable = zenData('deliverable');
 $deliverable->id->range('1-5');
 $deliverable->category->range('HLDS,DDS,DBDS,ADS');
+$deliverable->module->range('1-5');
 $deliverable->gen(5);
+
+zenData('module')->loadYaml('module')->gen(5);
 
 global $tester;
 $designModel = $tester->loadModel('design');

@@ -400,6 +400,7 @@ class programplanModel extends model
         $parents              = array();
         $prevSyncData         = null;
         $prevLevel            = 0;
+        $addNewStage          = false;
         foreach($plans as $plan)
         {
             if(!empty($plan->schedule))
@@ -447,6 +448,8 @@ class programplanModel extends model
 
                 $this->execution->updateProducts($stageID, $linkProducts);
                 if($plan->acl != 'open') $updateUserViewIdList[] = $stageID;
+
+                $addNewStage = true;
             }
 
             if(!$totalSyncData && $prevSyncData && $prevLevel == $level - 1)  $this->programplanTao->syncParentData($stageID, $parents[$prevLevel]);
@@ -459,6 +462,22 @@ class programplanModel extends model
         if($project && $project->model == 'ipd') $this->dao->update(TABLE_PROJECT)->set('parallel')->eq($parallel)->where('id')->eq($projectID)->exec();
         if($updateUserViewIdList) $this->loadModel('user')->updateUserView($updateUserViewIdList, 'sprint');
         if($enabledPoints) $this->programplanTao->updatePoint($projectID, $enabledPoints);
+
+        if($addNewStage)
+        {
+            $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+                ->where('t1.project')->eq($projectID)
+                ->andWhere('t2.category')->eq('PP')
+                ->fetch('id');
+
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('submittedBy')->eq($this->app->user->account)
+                ->set('submittedDate')->eq(helper::now())
+                ->where('id')->eq($projectDeliverableID)
+                ->exec();
+        }
+
         return true;
     }
 
@@ -1019,6 +1038,7 @@ class programplanModel extends model
 
         /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
         if($type == 'execution') return $ganttVersions;
+        if($type == 'project' && $category != 'gantt') return $ganttVersions;
 
         $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')

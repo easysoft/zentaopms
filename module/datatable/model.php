@@ -455,6 +455,11 @@ class datatableModel extends model
         {
             $method = 'browse'; // 任务加载task-browse的layout配置。
         }
+        elseif($module == 'my' && $method == 'task')
+        {
+            $module = 'task';
+            $method = 'browse'; // 地盘任务加载task-browse的layout配置。
+        }
         elseif($module == 'bug' && $method == 'bug')
         {
             $method = 'browse'; // 执行bug列表加载bug-browse的layout配置。

@@ -1113,9 +1113,16 @@ class user extends control
     public function ajaxGetItems(string $params = '', string $search = '', int $maxCount = 0)
     {
         $items  = array();
-        $users  = $this->user->getPairs($params);
         $search = empty($search) ? '' : base64_decode($search);
 
+        if(!empty($_POST))
+        {
+            if(!empty($_POST['search']))   $search   = $_POST['search'];
+            if(!empty($_POST['maxCount'])) $maxCount = $_POST['maxCount'];
+            if(!empty($_POST['params']))   $params   = $_POST['params'];
+        }
+
+        $users  = $this->user->getPairs($params);
         foreach($users as $account => $realname)
         {
             if(!empty($search) && stripos($account, $search) === false and stripos($realname, $search) === false) continue;

@@ -2233,13 +2233,7 @@ class executionZen extends execution
             }
         }
 
-        $productPlan = array();
-        if(!empty($planID))
-        {
-            $plan        = $this->productplan->fetchByID((int)$planID);
-            $productPlan = $this->productplan->getPairs($plan->product, $plan->branch, 'unexpired|withMainPlan', true);
-        }
-
+        $productPlan       = array();
         $productPlansOrder = array();
         foreach($productPlans as $productID => $branchPlans)
         {
@@ -2252,6 +2246,8 @@ class executionZen extends execution
                 {
                     if(empty($plans[$planMapID])) $productPlans[$productID][$branchID][$planMapID] = $orderPlans[$planMapID]->title;
                     $productPlansOrder[$productID][$branchID][$planMapID] = $productPlans[$productID][$branchID][$planMapID];
+
+                    if(empty($execution->hasProduct)) $productPlan[$planMapID] = $productPlans[$productID][$branchID][$planMapID];
                 }
             }
         }

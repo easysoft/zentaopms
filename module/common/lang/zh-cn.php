@@ -736,6 +736,7 @@ $lang->aiapp->zentaoAgent  = '禅道智能体';
 $lang->aiapp->generalAgent = '通用智能体';
 $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
+$lang->aiapp->toolkit      = '智能工具';
 
 if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
 if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);

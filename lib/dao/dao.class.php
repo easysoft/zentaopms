@@ -66,8 +66,10 @@ class dao extends baseDAO
                     }
                     else
                     {
+                        $groupID = $this->getWorkflowGroupID($currentModule, $data);
+
                         $workflowFields = array();
-                        $stmt = $this->dbh->query("SELECT `field`,`type` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$currentModule}' AND `buildin` = '0'");
+                        $stmt = $this->dbh->query("SELECT `field`,`type` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$currentModule}' AND `group` = '{$groupID}' AND `buildin` = '0'");
                         while($row = $stmt->fetch())
                         {
                             $workflowFields[$row->field] = $row->type;
@@ -101,10 +103,12 @@ class dao extends baseDAO
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
 
-        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `vision` = '{$this->config->vision}' AND `extensionType` = 'extend'")->fetch(PDO::FETCH_OBJ);
+        $groupID = $this->getWorkflowGroupID($module, $data);
+
+        $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `group` = '{$groupID}' AND `vision` = '{$this->config->vision}' AND `extensionType` = 'extend'")->fetch(PDO::FETCH_OBJ);
         if(!$action) return $data;
 
-        $fields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t2.type,t2.options,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module WHERE t1.field = t2.field AND t1.module = '{$module}' AND t1.action = '{$method}' AND `vision` = '{$this->config->vision}' AND t1.readonly = '0'")->fetchAll();
+        $fields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t2.type,t2.options,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module WHERE t1.field = t2.field AND t1.module = '{$module}' AND t1.action = '{$method}' AND t1.`group` = '{$groupID}' AND t2.`group` = '{$groupID}' AND `vision` = '{$this->config->vision}' AND t1.readonly = '0'")->fetchAll();
         if(!$fields) return $data;
 
         $this->app->loadLang('flow');
@@ -210,6 +214,62 @@ class dao extends baseDAO
     }
 
     /**
+     * 获取项目流程ID.
+     * Get workflow group id.
+     *
+     * @param  string $module
+     * @param  object $data
+     * @access public
+     * @return int
+     */
+    public function getWorkflowGroupID($module, $data = null)
+    {
+        $linkProductModules = array('productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
+        $linkProjectModules = array('execution', 'build', 'task');
+
+        $groupID = 0;
+        if(in_array($module, array('project', 'product')))
+        {
+            $groupID = empty($_POST['workflowGroup']) ? 0 : $_POST['workflowGroup'];
+        }
+        elseif(in_array($module, $linkProductModules))
+        {
+            $productVar = in_array($module, array('feedback', 'ticket')) ? "{$module}Product" : 'product';
+            if(!empty($data->product) || (!empty($_SESSION[$productVar]) && is_numeric($_SESSION[$productVar])))
+            {
+                $productID = !empty($data->product) ? $data->product : $_SESSION[$productVar];
+                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
+                $groupID   = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
+                if(!empty($result->shadow))
+                {
+                    $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
+                    $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
+                }
+            }
+        }
+        elseif(in_array($module, $linkProjectModules))
+        {
+            $projectID = !empty($data->projectID) ? $data->projectID : 0;
+            if((empty($projectID) || !is_numeric($projectID)) && !empty($data->project)) $projectID = $data->project;
+            if(empty($projectID) || !is_numeric($projectID)) $projectID = $_SESSION['project'];
+
+            if(!empty($projectID) && is_numeric($projectID))
+            {
+                $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $_SESSION['project'] . "'")->fetch(PDO::FETCH_OBJ);
+                $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
+            }
+        }
+
+        if($groupID)
+        {
+            $builtIn = $this->dbh->query("SELECT `main` FROM " . TABLE_WORKFLOWGROUP . " WHERE `id` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
+            $groupID = !empty($builtIn->main) ? 0 : $groupID;
+        }
+
+        return $groupID;
+    }
+
+    /**
      * Check workFlow field rule.
      *
      * @param  bool   $skip true|false
@@ -227,40 +287,7 @@ class dao extends baseDAO
         if($module == 'story' && $this->app->rawModule == 'epic')        $module = 'epic';
         if($module == 'project' && $method == 'createtemplate')          $method = 'create';
 
-        $linkProductModules = array('productplan', 'release', 'story', 'requirement', 'epic', 'bug', 'testcase', 'testtask', 'feedback', 'ticket');
-        $linkProjectModules = array('execution', 'build', 'task');
-
-        $groupID = 0;
-        if(in_array($module, array('project', 'product')))
-        {
-            $groupID = empty($_POST['workflowGroup']) ? 0 : $_POST['workflowGroup'];
-        }
-        elseif(in_array($module, $linkProductModules))
-        {
-            $productVar = in_array($module, array('feedback', 'ticket')) ? "{$module}Product" : 'product';
-            if(!empty($_SESSION[$productVar]) && is_numeric($_SESSION[$productVar]))
-            {
-                $productID = $_SESSION[$productVar];
-                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
-                $groupID   = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
-                if(!empty($result->shadow))
-                {
-                    $result  = $this->dbh->query("SELECT t2.`workflowGroup` FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.product = '{$productID}'")->fetch(PDO::FETCH_OBJ);
-                    $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
-                }
-            }
-        }
-        elseif(!empty($_SESSION['project']) && in_array($module, $linkProjectModules))
-        {
-            $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $_SESSION['project'] . "'")->fetch(PDO::FETCH_OBJ);
-            $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
-        }
-
-        if($groupID)
-        {
-            $builtIn = $this->dbh->query("SELECT `main` FROM " . TABLE_WORKFLOWGROUP . " WHERE `id` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
-            $groupID = !empty($builtIn->main) ? 0 : $groupID;
-        }
+        $groupID = $this->getWorkflowGroupID($module, $this->sqlobj->data);
 
         $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend' AND `vision` = '{$this->config->vision}' AND `group` = '{$groupID}'")->fetch(PDO::FETCH_OBJ);
         if(!$flowAction) return $this;
@@ -346,7 +373,7 @@ class dao extends baseDAO
                     }
                     else
                     {
-                        if(is_numeric($this->sqlobj->data->{$field->field}) && $this->sqlobj->data->{$field->field} == 0 && $rule->rule == 'notempty' && !in_array($field->control, array('select', 'multi-select'))) continue;
+                        if(is_numeric($this->sqlobj->data->{$field->field}) && $this->sqlobj->data->{$field->field} == 0 && $rule->rule == 'notempty') continue;
                         $this->check($field->field, $rule->rule);
                     }
                 }

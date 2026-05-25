@@ -142,6 +142,19 @@ if($config->edition == 'open' && hasPriv('stage', 'browse'))
     );
 }
 
+if($config->edition == 'ipd' && hasPriv('custom', 'set'))
+{
+    $menuItems[] = li
+    (
+        setClass('menu-item'),
+        a
+        (
+            set::href(createLink('custom', 'set', "module=stage&field=ipdTypeList")),
+            $lang->stage->ipdType
+        )
+    );
+}
+
 div
 (
     setClass('row has-sidebar-left'),

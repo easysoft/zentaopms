@@ -174,13 +174,23 @@ class programplanZen extends programplan
         /* Compute fields for create view. */
         list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData);
 
-        if($viewData->project->model == 'ipd') $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
+        $stages = empty($viewData->planID) ? $this->loadModel('stage')->getStages('order_asc', 0, $viewData->project->workflowGroup) : array();
+
+        if($viewData->project->model == 'ipd')
+        {
+            foreach($stages as $stage)
+            {
+                $stageType = $stage->type;
+                if(!isset($this->lang->stage->ipdTypeList[$stageType])) $this->lang->stage->ipdTypeList[$stageType] = $stageType;
+            }
+            $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
+        }
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->hyphen . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
-        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('order_asc', 0, $viewData->project->workflowGroup) : array();
+        $this->view->stages             = $stages;
         $this->view->programPlan        = $viewData->programPlan;
         $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;

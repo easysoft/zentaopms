@@ -188,35 +188,6 @@ class helper extends baseHelper
     }
 
     /**
-     * Create url of issue.
-     *
-     * @param  string       $moduleName
-     * @param  string       $methodName
-     * @param  string|array $vars
-     * @param  string       $viewType
-     * @param  bool         $onlyBody
-     * @static
-     * @access public
-     * @return string
-     */
-    public static function createLink(string $moduleName, string $methodName = 'index', string|array $vars = '', string $viewType = 'json', bool $onlyBody = false)
-    {
-        global $config;
-        $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
-
-        /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
-        if($config->requestType == 'GET')
-        {
-            $link = $config->webRoot . (string) substr($link, 1);
-        }
-        elseif($config->requestType == 'PATH_INFO2')
-        {
-            $link = substr((string) $link, $pos + 4);
-        }
-        return $link;
-    }
-
-    /**
      * 是否是内网。
      * Check is intranet.
      *
