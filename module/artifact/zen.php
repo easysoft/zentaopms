@@ -56,7 +56,7 @@ class artifactZen extends artifact
      * @access public
      * @return array
      */
-    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space'): array
+    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space', int $leaf = 0): array
     {
         $items = array();
         $nodes = $this->artifact->getArtifactNodes($artifact, $path);
@@ -69,11 +69,11 @@ class artifactZen extends artifact
         }
 
         $items = array();
-        if(empty($selectNode)) $selectNode = array();
         foreach($nodes as $node)
         {
             if(!isset($node->metadata)) continue;
             $path = helper::safe64Encode($node->path);
+            $nodeLeaf = !empty($node->leaf) ? 1 : 0;
 
             $item = new stdclass();
             $item->id         = $path;
@@ -82,7 +82,7 @@ class artifactZen extends artifact
             $item->path       = $node->path;
             $item->format     = $node->format;
             $item->kind       = $node->leaf ? 'file' : 'dir';
-            $item->active     = $node->path == $selectPath;
+            $item->active     = $node->path == $selectPath && $nodeLeaf == $leaf;
             $item->artifactID = $artifact->id;
             $item->spaceID    = $spaceID;
             $item->repoID     = $repoID;
@@ -92,14 +92,14 @@ class artifactZen extends artifact
             $item->className  = 'text-clip';
             $item->hint       = $node->name;
             $item->hover      = true;
-            $item->url        = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}");
+            $item->url        = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}&leaf={$nodeLeaf}");
 
             if($item->kind == 'dir')
             {
                 $baseSelectPath = helper::safe64Encode($selectPath);
-                $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
+                $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&leaf={$leaf}"));
             }
-            $item->actions = $node->metadata->type == 'asset' || $item->format != 'generic' ? array() : $this->buildTreeAction($item, $privs);
+            $item->actions = $node->metadata->type == 'asset' || $item->format != 'file' ? array() : $this->buildTreeAction($item, $privs);
             $items[] = $item;
         }
 

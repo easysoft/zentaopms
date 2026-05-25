@@ -76,7 +76,7 @@ if(!empty($artifactList))
                     div
                     (
                         setClass('flex justify-between items-center'),
-                        $artifact->format == 'generic' ? icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))) :
+                        $artifact->type == 'file' ? icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))) :
                         img
                         (
                             setClass('inline pr-1'),

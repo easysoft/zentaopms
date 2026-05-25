@@ -103,7 +103,7 @@ class artifact extends control
      * @param  int    $repoID
      * @param  string $type
      * @param  string $selectPath
-     * @param  int    $isExpand
+     * @param  int    $leaf
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -111,7 +111,7 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $isExpand = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
@@ -147,7 +147,7 @@ class artifact extends control
         $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
         $this->view->artifact     = $artifact;
         $this->view->browseLink   = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
-        $this->view->treeItems    = $this->artifactZen->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type);
+        $this->view->treeItems    = $this->artifactZen->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
         $this->view->selectNode   = $selectNode;
         $this->view->spaceID      = $spaceID;
         $this->view->repoID       = $repoID;
@@ -156,7 +156,7 @@ class artifact extends control
         $this->view->artifactList = empty($artifactList) ? array() : $artifactList;
         $this->view->breadCrumbs  = $breadCrumbs;
         $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
-        $this->view->isExpand     = $isExpand;
+        $this->view->leaf         = $leaf;
         $this->view->assetList    = $assetList;
         $this->view->node         = $node;
         $this->view->orderBy      = $orderBy;
@@ -220,7 +220,7 @@ class artifact extends control
         {
             $formData = form::data($this->config->artifact->form->edit)->get();
 
-            if(in_array($artifact->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            if(in_array($artifact->type, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
@@ -292,7 +292,7 @@ class artifact extends control
                 $formData->name = ltrim($path . '.' . $formData->name, '/');
             }
             if(empty($path) && $isSubDir) $formData->name = '/' . $formData->name;
-            $result = $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->format));
+            $result = $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->type));
             if(dao::isError()) $this->sendError(dao::getError());
 
             if($result) $this->loadModel('action')->create('artifactDir', $result->id, 'created', '', $artifactID . '|' . $formData->name . '|group.' . $result->id);
@@ -324,7 +324,7 @@ class artifact extends control
         $parentPath  = $currentPath ? dirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
 
-        $artifacts = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
+        $artifacts = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
         if($_POST)
         {
             $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
@@ -503,7 +503,7 @@ class artifact extends control
 
             $fromRepo = $artifact->name;
             $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
-            $toRepo   = zget($this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
+            $toRepo   = zget($this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
@@ -536,7 +536,7 @@ class artifact extends control
         $this->view->title              = $this->lang->artifact->moveArtifact;
         $this->view->asset              = $asset;
         $this->view->artifact           = $artifact;
-        $this->view->artifacts          = $this->artifact->getPairs($artifact->type, $artifact->format, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->artifacts          = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
         $this->view->currentPathEncoded = '';
         $this->view->parentPath         = $parentID;
         $this->display();
@@ -571,12 +571,12 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '', int $spaceID = 0, int $repoID = 0, string $type = 'space')
+    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '', int $spaceID = 0, int $repoID = 0, string $type = 'space', int $leaf = 0)
     {
         $artifact   = $this->artifact->fetchByID($artifactID);
         $path       = helper::safe64Decode($path);
         $selectPath = helper::safe64Decode($selectPath);
-        return print(json_encode($this->artifactZen->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type)));
+        return print(json_encode($this->artifactZen->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type, $leaf)));
     }
 
     /**

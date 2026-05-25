@@ -21,7 +21,7 @@ formPanel
         set::name('format'),
         set::required(true),
         set::disabled(true),
-        set::value(zget($lang->artifact->formatList, $artifact->format))
+        set::value(zget($lang->artifact->formatList, $artifact->type))
     ),
     formGroup
     (
@@ -29,6 +29,6 @@ formPanel
         set::name('name'),
         set::required(true),
         set::value($artifact->name),
-        set::placeholder($artifact->format == 'generic' ? $lang->artifact->placeholder->name : $lang->artifact->notice->nameNotSupportChinese)
+        set::placeholder($artifact->type == 'file' ? $lang->artifact->placeholder->name : $lang->artifact->notice->nameNotSupportChinese)
     )
 );
