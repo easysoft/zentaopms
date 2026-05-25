@@ -402,12 +402,6 @@ class commonModel extends model
         $this->config->systemDB   = isset($config['system']) ? $config['system'] : array();
         $this->config->personalDB = isset($config[$account]) ? $config[$account] : array();
 
-        /* Web root cannot be changed by api request. */
-        if(!$this->app->apiVersion)
-        {
-            $this->commonTao->updateDBWebRoot($this->config->systemDB);
-        }
-
         /* Override the items defined in config/config.php and config/my.php. */
         if(isset($this->config->systemDB->common))   $this->app->mergeConfig($this->config->systemDB->common, 'common');
         if(isset($this->config->personalDB->common)) $this->app->mergeConfig($this->config->personalDB->common, 'common');
@@ -1153,6 +1147,8 @@ class commonModel extends model
      */
     public function checkSafeFile()
     {
+        if(PHP_SAPI == 'cli') return false;
+
         if($this->config->inContainer) return false;
 
         if($this->app->hasValidSafeFile()) return false;
@@ -4073,22 +4069,24 @@ EOF;
             return $app->workspaceInfo;
         }
 
-        if($app->tab === 'project' && $lang->project->common == $lang->project->template)
+        $tab = $app->tab;
+        if($lang->$tab->common == $lang->project->template)
         {
+            /* 项目模板不显示进入空间按钮: */
             $app->workspaceInfo = array('enabled' => false, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;
         }
 
-        if(empty($lang->workspaceList[$app->tab]) || commonModel::setMainMenu())
+        if(empty($lang->workspaceList[$tab]) || commonModel::setMainMenu())
         {
             $app->workspaceInfo = array('enabled' => true, 'type' => '', 'opened' => false);
             return $app->workspaceInfo;
         }
 
         $cookieWorkspace = $app->cookie->workspace;
-        if($cookieWorkspace !== $app->tab)
+        if($cookieWorkspace !== $tab)
         {
-            $app->workspaceInfo = array('enabled' => true, 'type' => $app->tab, 'opened' => false);
+            $app->workspaceInfo = array('enabled' => true, 'type' => $tab, 'opened' => false);
             return $app->workspaceInfo;
         }
 

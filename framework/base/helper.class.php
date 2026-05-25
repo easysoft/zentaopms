@@ -1363,6 +1363,27 @@ function getWebRoot($full = false)
     if(!$full && $envWebRoot) return $envWebRoot;
 
     $path = $_SERVER['SCRIPT_NAME'];
+    if(!empty($_SERVER['REQUEST_URI']))
+    {
+        $requestPath = parse_url((string)$_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        if(is_string($requestPath) && $requestPath !== '')
+        {
+            /* REQUEST_URI may contain extra PATH_INFO after the entry script, such as /www/api.php/v2/bugs/1. */
+            $entryScript = basename($path);
+            $entryMarker = $entryScript ? '/' . $entryScript : '';
+
+            if($entryMarker && str_contains($requestPath, $entryMarker))
+            {
+                $entryPos = strpos($requestPath, $entryMarker);
+                $path     = substr($requestPath, 0, $entryPos + strlen($entryMarker));
+            }
+            elseif(empty($path))
+            {
+                $path = $requestPath;
+            }
+        }
+    }
+
     if(PHP_SAPI == 'cli')
     {
         if(isset($_SERVER['argv'][1]))

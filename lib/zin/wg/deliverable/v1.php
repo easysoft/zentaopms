@@ -77,6 +77,7 @@ class deliverable extends wg
         $projectID     = $this->prop('projectID');
         $createDocUrl  = $this->prop('createDocUrl');
         $uploadDocUrl  = $this->prop('uploadDocUrl');
+        $onRenderItem  = $this->prop('onRenderItem') ? $this->prop('onRenderItem') : null;
 
         jsVar('addFile', $isTemplate ? $lang->deliverable->files : $lang->doc->addFile);
         jsVar('createDocUrl', $createDocUrl);
@@ -107,7 +108,8 @@ class deliverable extends wg
             set::maxFileSize($this->prop('maxFileSize')),
             set::isTemplate($isTemplate),
             set::extraCategory($extraCategory),
-            set::categories($categories)
+            set::categories($categories),
+            set::onRenderItem($onRenderItem)
         );
     }
 }

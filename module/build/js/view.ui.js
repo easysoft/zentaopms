@@ -35,6 +35,7 @@ window.showLink = function(type, params, onlyUpdateTable)
     }
 
     loadTarget({url: url, target: type});
+    $('.detail-header .open-url').attr('href', $.createLink('build', 'view', 'buildID=' + buildID + '&type=' + type)).removeAttr('data-back');
 };
 
 window.onSearchLinks = function(type, result)

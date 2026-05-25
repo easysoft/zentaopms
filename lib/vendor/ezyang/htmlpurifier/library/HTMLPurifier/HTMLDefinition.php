@@ -158,7 +158,7 @@ class HTMLPurifier_HTMLDefinition extends HTMLPurifier_Definition
      */
     public function getAnonymousModule()
     {
-        if (!$this->_anonModule) {
+        if (empty($this->_anonModule)) {
             $this->_anonModule = new HTMLPurifier_HTMLModule();
             $this->_anonModule->name = 'Anonymous';
         }

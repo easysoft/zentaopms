@@ -2838,6 +2838,7 @@ class taskModel extends model
         {
             $task->parentId = $task->parent;
             $task->parent   = zget($parents, $task->parent, '');
+            $task->level    = str_replace(',', '.', trim($task->path, ','));
         }
 
         return $tasks;

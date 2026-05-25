@@ -23,7 +23,7 @@ if($app->rawMethod == 'work')
         if(!empty($config->enableAITeammate)) $showMenu = array('aitask' => 'aitask') + $showMenu;
         $nameMap = array_merge($nameMap, $showMenu);
     }
-    if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'nc' => 'qa', 'myMeeting' => 'meeting'));
+    if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'reviewissue' => 'reviewissue', 'nc' => 'qa', 'myMeeting' => 'meeting'));
     if($isIPD !== 0)                                 $nameMap = array_merge($nameMap, array('demand' => 'demand'));
 
     foreach($nameMap as $name => $countKey)

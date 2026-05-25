@@ -696,8 +696,9 @@ $lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|
 $lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory,miniprogramview,createMiniProgram,editminiprogram,configuredMiniProgram');
 $lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
 $lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
+$lang->aiapp->menu->toolkit      = array('link' => "{$lang->aiapp->toolkit}|aiapp|toolkit|");
 
-$lang->aiapp->dividerMenu = ',zentaoAgent,models,';
+$lang->aiapp->dividerMenu = ',zentaoAgent,models,toolkit';
 
 /* AI menu order. */
 $lang->aiapp->menuOrder[5]  = 'conversation';
@@ -705,6 +706,7 @@ $lang->aiapp->menuOrder[10] = 'zentaoAgent';
 $lang->aiapp->menuOrder[15] = 'generalAgent';
 $lang->aiapp->menuOrder[20] = 'models';
 $lang->aiapp->menuOrder[25] = 'config';
+$lang->aiapp->menuOrder[30] = 'toolkit';
 
 /* Nav group.*/
 $lang->navGroup = new stdclass();
@@ -916,23 +918,6 @@ if(!helper::hasFeature('kanban'))
 if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
 if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
 if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
-
-/* AI menu. */
-$lang->aiapp->menu = new stdclass();
-$lang->aiapp->menu->conversation = array('link' => "{$lang->aiapp->conversation}|aiapp|conversation|");
-$lang->aiapp->menu->zentaoAgent  = array('link' => "{$lang->aiapp->zentaoAgent}|ai|prompts|", 'alias' => 'promptview,promptassignrole,promptselectdatasource,promptsetpurpose,promptsettargetform,promptfinalize');
-$lang->aiapp->menu->generalAgent = array('link' => "{$lang->aiapp->generalAgent}|aiapp|square|", 'alias' => 'view,miniprograms,editMiniProgramCategory,miniprogramview,createMiniProgram,editminiprogram,configuredMiniProgram');
-$lang->aiapp->menu->models       = array('link' => "{$lang->aiapp->models}|aiapp|models|");
-$lang->aiapp->menu->config       = array('link' => "{$lang->aiapp->config}|zai|setting|", 'alias' => 'vectorized');
-
-$lang->aiapp->dividerMenu = ',zentaoAgent,models,';
-
-/* AI menu order. */
-$lang->aiapp->menuOrder[5]  = 'conversation';
-$lang->aiapp->menuOrder[10] = 'zentaoAgent';
-$lang->aiapp->menuOrder[15] = 'generalAgent';
-$lang->aiapp->menuOrder[20] = 'models';
-$lang->aiapp->menuOrder[25] = 'config';
 
 /* Sanplex menu changes: */
 if(!empty($config->sanplexVersion) && $config->vision === 'rnd')

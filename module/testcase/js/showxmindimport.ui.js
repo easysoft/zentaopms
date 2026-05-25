@@ -1286,7 +1286,7 @@ ztmindmap.Wraper.prototype.singleTestCaseToJson = function(data)
                 if(nextNextChild.length == 1)
                     subStep.expect = nextNextChild[0].text;
 
-                if(nextNextChild.length > 1)
+                if(nextChild.$.type == 'stepGroup')
                 {
                     subStep.type = "group";
                     for(var thirdLevelNode of nextNextChild)

@@ -951,6 +951,7 @@ class my extends control
         $this->loadModel('epic');
         $this->loadModel('requirement');
         $this->session->set('storyList', $this->app->getURI(true), 'my');
+        $this->session->set('reviewList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);

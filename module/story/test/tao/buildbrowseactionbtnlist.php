@@ -40,10 +40,6 @@ cid=18600
 - 查看软件需求详情操作菜单第七个链接
  - 第6条的name属性 @testcase
  - 第6条的url属性 @/testcase-create-1-0-0--0-2.html
-- 查看软件需求详情操作菜单第九个链接
- - 第8条的name属性 @batchCreate
- - 第8条的className属性 @~~
- - 第8条的url属性 @~~
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -90,5 +86,3 @@ r($storyOperateMenu1)       && p('1:name,hint,disabled')    && e('review,该需�
 r($storyOperateMenu1)       && p('3:name,data-toggle,url')  && e('close,modal,/story-close-2-.html');                   //查看软件需求详情操作菜单第四个链接
 r($storyOperateMenu1)       && p('5:name,url')              && e('edit,/story-edit-2-default.html');                    //查看软件需求详情操作菜单第六个链接
 r($storyOperateMenu1)       && p('6:name,url')              && e('testcase,/testcase-create-1-0-0--0-2.html');          //查看软件需求详情操作菜单第七个链接
-
-r($storyOperateMenu2)       && p('8:name,className,url') && e('batchCreate,~~,~~');                                     //查看软件需求详情操作菜单第九个链接

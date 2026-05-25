@@ -440,7 +440,7 @@ class model extends baseModel
         $this->loadModel('file');
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
         $uiID   = $this->loadModel('workflowlayout')->getUIByDataID($moduleName, $methodName, $objectID);
-        $fields = $this->workflowaction->getPageFields($moduleName, $action->action, '', null, $uiID, $groupID);
+        $fields = $this->workflowaction->getPageFields($moduleName, $action->action, '', null, $uiID, $action->group);
         foreach($fields as $field)
         {
             if($field->control == 'file' && $field->show && !$field->readonly)
@@ -449,7 +449,7 @@ class model extends baseModel
             }
         }
 
-        $flow = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
+        $flow = $this->loadModel('workflow')->getByModule($moduleName, false, $action->group);
         if($flow && $action) return $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
     }
 

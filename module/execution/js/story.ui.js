@@ -10,7 +10,14 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
 
     if($(this).hasClass('ajax-btn'))
     {
-        $.ajaxSubmit({url, data: form});
+        if($(this).hasClass('batch-unlink-btn'))
+        {
+            zui.Modal.confirm(confirmBatchUnlinkStory).then((res) => {if(res) $.ajaxSubmit({url, data:form});});
+        }
+        else
+        {
+            $.ajaxSubmit({url, data: form});
+        }
     }
     else
     {
@@ -78,7 +85,6 @@ $(document).off('click','.batch-btn').on('click', '.batch-btn', function()
             $('#storyIdList').val(unlinkTaskIdList);
         }
     }
-    console.log('ccc');
 
     zui.Modal.hide('#taskModal');
     console.log('eee');
@@ -159,11 +165,36 @@ window.renderStoryCell = function(result, info)
     }
     if(info.col.name == 'status' && result)
     {
+        result[0].props.class = 'status-' + info.row.data.rawStatus;
         if(info.row.data.URChanged == '1') result[0] = {html: "<span class='status-changed'>" + URChanged + "</span>"};
     }
     if(info.col.name == 'order')
     {
         result[0] = {html: "<i class='icon-move'></i>", className: 'text-gray cursor-move move-plan'};
+    }
+    if(info.col.name == 'actions' && result)
+    {
+        const rowData   = info.row.data;
+        const menuItems = result[0]?.props?.items;
+        if(menuItems)
+        {
+            const hintForDisabledCreate = () =>
+            {
+                if(rowData.isParent) return createTaskTip1;
+                if(rowData.status != 'active') return createTaskTip2;
+            };
+
+            const applyCreateTaskHint = (itemIndex, canSeeAction) =>
+            {
+                if(!canSeeAction || !menuItems[itemIndex]?.disabled) return;
+
+                const hint = hintForDisabledCreate();
+                if(hint !== undefined && menuItems[itemIndex]) menuItems[itemIndex].hint = hint;
+            };
+
+            applyCreateTaskHint(2, hasCreateTaskPriv);
+            applyCreateTaskHint(3, hasBatchCreateTaskPriv);
+        }
     }
     return result;
 };

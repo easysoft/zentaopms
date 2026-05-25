@@ -737,6 +737,7 @@ $lang->aiapp->zentaoAgent  = 'ZenTao Agent';
 $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Models';
 $lang->aiapp->config       = 'ZAI Settings';
+$lang->aiapp->toolkit      = 'Toolkit';
 
 if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
 if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);

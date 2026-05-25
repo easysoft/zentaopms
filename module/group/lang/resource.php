@@ -2047,6 +2047,7 @@ $lang->resource->aiapp->miniProgramChat    = 'miniProgramChat';
 $lang->resource->aiapp->collectMiniProgram = 'collectMiniProgram';
 $lang->resource->aiapp->models             = 'models';
 $lang->resource->aiapp->conversation       = 'browseConversation';
+$lang->resource->aiapp->toolkit            = 'viewAiToolkit';
 
 $lang->resource->zai = new stdclass();
 $lang->resource->zai->setting    = 'setting';

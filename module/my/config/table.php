@@ -240,6 +240,7 @@ $config->my->task->dtable->fieldList['id']['name']     = 'id';
 $config->my->task->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->my->task->dtable->fieldList['id']['type']     = 'checkID';
 $config->my->task->dtable->fieldList['id']['sortType'] = true;
+$config->my->task->dtable->fieldList['id']['show']     = true;
 
 $config->my->task->dtable->fieldList['name']['name']         = 'name';
 $config->my->task->dtable->fieldList['name']['title']        = $lang->task->name;
@@ -258,6 +259,7 @@ $config->my->task->dtable->fieldList['pri']['type']     = 'pri';
 $config->my->task->dtable->fieldList['pri']['priList']  = $lang->task->priList;
 $config->my->task->dtable->fieldList['pri']['group']    = 'pri';
 $config->my->task->dtable->fieldList['pri']['sortType'] = true;
+$config->my->task->dtable->fieldList['pri']['show']     = true;
 
 $config->my->task->dtable->fieldList['status']['name']      = 'status';
 $config->my->task->dtable->fieldList['status']['title']     = $lang->statusAB;
@@ -265,26 +267,30 @@ $config->my->task->dtable->fieldList['status']['type']      = 'status';
 $config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['status']['sortType']  = true;
+$config->my->task->dtable->fieldList['status']['show']     = true;
 
-$config->my->task->dtable->fieldList['project']['name']     = 'projectName';
-$config->my->task->dtable->fieldList['project']['title']    = $lang->task->project;
-$config->my->task->dtable->fieldList['project']['type']     = 'text';
-$config->my->task->dtable->fieldList['project']['link']     = array('module' => 'project', 'method' => 'view', 'params' => 'projectID={project}');
-$config->my->task->dtable->fieldList['project']['group']    = 'project';
-$config->my->task->dtable->fieldList['project']['sortType'] = true;
+$config->my->task->dtable->fieldList['projectName']['name']     = 'projectName';
+$config->my->task->dtable->fieldList['projectName']['title']    = $lang->task->project;
+$config->my->task->dtable->fieldList['projectName']['type']     = 'text';
+$config->my->task->dtable->fieldList['projectName']['link']     = array('module' => 'project', 'method' => 'view', 'params' => 'projectID={project}');
+$config->my->task->dtable->fieldList['projectName']['group']    = 'project';
+$config->my->task->dtable->fieldList['projectName']['sortType'] = true;
+$config->my->task->dtable->fieldList['projectName']['show']     = true;
 
-$config->my->task->dtable->fieldList['execution']['name']     = 'executionName';
-$config->my->task->dtable->fieldList['execution']['title']    = $lang->task->execution;
-$config->my->task->dtable->fieldList['execution']['type']     = 'text';
-$config->my->task->dtable->fieldList['execution']['link']     = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={execution}');
-$config->my->task->dtable->fieldList['execution']['group']    = 'project';
-$config->my->task->dtable->fieldList['execution']['sortType'] = true;
+$config->my->task->dtable->fieldList['executionName']['name']     = 'executionName';
+$config->my->task->dtable->fieldList['executionName']['title']    = $lang->task->execution;
+$config->my->task->dtable->fieldList['executionName']['type']     = 'text';
+$config->my->task->dtable->fieldList['executionName']['link']     = array('module' => 'execution', 'method' => 'task', 'params' => 'executionID={execution}');
+$config->my->task->dtable->fieldList['executionName']['group']    = 'project';
+$config->my->task->dtable->fieldList['executionName']['sortType'] = true;
+$config->my->task->dtable->fieldList['executionName']['show']     = true;
 
 $config->my->task->dtable->fieldList['openedBy']['name']     = 'openedBy';
 $config->my->task->dtable->fieldList['openedBy']['title']    = $lang->task->openedByAB;
 $config->my->task->dtable->fieldList['openedBy']['type']     = 'user';
 $config->my->task->dtable->fieldList['openedBy']['group']    = 'user';
 $config->my->task->dtable->fieldList['openedBy']['sortType'] = true;
+$config->my->task->dtable->fieldList['openedBy']['show']     = true;
 
 $config->my->task->dtable->fieldList['assignedTo']['name']     = 'assignedTo';
 $config->my->task->dtable->fieldList['assignedTo']['title']    = $lang->task->assignedToAB;
@@ -322,10 +328,52 @@ $config->my->task->dtable->fieldList['left']['type']     = 'number';
 $config->my->task->dtable->fieldList['left']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['left']['sortType'] = true;
 
+$config->my->task->dtable->fieldList['closedBy']['title']    = $lang->task->closedBy;
+$config->my->task->dtable->fieldList['closedBy']['type']     = 'user';
+$config->my->task->dtable->fieldList['closedBy']['sortType'] = true;
+$config->my->task->dtable->fieldList['closedBy']['group']    = 6;
+
+$config->my->task->dtable->fieldList['closedDate']['title']    = $lang->task->closedDate;
+$config->my->task->dtable->fieldList['closedDate']['type']     = 'datetime';
+$config->my->task->dtable->fieldList['closedDate']['sortType'] = true;
+$config->my->task->dtable->fieldList['closedDate']['group']    = 6;
+
+$config->my->task->dtable->fieldList['closedReason']['title']    = $lang->task->closedReason;
+$config->my->task->dtable->fieldList['closedReason']['type']     = 'category';
+$config->my->task->dtable->fieldList['closedReason']['map']      = $lang->task->reasonList;
+$config->my->task->dtable->fieldList['closedReason']['sortType'] = true;
+$config->my->task->dtable->fieldList['closedReason']['group']    = 6;
+
+$config->my->task->dtable->fieldList['canceledBy']['title']    = $lang->task->canceledBy;
+$config->my->task->dtable->fieldList['canceledBy']['type']     = 'user';
+$config->my->task->dtable->fieldList['canceledBy']['sortType'] = true;
+$config->my->task->dtable->fieldList['canceledBy']['group']    = 7;
+
+$config->my->task->dtable->fieldList['canceledDate']['title']    = $lang->task->canceledDate;
+$config->my->task->dtable->fieldList['canceledDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['canceledDate']['sortType'] = true;
+$config->my->task->dtable->fieldList['canceledDate']['group']    = 7;
+
+$config->my->task->dtable->fieldList['lastEditedBy']['title']    = $lang->task->lastEditedBy;
+$config->my->task->dtable->fieldList['lastEditedBy']['type']     = 'user';
+$config->my->task->dtable->fieldList['lastEditedBy']['sortType'] = true;
+$config->my->task->dtable->fieldList['lastEditedBy']['group']    = 8;
+
+$config->my->task->dtable->fieldList['lastEditedDate']['title']    = $lang->task->lastEditedDate;
+$config->my->task->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['lastEditedDate']['sortType'] = true;
+$config->my->task->dtable->fieldList['lastEditedDate']['group']    = 8;
+
+$config->my->task->dtable->fieldList['activatedDate']['title']    = $lang->task->activatedDate;
+$config->my->task->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['activatedDate']['sortType'] = true;
+$config->my->task->dtable->fieldList['activatedDate']['group']    = 8;
+
 $config->my->task->dtable->fieldList['actions']['name']     = 'actions';
 $config->my->task->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->my->task->dtable->fieldList['actions']['type']     = 'actions';
 $config->my->task->dtable->fieldList['actions']['sortType'] = false;
+$config->my->task->dtable->fieldList['actions']['width']    = 180;
 $config->my->task->dtable->fieldList['actions']['list']     = $config->my->task->actionList;
 $config->my->task->dtable->fieldList['actions']['menu']     = array(array('confirmStoryChange'), array('start|restart', 'finish', 'close', 'record', 'edit', 'batchCreate'));
 

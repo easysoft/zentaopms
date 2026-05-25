@@ -27,11 +27,12 @@ su('admin');
 $project = zenData('project');
 $project->type->range('project');
 $project->gen(10);
+
 zenData('task')->gen(10);
 zenData('projectspec')->gen(0);
 
 $names    = array('新阶段31', '新阶段121', '阶段211', '新增的阶段');
-$parent    = array('2', '2', '2', '2');
+$parent   = array('2', '2', '2', '2');
 $begin    = array();
 $end      = array();
 $idList   = array(11, 12);
@@ -39,13 +40,13 @@ $create   = array('name' => $names, 'parent' => $parent, 'begin' => $begin, 'end
 
 $programplan = new programplanModelTest();
 
-$programplan->createTest(array());
-r(dao::getError()) && p() && e('0'); // 传入空数据
+$programplan->instance->create(array());
+r(dao::getError()) && p('message:0') && e('『阶段名称』不能为空。'); // 传入空数据
 
 r($programplan->createTest(array(), 0, 0, 101)) && p('0:attribute') && e('request'); // 分解任务
 
 $plans1 = $programplan->createTest();
-r(count($plans1)) && p()                && e('21');             // 测试正常更新阶段信息 获取阶段数量
+r(count($plans1)) && p()                && e('14');             // 测试正常更新阶段信息 获取阶段数量
 r($plans1)        && p('0:name;1:name') && e('阶段31,阶段121'); // 测试正常更新阶段信息 检查数据信息
 
 $plans2 = $programplan->createTest($create);

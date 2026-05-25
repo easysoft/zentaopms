@@ -2221,6 +2221,7 @@ class execution extends control
         $this->view->productID    = $productID;
         $this->view->total        = count($stories);
         $this->view->product      = $this->product->getByID($productID);
+        $this->view->project      = $this->execution->fetchByID($execution->project);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -2519,10 +2520,13 @@ class execution extends control
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
-        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $linkedStories    = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $hasFrozenStories = $this->project->hasFrozenObject($project->id, 'SRS');
+        if($hasFrozenStories) $projectLinkedStories = $this->story->getExecutionStoryPairs($project->id, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
+            if($hasFrozenStories && !isset($projectLinkedStories[$id])) unset($allStories[$id]);
 
             if(!isset($modules[$story->module]))
             {
@@ -2641,7 +2645,7 @@ class execution extends control
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         $execution = $this->execution->getByID($executionID);
-        return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->execution->confirmBatchUnlinkStory, 'locate' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project'))));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project')));
     }
 
     /**

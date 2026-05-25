@@ -114,7 +114,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 targetForm    : info.targetForm,
                 objectID      : info.objectID,
                 objectType    : info.objectType,
-                objectData    : info.objectData,
+                objectData    : info.objectData || info.object,
                 objectProps   : info.dataPropNames,
                 actions: info.promptAudit ? [{
                     text         : langData.goTesting,
@@ -126,7 +126,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             const message =
             {
                 role: 'user',
-                content: [response.title, zui.formatString(langData.processedDataResult, {data: JSON.stringify(result)}), response.summary, zui.formatString(langData.promptResultReturn, {formName: info.targetFormName})].join('\n\n'),
+                content: [info.name + zui.formatString(langData.processedDataResult, {data: JSON.stringify(result)}), zui.formatString(langData.promptResultReturn, {formName: info.targetFormName})].join('\n\n'),
                 custom_data: {taskResults: [taskResult], asRole: 'assistant'}
             };
             return {message: message};

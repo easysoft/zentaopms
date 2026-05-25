@@ -1654,6 +1654,8 @@ CREATE TABLE IF NOT EXISTS `zt_projectdeliverable` (
   `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态',
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` date NULL,
+  `submittedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '提交人',
+  `submittedDate` datetime DEFAULT NULL COMMENT '提交时间',
    PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `project` ON `zt_projectdeliverable` (`project`);
@@ -2645,7 +2647,7 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `createdBy`, `createdDate`, 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
 ('',   'system', 'common',      '',       'CRProduct',       '1'),
 ('',   'system', 'common',      '',       'CRExecution',     '1'),
-('',   'system', 'common',      '',       'disabledFeatures', 'otherOA'),
+('',   'system', 'common',      '',       'disabledFeatures','otherOA'),
 ('',   'system', 'common',      'global', 'mode',            'ALM'),
 ('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}'),
 ('',   'system', 'common',      'global', 'installedDate',   CURDATE()),
@@ -14362,7 +14364,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `status` char(30) NOT NULL DEFAULT '',
   `resolution` varchar(30) NOT NULL DEFAULT '',
   `resolutionBy` varchar(30) NOT NULL DEFAULT '',
-  `resolutionDate` DATE NULL,
+  `resolutionDate` datetime NULL,
   `createdBy` varchar(30) NOT NULL DEFAULT '',
   `createdDate` datetime NULL,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
