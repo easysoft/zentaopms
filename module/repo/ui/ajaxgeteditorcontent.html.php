@@ -42,6 +42,7 @@ if($showEditor) jsVar('codeContent', $content);
 jsVar('canAddBug', $canAddBug);
 jsVar('canReview', !empty($canReview));
 jsVar('createLang', $lang->repo->addIssue);
+jsVar('showLinkObject', $showLinkObject);
 
 $lang = 'php';
 foreach($this->config->repo->fileExt as $langName => $exts)
@@ -99,7 +100,7 @@ else
         set::options($options),
         set::action($type == 'diff' ? 'diff' : 'create'),
         $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null,
-        set::onMouseDown('window.onMouseDown'),
+        $showLinkObject ? set::onMouseDown('window.onMouseDown') : null,
         set::onMouseMove('window.onMouseMove'),
         set::selectedLines(empty($lines) ? '' : $lines)
     );
@@ -110,7 +111,7 @@ if($canLinkStory) $dropMenus[] = array('id' => 'linkStory', 'text' => $this->lan
 if($canLinkBug)   $dropMenus[] = array('id' => 'linkBug',   'text' => $this->lang->repo->linkBug,   'icon' => 'bug');
 if($canLinkTask)  $dropMenus[] = array('id' => 'linkTask',  'text' => $this->lang->repo->linkTask,  'icon' => 'todo');
 
-$logWg = div
+$logWg = $showLinkObject ? div
 (
     set::id('log'),
     div(set::className('history')),
@@ -133,8 +134,8 @@ $logWg = div
             )
         ) : ''
     )
-);
-$relatedWg = div
+) : null;
+$relatedWg = $showLinkObject ? div
 (
     set::id('related'),
     div(set::className('btn btn-left pull-left'), icon('chevron-left')),
@@ -154,15 +155,15 @@ $relatedWg = div
         )
     ),
     div(set::className('table-empty-tip'), p($this->lang->repo->notRelated))
-);
+) : null;
 
 div
 (
     set::id('monacoEditor'),
     set::className('repoCode'),
     $wg,
-    $logWg,
-    $relatedWg
+    $showLinkObject ? $logWg : null,
+    $showLinkObject ? $relatedWg : null
 );
 
 div

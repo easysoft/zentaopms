@@ -207,7 +207,6 @@ $(function()
 
         /* Load default tab content. */
         var height = getIframeHeight();
-        console.log(height);
         $.cookie.set('repoCodePath', file, {expires:config.cookieLife, path:config.webRoot});
         $('#tab-' + fileAsId).html("<iframe class='repo-iframe' src='" + $.createLink('repo', 'ajaxGetDiffEditorContent', urlParams.replace('%s', '')) + "' width='100%' height='" + height + "' scrolling='no'></iframe>")
 
