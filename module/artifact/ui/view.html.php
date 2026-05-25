@@ -15,7 +15,7 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
     unset($lang->artifact->featureBar);
 }
-if($artifact->format == 'generic')
+if($artifact->type == 'file')
 {
     unset($config->artifact->dtable->fieldList['version']);
     unset($config->artifact->dtable->fieldList['arch']);
@@ -43,9 +43,9 @@ if(!empty($breadCrumbs))
 }
 
 $data              = initTableData($assetList, $config->artifact->dtable->fieldList);
-$viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+$viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&leaf={$leaf}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
-$canCreateDir      = hasPriv('artifact', 'createDir');
+$canCreateDir      = hasPriv('artifact', 'createDir') && $artifact->type == 'file' && !$leaf;
 $canUploadArtifact = hasPriv('artifact', 'uploadArtifact');
 div
 (
@@ -136,7 +136,7 @@ div
                 //    set::icon('icon-list-collapse'),
                 //    on::click()->call('window.isExpand', jsRaw('$this'))
                 //),
-                $canCreateDir && $artifact->format == 'generic' ? btn
+                $canCreateDir ? btn
                 (
                     set
                     (
@@ -182,7 +182,7 @@ div
                     'data-confirm' => $lang->artifact->notice->confirmDelete
                 ))
             )) : null,
-            set::sortLink(createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&isExpand={$isExpand}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+            set::sortLink(createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&leaf={$leaf}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footPager(usePager()),
             set::emptyTip($lang->artifact->notice->emptyAsset)
         )

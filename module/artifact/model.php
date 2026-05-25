@@ -18,12 +18,12 @@ class artifactModel extends model
      *
      * @param  int $spaceID
      * @param  int $repoID
-     * @param  string $type
+     * @param  string $scope
      * @param  ?object $pager
      * @access public
      * @return array
      */
-    public function getList(int $spaceID = 0, int $repoID = 0, string $type = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getList(int $spaceID = 0, int $repoID = 0, string $scope = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('space');
         if($spaceID && !$this->app->user->admin)
@@ -33,7 +33,7 @@ class artifactModel extends model
         }
 
         $repos = array();
-        if($type == 'all' && !$this->app->user->admin)
+        if($scope == 'all' && !$this->app->user->admin)
         {
             $spaceRepos   = $this->space->getReposBySpace($spaceID);
             $privateRepos = $this->dao->select('repo')->from(TABLE_DEVOPSREPOUSER)
@@ -52,10 +52,10 @@ class artifactModel extends model
         }
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
-            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
             ->andWhere('spaceID')->eq($spaceID)
-            ->beginIF($repoID && $type != 'all')->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF($type == 'all' && !empty($repos))->orWhere('repoID')->in($repos)->fi()
+            ->beginIF($repoID && $scope != 'all')->andWhere('repoID')->eq($repoID)->fi()
+            ->beginIF($scope == 'all' && !empty($repos))->orWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -65,16 +65,16 @@ class artifactModel extends model
      * 获取制品库键值对。
      * Get artifact repo pairs.
      *
-     * @param  int $spaceID
-     * @param  int $repoID
+     * @param  string $scope
      * @param  string $type
+     * @param  string $account
      * @access public
      * @return array
      */
-    public function getPairs(string $type = '', string $format = '', string $account = ''): array
+    public function getPairs(string $scope = '', string $type = '', string $account = ''): array
     {
         $spaceIdList = $repoIdList = array();
-        if($account && $type == 'space')
+        if($account && $scope == 'space')
         {
             $spaceIdList = $this->dao->select('t1.id')->from(TABLE_SPACE)->alias('t1')
                 ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')->on('t1.id=t2.space')
@@ -84,7 +84,7 @@ class artifactModel extends model
                 ->fetchPairs('id');
         }
 
-        if($account && $type == 'repo')
+        if($account && $scope == 'repo')
         {
             $repoIdList = $this->dao->select('t1.id')->from(TABLE_REPO)->alias('t1')
                 ->leftJoin(TABLE_DEVOPSREPOUSER)->alias('t2')->on('t1.id=t2.repo')
@@ -96,66 +96,11 @@ class artifactModel extends model
 
         return $this->dao->select('id, name')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
-            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->beginIF($scope)->andWhere('scope')->eq($scope)->fi()
             ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
             ->beginIF(!empty($repoIdList))->andWhere('repoID')->in($repoIdList)->fi()
-            ->beginIF($format)->andWhere('format')->eq($format)->fi()
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->fetchPairs('id');
-    }
-
-    /**
-     * 创建制品库。
-     * create artifact repo.
-     *
-     * @param  object $data
-     * @param  string $type
-     * @access public
-     * @return int|false
-     */
-    public function create(object $data, string $type): int|false
-    {
-        $check = '';
-        if($type == 'space')  $check = "spaceID = {$data->spaceID} and repoID = 0";
-        if($type == 'repo')   $check = "repoID = {$data->repoID}";
-        if($type == 'system') $check = "spaceID = 0 and repoID = 0";
-
-        $this->dao->insert(TABLE_ARTIFACT)->data($data)
-            ->batchCheck($this->config->artifact->create->requiredFields, 'notempty')
-            ->check('name', 'unique', $check)
-            ->autoCheck()
-            ->exec();
-        if(dao::isError()) return false;
-
-        $id = $this->dao->lastInsertID();
-        return $id;
-    }
-
-    /**
-     * 更新制品库。
-     * update artifact repo.
-     *
-     * @param  int    $id
-     * @param  object $data
-     * @access public
-     * @return bool
-     */
-    public function update(int $id, object $data): bool
-    {
-        $artifact = $this->fetchByID($id);
-        if(empty($artifact)) return false;
-
-        $check = 'id != ' . $id;
-        if($artifact->type == 'space')  $check .= " and spaceID = {$artifact->spaceID}";
-        if($artifact->type == 'repo')   $check .= " and repoID = {$artifact->repoID}";
-        if($artifact->type == 'system') $check .= " and spaceID = 0 and repoID = 0";
-
-        $this->dao->update(TABLE_ARTIFACT)->data($data)
-            ->check('name', 'unique', $check)
-            ->where('id')->eq($id)
-            ->autoCheck()
-            ->exec();
-
-        return !dao::isError();
     }
 
     /**
@@ -174,7 +119,7 @@ class artifactModel extends model
 
         $param = array();
         $param['artifactID'] = $artifact->id;
-        $param['format']     = $artifact->format;
+        $param['format']     = empty($artifact->format) ? $artifact->type : $artifact->format;
         $param['level']      = 'asset';
         $param['path']       = $path;
         $param['type']       = $artifact->type;
@@ -209,7 +154,7 @@ class artifactModel extends model
         $param['file']       = curl_file_create($file['tmp_name']);
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifact->format}"), $param, array(), $apiRoot->header, 'data', 'POST', 300));
+        $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifact->type}"), $param, array(), $apiRoot->header, 'data', 'POST', 300));
         return $this->gitfox->getResponse($result);
     }
 

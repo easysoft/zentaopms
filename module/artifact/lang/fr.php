@@ -80,7 +80,7 @@ $lang->artifact->typeList['repo']  = 'Repo';
 $lang->artifact->typeList['space'] = 'Space';
 
 $lang->artifact->formatList = array();
-$lang->artifact->formatList['generic']   = 'Common File Repository';
+$lang->artifact->formatList['file']      = 'Common File Repository';
 $lang->artifact->formatList['container'] = 'Image Repository';
 //$lang->artifact->formatList['helm']      = 'Helm Repository';
 //$lang->artifact->formatList['maven']     = 'Maven Repository';

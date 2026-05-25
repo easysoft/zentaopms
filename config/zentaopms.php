@@ -680,7 +680,7 @@ define('TABLE_PIPELINE',        '`ops_pipeline`');
 define('TABLE_PIPELINECONTENT', '`ops_pipeline_content`');
 define('TABLE_PIPELINEEXEC',    '`ops_pipeline_executions`');
 define('TABLE_PIPELINETRIGGER', '`ops_triggers`');
-define('TABLE_ARTIFACT',        '`ops_artifact`');
+define('TABLE_ARTIFACT',        '`ops_artifact_libs`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;

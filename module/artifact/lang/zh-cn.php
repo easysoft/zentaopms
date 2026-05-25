@@ -80,7 +80,7 @@ $lang->artifact->typeList['repo']  = '代码库';
 $lang->artifact->typeList['space'] = '空间';
 
 $lang->artifact->formatList = array();
-$lang->artifact->formatList['generic']   = '通用文件仓库';
+$lang->artifact->formatList['file']      = '通用文件仓库';
 $lang->artifact->formatList['container'] = '镜像仓库';
 //$lang->artifact->formatList['helm']      = 'Helm仓库';
 //$lang->artifact->formatList['maven']     = 'Maven仓库';
