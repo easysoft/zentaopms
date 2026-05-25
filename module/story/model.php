@@ -5280,6 +5280,8 @@ class storyModel extends model
             $story->rawStatus = $story->status;
             $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
         }
+
+        if(!common::hasPriv($story->type, 'assignTo')) $story->assignedToName = zget(zget($options, 'users', array()), $story->assignedTo, empty($story->assignedTo) ? $this->lang->noAssigned : $story->assignedTo);
         return $story;
     }
 
