@@ -24,7 +24,7 @@ $config->artifact->actionList['download']['className']    = 'ajax-submit';
 $config->artifact->actionList['copyCMD']['icon']      = 'copy';
 $config->artifact->actionList['copyCMD']['text']      = $lang->artifact->copyCMD;
 $config->artifact->actionList['copyCMD']['hint']      = $lang->artifact->copyCMD;
-$config->artifact->actionList['copyCMD']['url']       = array('module' => 'artifact', 'method' => 'copyCMD', 'params' => 'assetID={id}&artifactID={artifactID}');
+$config->artifact->actionList['copyCMD']['url']       = array('module' => 'artifact', 'method' => 'copyCMD', 'params' => 'assetID={id}');
 $config->artifact->actionList['copyCMD']['className'] = 'ajax-submit';
 
 $config->artifact->actionList['move']['icon']        = 'move';
