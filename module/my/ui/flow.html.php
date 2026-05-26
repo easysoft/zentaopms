@@ -12,7 +12,15 @@ namespace zin;
 
 include 'header.html.php';
 
+/* 判断dtable按钮高亮，要将rawModule和rawMethod设置为flow的模块名、方法名. */
+$app->rawModule = $flow->module;
+$app->rawMethod = 'browse';
+
 $dataList = initTableData($dataList, $cols, $this->flow);
+
+/* 追加导航、判断导航高亮，要使用my-work. */
+$app->rawModule = 'my';
+$app->rawMethod = 'work';
 
 foreach($dataList as $id => $data)
 {
@@ -26,108 +34,14 @@ foreach($dataList as $id => $data)
     }
 }
 
-$workLinkParams = "mode={$flowModule}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+$workLinkParams = "mode={$flow->module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
 $sortLink       = createLink('my', 'work', "{$workLinkParams}&orderBy={name}_{sortType}");
-
-$processToolbarItems = function(array $toolbarItems) use ($lang): array
-{
-    $items = array();
-
-    if(isset($toolbarItems['reportItem'])) $items[] = item(set($toolbarItems['reportItem']));
-
-    if(isset($toolbarItems['exportItems']))
-    {
-        $items[] = dropdown
-        (
-            btn(setClass('btn ghost'), set::icon('export'), $lang->export),
-            set::items($toolbarItems['exportItems']),
-            set::placement('bottom-end')
-        );
-    }
-
-    if(isset($toolbarItems['importItems']))
-    {
-        $items[] = dropdown
-        (
-            btn(setClass('btn ghost'), set::icon('import'), $lang->import),
-            set::items($toolbarItems['importItems']),
-            set::placement('bottom-end')
-        );
-    }
-
-    $createItem      = zget($toolbarItems, 'createItem', null);
-    $batchCreateItem = zget($toolbarItems, 'batchCreateItem', null);
-    if($createItem && $batchCreateItem) $items[] = btngroup
-    (
-        btn
-        (
-            setClass('btn primary '),
-            set::icon('plus'),
-            set::url($createItem['url']), $createItem['text'],
-            !empty($createItem['data-app']) ? set('data-app', $createItem['data-app']) : null
-        ),
-        dropdown
-        (
-            btn(setClass('btn primary dropdown-toggle'), setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-            set::items(array($createItem, $batchCreateItem)),
-            set::placement('bottom-end')
-        )
-    );
-    elseif($createItem && !$batchCreateItem) $items[] = item(set(array('class' => 'btn primary', 'icon' => 'plus') + $createItem));
-    elseif($batchCreateItem && !$createItem) $items[] = item(set(array('class' => 'btn primary', 'icon' => 'plus') + $batchCreateItem));
-
-    return $items;
-};
 
 featureBar
 (
     set::items($featureBarItems),
     !empty($canSearch) ? li(searchToggle(set::module($flow->module), set::open($browseMode == 'bysearch'))) : null
 );
-
-toolbar
-(
-    setID('actionBar'),
-    $processToolbarItems($toolbarItems),
-);
-
-if($categories)
-{
-    $categoryItems = array();
-    foreach($categories as $value => $category)
-    {
-        $key = substr($value, strripos($value, '_') + 1);
-        $categoryItems[] = array(
-            'text' => $category->name,
-            'url'  => createLink('my', 'work', "mode={$flowModule}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&category={$key}=0"),
-            'data-app' => $app->tab
-        );
-    }
-
-    sidebar
-    (
-        moduleMenu
-        (
-            to::header(dropdown
-            (
-                btn
-                (
-                    setClass('ghost category-dropdown'),
-                    $currentCategory->name
-                ),
-                set::items($categoryItems),
-            )),
-            set(array
-            (
-                'modules'     => $currentCategory->treeMenu,
-                'activeKey'   => $categoryValue,
-                'settingLink' => createLink('tree', 'browse', "rootID=0&type={$currentCategory->type}&currentModuleID=0&branch=&from={$flow->module}"),
-                'showDisplay' => false,
-                'settingApp'  => $app->tab
-            ))
-        )
-    );
-}
 
 dtable
 (

@@ -1269,6 +1269,8 @@ class my extends control
         $this->loadModel('workflow');
         $this->loadModel('approval');
 
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
         /* Load flow zen.*/
         if(!class_exists('flow', false))
         {
@@ -1278,11 +1280,6 @@ class my extends control
         $this->loadZen('flow');
 
         $flow = $this->workflow->getByModule($module);
-
-        $rawModule = $this->app->rawModule;
-        $rawMethod = $this->app->rawMethod;
-        $this->app->rawModule = $module;
-        $this->app->rawMethod = 'browse';
 
         $mode  = $type == 'bysearch' ? 'bysearch' : 'browse';
         $label = (int)$param;
@@ -1300,9 +1297,7 @@ class my extends control
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $extraQuery = $this->my->getAssignedToQuery();
-        $dataList   = $this->flow->getDataList($flow, $mode, $label, '', 0, $orderBy, $pager, $extraQuery);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $dataList = $this->flow->getUserDataList($flow, $mode, $orderBy, $pager);
 
         $fields = $this->loadModel('workflowaction', 'flow')->getPageFields($flow->module, 'browse', true, null, 0, $flow->group);
 
@@ -1319,12 +1314,6 @@ class my extends control
 
         $browseLink = $this->createLink('my', 'work', "mode={$module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->session->set($module . 'List', $browseLink, 'my');
-
-        $this->app->rawModule = $rawModule;
-        $this->app->rawMethod = $rawMethod;
-
-        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
-        a($this->view->todoCount);die;
 
         $this->view->title            = $flow->name;
         $this->view->flow             = $flow;
