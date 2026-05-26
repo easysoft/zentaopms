@@ -20,6 +20,10 @@ if($artifact->type == 'file')
     unset($config->artifact->dtable->fieldList['version']);
     unset($config->artifact->dtable->fieldList['arch']);
 }
+else
+{
+    unset($config->artifact->dtable->fieldList['path']);
+}
 
 $breadCrumbsBox = array();
 if(!empty($breadCrumbs))
@@ -46,7 +50,7 @@ $data              = initTableData($assetList, $config->artifact->dtable->fieldL
 $viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&leaf={$leaf}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
 $canCreateDir      = hasPriv('artifact', 'createDir') && $artifact->type == 'file' && !$leaf;
-$canUploadArtifact = hasPriv('artifact', 'uploadArtifact');
+$canUploadArtifact = hasPriv('artifact', 'uploadArtifact') && $artifact->type == 'file' && !$leaf;
 div
 (
     setClass('surface-light row flex justify-between items-center border-l border-t border-r py-1.5 pl-1 pr-2'),
@@ -74,7 +78,7 @@ div
         ),
         empty($breadCrumbsBox) ? null : $breadCrumbsBox,
     ),
-    empty($node) || $node->type == 'asset' || !$canUploadArtifact ? null : div
+    !$canUploadArtifact ? null : div
     (
         btn
         (

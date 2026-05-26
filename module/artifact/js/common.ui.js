@@ -166,3 +166,22 @@ window.loadParents = function(retries)
             if($parentLoadingDom.length) toggleLoading($parentLoadingDom, false);
         });
 };
+
+window.showCommand = function(command, title)
+{
+    const content = `<div class="input-group">
+        <input class="form-control docker-url" readonly type="text" value="${command}"> </input>
+        <span class="input-group-addon cursor-pointer" onclick="copyCommand()">
+        <i class="icon icon-copy"></i>
+        </span>`;
+    zui.Modal.open({type:'custom', title: title, content: {html: content}});
+};
+
+window.copyCommand = function()
+{
+    $('.docker-url')[0].select();
+    document.execCommand('copy');
+    window.getSelection().removeAllRanges();
+
+    zui.Messager.show({type: 'success', content: copyMessage, time: 2000});
+};
