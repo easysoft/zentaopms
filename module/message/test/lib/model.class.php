@@ -326,4 +326,21 @@ class messageModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * 测试从 html 中获取提及的用户。
+     * Test get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return string
+     */
+    public function getMentionUsersFromHtmlTest(string $html): string
+    {
+        $users = $this->instance->getMentionUsersFromHtml($html);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', $users);
+    }
 }

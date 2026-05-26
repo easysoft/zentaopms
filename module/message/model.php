@@ -450,4 +450,28 @@ class messageModel extends model
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
         $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
     }
+
+    /**
+     * 从 html 中获取提及的用户。
+     * Get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return array
+     */
+    public function getMentionUsersFromHtml(string $html): array
+    {
+        $pattern = '/<span[^>]*?\bmention-label\b[^>]*?data-type=["\']mention["\'][^>]*?data-id=["\']([^"\']+)["\'][^>]*>/is';
+
+        $accounts = array();
+        if(preg_match_all($pattern, $html, $matches))
+        {
+            foreach($matches[1] as $match)
+            {
+                $account = trim($match);
+                if($account) $accounts[$account] = $account;
+            }
+        }
+        return array_keys($accounts);
+    }
 }
