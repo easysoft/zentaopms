@@ -1,19 +1,20 @@
 <?php
-$lang->artifact->browse         = 'Repo Artifact Repository';
-$lang->artifact->create         = 'Create Artifact Repository';
-$lang->artifact->edit           = 'Edit Artifact Repository';
-$lang->artifact->delete         = 'Delete Artifact Repository';
-$lang->artifact->repoBrowser    = 'Repository Content';
-$lang->artifact->createDir      = 'Add Directory';
-$lang->artifact->uploadArtifact = 'Upload Artifact';
-$lang->artifact->addSubDir      = 'Add Sub Directory';
-$lang->artifact->addSiblingDir  = 'Add Sibling Directory';
-$lang->artifact->editDir        = 'Edit Directory';
-$lang->artifact->deleteDir      = 'Delete Directory';
-$lang->artifact->editArtifact   = 'Edit Artifact';
-$lang->artifact->moveArtifact   = 'Move Artifact';
-$lang->artifact->deleteArtifact = 'Delete Artifact';
+$lang->artifact->browse              = 'Repo Artifact Repository';
+$lang->artifact->create              = 'Create Artifact Repository';
+$lang->artifact->edit                = 'Edit Artifact Repository';
+$lang->artifact->delete              = 'Delete Artifact Repository';
+$lang->artifact->repoBrowser         = 'Repository Content';
+$lang->artifact->createDir           = 'Add Directory';
+$lang->artifact->uploadArtifact      = 'Upload Artifact';
+$lang->artifact->addSubDir           = 'Add Sub Directory';
+$lang->artifact->addSiblingDir       = 'Add Sibling Directory';
+$lang->artifact->editDir             = 'Edit Directory';
+$lang->artifact->deleteDir           = 'Delete Directory';
+$lang->artifact->editArtifact        = 'Edit Artifact';
+$lang->artifact->moveArtifact        = 'Move Artifact';
+$lang->artifact->deleteArtifact      = 'Delete Artifact';
 $lang->artifact->batchDeleteArtifact = 'Batch Delete Artifacts';
+$lang->artifact->copyCMD             = 'Copy Command';
 
 $lang->artifact->name          = 'Name';
 $lang->artifact->path          = 'Current Path';
@@ -50,6 +51,7 @@ $lang->artifact->history       = 'History';
 $lang->artifact->artifactRepo  = 'Artifact Repo';
 $lang->artifact->parent        = 'Parent';
 $lang->artifact->repo          = 'Code Repo';
+$lang->artifact->package       = 'Package';
 
 $lang->artifact->countArtifact = 'Total %s Artifact';
 
