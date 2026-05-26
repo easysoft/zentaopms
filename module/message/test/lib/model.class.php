@@ -362,6 +362,24 @@ class messageModelTest extends baseTest
     }
 
     /**
+     * 测试根据表单设置从对象中提取被 @ 的用户。
+     * Test extract mention users from form config and object.
+     *
+     * @param  array  $formConfig
+     * @param  object $object
+     * @access public
+     * @return string
+     */
+    public function extractMentionUsersFromFormTest(array $formConfig, object $object): string
+    {
+        $users = $this->instance->extractMentionUsersFromForm($formConfig, $object);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($users) ? '0' : implode(',', $users);
+    }
+
+    /**
      * 测试发送 @ 提及通知。
      * Test send mention notice.
      *
