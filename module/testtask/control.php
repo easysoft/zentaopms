@@ -905,8 +905,9 @@ class testtask extends control
 
             $this->loadModel('action')->create('case', $caseID, 'run', '', zget($run, 'task', '0') . ',' . $caseResult);
 
-            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $run, $caseID, $version);
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            $message = $this->executeHooks($caseID) ?: $this->lang->saveSuccess;
+            $this->testtaskZen->responseAfterRunCase($caseResult, $preAndNext, $run, $caseID, $version, $message);
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }
 
         $this->testtaskZen->assignForRunCase($run, $preAndNext, $runID, $caseID, $version, $confirm);
