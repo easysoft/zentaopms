@@ -150,7 +150,7 @@ formPanel
                 )
             )
         )
-    ),
+    )
 );
 /* ====== Render page ====== */
 render();
