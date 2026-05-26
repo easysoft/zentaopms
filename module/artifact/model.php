@@ -122,7 +122,7 @@ class artifactModel extends model
         $param['format']     = empty($artifact->format) ? $artifact->type : $artifact->format;
         $param['level']      = 'asset';
         $param['path']       = $path;
-        $param['type']       = $artifact->type;
+        $param['type']       = $artifact->scope;
         $param['spaceID']    = $artifact->spaceID;
         $param['repoID']     = $artifact->repoID;
 
@@ -175,12 +175,13 @@ class artifactModel extends model
         list($sort, $order) = explode('_', $orderBy);
 
         $params = array();
-        $params['entityID'] = $entityID;
-        $params['page']     = is_null($pager) ? 1 : $pager->pageID;
-        $params['pageSize'] = is_null($pager) ? 20 : $pager->recPerPage;
-        $params['sort']     = $sort;
-        $params['order']    = $order;
-        $params['more']     = true;
+        $params['artifactID'] = (int)$artifactID;
+        $params['entityID']   = $entityID;
+        $params['page']       = is_null($pager) ? 1 : $pager->pageID;
+        $params['pageSize']   = is_null($pager) ? 20 : $pager->recPerPage;
+        $params['sort']       = $sort;
+        $params['order']      = $order;
+        $params['more']       = true;
 
         if(strpos($entityID, 'asset.') === 0)
         {
@@ -209,13 +210,14 @@ class artifactModel extends model
 
         foreach($assetList->data as $asset)
         {
-            $asset->group      = isset($asset->metadata) ? $asset->metadata->group : '';
+            $asset->group      = isset($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : '';
             $asset->name       = $asset->path;
             $asset->path       = $asset->group;
             $asset->version    = isset($asset->metadata) ? $asset->metadata->version : '';
             $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
             $asset->size       = empty($asset->size)     ? 0 : round($asset->size / 1024, 2) . 'KB';
             $asset->artifactID = $artifactID;
+            $asset->package    = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
         }
         return $assetList->data;
     }
@@ -254,5 +256,25 @@ class artifactModel extends model
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($action->id)->exec();
         $this->loadModel('action')->create($action->objectType, $action->objectID, 'undeleted', '', $artifactID . '|' . $name . '|' . $entityID);
         return !dao::isError();
+    }
+
+    /**
+     * 判断指定的action.
+     * Check if the action is clickable.
+     *
+     * @param  object $artifact
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable(object $artifact, string $action): bool
+    {
+        $action = strtolower($action);
+        if($action == 'downloadartifact') return !empty($artifact->format) && $artifact->format == 'file';
+        if($action == 'copycmd')          return !empty($artifact->format) && $artifact->format == 'container';
+        if($action == 'editartifact')     return !empty($artifact->format) && $artifact->format == 'file';
+        if($action == 'moveartifact')     return !empty($artifact->format) && $artifact->format == 'file';
+
+        return true;
     }
 }
