@@ -80,6 +80,7 @@ $taskteam->status->range("wait");
 $taskteam->gen(5);
 
 zenData('effort')->gen(1);
+zenData('relationoftasks')->gen(0);
 zenData('user')->gen(20);
 zenData('taskteam')->gen(10);
 

@@ -2999,7 +2999,7 @@ class taskModel extends model
         $lastEffort  = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
             ->andWhere('objectType')->eq('task')
             ->andWhere('deleted')->eq('0')
-            ->beginIF($currentTeam)->andWhere('account')->eq($currentTeam->account)->fi()
+            ->beginIF($currentTeam)->andWhere('account')->eq(zget($currentTeam, 'account', ''))->fi()
             ->orderBy('date_desc,id_desc')
             ->limit(1)
             ->fetch();
