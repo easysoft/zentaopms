@@ -237,7 +237,11 @@ class dtable extends wg
      */
     public function initFormCol(array $config): array
     {
-        if(!empty($config['control']) && is_string($config['control'])) $config['control'] = array('type' => $config['control']);
+        if(!empty($config['control']) && is_string($config['control']))
+        {
+            if(strpos($config['control'], 'RAWJS<') === 0) return $config; // 自定义回调函数
+            $config['control'] = array('type' => $config['control']);
+        }
 
         if(isset($config['controlItems']))
         {
