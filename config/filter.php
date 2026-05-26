@@ -113,6 +113,17 @@ $filter->api->default                   = new stdClass();
 $filter->api->index                     = new stdClass();
 $filter->api->create                    = new stdClass();
 $filter->api->edit                      = new stdClass();
+
+$filter->api->importopenapi = new stdClass();
+$filter->api->importopenapi->get['libID']   = 'int';
+$filter->api->importopenapi->get['mode']    = 'string';
+$filter->api->importopenapi->post['libID']  = 'int';
+$filter->api->importopenapi->post['mode']   = 'string';
+$filter->api->importopenapi->post['module'] = 'int';
+
+$filter->api->ajaxGetLibModules               = new stdClass();
+$filter->api->ajaxGetLibModules->get['libID'] = 'int';
+
 $filter->api->exportopenapi             = new stdClass();
 $filter->mail->ztcloud                  = new stdclass();
 $filter->mail->batchdelete              = new stdclass();
