@@ -51,5 +51,5 @@ $config->artifact->dtable->fieldList['actions']['name']  = 'actions';
 $config->artifact->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->artifact->dtable->fieldList['actions']['type']  = 'actions';
 $config->artifact->dtable->fieldList['actions']['width'] = '100';
-$config->artifact->dtable->fieldList['actions']['menu']  = array('history', 'edit', 'downloa|copyCMD', 'move', 'delete');
+$config->artifact->dtable->fieldList['actions']['menu']  = array('history', 'edit', 'download|copyCMD', 'move', 'delete');
 $config->artifact->dtable->fieldList['actions']['list']  = $config->artifact->actionList;
