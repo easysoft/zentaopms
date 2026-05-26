@@ -2177,10 +2177,11 @@ class taskModel extends model
      *
      * @param  int    $taskID
      * @param  bool   $includeSelf
+     * @param  string $excludeStatus
      * @access public
      * @return array
      */
-    public function getAllChildId(int $taskID, bool $includeSelf = true): array
+    public function getAllChildId(int $taskID, bool $includeSelf = true, string $excludeStatus = ''): array
     {
         if(!$taskID) return [];
 
@@ -2191,6 +2192,7 @@ class taskModel extends model
             ->where('path')->like($task->path . '%') // 去除左侧的模糊查询以利用索引提高性能。Remove the left fuzzy query to use index to improve performance.
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$includeSelf)->andWhere('id')->ne($taskID)->fi()
+            ->beginIF(!empty($excludeStatus))->andWhere('status')->ne($excludeStatus)->fi()
             ->fetchPairs();
     }
 

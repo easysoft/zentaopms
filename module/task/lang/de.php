@@ -307,6 +307,7 @@ $lang->task->noModule                  = '<div>You have no modules.</div><div>Ma
 $lang->task->createDenied              = "Aufgben erstellen it in diesem %s gesperrt";
 $lang->task->cannotDeleteParent        = 'Cannot delete parent task';
 $lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
+$lang->task->closeParentTips           = 'There are still unclosed child tasks under this parent task: %s. If the parent task is closed, the child tasks will also be closed. Are you sure you want to close the parent task?';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be subtasks of this task";
 $lang->task->effortOperateTips         = 'Only the project manager, the executive supervisor, and the department head have the authority to %s logs belonging to others.';
 $lang->task->syncStoryToChildrenTip    = "Child tasks of %s do not have {$lang->SRCommon}, will {$lang->SRCommon} be synchronised with these child tasks?";

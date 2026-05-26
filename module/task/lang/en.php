@@ -309,6 +309,7 @@ $lang->task->noModule                  = '<div>You have no modules available.</d
 $lang->task->createDenied              = "You cannot add a task under this %s.";
 $lang->task->cannotDeleteParent        = 'Parent tasks cannot be deleted.';
 $lang->task->addChildTask              = 'Since this task already has logged effort, to ensure data consistency, a child task with the same name will be created automatically to record the effort.';
+$lang->task->closeParentTips           = 'There are still unclosed child tasks under this parent task: %s. If the parent task is closed, the child tasks will also be closed. Are you sure you want to close the parent task?';
 $lang->task->selectTestStoryTip        = "The following {$lang->SRCommon} will be created as child tasks of this task.";
 $lang->task->effortOperateTips         = 'Only the project manager, execution mannager, or department manager can %s others effort logs.';
 $lang->task->syncStoryToChildrenTip    = "The child task %s is not linked to any {$lang->SRCommon}. Do you want to synchronize it with the {$lang->SRCommon} of the parent task?";
