@@ -67,4 +67,46 @@ class testtaskTao extends testtaskModel
             ->page($pager)
             ->fetchAll('id', false);
     }
+
+     /**
+     * 通过搜索获取执行的测试单。
+     * Get execution testtasks by search.
+     *
+     * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $paramID
+     * @access public
+     * @return string
+     * */
+    public function processSearchQuery(int $executionID = 0, int $productID = 0, int $paramID = 0): string
+    {
+        if($paramID)
+        {
+            $query = $this->loadModel('search')->getQuery($paramID);
+            if($query)
+            {
+                $this->session->set('executionTesttaskQuery', $query->sql);
+                $this->session->set('executionTesttaskForm', $query->form);
+            }
+        }
+        if($this->session->executionTesttaskQuery === false) $this->session->set('executionTesttaskQuery', ' 1 = 1');
+
+        $testtaskQuery = $this->session->executionTesttaskQuery;
+
+        $testtaskQuery = '(' . $this->session->executionTesttaskQuery;
+        /* 处理查询中的产品条件。*/
+        if(strpos($this->session->executionTesttaskQuery, "`product` = 'all'") !== false)
+        {
+            $testtaskQuery  = str_replace("`product` = 'all'", '1 = 1', $testtaskQuery);
+            $testtaskQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+        }
+        elseif($productID)
+	    {
+            $testtaskQuery .= " AND `product` ='$productID'";
+        }
+        /* 处理查询中的版本条件。*/
+        $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realbegan`', '`realFinishedDate`', '`product`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realbegan`', 't1.`realFinishedDate`', 't1.`product`'), $testtaskQuery);
+        $testtaskQuery .= ')';
+        return $testtaskQuery;
+	}
 }

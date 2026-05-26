@@ -179,14 +179,17 @@ class testtaskModel extends model
      * @param  int    $executionID
      * @param  int    $productID
      * @param  string $objectType
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getExecutionTasks(int $executionID, int $productID = 0, string $objectType = 'execution', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
+        if($browseType == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery($executionID,$productID, $queryID);
 
         return $this->dao->select('t1.*, t2.name AS buildName, t3.name AS productName')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -196,6 +199,7 @@ class testtaskModel extends model
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)

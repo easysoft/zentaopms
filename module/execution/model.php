@@ -4248,6 +4248,27 @@ class executionModel extends model
     }
 
     /**
+     * 构造用例列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(array $products, int $queryID, string $actionURL)
+    {
+        $this->config->testtask->search['actionURL'] = $actionURL;
+        $this->config->testtask->search['queryID']   = $queryID;
+
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+
+        $this->config->testtask->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->loadModel('search')->setSearchParams($this->config->testtask->search);
+    }
+    /**
      * 构建搜索任务的表单。
      * Build task search form.
      *
