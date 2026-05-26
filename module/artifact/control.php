@@ -642,7 +642,11 @@ class artifact extends control
         $this->checkAccess($artifact->spaceID, $artifact->repoID);
 
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
-        if(dao::isError()) $this->sendError(dao::getError());
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            $this->sendError(!empty($error['apiMessage']) ? $error['apiMessage'] : $error);
+        }
 
         $path       = helper::safe64Decode($path);
         $parentPath = dirname($path);
@@ -677,7 +681,11 @@ class artifact extends control
         $this->checkAccess($artifact->spaceID, $artifact->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
-        if(dao::isError()) $this->sendError(dao::getError());
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            $this->sendError(!empty($error['apiMessage']) ? $error['apiMessage'] : $error);
+        }
 
         $entityID = 'asset.' . $assetID;
         $result   = $this->gitfox->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
