@@ -841,7 +841,7 @@ class codescan extends control
         if($status != 'all') $params['latestTaskStatus'] = $status;
 
         $planList = $this->codescan->getScanPlans($repoID, (array)$params);
-        $repoList = $this->repo->getRepoPairs();
+        $repoList = $this->repo->getPairs();
 
         $pager->recTotal = empty($planList->pager) ? 0 : (int)zget($planList->pager, 'total', 0);
         $planList = zget($planList, 'data', array());
@@ -988,7 +988,7 @@ class codescan extends control
         }
 
         $pager = $this->codescanZen->setPager($recPerPage, $pageID);
-        $this->view->repoList = $this->repo->getRepoPairs();
+        $this->view->repoList = $this->repo->getPairs();
         $this->view->planList = array_column($this->codescanZen->getListByQuery('plan'), 'name', 'id');
 
         $queryID   = $type == 'bySearch' ? $queryID : 0;
