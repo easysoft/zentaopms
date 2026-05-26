@@ -228,7 +228,7 @@ class artifact extends control
             $param = array();
             $param['entityID'] = 'artifact.' . $id;
             $param['newName']  = $formData->name;
-            $this->loadModel('gitfox')->request('/artifacts/entities/rename', 'POST', $param);
+            $this->loadModel('gitfox')->request('/artifacts/entities/relocate', 'POST', $param);
             if(dao::isError()) $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('artifact', (int)$id, 'edited');
