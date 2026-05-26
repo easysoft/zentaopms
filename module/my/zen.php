@@ -22,6 +22,7 @@ class myZen extends my
     protected function buildTaskData(array $tasks): array
     {
         $parents = array();
+
         foreach($tasks as $task)
         {
             if(isset($tasks[$task->parent]) || $task->parent <= 0 || isset($parents[$task->parent])) continue;
@@ -31,9 +32,9 @@ class myZen extends my
         $parentPairs = $this->loadModel('task')->getPairsByIdList($parents);
         foreach($tasks as $task)
         {
-            $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
-            $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
-            $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
+            $task->estimate      = $task->estimate . $this->lang->execution->workHourUnit;
+            $task->consumed      = $task->consumed . $this->lang->execution->workHourUnit;
+            $task->left          = $task->left     . $this->lang->execution->workHourUnit;
             $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? 'changed' : $task->status;
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;

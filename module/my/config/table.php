@@ -310,19 +310,19 @@ $config->my->task->dtable->fieldList['deadline']['type']     = 'date';
 $config->my->task->dtable->fieldList['deadline']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['deadline']['sortType'] = true;
 
-$config->my->task->dtable->fieldList['estimate']['name']     = 'estimateLabel';
+$config->my->task->dtable->fieldList['estimate']['name']     = 'estimate';
 $config->my->task->dtable->fieldList['estimate']['title']    = $lang->task->estimateAB;
 $config->my->task->dtable->fieldList['estimate']['type']     = 'number';
 $config->my->task->dtable->fieldList['estimate']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['estimate']['sortType'] = true;
 
-$config->my->task->dtable->fieldList['consumed']['name']     = 'consumedLabel';
+$config->my->task->dtable->fieldList['consumed']['name']     = 'consumed';
 $config->my->task->dtable->fieldList['consumed']['title']    = $lang->task->consumedAB;
 $config->my->task->dtable->fieldList['consumed']['type']     = 'number';
 $config->my->task->dtable->fieldList['consumed']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['consumed']['sortType'] = true;
 
-$config->my->task->dtable->fieldList['left']['name']     = 'leftLabel';
+$config->my->task->dtable->fieldList['left']['name']     = 'left';
 $config->my->task->dtable->fieldList['left']['title']    = $lang->task->leftAB;
 $config->my->task->dtable->fieldList['left']['type']     = 'number';
 $config->my->task->dtable->fieldList['left']['group']    = 'deadline';
