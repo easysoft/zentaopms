@@ -30,7 +30,7 @@ class artifactmembersprivEntry extends baseEntry
 
         if(!isset($this->app->user))
         {
-            $this->app->user = new stdclass();
+            $this->app->user          = new stdclass();
             $this->app->user->account = 'guest';
             $this->app->user->rights  = array(
                 'rights' => array(),
@@ -66,10 +66,10 @@ class artifactmembersprivEntry extends baseEntry
             $space = $this->space->fetchByID($spaceID);
             if(!$space) return $this->sendError(404, 'Space not found');
 
-            $spaceMembers   = $this->space->getSpaceMembers($space->id);
-            $fakeRepo       = new stdclass();
+            $spaceMembers      = $this->space->getSpaceMembers($space->id);
+            $fakeRepo          = new stdclass();
             $fakeRepo->members = $space->acl == 'private' ? $spaceMembers : $this->user->getPairs('noletter|noempty|nodeleted|noclosed');
-            $members        = $this->repo->getRepoMembers($fakeRepo);
+            $members           = $this->repo->getRepoMembers($fakeRepo);
         }
         else
         {
