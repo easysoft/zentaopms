@@ -2038,7 +2038,7 @@ class doc extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
             }
 
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, 'template.1', $data->lib));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 

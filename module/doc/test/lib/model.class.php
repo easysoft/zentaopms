@@ -3115,7 +3115,7 @@ class docModelTest extends baseTest
         // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
         if($docID) {
             // 文档移动的响应
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
 
