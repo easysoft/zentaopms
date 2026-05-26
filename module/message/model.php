@@ -510,4 +510,105 @@ class messageModel extends model
 
         return array_keys($mentionUsers);
     }
+
+    /**
+     * 根据表单设置获取被@的用户。
+     * Extract mention uers from form.
+     *
+     * @param  array $formConfig
+     * @param  object $object
+     * @access public
+     * @return array
+     */
+    public function extractMentionUsersFromForm(array $formConfig, object $object): array
+    {
+        $users = array();
+        foreach($formConfig as $fieldKey => $fieldConfig)
+        {
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor' && !empty($object->$fieldKey))
+            {
+                $users = array_merge($users, $this->getMentionUsersFromHtml((string)$object->$fieldKey));
+            }
+        }
+
+        return array_values(array_unique($users));
+    }
+
+    /**
+     * 给被@的人发送消息通知。
+     * Send notice to mention users.
+     *
+     * @param  string $objectType
+     * @param  string $method
+     * @param  int    $actionID
+     * @param  object $object
+     * @param  object $oldObject
+     * @access public
+     * @return void
+     */
+    public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, object $oldObject = null)
+    {
+        $isBlocksuite = $objectType == 'doc';
+        if($isBlocksuite)
+        {
+            $mentionUsers = $this->getMentionUsersFromDoc($object->rawContent);
+            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc($oldObject->rawContent);
+        }
+        else
+        {
+            if(empty($this->config->$objectType->form->{$method})) return;
+
+            $formConfig = $this->config->{$objectType}->form->{$method};
+
+            $mentionUsers = $this->extractMentionUsersFromForm($formConfig, $object);
+            if($oldObject) $oldMentionUsers = $this->extractMentionUsersFromForm($formConfig, $oldObject);
+        }
+
+        if(!empty($oldMentionUsers)) $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
+
+        if(empty($mentionUsers)) return;
+
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+        if(empty($messageSetting)) return;
+
+        $action = $this->loadModel('action')->getByID($actionID);
+        if(!$action) return;
+
+        $actor           = zget($action, 'actor', '');
+        $user            = $this->loadModel('user')->getByID($actor);
+        $actorRealname   = zget($user, 'realname', $actor);
+        $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
+        $objectTitle     = strtoupper($objectType) . '#' . sprintf("%03d", $object->id) . zget($object, $objectNameField, '');
+        $viewLink        = helper::createLink($objectType, 'view', "id={$object->id}");
+
+        if(isset($messageSetting['mail']))
+        {
+            $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+            $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
+            $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
+        }
+
+        if(isset($messageSetting['message']))
+        {
+            $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
+            $now  = helper::now();
+            foreach($mentionUsers as $mentionUser)
+            {
+                if($mentionUser == $actor || empty($mentionUser)) continue;
+
+                $notify = new stdclass();
+                $notify->objectType  = 'message';
+                $notify->action      = $actionID;
+                $notify->toList      = ",{$mentionUser},";
+                $notify->data        = $data;
+                $notify->status      = 'wait';
+                $notify->createdBy   = $actor;
+                $notify->createdDate = $now;
+                $notify->sendTime    = null;
+
+                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
+        }
+    }
 }

@@ -360,4 +360,70 @@ class messageModelTest extends baseTest
 
         return implode(',', $users);
     }
+
+    /**
+     * 测试根据表单设置从对象中提取被 @ 的用户。
+     * Test extract mention users from form config and object.
+     *
+     * @param  array  $formConfig
+     * @param  object $object
+     * @access public
+     * @return string
+     */
+    public function extractMentionUsersFromFormTest(array $formConfig, object $object): string
+    {
+        $users = $this->instance->extractMentionUsersFromForm($formConfig, $object);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($users) ? '0' : implode(',', $users);
+    }
+
+    /**
+     * 测试发送 @ 提及通知。
+     * Test send mention notice.
+     *
+     * @param  string      $objectType
+     * @param  string      $method
+     * @param  int         $actionID
+     * @param  object      $object
+     * @param  object|null $oldObject
+     * @param  string      $settingMode  message|empty
+     * @access public
+     * @return array|string
+     */
+    public function sendMentionNoticeTest(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null, string $settingMode = 'message'): array|string
+    {
+        global $tester;
+
+        $originalSetting = $tester->config->message->setting;
+        if($settingMode === 'empty')
+        {
+            $tester->config->message->setting = array();
+        }
+        else
+        {
+            $tester->config->message->setting = array('message' => array('setting' => array()));
+        }
+
+        $countBefore = (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+
+        $this->instance->sendMentionNotice($objectType, $method, $actionID, $object, $oldObject);
+
+        if(dao::isError())
+        {
+            $tester->config->message->setting = $originalSetting;
+            return dao::getError();
+        }
+
+        $countAfter = (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+
+        $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->orderBy('id_desc')->fetch();
+
+        $tester->config->message->setting = $originalSetting;
+
+        if(empty($notify)) return array('notifyCount' => $countAfter - $countBefore);
+
+        return array('notifyCount' => $countAfter - $countBefore, 'objectType' => $notify->objectType, 'action' => $notify->action, 'mentionUser' => trim($notify->toList, ','), 'status' => $notify->status, 'createdBy' => $notify->createdBy);
+    }
 }
