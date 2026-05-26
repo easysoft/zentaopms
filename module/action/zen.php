@@ -19,7 +19,7 @@ class actionZen extends action
         $hiddenTypeConfig    = explode(',', $this->config->action->hiddenTrashObjects);
         foreach($objectTypeList as $objectType)
         {
-            if(!isset($this->config->objectTables[$objectType])) continue;
+            if(!isset($this->config->objectTables[$objectType]) && !in_array($objectType, array('artifactasset', 'artifactdir'))) continue;
             if(in_array($objectType, $hiddenTypeConfig)) continue;
             in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
         }
