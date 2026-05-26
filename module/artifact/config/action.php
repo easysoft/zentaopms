@@ -8,7 +8,6 @@ $config->artifact->actionList['edit']['url']         = array('module' => 'artifa
 $config->artifact->actionList['edit']['data-toggle'] = 'modal';
 $config->artifact->actionList['edit']['data-app']    = $app->tab;
 
-$config->artifact->actionList['history'] = array();
 $config->artifact->actionList['history']['icon']        = 'history';
 $config->artifact->actionList['history']['text']        = $lang->artifact->history;
 $config->artifact->actionList['history']['hint']        = $lang->artifact->history;
@@ -22,7 +21,12 @@ $config->artifact->actionList['download']['hint']         = $lang->artifact->dow
 $config->artifact->actionList['download']['url']          = array('module' => 'artifact', 'method' => 'downloadArtifact', 'params' => 'assetID={id}&artifactID={artifactID}');
 $config->artifact->actionList['download']['className']    = 'ajax-submit';
 
-$config->artifact->actionList['move'] = array();
+$config->artifact->actionList['copyCMD']['icon']      = 'copy';
+$config->artifact->actionList['copyCMD']['text']      = $lang->artifact->copyCMD;
+$config->artifact->actionList['copyCMD']['hint']      = $lang->artifact->copyCMD;
+$config->artifact->actionList['copyCMD']['url']       = array('module' => 'artifact', 'method' => 'copyCMD', 'params' => 'assetID={id}&artifactID={artifactID}');
+$config->artifact->actionList['copyCMD']['className'] = 'ajax-submit';
+
 $config->artifact->actionList['move']['icon']        = 'move';
 $config->artifact->actionList['move']['text']        = $lang->artifact->move;
 $config->artifact->actionList['move']['hint']        = $lang->artifact->move;

@@ -7,6 +7,12 @@ $config->artifact->dtable->fieldList['path']['hint']     = true;
 $config->artifact->dtable->fieldList['path']['sortType'] = false;
 $config->artifact->dtable->fieldList['path']['checkbox'] = true;
 
+$config->artifact->dtable->fieldList['package']['name']     = 'package';
+$config->artifact->dtable->fieldList['package']['title']    = $lang->artifact->package;
+$config->artifact->dtable->fieldList['package']['hint']     = true;
+$config->artifact->dtable->fieldList['package']['sortType'] = false;
+$config->artifact->dtable->fieldList['package']['checkbox'] = true;
+
 $config->artifact->dtable->fieldList['name']['name']     = 'name';
 $config->artifact->dtable->fieldList['name']['title']    = $lang->artifact->name;
 $config->artifact->dtable->fieldList['name']['hint']     = true;
@@ -45,5 +51,5 @@ $config->artifact->dtable->fieldList['actions']['name']  = 'actions';
 $config->artifact->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->artifact->dtable->fieldList['actions']['type']  = 'actions';
 $config->artifact->dtable->fieldList['actions']['width'] = '100';
-$config->artifact->dtable->fieldList['actions']['menu']  = array('history', 'edit', 'download', 'move', 'delete');
+$config->artifact->dtable->fieldList['actions']['menu']  = array('history', 'edit', 'downloa|copyCMD', 'move', 'delete');
 $config->artifact->dtable->fieldList['actions']['list']  = $config->artifact->actionList;
