@@ -792,11 +792,22 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $cardPosition
+     * @param  string $confirm      no|yes
      * @access public
      * @return void
      */
-    public function close(int $taskID, string $cardPosition = '')
+    public function close(int $taskID, string $cardPosition = '', string $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            $childIdList = $this->task->getAllChildId($taskID, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('task', 'close', "taskID=$taskID&cardPosition=$cardPosition&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->task->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
+
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
