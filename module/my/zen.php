@@ -225,6 +225,7 @@ class myZen extends my
 
         /* Get the number of testtasks assigned to me. */
         $pager->recTotal = 0;
+
         $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
