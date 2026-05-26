@@ -901,13 +901,24 @@ class story extends control
      * @param  int    $storyID
      * @param  string $from        taskkanban
      * @param  string $storyType   story|requirement
+     * @param  string $confirm     yes|no
      * @access public
      * @return void
      */
-    public function close(int $storyID, string $from = '', string $storyType = 'story')
+    public function close(int $storyID, string $from = '', string $storyType = 'story', string $confirm = 'no')
     {
         $story = $this->story->getById($storyID);
         $this->commonAction($storyID);
+
+        if($confirm == 'no')
+        {
+            $childIdList = $this->story->getAllChildId($storyID, false, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('story', 'close', "storyID=$storyID&from=$from&storyType=$storyType&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
 
         if(!empty($_POST))
         {
