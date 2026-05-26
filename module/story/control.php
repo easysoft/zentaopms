@@ -915,9 +915,8 @@ class story extends control
             $childIdList = $this->story->getAllChildId($storyID, false, false, 'closed');
             if(!empty($childIdList))
             {
-                $unclosedChild = array_map(function($childID){return "#$childID";}, $childIdList);
-                $confirmURL    = $this->createLink('story', 'close', "storyID=$storyID&from=$from&storyType=$storyType&confirm=yes");
-                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->story->closeParentTips, implode(',', $unclosedChild)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+                $confirmURL = $this->createLink('story', 'close', "storyID=$storyID&from=$from&storyType=$storyType&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
             }
         }
 
