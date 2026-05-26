@@ -450,4 +450,64 @@ class messageModel extends model
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
         $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
     }
+
+    /**
+     * 从 html 中获取提及的用户。
+     * Get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return array
+     */
+    public function getMentionUsersFromHtml(string $html): array
+    {
+        $pattern = '/<span[^>]*?\bmention-label\b[^>]*?data-type=["\']mention["\'][^>]*?data-id=["\']([^"\']+)["\'][^>]*>/is';
+
+        $accounts = array();
+        if(preg_match_all($pattern, $html, $matches))
+        {
+            foreach($matches[1] as $match)
+            {
+                $account = trim($match);
+                if($account) $accounts[$account] = $account;
+            }
+        }
+        return array_keys($accounts);
+    }
+
+    /**
+     * 从 BlockSuite 文档 JSON 中获取被 @ 的用户账号。
+     * Get mention users from doc raw content.
+     *
+     * @param  string $rawContent
+     * @access public
+     * @return string[]
+     */
+    public function getMentionUsersFromDoc(string $rawContent): array
+    {
+        if(empty($rawContent)) return array();
+
+        $data = json_decode($rawContent, true);
+        if(empty($data)) return array();
+
+        $callback = function(array $block, array $accounts) : array
+        {
+            if(empty($block['props']['text']['delta']) || !is_array($block['props']['text']['delta'])) return $accounts;
+
+            $delta = $block['props']['text']['delta'];
+            foreach($delta as $op)
+            {
+                if(empty($op['attributes']['mention']['id'])) continue;
+
+                $account = trim($op['attributes']['mention']['id']);
+                if(!empty($account)) $accounts[$account] = $account;
+            }
+
+            return $accounts;
+        };
+
+        $mentionUsers = $this->loadModel('doc')->forEachDocBlock($data, $callback, array(), 'affine:paragraph');
+
+        return array_keys($mentionUsers);
+    }
 }

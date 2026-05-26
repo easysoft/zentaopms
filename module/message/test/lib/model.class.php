@@ -326,4 +326,38 @@ class messageModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * 测试从 html 中获取提及的用户。
+     * Test get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return string
+     */
+    public function getMentionUsersFromHtmlTest(string $html): string
+    {
+        $users = $this->instance->getMentionUsersFromHtml($html);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', $users);
+    }
+
+    /**
+     * 测试从 BlockSuite 文档 JSON 中获取被 @ 的用户账号。
+     * Test get mention users from doc raw content.
+     *
+     * @param  string $rawContent
+     * @access public
+     * @return string
+     */
+    public function getMentionUsersFromDocTest(string $rawContent): string
+    {
+        $users = $this->instance->getMentionUsersFromDoc($rawContent);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', $users);
+    }
 }
