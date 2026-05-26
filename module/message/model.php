@@ -510,4 +510,27 @@ class messageModel extends model
 
         return array_keys($mentionUsers);
     }
+
+    /**
+     * 根据表单设置获取被@的用户。
+     * Extract mention uers from form.
+     *
+     * @param  array $formConfig
+     * @param  object $object
+     * @access public
+     * @return array
+     */
+    public function extractMentionUsersFromForm(array $formConfig, object $object): array
+    {
+        $users = array();
+        foreach($formConfig as $fieldKey => $fieldConfig)
+        {
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor' && !empty($object->$fieldKey))
+            {
+                $users = array_merge($users, $this->getMentionUsersFromHtml((string)$object->$fieldKey));
+            }
+        }
+
+        return array_values(array_unique($users));
+    }
 }
