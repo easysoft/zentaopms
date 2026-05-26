@@ -12,8 +12,8 @@ cid=18841
 
 - 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
  - 属性field @consumed
- - 属性old @3
  - 属性new @8
+- 任务未开始时记录工时，查看已消耗工时，old字段。 @1
 - 任务未开始时记录工时，查看状态是否变化，应该从未开始变为开始
  - 属性field @status
  - 属性old @wait
@@ -25,20 +25,20 @@ cid=18841
 - 不在多人任务团队中的用户记录工时，直接返回false @0
 - 在多人任务团队中的用户记录工时，查看返回的最初预计工时
  - 属性field @estimate
- - 属性old @1
  - 属性new @25
 - 在多人任务团队中的用户记录工时，查看返回的消耗工时
  - 属性field @consumed
- - 属性old @4
  - 属性new @2
 - 在多人任务团队中的用户记录工时，查看返回的剩余工时
  - 属性field @left
- - 属性old @2
  - 属性new @21
+- 在多人任务团队中的用户记录工时，查看返回的最初预计工时，old字段 @1
+- 在多人任务团队中的用户记录工时，查看返回的消耗工时，old字段 @1
+- 在多人任务团队中的用户记录工时，查看返回的剩余工时，old字段 @1
 - 通过记录日志直接完成任务的情况
  - 第0条的field属性 @consumed
- - 第0条的old属性 @5
  - 第0条的new属性 @10
+- 通过记录日志直接完成任务的情况，old字段。 @1
 - 正常记录工时
  - 第2条的field属性 @status
  - 第2条的old属性 @done
@@ -124,7 +124,8 @@ $noconsumedTaskEffort[1]->date     = "2022-01-01";
 
 $task = new taskModelTest();
 $startTaskResult = $task->recordWorkhourTest(1, $startTaskEffort);
-r($startTaskResult[0]) && p('field,old,new') && e('consumed,3,8');           // 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
+r($startTaskResult[0])             && p('field,new') && e('consumed,8');       // 任务未开始时记录工时，查看已消耗工时，应该在之前消耗的基础上增加测试设置的消耗值
+r($startTaskResult[0]['old'] == 3) && p()            && e('1');                // 任务未开始时记录工时，查看已消耗工时，old字段。
 r($startTaskResult[1]) && p('field,old,new') && e('status,wait,doing');      // 任务未开始时记录工时，查看状态是否变化，应该从未开始变为开始
 r($startTaskResult[2]) && p('field,old,new') && e('assignedTo,user1,admin'); // 任务未开始时记录工时，查看指派给是否变化，应该从之前用户变为当前用户
 
@@ -134,11 +135,16 @@ r($multiTaskResult) && p() && e('0');  // 不在多人任务团队中的用户�
 
 su('user2');
 $multiTaskResult = $task->recordWorkhourTest(2, $multiTaskEffort);
-r($multiTaskResult[0]) && p('field,old,new') && e('estimate,1,25');  // 在多人任务团队中的用户记录工时，查看返回的最初预计工时
-r($multiTaskResult[1]) && p('field,old,new') && e('consumed,4,2');   // 在多人任务团队中的用户记录工时，查看返回的消耗工时
-r($multiTaskResult[2]) && p('field,old,new') && e('left,2,21');      // 在多人任务团队中的用户记录工时，查看返回的剩余工时
+r($multiTaskResult[0]) && p('field,new') && e('estimate,25');  // 在多人任务团队中的用户记录工时，查看返回的最初预计工时
+r($multiTaskResult[1]) && p('field,new') && e('consumed,2');   // 在多人任务团队中的用户记录工时，查看返回的消耗工时
+r($multiTaskResult[2]) && p('field,new') && e('left,21');      // 在多人任务团队中的用户记录工时，查看返回的剩余工时
+r($multiTaskResult[0]['old'] == 1) && p() && e('1');  // 在多人任务团队中的用户记录工时，查看返回的最初预计工时，old字段
+r($multiTaskResult[1]['old'] == 4) && p() && e('1');  // 在多人任务团队中的用户记录工时，查看返回的消耗工时，old字段
+r($multiTaskResult[2]['old'] == 2) && p() && e('1');  // 在多人任务团队中的用户记录工时，查看返回的剩余工时，old字段
 
-r($task->recordWorkhourTest(3, $finishTaskEffort))        && p('0:field,old,new') && e('consumed,5,10');                 // 通过记录日志直接完成任务的情况
+$finishTaskResult = $task->recordWorkhourTest(3, $finishTaskEffort);
+r($finishTaskResult)                && p('0:field,new') && e('consumed,10'); // 通过记录日志直接完成任务的情况
+r($finishTaskResult[0]['old'] == 5) && p()              && e('1');           // 通过记录日志直接完成任务的情况，old字段。
 r($task->recordWorkhourTest(4, $normalTaskEffort))        && p('2:field,old,new') && e('status,done,doing');             // 正常记录工时
 r($task->recordWorkhourTest(6, $normalTaskEffort))        && p('2:field,old,new') && e('status,cancel,doing');           // 正常记录工时
 r($task->recordWorkhourTest(7, $normalTaskEffort))        && p('2:field,old,new') && e('status,closed,doing');           // 正常记录工时
