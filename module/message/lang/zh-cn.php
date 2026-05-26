@@ -31,6 +31,8 @@ $lang->message->all    = '全部消息';
 $lang->message->timeLabel['minute'] = '%s分钟前';
 $lang->message->timeLabel['hour']   = '1小时前';
 
+$lang->message->mention = '%s在%s中@了你，请及时查看。'; 
+
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = '一键已读';
 $lang->message->notice->clearRead   = '清空已读';

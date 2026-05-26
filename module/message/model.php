@@ -588,5 +588,27 @@ class messageModel extends model
             $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
             $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
         }
+
+        if(isset($messageSetting['message']))
+        {
+            $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
+            $now  = helper::now();
+            foreach($mentionUsers as $mentionUser)
+            {
+                if($mentionUser == $actor || empty($mentionUser)) continue;
+
+                $notify = new stdclass();
+                $notify->objectType  = 'message';
+                $notify->action      = $actionID;
+                $notify->toList      = ",{$mentionUser},";
+                $notify->data        = $data;
+                $notify->status      = 'wait';
+                $notify->createdBy   = $actor;
+                $notify->createdDate = $now;
+                $notify->sendTime    = null;
+
+                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+            }
+        }
     }
 }
