@@ -424,6 +424,9 @@ class model extends baseModel
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
 
+        /* 测试单的执行用例动作用用例的执行动作。 */
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
+
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($moduleName, $objectID);
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName, $groupID);
         if(empty($action) or $action->extensionType == 'none') return '';

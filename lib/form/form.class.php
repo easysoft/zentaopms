@@ -139,6 +139,9 @@ class form extends fixer
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
         if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
 
+        /* 测试单的执行用例动作用用例的执行动作。 */
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
+
         /* 复制项目使用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
 

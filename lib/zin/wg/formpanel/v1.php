@@ -85,6 +85,7 @@ class formPanel extends panel
         if($moduleName == 'projectbuild')   return data('build');
         if($moduleName == 'cm')             return data('baseline');
         if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
+        if($moduleName == 'testtask' && $methodName == 'runcase') return data('run.case');
         return data($moduleName);
     }
 
@@ -106,6 +107,8 @@ class formPanel extends panel
                 $methodName = 'build';
             }
         }
+
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
 
         if($moduleName == 'project' && $methodName == 'createtemplate') $methodName = 'create';
         if($moduleName == 'project' && $methodName == 'edittemplate')   $methodName = 'edit';
