@@ -750,4 +750,22 @@ class artifact extends control
         $response['callback'] = "window.expandNode();";
         $this->sendSuccess($response);
     }
+
+    /**
+     * 复制制品拉取命令。
+     * Copy artifact pull command.
+     *
+     * @param  int $assetID
+     * @param  int $artifactID
+     * @access public
+     * @return void
+     */
+    public function copyCMD(int $assetID)
+    {
+        $asset   = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
+        $command = 'docker pull ' . $asset->link;
+
+        $title = $this->lang->artifact->copyCMD;
+        return $this->send(array('result' => 'success', 'message' => '', 'closeModal' => true, 'callback' => array('name' => 'showCommand', 'params' => array("$command", "$title"))));
+    }
 }
