@@ -416,7 +416,7 @@ class docZen extends doc
         list($spaceType, $spaceID) = explode('.', $space);
         if($docID)
         {
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $spaceID, $libID, $docType, $actionType));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID, $docType, $actionType));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 
