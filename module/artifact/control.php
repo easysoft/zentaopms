@@ -342,7 +342,11 @@ class artifact extends control
             $result = $this->loadModel('gitfox')->request('/artifacts/entities/relocate', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result) $this->loadModel('action')->create('artifactDir', $node->id, 'edited', '', $artifactID . '|' . $currentPath . '|' . $node->entityID);
+            if($result)
+            {
+                $dirID = empty(explode('.', $node->entityID)[1]) ? 0 : explode('.', $node->entityID)[1];
+                $this->loadModel('action')->create('artifactDir', (int)$dirID, 'edited', '', $artifactID . '|' . $currentPath . '|' . $node->entityID);
+            }
 
             $response = array();
             $response['result']     = 'success';
@@ -388,7 +392,7 @@ class artifact extends control
             $param['entityID'] = 'asset.' . $assetID;
             $param['newName']  = $formData->name;
 
-            $result   = $this->gitfox->request('/artifacts/entities/rename', 'POST', $param);
+            $result = $this->gitfox->request('/artifacts/entities/relocate', 'POST', $param);
             if(dao::isError()) $this->sendError(dao::getError());
 
             if($result && $asset && !empty($asset->path))
@@ -511,7 +515,7 @@ class artifact extends control
             $params['targetArtifactID'] = $formData->artifactID;
             $params['targetGroupID']    = (int)$targetGroupID;
 
-            $result = $this->gitfox->request('/artifacts/entities/move', 'POST', $params);
+            $result = $this->gitfox->request('/artifacts/entities/relocate', 'POST', $params);
             if(dao::isError()) $this->sendError(dao::getError());
 
             if($result && $asset && !empty($asset->path))
