@@ -1323,7 +1323,6 @@ class my extends control
         $this->view->cols             = $cols;
         $this->view->footToolbar      = $footToolbar;
         $this->view->featureBarItems  = $featureBarItems;
-        $this->view->toolbarItems     = array();
         $this->view->mode             = $module;
         $this->view->browseMode       = $mode;
         $this->view->label            = $label;
@@ -1332,7 +1331,6 @@ class my extends control
         $this->view->orderBy          = $orderBy;
         $this->view->pager            = $pager;
         $this->view->pendingReviews   = $flow->approval == 'enabled' ? $this->approval->getPendingReviews($flow->module) : array();
-        $this->view->summary          = $this->flow->getSummary($dataList, $fields);
         $this->view->canSearch        = common::hasPriv($module, 'search') && !empty($this->config->{$module}->search['fields']);
 
         $this->display();
