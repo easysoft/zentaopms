@@ -3309,4 +3309,17 @@ class repoModel extends model
         $this->loadModel('search')->setSearchParams($searchConfig);
         return $searchConfig;
     }
+
+    /**
+     * 获取代码库键值对。
+     * Get repo pairs.
+     *
+     * @access public
+     * @return void
+     * @return array
+     */
+    public function getPairs(): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+    }
 }
