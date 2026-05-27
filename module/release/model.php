@@ -842,11 +842,9 @@ class releaseModel extends model
      */
     public function changeStatus(int $releaseID, string $status, string $releasedDate = ''): bool
     {
-        $this->dao->update(TABLE_RELEASE)
-             ->set('status')->eq($status)
-             ->beginIF($releasedDate)->set('releasedDate')->eq($releasedDate)->fi()
-             ->where('id')->eq($releaseID)
-             ->exec();
+        $release = form::data($this->config->release->dtable->publish->fieldList)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
+
+        $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
 
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();
