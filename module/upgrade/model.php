@@ -9463,7 +9463,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function importBuildinWorkflow($vision = 'all', $importModule = '', $importAction = '', $hasGroup = 0)
+    public function importBuildinWorkflow($vision = 'all', $importModule = '')
     {
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
@@ -9514,7 +9514,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->exec();
                 $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
             }
         }
@@ -9533,7 +9533,6 @@ class upgradeModel extends model
             $data->module = $module;
             foreach($moduleActions as $action)
             {
-                if($importAction && strpos(",$importAction,", ",{$module}-{$action},") === false) continue;
                 $data->action = $action;
 
                 /* Use default action name if not set flow action name. */
@@ -9565,7 +9564,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->exec();
                 $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
             }
         }
@@ -9609,7 +9608,7 @@ class upgradeModel extends model
 
                 if(is_object($data->options) or is_array($data->options)) $data->options = helper::jsonEncode($data->options);
 
-                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
                 $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
@@ -9639,7 +9638,7 @@ class upgradeModel extends model
 
                     if($vision != 'all' && $vision != $data->vision) continue;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->exec();
                     $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
                 }
             }
@@ -9709,7 +9708,7 @@ class upgradeModel extends model
                     $data->order = $order;
                     $order++;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->exec();
                     $this->dao->insert(TABLE_WORKFLOWLABEL)->data($data)->exec();
                 }
             }
