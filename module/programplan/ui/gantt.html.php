@@ -137,7 +137,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setID('versionList'),
             setClass('ml-2'),
             setStyle(array('order' => '10010')),
-            versiondiff
+            $type == 'gantt' && $browseType != 'bysearch' ? versiondiff
             (
                 setClass('inline-block'),
                 set::appendClass('fixed-item'),
@@ -149,7 +149,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 set::diffLang($langData),
                 set::browseTemplate($browseTemplate),
                 set::baseline($isDiffMode ? $ganttBaseline : null)
-            ),
+            ) : null,
             icon
             (
                 'help',
