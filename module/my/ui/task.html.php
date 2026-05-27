@@ -76,34 +76,32 @@ foreach($tasks as $task)
 }
 $data  = array_values($tasks);
 
-if($config->edition == 'ipd')
+$canStartExecution = [];
+$executionID       = '';
+foreach($data as $task)
 {
-    static $canStartExecution = '';
-    static $executionID       = '';
-    foreach($data as $task)
-    {
-        if(empty($canStartExecution) || $executionID != $task->execution)
-        {
-            $executionID       = $task->execution;
-            $canStartExecution = $this->execution->checkStageStatus($executionID, 'start');
-        }
+    $task->estimate = helper::formatHours($task->estimate);
+    $task->consumed = helper::formatHours($task->consumed);
+    $task->left     = helper::formatHours($task->left);
 
-        if(!empty($canStartExecution['disabled']))
+    if($config->edition != 'ipd') continue;
+    if(empty($canStartExecution) || $executionID != $task->execution)
+    {
+        $executionID       = $task->execution;
+        $canStartExecution = $this->execution->checkStageStatus($executionID, 'start');
+    }
+
+    if(!empty($canStartExecution['disabled']))
+    {
+        foreach($task->actions as $key => $action)
         {
-            foreach($task->actions as $key => $action)
+            if(in_array($action['name'], array('start', 'finish', 'record')))
             {
-                if(in_array($action['name'], array('start', 'finish', 'record')))
-                {
-                    $tip = $action['name'] == 'record' ? 'recordWorkhourTip' : $action['name'] . 'Tip';
-                    $task->actions[$key]['disabled'] = true;
-                    $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
-                }
+                $tip = $action['name'] == 'record' ? 'recordWorkhourTip' : $action['name'] . 'Tip';
+                $task->actions[$key]['disabled'] = true;
+                $task->actions[$key]['hint']     = $lang->task->disabledTip->$tip;
             }
         }
-
-        $task->estimate = helper::formatHours($task->estimate);
-        $task->consumed = helper::formatHours($task->consumed);
-        $task->left     = helper::formatHours($task->left);
     }
 }
 

@@ -142,29 +142,15 @@ window.renderCell = function(result, info)
             let assignToClass = info.row.data.assignedTo == userAccount ? 'is-me' : '';
             if(!info.row.data.assignedTo) assignToClass = 'is-unassigned';
 
-            if(storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
+            if((info.row.data.type == 'epic' && epicAssignedToPriv) || (info.row.data.type == 'requirement' && requirementAssignedToPriv) || (info.row.data.type == 'story' && storyAssignedToPriv))
             {
-                result[0]['props']['href'] = $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id);
-            }
-            else if(!storyAssignedToPriv && requirementAssignedToPriv && info.row.data.type == 'requirement')
-            {
-                result[0] = {html : '<a href=' + $.createLink('requirement', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
+                if(hasCurrentPageAssignPriv) result[0]['props']['href'] = $.createLink(info.row.data.type, 'assignTo', 'storyID=' + info.row.data.id);
+                if(!hasCurrentPageAssignPriv) result[0] = {html : '<a href=' + $.createLink(info.row.data.type, 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'}
             }
 
-            if(storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
+            if((info.row.data.type == 'epic' && !epicAssignedToPriv) || (info.row.data.type == 'requirement' && !requirementAssignedToPriv) || (info.row.data.type == 'story' && !storyAssignedToPriv))
             {
-                result[0]['props']['href'] = $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id);
-            }
-            else if(!storyAssignedToPriv && epicAssignedToPriv && info.row.data.type == 'epic')
-            {
-                result[0] = {html : '<a href=' + $.createLink('epic', 'assignTo', 'storyID=' + info.row.data.id) + ' data-toggle="modal" class="dtable-assign-btn ' + assignToClass + '"><i class="icon icon-hand-right"></i><span>' + result[0] + '</span></a>'};
-            }
-
-            if((!requirementAssignedToPriv && info.row.data.type == 'requirement') || (!epicAssignedToPriv && info.row.data.type == 'epic'))
-            {
-                delete result[0]['props']['data-toggle'];
-                delete result[0]['props']['href'];
-                result[0]['props']['className'] += ' disabled';
+                result[0] = {html : info.row.data.assignedToName};
             }
         }
     }

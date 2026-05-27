@@ -251,7 +251,7 @@ class dao extends baseDAO
         {
             $projectID = !empty($data->projectID) ? $data->projectID : 0;
             if((empty($projectID) || !is_numeric($projectID)) && !empty($data->project)) $projectID = $data->project;
-            if(empty($projectID) || !is_numeric($projectID)) $projectID = $_SESSION['project'];
+            if(empty($projectID) || !is_numeric($projectID)) $projectID = $_SESSION['project'] ?? 0;
 
             if(!empty($projectID) && is_numeric($projectID))
             {

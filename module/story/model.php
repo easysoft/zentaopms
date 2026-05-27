@@ -1076,7 +1076,7 @@ class storyModel extends model
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed')   $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if($oldParentStory->status == 'closed' && $childStory->status != 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -5282,6 +5282,8 @@ class storyModel extends model
             $story->rawStatus = $story->status;
             $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
         }
+
+        if(!common::hasPriv($story->type, 'assignTo')) $story->assignedToName = zget(zget($options, 'users', array()), $story->assignedTo, empty($story->assignedTo) ? $this->lang->noAssigned : $story->assignedTo);
         return $story;
     }
 
