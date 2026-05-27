@@ -240,6 +240,7 @@ $lang->story->storyChanged     = 'Story Changed';
 $lang->story->demand           = 'Demand';
 $lang->story->unlinkReason     = 'Unlink Reason';
 $lang->story->retractedReason  = 'Retracted Reason';
+$lang->story->syncToChild      = 'Sync to child';
 
 $lang->story->ditto       = 'Dito';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";

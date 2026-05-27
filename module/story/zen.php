@@ -326,9 +326,11 @@ class storyZen extends story
      */
     public function initStoryForCreate(int $planID, int $storyID, int $bugID, int $todoID, string $extra = ''): object
     {
+        $output = $this->story->parseExtra($extra);
+
         $initStory = new stdclass();
         $initStory->source     = '';
-        $initStory->sourceNote = '';
+        $initStory->sourceNote = zget($output, 'sourceNote', '');
         $initStory->pri        = 3;
         $initStory->estimate   = '';
         $initStory->title      = '';

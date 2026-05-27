@@ -45,7 +45,8 @@ $fields->field('twinsStory')
 $fields->field('parent')
     ->id('parentBox')
     ->items($createFields['parent']['options'])
-    ->value($createFields['parent']['default']);
+    ->value($createFields['parent']['default'])
+    ->checkbox(array('text' => $lang->story->syncToChild, 'id' => 'syncToChild'));
 
 $fields->field('grade')
     ->disabled($gradeRule == 'stepwise')
