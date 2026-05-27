@@ -215,7 +215,7 @@ class artifactModel extends model
             $asset->path       = $asset->group;
             $asset->version    = isset($asset->metadata) ? $asset->metadata->version : '';
             $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
-            $asset->size       = empty($asset->size)     ? 0 : round($asset->size / 1024, 2) . 'KB';
+            $asset->size       = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
             $asset->artifactID = $artifactID;
             $asset->package    = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
         }
@@ -276,5 +276,67 @@ class artifactModel extends model
         if($action == 'moveartifact')     return !empty($artifact->format) && $artifact->format == 'file';
 
         return true;
+    }
+
+    /**
+     * 通过产品ID获取制品库信息。
+     * Get artifactrepo by product ID.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getReposByProduct(int $productID): array
+    {
+        $repoIdList = array();
+        if(!$this->app->user->admin)
+        {
+            $repoIdList = $this->loadModel('repo')->getRepoPairs();
+            if($repoIdList) $repoIdList = array_keys($repoIdList);
+        }
+
+        $artifactRepos = $this->dao->select('t1.*')->from(TABLE_ARTIFACT)->alias('t1')
+            ->innerJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
+            ->andWhere("FIND_IN_SET({$productID}, t2.`product`)")
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.scope')->eq('repo')
+            ->beginIf(!empty($repoIdList))->andWhere('t1.repoID')->in($repoIdList)->fi()
+            ->fetchAll('id');
+
+        return $artifactRepos;
+    }
+
+    /**
+     * 获取制品列表。
+     * Get artifact list.
+     *
+     * @param  array $assetIdList
+     * @access public
+     * @return array
+     */
+    public function getAssetByIdList(array $assetIdList = array()): array
+    {
+        return $this->dao->select('t1.*, t2.size')->from(TABLE_ARTIFACTASSET)->alias('t1')
+            ->leftJoin(TABLE_ARTIFACTBLOBS)->alias('t2')->on('t1.id = t2.assetID')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->in($assetIdList)
+            ->fetchAll();
+    }
+
+    /**
+     * 解析制品大小。
+     * Parse artifact size.
+     *
+     * @param  string $size
+     * @access public
+     * @return string
+     */
+    public function parseArtifactSize(string $size): string
+    {
+        if(!$size) return '';
+        if($size < 1024) return $size . 'B';
+        if($size < 1024 * 1024) return round($size / 1024, 2) . 'KB';
+        if($size < 1024 * 1024 * 1024) return round($size / 1024 / 1024, 2) . 'MB';
+        return round($size / 1024 / 1024 / 1024, 2) . 'GB';
     }
 }

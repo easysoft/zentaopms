@@ -52,6 +52,7 @@ $lang->artifact->artifactRepo  = 'Artifact Repo';
 $lang->artifact->parent        = 'Parent';
 $lang->artifact->repo          = 'Code Repo';
 $lang->artifact->package       = 'Package';
+$lang->artifact->asset         = 'Artifact';
 
 $lang->artifact->countArtifact = 'Total %s Artifact';
 
