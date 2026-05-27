@@ -30,6 +30,7 @@ jsVar('requirementViewPriv', hasPriv('requirement', 'view'));
 jsVar('requirementAssignedToPriv', hasPriv('requirement', 'assignTo'));
 jsVar('epicViewPriv', hasPriv('epic', 'view'));
 jsVar('epicAssignedToPriv', hasPriv('epic', 'assignTo'));
+jsVar('hasCurrentPageAssignPriv', hasPriv($storyType, 'assignTo'));
 
 $viewType          = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
 $storyCommon       = $storyType == 'requirement' ? $lang->URCommon : $lang->SRCommon;
@@ -291,8 +292,8 @@ $data    = array();
 $options = array('storyTasks' => $storyTasks, 'storyBugs' => $storyBugs, 'storyCases' => $storyCases, 'modules' => $modules, 'plans' => (isset($plans) ? $plans : array()), 'users' => $users, 'execution' => $project, 'roadmaps' => $roadmaps, 'reports' => $reports);
 foreach($stories as $story)
 {
-    $story->rawModule    = $story->module;
-    $story->from         = $app->tab;
+    $story->rawModule = $story->module;
+    $story->from      = $app->tab;
     $options['branches'] = zget($branchOptions, $story->product, array());
     $data[] = $this->story->formatStoryForList($story, $options, $storyType, $maxGradeGroup);
 }

@@ -94,7 +94,7 @@ class featureBar extends wg
                     $subItem = array();
                     $subItem['text']   = $text;
                     $subItem['active'] = $rawItem->name == 'QUERY' ? $key == $param : $key == $current;
-                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => "() => zui.updateSearchForm('$searchModule')"];
+                    $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => jsRaw("() => zui.updateSearchForm('$searchModule')")];
                     $subItem['url']    = $isModal ? '#featureBar' : $url;
 
                     if($isModal) $subItem['onClick'] = jsRaw("() => loadModal('{$url}')");
@@ -160,7 +160,7 @@ class featureBar extends wg
         $responsiveNavOptions['container']        = 'parent';
         $responsiveNavOptions['mergeDropdown']    = true;
         $responsiveNavOptions['getContainerSize'] = jsRaw('(container) => (Array.from($(container).children()).reduce((acc, item) => acc - (item.hasAttribute("z-use-responsivenavhelper") ? 0 : (item.clientWidth + 20)), container.clientWidth - 32))');
-        $responsiveNavOptions['fixedItems']       = jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle").length) {$(ele).css("order", 10000);return true} return false}');
+        $responsiveNavOptions['fixedItems']       = jsRaw('(_,ele) => {if($(ele).find(".search-form-toggle,.fixed-item").length) {$(ele).css("order", 10000);return true} return false}');
 
         return new nav
         (

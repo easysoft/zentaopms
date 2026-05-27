@@ -23,31 +23,31 @@ su('admin');
 $metricTest = new metricTaoTest();
 
 // 测试步骤1：day类型日期过滤
-$stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+$stmt = $metricTest->instance->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
 $query = array('dateBegin' => '2024-01-01', 'dateEnd' => '2024-01-31', 'dateType' => 'day');
-$result = $metricTest->processDAOWithDateTest($stmt, $query, 'day');
+$result = $metricTest->instance->processDAOWithDate($stmt, $query, 'day');
 r(is_object($result)) && p() && e('1');
 
 // 测试步骤2：year类型日期过滤
-$stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+$stmt = $metricTest->instance->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
 $query = array('dateBegin' => '2024', 'dateEnd' => '2024', 'dateType' => 'year');
-$result = $metricTest->processDAOWithDateTest($stmt, $query, 'year');
+$result = $metricTest->instance->processDAOWithDate($stmt, $query, 'year');
 r(is_object($result)) && p() && e('1');
 
 // 测试步骤3：month类型日期过滤
-$stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+$stmt = $metricTest->instance->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
 $query = array('dateBegin' => '2024-01', 'dateEnd' => '2024-03', 'dateType' => 'month');
-$result = $metricTest->processDAOWithDateTest($stmt, $query, 'month');
+$result = $metricTest->instance->processDAOWithDate($stmt, $query, 'month');
 r(is_object($result)) && p() && e('1');
 
 // 测试步骤4：week类型日期过滤
-$stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+$stmt = $metricTest->instance->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
 $query = array('dateBegin' => '2024-01-01', 'dateEnd' => '2024-01-15', 'dateType' => 'week');
-$result = $metricTest->processDAOWithDateTest($stmt, $query, 'week');
+$result = $metricTest->instance->processDAOWithDate($stmt, $query, 'week');
 r(is_object($result)) && p() && e('1');
 
 // 测试步骤5：空查询条件
-$stmt = $metricTest->objectTao->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
+$stmt = $metricTest->instance->dao->select('*')->from(TABLE_METRICLIB)->where('1')->eq('1');
 $query = array('dateType' => 'day');
-$result = $metricTest->processDAOWithDateTest($stmt, $query, 'day');
+$result = $metricTest->instance->processDAOWithDate($stmt, $query, 'day');
 r(is_object($result)) && p() && e('1');

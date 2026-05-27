@@ -32,3 +32,11 @@ $lang->index->chat->goConfigureFormat   = '点击前往 <a class="text-primary c
 $lang->index->chat->contactAdminForHelp = '请联系管理员进行功能配置';
 $lang->index->chat->unauthorized        = '没有权限访问 AI 聊天功能，请联系管理员进行权限分配。';
 $lang->index->chat->reloadTip           = '若已完成相关配置，请尝试 <a class="text-primary" id="reload-ai-chat">重新加载页面</a>。';
+
+$lang->index->switchVision    = '切换工作界面';
+$lang->index->switchWorkspace = '切换工作空间';
+
+$lang->index->workspaceList = [];
+$lang->index->workspaceList['product']   = "{$lang->productCommon}空间";
+$lang->index->workspaceList['project']   = "{$lang->projectCommon}空间";
+$lang->index->workspaceList['execution'] = "{$lang->executionCommon}空间";

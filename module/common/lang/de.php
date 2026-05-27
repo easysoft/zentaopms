@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -125,6 +126,8 @@ $lang->fail            = 'Fehlgeschlagen';
 $lang->addFiles        = 'Hinzufügen ';
 $lang->delFiles        = 'Deleted Files ';
 $lang->deleteSuccess   = 'Gelöscht';
+$lang->confirmDelete   = 'Do you want to delete it?';
+$lang->deleteing       = 'Deleting...';
 $lang->deleted         = 'Gelöscht';
 $lang->files           = 'Datei ';
 $lang->pasteText       = 'Einfügen';
@@ -213,6 +216,14 @@ $lang->contactUs->phone  = 'Telefon';
 $lang->contactUs->email  = 'Email';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = 'Wechat';
+
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = 'Benutzer auswählen';
+$lang->userSelector->deptTitle     = 'Nach Abteilung filtern';
+$lang->userSelector->userTitle     = 'Benutzer auswählen';
+$lang->userSelector->selectedTitle = 'Ausgewählt';
+$lang->userSelector->allText       = 'Alle Benutzer';
+$lang->userSelector->emptyText     = 'Keine verfügbaren Benutzer';
 
 $lang->common->common       = 'Standard Module';
 $lang->common->story        = 'Story';
@@ -577,6 +588,7 @@ $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Pleas
 $lang->error->noCurlExt       = 'No Curl module installed';
 $lang->error->loginTimeout    = 'Login has timed out, please login again!';
 $lang->error->httpServerError = 'Server error';
+$lang->error->action          = 'The conditions for executing this operation have not been met, and therefore the operation cannot be executed.';
 
 /* Page info. */
 $lang->pager = new stdclass();
@@ -689,5 +701,10 @@ $lang->aiapp->zentaoAgent  = 'ZenTao Agent';
 $lang->aiapp->generalAgent = 'General Agent';
 $lang->aiapp->models       = 'Model List';
 $lang->aiapp->config       = 'ZAI Setting';
+$lang->aiapp->toolkit      = 'Toolkit';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include (dirname(__FILE__) . '/menu.php');

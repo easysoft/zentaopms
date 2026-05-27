@@ -582,6 +582,7 @@ $lang->resource->doc->moveDoc            = 'moveDocAction';
 $lang->resource->doc->create             = 'create';
 $lang->resource->doc->view               = 'view';
 $lang->resource->doc->edit               = 'edit';
+$lang->resource->doc->copyDoc            = 'copyDoc';
 $lang->resource->doc->delete             = 'delete';
 $lang->resource->doc->deleteFile         = 'deleteFile';
 $lang->resource->doc->collect            = 'collectAction';
@@ -1055,169 +1056,6 @@ if($config->edition != 'open')
     $lang->resource->ticket->batchFinish    = 'batchFinish';
     $lang->resource->ticket->batchAssignTo  = 'batchAssignTo';
 
-    /* Attend */
-    $lang->resource->attend = new stdclass();
-    $lang->resource->attend->department       = 'department';
-    $lang->resource->attend->company          = 'company';
-    $lang->resource->attend->browseReview     = 'browseReview';
-    $lang->resource->attend->review           = 'review';
-    $lang->resource->attend->export           = 'exportAction';
-    $lang->resource->attend->stat             = 'reportAction';
-    $lang->resource->attend->saveStat         = 'saveStatAction';
-    $lang->resource->attend->exportStat       = 'exportStat';
-    $lang->resource->attend->detail           = 'detailAction';
-    $lang->resource->attend->exportDetail     = 'exportDetail';
-    $lang->resource->attend->settings         = 'settings';
-    $lang->resource->attend->personalSettings = 'personalSettings';
-    $lang->resource->attend->setManager       = 'setManager';
-
-    $lang->resource->attend->personal         = 'personal';
-    $lang->resource->attend->edit             = 'editAction';
-
-    $lang->attend->methodOrder[5]  = 'department';
-    $lang->attend->methodOrder[10] = 'company';
-    $lang->attend->methodOrder[15] = 'browseReview';
-    $lang->attend->methodOrder[20] = 'review';
-    $lang->attend->methodOrder[25] = 'export';
-    $lang->attend->methodOrder[30] = 'stat';
-    $lang->attend->methodOrder[35] = 'saveStat';
-    $lang->attend->methodOrder[40] = 'exportStat';
-    $lang->attend->methodOrder[45] = 'detail';
-    $lang->attend->methodOrder[60] = 'exportDetail';
-    $lang->attend->methodOrder[65] = 'settings';
-    $lang->attend->methodOrder[70] = 'personalSettings';
-    $lang->attend->methodOrder[75] = 'setManager';
-
-    $lang->attend->methodOrder[80] = 'personal';
-    $lang->attend->methodOrder[85] = 'edit';
-
-    /* Holiday */
-    //$lang->resource->holiday = new stdclass();
-    //$lang->resource->holiday->create = 'createAction';
-    //$lang->resource->holiday->edit   = 'editAction';
-    //$lang->resource->holiday->delete = 'deleteAction';
-
-    //$lang->resource->holiday->browse = 'browse';
-
-    //$lang->holiday->methodOrder[0]  = 'browse';
-    //$lang->holiday->methodOrder[5]  = 'create';
-    //$lang->holiday->methodOrder[10] = 'edit';
-    //$lang->holiday->methodOrder[15] = 'delete';
-
-    /* Leave */
-    $lang->resource->leave = new stdclass();
-    $lang->resource->leave->browseReview   = 'browseReview';
-    $lang->resource->leave->company        = 'companyAction';
-    $lang->resource->leave->review         = 'reviewAction';
-    $lang->resource->leave->export         = 'exportAction';
-    $lang->resource->leave->setReviewer    = 'setReviewerAction';
-    $lang->resource->leave->personalAnnual = 'personalAnnual';
-
-    $lang->resource->leave->personal     = 'personal';
-    $lang->resource->leave->create       = 'createAction';
-    $lang->resource->leave->edit         = 'editAction';
-    $lang->resource->leave->delete       = 'deleteAction';
-    $lang->resource->leave->view         = 'viewAction';
-    $lang->resource->leave->switchstatus = 'switchstatus';
-    $lang->resource->leave->back         = 'backAction';
-
-    $lang->leave->methodOrder[0]  = 'browseReview';
-    $lang->leave->methodOrder[5]  = 'company';
-    $lang->leave->methodOrder[10] = 'review';
-    $lang->leave->methodOrder[15] = 'export';
-    $lang->leave->methodOrder[20] = 'setReviewer';
-    $lang->leave->methodOrder[25] = 'personalAnnual';
-
-    $lang->leave->methodOrder[30] = 'personal';
-    $lang->leave->methodOrder[35] = 'create';
-    $lang->leave->methodOrder[40] = 'edit';
-    $lang->leave->methodOrder[45] = 'delete';
-    $lang->leave->methodOrder[50] = 'view';
-    $lang->leave->methodOrder[55] = 'switchstatus';
-    $lang->leave->methodOrder[60] = 'back';
-
-    /* Makeup */
-    $lang->resource->makeup = new stdclass();
-    $lang->resource->makeup->browseReview = 'browseReview';
-    $lang->resource->makeup->company      = 'companyAction';
-    $lang->resource->makeup->review       = 'reviewAction';
-    $lang->resource->makeup->export       = 'exportAction';
-    $lang->resource->makeup->setReviewer  = 'setReviewerAction';
-
-    $lang->resource->makeup->personal     = 'personal';
-    $lang->resource->makeup->create       = 'createAction';
-    $lang->resource->makeup->edit         = 'editAction';
-    $lang->resource->makeup->view         = 'viewAction';
-    $lang->resource->makeup->delete       = 'deleteAction';
-    $lang->resource->makeup->switchstatus = 'switchstatus';
-
-    $lang->makeup->methodOrder[0]  = 'browseReview';
-    $lang->makeup->methodOrder[5]  = 'company';
-    $lang->makeup->methodOrder[10] = 'review';
-    $lang->makeup->methodOrder[15] = 'export';
-    $lang->makeup->methodOrder[20] = 'setReviewer';
-
-    $lang->makeup->methodOrder[25]  = 'personal';
-    $lang->makeup->methodOrder[30]  = 'create';
-    $lang->makeup->methodOrder[35] = 'edit';
-    $lang->makeup->methodOrder[40] = 'view';
-    $lang->makeup->methodOrder[45] = 'delete';
-    $lang->makeup->methodOrder[50] = 'switchstatus';
-
-    /* Overtime */
-    $lang->resource->overtime = new stdclass();
-    $lang->resource->overtime->browseReview = 'browseReview';
-    $lang->resource->overtime->company      = 'companyAction';
-    $lang->resource->overtime->review       = 'reviewAction';
-    $lang->resource->overtime->export       = 'exportAction';
-    $lang->resource->overtime->setReviewer  = 'setReviewerAction';
-
-    $lang->resource->overtime->personal     = 'personal';
-    $lang->resource->overtime->create       = 'createAction';
-    $lang->resource->overtime->edit         = 'editAction';
-    $lang->resource->overtime->view         = 'viewAction';
-    $lang->resource->overtime->delete       = 'deleteAction';
-    $lang->resource->overtime->switchstatus = 'switchstatus';
-
-    $lang->overtime->methodOrder[0]  = 'browseReview';
-    $lang->overtime->methodOrder[5]  = 'company';
-    $lang->overtime->methodOrder[10] = 'review';
-    $lang->overtime->methodOrder[15] = 'export';
-    $lang->overtime->methodOrder[20] = 'setReviewer';
-
-    $lang->overtime->methodOrder[25]  = 'personal';
-    $lang->overtime->methodOrder[30]  = 'create';
-    $lang->overtime->methodOrder[35] = 'edit';
-    $lang->overtime->methodOrder[40] = 'view';
-    $lang->overtime->methodOrder[45] = 'delete';
-    $lang->overtime->methodOrder[50] = 'switchstatus';
-
-    /* Lieu */
-    $lang->resource->lieu = new stdclass();
-    $lang->resource->lieu->company      = 'companyAction';
-    $lang->resource->lieu->browseReview = 'browseReviewAction';
-    $lang->resource->lieu->review       = 'reviewAction';
-    $lang->resource->lieu->setReviewer  = 'setReviewerAction';
-
-    $lang->resource->lieu->personal     = 'personal';
-    $lang->resource->lieu->create       = 'createAction';
-    $lang->resource->lieu->edit         = 'editAction';
-    $lang->resource->lieu->delete       = 'deleteAction';
-    $lang->resource->lieu->view         = 'viewAction';
-    $lang->resource->lieu->switchstatus = 'switchstatus';
-
-    $lang->lieu->methodOrder[0]  = 'company';
-    $lang->lieu->methodOrder[5]  = 'browseReview';
-    $lang->lieu->methodOrder[10] = 'review';
-    $lang->lieu->methodOrder[15] = 'setReviewer';
-
-    $lang->lieu->methodOrder[20]  = 'personal';
-    $lang->lieu->methodOrder[25]  = 'create';
-    $lang->lieu->methodOrder[30] = 'edit';
-    $lang->lieu->methodOrder[35] = 'delete';
-    $lang->lieu->methodOrder[40] = 'view';
-    $lang->lieu->methodOrder[45] = 'switchstatus';
-
     /* Ops */
     $lang->resource->tree->editHost = 'editHost';
     $lang->resource->tree->browsehost = 'groupMaintenance';
@@ -1232,7 +1070,7 @@ if($config->edition != 'open')
     $lang->resource->doc->custom2export    = 'custom2export';
     $lang->resource->doc->execution2export = 'execution2export';
 
-    $lang->resource->my->review = 'review';
+    if(helper::hasFeature('OA')) $lang->resource->my->review = 'review';
 
     /* workflow */
     $lang->resource->workflow = new stdclass();
@@ -1443,14 +1281,3 @@ if($config->edition != 'open')
     $lang->resource->workflowaction->setJS  = 'setJSAction';
     $lang->resource->workflowaction->setCSS = 'setCSSAction';
 }
-
-if(!helper::hasFeature('OA'))
-{
-    unset($lang->resource->attend);
-    unset($lang->resource->leave);
-    unset($lang->resource->makeup);
-    unset($lang->resource->overtime);
-    unset($lang->resource->lieu);
-}
-
-// include (dirname(__FILE__) . '/changelog.php');

@@ -1518,6 +1518,21 @@ class testcaseModel extends model
             if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
             if(in_array($objectType, array('sprint', 'stage')) && $object->multiple) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
+
+        $projectDeliverables = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->in($projects)
+            ->andWhere('t2.category')->in($case->stage)
+            ->fetchPairs('id');
+        if(!empty($projectDeliverables))
+        {
+            $this->dao->update(TABLE_PROJECTDELIVERABLE)
+                ->set('submittedBy')->eq($this->app->user->account)
+                ->set('submittedDate')->eq(helper::now())
+                ->where('id')->in($projectDeliverables)
+                ->exec();
+        }
+
         return !dao::isError();
     }
 

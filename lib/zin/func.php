@@ -168,12 +168,14 @@ function imgCutter(): imgCutter {return createWg('imgCutter', func_get_args());}
 function modalNextStep(): modalNextStep {return createWg('modalNextStep', func_get_args());}
 function navigator(): navigator {return createWg('navigator', func_get_args());}
 function gantt(): gantt {return createWg('gantt', func_get_args());}
+function versiondiff(): versiondiff {return createWg('versiondiff', func_get_args());}
 function roadMap(): roadMap {return createWg('roadmap', func_get_args());}
 function progressBar(): progressBar {return createWg('progressBar', func_get_args());}
 function progressCircle(): progressCircle {return createWg('progressCircle', func_get_args());}
 function filter(): filter {return createWg('filter', func_get_args());}
 function resultFilter(): resultFilter {return createWg('resultFilter', func_get_args());}
 function contactList(): contactList {return createWg('contactList', func_get_args());}
+function userSelector(): userSelector {return createWg('userSelector', func_get_args());}
 function userPicker(): userPicker {return createWg('userPicker', func_get_args());}
 function mailto(): mailto {return createWg('mailto', func_get_args());}
 function whitelist(): whitelist {return createWg('whitelist', func_get_args());}
@@ -253,6 +255,8 @@ function taskAssignedTo(): taskAssignedTo {return createWg('taskAssignedTo', fun
 function docList(): docList {return createWg('docList', func_get_args());}
 function deliverable(): deliverable {return createWg('deliverable', func_get_args());}
 function menuViewSwitcher(): menuViewSwitcher {return createWg('menuViewSwitcher', func_get_args());}
+function workflowfield(): workflowfield {return createWg('workflowfield', func_get_args());}
+function markdown(): markdown {return createWg('markdown', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {

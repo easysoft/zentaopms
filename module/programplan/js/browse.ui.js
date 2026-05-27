@@ -21,4 +21,4 @@ window.insertToDoc = function(blockID, insertLink)
             window.insertZentaoList && window.insertZentaoList(blockType, newBlockID, null, oldBlockID);
         }
     });
-}
+};

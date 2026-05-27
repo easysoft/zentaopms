@@ -246,7 +246,7 @@ class ai extends control
         $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
         $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} $prompt->name";
+        $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
         $this->view->fieldConfig = $this->ai->getPromptFields($id);
 
         $this->display();
@@ -566,6 +566,8 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptByID($promptId);
         if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+
+        if(!$this->loadModel('zai')->canViewObject($prompt->module, $objectId)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->error->accessDenied)));
 
         $object = $this->ai->getObjectForPromptById($prompt, $objectId);
         if(empty($object)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noObjectData'])));

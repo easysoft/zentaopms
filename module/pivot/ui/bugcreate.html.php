@@ -68,7 +68,8 @@ $generateData = function() use ($lang, $title, $cols, $data, $bugs, $products, $
                 set::cols($cols),
                 set::data($bugs),
                 set::emptyTip($lang->error->noData),
-                set::height(jsRaw('getHeight'))
+                set::height(jsRaw('getHeight')),
+                set::plugins(array('selectable'))
             ),
             div
             (

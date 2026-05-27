@@ -103,6 +103,23 @@ class transferModel extends model
         /* 生成该模块的导出数据。 */
         /* Generate export datas. */
         $rows = $this->getRows($module, $fieldList);
+
+        /* Process duplicate bug value. */
+        if($module == 'bug' && in_array('duplicateBug', $fields))
+        {
+            $duplicateIdList = array_unique(array_filter(array_column($rows, 'duplicateBug')));
+            $duplicateBugs   = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateBug = !empty($duplicateBugs[$row->duplicateBug]) ? '#' . $row->duplicateBug . ' ' . $duplicateBugs[$row->duplicateBug] : '';
+        }
+
+        /* Process duplicate story value. */
+        if(in_array($module, array('story', 'requirement', 'epic')) && in_array('duplicateStory', $fields))
+        {
+            $duplicateIdList  = array_unique(array_filter(array_column($rows, 'duplicateStory')));
+            $duplicateStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateStory = !empty($duplicateStories[$row->duplicateStory]) ? '#' . $row->duplicateStory . ' ' . $duplicateStories[$row->duplicateStory] : '';
+        }
+
         if($module == 'story')
         {
             $parentList  = array_unique(array_filter(array_column($rows, 'parent')));
@@ -237,7 +254,7 @@ class transferModel extends model
         if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
 
         $notEmptyRule   = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $groupID);
+        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $action->group);
         foreach($workflowFields as $field)
         {
             if(empty($fieldList[$field->field])) continue;
@@ -394,12 +411,11 @@ class transferModel extends model
     public function initRequired(string $module, string $field)
     {
         if(!$field) return false;
-        $this->commonActions($module);
 
         /* 检查必填字段中是否存在该字段，如果存在返回yes，否则返回no。 */
         /* Check whether the required field contains the field. If yes, return true. Otherwise, return false. */
-        if(empty($this->moduleConfig->create->requiredFields)) return false;
-        $requiredFields = "," . $this->moduleConfig->create->requiredFields . ",";
+        if(empty($this->config->{$module}->create->requiredFields)) return false;
+        $requiredFields = "," . $this->config->{$module}->create->requiredFields . ",";
         if(strpos($requiredFields, $field) !== false) return true;
 
         return false;
@@ -722,7 +738,9 @@ class transferModel extends model
             preg_match_all('/[`"]' . $this->config->db->prefix . $module .'[`"] AS ([\w]+) /', $queryCondition, $matches);
             if(isset($matches[1][0])) $selectKey = "{$matches[1][0]}.id";
 
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND $selectKey IN(" . ($checkedItem ? $checkedItem : '0') . ")" : '') . ($orderBy ? " ORDER BY $orderBy" : ''));
+            $checkedItem = $checkedItem ? $checkedItem : '0';
+            if(strpos($queryCondition, 'GROUP BY') === false) $queryCondition .= ($this->post->exportType == 'selected' ? " AND $selectKey IN($checkedItem)" : '');
+            $stmt = $this->dbh->query($queryCondition . ($orderBy ? " ORDER BY $orderBy" : ''));
             while($row = $stmt->fetch())
             {
                 if($selectKey !== 't1.id' and isset($row->$module) and isset($row->id)) $row->id = $row->$module;

@@ -64,7 +64,7 @@ class bug extends control
         {
             $tab      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? $this->app->tab : 'qa';
             $mode     = (strpos(',create,edit,', ",{$this->app->methodName},") !== false and empty($this->config->CRProduct)) ? 'noclosed' : '';
-            $objectID = ($tab == 'project' or $tab == 'execution') ? $this->session->{$tab} : 0;
+            $objectID = ($tab == 'project' or $tab == 'execution') ? (int)$this->session->{$tab} : 0;
             if($tab == 'project' or $tab == 'execution')
             {
                 if(common::isTutorialMode())
@@ -73,7 +73,7 @@ class bug extends control
                 }
                 else
                 {
-                    $products = $this->product->getProducts($objectID, $mode, '', false);
+                    $products = $this->product->getProducts((int)$objectID, $mode, '', false);
                 }
             }
             else
@@ -694,10 +694,14 @@ class bug extends control
                 /* In execution, set data source. */
                 if($executionID)
                 {
-                    $object    = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
-                    $projectID = $object->type == 'project' ? $object->id : $object->parent;
+                    $object    = $this->loadModel('execution')->fetchByID($executionID);
+                    $projectID = $object->type == 'project' ? $object->id : $object->project;
+
                     $this->config->bug->dtable->fieldList['project']['dataSource']   = array('module' => 'project', 'method' => 'getPairsByIdList', 'params' => array('projectIdList' => array($projectID)));
                     $this->config->bug->dtable->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs', 'params' => $projectID);
+                    $this->config->bug->dtable->fieldList['story']['dataSource']     = array('module' => 'story', 'method' => 'getExecutionStoryPairs', 'params' => $projectID);
+
+                    $this->config->bug->dtable->fieldList['module']['dataSource']['params'] = array('type' => 'bug', 'rootIdList' => $productIdList);
                 }
             }
             $this->config->bug->dtable->fieldList['assignedTo']['dataSource'] = array('module' => 'user', 'method' => 'getPairs', 'params' => array());
@@ -1563,11 +1567,12 @@ class bug extends control
      *
      * @param  int     $productID
      * @param  int     $bugID
-     * @param  string  $type
+     * @param  string  $search
+     * @param  int     $duplicateBug
      * @access public
      * @return int
      */
-    public function ajaxGetProductBugs(int $productID, int $bugID, string $search = '', string $type = 'html')
+    public function ajaxGetProductBugs(int $productID, int $bugID, string $search = '', int $duplicateBug = 0)
     {
         /* 获取除了这个 bugID 的产品 bugs。 */
         /* Get product bugs exclude this bugID. */
@@ -1575,7 +1580,14 @@ class bug extends control
         $productBugs = $this->bug->getProductBugPairs($productID, '', $search, $limit, $productID ? 'single' : 'all');
 
         unset($productBugs[$bugID]);
-        if($type == 'json') return print(helper::jsonEncode($productBugs));
+
+        /* 编辑页已选的重复 bug 需出现在下拉中。 */
+        /* Ensure the selected duplicate bug is present for the edit page picker. */
+        if($duplicateBug && empty($productBugs[$duplicateBug]))
+        {
+            $duplicateInfo = $this->bug->fetchByID($duplicateBug);
+            if($duplicateInfo) $productBugs[$duplicateBug] = $duplicateInfo->id . ':' . $duplicateInfo->title;
+        }
 
         $bugList = array();
         foreach($productBugs as $bugID => $bugName) $bugList[] = array('value' => $bugID, 'text' => $bugName);

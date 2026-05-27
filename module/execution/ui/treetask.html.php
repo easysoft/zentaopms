@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-
+$lang->task->statusList['changed'] = $lang->task->storyChange;
 div
 (
     setClass('section-list', 'canvas', 'pt-4', 'pb-6', 'px-4', 'mb-4'),

@@ -55,7 +55,7 @@ class settingModel extends model
         if(empty($item)) return false;
 
         $item->value = strval($value);
-        if($item->module == 'feedback') $item->vision = '';
+        if(in_array($item->module, array('feedback', 'ticket'))) $item->vision = '';
 
         /* 升级的时候，检查 vision 字段是否存在，不存在的话，unset。 */
         if(!empty($this->app->upgrading))
@@ -272,9 +272,6 @@ class settingModel extends model
             if(!isset($config[$record->owner])) $config[$record->owner] = new stdclass();
             if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
             if(empty($record->module)) continue;
-
-            /* If it`s lite vision unset config requiredFields */
-            if($vision == 'lite' and $record->key == 'requiredFields' and $record->vision == '') continue;
 
             $config[$record->owner]->{$record->module}[] = $record;
         }

@@ -1165,17 +1165,8 @@ class bugZen extends bug
 
         $this->assignVarsForEdit($bug, $product);
 
-        $duplicateBugs = $this->bug->getProductBugPairs(0, $bug->branch, '', 0, 'all');
-        if(!empty($bug->duplicateBug))
-        {
-            $duplicateBug = $this->bug->fetchByID($bug->duplicateBug);
-            $duplicateBugs[$bug->duplicateBug] = $this->lang->productCommon . '#' . $duplicateBug->product . '@'. $duplicateBug->id . ':' . $duplicateBug->title;
-        }
-        unset($duplicateBugs[$bug->id]);
-
         $this->view->title                 = $this->lang->bug->edit . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
         $this->view->bug                   = $bug;
-        $this->view->duplicateBugs         = $duplicateBugs;
         $this->view->product               = $product;
         $this->view->moduleOptionMenu      = $moduleOptionMenu;
         $this->view->projectID             = $bug->project;
@@ -2254,7 +2245,12 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
+        /* bug #72539，删除BUG之前访问了回收站的BUG列表则跳转到产品BUG列表： */
+        /* bug #72539, if the user accesses the bug list of the trash can before deleting the bug, jump to the product bug list: */
+        $sessionBugList = $this->session->bugList;
+        if($sessionBugList && (strpos($sessionBugList, 'action-trash') !== false || strpos($sessionBugList, $this->config->moduleVar . '=action&' . $this->config->methodVar . '=trash') !== false)) $sessionBugList = '';
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $sessionBugList ? $sessionBugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
     }
 
     /**

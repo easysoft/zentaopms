@@ -177,6 +177,24 @@ class webhookModel extends model
     }
 
     /**
+     * 获取飞书绑定用户。
+     * Get feishu bound open id.
+     *
+     * @param  string $assignedTo
+     * @access public
+     * @return string
+     */
+    public function getFeishuBoundOpenId(string $assignedTo): string
+    {
+        return $this->dao->select('t1.openID')->from(TABLE_OAUTH)->alias('t1')
+            ->leftJoin(TABLE_WEBHOOK)->alias('t2')->on('t1.providerID = t2.id')
+            ->where('t1.account')->eq($assignedTo)
+            ->andWhere('t1.providerType')->eq('webhook')
+            ->andWhere('t2.type')->eq('feishuuser')
+            ->fetch('openID');
+    }
+
+    /**
      * 创建webhook。
      * Create a webhook.
      *
@@ -378,7 +396,7 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if(!$object) return false;
 
         $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
@@ -394,24 +412,25 @@ class webhookModel extends model
             $field          = $this->config->action->objectNameFields[$objectType];
             $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
             $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
-            $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
             $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
         }
-        $action->text   = $text;
+        $action->text = $text;
 
-        $mobile = '';
-        $email  = '';
+        $mobile     = '';
+        $email      = '';
+        $assignedTo = '';
         if(in_array($objectType, $this->config->webhook->needAssignTypes) && !empty($object->assignedTo))
         {
-            $assignedTo = $this->loadModel('user')->getById($object->assignedTo);
-            if($assignedTo)
+            $assignedTo = $object->assignedTo;
+            $user       = $this->loadModel('user')->getById($object->assignedTo);
+            if($user)
             {
-                $mobile = $assignedTo->mobile;
-                $email  = $assignedTo->email;
+                $mobile = $user->mobile;
+                $email  = $user->email;
             }
         }
 
-        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID);
+        return $this->getDataByType($webhook, $action, $title, $text, $mobile, $email, $objectType, $objectID, $assignedTo);
     }
 
     /**
@@ -426,10 +445,11 @@ class webhookModel extends model
      * @param  string $email
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $assignedTo
      * @access public
      * @return string
      */
-    public function getDataByType(object $webhook, object $action, string $title, string $text, string $mobile, string $email, string $objectType, int $objectID): string
+    public function getDataByType(object $webhook, object $action, string $title, string $text, string $mobile, string $email, string $objectType, int $objectID, string $assignedTo = ''): string
     {
         if($webhook->type == 'dinggroup' or $webhook->type == 'dinguser')
         {
@@ -445,7 +465,13 @@ class webhookModel extends model
         }
         elseif($webhook->type == 'feishuuser' or $webhook->type == 'feishugroup')
         {
-            $data = $this->getFeishuData($title, $text);
+            $atMarkdown = '';
+            if($webhook->type == 'feishugroup' && $assignedTo && $assignedTo != 'closed' && in_array($objectType, $this->config->webhook->needAssignTypes))
+            {
+                $openId = $this->getFeishuBoundOpenId($assignedTo);
+                if($openId) $atMarkdown .= '<at id=' . $openId . '></at>';
+            }
+            $data = $this->getFeishuData($title, $text, $atMarkdown);
         }
         else
         {
@@ -615,10 +641,11 @@ class webhookModel extends model
      *
      * @param  string $title
      * @param  string $text
+     * @param  string $atMarkdown
      * @access public
      * @return object
      */
-    public function getFeishuData(string $title, string $text): object
+    public function getFeishuData(string $title, string $text, string $atMarkdown = ''): object
     {
         $data = new stdclass();
         $data->msg_type = 'interactive';
@@ -626,6 +653,8 @@ class webhookModel extends model
         $data->card = array();
         $data->card['header']   = array();
         $data->card['elements'] = array();
+
+        if($atMarkdown) $text .= "\n" . $atMarkdown;
 
         $data->card['elements'][]         = array('tag' => 'markdown', 'content' => $text);
         $data->card['header']['title']    = array('tag' => 'plain_text', 'content' => (string)$title);

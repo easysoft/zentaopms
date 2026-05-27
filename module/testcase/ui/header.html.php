@@ -92,7 +92,7 @@ if($canDisplaySuite)
     /* Process variables of sutie menu. */
     $currentSuiteID   = isset($suiteID) ? (int)$suiteID : 0;
     $currentSuite     = zget($suiteList, $currentSuiteID, '');
-    $currentSuiteName = empty($currentSuite) ? $lang->testsuite->common : $currentSuite->name;
+    $currentSuiteName = empty($currentSuite) ? $lang->testtask->browseBySuite : $currentSuite->name;
     $suiteItems       = array();
     if(empty($suiteList))
     {

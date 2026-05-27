@@ -36,12 +36,13 @@ class holidayModel extends model
      */
     public function getList(string $year = '', string $type = 'all'): array
     {
+        $nextYear = (int)$year + 1;
         return $this->dao->select('*')->from(TABLE_HOLIDAY)
             ->where('1=1')
             ->beginIf(!empty($year))
             ->andWhere('year', true)->eq($year)
-            ->orWhere("DATE_FORMAT(`begin`, 'YYYY')")->eq($year)
-            ->orWhere("DATE_FORMAT(`end`, 'YYYY')")->eq($year)
+            ->orWhere("(`begin` >= '{$year}-01-01' AND `begin` < '{$nextYear}-01-01')")
+            ->orWhere("(`end` >= '{$year}-01-01' AND `end` < '{$nextYear}-01-01')")
             ->markright(1)
             ->fi()
             ->beginIf($type != 'all' && $type)->andWhere('type')->eq($type)->fi()
@@ -165,23 +166,22 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-     public function getWorkingDays(string $begin = '', string $end = ''): array
-     {
-         $records = $this->dao->select('*')->from(TABLE_HOLIDAY)
-             ->where('type')->eq('working')
-             ->andWhere('begin')->le($end)
-             ->andWhere('end')->ge($begin)
-             ->fetchAll('id');
+    public function getWorkingDays(string $begin = '', string $end = ''): array
+    {
+        $records = $this->dao->select('*')->from(TABLE_HOLIDAY)->where('type')->eq('working')
+            ->beginIF($end)->andWhere('begin')->le($end)->fi()
+            ->beginIF($begin)->andWhere('end')->ge($begin)->fi()
+            ->fetchAll('id');
 
-         $workingDays = array();
-         foreach($records as $record)
-         {
-             $dates       = $this->getDaysBetween($record->begin, $record->end);
-             $workingDays = array_merge($workingDays, $dates);
-         }
+        $workingDays = array();
+        foreach($records as $record)
+        {
+            $dates       = $this->getDaysBetween($record->begin, $record->end);
+            $workingDays = array_merge($workingDays, $dates);
+        }
 
-         return $workingDays;
-     }
+        return $workingDays;
+    }
 
     /**
      * 获取实际工作日。
@@ -192,48 +192,50 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-     public function getActualWorkingDays(string $begin, string $end): array
-     {
-         if(empty($begin) || empty($end) || $begin == '0000-00-00' || $end == '0000-00-00') return array();
+    public function getActualWorkingDays(string $begin, string $end): array
+    {
+        if(empty($begin) || empty($end) || $begin == '0000-00-00' || $end == '0000-00-00') return array();
 
-         /* Get holidays, working days and weekend days .*/
-         $holidays    = $this->getHolidays($begin, $end);
-         $workingDays = $this->getWorkingDays($begin, $end);
-         $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
+        /* Get holidays, working days and weekend days .*/
+        $holidays    = $this->getHolidays($begin, $end);
+        $workingDays = $this->getWorkingDays($begin, $end);
+        $weekend     = isset($this->config->execution->weekend) ? $this->config->execution->weekend : 2;
 
-         /* When the start date and end date are the same. */
-         $actualDays = array();
-         if($begin == $end)
-         {
-             if(in_array($begin, $workingDays)) return array($begin);
-             if(in_array($begin, $holidays))    return array();
+        /* When the start date and end date are the same. */
+        $beginTime  = strtotime($begin);
+        $actualDays = array();
+        if($begin == $end)
+        {
+            if(in_array($begin, $workingDays)) return array($begin);
+            if(in_array($begin, $holidays))    return array();
 
-             $w = date('w', strtotime($begin));
-             if($w == 0 || ($weekend == 2 && $w == 6)) return array();
+            $week = date('w', $beginTime);
+            if($week == 0 || ($weekend == 2 && $week == 6)) return array();
 
-             return array($begin);
-         }
+            return array($begin);
+        }
 
-         /* Process actual working days. */
-         for($i = 0, $currentDay = $begin; $currentDay < $end; $i ++)
-         {
-             $currentDay = date('Y-m-d', strtotime("{$begin} + {$i} days"));
-             $w          = date('w', strtotime($currentDay));
+        /* Process actual working days. */
+        for($i = 0, $currentDay = $begin; $currentDay < $end; $i++)
+        {
+            $currentTime = $beginTime + $i * 86400;
+            $currentDay  = date('Y-m-d', $currentTime);
 
-             if(in_array($currentDay, $workingDays))
-             {
-                 $actualDays[] = $currentDay;
-                 continue;
-             }
+            if(in_array($currentDay, $workingDays))
+            {
+                $actualDays[] = $currentDay;
+                continue;
+            }
 
-             if(in_array($currentDay, $holidays)) continue;
-             if($w == 0 || ($weekend == 2 && $w == 6)) continue;
+            $week = date('w', $currentTime);
+            if(in_array($currentDay, $holidays)) continue;
+            if($week == 0 || ($weekend == 2 && $week == 6)) continue;
 
-             $actualDays[] = $currentDay;
-         }
+            $actualDays[] = $currentDay;
+        }
 
-         return $actualDays;
-     }
+        return $actualDays;
+    }
 
     /**
      * 获取开始和结束日期间的日期。
@@ -244,19 +246,23 @@ class holidayModel extends model
      * @access public
      * @return array
      */
-     public function getDaysBetween(string $begin, string $end): array
-     {
-         $beginTime = strtotime($begin);
-         $endTime   = strtotime($end);
-         $days      = ($endTime - $beginTime) / 86400;
+    public function getDaysBetween(string $begin, string $end): array
+    {
+        $beginTime = strtotime($begin);
+        $endTime   = strtotime($end);
+        $days      = ($endTime - $beginTime) / 86400;
 
-         if(!$beginTime) return array();
+        if(!$beginTime) return array();
 
-         $dateList  = array();
-         for($i = 0; $i <= $days; $i ++) $dateList[] = date('Y-m-d', strtotime("+{$i} days", $beginTime));
+        $dateList = array();
+        for($i = 0, $currentTime = $beginTime; $i <= $days; $i ++)
+        {
+            $dateList[]   = date('Y-m-d', $currentTime);
+            $currentTime += 86400;
+        }
 
-         return $dateList;
-     }
+        return $dateList;
+    }
 
     /**
      * 判断一天是否是节假日。
@@ -450,6 +456,7 @@ class holidayModel extends model
                 $holiday = new stdClass();
                 $holiday->type  = $day->isOffDay ? 'holiday' : 'working';
                 $holiday->name  = $day->name . zget($this->lang->holiday->typeList, $holiday->type);
+                $holiday->year  = substr($day->date, 0, 4);
                 $holiday->begin = $day->date;
                 $holiday->end   = '';
                 $holidays[] = $holiday;

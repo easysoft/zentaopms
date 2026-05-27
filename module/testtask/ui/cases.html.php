@@ -60,14 +60,20 @@ else
 featureBar
 (
     set::linkParams("taskID={$task->id}&browseType={key}&param=0"),
-    helper::hasFeature('testsuite') ? dropdown
+    helper::hasFeature('testsuite') ? li
     (
-        btn
+        set::className('nav-item'),
+        dropdown
         (
-            setClass('ghost'),
-            $suiteName
-        ),
-        set::items($suiteItems)
+            a
+            (
+                setClass('ghost' . ($browseType == 'bysuite' ? ' active' : '')),
+                $suiteName,
+                $browseType == 'bysuite' && $pager->recTotal != '' ? span(setClass('label size-sm rounded-full white'), $pager->recTotal) : null,
+                span(setClass('caret'))
+            ),
+            set::items($suiteItems)
+        )
     ) : null,
     li(searchToggle(set::open($browseType == 'bysearch')))
 );

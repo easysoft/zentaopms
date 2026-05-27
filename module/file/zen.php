@@ -135,7 +135,8 @@ class fileZen extends file
         }
         else
         {
-            $extension = strpos($fileName, '.') !== false ? end(explode('.', $fileName)) : $file->extension;
+            $fileParts = explode('.', $fileName);
+            $extension = strpos($fileName, '.') !== false ? end($fileParts) : $file->extension;
         }
 
         $this->dao->update(TABLE_FILE)

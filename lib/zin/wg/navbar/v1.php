@@ -21,6 +21,7 @@ class navbar extends wg
         #navbar .nav li.nav-divider.divider {border: none; width: 1px; background: currentColor; margin: 0; padding-left: var(--nav-divider-margin); padding-right: var(--nav-divider-margin); box-sizing: content-box; background-clip: content-box;}
 
         #navbarHeading {position: absolute; top: 0; left: 1rem; bottom: 0; display: flex; align-items: center; justify-content: center;}
+        #navbar .nav-item.is-rsh-fixed.order-last {order: 10000}
         @media (min-width: 1400px) {#navbarHeading{left: 0}}
         CSS;
     }
@@ -203,13 +204,14 @@ class navbar extends wg
         }
 
         return array(
-            'type'    => 'dropdown',
-            'items'   => $dropItems,
-            'text'    => $lang->more,
-            'trigger' => 'hover',
-            'id'      => 'navbarMoreMenu',
-            'data-id' => 'more',
-            'menu'    => array('style' => array('max-width' => '300px'))
+            'type'       => 'dropdown',
+            'items'      => $dropItems,
+            'text'       => $lang->more,
+            'trigger'    => 'hover',
+            'id'         => 'navbarMoreMenu',
+            'data-id'    => 'more',
+            'outerClass' => 'is-rsh-fixed order-last',
+            'menu'       => array('style' => array('max-width' => '300px'))
         );
     }
 
@@ -270,7 +272,7 @@ class navbar extends wg
         if($app->tab == 'admin')
         {
             $groupID = data('groupID') ? data('groupID') : 0;
-            $app->control->loadModel('admin')->setMenu($groupID);
+            $app->control->loadModel('admin')->setMenu((int)$groupID);
             $adminMenuKey = $app->control->loadModel('admin')->getMenuKey();
         }
 
@@ -456,7 +458,7 @@ class navbar extends wg
             if(isset($newItem['data-id']))
             {
                 $newItem['zui-key'] = $newItem['data-id'];
-                if($newItem['data-id'] === 'settings' && strpos(',execution,project,product,', ",{$app->tab},") !== false) $newItem['outerClass'] = 'is-rsh-fixed';
+                if($newItem['data-id'] === 'settings' && strpos(',execution,project,product,', ",{$app->tab},") !== false) $newItem['outerClass'] = 'item is-rsh-fixed';
             }
 
             $showInMainMenu = isset($menuItem->showInMainMenu) ? $menuItem->showInMainMenu : false;

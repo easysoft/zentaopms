@@ -16,7 +16,7 @@ foreach($lang->dev->featureBar['api'] as $key => $label)
     $featureBarItems[] = array
     (
         'text'   => $label,
-        'active' => ($selectedModule == $key || ($key == 'index' and $selectedModule != 'restapi')),
+        'active' => $selectedModule == $key,
         'url'    => inlink('api', "module=$key")
     );
 }

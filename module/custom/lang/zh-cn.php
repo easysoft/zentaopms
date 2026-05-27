@@ -309,7 +309,6 @@ $lang->custom->features['doc']                  = '文档';
 $lang->custom->features['report']               = 'BI';
 $lang->custom->features['system']               = '组织';
 $lang->custom->features['assetlib']             = '资产库';
-$lang->custom->features['oa']                   = '办公';
 $lang->custom->features['ops']                  = '运维';
 $lang->custom->features['feedback']             = '反馈';
 $lang->custom->features['traincourse']          = '学堂';

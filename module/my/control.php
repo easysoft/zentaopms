@@ -566,7 +566,7 @@ class my extends control
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
             if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
-            if(empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
+            if(!empty($task->execution) && empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
         }
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -951,6 +951,7 @@ class my extends control
         $this->loadModel('epic');
         $this->loadModel('requirement');
         $this->session->set('storyList', $this->app->getURI(true), 'my');
+        $this->session->set('reviewList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
 
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);

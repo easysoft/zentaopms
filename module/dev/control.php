@@ -20,9 +20,9 @@ class dev extends control
      * @access public
      * @return void
      */
-    public function api($module = 'restapi', $apiID = 1)
+    public function api($module = 'v2', $apiID = 1)
     {
-        if($module == 'restapi') return print($this->fetch('dev', 'restAPI', "apiID=$apiID"));
+        if(in_array($module, ['v1', 'v2'])) return print($this->fetch('dev', 'restAPI', "version=$module&apiID=$apiID"));
 
         $this->view->title          = $this->lang->dev->api;
 
@@ -36,17 +36,18 @@ class dev extends control
     /**
      * Get rest api list.
      *
+     * @param  string $version
      * @param  int    $apiID
      * @access public
      * @return void
      */
-    public function restAPI($apiID = 1)
+    public function restAPI($version = 'v2', $apiID = 1)
     {
-        list($api, $typeList, $menu) = $this->dev->getAPIData($apiID);
-        if($api) $api->desc = htmlspecialchars_decode($api->desc);
+        list($api, $typeList, $menu) = $this->dev->getAPIData($apiID, $version);
+        if($api) $api->desc = htmlspecialchars_decode($api->desc ?? '');
 
         $this->view->title          = $this->lang->dev->api;
-        $this->view->selectedModule = 'restapi';
+        $this->view->selectedModule = $version;
         $this->view->moduleTree     = $menu;
         $this->view->typeList       = $typeList;
         $this->view->api            = $api;

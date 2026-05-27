@@ -934,8 +934,9 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
         if(empty($account) and isset($_COOKIE['za']))    $account = $_COOKIE['za'];
 
-        $vision = '';
-        if($this->config->installed and validater::checkAccount($account) and !$this->upgrading)
+        $vision    = '';
+        $installed = $this->config->installed ?? false;
+        if($installed && validater::checkAccount($account) && !$this->upgrading)
         {
             if(!empty($_COOKIE['vision']))
             {
@@ -1204,7 +1205,7 @@ class baseRouter
         if(defined('SESSION_STARTED')) return;
 
         /* API session use tmp/apisession directory. */
-        $apiMode = $this->apiVersion || isset($_GET[$this->config->sessionVar]);
+        $apiMode = $this->apiVersion && !isset($_GET[$this->config->sessionVar]);
 
         if(ini_get('session.save_handler') == 'files' || $apiMode)
         {

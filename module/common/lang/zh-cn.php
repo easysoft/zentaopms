@@ -28,6 +28,7 @@ $lang->dash      = '-';
 $lang->slash     = '/';
 $lang->and       = '和';
 $lang->to        = '至';
+$lang->minus     = ' - ';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -125,6 +126,8 @@ $lang->fail            = '失败';
 $lang->addFiles        = '上传了附件 ';
 $lang->delFiles        = '删除了附件 ';
 $lang->deleteSuccess   = '删除成功';
+$lang->confirmDelete   = '您确定要执行删除操作吗？';
+$lang->deleteing       = '删除中';
 $lang->deleted         = '已删除';
 $lang->files           = '附件 ';
 $lang->pasteText       = '多项录入';
@@ -213,6 +216,14 @@ $lang->contactUs->phone  = '电话';
 $lang->contactUs->email  = '邮箱';
 $lang->contactUs->qq     = 'QQ';
 $lang->contactUs->wechat = '微信';
+
+$lang->userSelector = new stdClass();
+$lang->userSelector->title         = '选择用户';
+$lang->userSelector->deptTitle     = '按部门筛选';
+$lang->userSelector->userTitle     = '选择用户';
+$lang->userSelector->selectedTitle = '已选择';
+$lang->userSelector->allText       = '全部用户';
+$lang->userSelector->emptyText     = '暂无可选用户';
 
 $lang->common->common       = '公有模块';
 $lang->common->story        = '需求';
@@ -578,6 +589,7 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 $lang->error->loginTimeout    = '登录已超时，请重新登入!';
 $lang->error->httpServerError = '服务器错误';
+$lang->error->action          = '没有满足该操作的条件，无法执行该操作。';
 
 /* 分页信息。*/
 $lang->pager               = new stdclass();
@@ -690,5 +702,10 @@ $lang->aiapp->zentaoAgent  = '禅道智能体';
 $lang->aiapp->generalAgent = '通用智能体';
 $lang->aiapp->models       = '模型列表';
 $lang->aiapp->config       = 'ZAI配置';
+$lang->aiapp->toolkit      = '智能工具';
+
+if(!helper::hasFeature('program')) unset($lang->searchObjects['program'], $lang->createObjects['program']);
+if(!helper::hasFeature('caselib')) unset($lang->searchObjects['caselib']);
+if(!helper::hasFeature('kanban') ) unset($lang->createObjects['kanban'], $lang->createObjects['kanbanspace']);
 
 include(dirname(__FILE__) . '/menu.php');

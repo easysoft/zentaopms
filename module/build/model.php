@@ -554,10 +554,16 @@ class buildModel extends model
      */
     public function update(int $buildID, object $build): array|false
     {
-        $oldBuild = $this->fetchByID($buildID);
+        $oldBuild = $this->getByID($buildID);
         $product  = $this->loadModel('product')->getByID((int) $build->product);
         $branch   = $this->post->branch === false || ($product && $product->type) == 'normal' ? 0 : $oldBuild->branch;
         if(empty($oldBuild->execution)) $build = $this->processBuildForUpdate($build, $oldBuild);
+
+        if(strpos($this->config->build->edit->requiredFields, 'files') !== false && empty($_FILES['files']['name'][0]) && empty($oldBuild->files))
+        {
+            dao::$errors['files'] = sprintf($this->lang->error->notempty, $this->lang->build->files);
+            return false;
+        }
 
         $product = $this->loadModel('product')->getByID($build->product);
         if(!empty($product) && $product->type != 'normal' && !isset($_POST['branch']) && isset($_POST['product']))

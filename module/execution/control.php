@@ -1254,6 +1254,23 @@ class execution extends control
 
             if($formData->status == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
 
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $conflictExecutions = $this->execution->checkDateConflict(array($executionID));
+                if(!empty($conflictExecutions))
+                {
+                    $toAdjustLink = $cancelLink = inlink('view', "executionID=$executionID");
+                    if(isInModal())
+                    {
+                        $kanbanLoad   = array('selector' => '#main>*');
+                        $toAdjustLink = 'zui.Modal.hide(); ' . ($this->app->tab == 'execution' ? '' : ($execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage();'));
+                        $cancelLink   = 'zui.Modal.hide(); ' . ($execution->type == 'kanban' ? 'loadCurrentPage(' . json_encode($kanbanLoad) . ');' : 'loadCurrentPage();');
+                    }
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . $executionID);
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){{$toAdjustLink} openPage('$taskScheduleLink'); window.reload();} else {$cancelLink}});"));
+                }
+            }
+
             /* If link from no head then reload. */
             if(isInModal())
             {
@@ -1364,6 +1381,16 @@ class execution extends control
 
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
+                }
+            }
+
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $conflictExecutions = $this->execution->checkDateConflict($postData->id);
+                if(!empty($conflictExecutions))
+                {
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . current($conflictExecutions));
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){openPage('{$this->session->executionList}'); openPage('$taskScheduleLink')} else {openPage('{$this->session->executionList}')}});"));
                 }
             }
 
@@ -1654,6 +1681,18 @@ class execution extends control
 
             $this->executeHooks($executionID);
 
+            if(in_array($this->config->edition, array('max', 'ipd')))
+            {
+                $conflictExecutions = $this->execution->checkDateConflict(array($executionID));
+                if(!empty($conflictExecutions))
+                {
+                    $toAdjustLink     = 'zui.Modal.hide(); ' . ($from == 'kanban' ? "changeStatus('doing');" : '');
+                    $cancelLink       = 'zui.Modal.hide();'  . ($from == 'kanban' ? "changeStatus('doing');" : 'loadCurrentPage();');
+                    $taskScheduleLink = $this->createLink('task', 'autoSchedule', 'executionID=' . $executionID);
+                    $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$this->lang->execution->dateConflictTip}', 'actions': [{key: 'confirm', text: '{$this->lang->execution->toAdjust}', btnType: 'primary'}, {key: 'cancel', text: '{$this->lang->execution->know}'}]}).then((res) => {if(res){{$toAdjustLink} openPage('$taskScheduleLink'); window.reload();} else {$cancelLink}});"));
+                }
+            }
+
             $response['closeModal'] = true;
             $response['load']       = true;
             if($from == 'kanban') $response['callback'] = "changeStatus('doing')";
@@ -1665,7 +1704,7 @@ class execution extends control
         $newEnd   = date('Y-m-d', strtotime($execution->end) + $dateDiff * 24 * 3600);
 
         $this->view->title      = $this->view->execution->name . $this->lang->hyphen .$this->lang->execution->activate;
-        $this->view->execution    = $execution;
+        $this->view->execution  = $execution;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions    = $this->loadModel('action')->getList($this->objectType, $executionID);
         $this->view->newBegin   = $newBegin;
@@ -2182,6 +2221,7 @@ class execution extends control
         $this->view->productID    = $productID;
         $this->view->total        = count($stories);
         $this->view->product      = $this->product->getByID($productID);
+        $this->view->project      = $this->execution->fetchByID($execution->project);
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
 
         $this->display();
@@ -2480,10 +2520,13 @@ class execution extends control
 
         if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
-        $linkedStories = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $linkedStories    = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
+        $hasFrozenStories = $this->project->hasFrozenObject($project->id, 'SRS');
+        if($hasFrozenStories) $projectLinkedStories = $this->story->getExecutionStoryPairs($project->id, 0, 'all', 0, 'full', 'all', $storyType);
         foreach($allStories as $id => $story)
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
+            if($hasFrozenStories && !isset($projectLinkedStories[$id])) unset($allStories[$id]);
 
             if(!isset($modules[$story->module]))
             {
@@ -2602,7 +2645,7 @@ class execution extends control
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         $execution = $this->execution->getByID($executionID);
-        return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->execution->confirmBatchUnlinkStory, 'locate' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project'))));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project')));
     }
 
     /**

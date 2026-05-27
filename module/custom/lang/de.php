@@ -309,7 +309,6 @@ $lang->custom->features['doc']                  = 'Doc';
 $lang->custom->features['report']               = 'BI';
 $lang->custom->features['system']               = 'System';
 $lang->custom->features['assetlib']             = 'Asset Lib';
-$lang->custom->features['oa']                   = 'Attend';
 $lang->custom->features['ops']                  = 'Deploy';
 $lang->custom->features['feedback']             = 'Feedback';
 $lang->custom->features['traincourse']          = 'Academy';

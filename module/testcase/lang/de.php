@@ -200,11 +200,12 @@ $lang->testcase->legendOpenAndEdit = 'Erstellt/Bearbeitet';
 $lang->testcase->legendComment     = 'Bemerkung';
 $lang->testcase->legendOther       = 'Other Related';
 
-$lang->testcase->confirmDelete         = 'Möchten Sie diesen Testfall schließen?';
-$lang->testcase->confirmBatchDelete    = 'Möchten Sie diese Testfälle schließen?';
-$lang->testcase->ditto                 = 'Dito';
-$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
-$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
+$lang->testcase->confirmDelete           = 'Möchten Sie diesen Testfall schließen?';
+$lang->testcase->confirmBatchDelete      = 'Möchten Sie diese Testfälle schließen?';
+$lang->testcase->ditto                   = 'Dito';
+$lang->testcase->dittoNotice             = "This Case is not linked to the {$lang->productCommon} as the last one is!";
+$lang->testcase->confirmUnlinkTesttask   = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
+$lang->testcase->confirmLibcaseChangeTip = 'The content of this test case will be synchronized with the content of version #%s in the test case library. Do you want to continue?';
 
 $lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = 'Yes';

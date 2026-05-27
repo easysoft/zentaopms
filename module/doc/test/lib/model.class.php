@@ -660,6 +660,48 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 获取带分页的文档数量。
+     * Get doc count with pager.
+     *
+     * @param  array  $libs
+     * @param  string $filterType
+     * @param  string $search
+     * @param  string $searchType
+     * @access public
+     * @return int
+     */
+    public function getDocCountWithPagerTest(array $libs, string $filterType = '', string $search = '', string $searchType = 'all'): int
+    {
+        $count = $this->instance->getDocCountWithPager($libs, $filterType, $search, $searchType);
+
+        if(dao::isError()) return 0;
+        return $count;
+    }
+
+    /**
+     * 获取带分页的文档列表。
+     * Get docs with pager.
+     *
+     * @param  array  $libs
+     * @param  string $spaceType
+     * @param  int    $excludeID
+     * @param  bool   $queryTemplate
+     * @param  string $filterType
+     * @param  object $pager
+     * @param  string $search
+     * @param  string $searchType
+     * @access public
+     * @return array
+     */
+    public function getDocsWithPagerTest(array $libs, string $spaceType, int $excludeID = 0, bool $queryTemplate = false, string $filterType = '', object $pager = null, string $search = '', string $searchType = 'all'): array
+    {
+        $docs = $this->instance->getDocsWithPager($libs, $spaceType, $excludeID, $queryTemplate, $filterType, $pager, $search, $searchType);
+
+        if(dao::isError()) return array();
+        return $docs;
+    }
+
+    /**
      * 处理文档的收藏者信息。
      * Process collector to account.
      *
@@ -3073,7 +3115,7 @@ class docModelTest extends baseTest
         // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
         if($docID) {
             // 文档移动的响应
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
 
@@ -5528,5 +5570,110 @@ class docModelTest extends baseTest
     public function forEachDocBlockTest(array $rawContent, callable $callback, mixed $data = null, string $flavours = '', string $types = 'block', ?array $props = null, int $level = 0, int $index = 0): mixed
     {
         return docModel::forEachDocBlock($rawContent, $callback, $data, $flavours, $types, $props, $level, $index);
+    }
+
+    /**
+     * Test copyDoc method.
+     *
+     * @param  int    $docID
+     * @param  object $targetData
+     * @access public
+     * @return int|false
+     */
+    public function copyDocTest(int $docID, object $targetData): int|false
+    {
+        $result = $this->instance->copyDoc($docID, $targetData);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * Test copyDocFiles method.
+     *
+     * @param  int   $newDocID         新文档ID
+     * @param  object $originalContent 原始文档内容
+     * @access public
+     * @return bool
+     */
+    public function copyDocFilesTest(int $newDocID, string $docType, object $originalContent): bool
+    {
+        $result = $this->instance->copyDocFiles($newDocID, $docType, $originalContent);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * Test updateDocContent method.
+     *
+     * @param  int    $newDocID 新文档ID
+     * @param  string $docType  文档类型
+     * @param  array  $gidMap   gid映射表
+     * @access public
+     * @return object|false
+     */
+    public function updateDocContentTest(int $newDocID, string $docType, array $gidMap): object|false
+    {
+        $this->invokeArgs('updateDocContent', [$newDocID, $docType, $gidMap]);
+        if(dao::isError()) return false;
+
+        return $this->instance->dao->select('*')->from(TABLE_DOCCONTENT)
+            ->where('doc')->eq($newDocID)
+            ->orderBy('version_desc')
+            ->limit(1)
+            ->fetch();
+    }
+
+    /**
+     * 验证并解码 URL 类型文档的 content。
+     * Validate and decode URL type doc content.
+     *
+     * @param  object     $doc
+     * @access public
+     * @return bool|array
+     */
+    public function validateDocUrlTest(object $doc): bool|array
+    {
+        $result = $this->invokeArgs('validateDocUrl', [$doc]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 处理文档列表数据。
+     * Process doc list data.
+     *
+     * @param  array  $docs
+     * @param  array  $rootDocs
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function processDocListTest(array $docs, array $rootDocs, string $spaceType): array
+    {
+        $result = $this->invokeArgs('processDocList', [$docs, $rootDocs, $spaceType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 追加文档筛选条件。
+     * Append doc filters.
+     *
+     * @param  object $dao
+     * @param  string $browseType
+     * @param  string $queryString
+     * @param  string $filterType
+     * @param  array  $hasPrivDocIdList
+     * @param  string $filterDocs
+     * @param  string $appendDocs
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function appendDocFiltersTest(object $dao, string $browseType, string $queryString, string $filterType, array $hasPrivDocIdList, string $filterDocs, string $appendDocs, string $orderBy): object
+    {
+        return $this->invokeArgs('appendDocFilters', [$dao, $browseType, $queryString, $filterType, $hasPrivDocIdList, $filterDocs, $appendDocs, $orderBy]);
     }
 }

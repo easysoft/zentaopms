@@ -24,7 +24,7 @@ sidebar
     set::preserve('zaiSetting'),
     div
     (
-        setClass('cell p-2.5 bg-white'),
+        setClass('cell p-2.5 canvas'),
         menu
         (
             set::items($menuItems)

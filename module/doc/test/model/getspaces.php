@@ -21,6 +21,12 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
+global $tester;
+$tester->dao->delete()->from(TABLE_DOCLIB)->exec();
+$tester->dao->delete()->from(TABLE_DOC)->exec();
+$tester->dao->delete()->from(TABLE_PRODUCT)->exec();
+$tester->dao->delete()->from(TABLE_PROJECT)->exec();
+
 $docTester = new docModelTest();
 r($docTester->getSpacesTest('all', 0)) && p('0') && e('0');          // 测试获取all类型的空间返回空间数组长度
 r($docTester->getSpacesTest('mine', 1)) && p('0') && e('0');         // 测试获取mine类型的空间返回空间数组长度

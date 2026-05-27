@@ -174,13 +174,23 @@ class programplanZen extends programplan
         /* Compute fields for create view. */
         list($visibleFields, $requiredFields, $customFields, $showFields, $defaultFields) = $this->computeFieldsCreateView($viewData);
 
-        if($viewData->project->model == 'ipd') $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
+        $stages = empty($viewData->planID) ? $this->loadModel('stage')->getStages('order_asc', 0, $viewData->project->workflowGroup) : array();
+
+        if($viewData->project->model == 'ipd')
+        {
+            foreach($stages as $stage)
+            {
+                $stageType = $stage->type;
+                if(!isset($this->lang->stage->ipdTypeList[$stageType])) $this->lang->stage->ipdTypeList[$stageType] = $stageType;
+            }
+            $this->config->programplan->form->create['attribute']['options'] = $this->lang->stage->ipdTypeList;
+        }
 
         $this->view->title              = $this->lang->programplan->create . $this->lang->hyphen . $viewData->project->name;
         $this->view->productList        = $viewData->productList;
         $this->view->project            = $viewData->project;
         $this->view->productID          = $viewData->productID ?: key($viewData->productList);
-        $this->view->stages             = empty($viewData->planID) ? $this->loadModel('stage')->getStages('order_asc', 0, $viewData->project->workflowGroup) : array();
+        $this->view->stages             = $stages;
         $this->view->programPlan        = $viewData->programPlan;
         $this->view->plans              = $viewData->plans;
         $this->view->planID             = $viewData->planID;
@@ -378,11 +388,14 @@ class programplanZen extends programplan
      * @param  int      $baselineID
      * @param  string   $type
      * @param  string   $orderBy
-     * j
+     * @param  string   $browseType
+     * @param  int      $queryID
+     * @param  string   $versionID
+     *
      * @access protected
      * @return array
      */
-    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0): array
+    protected function buildStages(int $projectID, int $productID, int $baselineID, string $type, string $orderBy, string $browseType = '', int $queryID = 0, string $versionID = '0'): array
     {
         /* Obtain user page configuration items. */
         $this->loadModel('setting');
@@ -399,11 +412,15 @@ class programplanZen extends programplan
         $this->view->selectCustom = $selectCustom;
 
         /* Get data for gantt. */
-        $stages = array();
-        if($type == 'gantt')      $stages = $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
-        if($type == 'assignedTo') $stages = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID);
-
-        return $stages;
+        if($versionID != 0)
+        {
+            $stages = $this->programplan->getGanttDataByVersion((int)$versionID);
+            if($stages) return $stages;
+        }
+        if($versionID == 'nowait') $browseType = 'nowait';
+        if($type == 'gantt') return $this->programplan->getDataForGantt($projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
+        if(isset($this->lang->programplan->ganttBrowseType[$type])) return $this->programplan->getDataForGanttGroup($type, $projectID, $productID, $baselineID, $selectCustom, false, $browseType, $queryID, $orderBy);
+        return array();
     }
 
     /**

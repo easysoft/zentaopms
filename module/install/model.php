@@ -106,54 +106,6 @@ class installModel extends model
     }
 
     /**
-     * 创建数据库表。
-     * Create tables.
-     *
-     * @param  bool   $saveLog
-     * @param  int    $isClearDB
-     * @access public
-     * @return bool
-     */
-    public function createTable(bool $saveLog = false, int $isClearDB = 0): bool
-    {
-        $this->dbh = $this->connectDB();
-
-        /* Add exception handling to ensure that all SQL is executed successfully. */
-        try
-        {
-            $this->dbh->useDB($this->config->db->name);
-
-            $dbFile = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
-            $tables = explode(';', file_get_contents($dbFile));
-
-            foreach($tables as $table)
-            {
-                $table = trim($table);
-                if(empty($table)) continue;
-
-                if(strpos($table, 'DROP TABLE') !== false && $isClearDB) $table = trim(str_replace('--', '', $table));
-
-                $table = $this->replaceContantsInSQL($table);
-                $table = $this->appendMySQLTableOptions($table);
-
-                /* Skip sql that is note. */
-                if(strpos($table, '--') === 0) continue;
-                if($saveLog) file_put_contents($this->buildDBLogFile('progress'), $table . "\n", FILE_APPEND);
-
-                $this->dbh->exec($table);
-            }
-        }
-        catch (PDOException $exception)
-        {
-            $message = $exception->getMessage();
-            if($saveLog) file_put_contents($this->buildDBLogFile('error'), $message);
-            echo nl2br($message);
-            helper::end();
-        }
-        return true;
-    }
-
-    /**
      * 替换SQL语句中的常量。
      * Replace contants in SQL.
      *
@@ -193,6 +145,29 @@ class installModel extends model
         if(version_compare($this->dbVersion, '4.1', '>')) $sql .= " DEFAULT CHARSET={$this->dbCharset['charset']} COLLATE={$this->dbCharset['collation']}";
         if(version_compare($this->dbVersion, '5.6', '<') && stripos($sql, 'FULLTEXT') !== false && stripos($sql, 'InnoDB') !== false) $sql = str_ireplace('ENGINE=InnoDB', 'ENGINE=MyISAM', $sql);
         return $sql;
+    }
+
+    /**
+     * 获取单条 SQL 对应的语义化变更。
+     * Get semantic changes by sql.
+     *
+     * @param  string $sql
+     * @access public
+     * @return array
+     */
+    public function getSemanticChangesBySQL(string $sql): array
+    {
+        $changes = [];
+        $items   = helper::parseSqlToSemantic($sql);
+        foreach($items as $item)
+        {
+            $search  = ['%TABLE%', '%FIELD%', '%INDEX%', '%VIEW%', '%OLD%', '%NEW%'];
+            $replace = [$item['table'] ?? '', $item['field'] ?? '', $item['index'] ?? '', $item['view'] ?? '', $item['old'] ?? '', $item['new'] ?? ''];
+            $subject = $this->lang->install->changeActions[$item['action']] ?? $this->lang->install->changeActions['other'];
+            $changes[] = ['mode' => $item['mode'], 'content' => str_replace($search, $replace, $subject), 'sql' => $sql];
+        }
+
+        return $changes;
     }
 
     /**
@@ -268,25 +243,6 @@ class installModel extends model
         }
 
         return true;
-    }
-
-    /**
-     * 获取数据库日志存储路径。
-     * Build DB log file.
-     *
-     * @param  string $type config|error|success|progress
-     * @access public
-     * @return string
-     */
-    public function buildDBLogFile($type): string
-    {
-        $cacheRoot = $this->app->getCacheRoot();
-        if(!file_exists($cacheRoot)) mkdir($cacheRoot, 0777, true);
-
-        if($type == 'config')   return $cacheRoot . 'db.cnf';
-        if($type == 'error')    return $cacheRoot . 'dberror.log';
-        if($type == 'success')  return $cacheRoot . 'dbsuccess.log';
-        if($type == 'progress') return $cacheRoot . 'dbprogress.log';
     }
 
     /**
