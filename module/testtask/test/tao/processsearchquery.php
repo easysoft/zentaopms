@@ -24,13 +24,10 @@ $paramID   = array(0, 1);
 $module = array('projectTesttask', 'executionTesttask');
 
 global $tester;
-$tester->session->set('testtaskQuery', '`product` != \'0\'');
 $testtask = $tester->loadModel('testtask');
-r($testtask->processSearchQuery($productID[0], $paramID[0]), $module[0]) && p() && e("( 1 = 1)"); // 处理product=0,paramID=0的查询语句
-r($testtask->processSearchQuery($productID[0], $paramID[1]), $module[0]) && p() && e("( 1 = 1)"); // 处理product=0,paramID=1的查询语句 
-r($testtask->processSearchQuery($productID[1], $paramID[0]), $module[0]) && p() && e("( 1 = 1 AND t1.`product` ='1')"); //处理product=1,paramID=0的查询语句
-r($testtask->processSearchQuery($productID[1], $paramID[1]), $module[1]) && p() && e("( 1 = 1 AND t1.`product` ='1')");//处理product=1,paramID=1的查询语句 
-r($testtask->processSearchQuery($productID[2], $paramID[0]), $module[1]) && p() && e("( 1 = 1 AND t1.`product` ='2')");//处理product=2,paramID=0的查询语句 
-r($testtask->processSearchQuery($productID[2], $paramID[1]), $module[1]) && p() && e("( 1 = 1 AND t1.`product` ='2')"); // 处理product=2,paramID=1的查询语句 
-unset($_SESSION['testtaskQuery']);
-unset($_SESSION['ProjectTesttaskQuery']);
+r($testtask->processSearchQuery($productID[0], $paramID[0], $module[0])) && p() && e("( 1 = 1)"); // 处理product=0,paramID=0的查询语句
+r($testtask->processSearchQuery($productID[0], $paramID[1], $module[0])) && p() && e("( 1 = 1)"); // 处理product=0,paramID=1的查询语句
+r($testtask->processSearchQuery($productID[1], $paramID[0], $module[0])) && p() && e("( 1 = 1 AND t1.`product` ='1')"); //处理product=1,paramID=0的查询语句
+r($testtask->processSearchQuery($productID[1], $paramID[1], $module[1])) && p() && e("( 1 = 1 AND t1.`product` ='1')");//处理product=1,paramID=1的查询语句
+r($testtask->processSearchQuery($productID[2], $paramID[0], $module[1])) && p() && e("( 1 = 1 AND t1.`product` ='2')");//处理product=2,paramID=0的查询语句
+r($testtask->processSearchQuery($productID[2], $paramID[1], $module[1])) && p() && e("( 1 = 1 AND t1.`product` ='2')"); // 处理product=2,paramID=1的查询语句
