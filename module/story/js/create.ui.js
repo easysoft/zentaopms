@@ -84,3 +84,38 @@ window.loadGrade = function(e)
         $grade.$.setValue(data.default);
     })
 }
+
+/**
+ * 同步至子需求。
+ * Sync to child.
+ *
+ * @access public
+ * @return void
+ */
+window.syncToChild = function()
+{
+    const syncToChild   = $('[id=syncToChild]').prop('checked');
+    const parentStoryID = $('[name=parent]').val();
+    if(syncToChild && parentStoryID)
+    {
+        $.getJSON($.createLink('story', 'ajaxGetParentStoryInfo', 'storyID=' + parentStoryID), function(data)
+        {
+            if(data.module)     $('[name=module]').zui('picker').$.setValue(data.module);
+            if(data.category)   $('[name=category]').zui('picker').$.setValue(data.category);
+            if(data.source)     $('[name=source]').zui('picker').$.setValue(data.source);
+            if(data.mailto)     $('[name="mailto[]"]').zui('picker').$.setValue(data.mailto);
+            if(data.pri)        $('[name=pri]').zui('priPicker').$.setValue(data.pri);
+            if(data.title)      $('[name=title]').val(data.title);
+            if(data.estimate)   $('[name=estimate]').val(data.estimate);
+            if(data.sourceNote) $('[name=sourceNote]').val(data.sourceNote);
+            if(data.keywords)   $('[name=keywords]').val(data.keywords);
+            if(data.spec)       $('zen-editor[name=spec]')[0].setHTML(data.spec);
+            if(data.verify)     $('zen-editor[name=verify]')[0].setHTML(data.verify);
+            if(data.files)
+            {
+                $('[name="files[]"]').closest('[data-zui-fileselector]').zui('fileSelector').$.setFiles(Object.values(data.files));
+                $('[name=fileList]').val(JSON.stringify(data.files));
+            }
+        });
+    }
+}
