@@ -169,7 +169,7 @@ class testtaskModel extends model
             ->andWhere('t1.auto')->ne('unit')
             ->andWhere('t1.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF(!empty($testtaskQuery))->andWhere($testtaskQuery)->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->orderBy('productOrder_asc, ' . $orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -205,7 +205,7 @@ class testtaskModel extends model
             ->beginIF($objectType == 'execution')->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($objectType == 'project')->andWhere('t1.project')->eq((int)$executionID)->fi()
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
-            ->beginIF(!empty($testtaskQuery))->andWhere($testtaskQuery)->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->andWhere('t1.auto')->ne('unit')
             ->orderBy($orderBy)
             ->page($pager)
