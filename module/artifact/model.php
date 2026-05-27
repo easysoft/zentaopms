@@ -218,6 +218,7 @@ class artifactModel extends model
             $asset->size       = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
             $asset->artifactID = $artifactID;
             $asset->package    = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
+            $asset->sysArch    = empty($asset->os) || empty($asset->arch) ? '' : $asset->os . '/' . $asset->arch;
         }
         return $assetList->data;
     }

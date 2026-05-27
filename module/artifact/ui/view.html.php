@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+jsVar('copyMessage', $lang->artifact->copied);
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
@@ -18,7 +19,7 @@ if($repoID)
 if($artifact->type == 'file')
 {
     unset($config->artifact->dtable->fieldList['version']);
-    unset($config->artifact->dtable->fieldList['arch']);
+    unset($config->artifact->dtable->fieldList['sysArch']);
 }
 else
 {

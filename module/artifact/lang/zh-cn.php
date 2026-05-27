@@ -15,6 +15,7 @@ $lang->artifact->moveArtifact        = '移动制品';
 $lang->artifact->deleteArtifact      = '删除制品';
 $lang->artifact->batchDeleteArtifact = '批量删除制品';
 $lang->artifact->copyCMD             = '复制命令';
+$lang->artifact->copied              = '复制成功';
 
 $lang->artifact->name          = '名称';
 $lang->artifact->path          = '所属目录';
