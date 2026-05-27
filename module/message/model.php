@@ -610,5 +610,35 @@ class messageModel extends model
                 $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
             }
         }
+
+        if(isset($messageSetting['webhook']))
+        {
+            $webhooks = $this->loadModel('webhook')->getList();
+            if(!$webhooks) return true;
+
+            $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+            foreach($webhooks as $id => $webhook)
+            {
+                $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
+                if(!$data) continue;
+
+                if($webhook->sendType == 'async')
+                {
+                    if($webhook->type == 'dinguser')
+                    {
+                        $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
+                        if(empty($openIdList)) continue;
+                    }
+
+                    $this->webhook->saveData($id, $actionID, $data, $actor);
+                    continue;
+                }
+
+                $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
+            }
+        }
     }
 }
