@@ -52,6 +52,7 @@ $lang->artifact->artifactRepo  = '制品库';
 $lang->artifact->parent        = '所属上级';
 $lang->artifact->repo          = '所属代码库';
 $lang->artifact->package       = '包名';
+$lang->artifact->asset         = '制品';
 
 $lang->artifact->countArtifact = '共%s个制品';
 
