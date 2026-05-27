@@ -69,33 +69,35 @@ class testtaskTao extends testtaskModel
     }
 
      /**
-     * 通过搜索获取执行的测试单。
-     * Get execution testtasks by search.
+     * 通过搜索获取测试单。
+     * Get testtasks by search.
      *
-     * @param  int    $executionID
      * @param  int    $productID
      * @param  int    $paramID
+     * @param  int    $module
      * @access public
      * @return string
      * */
-    public function processSearchQuery(int $executionID = 0, int $productID = 0, int $paramID = 0): string
+    public function processSearchQuery(int $productID = 0, int $paramID = 0, string $module = ''): string
     {
+        $queryName = $module . 'Query';
+        $formName  = $module . 'Form';
         if($paramID)
         {
             $query = $this->loadModel('search')->getQuery($paramID);
             if($query)
             {
-                $this->session->set('executionTesttaskQuery', $query->sql);
-                $this->session->set('executionTesttaskForm', $query->form);
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($formName, $query->form);
             }
         }
-        if($this->session->executionTesttaskQuery === false) $this->session->set('executionTesttaskQuery', ' 1 = 1');
+        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
 
-        $testtaskQuery = $this->session->executionTesttaskQuery;
+        $testtaskQuery = $this->session->$queryName;
 
-        $testtaskQuery = '(' . $this->session->executionTesttaskQuery;
+        $testtaskQuery = '(' . $this->session->$queryName;
         /* 处理查询中的产品条件。*/
-        if(strpos($this->session->executionTesttaskQuery, "`product` = 'all'") !== false)
+        if(strpos($this->session->$queryName, "`product` = 'all'") !== false)
         {
             $testtaskQuery  = str_replace("`product` = 'all'", '1 = 1', $testtaskQuery);
             $testtaskQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
@@ -105,7 +107,7 @@ class testtaskTao extends testtaskModel
             $testtaskQuery .= " AND `product` ='$productID'";
         }
         /* 处理查询中的版本条件。*/
-        $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realbegan`', '`realFinishedDate`', '`product`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realbegan`', 't1.`realFinishedDate`', 't1.`product`'), $testtaskQuery);
+        $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realbegan`', '`realFinishedDate`', '`product`', '`execution`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realbegan`', 't1.`realFinishedDate`', 't1.`product`', 't1.`execution`'), $testtaskQuery);
         $testtaskQuery .= ')';
         return $testtaskQuery;
 	}

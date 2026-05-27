@@ -1020,6 +1020,8 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1027,7 +1029,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testtask(int $projectID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('testtaskList', $this->app->getURI(true), 'project');
 
@@ -1038,7 +1040,11 @@ class project extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $project = $this->project->getByID($projectID);
-        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $productID, $orderBy, $pager);
+        $tasks   = $this->loadModel('testtask')->getProjectTasks($projectID, $productID, $type, $param, $orderBy, $pager);
+        $products = $this->loadModel('product')->getProducts($projectID);
+        /* Build the search form. */
+        $actionURL = $this->createLink('project', 'testtask', "projectID=$projectID&productID=$productID&type=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->project->buildTesttaskSearchForm($projectID, $products, $param, $actionURL);
 
         $this->projectZen->assignTesttaskVars($tasks);
 
@@ -1046,6 +1052,7 @@ class project extends control
         $this->view->project   = $project;
         $this->view->productID = $productID;
         $this->view->projectID = $projectID;
+        $this->view->type      = $type;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');
