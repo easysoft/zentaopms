@@ -13304,4 +13304,50 @@ class upgradeModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * 为已开启审批流的工作流真实表补充 reviewedBy 字段，并从审批节点回填已审批人。
+     * Add reviewedBy field for workflow tables with approval enabled and backfill from approval nodes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateReviewedByField(): bool
+    {
+        if($this->config->edition == 'open') return true;
+
+        $tables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)
+            ->where('approval')->eq('enabled')
+            ->fetchPairs();
+        if(empty($tables)) return true;
+
+        $nodes = $this->dao->select('approval,account')->from(TABLE_APPROVALNODE)
+            ->where('status')->eq('done')
+            ->andWhere('type')->eq('review')
+            ->orderBy('id')
+            ->fetchAll();
+
+        $reviewedByMap = array();
+        foreach($nodes as $node)
+        {
+            if(!isset($reviewedByMap[$node->approval])) $reviewedByMap[$node->approval] = array();
+            $reviewedByMap[$node->approval][$node->account] = $node->account;
+        }
+        foreach($reviewedByMap as $approvalID => $accounts) $reviewedByMap[$approvalID] = implode(',', $accounts);
+
+        foreach($tables as $table)
+        {
+            if(!$this->checkFieldsExists($table, 'reviewedBy')) $this->dbh->exec("ALTER TABLE `{$table}` ADD `reviewedBy` text NULL");
+            if(!$this->checkFieldsExists($table, 'approval')) continue;
+
+            $approvalIDs = $this->dao->select('approval')->from($table)->where('approval')->gt(0)->fetchPairs();
+            foreach($approvalIDs as $approvalID)
+            {
+                if(!isset($reviewedByMap[$approvalID])) continue;
+                $this->dao->update($table)->set('reviewedBy')->eq($reviewedByMap[$approvalID])->where('approval')->eq($approvalID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
 }
