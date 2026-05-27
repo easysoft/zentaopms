@@ -2461,6 +2461,23 @@ class baseSQL
     }
 
     /**
+     * 创建INNER JOIN部分。
+     * Create the inner join part.
+     *
+     * @param  string $table
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function innerJoin($table)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql         .= " INNER JOIN $table";
+        $this->currentTable = $table;
+
+        return $this;
+    }
+
+    /**
      * 创建ON部分。
      * Create the on part.
      *

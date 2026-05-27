@@ -215,7 +215,7 @@ class artifactModel extends model
             $asset->path       = $asset->group;
             $asset->version    = isset($asset->metadata) ? $asset->metadata->version : '';
             $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
-            $asset->size       = empty($asset->size)     ? 0 : round($asset->size / 1024, 2) . 'KB';
+            $asset->size       = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
             $asset->artifactID = $artifactID;
             $asset->package    = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
         }
