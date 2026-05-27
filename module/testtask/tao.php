@@ -80,35 +80,39 @@ class testtaskTao extends testtaskModel
      * */
     public function processSearchQuery(int $productID = 0, int $paramID = 0, string $module = ''): string
     {
+        $defaultQuery = '( 1 = 1)';
         $queryName = $module . 'Query';
         $formName  = $module . 'Form';
-        if($paramID)
+        if(!empty($module))
         {
-            $query = $this->loadModel('search')->getQuery($paramID);
-            if($query)
+            if($paramID)
             {
-                $this->session->set($queryName, $query->sql);
-                $this->session->set($formName, $query->form);
+                $query = $this->loadModel('search')->getQuery($paramID);
+                if($query)
+                {
+                    $this->session->set($queryName, $query->sql);
+                    $this->session->set($formName, $query->form);
+                }
             }
-        }
-        if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
+            if($this->session->$queryName === false) $this->session->set($queryName, ' 1 = 1');
 
-        $testtaskQuery = $this->session->$queryName;
+            $testtaskQuery = '(' . $this->session->$queryName;
+            /* 处理查询中的产品条件。*/
+            if(strpos($this->session->$queryName, "`product` = 'all'") !== false)
+            {
+                $testtaskQuery  = str_replace("`product` = 'all'", '1 = 1', $testtaskQuery);
+                $testtaskQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            }
+            elseif($productID)
+	        {
+                $testtaskQuery .= " AND `product` ='$productID'";
+            }
+            /* 处理查询中的版本条件。*/
+            $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realbegan`', '`realFinishedDate`', '`product`', '`execution`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realbegan`', 't1.`realFinishedDate`', 't1.`product`', 't1.`execution`'), $testtaskQuery);
+            $testtaskQuery .= ')';
 
-        $testtaskQuery = '(' . $this->session->$queryName;
-        /* 处理查询中的产品条件。*/
-        if(strpos($this->session->$queryName, "`product` = 'all'") !== false)
-        {
-            $testtaskQuery  = str_replace("`product` = 'all'", '1 = 1', $testtaskQuery);
-            $testtaskQuery .= ' AND `product` ' . helper::dbIN($this->app->user->view->products);
+            return $testtaskQuery;
         }
-        elseif($productID)
-	    {
-            $testtaskQuery .= " AND `product` ='$productID'";
-        }
-        /* 处理查询中的版本条件。*/
-        $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realbegan`', '`realFinishedDate`', '`product`', '`execution`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realbegan`', 't1.`realFinishedDate`', 't1.`product`', 't1.`execution`'), $testtaskQuery);
-        $testtaskQuery .= ')';
-        return $testtaskQuery;
+        return $defaultQuery;
 	}
 }
