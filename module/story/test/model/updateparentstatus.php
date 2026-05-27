@@ -18,6 +18,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+zenData('product')->gen(20);
+
 $story = zenData('story');
 $story->product->range(1);
 $story->parent->range('0,`-1`,2,`-1`,0{10},`-1`,100,14,15,15,15');

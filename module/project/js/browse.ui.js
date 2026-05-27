@@ -24,38 +24,42 @@ window.renderCell = function(result, {col, row})
     return result;
 }
 
-$(document).off('click', '#table-project-browse .batch-btn').on('click', '#table-project-browse .batch-btn', function()
+window.handleBatchBtnClick = function(event)
 {
-    const dtable = zui.DTable.query($(this).target);
+    const $this = $(event.target).closest('a,.btn');
+    const dtable = zui.DTable.query($this);
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
     const form = new FormData();
-    const url  = $(this).data('url');
+    const url  = $this.data('url');
     checkedList.forEach((id) => form.append('projectIdList[]', id));
     postAndLoadPage(url, form);
-}).off('click', '#actionBar .export').on('click', '#actionBar .export', function()
+};
+
+window.handleClickExportBtn = function(event)
 {
     const dtable = zui.DTable.query($('#table-project-browse'));
     const checkedList = dtable ? dtable.$.getChecks() : [];
     if(!checkedList.length) return;
 
     $.cookie.set('checkedItem', checkedList, {expires:config.cookieLife, path:config.webRoot});
-});
+};
 
-$(document).off('click', '.switchButton').on('click', '.switchButton', function()
+window.handleClickSwitchButton = function(event)
 {
-    var projectType = $(this).attr('data-type');
+    const $this = $(event.target).closest('a,.btn');
+    const projectType = $this.attr('data-type');
     $.cookie.set('projectType', projectType, {expires:config.cookieLife, path:config.webRoot});
     loadCurrentPage();
-});
+};
 
-$(document).on('click', 'input[name=involved]', function()
+window.handleChangeInvolved = function(event)
 {
-    var involved = $(this).is(':checked') ? 1 : 0;
+    const involved = $(event.target).is(':checked') ? 1 : 0;
     $.cookie.set('involved', involved, {expires:config.cookieLife, path:config.webRoot});
     loadTable();
-});
+};
 
 /**
  * 提示并删除项目。
@@ -72,7 +76,7 @@ window.confirmDelete = function(projectID, projectName)
     {
         if(res) $.ajaxSubmit({url: $.createLink('project', 'delete', 'projectID=' + projectID)});
     });
-}
+};
 
 window.changeProgram = function()
 {
