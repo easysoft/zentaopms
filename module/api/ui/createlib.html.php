@@ -21,21 +21,9 @@ if($this->config->edition != 'open')
 formPanel
 (
     set::className('createLibForm'),
-    set::title($lang->api->createLib),
+    set::title($title),
     set::labelWidth('100px'),
-    $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
-    ? formGroup
-    (
-        set::label($lang->api->createMode),
-        radioList
-        (
-            set::name('createMode'),
-            set::items($lang->api->createModeList),
-            set::value('create'),
-            set::inline(true),
-            on::change('toggleCreateMode')
-        )
-    ) : null,
+    formHidden('createMode', $createMode),
     formGroup
     (
         set::label($lang->api->libType),
@@ -89,11 +77,10 @@ formPanel
         set::name('baseUrl'),
         set::placeholder($lang->api->baseUrlDesc)
     ),
-    $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
+    $createMode === 'import' && $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
     ? formGroup
     (
         setID('importFileBox'),
-        setClass('hidden'),
         set::label($lang->api->importFile),
         set::required(true),
         fileSelector(setID('files'), set::name('files'), set::accept('.json,.yaml'), set::maxFileCount(1), set::multiple(false), set::required(true)),
