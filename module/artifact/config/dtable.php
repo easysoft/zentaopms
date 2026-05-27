@@ -26,9 +26,9 @@ $config->artifact->dtable->fieldList['version']['title']    = $lang->artifact->v
 $config->artifact->dtable->fieldList['version']['sortType'] = false;
 $config->artifact->dtable->fieldList['version']['hint']     = true;
 
-$config->artifact->dtable->fieldList['arch']['title']    = $lang->artifact->arch;
-$config->artifact->dtable->fieldList['arch']['sortType'] = false;
-$config->artifact->dtable->fieldList['arch']['hint']     = true;
+$config->artifact->dtable->fieldList['sysArch']['title']    = $lang->artifact->arch;
+$config->artifact->dtable->fieldList['sysArch']['sortType'] = false;
+$config->artifact->dtable->fieldList['sysArch']['hint']     = true;
 
 $config->artifact->dtable->fieldList['checkValue']['title']    = $lang->artifact->checkValue;
 $config->artifact->dtable->fieldList['checkValue']['sortType'] = false;
