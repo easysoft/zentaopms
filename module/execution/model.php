@@ -4261,17 +4261,15 @@ class executionModel extends model
     {
         $searchConfig = $this->config->testtask->search;
         $searchConfig['module'] = 'executionTesttask';
-        if($cacheSearchFunc)                             
-        {                                                
+        if($cacheSearchFunc)
+        {
             $this->cacheSearchFunc('executionTesttask', __METHOD__, func_get_args());
-            return $searchConfig; // 返回基础搜索参数。                       
-        } 
+            return $searchConfig;
+        }
         $searchConfig['actionURL'] = $actionURL;
         $searchConfig['queryID']   = $queryID;
-
         $productPairs = array(0 => '');
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-
         $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
         $this->loadModel('search')->setSearchParams($searchConfig);
         return $searchConfig;
