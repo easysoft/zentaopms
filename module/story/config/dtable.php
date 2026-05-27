@@ -251,11 +251,12 @@ $config->story->dtable->fieldList['closedDate']['sortType'] = true;
 $config->story->dtable->fieldList['closedDate']['type']     = 'date';
 $config->story->dtable->fieldList['closedDate']['group']    = 8;
 
-$config->story->dtable->fieldList['closedReason']['name']     = 'closedReason';
-$config->story->dtable->fieldList['closedReason']['title']    = $lang->story->closedReason;
-$config->story->dtable->fieldList['closedReason']['sortType'] = true;
-$config->story->dtable->fieldList['closedReason']['width']    = '90';
-$config->story->dtable->fieldList['closedReason']['group']    = 8;
+$config->story->dtable->fieldList['closedReason']['name']       = 'closedReason';
+$config->story->dtable->fieldList['closedReason']['title']      = $lang->story->closedReason;
+$config->story->dtable->fieldList['closedReason']['sortType']   = true;
+$config->story->dtable->fieldList['closedReason']['width']      = '90';
+$config->story->dtable->fieldList['closedReason']['group']      = 8;
+$config->story->dtable->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 
 $config->story->dtable->fieldList['lastEditedBy']['name']     = 'lastEditedBy';
 $config->story->dtable->fieldList['lastEditedBy']['title']    = $lang->story->lastEditedBy;

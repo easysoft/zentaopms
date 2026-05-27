@@ -5181,7 +5181,7 @@ class docModel extends model
         $targetLib = $this->getLibByID($targetData->lib);
 
         $newDoc = new stdClass();
-        $newDoc->project    = $targetLib ? $targetLib->product : 0;
+        $newDoc->project    = $targetLib ? $targetLib->project : 0;
         $newDoc->product    = $targetLib ? $targetLib->product : 0;
         $newDoc->execution  = $targetLib ? $targetLib->execution : 0;
         $newDoc->lib        = $targetData->lib;

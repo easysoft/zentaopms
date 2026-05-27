@@ -122,7 +122,7 @@ class ssoZen extends sso
         $user->last     = date(DT_DATETIME1, (int)$last);
         $user->lastTime = $user->last;
         $user = $this->user->checkNeedModifyPassword($user, 0);
-        $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($last)->where('account')->eq($user->account)->exec();
+        $this->dao->update(TABLE_USER)->set('visits = visits + 1')->set('ip')->eq($userIP)->set('last')->eq($user->last)->where('account')->eq($user->account)->exec();
 
         $this->user->login($user);
 

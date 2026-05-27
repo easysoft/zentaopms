@@ -183,6 +183,8 @@ class productsBox extends wg
         list($currentPlan, $productPlans, $from) = $this->prop(array('currentPlan', 'productPlans', 'from'));
 
         $planProductID = current(array_keys($productItems));
+        if(!$planProductID) $planProductID = 0;
+
         $productsBox   = array();
         $productsBox[] = $from == 'execution' ? div
         (
@@ -190,6 +192,7 @@ class productsBox extends wg
             formGroup
             (
                 set::label($lang->execution->linkPlan),
+
                 set::className('planBox'),
                 picker
                 (

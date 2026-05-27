@@ -350,6 +350,14 @@ class actionModel extends model
                 $history->newValue = trim($history->newValue, ',');
             }
         }
+        elseif(isset($this->config->action->showNameFields[$history->field]))
+        {
+            $objectType = $this->config->action->showNameFields[$history->field];
+            $table      = $this->config->objectTables[$objectType];
+            $nameField  = $this->config->action->objectNameFields[$objectType];
+            if($history->old) $history->oldValue = is_numeric($history->old) ? $this->dao->select($nameField)->from($table)->where('id')->eq($history->old)->fetch($nameField) : $this->lang->trunk;
+            if($history->new) $history->newValue = is_numeric($history->new) ? $this->dao->select($nameField)->from($table)->where('id')->eq($history->new)->fetch($nameField) : $this->lang->trunk;
+        }
         else
         {
             $fieldListVar = isset($this->config->action->objectFields[$objectType][$history->field]) ? $this->config->action->objectFields[$objectType][$history->field] : $history->field . 'List';
@@ -358,7 +366,7 @@ class actionModel extends model
             if(isset($fieldList[$history->old])) $history->oldValue = $fieldList[$history->old];
             if(isset($fieldList[$history->new])) $history->newValue = $fieldList[$history->new];
         }
-
+         
         /* 如果是升级, 检查oldValue和newValue字段是否存在。以防止从老版本升级的时候，而这两个字段不存在，导致升级失败。 */
         if(!empty($this->app->upgrading) && (isset($history->oldValue) || isset($history->newValue)))
         {

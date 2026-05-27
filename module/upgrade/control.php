@@ -828,6 +828,8 @@ class upgrade extends control
             if(is_file($wwwRoot . $file . '.php')) $files[] = $wwwRoot . $file . '.php';
         }
 
+        if($referer) $referer = helper::safe64Decode($referer);
+
         if($files)
         {
             $command = 'rm -f ' . implode(' ', $files);

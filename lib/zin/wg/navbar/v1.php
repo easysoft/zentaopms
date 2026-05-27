@@ -458,7 +458,7 @@ class navbar extends wg
             if(isset($newItem['data-id']))
             {
                 $newItem['zui-key'] = $newItem['data-id'];
-                if($newItem['data-id'] === 'settings' && strpos(',execution,project,product,', ",{$app->tab},") !== false) $newItem['outerClass'] = 'is-rsh-fixed';
+                if($newItem['data-id'] === 'settings' && strpos(',execution,project,product,', ",{$app->tab},") !== false) $newItem['outerClass'] = 'item is-rsh-fixed';
             }
 
             $showInMainMenu = isset($menuItem->showInMainMenu) ? $menuItem->showInMainMenu : false;

@@ -396,7 +396,7 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if(!$object) return false;
 
         $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
@@ -412,10 +412,9 @@ class webhookModel extends model
             $field          = $this->config->action->objectNameFields[$objectType];
             $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
             $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
-            $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
             $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
         }
-        $action->text   = $text;
+        $action->text = $text;
 
         $mobile     = '';
         $email      = '';

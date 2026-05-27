@@ -1933,11 +1933,14 @@ class doc extends control
 
                 $actionID = $this->loadModel('action')->create('doc', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
                 $this->action->logHistory($actionID, $changes);
+
+                $lib              = $this->doc->getLibByID($libID);
+                $spaceTypeChanged = $spaceType != $lib->type;
+
+                return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
             }
 
-            $lib = $this->doc->getLibByID($libID);
-            $spaceTypeChanged = $spaceType != $lib->type;
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
@@ -2035,7 +2038,7 @@ class doc extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
             }
 
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, 'template.1', $data->lib));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 

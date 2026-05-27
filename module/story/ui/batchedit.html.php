@@ -19,6 +19,7 @@ jsVar('researchReports', isset($researchReports) ? $researchReports : array());
 jsVar('productStoryList', $productStoryList);
 jsVar('storyType', $storyType);
 jsVar('urStageOptions', $urStageOptions);
+jsVar('edition', $config->edition);
 
 $URSourceItems = array();
 foreach($lang->requirement->sourceList as $key => $name) $URSourceItems[] = array('value' => $key, 'text' => $name);
