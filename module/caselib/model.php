@@ -239,22 +239,22 @@ class caselibModel extends model
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
-                $this->session->set('caselibQuery', ' 1 = 1');
+                $this->session->set('testcaseQuery', ' 1 = 1');
                 if($query)
                 {
-                    $this->session->set('caselibQuery', $query->sql);
-                    $this->session->set('caselibForm', $query->form);
+                    $this->session->set('testcaseQuery', $query->sql);
+                    $this->session->set('testcaseForm', $query->form);
                 }
             }
             else
             {
-                if($this->session->caselibQuery == false) $this->session->set('caselibQuery', ' 1 = 1');
+                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             }
 
             $queryLibID = $libID;
             $allLib     = "`lib` = 'all'";
-            $caseQuery  = '(' . $this->session->caselibQuery;
-            if(strpos($this->session->caselibQuery, $allLib) !== false)
+            $caseQuery  = '(' . $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allLib) !== false)
             {
                 $caseQuery = str_replace($allLib, '1', $caseQuery);
                 $queryLibID = 'all';
