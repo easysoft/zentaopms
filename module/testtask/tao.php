@@ -74,7 +74,7 @@ class testtaskTao extends testtaskModel
      *
      * @param  int    $productID
      * @param  int    $paramID
-     * @param  int    $module
+     * @param  string $module
      * @access public
      * @return string
      * */
