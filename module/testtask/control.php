@@ -1215,7 +1215,7 @@ class testtask extends control
     {
         if($objectType && ($objectType == 'project' || $objectType == 'execution') && $objectID)
         {
-            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'id_desc', null);
+            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'all', 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'all', 0, 'id_desc', null);
         }
         else
         {

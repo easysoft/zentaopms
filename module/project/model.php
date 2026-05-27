@@ -1104,6 +1104,42 @@ class projectModel extends model
     }
 
     /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $projectID
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $projectID, array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig = $this->config->testtask->search;
+        $searchConfig['module'] = 'projectTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('projectTesttask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $project = $this->getByID($projectID);
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $executionPairs = $this->loadModel('execution')->getPairs($projectID);
+        $searchConfig['fields']['execution']  = zget($this->lang->project->executionList, $project->model);
+        $searchConfig['params']['execution']  = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
+
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+
+        $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
+
+    /**
      * 根据项目集和模型获取项目列表(列表索引为项目编号)。
      * Get project pairs by model and project.
      *
