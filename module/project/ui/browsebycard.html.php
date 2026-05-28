@@ -48,6 +48,14 @@ featureBar
     li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
 
+$createProjectBtn = array
+(
+    'icon'          => 'plus',
+    'text'          => $lang->project->create,
+    'data-toggle'   => 'modal',
+    'data-position' => 'center'
+);
+
 /* zin: Define the toolbar on main menu. */
 toolbar
 (
@@ -76,15 +84,11 @@ toolbar
         'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
         'data-toggle' => 'modal'
     ))) : null,
-    hasPriv('project', 'create') ? item(set(array
+    hasPriv('project', 'create') ? item(set(array_merge($createProjectBtn, array
     (
-        'icon'          => 'plus',
-        'text'          => $lang->project->create,
-        'class'         => 'primary create-project-btn',
-        'url'           => createLink('project', 'createGuide', "programID={$programID}"),
-        'data-toggle'   => 'modal',
-        'data-position' => 'center'
-    ))) : null,
+        'class' => 'primary create-project-btn',
+        'url'   => createLink('project', 'createGuide', "programID={$programID}")
+    )))) : null,
     on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
 );
 
@@ -325,15 +329,11 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        hasPriv('project', 'create') ? btn(set(array
+        hasPriv('project', 'create') ? btn(set(array_merge($createProjectBtn, array
         (
-            'icon'          => 'plus',
-            'text'          => $lang->project->create,
-            'class'         => 'ml-2',
-            'url'           => createLink('project', 'createGuide'),
-            'data-toggle'   => 'modal',
-            'data-position' => 'center'
-        ))) : null
+            'class' => 'ml-2',
+            'url'   => createLink('project', 'createGuide')
+        )))) : null
     ) : $projectCards,
     !empty($projectStats) ? div
     (
