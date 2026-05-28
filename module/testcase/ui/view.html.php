@@ -74,7 +74,11 @@ if($this->config->edition == 'ipd')
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$config->testcase->actionList['edit']['url'] = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}');
+$editModule = $isLibCase ? 'caselib' : 'testcase';
+$editMethod = $isLibCase ? 'editCase' : 'edit';
+$editParams = $isLibCase ? 'caseID={caseID}' : 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}';
+$config->testcase->actionList['edit']['url'] = array('module' => $editModule, 'method' => $editMethod, 'params' => $editParams);
+
 $actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
 if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
