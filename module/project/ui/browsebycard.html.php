@@ -8,81 +8,8 @@ declare(strict_types=1);
  * @package     project
  * @link        https://www.zentao.net
  */
+
 namespace zin;
-
-jsVar('browseType', $browseType);
-jsVar('param', $param);
-jsVar('recTotal', $pager->recTotal);
-jsVar('recPerPage', $pager->recPerPage);
-jsVar('pageID', $pager->pageID);
-
-/* zin: Define the feature bar on main menu. */
-unset($programs[0]);
-featureBar
-(
-    helper::hasFeature('program') ? to::before
-    (
-        div
-        (
-            picker
-            (
-                set::name('programID'),
-                set::value($programID),
-                set::items($programs),
-                set::width('200px'),
-                set::placeholder($lang->project->selectProgram),
-                on::change('changeProgram')
-            )
-        )
-    ) : null,
-    set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    checkbox
-    (
-        set::rootClass('mx-2'),
-        set::name('involved'),
-        set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : ''),
-        on::change()->call('handleChangeInvolved', jsRaw('event'))
-    ),
-    li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
-);
-
-/* zin: Define the toolbar on main menu. */
-toolbar
-(
-    item(set(array
-    (
-        'type'  => 'btnGroup',
-        'items' => array(array
-        (
-            'icon'      => 'list',
-            'class'     => 'switchButton btn-icon',
-            'data-type' => 'bylist',
-            'hint'      => $lang->project->bylist
-        ), array
-        (
-            'icon'      => 'cards-view',
-            'class'     => 'btn-icon switchButton text-primary',
-            'data-type' => 'bycard',
-            'hint'      => $lang->project->bycard
-        ))
-    ))),
-    hasPriv('project', 'export') ? item(set(array
-    (
-        'icon'        => 'export',
-        'text'        => $lang->project->export,
-        'class'       => 'ghost export',
-        'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    hasPriv('project', 'create') ? item(set(array_merge($createProjectBtn, array
-    (
-        'class' => 'primary create-project-btn',
-        'url'   => createLink('project', 'createGuide', "programID={$programID}")
-    )))) : null,
-    on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
-);
 
 $projectCards = null;
 if(!empty($projectStats))
@@ -312,7 +239,13 @@ if(!empty($projectStats))
 $emptyTipCreateBtn = null;
 if(hasPriv('project', 'create'))
 {
-    $emptyTipCreateBtn = btn(set(array_merge($createProjectBtn, array
+    $emptyTipCreateBtn = btn(set(array_merge(array
+    (
+        'icon'          => 'plus',
+        'text'          => $lang->project->create,
+        'data-toggle'   => 'modal',
+        'data-position' => 'center'
+    ), array
     (
         'class' => 'ml-2',
         'url'   => createLink('project', 'createGuide')
