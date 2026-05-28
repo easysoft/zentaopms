@@ -114,25 +114,32 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             $item['class']  = 'selected';
         }
 
+        $item['visible'] = $version->visible;
+
         if($version->reviewType == 'deliverable') $versionItems['deliverable']['items'][$version->id] = $item;
         if($version->reviewType == 'gantt' && $version->status != 'tmpGantt') $versionItems['gantt']['items'][$version->id] = $item;
         if($version->reviewType == 'gantt' && $version->status == 'tmpGantt') $versionItems['tmpGantt']['items'][$version->id] = $item;
     }
 
     $versionItemList = array();
+    $visibleVersionItemList = array();
     foreach($versionItems as $key => $versionList)
     {
         $versionItemList[$key] = array('type' => 'heading', 'text' => $versionList['text']);
+        $visibleVersionItemList[$key] = array('type' => 'heading', 'text' => $versionList['text']);
         foreach($versionList['items'] as $id => $versionItem)
         {
             $versionItemList[$id] = array_merge($versionItem, array('type' => 'item'));
+            if(isset($versionItem['visible']) && $versionItem['visible'] == 1) $visibleVersionItemList[$id] = array_merge($versionItem, array('type' => 'item'));
         }
     }
 
     $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '', 'className' => 'sticky canvas', 'style' => array('bottom' => '-8px', 'height' => '32px'));
     if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}&type={$type}"), 'data-toggle' => 'modal'));
-    $versionItemList['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
-    $versionItemList['0']      = $item;
+    $versionItemList['nowait']        = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
+    $versionItemList['0']             = $item;
+    $visibleVersionItemList['nowait'] = $versionItemList['nowait'];
+    $visibleVersionItemList['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
     if($versionID == '0' && $isDiffMode) $currentVersion = $lang->project->latestVersion;
 
@@ -160,7 +167,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 set::currentVersion($currentVersion),
                 set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
                 set::diffMode($isDiffMode),
-                set::versionItems($versionItemList),
+                set::versionItems($visibleVersionItemList),
+                set::allVersionItems($versionItemList),
                 set::diffLang($langData),
                 set::browseTemplate($browseTemplate),
                 set::baseline($isDiffMode ? $ganttBaseline : null)
