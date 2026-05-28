@@ -111,7 +111,7 @@ $lang->story->exportAction    = "Export Story";
 $lang->story->reportAction    = "Story Report";
 
 $lang->story->closedStory      = "{$lang->SRCommon} %s is closed, and this operation has been filtered.";
-$lang->story->batchToTaskTips  = "Only active {$lang->SRCommon} can be converted into tasks.";
+$lang->story->batchToTaskTips  = "Only active and the lowest level {$lang->SRCommon} can be converted into tasks.";
 $lang->story->successToTask    = "Converted to task.";
 $lang->story->storyRound       = '%s time estimation';
 $lang->story->float            = "『%s』should be positive number, decimals included.";

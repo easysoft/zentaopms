@@ -200,11 +200,12 @@ $lang->testcase->legendOpenAndEdit = 'Créer/Editer';
 $lang->testcase->legendComment     = 'Commentaire';
 $lang->testcase->legendOther       = 'Other Related';
 
-$lang->testcase->confirmDelete         = 'Voulez-vous supprimer ce CasTest ?';
-$lang->testcase->confirmBatchDelete    = 'Voulez-vous supprimer des Castests par Lot ?';
-$lang->testcase->ditto                 = 'Idem';
-$lang->testcase->dittoNotice           = "This Case is not linked to the {$lang->productCommon} as the last one is!";
-$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
+$lang->testcase->confirmDelete           = 'Voulez-vous supprimer ce CasTest ?';
+$lang->testcase->confirmBatchDelete      = 'Voulez-vous supprimer des Castests par Lot ?';
+$lang->testcase->ditto                   = 'Idem';
+$lang->testcase->dittoNotice             = "This Case is not linked to the {$lang->productCommon} as the last one is!";
+$lang->testcase->confirmUnlinkTesttask   = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
+$lang->testcase->confirmLibcaseChangeTip = 'The content of this test case will be synchronized with the content of version #%s in the test case library. Do you want to continue?';
 
 $lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = 'Yes';

@@ -42,9 +42,9 @@ cid=17907
 
 - 查询没有项目ID的情况 @0
 - 查询错误ID的情况 @0
-- 检查项目13的预计工时属性estimate @2
-- 检查项目14的预计工时属性estimate @3
-- 检查项目15的预计工时属性estimate @4
+- 检查项目13的预计工时属性estimate @2.0
+- 检查项目14的预计工时属性estimate @3.0
+- 检查项目15的预计工时属性estimate @4.0
 - 检查不存在ID的情况 @0
 
 */
@@ -60,7 +60,7 @@ r($projectTester->fetchTaskEstimateByIdList($noneIDList))  && p() && e('0'); // 
 r($projectTester->fetchTaskEstimateByIdList($wrongIDList)) && p() && e('0'); // 查询错误ID的情况
 
 $estimates = $projectTester->fetchTaskEstimateByIdList($realIDList);
-r($estimates[13])       && p('estimate') && e('2'); // 检查项目13的预计工时
-r($estimates[14])       && p('estimate') && e('3'); // 检查项目14的预计工时
-r($estimates[15])       && p('estimate') && e('4'); // 检查项目15的预计工时
-r(isset($estimates[1])) && p()           && e('0'); // 检查不存在ID的情况
+r($estimates[13])       && p('estimate') && e('2.0'); // 检查项目13的预计工时
+r($estimates[14])       && p('estimate') && e('3.0'); // 检查项目14的预计工时
+r($estimates[15])       && p('estimate') && e('4.0'); // 检查项目15的预计工时
+r(isset($estimates[1])) && p()           && e('0');   // 检查不存在ID的情况

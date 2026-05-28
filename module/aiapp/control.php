@@ -193,4 +193,21 @@ class aiapp extends control
         $this->view->params        = empty($params) ? '' : helper::safe64Decode($params);
         $this->display();
     }
+
+    /**
+     * Toolkit page.
+     *
+     * @access public
+     * @return void
+     */
+    public function toolkit($tab = 'cli')
+    {
+        if(!isset($this->lang->aiapp->toolkitItems[$tab])) $tab = array_keys($this->lang->aiapp->toolkitItems)[0];
+        $current = $this->lang->aiapp->toolkitItems[$tab];
+
+        $this->view->tab     = $tab;
+        $this->view->current = $current;
+        $this->view->title   = $this->lang->aiapp->toolkitTitle;
+        $this->display();
+    }
 }

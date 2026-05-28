@@ -816,10 +816,11 @@ class doc extends control
      * @param  int|string $libID
      * @param  int        $moduleID
      * @param  string     $docType    html|word|ppt|excel|attachment
+     * @param  string     $from       deliverable
      * @access public
      * @return void
      */
-    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '')
+    public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', $from = '')
     {
         if(!empty($_POST))
         {
@@ -869,7 +870,7 @@ class doc extends control
             }
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'], $docResult['deletedFiles'])) : $this->docZen->responseAfterUploadDocs($docResult);
+            return !empty($docID) ? $this->send($this->docZen->responseAfterEdit($docData, $docResult['changes'], $docResult['files'], $docResult['deletedFiles'])) : $this->docZen->responseAfterUploadDocs($docResult, $from);
         }
 
         if($objectType == 'execution' && $libID) // 此时传入的objectID是projectID，用lib的信息更改回executionID
@@ -1932,11 +1933,14 @@ class doc extends control
 
                 $actionID = $this->loadModel('action')->create('doc', $docID, 'Moved', '', json_encode(array('from' => $doc->lib, 'to' => $data->lib)));
                 $this->action->logHistory($actionID, $changes);
+
+                $lib              = $this->doc->getLibByID($libID);
+                $spaceTypeChanged = $spaceType != $lib->type;
+
+                return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
             }
 
-            $lib = $this->doc->getLibByID($libID);
-            $spaceTypeChanged = $spaceType != $lib->type;
-            return $this->docZen->responseAfterMove($this->post->space, $data->lib, $docID, $spaceTypeChanged, $doc->type);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
@@ -1983,7 +1987,7 @@ class doc extends control
             {
                 $space = $newLib->type . '.' . ($newLib->product ?: $newLib->execution ?: $newLib->project);
             }
-            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type);
+            return $this->docZen->responseAfterMove($space, $data->lib, $newDocID, false, $newDoc->type, 'copy');
         }
 
         $this->docZen->prepareDocViewData($spaceType, $space, $libID, $docID, $doc);
@@ -2034,7 +2038,7 @@ class doc extends control
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $newDoc));
             }
 
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, '1', $data->lib));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, 'template.1', $data->lib));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 

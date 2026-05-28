@@ -1763,6 +1763,9 @@ $config->delete['22_0_beta'][] = 'extension/max/researchreport/view';
 $config->delete['22_0_beta'][] = 'extension/ipd/researchreport/view';
 $config->delete['22_0_beta'][] = 'extension/max/budget/view';
 $config->delete['22_0_beta'][] = 'extension/ipd/budget/view';
+$config->delete['22_2'][]      = 'extension/biz/common/ext/model/oa.php';
+$config->delete['22_2'][]      = 'extension/max/common/ext/model/oa.php';
+$config->delete['22_2'][]      = 'extension/ipd/common/ext/model/oa.php';
 
 $config->delete['22_2'][] = 'extension/ipd/workflow/view';
 $config->delete['22_2'][] = 'extension/ipd/workflow/js/browsedb.js';

@@ -79,6 +79,8 @@ class productsBox extends wg
         global $lang, $app;
         list($productItems, $project, $isStage, $hasNewProduct, $type) = $this->prop(array('productItems', 'project', 'isStage', 'hasNewProduct', 'type'));
 
+        $copyProjectID = data('copyProjectID');
+
         $typeLang     = $type == 'plan' ? $lang->project->associatePlan : $lang->project->manageRoadmap;
         $typeClass    = $type == 'plan' ? 'planBox'    : 'roadmapBox';
         $typeIdAttr   = $type == 'plan' ? 'plan0'      : 'roadmap0';
@@ -116,7 +118,7 @@ class productsBox extends wg
                     bind::change('loadBranches(event)'),
                     set::name('products[0]'),
                     set::items($productItems),
-                    !empty($project) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
+                    !empty($copyProjectID) && empty($project->hasProduct) ? set::value(current(array_keys($productItems))) : null,
                     set::placeholder($this->prop('selectTip'))
                 ),
             ),
@@ -181,6 +183,8 @@ class productsBox extends wg
         list($currentPlan, $productPlans, $from) = $this->prop(array('currentPlan', 'productPlans', 'from'));
 
         $planProductID = current(array_keys($productItems));
+        if(!$planProductID) $planProductID = 0;
+
         $productsBox   = array();
         $productsBox[] = $from == 'execution' ? div
         (
@@ -188,6 +192,7 @@ class productsBox extends wg
             formGroup
             (
                 set::label($lang->execution->linkPlan),
+
                 set::className('planBox'),
                 picker
                 (

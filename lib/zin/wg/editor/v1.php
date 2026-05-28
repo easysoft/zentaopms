@@ -67,6 +67,7 @@ class editor extends wg
         if(empty($this->prop('uid'))) $this->setProp('uid', uniqid());
         $this->setDefaultProps(array('uploadUrl' => createLink('file', 'ajaxUpload', 'uid=' . $this->prop('uid'))));
         if(helper::getBrowser()['name'] == 'safari') $this->setProp('neglectDefaultTextStyle', true);
+        if($this->prop('readonly')) $this->setProp('hideMenubar', true);
     }
 
     protected function buildTemplate(string $editor, string $type): node
@@ -116,6 +117,13 @@ class editor extends wg
         if(!isset($customProps['class'])) $customProps['class'] = 'w-full';
 
         $addCss = '';
+        if($this->prop('readonly'))
+        {
+            $addCss .= <<<CSS
+            .editor, .tiptap.ProseMirror {background-color: rgba(var(--color-gray-100-rgb), var(--tw-bg-opacity)); --tw-bg-opacity: .4;}
+            .tiptap.ProseMirror {padding-top: 0;}
+            CSS;
+        }
         if($this->prop('maxHeight'))
         {
             $height = $this->prop('maxHeight');

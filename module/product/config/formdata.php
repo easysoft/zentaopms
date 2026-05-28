@@ -45,8 +45,8 @@ $config->product->form->batchEdit['line']    = array('type' => 'int',    'contro
 $config->product->form->batchEdit['PO']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => 'users');
 $config->product->form->batchEdit['QD']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => 'users');
 $config->product->form->batchEdit['RD']      = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => '',        'options' => 'users');
-$config->product->form->batchEdit['type']    = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => 'normal',  'options' => $lang->product->typeList);
-$config->product->form->batchEdit['status']  = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => false, 'default' => 'normal',  'options' => $lang->product->statusList);
+$config->product->form->batchEdit['type']    = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => true, 'default' => 'normal',  'options' => $lang->product->typeList);
+$config->product->form->batchEdit['status']  = array('type' => 'string', 'control' => 'select',    'width' => '128px', 'required' => true, 'default' => 'normal',  'options' => $lang->product->statusList);
 $config->product->form->batchEdit['acl']     = array('type' => 'string', 'control' => 'radioList', 'width' => '120px', 'required' => false, 'default' => 'private', 'options' => $lang->product->abbr->aclList);
 
 $config->product->form->close = array();

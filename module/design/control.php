@@ -119,6 +119,17 @@ class design extends control
             foreach($designs as $design) $design->relatedObject = zget($designRelatedObjectList, $design->id, 0);
         }
 
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $designTypeList = $this->lang->design->typeList;
+            $designTypes    = array_unique(array_filter(array_column($designs, 'type')));
+            foreach($designTypes as $designType)
+            {
+                if(!isset($designTypeList[$designType])) $designTypeList[$designType] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($designType)->fetch('name');
+            }
+            $this->config->design->dtable->fieldList['type']['statusMap'] = $designTypeList;
+        }
+
         $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;
         $this->view->designs   = $designs;
         $this->view->projectID = $projectID;
@@ -241,6 +252,13 @@ class design extends control
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
 
+        $designTypeList = $this->lang->design->typeList;
+        if(in_array($this->config->edition, array('max', 'ipd')) && !isset($designTypeList[$design->type]))
+        {
+            $designTypeList[$design->type] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($design->type)->fetch('name');
+        }
+        $this->view->designTypeList = $designTypeList;
+
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->view;
         $this->view->design   = $design;
         $this->view->stories  = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
@@ -297,6 +315,13 @@ class design extends control
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
         $frozenType    = $this->design->getFrozenDesignType($design->project);
         foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
+
+        $designTypeList = $this->lang->design->typeList;
+        if(in_array($this->config->edition, array('max', 'ipd')) && !isset($designTypeList[$design->type]))
+        {
+            $designTypeList[$design->type] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($design->type)->fetch('name');
+        }
+        $this->view->designTypeList = $designTypeList;
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;
         $this->view->design   = $design;

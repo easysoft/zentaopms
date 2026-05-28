@@ -1,7 +1,7 @@
 window.clickSubmit = () =>
 {
     const os = $('#os').zui('picker').$.state.value;
-    loadPage({url : $.createLink('misc', rawMethod, "action=getPackage&os=" + os), selector : '#downloadClient', success: getClient});
+    loadModal({url : $.createLink('misc', rawMethod, "action=getPackage&os=" + os), selector : '#downloadClient', success: getClient});
 };
 
 window.getClient = function()

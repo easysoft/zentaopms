@@ -31,11 +31,17 @@ $product->type->range('normal');
 $product->status->range('normal');
 $product->gen(3);
 
+$projectproduct = zenData('projectproduct');
+$projectproduct->project->range('3,4,5');
+$projectproduct->product->range('1');
+$projectproduct->gen(3);
+
 $stroy = zenData('story');
 $stroy->id->range('4,324,364');
 $stroy->title->range('1-3')->prefix('需求');
 $stroy->type->range('story');
 $stroy->status->range('active');
+$stroy->product->range('1');
 $stroy->gen(3);
 
 $stroyspec = zenData('storyspec');

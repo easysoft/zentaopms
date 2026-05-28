@@ -111,7 +111,7 @@ $lang->story->exportAction    = "Export {$lang->SRCommon}";
 $lang->story->reportAction    = "Report";
 
 $lang->story->closedStory      = "{$lang->SRCommon} %s is closed, and this operation will be ignored.";
-$lang->story->batchToTaskTips  = "Only active {$lang->SRCommon} can be converted into tasks.";
+$lang->story->batchToTaskTips  = "Only active and the lowest level {$lang->SRCommon} can be converted into tasks.";
 $lang->story->successToTask    = "Batch conversion to tasks completed.";
 $lang->story->storyRound       = 'Round %s estimation';
 $lang->story->float            = "[%s] should be a positive number and may include decimals.";

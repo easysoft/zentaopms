@@ -243,7 +243,7 @@ class testcaseTaoTest extends baseTest
     {
         $_SESSION['project'] = 1;
 
-        $objects = $this->objectModel->getBySuite($productID, $branch, $suiteID, $moduleIdList, $auto, $orderBy, $pager);
+        $objects = $this->instance->getBySuite($productID, $branch, $suiteID, $moduleIdList, $auto, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 

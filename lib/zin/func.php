@@ -259,6 +259,7 @@ function workflowfield(): workflowfield {return createWg('workflowfield', func_g
 function formula(): formula {return createWg('formula', func_get_args());}
 function workflowCondition(): workflowCondition {return createWg('workflowCondition', func_get_args());}
 function workflowFieldCondition(): workflowFieldCondition {return createWg('workflowFieldCondition', func_get_args());}
+function markdown(): markdown {return createWg('markdown', func_get_args());}
 
 if(is_dir(__DIR__ . DS . 'wg' . DS . 'schedule'))
 {

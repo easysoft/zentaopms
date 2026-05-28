@@ -1,8 +1,10 @@
 window.backup = function(e)
 {
+    $(e).attr('disabled', 'disabled');
     if(backupError)
     {
         zui.Modal.alert(backupError);
+        $(e).removeAttr('disabled');
         return;
     }
     var backupBtn = $('#actionBar .backup');

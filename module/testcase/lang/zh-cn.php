@@ -201,11 +201,12 @@ $lang->testcase->legendOpenAndEdit = '创建编辑';
 $lang->testcase->legendComment     = '备注';
 $lang->testcase->legendOther       = '其他相关';
 
-$lang->testcase->confirmDelete         = '您确认要删除该测试用例吗？';
-$lang->testcase->confirmBatchDelete    = '您确认要批量删除这些测试用例吗？';
-$lang->testcase->ditto                 = '同上';
-$lang->testcase->dittoNotice           = "该用例与上一用例不属于同一{$lang->productCommon}！";
-$lang->testcase->confirmUnlinkTesttask = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
+$lang->testcase->confirmDelete           = '您确认要删除该测试用例吗？';
+$lang->testcase->confirmBatchDelete      = '您确认要批量删除这些测试用例吗？';
+$lang->testcase->ditto                   = '同上';
+$lang->testcase->dittoNotice             = "该用例与上一用例不属于同一{$lang->productCommon}！";
+$lang->testcase->confirmUnlinkTesttask   = '用例[%s]已关联在之前所属平台/分支的测试单中，调整平台/分支后，将从之前所属平台/分支的测试单中移除，请确认是否继续修改。';
+$lang->testcase->confirmLibcaseChangeTip = '该用例的内容将被同步更新为用例库中该用例 #%s 版本的内容，是否继续？';
 
 $lang->testcase->autoList['']     = '';
 $lang->testcase->autoList['auto'] = '是';

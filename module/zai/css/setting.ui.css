@@ -1,2 +1,8 @@
 .is-readonly .form-control {box-shadow: none; outline: none; background: var(--color-canvas);}
 .is-readonly .form-label.required:after {display: none;}
+
+#zaiSettingForm .panel-footer {display: none; padding-top: 0;}
+#zaiSettingForm.is-checked .panel-footer {display: block;}
+#zaiSettingForm .zai-doctor-result-summary {font-size: 15px; font-weight: bold; margin-bottom: 8px;}
+#zaiSettingForm .zai-doctor-result-list {padding-left: 0px;}
+#zaiSettingForm .zai-doctor-result-detail > .icon {margin-right: 10px;}

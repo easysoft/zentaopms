@@ -1074,7 +1074,7 @@ class storyModel extends model
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed')   $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if($oldParentStory->status == 'closed' && $childStory->status != 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -4335,6 +4335,18 @@ class storyModel extends model
         $projectStory->version = 1;
         $projectStory->order   = $lastOrder + 1;
         $this->dao->insert(TABLE_PROJECTSTORY)->data($projectStory)->exec();
+
+        $projectDeliverableID = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
+            ->where('t1.project')->eq($executionID)
+            ->andWhere('t2.category')->eq('SRS')
+            ->fetch('id');
+
+        $this->dao->update(TABLE_PROJECTDELIVERABLE)
+            ->set('submittedBy')->eq($this->app->user->account)
+            ->set('submittedDate')->eq(helper::now())
+            ->where('id')->eq($projectDeliverableID)
+            ->exec();
     }
 
     /**
@@ -5268,6 +5280,8 @@ class storyModel extends model
             $story->rawStatus = $story->status;
             $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
         }
+
+        if(!common::hasPriv($story->type, 'assignTo')) $story->assignedToName = zget(zget($options, 'users', array()), $story->assignedTo, empty($story->assignedTo) ? $this->lang->noAssigned : $story->assignedTo);
         return $story;
     }
 

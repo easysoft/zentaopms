@@ -56,7 +56,7 @@ formPanel(
     input(set::type('hidden'), set::name('docID'), set::value(isset($doc) && $doc->id ? $doc->id : '')),
     input(set::type('hidden'), set::name('type'), set::value($docType ?: 'text')),
     input(set::type('hidden'), set::name('contentType'), set::value($docType == 'url' ? 'url' : 'doc')),
-    $this->app->tab == 'doc' && $objectType == 'project' && $modalType != 'chapter' ? formRow
+    $objectType == 'project' && $modalType != 'chapter' ? formRow
     (
         formGroup
         (
@@ -65,9 +65,10 @@ formPanel(
            set::name('project'),
            set::items(createLink('project', 'ajaxGetDropMenu', "objectID=$objectID&module=&method=&extra=selectmode&useLink=0")),
            set::value(isset($execution) ? $execution->project : $objectID),
-           set::required(true)
+           set::required(true),
+           set::disabled($this->app->tab != 'doc')
         ),
-        ($mode == 'create' && $this->app->tab == 'doc' and $config->vision == 'rnd') ? formGroup
+        ($mode == 'create' and $config->vision == 'rnd') ? formGroup
         (
             setClass('w-1/2'),
             set::label($lang->doc->execution),

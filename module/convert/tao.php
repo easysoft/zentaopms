@@ -1672,8 +1672,14 @@ class convertTao extends convertModel
     public function processBuildinFieldData(string $module, object $data, object $object, array $relations, array $customFields, bool $buildinFlow = false)
     {
         $jiraFields = !empty($relations["zentaoField{$data->issuetype}"]) ? $relations["zentaoField{$data->issuetype}"] : array();
+
+        $table = zget($this->config->objectTables, $module, '');
+        if(empty($table)) return $object;
+
+        $tableFields = empty($jiraFields) ? array() : $this->dao->descTable($table);
         foreach($jiraFields as $jiraField => $zentaoField)
         {
+            if(!isset($tableFields[$zentaoField])) continue;
             if(!empty($data->{$jiraField}))
             {
                 $fields      = $this->session->jiraMethod == 'api' ? zget($customFields, $data->issuetype, array()) : $customFields;
@@ -1727,7 +1733,7 @@ class convertTao extends convertModel
      * @param  int       $executionID
      * @param  string    $type
      * @param  object    $data
-     * @param  array     $reasonList
+     * @param  array     $relations
      * @param  array     $customFields
      * @access protected
      * @return bool
