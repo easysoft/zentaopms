@@ -243,6 +243,10 @@ if(file_exists($myConfig)) include $myConfig;
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
 
+/* 权限配置文件。privilege settings. */
+$privilegeConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'privilege.php';
+if(file_exists($privilegeConfig)) include $privilegeConfig;
+
 /* 禅道userview配置文件。zentaopms userview settings. */
 $userViewConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'userview.php';
 if(file_exists($userViewConfig)) include $userViewConfig;
