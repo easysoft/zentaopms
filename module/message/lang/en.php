@@ -73,3 +73,4 @@ $lang->message->label->moved        = 'Move';
 $lang->message->label->nearing      = 'Due Reminder';
 $lang->message->label->published    = 'Release';
 $lang->message->label->changestatus = 'Change Release Status';
+$lang->message->label->mentioned    = '@Mention';
