@@ -141,6 +141,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $langData['compare']     = $lang->project->diffVersion;
     $langData['confirm']     = $lang->confirm;
     $langData['cancel']      = $lang->cancel;
+    $langData['settings']    = $lang->settings;
 
     $isLatestVersion = empty($versionID) && !$isDiffMode;
     $versionList     = null;
