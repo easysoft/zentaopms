@@ -1000,6 +1000,10 @@ class repoZen extends repo
         }
         $pipeline = $this->dao->select('*')->from(TABLE_PIPELINE)->where('repoID')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($pipeline) $error .= sprintf($this->lang->repo->error->linkedJob, html::a($this->createLink('pipeline', 'browse', 'space=0&repoID=' . $repoID . '&type=repo'), implode(', ', array_column($pipeline, 'id')), '_blank', '', false));
+
+        $artifacts = $this->loadModel('artifact')->getByRepoID($repoID);
+        if(!empty($artifacts)) $error .= sprintf($this->lang->repo->error->linkedArtifact, html::a($this->createLink('artifact', 'browse', 'spaceID=0&repoID=' . $repoID . '&type=repo'), implode(', ', array_keys($artifacts)), '_blank', '', false));
+
         return $error;
     }
 

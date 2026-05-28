@@ -272,6 +272,7 @@ $lang->repo->error->encoding          = "The encoding might be wrong. Please cha
 $lang->repo->error->deleted           = "Release failed, submission record associated with design, design numbers ( %s ).<br/>";
 $lang->repo->error->linkedBranch      = "Release failed, code repository associated with branch, branch types are ( %s ) branches are ( %s ).<br/>";
 $lang->repo->error->linkedJob         = "Release failed, code library is associated with pipeline, pipeline numbers are ( %s ).<br/>";
+$lang->repo->error->linkedArtifact    = "Release failed, code library is associated with artifact repo, artifact repo numbers are ( %s ).<br/>";
 $lang->repo->error->clientPath        = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound          = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable        = '%s is not writable! Please check the privilege, or download will not be done.';

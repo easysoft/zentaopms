@@ -26,9 +26,9 @@ class artifactModel extends model
     public function getList(int $spaceID = 0, int $repoID = 0, string $scope = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('space');
-        if($spaceID && !$this->app->user->admin)
+        $space = $this->space->getByID($spaceID);
+        if(!empty($space) && $space->acl != 'open' && !$this->app->user->admin)
         {
-            $space = $this->space->getByID($spaceID);
             if(empty($space->members) || !isset($space->members[$this->app->user->account])) return array();
         }
 
@@ -339,5 +339,22 @@ class artifactModel extends model
         if($size < 1024 * 1024) return round($size / 1024, 2) . 'KB';
         if($size < 1024 * 1024 * 1024) return round($size / 1024 / 1024, 2) . 'MB';
         return round($size / 1024 / 1024 / 1024, 2) . 'GB';
+    }
+
+    /**
+     * 通过repoID获取制品库信息。
+     * Get artifact repo by repo ID.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getByRepoID(int $repoID): array
+    {
+        return $this->dao->select('*')->from(TABLE_ARTIFACT)
+            ->where('deleted')->eq(0)
+            ->andWhere('scope')->eq('repo')
+            ->andWhere('repoID')->eq($repoID)
+            ->fetchAll('id');
     }
 }

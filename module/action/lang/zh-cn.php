@@ -399,8 +399,9 @@ $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
 
-$lang->action->desc->editedasset = '$date, 由 <strong>$actor</strong> $extra' . "\n";
-$lang->action->desc->movedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->editedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset   = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->deletedasset = '$date, 由 <strong>$actor</strong> 删除' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
@@ -667,6 +668,7 @@ $lang->action->label->enablerule              = '启用了规则';
 $lang->action->label->disablerule             = '关闭了规则';
 $lang->action->label->editedasset             = '编辑了';
 $lang->action->label->movedasset              = '移动了';
+$lang->action->label->deletedasset            = '删除了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

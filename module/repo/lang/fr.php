@@ -272,6 +272,7 @@ $lang->repo->error->encoding          = "L'encodage est peut-être erroné. Veui
 $lang->repo->error->deleted           = "Échec de décharge, enregistrement de soumission associé à la conception, numéro de conception ( %s ).<br/>";
 $lang->repo->error->linkedBranch      = "La levée échoue, la base de code est associée à la branche, le type de branche est ( %s ), la branche est ( %s ).<br/>";
 $lang->repo->error->linkedJob         = "Échec de la levée, base de code associée à la construction, numéro de construction ( %s ).<br/>";
+$lang->repo->error->linkedArtifact    = "Release failed, code library is associated with artifact repo, artifact repo numbers are ( %s ).<br/>";
 $lang->repo->error->clientPath        = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound          = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable        = '%s is not writable! Please check the privilege, or download will not be done.';

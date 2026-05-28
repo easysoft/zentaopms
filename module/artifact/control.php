@@ -160,6 +160,7 @@ class artifact extends control
         $this->view->assetList    = $assetList;
         $this->view->node         = $node;
         $this->view->orderBy      = $orderBy;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager        = $pager;
 
         $this->display();
@@ -386,7 +387,7 @@ class artifact extends control
         if($_POST)
         {
             $formData = form::data($this->config->artifact->form->editArtifact)->get();
-            if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
+            if(preg_match('/[\\/:*?"<>|]/', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->assetNameFormatError));
 
             $param = array();
             $param['entityID'] = 'asset.' . $assetID;

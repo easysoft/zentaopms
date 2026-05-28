@@ -397,8 +397,9 @@ $lang->action->desc->savebackupsettings  = '$date, Save backup settings backups 
 $lang->action->desc->deleteexpiredbackup = '$date, Clean up expired backups by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, Manually clean up backup by <strong>$actor</strong>.' . "\n";
 
-$lang->action->desc->editedasset = '$date, 由 <strong>$actor</strong> $extra' . "\n";
-$lang->action->desc->movedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->editedasset  = '$date, <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset   = '$date, <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->deletedasset = '$date, <strong>$actor</strong> deleted' . "\n";
 
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
@@ -662,6 +663,7 @@ $lang->action->label->enabledrunner           = 'Enabled';
 $lang->action->label->disabledrunner          = 'Suspended';
 $lang->action->label->editedasset             = 'Edited';
 $lang->action->label->movedasset              = 'Moved';
+$lang->action->label->deletedasset            = 'Deleted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
