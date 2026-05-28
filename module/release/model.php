@@ -842,7 +842,7 @@ class releaseModel extends model
      */
     public function changeStatus(int $releaseID, string $status, string $releasedDate = ''): bool
     {
-        $release = form::data($this->config->release->dtable->publish->fieldList)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
+        $release = form::data($this->config->release->form->publish)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
 
         $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
 
