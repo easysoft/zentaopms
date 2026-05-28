@@ -1,5 +1,5 @@
 <?php
-$lang->artifact->browse              = '代码库制品库';
+$lang->artifact->browse              = '制品库列表';
 $lang->artifact->create              = '创建制品库';
 $lang->artifact->edit                = '编辑制品库';
 $lang->artifact->delete              = '删除制品库';

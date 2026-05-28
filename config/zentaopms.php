@@ -382,7 +382,6 @@ $config->logonMethods[] = 'ppm.recall';
 $config->logonMethods[] = 'codescan.refresh';
 $config->logonMethods[] = 'codescan.tips';
 $config->logonMethods[] = 'repo.viewwebhookrequest';
-$config->logonMethods[] = 'artifact.browse';
 $config->logonMethods[] = 'artifact.view';
 $config->logonMethods[] = 'artifact.downloadartifact';
 $config->logonMethods[] = 'artifact.history';

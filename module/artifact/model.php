@@ -35,6 +35,7 @@ class artifactModel extends model
         $repos = array();
         if(!$repoID && !$this->app->user->admin)
         {
+            if($scope == 'all') $repos[] = 0;
             $spaceRepos   = $this->space->getReposBySpace($spaceID);
             $privateRepos = $this->dao->select('repo')->from(TABLE_DEVOPSREPOUSER)
                 ->where('account')->eq($this->app->user->account)
@@ -55,7 +56,7 @@ class artifactModel extends model
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
             ->andWhere('spaceID')->eq($spaceID)
             ->beginIF($repoID && $scope != 'all')->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF(!$repoID && !empty($repos))->andWhere('repoID')->in($repos)->fi()
+            ->beginIF(!$repoID && $scope != 'space' && !empty($repos))->andWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -237,10 +238,8 @@ class artifactModel extends model
 
         if($action->objectType == 'artifactasset')
         {
-            $comments = explode('|', $action->comment);
-            if(empty($comments) || count($comments) < 2) return false;
             $entityID = 'asset.' . $action->objectID;
-            list($artifactID, $name) = $comments;
+            $name     = $action->comment;
         }
         else
         {
@@ -249,13 +248,18 @@ class artifactModel extends model
             list($artifactID, $name, $entityID) = $comments;
         }
 
-        $result = $this->loadModel('gitfox')->request('/artifacts/recycle/restore', 'POST', array('entityIDs' => array($entityID)));
-        if(empty($result) || empty($result->success)) return false;
+        $result = $this->loadModel('gitfox')->request('/artifacts/recycle/restore', 'POST', array('entityID' => $entityID));
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            $this->app->control->sendError(empty($error['apiMessage']) ? $error : $error['apiMessage']);
+        }
+        if(empty($result)) return false;
 
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($action->id)->exec();
-        $this->loadModel('action')->create($action->objectType, $action->objectID, 'undeleted', '', $artifactID . '|' . $name . '|' . $entityID);
+        $this->loadModel('action')->create($action->objectType, $action->objectID, 'undeleted', '', $name);
         return !dao::isError();
     }
 

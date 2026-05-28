@@ -173,9 +173,10 @@ class artifactZen extends artifact
 
         $dropdownItems   = array();
         if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
-        if(!empty($privs['createDir']))$dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
-        if(!empty($privs['editDir']) )$dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
-        if(!empty($privs['deleteDir']) )$dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
+        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
+        if(!empty($privs['editDir']) )  $dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
+        if(!empty($privs['deleteDir'])) $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
+        if(empty($dropdownItems)) return $actions;
 
         $actions[] = array
         (
