@@ -1,9 +1,0 @@
-#publicTip {padding-left: 10px;}
-.table-form>tbody>tr>th {width: 110px;}
-.gitlab-bind .btn-info{background-color: unset;color:unset;padding: 6px 6px;}
-.gitlab-bind .btn-info.active{color: #2e7fff;background-color: rgba(239,239,239,.8);
-border-color: rgba(0,0,0,0);}
-.gitlab-bind-all{padding: 1px 6px;margin-left: 5px;border-radius: 10px;background: white;}
-.img-circle {border-radius: 50%;}
-.gitlab-account-desc{color: #9EA3B0;font-size: 12px;}
-.gitlab-user-select .chosen-container{max-width: 200px;}
