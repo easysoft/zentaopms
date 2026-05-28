@@ -160,6 +160,7 @@ class artifact extends control
         $this->view->assetList    = $assetList;
         $this->view->node         = $node;
         $this->view->orderBy      = $orderBy;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager        = $pager;
 
         $this->display();

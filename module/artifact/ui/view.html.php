@@ -170,6 +170,7 @@ div
             setID('artifactAssetsTable'),
             set::cols($config->artifact->dtable->fieldList),
             set::data($data),
+            set::userMap($users),
             set::orderBy($orderBy),
             set::checkable($canDeleteArtifact),
             $canDeleteArtifact ? set::onCheckChange(jsRaw('window.toggleArtifactBatchDelete')) : null,
