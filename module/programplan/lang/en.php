@@ -89,6 +89,9 @@ $lang->programplan->createGanttVersion  = 'Create Version';
 $lang->programplan->editGanttVersion    = 'Edit Version';
 $lang->programplan->deleteGanttVersion  = 'Delete Version';
 $lang->programplan->diffGanttVersion    = 'Version comparison';
+$lang->programplan->deliverableVersion  = 'Deliverables & Baseline Version';
+$lang->programplan->ganttVersion        = 'Plan Version';
+$lang->programplan->tmpGanttVersion     = 'Temporary Version';
 
 $lang->programplan->errorBegin       = "The phase start date cannot be earlier than the start date of its {$lang->projectCommon} %s.";
 $lang->programplan->errorEnd         = "The phase end date cannot be later than the end date of its {$lang->projectCommon} %s.";
