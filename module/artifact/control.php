@@ -694,7 +694,7 @@ class artifact extends control
 
         if($result && $asset && !empty($asset->path))
         {
-            $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $asset->path, ACTIONMODEL::CAN_UNDELETED);
         }
         if(dao::isError()) $this->sendError(dao::getError());
         $response = array();
