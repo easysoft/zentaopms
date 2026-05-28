@@ -2838,6 +2838,7 @@ class taskModel extends model
         {
             $task->parentId = $task->parent;
             $task->parent   = zget($parents, $task->parent, '');
+            $task->level    = str_replace(',', '.', trim($task->path, ','));
         }
 
         return $tasks;
@@ -2996,8 +2997,23 @@ class taskModel extends model
 
         $allChanges  = array();
         $oldStatus   = $task->status;
-        $lastDate    = $this->dao->select('date')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)->andWhere('objectType')->eq('task')->andWhere('deleted')->eq('0')->orderBy('date_desc,id_desc')->limit(1)->fetch('date');
         $currentTeam = !empty($task->team) ? $this->getTeamByAccount($task->team, $this->app->user->account, array()) : array();
+        $lastEffort  = $this->dao->select('*')->from(TABLE_EFFORT)->where('objectID')->eq($taskID)
+            ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
+            ->beginIF($currentTeam)->andWhere('account')->eq(zget($currentTeam, 'account', ''))->fi()
+            ->orderBy('date_desc,id_desc')
+            ->limit(1)
+            ->fetch();
+        $lastDate = zget($lastEffort, 'date', '');
+        $lastLeft = zget($lastEffort, 'left', 0);
+        foreach($workhour as $record)
+        {
+            if($lastDate > $record->date) continue;
+
+            $lastDate = $record->date;
+            $lastLeft = $record->left;
+        }
 
         foreach($workhour as $record)
         {
@@ -3009,14 +3025,13 @@ class taskModel extends model
 
             $isFinishTask = (empty($currentTeam) && in_array($task->status, $this->config->task->unfinishedStatus)) || (!empty($currentTeam) && $currentTeam->status != 'done');
             /* Change the workhour and status of tasks through effort. */
-            list($newTask, $actionID) = $this->taskTao->buildTaskForEffort($record, $task, (string)$lastDate, $isFinishTask);
-            if($lastDate <= $record->date) $lastDate = $record->date;
+            list($newTask, $actionID) = $this->taskTao->buildTaskForEffort($record, $task, $lastDate, $isFinishTask);
 
             /* Process multi-person task. Update consumed on team table. */
             if(!empty($currentTeam))
             {
-                $currentTeam->status = $record->left == 0 ? 'done' : 'doing';
-                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task, (string)$lastDate);
+                $currentTeam->status = $lastLeft == 0 ? 'done' : 'doing';
+                $this->taskTao->updateTeamByEffort($effortID, $record, $currentTeam, $task, $lastDate);
                 $newTask = $this->computeMultipleHours($task, $newTask);
             }
 

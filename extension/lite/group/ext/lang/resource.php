@@ -582,6 +582,7 @@ $lang->resource->doc->moveDoc            = 'moveDocAction';
 $lang->resource->doc->create             = 'create';
 $lang->resource->doc->view               = 'view';
 $lang->resource->doc->edit               = 'edit';
+$lang->resource->doc->copyDoc            = 'copyDoc';
 $lang->resource->doc->delete             = 'delete';
 $lang->resource->doc->deleteFile         = 'deleteFile';
 $lang->resource->doc->collect            = 'collectAction';
@@ -1069,7 +1070,7 @@ if($config->edition != 'open')
     $lang->resource->doc->custom2export    = 'custom2export';
     $lang->resource->doc->execution2export = 'execution2export';
 
-    $lang->resource->my->review = 'review';
+    if(helper::hasFeature('OA')) $lang->resource->my->review = 'review';
 
     /* workflow */
     $lang->resource->workflow = new stdclass();

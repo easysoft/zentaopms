@@ -23,9 +23,10 @@ jsVar('modulePairs', $modulePairs);
 jsVar('oldShowGrades', $showGrades);
 jsVar('gradeGroup', $gradeGroup);
 jsVar('hasProduct',  $execution->hasProduct);
-jsVar('linkedTaskStories',  $linkedTaskStories);
-jsVar('URChanged',          $lang->story->URChanged);
-jsVar('confirmStoryToTask', $lang->execution->confirmStoryToTask);
+jsVar('linkedTaskStories',       $linkedTaskStories);
+jsVar('URChanged',               $lang->story->URChanged);
+jsVar('confirmStoryToTask',      $lang->execution->confirmStoryToTask);
+jsVar('confirmBatchUnlinkStory', $lang->execution->confirmBatchUnlinkStory);
 jsVar('typeNotEmpty',       sprintf($lang->error->notempty, $lang->task->type));
 jsVar('hourPointNotEmpty',  sprintf($lang->error->notempty, $lang->story->convertRelations));
 jsVar('hourPointNotError',  sprintf($lang->story->float, $lang->story->convertRelations));
@@ -199,7 +200,8 @@ if(commonModel::isTutorialMode())
 $createItems = array();
 $batchItems  = array();
 if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
-if(in_array($execution->attribute, array('mix', 'request', 'design')) || !$execution->multiple)
+if((in_array($execution->attribute, array('mix', 'request', 'design')) && $execution->type == 'stage') || !$execution->multiple)
+
 {
     if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');
     if($canOpreate['createEpic'])             $createItems[] = array('text' => $lang->epic->create,  'url' => $createEpicLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->epic->create) : '');
@@ -525,7 +527,7 @@ if($canBatchAction && !$isFromDoc && !$isFromAI)
     {
         $footToolbar['items'][] = array(
             'text'      => $lang->execution->unlinkStoryAB,
-            'className' => 'btn batch-btn ajax-btn size-sm secondary',
+            'className' => 'btn batch-btn ajax-btn batch-unlink-btn size-sm secondary',
             'data-url'  => $this->createLink('execution', 'batchUnlinkStory', "executionID={$execution->id}")
         );
     }

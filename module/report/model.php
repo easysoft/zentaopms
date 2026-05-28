@@ -238,13 +238,15 @@ class reportModel extends model
     public function getUserKanbanCards(): array
     {
         $expireDays = isset($this->config->kanban->reminder->expireDays) ? $this->config->kanban->reminder->expireDays : 1;
-        $cards = $this->dao->select('id, name, assignedTo, end as deadline, kanban')
-            ->from(TABLE_KANBANCARD)
-            ->where('assignedTo')->ne('')
-            ->andWhere('progress')->lt(100)
-            ->andWhere('archived')->eq(0)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
+        $cards = $this->dao->select('t1.id, t1.name, t1.assignedTo, t1.end as deadline, t1.kanban')
+            ->from(TABLE_KANBANCARD)->alias('t1')
+            ->leftJoin(TABLE_KANBAN)->alias('t2')->on('t1.kanban = t2.id')
+            ->where('t1.assignedTo')->ne('')
+            ->andWhere('t2.status')->eq('active')
+            ->andWhere('t1.progress')->lt(100)
+            ->andWhere('t1.archived')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.end')->lt(date(DT_DATE1, strtotime('+' . $expireDays . ' day')))
             ->fetchAll();
 
         $cardGroups = array();

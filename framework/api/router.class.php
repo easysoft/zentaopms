@@ -431,6 +431,11 @@ class api extends router
             case TABLE_BUILD:
             case TABLE_TASK:
                 return (!$object->execution || strpos(",{$userView->sprints},", ",$object->execution,") !== false);
+            case TABLE_TESTTASK:
+                $projects = ",{$userView->sprints},{$userView->projects},";
+                return (!$object->product || strpos(",{$userView->products},", ",$object->product,") !== false)
+                    && (!$object->project || strpos($projects, ",$object->project,") !== false)
+                    && (!$object->execution || strpos(",{$userView->sprints},", ",$object->execution,") !== false);
             default:
                 return true;
         }
@@ -486,6 +491,8 @@ class api extends router
             'ticketID'      => TABLE_TICKET,
             'dept'          => TABLE_DEPT,
             'deptID'        => TABLE_DEPT,
+            'testtask'      => TABLE_TESTTASK,
+            'testtaskID'    => TABLE_TESTTASK,
         ];
 
         /* Check assignedTo. */

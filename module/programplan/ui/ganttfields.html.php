@@ -83,3 +83,8 @@ foreach($ganttFields as $colName => $value)
 
     $ganttFields[$colName] = $value;
 }
+if(empty($config->setPercent))
+{
+    $showFields = str_replace(',progress,', ',', $showFields);
+    unset($ganttFields['column_percent']);
+}

@@ -22,6 +22,7 @@ class myZen extends my
     protected function buildTaskData(array $tasks): array
     {
         $parents = array();
+
         foreach($tasks as $task)
         {
             if(isset($tasks[$task->parent]) || $task->parent <= 0 || isset($parents[$task->parent])) continue;
@@ -31,9 +32,9 @@ class myZen extends my
         $parentPairs = $this->loadModel('task')->getPairsByIdList($parents);
         foreach($tasks as $task)
         {
-            $task->estimateLabel = $task->estimate . $this->lang->execution->workHourUnit;
-            $task->consumedLabel = $task->consumed . $this->lang->execution->workHourUnit;
-            $task->leftLabel     = $task->left     . $this->lang->execution->workHourUnit;
+            $task->estimate      = $task->estimate . $this->lang->execution->workHourUnit;
+            $task->consumed      = $task->consumed . $this->lang->execution->workHourUnit;
+            $task->left          = $task->left     . $this->lang->execution->workHourUnit;
             $task->status        = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed')) ? 'changed' : $task->status;
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;
@@ -171,7 +172,7 @@ class myZen extends my
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $count = array('task' => 0, 'aitask' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
+        $count = array('task' => 0, 'aitask' => 0, 'story' => 0, 'bug' => 0, 'case' => 0, 'testtask' => 0, 'requirement' => 0, 'issue' => 0, 'risk' => 0, 'reviewissue' => 0, 'qa' => 0, 'meeting' => 0, 'ticket' => 0, 'feedback' => 0);
 
         /* Get the number of tasks assigned to me. */
         $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager);

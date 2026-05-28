@@ -798,13 +798,14 @@ class pivotModel extends model
                     if($filter['type'] == 'multipleselect' && is_array($filter['default'])) $queryDefault = implode("','", $filter['default']);
                 }
 
+                $queryDefault = $this->dbh->quote($queryDefault);
                 if(strpos($sql, $filter['field'] . 'Condition') === false)
                 {
-                    $sql = str_replace('$' . $filter['field'], "'{$queryDefault}'", $sql);
+                    $sql = str_replace('$' . $filter['field'], $queryDefault, $sql);
                 }
                 else
                 {
-                    $sql = str_replace('$' . $filter['field'] . 'Condition', "{$filter['relatedField']}='{$queryDefault}'", $sql);
+                    $sql = str_replace('$' . $filter['field'] . 'Condition', "{$filter['relatedField']}={$queryDefault}", $sql);
                 }
             }
             else

@@ -142,9 +142,6 @@ class dept extends control
     {
         $users = $this->dept->getDeptUserPairs($dept, $key);
 
-        $isJsonView = $this->app->getViewType() == 'json';
-        if(!$isJsonView) return print(html::select('user', array('' => '') + $users, $user, "class='form-control chosen'"));
-
         $items = array();
         foreach($users as $userID => $userName) $items[] = array('text' => $userName, 'value' => $userID);
         return print(json_encode($items));

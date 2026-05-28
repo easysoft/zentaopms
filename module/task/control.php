@@ -1046,6 +1046,8 @@ class task extends control
         if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
         if($task->story) $this->loadModel('story')->setStage($task->story);
 
+        $this->loadModel('program')->refreshProjectStats($task->project);
+
         $message = $this->executeHooks($taskID);
         $message = $message ?: $this->lang->saveSuccess;
 

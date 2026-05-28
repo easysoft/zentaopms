@@ -52,7 +52,7 @@ class transfer extends control
 
                 if(!empty($action->extensionType) && $action->extensionType == 'extend')
                 {
-                    $appendFields = $this->loadModel('workflowaction')->getPageFields($module, 'exportTemplate', true, null, 0, $groupID);
+                    $appendFields = $this->loadModel('workflowaction')->getPageFields($module, 'exportTemplate', true, null, 0, $action->group);
                     foreach($appendFields as $appendField)
                     {
                         $this->lang->$module->{$appendField->field} = $appendField->name;

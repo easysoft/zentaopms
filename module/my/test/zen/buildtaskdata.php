@@ -133,7 +133,7 @@ $taskCanceled = array(6 => $task6);
 $taskClosed = array(7 => $task7);
 
 r($myTest->buildTaskDataTest($emptyTasks)) && p('') && e('0'); // 测试空任务数组返回结果
-r($myTest->buildTaskDataTest($singleTask)) && p('1:estimateLabel') && e('5h'); // 测试独立任务工时标签添加
+r($myTest->buildTaskDataTest($singleTask)) && p('1:estimate') && e('5h'); // 测试独立任务工时标签添加
 r($myTest->buildTaskDataTest($singleTask)) && p('1:status') && e('doing'); // 测试任务状态为doing时保持原状态
 r($myTest->buildTaskDataTest($tasksWithParent)) && p('2:hasChild') && e('1'); // 测试子任务存在父任务时父任务hasChild标记
 r($myTest->buildTaskDataTest($tasksWithParent)) && p('3:parent') && e('2'); // 测试子任务存在父任务时子任务parent不变

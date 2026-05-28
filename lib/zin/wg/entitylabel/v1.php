@@ -69,6 +69,7 @@ class entityLabel extends wg
 
         if(empty($href)) return span
         (
+            set::title($text),
             setClass($titleClass, $className),
             set($labelProps),
             $titlePrefix,
@@ -77,6 +78,7 @@ class entityLabel extends wg
 
         return a
         (
+            set::title($text),
             setClass($titleClass, $className),
             set::href($href),
             set($labelProps),

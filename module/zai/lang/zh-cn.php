@@ -7,6 +7,7 @@ $lang->zai->token      = '应用密钥';
 $lang->zai->adminToken = '管理密钥';
 $lang->zai->addSetting = '添加 ZAI 配置';
 
+$lang->zai->testConnection           = '测试连接';
 $lang->zai->configurationUnavailable = 'ZAI 配置不可用。';
 $lang->zai->illegalZentaoUser        = '非法禅道用户！';
 $lang->zai->onlyPostRequest          = '此操作只支持 POST 请求。';

@@ -26,7 +26,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 $object = zenData('object');
 $object->project->range('1');
 $object->type->range('reviewed,taged,taged');
-$object->category->range('1,1,0');
+$object->category->range('1,1,gantt');
 $object->categoryVersion->range('`{"1":1}`,`{"1":2}`,[]');
 $object->status->range('pass,pass,gantt');
 $object->gen(10);
@@ -57,7 +57,7 @@ global $tester;
 
 $programplanModel = $tester->loadModel('programplan');
 
-$versions = $programplanModel->getGanttVersions(1);
+$versions = $programplanModel->getGanttVersions(1, 0, 'gantt');
 r(count($versions)) && p() && e('6');
 r($versions[1]) && p('id,reviewType,version') && e('1,deliverable,版本号1');
 r($versions[9]) && p('id,reviewType,type') && e('9,gantt,taged');
