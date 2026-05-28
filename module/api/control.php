@@ -579,12 +579,13 @@ class api extends control
      * 创建一个接口文档库。
      * Create a api doc library.
      *
-     * @param  string $type     project|product
+     * @param  string $type       project|product
      * @param  int    $objectID
+     * @param  string $createMode create|import
      * @access public
      * @return void
      */
-    public function createLib(string $type = 'product', int $objectID = 0)
+    public function createLib(string $type = 'product', int $objectID = 0, string $createMode = 'create')
     {
         if(!empty($_POST))
         {
@@ -627,10 +628,12 @@ class api extends control
         $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
-        $this->view->type     = $type;
-        $this->view->objectID = $objectID;
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->user->getPairs('nocode|noclosed');
+        $this->view->type       = $type;
+        $this->view->objectID   = $objectID;
+        $this->view->createMode = $createMode;
+        $this->view->title      = $createMode === 'import' ? $this->lang->api->importOpenAPI : $this->lang->api->createLib;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->user->getPairs('nocode|noclosed');
         $this->display();
     }
 

@@ -108,6 +108,17 @@ foreach($lang->api->homeFilterTypes as $key => $text)
     $filterItems[] = $item;
 }
 
+$hasImportOpenAPIPriv = $this->config->edition != 'open' && hasPriv('api', 'importOpenApi');
+$createLibMenuItems   = array();
+$createLibMenuItems[] = array('text' => $lang->api->createLib, 'icon' => 'wiki-lib', 'url' => createLink('api', 'createLib', "type=$type&objectID=0&createMode=create"), 'data-toggle' => 'modal', 'data-size' => 'sm');
+if($hasImportOpenAPIPriv) $createLibMenuItems[] = array(
+    'text'        => $lang->api->importOpenAPI,
+    'icon'        => 'import',
+    'data-toggle' => 'modal',
+    'data-size'   => 'sm',
+    'url'         => createLink('api', 'createLib', "type=$type&objectID=0&createMode=import"),
+);
+
 div
 (
     setKey('header'),
@@ -121,13 +132,18 @@ div
     checkbox(set::name('notempty'), set::text($lang->api->showNotEmpty), set::checked($notempty)),
     $type !== 'nolink' ? checkbox(set::name('showclosed'), set::text($lang->api->showClosed), set::checked(!$unclosed)) : null,
     div(setClass('flex-auto')),
-    (!$isEmpty && $canCreateLib) ? btn
+    (!$isEmpty && $canCreateLib) ? dropdown
     (
-        set::icon('plus'),
-        set::type('primary'),
-        set::size('md'),
-        set::text($lang->api->createLib),
-        set('zui-command', "createLib/$type")
+        btn
+        (
+            set::icon('plus'),
+            set::type('primary'),
+            set::size('md'),
+            set::text($lang->api->createLib),
+            setClass('dropdown-toggle')
+        ),
+        set::placement('bottom-end'),
+        set::items($createLibMenuItems)
     ) : null,
     on::change('[type=checkbox]')
         ->const('notempty', jsRaw('$this.closest(".doc-app-header").find("[name=notempty]:checked").length'))
@@ -143,12 +159,16 @@ if($isEmpty)
         setKey('empty'),
         setClass('doc-app-empty h-full center gap-4'),
         div(setClass('text-gray'), $lang->api->noLib),
-        $canCreateLib ? btn
+        $canCreateLib ? dropdown
         (
-            set::icon('plus'),
-            set::type('primary'),
-            set::text($lang->api->createLib),
-            set('zui-command', "createLib/$type")
+            btn
+            (
+                set::icon('plus'),
+                set::type('primary'),
+                set::text($lang->api->createLib),
+                setClass('dropdown-toggle')
+            ),
+            set::items($createLibMenuItems)
         ) : null
     );
 }
