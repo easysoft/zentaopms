@@ -33,7 +33,7 @@ class artifactModel extends model
         }
 
         $repos = array();
-        if($scope == 'all' && !$this->app->user->admin)
+        if(!$repoID && !$this->app->user->admin)
         {
             $spaceRepos   = $this->space->getReposBySpace($spaceID);
             $privateRepos = $this->dao->select('repo')->from(TABLE_DEVOPSREPOUSER)
@@ -55,7 +55,7 @@ class artifactModel extends model
             ->beginIF($scope != 'all')->andWhere('scope')->eq($scope)->fi()
             ->andWhere('spaceID')->eq($spaceID)
             ->beginIF($repoID && $scope != 'all')->andWhere('repoID')->eq($repoID)->fi()
-            ->beginIF($scope == 'all' && !empty($repos))->orWhere('repoID')->in($repos)->fi()
+            ->beginIF(!$repoID && !empty($repos))->andWhere('repoID')->in($repos)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

@@ -20,6 +20,7 @@ if($artifact->type == 'file')
 {
     unset($config->artifact->dtable->fieldList['version']);
     unset($config->artifact->dtable->fieldList['sysArch']);
+    unset($config->artifact->dtable->fieldList['package']);
 }
 else
 {
