@@ -1449,6 +1449,7 @@ $lang->resource->repo->editComment   = 'editComment';
 $lang->resource->repo->deleteComment = 'deleteComment';
 
 $lang->resource->artifact = new stdclass();
+$lang->resource->artifact->browse         = 'browse';
 $lang->resource->artifact->create         = 'create';
 $lang->resource->artifact->edit           = 'edit';
 $lang->resource->artifact->delete         = 'delete';

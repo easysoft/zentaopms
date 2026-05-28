@@ -1,5 +1,5 @@
 <?php
-$lang->artifact->browse              = 'Repo Artifact Repository';
+$lang->artifact->browse              = 'Artifact Repository List';
 $lang->artifact->create              = 'Create Artifact Repository';
 $lang->artifact->edit                = 'Edit Artifact Repository';
 $lang->artifact->delete              = 'Delete Artifact Repository';

@@ -4418,37 +4418,43 @@ $config->group->package->browseSystem->privs  = array();
 $config->group->package->browseSystem->privs['repo-browseSystem'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('system-create', 'system-view'));
 $config->group->package->browseSystem->privs['system-view']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('repo-browseSystem'), 'recommend' => array('system-create', 'system-edit', 'system-delete'));
 
+$config->group->package->browseArtifactrepo = new stdclass();
+$config->group->package->browseArtifactrepo->order  = 2800;
+$config->group->package->browseArtifactrepo->subset = 'artifact';
+$config->group->package->browseArtifactrepo->privs  = array();
+$config->group->package->browseArtifactrepo->privs['artifact-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+
 $config->group->package->manageArtifactrepo = new stdclass();
-$config->group->package->manageArtifactrepo->order  = 2800;
+$config->group->package->manageArtifactrepo->order  = 2810;
 $config->group->package->manageArtifactrepo->subset = 'artifact';
 $config->group->package->manageArtifactrepo->privs  = array();
-$config->group->package->manageArtifactrepo->privs['artifact-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
-$config->group->package->manageArtifactrepo->privs['artifact-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+$config->group->package->manageArtifactrepo->privs['artifact-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
+$config->group->package->manageArtifactrepo->privs['artifact-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
 
 $config->group->package->deleteArtifactrepo = new stdclass();
 $config->group->package->deleteArtifactrepo->order  = 2820;
 $config->group->package->deleteArtifactrepo->subset = 'artifact';
 $config->group->package->deleteArtifactrepo->privs  = array();
-$config->group->package->deleteArtifactrepo->privs['artifact-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+$config->group->package->deleteArtifactrepo->privs['artifact-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
 
 $config->group->package->manageArtifactDir = new stdclass();
 $config->group->package->manageArtifactDir->order  = 2830;
 $config->group->package->manageArtifactDir->subset = 'artifact';
 $config->group->package->manageArtifactDir->privs  = array();
-$config->group->package->manageArtifactDir->privs['artifact-createDir'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
-$config->group->package->manageArtifactDir->privs['artifact-editDir']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+$config->group->package->manageArtifactDir->privs['artifact-createDir'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
+$config->group->package->manageArtifactDir->privs['artifact-editDir']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
 
 $config->group->package->deleteArtifactDir = new stdclass();
 $config->group->package->deleteArtifactDir->order  = 2840;
 $config->group->package->deleteArtifactDir->subset = 'artifact';
 $config->group->package->deleteArtifactDir->privs  = array();
-$config->group->package->deleteArtifactDir->privs['artifact-deleteDir'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+$config->group->package->deleteArtifactDir->privs['artifact-deleteDir'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
 
 $config->group->package->uploadArtifact = new stdclass();
 $config->group->package->uploadArtifact->order  = 2850;
 $config->group->package->uploadArtifact->subset = 'artifact';
 $config->group->package->uploadArtifact->privs  = array();
-$config->group->package->uploadArtifact->privs['artifact-uploadArtifact'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse'), 'recommend' => array());
+$config->group->package->uploadArtifact->privs['artifact-uploadArtifact'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('space-browse', 'repo-browse', 'artifact-browse'), 'recommend' => array());
 
 $config->group->package->deleteArtifact = new stdclass();
 $config->group->package->deleteArtifact->order  = 2860;
