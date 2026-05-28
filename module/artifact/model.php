@@ -26,9 +26,9 @@ class artifactModel extends model
     public function getList(int $spaceID = 0, int $repoID = 0, string $scope = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $this->loadModel('space');
-        if($spaceID && !$this->app->user->admin)
+        $space = $this->space->getByID($spaceID);
+        if(!empty($space) && $space->acl != 'open' && !$this->app->user->admin)
         {
-            $space = $this->space->getByID($spaceID);
             if(empty($space->members) || !isset($space->members[$this->app->user->account])) return array();
         }
 
