@@ -19,6 +19,8 @@ cid=19323
 */
 global $tester;
 $transfer = $tester->loadModel('transfer');
+$transfer->loadModel('task');
+$transfer->loadModel('bug');
 
 r($transfer->initRequired('task', 'execution')) && p('') && e('1'); // 测试Task模块execution字段是否必填
 r($transfer->initRequired('bug',  'title'))     && p('') && e('1'); // 测试获取bug模块title字段是否必填

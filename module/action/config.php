@@ -126,8 +126,13 @@ $config->action->latestDateList = array('today', 'yesterday', 'thisWeek', 'lastW
 
 $config->action->userFields         = 'openedBy,addedBy,createdBy,editedBy,assignedTo,finishedBy,canceledBy,closedBy,activatedBy,resolvedBy,lastEditedBy,builder,owner,reviewedBy,forwardBy,scriptedBy,manager,commitedBy,archivedBy,PO,QD,RD,feedback,PM,account,changedBy,submitedBy,retractedBy,lastRunner,assignedBy,processedBy';
 $config->action->multipleUserFields = 'mailto,whitelist,reviewer,users,assignee,approver,PMT,committer,backReviewers,contributor,reviewers';
+$config->action->showNameFields     = array('resolvedBuild' => 'build');
 
-$config->action->objectFields['task']['closedReason'] = 'reasonList';
+$config->action->objectFields['task']['closedReason']        = 'reasonList';
+$config->action->objectFields['story']['closedReason']       = 'reasonList';
+$config->action->objectFields['requirement']['closedReason'] = 'reasonList';
+$config->action->objectFields['epic']['closedReason']        = 'reasonList';
+$config->action->objectFields['roadmap']['closedReason']     = 'reasonList';
 
 $config->action->multipleObjectFields['bug']['os']        = 'osList';
 $config->action->multipleObjectFields['bug']['browser']   = 'browserList';

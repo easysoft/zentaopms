@@ -62,7 +62,7 @@ div
             a
             (
                 setClass('btn primary w-24'),
-                set::href('javascript:loadCurrentPage()'),
+                set::href($referer ?: 'javascript:loadCurrentPage()'),
                 $lang->refresh
             )
         )

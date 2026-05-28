@@ -1094,10 +1094,14 @@ $lang->ai->formSchema['doc']['edit']->type  = 'object';
 $lang->ai->formSchema['doc']['edit']->properties = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->title   = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->content = new stdclass();
+$lang->ai->formSchema['doc']['edit']->properties->contentType = new stdclass();
 $lang->ai->formSchema['doc']['edit']->properties->title->type          = 'string';
 $lang->ai->formSchema['doc']['edit']->properties->title->description   = '文档的标题';
 $lang->ai->formSchema['doc']['edit']->properties->content->type        = 'string';
 $lang->ai->formSchema['doc']['edit']->properties->content->description = '文档的正文';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->type        = 'string';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->description = '内容类型';
+$lang->ai->formSchema['doc']['edit']->properties->contentType->enum        = array('html', 'markdown');
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
 
 $lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];

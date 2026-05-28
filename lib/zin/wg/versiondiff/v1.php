@@ -89,8 +89,7 @@ class versiondiff extends wg
                'onClickItem' => jsRaw('setClickVersionItem')
             ]),
             set::triggerProps([
-                'onShown' => jsRaw('showMenu'),
-                'onHide' => jsRaw('function(){return !this.menu.state.showCheckbox}')
+                'onShown' => jsRaw('showMenu')
             ])
         );
     }

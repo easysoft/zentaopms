@@ -1405,7 +1405,7 @@ class productModel extends model
         /* Product ID does not exist in products list, it may be deleted. */
         /* Confirm if product exist. */
         $product = $this->getByID($productID);
-        if(empty($product) or $product->deleted == 1) $productID = (int)key($products);
+        if(empty($product) || ($product->shadow == 0 && $product->deleted == 1)) $productID = (int)key($products);
 
         /* If product is invisible for current user, respond access denied message. */
         if($productID && !$this->checkPriv($productID))

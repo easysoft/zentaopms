@@ -240,6 +240,7 @@ $lang->story->storyChanged     = '需求已变更';
 $lang->story->demand           = '需求池需求';
 $lang->story->unlinkReason     = '移除原因';
 $lang->story->retractedReason  = '撤销原因';
+$lang->story->syncToChild      = '同步至子需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";

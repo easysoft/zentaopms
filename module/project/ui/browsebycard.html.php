@@ -42,7 +42,8 @@ featureBar
         set::rootClass('mx-2'),
         set::name('involved'),
         set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : '')
+        set::checked($this->cookie->involved ? 'checked' : ''),
+        on::change()->call('handleChangeInvolved', jsRaw('event'))
     ),
     li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
@@ -83,7 +84,8 @@ toolbar
         'url'           => createLink('project', 'createGuide', "programID={$programID}"),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
-    ))) : null
+    ))) : null,
+    on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
 );
 
 $projectCards = null;

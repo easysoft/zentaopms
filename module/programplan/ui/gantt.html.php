@@ -127,17 +127,15 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     $langData['cancel']      = $lang->cancel;
 
     $isLatestVersion = empty($versionID) && !$isDiffMode;
-    featureBar
-    (
-        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
-        $productDropdown,
-        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
-        li
+    $versionList     = null;
+    if(empty($project->isTpl))
+    {
+        $versionList = li
         (
             setID('versionList'),
             setClass('ml-2'),
             setStyle(array('order' => '10010')),
-            versiondiff
+            $type == 'gantt' && $browseType != 'bysearch' ? versiondiff
             (
                 setClass('inline-block'),
                 set::appendClass('fixed-item'),
@@ -149,7 +147,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 set::diffLang($langData),
                 set::browseTemplate($browseTemplate),
                 set::baseline($isDiffMode ? $ganttBaseline : null)
-            ),
+            ) : null,
             icon
             (
                 'help',
@@ -157,7 +155,15 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 setClass($isDiffMode ? '' : 'hidden'),
                 set::title($lang->programplan->noticeDiffVersion)
             )
-        )
+        );
+    }
+
+    featureBar
+    (
+        btn(setClass('ghost mr-2', ($browseType != 'bysearch' ? 'active' : '')), $lang->project->featureBar['browse']['all'], set::url($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID"))),
+        $productDropdown,
+        $hasSearch && $isLatestVersion ? li(searchToggle(set::module('projectTask'), set::open($browseType == 'bysearch'))) : null,
+        $versionList
     );
     toolbar
     (

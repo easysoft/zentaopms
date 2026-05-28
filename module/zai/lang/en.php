@@ -7,6 +7,7 @@ $lang->zai->token      = 'App Secret';
 $lang->zai->adminToken = 'Admin Secret';
 $lang->zai->addSetting = 'Add ZAI Setting';
 
+$lang->zai->testConnection           = 'Test Connection';
 $lang->zai->configurationUnavailable = 'ZAI configuration unavailable.';
 $lang->zai->illegalZentaoUser        = 'Illegal Zentao user!';
 $lang->zai->onlyPostRequest          = 'This operation only supports POST requests.';

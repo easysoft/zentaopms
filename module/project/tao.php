@@ -914,7 +914,7 @@ class projectTao extends projectModel
 
         return $this->dao->select($selectFields)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.parent')->lt(1)
+            ->where('t1.isParent')->eq(0)
             ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)

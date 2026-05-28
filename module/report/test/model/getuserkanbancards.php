@@ -20,6 +20,8 @@ $card->deleted->range('0,0,0,0,0,0,0,1');
 $card->end->range('`' . date('Y-m-d') . '`,`' . date('Y-m-d') . '`,`' . date('Y-m-d', strtotime('+3 day')) . '`,`' . date('Y-m-d', strtotime('+10 day')) . '`,`' . date('Y-m-d') . '`,`' . date('Y-m-d') . '`,`' . date('Y-m-d') . '`,`' . date('Y-m-d') . '`');
 $card->gen(8);
 
+zenData('kanban')->gen(1);
+
 su('admin');
 
 /**

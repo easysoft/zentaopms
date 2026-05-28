@@ -38,9 +38,10 @@ $ganttLang->wrongRelationTarget = $lang->execution->error->wrongGanttRelationTar
 $ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
 $ganttLang->warningNoToday      = $lang->execution->gantt->warning->noTodayMarker;
 
-if($from == 'doc')
+if($from == 'doc' || !empty($versionID))
 {
-    $typeHtml = $lang->programplan->ganttBrowseType['gantt'];
+    $showType = $from == 'doc' ? 'gantt' : $type;
+    $typeHtml = $lang->programplan->ganttBrowseType[$showType];
 }
 else
 {
@@ -82,4 +83,9 @@ foreach($ganttFields as $colName => $value)
     }
 
     $ganttFields[$colName] = $value;
+}
+if(empty($config->setPercent))
+{
+    $showFields = str_replace(',progress,', ',', $showFields);
+    unset($ganttFields['column_percent']);
 }

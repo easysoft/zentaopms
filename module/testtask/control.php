@@ -362,7 +362,7 @@ class testtask extends control
      * 查看非单元测试的测试单的用例列表。
      * Browse cases of a testtask which isn't unit test.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $browseType  all|assignedtome|bysuite|byModule
      * @param  string $orderBy
      * @param  int    $param
@@ -372,11 +372,11 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function cases(int $taskID, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function cases(int $testtaskID, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 获取测试单信息。*/
         /* Get testtask info. */
-        $testtask = $this->testtask->getByID($taskID);
+        $testtask = $this->testtask->getByID($testtaskID);
         if(!$testtask) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
         if(!$this->loadModel('common')->checkPrivByObject('project', $testtask->project))     return $this->sendError($this->lang->project->accessDenied, inlink('browse'));
         if($testtask->execution && !$this->loadModel('common')->checkPrivByObject('execution', $testtask->execution)) return $this->sendError($this->lang->execution->accessDenied, inlink('browse'));
@@ -398,8 +398,8 @@ class testtask extends control
 
         /* 保存部分内容到 cookie 中供后面使用。*/
         /* Save cookies. */
-        if($this->cookie->preTaskID != $taskID) helper::setcookie('taskCaseModule', 0, 0);
-        helper::setcookie('preTaskID', $taskID);
+        if($this->cookie->preTaskID != $testtaskID) helper::setcookie('taskCaseModule', 0, 0);
+        helper::setcookie('preTaskID', $testtaskID);
         if($browseType == 'bymodule') helper::setcookie('taskCaseModule', $param, 0);
 
         /* 如果测试单所属产品在产品键值对中不存在，将其加入。*/
@@ -433,7 +433,7 @@ class testtask extends control
      * The report page of a testtask.
      *
      * @param  int    $productID
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $browseType
      * @param  int    $branchID
      * @param  int    $moduleID
@@ -441,7 +441,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function report(int $productID, int $taskID, string $browseType, int $branchID, int $moduleID = 0, string $chartType = 'pie')
+    public function report(int $productID, int $testtaskID, string $browseType, int $branchID, int $moduleID = 0, string $chartType = 'pie')
     {
         $this->loadModel('report');
         $charts = $datas = array();
@@ -451,7 +451,7 @@ class testtask extends control
             foreach($this->post->charts as $chart)
             {
                 $chartFunc   = 'getDataOf' . $chart;
-                $chartData   = $this->testtask->$chartFunc($taskID);
+                $chartData   = $this->testtask->$chartFunc($testtaskID);
                 $chartOption = $this->config->testtask->report->options;
                 if(!empty($chartType))
                 {
@@ -464,7 +464,7 @@ class testtask extends control
             }
         }
 
-        $task = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($task->product, $branchID, $task->project, $task->execution, $task);
         $this->testtaskZen->setDropMenu($task->product, $task);
 
@@ -478,7 +478,7 @@ class testtask extends control
 
         $this->view->title      = $this->products[$task->product] . $this->lang->hyphen . $this->lang->testtask->common . $this->lang->hyphen . $this->lang->testtask->reportChart;
         $this->view->productID  = $task->product;
-        $this->view->taskID     = $taskID;
+        $this->view->taskID     = $testtaskID;
         $this->view->browseType = $browseType;
         $this->view->moduleID   = $moduleID;
         $this->view->branchID   = $branchID;
@@ -492,16 +492,16 @@ class testtask extends control
      * 分组浏览一个测试单关联的用例。
      * Browse the cases associated with a testtask in groups.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $browseType
      * @access public
      * @return void
      */
-    public function groupCase(int $taskID, string $browseType = 'all')
+    public function groupCase(int $testtaskID, string $browseType = 'all')
     {
         /* 检查测试单是否存在。*/
         /* Check if the testtask exists. */
-        $task = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($testtaskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
         /* 检查是否有权限访问测试单所属产品。*/
@@ -548,16 +548,16 @@ class testtask extends control
      * 编辑一个测试单。
      * Edit a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function edit(int $taskID)
+    public function edit(int $testtaskID)
     {
         if(!empty($_POST))
         {
-            $oldTask = $this->testtask->getByID($taskID);
-            $task    = $this->testtaskZen->buildTaskForEdit($taskID, $oldTask->product);
+            $oldTask = $this->testtask->getByID($testtaskID);
+            $task    = $this->testtaskZen->buildTaskForEdit($testtaskID, $oldTask->product);
             $this->testtaskZen->checkTaskForEdit($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -566,17 +566,17 @@ class testtask extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes || $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'edited', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
             if(isInModal()) return $this->send(array('result' => 'success', 'message' => $message, 'load' => true));
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->testtaskList, 'closeModal' => true));
         }
 
         /* Get task info. */
-        $task = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($task->product, $task->branch, $task->project, $task->execution, $task);
         $productID = $this->loadModel('product')->checkAccess($task->product, $this->products);
 
@@ -596,36 +596,36 @@ class testtask extends control
      * 开始一个测试单。
      * Start a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function start(int $taskID)
+    public function start(int $testtaskID)
     {
         if(!empty($_POST))
         {
-            $task = $this->testtaskZen->buildTaskForStart($taskID);
+            $task = $this->testtaskZen->buildTaskForStart($testtaskID);
 
             $changes = $this->testtask->start($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes || $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Started', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($taskID);
+        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->start;
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
         $this->display();
@@ -635,36 +635,36 @@ class testtask extends control
      * 关闭一个测试单。
      * Close a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function close(int $taskID)
+    public function close(int $testtaskID)
     {
         if(!empty($_POST))
         {
-            $task = $this->testtaskZen->buildTaskForClose($taskID);
+            $task = $this->testtaskZen->buildTaskForClose($testtaskID);
 
             $changes = $this->testtask->close($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes || $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Closed', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Closed', $this->post->comment);
                 if($changes) $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($taskID);
+        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->close;
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted|qdfirst');
         $this->view->testtask = $testtask;
         $this->display();
@@ -674,36 +674,36 @@ class testtask extends control
      * 阻塞一个测试单。
      * Block a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function block(int $taskID)
+    public function block(int $testtaskID)
     {
         if(!empty($_POST))
         {
-            $task = $this->testtaskZen->buildTaskForBlock($taskID);
+            $task = $this->testtaskZen->buildTaskForBlock($testtaskID);
 
             $changes = $this->testtask->block($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes || $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Blocked', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Blocked', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($taskID);
+        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->block;
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
         $this->display();
@@ -713,36 +713,36 @@ class testtask extends control
      * 激活一个测试单。
      * Activate a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function activate(int $taskID)
+    public function activate(int $testtaskID)
     {
         if(!empty($_POST))
         {
-            $task = $this->testtaskZen->buildTaskForActivate($taskID);
+            $task = $this->testtaskZen->buildTaskForActivate($testtaskID);
 
             $changes = $this->testtask->activate($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($changes || $this->post->comment)
             {
-                $actionID = $this->loadModel('action')->create('testtask', $taskID, 'Activated', $this->post->comment);
+                $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+            $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true, 'load' => true));
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($taskID);
+        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
         $this->view->title    = $testtask->name . $this->lang->hyphen . $this->lang->testtask->activate;
-        $this->view->actions  = $this->loadModel('action')->getList('testtask', $taskID);
+        $this->view->actions  = $this->loadModel('action')->getList('testtask', $testtaskID);
         $this->view->users    = $this->loadModel('user')->getPairs('nodeleted', $testtask->owner);
         $this->view->testtask = $testtask;
         $this->display();
@@ -752,19 +752,19 @@ class testtask extends control
      * 删除一个测试单。
      * Delete a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function delete(int $taskID)
+    public function delete(int $testtaskID)
     {
-        $task = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($testtaskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('qa', 'index'))));
 
-        $this->testtask->delete(TABLE_TESTTASK, $taskID);
+        $this->testtask->delete(TABLE_TESTTASK, $testtaskID);
         if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
 
-        $message = $this->executeHooks($taskID) ?: $this->lang->saveSuccess;
+        $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
 
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
@@ -779,7 +779,7 @@ class testtask extends control
      * 关联测试用例到一个测试单。
      * Link cases to a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $type
      * @param  int    $param
      * @param  int    $recTotal
@@ -788,18 +788,18 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function linkCase(int $taskID, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkCase(int $testtaskID, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         if(!empty($_POST))
         {
             $runs = form::batchData($this->config->testtask->form->linkCase)->get();
-            $this->testtask->linkCase($taskID, $type, $runs);
+            $this->testtask->linkCase($testtaskID, $type, $runs);
             if(dao::isError()) return $this->send(array('result' => 'success', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$taskID}")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('cases', "taskID={$testtaskID}")));
         }
         /* Get testtask info. */
-        $task = $this->testtask->getByID($taskID);
+        $task = $this->testtask->getByID($testtaskID);
         if(!$task) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->checkLinked, 'locate' => array('back' => true))));
 
         /* Check if user have permission to access the product to which the testtask belongs. */
@@ -825,7 +825,7 @@ class testtask extends control
         $this->view->title        = $task->name . $this->lang->hyphen . $this->lang->testtask->linkCase;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->suites       = $this->loadModel('testsuite')->getSuites($task->product);
-        $this->view->relatedTasks = $this->testtask->getRelatedTestTasks($productID, $taskID);
+        $this->view->relatedTasks = $this->testtask->getRelatedTestTasks($productID, $testtaskID);
         $this->view->cases        = $cases;
         $this->view->task         = $task;
         $this->view->type         = $type;
@@ -856,13 +856,13 @@ class testtask extends control
      * 批量从测试单中移除用例。
      * Batch remove cases from a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @access public
      * @return void
      */
-    public function batchUnlinkCases(int $taskID)
+    public function batchUnlinkCases(int $testtaskID)
     {
-        $this->testtask->batchUnlinkCases($taskID, $this->post->caseIdList);
+        $this->testtask->batchUnlinkCases($testtaskID, $this->post->caseIdList);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -920,21 +920,21 @@ class testtask extends control
      * @param  int    $productID
      * @param  string $orderBy
      * @param  string $from
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $confirm
      * @access public
      * @return void
      */
-    public function batchRun(int $productID, string $orderBy = 'id_desc', string $from = 'testcase', int $taskID = 0, string $confirm = '')
+    public function batchRun(int $productID, string $orderBy = 'id_desc', string $from = 'testcase', int $testtaskID = 0, string $confirm = '')
     {
         $url = $this->session->caseList ?: inlink('browse', "productID=$productID");
 
         if($this->post->results)
         {
             $cases = form::batchData($this->config->testtask->form->batchRun)->get();
-            $this->testtask->batchRun($cases, $from, $taskID);
+            $this->testtask->batchRun($cases, $from, $testtaskID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if(!empty($taskID)) $this->testtask->updateStatus((int)$taskID);
+            if(!empty($testtaskID)) $this->testtask->updateStatus((int)$testtaskID);
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }
@@ -944,7 +944,7 @@ class testtask extends control
         $caseIdList = $this->loadModel('testcase')->ignoreAutoCaseIdList((array)$this->post->caseIdList);
         if(empty($caseIdList)) $this->locate($url);
 
-        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $taskID, $confirm, $caseIdList);
+        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList);
         if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
         $steps = $this->testcase->getStepGroupByIdList($caseIdList);
@@ -1072,15 +1072,15 @@ class testtask extends control
      * 批量指派测试单中的用例。
      * Batch assign cases in a testtask.
      *
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $account
      * @access public
      * @return void
      */
-    public function batchAssign(int $taskID, string $account = '')
+    public function batchAssign(int $testtaskID, string $account = '')
     {
         if(empty($account)) $account = $this->post->assignedTo;
-        $this->testtask->batchAssign($taskID, $account, $this->post->caseIdList);
+        $this->testtask->batchAssign($testtaskID, $account, $this->post->caseIdList);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
@@ -1107,10 +1107,10 @@ class testtask extends control
             if(!is_writable($this->file->savePath)) return $this->send(array('result' => 'fail', 'message' => sprintf(strip_tags($this->lang->file->errorCanNotWrite), $this->file->savePath, $this->file->savePath)));
 
             $task   = $this->testtaskZen->buildTaskForImportUnitResult($productID);
-            $taskID = $this->testtask->importUnitResult($task);
+            $testtaskID = $this->testtask->importUnitResult($task);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('unitCases', "taskID=$taskID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => inlink('unitCases', "taskID=$testtaskID")));
         }
 
         $this->app->loadLang('job');
@@ -1153,7 +1153,7 @@ class testtask extends control
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
         $items = array();
-        foreach($testTasks as $taskID =>  $taskName) $items[] = array('text' => $taskName, 'value' => $taskID);
+        foreach($testTasks as $testtaskID =>  $taskName) $items[] = array('text' => $taskName, 'value' => $testtaskID);
 
         $fieldName = $id ? "testtasks[$id]" : 'testtask';
         return print(json_encode(array('name' => $fieldName, 'items' => $items)));
@@ -1173,7 +1173,7 @@ class testtask extends control
     {
         $tasks = array();
         $pairs = $this->testtask->getPairs($productID, $executionID, $appendTaskID);
-        foreach($pairs as $taskID => $taskName) $tasks[] = array('text' => $taskName, 'value' => $taskID, 'keys' => $taskName);
+        foreach($pairs as $testtaskID => $taskName) $tasks[] = array('text' => $taskName, 'value' => $testtaskID, 'keys' => $taskName);
 
         return $this->send(array('result' => 'success', 'tasks' => $tasks));
     }
@@ -1203,7 +1203,7 @@ class testtask extends control
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  int    $taskID
+     * @param  int    $testtaskID
      * @param  string $module
      * @param  string $method
      * @param  string $objectType
@@ -1211,11 +1211,11 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu(int $productID, string $branch, int $taskID, string $module, string $method, string $objectType = '', int $objectID = 0)
+    public function ajaxGetDropMenu(int $productID, string $branch, int $testtaskID, string $module, string $method, string $objectType = '', int $objectID = 0)
     {
         if($objectType && ($objectType == 'project' || $objectType == 'execution') && $objectID)
         {
-            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'id_desc', null);
+            $testtasks = $objectType == 'project' ? $this->testtask->getProjectTasks($objectID, 0, 'all', 0, 'id_desc', null) : $this->testtask->getExecutionTasks($objectID, 0, 'execution', 'all', 0, 'id_desc', null);
         }
         else
         {
@@ -1228,7 +1228,7 @@ class testtask extends control
 
         $params = $method == 'report' ? "productID={$productID}&taskID=%s&browseType=all&branch={$branch}" : "taskID=%s";
 
-        $this->view->currentTaskID   = $taskID;
+        $this->view->currentTaskID   = $testtaskID;
         $this->view->testtasks       = $testtasks;
         $this->view->module          = $module;
         $this->view->method          = $method;

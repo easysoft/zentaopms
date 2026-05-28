@@ -3115,7 +3115,7 @@ class docModelTest extends baseTest
         // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
         if($docID) {
             // 文档移动的响应
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
 
@@ -5623,5 +5623,57 @@ class docModelTest extends baseTest
             ->orderBy('version_desc')
             ->limit(1)
             ->fetch();
+    }
+
+    /**
+     * 验证并解码 URL 类型文档的 content。
+     * Validate and decode URL type doc content.
+     *
+     * @param  object     $doc
+     * @access public
+     * @return bool|array
+     */
+    public function validateDocUrlTest(object $doc): bool|array
+    {
+        $result = $this->invokeArgs('validateDocUrl', [$doc]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 处理文档列表数据。
+     * Process doc list data.
+     *
+     * @param  array  $docs
+     * @param  array  $rootDocs
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function processDocListTest(array $docs, array $rootDocs, string $spaceType): array
+    {
+        $result = $this->invokeArgs('processDocList', [$docs, $rootDocs, $spaceType]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * 追加文档筛选条件。
+     * Append doc filters.
+     *
+     * @param  object $dao
+     * @param  string $browseType
+     * @param  string $queryString
+     * @param  string $filterType
+     * @param  array  $hasPrivDocIdList
+     * @param  string $filterDocs
+     * @param  string $appendDocs
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
+    public function appendDocFiltersTest(object $dao, string $browseType, string $queryString, string $filterType, array $hasPrivDocIdList, string $filterDocs, string $appendDocs, string $orderBy): object
+    {
+        return $this->invokeArgs('appendDocFilters', [$dao, $browseType, $queryString, $filterType, $hasPrivDocIdList, $filterDocs, $appendDocs, $orderBy]);
     }
 }
