@@ -633,7 +633,9 @@ class release extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+
+            $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->release = $release;

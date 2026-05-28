@@ -610,7 +610,8 @@ class productplanModel extends model
         $oldPlan = $this->getByID($planID);
         if(!$oldPlan) return false;
 
-        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason);
+        $plan = form::data($this->config->productplan->form->close)->get();
+        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason, $plan);
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 

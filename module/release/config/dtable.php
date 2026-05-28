@@ -207,6 +207,3 @@ $config->release->dtable->leftBug->fieldList['actions']['menu']  = array('unlink
 unset($config->release->dtable->leftBug->fieldList['resolvedBuild']);
 unset($config->release->dtable->leftBug->fieldList['resolvedBy']);
 unset($config->release->dtable->leftBug->fieldList['resolvedDate']);
-
-$config->release->dtable->publish = new stdclass();
-$config->release->dtable->publish->fieldList = array();
