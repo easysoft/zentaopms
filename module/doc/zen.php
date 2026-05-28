@@ -417,12 +417,12 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false, string $docType = '')
+    protected function responseAfterMove(string $space, int $libID = 0, int $docID = 0, bool $spaceTypeChanged = false, string $docType = '', string $actionType = 'move')
     {
         list($spaceType, $spaceID) = explode('.', $space);
         if($docID)
         {
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $spaceID, $libID, $docType));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID, $docType, $actionType));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'docApp' => $docAppAction));
         }
 

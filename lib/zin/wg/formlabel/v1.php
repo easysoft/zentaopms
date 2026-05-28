@@ -50,6 +50,7 @@ class formLabel extends wg
         return h::label
         (
             setClass('form-label', $required ? 'required' : null),
+            set('title', $text),
             set('for', $for),
             set($this->getRestProps()),
             span(setClass('text'), $text),

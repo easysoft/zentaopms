@@ -35,8 +35,7 @@ formPanel
             $lang->execution->copy
         )
     ),
-    on::change('[name=begin]', 'computeWorkDays(NaN)'),
-    on::change('[name=end]', 'computeWorkDays(NaN)'),
+    on::change('[name=begin], [name=end]', 'dateRangeChange'),
     $config->systemMode == 'ALM' ? formGroup
     (
         set::width('1/2'),

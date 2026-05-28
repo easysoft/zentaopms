@@ -766,6 +766,8 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -773,7 +775,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -789,7 +791,12 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', 'product_asc,' . $sort, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', $type, $param, 'product_asc,' . $sort, $pager);
+
+        $products = $this->product->getProducts($executionID);
+        /* Build the search form. */
+        $actionURL = $this->createLink('execution', 'testtask', "executionID=$executionID&productID=$productID&type=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->execution->buildTesttaskSearchForm($products, $param, $actionURL);
 
         $this->executionZen->assignTesttaskVars($tasks);
 
@@ -800,6 +807,7 @@ class execution extends control
         $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
+        $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
@@ -2645,7 +2653,7 @@ class execution extends control
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         $execution = $this->execution->getByID($executionID);
-        return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->execution->confirmBatchUnlinkStory, 'locate' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project'))));
+        return $this->send(array('result' => 'success', 'load' => $this->createLink('execution', 'story', "executionID=$executionID") . ($execution->multiple ? '' : '#app=project')));
     }
 
     /**

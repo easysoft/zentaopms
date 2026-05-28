@@ -776,6 +776,13 @@ class projectZen extends project
         }
         if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
 
+        if(in_array($this->config->edition, array('max', 'ipd')) && (in_array($project->model, array('scrum', 'kanban')) || !empty($project->isTpl)))
+        {
+            unset($this->lang->resource->task->autoschedule);
+            unset($this->lang->resource->execution->taskAutoSchedule);
+        }
+        if(!empty($project->isTpl)) unset($this->lang->resource->programplan->taskAutoSchedule);
+
         if(!$project->multiple and !$project->hasProduct)
         {
             unset($this->lang->resource->story->batchChangePlan);
@@ -1079,8 +1086,9 @@ class projectZen extends project
     protected function removeAssociatedExecutions(array $executionIdList): void
     {
         $this->project->deleteByTableName(TABLE_EXECUTION, array_keys($executionIdList));
-        foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', actionModel::CAN_UNDELETED);
-        $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
+        $this->loadModel('action');
+        foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', actionModel::CAN_UNDELETED);
+        $this->loadModel('user')->updateUserView(array_keys($executionIdList), 'sprint');
     }
 
     /**

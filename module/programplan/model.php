@@ -1027,7 +1027,7 @@ class programplanModel extends model
         /* 1. 甘特图创建的版本。 Gantt version. */
         $ganttVersions = $this->dao->select("*, 'gantt' AS reviewType")->from(TABLE_OBJECT)
             ->where('type')->eq('taged')
-            ->andWhere('status')->eq('gantt')
+            ->andWhere('status')->in('gantt,tmpGantt')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($category))->andWhere('category')->eq($category)->fi()
             ->beginIF($type == 'project')->andWhere('project')->eq($projectID)->fi()
@@ -1038,6 +1038,7 @@ class programplanModel extends model
 
         /* 执行的甘特图版本只有这个。 Execution's gantt version only has this. */
         if($type == 'execution') return $ganttVersions;
+        if($type == 'project' && $category != 'gantt') return $ganttVersions;
 
         $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
@@ -1045,7 +1046,7 @@ class programplanModel extends model
             ->fetch('disabledFeatures');
 
         /* 2. 交付物的项目计划。 Project plan of deliverable. */
-        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+        $deliverableVersions = strpos(",{$disabledFeatures},", ',deliverable,') !== false ? array() : $this->dao->select('t1.*, t2.type AS reviewType, t2.deliverable, t2.id AS reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->leftJoin(TABLE_DELIVERABLE)->alias('t3')->on('t1.category = t3.id')
             ->where('t1.project')->eq($projectID)
@@ -1055,16 +1056,13 @@ class programplanModel extends model
             ->andWhere('t2.type')->eq('deliverable')
             ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
             ->fetchAll('id', false);
+        $deliverableIdList = array_unique(array_column($deliverableVersions, 'deliverable'));
+
         /* 3. 基线评审的版本。 Project plan of baseline. */
         $baselineVersions = array();
         if(strpos(",{$disabledFeatures},", ',cm,') === false)
         {
-            $ppCategories = $this->dao->select('t1.id')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
-                ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.deliverable = t2.id')
-                ->where('t1.project')->eq($projectID)
-                ->andWhere('t2.category')->eq('PP')
-                ->fetchPairs();
-            $baselineVersions = $this->dao->select('t1.*, t2.type AS reviewType')->from(TABLE_OBJECT)->alias('t1')
+            $baselineVersions = $this->dao->select('t1.id, t1.title, t1.category, t1.categoryVersion')->from(TABLE_OBJECT)->alias('t1')
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.status')->eq('pass')
@@ -1074,18 +1072,27 @@ class programplanModel extends model
                 ->fetchAll('id', false);
             foreach($baselineVersions as $baselineVersion)
             {
-                if(isset($ppCategories[$baselineVersion->category])) continue;
                 foreach(explode(',', $baselineVersion->category) as $category)
                 {
-                    if(isset($ppCategories[$category])) continue 2;
-                }
+                    if(!in_array($category, $deliverableIdList))
+                    {
+                        unset($baselineVersions[$baselineVersion->id]);
+                        continue 2;
+                    }
 
-                unset($baselineVersions[$baselineVersion->id]);
+                    $categoryVersion     = json_decode($baselineVersion->categoryVersion, true);
+                    $deliverableReviewID = $categoryVersion[$category];
+                    foreach($deliverableVersions as $deliverable)
+                    {
+                        if(!isset($deliverable->baselineList)) $deliverable->baselineList = '';
+                        if($deliverable->reviewID == $deliverableReviewID) $deliverable->baselineList .= "$baselineVersion->title ";
+                    }
+                }
             }
         }
 
         /* 4. 合并版本。 Merge versions. */
-        $versions = arrayUnion($deliverableVersions, $baselineVersions, $ganttVersions);
+        $versions = arrayUnion($deliverableVersions, $ganttVersions);
         ksort($versions, SORT_NUMERIC);
 
         return $versions;
@@ -1104,7 +1111,7 @@ class programplanModel extends model
         $object = $this->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($versionID)->fetch();
         if(empty($object)) return array();
 
-        if($object->status == 'gantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
+        if($object->status == 'gantt' || $object->status == 'tmpGantt') return (array)json_decode($object->data); // 如果是个甘特图直接创建的版本，直接返回数据。 If it is a gantt version created directly, return the data directly.
 
         /* 如果是基线关联的甘特图版本，需要找到基线对应的交付物的甘特图版本。 If it is a gantt version related to a baseline, find the gantt version corresponding to the deliverable. */
         if(empty($object->data) && !empty($object->categoryVersion))

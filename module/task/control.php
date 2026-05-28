@@ -792,11 +792,22 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  string $cardPosition
+     * @param  string $confirm      no|yes
      * @access public
      * @return void
      */
-    public function close(int $taskID, string $cardPosition = '')
+    public function close(int $taskID, string $cardPosition = '', string $confirm = 'no')
     {
+        if($confirm == 'no')
+        {
+            $childIdList = $this->task->getAllChildId($taskID, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('task', 'close', "taskID=$taskID&cardPosition=$cardPosition&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->task->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
+
         $cardPosition = str_replace(array(',', ' '), array('&', ''), $cardPosition);
         parse_str($cardPosition, $output);
 
@@ -1034,6 +1045,8 @@ class task extends control
         }
         if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
         if($task->story) $this->loadModel('story')->setStage($task->story);
+
+        $this->loadModel('program')->refreshProjectStats($task->project);
 
         $message = $this->executeHooks($taskID);
         $message = $message ?: $this->lang->saveSuccess;

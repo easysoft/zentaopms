@@ -548,6 +548,7 @@ class executionModel extends model
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->user->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? (int)$execution->project : (int)$oldExecution->project;
+            if(isset($execution->schedule)) $execution->schedule = htmlspecialchars_decode($execution->schedule);
 
             if(isset($execution->project))
             {
@@ -3905,7 +3906,7 @@ class executionModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
-            ->filterTpl('skip')
+            ->filterTpl(false)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id', false);
@@ -4005,6 +4006,7 @@ class executionModel extends model
         if($action == 'putoff')       return $execution->status == 'wait' || $execution->status == 'doing';
         if($action == 'activate')     return $execution->status == 'suspended' || $execution->status == 'closed';
         if($action == 'delete')       return empty($execution->isParent);
+        if($action == 'gantt')        return $execution->type != 'kanban' && empty($execution->isParent);
 
         return true;
     }
@@ -4247,6 +4249,33 @@ class executionModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    /**
+     * 构造用例列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig = $this->config->testtask->search;
+        $searchConfig['module'] = 'executionTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('executionTesttask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
     /**
      * 构建搜索任务的表单。
      * Build task search form.
@@ -5531,20 +5560,25 @@ class executionModel extends model
     {
         $stageType    = $execution->type == 'stage' ? $execution->attribute : $execution->type;
         $project      = $this->loadModel('project')->fetchByID((int)$execution->project);
-        $deliverables = $this->dao->select('t1.id')->from(TABLE_DELIVERABLE)->alias('t1')
+        $deliverables = $this->dao->select('t1.id, t2.required')->from(TABLE_DELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
             ->andWhere('t1.status')->eq('enabled')
-            ->andWhere('t2.required')->eq('1')
+            ->andWhere('t2.required')->ne('0')
             ->andWhere('t2.stage')->eq($stageType)
-            ->fetchPairs();
+            ->fetchPairs('id');
 
         if(empty($deliverables)) return true;
 
-        $countExecutionDeliverables = $this->dao->select('count(*) as count')->from(TABLE_PROJECTDELIVERABLE)->where('project')->eq($execution->project)->andWhere('deliverable')->in($deliverables)->fetch('count');
+        $executionDeliverables = $this->dao->select('*')->from(TABLE_PROJECTDELIVERABLE)->where('project')->eq($execution->project)->andWhere('deliverable')->in(array_keys($deliverables))->fetchAll();
+        foreach($executionDeliverables as $key => $deliverable)
+        {
+            $required = $deliverables[$deliverable->deliverable];
+            if($required == 2 && $deliverable->status != 'pass') unset($executionDeliverables[$key]);
+        }
 
-        return $countExecutionDeliverables >= count($deliverables);
+        return count($executionDeliverables) >= count($deliverables);
     }
 
     /**

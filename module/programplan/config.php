@@ -89,4 +89,4 @@ $config->programplan->customAgilePlus->defaultFields = $config->programplan->cus
 
 $config->programplan->custom->customGanttFields = 'ownerID,status,begin,deadline,realBegan,realEnd,duration,progress,taskProgress,estimate,consumed,left,delay,delayDays,taskType,openedBy,openedDate,assignedDate,finishedBy,closedBy,closedDate,closedReason,lastEditedBy,lastEditedDate,activatedDate,story,keywords,mailto';
 $config->programplan->ganttCustom = new stdclass();
-$config->programplan->ganttCustom->ganttFields = 'ownerID,deadline';
+$config->programplan->ganttCustom->ganttFields = 'ownerID,begin,deadline,duration';

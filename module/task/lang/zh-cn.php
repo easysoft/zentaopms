@@ -308,6 +308,7 @@ $lang->task->noModule                  = '<div>您现在还没有模块信息</d
 $lang->task->createDenied              = "你不能在该%s添加任务";
 $lang->task->cannotDeleteParent        = '不能删除父任务。';
 $lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
+$lang->task->closeParentTips           = '该父任务下还有未关闭的子任务：%s。父任务关闭后，子任务也将同时关闭，您确认要关闭父任务吗？';
 $lang->task->selectTestStoryTip        = "以下{$lang->SRCommon}将作为此任务的子任务";
 $lang->task->effortOperateTips         = '只有项目负责人、执行负责人、所属部门负责人才能%s他人日志。';
 $lang->task->syncStoryToChildrenTip    = "子任务%s没有关联{$lang->SRCommon}，是否同步更新为父任务的相关{$lang->SRCommon}？";

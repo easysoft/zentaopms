@@ -129,6 +129,7 @@ class story extends control
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
         parse_str($extras, $params);
         if(!isset($params['needNotReview'])) $extra .= ',needNotReview={needNotReview}';
+        if(in_array($this->config->edition, array('max', 'ipd'))) $extra .= ",source={source},sourceNote={sourceNote}";
         $this->view->needNotReview = $params['needNotReview'] ?? !$this->view->forceReview;
         $this->view->loadUrl       = $this->createLink($storyType, 'create', "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
 
@@ -901,13 +902,24 @@ class story extends control
      * @param  int    $storyID
      * @param  string $from        taskkanban
      * @param  string $storyType   story|requirement
+     * @param  string $confirm     yes|no
      * @access public
      * @return void
      */
-    public function close(int $storyID, string $from = '', string $storyType = 'story')
+    public function close(int $storyID, string $from = '', string $storyType = 'story', string $confirm = 'no')
     {
         $story = $this->story->getById($storyID);
         $this->commonAction($storyID);
+
+        if($confirm == 'no')
+        {
+            $childIdList = $this->story->getAllChildId($storyID, false, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('story', 'close', "storyID=$storyID&from=$from&storyType=$storyType&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
 
         if(!empty($_POST))
         {
@@ -2231,5 +2243,19 @@ class story extends control
     public function unlinkBranch()
     {
         return print($this->fetch('repo', 'unlinkBranch'));
+    }
+
+    /**
+     * AJAX: 获取父需求的信息。
+     * AJAX: Get parent story info.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetParentStoryInfo(int $storyID)
+    {
+        $story = $this->story->getByID($storyID);
+        return print(json_encode($story));
     }
 }
