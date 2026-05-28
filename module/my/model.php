@@ -1364,6 +1364,7 @@ class myModel extends model
                 }
                 $ppm->status = $ppm->reviewStatus;
             }
+            if(empty($ppm->status)) $ppm->status = 'pending';
         }
         return $ppms;
     }
