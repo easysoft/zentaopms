@@ -493,6 +493,12 @@ class webhookModel extends model
      */
     public function getViewLink(string $objectType, int $objectID): string
     {
+        $isAPI = (defined('RUN_MODE') && RUN_MODE == 'api');
+        if($isAPI)
+        {
+            global $oldRequestType;
+            if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+        }
         $oldOnlyBody = '';
         $tab         = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
@@ -515,11 +521,13 @@ class webhookModel extends model
         {
             $viewLink = helper::createLink('aitask', 'view', "taskID={$objectID}", 'html') . $tab;
             if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+            if($isAPI) $this->config->requestType = 'GET';
             return $viewLink;
         }
 
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+        if($isAPI) $this->config->requestType = 'GET';
 
         return $viewLink;
     }
