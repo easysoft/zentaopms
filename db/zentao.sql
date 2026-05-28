@@ -14004,7 +14004,7 @@ CREATE TABLE IF NOT EXISTS `zt_object` (
   `reviewOpinion` text NULL,
   `reviewers` text NULL,
   `enabled` enum('0','1') NOT NULL DEFAULT '1',
-  `visible` enum('0','1') NOT NULL DEFAULT '0' COMMENT '甘特图中版本是否可见，默认0不可见'
+  `visible` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '甘特图中版本是否可见，默认0不可见'
   `data` text NULL DEFAULT NULL,
   `items` text NULL DEFAULT NULL COMMENT '评审条目列表',
   `end` date NULL,
