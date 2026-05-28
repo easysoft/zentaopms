@@ -84,7 +84,7 @@ formPanel
         set::label($lang->api->importFile),
         set::required(true),
         fileSelector(setID('files'), set::name('files'), set::accept('.json,.yaml'), set::maxFileCount(1), set::multiple(false), set::required(true)),
-        set::tip($lang->api->importFileTip)
+        span(setClass('text-gray'), $lang->api->importFileTip)
     ) : null,
     formRow
     (
