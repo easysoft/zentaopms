@@ -40,7 +40,8 @@ $ganttLang->warningNoToday      = $lang->execution->gantt->warning->noTodayMarke
 
 if($from == 'doc' || !empty($versionID))
 {
-    $typeHtml = $lang->programplan->ganttBrowseType['gantt'];
+    $showType = $from == 'doc' ? 'gantt' : $type;
+    $typeHtml = $lang->programplan->ganttBrowseType[$showType];
 }
 else
 {
