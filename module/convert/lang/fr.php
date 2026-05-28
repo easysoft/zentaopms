@@ -106,7 +106,7 @@ $lang->convert->errorGroupExists   = 'Group %s existed.';
 $lang->convert->errorBuildExists   = 'Build %s existed.';
 $lang->convert->errorReleaseExists = 'Release %s existed.';
 $lang->convert->errorCopyFailed    = 'File %s copy failed.';
-$lang->convert->importFailed       = 'Import failed';
+$lang->convert->importFailed       = 'Import failed. Please refresh the page and try again.';
 
 $lang->convert->setParam = 'Set parameters.';
 
@@ -194,6 +194,8 @@ $lang->convert->jira->passwordDifferent  = 'Password do not match!';
 $lang->convert->jira->passwordEmpty      = 'Password can not be empty!';
 $lang->convert->jira->passwordLess       = 'Password must not be less than six characters!';
 $lang->convert->jira->importSuccessfully = 'Done!';
+$lang->convert->jira->getDataResult      = "Get <strong class='text-danger'>%s</strong> Data. <strong class='%scount'>%s</strong> pieces of data processed；";
+$lang->convert->jira->getDataSuccess     = 'Get Jira Data processed. jira Data import in progress.';
 $lang->convert->jira->importResult       = "Import <strong class='text-danger'>%s</strong> data, <strong class='%scount'>%s</strong> pieces of data processed；";
 $lang->convert->jira->importing          = 'Data is being imported, please do not switch to other pages.';
 $lang->convert->jira->importingAB        = 'Data Import';
