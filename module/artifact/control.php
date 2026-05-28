@@ -324,6 +324,7 @@ class artifact extends control
         $currentPath = $path ? helper::safe64Decode($path) : '';
         $parentPath  = $currentPath ? dirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
+        $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
 
         $artifacts = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
         if($_POST)
@@ -365,7 +366,7 @@ class artifact extends control
         $this->view->artifact           = $artifact;
         $this->view->currentPath        = $currentPath;
         $this->view->currentPathEncoded = $path;
-        $this->view->parentPath         = $parentPath;
+        $this->view->parentPath         = empty($parentNode) || $parentPath == '/' ? '/' : $parentNode->entityID;
         $this->display();
     }
 
@@ -499,7 +500,12 @@ class artifact extends control
         if(dao::isError()) $this->sendError(dao::getError());
 
         $parentID = '/';
-        if(!empty($asset->metadata) && !empty($asset->metadata->groupID)) $parentID = (string)$asset->metadata->groupID;
+        if(!empty($asset->metadata) && !empty($asset->metadata->group))
+        {
+            $parentPath = '/' . $asset->metadata->group;
+            $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
+            $parentID   = $parentNode->entityID;
+        }
 
         if($_POST)
         {

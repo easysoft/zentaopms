@@ -130,11 +130,8 @@ window.loadParents = function(retries)
     const $parentField      = $('[name=parent]');
     const $parentPicker     = $parentField.zui('picker');
     const $parentLoadingDom = $parentField.closest('.form-group').find('.picker-box').first();
-    const currentArtifact   = String(window.currentArtifactID || '');
-    const selectedArtifact  = String(artifactID);
-    const currentPath       = selectedArtifact === currentArtifact ? (window.currentPathEncoded || '') : '';
-    let defaultParentPath   = selectedArtifact === currentArtifact ? (window.currentParentPath || '/') : '/';
-    const link              = $.createLink('artifact', 'ajaxGetDirParentItems', 'artifactID=' + artifactID + '&path=' + currentPath);
+    let defaultParentPath   = artifactID == currentArtifactID ? (currentParentPath || '/') : '/';
+    const link              = $.createLink('artifact', 'ajaxGetDirParentItems', 'artifactID=' + artifactID + '&path=');
     const requestToken      = ++window.parentPickerRequestToken;
 
     if(window.disableRootParent && defaultParentPath === '/') defaultParentPath = '';
