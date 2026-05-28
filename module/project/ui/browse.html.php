@@ -14,6 +14,14 @@ namespace zin;
 
 jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
+$createProjectBtn = array
+(
+    'icon'          => 'plus',
+    'text'          => $lang->project->create,
+    'data-toggle'   => 'modal',
+    'data-position' => 'center'
+);
+
 if($projectType == 'bycard')
 {
     include 'browsebycard.html.php';

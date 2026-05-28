@@ -29,14 +29,6 @@ featureBar
     li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
 
-$createProjectBtn = array
-(
-    'icon'          => 'plus',
-    'text'          => $lang->project->create,
-    'data-toggle'   => 'modal',
-    'data-position' => 'center'
-);
-
 /* zin: Define the toolbar on main menu. */
 toolbar
 (

@@ -48,14 +48,6 @@ featureBar
     li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
 
-$createProjectBtn = array
-(
-    'icon'          => 'plus',
-    'text'          => $lang->project->create,
-    'data-toggle'   => 'modal',
-    'data-position' => 'center'
-);
-
 /* zin: Define the toolbar on main menu. */
 toolbar
 (
@@ -317,6 +309,16 @@ if(!empty($projectStats))
     }
 }
 
+$emptyTipCreateBtn = null;
+if(hasPriv('project', 'create'))
+{
+    $emptyTipCreateBtn = btn(set(array_merge($createProjectBtn, array
+    (
+        'class' => 'ml-2',
+        'url'   => createLink('project', 'createGuide')
+    ))));
+}
+
 div
 (
     setID('cards'),
@@ -329,11 +331,7 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        hasPriv('project', 'create') ? btn(set(array_merge($createProjectBtn, array
-        (
-            'class' => 'ml-2',
-            'url'   => createLink('project', 'createGuide')
-        )))) : null
+        $emptyTipCreateBtn
     ) : $projectCards,
     !empty($projectStats) ? div
     (
