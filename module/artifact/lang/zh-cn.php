@@ -71,6 +71,7 @@ $lang->artifact->notice->noArtifact            = '暂无制品库';
 $lang->artifact->notice->emptyAsset            = '暂无制品';
 $lang->artifact->notice->nameNotSupportChinese = '名称仅支持英文，数字，下划线（_），中横线（-），英文句号（.）';
 $lang->artifact->notice->dirNameFormatError    = '名称仅支持中文，英文，数字，下划线（_），中横线（-）';
+$lang->artifact->notice->assetNameFormatError  = '名称不能包含\/:*?"<>|';
 $lang->artifact->notice->confirmDelete         = '删除后文件将会在回收站保留30天，超时后将无法恢复。';
 $lang->artifact->notice->confirmDeleteDir      = '删除目录后，同步删除目录下的子目录和文件，确认要删除吗?';
 $lang->artifact->notice->rootNotAllowed        = '移动制品时不能选择根目录。';
