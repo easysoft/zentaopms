@@ -136,7 +136,6 @@ $config->bug->actionList['toTask']['data-url']    = array('module' => 'task', 'm
 $config->bug->actionList['toTask']['data-target'] = '#toTask';
 $config->bug->actionList['toTask']['data-toggle'] = 'modal';
 $config->bug->actionList['toTask']['data-size']   = 'sm';
-$config->bug->actionList['toTask']['notInModal']  = true;
 
 $config->bug->actionList['createCase']['icon']       = 'sitemap';
 $config->bug->actionList['createCase']['id']         = 'createCase';
