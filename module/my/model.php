@@ -1360,11 +1360,14 @@ class myModel extends model
     {
         if($this->config->edition != 'max' and $this->config->edition != 'ipd') return array();
 
-        $projectchangePendingList = $this->loadModel('approval')->getPendingReviews('projectchange');
+        $projectchangePendingList   = $this->loadModel('approval')->getPendingReviews('projectchange');
         $projectchangeReviewingList = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('projectchange')->andWhere('object')->in($projectchangePendingList)->fetchPairs();
 
+        $baselinePendingList   = $this->approval->getPendingReviews('baseline');
+        $baselineReviewingList = $this->dao->select('id')->from(TABLE_REVIEW)->where('type')->eq('baseline')->andWhere('object')->in($baselinePendingList)->fetchPairs();
+
         $pendingList = $this->loadModel('approval')->getPendingReviews('review');
-        $pendingList = arrayUnion($pendingList, $projectchangeReviewingList);
+        $pendingList = arrayUnion($pendingList, $projectchangeReviewingList, $baselineReviewingList);
 
         $projectReviews = $this->loadModel('review')->getByList(0, $pendingList, $orderBy);
 
@@ -1382,7 +1385,7 @@ class myModel extends model
             $data = new stdclass();
             $data->id      = $review->id;
             $data->title   = $review->title;
-            $data->type    = $review->type == 'projectchange' ? 'projectchange' : 'projectreview';
+            $data->type    = in_array($review->type, array('projectchange', 'baseline')) ? $review->type : 'projectreview';
             $data->time    = date('Y-m-d H:i:s', strtotime($review->createdDate));
             $data->status  = $review->status;
             $data->product = $review->product;
@@ -1410,6 +1413,7 @@ class myModel extends model
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
             ->where('t2.objectType')->ne('review')
             ->andWhere('objectType')->ne('projectchange')
+            ->andWhere('objectType')->ne('baseline')
             ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')

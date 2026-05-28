@@ -2245,7 +2245,12 @@ class bugZen extends bug
         /* Respond when delete in task kanban. */
         if($from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
-        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
+        /* bug #72539，删除BUG之前访问了回收站的BUG列表则跳转到产品BUG列表： */
+        /* bug #72539, if the user accesses the bug list of the trash can before deleting the bug, jump to the product bug list: */
+        $sessionBugList = $this->session->bugList;
+        if($sessionBugList && (strpos($sessionBugList, 'action-trash') !== false || strpos($sessionBugList, $this->config->moduleVar . '=action&' . $this->config->methodVar . '=trash') !== false)) $sessionBugList = '';
+
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => $sessionBugList ? $sessionBugList : inlink('browse', "productID={$bug->product}"), 'closeModal' => true));
     }
 
     /**

@@ -644,7 +644,7 @@ class control extends baseControl
                 $field->value    = isset($object->{$field->field}) ? zget($object, $field->field, '') : '';
                 $field->width    = $field->width != 'auto' ? $field->width : 'full';
 
-                if(!$field->value && $field->defaultValue) $field->value = $field->defaultValue;
+                if(!$field->value && isset($field->defaultValue)) $field->value = $field->defaultValue;
             }
 
             return $fieldList;

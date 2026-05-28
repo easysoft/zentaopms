@@ -437,7 +437,7 @@ class datatable extends control
         }
 
         $target = $module . ucfirst($method);
-        if(strpos(',product-browse,execution-story,', ",$module-$method,") !== false && strpos(',story,requirement,epic,', ",$extra,") !== false) $target .= ucfirst($extra);
+        if("$module-$method" == 'product-browse' && strpos(',story,requirement,epic,', ",$extra,") !== false) $target .= ucfirst($extra);
 
         $settings = isset($this->config->datatable->$target->cols) ? $this->config->datatable->$target->cols : '';
         if(!empty($settings)) $this->loadModel('setting')->setItem("system.datatable.{$target}.cols", $settings);

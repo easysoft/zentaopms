@@ -55,7 +55,7 @@ formPanel
         set::name('type'),
         set::label($lang->design->type),
         set::value($design->type),
-        set::items($lang->design->typeList)
+        set::items($designTypeList)
     ),
     formGroup
     (
