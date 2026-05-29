@@ -582,4 +582,21 @@ class programplan extends control
         $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'callback' => "loadCurrentPage('#versionList')"));
     }
+
+    /**
+     * 设置甘特图版本可见。
+     * Set show version.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowVersion()
+    {
+        if(!empty($_POST['showVersions']) || !empty($_POST['hiddenVersions']))
+        {
+            if(!empty($_POST['showVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('1')->where('id')->in($_POST['showVersions'])->exec();
+            if(!empty($_POST['hiddenVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('0')->where('id')->in($_POST['hiddenVersions'])->exec();
+            return $this->sendSuccess(array('load' => true));
+        }
+    }
 }
