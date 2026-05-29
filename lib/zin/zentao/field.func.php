@@ -55,3 +55,19 @@ function useFields(string|array|field|fieldList|null ...$args): fieldList
 {
     return fieldList::build(...$args);
 }
+
+function loadFields(string $moduleName, string $methodName, string $viewDir = 'ui'): void
+{
+    global $app;
+
+    $moduleName = strtolower(trim($moduleName));
+    $methodName = strtolower(trim($methodName));
+    $appName     = $app->getAppName();
+    $modulePath  = $app->getModulePath($appName, $moduleName);
+    $viewPath    = $modulePath . $viewDir;
+
+    $commonFieldFile = $viewPath . DS . 'common.field.php';
+    $methodFieldFile = $viewPath . DS . $methodName . '.field.php';
+    helper::import($commonFieldFile);
+    helper::import($methodFieldFile);
+}
