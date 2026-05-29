@@ -73,9 +73,9 @@ class form extends fixer
      * 获取表单数据。
      * Get the form data.
      *
-     * @param array|null $configObject
-     * @param int        $objectID
-     * @param int        $flowGroupID
+     * @param  array|null $configObject
+     * @param  int        $objectID
+     * @param  int        $flowGroupID
      * @return form
      */
     public static function data(array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form

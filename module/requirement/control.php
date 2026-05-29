@@ -22,6 +22,26 @@ class requirement extends control
     }
 
     /**
+     * Copy a requirement.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  int    $objectID  projectID|executionID
+     * @param  int    $bugID
+     * @param  int    $planID
+     * @param  int    $todoID
+     * @param  string $extra for example feedbackID=0
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '')
+    {
+        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=requirement");
+    }
+
+    /**
      * Create a batch stories.
      *
      * @param  int    $productID
