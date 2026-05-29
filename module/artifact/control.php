@@ -326,7 +326,7 @@ class artifact extends control
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
         $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
 
-        $artifacts = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
+        $artifacts = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
         if($_POST)
         {
             $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
@@ -514,7 +514,8 @@ class artifact extends control
 
             $fromRepo = $artifact->name;
             $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
-            $toRepo   = zget($this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
+            $targetArtifact = $this->artifact->fetchByID((int)$formData->artifactID);
+            $toRepo         = empty($targetArtifact) ? '' : $targetArtifact->name;
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
@@ -547,7 +548,7 @@ class artifact extends control
         $this->view->title              = $this->lang->artifact->moveArtifact;
         $this->view->asset              = $asset;
         $this->view->artifact           = $artifact;
-        $this->view->artifacts          = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->artifacts          = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
         $this->view->currentPathEncoded = '';
         $this->view->parentPath         = $parentID;
         $this->display();
