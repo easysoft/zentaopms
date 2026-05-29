@@ -87,8 +87,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
     /* Build versions for dropdown. */
     $browseTemplate = createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s");
     $versionItems = array();
-    $versionItems['deliverable'] = array('text' => $lang->programplan->deliverableVersion, 'type' => 'heading', 'items' => array());
     $versionItems['gantt']       = array('text' => $lang->programplan->ganttVersion,       'type' => 'heading', 'items' => array());
+    $versionItems['deliverable'] = array('text' => $lang->programplan->deliverableVersion, 'type' => 'heading', 'items' => array());
     $versionItems['tmpGantt']    = array('text' => $lang->programplan->tmpGanttVersion,    'type' => 'heading', 'items' => array());
     $currentVersion = $lang->project->version;
     foreach($versions as $version)
