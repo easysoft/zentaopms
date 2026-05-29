@@ -13343,6 +13343,7 @@ REPLACE INTO `zt_workflowrule`(`type`, `name`, `rule`, `createdBy`, `createdDate
 ('system','必填','notempty','admin','2020-10-14 14:06:14'),
 ('system','唯一','unique','admin','2020-10-14 14:06:14'),
 ('system','日期','date','admin','2020-10-14 14:06:14'),
+('system','日期时间','datetime','admin','2020-10-14 14:06:14'),
 ('system','email','email','admin','2020-10-14 14:06:14'),
 ('system','数字','float','admin','2020-10-14 14:06:14'),
 ('system','电话','phone','admin','2020-10-14 14:06:14'),
