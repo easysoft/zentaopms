@@ -37,8 +37,11 @@ class bugModel extends model
         $bugID = $this->dao->lastInsertID();
 
         $action = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
-        $this->loadModel('action')->create('bug', $bugID, $action);
+        $actionID = $this->loadModel('action')->create('bug', $bugID, $action);
         if(!empty($bug->assignedTo)) $this->action->create('bug', $bugID, 'Assigned', '', $bug->assignedTo);
+
+        $bug->id = $bugID;
+        $this->loadModel('message')->sendMentionNotice('bug', 'create', $actionID, $bug);
 
         /* Add score for create. */
         $this->loadModel('file')->saveUpload('bug', $bugID);
@@ -342,6 +345,8 @@ class bugModel extends model
         {
             $actionID = $this->loadModel('action')->create('bug', $bug->id, $changes ? $action : 'Commented', zget($bug, 'comment', ''));
             if($changes) $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice('bug', 'edit', $actionID, $bug, $oldBug);
         }
 
         if($this->config->edition != 'open' && $this->app->rawMethod != 'batchedit')

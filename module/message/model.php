@@ -584,60 +584,72 @@ class messageModel extends model
 
         if(isset($messageSetting['mail']))
         {
-            $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-            $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
-            $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
+            $actions = $messageSetting['mail']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            {
+                $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
+                $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
+            }
         }
 
         if(isset($messageSetting['message']))
         {
-            $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
-            $now  = helper::now();
-            foreach($mentionUsers as $mentionUser)
+            $actions = $messageSetting['message']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
-                if($mentionUser == $actor || empty($mentionUser)) continue;
+                $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
+                $now  = helper::now();
+                foreach($mentionUsers as $mentionUser)
+                {
+                    if($mentionUser == $actor || empty($mentionUser)) continue;
 
-                $notify = new stdclass();
-                $notify->objectType  = 'message';
-                $notify->action      = $actionID;
-                $notify->toList      = ",{$mentionUser},";
-                $notify->data        = $data;
-                $notify->status      = 'wait';
-                $notify->createdBy   = $actor;
-                $notify->createdDate = $now;
-                $notify->sendTime    = null;
+                    $notify = new stdclass();
+                    $notify->objectType  = 'message';
+                    $notify->action      = $actionID;
+                    $notify->toList      = ",{$mentionUser},";
+                    $notify->data        = $data;
+                    $notify->status      = 'wait';
+                    $notify->createdBy   = $actor;
+                    $notify->createdDate = $now;
+                    $notify->sendTime    = null;
 
-                $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                    $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                }
             }
         }
 
         if(isset($messageSetting['webhook']))
         {
-            $webhooks = $this->loadModel('webhook')->getList();
-            if(!$webhooks) return true;
-
-            $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-            foreach($webhooks as $id => $webhook)
+            $actions = $messageSetting['webhook']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
-                $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-                $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
-                $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
-                if(!$data) continue;
+                $webhooks = $this->loadModel('webhook')->getList();
+                if(!$webhooks) return true;
 
-                if($webhook->sendType == 'async')
+                $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                foreach($webhooks as $id => $webhook)
                 {
-                    if($webhook->type == 'dinguser')
+                    $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                    $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
+                    if(!$data) continue;
+
+                    if($webhook->sendType == 'async')
                     {
-                        $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
-                        if(empty($openIdList)) continue;
+                        if($webhook->type == 'dinguser')
+                        {
+                            $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
+                            if(empty($openIdList)) continue;
+                        }
+
+                        $this->webhook->saveData($id, $actionID, $data, $actor);
+                        continue;
                     }
 
-                    $this->webhook->saveData($id, $actionID, $data, $actor);
-                    continue;
+                    $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
                 }
-
-                $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
-                if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
             }
         }
     }

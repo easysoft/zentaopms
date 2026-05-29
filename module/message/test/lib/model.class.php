@@ -403,7 +403,10 @@ class messageModelTest extends baseTest
         }
         else
         {
-            $tester->config->message->setting = array('message' => array('setting' => array()));
+            $tester->config->message->setting = array();
+            $tester->config->message->setting['message'] = array();
+            $tester->config->message->setting['message']['setting'] = array();
+            $tester->config->message->setting['message']['setting'][$objectType] = array('mentioned');
         }
 
         $countBefore = (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
