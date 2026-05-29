@@ -56,6 +56,7 @@ $config->logonMethods[] = 'custom.ajaxsetmenu';
 $config->logonMethods[] = 'custom.ajaxsave';
 $config->logonMethods[] = 'custom.ajaxsaveglobal';
 $config->logonMethods[] = 'datatable.ajaxdisplay';
+$config->logonMethods[] = 'datatable.ajaxsave';
 $config->logonMethods[] = 'datatable.ajaxreset';
 $config->logonMethods[] = 'doc.buildzentaolist';
 $config->logonMethods[] = 'doc.ajaxgetdropmenu';
