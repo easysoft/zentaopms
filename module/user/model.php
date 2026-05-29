@@ -3047,7 +3047,7 @@ class userModel extends model
         if(in_array("repo.$method", $app->config->logonMethods)) return true;
 
         /* 检查权限数组中是否有对应的权限 */
-        if(!isset($rights['repo'][$method])) return false;
+        if(!isset($rights['repo'][$method]) && !isset($rights['artifact'][$method])) return false;
 
         return true;
     }

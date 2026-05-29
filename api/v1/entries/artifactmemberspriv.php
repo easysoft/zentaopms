@@ -97,10 +97,10 @@ class artifactmembersprivEntry extends baseEntry
         {
             $canCreateRepo = $this->user->hasRepoPrivByAccount($account, 'createRepo');
             $canEditRepo   = $this->user->hasRepoPrivByAccount($account, 'edit');
-
+            $canUploadRepo   = $this->user->hasRepoPrivByAccount($account, 'uploadArtifact');
             $privs[$account] = array(
                 'pull' => true,
-                'push' => $canCreateRepo || $canEditRepo
+                'push' => $canUploadRepo && ($canCreateRepo || $canEditRepo)
             );
         }
 
