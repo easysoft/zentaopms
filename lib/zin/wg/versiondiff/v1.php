@@ -29,7 +29,6 @@ class versiondiff extends wg
     protected function build()
     {
         list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $allVersionItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'allVersionItems'));
-        if(empty($allVersionItems)) $allVersionItems = $versionItems;
 
         /* 如果版本不可见，调整到最新版本。 If the version does not visible, adjust to the latest version. */
         if(!isset($versionItems[$versionID]))
