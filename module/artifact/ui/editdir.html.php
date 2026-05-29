@@ -25,6 +25,7 @@ formPanel
     (
         set::label($lang->artifact->artifactRepo),
         set::name('artifactID'),
+        set::control(array('control' => 'picker', 'tree' => true)),
         set::required(true),
         set::items($artifacts),
         set::value($artifact->id)
