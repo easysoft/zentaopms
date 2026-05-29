@@ -12,7 +12,8 @@ class versiondiff extends wg
         'baseline:string',
         'browseTemplate:string',
         'diffLang:array',
-        'versionItems?:array'
+        'versionItems?:array',   //在版本菜单中可见的版本，即visible为1的版本
+        'allVersionItems?:array' //所有版本
     );
 
     public static function getPageCSS(): string
@@ -27,9 +28,9 @@ class versiondiff extends wg
 
     protected function build()
     {
-        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline'));
+        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $allVersionItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'allVersionItems'));
 
-        /* 如果版本不存在，调整到最新版本。 If the version does not exist, adjust to the latest version. */
+        /* 如果版本不可见，调整到最新版本。 If the version does not visible, adjust to the latest version. */
         if(!isset($versionItems[$versionID]))
         {
             global $app;
@@ -44,6 +45,8 @@ class versiondiff extends wg
             jsVar('canDiffVersion', $canDiffVersion),
             jsVar('+diffMode', $diffMode),
             jsVar('browseTemplate', $browseTemplate),
+            jsVar('visibleVersionItems', array_values($versionItems)),
+            jsVar('allVersionItems', array_values($allVersionItems)),
             div
             (
                 setClass($this->prop('class')),
