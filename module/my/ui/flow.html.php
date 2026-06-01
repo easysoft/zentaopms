@@ -37,8 +37,22 @@ foreach($dataList as $id => $data)
 $workLinkParams = "mode={$flow->module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
 $sortLink       = createLink('my', 'work', "{$workLinkParams}&orderBy={name}_{sortType}");
 
+$workParams      = "mode={$flow->module}&type=assignedTo&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+$featureBarItems = array(array(
+    'text'   => $this->lang->my->assignedToMe,
+    'active' => $type != 'bysearch',
+    'url'    => $this->createLink('my', 'work', $workParams),
+    'badge' => array(
+        'text' => $pager->recTotal,
+        'class' => 'size-sm canvas ring-0 rounded-md'
+    )
+));
+
+if($browseMode == 'bysearch') unset($featureBarItems[0]['badge']);
+
 featureBar
 (
+    set::current($type),
     set::items($featureBarItems),
     !empty($canSearch) ? li(searchToggle(set::module($flow->module), set::open($browseMode == 'bysearch'))) : null
 );
