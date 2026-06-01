@@ -30,21 +30,45 @@ else
 $breadCrumbsBox = array();
 if(!empty($breadCrumbs))
 {
-    foreach($breadCrumbs as $pathName => $pathItems)
+    if(count($breadCrumbs) < 5)
     {
-        $breadCrumbsBox[] = span('>', setStyle('margin', '5px'));
-        $breadCrumbsBox[] = picker
-        (
-            setClass('picker-btn state'),
-            setStyle('box-shadow', 'none'),
-            set::items($pathItems),
-            set::search(false),
-            set::required(true),
-            set::menu(jsRaw('{searchBox: true, search: undefined}')),
-            set::display(jsRaw("(value, selections) => {
-            return {html: `<div>\${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
-            set::value(helper::safe64Encode($pathName))
-        );
+        foreach($breadCrumbs as $pathName => $pathItems)
+        {
+            $breadCrumbsBox[] = span('>', setStyle('margin', '5px'));
+            $breadCrumbsBox[] = picker
+                (
+                    setClass('picker-btn state'),
+                    setStyle('box-shadow', 'none'),
+                    set::items($pathItems),
+                    set::search(false),
+                    set::required(true),
+                    set::menu(jsRaw('{searchBox: true, search: undefined}')),
+                    set::display(jsRaw("(value, selections) => {
+                    return {html: `<div style='max-width: 100px'>\${selections.map(x => x.text).join(',')}</div><style>.picker-btn .caret{display:none}</style><button type='button' class='picker-btn-trigger btn size-xs square text-primary'><i class='icon icon-exchange'></i></button>`, className: 'flex justify-between gap-2 p-px'};}")),
+                    set::value(helper::safe64Encode($pathName))
+                );
+        }
+    }
+    else
+    {
+        $breadCrumbs = array_keys($breadCrumbs);
+        $count = 0;
+        $last  = end($breadCrumbs);
+        $breadCrumb      = '';
+        foreach($breadCrumbs as $pathName)
+        {
+            if($count < 3)
+            {
+                $breadCrumb .= '>' . basename($pathName);
+            }
+
+            if($pathName == $last)
+            {
+                $breadCrumb .= '>...>' . basename($pathName);
+            }
+            $count++;
+        }
+        $breadCrumbsBox[] = span(ltrim($breadCrumb, '>'), set::title($last), setStyle('margin', '5px'), setStyle('color', 'var(--color-text)'));
     }
 }
 

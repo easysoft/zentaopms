@@ -75,6 +75,7 @@ $lang->artifact->notice->assetNameFormatError  = 'The name cannot contain \/:*?"
 $lang->artifact->notice->confirmDelete         = 'Delete after the file will be in the recycle bin for 30 days. After the timeout, the file will be unable to be restored.';
 $lang->artifact->notice->confirmDeleteDir      = 'Delete directory and all sub directories and files. Are you sure to delete it?';
 $lang->artifact->notice->rootNotAllowed        = 'Root directory cannot be selected when moving an artifact.';
+$lang->artifact->notice->dirNameTooLong        = 'Directory name is too long.';
 
 $lang->artifact->featureBar['browse']['all']   = 'All';
 $lang->artifact->featureBar['browse']['space'] = 'Space Artifact Repository';
