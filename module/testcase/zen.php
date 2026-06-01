@@ -2342,6 +2342,7 @@ class testcaseZen extends testcase
      * Respond after creating testcase.
      *
      * @param  int       $caseID
+     * @param  int       $moduleID
      * @access protected
      * @return array|int
      */

@@ -70,7 +70,7 @@ $config->testcase->actionList['createBug']['data-size']   = 'lg';
 $config->testcase->actionList['create']['icon']       = 'copy';
 $config->testcase->actionList['create']['text']       = $lang->testcase->copy;
 $config->testcase->actionList['create']['hint']       = $lang->testcase->copy;
-$config->testcase->actionList['create']['url']        = array('module' => 'testcase', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
+$config->testcase->actionList['create']['url']        = array('module' => 'testcase', 'method' => 'copy', 'params' => 'productID={product}&branch={branch}&moduleID={module}&from=testcase&param={caseID}');
 $config->testcase->actionList['create']['data-app']   = $app->tab;
 $config->testcase->actionList['create']['notInModal'] = true;
 

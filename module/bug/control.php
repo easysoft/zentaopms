@@ -300,9 +300,24 @@ class bug extends control
         $extrasValue = 'productID={product},moduleID={module},projectID={project},executionID={execution},regionID={region},allBuilds={allBuilds},allUsers={allUsers}' . (empty($from) ? '' : "&from=$from");
         if(!empty($fromType)) $extrasValue .= ",fromType={$fromType}";
         if(!empty($fromID))   $extrasValue .= ",fromID={$fromID}";
-        $this->view->loadUrl = $this->createLink('bug', 'create', "productID={$productID}&branch={branch}&extras={$extrasValue}");
+        $this->view->loadUrl = $this->createLink('bug', $this->app->rawMethod, "productID={$productID}&branch={branch}&extras={$extrasValue}");
 
         $this->display();
+    }
+
+    /**
+     * 复制Bug。
+     * Copy bug.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID, string $branch = '', string $extras = '')
+    {
+        echo $this->fetch('bug', 'create', "productID={$productID}&branch={$branch}&extras={$extras}");
     }
 
     /**
