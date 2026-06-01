@@ -1168,7 +1168,6 @@ $config->group->package->manageTask = new stdclass();
 $config->group->package->manageTask->order  = 10;
 $config->group->package->manageTask->subset = 'task';
 $config->group->package->manageTask->privs  = array();
-
 $config->group->package->manageTask->privs['task-create']                 = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 0, 'depend' => array('execution-task'), 'recommend' => array('execution-importBug', 'execution-importplanstories', 'task-activate', 'task-assignTo', 'task-batchCreate', 'task-cancel', 'task-close', 'task-edit', 'task-finish', 'task-pause', 'task-restart', 'task-start'));
 $config->group->package->manageTask->privs['task-batchCreate']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 1, 'depend' => array('execution-task'), 'recommend' => array('task-create'));
 $config->group->package->manageTask->privs['task-edit']                   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 2, 'depend' => array('execution-task'), 'recommend' => array('task-activate', 'task-assignTo', 'task-batchChangeModule', 'task-batchEdit', 'task-cancel', 'task-close', 'task-confirmdesignchange', 'task-confirmStoryChange', 'task-create', 'task-finish', 'task-pause', 'task-restart', 'task-start'));
@@ -1772,7 +1771,6 @@ $config->group->package->manageBug->privs['bug-linkBugs']           = array('edi
 $config->group->package->manageBug->privs['bug-batchChangeModule']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 17, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-batchChangeBranch']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 18, 'depend' => array(), 'recommend' => array('bug-edit'));
 $config->group->package->manageBug->privs['bug-batchChangePlan']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 19, 'depend' => array(), 'recommend' => array('bug-edit'));
-
 $config->group->package->manageBug->privs['bug-createBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 20, 'depend' => array('bug-view'), 'recommend' => array('bug-unlinkBranch'));
 $config->group->package->manageBug->privs['bug-unlinkBranch']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 21, 'depend' => array('bug-view', 'bug-createBranch'), 'recommend' => array());
 
