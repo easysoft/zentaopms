@@ -82,16 +82,16 @@ $breadcrumbItems[] = dropmenu
 (
     setID('source'),
     set::objectID($objectID),
-    set::text(mb_substr($oldRevision, 0, 10)),
+    set::text($isBranchOrTag ? $oldRevision : mb_substr($oldRevision, 0, 10)),
     set::data(array('data' => $menuData, 'tabs' => $tabs))
 );
-$breadcrumbItems[] = span(setClass('label label-exchange mr-2 text-white'), icon('exchange'));
+$breadcrumbItems[] = span(on::click()->call('changeDiff'), setID('exchange'), setClass('label label-exchange mr-2 text-white'), icon('exchange'));
 $breadcrumbItems[] = span($lang->repo->target . ':');
 $breadcrumbItems[] = dropmenu
 (
     setID('target'),
     set::objectID($objectID),
-    set::text(mb_substr($newRevision, 0, 10)),
+    set::text($isBranchOrTag ? $newRevision : mb_substr($newRevision, 0, 10)),
     set::data(array('data' => $menuData, 'tabs' => $tabs))
 );
 $breadcrumbItems[] = btn
@@ -102,15 +102,12 @@ $breadcrumbItems[] = btn
     on::click()->call('window.goDiff')
 );
 
-div(
+featureBar
+(
     setClass($inModal ? 'hidden' : ''),
-    on::click('.label-exchange')->call('changeDiff'),
-    \zin\featureBar
-    (
-        backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
-        item(set::type('divider')),
-        ...$breadcrumbItems
-    )
+    backBtn(set::icon('back'), setClass('bg-transparent diff-back-btn'), set::back('GLOBAL'), $lang->goback),
+    item(set::type('divider')),
+    $breadcrumbItems
 );
 
 if($diffs)

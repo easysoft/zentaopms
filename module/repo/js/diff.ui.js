@@ -230,6 +230,8 @@ window.changeDiff = function()
     {
         $('#oldRevision').val(target);
         $('#newRevision').val(source);
+        $('#target').text(source);
+        $('#source').text(target);
         window.goDiff();
     }
 }
@@ -302,5 +304,5 @@ window.goDiff = function()
     }
 
     var url = $.createLink('repo', 'diff', 'repoID=' + repo.id + '&objectID=' + objectID + '&entry=&oldRevision=' + oldRevision + '&newRevision=' +newRevision + '&showBug=0&encoding=&isBranchOrTag=' + isBranchOrTag);
-    loadPage(url);
+    openPage(url);
 }
