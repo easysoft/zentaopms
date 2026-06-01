@@ -522,7 +522,7 @@ class programplan extends control
 
             $versionID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('ganttversion', $versionID, 'created', '', $version->title);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
         }
 
         $this->view->productID = $productID;
