@@ -597,7 +597,7 @@ class programplan extends control
         {
             if(!empty($_POST['showVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('1')->where('id')->in($_POST['showVersions'])->exec();
             if(!empty($_POST['hiddenVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('0')->where('id')->in($_POST['hiddenVersions'])->exec();
-            return $this->sendSuccess(array('load' => true));
+            return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
         }
     }
 }
