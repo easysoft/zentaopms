@@ -344,7 +344,7 @@ class extensionZen extends extension
         $backupTables = array();
         foreach($sqls as $sql)
         {
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
             $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
             if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
             {

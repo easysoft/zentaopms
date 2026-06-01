@@ -614,8 +614,13 @@ class projectModel extends model
      */
     public function getProjectLink(string $module, string $method, int $projectID, string $extra = '') :string
     {
-        $link    = helper::createLink('project', 'index', "projectID=%s");
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($module);
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=' . $flow->app;
+        }
 
+        $link    = helper::createLink('project', 'index', "projectID=%s");
         $project = $this->projectTao->fetchProjectInfo($projectID);
 
         if(empty($project->multiple)) return $link;
@@ -644,11 +649,6 @@ class projectModel extends model
             if(!$linkParams[0]) $linkParams[0] = $module;
 
             return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
-        }
-        if($this->config->edition != 'open')
-        {
-            $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
         }
 
         if(in_array($module, $this->config->waterfallModules)) return helper::createLink($module, 'browse', "projectID=%s");
@@ -2394,7 +2394,7 @@ class projectModel extends model
 
         /* Replace url params. */
         common::setMenuVars('project', $projectID);
-        $this->setNoMultipleMenu($projectID);
+        if($this->app->tab == 'project') $this->setNoMultipleMenu($projectID);
 
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 

@@ -30,7 +30,7 @@ ZenTao Project Management Software (ZenTao PMS) is an open-source software relea
 Built with PHP and MySQL on the proprietary ZenTao PHP framework, it offers high extensibility, allowing third-party developers and organizations to easily develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao PMS is developed by <strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>ZenTao Software (Qingdao) Co., Ltd. </a></strong>.
+ZenTao PMS is developed by <strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>ZenTao Software (Qingdao) Group Co., Ltd </a></strong>.
 Official Website: <a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 Technical Support: <a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 Follow us on LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
