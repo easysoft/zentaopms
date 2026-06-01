@@ -1321,7 +1321,6 @@ $config->delete['20_0'][] = 'extension/ipd/feedback/ext/ui/admin.excel.html.hook
 $config->delete['20_0'][] = 'module/story/ui/linkstories.html.php';
 $config->delete['20_0'][] = 'extension/or/product/ext/control/batchedit.php';
 
-$config->delete['20_1'][] = 'module/gitfox';
 $config->delete['20_1'][] = 'module/artifactrepo';
 $config->delete['20_1'][] = 'execution/biz/common/ext/lang/zh-tw/report.php';
 $config->delete['20_1'][] = 'execution/biz/common/ext/lang/zh-cn/report.php';
