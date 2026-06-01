@@ -45,8 +45,6 @@ class versiondiff extends wg
             jsVar('canDiffVersion', $canDiffVersion),
             jsVar('+diffMode', $diffMode),
             jsVar('browseTemplate', $browseTemplate),
-            jsVar('visibleVersionItems', array_values($versionItems)),
-            jsVar('allVersionItems', array_values($allVersionItems)),
             div
             (
                 setClass($this->prop('class')),
@@ -83,13 +81,15 @@ class versiondiff extends wg
                 )
             ),
             set::menu([
-               'checkOnClick' => '.has-checkbox .item',
-               'items' => array_values($versionItems),
-               'width' => 300,
-               'header' => jsRaw('setVersionDropdownHeader'),
-               'footer' => jsRaw('setVersionDropdownFooter'),
-               'getItem' => jsRaw('getVersionItem'),
-               'onClickItem' => jsRaw('setClickVersionItem')
+               'checkOnClick'        => '.has-checkbox .item',
+               'items'               => array_values($versionItems),
+               'width'               => 300,
+               'header'              => jsRaw('setVersionDropdownHeader'),
+               'footer'              => jsRaw('setVersionDropdownFooter'),
+               'getItem'             => jsRaw('getVersionItem'),
+               'onClickItem'         => jsRaw('setClickVersionItem'),
+               'visibleVersionItems' => array_values($versionItems),
+               'allVersionItems'     => array_values($allVersionItems)
             ]),
             set::triggerProps([
                 'onShown' => jsRaw('showMenu')
