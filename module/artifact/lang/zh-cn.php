@@ -75,6 +75,7 @@ $lang->artifact->notice->assetNameFormatError  = '名称不能包含\/:*?"<>|';
 $lang->artifact->notice->confirmDelete         = '删除后文件将会在回收站保留30天，超时后将无法恢复。';
 $lang->artifact->notice->confirmDeleteDir      = '删除目录后，同步删除目录下的子目录和文件，确认要删除吗?';
 $lang->artifact->notice->rootNotAllowed        = '移动制品时不能选择根目录。';
+$lang->artifact->notice->dirNameTooLong        = '目录名称不能超过15个字符。';
 
 $lang->artifact->featureBar['browse']['all']   = '全部';
 $lang->artifact->featureBar['browse']['space'] = '空间制品库';

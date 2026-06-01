@@ -289,6 +289,7 @@ class artifact extends control
 
             $formData = form::data($this->config->artifact->form->createDir)->get();
             if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
+            if(mb_strlen($formData->name) > 15) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameTooLong));
             if($path)
             {
                 $formData->name = ltrim($path . '.' . $formData->name, '/');
@@ -335,6 +336,7 @@ class artifact extends control
 
             $formData = form::data($this->config->artifact->form->editDir)->get();
             if(!preg_match('/^[\x{4e00}-\x{9fa5}a-zA-Z0-9\-_]+$/u', $formData->name)) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameFormatError));
+            if(mb_strlen($formData->name) > 15) return $this->sendError(array('name' => $this->lang->artifact->notice->dirNameTooLong));
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
