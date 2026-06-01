@@ -508,7 +508,8 @@ class programplan extends control
                 ->setIF($project->type == 'project', 'project', $projectID)
                 ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
                 ->get();
-            $version->data = $this->post->data;
+            $version->data    = $this->post->data;
+            $version->visible = in_array($project->type, array('stage', 'sprint', 'kanban')) ? 1 : 0;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();

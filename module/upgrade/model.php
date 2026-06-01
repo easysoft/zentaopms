@@ -13313,4 +13313,27 @@ class upgradeModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * 设置项目计划交付物版本和执行计划版本为可见。
+     * Set the field of visible to 1.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processObjectVisible()
+    {
+        $objectIdList = $this->dao->select('t1.id')->from(TABLE_OBJECT)->alias('t1')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.category = t2.id')
+            ->where('t2.category')->eq('PP')
+            ->orWhere('(t1.project')->eq(0)
+            ->andWhere('t1.execution')->ne(0)
+            ->andWhere('t1.type')->eq('taged')
+            ->andWhere('t1.status')->eq('gantt')
+            ->markRight(1)
+            ->fetchPairs();
+
+        $this->dao->update(TABLE_OBJECT)->set('visible')->eq(1)->where('id')->in($objectIdList)->exec();
+        return true;
+    }
 }
