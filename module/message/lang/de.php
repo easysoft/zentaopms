@@ -31,6 +31,8 @@ $lang->message->all    = 'All Messages';
 $lang->message->timeLabel['minute'] = '%s minute ago';
 $lang->message->timeLabel['hour']   = '1 hour ago';
 
+$lang->message->mention = '%s mentioned you in %s. Please check it in time.';
+
 $lang->message->notice = new stdclass();
 $lang->message->notice->allMarkRead = 'One-click read';
 $lang->message->notice->clearRead   = 'Clear read';
