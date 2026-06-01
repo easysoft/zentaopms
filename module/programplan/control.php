@@ -508,7 +508,8 @@ class programplan extends control
                 ->setIF($project->type == 'project', 'project', $projectID)
                 ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
                 ->get();
-            $version->data = $this->post->data;
+            $version->data    = $this->post->data;
+            $version->visible = in_array($project->type, array('stage', 'sprint', 'kanban')) ? 1 : 0;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
@@ -521,7 +522,7 @@ class programplan extends control
 
             $versionID = $this->dao->lastInsertID();
             $this->loadModel('action')->create('ganttversion', $versionID, 'created', '', $version->title);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "loadCurrentPage('#versionList')"));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         }
 
         $this->view->productID = $productID;
