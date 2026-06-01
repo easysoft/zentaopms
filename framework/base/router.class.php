@@ -1478,7 +1478,16 @@ class baseRouter
         {
             $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
         }
-        $_FILES = $this->moduleName == 'artifact' ? $_FILES : validater::filterFiles();
+
+        $allowedModules = explode(',', $this->config->file->allowedModules);
+        if(in_array($this->moduleName, $allowedModules))
+        {
+            $this->config->file->dangers = '';
+        }
+        else
+        {
+            $_FILES = validater::filterFiles();
+        }
     }
 
     /**
