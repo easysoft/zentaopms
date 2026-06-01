@@ -2540,7 +2540,7 @@ class actionModel extends model
             $kanbanSpace = $this->dao->select('*')->from(TABLE_KANBANSPACE)->where('id')->eq($object->space)->fetch();
             if($kanbanSpace->deleted) return $this->lang->action->refusekanban;
         }
-        elseif($action->objectType == 'artifact' && !empty($object->type) && $object->type == 'repo')
+        elseif($action->objectType == 'artifact' && !empty($object->repoID))
         {
             $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($object->repoID)->fetch();
             if(empty($repo) || $repo->deleted) return $this->lang->action->repoDeleted;
