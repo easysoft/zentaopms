@@ -418,10 +418,6 @@ class taskModel extends model
 
         if(isset($task->version) && $task->version > $oldTask->version) $this->recordTaskVersion($task);
 
-        /* Compute task's story stage. */
-        $this->loadModel('story')->setStage($task->story);
-        if($task->story != $oldTask->story) $this->story->setStage($oldTask->story);
-
         /* Create score. */
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
@@ -453,6 +449,10 @@ class taskModel extends model
             $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $task->id, '', false);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
+
+        /* Compute task's story stage. */
+        $this->loadModel('story')->setStage($task->story);
+        if(($task->story != $oldTask->story) || !empty($oldParentTask->story)) $this->story->setStage(!empty($oldParentTask->story) ? $oldParentTask->story : $oldTask->story);
 
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $oldTask->id);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
