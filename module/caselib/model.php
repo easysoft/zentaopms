@@ -159,6 +159,7 @@ class caselibModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -181,6 +182,7 @@ class caselibModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchPairs();
@@ -277,7 +279,8 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
-                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi();
+                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+                ->beginIF($browseType == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi();
         }
         return $stmt->orderBy($sort)->page($pager)->fetchAll('id');
     }

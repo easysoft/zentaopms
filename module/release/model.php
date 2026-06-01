@@ -187,6 +187,7 @@ class releaseModel extends model
             ->beginIF($branch !== 'all')->andWhere("FIND_IN_SET($branch, t1.branch)")->fi()
             ->beginIF(!in_array($type, array('all', 'review', 'bySearch')))->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->beginIF($type == 'bySearch')->andWhere($releaseQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)

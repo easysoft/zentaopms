@@ -297,7 +297,7 @@ class taskTaoTest extends baseTest
      */
     public function fetchExecutionTasksTest(int $executionID, int $productID = 0, array|string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', int $count = 0): array|int|bool
     {
-        $tasks = $this->instance->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
+        $tasks = $this->invokeArgs('fetchExecutionTasks', [$executionID, $productID, $type, $modules, $orderBy]);
         if(dao::isError())
         {
             return dao::getError();

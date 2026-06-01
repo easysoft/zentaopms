@@ -57,6 +57,7 @@ class testsuiteModel extends model
             ->andWhere('`addedBy`')->eq($this->app->user->account)
             ->markRight(2)
             ->beginIF(strpos($param, 'review') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF(strpos($param, 'reviewedby') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);

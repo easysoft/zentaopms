@@ -934,7 +934,7 @@ class projectTaoTest extends baseTest
      */
     public function getListTest($status, $involved = false)
     {
-        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+        return $this->invokeArgs('fetchProjectList', [$status, 'id_desc', $involved, null]);
     }
 
     /**
@@ -1305,6 +1305,6 @@ class projectTaoTest extends baseTest
      */
     public function fetchProjectListTest($status, $involved = false)
     {
-        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+        return $this->invokeArgs('fetchProjectList', [$status, 'id_desc', $involved, null]);
     }
 }
