@@ -38,6 +38,8 @@ $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
 $config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,assignedTo,pri,deadline,severity,os,browser,keywords';
 
+if(in_array($config->edition, array('max', 'ipd'))) $config->bug->list->customBatchCreateFields .= ',identify,injection';
+
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
 $config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,assignedTo,%s';

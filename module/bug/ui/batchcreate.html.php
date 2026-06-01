@@ -104,6 +104,13 @@ $items[] = array('name' => 'browser', 'label' => $lang->bug->browser, 'control' 
 /* Field of keywords. */
 $items[] = array('name' => 'keywords', 'label' => $lang->bug->keywords, 'width' => '200px', 'required' => isset($requiredFields['keywords']));
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    /* Field of identify. */
+    $items[] = array('name' => 'identify', 'label' => $lang->bug->identify, 'control' => 'picker', 'items' => $lang->bug->identifyList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['identify']));
+    /* Field of injection. */
+    $items[] = array('name' => 'injection', 'label' => $lang->bug->injection, 'control' => 'picker', 'items' => $lang->bug->injectionList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['injection']));
+}
 formBatchPanel
 (
     set::title($lang->bug->batchCreate),
