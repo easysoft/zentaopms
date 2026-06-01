@@ -380,9 +380,14 @@ class productModel extends model
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
 
         /* Update and create linked data. */
-        $this->loadModel('action')->create('product', $productID, 'opened');
+        $actionID = $this->loadModel('action')->create('product', $productID, 'opened');
+
+        $product->id = $productID;
+        $this->loadModel('message')->sendMentionNotice('product', 'create', $actionID, $product);
+
         $uid = empty($this->post->uid) ? '' : $this->post->uid;
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
@@ -426,6 +431,8 @@ class productModel extends model
         {
             $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice('product', 'edit', $actionID, $product, $oldProduct);
         }
 
         return $changes;
