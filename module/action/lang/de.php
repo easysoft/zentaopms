@@ -58,6 +58,8 @@ $lang->action->refusescene  = 'Before restoring the scene, please restore the pa
 $lang->action->refusemodule = 'Before restoring the module, please restore the parent module of this module ';
 $lang->action->refusekanban = 'Before restoring the Kanban board, make sure to restore the space it belongs to';
 
+$lang->action->repoDeleted = 'Repository has been deleted.';
+
 $lang->action->trashTips           = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
 $lang->action->textDiff            = 'Text Format';
 $lang->action->original            = 'Original Format';

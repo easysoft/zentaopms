@@ -58,6 +58,8 @@ $lang->action->refusescene  = 'Please restore the parent scenario before restori
 $lang->action->refusemodule = 'Please restore the parent module before restoring this module.';
 $lang->action->refusekanban = 'Please restore the space this Kanban belongs to before restoring the Kanban.';
 
+$lang->action->repoDeleted = 'Repository has been deleted.';
+
 $lang->action->trashTips           = 'Note: To ensure system integrity, items in the system are only marked as deleted rather than permanently removed.';
 $lang->action->textDiff            = 'Text Format';
 $lang->action->original            = 'Raw Format';
