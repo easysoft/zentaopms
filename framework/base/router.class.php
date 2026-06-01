@@ -819,7 +819,6 @@ class baseRouter
             if(!$apiMode && (empty($httpHost) or !str_starts_with((string) $this->server->http_referer, "$httpType://$httpHost"))) $_FILES = $_POST = array();
         }
 
-        $_FILES  = validater::filterFiles();
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
@@ -1479,6 +1478,7 @@ class baseRouter
         {
             $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
         }
+        $_FILES = $this->moduleName == 'artifact' ? $_FILES : validater::filterFiles();
     }
 
     /**

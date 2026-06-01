@@ -825,7 +825,7 @@ class testcaseZen extends testcase
 
         if(!isset($branchTagOption[$case->branch]))
         {
-            $caseBranch = $this->branch->getByID($case->branch, $case->product, '');
+            $caseBranch = $this->branch->getByID((string)$case->branch, $case->product, '');
             $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 

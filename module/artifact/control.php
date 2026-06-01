@@ -113,6 +113,7 @@ class artifact extends control
      */
     public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->config->file->dangers = '';
         $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
 
@@ -602,6 +603,7 @@ class artifact extends control
      */
     public function uploadArtifact(int $artifactID, string $path = '')
     {
+        $this->config->file->dangers = '';
         $artifact = $this->artifact->fetchByID($artifactID);
         $this->checkAccess($artifact->spaceID, $artifact->repoID);
 
