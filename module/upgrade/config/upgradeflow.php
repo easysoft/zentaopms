@@ -151,7 +151,7 @@ if($config->edition != 'open')
     $config->upgrade->execFlow['18_4_beta1']['functions'] = 'processDeployStepAction,updateBISQL,updatePivotStage';
     $config->upgrade->execFlow['20_4']['functions']      .= ',updateTaskRelationPriv';
     $config->upgrade->execFlow['21_7_9']['functions']    .= ',modifyProjectWorkflowGroup,upgradeAuditcl,upgradeProcessAndActivity,addWorkflowGroupOtherActivity,addDefaultDeliverableModule,upgradeDesignToDeliverable,buildinTestcaseStageDeliverable,upgradeDeliverable,buildinBaselineReview,upgradeReviewclCategory,upgradeBaselineObjects,upgradeReviewToDeliverable,upgradeBaseline,addDeliverablePrivs,upgradeStageAndPoint,upgradeObjectOfDecision,upgradeClosedFeature,parseDocFetcherURL,updateWorkflowGroupPriv,upgradeReportTemplateObjects';
-    $config->upgrade->execFlow['22_2']                   .= array('functions' => 'updateReviewedByField'); // 暂定22.2，发布之前要改版本号
+    $config->upgrade->execFlow['22_2']                    = array('functions' => 'updateReviewedByField'); // 暂定22.2，发布之前要改版本号
 }
 
 if(in_array($this->config->edition, array('max', 'ipd'))) $config->upgrade->execFlow['18_7']['functions'] = 'processOldMetrics,processHistoryDataForMetric,metric-updateMetricDate';
