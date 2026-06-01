@@ -13350,4 +13350,31 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 升级时，当用户拥有某个权限的时候新增另一个权限。
+     * Add user group.
+     *
+     * @param  array  $checkedPrivs   array(0 => array('module' => 'bug', 'method' => 'create'))
+     * @param  array  $addPrivs       array(0 => array('module' => 'bug', 'method' => 'copy'))
+     * @access public
+     * @return bool
+     */
+    public function addUserGroup(array $checkedPrivs, array $addPrivs): bool
+    {
+        foreach($checkedPrivs as $index => $checkedPriv)
+        {
+            if(empty($addPrivs[$index])) continue;
+
+            $privList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq($checkedPriv['module'])->andWhere('method')->eq($checkedPriv['method'])->fetchAll();
+            $addPriv  = $addPrivs[$index];
+            foreach($privList as $priv)
+            {
+                $this->dao->delete()->from(TABLE_GROUPPRIV)->where('group')->eq($priv->group)->andWhere('module')->eq($addPriv['module'])->andWhere('method')->eq($addPriv['method'])->exec();
+                $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($priv->group)->set('module')->eq($addPriv['module'])->set('method')->eq($addPriv['method'])->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
 }
