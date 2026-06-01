@@ -113,6 +113,7 @@ class artifact extends control
      */
     public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->config->file->dangers = '';
         $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
 
@@ -326,7 +327,7 @@ class artifact extends control
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
         $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
 
-        $artifacts = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
+        $artifacts = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
         if($_POST)
         {
             $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
@@ -514,7 +515,8 @@ class artifact extends control
 
             $fromRepo = $artifact->name;
             $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
-            $toRepo   = zget($this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account), $formData->artifactID, '');
+            $targetArtifact = $this->artifact->fetchByID((int)$formData->artifactID);
+            $toRepo         = empty($targetArtifact) ? '' : $targetArtifact->name;
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
@@ -547,7 +549,7 @@ class artifact extends control
         $this->view->title              = $this->lang->artifact->moveArtifact;
         $this->view->asset              = $asset;
         $this->view->artifact           = $artifact;
-        $this->view->artifacts          = $this->artifact->getPairs($artifact->scope, $artifact->type, $this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->artifacts          = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
         $this->view->currentPathEncoded = '';
         $this->view->parentPath         = $parentID;
         $this->display();
@@ -601,6 +603,7 @@ class artifact extends control
      */
     public function uploadArtifact(int $artifactID, string $path = '')
     {
+        $this->config->file->dangers = '';
         $artifact = $this->artifact->fetchByID($artifactID);
         $this->checkAccess($artifact->spaceID, $artifact->repoID);
 

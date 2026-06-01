@@ -12,6 +12,26 @@ declare(strict_types=1);
 class artifactZen extends artifact
 {
     /**
+     * 获取制品库选择器树数据。
+     * Get artifact repo picker tree items.
+     *
+     * @param  string $type
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getArtifactRepoPickerItems(string $scope, string $type, array $spaces, array $repos): array
+    {
+        if(empty($spaces)) return array();
+
+        $spaceIDList = array_keys($spaces);
+        $repoIDList  = array_keys($repos);
+        $artifacts   = $this->artifact->getListByScope($scope, $type, $spaceIDList, $repoIDList);
+
+        return $this->buildArtifactRepoPickerItems($spaces, $repos, $artifacts);
+    }
+
+    /**
      * 获取节点的面包屑。
      * Get the breadcrumb of the node.
      *
@@ -101,6 +121,74 @@ class artifactZen extends artifact
             }
             $item->actions = $node->metadata->type == 'asset' || $item->format != 'file' ? array() : $this->buildTreeAction($item, $privs);
             $items[] = $item;
+        }
+
+        return $items;
+    }
+
+    /**
+     * 组装制品库选择器树。
+     * Build artifact repo picker tree.
+     *
+     * @param  array $spaces
+     * @param  array $repos
+     * @access protected
+     * @return array
+     */
+    protected function buildArtifactRepoPickerItems(array $spaces, array $repos, array $artifacts): array
+    {
+        $artifactSpaces = array();
+        $artifactRepos  = array();
+        foreach($artifacts as $artifact)
+        {
+            if(empty($artifact->spaceID)) continue;
+
+            if(empty($artifact->repoID))
+            {
+                $artifactSpaces[$artifact->spaceID][] = $artifact;
+            }
+            else
+            {
+                $artifactRepos[$artifact->spaceID][$artifact->repoID][] = $artifact;
+            }
+        }
+
+        $items = array();
+        foreach($spaces as $spaceID => $spaceName)
+        {
+            $children = array();
+            if(!empty($artifactSpaces[$spaceID]) && !isset($artifactRepos[$spaceID]))
+            {
+                foreach($artifactSpaces[$spaceID] as $spaceArtifact)
+                {
+                    $children[] = array('text' => $spaceArtifact->name, 'value' => $spaceArtifact->id, 'keys' => $spaceArtifact->name);
+                }
+            }
+
+            if(isset($artifactRepos[$spaceID]))
+            {
+                foreach($artifactRepos[$spaceID] as $repoID => $repoArtifacts)
+                {
+                    if(!isset($repos[$repoID])) continue;
+                    $repoName = $repos[$repoID];
+
+                    $repoItems = array();
+                    foreach($repoArtifacts as $repoArtifact)
+                    {
+                        $repoItems[] = array('text' => $repoArtifact->name, 'value' => $repoArtifact->id, 'keys' => $repoArtifact->name);
+                    }
+                    $children[] = array('text' => array('html' => "{$repoName}<span class='ml-1 label text-ellipsis'>{$this->lang->repo->common}</span>", 'class' => 'text-clip'), 'disabled' => true, 'items' => $repoItems);
+                }
+            }
+
+            if(empty($children)) continue;
+
+            $items[] = array
+            (
+                'text'     => array('html' => "{$spaceName}<span class='ml-1 label text-ellipsis'>{$this->lang->space->common}</span>", 'class' => 'text-clip'),
+                'disabled' => true,
+                'items'    => $children
+            );
         }
 
         return $items;

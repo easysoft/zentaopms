@@ -72,32 +72,11 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(string $scope = '', string $type = '', string $account = ''): array
+    public function getPairs(string $scope = '', string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
     {
-        $spaceIdList = $repoIdList = array();
-        if($account && $scope == 'space')
-        {
-            $spaceIdList = $this->dao->select('t1.id')->from(TABLE_SPACE)->alias('t1')
-                ->leftJoin(TABLE_DEVOPSSPACEUSER)->alias('t2')->on('t1.id=t2.space')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('(t1.acl')->eq('open')
-                ->orWhere('t2.account')->eq($account)->markRight()
-                ->fetchPairs('id');
-        }
-
-        if($account && $scope == 'repo')
-        {
-            $repoIdList = $this->dao->select('t1.id')->from(TABLE_REPO)->alias('t1')
-                ->leftJoin(TABLE_DEVOPSREPOUSER)->alias('t2')->on('t1.id=t2.repo')
-                ->where('t1.deleted')->eq(0)
-                ->andWhere('(t1.acl')->eq('open')
-                ->orWhere('t2.account')->eq($account)->markRight()
-                ->fetchPairs('id');
-        }
-
         return $this->dao->select('id, name')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
-            ->beginIF($scope)->andWhere('scope')->eq($scope)->fi()
+            ->beginIF($scope && $scope != 'all')->andWhere('scope')->eq($scope)->fi()
             ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
             ->beginIF(!empty($repoIdList))->andWhere('repoID')->in($repoIdList)->fi()
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
@@ -359,6 +338,28 @@ class artifactModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('scope')->eq('repo')
             ->andWhere('repoID')->eq($repoID)
+            ->fetchAll('id');
+    }
+
+    /**
+     * 通过scope获取制品库信息。
+     * getListByScope
+     *
+     * @param  string $scope
+     * @param  string $type
+     * @param  array $spaceIdList
+     * @param  array $repoIdList
+     * @access public
+     * @return array
+     */
+    public function getListByScope(string $scope, string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
+    {
+        return $this->dao->select('*')->from(TABLE_ARTIFACT)
+            ->where('deleted')->eq(0)
+            ->andWhere('scope')->eq($scope)
+            ->beginIF(!empty($spaceIdList))->andWhere('spaceID')->in($spaceIdList)->fi()
+            ->beginIF(!empty($repoIdList) && in_array($scope, array('repo', 'all')))->andWhere('repoID')->in($repoIdList)->fi()
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->fetchAll('id');
     }
 }
