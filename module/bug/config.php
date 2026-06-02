@@ -18,7 +18,7 @@ $config->bug->actions->view = array();
 $config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'createBranch', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
 $config->bug->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
 
-$config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm', 'bysearch');
+$config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'reviewedby', 'needconfirm', 'bysearch');
 
 $config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, execution, story, task,
