@@ -90,7 +90,7 @@ class testtaskModel extends model
         $searchConfig['actionURL'] = $actionURL;
         $searchConfig['queryID']   = $queryID;
 
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get product params. */
@@ -102,12 +102,12 @@ class testtaskModel extends model
         $projectParams = $projectParams + array('all' => $this->lang->testtask->allProject);
 
         $searchConfig['params']['product']['values'] = $productParams;
-        $searchConfig['fields']['project']  = $this->lang->testtask->project;
-        $searchConfig['params']['project']  = array('operator' => '=', 'control' => 'select', 'values' => $projectParams);
+        $searchConfig['fields']['project'] = $this->lang->testtask->project;
+        $searchConfig['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => $projectParams);
 
         $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID, "0", (int)$projectID);
-        $searchConfig['fields']['execution']  = $this->lang->testtask->execution;
-        $searchConfig['params']['execution']  = array('operator' => '=', 'control' => 'select', 'values' => $executionParams);
+        $searchConfig['fields']['execution'] = $this->lang->testtask->execution;
+        $searchConfig['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionParams);
 
         $this->loadModel('search')->setSearchParams($searchConfig);
         return $searchConfig;

@@ -24,8 +24,8 @@ $actionURL = '';
 $module    = 'testtask';
 
 $searchConfig = $testtask->buildTesttaskSearchForm($productID, $queryID, $actionURL, true);
-r(isset($searchConfig['queryID']))                && p()         && e(0);       // 缓存查询参数，查询参数中 queryID 为空。
-r(isset($searchConfig['actionURL']))              && p()         && e(0);       // 缓存查询参数，查询参数中 actionURL 为空。
-r(isset($searchConfig['fields']['product']))      && p()         && e(1);       // 缓存查询参数，查询参数中有 product 字段。
-r(isset($searchConfig['fields']['pri']))          && p()         && e(1);       // 缓存查询参数，查询参数中有 pri 字段。
-r($searchConfig)                                  && p('module') && e('testtask');  // module 为 projectTesttask,缓存查询参数，打印 module 的值。
+r(isset($searchConfig['queryID']))           && p()         && e(0); // 缓存查询参数，查询参数中 queryID 为空。
+r(isset($searchConfig['actionURL']))         && p()         && e(0); // 缓存查询参数，查询参数中 actionURL 为空。
+r(isset($searchConfig['fields']['product'])) && p()         && e(1); // 缓存查询参数，查询参数中有 product 字段。
+r(isset($searchConfig['fields']['pri']))     && p()         && e(1); // 缓存查询参数，查询参数中有 pri 字段。
+r($searchConfig)                             && p('module') && e('testtask'); // module 为 projectTesttask,缓存查询参数，打印 module 的值。
