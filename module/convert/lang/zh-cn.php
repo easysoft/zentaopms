@@ -201,6 +201,7 @@ $lang->convert->jira->importing          = '数据导入中，请不要切换其
 $lang->convert->jira->importingAB        = '数据导入中';
 $lang->convert->jira->imported           = '数据导入完成';
 $lang->convert->jira->restore            = '上次导入信息没有完成，是否从上次流程继续填写？';
+$lang->convert->jira->noCustomeFields    = '此对象没有需要配置的字段，请点击下一步。';
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = '业务需求';

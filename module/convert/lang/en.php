@@ -201,6 +201,7 @@ $lang->convert->jira->importing          = 'Data import in progress — please d
 $lang->convert->jira->importingAB        = 'Migrating data...';
 $lang->convert->jira->imported           = 'Data migration completed.';
 $lang->convert->jira->restore            = 'The previous migration was not completed. Would you like to continue from where you left off?';
+$lang->convert->jira->noCustomeFields    = 'This object has no fields that require configuration. Please click Next.';
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = 'Epic';
