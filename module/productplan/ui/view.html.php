@@ -172,12 +172,12 @@ if($product->type != 'normal')
     $branchNames = trim($branchNames, ',');
 }
 
-$fnGetChildrenPlans = function($childrenPlans)
+$fnGetChildrenPlans = function($childrenPlans) use($product)
 {
     $childrenPlanItems = array();
     foreach($childrenPlans as $childrenPlan)
     {
-        $childrenPlanItems[] = a(set::href(inlink('view', "planID={$childrenPlan->id}")), "#{$childrenPlan->id} {$childrenPlan->title}");
+        $childrenPlanItems[] = a(set::href(inlink('view', "planID={$childrenPlan->id}")), !empty($product->shadow) ? setData('app', 'project') : null, "#{$childrenPlan->id} {$childrenPlan->title}");
         $childrenPlanItems[] = h::br();
     }
 
@@ -353,7 +353,7 @@ detailBody
                 (
                     set::title($lang->productplan->basicInfo),
                     item(set::name($lang->productplan->title), $plan->title),
-                    $plan->parent > 0 ? item(set::name($lang->productplan->parent), a(set::href(inlink('view', "planID={$parentPlan->id}")), "#{$parentPlan->id} {$parentPlan->title}")) : null,
+                    $plan->parent > 0 ? item(set::name($lang->productplan->parent), a(set::href(inlink('view', "planID={$parentPlan->id}")), !empty($product->shadow) ? setData('app', 'project') : null, "#{$parentPlan->id} {$parentPlan->title}")) : null,
                     $product->type != 'normal' ? item(set::name($lang->product->branch), $branchNames) : null,
                     item(set::name($lang->productplan->begin), $plan->begin == FUTURE_TIME ? $lang->productplan->future : $plan->begin),
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
