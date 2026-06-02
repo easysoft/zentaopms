@@ -601,7 +601,11 @@ class storyModel extends model
         /* Create actions. Record submit review action. */
         $bugAction = empty($storyFrom) ? 'Opened' : 'From' . ucfirst($storyFrom);
         $action    = $bugID == 0 ? $bugAction : 'Frombug';
-        $this->action->create('story', $storyID, $action, '', $extra);
+        $actionID  = $this->action->create('story', $storyID, $action, '', $extra);
+
+        $story->id = $storyID;
+        $this->loadModel('message')->sendMentionNotice($story->type, 'create', $actionID, $story);
+
         if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
         if(!empty($story->assignedTo)) $this->action->create('story', $storyID, 'Assigned', '', $story->assignedTo);
 
@@ -833,6 +837,20 @@ class storyModel extends model
         }
 
         $changes = common::createChanges($oldStory, $story);
+
+        if($this->post->comment != '' or !empty($changes))
+        {
+            $action   = !empty($changes) ? 'Changed' : 'Commented';
+            $actionID = $this->loadModel('action')->create('story', $storyID, $action, $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice($oldStory->type, 'change', $actionID, $story, $oldStory);
+
+            /* Record submit review action. */
+            $story = $this->fetchByID($storyID);
+            if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
+        }
+
         if(isset($story->relievedTwins))
         {
             $this->relieveTwins($oldStory->product, $storyID);
@@ -853,7 +871,7 @@ class storyModel extends model
      * @access public
      * @return bool|int
      */
-    public function update(int $storyID, object $story, string|bool $comment = ''): bool|int
+    public function update(int $storyID, object $story): bool|int
     {
         $oldStory = $this->getByID($storyID);
 
@@ -868,7 +886,7 @@ class storyModel extends model
         if(isset($story->estimate)) $story->estimate = round((float)$story->estimate, 2);
 
         $moduleName = $this->app->rawModule;
-        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult,oldDocs,docVersions')
+        $this->dao->update(TABLE_STORY)->data($story, 'reviewer,spec,verify,deleteFiles,renameFiles,files,finalResult,oldDocs,docVersions,comment')
             ->autoCheck()
             ->batchCheck($this->config->{$moduleName}->edit->requiredFields, 'notempty')
             ->checkIF(!empty($story->closedBy), 'closedReason', 'notempty')
@@ -968,11 +986,15 @@ class storyModel extends model
 
         $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
         $changes = common::createChanges($oldStory, $story);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($story->comment) or !empty($changes))
         {
             $action   = !empty($changes) ? 'Edited' : 'Commented';
-            $actionID = $this->action->create('story', $storyID, $action, $comment);
+            $actionID = $this->action->create('story', $storyID, $action, $story->comment);
             $this->action->logHistory($actionID, $changes);
+
+            $story->type = $oldStory->type;
+            $this->loadModel('message')->sendMentionNotice($oldStory->type, 'edit', $actionID, $story, $oldStory);
+
             if(isset($story->finalResult))
             {
                 if($story->finalResult == 'clarify')

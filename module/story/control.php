@@ -322,7 +322,7 @@ class story extends control
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->storyZen->processDataForEdit($storyID, $storyData);
-            $this->story->update($storyID, $storyData, $this->post->comment);
+            $this->story->update($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($storyID);
@@ -432,17 +432,6 @@ class story extends control
 
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $action   = !empty($changes) ? 'Changed' : 'Commented';
-                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-
-                /* Record submit review action. */
-                $story = $this->story->fetchByID($storyID);
-                if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
-            }
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
