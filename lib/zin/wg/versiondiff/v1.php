@@ -30,12 +30,10 @@ class versiondiff extends wg
     {
         list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $settingsItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'settingsItems'));
 
+        global $app;
+
         /* 如果版本不可见，调整到最新版本。 If the version does not visible, adjust to the latest version. */
-        if(!isset($versionItems[$versionID]))
-        {
-            global $app;
-            return $app->control->send(array('load' => sprintf($browseTemplate, 0)));
-        }
+        if(!isset($versionItems[$versionID])) return $app->control->send(array('load' => sprintf($browseTemplate, 0)));
 
         return dropdown
         (
