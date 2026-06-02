@@ -593,22 +593,24 @@ class programplan extends control
      */
     public function ajaxSetShowVersion(string $objectType = 'project')
     {
-        if(!empty($_POST['showVersions']) || !empty($_POST['hiddenVersions']))
-        {
-            $settings = $this->loadModel('setting')->getItem("owner=system&module={$objectType}&section=&key=ganttVersionSettings");
-            $settings = explode(',', $settings);
-            foreach(explode(',', $_POST['showVersions']) as $showVersion)
-            {
-                if(empty($showVersion)) continue;
-                if(!in_array($showVersion, $settings)) $settings[] = $showVersion;
-            }
-            foreach(explode(',', $_POST['hiddenVersions']) as $hiddenVersion)
-            {
-                if(in_array($hiddenVersion, $settings)) $settings = array_filter($settings, function($value) use($hiddenVersion) {return $value != $hiddenVersion;});
-            }
-            $this->setting->setItem("system.$objectType.ganttVersionSettings", implode(',', $settings));
+        if(empty($_POST['showVersions']) && empty($_POST['hiddenVersions'])) return;
 
-            return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
+        $showVersions   = zget($_POST, 'showVersions', '');
+        $hiddenVersions = zget($_POST, 'hiddenVersions', '');
+
+        $settings = $this->loadModel('setting')->getItem("owner=system&module={$objectType}&section=&key=ganttVersionSettings");
+        $settings = explode(',', $settings);
+        foreach(explode(',', $showVersions) as $showVersion)
+        {
+            if(empty($showVersion)) continue;
+            if(!in_array($showVersion, $settings)) $settings[] = $showVersion;
         }
+        foreach(explode(',', $hiddenVersions) as $hiddenVersion)
+        {
+            if(in_array($hiddenVersion, $settings)) $settings = array_filter($settings, function($value) use($hiddenVersion) {return $value != $hiddenVersion;});
+        }
+        $this->setting->setItem("system.$objectType.ganttVersionSettings", implode(',', $settings));
+
+        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
     }
 }
