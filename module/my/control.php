@@ -1301,10 +1301,14 @@ class my extends control
 
         $fields = $this->loadModel('workflowaction', 'flow')->getPageFields($flow->module, 'browse', true, null, 0, $flow->group);
 
+        $this->app->rawModule = $flow->module; // 获取数据表格列的自定义项
+
         $menu        = $this->flowZen->buildDtableMenu($flow->module);
         $actions     = $this->flowZen->buildDtableActions($flow->module, $flow->navigator);
         $cols        = $this->flow->buildDtableCols($fields, $menu, $actions);
         $footToolbar = $this->flowZen->buildDtableFootToolbar($flow->module);
+
+        $this->app->rawModule = 'my'; // 切换回my模块
 
         $browseLink = $this->createLink('my', 'work', "mode={$module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->session->set($module . 'List', $browseLink, 'my');

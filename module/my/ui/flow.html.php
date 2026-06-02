@@ -62,7 +62,12 @@ dtable
     setID('dataList'),
     set::cols($cols),
     set::data(array_values($dataList)),
-    set::customCols(true),
+    set::customCols(array(
+        'url' => createLink('datatable', 'ajaxcustom', "module={$flow->module}&method=browse"),
+        'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$flow->module}&method=browse"),
+        'resetUrl' => createLink('datatable', 'ajaxreset', "module={$flow->module}&method=browse"),
+        'resetGlobalUrl' => createLink('datatable', 'ajaxreset', "module={$flow->module}&method=browse&system=1"),
+    )),
     set::moduleName($flow->module),
     set::checkable(!empty($footToolbar)),
     set::orderBy($orderBy),
