@@ -114,6 +114,7 @@ class changeStatus extends tester
         $form->dom->revokeBtn->click();
         $form->wait(2);
         $form->dom->confirmBtn->click();
+        $form->wait(2);
         $viewPage = $this->initForm('projectstory', 'view', $storyUrl, 'appIframe-project');
         $viewPage->wait(2);
         $status = $viewPage->dom->storyStatus->getText();
