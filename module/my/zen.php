@@ -268,6 +268,9 @@ class myZen extends my
             $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
+
+            $flows = $this->loadModel('my')->getFlowPairs();
+            foreach($flows as $module => $name) $count[$module] = $this->my->getAssignedFlowCount($module);
         }
 
         if($isMax || $isIPD)
