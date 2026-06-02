@@ -2388,7 +2388,7 @@ class execution extends control
 
         if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
-        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted|devfirst|all', $appendUsers);
         $userItems = array();
         foreach($users as $account => $realName) $userItems[$account] = array('value' => $account, 'text' => $realName, 'keys' => $account, 'disabled' => false);
 

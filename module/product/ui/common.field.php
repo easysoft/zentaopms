@@ -20,7 +20,7 @@ $fields->field('type')
 $fields->field('code')->control('input');
 
 $fields->field('PO')
-    ->control(array('control' => 'remotepicker', 'params' => 'nodeleted,pofirst,noclosed'))
+    ->control(array('control' => 'remotepicker', 'params' => 'nodeleted,pofirst,noclosed,all'))
     ->value(data('fields.PO.default'));
 
 $fields->field('reviewer')

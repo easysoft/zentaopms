@@ -18,4 +18,14 @@ class whitelist extends userPicker
     protected static array $defaultProps = array(
         'name' => 'whitelist[]'
     );
+
+    protected function created()
+    {
+        global $app;
+
+        $users = $app->control->loadModel('user')->getPairs('noclosed|nodeleted|all');
+        $items = array_map(function($account, $name){return array('text' => $name, 'value' => $account);}, array_keys($users), $users);
+
+        $this->setProp('items', $items);
+    }
 }
