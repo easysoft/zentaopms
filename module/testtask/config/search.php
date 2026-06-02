@@ -18,7 +18,7 @@ $config->testtask->search['fields']['realFinishedDate'] = $lang->testtask->realF
 
 $config->testtask->search['params']['id']               = array('operator' => '=', 'control' => 'input', 'values' => '');
 $config->testtask->search['params']['name']             = array('operator' => 'include', 'control' => 'input', 'values' => '');
-$config->testtask->search['params']['type']             = array('operator' => '=', 'control' => 'select', 'values' => $lang->testtask->typeList);
+$config->testtask->search['params']['type']             = array('operator' => 'include', 'control' => 'select', 'values' => $lang->testtask->typeList);
 $config->testtask->search['params']['status']           = array('operator' => '=', 'control' => 'select', 'values' => $lang->testtask->statusList);
 $config->testtask->search['params']['product']          = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->testtask->search['params']['owner']            = array('operator' => '=', 'control' => 'select', 'values' => 'users');

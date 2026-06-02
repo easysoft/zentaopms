@@ -73,6 +73,7 @@ $lang->testtask->common            = '测试单';
 $lang->testtask->product           = '所属' . $lang->productCommon;
 $lang->testtask->project           = '所属' . $lang->projectCommon;
 $lang->testtask->execution         = '所属' . $lang->execution->common;
+$lang->testtask->allProject        = '所有' . $lang->projectCommon;
 $lang->testtask->type              = '测试类型';
 $lang->testtask->build             = '提测构建';
 $lang->testtask->owner             = '负责人';

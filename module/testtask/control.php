@@ -68,6 +68,8 @@ class testtask extends control
      * @param  int    $productID
      * @param  string $branch
      * @param  string $type
+     * @param  string $browseType
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -77,7 +79,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $branch = '0', string $type = 'local,totalStatus', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
+    public function browse(int $productID = 0, string $branch = '0', string $type = 'local,totalStatus', string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $beginTime = '', string $endTime = '')
     {
         /* 检查是否有权限访问测试单所属产品。*/
         /* Check if user have permission to access the product to which the testtask belongs. */
@@ -107,9 +109,13 @@ class testtask extends control
         /* Set 1.5 level menu. */
         $this->loadModel('qa')->setMenu($productID, $branch);
 
+        /* Build the search form. */
+        $actionURL = $this->createLink('testtask', 'browse', "productID=$productID&branch=$branch&type=$type&browseType=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->testtask->buildTesttaskSearchForm($productID, $param, $actionURL);
+
         /* 从数据库中查询符合条件的测试单。*/
         /* Query the testtasks from the database. */
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $sort, $pager);
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, $type, $beginTime, $endTime, $browseType, $param, $sort, $pager);
 
         /* Process testtask members. */
         $users = $this->loadModel('user')->getPairs('noclosed|noletter');
@@ -133,6 +139,8 @@ class testtask extends control
         $this->view->product         = $product;
         $this->view->branch          = $branch;
         $this->view->type            = $type;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
         $this->view->beginTime       = $beginTime;
@@ -1220,7 +1228,7 @@ class testtask extends control
         else
         {
             $scope     = empty($objectType) ? 'local' : 'all';
-            $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'id_desc', null);
+            $testtasks = $this->testtask->getProductTasks($productID, $branch, "$scope,totalStatus", '', '', 'all', 0, 'id_desc', null);
         }
 
         $namePairs = array();

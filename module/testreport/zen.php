@@ -117,7 +117,7 @@ class testreportZen extends testreport
         }
 
         $taskPairs = array();
-        $tasks     = $this->testtask->getProductTasks($productID, empty($objectID) ? 'all' : $task->branch, 'local,totalStatus', '', '', 'id_desc', null);
+        $tasks     = $this->testtask->getProductTasks($productID, empty($objectID) ? 'all' : $task->branch, 'local,totalStatus', '', '', 'all', 0, 'id_desc', null);
         foreach($tasks as $testTask)
         {
             if($testTask->build != 'trunk') $taskPairs[$testTask->id] = $testTask->name;
