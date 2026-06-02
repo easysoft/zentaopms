@@ -2825,7 +2825,7 @@ class repo extends control
 
         $this->loadModel('gitfox')->apiDeleteBranch($repoID, $branch);
         if(dao::isError()) return $this->sendError($this->parseErrorContent(dao::getError()));
-        $this->repo->unlinkObjectBranch($repoID, 'repo', $repoID, $branch);
+        $this->repo->unlinkObjectBranch(0, '', $repoID, $branch);
         if(dao::isError()) return $this->sendError(dao::getError());
         $this->loadModel('action')->create('repobranch', $repoID, 'deleted', '', $branch);
 
