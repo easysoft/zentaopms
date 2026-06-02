@@ -2805,9 +2805,9 @@ class repoModel extends model
     public function unlinkObjectBranch(int $objectID, string $objectType, int $repoID, string $branch): bool
     {
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($objectID)
+            ->where('relation')->eq('linkrepobranch')
+            ->beginIF($objectType)->andWhere('AType')->eq($objectType)->fi()
+            ->beginIF($objectID)->andWhere('AID')->eq($objectID)->fi()
             ->andWhere('BID')->eq($repoID)
             ->andWhere('BType')->eq($branch)
             ->exec();
