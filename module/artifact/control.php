@@ -186,8 +186,8 @@ class artifact extends control
             $repo = $this->loadModel('repo')->fetchByID($repoID);
 
             $formData = form::data($this->config->artifact->form->create)
-                ->add('repoID', $repoID)
-                ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : $space)
+                ->add('repoID', (int)$repoID)
+                ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : (int)$space)
                 ->get();
             if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
