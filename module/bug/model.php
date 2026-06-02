@@ -996,6 +996,8 @@ class bugModel extends model
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'openedbyme')->andWhere('t1.openedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
