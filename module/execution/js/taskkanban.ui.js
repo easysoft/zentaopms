@@ -291,7 +291,7 @@ window.getItem = function(info)
     if(info.laneInfo.type == 'task')
     {
         let label    = '';
-        let hasLabel = typeof info.item.title ==  'object' && info.item.title.html.includes("<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>");
+        let hasLabel = typeof info.item.title == 'object' && info.item.title.html.includes("<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>");
         if(info.item.isParent == '1' && !hasLabel)
         {
             label = "<span class='label gray-pale rounded p-0 size-sm whitespace-nowrap'>" + parentAB + "</span> ";
