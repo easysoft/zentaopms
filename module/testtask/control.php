@@ -939,15 +939,13 @@ class testtask extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $url));
         }
 
-        /* 根据不同情况获取要批量执行的用例。*/
-        /* Get cases to run according to different situations. */
-        $caseIdList = $this->loadModel('testcase')->ignoreAutoCaseIdList((array)$this->post->caseIdList);
+        $caseIdList = (array)$this->post->caseIdList;
         if(empty($caseIdList)) $this->locate($url);
 
         $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList);
         if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
-        $steps = $this->testcase->getStepGroupByIdList($caseIdList);
+        $steps = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
 
         $emptyCases = '';
         foreach($cases as $caseID => $case)
