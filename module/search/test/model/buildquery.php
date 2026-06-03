@@ -11,6 +11,7 @@ cid=18295
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%0%' ) AND ( 1  ))
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  ) AND ( 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'form' 第0条的field属性 @title
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%bug%' AND `status` = 'active'  ) AND ( 1  ))
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%bug%' OR `status` = 'active'  ) AND ( 1  ))
 - 执行search2模块的buildQueryTest方法，参数是$searchConfig2, $postDatas2, 'query'  @(( 1  OR `status` = 'active'  ) AND ( 1  ))
@@ -62,6 +63,16 @@ r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1
 $postData1->value1 = '';
 $postDatas = array($postData1);
 r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'form')) && p('0:field') && e('title');
+
+// 测试步骤4.1：空值时仍保留用户选择的字段
+$postData5 = new stdclass();
+$postData5->field2    = 'title';
+$postData5->andOr2    = 'and';
+$postData5->operator2 = 'include';
+$postData5->value2    = '';
+$postDatas = array($postData5);
+r($search->buildQueryTest($searchConfig, $postDatas, 'form')) && p('1:field') && e('title');
 
 // 测试步骤5：多个搜索条件组合
 $postData1->value1 = 'bug';
