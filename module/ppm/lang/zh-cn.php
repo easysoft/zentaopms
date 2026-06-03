@@ -316,14 +316,20 @@ $lang->ppm->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变�
 $lang->ppm->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接添加到基础分支，而不产生合并提交,可能需要进行变基。';
 
 $lang->ppm->notice = new stdclass();
-$lang->ppm->notice->confirmClose       = '是否确认关闭该合并请求？';
-$lang->ppm->notice->confirmReopen      = '是否开启该合并请求？';
-$lang->ppm->notice->fastNotice         = '目标分支已有新提交，无法进行快速合并';
-$lang->ppm->notice->sameBranch         = '源分支与目标分支不能相同。';
-$lang->ppm->notice->userNotAllowMerge  = '只允许以下用户合并：%s';
-$lang->ppm->notice->userNotAllowCreate = '只允许以下用户创建：%s';
+$lang->ppm->notice->confirmClose                 = '是否确认关闭该合并请求？';
+$lang->ppm->notice->confirmReopen                = '是否开启该合并请求？';
+$lang->ppm->notice->fastNotice                   = '目标分支已有新提交，无法进行快速合并';
+$lang->ppm->notice->sameBranch                   = '源分支与目标分支不能相同。';
+$lang->ppm->notice->userNotAllowMerge            = '只允许以下用户合并：%s';
+$lang->ppm->notice->userNotAllowCreate           = '只允许以下用户创建：%s';
+$lang->ppm->notice->hasUnresolvedIssues          = '有未解决的问题，请先解决。';
+$lang->ppm->notice->hasUnresolvedSpecifiedIssues = '有未解决的%s类型的问题，请先解决。';
 
 $lang->ppm->featureBar['view']['all']   = '全部';
 $lang->ppm->featureBar['view']['story'] = '需求';
 $lang->ppm->featureBar['view']['task']  = '任务';
 $lang->ppm->featureBar['view']['bug']   = '缺陷';
+
+$lang->ppm->issueSourceList = array();
+$lang->ppm->issueSourceList['code']  = '代码';
+$lang->ppm->issueSourceList['scan']  = '扫描';
