@@ -94,7 +94,7 @@ div
         (
             setClass('picker-btn state'),
             setStyle('box-shadow', 'none'),
-            set::items($artifactList),
+            set::items($artifactLibList),
             set::search(false),
             set::required(true),
             set::menu(jsRaw('{searchBox: true, search: undefined}')),

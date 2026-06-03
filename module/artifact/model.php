@@ -23,10 +23,9 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $spaceID = 0, int $repoID = 0, string $scope = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getLibList(int $spaceID = 0, int $repoID = 0, string $scope = 'space', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $this->loadModel('space');
-        $space = $this->space->getByID($spaceID);
+        $space = $this->loadModel('space')->getByID($spaceID);
         if(!empty($space) && $space->acl != 'open' && !$this->app->user->admin)
         {
             if(empty($space->members) || !isset($space->members[$this->app->user->account])) return array();
@@ -72,7 +71,7 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(string $scope = '', string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
+    public function getLibPairs(string $scope = '', string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
     {
         return $this->dao->select('id, name')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)
@@ -87,24 +86,24 @@ class artifactModel extends model
      * 获取制品库节点。
      * Get artifact nodes.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  string $path
      * @access public
      * @return array
      */
-    public function getArtifactNodes(object $artifact, string $path): array
+    public function getArtifactLibNodes(object $artifactLib, string $path): array
     {
         $nodes = array();
-        if(empty($artifact->id)) return $nodes;
+        if(empty($artifactLib->id)) return $nodes;
 
         $param = array();
-        $param['artifactID'] = $artifact->id;
-        $param['format']     = empty($artifact->format) ? $artifact->type : $artifact->format;
+        $param['artifactID'] = $artifactLib->id;
+        $param['format']     = $artifactLib->type;
         $param['level']      = 'asset';
         $param['path']       = $path;
-        $param['type']       = $artifact->scope;
-        $param['spaceID']    = $artifact->spaceID;
-        $param['repoID']     = $artifact->repoID;
+        $param['type']       = $artifactLib->scope;
+        $param['spaceID']    = $artifactLib->spaceID;
+        $param['repoID']     = $artifactLib->repoID;
 
         $nodes = $this->loadModel('gitfox')->request('/artifacts/nodes', 'POST', $param);
         if(dao::isError()) return array();
@@ -122,19 +121,19 @@ class artifactModel extends model
      * @access public
      * @return bool|array|object
      */
-    public function uploadArtifact(int $artifactID, array $file, string $path = ''): bool|array|object
+    public function uploadArtifact(int $artifactLibID, array $file, string $path = ''): bool|array|object
     {
-        $artifact = $this->fetchByID($artifactID);
-        if(empty($artifact)) return false;
+        $artifactLib = $this->fetchByID($artifactLibID);
+        if(empty($artifactLib)) return false;
 
         $param = array();
-        $param['artifactID'] = $artifactID;
-        $param['name']       = pathinfo($file['name'], PATHINFO_BASENAME);
+        $param['artifactID'] = $artifactLibID;
+        $param['name']       = basename($file['name']);
         $param['group']      = str_replace('/', '.', ltrim($path, '/'));
         $param['file']       = curl_file_create($file['tmp_name']);
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
-        $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifact->type}"), $param, array(), $apiRoot->header, 'data', 'POST', 300));
+        $result  = json_decode(common::http(sprintf($apiRoot->url, "/artifacts/upload/{$artifactLib->type}"), $param, array(), $apiRoot->header, 'data', 'POST', 3000));
         return $this->gitfox->getResponse($result);
     }
 
@@ -143,19 +142,19 @@ class artifactModel extends model
      * Get artifact list.
      *
      * @param  string  $entityID
-     * @param  int     $artifactID
+     * @param  int     $artifactLibID
      * @param  string  $orderBy
      * @param  ?object $pager
      * @access public
      * @return array
      */
-    public function getAssetListByNodeID(string $entityID, int $artifactID = 0, string $orderBy = 'editedDate_desc', ?object $pager = null): array
+    public function getAssetListByNodeID(string $entityID, int $artifactLibID = 0, string $orderBy = 'editedDate_desc', ?object $pager = null): array
     {
         if(!$entityID) return array();
         list($sort, $order) = explode('_', $orderBy);
 
         $params = array();
-        $params['artifactID'] = (int)$artifactID;
+        $params['artifactID'] = (int)$artifactLibID;
         $params['entityID']   = $entityID;
         $params['page']       = is_null($pager) ? 1 : $pager->pageID;
         $params['pageSize']   = is_null($pager) ? 20 : $pager->recPerPage;
@@ -190,15 +189,15 @@ class artifactModel extends model
 
         foreach($assetList->data as $asset)
         {
-            $asset->group      = isset($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : '';
-            $asset->name       = $asset->path;
-            $asset->path       = $asset->group;
-            $asset->version    = isset($asset->metadata) ? $asset->metadata->version : '';
-            $asset->checkValue = empty($asset->checksum) ? '' : $asset->checksum->md5;
-            $asset->size       = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
-            $asset->artifactID = $artifactID;
-            $asset->package    = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
-            $asset->sysArch    = empty($asset->os) || empty($asset->arch) ? '' : $asset->os . '/' . $asset->arch;
+            $asset->group         = isset($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : '';
+            $asset->name          = $asset->format == 'container' ? $asset->metadata->image . ':' . $asset->metadata->version : $asset->path;
+            $asset->path          = $asset->group;
+            $asset->version       = isset($asset->metadata) ? $asset->metadata->version : '';
+            $asset->checkValue    = empty($asset->checksum) ? '' : $asset->checksum->md5;
+            $asset->size          = empty($asset->size)     ? 0 : $this->parseArtifactSize((string)$asset->size);
+            $asset->artifactLibID = $artifactLibID;
+            $asset->package       = $asset->format == 'container' ? $asset->metadata->image : zget($asset, 'package');
+            $asset->sysArch       = empty($asset->os) || empty($asset->arch) ? '' : $asset->os . '/' . $asset->arch;
         }
         return $assetList->data;
     }
@@ -224,7 +223,7 @@ class artifactModel extends model
         {
             $comments = explode('|', $action->comment);
             if(empty($comments) || count($comments) < 3) return false;
-            list($artifactID, $name, $entityID) = $comments;
+            list($artifactLibID, $name, $entityID) = $comments;
         }
 
         $result = $this->loadModel('gitfox')->request('/artifacts/recycle/restore', 'POST', array('entityID' => $entityID));
@@ -270,7 +269,7 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getReposByProduct(int $productID): array
+    public function getLibsByProduct(int $productID): array
     {
         $repoIdList = array();
         if(!$this->app->user->admin)
@@ -279,15 +278,13 @@ class artifactModel extends model
             if($repoIdList) $repoIdList = array_keys($repoIdList);
         }
 
-        $artifactRepos = $this->dao->select('t1.*')->from(TABLE_ARTIFACT)->alias('t1')
+        return $this->dao->select('t1.*')->from(TABLE_ARTIFACT)->alias('t1')
             ->innerJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
             ->andWhere("FIND_IN_SET({$productID}, t2.`product`)")
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.scope')->eq('repo')
             ->beginIf(!empty($repoIdList))->andWhere('t1.repoID')->in($repoIdList)->fi()
             ->fetchAll('id');
-
-        return $artifactRepos;
     }
 
     /**
@@ -300,8 +297,11 @@ class artifactModel extends model
      */
     public function getAssetByIdList(array $assetIdList = array()): array
     {
-        return $this->dao->select('t1.*, t2.size')->from(TABLE_ARTIFACTASSET)->alias('t1')
+        return $this->dao->select('t1.*, t2.size, t3.name as groupName, t5.name as packageName, t4.version')->from(TABLE_ARTIFACTASSET)->alias('t1')
             ->leftJoin(TABLE_ARTIFACTBLOBS)->alias('t2')->on('t1.id = t2.assetID')
+            ->leftJoin(TABLE_ARTIFACTGROUPS)->alias('t3')->on('t1.groupID = t3.id')
+            ->leftJoin(TABLE_ARTIFACTVERSIONS)->alias('t4')->on('t1.versionID = t4.id')
+            ->leftJoin(TABLE_ARTIFACTPACKAGES)->alias('t5')->on('t4.packageID = t5.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->in($assetIdList)
             ->fetchAll();
@@ -352,7 +352,7 @@ class artifactModel extends model
      * @access public
      * @return array
      */
-    public function getListByScope(string $scope, string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
+    public function getLibListByScope(string $scope, string $type = '', array $spaceIdList = array(), array $repoIdList = array()): array
     {
         return $this->dao->select('*')->from(TABLE_ARTIFACT)
             ->where('deleted')->eq(0)

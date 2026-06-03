@@ -13,29 +13,29 @@ class artifactZen extends artifact
 {
     /**
      * 获取制品库选择器树数据。
-     * Get artifact repo picker tree items.
+     * Get artifact Lib picker tree items.
      *
      * @param  string $type
      * @param  string $account
      * @access public
      * @return array
      */
-    public function getArtifactRepoPickerItems(string $scope, string $type, array $spaces, array $repos): array
+    public function getArtifactLibPickerItems(string $scope, string $type, array $spaces, array $repos): array
     {
         if(empty($spaces)) return array();
 
-        $spaceIDList = array_keys($spaces);
-        $repoIDList  = array_keys($repos);
-        $artifacts   = $this->artifact->getListByScope($scope, $type, $spaceIDList, $repoIDList);
+        $spaceIDList  = array_keys($spaces);
+        $repoIDList   = array_keys($repos);
+        $artifactLibs = $this->artifact->getLibListByScope($scope, $type, $spaceIDList, $repoIDList);
 
-        return $this->buildArtifactRepoPickerItems($spaces, $repos, $artifacts);
+        return $this->buildArtifactLibPickerItems($spaces, $repos, $artifactLibs);
     }
 
     /**
      * 获取节点的面包屑。
      * Get the breadcrumb of the node.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  array $selectPathList
      * @param  int $spaceID
      * @param  int $repoID
@@ -43,7 +43,7 @@ class artifactZen extends artifact
      * @access public
      * @return array
      */
-    public function getBreadCrumbs(object $artifact, array $selectPathList, int $spaceID = 0, int $repoID = 0, string $type = 'space'): array
+    public function getBreadCrumbs(object $artifactLib, array $selectPathList, int $spaceID = 0, int $repoID = 0, string $type = 'space'): array
     {
         $breadCrumbs = array();
         if(empty($selectPathList)) return $breadCrumbs;
@@ -52,14 +52,14 @@ class artifactZen extends artifact
         foreach($selectPathList as $key => $path)
         {
             $parentPath .= $key == 0 ? '/' : '/' . $selectPathList[$key - 1];
-            $nodes      = $this->artifact->getArtifactNodes($artifact, '/'. ltrim($parentPath, '/'));
+            $nodes      = $this->artifact->getArtifactLibNodes($artifactLib, '/'. ltrim($parentPath, '/'));
             if(empty($nodes)) continue;
             $selectPath = '/' . ltrim($parentPath . '/' . $path, '/');
             foreach($nodes as $node)
             {
                 if(!empty($node->leaf)) continue;
                 $nodePath = helper::safe64Encode($node->path);
-                $breadCrumbs[$selectPath][] = array('text' => $node->name, 'path'=> $node->path, 'value' => $nodePath, 'keys' => $node->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath=$nodePath"));
+                $breadCrumbs[$selectPath][] = array('text' => $node->name, 'path'=> $node->path, 'value' => $nodePath, 'keys' => $node->name, 'url' => $this->createLink('artifact', 'view', "artifactLibID={$artifactLib->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath=$nodePath"));
             }
         }
 
@@ -70,16 +70,16 @@ class artifactZen extends artifact
      * 获取制品库目录结构。
      * Get artifact folder structure.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  string $path
      * @param  string $selectPath
      * @access public
      * @return array
      */
-    public function getArtifactTreeData(object $artifact, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space', int $leaf = 0): array
+    public function getArtifactLibTreeData(object $artifactLib, string $path = '/', string $selectPath = '', int $spaceID = 0, int $repoID = 0, $type = 'space', int $leaf = 0): array
     {
         $items = array();
-        $nodes = $this->artifact->getArtifactNodes($artifact, $path);
+        $nodes = $this->artifact->getArtifactLibNodes($artifactLib, $path);
         if(empty($nodes)) return $items;
 
         $privs = array();
@@ -96,28 +96,27 @@ class artifactZen extends artifact
             $nodeLeaf = !empty($node->leaf) ? 1 : 0;
 
             $item = new stdclass();
-            $item->id         = $path;
-            $item->name       = $node->name;
-            $item->text       = $node->name;
-            $item->path       = $node->path;
-            $item->format     = $node->format;
-            $item->kind       = $node->leaf ? 'file' : 'dir';
-            $item->active     = $node->path == $selectPath && $nodeLeaf == $leaf;
-            $item->artifactID = $artifact->id;
-            $item->spaceID    = $spaceID;
-            $item->repoID     = $repoID;
-            $item->viewType   = $type;
-            $item->basePath   = $path;
-            $item->entityID   = $node->metadata->entityID;
-            $item->className  = 'text-clip';
-            $item->hint       = $node->name;
-            $item->hover      = true;
-            $item->url        = $this->createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}&leaf={$nodeLeaf}");
+            $item->id            = $path;
+            $item->name          = $node->format == 'container' && !empty($node->metadata) && $node->leaf ? $node->metadata->name . ':' . $node->metadata->version : $node->name;
+            $item->text          = $item->name;
+            $item->path          = $node->path;
+            $item->format        = $node->format;
+            $item->active        = $node->path == $selectPath && $nodeLeaf == $leaf;
+            $item->artifactLibID = $artifactLib->id;
+            $item->spaceID       = $spaceID;
+            $item->repoID        = $repoID;
+            $item->viewType      = $type;
+            $item->basePath      = $path;
+            $item->entityID      = $node->metadata->entityID;
+            $item->className     = 'text-clip';
+            $item->hint          = $item->name;
+            $item->hover         = true;
+            $item->url           = $this->createLink('artifact', 'view', "artifactID={$artifactLib->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$path}&leaf={$nodeLeaf}");
 
-            if($item->kind == 'dir')
+            if(!$node->leaf)
             {
                 $baseSelectPath = helper::safe64Encode($selectPath);
-                $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifact->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&leaf={$leaf}"));
+                $item->items = array('url' => $this->createLink('artifact', 'ajaxGetFolders', "artifactID={$artifactLib->id}&path={$path}&selectPath={$baseSelectPath}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&leaf={$leaf}"));
             }
             $item->actions = $node->metadata->type == 'asset' || $item->format != 'file' ? array() : $this->buildTreeAction($item, $privs);
             $items[] = $item;
@@ -132,24 +131,25 @@ class artifactZen extends artifact
      *
      * @param  array $spaces
      * @param  array $repos
+     * @param  array $artifactLibs
      * @access protected
      * @return array
      */
-    protected function buildArtifactRepoPickerItems(array $spaces, array $repos, array $artifacts): array
+    protected function buildArtifactLibPickerItems(array $spaces, array $repos, array $artifactLibs): array
     {
-        $artifactSpaces = array();
-        $artifactRepos  = array();
-        foreach($artifacts as $artifact)
+        $artifactLibSpaces = array();
+        $artifactLibRepos  = array();
+        foreach($artifactLibs as $artifactLib)
         {
-            if(empty($artifact->spaceID)) continue;
+            if(empty($artifactLib->spaceID)) continue;
 
-            if(empty($artifact->repoID))
+            if(empty($artifactLib->repoID))
             {
-                $artifactSpaces[$artifact->spaceID][] = $artifact;
+                $artifactLibSpaces[$artifactLib->spaceID][] = $artifactLib;
             }
             else
             {
-                $artifactRepos[$artifact->spaceID][$artifact->repoID][] = $artifact;
+                $artifactLibRepos[$artifactLib->spaceID][$artifactLib->repoID][] = $artifactLib;
             }
         }
 
@@ -157,25 +157,25 @@ class artifactZen extends artifact
         foreach($spaces as $spaceID => $spaceName)
         {
             $children = array();
-            if(!empty($artifactSpaces[$spaceID]) && !isset($artifactRepos[$spaceID]))
+            if(!empty($artifactLibSpaces[$spaceID]) && !isset($artifactLibRepos[$spaceID]))
             {
-                foreach($artifactSpaces[$spaceID] as $spaceArtifact)
+                foreach($artifactLibSpaces[$spaceID] as $spaceArtifactLib)
                 {
-                    $children[] = array('text' => $spaceArtifact->name, 'value' => $spaceArtifact->id, 'keys' => $spaceArtifact->name);
+                    $children[] = array('text' => $spaceArtifactLib->name, 'value' => $spaceArtifactLib->id, 'keys' => $spaceArtifactLib->name);
                 }
             }
 
-            if(isset($artifactRepos[$spaceID]))
+            if(isset($artifactLibRepos[$spaceID]))
             {
-                foreach($artifactRepos[$spaceID] as $repoID => $repoArtifacts)
+                foreach($artifactLibRepos[$spaceID] as $repoID => $repoArtifactLibs)
                 {
                     if(!isset($repos[$repoID])) continue;
                     $repoName = $repos[$repoID];
 
                     $repoItems = array();
-                    foreach($repoArtifacts as $repoArtifact)
+                    foreach($repoArtifactLibs as $repoArtifactLib)
                     {
-                        $repoItems[] = array('text' => $repoArtifact->name, 'value' => $repoArtifact->id, 'keys' => $repoArtifact->name);
+                        $repoItems[] = array('text' => $repoArtifactLib->name, 'value' => $repoArtifactLib->id, 'keys' => $repoArtifactLib->name);
                     }
                     $children[] = array('text' => array('html' => "{$repoName}<span class='ml-1 label text-ellipsis'>{$this->lang->repo->common}</span>", 'class' => 'text-clip'), 'disabled' => true, 'items' => $repoItems);
                 }
@@ -198,17 +198,17 @@ class artifactZen extends artifact
      * 获取编辑目录页所属上级选项。
      * Get parent picker items for edit dir page.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  string $excludePath
      * @access public
      * @return array
      */
-    public function getParentPickerItems(object $artifact, string $excludePath = ''): array
+    public function getParentPickerItems(object $artifactLib, string $excludePath = ''): array
     {
         $items = array(array('text' => '/', 'value' => '/'));
-        if(empty($artifact->id)) return $items;
+        if(empty($artifactLib->id)) return $items;
 
-        $children = $this->buildParentPickerChildren($artifact, '/', $excludePath);
+        $children = $this->buildParentPickerChildren($artifactLib, '/', $excludePath);
         if(!empty($children)) $items[0]['items'] = $children;
 
         return $items;
@@ -218,16 +218,16 @@ class artifactZen extends artifact
      * 构建编辑目录页所属上级树。
      * Build parent picker tree for edit dir page.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  string $path
      * @param  string $excludePath
      * @access protected
      * @return array
      */
-    protected function buildParentPickerChildren(object $artifact, string $path = '/', string $excludePath = ''): array
+    protected function buildParentPickerChildren(object $artifactLib, string $path = '/', string $excludePath = ''): array
     {
         $items = array();
-        $nodes = $this->artifact->getArtifactNodes($artifact, $path);
+        $nodes = $this->artifact->getArtifactLibNodes($artifactLib, $path);
         if(empty($nodes)) return $items;
 
         foreach($nodes as $node)
@@ -236,7 +236,7 @@ class artifactZen extends artifact
             if($excludePath && $node->path == $excludePath) continue;
 
             $item = array('text' => $node->name, 'value' => $node->metadata->entityID, 'keys' => $node->name);
-            $children = $this->buildParentPickerChildren($artifact, $node->path, $excludePath);
+            $children = $this->buildParentPickerChildren($artifactLib, $node->path, $excludePath);
             if(!empty($children)) $item['items'] = $children;
 
             $items[] = $item;
@@ -260,10 +260,10 @@ class artifactZen extends artifact
         if(empty($item->format) || empty($item->id)) return $actions;
 
         $dropdownItems   = array();
-        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=0"));
-        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactID}&path={$item->basePath}&isSubDir=1"));
-        if(!empty($privs['editDir']) )  $dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactID}&path={$item->basePath}"));
-        if(!empty($privs['deleteDir'])) $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
+        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSiblingDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSiblingDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactLibID}&path={$item->basePath}&isSubDir=0"));
+        if(!empty($privs['createDir'])) $dropdownItems[] = array('key' => 'addSubDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->addSubDir, 'url' => $this->createLink('artifact', 'createDir', "artifactID={$item->artifactLibID}&path={$item->basePath}&isSubDir=1"));
+        if(!empty($privs['editDir']) )  $dropdownItems[] = array('key' => 'editDir', 'data-toggle' => 'modal', 'text' => $this->lang->artifact->editDir, 'url' => $this->createLink('artifact', 'editDir', "artifactID={$item->artifactLibID}&path={$item->basePath}"));
+        if(!empty($privs['deleteDir'])) $dropdownItems[] = array('key' => 'deleteDir', 'innerClass' => 'ajax-submit', 'text' => $this->lang->artifact->deleteDir, 'url' => $this->createLink('artifact', 'deleteDir', "artifactID={$item->artifactLibID}&entityID={$item->entityID}&path={$item->basePath}"), 'data-confirm' => array('message' => $this->lang->artifact->notice->confirmDeleteDir));
         if(empty($dropdownItems)) return $actions;
 
         $actions[] = array
@@ -284,20 +284,20 @@ class artifactZen extends artifact
      * 通过路径获取节点。
      * Get node by path.
      *
-     * @param  object $artifact
+     * @param  object $artifactLib
      * @param  string $path
      *
      * @access public
      * @return object|array
      */
-    public function getNodeByPath(object $artifact, string $path): object|array
+    public function getNodeByPath(object $artifactLib, string $path): object|array
     {
         if(empty($path)) return array();
 
         $parentPath = dirname($path);
         if(empty($parentPath)) return array();
 
-        $nodes = $this->artifact->getArtifactNodes($artifact, $parentPath);
+        $nodes = $this->artifact->getArtifactLibNodes($artifactLib, $parentPath);
         if(empty($nodes)) return array();
 
         foreach($nodes as $node)
