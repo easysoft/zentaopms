@@ -666,7 +666,7 @@ class taskTao extends taskModel
      * @param  object $task
      * @return float
      */
-    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    public function getLeftAfterDeleteWorkhour(object $effort, object $task): float
     {
         $left = $task->left;
         if($effort->isLast)
