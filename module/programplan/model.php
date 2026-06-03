@@ -1062,7 +1062,7 @@ class programplanModel extends model
         $baselineVersions = array();
         if(strpos(",{$disabledFeatures},", ',cm,') === false)
         {
-            $baselineVersions = $this->dao->select('t1.id, t1.title, t1.category, t1.categoryVersion')->from(TABLE_OBJECT)->alias('t1')
+            $baselineVersions = $this->dao->select('t1.id, t1.version, t1.category, t1.categoryVersion')->from(TABLE_OBJECT)->alias('t1')
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
                 ->where('t1.project')->eq($projectID)
                 ->andWhere('t2.status')->eq('pass')
@@ -1085,7 +1085,7 @@ class programplanModel extends model
                     foreach($deliverableVersions as $deliverable)
                     {
                         if(!isset($deliverable->baselineList)) $deliverable->baselineList = '';
-                        if($deliverable->reviewID == $deliverableReviewID) $deliverable->baselineList .= "$baselineVersion->title ";
+                        if($deliverable->reviewID == $deliverableReviewID) $deliverable->baselineList .= "$baselineVersion->version ";
                     }
                 }
             }

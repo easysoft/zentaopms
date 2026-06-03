@@ -508,8 +508,7 @@ class programplan extends control
                 ->setIF($project->type == 'project', 'project', $projectID)
                 ->setIF(in_array($project->type, array('stage', 'sprint', 'kanban')), 'execution', $projectID)
                 ->get();
-            $version->data    = $this->post->data;
-            $version->visible = in_array($project->type, array('stage', 'sprint', 'kanban')) ? 1 : 0;
+            $version->data = $this->post->data;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!isset($this->lang->object)) $this->lang->object = new stdclass();
@@ -588,16 +587,30 @@ class programplan extends control
      * 设置甘特图版本可见。
      * Set show version.
      *
+     * @param  string $objectType
      * @access public
      * @return void
      */
-    public function ajaxSetShowVersion()
+    public function ajaxSetShowVersion(string $objectType = 'project')
     {
-        if(!empty($_POST['showVersions']) || !empty($_POST['hiddenVersions']))
+        if(empty($_POST['showVersions']) && empty($_POST['hiddenVersions'])) return;
+
+        $showVersions   = zget($_POST, 'showVersions', '');
+        $hiddenVersions = zget($_POST, 'hiddenVersions', '');
+
+        $settings = $this->loadModel('setting')->getItem("owner=system&module={$objectType}&section=&key=ganttVersionSettings");
+        $settings = explode(',', $settings);
+        foreach(explode(',', $showVersions) as $showVersion)
         {
-            if(!empty($_POST['showVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('1')->where('id')->in($_POST['showVersions'])->exec();
-            if(!empty($_POST['hiddenVersions'])) $this->dao->update(TABLE_OBJECT)->set('visible')->eq('0')->where('id')->in($_POST['hiddenVersions'])->exec();
-            return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
+            if(empty($showVersion)) continue;
+            if(!in_array($showVersion, $settings)) $settings[] = $showVersion;
         }
+        foreach(explode(',', $hiddenVersions) as $hiddenVersion)
+        {
+            if(in_array($hiddenVersion, $settings)) $settings = array_filter($settings, function($value) use($hiddenVersion) {return $value != $hiddenVersion;});
+        }
+        $this->setting->setItem("system.$objectType.ganttVersionSettings", implode(',', $settings));
+
+        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
     }
 }

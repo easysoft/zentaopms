@@ -114,45 +114,46 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             $item['class']  = 'selected';
         }
 
-        $item['visible'] = $version->visible;
-
         if($version->reviewType == 'deliverable') $versionItems['deliverable']['items'][$version->id] = $item;
         if($version->reviewType == 'gantt' && $version->status != 'tmpGantt') $versionItems['gantt']['items'][$version->id] = $item;
         if($version->reviewType == 'gantt' && $version->status == 'tmpGantt') $versionItems['tmpGantt']['items'][$version->id] = $item;
     }
 
-    $headingItem = array();
-    $allVersionItemList = array();
-    $visibleVersionItemList = array();
+    $settingsValue = $this->loadModel('setting')->getItem("owner=system&module=project&section=&key=ganttVersionSettings");
+
+    $headingItem     = array();
+    $versionItemList = array();
     foreach($versionItems as $key => $versionList)
     {
         $headingItem = array('type' => 'heading', 'text' => $versionList['text']);
         foreach($versionList['items'] as $id => $versionItem)
         {
-            if(!isset($allVersionItemList[$key])) $allVersionItemList[$key] = $headingItem;
-            $allVersionItemList[$id] = array_merge($versionItem, array('type' => 'item'));
+            if(strpos(",$settingsValue,", ",$key,") === false) continue;
 
-            if(isset($versionItem['visible']) && $versionItem['visible'] == 1)
-            {
-                if(!isset($visibleVersionItemList[$key])) $visibleVersionItemList[$key] = $headingItem;
-                $visibleVersionItemList[$id] = array_merge($versionItem, array('type' => 'item'));
-            }
+            if(!isset($versionItemList[$key])) $versionItemList[$key] = $headingItem;
+            $versionItemList[$id] = array_merge($versionItem, array('type' => 'item'));
         }
     }
 
+    $settingsItems   = array();
+    $settingsItems[] = array('title' => $lang->programplan->ganttVersion,       'value' => 'gantt',       'visible' => strpos(",$settingsValue,", ',gantt,') !== false);
+    $settingsItems[] = array('title' => $lang->programplan->deliverableVersion, 'value' => 'deliverable', 'visible' => strpos(",$settingsValue,", ',deliverable,') !== false);
+    $settingsItems[] = array('title' => $lang->programplan->tmpGanttVersion,    'value' => 'tmpGantt',    'visible' => strpos(",$settingsValue,", ',tmpGantt,') !== false);
+
     $item = array('title' => $lang->project->latestVersion, 'value' => 0, 'class' =>  $versionID == '0' ? 'selected' : '', 'className' => 'sticky canvas', 'style' => array('bottom' => '-8px', 'height' => '32px'));
     if(hasPriv('programplan', 'createGanttVersion') && $versionID == '0') $item['actions'] = array(array('text' => $lang->project->saveVersion, 'class' => 'btn size-sm danger-outline rounded-full border border-gray', 'url' => createLink('programplan', 'createGanttVersion', "projectID={$projectID}&productID={$productID}&type={$type}"), 'data-toggle' => 'modal'));
-    $visibleVersionItemList['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
-    $visibleVersionItemList['0']      = $item;
+    $versionItemList['nowait'] = array('title' => $lang->project->realProgress, 'value' => 'nowait', 'class' =>  $versionID == 'nowait' ? 'selected' : '', 'className' => 'sticky canvas border-t', 'style' => array('bottom' => '24px', 'height' => '32px'));
+    $versionItemList['0']      = $item;
     if($versionID == 'nowait') $currentVersion = $lang->project->realProgress;
     if($versionID == '0' && $isDiffMode) $currentVersion = $lang->project->latestVersion;
 
     $langData = [];
-    $langData['allVersions'] = $lang->project->allVersions;
-    $langData['compare']     = $lang->project->diffVersion;
-    $langData['confirm']     = $lang->confirm;
-    $langData['cancel']      = $lang->cancel;
-    $langData['settings']    = $lang->settings;
+    $langData['allVersions']    = $lang->project->allVersions;
+    $langData['compare']        = $lang->project->diffVersion;
+    $langData['confirm']        = $lang->confirm;
+    $langData['cancel']         = $lang->cancel;
+    $langData['settings']       = $lang->settings;
+    $langData['versionDisplay'] = $lang->programplan->versionDisplay;
 
     $isLatestVersion = empty($versionID) && !$isDiffMode;
     $versionList     = null;
@@ -171,8 +172,8 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
                 set::currentVersion($currentVersion),
                 set::canDiffVersion(hasPriv('programplan', 'diffGanttVersion')),
                 set::diffMode($isDiffMode),
-                set::versionItems($visibleVersionItemList),
-                set::allVersionItems($allVersionItemList),
+                set::versionItems($versionItemList),
+                set::settingsItems($settingsItems),
                 set::diffLang($langData),
                 set::browseTemplate($browseTemplate),
                 set::baseline($isDiffMode ? $ganttBaseline : null)

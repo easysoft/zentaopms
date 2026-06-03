@@ -92,6 +92,7 @@ $lang->programplan->diffGanttVersion    = '版本对比';
 $lang->programplan->deliverableVersion  = '交付物&基线版本';
 $lang->programplan->ganttVersion        = '计划版本';
 $lang->programplan->tmpGanttVersion     = '临时版本';
+$lang->programplan->versionDisplay      = '版本显示';
 
 $lang->programplan->errorBegin       = "阶段的开始时间不能小于所属{$lang->projectCommon}的开始时间%s";
 $lang->programplan->errorEnd         = "阶段的结束时间不能大于所属{$lang->projectCommon}的结束时间%s";

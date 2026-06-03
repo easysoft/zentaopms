@@ -92,6 +92,7 @@ $lang->programplan->diffGanttVersion    = 'Version comparison';
 $lang->programplan->deliverableVersion  = 'Deliverables & Baseline Version';
 $lang->programplan->ganttVersion        = 'Plan Version';
 $lang->programplan->tmpGanttVersion     = 'Temporary Version';
+$lang->programplan->versionDisplay      = 'Version Display';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";

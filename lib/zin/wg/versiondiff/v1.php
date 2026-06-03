@@ -12,8 +12,8 @@ class versiondiff extends wg
         'baseline:string',
         'browseTemplate:string',
         'diffLang:array',
-        'versionItems?:array',   //在版本菜单中可见的版本，即visible为1的版本
-        'allVersionItems?:array' //所有版本
+        'versionItems?:array',
+        'settingsItems?:array'
     );
 
     public static function getPageCSS(): string
@@ -28,14 +28,12 @@ class versiondiff extends wg
 
     protected function build()
     {
-        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $allVersionItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'allVersionItems'));
+        list($versionID, $currentVersion, $canDiffVersion, $diffMode, $browseTemplate, $diffLang, $versionItems, $baseline, $settingsItems) = $this->prop(array('versionID', 'currentVersion', 'canDiffVersion', 'diffMode', 'browseTemplate', 'diffLang', 'versionItems', 'baseline', 'settingsItems'));
+
+        global $app;
 
         /* 如果版本不可见，调整到最新版本。 If the version does not visible, adjust to the latest version. */
-        if(!isset($versionItems[$versionID]))
-        {
-            global $app;
-            return $app->control->send(array('load' => sprintf($browseTemplate, 0)));
-        }
+        if(!isset($versionItems[$versionID])) return $app->control->send(array('load' => sprintf($browseTemplate, 0)));
 
         return dropdown
         (
@@ -45,6 +43,7 @@ class versiondiff extends wg
             jsVar('canDiffVersion', $canDiffVersion),
             jsVar('+diffMode', $diffMode),
             jsVar('browseTemplate', $browseTemplate),
+            jsVar('appTab', $app->tab),
             div
             (
                 setClass($this->prop('class')),
@@ -81,15 +80,14 @@ class versiondiff extends wg
                 )
             ),
             set::menu([
-               'checkOnClick'        => '.has-checkbox .item',
-               'items'               => array_values($versionItems),
-               'width'               => 300,
-               'header'              => jsRaw('setVersionDropdownHeader'),
-               'footer'              => jsRaw('setVersionDropdownFooter'),
-               'getItem'             => jsRaw('getVersionItem'),
-               'onClickItem'         => jsRaw('setClickVersionItem'),
-               'visibleVersionItems' => array_values($versionItems),
-               'allVersionItems'     => array_values($allVersionItems)
+               'checkOnClick'  => '.has-checkbox .item',
+               'items'         => array_values($versionItems),
+               'width'         => 300,
+               'header'        => jsRaw('setVersionDropdownHeader'),
+               'footer'        => jsRaw('setVersionDropdownFooter'),
+               'getItem'       => jsRaw('getVersionItem'),
+               'onClickItem'   => jsRaw('setClickVersionItem'),
+               'settingsItems' => $settingsItems
             ]),
             set::triggerProps([
                 'onShown' => jsRaw('showMenu')
