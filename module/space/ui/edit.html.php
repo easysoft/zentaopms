@@ -39,7 +39,7 @@ formPanel
     (
         set::name('desc'),
         set::label($lang->space->desc),
-        set::control(array('control' => 'editor', 'upload-url' => 'disabled')),
+        set::control(array('control' => 'editor', 'placeholder' => $lang->space->placeholder->desc, 'upload-url' => 'disabled')),
         set::value($space->desc)
     ),
     formGroup
