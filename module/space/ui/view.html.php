@@ -22,7 +22,7 @@ $repoBrowseURL = common::hasPriv('repo', 'browse') ? $this->createLink('repo', '
 $repoDom       = common::hasPriv('repo', 'browse') ? initLinkTable($repoList, $repoBrowseURL) : null;
 
 //$artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
-//$artifactRepoDom = common::hasPriv('artifactrepo', 'view') ? initLinkTable($artifactRepoList, $artifactRepoURL) : null;
+//$artifactRepoDom = common::hasPriv('artifactrepo', 'view') ? initLinkTable($artifactLibList, $artifactRepoURL) : null;
 
 function initLinkTable(array $listData, string $url): array
 {
@@ -75,7 +75,7 @@ foreach($spaceMembers as $user)
 $repoCount         = empty($repoList) ? 0 : count($repoList);
 $systemCount       = empty($systemList) ? 0 : count($systemList);
 $pipelineCount     = empty($pipelineList) ? 0 : count($pipelineList);
-//$artifactRepoCount = empty($artifactRepoList) ? 0 : count($artifactRepoList);
+//$artifactRepoCount = empty($artifactLibList) ? 0 : count($artifactLibList);
 
 div
 (
@@ -258,7 +258,7 @@ foreach($actionList as $actionType => $typeActions)
     foreach($typeActions as $key => $action)
     {
         $actionList[$actionType][$key]['url'] = str_replace('{id}', (string)$space->id, $action['url']);
-        if($action['icon'] == 'trash' && (!empty($repoList) || !empty($artifactRepoList)))
+        if($action['icon'] == 'trash' && (!empty($repoList) || !empty($artifactLibList)))
         {
             $actionList[$actionType][$key]['disabled'] = true;
             $actionList[$actionType][$key]['hint']     = $lang->space->notice->deleteFail;

@@ -127,11 +127,15 @@ class artifact extends control
         $selectPathList = empty($selectPath) ? array() : explode('/', trim($selectPath, '/'));
         $breadCrumbs    = $this->artifactZen->getBreadCrumbs($artifactLib, $selectPathList, $spaceID, $repoID, $type);
 
-        $selectNode = empty($selectPathList) ? false : new stdclass();
+        $selectNode  = empty($selectPathList) ? false : new stdclass();
+        $keyPath     = '';
+        $currentPath = '';
         foreach($selectPathList as $path)
         {
-            $path = helper::safe64Encode('/' . $path);
-            $selectNode->$path = true;
+            $currentPath .= '/' . $path;
+            $pathKey = helper::safe64Encode($currentPath);
+            $keyPath = empty($keyPath) ? $pathKey : "{$keyPath}:{$pathKey}";
+            $selectNode->$keyPath = true;
         }
 
         $repo         = $this->loadModel('repo')->fetchByID($repoID);
@@ -358,8 +362,12 @@ class artifact extends control
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
 
+            $currentParent = empty($parentNode) || $parentPath == '/' ? '/' : $parentNode->entityID;
+            $isSameParent  = $formData->parent === $currentParent;
+            $isSameRepo    = (int)$formData->artifactID === (int)$artifactLibID;
+
             $base64Path = !$parentPath || $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
-            $response['callback'] = $base64Path ? "window.expandNode('{$base64Path}');" : "window.expandNode();";
+            $response['callback'] = $isSameRepo && $isSameParent && $base64Path ? "window.expandNode('{$base64Path}');" : "window.expandNode();";
             $this->sendSuccess($response);
         }
 
@@ -409,7 +417,7 @@ class artifact extends control
             if(dao::isError()) $this->sendError(dao::getError());
             $response = array();
             $response['result']     = 'success';
-            $response['message']    = $this->lang->deleteSuccess;
+            $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
             $response['callback']   = "window.expandNode();";
             $this->sendSuccess($response);

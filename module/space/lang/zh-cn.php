@@ -69,6 +69,9 @@ $lang->space->notice->accessArtifact      = '仅展示用户可访问的非公�
 $lang->space->notice->confirmRemoveMember = '您确定从该空间中移除该用户吗？';
 $lang->space->notice->confirmDelete       = '您确定删除“ %s” 权限分组吗？';
 
+$lang->space->placeholder       = new stdclass();
+$lang->space->placeholder->desc = '请输入空间描述';
+
 $lang->space->tips      = '提示';
 $lang->space->afterInfo = "空间添加成功，您现在可以进行以下操作：";
 $lang->space->setMember = '设置成员';

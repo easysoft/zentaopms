@@ -69,6 +69,9 @@ $lang->space->notice->accessArtifact      = 'Only display users who can access p
 $lang->space->notice->confirmRemoveMember = 'Are you sure to remove this user from this space?';
 $lang->space->notice->confirmDelete       = 'Are you sure delete %s permission group?';
 
+$lang->space->placeholder = new stdclass();
+$lang->space->placeholder->desc = 'Description of this space';
+
 $lang->space->tips      = 'Note';
 $lang->space->afterInfo = "Space is created. Next you can ";
 $lang->space->setMember = 'Set Member';

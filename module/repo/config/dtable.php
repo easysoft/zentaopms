@@ -164,6 +164,7 @@ $config->repo->logDtable->fieldList['relations']['title'] =  $lang->repo->relati
 
 $config->repo->logDtable->fieldList['comment']['type']  = 'html';
 $config->repo->logDtable->fieldList['comment']['width'] = '400';
+$config->repo->logDtable->fieldList['comment']['hint']  = true;
 
 $config->repo->blameDtable = new stdclass();
 
