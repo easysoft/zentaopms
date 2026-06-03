@@ -1067,6 +1067,8 @@ class bugModel extends model
                 ->andWhere('t2.path')->like("%,$param,%")
                 ->andWhere('t2.deleted')->eq('0')
                 ->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
