@@ -362,8 +362,12 @@ class artifact extends control
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
 
+            $currentParent = empty($parentNode) || $parentPath == '/' ? '/' : $parentNode->entityID;
+            $isSameParent  = $formData->parent === $currentParent;
+            $isSameRepo    = (int)$formData->artifactID === (int)$artifactLibID;
+
             $base64Path = !$parentPath || $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
-            $response['callback'] = $base64Path ? "window.expandNode('{$base64Path}');" : "window.expandNode();";
+            $response['callback'] = $isSameRepo && $isSameParent && $base64Path ? "window.expandNode('{$base64Path}');" : "window.expandNode();";
             $this->sendSuccess($response);
         }
 
