@@ -412,8 +412,7 @@ class storyModelTest extends baseTest
      */
     public function getMentionNotifyCount(): int
     {
-        global $tester;
-        return (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+        return (int)$this->instance->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
     }
 
     /**
@@ -425,8 +424,7 @@ class storyModelTest extends baseTest
      */
     public function getLastMentionNotifyInfo(): array
     {
-        global $tester;
-        $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->orderBy('id_desc')->fetch();
+        $notify = $this->instance->dao->select('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->orderBy('id_desc')->fetch();
         if(empty($notify)) return array('notifyCount' => 0);
 
         return array('notifyCount' => 1, 'mentionUser' => trim($notify->toList, ','), 'status' => $notify->status, 'createdBy' => $notify->createdBy);
