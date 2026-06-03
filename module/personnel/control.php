@@ -198,7 +198,7 @@ class personnel extends control
         $this->view->appendUsers = $appendUsers;
         $this->view->whitelist   = $this->personnel->getWhitelist($objectID, $objectType);
         $this->view->depts       = $this->dept->getOptionMenu();
-        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|nodeleted|all');
         $this->view->dept        = $this->dept->getByID($deptID);
         $this->view->programID   = $programID;
         $this->view->from        = $from;
