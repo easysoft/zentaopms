@@ -245,22 +245,15 @@ class stakeholder extends control
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
 
+        $userItems    = array();
         $users        = $this->loadModel('user')->getPairs('noclosed');
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
         foreach($users as $account => $realname)
         {
-            if(isset($members[$account]))
-            {
-                unset($users[$account]);
-            }
-            else if(isset($stakeholders[$account]))
-            {
-                unset($users[$account]);
-            }
+            if(isset($members[$account])) continue;
+            if(isset($stakeholders[$account])) continue;
+            $userItems[] = array('text' => $realname, 'value' => $account);
         }
-
-        $userItems = array();
-        foreach($users as $account => $realname) $userItems[] = array('text' => $realname, 'value' => $account);
 
         return print(json_encode($userItems));
     }
