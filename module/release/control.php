@@ -151,7 +151,10 @@ class release extends control
             $releaseID = $this->release->create($releaseData, $this->post->sync ? true : false);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('release', $releaseID, 'opened');
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'opened');
+
+            $releaseData->id = $releaseID;
+            $this->loadModel('message')->sendMentionNotice('release', 'create', $actionID, $releaseData);
 
             $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
@@ -226,6 +229,9 @@ class release extends control
             {
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+                $releaseData->id = $releaseID;
+                $this->loadModel('message')->sendMentionNotice('release', 'edit', $actionID, $releaseData, $release);
             }
 
             $result  = $this->executeHooks($releaseID);
