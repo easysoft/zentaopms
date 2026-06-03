@@ -779,7 +779,7 @@ class upgradeModel extends model
     public function deleteFiles(string $script): string
     {
         $dir = dirname($script);
-        if(!is_writable($dir)) return "chmod 777 {$dir}";
+        if(!is_writable($dir)) return helper::buildGrantPermissionCommand($dir);
 
         $command = array();
         $zfile   = $this->app->loadClass('zfile');
@@ -800,7 +800,7 @@ class upgradeModel extends model
                     if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
                        (!$isDir && !$zfile->removeFile($fullPath)))
                     {
-                        $command[] = 'rm -fr ' . $fullPath;
+                        $command[] = helper::buildDeleteCommand($fullPath, $isDir);
                     }
                 }
             }
@@ -815,18 +815,25 @@ class upgradeModel extends model
             if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
                 (!$isDir && !$zfile->removeDir($patchPath)))
             {
-                $command[] = 'rm -fr ' . $patchPath;
+                $command[] = helper::buildDeleteCommand($patchPath, $isDir);
             }
         }
 
         if(!$command) return '';
 
-        asort($command);
+        return helper::writeCommandScript($script, $command);
+    }
 
-        $content = "#!/bin/bash\n" . implode("\n", $command);
-        file_put_contents($script, $content);
-
-        return "/bin/bash $script";
+    /**
+     * 获取删除脚本路径。
+     * Get delete script path.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDeleteScriptPath(): string
+    {
+        return $this->app->getTmpRoot() . 'deleteFiles' . (helper::isWindows() ? '.bat' : '.sh');
     }
 
     /**
@@ -5291,7 +5298,7 @@ class upgradeModel extends model
                 if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
-                    $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
+                    $response['command'] = helper::buildGrantPermissionCommand($customRoot, true, 'o=rwx');
 
                     return $response;
                 }
@@ -5316,7 +5323,7 @@ class upgradeModel extends model
     public function removeEncryptedDir(string $script): string
     {
         $dir = dirname($script);
-        if(!is_writable($dir)) return "chmod 777 {$dir}";
+        if(!is_writable($dir)) return helper::buildGrantPermissionCommand($dir);
 
         $command       = [];
         $zfile         = $this->app->loadClass('zfile');
@@ -5329,17 +5336,12 @@ class upgradeModel extends model
             if(in_array($module, $this->config->upgrade->openModules)) continue; // If the module is open module, skip it.
 
             $dirPath = $this->app->moduleRoot . $module;
-            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath; // If the directory can't be removed, append the command for deleting a directory.
+            if(!$zfile->removeDir($dirPath)) $command[] = helper::buildDeleteCommand($dirPath, true); // If the directory can't be removed, append the command for deleting a directory.
         }
 
         if(!$command) return '';
 
-        asort($command);
-
-        $content = "#!/bin/bash\n" . implode("\n", $command);
-        file_put_contents($script, $content);
-
-        return "/bin/bash $script";
+        return helper::writeCommandScript($script, $command);
     }
 
     /**
