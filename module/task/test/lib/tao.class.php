@@ -327,7 +327,7 @@ class taskTaoTest extends baseTest
      */
     public function fetchUserTasksByTypeTest(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $projectID = 0, int $limit = 0, ?object $pager = null): array
     {
-        $object = $this->instance->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
+        $object = $this->invokeArgs('fetchUserTasksByType', [$account, $type, $orderBy, $projectID, $limit, $pager]);
 
         if(dao::isError()) return dao::getError();
         return $object;

@@ -16,10 +16,11 @@ set::zui(true);
 panel
 (
     setClass('bg-white'),
+    set::bodyClass('h-full'),
     set::title(zget($lang->editor->modules, $module, isset($lang->{$module}->common) ? $lang->{$module}->common : $module)),
     div
     (
-        setClass('extend-content'),
+        setClass('extend-content h-full'),
         treeEditor(set(array('items' => $tree, 'canEdit' => false, 'canDelete' => false, 'canSplit' => false)))
     )
 );
