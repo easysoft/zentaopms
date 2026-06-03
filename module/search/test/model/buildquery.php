@@ -8,13 +8,14 @@ timeout=0
 cid=18295
 
 - 执行$form第0条的field属性 @title
-- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))
-- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%0%' ) AND ( 1  ))
-- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  ) AND ( 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1 = 1  AND `title`  LIKE '%test%' ) AND ( 1 = 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1 = 1  AND `title`  LIKE '%0%' ) AND ( 1 = 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1 = 1  ) AND ( 1 = 1  ))
 - 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'form' 第0条的field属性 @title
-- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%bug%' AND `status` = 'active'  ) AND ( 1  ))
-- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1  AND `title`  LIKE '%bug%' OR `status` = 'active'  ) AND ( 1  ))
-- 执行search2模块的buildQueryTest方法，参数是$searchConfig2, $postDatas2, 'query'  @(( 1  OR `status` = 'active'  ) AND ( 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'form' 第1条的field属性 @title
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1 = 1  AND `title`  LIKE '%bug%' AND `status` = 'active'  ) AND ( 1 = 1  ))
+- 执行search模块的buildQueryTest方法，参数是$searchConfig, $postDatas, 'query'  @(( 1 = 1  AND `title`  LIKE '%bug%' OR `status` = 'active'  ) AND ( 1 = 1  ))
+- 执行search2模块的buildQueryTest方法，参数是$searchConfig2, $postDatas2, 'query'  @(( 1 = 1  OR `status` = 'active'  ) AND ( 1 = 1  ))
 
 */
 
@@ -52,17 +53,17 @@ $form = $search->buildQueryTest($searchConfig, $postDatas, 'form');
 r($form) && p('0:field') && e('title');
 
 // 测试步骤2：正常搜索SQL生成
-r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  AND `title`  LIKE '%test%' ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1 = 1  AND `title`  LIKE '%test%' ) AND ( 1 = 1  ))");
 
 // 测试步骤3：特殊值0的处理
 $postData1->value1 = '0';
 $postDatas = array($postData1);
-r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  AND `title`  LIKE '%0%' ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1 = 1  AND `title`  LIKE '%0%' ) AND ( 1 = 1  ))");
 
 // 测试步骤4：空值条件处理
 $postData1->value1 = '';
 $postDatas = array($postData1);
-r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1 = 1  ) AND ( 1 = 1  ))");
 r($search->buildQueryTest($searchConfig, $postDatas, 'form')) && p('0:field') && e('title');
 
 // 测试步骤4.1：空值时仍保留用户选择的字段
@@ -82,12 +83,12 @@ $postData2->andOr2    = 'and';
 $postData2->operator2 = '=';
 $postData2->value2    = 'active';
 $postDatas = array($postData1, $postData2);
-r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  AND `title`  LIKE '%bug%' AND `status` = 'active'  ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1 = 1  AND `title`  LIKE '%bug%' AND `status` = 'active'  ) AND ( 1 = 1  ))");
 
 // 测试步骤6：OR逻辑关系测试
 $postData2->andOr2 = 'or';
 $postDatas = array($postData1, $postData2);
-r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1  AND `title`  LIKE '%bug%' OR `status` = 'active'  ) AND ( 1  ))");
+r($search->buildQueryTest($searchConfig, $postDatas, 'query')) && p() && e("(( 1 = 1  AND `title`  LIKE '%bug%' OR `status` = 'active'  ) AND ( 1 = 1  ))");
 
 // 测试步骤7：无效字段名过滤（SQL注入防护） - 使用新的测试实例
 $searchConfig2 = array();
@@ -105,4 +106,4 @@ $postData4->andOr1    = 'and';
 $postData4->operator1 = 'include';
 $postData4->value1    = 'test';
 $postDatas2 = array($postData4);
-r($search2->buildQueryTest($searchConfig2, $postDatas2, 'query')) && p() && e("(( 1  OR `status` = 'active'  ) AND ( 1  ))");
+r($search2->buildQueryTest($searchConfig2, $postDatas2, 'query')) && p() && e("(( 1 = 1  OR `status` = 'active'  ) AND ( 1 = 1  ))");
