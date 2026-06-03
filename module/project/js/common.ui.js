@@ -24,6 +24,7 @@ function changeType()
     else
     {
         $('.productsBox').removeClass('hidden');
+        toggleStageBy();
     }
 }
 
