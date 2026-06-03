@@ -585,7 +585,7 @@ class messageModel extends model
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(true || (isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType])))
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
                 $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
                 $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
@@ -596,7 +596,7 @@ class messageModel extends model
         if(isset($messageSetting['message']))
         {
             $actions = $messageSetting['message']['setting'];
-            if(true || (isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType])))
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
                 $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
                 $now  = helper::now();
@@ -622,7 +622,7 @@ class messageModel extends model
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(true || (isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType])))
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
                 $webhooks = $this->loadModel('webhook')->getList();
                 if(!$webhooks) return true;
