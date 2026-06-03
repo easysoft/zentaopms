@@ -1391,7 +1391,7 @@ class story extends control
      */
     public function tasks(int $storyID, int $executionID = 0)
     {
-        $tasks = $this->loadModel('task')->getListByStory($storyID, $executionID);
+        $tasks = $this->loadModel('task')->getListByStory($storyID, $executionID, 0, false);
 
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
