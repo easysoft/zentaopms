@@ -737,7 +737,7 @@ class productModel extends model
             $productID = key($products);
             $showAll   = true;
         }
-        $product = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? $products : array();
+        $product = $this->app->tab == 'project' || !empty($showAll) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
