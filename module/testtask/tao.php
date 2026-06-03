@@ -112,6 +112,13 @@ class testtaskTao extends testtaskModel
 	        {
                 $testtaskQuery .= " AND `product` ='$productID'";
             }
+            /* 处理查询中的项目条件。*/
+            if(strpos($this->session->$queryName, "`project` = 'all'") !== false)
+            {
+                $testtaskQuery  = str_replace("`project` = 'all'", '1 = 1', $testtaskQuery);
+                $testtaskQuery .= ' AND `project` ' . helper::dbIN($this->app->user->view->projects);
+            }
+
             /* 处理查询中的版本条件。*/
             $testtaskQuery = str_replace(array('`id`', '`name`', '`type`', '`status`', '`owner`', '`pri`', '`begin`','`end`', '`createdDate`', '`realBegan`', '`realFinishedDate`', '`product`', '`project`', '`execution`'), array('t1.`id`', 't1.`name`', 't1.`type`', 't1.`status`', 't1.`owner`', 't1.`pri`', 't1.`begin`', 't1.`end`', 't1.`createdDate`', 't1.`realBegan`', 't1.`realFinishedDate`', 't1.`product`', 't1.`project`', 't1.`execution`'), $testtaskQuery);
             $testtaskQuery .= ')';
