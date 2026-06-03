@@ -269,7 +269,7 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq($libID)->fi()
-                ->beginIF($this->app->tab != 'qa' && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
+                ->beginIF(!in_array($this->app->tab, array('qa', 'assetlib')) && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
         }
         else
         {
