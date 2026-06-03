@@ -666,7 +666,7 @@ class taskTao extends taskModel
      * @param  object $task
      * @return float
      */
-    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    public function getLeftAfterDeleteWorkhour(object $effort, object $task): float
     {
         $left = $task->left;
         if($effort->isLast)
@@ -715,6 +715,12 @@ class taskTao extends taskModel
         if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
         {
             $newTeamInfo->status = 'doing';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
+
+        if(isset($newTeamInfo->consumed) && empty($newTeamInfo->consumed))
+        {
+            $newTeamInfo->status = 'wait';
             $newTeamInfo->left   = $currentTeam->estimate;
         }
         $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();

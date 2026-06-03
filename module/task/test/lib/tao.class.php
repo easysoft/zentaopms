@@ -343,7 +343,7 @@ class taskTaoTest extends baseTest
     public function getLeftAfterDeleteWorkhourTest(int $effortID): object
     {
         $effort = $this->instance->getEffortByID($effortID);
-        $task   = $this->instance->getById($effort->objectID);
+        $task   = $this->instance->fetchByID($effort->objectID);
 
         $result = new stdclass();
         $result->taskEstimate   = $task->estimate;
