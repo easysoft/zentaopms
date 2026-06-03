@@ -2580,7 +2580,7 @@ class actionModel extends model
             if($task->parent > 0)
             {
                 $parentConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('consumed');
-                if($parentConsumed)
+                if((float)$parentConsumed > 0)
                 {
                     $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$task->id},")->where('id')->eq($task->id)->exec();
                 }
