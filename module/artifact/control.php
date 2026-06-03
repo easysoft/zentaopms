@@ -671,19 +671,15 @@ class artifact extends control
 
         $path       = helper::safe64Decode($path);
         $parentPath = dirname($path);
-        $base64Path = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
+        $selectPath = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
         if($result)
         {
             list($type, $id) = explode('.', $entityID);
             $this->loadModel('action')->create('artifactDir', (int)$id, 'deleted', $artifactLibID . '|' . $path . '|' . $entityID, ACTIONMODEL::CAN_UNDELETED);
         }
 
-        $response = array();
-        $response['result']     = 'success';
-        $response['message']    = $this->lang->deleteSuccess;
-        $response['closeModal'] = true;
-        $response['callback']   = "window.expandNode('{$base64Path}');";
-        $this->sendSuccess($response);
+        $viewURL = $this->createLink('artifact', 'view', "artifactID={$artifactLibID}&spaceID={$artifactLib->spaceID}&repoID={$artifactLib->repoID}&type={$artifactLib->scope}&selectPath={$selectPath}");
+        return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'closeModal' => true, 'locate' => $viewURL));
     }
 
     /**
