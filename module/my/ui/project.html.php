@@ -38,7 +38,7 @@ $suspendedCount = 0;
 $closedCount    = 0;
 foreach($projects as $project)
 {
-    $this->project->formatDataForList($project, array());
+    $this->project->formatDataForList($project, $PMList);
 
     if($project->status == 'wait')      $waitCount ++;
     if($project->status == 'doing')     $doingCount ++;
