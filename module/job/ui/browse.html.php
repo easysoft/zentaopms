@@ -25,7 +25,7 @@ featureBar
 (
     set::current('job'),
     set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
-    div(searchToggle(set::module('job'), set::open($type == 'bySearch')))
+    div(searchToggle(set::module('job'), set::open($browseType == 'bySearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -48,7 +48,7 @@ dtable
     set::customCols(true),
     set::cols($cols),
     set::data($tableData),
-    set::sortLink(createLink('job', 'browse', "repoID={$repoID}&type={$type}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('job', 'browse', "repoID={$repoID}&browseType={$browseType}&queryID={$queryID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footPager(usePager())

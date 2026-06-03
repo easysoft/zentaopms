@@ -1015,7 +1015,7 @@ class project extends control
      * Browse builds of a project.
      *
      * @param  int    $projectID
-     * @param  string $type      all|product|bysearch
+     * @param  string $browseType all|product|bysearch
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -1024,19 +1024,19 @@ class project extends control
      * @access public
      * @return void
      */
-    public function build(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function build(int $projectID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Set menu lang. */
         $this->project->setMenu($projectID);
         $project = $this->project->getByID($projectID);
 
-        if($type == 'product') $this->session->set('buildProductID', $param);
+        if($browseType == 'product') $this->session->set('buildProductID', $param);
         if(!$this->session->buildProductID) $this->session->set('buildProductID', $param);
 
         /* Build the search form. */
-        $type     = strtolower($type);
+        $browseType = strtolower($browseType);
         $products = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
-        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $projectID, $this->session->buildProductID, 'project');
+        $this->project->buildProjectBuildSearchForm($products, $browseType == 'bysearch' ? (int)$param : 0, $projectID, $this->session->buildProductID, 'project');
 
         /* Build the search form. */
         $this->app->loadClass('pager', true);
@@ -1044,13 +1044,13 @@ class project extends control
 
         /* Get builds. */
         $this->loadModel('build');
-        if($type == 'bysearch')
+        if($browseType == 'bysearch')
         {
             $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param, $orderBy, $pager);
         }
         else
         {
-            $builds = $this->build->getProjectBuilds((int)$projectID, $type, (string)$param, $orderBy, $pager);
+            $builds = $this->build->getProjectBuilds((int)$projectID, $browseType, (string)$param, $orderBy, $pager);
         }
 
         /* Set view data. */
@@ -1061,10 +1061,10 @@ class project extends control
         $this->view->project   = $project;
         $this->view->products  = $products;
         $this->view->system    = $this->loadModel('system')->getPairs();
-        $this->view->type      = $type;
-        $this->view->orderBy   = $orderBy;
-        $this->view->param     = $param;
-        $this->view->pager     = $pager;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
+        $this->view->pager      = $pager;
         $this->display();
     }
 

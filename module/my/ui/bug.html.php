@@ -21,36 +21,36 @@ jsVar('checkedSummary', isset($checkedSummary) ? $checkedSummary : '');
 
 featurebar
 (
-    set::current($type),
-    set::linkParams("mode=bug&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($type == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("mode=bug&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($browseType == 'bySearch')))
 );
 
-$canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $type == 'assignedTo';
-$canBatchConfirm  = common::hasPriv('bug', 'batchConfirm') && $type != 'closedBy';
-$canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($type) != 'closedby';
+$canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $browseType == 'assignedTo';
+$canBatchConfirm  = common::hasPriv('bug', 'batchConfirm') && $browseType != 'closedBy';
+$canBatchClose    = common::hasPriv('bug', 'batchClose')   && strtolower($browseType) != 'closedby';
 $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
-$currentType = $type;
-if($type == 'bySearch') $type = $this->session->myBugType;
+$currentBrowseType = $browseType;
+if($browseType == 'bySearch') $browseType = $this->session->myBugType;
 
-if($type == 'openedBy')
+if($browseType == 'openedBy')
 {
     $config->my->bug->dtable->fieldList['openedBy']['hidden']     = true;
     $config->my->bug->dtable->fieldList['openedDate']['hidden']   = true;
     $config->my->bug->dtable->fieldList['assignedDate']['hidden'] = true;
 }
 
-if($type == 'resolvedBy')
+if($browseType == 'resolvedBy')
 {
     $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
     $config->my->bug->dtable->fieldList['resolvedBy']['hidden'] = true;
 }
 
-if($type == 'assignedBy') $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
-if($type == 'closedBy')   $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
-if($type == 'assignedTo') $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
+if($browseType == 'assignedBy') $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($browseType == 'closedBy')   $config->my->bug->dtable->fieldList['openedDate']['hidden'] = true;
+if($browseType == 'assignedTo') $config->my->bug->dtable->fieldList['assignedTo']['hidden'] = true;
 if($app->rawMethod == 'work')
 {
     $config->my->bug->dtable->fieldList['status']['hidden']     = true;
@@ -101,14 +101,14 @@ dtable
     set::fixedLeftWidth('44%'),
     set::onRenderCell(jsRaw('window.onRenderBugNameCell')),
     set::checkable($canBatchAction),
-    set::checkInfo($type == 'resolvedBy' ? jsRaw('function(checks){return window.setStatistics(this, checks);}') : null),
+    set::checkInfo($browseType == 'resolvedBy' ? jsRaw('function(checks){return window.setStatistics(this, checks);}') : null),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$currentType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$currentBrowseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->bug->notice->noBug),
-    set::customData($type == 'resolvedBy' ? array('pageSummary' => $summary) : array())
+    set::customData($browseType == 'resolvedBy' ? array('pageSummary' => $summary) : array())
 );
 
 render();

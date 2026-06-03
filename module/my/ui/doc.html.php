@@ -16,13 +16,13 @@ jsVar('objectIconList', $config->doc->objectIconList);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=doc&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module('contributeDoc'), set::open($type == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("mode=doc&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module('contributeDoc'), set::open($browseType == 'bySearch')))
 );
 
-if($type == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);
-if($type == 'editedbyme') unset($config->my->doc->dtable->fieldList['editedBy']);
+if($browseType == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);
+if($browseType == 'editedbyme') unset($config->my->doc->dtable->fieldList['editedBy']);
 
 $docs = initTableData($docs, $config->my->doc->dtable->fieldList, $this->doc);
 $cols = array_values($config->my->doc->dtable->fieldList);
@@ -45,7 +45,7 @@ dtable
     set::userMap($users),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode=doc&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode=doc&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::emptyTip($lang->doc->noDoc)
 );

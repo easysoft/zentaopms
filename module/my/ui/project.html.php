@@ -15,8 +15,8 @@ jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
 featurebar
 (
-    set::current($status),
-    set::linkParams("status={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
+    set::current($browseType),
+    set::linkParams("browseType={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 $this->loadModel('project');
@@ -71,7 +71,7 @@ foreach($projects as $project)
 $projects = array_values($projects);
 
 $footerHtml = sprintf($lang->project->summary, count($projects));
-if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount);
+if($browseType == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount);
 
 dtable
 (
@@ -80,7 +80,7 @@ dtable
     set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'project', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', 'project', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
     set::footPager(usePager()),
     set::emptyTip($lang->project->empty)
