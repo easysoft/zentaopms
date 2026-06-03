@@ -109,7 +109,7 @@ class productsBox extends wg
                 on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
-                set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
+                set::required($this->prop('required')),
                 set::label($lang->project->manageProducts),
                 set::labelFor('productBox'),
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
