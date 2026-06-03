@@ -415,7 +415,8 @@ class actionTao extends actionModel
             if($plan && $plan->title)
             {
                 $isShadowProduct = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->eq($plan->product)->fetch('shadow');
-                $action->extra = common::hasPriv('productplan', 'view') && $this->config->vision != 'or' ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title, '', $isShadowProduct ? 'data-app="project"' : '') : $plan->title;
+                $planAttr        = $isShadowProduct ? 'data-app="project"' : '';
+                $action->extra = common::hasPriv('productplan', 'view') && $this->config->vision != 'or' ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title, '', $planAttr) : $plan->title;
             }
         }
         elseif(in_array($type, array('build', 'bug', 'release', 'testtask', 'roadmap')))
