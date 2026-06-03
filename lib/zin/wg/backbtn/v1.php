@@ -79,7 +79,7 @@ class backBtn extends btn
             'api'            => 'api-index',
             'demand'         => 'demand-browse,demand-view,my-work,my-contribute,feedback-adminview,feedback-admin,my-index,demandpool-track,product-dynamic',
             'issue'          => 'issue-browse,issue-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
-            'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
+            'risk'           => 'risk-browse,risk-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view,assetlib-riskview',
             'opportunity'    => 'opportunity-browse,opportunity-view,my-index,project-index,project-dynamic,execution-dynamic,project-view,execution-view',
             'meeting'        => 'meeting-browse,meeting-view,my-index,project-dynamic,execution-dynamic,project-view,execution-view,my-meeting',
             'todo'           => 'my-todo,my-effort,company-effort,company-calendar',
