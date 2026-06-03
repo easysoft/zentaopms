@@ -158,16 +158,16 @@ class space extends control
             }
         }
 
-        $this->view->title            = $this->lang->space->view;
-        $this->view->space            = $space;
-        $this->view->spaceID          = $id;
-        $this->view->repoList         = $this->space->getReposBySpace($id);
-        //$this->view->artifactRepoList = $this->space->getArtifactReposBySpace($id);
-        $this->view->managers         = $this->loadModel('user')->getListByAccounts($managers, 'account');
-        $this->view->members          = $this->user->getListByAccounts($members, 'account');
-        $this->view->systemList       = $this->space->getSystemBySpace($id);
-        $this->view->pipelineList     = $this->space->getPipelineBySpace($id);
-        $this->view->actions          = $this->loadModel('action')->getList('space', $id);
+        $this->view->title           = $this->lang->space->view;
+        $this->view->space           = $space;
+        $this->view->spaceID         = $id;
+        $this->view->repoList        = $this->space->getReposBySpace($id);
+        $this->view->artifactLibList = $this->space->getArtifactLibsBySpace($id);
+        $this->view->managers        = $this->loadModel('user')->getListByAccounts($managers, 'account');
+        $this->view->members         = $this->user->getListByAccounts($members, 'account');
+        $this->view->systemList      = $this->space->getSystemBySpace($id);
+        $this->view->pipelineList    = $this->space->getPipelineBySpace($id);
+        $this->view->actions         = $this->loadModel('action')->getList('space', $id);
 
         $this->display();
     }
@@ -183,7 +183,7 @@ class space extends control
     public function delete(int $id)
     {
         $repos         = $this->space->getReposBySpace($id);
-        //$artifactRepos = $this->space->getArtifactReposBySpace($id);
+        $artifactRepos = $this->space->getArtifactLibsBySpace($id);
 
         if(!empty($repos) || !empty($artifactRepos)) $this->sendError($this->lang->space->notice->deleteFail);
 
