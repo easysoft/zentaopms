@@ -1116,25 +1116,26 @@ class projectModel extends model
      */
     public function buildTesttaskSearchForm(int $projectID, array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
     {
-        $searchConfig = $this->config->testtask->search;
+        $searchConfig           = $this->config->testtask->search;
         $searchConfig['module'] = 'projectTesttask';
         if($cacheSearchFunc)
         {
             $this->cacheSearchFunc('projectTesttask', __METHOD__, func_get_args());
             return $searchConfig;
         }
-        $project = $this->getByID($projectID);
         $searchConfig['actionURL'] = $actionURL;
         $searchConfig['queryID']   = $queryID;
 
+        unset($searchConfig['fields']['project']);
+        unset($searchConfig['params']['project']);
+
         $executionPairs = $this->loadModel('execution')->getPairs($projectID);
-        $searchConfig['fields']['execution']  = zget($this->lang->project->executionList, $project->model);
-        $searchConfig['params']['execution']  = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
+        $searchConfig['params']['execution']['values'] = $executionPairs;
 
         $productPairs = array(0 => '');
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-
         $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+
         $this->loadModel('search')->setSearchParams($searchConfig);
         return $searchConfig;
     }

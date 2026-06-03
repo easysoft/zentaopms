@@ -80,7 +80,7 @@ class testtaskModel extends model
      */
     public function buildTesttaskSearchForm(int $productID, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
     {
-        $searchConfig = $this->config->testtask->search;
+        $searchConfig           = $this->config->testtask->search;
         $searchConfig['module'] = 'testtask';
         if($cacheSearchFunc)
         {
@@ -93,21 +93,15 @@ class testtaskModel extends model
         $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
-        /* Get product params. */
-        $productParams = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
-        $productParams = $productParams + array('all' => $this->lang->all);
-
-        /* Get project params. */
-        $projectParams = $this->loadModel('product')->getProjectPairsByProduct($productID);
-        $projectParams = $projectParams + array('all' => $this->lang->testtask->allProject);
-
-        $searchConfig['params']['product']['values'] = $productParams;
-        $searchConfig['fields']['project'] = $this->lang->testtask->project;
-        $searchConfig['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => $projectParams);
-
+        /* Get params. */
+        $productParams   = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
+        $productParams   = $productParams + array('all' => $this->lang->all);
+        $projectParams   = $this->loadModel('product')->getProjectPairsByProduct($productID) + array('all' => $this->lang->testtask->allProject);
         $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID, "0", (int)$projectID);
-        $searchConfig['fields']['execution'] = $this->lang->testtask->execution;
-        $searchConfig['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionParams);
+
+        $searchConfig['params']['product']['values']   = $productParams;
+        $searchConfig['params']['project']['values']   = $projectParams;
+        $searchConfig['params']['execution']['values'] = $executionParams;
 
         $this->loadModel('search')->setSearchParams($searchConfig);
         return $searchConfig;
