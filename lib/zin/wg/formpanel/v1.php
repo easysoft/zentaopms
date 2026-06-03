@@ -334,6 +334,7 @@ class formPanel extends panel
                 set::required($field->required),
                 set::control($field->control),
                 set::items($field->items),
+                set::ditto($field->ditto),
                 set::width('200px'),
                 set::value($value),
                 set::placeholder($field->placeholder)
