@@ -344,6 +344,7 @@ class my extends control
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $queryID = ($type == 'bysearch') ? (int)$param : 0;
