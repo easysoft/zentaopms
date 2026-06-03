@@ -3141,7 +3141,7 @@ class blockZen extends block
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
         if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
-        if(!empty($fixedBugGroup))     $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+        if(!empty($activatedBugGroup)) $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();

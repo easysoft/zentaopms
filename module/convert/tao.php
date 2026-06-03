@@ -1424,7 +1424,7 @@ class convertTao extends convertModel
     {
         /* Create project. */
         $project = new stdclass();
-        $project->name          = substr($data->pname, 0, 90);
+        $project->name          = mb_substr($data->pname, 0, 90);
         $project->code          = $data->pkey;
         $project->desc          = isset($data->description) ? $data->description : '';
         $project->status        = $data->status;
@@ -1649,7 +1649,7 @@ class convertTao extends convertModel
 
         /* 创建产品同名的应用。 */
         $system = new stdclass();
-        $system->name        = substr($product->name, 0, 80);
+        $system->name        = mb_substr($product->name, 0, 80);
         $system->product     = $productID;
         $system->status      = 'active';
         $system->desc        = '';
@@ -2416,7 +2416,7 @@ class convertTao extends convertModel
             if(empty($flowRelation[$jiraCode]))
             {
                 $flow = new stdclass();
-                $flow->name        = substr(zget($issueTypeList[$jiraCode], 'pname', ''), 0, 30);
+                $flow->name        = mb_substr(zget($issueTypeList[$jiraCode], 'pname', ''), 0, 30);
                 $flow->icon        = 'flow';
                 $flow->module      = 'jira' . $jiraCode;
                 $flow->approval    = 'disabled';
@@ -2553,7 +2553,7 @@ class convertTao extends convertModel
                     if(empty($jiraFieldControl[$controlCode])) $controlCode = !empty($options['code']) ? 'com.atlassian.jira.plugin.system.customfieldtypes:select' : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
 
                     $field = new stdclass();
-                    $field->name          = substr(zget($jiraFields[$jiraField], 'cfname', ''), 0, 60);
+                    $field->name          = mb_substr(zget($jiraFields[$jiraField], 'cfname', ''), 0, 60);
                     $field->field         = 'jirafield' . str_replace(range(0, 9), range('a', 'z'), uniqid());
                     $field->control       = $jiraFieldControl[$controlCode]['control'];
                     $field->type          = $jiraFieldControl[$controlCode]['type'];
@@ -2788,7 +2788,7 @@ class convertTao extends convertModel
     protected function createGroup(string $type, string $name, array $objectList, int $jiraProjectID, int $zentaoProjectID, array $productRelations, array $projectFieldList): bool
     {
         $group = new stdclass();
-        $group->name            = substr($name, 0, 80) . $this->lang->workflowgroup->template;
+        $group->name            = mb_substr($name, 0, 80) . $this->lang->workflowgroup->template;
         $group->projectModel    = $type == 'project' ? 'scrum'   : '';
         $group->projectType     = $type == 'project' ? 'product' : '';
         $group->type            = $type;
