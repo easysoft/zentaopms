@@ -125,6 +125,7 @@ class dingapi
                 $parentID = isset($dept->parentid) ? $dept->parentid : 0;
                 $parentDepts[$parentID][$dept->id] = $dept->name;
             }
+            ksort($parentDepts);
         }
 
         $tree = array();
