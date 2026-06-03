@@ -613,4 +613,18 @@ class programplan extends control
 
         return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
     }
+
+    /**
+     * 版本回滚。
+     * Rollback gantt version.
+     *
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function rollbackGanttVersion(int $versionID = 0)
+    {
+        $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+        return $this->sendSuccess(array('load' => true));
+    }
 }
