@@ -207,10 +207,11 @@ class ppmZen extends ppm
      *
      * @param  object $ppm
      * @param  string $reviewResult
+     * @param  array $issues
      * @access public
      * @return object
      */
-    public function getCheckResult(object $ppm, string $reviewResult): object
+    public function getCheckResult(object $ppm, string $reviewResult, array $issues = array()): object
     {
         $result = new stdClass();
         $mergeCheck = $this->loadModel('gitfox')->apiGetMergeCheckMessage($ppm->repoID, $ppm->sourceBranch, $ppm->targetBranch);
@@ -221,6 +222,7 @@ class ppmZen extends ppm
         $ppmHandLeUser = empty($rule) ? array() : explode(',', zget($rule, 'ppmHandleUser', ''));
         $ppmHandLeUser = array_filter($ppmHandLeUser);
         $userCanMerge  = empty($ppmHandLeUser) || in_array($this->app->user->account, $ppmHandLeUser);
+
         if(!$userCanMerge)
         {
             $users = $this->loadModel('user')->getPairs('noletter');
@@ -233,8 +235,43 @@ class ppmZen extends ppm
             $canMergeUsers   = sprintf($this->lang->ppm->notice->userNotAllowMerge, implode(',', $canMergeUsers));
             $result->message = $result->message ? $result->message . '; ' . $canMergeUsers : $canMergeUsers;
         }
-        $result->canMerge = empty($result->conflictFiles) && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$result->message;
 
+        $reviewFlow = $this->loadModel('reporeviewflow')->getById($rule->reviewFlowID);
+        if(!empty($reviewFlow) && !empty($reviewFlow->definition->reviewFlow->issues))
+        {
+            $activeIssues = array();
+            foreach($issues as $issue) if($issue->status == 'active') $activeIssues[] = $issue;
+
+            $handleIssueFlow = $reviewFlow->definition->reviewFlow->issues;
+            if(!empty($handleIssueFlow) && !empty($activeIssues))
+            {
+                if($handleIssueFlow->addressOption == 'allMustBeSolved')
+                {
+                    $result->message = $result->message ? $result->message . '; ' . $this->lang->ppm->notice->hasUnresolvedIssues : $this->lang->ppm->notice->hasUnresolvedIssues;
+                }
+                elseIf($handleIssueFlow->addressOption == 'specificMustBeSolved')
+                {
+                    $this->app->loadLang('bug');
+                    foreach($activeIssues as $activeIssue)
+                    {
+                        if(in_array($activeIssue->type, $handleIssueFlow->mandatoryType))
+                        {
+                            $mandatoryType = array();
+                            foreach($handleIssueFlow->mandatoryType as $type)
+                            {
+                                if(empty($this->lang->bug->typeList[$type])) continue;
+                                $mandatoryType[] = zget($this->lang->bug->typeList, $type);
+                            }
+                            $hasUnresolvedSpecifiedIssues = sprintf($this->lang->ppm->notice->hasUnresolvedSpecifiedIssues, implode(',', $mandatoryType));
+                            $result->message = $result->message ? $result->message . '; ' . $hasUnresolvedSpecifiedIssues : $hasUnresolvedSpecifiedIssues;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        $result->canMerge = empty($result->conflictFiles) && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$result->message;
         return $result;
     }
 }
