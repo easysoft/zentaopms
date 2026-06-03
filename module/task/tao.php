@@ -607,7 +607,7 @@ class taskTao extends taskModel
             ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
-            ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->andWhere("((t5.`account` = '{$account}') OR t1.`assignedTo` = '{$account}' OR t1.`finishedby` = '{$account}')")
             ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
