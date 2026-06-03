@@ -82,14 +82,14 @@ class artifact extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $repo = $this->loadModel('repo')->fetchByID($repoID);
-        $this->view->title        = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
-        $this->view->repo         = $repo;
-        $this->view->repoID       = $repoID;
-        $this->view->spaceID      = $space;
-        $this->view->repoPairs    = $this->repo->getRepoPairs();
-        $this->view->type         = $type;
-        $this->view->artifactList = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc', $pager);
-        $this->view->pager        = $pager;
+        $this->view->title           = $this->lang->artifact->common . $this->lang->hyphen . $this->lang->artifact->browse;
+        $this->view->repo            = $repo;
+        $this->view->repoID          = $repoID;
+        $this->view->spaceID         = $space;
+        $this->view->repoPairs       = $this->repo->getRepoPairs();
+        $this->view->type            = $type;
+        $this->view->artifactLibList = $this->artifact->getLibList($type == 'repo' && !empty($repo) ? $repo->spaceID : $space, $repoID, $type, 'createdDate_asc', $pager);
+        $this->view->pager           = $pager;
 
         $this->display();
     }
@@ -98,7 +98,7 @@ class artifact extends control
      * 浏览制品库制品。
      * Browse artifact repo.
      *
-     * @param  int    $artifactID
+     * @param  int    $artifactLibID
      * @param  int    $spaceID
      * @param  int    $repoID
      * @param  string $type
@@ -111,21 +111,21 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function view(int $artifactID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function view(int $artifactLibID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->config->file->dangers = '';
         $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
 
-        $artifact = $this->artifact->fetchByID($artifactID);
-        if(empty($artifact)) return print(js::error($this->lang->artifact->notice->noArtifact));
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        if(empty($artifactLib)) return print(js::error($this->lang->artifact->notice->noArtifact));
 
-        $this->commonAction((int)$artifact->spaceID, (int)$artifact->repoID);
+        $this->commonAction((int)$artifactLib->spaceID, (int)$artifactLib->repoID);
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $selectPathList = empty($selectPath) ? array() : explode('/', trim($selectPath, '/'));
-        $breadCrumbs    = $this->artifactZen->getBreadCrumbs($artifact, $selectPathList, $spaceID, $repoID, $type);
+        $breadCrumbs    = $this->artifactZen->getBreadCrumbs($artifactLib, $selectPathList, $spaceID, $repoID, $type);
 
         $selectNode = empty($selectPathList) ? false : new stdclass();
         foreach($selectPathList as $path)
@@ -134,35 +134,35 @@ class artifact extends control
             $selectNode->$path = true;
         }
 
-        $repo      = $this->loadModel('repo')->fetchByID($repoID);
-        $artifacts = $this->artifact->getList($type == 'repo' && !empty($repo) ? $repo->spaceID : $spaceID, $repoID, $type, 'createdDate_asc');
+        $repo         = $this->loadModel('repo')->fetchByID($repoID);
+        $artifactLibs = $this->artifact->getLibList($type == 'repo' && !empty($repo) ? $repo->spaceID : $spaceID, $repoID, $type, 'createdDate_asc');
 
-        $artifactList = array();
-        foreach($artifacts as $artifactRepo)
+        $artifactLibList = array();
+        foreach($artifactLibs as $lib)
         {
-            $artifactList[] = array('text' => $artifactRepo->name, 'value' => $artifactRepo->id, 'keys' => $artifactRepo->name, 'url' => $this->createLink('artifact', 'view', "artifactID={$artifactRepo->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
+            $artifactLibList[] = array('text' => $lib->name, 'value' => $lib->id, 'keys' => $lib->name, 'url' => $this->createLink('artifact', 'view', "artifactLibID={$lib->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
         }
-        $node      = $this->artifactZen->getNodeByPath($artifact, $selectPath);
-        $assetList = $this->artifact->getAssetListByNodeID(empty($node) || empty($node->entityID) ? '' : $node->entityID, $artifactID, $orderBy, $pager);
+        $node      = $this->artifactZen->getNodeByPath($artifactLib, $selectPath);
+        $assetList = $this->artifact->getAssetListByNodeID(empty($node) || empty($node->entityID) ? '' : $node->entityID, $artifactLibID, $orderBy, $pager);
 
-        $this->view->title        = $artifact->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
-        $this->view->artifact     = $artifact;
-        $this->view->browseLink   = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
-        $this->view->treeItems    = $this->artifactZen->getArtifactTreeData($artifact, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
-        $this->view->selectNode   = $selectNode;
-        $this->view->spaceID      = $spaceID;
-        $this->view->repoID       = $repoID;
-        $this->view->type         = $type;
-        $this->view->repo         = $repo;
-        $this->view->artifactList = empty($artifactList) ? array() : $artifactList;
-        $this->view->breadCrumbs  = $breadCrumbs;
-        $this->view->selectPath   = $selectPath ? helper::safe64Encode($selectPath) : '';
-        $this->view->leaf         = $leaf;
-        $this->view->assetList    = $assetList;
-        $this->view->node         = $node;
-        $this->view->orderBy      = $orderBy;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager        = $pager;
+        $this->view->title           = $artifactLib->name . $this->lang->hyphen . $this->lang->artifact->repoBrowser;
+        $this->view->artifact        = $artifactLib;
+        $this->view->browseLink      = $this->createLink('artifact', 'browse', "space={$spaceID}&repoID={$repoID}&type={$type}");
+        $this->view->treeItems       = $this->artifactZen->getArtifactLibTreeData($artifactLib, '/', $selectPath, $spaceID, $repoID, $type, $leaf);
+        $this->view->selectNode      = $selectNode;
+        $this->view->spaceID         = $spaceID;
+        $this->view->repoID          = $repoID;
+        $this->view->type            = $type;
+        $this->view->repo            = $repo;
+        $this->view->artifactLibList = empty($artifactLibList) ? array() : $artifactLibList;
+        $this->view->breadCrumbs     = $breadCrumbs;
+        $this->view->selectPath      = $selectPath ? helper::safe64Encode($selectPath) : '';
+        $this->view->leaf            = $leaf;
+        $this->view->assetList       = $assetList;
+        $this->view->node            = $node;
+        $this->view->orderBy         = $orderBy;
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager           = $pager;
 
         $this->display();
     }
@@ -215,14 +215,14 @@ class artifact extends control
      */
     public function edit(int $id)
     {
-        $artifact = $this->artifact->fetchByID($id);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($id);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         if($_POST)
         {
             $formData = form::data($this->config->artifact->form->edit)->get();
 
-            if(in_array($artifact->type, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            if(in_array($artifactLib->type, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
@@ -237,8 +237,8 @@ class artifact extends control
             $this->sendSuccess(array('load' => true));
         }
 
-        $this->view->title    = $this->lang->artifact->edit;
-        $this->view->artifact = $artifact;
+        $this->view->title       = $this->lang->artifact->edit;
+        $this->view->artifactLib = $artifactLib;
         $this->display();
     }
 
@@ -252,8 +252,8 @@ class artifact extends control
      */
     public function delete(int $id)
     {
-        $artifact = $this->artifact->fetchByID($id);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($id);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array("artifact.{$id}")));
         if(dao::isError())
@@ -270,16 +270,16 @@ class artifact extends control
      * 创建制品库目录。
      * Create artifact repo directory.
      *
-     * @param  int    $artifactID
+     * @param  int    $artifactLibID
      * @param  string $path
      * @param  int    $isSubDir
      * @access public
      * @return void
      */
-    public function createDir(int $artifactID, string $path = '', int $isSubDir = 0)
+    public function createDir(int $artifactLibID, string $path = '', int $isSubDir = 0)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         if($_POST)
         {
@@ -295,10 +295,10 @@ class artifact extends control
                 $formData->name = ltrim($path . '.' . $formData->name, '/');
             }
             if(empty($path) && $isSubDir) $formData->name = '/' . $formData->name;
-            $result = $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactID, 'names' => $formData->name, 'format' => $artifact->type));
+            $result = $this->loadModel('gitfox')->request('/artifacts/groups', 'POST', array('artifactID' => (int)$artifactLibID, 'names' => $formData->name, 'format' => $artifactLib->type));
             if(dao::isError()) $this->sendError(dao::getError());
 
-            if($result) $this->loadModel('action')->create('artifactDir', $result->id, 'created', '', $artifactID . '|' . $formData->name . '|group.' . $result->id);
+            if($result) $this->loadModel('action')->create('artifactDir', $result->id, 'created', '', $artifactLibID . '|' . $formData->name . '|group.' . $result->id);
 
             $response = array();
             $response['result']     = 'success';
@@ -318,20 +318,20 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function editDir(int $artifactID, string $path = '')
+    public function editDir(int $artifactLibID, string $path = '')
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $currentPath = $path ? helper::safe64Decode($path) : '';
         $parentPath  = $currentPath ? dirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
-        $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
+        $parentNode = $this->artifactZen->getNodeByPath($artifactLib, $parentPath);
 
-        $artifacts = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
+        $artifactLibs = $this->artifactZen->getArtifactLibPickerItems($artifactLib->scope, $artifactLib->type, $this->spaces, $this->repos);
         if($_POST)
         {
-            $node = $this->artifactZen->getNodeByPath($artifact, $currentPath);
+            $node = $this->artifactZen->getNodeByPath($artifactLib, $currentPath);
             if(empty($node)) return $this->sendError($this->lang->fail);
 
             $formData = form::data($this->config->artifact->form->editDir)->get();
@@ -350,7 +350,7 @@ class artifact extends control
             if($result)
             {
                 $dirID = empty(explode('.', $node->entityID)[1]) ? 0 : explode('.', $node->entityID)[1];
-                $this->loadModel('action')->create('artifactDir', (int)$dirID, 'edited', '', $artifactID . '|' . $currentPath . '|' . $node->entityID);
+                $this->loadModel('action')->create('artifactDir', (int)$dirID, 'edited', '', $artifactLibID . '|' . $currentPath . '|' . $node->entityID);
             }
 
             $response = array();
@@ -364,9 +364,9 @@ class artifact extends control
         }
 
         $this->view->title              = $this->lang->artifact->editDir;
-        $this->view->artifacts          = $artifacts;
+        $this->view->artifactLibs       = $artifactLibs;
         $this->view->dirName            = $currentPath ? ltrim(baseName($currentPath), '/') : '';
-        $this->view->artifact           = $artifact;
+        $this->view->artifactLib        = $artifactLib;
         $this->view->currentPath        = $currentPath;
         $this->view->currentPathEncoded = $path;
         $this->view->parentPath         = empty($parentNode) || $parentPath == '/' ? '/' : $parentNode->entityID;
@@ -381,10 +381,10 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function editArtifact(int $assetID, int $artifactID)
+    public function editArtifact(int $assetID, int $artifactLibID)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
 
@@ -404,7 +404,7 @@ class artifact extends control
             {
                 $oldName = !empty($asset->metadata) && !empty($asset->metadata->name) ? $asset->metadata->name : basename($asset->path);
                 $extra   = sprintf($this->lang->artifact->actionComment->edited, $oldName, $formData->name);
-                $this->loadModel('action')->create('artifactAsset', $assetID, 'editedasset', '', "{$artifactID}|{$extra}");
+                $this->loadModel('action')->create('artifactAsset', $assetID, 'editedasset', '', "{$artifactLibID}|{$extra}");
             }
             if(dao::isError()) $this->sendError(dao::getError());
             $response = array();
@@ -425,14 +425,14 @@ class artifact extends control
      * Download artifact.
      *
      * @param  int $assetID
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @access public
      * @return void
      */
-    public function downloadArtifact(int $assetID, int $artifactID = 0)
+    public function downloadArtifact(int $assetID, int $artifactLibID = 0)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
@@ -453,13 +453,13 @@ class artifact extends control
         if(!is_dir($tempDownloadDir)) mkdir($tempDownloadDir, 0755, true);
 
         $url      = sprintf($apiRoot->url, "/artifacts/assets/{$assetID}/download");
-        $context  = stream_context_create(array('http' => array('method' => 'GET', 'header' => implode("\r\n", $apiRoot->header), 'timeout' => 10)));
+        $context  = stream_context_create(array('http' => array('method' => 'GET', 'header' => implode("\r\n", $apiRoot->header), 'timeout' => 1000)));
         $filePath = $tempDownloadDir . $fileName;
         file_put_contents($filePath, file_get_contents($url, false, $context));
 
         $downArtifact = file_get_contents($filePath);
         unlink($filePath);
-        if($downArtifact) $this->loadModel('action')->create('artifactAsset', $assetID, 'downloaded', '', $artifactID . '|' . $fileName);
+        if($downArtifact) $this->loadModel('action')->create('artifactAsset', $assetID, 'downloaded', '', $artifactLibID . '|' . $fileName);
 
         $this->loadModel('file')->sendDownHeader($fileName, $extension, $downArtifact);
     }
@@ -469,14 +469,14 @@ class artifact extends control
      * View artifact history.
      *
      * @param  int $id
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @access public
      * @return void
      */
-    public function history(int $id, int $artifactID)
+    public function history(int $id, int $artifactLibID)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $id);
 
@@ -490,14 +490,14 @@ class artifact extends control
      * Move artifact.
      *
      * @param  int $assetID
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @access public
      * @return void
      */
-    public function moveArtifact(int $assetID, int $artifactID)
+    public function moveArtifact(int $assetID, int $artifactLibID)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError()) $this->sendError(dao::getError());
@@ -506,7 +506,7 @@ class artifact extends control
         if(!empty($asset->metadata) && !empty($asset->metadata->group))
         {
             $parentPath = '/' . $asset->metadata->group;
-            $parentNode = $this->artifactZen->getNodeByPath($artifact, $parentPath);
+            $parentNode = $this->artifactZen->getNodeByPath($artifactLib, $parentPath);
             $parentID   = $parentNode->entityID;
         }
 
@@ -515,10 +515,11 @@ class artifact extends control
             $formData = form::data($this->config->artifact->form->moveArtifact)->get();
             if($formData->parent == '/') return $this->sendError(array('parent' => $this->lang->artifact->notice->rootNotAllowed));
 
-            $fromRepo = $artifact->name;
+            $fromRepo = $artifactLib->name;
             $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
-            $targetArtifact = $this->artifact->fetchByID((int)$formData->artifactID);
-            $toRepo         = empty($targetArtifact) ? '' : $targetArtifact->name;
+
+            $targetArtifactLib = $this->artifact->fetchByID((int)$formData->artifactID);
+            $toRepo            = empty($targetArtifactLib) ? '' : $targetArtifactLib->name;
 
             $targetGroupID = $formData->parent == '/' ? 0 : explode('.', $formData->parent)[1];
             $params = array();
@@ -535,7 +536,7 @@ class artifact extends control
                 if(dao::isError()) $this->sendError(dao::getError());
 
                 $toPath = !empty($movedAsset->metadata) && !empty($movedAsset->metadata->group) ? $movedAsset->metadata->group : (!empty($movedAsset->path) ? dirname($movedAsset->path) : '/');
-                $extra  = $artifactID . '|' . sprintf($this->lang->artifact->actionComment->moved, $fromRepo, $fromPath, $toRepo, $toPath);
+                $extra  = $artifactLibID . '|' . sprintf($this->lang->artifact->actionComment->moved, $fromRepo, $fromPath, $toRepo, $toPath);
                 $this->loadModel('action')->create('artifactAsset', $assetID, 'movedasset', '', $extra);
             }
             if(dao::isError()) $this->sendError(dao::getError());
@@ -550,8 +551,8 @@ class artifact extends control
 
         $this->view->title              = $this->lang->artifact->moveArtifact;
         $this->view->asset              = $asset;
-        $this->view->artifact           = $artifact;
-        $this->view->artifacts          = $this->artifactZen->getArtifactRepoPickerItems($artifact->scope, $artifact->type, $this->spaces, $this->repos);
+        $this->view->artifactLib        = $artifactLib;
+        $this->view->artifactLibs       = $this->artifactZen->getArtifactLibPickerItems($artifactLib->scope, $artifactLib->type, $this->spaces, $this->repos);
         $this->view->currentPathEncoded = '';
         $this->view->parentPath         = $parentID;
         $this->display();
@@ -561,23 +562,23 @@ class artifact extends control
      * 获取编辑目录页所属上级选项。
      * Get parent directory options for edit dir page.
      *
-     * @param  int    $artifactID
+     * @param  int    $artifactLibID
      * @param  string $path
      * @access public
      * @return void
      */
-    public function ajaxGetDirParentItems(int $artifactID, string $path = '')
+    public function ajaxGetDirParentItems(int $artifactLibID, string $path = '')
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $path     = helper::safe64Decode($path);
-        return print(json_encode($this->artifactZen->getParentPickerItems($artifact, $path)));
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $path        = helper::safe64Decode($path);
+        return print(json_encode($this->artifactZen->getParentPickerItems($artifactLib, $path)));
     }
 
     /**
      * 获取目录树.
      * Get directory tree.
      *
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @param  string $path
      * @param  string $selectPath
      * @param  int $spaceID
@@ -586,28 +587,28 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function ajaxGetFolders(int $artifactID, string $path = '', string $selectPath = '', int $spaceID = 0, int $repoID = 0, string $type = 'space', int $leaf = 0)
+    public function ajaxGetFolders(int $artifactLibID, string $path = '', string $selectPath = '', int $spaceID = 0, int $repoID = 0, string $type = 'space', int $leaf = 0)
     {
-        $artifact   = $this->artifact->fetchByID($artifactID);
-        $path       = helper::safe64Decode($path);
-        $selectPath = helper::safe64Decode($selectPath);
-        return print(json_encode($this->artifactZen->getArtifactTreeData($artifact, $path, $selectPath, $spaceID, $repoID, $type, $leaf)));
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $path        = helper::safe64Decode($path);
+        $selectPath  = helper::safe64Decode($selectPath);
+        return print(json_encode($this->artifactZen->getArtifactLibTreeData($artifactLib, $path, $selectPath, $spaceID, $repoID, $type, $leaf)));
     }
 
     /**
      * 上传制品.
      * Upload artifact.
      *
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @param  string $path
      * @access public
      * @return void
      */
-    public function uploadArtifact(int $artifactID, string $path = '')
+    public function uploadArtifact(int $artifactLibID, string $path = '')
     {
         $this->config->file->dangers = '';
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $originalPath = $path;
         if(!empty($_FILES))
@@ -623,13 +624,13 @@ class artifact extends control
             $path = helper::safe64Decode($path);
 
             $file = $_FILES['file'];
-            $result = $this->artifact->uploadArtifact($artifactID, $file, $path);
+            $result = $this->artifact->uploadArtifact($artifactLibID, $file, $path);
             if(dao::isError()) $this->sendError(dao::getError());
 
             if($result && !empty($result[0]) && !empty($result[0]->Object))
             {
                 $asset = $result[0]->Object;
-                $this->loadModel('action')->create('artifactAsset', $asset->id, 'uploaded', '', $artifactID . '|' . $asset->path);
+                $this->loadModel('action')->create('artifactAsset', $asset->id, 'uploaded', '', $artifactLibID . '|' . $asset->path);
             }
             $this->sendSuccess($response);
 
@@ -642,16 +643,16 @@ class artifact extends control
      * 删除制品库目录。
      * Delete artifact repo directory.
      *
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @param  string $entityID
      * @param  string $path
      * @access public
      * @return void
      */
-    public function deleteDir(int $artifactID, string $entityID, string $path = '')
+    public function deleteDir(int $artifactLibID, string $entityID, string $path = '')
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $result = $this->loadModel('gitfox')->request('/artifacts/entities', 'DELETE', array('entityIDs' => array($entityID)));
         if(dao::isError())
@@ -666,7 +667,7 @@ class artifact extends control
         if($result)
         {
             list($type, $id) = explode('.', $entityID);
-            $this->loadModel('action')->create('artifactDir', (int)$id, 'deleted', $artifactID . '|' . $path . '|' . $entityID, ACTIONMODEL::CAN_UNDELETED);
+            $this->loadModel('action')->create('artifactDir', (int)$id, 'deleted', $artifactLibID . '|' . $path . '|' . $entityID, ACTIONMODEL::CAN_UNDELETED);
         }
 
         $response = array();
@@ -681,16 +682,16 @@ class artifact extends control
      * 删除制品.
      * Delete artifact.
      *
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @param  int $assetID
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @access public
      * @return void
      */
-    public function deleteArtifact(int $assetID, int $artifactID = 0)
+    public function deleteArtifact(int $assetID, int $artifactLibID = 0)
     {
-        $artifact = $this->artifact->fetchByID($artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID($artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $asset = $this->loadModel('gitfox')->request('/artifacts/assets/' . $assetID);
         if(dao::isError())
@@ -723,14 +724,14 @@ class artifact extends control
      * @access public
      * @return void
      */
-    public function ajaxBatchDeleteArtifact(int $artifactID)
+    public function ajaxBatchDeleteArtifact(int $artifactLibID)
     {
         if(!common::hasPriv('artifact', 'deleteArtifact')) return $this->sendError($this->lang->error->accessDenied);
 
         $assetIDList = $this->post->assetIDList;
 
-        $artifact = $this->artifact->fetchByID((int)$artifactID);
-        $this->checkAccess($artifact->spaceID, $artifact->repoID);
+        $artifactLib = $this->artifact->fetchByID((int)$artifactLibID);
+        $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
         if(!is_array($assetIDList)) $assetIDList = explode(',', (string)$assetIDList);
@@ -759,7 +760,7 @@ class artifact extends control
         {
             foreach($assetList as $assetID => $asset)
             {
-                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
+                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactLibID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
             }
         }
         if(dao::isError()) $this->sendError(dao::getError());
@@ -776,7 +777,7 @@ class artifact extends control
      * Copy artifact pull command.
      *
      * @param  int $assetID
-     * @param  int $artifactID
+     * @param  int $artifactLibID
      * @access public
      * @return void
      */

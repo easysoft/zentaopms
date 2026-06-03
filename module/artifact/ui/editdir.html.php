@@ -10,7 +10,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('currentArtifactID', (string)$artifact->id);
+jsVar('currentArtifactID', (string)$artifactLib->id);
 jsVar('currentPathEncoded', $currentPathEncoded);
 jsVar('currentParentPath', $parentPath);
 
@@ -27,8 +27,8 @@ formPanel
         set::name('artifactID'),
         set::control(array('control' => 'picker', 'tree' => true)),
         set::required(true),
-        set::items($artifacts),
-        set::value($artifact->id)
+        set::items($artifactLibs),
+        set::value($artifactLib->id)
     ),
     formGroup
     (

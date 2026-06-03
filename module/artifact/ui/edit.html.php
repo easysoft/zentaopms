@@ -21,14 +21,14 @@ formPanel
         set::name('format'),
         set::required(true),
         set::disabled(true),
-        set::value(zget($lang->artifact->formatList, $artifact->type))
+        set::value(zget($lang->artifact->formatList, $artifactLib->type))
     ),
     formGroup
     (
         set::label($lang->artifact->name),
         set::name('name'),
         set::required(true),
-        set::value($artifact->name),
-        set::placeholder($artifact->type == 'file' ? $lang->artifact->placeholder->name : $lang->artifact->notice->nameNotSupportChinese)
+        set::value($artifactLib->name),
+        set::placeholder($artifactLib->type == 'file' ? $lang->artifact->placeholder->name : $lang->artifact->notice->nameNotSupportChinese)
     )
 );

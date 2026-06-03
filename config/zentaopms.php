@@ -683,6 +683,9 @@ define('TABLE_PIPELINETRIGGER', '`ops_triggers`');
 define('TABLE_ARTIFACT',        '`ops_artifact_libs`');
 define('TABLE_ARTIFACTASSET',   '`ops_artifact_assets`');
 define('TABLE_ARTIFACTBLOBS',   '`ops_artifact_blobs`');
+define('TABLE_ARTIFACTGROUPS',   '`ops_artifact_groups`');
+define('TABLE_ARTIFACTPACKAGES', '`ops_artifact_packages`');
+define('TABLE_ARTIFACTVERSIONS', '`ops_artifact_versions`');
 
 $config->objectTables['dept']           = TABLE_DEPT;
 $config->objectTables['product']        = TABLE_PRODUCT;

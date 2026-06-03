@@ -41,24 +41,24 @@ $createItem = array
 
 $setItems     = array();
 $childActions = array();
-if(!empty($artifactList))
+if(!empty($artifactLibList))
 {
-    foreach($artifactList as $artifact)
+    foreach($artifactLibList as $artifactLib)
     {
-        $repoName = (!empty($artifact->repoID) && empty($linkRepoID)) ? zget($repoPairs, $artifact->repoID, '') : '';
+        $repoName = (!empty($artifactLib->repoID) && empty($linkRepoID)) ? zget($repoPairs, $artifactLib->repoID, '') : '';
         $childActions = array
         (
             $canEdit ? array
             (
                 'icon'         => 'edit',
-                'url'          => inLink('edit', "id={$artifact->id}"),
+                'url'          => inLink('edit', "id={$artifactLib->id}"),
                 'text'         => $lang->artifact->edit,
                 'data-toggle'  => 'modal'
             ) : null,
             $canDelete ? array
             (
                 'icon'         => 'trash',
-                'url'          => inLink('delete', "id={$artifact->id}"),
+                'url'          => inLink('delete', "id={$artifactLib->id}"),
                 'text'         => $lang->artifact->delete,
                 'innerClass'   => 'ajax-submit',
                 'data-confirm' => $lang->artifact->notice->deleteConfirm
@@ -71,12 +71,12 @@ if(!empty($artifactList))
                 col
                 (
                     setClass('canvas border rounded py-2 px-3 col gap-1 hover:shadow-lg hover:border-primary relative cursor-pointer', 'open-url'),
-                    set('data-id', $artifact->id),
-                    set('data-url', inLink('view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
+                    set('data-id', $artifactLib->id),
+                    set('data-url', inLink('view', "artifactID={$artifactLib->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}")),
                     div
                     (
                         setClass('flex justify-between items-center'),
-                        $artifact->type == 'file' ? icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))) :
+                        $artifactLib->type == 'file' ? icon('doclib text-2xl', set::style(array('color' => 'var(--color-warning-500)'))) :
                         img
                         (
                             setClass('inline pr-1'),
@@ -105,8 +105,8 @@ if(!empty($artifactList))
                             span
                             (
                                 setClass('clip font-bold text-md max-w-full'),
-                                set::title($artifact->name),
-                                $artifact->name
+                                set::title($artifactLib->name),
+                                $artifactLib->name
                             ),
                             !empty($repoName) ? div
                             (
