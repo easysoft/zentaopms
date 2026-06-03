@@ -162,6 +162,7 @@ class space extends control
         $this->view->space           = $space;
         $this->view->spaceID         = $id;
         $this->view->repoList        = $this->space->getReposBySpace($id);
+        $this->view->repoPairs       = $this->loadModel('repo')->getRepoPairs();
         $this->view->artifactLibList = $this->space->getArtifactLibsBySpace($id);
         $this->view->managers        = $this->loadModel('user')->getListByAccounts($managers, 'account');
         $this->view->members         = $this->user->getListByAccounts($members, 'account');
