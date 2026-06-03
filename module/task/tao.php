@@ -717,6 +717,12 @@ class taskTao extends taskModel
             $newTeamInfo->status = 'doing';
             $newTeamInfo->left   = $currentTeam->estimate;
         }
+
+        if(isset($newTeamInfo->consumed) && empty($newTeamInfo->consumed))
+        {
+            $newTeamInfo->status = 'wait';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
         $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
         return (float)$left;
     }
