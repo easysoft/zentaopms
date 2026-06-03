@@ -19,18 +19,18 @@ dropmenu
 );
 
 $repoBrowseURL = common::hasPriv('repo', 'browse') ? $this->createLink('repo', 'browse', "repoID=%s") : '';
-$repoDom       = common::hasPriv('repo', 'browse') ? initLinkTable($repoList, $repoBrowseURL) : null;
+$repoDom       = common::hasPriv('repo', 'browse') ? initLinkTable($repoList, $repoBrowseURL, $repoPairs) : null;
 
 //$artifactRepoURL = common::hasPriv('artifactrepo', 'view') ? $this->createLink('artifactrepo', 'view', "id=%s") : '';
 //$artifactRepoDom = common::hasPriv('artifactrepo', 'view') ? initLinkTable($artifactLibList, $artifactRepoURL) : null;
 
-function initLinkTable(array $listData, string $url): array
+function initLinkTable(array $listData, string $url, array $repoPairs = []): array
 {
     $listDom = array();
     $tdDom   = array();
     foreach($listData as $id => $object)
     {
-        $tdDom[] = $url ? h::td(h::a(set::href(sprintf($url, $id)), $object->name)) : h::td($object->name);
+        $tdDom[] = $url && isset($repoPairs[$id]) ? h::td(h::a(set::href(sprintf($url, $id)), $object->name)) : h::td($object->name);
 
         $tdCount = count($tdDom);
         if($tdCount == 3)
