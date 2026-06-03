@@ -9,6 +9,15 @@ $config->datatable->moduleAlias['execution-build']    = 'build';
 $config->datatable->moduleAlias['project-build']      = 'build';
 $config->datatable->moduleAlias['execution-testcase'] = 'testcase';
 
+$config->datatable->workflowLayoutMap['build-build']           = array('module' => 'build', 'method' => 'browse'); // 版本加载build-browse的layout配置。
+$config->datatable->workflowLayoutMap['task-task']             = array('module' => 'task', 'method' => 'browse'); // 任务加载task-browse的layout配置。
+$config->datatable->workflowLayoutMap['my-task']               = array('module' => 'task', 'method' => 'browse'); // 地盘任务加载task-browse的layout配置。
+$config->datatable->workflowLayoutMap['my-story']              = array('module' => 'story', 'method' => 'browse'); // 地盘需求加载story-browse的layout配置。
+$config->datatable->workflowLayoutMap['bug-bug']               = array('module' => 'bug', 'method' => 'browse'); // 执行bug列表加载bug-browse的layout配置。
+$config->datatable->workflowLayoutMap['story-story']           = array('module' => 'story', 'method' => 'browse'); // 执行需求列表加载story-browse的layout配置。
+$config->datatable->workflowLayoutMap['testcase-testcase']     = array('module' => 'testcase', 'method' => 'browse'); // 执行用例列表加载testcase-browse的layout配置。
+$config->datatable->workflowLayoutMap['projectrelease-browse'] = array('module' => 'release', 'method' => 'browse'); // 项目发布加载release-browse的layout配置。
+
 $config->datatable->noProductModule = ',review,';
 
 $config->datatable->defaultColConfig['id']['width']    = 60;
