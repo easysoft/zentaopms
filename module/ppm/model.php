@@ -752,7 +752,7 @@ class ppmModel extends model
      * @access public
      * @return void
      */
-    public function getRelationByBranch(object $repo, string $sourceBranch, string $targetBranch, string $type= '', ?object $pager = null)
+    public function getRelationByBranch(object $repo, string $sourceBranch, string $targetBranch, string $type = '', ?object $pager = null)
     {
         if($type == 'all') $type = '';
         $params = array();
@@ -1146,5 +1146,30 @@ class ppmModel extends model
         }
 
         return $response;
+    }
+
+    /**
+     * 获取提交对应的缺陷。
+     * Get commits bugs.
+     *
+     * @param  int     $repoID
+     * @param  int     $ppmID
+     * @param  ?object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugsByCommits(int $repoID, int $ppmID, ?object $pager = null): array
+    {
+        $commits = $this->apiGetMRCommits($repoID, $ppmID);
+        if(empty($commits)) return array();
+
+        $commitList = array_column($commits, 'sha');
+
+        return $this->dao->select('*, concat("code") as source')->from(TABLE_BUG)
+            ->where('repo')->eq($repoID)
+            ->andWhere('v2')->in($commitList)
+            ->andWhere('deleted')->eq(0)
+            ->page($pager)
+            ->fetchAll('id');
     }
 }
