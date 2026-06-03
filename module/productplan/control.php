@@ -79,7 +79,11 @@ class productplan extends control
                 ->get();
             $planID   = $this->productplan->create($planData, (int)$this->post->future);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('productplan', $planID, 'opened');
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'opened');
+
+            $planData->id = $planID;
+            $this->loadModel('message')->sendMentionNotice('productplan', 'create', $actionID, $planData);
 
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
@@ -141,14 +145,18 @@ class productplan extends control
                 ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
                 ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
                 ->get();
-            $changes  = $this->productplan->update($planData, $plan);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $changes = $this->productplan->update($planData, $plan);
 
             $this->productplan->unlinkOldBranch(array($planID => $changes));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                $planData->id = $planID;
+                $this->loadModel('message')->sendMentionNotice('productplan', 'edit', $actionID, $planData, $plan);
             }
             $message = $this->executeHooks($planID);
             if($message) $this->lang->saveSuccess = $message;
