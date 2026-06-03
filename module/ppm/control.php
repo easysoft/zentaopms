@@ -398,7 +398,7 @@ class ppm extends control
         $this->view->repoID           = $repo->id;
         $this->view->flow             = $flow;
         $this->view->commitLogs       = $this->ppm->apiGetMRCommits($ppm->targetRepoID, $ppm->id, $commitPager);
-        $this->view->bugs             = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, 'bug', $bugPager);
+        $this->view->bugs             = $this->ppm->getBugsByCommits($repo->id, $ppm->id, $bugPager);
         $this->view->linkObjects      = $this->ppm->getRelationByBranch($repo, $ppm->sourceSHA, $ppm->mergeBaseSHA, $param, $objectPager);
         $this->view->commitPager      = $commitPager;
         $this->view->bugPager         = $bugPager;
@@ -407,7 +407,7 @@ class ppm extends control
         $this->view->encoding         = $encoding;
         $this->view->diffs            = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->checkResult      = $this->ppmZen->getCheckResult($ppm, $reviewResult);
+        $this->view->checkResult      = $this->ppmZen->getCheckResult($ppm, $reviewResult, $this->view->bugs);
         $this->view->oldRevision      = $ppm->targetBranch;
         $this->view->newRevision      = $ppm->sourceBranch;
         $this->view->defaultMergeType = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
