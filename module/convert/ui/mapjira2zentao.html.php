@@ -247,6 +247,21 @@ if($step == 'relation')
     }
 }
 
+/* 无需配置字段映射的提示。*/
+if(empty($rows))
+{
+    $rows[] = formRow
+    (
+        div
+        (
+            setStyle(array('position' => 'absolute', 'top' => '50%', 'left' => '50%')),
+            setClass('text-gray'),
+            $lang->convert->jira->noCustomeFields
+        ),
+        input(set::name('nodata'), setClass('hidden'))
+    );
+}
+
 div
 (
     setClass('flex'),
