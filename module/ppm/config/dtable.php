@@ -105,6 +105,7 @@ $config->ppm->taskDtable->fieldList['status']['statusMap'] = $lang->task->status
 $config->ppm->taskDtable->fieldList['status']['sortType']  = true;
 $config->ppm->taskDtable->fieldList['status']['show']      = true;
 
+$app->loadLang('bug');
 $config->ppm->bug = new stdclass();
 $config->ppm->bug->dtable = new stdclass();
 $config->ppm->bug->dtable->fieldList = array();
@@ -119,34 +120,29 @@ $config->ppm->bug->dtable->fieldList['title']['type']     = 'shorttitle';
 $config->ppm->bug->dtable->fieldList['title']['link']     = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
 $config->ppm->bug->dtable->fieldList['title']['data-app'] = 'devops';
 $config->ppm->bug->dtable->fieldList['title']['fixed']    = false;
-$config->ppm->bug->dtable->fieldList['title']['group']    = 1;
 
 $config->ppm->bug->dtable->fieldList['source']['name']  = 'source';
 $config->ppm->bug->dtable->fieldList['source']['title'] = $lang->ppm->bug->source;
-$config->ppm->bug->dtable->fieldList['source']['type']  = 'categroy';
-$config->ppm->bug->dtable->fieldList['source']['group'] = 2;
+$config->ppm->bug->dtable->fieldList['source']['map']   = $lang->ppm->issueSourceList;
 
 $config->ppm->bug->dtable->fieldList['type']['name']  = 'type';
 $config->ppm->bug->dtable->fieldList['type']['title'] = $lang->ppm->bug->type;
-$config->ppm->bug->dtable->fieldList['type']['type']  = 'categroy';
-$config->ppm->bug->dtable->fieldList['type']['group'] = 3;
+$config->ppm->bug->dtable->fieldList['type']['map']   = $lang->bug->typeList;
 
 $config->ppm->bug->dtable->fieldList['file']['name']  = 'file';
 $config->ppm->bug->dtable->fieldList['file']['title'] = $lang->ppm->bug->file;
-$config->ppm->bug->dtable->fieldList['file']['type']  = 'desc';
-$config->ppm->bug->dtable->fieldList['file']['group'] = 4;
+$config->ppm->bug->dtable->fieldList['file']['width'] = 80;
 
 $config->ppm->bug->dtable->fieldList['severity']['name']     = 'severity';
 $config->ppm->bug->dtable->fieldList['severity']['title']    = $lang->ppm->bug->severity;
 $config->ppm->bug->dtable->fieldList['severity']['type']     = 'severity';
-$config->ppm->bug->dtable->fieldList['severity']['group']    = 5;
 $config->ppm->bug->dtable->fieldList['severity']['sortType'] = false;
 
-$config->ppm->bug->dtable->fieldList['status']['name']     = 'status';
-$config->ppm->bug->dtable->fieldList['status']['title']    = $lang->ppm->bug->status;
-$config->ppm->bug->dtable->fieldList['status']['type']     = 'status';
-$config->ppm->bug->dtable->fieldList['status']['group']    = 6;
-$config->ppm->bug->dtable->fieldList['status']['sortType'] = false;
+$config->ppm->bug->dtable->fieldList['status']['name']      = 'status';
+$config->ppm->bug->dtable->fieldList['status']['title']     = $lang->ppm->bug->status;
+$config->ppm->bug->dtable->fieldList['status']['type']      = 'status';
+$config->ppm->bug->dtable->fieldList['status']['sortType']  = false;
+$config->ppm->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 
 $app->loadLang('repo');
 $config->ppm->commitLogs = new stdclass();
