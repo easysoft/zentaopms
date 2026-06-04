@@ -23,7 +23,6 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 global $tester;
 $tester->dao->delete()->from(TABLE_PROJECT)->exec();
 $tester->dao->delete()->from(TABLE_TEAM)->exec();
-$tester->dao->delete()->from(TABLE_PROJECTSTORY)->exec();
 
 for($i = 1; $i <= 5; $i++)
 {
@@ -51,9 +50,6 @@ for($i = 1; $i <= 5; $i++)
 }
 
 su('admin');
-
-global $app;
-$app->user->admin = true;
 
 $userTest = new userModelTest();
 
