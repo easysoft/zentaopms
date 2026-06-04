@@ -1103,8 +1103,11 @@ class taskModel extends model
 
         if($createAction)
         {
-            $this->loadModel('action')->create('task', $taskID, 'Opened', '');
+            $actionID = $this->loadModel('action')->create('task', $taskID, 'Opened', '');
             if(!empty($task->assignedTo)) $this->action->create('task', $taskID, 'Assigned', '', $task->assignedTo);
+
+            $task->id = $taskID;
+            $this->loadModel('message')->sendMentionNotice('task', 'create', $actionID, $task);
         }
         $this->loadModel('file')->updateObjectID($this->post->uid, $taskID, 'task');
         $this->loadModel('score')->create('task', 'create', $taskID);
@@ -3291,6 +3294,8 @@ class taskModel extends model
             $action   = !empty($changes) ? 'Edited' : 'Commented';
             $actionID = $this->loadModel('action')->create('task', $taskID, $action, $this->post->comment, $extra);
             if(!empty($changes) && $actionID) $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice('task', 'edit', $actionID, $task, $oldTask);
         }
 
         return $changes;
