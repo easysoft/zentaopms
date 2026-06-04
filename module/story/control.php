@@ -102,7 +102,7 @@ class story extends control
             if($this->post->newStory)
             {
                 $response['message'] = $message . $this->lang->story->newStory;
-                $response['load']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=$copyStoryID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
+                $response['load']    = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=$copyStoryID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
                 return $this->send($response);
             }
 
