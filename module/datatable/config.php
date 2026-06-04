@@ -14,6 +14,7 @@ $config->datatable->workflowLayoutMap['task-task']             = array('module' 
 $config->datatable->workflowLayoutMap['my-task']               = array('module' => 'task', 'method' => 'browse'); // 地盘任务加载task-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-story']              = array('module' => 'story', 'method' => 'browse'); // 地盘需求加载story-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-requirement']       = array('module' => 'requirement', 'method' => 'browse'); // 地盘用户需求加载requirement-browse的layout配置。
+$config->datatable->workflowLayoutMap['my-epic']              = array('module' => 'epic', 'method' => 'browse'); // 地盘业务需求加载epic-browse的layout配置。
 $config->datatable->workflowLayoutMap['bug-bug']               = array('module' => 'bug', 'method' => 'browse'); // 执行bug列表加载bug-browse的layout配置。
 $config->datatable->workflowLayoutMap['story-story']           = array('module' => 'story', 'method' => 'browse'); // 执行需求列表加载story-browse的layout配置。
 $config->datatable->workflowLayoutMap['testcase-testcase']     = array('module' => 'testcase', 'method' => 'browse'); // 执行用例列表加载testcase-browse的layout配置。

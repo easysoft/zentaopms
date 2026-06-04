@@ -5,6 +5,7 @@ $app->loadLang('score');
 $app->loadLang('task');
 $app->loadLang('story');
 $app->loadLang('requirement');
+$app->loadLang('epic');
 $app->loadLang('bug');
 $app->loadLang('doc');
 $app->loadLang('testtask');
