@@ -478,7 +478,10 @@ class project extends control
             $projectID = $this->project->create($project, $postData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($project->model == 'kanban') $this->project->addTeamMembers($projectID, $project, (array)$this->post->teamMembers);
-            $this->loadModel('action')->create('project', $projectID, 'opened');
+            $actionID = $this->loadModel('action')->create('project', $projectID, 'opened');
+
+            $project->id = $projectID;
+            $this->loadModel('message')->sendMentionNotice('project', 'create', $actionID, $project);
 
             /* Link the plan stories. */
             if(($project->hasProduct) && $this->post->plans) $this->project->addPlans($projectID, $this->post->plans);
@@ -548,6 +551,9 @@ class project extends control
             {
                 $actionID = $this->loadModel('action')->create('project', $projectID, 'edited');
                 $this->action->logHistory($actionID, $changes);
+
+                $newProject->id = $projectID;
+                $this->loadModel('message')->sendMentionNotice('project', 'edit', $actionID, $newProject, $project);
             }
 
             $message = $this->executeHooks($projectID);
