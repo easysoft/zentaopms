@@ -546,7 +546,8 @@ class my extends control
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager    = pager::init($recTotal, $recPerPage, $pageID);
+        $queryID  = $type == 'bySearch' ? (int)$param : 0;
 
         /* Save session. */
         if($this->app->viewType != 'json')
@@ -556,12 +557,14 @@ class my extends control
             $this->session->set('reportList',   $uri, 'qa');
             $this->session->set('buildList',    $uri, 'execution');
         }
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=testtask&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildTesttaskSearchForm($queryID, $actionURL);
 
         /* Append id for second sort. */
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type);
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type, $queryID);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;

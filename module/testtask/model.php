@@ -358,11 +358,14 @@ class testtaskModel extends model
      * @param   object $pager
      * @param   string $orderBy
      * @param   string $type
+     * @param   int    $queryID
      * @access  public
      * @return  array
      */
-    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = ''): array
+    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = '', int $queryID = 0): array
     {
+        $testtaskQuery = '';
+        if($type == 'bySearch') $testtaskQuery = $this->testtaskTao->processSearchQuery(0, $queryID, 'myTesttask');
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
@@ -377,6 +380,7 @@ class testtaskModel extends model
             ->markRight(1)
             ->beginIF($type == 'wait')->andWhere('t1.status')->ne('done')->fi()
             ->beginIF($type == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
