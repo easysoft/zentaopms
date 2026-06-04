@@ -23,6 +23,8 @@ class taskModelTest extends baseTest
 
          $_SESSION['project'] = $object->project;
 
+        unset($object->project);
+
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
