@@ -1666,24 +1666,37 @@ class userModel extends model
     {
         $this->loadModel('project');
 
-        $allProducts = $this->loadModel('product')->getListByAcl('private');
-        $allProjects = $this->project->getListByAclAndType('private,program', 'project');
-        $allPrograms = $this->project->getListByAclAndType('private,program', 'program');
-        $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
+        static $allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders;
 
-        $teams = [];
-        $teamList = $this->project->getTeamListByType('project,execution', $account);
-        foreach($teamList as $team) $teams[$team->type][$team->root][$team->account] = $team->account;
+        if(!$allProducts) $allProducts = $this->loadModel('product')->getListByAcl('private');
+        if(!$allProjects) $allProjects = $this->project->getListByAclAndType('private,program', 'project');
+        if(!$allPrograms) $allPrograms = $this->project->getListByAclAndType('private,program', 'program');
+        if(!$allSprints)  $allSprints  = $this->project->getListByAclAndType('private', 'sprint,stage,kanban');
 
-        $whiteList = [];
-        $aclList = $this->project->getAclListByObjectType('program,project,sprint,product', $account);
-        foreach($aclList as $acl) $whiteList[$acl->objectType][$acl->objectID][$acl->account] = $acl->account;
+        if(empty($teams[$account]))
+        {
+            $teams[$account] = [];
+            $teamList = $this->project->getTeamListByType('project,execution', $account);
+            foreach($teamList as $team) $teams[$account][$team->type][$team->root][$team->account] = $team->account;
+        }
 
-        $stakeholders = [];
-        $cachedHolders = $this->dao->select('objectID, objectType, user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->andWhere('user')->eq($account)->fetchAll();
-        foreach($cachedHolders as $holder) $stakeholders[$holder->objectType][$holder->objectID][$holder->user] = $holder->user;
+        /* Get white list. */
+        if(empty($whiteList[$account]))
+        {
+            $whiteList[$account] = [];
+            $aclList = $this->project->getAclListByObjectType('program,project,sprint,product', $account);
+            foreach($aclList as $acl) $whiteList[$account][$acl->objectType][$acl->objectID][$acl->account] = $acl->account;
+        }
 
-        return array($allProducts, $allProjects, $allPrograms, $allSprints, $teams, $whiteList, $stakeholders);
+        /* Get stakeholders. */
+        if(empty($stakeholders[$account]))
+        {
+            $stakeholders[$account] = [];
+            $cachedHolders = $this->dao->select('objectID, objectType, user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->andWhere('user')->eq($account)->fetchAll();
+            foreach($cachedHolders as $holder) $stakeholders[$account][$holder->objectType][$holder->objectID][$holder->user] = $holder->user;
+        }
+
+        return array($allProducts, $allProjects, $allPrograms, $allSprints, $teams[$account], $whiteList[$account], $stakeholders[$account]);
     }
 
     /**
