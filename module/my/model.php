@@ -592,6 +592,34 @@ class myModel extends model
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
     }
 
+    /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'myTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc($searchConfig['module'], __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $searchConfig['params']['product']['values']   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $searchConfig['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject);
+        $searchConfig['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'all', 'multiple');
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
+
     /*
      * 构建风险搜索表单。
      * Build risk search form.
