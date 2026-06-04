@@ -3301,16 +3301,16 @@ class storyModel extends model
      * 获取零用例需求。
      * Get zero case.
      *
-     * @param  int     $productID
-     * @param  int     $projectID
-     * @param  int     $executionID
-     * @param  int     $branchID
-     * @param  string  $orderBy
-     * @param  object  $pager
+     * @param  int        $productID
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int|string $branchID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int|string $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $casedStories = $this->dao->select('DISTINCT t1.story')
             ->from(TABLE_CASE)->alias('t1')

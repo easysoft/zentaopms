@@ -260,17 +260,17 @@ class testcase extends control
     /**
      * Show zero case story.
      *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  string $orderBy
-     * @param  int    $objectID
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int        $productID
+     * @param  int|string $branchID
+     * @param  string     $orderBy
+     * @param  int        $objectID
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function zeroCase(int $productID = 0, int|string $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
