@@ -1229,7 +1229,6 @@ class programplanModel extends model
         $updateStage->closedDate     = $stage->closedDate;
         $updateStage->canceledBy     = $stage->canceledBy;
         $updateStage->canceledDate   = $stage->canceledDate;
-        $updateStage->finishedBy     = $stage->finishedBy;
         $updateStage->lastEditedBy   = $this->app->user->account;
         $updateStage->lastEditedDate = helper::now();
         $updateStage->estimate       = $stage->estimate;

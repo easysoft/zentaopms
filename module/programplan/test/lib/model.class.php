@@ -1026,4 +1026,20 @@ class programplanModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test rollbackStage method.
+     *
+     * @param  object $stage
+     * @access public
+     * @return object|false
+     */
+    public function rollbackStageTest(object $stage): object|false
+    {
+        $this->instance->rollbackStage($stage);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($stage->id)->fetch();
+    }
 }
