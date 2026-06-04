@@ -22,7 +22,8 @@ formPanel
         set::width('1/2'),
         set::name("name"),
         set::label($lang->repo->name),
-        set::value($repo->name)
+        set::value($repo->name),
+        set::disabled(true)
     ),
     formGroup
     (
@@ -30,8 +31,8 @@ formPanel
         set::name("space"),
         set::label($lang->repo->space),
         set::required(true),
-        set::items($spaces),
-        set::value($repo->spaceID)
+        set::value($repo->spaceID),
+        set::disabled(true)
     ),
     formGroup
     (
