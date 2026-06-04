@@ -1202,4 +1202,60 @@ class programplanModel extends model
             return true;
         }));
     }
+
+    /**
+     * Rollback stage.
+     * 回滚阶段。
+     *
+     * @param object  $stage
+     * @access public
+     * @return array
+     */
+    public function rollbackStage(object $stage)
+    {
+        $this->app->loadLang('stage');
+        $updateStage = new stdClass();
+        $updateStage->name           = $stage->name;
+        $updateStage->milestone      = $stage->milestonecode;
+        $updateStage->status         = $stage->rawStatus;
+        $updateStage->begin          = $stage->begin;
+        $updateStage->end            = $stage->deadline;
+        $updateStage->parent         = $stage->parent;
+        $updateStage->isTpl          = $stage->isTpl;
+        $updateStage->realBegan      = $stage->realBegan;
+        $updateStage->realEnd        = $stage->realEnd;
+        $updateStage->progress       = $stage->progress;
+        $updateStage->closedBy       = $stage->closedBy;
+        $updateStage->closedDate     = $stage->closedDate;
+        $updateStage->canceledBy     = $stage->canceledBy;
+        $updateStage->canceledDate   = $stage->canceledDate;
+        $updateStage->lastEditedBy   = $this->app->user->account;
+        $updateStage->lastEditedDate = helper::now();
+        $updateStage->estimate       = $stage->estimate;
+        $updateStage->consumed       = $stage->consumed;
+        $updateStage->left           = $stage->left;
+        $updateStage->deleted        = '0';
+
+        $oldStage = $this->fetchByID($stage->id, 'project');
+        $project  = $this->fetchByID($oldStage->project, 'project');
+        $updateAttribute = array_search($stage->attribute, $project->model == 'ipd' ? $this->lang->stage->ipdTypeList : $this->lang->stage->typeList, true);
+        if($updateAttribute) $updateStage->attribute = $updateAttribute;
+
+        $this->dao->update(TABLE_PROJECT)->data($updateStage)->where('id')->eq($stage->id)->exec();
+
+        if($oldStage->deleted == '1')
+        {
+            $this->loadModel('user');
+
+            /* 恢复用户的执行权限。 */
+            if($stage->acl != 'open') $this->user->updateUserView(array($stage->id), 'sprint');
+
+            /* 恢复用户的产品权限。 */
+            $products = $this->loadModel('product')->getProducts($stage->id, 'all', '', false);
+            if(!empty($products)) $this->user->updateUserView(array_keys($products), 'product');
+
+            /* 恢复文档库。*/
+            $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where('execution')->eq($stage->id)->exec();
+        }
+    }
 }
