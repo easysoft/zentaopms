@@ -653,6 +653,12 @@ class programplan extends control
         $tmpVersion->data     = json_encode($currentVersion);
         $this->dao->insert(TABLE_OBJECT)->data($tmpVersion)->exec();
 
+        $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
+        foreach($targetVersion['data'] as $version)
+        {
+            if($version->type == 'plan') $this->programplan->rollbackStage($version);
+        }
+
         return $this->sendSuccess(array('load' => true));
     }
 }
