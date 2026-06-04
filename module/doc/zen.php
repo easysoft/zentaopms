@@ -721,10 +721,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link);
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'actionID' => $actionID ?? 0);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc, 'actionID' => $actionID ?? 0);
     }
 
     /**
