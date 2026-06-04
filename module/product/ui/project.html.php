@@ -35,7 +35,8 @@ featureBar
 );
 
 /* Set right toolbar. */
-if($branchStatus != 'closed')
+$canBeChanged = $product->status != 'closed' || !isset($config->CRProduct) || !empty($config->CRProduct);
+if($branchStatus != 'closed' && $canBeChanged)
 {
     toolbar
     (
@@ -131,7 +132,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->project->empty),
     set::createTip($lang->project->create),
-    set::createLink($branchStatus != 'closed' && hasPriv('project', 'create') ? createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true) : ''),
+    set::createLink($branchStatus != 'closed' && hasPriv('project', 'create') && $canBeChanged ? createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true) : ''),
     set::createAttr("data-toggle='modal'")
 );
 
