@@ -106,6 +106,8 @@ $lang->programplan->cropStageTip     = "已经开始了的阶段不能再裁剪"
 $lang->programplan->childEnabledTip  = "子阶段启用状态跟随父阶段";
 $lang->programplan->reviewedPointTip = "该评审点已提交评审不能再操作";
 $lang->programplan->typeTip          = "第一层级仅支持创建阶段，同一阶段下可以创建阶段或创建迭代/看板。迭代/看板不支持继续拆分。";
+$lang->programplan->rollbackTip      = '新增的执行和任务将被删除，已删除的将恢复，并仅回滚部分字段信息。该操作将覆盖当前排期，且不可恢复，请谨慎操作。是否继续？';
+$lang->programplan->canNotCallback   = '无法回滚，回滚后执行计划起止日期超出项目计划起止日期，请先调整项目计划日期。';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';

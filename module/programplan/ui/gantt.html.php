@@ -104,8 +104,9 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         {
             $item['hint']    = $version->items;
             $item['actions'] = array();
-            if(hasPriv('programplan', 'editGanttVersion'))   $item['actions'][] = array('icon' => 'edit',  'hint' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
-            if(hasPriv('programplan', 'deleteGanttVersion')) $item['actions'][] = array('icon' => 'trash', 'hint' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
+            if(hasPriv('programplan', 'rollbackGanttVersion')) $item['actions'][] = array('icon' => 'undo',  'hint' => $lang->programplan->rollbackGanttVersion, 'url' => createLink('programplan', 'rollbackGanttVersion', "projectID={$projectID}&versionID={$version->id}"), 'data-confirm' => $lang->programplan->rollbackTip, 'className' => 'ajax-submit');
+            if(hasPriv('programplan', 'editGanttVersion'))     $item['actions'][] = array('icon' => 'edit',  'hint' => $lang->edit,   'url' => createLink('programplan', 'editGanttVersion', "versionID={$version->id}"), 'data-toggle' => 'modal');
+            if(hasPriv('programplan', 'deleteGanttVersion'))   $item['actions'][] = array('icon' => 'trash', 'hint' => $lang->delete, 'url' => createLink('programplan', 'deleteGanttVersion', "versionID={$version->id}"), 'class' => 'ajax-submit', 'data-confirm' => $lang->confirmDelete);
         }
 
         if($version->id == $versionID)
