@@ -35,7 +35,7 @@ featureBar
 );
 
 /* Set right toolbar. */
-$canBeChanged = $product->status != 'closed' || !isset($config->CRProduct) || !empty($config->CRProduct);
+$canBeChanged = common::canModify('product', $product);
 if($branchStatus != 'closed' && $canBeChanged)
 {
     toolbar
