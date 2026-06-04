@@ -618,13 +618,41 @@ class programplan extends control
      * 版本回滚。
      * Rollback gantt version.
      *
+     * @param  int    $projectID
      * @param  int    $versionID
      * @access public
      * @return void
      */
-    public function rollbackGanttVersion(int $versionID = 0)
+    public function rollbackGanttVersion(int $projectID, int $versionID = 0)
     {
-        $oldVersion = $this->programplan->fetchByID($versionID, 'ganttversion');
+        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
+        $minPlanBegin = $maxPlanEnd = '';
+        foreach($currentVersion['data'] as $version)
+        {
+            if($version->type == 'plan')
+            {
+                if(empty($minPlanBegin) || $version->begin < $minPlanBegin) $minPlanBegin = $version->begin;
+                if(empty($maxPlanEnd) || $version->deadline > $maxPlanEnd) $maxPlanEnd = $version->deadline;
+            }
+
+            $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
+        }
+
+        $project = $this->programplan->fetchByID($projectID, 'project');
+        if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
+
+        /* 将回滚前的版本存为临时版本。*/
+        $tmpVersion = new stdClass();
+        $tmpVersion->version  = date(DT_DATE3 . ' H:i:s');
+        $tmpVersion->title    = date(DT_DATE3 . ' H:i:s');
+        $tmpVersion->project  = $projectID;
+        $tmpVersion->product  = 0;
+        $tmpVersion->type     = 'taged';
+        $tmpVersion->category = 'gantt';
+        $tmpVersion->status   = 'tmpGantt';
+        $tmpVersion->data     = json_encode($currentVersion);
+        $this->dao->insert(TABLE_OBJECT)->data($tmpVersion)->exec();
+
         return $this->sendSuccess(array('load' => true));
     }
 }
