@@ -17,6 +17,7 @@ $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.checknetconnect';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.installevent';
+$config->openMethods[] = 'my.ajaxswitchvision';
 $config->openMethods[] = 'sso.bind';
 $config->openMethods[] = 'sso.feishuauthen';
 $config->openMethods[] = 'sso.feishulogin';
