@@ -576,6 +576,8 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $this->loadModel('message')->sendMentionNotice('testtask', 'edit', $actionID, $task, $oldTask);
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
