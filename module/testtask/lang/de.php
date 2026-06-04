@@ -73,6 +73,7 @@ $lang->testtask->common            = 'Testaufgabe';
 $lang->testtask->product           = $lang->productCommon;
 $lang->testtask->project           = $lang->projectCommon;
 $lang->testtask->execution         = $lang->execution->common;
+$lang->testtask->allProject        = 'All' . $lang->projectCommon;
 $lang->testtask->type              = 'Typ';
 $lang->testtask->build             = 'Build';
 $lang->testtask->owner             = 'Besitzer';

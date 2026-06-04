@@ -582,4 +582,35 @@ class programplan extends control
         $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($versionID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->deleteSuccess, 'callback' => "loadCurrentPage('#versionList')"));
     }
+
+    /**
+     * 设置甘特图版本可见。
+     * Set show version.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function ajaxSetShowVersion(string $objectType = 'project')
+    {
+        if(empty($_POST['showVersions']) && empty($_POST['hiddenVersions'])) return;
+
+        $showVersions   = zget($_POST, 'showVersions', '');
+        $hiddenVersions = zget($_POST, 'hiddenVersions', '');
+
+        $settings = $this->loadModel('setting')->getItem("owner=system&module={$objectType}&section=&key=ganttVersionSettings");
+        $settings = explode(',', $settings);
+        foreach(explode(',', $showVersions) as $showVersion)
+        {
+            if(empty($showVersion)) continue;
+            if(!in_array($showVersion, $settings)) $settings[] = $showVersion;
+        }
+        foreach(explode(',', $hiddenVersions) as $hiddenVersion)
+        {
+            if(in_array($hiddenVersion, $settings)) $settings = array_filter($settings, function($value) use($hiddenVersion) {return $value != $hiddenVersion;});
+        }
+        $this->setting->setItem("system.$objectType.ganttVersionSettings", implode(',', $settings));
+
+        return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
+    }
 }

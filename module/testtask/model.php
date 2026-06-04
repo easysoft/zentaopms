@@ -50,23 +50,62 @@ class testtaskModel extends model
      * @param  string $type
      * @param  string $begin
      * @param  string $end
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getProductTasks(int $productID, string $branch = 'all', string $type = '', string $begin = '', string $end = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTesttasks();
-
         $scopeAndStatus = explode(',', $type);
         $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
         $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
         $branch         = $scope == 'all' ? 'all' : $branch;
-        $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $orderBy, $pager);
+        $tasks = $this->fetchTesttaskList($productID, $branch, 0, '', $scope, $status, $begin, $end, $browseType, $queryID, $orderBy, $pager);
         return $this->processExecutionName($tasks);
     }
 
+    /**
+     * 构造测试单列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  int    $productID
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(int $productID, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'testtask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('testtask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
+
+        /* Get params. */
+        $productParams   = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
+        $productParams   = $productParams + array('all' => $this->lang->all);
+        $projectParams   = $this->loadModel('product')->getProjectPairsByProduct($productID) + array('all' => $this->lang->testtask->allProject);
+        $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID, "0", (int)$projectID);
+
+        $searchConfig['params']['product']['values']   = $productParams;
+        $searchConfig['params']['project']['values']   = $projectParams;
+        $searchConfig['params']['execution']['values'] = $executionParams;
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
     /**
      * 根据项目名称和执行名称来更新执行名称。
      * Update the execution name based on the project name and execution name.
@@ -116,7 +155,7 @@ class testtaskModel extends model
         if($browseType == 'newest') $orderBy = 'end_desc,' . $orderBy;
 
         $projectID = $this->lang->navGroup->testtask != 'qa' ? $this->session->project : 0;
-        $tasks     = $this->fetchTesttaskList($productID, '', $projectID, 'unit', 'local', '', $begin, $end, $orderBy, $pager);
+        $tasks     = $this->fetchTesttaskList($productID, '', $projectID, 'unit', 'local', '', $begin, $end, 'all', 0, $orderBy, $pager);
 
         $resultGroups = $this->dao->select('t1.task, t2.*')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_TESTRESULT)->alias('t2')->on('t1.id=t2.run')

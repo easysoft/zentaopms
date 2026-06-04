@@ -265,7 +265,7 @@ class release extends control
      * View a release.
      *
      * @param  int    $releaseID
-     * @param  string $type       story|bug|leftBug
+     * @param  string $type       story|bug|leftBug|escapedBug
      * @param  string $link
      * @param  string $param
      * @param  string $orderBy
@@ -283,7 +283,7 @@ class release extends control
         $uri = $this->app->getURI(true);
         if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
         if($type == 'story') $this->session->set('storyList', $uri, 'product');
-        if($type == 'bug' || $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
+        if(in_array($type, array('bug', 'leftBug', 'escapedBug'))) $this->session->set('bugList', $uri, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -293,10 +293,11 @@ class release extends control
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $storyPager   = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $bugPager     = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-        $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
+        $storyPager      = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $bugPager        = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $leftBugPager    = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
+        $escapedBugPager = new pager($type == 'escapedBug' ? $recTotal : 0, $recPerPage, $type == 'escapedBug' ? $pageID : 1);
+        $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager, $escapedBugPager);
 
         $this->commonAction($release->product);
         if($this->app->tab == 'project')

@@ -4261,7 +4261,7 @@ class executionModel extends model
      */
     public function buildTesttaskSearchForm(array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
     {
-        $searchConfig = $this->config->testtask->search;
+        $searchConfig           = $this->config->testtask->search;
         $searchConfig['module'] = 'executionTesttask';
         if($cacheSearchFunc)
         {
@@ -4270,6 +4270,12 @@ class executionModel extends model
         }
         $searchConfig['actionURL'] = $actionURL;
         $searchConfig['queryID']   = $queryID;
+
+        unset($searchConfig['fields']['project']);
+        unset($searchConfig['params']['project']);
+        unset($searchConfig['fields']['execution']);
+        unset($searchConfig['params']['execution']);
+
         $productPairs = array(0 => '');
         foreach($products as $product) $productPairs[$product->id] = $product->name;
         $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
