@@ -1981,7 +1981,7 @@ class testcaseZen extends testcase
 
             if($this->config->edition != 'open')
             {
-                $extendFields = $this->loadModel('flow')->getExtendFields('testcase', 'create');
+                $extendFields = $this->loadModel('flow')->getExtendFields('testcase', $this->app->rawMethod);
                 foreach($extendFields as $field) $case->{$field->field} = $testcase->{$field->field};
             }
         }
