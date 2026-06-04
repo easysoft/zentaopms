@@ -236,7 +236,7 @@ class ppmZen extends ppm
             $result->message = $result->message ? $result->message . '; ' . $canMergeUsers : $canMergeUsers;
         }
 
-        $reviewFlow = $this->loadModel('reporeviewflow')->getById($rule->reviewFlowID);
+        $reviewFlow = $this->loadModel('reporeviewflow')->getById(empty($rule) ? 0 : $rule->reviewFlowID);
         if(!empty($reviewFlow) && !empty($reviewFlow->definition->reviewFlow->issues))
         {
             $activeIssues = array();
