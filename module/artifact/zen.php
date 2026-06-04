@@ -28,7 +28,7 @@ class artifactZen extends artifact
         $repoIDList   = array_keys($repos);
         $artifactLibs = $this->artifact->getLibListByScope($scope, $type, $spaceIDList, $repoIDList);
 
-        return $this->buildArtifactLibPickerItems($spaces, $repos, $artifactLibs);
+        return $this->artifact->buildArtifactLibPickerItems($spaces, $repos, $artifactLibs);
     }
 
     /**
@@ -120,75 +120,6 @@ class artifactZen extends artifact
             }
             $item->actions = $node->metadata->type == 'asset' || $item->format != 'file' ? array() : $this->buildTreeAction($item, $privs);
             $items[] = $item;
-        }
-
-        return $items;
-    }
-
-    /**
-     * 组装制品库选择器树。
-     * Build artifact repo picker tree.
-     *
-     * @param  array $spaces
-     * @param  array $repos
-     * @param  array $artifactLibs
-     * @access protected
-     * @return array
-     */
-    protected function buildArtifactLibPickerItems(array $spaces, array $repos, array $artifactLibs): array
-    {
-        $artifactLibSpaces = array();
-        $artifactLibRepos  = array();
-        foreach($artifactLibs as $artifactLib)
-        {
-            if(empty($artifactLib->spaceID)) continue;
-
-            if(empty($artifactLib->repoID))
-            {
-                $artifactLibSpaces[$artifactLib->spaceID][] = $artifactLib;
-            }
-            else
-            {
-                $artifactLibRepos[$artifactLib->spaceID][$artifactLib->repoID][] = $artifactLib;
-            }
-        }
-
-        $items = array();
-        foreach($spaces as $spaceID => $spaceName)
-        {
-            $children = array();
-            if(!empty($artifactLibSpaces[$spaceID]) && !isset($artifactLibRepos[$spaceID]))
-            {
-                foreach($artifactLibSpaces[$spaceID] as $spaceArtifactLib)
-                {
-                    $children[] = array('text' => $spaceArtifactLib->name, 'value' => $spaceArtifactLib->id, 'keys' => $spaceArtifactLib->name);
-                }
-            }
-
-            if(isset($artifactLibRepos[$spaceID]))
-            {
-                foreach($artifactLibRepos[$spaceID] as $repoID => $repoArtifactLibs)
-                {
-                    if(!isset($repos[$repoID])) continue;
-                    $repoName = $repos[$repoID];
-
-                    $repoItems = array();
-                    foreach($repoArtifactLibs as $repoArtifactLib)
-                    {
-                        $repoItems[] = array('text' => $repoArtifactLib->name, 'value' => $repoArtifactLib->id, 'keys' => $repoArtifactLib->name);
-                    }
-                    $children[] = array('text' => array('html' => "{$repoName}<span class='ml-1 label text-ellipsis'>{$this->lang->repo->common}</span>", 'class' => 'text-clip'), 'disabled' => true, 'items' => $repoItems);
-                }
-            }
-
-            if(empty($children)) continue;
-
-            $items[] = array
-            (
-                'text'     => array('html' => "{$spaceName}<span class='ml-1 label text-ellipsis'>{$this->lang->space->common}</span>", 'class' => 'text-clip'),
-                'disabled' => true,
-                'items'    => $children
-            );
         }
 
         return $items;
