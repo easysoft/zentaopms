@@ -1063,6 +1063,7 @@ function checkFlowActionCondition(array $actionConfig, string $action, object $i
     if(!empty($actionConfig['url']['method']) && $method != $actionConfig['url']['method']) $method = $actionConfig['url']['method'];
 
     if($module == 'testtask' && $method == 'runCase') $module = 'testcase';
+    if($module == 'projectrelease') $module = 'release';
 
     static $flowActions = [];
     if(empty($flowActions[$module])) $flowActions[$module] = $model->loadModel('workflowaction')->getList($module);
