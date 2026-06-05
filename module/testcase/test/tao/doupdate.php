@@ -35,7 +35,7 @@ $title = array('title' => '修改后的用例');
 $type  = array('type'  => 'install');
 $pri   = array('pri'   => '1');
 
-$testcase = new testCaseTest();
+$testcase = new testcaseTaoTest();
 r($testcase->doUpdateTest($testcaseIdList[0], $title)) && p('title,type,pri') && e('修改后的用例,feature,1');    // 测试更新用例名称
 r($testcase->doUpdateTest($testcaseIdList[1], $type))  && p('title,type,pri') && e('这个是测试用例2,install,2'); // 测试更新用例类型
 r($testcase->doUpdateTest($testcaseIdList[2], $pri))   && p('title,type,pri') && e('这个是测试用例3,config,1');  // 测试更新用例优先级
