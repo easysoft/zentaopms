@@ -1042,4 +1042,21 @@ class programplanModelTest extends baseTest
 
         return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($stage->id)->fetch();
     }
+
+    /**
+     * Test rollbackTask method.
+     *
+     * @param  object $task
+     * @access public
+     * @return object|false
+     */
+    public function rollbackTaskTest(object $task): object|false
+    {
+        $this->instance->rollbackTask($task);
+
+        if(dao::isError()) return dao::getError();
+
+        $taskID = explode("-", $task->id);
+        return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID[1])->fetch();
+    }
 }

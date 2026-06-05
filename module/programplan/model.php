@@ -1207,13 +1207,12 @@ class programplanModel extends model
      * Rollback stage.
      * 回滚阶段。
      *
-     * @param object  $stage
+     * @param  object $stage
      * @access public
-     * @return array
+     * @return void
      */
     public function rollbackStage(object $stage)
     {
-        $this->app->loadLang('stage');
         $updateStage = new stdClass();
         $updateStage->name           = $stage->name;
         $updateStage->milestone      = $stage->milestonecode;
@@ -1234,8 +1233,9 @@ class programplanModel extends model
         $updateStage->estimate       = $stage->estimate;
         $updateStage->consumed       = $stage->consumed;
         $updateStage->left           = $stage->left;
-        $updateStage->deleted        = '0';
+        $updateStage->deleted        = 0;
 
+        $this->app->loadLang('stage');
         $oldStage = $this->fetchByID($stage->id, 'project');
         $project  = $this->fetchByID($oldStage->project, 'project');
         $updateAttribute = array_search($stage->attribute, $project->model == 'ipd' ? $this->lang->stage->ipdTypeList : $this->lang->stage->typeList, true);
@@ -1257,5 +1257,51 @@ class programplanModel extends model
             /* 恢复文档库。*/
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where('execution')->eq($stage->id)->exec();
         }
+    }
+
+    /**
+     * Rollback task.
+     * 回滚任务。
+     *
+     * @param  object $task
+     * @access public
+     * @return void
+     */
+    public function rollbackTask(object $task)
+    {
+        $updateTask = new stdclass();
+        $updateTask->story          = $task->story;
+        $updateTask->estStarted     = $task->begin;
+        $updateTask->deadline       = $task->deadline;
+        $updateTask->parent         = $task->parent;
+        $updateTask->estimate       = $task->estimate;
+        $updateTask->consumed       = $task->consumed;
+        $updateTask->left           = $task->left;
+        $updateTask->status         = $task->rawStatus;
+        $updateTask->pri            = $task->pri;
+        $updateTask->color          = $task->color;
+        $updateTask->mailto         = $task->mailto;
+        $updateTask->keywords       = $task->keywords;
+        $updateTask->finishedBy     = $task->finishedBy;
+        $updateTask->closedBy       = $task->closedBy;
+        $updateTask->closedDate     = $task->closedDate;
+        $updateTask->closedReason   = $task->closedReason;
+        $updateTask->canceledBy     = $task->canceledBy;
+        $updateTask->canceledDate   = $task->canceledDate;
+        $updateTask->activatedDate  = $task->activatedDate;
+        $updateTask->lastEditedBy   = $this->app->user->account;
+        $updateTask->lastEditedDate = helper::now();
+        $updateTask->deleted        = 0;
+
+        $this->app->loadLang('task');
+        $updateTask->type = array_search($task->taskType, $this->lang->task->typeList, true);
+
+        if(preg_match('/<span[^>]*class=[\'"]gantt_title[\'"]>(.+?)<\/span>/', $task->text, $taskName))
+        {
+            $updateTask->name = preg_replace('/^#\d+\s+/', '', $taskName[1]);
+        }
+
+        $taskID = explode("-", $task->id);
+        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID[1])->exec();
     }
 }
