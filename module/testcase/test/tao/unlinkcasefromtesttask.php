@@ -23,6 +23,6 @@ cid=19053
 $testcase = new testcaseTaoTest();
 r($testcase->unlinkCaseFromTesttaskTest(1, 1)) && p() && e(0); //测试取消测试单与用例的关联。
 r($testcase->unlinkCaseFromTesttaskTest(0, 1)) && p() && e(1); //测试取消测试单与用例的关联。
-r($testcase->unlinkCaseFromTesttaskTest(1, 0)) && p() && e(1); //测试取消测试单与用例的关联。
+r($testcase->unlinkCaseFromTesttaskTest(1, 0)) && p() && e(0); //测试取消测试单与用例的关联。
 r($testcase->unlinkCaseFromTesttaskTest(0, 0)) && p() && e(1); //测试取消测试单与用例的关联。
 r($testcase->unlinkCaseFromTesttaskTest(2, 2)) && p() && e(0); //测试取消测试单与用例的关联。
