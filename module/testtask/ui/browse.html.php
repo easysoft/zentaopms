@@ -13,7 +13,7 @@ $scopeAndStatus = explode(',', $type);
 $scope          = !empty($scopeAndStatus[0]) ? $scopeAndStatus[0] : '';
 $status         = !empty($scopeAndStatus[1]) ? $scopeAndStatus[1] : '';
 $viewName       = $scope == 'local'? \zget($products, $product->id) : $lang->testtask->all;
-jsVar('condition', "productID=$product->id&branch=$branch&type=$type&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
+jsVar('condition', "productID=$product->id&branch=$branch&type=$type&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1");
 jsVar('multipleSprints', $multipleSprints);
 
 $testMenuLink = createLink($this->app->rawModule, $this->app->rawMethod, array('productID' => $product->id, 'branch' => '{branch}', 'type' => '{type}'));
