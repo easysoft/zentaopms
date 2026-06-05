@@ -1209,9 +1209,9 @@ class programplanModel extends model
      *
      * @param  object $stage
      * @access public
-     * @return void
+     * @return bool
      */
-    public function rollbackStage(object $stage)
+    public function rollbackStage(object $stage): bool
     {
         $updateStage = new stdClass();
         $updateStage->name           = $stage->name;
@@ -1242,6 +1242,7 @@ class programplanModel extends model
         if($updateAttribute) $updateStage->attribute = $updateAttribute;
 
         $this->dao->update(TABLE_PROJECT)->data($updateStage)->where('id')->eq($stage->id)->exec();
+        if(dao::isError()) return false;
 
         if($oldStage->deleted == '1')
         {
@@ -1257,6 +1258,8 @@ class programplanModel extends model
             /* 恢复文档库。*/
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where('execution')->eq($stage->id)->exec();
         }
+
+        return true;
     }
 
     /**
@@ -1265,9 +1268,9 @@ class programplanModel extends model
      *
      * @param  object $task
      * @access public
-     * @return void
+     * @return bool
      */
-    public function rollbackTask(object $task)
+    public function rollbackTask(object $task): bool
     {
         $updateTask = new stdclass();
         $updateTask->story          = $task->story;
@@ -1303,5 +1306,54 @@ class programplanModel extends model
 
         $taskID = explode("-", $task->id);
         $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID[1])->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Rollback task relation.
+     * 回滚任务依赖关系。
+     *
+     * @param  int    $projectID
+     * @param  array  $relations
+     * @access public
+     * @return bool
+     */
+    public function rollbackTaskRelation(int $projectID, array $relations): bool
+    {
+        if(empty($relations))
+        {
+            $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->exec();
+            return !dao::isError();
+        }
+
+        $projectRelationIdList = $this->dao->select('id')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchPairs('id');
+        foreach($relations as $relation)
+        {
+            if(isset($projectRelationIdList[$relation->id])) unset($projectRelationIdList[$relation->id]);
+
+            list($sourceExecution, $sourceTaskID) = explode('-', $relation->source);
+            list($targetExecution, $targetTaskID) = explode('-', $relation->target);
+
+            /* 0-完成开始; 1-开始开始; 2-完成完成; 3-开始完成 */
+            $condition = array(0 => 'end',   1 => 'begin', 2 => 'end', 3 => 'begin');
+            $action    = array(0 => 'begin', 1 => 'begin', 2 => 'end', 3 => 'end');
+
+            $updateRelation = new stdclass();
+            $updateRelation->execution = "{$targetExecution},{$sourceExecution}";
+            $updateRelation->pretask   = $sourceTaskID;
+            $updateRelation->condition = $condition[$relation->type];
+            $updateRelation->task      = $targetTaskID;
+            $updateRelation->action    = $action[$relation->type];
+            $this->dao->update(TABLE_RELATIONOFTASKS)->data($updateRelation)->where('id')->eq($relation->id)->exec();
+            if(dao::isError()) return false;
+        }
+
+        if(!empty($projectRelationIdList))
+        {
+            $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('id')->in($projectRelationIdList)->exec();
+            if(dao::isError()) return false;
+        }
+
+        return true;
     }
 }

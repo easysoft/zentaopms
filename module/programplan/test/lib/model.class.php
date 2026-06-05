@@ -1059,4 +1059,24 @@ class programplanModelTest extends baseTest
         $taskID = explode("-", $task->id);
         return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID[1])->fetch();
     }
+
+    /**
+     * Test rollbackTaskRelation method.
+     *
+     * @param  int   $projectID
+     * @param  array $relations
+     * @access public
+     * @return array|false
+     */
+    public function rollbackTaskRelationTest(int $projectID, array $relations): array|false
+    {
+        $result = $this->instance->rollbackTaskRelation($projectID, $relations);
+
+        if(dao::isError()) return dao::getError();
+
+        $relations = $this->instance->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchAll();
+        $output    = array('result' => $result, 'count' => count($relations));
+        foreach($relations as $relation) $output[] = $relation;
+        return $output;
+    }
 }
