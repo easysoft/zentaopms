@@ -35,7 +35,7 @@ cid=19596
 - 字符串字段长度超过数据库设置，提示错误信息。第errors条的type属性 @『用户类型』长度应当不超过『30』，且大于『0』。
 - 数字字段类型不符合数据库设置，提示错误信息。第errors条的company属性 @『所属公司』应当是数字。
 - 日期字段类型不符合数据库设置，提示错误信息。第errors条的join属性 @『入职日期』应当为合法的日期。
-- 枚举字段类型不符合数据库设置，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 枚举字段类型不符合数据库设置，提示错误信息。第errors条的gender属性 @『性别』长度应当不超过『1』，且大于『0』。
 - 创建外部公司成功，用户名重复，返回 false。属性result @0
 - 创建外部公司成功，用户名重复，提示错误信息。第errors条的account属性 @『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 事务回滚成功，没有创建公司。 @0
@@ -60,13 +60,32 @@ cid=19596
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+global $tester;
+$tester->dao->delete()->from(TABLE_ACTION)->exec();
+$tester->dao->delete()->from(TABLE_ACTIONRECENT)->exec();
+$tester->dao->delete()->from(TABLE_USERGROUP)->exec();
+$tester->dao->delete()->from(TABLE_COMPANY)->exec();
+$tester->dao->delete()->from(TABLE_USER)->exec();
+$tester->dao->exec('ALTER TABLE ' . TABLE_ACTION . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_ACTIONRECENT . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_USERGROUP . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_COMPANY . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_USER . ' AUTO_INCREMENT = 1');
+
 zenData('user')->gen(1);
 zenData('company')->gen(1);
 zenData('usergroup')->gen(0);
 
+$companyID = $tester->dao->select('id')->from(TABLE_COMPANY)->orderBy('id')->fetch('id');
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq($companyID)->exec();
+
+$userID = $tester->dao->select('id')->from(TABLE_USER)->orderBy('id')->fetch('id');
+$tester->dao->update(TABLE_USER)->set('account')->eq('admin')->set('realname')->eq('admin')->set('password')->eq(md5('123456'))->set('role')->eq('qa')->set('deleted')->eq('0')->where('id')->eq($userID)->exec();
+
 su('admin');
 
 global $app;
+$app->company = $tester->dao->select('*')->from(TABLE_COMPANY)->where('id')->eq($companyID)->fetch();
 
 /* 安全配置相关功能在 checkPassword 单元测试用例中有详细测试，此处重置为默认值以减少对当前用例的影响。*/
 unset($config->safe->mode);
@@ -194,7 +213,7 @@ r($result) && p('result')         && e(0);                                      
 r($result) && p('errors:type')    && e('『用户类型』长度应当不超过『30』，且大于『0』。'); // 字符串字段长度超过数据库设置，提示错误信息。
 r($result) && p('errors:company') && e('『所属公司』应当是数字。');                        // 数字字段类型不符合数据库设置，提示错误信息。
 r($result) && p('errors:join')    && e('『入职日期』应当为合法的日期。');                  // 日期字段类型不符合数据库设置，提示错误信息。
-r($result) && p('errors:gender')  && e('『性别』不符合格式，应当为:『/f|m/』。');          // 枚举字段类型不符合数据库设置，提示错误信息。
+r($result) && p('errors:gender')  && e('『性别』长度应当不超过『1』，且大于『0』。');          // 枚举字段类型不符合数据库设置，提示错误信息。
 
 /* 检查事务回滚功能。*/
 $user12 = clone $template;
@@ -205,7 +224,7 @@ $result = $userTest->createTest($user12);
 r($result) && p('result')         && e(0);                                                                                             // 创建外部公司成功，用户名重复，返回 false。
 r($result) && p('errors:account') && e('『用户名』已经有『user1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 创建外部公司成功，用户名重复，提示错误信息。
 
-$company = $tester->dao->select('*')->from(TABLE_COMPANY)->where('name')->eq($user11->newCompany)->fetch();
+$company = $tester->dao->select('*')->from(TABLE_COMPANY)->where('name')->eq($user12->newCompany)->fetch();
 r($company) && p() && e(0); // 事务回滚成功，没有创建公司。
 
 /* 检查生成用户权限组。*/
