@@ -657,6 +657,7 @@ class programplan extends control
         foreach($targetVersion['data'] as $version)
         {
             if($version->type == 'plan') $this->programplan->rollbackStage($version);
+            if($version->type == 'task') $this->programplan->rollbackTask($version);
         }
 
         return $this->sendSuccess(array('load' => true));
