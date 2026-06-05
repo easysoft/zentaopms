@@ -45,7 +45,10 @@ foreach($pipelines as $pipeline)
             (
                 setClass('border px-4 h-12 flex items-center'),
                 span(setClass('font-bold'), "{$lang->ppm->pipeline}: {$pipeline->name}#{$pipeline->id}"),
-                $pipeline->status == 'success' ? label(setClass('success ml-4'), $lang->pipeline->execStatusList['success']) : label(setClass('danger ml-4'), $lang->pipeline->execStatusList[$pipeline->status]),
+                $pipeline->status == 'success' ? label(setClass('success ml-4'), $lang->pipeline->execStatusList['success']) : null,
+                in_array($pipeline->status, array('failure', 'error', 'declined')) ? label(setClass('danger ml-4'), $lang->pipeline->execStatusList[$pipeline->status]) : null,
+                in_array($pipeline->status, array('running', 'pending'))           ? label(setClass('secondary ml-4'), $lang->pipeline->execStatusList[$pipeline->status]) : null,
+                in_array($pipeline->status, array('skipped', 'blocked'))           ? label(setClass('grey ml-4'), $lang->pipeline->execStatusList[$pipeline->status]) : null,
                 $canViewExecution ? div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView), set::url('pipeline', 'execView', "id={$pipeline->id}&spaceID=0&repoID={$repoID}&type=repo"), set::target('_blank'))) : null
             )
         );
