@@ -656,9 +656,20 @@ class programplan extends control
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
         foreach($targetVersion['data'] as $version)
         {
-            if($version->type == 'plan') $this->programplan->rollbackStage($version);
-            if($version->type == 'task') $this->programplan->rollbackTask($version);
+            if($version->type == 'plan')
+            {
+                $result = $this->programplan->rollbackStage($version);
+                if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+            if($version->type == 'task')
+            {
+                $result = $this->programplan->rollbackTask($version);
+                if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
         }
+
+        $result = $this->programplan->rollbackTaskRelation($projectID, $targetVersion['links']);
+        if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         return $this->sendSuccess(array('load' => true));
     }
