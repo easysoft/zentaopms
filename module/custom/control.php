@@ -459,6 +459,14 @@ class custom extends control
         if($module == 'programplan' && $section == 'custom') $key = 'createFields';
         $customFields = zget(zget($this->config->$module, 'list', array()), $section . ucfirst($key), '');
         $showFields   = zget(zget($this->config->$module, $section, array()), $key, '');
+
+        /* 当恢复默认时，将后台对应操作的必填字段也加入到显示字段中，避免必填字段被隐藏。*/
+        $requiredMethod = str_replace('Fields', '', $key);
+        if(stripos($requiredMethod, 'batch') === 0) $requiredMethod = strtolower(substr($requiredMethod, 5));
+        if(!empty($this->config->$module->$requiredMethod->requiredFields))
+        {
+            $showFields = $showFields ? "{$showFields},{$this->config->$module->$requiredMethod->requiredFields}" : $this->config->$module->$requiredMethod->requiredFields;
+        }
         if($module == 'marketresearch') return print(js::reload('parent'));
         return $this->send(array('result' => 'success', 'key' => $key, 'callback' => 'loadCurrentPage', 'customFields' => $customFields, 'showFields' => $showFields));
     }
