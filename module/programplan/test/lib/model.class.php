@@ -1056,6 +1056,7 @@ class programplanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($task->id)->fetch();
+        $taskID = explode("-", $task->id);
+        return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID[1])->fetch();
     }
 }

@@ -1207,9 +1207,9 @@ class programplanModel extends model
      * Rollback stage.
      * 回滚阶段。
      *
-     * @param object  $stage
+     * @param  object $stage
      * @access public
-     * @return array
+     * @return void
      */
     public function rollbackStage(object $stage)
     {
@@ -1263,9 +1263,9 @@ class programplanModel extends model
      * Rollback task.
      * 回滚任务。
      *
-     * @param object  $task
+     * @param  object $task
      * @access public
-     * @return array
+     * @return void
      */
     public function rollbackTask(object $task)
     {
@@ -1301,6 +1301,7 @@ class programplanModel extends model
             $updateTask->name = preg_replace('/^#\d+\s+/', '', $taskName[1]);
         }
 
-        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($task->id)->exec();
+        $taskID = explode("-", $task->id);
+        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID[1])->exec();
     }
 }

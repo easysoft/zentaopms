@@ -34,34 +34,34 @@ $task->gen(10);
 $programplan = new programplanModelTest();
 
 $taskObj = new stdclass();
-$taskObj->id = 5;
-$taskObj->story = 1;
-$taskObj->begin = '2024-06-01';
-$taskObj->deadline = '2024-06-30';
-$taskObj->parent = 0;
-$taskObj->estimate = '12.5';
-$taskObj->consumed = '7.5';
-$taskObj->left = '5.0';
-$taskObj->rawStatus = 'doing';
-$taskObj->pri = 2;
-$taskObj->color = '#FF0000';
-$taskObj->mailto = 'admin,user1';
-$taskObj->keywords = '关键字';
-$taskObj->finishedBy = '';
-$taskObj->closedBy = '';
-$taskObj->closedDate = null;
-$taskObj->closedReason = '';
-$taskObj->canceledBy = '';
-$taskObj->canceledDate = null;
-$taskObj->activatedDate = null;
-$taskObj->taskType = '设计';
-$taskObj->text = '<span class="gantt_title">#5 回滚后的任务</span>';
+$taskObj->id             = '1-5';
+$taskObj->story          = 1;
+$taskObj->begin          = '2024-06-01';
+$taskObj->deadline       = '2024-06-30';
+$taskObj->parent         = 0;
+$taskObj->estimate       = '12.5';
+$taskObj->consumed       = '7.5';
+$taskObj->left           = '5.0';
+$taskObj->rawStatus      = 'doing';
+$taskObj->pri            = 2;
+$taskObj->color          = '#FF0000';
+$taskObj->mailto         = 'admin,user1';
+$taskObj->keywords       = '关键字';
+$taskObj->finishedBy     = '';
+$taskObj->closedBy       = '';
+$taskObj->closedDate     = null;
+$taskObj->closedReason   = '';
+$taskObj->canceledBy     = '';
+$taskObj->canceledDate   = null;
+$taskObj->activatedDate  = null;
+$taskObj->taskType       = '设计';
+$taskObj->text           = '<span class="gantt_title">#5 回滚后的任务</span>';
 
 $result = $programplan->rollbackTaskTest($taskObj);
-r($result) && p('name') && e('回滚后的任务');  // 正常回滚任务：验证name字段
-r($result) && p('status') && e('doing');      // 正常回滚任务：验证status字段
-r($result) && p('type') && e('design');       // 正常回滚任务：验证type字段
-r($result) && p('estStarted') && e('2024-06-01'); // 正常回滚任务：验证estStarted字段
-r($result) && p('deadline') && e('2024-06-30');   // 正常回滚任务：验证deadline字段
-r($result) && p('estimate') && e('12.50');    // 正常回滚任务：验证estimate字段
-r($result) && p('lastEditedBy') && e('admin'); // 正常回滚任务：验证lastEditedBy字段
+r($result) && p('name')         && e('回滚后的任务'); // 正常回滚任务：验证name字段
+r($result) && p('status')       && e('doing');        // 正常回滚任务：验证status字段
+r($result) && p('type')         && e('design');       // 正常回滚任务：验证type字段
+r($result) && p('estStarted')   && e('2024-06-01');   // 正常回滚任务：验证estStarted字段
+r($result) && p('deadline')     && e('2024-06-30');   // 正常回滚任务：验证deadline字段
+r($result) && p('estimate')     && e('12.50');        // 正常回滚任务：验证estimate字段
+r($result) && p('lastEditedBy') && e('admin');        // 正常回滚任务：验证lastEditedBy字段
