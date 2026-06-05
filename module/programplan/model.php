@@ -1213,8 +1213,6 @@ class programplanModel extends model
      */
     public function rollbackStage(object $stage): bool
     {
-        $this->dao->begin();
-
         $updateStage = new stdClass();
         $updateStage->name           = $stage->name;
         $updateStage->milestone      = $stage->milestonecode;
@@ -1244,13 +1242,7 @@ class programplanModel extends model
         if($updateAttribute) $updateStage->attribute = $updateAttribute;
 
         $this->dao->update(TABLE_PROJECT)->data($updateStage)->where('id')->eq($stage->id)->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
-
-        $this->dao->commit();
+        if(dao::isError()) return false;
 
         if($oldStage->deleted == '1')
         {
@@ -1280,8 +1272,6 @@ class programplanModel extends model
      */
     public function rollbackTask(object $task): bool
     {
-        $this->dao->begin();
-
         $updateTask = new stdclass();
         $updateTask->story          = $task->story;
         $updateTask->estStarted     = $task->begin;
@@ -1316,14 +1306,7 @@ class programplanModel extends model
 
         $taskID = explode("-", $task->id);
         $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID[1])->exec();
-        if(dao::isError())
-        {
-            $this->dao->rollback();
-            return false;
-        }
-
-        $this->dao->commit();
-        return true;
+        return !dao::isError();
     }
 
     /**
@@ -1337,19 +1320,10 @@ class programplanModel extends model
      */
     public function rollbackTaskRelation(int $projectID, array $relations): bool
     {
-        $this->dao->begin();
-
         if(empty($relations))
         {
             $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->exec();
-            if(dao::isError())
-            {
-                $this->dao->rollback();
-                return false;
-            }
-
-            $this->dao->commit();
-            return true;
+            return !dao::isError();
         }
 
         $projectRelationIdList = $this->dao->select('id')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchPairs('id');
@@ -1371,24 +1345,15 @@ class programplanModel extends model
             $updateRelation->task      = $targetTaskID;
             $updateRelation->action    = $action[$relation->type];
             $this->dao->update(TABLE_RELATIONOFTASKS)->data($updateRelation)->where('id')->eq($relation->id)->exec();
-            if(dao::isError())
-            {
-                $this->dao->rollback();
-                return false;
-            }
+            if(dao::isError()) return false;
         }
 
         if(!empty($projectRelationIdList))
         {
             $this->dao->delete()->from(TABLE_RELATIONOFTASKS)->where('id')->in($projectRelationIdList)->exec();
-            if(dao::isError())
-            {
-                $this->dao->rollback();
-                return false;
-            }
+            if(dao::isError()) return false;
         }
 
-        $this->dao->commit();
         return true;
     }
 }

@@ -653,24 +653,39 @@ class programplan extends control
         $tmpVersion->data     = json_encode($currentVersion);
         $this->dao->insert(TABLE_OBJECT)->data($tmpVersion)->exec();
 
+        $this->dao->begin();
+
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
         foreach($targetVersion['data'] as $version)
         {
             if($version->type == 'plan')
             {
                 $result = $this->programplan->rollbackStage($version);
-                if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(!$result)
+                {
+                    $this->dao->rollback();
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
             }
             if($version->type == 'task')
             {
                 $result = $this->programplan->rollbackTask($version);
-                if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(!$result)
+                {
+                    $this->dao->rollback();
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
             }
         }
 
         $result = $this->programplan->rollbackTaskRelation($projectID, $targetVersion['links']);
-        if(!$result) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(!$result)
+        {
+            $this->dao->rollback();
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
 
+        $this->dao->commit();
         return $this->sendSuccess(array('load' => true));
     }
 }
