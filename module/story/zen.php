@@ -452,7 +452,7 @@ class storyZen extends story
         $products  = array();
         $branches  = array();
 
-        if($objectID != 0)
+        if(!empty($objectID))
         {
             $onlyNoClosed = empty($this->config->CRProduct) ? 'noclosed' : '';
             $products     = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
