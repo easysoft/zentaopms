@@ -15,7 +15,7 @@ set::zui(true);
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
 
-$cmd  = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->upgrade->createWinFile : $lang->upgrade->createLinuxFile;
+$cmd  = helper::isWindows() ? $lang->upgrade->createWinFile : $lang->upgrade->createLinuxFile;
 $isEn = $app->getClientLang() == 'en';
 
 div

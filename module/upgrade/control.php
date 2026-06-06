@@ -174,7 +174,7 @@ class upgrade extends control
             return $this->display('upgrade', 'sqlfail');
         }
 
-        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $script  = $this->upgrade->getDeleteScriptPath();
         $command = $this->upgrade->deleteFiles($script);
         if($command) return $this->displayCommand($command);
 
@@ -594,7 +594,7 @@ class upgrade extends control
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
-        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $script  = $this->upgrade->getDeleteScriptPath();
         $command = $this->upgrade->removeEncryptedDir($script);
         if($command) return $this->displayCommand($command);
         if(is_file($script)) unlink($script);
@@ -832,7 +832,7 @@ class upgrade extends control
 
         if($files)
         {
-            $command = 'rm -f ' . implode(' ', $files);
+            $command = implode("\n", array_map(fn($file) => helper::buildDeleteCommand($file, false), $files));
             $tips    = $this->lang->upgrade->safeDeleteFile . ' ' . $this->lang->upgrade->execCommand;
             return $this->displayCommand($command, $tips, $referer);
         }
