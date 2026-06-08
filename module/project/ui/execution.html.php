@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('status',    $status);
+jsVar('browseType', $browseType);
 jsVar('projectID', $projectID);
 jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
@@ -23,7 +23,7 @@ jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 jsVar('confirmCreateStage', $lang->project->confirmCreateStage);
 
-$searchTask = strtolower($status) == 'bysearch';
+$searchTask = strtolower($browseType) == 'bysearch';
 
 $footToolbar = array();
 $canModify            = common::canModify('project', $project);
