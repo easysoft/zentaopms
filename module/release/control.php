@@ -87,11 +87,11 @@ class release extends control
         $sort = $orderBy;
         if(strpos($sort, 'branchName_') !== false) $sort = str_replace('branchName_', 'branch_', $sort);
 
-        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&browseType=bySearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&browseType=bysearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
-        $releaseQuery    = $browseType == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
+        $releaseQuery    = $browseType == 'bysearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
         $currentReleases = $this->release->getList($productID, $branch, $browseType, $sort, $releaseQuery, $pager);
         $children        = implode(',', array_column($currentReleases, 'releases'));
 
@@ -433,7 +433,7 @@ class release extends control
         $release = $this->release->getByID($releaseID);
         $this->commonAction($release->product);
 
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->releaseZen->buildLinkStorySearchForm($release, $queryID);
 
         $builds          = $this->loadModel('build')->getByList(explode(',', $release->build));
@@ -448,7 +448,7 @@ class release extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $excludeStoryIdList = $this->releaseZen->getExcludeStoryIdList($release);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $executionIdList, 'story', $excludeStoryIdList, 'draft,reviewing,changing', $pager);
         }
@@ -507,7 +507,7 @@ class release extends control
      * Link bugs.
      *
      * @param  int    $releaseID
-     * @param  string $browseType  bug|leftBug|bySearch
+     * @param  string $browseType  bug|leftBug|bysearch
      * @param  int    $param
      * @param  string $type        bug|leftBug
      * @param  int    $recTotal
@@ -532,7 +532,7 @@ class release extends control
         $this->commonAction($release->product);
 
         /* Build the search form. */
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
         $this->releaseZen->buildLinkBugSearchForm($release, $queryID, $type);
 
         /* Load pager. */
@@ -542,7 +542,7 @@ class release extends control
         $builds      = $this->loadModel('build')->getByList(explode(',', $release->build));
         $allBugs     = array();
         $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allBugs = $this->bug->getBySearch('bug', $release->product, $release->branch, 0, 0 , $queryID, $releaseBugs, 'id_desc', $pager);
         }

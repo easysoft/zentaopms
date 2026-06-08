@@ -78,11 +78,11 @@ class job extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $queryID   = $browseType == 'bySearch' ? $queryID : 0;
-        $actionURL = $this->createLink('job', 'browse', "repoID={$repoID}&browseType=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
+        $queryID   = $browseType == 'bysearch' ? $queryID : 0;
+        $actionURL = $this->createLink('job', 'browse', "repoID={$repoID}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
         $this->jobZen->buildSearchForm($this->config->job->search, $queryID, $actionURL);
 
-        $jobQuery  = $browseType == 'bySearch' ? $this->jobZen->getJobSearchQuery((int)$queryID) : '';
+        $jobQuery  = $browseType == 'bysearch' ? $this->jobZen->getJobSearchQuery((int)$queryID) : '';
         $jobList   = $this->jobZen->getJobList($repoID, $jobQuery, $orderBy, $pager);
         $pipelines = $this->loadModel('pipeline')->getPairs('jenkins,gitlab');
 

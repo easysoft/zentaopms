@@ -336,8 +336,8 @@ class project extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bysearch&queryID=myQueryID");
         $this->project->buildSearchForm($queryID, $actionURL);
 
         $programTitle = $this->loadModel('setting')->getItem("owner={$this->app->user->account}&module=project&key=programTitle");
@@ -448,7 +448,7 @@ class project extends control
             {
                 $productID = $this->loadModel('product')->getProductIDByProject($projectID, true);
                 $session   = $this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=lists", '', false, $projectID);
-                if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "status=undone&projectID=$projectID", '', false);
+                if(in_array($this->config->edition, array('max', 'ipd'))) $session = $this->createLink('project', 'execution', "browseType=undone&projectID=$projectID", '', false);
                 $this->session->set('projectPlanList', $session, 'project');
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('programplan', 'create', "projectID=$projectID&productID=0&planID=0&executionType=stage&from=projectCreate", '', false, $projectID)));
             }
@@ -795,7 +795,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function execution(string $status = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $queryID = 0)
+    public function execution(string $browseType = 'undone', int $projectID = 0, string $orderBy = 'order_asc', int $productID = 0, int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $queryID = 0)
     {
         $projects  = $this->project->getPairsByProgram();
         $projectID = $this->project->checkAccess($projectID, $projects);
@@ -837,14 +837,14 @@ class project extends control
         if($this->cookie->showTask)
         {
             /* Build the search form. */
-            $actionURL  = $this->createLink('project', 'execution', "status=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
+            $actionURL  = $this->createLink('project', 'execution', "browseType=bysearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&queryID=myQueryID");
             $executions = $this->execution->fetchExecutionList($projectID, 'all', $productID);
             $executions = $this->execution->getPairsByList(array_keys($executions));
             $this->execution->buildTaskSearchForm($projectID, $executions, $queryID, $actionURL, 'projectTask');
         }
 
         $this->view->title               = $this->lang->execution->allExecutions;
-        $this->view->executionStats      = $this->projectZen->getExecutionStats($status, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
+        $this->view->executionStats      = $this->projectZen->getExecutionStats($browseType, $projectID, isset($executions) ? array_keys($executions) : array(), $productID, $queryID, $sort, $pager);
         $this->view->productList         = array(0 => $this->lang->product->all) + $this->product->getProductPairsByProject($projectID, 'all', '', false);
         $this->view->productID           = $productID;
         $this->view->product             = $this->product->getByID($productID);
@@ -853,7 +853,7 @@ class project extends control
         $this->view->projects            = $projects;
         $this->view->pager               = $pager;
         $this->view->orderBy             = $orderBy;
-        $this->view->status              = $status;
+        $this->view->browseType          = $browseType;
         $this->view->users               = $this->loadModel('user')->getPairs('noletter');
         $this->view->isStage             = isset($project->model) && (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')));
         $this->view->avatarList          = $this->user->getAvatarPairs('');
@@ -879,7 +879,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug(int $projectID = 0, int $productID = 0, string $branchID = 'all', string $orderBy = 'status,id_desc', int $build = 0, string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $projectID = 0, int $productID = 0, string $branchID = 'all', string $orderBy = 'status,id_desc', int $build = 0, string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load models. */
         $this->loadModel('product');
@@ -892,8 +892,8 @@ class project extends control
         $projectID = (int)$projectID;
         $product   = $this->product->getById($productID);
         $project   = $this->project->getByID($projectID);
-        $type      = strtolower($type);
-        $products  = $this->product->getProducts($projectID);
+        $browseType = strtolower($browseType);
+        $products   = $this->product->getProducts($projectID);
 
         $this->session->set('currentProductType', !isset($product->type) ? 'normal' : $product->type);
         if($this->session->currentProductType != 'normal') $this->config->bug->dtable->fieldList['branch']['title'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
@@ -903,7 +903,7 @@ class project extends control
         if(!$project->hasProduct) $this->config->excludeSwitcherList[] = 'project-bug';
 
         /* 处理无产品项目、无迭代项目的bug搜索参数，构造搜索表单。 */
-        $this->projectZen->processBugSearchParams($project, $type, $param, $projectID, $productID, $branchID, $orderBy, $build, $products);
+        $this->projectZen->processBugSearchParams($project, $browseType, $param, $projectID, $productID, $branchID, $orderBy, $build, $products);
 
         /* team member pairs. */
         $memberPairs     = array();
@@ -916,10 +916,10 @@ class project extends control
         $this->projectZen->prepareBranchForBug($products, $productID);
 
         /* 准备模块数据。 */
-        $this->projectZen->prepareModuleForBug($productID, $projectID, $type, $param, $orderBy, $build, $branchID, $products);
+        $this->projectZen->prepareModuleForBug($productID, $projectID, $browseType, $param, $orderBy, $build, $branchID, $products);
 
         /* 构造必要的变量到视图。 */
-        $this->projectZen->buildBugView($productID, $projectID, $project, $type, $param, $orderBy, $build, $branchID, $products, $recTotal, $recPerPage, $pageID);
+        $this->projectZen->buildBugView($productID, $projectID, $project, $browseType, $param, $orderBy, $build, $branchID, $products, $recTotal, $recPerPage, $pageID);
     }
 
     /**

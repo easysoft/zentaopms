@@ -90,7 +90,7 @@ foreach($executions as $execution) $execution->nameCol = $execution->name;
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "browseType={$browseType}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName  = !empty($product) ? $product->name : '';
 $showProduct  = (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $project->stageBy == 'product') || in_array($project->model, array('agileplus', 'scrum'));
@@ -107,8 +107,8 @@ featureBar
     ) : null,
     set::module('project'),
     set::method('execution'),
-    set::current($status),
-    set::link('project', 'execution', "status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::current($browseType),
+    set::link('project', 'execution', "browseType={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li
     (
         checkbox
@@ -151,7 +151,7 @@ toolbar
         'text'        => $lang->programplan->exporting,
         'class'       => "ghost export",
         'data-toggle' => "modal",
-        'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project")
+        'url'         => createLink('execution', 'export', "status={$browseType}&productID={$productID}&orderBy={$orderBy}&from=project")
     ))) : null,
     $canModifyProject && common::hasPriv('programplan', 'create') && $isStage && empty($product->deleted) ? item(set(array
     (
@@ -197,8 +197,8 @@ dtable
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::footToolbar($footToolbar),
     set::orderBy($orderBy),
-    set::sortLink(createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
+    set::sortLink(createLink('project', 'execution', "browseType={$browseType}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "browseType={$browseType}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
     set::emptyTip(!$searchTask ? $lang->execution->noExecution : $lang->task->noTask),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
     set::createLink($canCreateExecution && !$searchTask && !$hasFrozenExecutions ? $createLink : ''),

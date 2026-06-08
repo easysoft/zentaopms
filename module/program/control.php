@@ -47,7 +47,7 @@ class program extends control
         $PMList   = $this->programZen->getPMListByPrograms($programs);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('program', 'browse', "browseType=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $actionURL = $this->createLink('program', 'browse', "browseType=bysearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 

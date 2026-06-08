@@ -13,9 +13,9 @@ namespace zin;
 /* zin: Define the set::module('bug') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
-    set::linkParams("executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build={$buildID}&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    li(searchToggle(set::module('executionBug'), set::open($type == 'bysearch')))
+    set::current($browseType),
+    set::linkParams("executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build={$buildID}&browseType={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    li(searchToggle(set::module('executionBug'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -98,11 +98,11 @@ dtable
     set::severityList($lang->bug->severityList),
     set::checkable($canBatchAssignTo),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={name}_{sortType}&build=$buildID&browseType=$browseType&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar(!empty($footToolbar) ? $footToolbar : null),
     set::customCols(true),
     set::footPager(
-        usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
+        usePager(array('linkCreator' => helper::createLink('execution', 'bug', "executionID={$execution->id}&productID={$productID}&branch={$branchID}&orderBy={$orderBy}&build=$buildID&browseType=$browseType&param=$param&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}")))
     ),
     set::emptyTip($lang->bug->notice->noBug),
     set::createTip($lang->bug->create),

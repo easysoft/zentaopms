@@ -257,7 +257,7 @@ class testsuiteModel extends model
             }
         }
 
-        $query = $browseType == 'bySearch' ? $this->session->testsuiteQuery : ' 1 = 1';
+        $query = $browseType == 'bysearch' ? $this->session->testsuiteQuery : ' 1 = 1';
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false) $query .= " AND `product` = {$suite->product}";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);

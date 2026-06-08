@@ -73,7 +73,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $browseType all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $browseType all|bysearch|HLDS|DDS|DBDS|ADS
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -94,13 +94,13 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
-        $queryID       = $browseType == 'bySearch' ? $param : 0;
+        $queryID       = $browseType == 'bysearch' ? $param : 0;
 
         /* Build Search Form. */
         $this->config->design->search['params']['story']['values'] = $stories;
         $this->config->design->search['params']['type']['values']  = $this->lang->design->typeList;
 
-        $this->config->design->search['actionURL'] = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&browseType=bySearch&queryID=myQueryID");
+        $this->config->design->search['actionURL'] = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&browseType=bysearch&queryID=myQueryID");
         $this->config->design->search['queryID']   = $queryID;
         $this->loadModel('search')->setSearchParams($this->config->design->search);
 
@@ -150,7 +150,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @access public
      * @return void
      */
@@ -197,7 +197,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @access public
      * @return void
      */

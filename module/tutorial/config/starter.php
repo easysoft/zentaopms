@@ -245,7 +245,7 @@ $starter->tasks['manageTeam']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'title'  => $lang->tutorial->starter->manageTeam->step3->name,
     'desc'   => $lang->tutorial->starter->manageTeam->step3->desc
 );
@@ -307,7 +307,7 @@ $starter->tasks['createProjectExecution']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'execution',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'title'  => $lang->tutorial->starter->createProjectExecution->step3->name,
     'desc'   => $lang->tutorial->starter->createProjectExecution->step3->desc
 );
@@ -316,7 +316,7 @@ $starter->tasks['createProjectExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainMenu #actionBar a.create-execution-btn',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'title'  => $lang->tutorial->starter->createProjectExecution->step4->name,
     'desc'   => $lang->tutorial->starter->createProjectExecution->step4->desc
 );

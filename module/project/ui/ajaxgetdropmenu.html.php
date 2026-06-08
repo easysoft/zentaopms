@@ -89,7 +89,7 @@ elseif(!empty($project->isTpl))
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
             $item['keys']     = zget($projectPinyinNames, $project->name, '');
             $item['involved'] = isset($involvedProjects[$project->id]);
-            $item['url']      = helper::createLink('project', 'execution', "status=undone&projectID={$project->id}");
+            $item['url']      = helper::createLink('project', 'execution', "browseType=undone&projectID={$project->id}");
 
             $data[] = $item;
         }

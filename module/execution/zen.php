@@ -793,7 +793,7 @@ class executionZen extends execution
     {
         $project = $this->loadModel('project')->getByID($execution->project);
 
-        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$execution->id&browseType=bySearch&param=myQueryID");
+        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$execution->id&browseType=bysearch&param=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;
         if(!empty($products))
         {
@@ -1675,7 +1675,7 @@ class executionZen extends execution
      * Set the cookie and session.
      *
      * @param  string    $executionID
-     * @param  string    $type        all|byModule|byProduct|byBranch|bySearch
+     * @param  string    $type        all|bymodule|byproduct|bybranch|bysearch
      * @param  string    $param
      * @param  string    $orderBy
      * @access protected
@@ -2283,7 +2283,7 @@ class executionZen extends execution
 
         if(!empty($projectID) and $model == 'kanban')
         {
-            if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "browseType=all&projectID=$projectID");
             return inlink('kanban', "executionID=$executionID");
         }
         $execution = $this->execution->fetchByID($executionID);

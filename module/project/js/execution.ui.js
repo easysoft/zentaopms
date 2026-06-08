@@ -5,7 +5,7 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
 
     if(show == 0 && status == 'bysearch')
     {
-        loadPage($.createLink('project', 'execution', 'status=undone&projectID=' + projectID));
+        loadPage($.createLink('project', 'execution', 'browseType=undone&projectID=' + projectID));
     }
     else
     {

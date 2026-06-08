@@ -1093,8 +1093,9 @@ class projectModel extends model
             $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
         }
 
+        $objectIDField                            = $type == 'project' ? 'projectID' : 'executionID';
         $this->config->build->search['module']    = $type == 'project' ? 'projectBuild' : 'executionBuild';
-        $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "{$objectIDField}=$projectID&browseType=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = (int)$queryID;
         $this->config->build->search['params']['product']['values'] = $products;
         $this->config->build->search['params']['system']['values']  = $this->loadModel('system')->getPairs($queryID ? 0 : (int)$productID, '0');
