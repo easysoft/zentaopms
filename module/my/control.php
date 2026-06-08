@@ -1306,7 +1306,7 @@ class my extends control
         $menu        = $this->flowZen->buildDtableMenu($flow->module);
         $actions     = $this->flowZen->buildDtableActions($flow->module, $flow->navigator);
         $cols        = $this->flow->buildDtableCols($fields, $menu, $actions);
-        $footToolbar = $this->flowZen->buildDtableFootToolbar($flow->module);
+        $footToolbar = $this->flow->buildDtableFootToolbar($flow->module);
 
         $this->app->rawModule = 'my'; // 切换回my模块
 
