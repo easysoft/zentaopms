@@ -321,7 +321,7 @@ class formPanel extends panel
         list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
         $data         = $this->getData();
         $fields       = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
-        $dittoControl = array('input', 'picker', 'date', 'datetime');
+        $dittoControl = array('input', 'picker', 'datePicker', 'datetimePicker');
 
         $formBatchItem = array();
         foreach($fields as $field)
@@ -335,7 +335,7 @@ class formPanel extends panel
                 set::required($field->required),
                 set::control($field->control),
                 set::items($field->items),
-                set::ditto(in_array($field->control, $dittoControl) ? $field->ditto : false),
+                set::ditto(in_array(zget($field->control, 'control', 'input'), $dittoControl) ? $field->ditto : false),
                 set::width('200px'),
                 set::value($value),
                 set::placeholder($field->placeholder)
