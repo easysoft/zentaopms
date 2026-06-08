@@ -1276,7 +1276,6 @@ class programplanModel extends model
         $updateTask->story          = $task->story;
         $updateTask->estStarted     = $task->begin;
         $updateTask->deadline       = $task->deadline;
-        $updateTask->parent         = $task->parent;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
@@ -1297,7 +1296,8 @@ class programplanModel extends model
         $updateTask->deleted        = 0;
 
         $this->app->loadLang('task');
-        $updateTask->type = array_search($task->taskType, $this->lang->task->typeList, true);
+        $updateTask->type   = array_search($task->taskType, $this->lang->task->typeList, true);
+        $updateTask->parent = strpos($task->parent, '-') !== false ? end(explode('-', $task->parent)) : $task->parent;
 
         if(preg_match('/<span[^>]*class=[\'"]gantt_title[\'"]>(.+?)<\/span>/', $task->text, $taskName))
         {
@@ -1354,6 +1354,66 @@ class programplanModel extends model
             if(dao::isError()) return false;
         }
 
+        return true;
+    }
+
+    /**
+     * Delete extra stage and task.
+     * 删除多余的阶段和任务。
+     *
+     * @param  array  $stages
+     * @param  array  $tasks
+     * @access public
+     * @return bool
+     */
+    public function deleteExtraStageAndTask(array $stages, array $tasks): bool
+    {
+        if(empty($stages) && empty($tasks)) return true;
+
+        /* 删除回滚版本中没有的阶段。*/
+        if(!empty($stages))
+        {
+            foreach($stages as $stageID)
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
+                if(dao::isError()) return false;
+
+                $this->loadModel('execution')->updateUserView($stageID);
+            }
+        }
+
+        /* 删除回滚版本中没有的任务。*/
+        if(!empty($tasks))
+        {
+            $this->loadModel('task');
+            $this->loadModel('story');
+            foreach($tasks as $taskID)
+            {
+                $task = $this->task->fetchByID($taskID);
+                if($task->isParent)
+                {
+                    $childIdList = $this->task->getAllChildId($taskID, false);
+                    $childTasks  = $this->task->getByIdList($childIdList);
+                    foreach($childTasks as $childID => $childTask)
+                    {
+                        if(!isset($tasks[$childID])) continue;
+                        if(strpos(",{$childTask->path},", ",$taskID,") === false) continue;
+
+                        $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($childID)->exec();
+                        if(dao::isError()) return false;
+
+                        if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
+                        if($childTask->story) $this->story->setStage($childTask->story);
+                    }
+                }
+
+                $this->task->delete(TABLE_TASK, $taskID);
+                if(dao::isError()) return false;
+
+                if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
+                if($task->story) $this->story->setStage($task->story);
+            }
+        }
         return true;
     }
 }

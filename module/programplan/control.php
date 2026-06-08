@@ -627,13 +627,17 @@ class programplan extends control
     {
         $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
         $minPlanBegin = $maxPlanEnd = '';
+        $currentStages = $currentTasks = array();
         foreach($currentVersion['data'] as $version)
         {
             if($version->type == 'plan')
             {
                 if(empty($minPlanBegin) || $version->begin < $minPlanBegin) $minPlanBegin = $version->begin;
                 if(empty($maxPlanEnd) || $version->deadline > $maxPlanEnd) $maxPlanEnd = $version->deadline;
+                $currentStages[$version->id] = $version->id;
             }
+
+            if($version->type == 'task') $currentTasks[$version->id] = $version->id;
 
             $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
         }
@@ -656,29 +660,45 @@ class programplan extends control
         $this->dao->begin();
 
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
-        foreach($targetVersion['data'] as $version)
+        $targetData    = $targetVersion['data'] ?? array();
+        foreach($targetData as $version)
         {
             if($version->type == 'plan')
             {
+                /* 回滚阶段。*/
                 $result = $this->programplan->rollbackStage($version);
                 if(!$result)
                 {
                     $this->dao->rollback();
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
+
+                if(isset($currentStages[$version->id])) unset($currentStages[$version->id]);
             }
             if($version->type == 'task')
             {
+                /* 回滚任务。*/
                 $result = $this->programplan->rollbackTask($version);
                 if(!$result)
                 {
                     $this->dao->rollback();
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
+
+                if(isset($currentTasks[$version->id])) unset($currentTasks[$version->id]);
             }
         }
 
-        $result = $this->programplan->rollbackTaskRelation($projectID, $targetVersion['links']);
+        /* 回滚任务依赖关系。*/
+        $result = $this->programplan->rollbackTaskRelation($projectID, $targetVersion['links'] ?? array());
+        if(!$result)
+        {
+            $this->dao->rollback();
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        /* 删除回滚版本中没有的阶段和任务。*/
+        $result = $this->programplan->deleteExtraStageAndTask($currentStages, $currentTasks);
         if(!$result)
         {
             $this->dao->rollback();
