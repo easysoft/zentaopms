@@ -391,6 +391,7 @@ $config->ajaxDependencies['story.ajaxgetexecutionstories']                    = 
 $config->ajaxDependencies['story.ajaxgetgrade']                               = ['story.create', 'story.edit', 'story.batchcreate'];
 $config->ajaxDependencies['story.ajaxgetinfo']                                = ['task.batchedit', 'task.create', 'task.edit', 'task.batchcreate', 'execution.kanban'];
 $config->ajaxDependencies['story.ajaxgetproductstories']                      = ['bug.edit', 'testcase.batchedit', 'testcase.showimport', 'testcase.create', 'testcase.edit'];
+$config->ajaxDependencies['story.ajaxgetcasestories']                         = ['testcase.create', 'testcase.edit'];
 $config->ajaxDependencies['story.ajaxrelievetwins']                           = 'story.edit';
 $config->ajaxDependencies['system.ajaxcnemetrics']                            = 'system.dashboard';
 $config->ajaxDependencies['system.ajaxdbauthurl']                             = 'system.dblist';
