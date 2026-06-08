@@ -70,7 +70,7 @@ class testtaskZen extends testtask
         $searchConfig = $this->config->testcase->search;
         $searchConfig['module']    = 'testtask';
         $searchConfig['queryID']   = $queryID;
-        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bySearch&queryID=myQueryID");
+        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bysearch&queryID=myQueryID");
 
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();

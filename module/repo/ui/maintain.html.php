@@ -65,7 +65,7 @@ if(empty($config->repo->maintain->showRepoPath))
 if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo.visit';
 
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
-$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bysearch&param={queryID}");
 
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
@@ -90,7 +90,7 @@ foreach($repos as $repo)
 (
     set::current('all'),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
+    li(searchToggle(set::module('repo'), set::open($type == 'bysearch')))
 );
 if($config->inCompose && empty($repoServers))
 {

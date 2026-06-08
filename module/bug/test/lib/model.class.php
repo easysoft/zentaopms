@@ -416,7 +416,7 @@ class bugModelTest extends baseTest
      */
     public function getUserBugsTest(string $account, string $type = 'assignedTo', int $limit = 0, int $executionID = 0, int $queryID = 0, string $rawMethod = 'work', string|bool $query = false): array|int
     {
-        if($type == 'bySearch')
+        if($type == 'bysearch')
         {
             $moduleName = $rawMethod == 'work' ? 'workBug' : 'contributeBug';
             $queryName  = $moduleName . 'Query';

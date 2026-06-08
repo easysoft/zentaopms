@@ -1463,7 +1463,7 @@ class story extends control
      * @param  int    $storyID
      * @param  string $type          link|remove
      * @param  int    $linkedStoryID
-     * @param  string $browseType    ''|bySearch
+     * @param  string $browseType    ''|bysearch
      * @param  int    $queryID       0|
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1495,7 +1495,7 @@ class story extends control
         $products = $this->product->getPairs('', 0, '', 'all');
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bysearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, 'all', (string)$story->branch);
 
         /* Load pager. */

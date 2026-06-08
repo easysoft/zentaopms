@@ -23,7 +23,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("mode={$mode}&browseType={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($browseType == 'bysearch')))
 );
 
 $viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';

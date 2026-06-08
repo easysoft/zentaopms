@@ -1612,7 +1612,7 @@ class actionModel extends model
             {
                 $moduleName = 'execution';
                 $methodName = 'gantt';
-                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bySearch=0&param=&version={$ganttversion->id}";
+                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bysearch=0&param=&version={$ganttversion->id}";
             }
         }
 

@@ -57,7 +57,7 @@ class compileModel extends model
     public function getList(int $repoID, int $jobID, string $browseType = '', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $compileQuery = '';
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $query = $this->loadModel('search')->getQuery($queryID);
             if($query)

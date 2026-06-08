@@ -160,7 +160,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("browseType={key}&orderBy={$orderBy}"),
-    li(searchToggle(set::module('program'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module('program'), set::open($browseType == 'bysearch')))
 );
 
 $canCreateProject = hasPriv('project', 'create');

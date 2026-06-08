@@ -23,7 +23,7 @@ featurebar
 (
     set::current($browseType),
     set::linkParams("mode=bug&browseType={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module($this->app->rawMethod . 'Bug'), set::open($browseType == 'bysearch')))
 );
 
 $canBatchEdit     = common::hasPriv('bug', 'batchEdit')    && $browseType == 'assignedTo';
@@ -33,7 +33,7 @@ $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
 $canBatchAction   = $canBatchEdit || $canBatchConfirm || $canBatchClose || $canBatchAssignTo;
 
 $currentBrowseType = $browseType;
-if($browseType == 'bySearch') $browseType = $this->session->myBugType;
+if($browseType == 'bysearch') $browseType = $this->session->myBugType;
 
 if($browseType == 'openedBy')
 {

@@ -36,7 +36,7 @@ class host extends control
 
         /* Build the search form. */
         $param     = (int)$param;
-        $actionURL = $this->createLink('host', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('host', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->config->host->search['actionURL'] = $actionURL;
         $this->config->host->search['queryID']   = $param;
         $this->config->host->search['onMenuBar'] = 'no';

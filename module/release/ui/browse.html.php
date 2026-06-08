@@ -82,7 +82,7 @@ featureBar
 
 if($isFromDoc || $isFromAI) div(setID('docSearchForm'));
 
-$searchBrowseLink = createLink('release', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}");
+$searchBrowseLink = createLink('release', 'browse', "productID={$product->id}&branch={$branch}&browseType=bysearch&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}");
 
 /* zin: Define the toolbar on main menu. */
 $canCreateRelease = hasPriv('release', 'create') && common::canModify('product', $product);

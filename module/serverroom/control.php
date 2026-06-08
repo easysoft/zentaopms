@@ -35,7 +35,7 @@ class serverroom extends control
         $serverRoomList = $this->serverroom->getList($browseType, $param, $orderBy, $pager);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('serverroom', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('serverroom', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->config->serverroom->search['actionURL'] = $actionURL;
         $this->config->serverroom->search['queryID']   = $param;
         $this->config->serverroom->search['onMenuBar'] = 'no';

@@ -72,7 +72,7 @@ $lang->extension->obtainOfficial[2] = '官方认证';
 $lang->extension->byDownloads   = '最多下载';
 $lang->extension->byAddedTime   = '最新添加';
 $lang->extension->byUpdatedTime = '最近更新';
-$lang->extension->bySearch      = '搜索';
+$lang->extension->bysearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
 
 $lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;

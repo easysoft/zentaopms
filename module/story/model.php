@@ -2345,14 +2345,14 @@ class storyModel extends model
      * Get the stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $browseType bySearch
+     * @param  string  $browseType bysearch
      * @param  int     $queryID
      * @param  object  $pager
      * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
+    public function getStories2Link(int $storyID, string $browseType = 'bysearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
     {
         $story    = $this->getById($storyID);
         $excludes = $this->storyTao->getRelation($storyID, $story->type);
@@ -2361,7 +2361,7 @@ class storyModel extends model
         $excludes[$storyID] = $storyID;
 
         $stories2Link = array();
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, $orderBy, 0, 'all', $excludes, '', $pager);
         }

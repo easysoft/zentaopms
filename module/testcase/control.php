@@ -122,7 +122,7 @@ class testcase extends control
         $projectParam   = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
         if($from == 'doc' || $from == 'ai') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
-        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bysearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
         $this->testcaseZen->assignCasesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
@@ -927,7 +927,7 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->testcaseZen->buildLinkCasesSearchForm($case, $queryID);
 
         /* 获取可关联的用例。*/
@@ -973,7 +973,7 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->testcaseZen->buildLinkBugsSearchForm($case, $queryID);
 
         /* 获取关联的bug。*/

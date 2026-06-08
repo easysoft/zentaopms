@@ -25,7 +25,7 @@ featureBar
 (
     set::current('job'),
     set::link($this->createLink('{key}', 'browse', "repoID=$repoID")),
-    div(searchToggle(set::module('job'), set::open($browseType == 'bySearch')))
+    div(searchToggle(set::module('job'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

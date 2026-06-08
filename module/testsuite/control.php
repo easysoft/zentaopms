@@ -326,7 +326,7 @@ class testsuite extends control
         $this->config->testcase->search['params']['story']['values']  = array('' => '') + $this->testsuite->getCaseLinkedStories($productID);
 
         $this->config->testcase->search['module']    = 'testsuite';
-        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&browseType=bySearch&param=myQueryID");
+        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&browseType=bysearch&param=myQueryID");
 
         $scene = $this->testcase->getSceneMenu($productID);
         $this->config->testcase->search['params']['scene']['values'] = $scene;

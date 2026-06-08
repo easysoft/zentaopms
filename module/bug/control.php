@@ -141,7 +141,7 @@ class bug extends control
         list($moduleID, $queryID, $realOrderBy, $pager) = $this->bugZen->prepareBrowseParams($browseType, $param, $orderBy, $recTotal, $recPerPage, $pageID);
         if(!isset($modules[$moduleID])) $moduleID = 0;
 
-        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $actionURL = $this->createLink('bug', 'browse', "productID=$productID&branch=$branch&browseType=bysearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->bugZen->buildBrowseSearchForm($productID, $branch, $queryID, $actionURL);
 
         $executions = $this->loadModel('execution')->fetchPairs($this->projectID, 'all', false);
@@ -775,7 +775,7 @@ class bug extends control
      * Link related bugs.
      *
      * @param  int    $bugID
-     * @param  string $bySearch
+     * @param  string $bysearch
      * @param  string $excludeBugs
      * @param  int    $queryID
      * @param  int    $recTotal
@@ -784,10 +784,10 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function linkBugs(int $bugID, string $bySearch = 'false', string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function linkBugs(int $bugID, string $bysearch = 'false', string $excludeBugs = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $bug      = $this->bug->getByID($bugID);
-        $bySearch = $bySearch === 'true';
+        $bysearch = $bysearch === 'true';
 
         /* 检查 bug 所属执行的权限。*/
         /* Check privilege of bug 所属执行的权限。*/
@@ -804,7 +804,7 @@ class bug extends control
         /* Assign. */
         $this->view->title     = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title {$this->lang->dash} " . $this->products[$bug->product];
         $this->view->bug       = $bug;
-        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bySearch, $excludeBugs, $queryID, $pager);
+        $this->view->bugs2Link = $this->bug->getBugs2Link($bugID, $bysearch, $excludeBugs, $queryID, $pager);
         $this->view->users     = $this->user->getPairs('noletter');
         $this->view->pager     = $pager;
         $this->display();

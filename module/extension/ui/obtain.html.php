@@ -19,7 +19,7 @@ $searchForm = div
         (
             set::name('key'),
             set::value($this->post->key ? $this->post->key : ''),
-            set::placeholder($lang->extension->bySearch)
+            set::placeholder($lang->extension->bysearch)
         ),
         span
         (

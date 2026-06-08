@@ -98,7 +98,7 @@ class repoModel extends model
      */
     public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
-        $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
+        $repoQuery = $type == 'bysearch' ? $this->repoTao->processSearchQuery($param) : '';
         $repos     = $this->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
 
         /* Get products. */

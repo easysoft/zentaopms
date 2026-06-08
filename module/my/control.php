@@ -404,7 +404,7 @@ class my extends control
     public function task(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
-        if($browseType != 'bySearch')            $this->session->set('myTaskType', $browseType);
+        if($browseType != 'bysearch')            $this->session->set('myTaskType', $browseType);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
@@ -418,12 +418,12 @@ class my extends control
 
         /* Get tasks. */
         $this->loadModel('task');
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
         if($browseType == 'assignedBy')
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'task');
         }
-        elseif($browseType == 'bySearch')
+        elseif($browseType == 'bysearch')
         {
             $tasks = $this->my->getTasksBySearch($this->app->user->account, 0, $pager, $sort, $queryID);
         }
@@ -434,7 +434,7 @@ class my extends control
         $summary = $this->loadModel('execution')->summary($tasks);
         $tasks   = $this->myZen->buildTaskData($tasks);
 
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bysearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL, $this->app->rawMethod . 'Task');
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -470,8 +470,8 @@ class my extends control
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        $queryID  = $browseType == 'bySearch' ? (int)$param : 0;
-        if($browseType != 'bySearch')            $this->session->set('myBugType', $browseType);
+        $queryID  = $browseType == 'bysearch' ? (int)$param : 0;
+        if($browseType != 'bysearch')            $this->session->set('myBugType', $browseType);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
@@ -493,7 +493,7 @@ class my extends control
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bysearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -675,10 +675,10 @@ class my extends control
 
         /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
         $docs    = $this->loadModel('doc')->getDocsByBrowseType($browseType, $queryID, 0, $sort, $pager);
 
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bysearch&queryID=myQueryID");
         $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
 
         /* Assign. */

@@ -488,7 +488,7 @@ class docModel extends model
      * 通过类型获取文档列表数据。
      * Get doc list data by browse type.
      *
-     * @param  string $browseType all|bySearch|openedbyme|editedbyme|byediteddate|collectedbyme
+     * @param  string $browseType all|bysearch|openedbyme|editedbyme|byediteddate|collectedbyme
      * @param  int    $queryID
      * @param  int    $moduleID
      * @param  string $sort
@@ -503,7 +503,7 @@ class docModel extends model
         $allLibs          = $this->getLibs('all');
         $allLibIDList     = array_keys($allLibs);
         $hasPrivDocIdList = $this->getPrivDocs($allLibIDList, $moduleID);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $docs = $this->getMyDocListBySearch($queryID, $hasPrivDocIdList, $allLibIDList, $sort, $pager);
         }
@@ -525,7 +525,7 @@ class docModel extends model
         }
 
         if(empty($docs)) return array();
-        if(!in_array($browseType, array('bySearch', 'openedbyme', 'editedbyme'))) return $this->processCollector($docs);
+        if(!in_array($browseType, array('bysearch', 'openedbyme', 'editedbyme'))) return $this->processCollector($docs);
 
         $objects = array();
         list($objects['project'], $objects['execution'], $objects['product']) = $this->getObjectsByDoc(array_keys($docs));
@@ -2731,7 +2731,7 @@ class docModel extends model
             ->beginIF($storyIdList)->orWhere("(objectType = 'story' and objectID in ($storyIdList))")->fi()
             ->fi()
             ->markRight(1)
-            ->beginIF($browseType == 'bySearch')->andWhere("($docFileQuery)")->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere("($docFileQuery)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);

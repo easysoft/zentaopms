@@ -756,7 +756,7 @@ class program extends control
             $programLines[$productLine->root][$productLine->id] = $productLine->name;
         }
 
-        $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $actionURL = $this->createLink('program', 'productview', "browseType=bysearch&orderBy=order_asc&queryID=myQueryID");
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 

@@ -91,7 +91,7 @@ class requirement extends control
      * @param  int    $storyID
      * @param  string $type          linkStories|linkRelateUR|linkRelateSR
      * @param  int    $linkedStoryID
-     * @param  string $browseType    ''|bySearch
+     * @param  string $browseType    ''|bysearch
      * @param  int    $queryID
      * @access public
      * @return void

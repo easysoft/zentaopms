@@ -210,7 +210,7 @@ class testcaseZen extends testcase
         if(empty($branches)) $canImportModules[0] = $this->testcase->getCanImportedModules($productID, $libID, 0, 'items', $cases);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bysearch&queryID=myQueryID");
 
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['onMenuBar'] = 'no';
@@ -2467,7 +2467,7 @@ class testcaseZen extends testcase
      */
     protected function buildLinkCasesSearchForm(object $case, int $queryID): void
     {
-        $actionURL = $this->createLink('testcase', 'linkCases', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID={$case->id}&browseType=bysearch&queryID=myQueryID", '', true);
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
@@ -2487,7 +2487,7 @@ class testcaseZen extends testcase
      */
     protected function buildLinkBugsSearchForm(object $case, int $queryID): void
     {
-        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType=bysearch&queryID=myQueryID", '', true);
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;

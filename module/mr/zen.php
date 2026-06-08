@@ -103,7 +103,7 @@ class mrZen extends mr
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
 
-        $this->config->product->search['actionURL']        = $this->createLink($this->app->rawModule, 'linkStory', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->product->search['actionURL']        = $this->createLink($this->app->rawModule, 'linkStory', "MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->product->search['queryID']          = $queryID;
         $this->config->product->search['style']            = 'simple';
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
@@ -136,7 +136,7 @@ class mrZen extends mr
     {
         if(empty($this->product)) $this->loadModel('product');
 
-        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'linkBug', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'linkBug', "MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
 
@@ -172,7 +172,7 @@ class mrZen extends mr
     protected function buildLinkTaskSearchForm(int $MRID, int $repoID, string $orderBy, int $queryID, array $productExecutions)
     {
         $this->config->execution->search['module']                        = 'mrTask';
-        $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}");
+        $this->config->execution->search['actionURL']                     = $this->createLink($this->app->rawModule, 'linkTask', "MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
         $this->config->execution->search['queryID']                       = $queryID;
         $this->config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
 

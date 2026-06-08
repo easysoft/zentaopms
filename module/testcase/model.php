@@ -739,9 +739,9 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCases2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
+    public function getCases2Link(int $caseID, string $browseType = 'bysearch', int $queryID = 0): array
     {
-        if($browseType != 'bySearch') return array();
+        if($browseType != 'bysearch') return array();
 
         $case       = $this->getByID($caseID);
         $cases2Link = $this->getBySearch($case->product, $case->branch, (int)$queryID, $auto = 'no', $orderBy = 'id');
@@ -764,9 +764,9 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0, string $orderBy = 'id_asc'): array
+    public function getBugs2Link(int $caseID, string $browseType = 'bysearch', int $queryID = 0, string $orderBy = 'id_asc'): array
     {
-        if($browseType != 'bySearch') return array();
+        if($browseType != 'bysearch') return array();
 
         $case      = $this->getByID($caseID);
         $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', $orderBy);

@@ -37,7 +37,7 @@ $searchConfig['params']['status']['operator'] = '=';
 $searchConfig['params']['status']['control']  = 'select';
 $searchConfig['params']['status']['value']    = array('active' => 'Active', 'closed' => 'Closed');
 $searchConfig['onMenuBar'] = 'yes';
-$searchConfig['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bySearch&queryID=myQueryID';
+$searchConfig['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bysearch&queryID=myQueryID';
 $searchConfig['queryID']   = 0;
 
 $search = new searchModelTest();
@@ -96,7 +96,7 @@ $searchConfig2['module'] = 'bug';
 $searchConfig2['fields'] = array('title' => 'Bug Title');
 $searchConfig2['params'] = array('title' => array('operator' => 'include', 'control' => 'input', 'value' => ''));
 $searchConfig2['onMenuBar'] = 'yes';
-$searchConfig2['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bySearch&queryID=myQueryID';
+$searchConfig2['actionURL'] = '/index.php?m=bug&f=browse&productID=110&branch=0&browseType=bysearch&queryID=myQueryID';
 $searchConfig2['queryID'] = 0;
 
 $search2 = new searchModelTest();

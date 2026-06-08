@@ -184,7 +184,7 @@ $lang->testcase->openedByMe   = 'Von mir erstellt';
 $lang->testcase->allCases     = 'Alle';
 $lang->testcase->allTestcases = 'Alle Fälle';
 $lang->testcase->needConfirm  = 'Story geändert';
-$lang->testcase->bySearch     = 'Suche';
+$lang->testcase->bysearch     = 'Suche';
 $lang->testcase->unexecuted   = 'Wartend';
 
 $lang->testcase->lblStory       = 'Story';

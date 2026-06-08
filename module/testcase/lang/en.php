@@ -183,7 +183,7 @@ $lang->testcase->openedByMe   = 'CreatedByMe';
 $lang->testcase->allCases     = 'All';
 $lang->testcase->allTestcases = 'All Cases';
 $lang->testcase->needConfirm  = 'Story Changed';
-$lang->testcase->bySearch     = 'Search';
+$lang->testcase->bysearch     = 'Search';
 $lang->testcase->unexecuted   = 'Pending';
 
 $lang->testcase->lblStory       = 'Linked Story';
