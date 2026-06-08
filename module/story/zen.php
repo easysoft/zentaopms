@@ -63,12 +63,10 @@ class storyZen extends story
         }
         if($this->app->tab == 'project')
         {
-            $projectID = $objectID;
-            if(!$this->session->multiple)
-            {
-                $projectID = $this->session->project;
-                $objectID  = $this->execution->getNoMultipleID($projectID);
-            }
+            $projectID = $objectID ? $objectID : $this->session->project;
+            $project   = $this->project->fetchByID($projectID);
+            if(in_array($project->type, array('sprint', 'stage', 'kanban'))) $projectID = $project->project;
+            if(empty($project->multiple) && $project->type == 'project') $objectID = $this->execution->getNoMultipleID($projectID);
 
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($projectID, $projects);
