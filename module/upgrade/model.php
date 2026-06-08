@@ -9456,7 +9456,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function importBuildinWorkflow($vision = 'all', $importModule = '')
+    public function importBuildinWorkflow($vision = 'all', $importModule = '', $importAction = '', $hasGroup = 0)
     {
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
@@ -9507,7 +9507,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
             }
         }
@@ -9526,6 +9526,7 @@ class upgradeModel extends model
             $data->module = $module;
             foreach($moduleActions as $action)
             {
+                if($importAction && strpos(",$importAction,", ",{$module}-{$action},") === false) continue;
                 $data->action = $action;
 
                 /* Use default action name if not set flow action name. */
@@ -9557,7 +9558,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
             }
         }
@@ -9601,7 +9602,7 @@ class upgradeModel extends model
 
                 if(is_object($data->options) or is_array($data->options)) $data->options = helper::jsonEncode($data->options);
 
-                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
@@ -9631,7 +9632,7 @@ class upgradeModel extends model
 
                     if($vision != 'all' && $vision != $data->vision) continue;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                     $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
                 }
             }
@@ -9701,7 +9702,7 @@ class upgradeModel extends model
                     $data->order = $order;
                     $order++;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                     $this->dao->insert(TABLE_WORKFLOWLABEL)->data($data)->exec();
                 }
             }
@@ -13303,6 +13304,79 @@ class upgradeModel extends model
             $schedule = !empty($schedule) ? json_encode($schedule) : null;
             $this->dao->update(TABLE_PROJECT)->set('schedule')->eq($schedule)->where('id')->eq($project->id)->exec();
         }
+        return !dao::isError();
+    }
+
+    /**
+     * 为已开启审批流的工作流真实表补充 reviewedBy 字段，并从审批节点回填已审批人。
+     * Add reviewedBy field for workflow tables with approval enabled and backfill from approval nodes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateReviewedByField(): bool
+    {
+        if($this->config->edition == 'open') return true;
+
+        $tables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)
+            ->where('approval')->eq('enabled')
+            ->fetchPairs();
+        if(empty($tables)) return true;
+
+        $nodes = $this->dao->select('approval,account')->from(TABLE_APPROVALNODE)
+            ->where('status')->eq('done')
+            ->andWhere('type')->eq('review')
+            ->orderBy('id')
+            ->fetchAll();
+
+        $reviewedByMap = array();
+        foreach($nodes as $node)
+        {
+            if(!isset($reviewedByMap[$node->approval])) $reviewedByMap[$node->approval] = array();
+            $reviewedByMap[$node->approval][$node->account] = $node->account;
+        }
+        foreach($reviewedByMap as $approvalID => $accounts) $reviewedByMap[$approvalID] = implode(',', $accounts);
+
+        foreach($tables as $table)
+        {
+            if(!$this->checkFieldsExists($table, 'reviewedBy')) $this->dbh->exec("ALTER TABLE `{$table}` ADD `reviewedBy` text NULL");
+            if(!$this->checkFieldsExists($table, 'approval')) continue;
+
+            $approvalIDs = $this->dao->select('approval')->from($table)->where('approval')->gt(0)->fetchPairs();
+            foreach($approvalIDs as $approvalID)
+            {
+                if(!isset($reviewedByMap[$approvalID])) continue;
+                $this->dao->update($table)->set('reviewedBy')->eq($reviewedByMap[$approvalID])->where('approval')->eq($approvalID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 升级时，当用户拥有某个权限的时候新增另一个权限。
+     * Add user group.
+     *
+     * @param  array  $checkedPrivs   array(0 => array('module' => 'bug', 'method' => 'create'))
+     * @param  array  $addPrivs       array(0 => array('module' => 'bug', 'method' => 'copy'))
+     * @access public
+     * @return bool
+     */
+    public function addUserGroup(array $checkedPrivs, array $addPrivs): bool
+    {
+        foreach($checkedPrivs as $index => $checkedPriv)
+        {
+            if(empty($addPrivs[$index])) continue;
+
+            $privList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq($checkedPriv['module'])->andWhere('method')->eq($checkedPriv['method'])->fetchAll();
+            $addPriv  = $addPrivs[$index];
+            foreach($privList as $priv)
+            {
+                $this->dao->delete()->from(TABLE_GROUPPRIV)->where('group')->eq($priv->group)->andWhere('module')->eq($addPriv['module'])->andWhere('method')->eq($addPriv['method'])->exec();
+                $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($priv->group)->set('module')->eq($addPriv['module'])->set('method')->eq($addPriv['method'])->exec();
+            }
+        }
+
         return !dao::isError();
     }
 }

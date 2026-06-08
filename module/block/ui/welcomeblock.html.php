@@ -26,6 +26,7 @@ $getMeasureItem = function($data)
     {
         if(empty($info['number'])) continue;
         if(count($items) >= 5) break;
+        $label = zget($welcomeLabel, $key, '');
         $items[] = cell
         (
             div
@@ -33,7 +34,7 @@ $getMeasureItem = function($data)
                 set('class', 'text-3xl h-10 num'),
                 !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
             ),
-            div(zget($welcomeLabel, $key, ''))
+            div(set::title($label), setClass('w-24 overflow-hidden whitespace-nowrap'), $label)
         );
     }
     if(count($items) < 5)
@@ -43,6 +44,7 @@ $getMeasureItem = function($data)
             if(count($items) >= 5) break;
             if(empty($info['number']))
             {
+                $label = zget($welcomeLabel, $key, '');
                 $items[] = cell
                 (
                     div
@@ -50,7 +52,7 @@ $getMeasureItem = function($data)
                         set('class', 'text-3xl h-10 num'),
                         !empty($info['href']) ? a(setClass('text-primary'), set('href', $info['href']), $info['number']) : span($info['number'])
                     ),
-                    div(zget($welcomeLabel, $key, ''))
+                    div(set::title($label), setClass('w-24 overflow-hidden whitespace-nowrap'), $label)
                 );
             }
         }

@@ -30,3 +30,5 @@ $config->release->form->edit['product']      = array('type' => 'int',          '
 $config->release->form->edit['branch']       = array('type' => 'int',          'required' => false, 'default' => 0);
 $config->release->form->edit['deleteFiles']  = array('type' => 'array',        'required' => false, 'default' => array());
 $config->release->form->edit['renameFiles']  = array('type' => 'array',        'required' => false, 'default' => array());
+
+$config->release->form->publish = array();

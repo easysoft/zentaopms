@@ -89,6 +89,17 @@ class my extends control
      */
     public function work(string $mode = 'task', string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        if($this->config->edition != 'open')
+        {
+            $this->my->appendWorkFlowMenu();
+            $flows = $this->my->getFlowPairs();
+            if(isset($flows[$mode]))
+            {
+                echo $this->fetch('my', 'flow', "module={$mode}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+                return;
+            }
+        }
+
         if(in_array($mode, array('testcase', 'feedback')) && $browseType == 'assignedTo') $browseType = 'assigntome';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
@@ -1237,6 +1248,90 @@ class my extends control
         $this->view->param      = $param;
         $this->view->browseType = $browseType;
         $this->view->mode       = 'ticket';
+        $this->display();
+    }
+
+    /**
+     * 待处理中的自定义工作流列表，展示指派给当前用户的数据。
+     * Assigned custom workflow list in my work.
+     *
+     * @param  string $module
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function flow(string $module, string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->loadModel('flow');
+        $this->loadModel('workflow');
+        $this->loadModel('approval');
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        /* Load flow zen.*/
+        if(!class_exists('flow', false))
+        {
+            $flowControlFile = $this->app->getModulePath('', 'flow') . 'control.php';
+            if(is_file($flowControlFile)) helper::import($flowControlFile);
+        }
+        $this->loadZen('flow');
+
+        $flow = $this->workflow->getByModule($module);
+
+        $mode  = $type == 'bysearch' ? 'bysearch' : 'browse';
+        $label = (int)$param;
+
+        $searchURL = $this->createLink('my', 'work', "mode={$module}&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->flow->setSearchParams($flow, null, $searchURL);
+
+        $labels = $this->loadModel('workflowlabel', 'flow')->getList($module);
+        if(!$label && $mode != 'bysearch')
+        {
+            $currentLabel = reset($labels);
+            if(!empty($currentLabel->id)) $label = (int)$currentLabel->id;
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $dataList = $this->flow->getUserDataList($flow, $mode, $orderBy, $pager);
+
+        $fields = $this->loadModel('workflowaction', 'flow')->getPageFields($flow->module, 'browse', true, null, 0, $flow->group);
+
+        $this->app->rawModule = $flow->module; // 获取数据表格列的自定义项
+
+        $menu        = $this->flowZen->buildDtableMenu($flow->module);
+        $actions     = $this->flowZen->buildDtableActions($flow->module, $flow->navigator);
+        $cols        = $this->flow->buildDtableCols($fields, $menu, $actions);
+        $footToolbar = $this->flow->buildDtableFootToolbar($flow->module);
+
+        $this->app->rawModule = 'my'; // 切换回my模块
+
+        $browseLink = $this->createLink('my', 'work', "mode={$module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->session->set($module . 'List', $browseLink, 'my');
+
+        $this->view->title            = $flow->name;
+        $this->view->flow             = $flow;
+        $this->view->flowModule       = $module;
+        $this->view->dataList         = $dataList;
+        $this->view->fields           = $fields;
+        $this->view->cols             = $cols;
+        $this->view->footToolbar      = $footToolbar;
+        $this->view->mode             = $module;
+        $this->view->browseMode       = $mode;
+        $this->view->label            = $label;
+        $this->view->type             = $type;
+        $this->view->param            = $param;
+        $this->view->orderBy          = $orderBy;
+        $this->view->pager            = $pager;
+        $this->view->pendingReviews   = $flow->approval == 'enabled' ? $this->approval->getPendingReviews($flow->module) : array();
+        $this->view->canSearch        = common::hasPriv($module, 'search') && !empty($this->config->{$module}->search['fields']);
+
         $this->display();
     }
 

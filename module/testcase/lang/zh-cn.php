@@ -105,6 +105,7 @@ $lang->testcase->caseType         = '用例类型';
 $lang->testcase->allType          = '所有类型';
 $lang->testcase->automated        = '自动化';
 $lang->testcase->automation       = '自动化设置';
+$lang->testcase->runCase          = '执行';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 

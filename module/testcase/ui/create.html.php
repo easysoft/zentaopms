@@ -18,6 +18,7 @@ $params = $app->getParams();
 array_shift($params);
 jsVar('createParams', http_build_query($params));
 jsVar('tab', $this->app->tab);
+jsVar('methodName', $app->rawMethod);
 if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
 if($app->tab == 'qa')        jsVar('objectID', 0);
@@ -35,7 +36,7 @@ formGridPanel
     set::title($lang->testcase->create),
     set::fields($fields),
     set::data($case),
-    set::loadUrl(helper::createLink('testcase', 'create', "productID={product}&branch={branch}&moduleID={module}&from=$from&param=$param")),
+    set::loadUrl(helper::createLink('testcase', $app->rawMethod, "productID={product}&branch={branch}&moduleID={module}&from=$from&param=$param")),
     !empty($gobackLink) ? set::backUrl($gobackLink) : null,
     on::change('#story', 'changeStory'),
     on::change('[name=product]', 'loadProduct'),

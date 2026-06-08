@@ -226,6 +226,7 @@ class myZen extends my
 
         /* Get the number of testtasks assigned to me. */
         $pager->recTotal = 0;
+
         $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
@@ -268,6 +269,9 @@ class myZen extends my
             $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
+
+            $flows = $this->loadModel('my')->getFlowPairs();
+            foreach($flows as $module => $name) $count[$module] = $this->my->getAssignedFlowCount($module);
         }
 
         if($isMax || $isIPD)

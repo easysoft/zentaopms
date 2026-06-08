@@ -447,7 +447,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'doing', 'started');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -463,7 +464,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'done', 'finished');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -481,13 +483,13 @@ class productplan extends control
             $this->productplan->updateStatus($planID, 'closed', 'closed');
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->productplan = $this->productplan->getById($planID);
-        $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users       = $this->loadModel('user')->getPairs();
-
+        $this->view->plan    = $this->productplan->getById($planID);
+        $this->view->actions = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
@@ -505,7 +507,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'doing', 'activated');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
