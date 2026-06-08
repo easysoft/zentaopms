@@ -230,13 +230,12 @@ class productZen extends product
      */
     private function setSelectFormOptions(int $programID, array $fields): array
     {
-        $users          = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $whitelistUsers = $this->loadModel('user')->getPairs('nodeleted|noclosed|all');
+        $users = $this->loadModel('user')->getPairs('nodeleted|noclosed');
 
         /* 追加字段的name、title属性，展开user数据。 */
         foreach($fields as $field => $attr)
         {
-            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $field == 'whitelist' ? $whitelistUsers : $users;
+            if(isset($attr['options']) and $attr['options'] == 'users') $fields[$field]['options'] = $users;
             if(!isset($fields[$field]['name']))  $fields[$field]['name']  = $field;
             if(!isset($fields[$field]['title'])) $fields[$field]['title'] = zget($this->lang->product, $field);
         }

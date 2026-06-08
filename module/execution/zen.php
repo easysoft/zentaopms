@@ -1757,10 +1757,10 @@ class executionZen extends execution
         }
 
         $this->loadModel('user');
-        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst|all', $appendPm, $this->config->maxCount);
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', $appendPm, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
 
-        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst|all',  $appendPo, $this->config->maxCount);
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst',  $appendPo, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
 
         $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst',  $appendQd, $this->config->maxCount);

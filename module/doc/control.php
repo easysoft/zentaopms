@@ -430,7 +430,7 @@ class doc extends control
         }
 
         $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->user->getPairs('nocode|noclosed|all');
+        $this->view->users    = $this->user->getPairs('nocode|noclosed');
         $this->view->objects  = $objects;
         $this->view->type     = $type;
         $this->view->objectID = $objectID;
@@ -528,7 +528,7 @@ class doc extends control
 
         $this->view->lib    = $lib;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('noletter|noclosed|all', $lib->users);
+        $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
         $this->view->libID  = $libID;
     }
 
@@ -1066,7 +1066,7 @@ class doc extends control
         $this->view->libID          = $libID;
         $this->view->libTree        = $this->doc->getLibTree($libID, $libs, $objectType, $moduleID, (int)$objectID, '', 0, $docID);
         $this->view->groups         = $this->loadModel('group')->getPairs();
-        $this->view->users          = $this->user->getPairs('noletter|noclosed|nodeleted|all', $doc->users);
+        $this->view->users          = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
         $this->view->files          = $this->loadModel('file')->getByObject('doc', $docID);
         $this->view->objectType     = $objectType;
         $this->view->object         = $object;
@@ -1268,7 +1268,7 @@ class doc extends control
     public function ajaxGetWhitelist(int $doclibID, string $acl = '', string $control = '', int $docID = 0)
     {
         $doclib = $this->doc->getLibByID($doclibID);
-        $users  = $this->user->getPairs('noletter|noempty|noclosed|all');
+        $users  = $this->user->getPairs('noletter|noempty|noclosed');
         if($control == 'group')
         {
             if($doclib->acl == 'private') return print('private');
@@ -1895,7 +1895,7 @@ class doc extends control
         $this->view->libType      = $spaceType;
         $this->view->hasOthersDoc = $this->doc->hasOthersDoc($lib);
         $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed|all');
+        $this->view->users        = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->display();
     }
 
@@ -2129,7 +2129,7 @@ class doc extends control
         $this->view->libPairs        = $libPairs;
         $this->view->optionMenu      = $this->loadModel('tree')->getOptionMenu($libID, 'doc', 0);
         $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed|all');
+        $this->view->users           = $this->loadModel('user')->getPairs('nocode|noclosed');
         $this->view->hasOpenDoc      = in_array('open', $docAclList);
         $this->display();
     }
@@ -2740,7 +2740,7 @@ class doc extends control
         }
         else
         {
-            $this->view->users  = $this->user->getPairs('nocode|noclosed|nodeleted|all');
+            $this->view->users  = $this->user->getPairs('nocode|noclosed|nodeleted');
             $this->view->groups = $this->loadModel('group')->getPairs();
         }
 

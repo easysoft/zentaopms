@@ -329,7 +329,7 @@ class projectZen extends project
         $this->view->title               = $this->lang->project->create;
         $this->view->gobackLink          = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->model               = $model;
-        $this->view->PMUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst|all');
+        $this->view->PMUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
         $this->view->programID           = $programID;
         $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
@@ -446,7 +446,7 @@ class projectZen extends project
 
         $this->view->title = $this->lang->project->edit;
 
-        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst|all',  $project->PM);
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
         $this->view->users                = $this->user->getPairs('noclosed|nodeleted');
         $this->view->project              = $project;
         $this->view->programList          = $programList;
