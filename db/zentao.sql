@@ -13180,6 +13180,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlayout` (
   `order` int unsigned NOT NULL DEFAULT 0,
   `width` smallint unsigned NOT NULL DEFAULT 0,
   `position` text DEFAULT NULL,
+  `ditto` tinyint unsigned NOT NULL DEFAULT 0,
   `readonly` tinyint unsigned NOT NULL DEFAULT 0,
   `mobileShow` tinyint unsigned NOT NULL DEFAULT 1,
   `summary` varchar(20) NOT NULL DEFAULT '',

@@ -378,7 +378,7 @@ class storyZen extends story
 
         if($this->config->edition != 'open')
         {
-            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, 'create');
+            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, $this->app->rawMethod);
             foreach($extendFields as $field) $initStory->{$field->field} = $story->{$field->field};
         }
 

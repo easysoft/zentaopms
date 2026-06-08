@@ -73,9 +73,9 @@ class form extends fixer
      * 获取表单数据。
      * Get the form data.
      *
-     * @param array|null $configObject
-     * @param int        $objectID
-     * @param int        $flowGroupID
+     * @param  array|null $configObject
+     * @param  int        $objectID
+     * @param  int        $flowGroupID
      * @return form
      */
     public static function data(array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
@@ -138,6 +138,9 @@ class form extends fixer
         /* 用户需求和业务需求用自己的工作流。*/
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
         if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
+
+        /* 测试单的执行用例动作用用例的执行动作。 */
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
 
         /* 复制项目使用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';

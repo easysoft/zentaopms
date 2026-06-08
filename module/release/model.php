@@ -188,6 +188,7 @@ class releaseModel extends model
             ->beginIF(!in_array($type, array('all', 'review', 'bysearch')))->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->beginIF($type == 'bysearch')->andWhere($releaseQuery)->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -842,11 +843,9 @@ class releaseModel extends model
      */
     public function changeStatus(int $releaseID, string $status, string $releasedDate = ''): bool
     {
-        $this->dao->update(TABLE_RELEASE)
-             ->set('status')->eq($status)
-             ->beginIF($releasedDate)->set('releasedDate')->eq($releasedDate)->fi()
-             ->where('id')->eq($releaseID)
-             ->exec();
+        $release = form::data($this->config->release->form->publish)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
+
+        $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
 
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();

@@ -1412,6 +1412,9 @@ class executionModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
+            ->fi()
             ->fetchAll('id');
 
         return count($executions);
@@ -1558,6 +1561,9 @@ class executionModel extends model
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')

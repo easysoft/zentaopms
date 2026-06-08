@@ -405,6 +405,25 @@ class testcase extends control
     }
 
     /**
+     * 复制一个测试用例。
+     * Copy a test case.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $from
+     * @param  int    $param
+     * @param  int    $storyID
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0, string $extras = '')
+    {
+        echo $this->fetch('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&from=$from&param=$param&storyID=$storyID&extras=$extras");
+    }
+
+    /**
      * 批量创建用例。
      * Create batch testcase.
      *

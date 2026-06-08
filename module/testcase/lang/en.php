@@ -105,6 +105,7 @@ $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
 $lang->testcase->automated        = 'Automated';
 $lang->testcase->automation       = 'Automation Test';
+$lang->testcase->runCase          = 'Run';
 
 $lang->case = $lang->testcase;
 $lang->testcase->stepDesc          = 'Step';

@@ -23,7 +23,7 @@ class caselibZenTest extends baseTest
     {
         ob_start();
         $this->invokeArgs('responseAfterShowImport', [$libID, $caseData, $maxImport, $pageID, $stepVars]);
-        $output = ob_get_clean
+        $output = ob_get_clean();
         return $output;
     }
 

@@ -35,6 +35,7 @@ class workflowFieldCondition extends wg
         $fieldItems = array();
         foreach($fields as $code => $label) $fieldItems[] = array('text' => $label, 'value' => $code);
 
+        jsVar('currentModule', $app->rawModule);
         jsVar('fieldItems', $fieldItems);
         jsVar('moduleName', $module);
         jsVar('setFormula', $lang->workflowhook->formula->set);

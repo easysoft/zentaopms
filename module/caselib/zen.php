@@ -86,7 +86,7 @@ class caselibZen extends caselib
         unset($this->config->testcase->search['params']['lastRunDate']);
 
         /* Set search params. */
-        $this->config->testcase->search['module']    = 'caselib';
+        $this->config->testcase->search['module']    = 'testcase';
         $this->config->testcase->search['actionURL'] = $actionURL;
         $this->config->testcase->search['queryID']   = $queryID;
 

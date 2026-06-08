@@ -87,6 +87,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -183,6 +184,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

@@ -18,7 +18,7 @@ $config->bug->actions->view = array();
 $config->bug->actions->view['mainActions']   = array('confirm', 'assignTo', 'createBranch', 'resolve', 'close', 'activate', 'toStory', 'toTask', 'createCase');
 $config->bug->actions->view['suffixActions'] = array('edit', 'copy', 'delete');
 
-$config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'needconfirm', 'bysearch');
+$config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbyme', 'resolvedbyme', 'assigntonull', 'unconfirmed', 'unresolved', 'unclosed', 'toclosed', 'longlifebugs', 'postponedbugs', 'overduebugs', 'assignedbyme', 'review', 'reviewedby', 'needconfirm', 'bysearch');
 
 $config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, execution, story, task,
@@ -154,7 +154,7 @@ $config->bug->actionList['edit']['data-app'] = $app->tab;
 $config->bug->actionList['copy']['icon']       = 'copy';
 $config->bug->actionList['copy']['text']       = $lang->bug->copy;
 $config->bug->actionList['copy']['hint']       = $lang->bug->copy;
-$config->bug->actionList['copy']['url']        = array('module' => 'bug', 'method' => 'create', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
+$config->bug->actionList['copy']['url']        = array('module' => 'bug', 'method' => 'copy', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
 $config->bug->actionList['copy']['notInModal'] = true;
 $config->bug->actionList['copy']['data-app']   = $app->tab;
 
