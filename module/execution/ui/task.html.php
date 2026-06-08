@@ -242,7 +242,7 @@ if(!$isFromDoc && !$isFromAI)
         moduleMenu
         (
             set::modules($moduleTree),
-            set::activeKey($status == 'byProduct' ? "product-{$activeKey}" : $activeKey),
+            set::activeKey($browseType == 'byProduct' ? "product-{$activeKey}" : $activeKey),
             set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
             set::settingApp($execution->multiple ? 'execution' : 'project'),
             set::closeLink(createLink('execution', 'task', "executionID={$executionID}")),
