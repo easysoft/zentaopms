@@ -1378,7 +1378,7 @@ class programplanModel extends model
                 $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
                 if(dao::isError()) return false;
 
-                $this->loadModel('execution')->updateUserView($stageID);;
+                $this->loadModel('execution')->updateUserView($stageID);
             }
         }
 
