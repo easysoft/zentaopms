@@ -1079,4 +1079,45 @@ class programplanModelTest extends baseTest
         foreach($relations as $relation) $output[] = $relation;
         return $output;
     }
+
+    /**
+     * Test deleteExtraStageAndTask method.
+     *
+     * @param  array $stages
+     * @param  array $tasks
+     * @access public
+     * @return array|false
+     */
+    public function deleteExtraStageAndTaskTest(array $stages, array $tasks): array|false
+    {
+        $result = $this->instance->deleteExtraStageAndTask($stages, $tasks);
+
+        if(dao::isError()) return dao::getError();
+
+        $output = array('result' => $result);
+
+        if(!empty($stages))
+        {
+            $stageList = $this->instance->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('id')->in($stages)->orderBy('id_asc')->fetchAll();
+            $output['stageCount'] = count($stageList);
+            foreach($stageList as $stage) $output[] = $stage;
+        }
+        else
+        {
+            $output['stageCount'] = 0;
+        }
+
+        if(!empty($tasks))
+        {
+            $taskList = $this->instance->dao->select('id, deleted')->from(TABLE_TASK)->where('id')->in($tasks)->orderBy('id_asc')->fetchAll();
+            $output['taskCount'] = count($taskList);
+            foreach($taskList as $task) $output[] = $task;
+        }
+        else
+        {
+            $output['taskCount'] = 0;
+        }
+
+        return $output;
+    }
 }
