@@ -64,7 +64,7 @@ class aiModel extends model
 
                 $workflowModule = zget($moduleMap, $module, $module);
 
-                $fieldList = $this->loadModel('workflowfield')->getList($workflowModule);
+                $fieldList = $this->workflowfield->getList($workflowModule);
                 foreach($fieldList as $field => $value)
                 {
                     $this->lang->ai->moduleList[$module][$field] = $value->name;
