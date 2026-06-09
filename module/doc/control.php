@@ -2297,7 +2297,7 @@ class doc extends control
      */
     public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
     {
-        if(empty($orderBy)) $orderBy = 'id_desc';
+        if(empty($orderBy)) $orderBy = $type == 'view' ? 't2.date_desc' : 'id_desc';
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
@@ -2357,7 +2357,8 @@ class doc extends control
         $browseType  = !empty($search) ? 'bykeyword' : 'all';
         $queryID     = $search;
 
-        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+        $orderBy = $type == 'view' ? 't2.date_desc' : 'id_desc';
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager, '', '', $filterType);
 
         $order = 0;
         $menu = $this->config->doc->quickMenu[$type];
