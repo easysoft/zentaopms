@@ -225,7 +225,7 @@ class artifactZen extends artifact
     {
         if(empty($path)) return array();
 
-        $parentPath = dirname($path);
+        $parentPath = $this->artifact->parseDirname($path);
         if(empty($parentPath)) return array();
 
         $nodes = $this->artifact->getArtifactLibNodes($artifactLib, $parentPath);

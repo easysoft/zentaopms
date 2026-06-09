@@ -288,7 +288,7 @@ class artifact extends control
         if($_POST)
         {
             $path = helper::safe64Decode($path);
-            if(!$isSubDir) $path = dirname($path);
+            if(!$isSubDir) $path = $this->artifact->parseDirname($path);
             $base64Path = $path ? helper::safe64Encode($path) : '';
 
             $formData = form::data($this->config->artifact->form->createDir)->get();
@@ -328,7 +328,7 @@ class artifact extends control
         $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
         $currentPath = $path ? helper::safe64Decode($path) : '';
-        $parentPath  = $currentPath ? dirname($currentPath) : '/';
+        $parentPath  = $currentPath ? $this->artifact->parseDirname($currentPath) : '/';
         if($parentPath === '' || $parentPath === '.') $parentPath = '/';
         $parentNode = $this->artifactZen->getNodeByPath($artifactLib, $parentPath);
 
@@ -524,7 +524,7 @@ class artifact extends control
             if($formData->parent == '/') return $this->sendError(array('parent' => $this->lang->artifact->notice->rootNotAllowed));
 
             $fromRepo = $artifactLib->name;
-            $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : dirname($asset->path);
+            $fromPath = !empty($asset->metadata) && !empty($asset->metadata->group) ? $asset->metadata->group : $this->artifact->parseDirname($asset->path);
 
             $targetArtifactLib = $this->artifact->fetchByID((int)$formData->artifactID);
             $toRepo            = empty($targetArtifactLib) ? '' : $targetArtifactLib->name;
@@ -543,7 +543,7 @@ class artifact extends control
                 $movedAsset = $this->gitfox->request('/artifacts/assets/' . $assetID);
                 if(dao::isError()) $this->sendError(dao::getError());
 
-                $toPath = !empty($movedAsset->metadata) && !empty($movedAsset->metadata->group) ? $movedAsset->metadata->group : (!empty($movedAsset->path) ? dirname($movedAsset->path) : '/');
+                $toPath = !empty($movedAsset->metadata) && !empty($movedAsset->metadata->group) ? $movedAsset->metadata->group : (!empty($movedAsset->path) ? $this->artifact->parseDirname($movedAsset->path) : '/');
                 $extra  = $artifactLibID . '|' . sprintf($this->lang->artifact->actionComment->moved, $fromRepo, $fromPath, $toRepo, $toPath);
                 $this->loadModel('action')->create('artifactAsset', $assetID, 'movedasset', '', $extra);
             }
@@ -670,7 +670,7 @@ class artifact extends control
         }
 
         $path       = helper::safe64Decode($path);
-        $parentPath = dirname($path);
+        $parentPath = $this->artifact->parseDirname($path);
         $selectPath = $parentPath == '/' ? '' : helper::safe64Encode($parentPath);
         if($result)
         {
