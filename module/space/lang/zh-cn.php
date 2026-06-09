@@ -44,8 +44,8 @@ $lang->space->aclList['open']    = '公开';
 $lang->space->aclList['private'] = '私有';
 
 $lang->space->aclNoticeList = array();
-$lang->space->aclNoticeList['open']    = '公开(有空间视图的权限即可访问该空间及空间下制品库)';
-$lang->space->aclNoticeList['private'] = '私有(仅成员、空间管理员可访问该空间及空间下制品库)';
+$lang->space->aclNoticeList['open']    = '公开(有空间视图的权限即可访问该空间)';
+$lang->space->aclNoticeList['private'] = '私有(仅成员、空间管理员可访问该空间)';
 
 $lang->space->authList = array();
 $lang->space->authList['extend'] = '继承';
