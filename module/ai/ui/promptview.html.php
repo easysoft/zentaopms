@@ -30,8 +30,6 @@ detailHeader
             setClass('primary'),
             set::icon('plus'),
             set::url(createLink('ai', 'createprompt')),
-            setData('toggle', 'modal'),
-            setData('size', 'sm'),
             $lang->ai->prompts->create,
         ) : null
     )
