@@ -43,6 +43,7 @@ $lang->ai->modelTestConnection     = '测试连接';
 $lang->ai->promptCreate            = '创建禅道智能体';
 $lang->ai->promptEdit              = '编辑禅道智能体';
 $lang->ai->promptDelete            = '删除禅道智能体';
+$lang->ai->promptBasicInfo         = '基础信息';
 $lang->ai->promptAssignRole        = '指定角色';
 $lang->ai->promptSelectDataSource  = '选择对象';
 $lang->ai->promptSetPurpose        = '确认操作';
@@ -818,6 +819,7 @@ $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 $lang->ai->models->promptFor = '输入给 %s';
 
 $lang->ai->designStepNav = array();
+$lang->ai->designStepNav['basicinfo']        = '基础信息';
 $lang->ai->designStepNav['assignrole']       = '指定角色';
 $lang->ai->designStepNav['selectdatasource'] = '选择对象';
 $lang->ai->designStepNav['setpurpose']       = '确认操作';

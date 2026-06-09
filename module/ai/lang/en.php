@@ -43,6 +43,7 @@ $lang->ai->modelTestConnection     = 'Test Model Connection';
 $lang->ai->promptCreate            = 'Create ZenTao Agent';
 $lang->ai->promptEdit              = 'Edit ZenTao Agent';
 $lang->ai->promptDelete            = 'Delete ZenTao Agent';
+$lang->ai->promptBasicInfo         = 'ZenTao Agent Basic Info';
 $lang->ai->promptAssignRole        = 'Assign ZenTao Agent Role';
 $lang->ai->promptSelectDataSource  = 'Select ZenTao Agent Data';
 $lang->ai->promptSetPurpose        = 'Set ZenTao Agent Purpose';
@@ -818,6 +819,7 @@ $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 $lang->ai->models->promptFor = 'ZenTao agent for %s';
 
 $lang->ai->designStepNav = array();
+$lang->ai->designStepNav['basicinfo']        = 'Basic Info';
 $lang->ai->designStepNav['assignrole']       = 'Specify Role';
 $lang->ai->designStepNav['selectdatasource'] = 'Select Object';
 $lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
