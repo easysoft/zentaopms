@@ -282,7 +282,7 @@ class blockZen extends block
                 /* 处理研发需求或任务列表区块点击更多后的跳转连接。 */
                 if($moduleName == 'my' && $method == 'task' && $block->params->type != 'assignedTo' || $moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
                 {
-                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&type={$block->params->type}");
+                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&browseType={$block->params->type}");
                 }
                 else
                 {
@@ -487,8 +487,8 @@ class blockZen extends block
                 $count         = zget($assignedGroup, 'value', 0);
             }
             $assignToLink = '';
-            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&type=$type");
-            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&type=$type");
+            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&browseType=$type");
+            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&browseType=$type");
             $assignToMe[$field] = array('number' => $count, 'href' => $assignToLink);
         }
 

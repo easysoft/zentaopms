@@ -125,8 +125,8 @@ $lang->block->summary = new stdclass();
 $lang->block->summary->welcome    = 'Zentao has been with you for %s: ';
 $lang->block->summary->yesterday  = '<strong>Yesterday</strong>';
 $lang->block->summary->noWork     = 'You have not yet processed tasks and bugs,';
-$lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks';
-$lang->block->summary->fixBug     = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a> bugs';
+$lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&browseType=finishedBy') . '" class="text-success">%s</a> tasks';
+$lang->block->summary->fixBug     = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&browseType=resolvedBy') . '" class="text-success">%s</a> bugs';
 
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';

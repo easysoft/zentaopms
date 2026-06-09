@@ -125,9 +125,9 @@ $lang->block->summary = new stdclass();
 $lang->block->summary->welcome    = '%s with Zentao! %s  and your tasks and bugs are waiting for your great work today!';
 $lang->block->summary->yesterday  = '<strong>yesterday</strong>,';
 $lang->block->summary->noWork     = 'A quiet day ';
-$lang->block->summary->finishTask = 'You completed <a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> task(s)';
-$lang->block->summary->fixBug     = 'You resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a> bug(s)';
-$lang->block->summary->fixBugEn   = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a> bug(s)';
+$lang->block->summary->finishTask = 'You completed <a href="' .  helper::createLink('my', 'contribute', 'mode=task&browseType=finishedBy') . '" class="text-success">%s</a> task(s)';
+$lang->block->summary->fixBug     = 'You resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&browseType=resolvedBy') . '" class="text-success">%s</a> bug(s)';
+$lang->block->summary->fixBugEn   = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&browseType=resolvedBy') . '" class="text-success">%s</a> bug(s)';
 
 $lang->block->dashboard['default'] = 'My Overview';
 $lang->block->dashboard['my']      = 'Dashboard';

@@ -14,8 +14,8 @@ include 'header.html.php';
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=testtask&type={key}&param=&orderBy={$orderBy}")
+    set::current($browseType),
+    set::linkParams("mode=testtask&browseType={key}&param=&orderBy={$orderBy}")
 );
 
 foreach($config->my->testtask->dtable->fieldList['actions']['list'] as $actionKey => $action)
@@ -34,7 +34,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::fixedLeftWidth('20%'),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),
     set::emptyTip($lang->testtask->noTesttask)

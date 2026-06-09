@@ -17,9 +17,9 @@ jsVar('errorNoExecution', $lang->feedback->noExecution);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Feedback'), set::open($type == 'bysearch')))
+    set::current($browseType),
+    set::linkParams("mode={$mode}&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Feedback'), set::open($browseType == 'bysearch')))
 );
 
 foreach($feedbacks as $feedback)
@@ -52,7 +52,7 @@ if($canBatchAction)
     $footToolbar['items'] = array();
     if($canBatchEdit)
     {
-        $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchEdit', "browseType=$type&from={$app->rawMethod}"));
+        $footToolbar['items'][] = array('text' => $lang->edit, 'className' => 'primary batch-btn not-open-url', 'data-url' => createLink('feedback', 'batchEdit', "browseType=$browseType&from={$app->rawMethod}"));
     }
     if($canBatchClose)
     {
@@ -79,7 +79,7 @@ dtable
     set::userMap($users),
     set::orderBy($orderBy),
     set::customCols(true),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::footToolbar($footToolbar)
 );

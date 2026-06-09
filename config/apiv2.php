@@ -108,6 +108,9 @@ $routes['/systems']                     = array('response' => 'appList(array)|sy
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
 
+$routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
+$routes['/todos/:todoID'] = array('response' => 'todo');
+
 $routes['/depts']         = array('response' => 'sons|depts');
 $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');

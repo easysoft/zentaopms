@@ -16,9 +16,9 @@ jsVar('unexecuted', $lang->testcase->unexecuted);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=testcase&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Testcase'), set::open($type == 'bysearch')))
+    set::current($browseType),
+    set::linkParams("mode=testcase&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Testcase'), set::open($browseType == 'bysearch')))
 );
 
 $canBatchEdit = common::hasPriv('testcase', 'batchEdit');
@@ -27,13 +27,13 @@ $footToolbar  = array('items' => array
     $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&from={$app->rawMethod}")) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
-if($type == 'openedbyme' || $app->rawMethod == 'contribute')
+if($browseType == 'openedbyme' || $app->rawMethod == 'contribute')
 {
     unset($config->my->testcase->dtable->fieldList['testtask']);
     unset($config->my->testcase->dtable->fieldList['openedBy']);
 }
 
-if($type == 'assigntome')
+if($browseType == 'assigntome')
 {
     $config->my->testcase->dtable->fieldList['title']['link']['params'] .= "&from=testtask&taskID={task}";
     $config->my->testcase->dtable->fieldList['actions']['list']['runCase']['url']   = array('module' => 'testtask', 'method' => 'runCase',   'params' => 'id={run}');
@@ -63,7 +63,7 @@ dtable
     set::checkedSummary($lang->testcase->failCheckedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->testcase->noCase)

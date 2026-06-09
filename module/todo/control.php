@@ -72,7 +72,7 @@ class todo extends control
             if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'browseType=all&userID=&status=all&orderBy=id_desc')));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -108,7 +108,7 @@ class todo extends control
 
             if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "type={$date}")));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "browseType={$date}")));
         }
 
         unset($this->lang->todo->typeList['cycle']);
