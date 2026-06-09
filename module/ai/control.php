@@ -327,6 +327,8 @@ class ai extends control
      */
     public function promptBasicInfo($promptID = 0)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+
         $this->view->title = $this->lang->ai->promptBasicInfo;
         $this->display();
     }
