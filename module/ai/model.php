@@ -35,13 +35,22 @@ class aiModel extends model
     public $errors = array();
 
     /**
-     * 获取数据源列表。
-     * Get data source list.
+     * 根据config.php中的$config->ai->dataSource，和$config->ai->moduleGroup，生成数据源列表。
+     * 如果模块有dataSource定义，则直接使用
+     * 如果模块没有dataSource定义，则通过工作流（workflow）获取模块字段。
+     * 特殊的模块：programplans/executions 使用execution字段。stories使用story字段,bugs使用bug字段。
+     * 返回数据结构为：
+     * array(
+     *     'program' => array('name', 'desc', 'begin'),
+     *     'testsuite' => array('name', 'desc'),
+     *     'testtask' => array('name', 'desc', 'begin', 'end'),
+     *     'caselib' => array('name', 'desc'),
+     * )
      *
      * @access public
      * @return array
      */
-    public function getDataSource(): array
+    public function getDataSource()
     {
         $dataSource = array();
         $fieldCache = array();
@@ -64,15 +73,9 @@ class aiModel extends model
 
                 $workflowModule = zget($moduleMap, $module, $module);
 
-                $fieldList = $this->workflowfield->getList($workflowModule);
+                $fieldList = $this->loadModel('workflowfield')->getList($workflowModule);
                 foreach($fieldList as $field => $value)
                 {
-                    if(in_array($field, array('deleted', 'version', 'subStatus')))
-                    {
-                        unset($fieldList[$field]);
-                        continue;
-                    }
-
                     $this->lang->ai->moduleList[$module][$field] = $value->name;
                 }
 
