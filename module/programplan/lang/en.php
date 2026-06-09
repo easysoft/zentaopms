@@ -108,6 +108,7 @@ $lang->programplan->reviewedPointTip = "This review point has already been submi
 $lang->programplan->typeTip          = "At the top level, you can only create phases. Within a phase, you may create sub-phases or {$lang->executionCommon} / Kanban boards. {$lang->executionCommon}s and Kanban boards cannot be further subdivided.";
 $lang->programplan->rollbackTip      = 'New executions and tasks will be deleted, deleted ones will be restored, and only some fields will be rolled back. This operation will overwrite the current schedule and cannot be recovered. Please proceed with caution. Continue?';
 $lang->programplan->canNotCallback   = 'Unable to rollback. The execution plan dates would exceed the project plan dates. Please adjust the project plan dates first.';
+$lang->programplan->frozenCallback   = 'Version rollback is not allowed after the stage has been baselined.';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';

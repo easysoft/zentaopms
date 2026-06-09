@@ -108,6 +108,7 @@ $lang->programplan->reviewedPointTip = "The review point has been submitted for 
 $lang->programplan->typeTip          = "The first level only supports creating stages, and stages can be created or {$lang->executionCommon}/Kanban can be created under the same stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
 $lang->programplan->rollbackTip      = 'New executions and tasks will be deleted, deleted ones will be restored, and only some fields will be rolled back. This operation will overwrite the current schedule and cannot be recovered. Please proceed with caution. Continue?';
 $lang->programplan->canNotCallback   = 'Unable to rollback. The execution plan dates would exceed the project plan dates. Please adjust the project plan dates first.';
+$lang->programplan->frozenCallback   = 'Version rollback is not allowed after the stage has been baselined.';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
