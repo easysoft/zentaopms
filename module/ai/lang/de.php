@@ -128,6 +128,7 @@ $lang->ai->prompts->deleted       = 'Deleted';
 $lang->ai->prompts->stage         = 'Stage';
 $lang->ai->prompts->basicInfo     = 'Basic Info';
 $lang->ai->prompts->processObject = 'Processing Object';
+$lang->ai->prompts->actionPurpose = 'Operation Purpose';
 $lang->ai->prompts->editInfo      = 'Edit Info';
 $lang->ai->prompts->createdBy     = 'Creator';
 $lang->ai->prompts->publishedBy   = 'Published by';

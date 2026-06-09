@@ -128,6 +128,7 @@ $lang->ai->prompts->deleted       = '已删除';
 $lang->ai->prompts->stage         = '阶段';
 $lang->ai->prompts->basicInfo     = '基本信息';
 $lang->ai->prompts->processObject = '处理对象';
+$lang->ai->prompts->actionPurpose = '操作目的';
 $lang->ai->prompts->editInfo      = '创建编辑';
 $lang->ai->prompts->createdBy     = '由谁创建';
 $lang->ai->prompts->publishedBy   = '由谁发布';
