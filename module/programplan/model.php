@@ -1217,17 +1217,16 @@ class programplanModel extends model
         $updateStage->name           = $stage->name;
         $updateStage->milestone      = $stage->milestonecode;
         $updateStage->status         = $stage->rawStatus;
-        $updateStage->begin          = $stage->begin;
-        $updateStage->end            = $stage->deadline;
-        $updateStage->parent         = $stage->parent;
-        $updateStage->isTpl          = $stage->isTpl;
-        $updateStage->realBegan      = $stage->realBegan;
-        $updateStage->realEnd        = $stage->realEnd;
+        $updateStage->begin          = $stage->begin ?: null;
+        $updateStage->end            = $stage->deadline ?: null;
+        $updateStage->parent         = $stage->parent ?: 0;
+        $updateStage->realBegan      = $stage->realBegan ?: null;
+        $updateStage->realEnd        = $stage->realEnd ?: null;
         $updateStage->progress       = $stage->progress;
         $updateStage->closedBy       = $stage->closedBy;
-        $updateStage->closedDate     = $stage->closedDate;
+        $updateStage->closedDate     = $stage->closedDate ?: null;
         $updateStage->canceledBy     = $stage->canceledBy;
-        $updateStage->canceledDate   = $stage->canceledDate;
+        $updateStage->canceledDate   = $stage->canceledDate ?: null;
         $updateStage->lastEditedBy   = $this->app->user->account;
         $updateStage->lastEditedDate = helper::now();
         $updateStage->estimate       = $stage->estimate;
@@ -1249,7 +1248,7 @@ class programplanModel extends model
             $this->loadModel('user');
 
             /* 恢复用户的执行权限。 */
-            if($stage->acl != 'open') $this->user->updateUserView(array($stage->id), 'sprint');
+            $this->user->updateUserView(array($stage->id), 'sprint');
 
             /* 恢复用户的产品权限。 */
             $products = $this->loadModel('product')->getProducts($stage->id, 'all', '', false);
@@ -1272,25 +1271,27 @@ class programplanModel extends model
      */
     public function rollbackTask(object $task): bool
     {
+        list($executionID, $taskID) = explode('-', $task->id);
+
         $updateTask = new stdclass();
-        $updateTask->story          = $task->story;
-        $updateTask->estStarted     = $task->begin;
-        $updateTask->deadline       = $task->deadline;
+        $updateTask->execution      = $executionID;
+        $updateTask->story          = $task->story ?: 0;
+        $updateTask->estStarted     = $task->begin ?: null;
+        $updateTask->deadline       = $task->deadline ?: null;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
         $updateTask->status         = $task->rawStatus;
         $updateTask->pri            = $task->pri;
-        $updateTask->color          = $task->color;
         $updateTask->mailto         = $task->mailto;
         $updateTask->keywords       = $task->keywords;
         $updateTask->finishedBy     = $task->finishedBy;
         $updateTask->closedBy       = $task->closedBy;
-        $updateTask->closedDate     = $task->closedDate;
+        $updateTask->closedDate     = $task->closedDate ?: null;
         $updateTask->closedReason   = $task->closedReason;
         $updateTask->canceledBy     = $task->canceledBy;
-        $updateTask->canceledDate   = $task->canceledDate;
-        $updateTask->activatedDate  = $task->activatedDate;
+        $updateTask->canceledDate   = $task->canceledDate ?: null;
+        $updateTask->activatedDate  = $task->activatedDate ?: null;
         $updateTask->lastEditedBy   = $this->app->user->account;
         $updateTask->lastEditedDate = helper::now();
         $updateTask->deleted        = 0;
@@ -1299,15 +1300,29 @@ class programplanModel extends model
         $updateTask->type = array_search($task->taskType, $this->lang->task->typeList, true);
 
         /* parent带-的代表任务，不带-的代表阶段，当记录的为阶段时任务的parent为0。*/
-        $updateTask->parent = strpos($task->parent, '-') !== false ? end(explode('-', $task->parent)) : 0;
+        $updateTask->parent = strpos((string)$task->parent, '-') !== false ? explode('-', $task->parent)[1] : 0;
 
         if(preg_match('/<span[^>]*class=[\'"]gantt_title[\'"]>(.+?)<\/span>/', $task->text, $taskName))
         {
             $updateTask->name = preg_replace('/^#\d+\s+/', '', $taskName[1]);
         }
 
-        $taskID = explode("-", $task->id);
-        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID[1])->exec();
+        /* 当任务名称、计划开始、截止时间被修改时，增加一个版本。*/
+        $oldTask = $this->fetchByID((int)$taskID, 'task');
+        if($oldTask->name != $updateTask->name || $oldTask->estStarted != $updateTask->estStarted || $oldTask->deadline != $updateTask->deadline)
+        {
+            $updateTask->version = $oldTask->version + 1;
+
+            $taskSpec = new stdclass();
+            $taskSpec->task       = $taskID;
+            $taskSpec->version    = $updateTask->version;
+            $taskSpec->name       = $updateTask->name;
+            $taskSpec->estStarted = $updateTask->estStarted;
+            $taskSpec->deadline   = $updateTask->deadline;
+            $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->exec();
+        }
+
+        $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID)->exec();
         return !dao::isError();
     }
 
@@ -1331,8 +1346,6 @@ class programplanModel extends model
         $projectRelationIdList = $this->dao->select('id')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchPairs('id');
         foreach($relations as $relation)
         {
-            if(isset($projectRelationIdList[$relation->id])) unset($projectRelationIdList[$relation->id]);
-
             list($sourceExecution, $sourceTaskID) = explode('-', $relation->source);
             list($targetExecution, $targetTaskID) = explode('-', $relation->target);
 
@@ -1346,7 +1359,18 @@ class programplanModel extends model
             $updateRelation->condition = $condition[$relation->type];
             $updateRelation->task      = $targetTaskID;
             $updateRelation->action    = $action[$relation->type];
-            $this->dao->update(TABLE_RELATIONOFTASKS)->data($updateRelation)->where('id')->eq($relation->id)->exec();
+
+            if(!isset($projectRelationIdList[$relation->id]))
+            {
+                $updateRelation->project = $projectID;
+                $this->dao->insert(TABLE_RELATIONOFTASKS)->data($updateRelation)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_RELATIONOFTASKS)->data($updateRelation)->where('id')->eq($relation->id)->exec();
+                unset($projectRelationIdList[$relation->id]);
+            }
+
             if(dao::isError()) return false;
         }
 
@@ -1391,10 +1415,10 @@ class programplanModel extends model
             $this->loadModel('story');
             foreach($tasks as $taskID)
             {
-                $task = $this->task->fetchByID($taskID);
+                $task = $this->task->fetchByID((int)$taskID);
                 if($task->isParent)
                 {
-                    $childIdList = $this->task->getAllChildId($taskID, false);
+                    $childIdList = $this->task->getAllChildId((int)$taskID, false);
                     $childTasks  = $this->task->getByIdList($childIdList);
                     foreach($childTasks as $childID => $childTask)
                     {
@@ -1409,7 +1433,7 @@ class programplanModel extends model
                     }
                 }
 
-                $this->task->delete(TABLE_TASK, $taskID);
+                $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($taskID)->exec();
                 if(dao::isError()) return false;
 
                 if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
