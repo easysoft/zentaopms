@@ -1095,7 +1095,6 @@ class docModel extends model
      */
     public function getMineList(string $type, string $browseType, int|string $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = '', string $filterType = ''): array
     {
-        if($type == 'view' && $orderBy == 'id_desc') $orderBy = 't2.date_desc';
         $query = '';
         if($browseType == 'bysearch')
         {
@@ -1192,7 +1191,6 @@ class docModel extends model
 
     public function getMySpaceDocs(string $type, string $browseType, string $query = '', string $orderBy = 'id_desc', ?object $pager = null, string $appendDocs = '', string $filterDocs = '', string $filterType = ''): array
     {
-        if($type == 'view' && $orderBy == 'id_desc') $orderBy = 't2.date_desc';
         if(!in_array($type, array('all', 'view', 'collect', 'createdby', 'editedby'))) return array();
 
         $allLibs          = $this->getLibs('all');
