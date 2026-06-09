@@ -29,7 +29,7 @@ detailHeader
         (
             setClass('primary'),
             set::icon('plus'),
-            set::url(createLink('ai', 'createprompt')),
+            set::url(createLink('ai', 'promptbasicinfo')),
             $lang->ai->prompts->create,
         ) : null
     )

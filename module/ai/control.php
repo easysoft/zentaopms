@@ -327,6 +327,8 @@ class ai extends control
      */
     public function promptBasicInfo($promptID = 0)
     {
+        $this->view->title = $this->lang->ai->promptBasicInfo;
+        $this->display();
     }
 
     /**
