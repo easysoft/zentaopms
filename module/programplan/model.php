@@ -1256,6 +1256,16 @@ class programplanModel extends model
 
             /* 恢复文档库。*/
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(0)->where('execution')->eq($stage->id)->exec();
+
+            /* 标记为已还原。*/
+            $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
+                ->where('objectType')->eq('execution')
+                ->andWhere('objectID')->eq($oldStage->id)
+                ->andWhere('project')->eq($oldStage->project)
+                ->andWhere('execution')->eq($oldStage->id)
+                ->andWhere('action')->eq('deleted')
+                ->fetchPairs('id');
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(0)->where('id')->in($deleteActionID)->exec();
         }
 
         return true;
@@ -1323,7 +1333,21 @@ class programplanModel extends model
         }
 
         $this->dao->update(TABLE_TASK)->data($updateTask)->where('id')->eq($taskID)->exec();
-        return !dao::isError();
+        if(dao::isError()) return false;
+
+        if($oldTask->deleted == '1')
+        {
+            /* 标记为已还原。*/
+            $deleteActionID = $this->dao->select('id')->from(TABLE_ACTION)
+                ->where('objectType')->eq('task')
+                ->andWhere('objectID')->eq($oldTask->id)
+                ->andWhere('project')->eq($oldTask->project)
+                ->andWhere('execution')->eq($oldTask->execution)
+                ->andWhere('action')->eq('deleted')
+                ->fetchPairs('id');
+            $this->dao->update(TABLE_ACTION)->set('extra')->eq(0)->where('id')->in($deleteActionID)->exec();
+        }
+        return true;
     }
 
     /**
@@ -1399,12 +1423,15 @@ class programplanModel extends model
         /* 删除回滚版本中没有的阶段。*/
         if(!empty($stages))
         {
+            $this->loadModel('execution');
+            $this->loadModel('action');
             foreach($stages as $stageID)
             {
                 $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
                 if(dao::isError()) return false;
 
-                $this->loadModel('execution')->updateUserView($stageID);
+                $this->action->create('execution', (int)$stageID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+                $this->execution->updateUserView($stageID);
             }
         }
 
@@ -1413,6 +1440,7 @@ class programplanModel extends model
         {
             $this->loadModel('task');
             $this->loadModel('story');
+            $this->loadModel('action');
             foreach($tasks as $taskID)
             {
                 $task = $this->task->fetchByID((int)$taskID);
@@ -1428,6 +1456,7 @@ class programplanModel extends model
                         $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($childID)->exec();
                         if(dao::isError()) return false;
 
+                        $this->action->create('task', (int)$childID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
                         if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
                         if($childTask->story) $this->story->setStage($childTask->story);
                     }
@@ -1436,6 +1465,7 @@ class programplanModel extends model
                 $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($taskID)->exec();
                 if(dao::isError()) return false;
 
+                $this->action->create('task', (int)$taskID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
                 if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
                 if($task->story) $this->story->setStage($task->story);
             }
