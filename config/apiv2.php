@@ -111,6 +111,40 @@ $routes['/systems/:systemID']           = array('response' => 'system,actions(ar
 $routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
 $routes['/todos/:todoID'] = array('response' => 'todo');
 
+$routes['/my/todos']        = array('redirect' => '/my/todo',                   'response' => 'todos(array),pager');
+$routes['/my/tasks']        = array('redirect' => '/my/work?mode=task',         'response' => 'tasks(array),pager',         'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workTask'));
+$routes['/my/bugs']         = array('redirect' => '/my/work?mode=bug',          'response' => 'bugs(array),pager',          'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workBug'));
+$routes['/my/stories']      = array('redirect' => '/my/work?mode=story',        'response' => 'stories(array),pager',       'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workStory'));
+$routes['/my/epics']        = array('redirect' => '/my/work?mode=epic',         'response' => 'stories(array)|epics,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workEpic'));
+$routes['/my/requirements'] = array('redirect' => '/my/work?mode=requirement',  'response' => 'stories(array)|requirements,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workRequirement'));
+$routes['/my/testtasks']    = array('redirect' => '/my/work?mode=testtask',     'response' => 'tasks(array)|testtasks,pager');
+$routes['/my/testcases']    = array('redirect' => '/my/work?mode=testcase',     'response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workTestcase'));
+$routes['/my/projects']     = array('redirect' => '/my/project',                'response' => 'projects(array),pager');
+$routes['/my/executions']   = array('redirect' => '/my/execution',              'response' => 'executions(array),pager');
+$routes['/my/issues']       = array('redirect' => '/my/work?mode=issue',        'response' => 'issues(array),pager');
+$routes['/my/risks']        = array('redirect' => '/my/work?mode=risk',         'response' => 'risks(array),pager',          'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workRisk'));
+$routes['/my/reviewissues'] = array('redirect' => '/my/work?mode=reviewissue',  'response' => 'reviewissues(array),pager',   'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workReviewissue'));
+$routes['/my/audits']       = array('redirect' => '/my/audit',                  'response' => 'reviewList(array)|audits,pager');
+$routes['/my/auditplans']   = array('redirect' => '/my/auditplan',              'response' => 'auditplans(array),pager');
+$routes['/my/ncs']          = array('redirect' => '/my/nc',                     'response' => 'ncs(array),pager');
+$routes['/my/meetings']     = array('redirect' => '/my/work?mode=mymeeting',    'response' => 'meetings(array),pager');
+$routes['/my/feedbacks']    = array('redirect' => '/my/work?mode=feedback',     'response' => 'feedbacks(array),pager',      'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workFeedback'));
+$routes['/my/tickets']      = array('redirect' => '/my/work?mode=ticket',       'response' => 'tickets(array),pager',        'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'workTicket'));
+
+$routes['/my/activity/tasks']        = array('redirect' => '/my/contribute?mode=task',        'response' => 'tasks(array),pager',         'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeTask'));
+$routes['/my/activity/bugs']         = array('redirect' => '/my/contribute?mode=bug',         'response' => 'bugs(array),pager',          'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeBug'));
+$routes['/my/activity/stories']      = array('redirect' => '/my/contribute?mode=story',       'response' => 'stories(array),pager',       'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeStory'));
+$routes['/my/activity/epics']        = array('redirect' => '/my/contribute?mode=epic',        'response' => 'stories(array)|epics,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeEpic'));
+$routes['/my/activity/requirements'] = array('redirect' => '/my/contribute?mode=requirement', 'response' => 'stories(array)|requirements,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeRequirement'));
+$routes['/my/activity/testtasks']    = array('redirect' => '/my/contribute?mode=testtask',    'response' => 'tasks(array)|testtasks,pager');
+$routes['/my/activity/testcases']    = array('redirect' => '/my/contribute?mode=testcase',    'response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeTestcase'));
+$routes['/my/activity/docs']         = array('redirect' => '/my/contribute?mode=doc',         'response' => 'docs(array),pager');
+$routes['/my/activity/issues']       = array('redirect' => '/my/contribute?mode=issue',       'response' => 'issues(array),pager');
+$routes['/my/activity/risks']        = array('redirect' => '/my/contribute?mode=risk',        'response' => 'risks(array),pager',          'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeRisk'));
+$routes['/my/activity/reviewissues'] = array('redirect' => '/my/contribute?mode=reviewissue', 'response' => 'reviewissues(array),pager',   'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeReviewissue'));
+$routes['/my/activity/audits']       = array('redirect' => '/my/contribute?mode=audit',       'response' => 'reviewList(array)|audits,pager');
+$routes['/my/activity/feedbacks']    = array('redirect' => '/my/contribute?mode=feedback',    'response' => 'feedbacks(array),pager',      'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeFeedback'));
+
 $routes['/depts']         = array('response' => 'sons|depts');
 $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');
