@@ -13,6 +13,7 @@ declare(strict_types=1);
 namespace zin;
 
 include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
 
 jsVar('window.executionID', $execution->id);
 jsVar('vision', $config->vision);

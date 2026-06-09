@@ -77,7 +77,46 @@ $promptMenuInject = function() use ($generateAgents)
     if(!isset($this->config->ai->menuPrint->locations[$module][$method])) return;
 
     $menuOptions = $this->config->ai->menuPrint->locations[$module][$method];
+    $isFormPage  = empty($menuOptions->objectVarName);
+
+    if($isFormPage)
+    {
+        $prompts = $this->ai->getPromptsForTargetForm($module, $method);
+        if(empty($prompts)) return;
+
+        $btnName = $this->lang->ai->prompts->common;
+        $html    = "<div class='flex gap-2 inline-block pull-right ml-2 mr-2'>";
+        $html   .= '<div class="prompts dropdown"><button class="btn ai-styled size-sm size-sm font-medium" type="button" data-toggle="dropdown" data-placement="bottom-end"><i class="icon icon-lightning"></i>' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
+        foreach($prompts as $prompt)
+        {
+            $html .= '<li class="menu-item">';
+            $html .= html::a('javascript:;', $prompt->name, '', "onclick='executeWithFormContext({$prompt->id})' style='width: 100%;'", 'btn ghost size-sm font-medium text-left');
+            $html .= '</li>';
+        }
+        $html .= '</menu></div>';
+        $html .= '</div>';
+
+        h::importJs($this->app->getWebRoot() . 'js/zui3/ai.js');
+
+        $script  = '(() => {';
+        $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
+        $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
+        $script .= '$aiMenu.' . $menuOptions->injectMethod . "(`$html`).css('z-index', 20);";
+        $script .= '})();';
+
+        h::globalJS($script);
+        return;
+    }
+
     $prompts     = $this->ai->getPromptsForUser($menuOptions->module);
+    $useUniversalForm = (array)$this->config->ai->useUniversalForm;
+    if(!empty($useUniversalForm))
+    {
+        $prompts = array_filter($prompts, function($p) use ($useUniversalForm)
+        {
+            return !in_array($p->code, $useUniversalForm);
+        });
+    }
     $prompts     = $this->ai->filterPromptsForExecution($prompts, true);
     $btnName     = $this->lang->ai->prompts->common;
 

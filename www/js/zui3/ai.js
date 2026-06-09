@@ -152,6 +152,65 @@ window.executeZentaoPrompt = async function(info, testingMode)
     zaiPanel.openPopup(popupOptions);
 };
 
+/**
+ * 执行通用表单智能体
+ * Execute universal form prompt and inject AI result into current page form.
+ *
+ * @param {number} promptID
+ */
+window.executeWithFormContext = async function(promptID)
+{
+    const $form = $('form').first();
+    if(!$form.length) return;
+
+    const $btn = $form.closest('.panel').find('.prompts.dropdown .btn');
+    $btn && $btn.prop('disabled', true).append(' <i class="icon icon-spin icon-spinner"></i>');
+
+    try
+    {
+        const formHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($form) : null;
+        if(!formHelper || typeof formHelper.getFormSchema !== 'function') return;
+
+        const formSchema = formHelper.getFormSchema() || {};
+
+        const response = await $.ajax({
+            url: $.createLink('ai', 'executeUniversalPrompt', 'promptID=' + promptID),
+            type: 'POST',
+            data: {
+                formSchema: JSON.stringify(formSchema),
+                pageUrl: window.location.href,
+            },
+            dataType: 'json',
+        });
+
+        if(response && response.result === 'success' && response.callback)
+        {
+            if(window.parent && window.parent.executeZentaoPrompt)
+            {
+                window.parent.openPageForm = function(url, data, callback)
+                {
+                    const $applyForm = $('form').first();
+                    if($applyForm.length)
+                    {
+                        const applyHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($applyForm) : null;
+                        if(applyHelper) applyHelper.setFormData(data);
+                    }
+                    callback && callback();
+                };
+                window.parent.executeZentaoPrompt(response.callback.params[0], response.callback.params[1]);
+            }
+        }
+    }
+    catch(e)
+    {
+        console.error('executeWithFormContext failed:', e);
+    }
+    finally
+    {
+        $btn && $btn.prop('disabled', false).find('.icon-spinner').remove();
+    }
+};
+
 window.openAITaskPopup = async function(taskID)
 {
     const zaiPanel = await checkZAIPanel(true);

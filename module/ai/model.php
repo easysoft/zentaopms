@@ -2059,6 +2059,70 @@ class aiModel extends model
     }
 
     /**
+     * 构建可填充字段描述
+     * Build fillable fields description for prompt.
+     *
+     * @param  object $prompt
+     * @param  array  $allowedFields
+     * @access public
+     * @return string
+     */
+    public function getFormSchemaDescription($prompt, array $allowedFields)
+    {
+        $desc  = "[目标表单信息]\n";
+        $desc .= '表单: ' . ($prompt->name ?? $prompt->targetForm) . "\n\n";
+
+        if(!empty($allowedFields))
+        {
+            $desc .= "可填充字段:\n";
+            foreach($allowedFields as $name => $field)
+            {
+                if(!is_array($field)) continue;
+                $label = $field['label'] ?? $name;
+                $desc .= "- {$name}\n";
+            }
+        }
+
+        $desc .= "\n请返回 JSON 对象，键名对应上述字段名。必填字段必须提供值。\n";
+        return $desc;
+    }
+
+    /**
+     * 构建动态 JSON Schema
+     * Build dynamic JSON schema for function calling.
+     *
+     * @param  array  $fields
+     * @param  object $prompt
+     * @access public
+     * @return array
+     */
+    public function buildDynamicSchema(array $fields, $prompt)
+    {
+        $properties = array();
+        $required   = array();
+
+        foreach($fields as $name => $field)
+        {
+            $prop = array('type' => 'string', 'description' => $field['label'] ?? $name);
+            if(!empty($field['options']))
+            {
+                $options = $field['options'];
+                if(is_array($options))
+                {
+                    $prop['enum'] = array_map(function($opt)
+                    {
+                        return is_array($opt) ? ($opt['value'] ?? $opt) : $opt;
+                    }, $options);
+                }
+            }
+            if(!empty($field['required'])) $required[] = $name;
+            $properties[$name] = $prop;
+        }
+
+        return array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
+    }
+
+    /**
      * Get object data for prompt by id.
      *
      * @param  object        $prompt    prompt object
@@ -2926,6 +2990,29 @@ class aiModel extends model
         }
 
         return array($testData, $result);
+    }
+
+    /**
+     * 获取目标表单页面的智能体列表
+     * Get prompts for target form page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getPromptsForTargetForm(string $module, string $method)
+    {
+        $targetForm = "{$module}.{$method}";
+        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->andWhere('targetForm')->eq($targetForm)
+            ->orderBy('id_desc')
+            ->fetchAll('id', false);
+
+        $useUniversalForm = (array)$this->config->ai->useUniversalForm;
+        if(empty($useUniversalForm)) return array();
     }
 
     /**
