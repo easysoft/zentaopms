@@ -1296,8 +1296,10 @@ class programplanModel extends model
         $updateTask->deleted        = 0;
 
         $this->app->loadLang('task');
-        $updateTask->type   = array_search($task->taskType, $this->lang->task->typeList, true);
-        $updateTask->parent = strpos($task->parent, '-') !== false ? end(explode('-', $task->parent)) : $task->parent;
+        $updateTask->type = array_search($task->taskType, $this->lang->task->typeList, true);
+
+        /* parent带-的代表任务，不带-的代表阶段，当记录的为阶段时任务的parent为0。*/
+        $updateTask->parent = strpos($task->parent, '-') !== false ? end(explode('-', $task->parent)) : 0;
 
         if(preg_match('/<span[^>]*class=[\'"]gantt_title[\'"]>(.+?)<\/span>/', $task->text, $taskName))
         {
@@ -1414,6 +1416,30 @@ class programplanModel extends model
                 if($task->story) $this->story->setStage($task->story);
             }
         }
+        return true;
+    }
+
+    /**
+     * 设置任务的路径。
+     * Set task path.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return bool
+     */
+    public function setTaskPath(int $taskID): bool
+    {
+        $task   = $this->dao->select('parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $parent = $this->dao->select('id,parent,path')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch();
+        $path   = empty($parent) ? ",{$taskID}," : "{$parent->path}{$taskID},";
+
+        $this->dao->update(TABLE_TASK)->set('path')->eq($path)->where('id')->eq($taskID)->exec();
+        if(dao::isError()) return false;
+
+        $children = $this->dao->select('id')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->eq($taskID)->fetchPairs('id');
+        if(empty($children)) return true;
+
+        foreach($children as $id) $this->setTaskPath($id);
         return true;
     }
 }

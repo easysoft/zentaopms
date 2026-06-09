@@ -661,6 +661,7 @@ class programplan extends control
 
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
         $targetData    = $targetVersion['data'] ?? array();
+        $parentStages  = $parentTasks = array();
         foreach($targetData as $version)
         {
             if($version->type == 'plan')
@@ -673,6 +674,7 @@ class programplan extends control
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 
+                if($version->parent == 0) $parentStages[$version->id] = $version->id;
                 if(isset($currentStages[$version->id])) unset($currentStages[$version->id]);
             }
             if($version->type == 'task')
@@ -685,6 +687,7 @@ class programplan extends control
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 
+                if(strpos($task->parent, '-') === false) $parentTasks[$version->id] = $version->id;
                 if(isset($currentTasks[$version->id])) unset($currentTasks[$version->id]);
             }
         }
@@ -706,6 +709,11 @@ class programplan extends control
         }
 
         $this->dao->commit();
+
+        /* 重置阶段和任务的path。*/
+        foreach($parentStages as $parentStageID) $this->programplan->setTreePath($parentStageID);
+        foreach($parentTasks as $parentTaskID) $this->programplan->setTaskPath($parentTaskID);
+
         return $this->sendSuccess(array('load' => true));
     }
 }
