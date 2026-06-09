@@ -14,6 +14,9 @@ cid=0
 - 执行customTest模块的checkInvalidKeysTest方法，参数是'story', 'sourceList', 'zh-cn', array 属性message @键的长度必须小于20个字符！
 - 执行customTest模块的checkInvalidKeysTest方法，参数是'story', 'sourceList', 'zh-cn', array  @1
 - 执行customTest模块的checkInvalidKeysTest方法，参数是'story', 'priList', 'zh-cn', array  @1
+- 执行customTest模块的checkInvalidKeysTest方法，参数是'user', 'outside', 'zh-cn', array  @1
+- 执行customTest模块的checkInvalidKeysTest方法，参数是'user', 'outside', 'zh-cn', array 属性message @键值应当为大小写英文字母、数字或下划线的组合
+- 执行customTest模块的checkInvalidKeysTest方法，参数是'user', 'deleted', 'zh-cn', array  @1
 
 */
 
@@ -32,3 +35,6 @@ r($customTest->checkInvalidKeysTest('todo', 'typeList', 'zh-cn', array('short', 
 r($customTest->checkInvalidKeysTest('story', 'sourceList', 'zh-cn', array('valid_key', 'verylongsourcekey1234'))) && p('message') && e('键的长度必须小于20个字符！');
 r($customTest->checkInvalidKeysTest('story', 'sourceList', 'zh-cn', array('valid_key', 'test123', 'ABC_def'))) && p() && e('1');
 r($customTest->checkInvalidKeysTest('story', 'priList', 'zh-cn', array())) && p() && e('1');
+r($customTest->checkInvalidKeysTest('user', 'outside', 'zh-cn', array('0', '1'))) && p() && e('1');
+r($customTest->checkInvalidKeysTest('user', 'outside', 'zh-cn', array('valid', 'invalid-key'))) && p('message') && e('键值应当为大小写英文字母、数字或下划线的组合');
+r($customTest->checkInvalidKeysTest('user', 'deleted', 'zh-cn', array())) && p() && e('1');

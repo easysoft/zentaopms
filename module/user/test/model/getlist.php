@@ -15,6 +15,8 @@ cid=19615
 - 查找系统中第四个用户的真实姓名第3条的realname属性 @用户名4
 - 查找系统中第五个用户的真实姓名第4条的realname属性 @用户名5
 - 查找系统中所有用户数量 @5
+- 开启showOutside查询未删除用户第2条的realname属性 @用户名5
+- 开启showOutside查询未删除用户数量 @3
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,6 +31,8 @@ $user->type->range('inside{3},outside{2}');
 $user->deleted->range('0-1');
 $user->gen(5);
 
+$showOutside = '1';
+
 $user = new userModelTest();
 
 r($user->getListTest())                  && p('0:realname') && e('用户名1'); // 查找系统中第一个未删除的、内部用户真实姓名,根据account正序排
@@ -40,3 +44,5 @@ r($user->getListTest('all'))             && p('2:realname') && e('用户名3'); 
 r($user->getListTest('all'))             && p('3:realname') && e('用户名4'); // 查找系统中第四个用户的真实姓名
 r($user->getListTest('all'))             && p('4:realname') && e('用户名5'); // 查找系统中第五个用户的真实姓名
 r($user->getListTest('all', true))       && p()             && e('5');       // 查找系统中所有用户数量
+r($user->getListTest('nodeleted', false, $showOutside)) && p('2:realname') && e('用户名5'); // 开启showOutside查询未删除用户包含外部用户
+r($user->getListTest('nodeleted', true, $showOutside))  && p()             && e('3');       // 开启showOutside查询未删除用户数量
