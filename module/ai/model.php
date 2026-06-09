@@ -35,6 +35,61 @@ class aiModel extends model
     public $errors = array();
 
     /**
+     * 根据config.php中的$config->ai->dataSource，和$config->ai->moduleGroup，生成数据源列表。
+     * 如果模块有dataSource定义，则直接使用
+     * 如果模块没有dataSource定义，则通过工作流（workflow）获取模块字段。
+     * 特殊的模块：programplans/executions 使用execution字段。stories使用story字段,bugs使用bug字段。
+     * 返回数据结构为：
+     * array(
+     *     'program' => array('name', 'desc', 'begin'),
+     *     'testsuite' => array('name', 'desc'),
+     *     'testtask' => array('name', 'desc', 'begin', 'end'),
+     *     'caselib' => array('name', 'desc'),
+     * )
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataSource()
+    {
+        $dataSource = array();
+        $fieldCache = array();
+        $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
+
+        $this->loadModel('workflowfield');
+        foreach($this->config->ai->moduleGroup as $group => $modules)
+        {
+            foreach($modules as $module)
+            {
+                $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
+                if(!empty($dataSource[$group][$module])) continue;
+
+                $cacheKey = "$group.$module";
+                if(isset($fieldCache[$cacheKey]))
+                {
+                    $dataSource[$group][$module] = $fieldCache[$cacheKey];
+                    continue;
+                }
+
+                $workflowModule = zget($moduleMap, $module, $module);
+
+                $fieldList = $this->loadModel('workflowfield')->getList($workflowModule);
+                foreach($fieldList as $field => $value)
+                {
+                    $this->lang->ai->moduleList[$module][$field] = $value->name;
+                }
+
+                $fields = array_keys($fieldList);
+
+                $fieldCache[$cacheKey]       = $fields;
+                $dataSource[$group][$module] = $fields;
+            }
+        }
+
+        return $dataSource;
+    }
+
+    /**
      * Check if object action is clickable, used in datatables.
      *
      * @param  object  $object  object to check, model objects are supported, add support for more if needed.

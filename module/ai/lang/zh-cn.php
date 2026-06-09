@@ -395,176 +395,45 @@ $APPEALS模型通过结构化分析，将模糊的直觉转化为清晰的数据
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
 /* Data source definition. */
-$lang->ai->dataSource = array();
+$lang->ai->moduleList = array();
 
-$lang->ai->dataSource['my']['common']          = '地盘';
-$lang->ai->dataSource['product']['common']     = '产品';
-$lang->ai->dataSource['story']['common']       = '需求';
-$lang->ai->dataSource['productplan']['common'] = '计划';
-$lang->ai->dataSource['release']['common']     = '发布';
-$lang->ai->dataSource['project']['common']     = '项目';
-$lang->ai->dataSource['execution']['common']   = '执行';
-$lang->ai->dataSource['task']['common']        = '任务';
-$lang->ai->dataSource['bug']['common']         = 'Bug';
-$lang->ai->dataSource['case']['common']        = '用例';
-$lang->ai->dataSource['doc']['common']         = '文档';
-
-$lang->ai->dataSource['my']['efforts']['common']    = '日志列表';
-$lang->ai->dataSource['my']['efforts']['date']      = '日期';
-$lang->ai->dataSource['my']['efforts']['work']      = '工作内容';
-$lang->ai->dataSource['my']['efforts']['account']   = '记录人';
-$lang->ai->dataSource['my']['efforts']['consumed']  = '耗时';
-$lang->ai->dataSource['my']['efforts']['left']      = '剩余';
-$lang->ai->dataSource['my']['efforts']['objectID']  = '对象';
-$lang->ai->dataSource['my']['efforts']['product']   = '产品';
-$lang->ai->dataSource['my']['efforts']['project']   = '项目';
-$lang->ai->dataSource['my']['efforts']['execution'] = '执行';
-
-$lang->ai->dataSource['product']['product']['common']  = '产品';
-$lang->ai->dataSource['product']['product']['name']    = '产品名称';
-$lang->ai->dataSource['product']['product']['desc']    = '产品描述';
-$lang->ai->dataSource['product']['modules']['common']  = '产品模块列表';
-$lang->ai->dataSource['product']['modules']['name']    = '模块名称';
-$lang->ai->dataSource['product']['modules']['modules'] = '子模块';
-
-$lang->ai->dataSource['productplan']['productplan']['common'] = '计划';
-$lang->ai->dataSource['productplan']['productplan']['title']  = '计划名称';
-$lang->ai->dataSource['productplan']['productplan']['desc']   = '计划描述';
-$lang->ai->dataSource['productplan']['productplan']['begin']  = '开始时间';
-$lang->ai->dataSource['productplan']['productplan']['end']    = '结束时间';
-
-$lang->ai->dataSource['productplan']['stories']['common']   = '需求列表';
-$lang->ai->dataSource['productplan']['stories']['title']    = '需求名称';
-$lang->ai->dataSource['productplan']['stories']['module']   = '所属模块';
-$lang->ai->dataSource['productplan']['stories']['pri']      = '优先级';
-$lang->ai->dataSource['productplan']['stories']['estimate'] = '预计故事点';
-$lang->ai->dataSource['productplan']['stories']['status']   = '状态';
-$lang->ai->dataSource['productplan']['stories']['stage']    = '阶段';
-
-$lang->ai->dataSource['productplan']['bugs']['common'] = 'Bug列表';
-$lang->ai->dataSource['productplan']['bugs']['title']  = 'Bug标题';
-$lang->ai->dataSource['productplan']['bugs']['pri']    = '优先级';
-$lang->ai->dataSource['productplan']['bugs']['status'] = '状态';
-
-$lang->ai->dataSource['release']['release']['common']  = '发布';
-$lang->ai->dataSource['release']['release']['product'] = '所属产品';
-$lang->ai->dataSource['release']['release']['name']    = '发布名称';
-$lang->ai->dataSource['release']['release']['desc']    = '发布描述';
-$lang->ai->dataSource['release']['release']['date']    = '发布日期';
-
-$lang->ai->dataSource['release']['stories']['common']   = '需求列表';
-$lang->ai->dataSource['release']['stories']['title']    = '需求名称';
-$lang->ai->dataSource['release']['stories']['estimate'] = '预估故事点';
-
-$lang->ai->dataSource['release']['bugs']['common'] = 'Bug列表';
-$lang->ai->dataSource['release']['bugs']['title']  = 'Bug标题';
-
-$lang->ai->dataSource['project']['project']['common']   = '项目';
-$lang->ai->dataSource['project']['project']['name']     = '项目名称';
-$lang->ai->dataSource['project']['project']['type']     = '项目类型';
-$lang->ai->dataSource['project']['project']['desc']     = '项目描述';
-$lang->ai->dataSource['project']['project']['begin']    = '计划开始';
-$lang->ai->dataSource['project']['project']['end']      = '计划结束';
-$lang->ai->dataSource['project']['project']['estimate'] = '预计工时';
-
-$lang->ai->dataSource['project']['programplans']['common']    = '阶段列表';
-$lang->ai->dataSource['project']['programplans']['name']      = '阶段名称';
-$lang->ai->dataSource['project']['programplans']['desc']      = '阶段描述';
-$lang->ai->dataSource['project']['programplans']['status']    = '阶段状态';
-$lang->ai->dataSource['project']['programplans']['begin']     = '计划开始';
-$lang->ai->dataSource['project']['programplans']['end']       = '计划完成';
-$lang->ai->dataSource['project']['programplans']['realBegan'] = '实际开始';
-$lang->ai->dataSource['project']['programplans']['realEnd']   = '实际完成';
-$lang->ai->dataSource['project']['programplans']['progress']  = '任务进度';
-$lang->ai->dataSource['project']['programplans']['estimate']  = '预计工时';
-$lang->ai->dataSource['project']['programplans']['consumed']  = '消耗工时';
-$lang->ai->dataSource['project']['programplans']['left']      = '剩余工时';
-
-$lang->ai->dataSource['project']['executions']['common']    = '迭代列表';
-$lang->ai->dataSource['project']['executions']['name']      = '执行名称';
-$lang->ai->dataSource['project']['executions']['desc']      = '执行描述';
-$lang->ai->dataSource['project']['executions']['status']    = '执行状态';
-$lang->ai->dataSource['project']['executions']['begin']     = '计划开始';
-$lang->ai->dataSource['project']['executions']['end']       = '计划完成';
-$lang->ai->dataSource['project']['executions']['realBegan'] = '实际开始';
-$lang->ai->dataSource['project']['executions']['realEnd']   = '实际完成';
-$lang->ai->dataSource['project']['executions']['estimate']  = '预计工时';
-$lang->ai->dataSource['project']['executions']['consumed']  = '消耗工时';
-$lang->ai->dataSource['project']['executions']['left']      = '剩余工时';
-$lang->ai->dataSource['project']['executions']['progress']  = '进度';
-
-$lang->ai->dataSource['story']['story']['common']   = '需求';
-$lang->ai->dataSource['story']['story']['title']    = '需求标题';
-$lang->ai->dataSource['story']['story']['spec']     = '需求描述';
-$lang->ai->dataSource['story']['story']['verify']   = '验收标准';
-$lang->ai->dataSource['story']['story']['product']  = '产品';
-$lang->ai->dataSource['story']['story']['module']   = '模块';
-$lang->ai->dataSource['story']['story']['pri']      = '优先级';
-$lang->ai->dataSource['story']['story']['category'] = '需求类型';
-$lang->ai->dataSource['story']['story']['estimate'] = '预计工时';
-
-$lang->ai->dataSource['execution']['execution']['common']   = '执行';
-$lang->ai->dataSource['execution']['execution']['name']     = '执行名称';
-$lang->ai->dataSource['execution']['execution']['desc']     = '执行描述';
-$lang->ai->dataSource['execution']['execution']['estimate'] = '预计工时';
-
-$lang->ai->dataSource['execution']['tasks']['common']       = '任务列表';
-$lang->ai->dataSource['execution']['tasks']['name']         = '任务名称';
-$lang->ai->dataSource['execution']['tasks']['pri']          = '优先级';
-$lang->ai->dataSource['execution']['tasks']['status']       = '状态';
-$lang->ai->dataSource['execution']['tasks']['estimate']     = '预计工时';
-$lang->ai->dataSource['execution']['tasks']['consumed']     = '已消耗';
-$lang->ai->dataSource['execution']['tasks']['left']         = '剩余';
-$lang->ai->dataSource['execution']['tasks']['progress']     = '进度';
-$lang->ai->dataSource['execution']['tasks']['estStarted']   = '预计开始';
-$lang->ai->dataSource['execution']['tasks']['realStarted']  = '实际开始';
-$lang->ai->dataSource['execution']['tasks']['finishedDate'] = '完成日期';
-$lang->ai->dataSource['execution']['tasks']['closedReason'] = '关闭原因';
-
-$lang->ai->dataSource['task']['task']['common']      = '任务';
-$lang->ai->dataSource['task']['task']['name']        = '任务名称';
-$lang->ai->dataSource['task']['task']['desc']        = '任务描述';
-$lang->ai->dataSource['task']['task']['pri']         = '优先级';
-$lang->ai->dataSource['task']['task']['status']      = '状态';
-$lang->ai->dataSource['task']['task']['estimate']    = '预计';
-$lang->ai->dataSource['task']['task']['consumed']    = '消耗';
-$lang->ai->dataSource['task']['task']['left']        = '剩余';
-$lang->ai->dataSource['task']['task']['progress']    = '进度';
-$lang->ai->dataSource['task']['task']['estStarted']  = '预计开始';
-$lang->ai->dataSource['task']['task']['realStarted'] = '实际开始';
-$lang->ai->dataSource['task']['task']['story']       = '相关需求';
-
-$lang->ai->dataSource['case']['case']['common']        = '用例';
-$lang->ai->dataSource['case']['case']['title']         = '标题';
-$lang->ai->dataSource['case']['case']['precondition']  = '前置条件';
-$lang->ai->dataSource['case']['case']['scene']         = '所属场景';
-$lang->ai->dataSource['case']['case']['product']       = '所属产品';
-$lang->ai->dataSource['case']['case']['module']        = '所属模块';
-$lang->ai->dataSource['case']['case']['pri']           = '优先级';
-$lang->ai->dataSource['case']['case']['type']          = '类型';
-$lang->ai->dataSource['case']['case']['lastRunResult'] = '结果';
-$lang->ai->dataSource['case']['case']['status']        = '状态';
-
-$lang->ai->dataSource['case']['steps']['common'] = '步骤列表';
-$lang->ai->dataSource['case']['steps']['desc']   = '步骤描述';
-$lang->ai->dataSource['case']['steps']['expect'] = '预期';
-
-$lang->ai->dataSource['bug']['bug']['common']    = 'Bug';
-$lang->ai->dataSource['bug']['bug']['title']     = 'Bug标题';
-$lang->ai->dataSource['bug']['bug']['steps']     = '重现步骤';
-$lang->ai->dataSource['bug']['bug']['severity']  = '级别';
-$lang->ai->dataSource['bug']['bug']['pri']       = '优先级';
-$lang->ai->dataSource['bug']['bug']['status']    = '状态';
-$lang->ai->dataSource['bug']['bug']['confirmed'] = '确认';
-$lang->ai->dataSource['bug']['bug']['type']      = 'Bug类型';
-
-$lang->ai->dataSource['doc']['doc']['common']     = '文档';
-$lang->ai->dataSource['doc']['doc']['title']      = '文档标题';
-$lang->ai->dataSource['doc']['doc']['content']    = '文档正文';
-$lang->ai->dataSource['doc']['doc']['addedBy']    = '创建者';
-$lang->ai->dataSource['doc']['doc']['addedDate']  = '创建日期';
-$lang->ai->dataSource['doc']['doc']['editedBy']   = '修改者';
-$lang->ai->dataSource['doc']['doc']['editedDate'] = '修改日期';
+$lang->ai->moduleList['program']['common']      = '项目集';
+$lang->ai->moduleList['program']['name']        = '项目集名称';
+$lang->ai->moduleList['program']['desc']        = '项目集描述';
+$lang->ai->moduleList['product']['common']      = '产品';
+$lang->ai->moduleList['story']['common']        = '需求';
+$lang->ai->moduleList['productplan']['common']  = '计划';
+$lang->ai->moduleList['release']['common']      = '发布';
+$lang->ai->moduleList['charter']['common']      = '立项';
+$lang->ai->moduleList['project']['common']      = '项目';
+$lang->ai->moduleList['execution']['common']    = '执行';
+$lang->ai->moduleList['executions']['common']   = '执行列表';
+$lang->ai->moduleList['programplans']['common'] = '阶段列表';
+$lang->ai->moduleList['task']['common']         = '任务';
+$lang->ai->moduleList['bug']['common']          = 'Bug';
+$lang->ai->moduleList['case']['common']         = '用例';
+$lang->ai->moduleList['steps']['common']        = '用例步骤';
+$lang->ai->moduleList['steps']['desc']          = '描述';
+$lang->ai->moduleList['steps']['expect']        = '预期结果';
+$lang->ai->moduleList['caselib']['common']      = '用例库';
+$lang->ai->moduleList['caselib']['name']        = '用例库名称';
+$lang->ai->moduleList['caselib']['desc']        = '用例库描述';
+$lang->ai->moduleList['testsuite']['common']    = '套件';
+$lang->ai->moduleList['testsuite']['name']      = '套件名称';
+$lang->ai->moduleList['testsuite']['desc']      = '套件描述';
+$lang->ai->moduleList['testtask']['common']     = '测试单';
+$lang->ai->moduleList['testtask']['name']       = '测试单名称';
+$lang->ai->moduleList['testtask']['desc']       = '测试单描述';
+$lang->ai->moduleList['testtask']['begin']      = '开始时间';
+$lang->ai->moduleList['testtask']['end']        = '结束时间';
+$lang->ai->moduleList['doc']['common']          = '文档';
+$lang->ai->moduleList['doc']['name']            = '文档名称';
+$lang->ai->moduleList['doc']['desc']            = '文档描述';
+$lang->ai->moduleList['doc']['addedBy']         = '创建者';
+$lang->ai->moduleList['doc']['addedDate']       = '创建时间';
+$lang->ai->moduleList['doc']['editedBy']        = '修改者';
+$lang->ai->moduleList['doc']['editedDate']      = '修改时间';
+$lang->ai->moduleList['doc']['content']         = '文档内容';
 
 /* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
