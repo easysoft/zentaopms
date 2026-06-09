@@ -431,4 +431,18 @@ class artifactModel extends model
 
         return $items;
     }
+
+    /**
+     * 获取目录名, 兼容Windows。
+     * parseDirname
+     *
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function parseDirname(string $path): string
+    {
+        $path = dirname($path);
+        return str_replace('\\', '/', $path);
+    }
 }
