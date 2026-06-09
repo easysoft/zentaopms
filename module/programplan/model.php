@@ -1204,6 +1204,49 @@ class programplanModel extends model
     }
 
     /**
+     * 保存甘特图临时版本。
+     * Save tmp gantt version.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $data
+     * @access public
+     * @return void
+     */
+    public function saveTmpGanttVersion(int $projectID = 0, string $type = '', string $data = '')
+    {
+        $status  = 'tmpGantt';
+        $project = $this->loadModel('project')->fetchByID($projectID);
+
+        $oldVersions = $this->dao->select('id')->from(TABLE_OBJECT)
+            ->where('status')->eq($status)
+            ->andWhere('type')->eq('taged')
+            ->beginIF($project->type == 'project')->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(in_array($project->type, array('stage', 'sprint', 'kanban')))->andWhere('execution')->eq($projectID)->fi()
+            ->orderBy('id_asc')
+            ->fetchAll();
+
+        if(count($oldVersions) >= 5)
+        {
+            $oldestVersion = reset($oldVersions);
+            if(!empty($oldestVersion->id)) $this->dao->delete()->from(TABLE_OBJECT)->where('id')->eq($oldestVersion->id)->exec();
+        }
+
+        $version = new stdClass();
+        $version->version  = date(DT_DATE3 . ' H:i:s');
+        $version->title    = date(DT_DATE3 . ' H:i:s');
+        $version->product  = 0;
+        $version->type     = 'taged';
+        $version->category = $type;
+        $version->status   = $status;
+        $version->data     = $data;
+
+        if($project->type == 'project') $version->project = $projectID;
+        if(in_array($project->type, array('stage', 'sprint', 'kanban'))) $version->execution = $projectID;
+        $this->dao->insert(TABLE_OBJECT)->data($version)->exec();
+    }
+
+    /**
      * Rollback stage.
      * 回滚阶段。
      *

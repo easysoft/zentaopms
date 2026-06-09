@@ -1139,4 +1139,25 @@ class programplanModelTest extends baseTest
         foreach($tasks as $task) $output[] = $task;
         return $output;
     }
+
+    /**
+     * Test saveTmpGanttVersion method.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $data
+     * @access public
+     * @return array|false
+     */
+    public function saveTmpGanttVersionTest(int $projectID, string $type, string $data): array|false
+    {
+        $this->instance->saveTmpGanttVersion($projectID, $type, $data);
+
+        if(dao::isError()) return dao::getError();
+
+        $versions = $this->instance->dao->select('*')->from(TABLE_OBJECT)->where('status')->eq('tmpGantt')->andWhere('type')->eq('taged')->orderBy('id_asc')->fetchAll();
+        $output   = array('count' => count($versions));
+        foreach($versions as $version) $output[] = $version;
+        return $output;
+    }
 }
