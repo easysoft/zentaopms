@@ -3013,6 +3013,11 @@ class aiModel extends model
 
         $useUniversalForm = (array)$this->config->ai->useUniversalForm;
         if(empty($useUniversalForm)) return array();
+
+        return array_filter($prompts, function($prompt) use ($useUniversalForm)
+        {
+            return in_array($prompt->code, $useUniversalForm);
+        });
     }
 
     /**
@@ -3034,6 +3039,172 @@ class aiModel extends model
         if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
+    }
+
+    /**
+     * 加载表单上下文的关联对象
+     * Load context objects from form schema fields.
+     *
+     * @param  array $formSchema
+     * @param  array $fieldNames  表单字段名列表，字段值作为对象 ID 加载
+     * @param  array $relations
+     * @access public
+     * @return array
+     */
+    public function loadFormContextObjects(array $formSchema, array $fieldNames, array $relations = array())
+    {
+        $context = array();
+        if(empty($formSchema['fields'])) return $context;
+
+        $pageLevelTypes = (array)$this->config->ai->contextPageLevel;
+        $pageLevelFields = array('name', 'desc', 'model', 'attribute', 'begin', 'end');
+        $associatedFields = array('title', 'spec', 'verify', 'type', 'pri', 'estimate', 'status');
+        $loadedObjects = array();
+
+        foreach($fieldNames as $fieldName)
+        {
+            if(empty($formSchema['fields'][$fieldName]['currentValue'])) continue;
+            $id = (int)$formSchema['fields'][$fieldName]['currentValue'];
+            if($id <= 0) continue;
+
+            if(!$this->loadModel('zai')->canViewObject($fieldName, $id)) continue;
+
+            $object = $this->loadModel($fieldName)->getById($id);
+            if(empty($object)) continue;
+
+            $loadedObjects[$fieldName] = $object;
+
+            $fields = in_array($fieldName, $pageLevelTypes) ? $pageLevelFields : $associatedFields;
+            $data = array('id' => $object->id);
+            foreach($fields as $field)
+            {
+                if(!isset($object->$field) || $object->$field === '') continue;
+                $data[$field] = in_array($field, array('desc', 'spec', 'verify')) ? strip_tags($object->$field) : $object->$field;
+            }
+            $context[$fieldName] = $data;
+        }
+
+        if(!empty($relations) && !empty($loadedObjects))
+        {
+            foreach($relations as $fromKey => $toMapping)
+            {
+                if(empty($loadedObjects[$fromKey])) continue;
+                $fromObject = $loadedObjects[$fromKey];
+
+                foreach($toMapping as $toKey => $toConfig)
+                {
+                    if(isset($context[$toKey])) continue;
+
+                    $toModule  = is_string($toConfig) ? $toConfig : ($toConfig['module'] ?? $toKey);
+                    $field     = is_array($toConfig) ? ($toConfig['field'] ?? $toKey) : $toKey;
+                    $via       = is_array($toConfig) ? ($toConfig['via'] ?? '') : '';
+
+                    if($via === 'projectproduct')
+                    {
+                        $productId = $this->loadModel('product')->getProductIDByProject($fromObject->id, true);
+                        if(empty($productId)) continue;
+                        $relId = (int)$productId;
+                    }
+                    else
+                    {
+                        if(!isset($fromObject->$field)) continue;
+                        $relId = (int)$fromObject->$field;
+                    }
+
+                    if($relId <= 0) continue;
+                    if(!$this->loadModel('zai')->canViewObject($toModule, $relId)) continue;
+
+                    $object = $this->loadModel($toModule)->getById($relId);
+                    if(empty($object)) continue;
+
+                    $loadedObjects[$toKey] = $object;
+
+                    $fields = in_array($toKey, $pageLevelTypes) ? $pageLevelFields : $associatedFields;
+                    $data = array('id' => $object->id);
+                    foreach($fields as $field)
+                    {
+                        if(!isset($object->$field) || $object->$field === '') continue;
+                        $data[$field] = in_array($field, array('desc')) ? strip_tags($object->$field) : $object->$field;
+                    }
+                    $context[$toKey] = $data;
+                }
+            }
+        }
+
+        return $context;
+    }
+
+    /**
+     * 构建上下文描述字符串
+     * Build context description string for prompt.
+     *
+     * @param  array $contextObjects
+     * @access public
+     * @return string
+     */
+    public function buildContextDescription(array $contextObjects)
+    {
+        $topLabels      = (array)$this->config->ai->contextLabels;
+        $fieldLabels    = (array)$this->config->ai->contextFieldLabels;
+        $pageLevelTypes = (array)$this->config->ai->contextPageLevel;
+        $desc           = '';
+
+        foreach($contextObjects as $key => $data)
+        {
+            $desc .= "{$topLabels[$key]}：" . (in_array($key, $pageLevelTypes) ? '' : "#{$data['id']}") . "\n";
+
+            if(in_array($key, $pageLevelTypes))
+            {
+                $hasBeginEnd = !empty($data['begin']) && !empty($data['end']);
+                foreach($data as $field => $value)
+                {
+                    if(in_array($field, array('id'))) continue;
+                    if($field === 'begin' || $field === 'end') continue;
+                    $label = $fieldLabels[$field] ?? $field;
+                    $desc .= "  {$label}：{$value}\n";
+                }
+                if($hasBeginEnd)
+                {
+                    $pairLabel = $fieldLabels['begin_end'] ?? '日期';
+                    $desc .= "  {$pairLabel}：{$data['begin']} ~ {$data['end']}\n";
+                }
+            }
+            else
+            {
+                $fieldOrder = array('title', 'spec', 'verify', 'type', 'pri', 'estimate', 'status');
+                foreach($fieldOrder as $field)
+                {
+                    if(empty($data[$field])) continue;
+                    $label = $fieldLabels[$field] ?? '';
+                    if(!$label) continue;
+                    $value = $data[$field];
+                    if($field === 'estimate') $value .= 'h';
+                    $desc .= "  {$label}：{$value}\n";
+                }
+            }
+        }
+
+        return rtrim($desc);
+    }
+
+    /**
+     * 过滤字段白名单
+     * Filter fields to only allowed ones.
+     *
+     * @param  array $fields
+     * @param  array $allowed
+     * @access public
+     * @return array
+     */
+    public function filterAllowedFields(array $fields, array $allowed)
+    {
+        if(empty($allowed)) return $fields;
+        $filtered = array();
+        foreach($fields as $name => $field)
+        {
+            if(in_array($name, $allowed)) $filtered[$name] = $field;
+        }
+        return $filtered ?: $fields;
     }
 
     /**
