@@ -1120,4 +1120,23 @@ class programplanModelTest extends baseTest
 
         return $output;
     }
+
+    /**
+     * Test setTaskPath method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return array|false
+     */
+    public function setTaskPathTest(int $taskID): array|false
+    {
+        $result = $this->instance->setTaskPath($taskID);
+
+        if(dao::isError()) return dao::getError();
+
+        $tasks  = $this->instance->dao->select('id,parent,path')->from(TABLE_TASK)->orderBy('id_asc')->fetchAll();
+        $output = array('result' => $result);
+        foreach($tasks as $task) $output[] = $task;
+        return $output;
+    }
 }

@@ -637,7 +637,11 @@ class programplan extends control
                 $currentStages[$version->id] = $version->id;
             }
 
-            if($version->type == 'task') $currentTasks[$version->id] = $version->id;
+            if($version->type == 'task')
+            {
+                $taskID = explode('-', $version->id)[1];
+                $currentTasks[$taskID] = $taskID;
+            }
 
             $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
         }
@@ -661,6 +665,7 @@ class programplan extends control
 
         $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
         $targetData    = $targetVersion['data'] ?? array();
+        $parentStages  = $parentTasks = array();
         foreach($targetData as $version)
         {
             if($version->type == 'plan')
@@ -673,6 +678,7 @@ class programplan extends control
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 
+                if($version->parent == 0) $parentStages[$version->id] = $version->id;
                 if(isset($currentStages[$version->id])) unset($currentStages[$version->id]);
             }
             if($version->type == 'task')
@@ -685,7 +691,9 @@ class programplan extends control
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 
-                if(isset($currentTasks[$version->id])) unset($currentTasks[$version->id]);
+                $taskID = explode('-', $version->id)[1];
+                if(strpos((string)$version->parent, '-') === false) $parentTasks[$taskID] = $taskID;
+                if(isset($currentTasks[$taskID])) unset($currentTasks[$taskID]);
             }
         }
 
@@ -706,6 +714,11 @@ class programplan extends control
         }
 
         $this->dao->commit();
+
+        /* 重置阶段和任务的path。*/
+        foreach($parentStages as $parentStageID) $this->programplan->setTreePath($parentStageID);
+        foreach($parentTasks as $parentTaskID) $this->programplan->setTaskPath((int)$parentTaskID);
+
         return $this->sendSuccess(array('load' => true));
     }
 }
