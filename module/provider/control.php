@@ -11,4 +11,21 @@ declare(strict_types=1);
  */
 class provider extends control
 {
+    /**
+     * 浏览服务列表。
+     * Browse provider list.
+     *
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browse(string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->loadModel('space')->setMenu();
+
+        $this->view->title = $this->lang->provider->browse;
+        $this->display();
+    }
 }
