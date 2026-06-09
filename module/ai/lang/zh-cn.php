@@ -394,7 +394,6 @@ $APPEALS模型通过结构化分析，将模糊的直觉转化为清晰的数据
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
-/* Data source definition. */
 $lang->ai->moduleList = array();
 
 $lang->ai->moduleList['program']['common']      = '项目集';
@@ -402,6 +401,8 @@ $lang->ai->moduleList['program']['name']        = '项目集名称';
 $lang->ai->moduleList['program']['desc']        = '项目集描述';
 $lang->ai->moduleList['product']['common']      = '产品';
 $lang->ai->moduleList['story']['common']        = '需求';
+$lang->ai->moduleList['story']['spec']          = '需求描述';
+$lang->ai->moduleList['story']['verify']        = '验收标准';
 $lang->ai->moduleList['productplan']['common']  = '计划';
 $lang->ai->moduleList['release']['common']      = '发布';
 $lang->ai->moduleList['charter']['common']      = '立项';
