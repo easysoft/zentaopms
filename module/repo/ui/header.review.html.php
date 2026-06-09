@@ -11,6 +11,8 @@ declare(strict_types=1);
  */
 
 namespace zin;
+global $app;
+$app->loadLang('bug');
 
 /* get last review info in this file. */
 $lastReview   = $this->repo->getLastReviewInfo($file);
@@ -119,7 +121,7 @@ foreach($products as $id => $product) $productPickerItems[] = array('text' => $p
 foreach($branches as $id => $branch) $branchPickerItems[] = array('text' => $branch, 'value' => $id);
 foreach($executions as $id => $execution) $executionPickerItems[] = array('text' => $execution, 'value' => $id);
 foreach($modules as $id => $module) $modulePickerItems[] = array('text' => $module, 'value' => $id);
-foreach($lang->repo->typeList as $id => $repoType) $typePickerItems[] = array('text' => $repoType, 'value' => $id);
+foreach($lang->bug->typeList as $id => $repoType) $typePickerItems[] = array('text' => $repoType, 'value' => $id);
 foreach($users as $id => $user) $userPickerItems[] = array('text' => $user, 'value' => $id);
 
 $browser = helper::getBrowser();

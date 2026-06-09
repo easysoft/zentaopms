@@ -89,4 +89,3 @@ $config->repo->form->addBug['severity']      = array('required' => false, 'type'
 $config->repo->form->addBug['openedDate']    = array('required' => false, 'type' => 'string', 'default' => $now);
 $config->repo->form->addBug['assignedDate']  = array('required' => false, 'type' => 'string', 'default' => $now);
 $config->repo->form->addBug['openedBuild']   = array('required' => false, 'type' => 'string', 'default' => 'trunk');
-$config->repo->form->addBug['type']          = array('required' => false, 'type' => 'string', 'default' => 'codeimprovement');

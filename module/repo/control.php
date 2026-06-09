@@ -2308,6 +2308,7 @@ class repo extends control
                 ->add('v2', $v2)
                 ->remove('begin,end,uid,fromReversion,revision,file')
                 ->get();
+            $bug->type = $bug->repoType;
             $bug = $this->loadModel('file')->processImgURL($bug, 'steps',(string)$this->post->uid);
 
             $result = $this->repo->saveBug($repoID, $bug);
