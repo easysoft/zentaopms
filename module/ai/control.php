@@ -333,6 +333,9 @@ class ai extends control
         if(empty($prompt)) $prompt = new stdclass();
         if(empty($prompt->id)) $prompt->id = 0;
         if(!isset($prompt->name)) $prompt->name = '';
+        if(!isset($prompt->module)) $prompt->module = '';
+        if(!isset($prompt->actionPurpose)) $prompt->actionPurpose = '';
+        if(!isset($prompt->displayPosition)) $prompt->displayPosition = '';
 
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
