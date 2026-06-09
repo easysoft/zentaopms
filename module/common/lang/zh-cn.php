@@ -500,6 +500,7 @@ $lang->scanplan->common     = '扫描计划';
 $lang->scantask->common     = '扫描任务';
 $lang->scanissue->common    = '扫描问题';
 $lang->scanOverview->common = '扫描概况';
+$lang->provider->common     = '服务';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
