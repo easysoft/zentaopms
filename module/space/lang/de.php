@@ -44,8 +44,8 @@ $lang->space->aclList['open']    = 'Open';
 $lang->space->aclList['private'] = 'Private';
 
 $lang->space->aclNoticeList = array();
-$lang->space->aclNoticeList['open']    = 'Public (Anyone with space view permission can access the space and its artifact)';
-$lang->space->aclNoticeList['private'] = 'Private (Only members and space administrators can access the space and its artifact)';
+$lang->space->aclNoticeList['open']    = 'Public (Anyone with space view permission can access the space)';
+$lang->space->aclNoticeList['private'] = 'Private (Only members and space administrators can access the space)';
 
 $lang->space->authList = array();
 $lang->space->authList['extend'] = 'Extend';
