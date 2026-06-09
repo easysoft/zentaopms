@@ -4157,7 +4157,7 @@ $config->group->package->browseReviewRequest->order  = 2580;
 $config->group->package->browseReviewRequest->subset = 'codeReview';
 $config->group->package->browseReviewRequest->privs  = array();
 $config->group->package->browseReviewRequest->privs['ppm-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('repo-maintain', 'repo-browse'), 'recommend' => array('ppm-addReview', 'ppm-approval', 'ppm-close', 'ppm-create', 'ppm-edit', 'ppm-linkBug', 'ppm-linkStory', 'ppm-linkTask', 'ppm-reopen', 'ppm-unlink', 'ppm-view'));
-$config->group->package->browseReviewRequest->privs['ppm-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array());
+$config->group->package->browseReviewRequest->privs['ppm-view']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse', 'approval-progress'), 'recommend' => array());
 
 $config->group->package->submitReviewRequest = new stdclass();
 $config->group->package->submitReviewRequest->order  = 2585;
@@ -4172,9 +4172,9 @@ $config->group->package->codeReview = new stdclass();
 $config->group->package->codeReview->order  = 2590;
 $config->group->package->codeReview->subset = 'codeReview';
 $config->group->package->codeReview->privs  = array();
-$config->group->package->codeReview->privs['ppm-review'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-close', 'ppm-reopen'));
-$config->group->package->codeReview->privs['ppm-close']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-reopen'));
-$config->group->package->codeReview->privs['ppm-reopen'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ppm-browse'), 'recommend' => array('ppm-review', 'ppm-close'));
+$config->group->package->codeReview->privs['ppm-review'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ppm-browse', 'approval-progress'), 'recommend' => array('ppm-close', 'ppm-reopen'));
+$config->group->package->codeReview->privs['ppm-close']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ppm-browse', 'approval-progress'), 'recommend' => array('ppm-review', 'ppm-reopen'));
+$config->group->package->codeReview->privs['ppm-reopen'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ppm-browse', 'approval-progress'), 'recommend' => array('ppm-review', 'ppm-close'));
 
 $config->group->package->trainPracticeLib = new stdclass();
 $config->group->package->trainPracticeLib->order  = 8;
