@@ -758,7 +758,7 @@ class productTao extends productModel
         $projectIdList = array_column($executions, 'project');
 
         /* 现在只有阶段有子阶段，所以只查询阶段类型的执行。 */
-        $stages      = $this->dao->select('id,name,attribute,parent,path')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $stages      = $this->dao->select('id,name,attribute,parent,path')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage,kanban')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
         $stageFilter = str_contains($mode, 'stagefilter');
         foreach($stages as $exec) $parents[$exec->parent] = true;
 

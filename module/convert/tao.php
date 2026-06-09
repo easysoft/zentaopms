@@ -2539,7 +2539,7 @@ class convertTao extends convertModel
                 if(empty($fieldRelation[$module][$jiraField]))
                 {
                     $jiraFields  = $this->session->jiraMethod == 'api' ? zget($fields, $jiraCode, array()) : $fields;
-                    $controlCode = !empty($jiraFields[$jiraField]->customfieldtypekey) ? $jiraFields[$jiraField]->customfieldtypekey : 'com.atlassian.jira.plugin.system.customfieldtypes:textfield';
+                    $controlCode = zget($jiraFields[$jiraField], 'customfieldtypekey', 'com.atlassian.jira.plugin.system.customfieldtypes:textfield');
 
                     $options = array('code' => array(), 'name' => array());
                     foreach($fieldOptions as $optionID => $fieldOption)
