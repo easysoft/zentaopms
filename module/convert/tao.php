@@ -1228,22 +1228,23 @@ class convertTao extends convertModel
      * 导入issue变更记录。
      * Import jira issue change item.
      *
-     * @param  array     $dataList
+     * @param  array     $changeItems
      * @param  array     $changeGroups
      * @access protected
      * @return bool
      */
-    protected function importJiraChangeItem(array $dataList, array $changeGroups = array()): bool
+    protected function importJiraChangeItem(array $changeItems, array $changeGroups = array()): bool
     {
         $issueList = $this->getIssueData();
 
         $changeGroup    = $changeGroups || $this->session->jiraMethod == 'api' ? $changeGroups : $this->getJiraData($this->session->jiraMethod, 'changegroup');
-        $changeRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jchangeitem')->fetchAll('AID');
-        foreach($dataList as $data)
+        $changeRelation = $this->dao->dbh($this->dbh)->select('*')->from(JIRA_TMPRELATION)->where('AType')->eq('jchangegroup')->fetchAll('AID');
+
+        $actionGroup = array();
+        foreach($changeGroup as $group)
         {
-            $data = (object)$data;
-            if(!empty($changeRelation[$data->id])) continue;
-            $group = $changeGroup[$data->groupid];
+            $group = (object)$group;
+            if(!empty($changeRelation[$group->id])) continue;
 
             $issueID = $group->issueid;
             if(!isset($issueList[$issueID])) continue;
@@ -1257,13 +1258,31 @@ class convertTao extends convertModel
             $action->objectType = substr($objectType, 1);
             $action->objectID   = $objectID;
             $action->actor      = $this->getJiraAccount(isset($group->author) ? $group->author : '');
-            $action->action     = 'commented';
+            $action->action     = 'edited';
             $action->date       = isset($group->created) ? $this->formatDatetime(substr($group->created, 0, 19)) : '';
-            $action->comment    = sprintf($this->lang->convert->jira->changeItems, $data->field, $data->oldstring, $data->newstring);
+            $action->comment    = '';
             $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
             $actionID = $this->dao->dbh($this->dbh)->lastInsertID();
 
-            $this->createTmpRelation('jchangeitem', $data->id, 'zaction', $actionID);
+            $actionGroup[$group->id] = $actionID;
+            $this->createTmpRelation('jchangegroup', $group->id, 'zaction', $actionID);
+        }
+
+        foreach($changeItems as $changeItem)
+        {
+            $changeItem = (object)$changeItem;
+            if(empty($actionGroup[$changeItem->groupid])) continue;
+            $actionID = $actionGroup[$changeItem->groupid];
+
+            $history = new stdclass();
+            $history->action     = $actionID;
+            $history->field      = $changeItem->field;
+            $history->oldValue   = $changeItem->oldstring;
+            $history->newValue   = $changeItem->newstring;
+            $this->dao->dbh($this->dbh)->insert(TABLE_HISTORY)->data($history)->exec();
+            $historyID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            $this->createTmpRelation('jchangeitem', $changeItem->id, 'zaction', $historyID);
         }
 
         return true;
