@@ -29,7 +29,7 @@ toolbar
         'class'       => 'primary',
         'icon'        => 'plus',
         'text'        => $lang->ai->prompts->create,
-        'url'         => inlink('createprompt')
+        'url'         => inlink('promptbasicinfo')
     ))) : null
 );
 

@@ -267,7 +267,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $url = commonModel::hasPriv('ai', 'designPrompt') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $url));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
         $this->view->title = $this->lang->ai->prompts->create;
@@ -316,6 +316,29 @@ class ai extends control
 
         if(dao::isError() || $result === false) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->ai->prompts->action->deleteSuccess, 'load' => $this->inlink('prompts')));
+    }
+
+    /**
+     * Set basic info of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptBasicInfo($promptID = 0)
+    {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+
+        $prompt = empty($promptID) ? new stdclass() : $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) $prompt = new stdclass();
+        if(empty($prompt->id)) $prompt->id = 0;
+        if(!isset($prompt->name)) $prompt->name = '';
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = 'basicinfo';
+        $this->view->title          = $this->lang->ai->promptBasicInfo;
+        $this->display();
     }
 
     /**
