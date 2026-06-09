@@ -338,9 +338,7 @@ class action extends control
                     return print(js::error($this->lang->error->accessDenied));
                 }
 
-                $table     = $this->config->objectTables[$objectType];
-                $nameField = zget($this->config->action->objectNameFields, $objectType, 'title');
-
+                $table = $this->config->objectTables[$objectType];
                 $objectData = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
                 $objectData->actioncomment = $commentData->actioncomment;
                 $this->loadModel('message')->sendMentionNotice($objectType, 'comment', $actionID, $objectData);
