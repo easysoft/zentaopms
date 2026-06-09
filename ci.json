@@ -12,7 +12,7 @@
       "gitVersion": "feature/zai"
     },
     "zentaoipd": {
-      "gitVersion": "release/5.2"
+      "gitVersion": "release/5.3"
     },
     "devops": {
       "gitRepo": "zentao/devops"

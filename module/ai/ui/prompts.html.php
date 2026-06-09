@@ -29,9 +29,7 @@ toolbar
         'class'       => 'primary',
         'icon'        => 'plus',
         'text'        => $lang->ai->prompts->create,
-        'url'         => inlink('createprompt'),
-        'data-toggle' => 'modal',
-        'data-size'   => 'sm'
+        'url'         => inlink('createprompt')
     ))) : null
 );
 
