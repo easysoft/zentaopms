@@ -625,17 +625,27 @@ class programplan extends control
      */
     public function rollbackGanttVersion(int $projectID, int $versionID = 0)
     {
-        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
-        $minPlanBegin = $maxPlanEnd = '';
-        $currentStages = $currentTasks = array();
-        foreach($currentVersion['data'] as $version)
+        /* 目标版本中执行的起止日期超出项目起止日期时提示无法回滚。*/
+        $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
+        $targetData    = $targetVersion['data'] ?? array();
+        $project       = $this->programplan->fetchByID($projectID, 'project');
+        $minPlanBegin  = $maxPlanEnd = '';
+        foreach($targetData as $version)
         {
             if($version->type == 'plan')
             {
                 if(empty($minPlanBegin) || $version->begin < $minPlanBegin) $minPlanBegin = $version->begin;
                 if(empty($maxPlanEnd) || $version->deadline > $maxPlanEnd) $maxPlanEnd = $version->deadline;
-                $currentStages[$version->id] = $version->id;
             }
+        }
+        if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
+
+        /* 获取最新版本。*/
+        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
+        $currentStages  = $currentTasks = array();
+        foreach($currentVersion['data'] as $version)
+        {
+            if($version->type == 'plan') $currentStages[$version->id] = $version->id;
 
             if($version->type == 'task')
             {
@@ -646,17 +656,12 @@ class programplan extends control
             $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
         }
 
-        $project = $this->programplan->fetchByID($projectID, 'project');
-        if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
-
         /* 将回滚前的版本存为临时版本。*/
         $this->programplan->saveTmpGanttVersion($projectID, 'gantt', json_encode($currentVersion));
 
         $this->dao->begin();
 
-        $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
-        $targetData    = $targetVersion['data'] ?? array();
-        $parentStages  = $parentTasks = array();
+        $parentStages = $parentTasks = array();
         foreach($targetData as $version)
         {
             if($version->type == 'plan')
