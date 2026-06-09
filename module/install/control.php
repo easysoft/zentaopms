@@ -212,7 +212,7 @@ class install extends control
             $this->installZen->setDBParam((object)$this->session->myConfig);
 
             $dbh = $this->install->connectDB();
-            $dbh->exec("USE `{$this->config->db->name}`");
+            $dbh->useDB($this->config->db->name);
 
             foreach($installSqls as $sql)
             {
