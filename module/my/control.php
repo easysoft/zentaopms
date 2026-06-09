@@ -504,6 +504,7 @@ class my extends control
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
+        $bugs = $this->bug->processBuildForBugs($bugs);
         $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bysearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
