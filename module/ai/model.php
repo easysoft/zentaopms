@@ -35,22 +35,13 @@ class aiModel extends model
     public $errors = array();
 
     /**
-     * 根据config.php中的$config->ai->dataSource，和$config->ai->moduleGroup，生成数据源列表。
-     * 如果模块有dataSource定义，则直接使用
-     * 如果模块没有dataSource定义，则通过工作流（workflow）获取模块字段。
-     * 特殊的模块：programplans/executions 使用execution字段。stories使用story字段,bugs使用bug字段。
-     * 返回数据结构为：
-     * array(
-     *     'program' => array('name', 'desc', 'begin'),
-     *     'testsuite' => array('name', 'desc'),
-     *     'testtask' => array('name', 'desc', 'begin', 'end'),
-     *     'caselib' => array('name', 'desc'),
-     * )
+     * 获取数据源列表。
+     * Get data source list.
      *
      * @access public
      * @return array
      */
-    public function getDataSource()
+    public function getDataSource(): array
     {
         $dataSource = array();
         $fieldCache = array();
