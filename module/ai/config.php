@@ -197,6 +197,56 @@ $config->ai->targetFormVars['doc']['edit']           = (object)array('format' =>
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
+/* 参与上下文加载的字段列表 */
+$config->ai->formContextFields = array('execution', 'story', 'bug');
+
+/* 对象类型中文标签 */
+$config->ai->contextLabels = array(
+    'execution' => '执行',
+    'project'   => '项目',
+    'story'     => '关联需求',
+    'product'   => '产品',
+    'bug'       => '关联Bug',
+);
+
+/* 字段中文标签 */
+$config->ai->contextFieldLabels = array(
+    'name'      => '名称',
+    'title'     => '名称',
+    'desc'      => '描述',
+    'model'     => '流程',
+    'attribute' => '类型',
+    'spec'      => '描述',
+    'verify'    => '验收标准',
+    'type'      => '类别',
+    'pri'       => '优先级',
+    'estimate'  => '预计工时',
+    'status'    => '状态',
+    'begin_end' => '日期',
+);
+
+/* 关联链配置 */
+$config->ai->contextRelations = array(
+    'execution' => array(
+        'project' => array('module' => 'project', 'field' => 'project'),
+    ),
+    'project' => array(
+        'product' => array('module' => 'product', 'via' => 'projectproduct'),
+    ),
+);
+
+/* 页面级对象类型 */
+$config->ai->contextPageLevel = array('product', 'project', 'execution');
+
+/* AI 可操作字段白名单 */
+$config->ai->universalFormFields = array();
+$config->ai->universalFormFields['task']['create'] = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
+
+/* 使用通用表单流程的智能体 code 列表 */
+$config->ai->useUniversalForm = array(
+    'zt_create_task',
+);
+
 /**
  * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
  * Some are identical except for module name, reuse them as much as possible.
@@ -225,6 +275,13 @@ $config->ai->menuPrint->locations['bug']['view']              = clone $config->a
 $config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
 $config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
+
+$config->ai->menuPrint->locations['task']['create'] = (object)array(
+    'module'          => 'task',
+    'targetContainer' => '#mainContent .panel-heading .panel-actions',
+    'injectMethod'    => 'prepend',
+    'objectVarName'   => null,
+);
 
 $config->ai->menuPrint->locations['execution']['view'] = (object)array( // TODO: fix this.
     'module'          => 'execution',

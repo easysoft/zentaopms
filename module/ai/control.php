@@ -922,6 +922,104 @@ class ai extends control
     }
 
     /**
+     * 执行通用表单提示词
+     * Execute universal form prompt for target form pages.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function executeUniversalPrompt($promptID)
+    {
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+
+        if(!common::hasPriv('ai', 'promptExecute')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
+        $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
+        if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
+
+        $contextObjects = $this->ai->loadFormContextObjects($formSchema, $this->config->ai->formContextFields ?? array(), $this->config->ai->contextRelations ?? array());
+        $contextDesc    = $this->ai->buildContextDescription($contextObjects);
+
+        $formDataLines = array();
+        if(!empty($formSchema['fields']))
+        {
+            foreach($formSchema['fields'] as $name => $field)
+            {
+                $label    = $field['label'] ?? $name;
+                $input    = $field['controlType'] ?? 'input';
+                $valType  = $field['valueType'] ?? 'string';
+                $value    = $field['currentValue'] ?? '';
+                $required = !empty($field['required']) ? 'true' : 'false';
+                $line     = "- {$label}\n  name: {$name}\n  input: {$input}\n  type: {$valType}\n  required: {$required}\n  value: {$value}";
+
+                if(!empty($field['options']) && is_array($field['options']))
+                {
+                    $optStrs = array();
+                    foreach($field['options'] as $opt)
+                    {
+                        $optVal   = $opt['value'] ?? '';
+                        $optText  = $opt['text'] ?? '';
+                        $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
+                    }
+                    $line .= "\n  options: " . implode(', ', $optStrs);
+                }
+
+                $formDataLines[] = $line;
+            }
+        }
+
+        $targetFormParts = explode('.', $prompt->targetForm);
+        $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
+        $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
+        $fillableDesc    = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
+
+        $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
+        $fullPrompt .= "当前表单数据：\n" . implode("\n", $formDataLines) . "\n\n";
+        $fullPrompt .= $fillableDesc;
+
+        $schema = $this->ai->buildDynamicSchema($filteredFields, $prompt);
+        $location = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        $targetFormName = $this->lang->ai->targetForm[$targetFormParts[0]][$targetFormParts[1]] ?? '';
+
+        $dataPropNames = new stdclass();
+        $dataPropNames->{$prompt->module} = new stdclass();
+        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
+        foreach($filteredFields as $name => $field)
+        {
+            $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
+        }
+
+        $originObject = new stdclass();
+        foreach($filteredFields as $name => $field)
+        {
+            if(isset($field['currentValue']) && $field['currentValue'] !== '')
+            {
+                $originObject->$name = $field['currentValue'];
+            }
+        }
+
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array(array(
+            'role'           => $prompt->role . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''),
+            'schema'         => $schema,
+            'dataPrompt'     => $fullPrompt,
+            'name'           => $prompt->name,
+            'purpose'        => $prompt->purpose,
+            'targetForm'     => $prompt->targetForm,
+            'promptID'       => $prompt->id,
+            'formLocation'   => $location,
+            'objectID'       => 0,
+            'objectType'     => $prompt->module,
+            'object'         => array($prompt->module => $originObject),
+            'model'          => $prompt->model,
+            'targetFormName' => $targetFormName,
+            'dataPropNames'  => $dataPropNames,
+            'knowledgeLib'   => $prompt->knowledgeLib ?? '',
+        ), false))));
+    }
+
+    /**
      * Return html element for the role template list.
      * This is used in prompt designing step 2.
      * Return html will deserialize in the front end js and replace the original role template list.
