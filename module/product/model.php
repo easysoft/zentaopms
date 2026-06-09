@@ -507,12 +507,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function close(int $productID, object $product, string|false $comment = ''): array|false
+    public function close(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -520,10 +520,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'close', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }
@@ -538,12 +544,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function activate(int $productID, object $product, string|false $comment = ''): array|false
+    public function activate(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -551,10 +557,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'activate', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }

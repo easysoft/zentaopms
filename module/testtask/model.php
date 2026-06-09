@@ -36,7 +36,11 @@ class testtaskModel extends model
         if(dao::isError()) return false;
 
         $taskID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $testtask->id = $taskID;
+        $this->loadModel('message')->sendMentionNotice('testtask', 'create', $actionID, $testtask);
 
         return $taskID;
     }

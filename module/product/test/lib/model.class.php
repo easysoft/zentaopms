@@ -558,7 +558,8 @@ class productModelTest extends baseTest
     public function closeTest(int $productID): array|false
     {
         $data = new stdclass();
-        $data->status = 'closed';
+        $data->status  = 'closed';
+        $data->comment = '';
 
         $changes = $this->instance->close($productID, $data);
 
@@ -1249,7 +1250,8 @@ class productModelTest extends baseTest
         if(!$oldProduct) return false;
 
         $product = new stdClass();
-        $product->status = 'normal';
+        $product->status  = 'normal';
+        $product->comment = '';
         $changes = $this->instance->activate($productID, $product);
         if(dao::isError()) return dao::getError();
 
