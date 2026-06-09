@@ -561,7 +561,7 @@ $lang->devops->homeMenu->codescan['menuOrder'][25] = 'ruleset';
 $lang->devops->homeMenu->codescan['menuOrder'][30] = 'scanRule';
 
 $lang->devops->menu = new stdclass();
-$lang->devops->menu->code         = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
+$lang->devops->menu->code         = array('link' => "{$lang->repocode->common}|repo|browse|repoID=%s", 'alias' => 'view', 'subModule' => 'my', 'exclude' => 'repo-review,repo-browsetag,repo-browsebranch,repo-log,repo-diff,repo-revision,repo-setrules,repo-setbranchrule,repobranchType-browse,repo-browsewebhooks,repo-createwebhook,repo-editwebhook,repo-logwebhook');
 $lang->devops->menu->commit       = array('link' => "{$lang->repo->commit}|repo|log|repoID=%s", 'alias' => 'diff');
 $lang->devops->menu->branch       = array('link' => "{$lang->repo->branch}|repo|browsebranch|repoID=%s");
 $lang->devops->menu->tag          = array('link' => "{$lang->repo->tag}|repo|browsetag|repoID=%s");
