@@ -710,6 +710,7 @@ class artifact extends control
 
         if($result && $asset && !empty($asset->path))
         {
+            $asset->path = $asset->format == 'container' ? $asset->metadata->image . ':' . $asset->metadata->version : $asset->path;
             $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $asset->path, ACTIONMODEL::CAN_UNDELETED);
         }
         if(dao::isError()) $this->sendError(dao::getError());
@@ -737,11 +738,7 @@ class artifact extends control
         $artifactLib = $this->artifact->fetchByID((int)$artifactLibID);
         $this->checkAccess($artifactLib->spaceID, $artifactLib->repoID);
 
-        if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
-        if(!is_array($assetIDList)) $assetIDList = explode(',', (string)$assetIDList);
-
         $assetIDList = array_values(array_unique(array_filter(array_map('intval', $assetIDList))));
-        if(empty($assetIDList)) return $this->sendError($this->lang->artifact->notice->noArtifact);
 
         $entityIDs = array();
         $assetList = array();
@@ -755,8 +752,6 @@ class artifact extends control
             $entityIDs[] = 'asset.' . $assetID;
         }
 
-        if(empty($entityIDs)) return $this->sendError($this->lang->artifact->notice->noArtifact);
-
         $result = $this->gitfox->request('/artifacts/entities', 'DELETE', array('entityIDs' => $entityIDs));
         if(dao::isError()) $this->sendError(dao::getError());
 
@@ -764,7 +759,8 @@ class artifact extends control
         {
             foreach($assetList as $assetID => $asset)
             {
-                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $artifactLibID . '|' . $asset->path, ACTIONMODEL::CAN_UNDELETED);
+                $asset->path = $asset->format == 'container' ? $asset->metadata->image . ':' . $asset->metadata->version : $asset->path;
+                if(!empty($asset->path)) $this->loadModel('action')->create('artifactAsset', $assetID, 'deleted', $asset->path, ACTIONMODEL::CAN_UNDELETED);
             }
         }
         if(dao::isError()) $this->sendError(dao::getError());
