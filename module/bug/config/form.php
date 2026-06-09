@@ -188,6 +188,7 @@ $config->bug->form->batchEdit['branch']         = array('required' => false, 'ty
 $config->bug->form->batchEdit['module']         = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['openedBuild']    = array('required' => true,  'type' => 'array',  'filter' => 'join');
 $config->bug->form->batchEdit['plan']           = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchEdit['case']           = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchEdit['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->batchEdit['os']             = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
