@@ -1151,6 +1151,13 @@ $lang->action->desc->reject                       = '$date, 由 <strong>$actor</
 $lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了' . $lang->projectCommon . '与代码库 $extra 的关联';
 
+$lang->action->desc->editedbyrollback     = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 编辑了 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->deletedbyrollback    = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 删除了 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->undeletedbyrollback  = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 还原了 <strong>$extra</strong>。' . "\n";
+$lang->action->label->editedbyrollback    = '通过 项目甘特图版本回滚 编辑了';
+$lang->action->label->deletedbyrollback   = '通过 项目甘特图版本回滚 删除了';
+$lang->action->label->undeletedbyrollback = '通过 项目甘特图版本回滚 还原了';
+
 $lang->action->reviewStatusList['wait']      = '待审批';
 $lang->action->reviewStatusList['doing']     = '审批中';
 $lang->action->reviewStatusList['pass']      = '通过';
