@@ -635,7 +635,7 @@ class baseHelper
 
     /**
      * 将 Windows 路径包装为命令行参数。
-     * Quote Windows path for shell command.
+     * Quote Windows path for cli command.
      *
      * @param  string $path
      * @static
