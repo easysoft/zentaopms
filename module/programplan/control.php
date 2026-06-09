@@ -650,16 +650,7 @@ class programplan extends control
         if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
 
         /* 将回滚前的版本存为临时版本。*/
-        $tmpVersion = new stdClass();
-        $tmpVersion->version  = date(DT_DATE3 . ' H:i:s');
-        $tmpVersion->title    = date(DT_DATE3 . ' H:i:s');
-        $tmpVersion->project  = $projectID;
-        $tmpVersion->product  = 0;
-        $tmpVersion->type     = 'taged';
-        $tmpVersion->category = 'gantt';
-        $tmpVersion->status   = 'tmpGantt';
-        $tmpVersion->data     = json_encode($currentVersion);
-        $this->dao->insert(TABLE_OBJECT)->data($tmpVersion)->exec();
+        $this->programplan->saveTmpGanttVersion($projectID, 'gantt', json_encode($currentVersion));
 
         $this->dao->begin();
 

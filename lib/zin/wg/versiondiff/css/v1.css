@@ -1,6 +1,6 @@
 .menu-item.selected {background: var(--menu-selected-bg); color: var(--menu-selected-color);}
 .menu-item .item-content {overflow:hidden; text-overflow:clip; justify-content: space-between;}
-.menu-item .item-actions {min-width: 55px; justify-content: center;}
+.menu-item .item-actions {justify-content: center;}
 .menu-item .item-title {flex:none;}
 #versionBox, #nextBox{max-width:150px;}
 #versionBox .text, #nextBox .text{overflow:hidden}
