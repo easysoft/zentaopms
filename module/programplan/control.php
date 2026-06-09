@@ -687,7 +687,7 @@ class programplan extends control
                     return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 }
 
-                if(strpos($task->parent, '-') === false) $parentTasks[$version->id] = $version->id;
+                if(strpos($version->parent, '-') === false) $parentTasks[$version->id] = $version->id;
                 if(isset($currentTasks[$version->id])) unset($currentTasks[$version->id]);
             }
         }
