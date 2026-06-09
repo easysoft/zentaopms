@@ -1615,8 +1615,13 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
+        /* Set display fields. */
+        $showFields = $this->config->bug->custom->batchEditFields;
+        $showFields = trim($showFields, ',');
+
         $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->hyphen) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
 
         /* Judge whether the editedBugs is too large and set session. */
         $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
@@ -1631,6 +1636,7 @@ class bugZen extends bug
         $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
         $this->view->productID = $productID;
         $this->view->branch    = $branch;
+        $this->view->fromCases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branch));
 
         /* Assign project related variables. */
         $this->assignProjectRelatedVars($bugs, $products);
