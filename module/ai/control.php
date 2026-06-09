@@ -319,6 +319,17 @@ class ai extends control
     }
 
     /**
+     * Set basic info of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptBasicInfo($promptID = 0)
+    {
+    }
+
+    /**
      * Edit role of prompt, prompt editing step 2.
      *
      * @param  int    $promptID
