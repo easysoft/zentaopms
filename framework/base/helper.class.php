@@ -736,7 +736,7 @@ class baseHelper
             $content = "@echo off\r\n" . implode("\r\n", $commands);
             file_put_contents($script, $content);
 
-            return 'cmd /c "' . static::quoteWindowsPath($script) . '"';
+            return 'cmd /c ' . static::quoteWindowsPath($script);
         }
 
         $content = "#!/bin/bash\n" . implode("\n", $commands);
