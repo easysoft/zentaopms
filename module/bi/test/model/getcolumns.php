@@ -9,7 +9,7 @@ cid=15161
 
 - 测试步骤1：MySQL驱动获取基本字段类型 @2
 - 测试步骤2：无效驱动参数测试 @0
-- 测试步骤3：返回原始列信息模式 @returnOrigin
+- 测试步骤3：返回原始列信息模式 @1
 - 测试步骤4：测试空SQL语句 @0
 - 测试步骤5：测试多字段查询类型信息 @3
 
@@ -42,25 +42,27 @@ try {
 }
 
 // 如果无法正常初始化，创建mock测试实例
-if ($useMockMode) {
+if($useMockMode)
+{
     class mockBiTest
     {
         public function getColumnsTest(string $sql, $driver = 'mysql', $returnOrigin = false)
         {
-            // 处理空SQL情况
             if(empty($sql)) return false;
-
-            // 测试无效驱动
             if($driver == 'invaliddriver') return false;
 
-            // 模拟原始返回模式
-            if($returnOrigin) return 'returnOrigin';
+            if($returnOrigin)
+            {
+                return array(
+                    array('name' => 'id', 'native_type' => 'INT24'),
+                    array('name' => 'name', 'native_type' => 'VAR_STRING')
+                );
+            }
 
-            // 模拟不同SQL查询的返回结果
             if(strpos($sql, 'select id, name from zt_product') !== false)
             {
                 return array(
-                    'id' => array('name' => 'id', 'native_type' => 'INT24'),
+                    'id'   => array('name' => 'id', 'native_type' => 'INT24'),
                     'name' => array('name' => 'name', 'native_type' => 'VAR_STRING')
                 );
             }
@@ -68,34 +70,22 @@ if ($useMockMode) {
             if(strpos($sql, 'select id, name, code') !== false)
             {
                 return array(
-                    'id' => array('name' => 'id', 'native_type' => 'INT24'),
+                    'id'   => array('name' => 'id', 'native_type' => 'INT24'),
                     'name' => array('name' => 'name', 'native_type' => 'VAR_STRING'),
                     'code' => array('name' => 'code', 'native_type' => 'VAR_STRING')
                 );
             }
 
-            if(strpos($sql, 'select id, title from zt_bug') !== false)
-            {
-                return array(
-                    'id' => array('name' => 'id', 'native_type' => 'INT24'),
-                    'title' => array('name' => 'title', 'native_type' => 'VAR_STRING')
-                );
-            }
-
-            // 默认返回空数组
             return array();
         }
     }
     $biTest = new mockBiTest();
 }
 
-// 4. 强制要求：必须包含至少5个测试步骤
+$originColumns = $biTest->getColumnsTest('select id, name from zt_product', 'mysql', true);
+
 r(count($biTest->getColumnsTest('select id, name from zt_product', 'mysql', false))) && p() && e('2'); // 测试步骤1：MySQL驱动获取基本字段类型
-
 r($biTest->getColumnsTest('select * from zt_product', 'invaliddriver', false)) && p() && e('0'); // 测试步骤2：无效驱动参数测试
-
-r($biTest->getColumnsTest('select id, name from zt_product', 'mysql', true)) && p() && e('returnOrigin'); // 测试步骤3：返回原始列信息模式
-
+r(is_array($originColumns) && isset($originColumns[0]['native_type'])) && p() && e('1'); // 测试步骤3：返回原始列信息模式
 r($biTest->getColumnsTest('', 'mysql', false)) && p() && e('0'); // 测试步骤4：测试空SQL语句
-
 r(count($biTest->getColumnsTest('select id, name, code from zt_product', 'mysql', false))) && p() && e('3'); // 测试步骤5：测试多字段查询类型信息

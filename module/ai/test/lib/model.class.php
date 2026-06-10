@@ -1336,7 +1336,7 @@ class aiModelTest extends baseTest
      */
     public function getAgentsByIDsTest($ids = null)
     {
-        $result = $this->objectModel->getAgentsByIDs($ids);
+        $result = $this->instance->getAgentsByIDs($ids);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1352,7 +1352,7 @@ class aiModelTest extends baseTest
      */
     public function getAgentsByCodesTest($codes = null, $status = '')
     {
-        $result = $this->objectModel->getAgentsByCodes($codes, $status);
+        $result = $this->instance->getAgentsByCodes($codes, $status);
         if(dao::isError()) return dao::getError();
 
         return $result;
