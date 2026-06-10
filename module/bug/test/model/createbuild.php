@@ -3,7 +3,14 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('project')->loadYaml('project_createbuild')->gen(20);
+zenData('project')->gen(0);
+$execution = zenData('project');
+$execution->id->range('11,12');
+$execution->project->range('1');
+$execution->type->range('sprint,kanban');
+$execution->gen(2);
+
+zenData('bug')->gen(0);
 zenData('bug')->loadYaml('bug_createbuild')->gen(10);
 zenData('user')->gen(1);
 zenData('build')->gen(1);
@@ -59,8 +66,18 @@ $emptyBuildName->resolution     = 'bydesign';
 
 $emptyBuildExecution = new stdclass();
 $emptyBuildExecution->buildExecution = 0;
-$emptyBuildExecution->buildName      = 'bug新建的版本2';
+$emptyBuildExecution->buildName      = 'bug新建的版本5';
 $emptyBuildExecution->resolution     = 'bydesign';
+
+$emptySprintExecution = new stdclass();
+$emptySprintExecution->buildExecution = 0;
+$emptySprintExecution->buildName      = 'bug新建的版本6';
+$emptySprintExecution->resolution     = 'bydesign';
+
+$duplicateBuildName = new stdclass();
+$duplicateBuildName->buildExecution = 11;
+$duplicateBuildName->buildName      = 'bug新建的版本1';
+$duplicateBuildName->resolution     = 'bydesign';
 
 $bug = new bugModelTest();
 
@@ -70,6 +87,6 @@ r($bug->createBuildTest($duplicateBug1,       $bugIdList[2])) && p('name') && e(
 r($bug->createBuildTest($duplicateBug2,       $bugIdList[3])) && p('name') && e('bug新建的版本4');           // 测试解决版本执行11 解决方案为重复BUG 重复bugID1的时候创建一个版本
 r($bug->createBuildTest($emptyBuildName,      $bugIdList[4])) && p()       && e('『新版本名称』不能为空。'); // 测试解决版本执行11 解决方案为设计如此的时候创建一个名称为空的版本
 r($bug->createBuildTest($emptyBuildExecution, $bugIdList[5])) && p()       && e('『所属看板』不能为空。');   // 测试解决版本执行12 解决方案为设计如此的时候创建一个版本执行为空的版本
-r($bug->createBuildTest($emptyBuildExecution, $bugIdList[6])) && p()       && e('『所属执行』不能为空。');   // 测试解决版本执行11 解决方案为设计如此的时候创建一个版本执行为空的版本
+r($bug->createBuildTest($emptySprintExecution, $bugIdList[6])) && p()      && e('『所属执行』不能为空。');   // 测试解决版本执行11 解决方案为设计如此的时候创建一个版本执行为空的版本
 
-r($bug->createBuildTest($bydesignBug1, $bugIdList[0])) && p() && e('『新版本名称』已经有『bug新建的版本1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试解决bugID 11 解决方案为设计如此的时候创建一个同名版本
+r($bug->createBuildTest($duplicateBuildName, $bugIdList[0])) && p() && e('『新版本名称』已经有『bug新建的版本1』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试解决bugID 11 解决方案为设计如此的时候创建一个同名版本
