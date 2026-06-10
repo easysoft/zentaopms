@@ -639,7 +639,12 @@ class release extends control
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
+            if($this->post->comment)
+            {
+                $release->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('release', 'publish', $actionID, $release);
+            }
             return $this->sendSuccess(array('load' => true, 'closeModal' => true));
         }
 
