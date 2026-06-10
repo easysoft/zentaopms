@@ -3042,7 +3042,6 @@ $config->group->package->module->privs['tree-updateOrder'] = array('edition' => 
 $config->group->package->module->privs['tree-manageChild'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 6, 'depend' => array('tree-edit'), 'recommend' => array('tree-delete'));
 $config->group->package->module->privs['tree-edit']        = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 7, 'depend' => array('tree-browse'), 'recommend' => array());
 $config->group->package->module->privs['tree-delete']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 8, 'depend' => array('tree-browse'), 'recommend' => array());
-$config->group->package->module->privs['tree-fix']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite,or', 'order' => 9, 'depend' => array('tree-browse'), 'recommend' => array());
 $config->group->package->module->privs['tree-browsegroup'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 2, 'depend' => array('tree-browse'), 'recommend' => array());
 
 $config->group->package->file = new stdclass();
