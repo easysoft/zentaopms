@@ -6,6 +6,7 @@ $config->openModules[] = 'upgrade';
 
 /* 未登录用户可以访问的方法。The methods that can be accessed by the unlogged users. */
 $config->openMethods   = [];
+$config->openMethods[] = 'action.ajaxgetlist';
 $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.planmodal';
 $config->openMethods[] = 'admin.register';
@@ -416,6 +417,7 @@ $config->ajaxDependencies['testtask.ajaxgettesttasks']                        = 
 $config->ajaxDependencies['todo.ajaxgetexecutionpairs']                       = 'todo.view';
 $config->ajaxDependencies['todo.ajaxgetproductpairs']                         = 'todo.view';
 $config->ajaxDependencies['todo.ajaxgetprogramid']                            = 'todo.view';
+$config->ajaxDependencies['tree.ajaxcreatemodule']                            = ['doc.myspace', 'doc.teamspace', 'doc.productspace', 'doc.projectspace', 'doc.view', 'api.index', 'api.view'];
 $config->ajaxDependencies['tree.ajaxgetmodules']                              = ['testcase.batchcreate', 'testcase.batchedit', 'bug.batchcreate'];
 $config->ajaxDependencies['tree.ajaxgetoptionmenu']                           = ['task.create', 'task.edit', 'tree.edit', 'tree.browse', 'bug.batchedit', 'bug.edit', 'story.batchedit', 'story.batchedit', 'story.edit', 'story.batchcreate', 'testcase.createscene', 'testcase.editscene', 'testcase.create', 'testcase.edit', 'testcase.importfromlib', 'caselib.createcase', 'story.create', 'ticket.create', 'issue.resolve', 'repo.ajaxgeteditorcontent', 'repo.view', 'repo.diff'];
 $config->ajaxDependencies['tree.ajaxgetsonmodules']                           = 'tree.browse';
