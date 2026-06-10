@@ -505,7 +505,7 @@ class ai extends control
 
                 if(json_last_error() !== JSON_ERROR_NONE)
                 {
-                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
+                    return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->jsonParseFail, json_last_error_msg())));
                 }
             }
 
@@ -578,7 +578,7 @@ class ai extends control
 
                 if(json_last_error() !== JSON_ERROR_NONE)
                 {
-                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
+                    return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->jsonParseFail, json_last_error_msg())));
                 }
             }
 

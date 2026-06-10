@@ -85,6 +85,7 @@ $lang->ai->store                  = '商店';
 $lang->ai->export                 = '导出';
 $lang->ai->import                 = '导入';
 $lang->ai->saveFail               = '保存失败';
+$lang->ai->jsonParseFail          = 'JSON解析失败：%s';
 $lang->ai->installPackage         = '安装包';
 $lang->ai->toPublish              = '安装后发布';
 $lang->ai->toZentaoStoreAIPage    = '点击可跳转至禅道官网应用商店通用智能体页面。';
