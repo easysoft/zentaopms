@@ -1,12 +1,10 @@
 <?php
 global $app, $lang;
 $config->provider->actionList = array();
-$config->provider->actionList['edit']['icon']        = 'edit';
-$config->provider->actionList['edit']['text']        = $lang->provider->edit;
-$config->provider->actionList['edit']['hint']        = $lang->provider->edit;
-$config->provider->actionList['edit']['url']         = array('module' => 'provider', 'method' => 'edit', 'params' => 'id={id}');
-$config->provider->actionList['edit']['data-toggle'] = 'modal';
-$config->provider->actionList['edit']['data-app']    = $app->tab;
+$config->provider->actionList['edit']['icon'] = 'edit';
+$config->provider->actionList['edit']['text'] = $lang->provider->edit;
+$config->provider->actionList['edit']['hint'] = $lang->provider->edit;
+$config->provider->actionList['edit']['url']  = array('module' => 'provider', 'method' => 'edit', 'params' => 'id={id}');
 
 $config->provider->actionList['delete']['icon']         = 'trash';
 $config->provider->actionList['delete']['text']         = $lang->provider->delete;

@@ -7,3 +7,7 @@ $config->provider->form->create['url']         = array('type' => 'string', 'requ
 $config->provider->form->create['account']     = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->provider->form->create['token']       = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
 $config->provider->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->provider->form->edit = $config->provider->form->create;
+$config->provider->form->create['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+unset($config->provider->form->edit['createdDate']);

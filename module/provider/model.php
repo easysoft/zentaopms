@@ -31,6 +31,26 @@ class providerModel extends model
     }
 
     /**
+     * 更新一个服务。
+     * Update a provider.
+     *
+     * @param  int $id
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function update(int $id, object $formData): bool
+    {
+        $this->dao->update(TABLE_PROVIDER)->data($formData)
+            ->autoCheck()
+            ->batchCheck($this->config->provider->edit->requiredFields, 'notempty')
+            ->where('id')->eq($id)
+            ->exec();
+
+        return !dao::isError();
+    }
+
+    /**
      * 获取服务列表。
      * Get provider list.
      *
@@ -46,5 +66,32 @@ class providerModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+    }
+
+    /**
+     * 根据ID获取服务。
+     * Get provider by id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return object|false
+     */
+    public function getByID(int $id): object|false
+    {
+        $provider = $this->fetchByID($id);
+        if(empty($provider)) return false;
+
+        if($provider->type == 'Jenkins')
+        {
+            list($account, $token) = explode(':', base64_decode($provider->token));
+            $provider->account = $account;
+            $provider->token   = $token;
+        }
+        else
+        {
+            $provider->account = '';
+        }
+
+        return $provider;
     }
 }
