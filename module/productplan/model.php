@@ -618,6 +618,12 @@ class productplanModel extends model
         $actionID = $this->loadModel('action')->create('productplan', $planID, $action, (string)$this->post->comment);
         $this->action->logHistory($actionID, $changes);
 
+        if($status == 'closed' && $this->post->comment)
+        {
+            $oldPlan->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('productplan', 'close', $actionID, $oldPlan);
+        }
+
         if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 
         return !dao::isError();
