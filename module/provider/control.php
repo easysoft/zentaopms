@@ -77,4 +77,37 @@ class provider extends control
         $this->view->type  = $type;
         $this->display();
     }
+
+    public function edit(int $id)
+    {
+        $provider = $this->provider->getById($id);
+        if($_POST)
+        {
+            $this->config->provider->form->edit['token']['required']   = in_array($provider->type, array('GitLab', 'GitHub', 'Gitea', 'Gogs', 'Jenkins'));
+            $this->config->provider->form->edit['account']['required'] = $provider->type == 'Jenkins';
+            $formData = form::data($this->config->provider->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->skipSpecial('name')
+                ->get();
+
+            if(!empty($formData->account && $provider->type == 'Jenkins'))
+            {
+                $formData->token = base64_encode($formData->account . ':' . $formData->token);
+            }
+            unset($formData->account);
+
+            if(!empty($formData->url) && !$this->providerZen->checkServiceUrl($formData)) return $this->sendError(dao::getError());
+
+            $this->provider->update($id, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->loadModel('action')->create('provider', $id, 'edited');
+            return $this->sendSuccess(array('load' => $this->createLink('provider', 'browse')));
+        }
+
+        $this->view->title    = $this->lang->provider->edit;
+        $this->view->type     = $provider->type;
+        $this->view->provider = $provider;
+        $this->display();
+    }
 }
