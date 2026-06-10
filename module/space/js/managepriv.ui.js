@@ -10,11 +10,6 @@ $(function()
     $('#privPackageList .package-column').on('click', '.privs.popover input[type=checkbox]', groupItemChange);
 });
 
-function showPriv()
-{
-    loadPage($.createLink('space', 'managePriv', 'spaceID=' + spaceID + '&groupID=' + groupID + '&type=' + type));
-}
-
 window.handleSideRecommentCheckClick = function($target)
 {
     const checked = $target.prop('checked');
@@ -322,54 +317,6 @@ function updatePrivTree(privList)
             return false;
         }
     });
-}
-
-/**
- * Control the packages select control for a module.
- *
- * @access  public
- * @return  void
- */
-window.setSubsetPackages = function()
-{
-    let subset = $(this).val();
-    $('#packageBox select').addClass('hidden');                      // Hide all select first.
-    $('#packageBox select').val('');                                 // Unselect all select.
-    $("select[data-module='" + subset + "']").removeClass('hidden'); // Show the action control for current module.
-
-    updatePrivList(subset, '');
-}
-
-/**
- * Update the action box when subset or package selected.
- *
- * @param  string  selectedSubset
- * @param  string  selectedPackages
- * @access public
- * @return void
- */
-function updatePrivList(selectedSubset, selectedPackages)
-{
-    $.get($.createLink('group', 'ajaxGetPrivByParents', 'subset=' + selectedSubset + '&packages=' + selectedPackages), function(data)
-    {
-        $('#actions').replaceWith(data);
-    })
-}
-
-/**
- * Control the actions select control for a package.
- *
- * @access public
- * @return void
- */
-function setActions()
-{
-    $('#actionBox select').val('');
-
-    var selectedSubset   = $('[name=module]').val();
-    var selectedPackages = '|' + $('#packageBox select').not('.hidden').val().join('|') + '|';
-
-    updatePrivList(selectedSubset, selectedPackages);
 }
 
 window.setNoChecked = function()

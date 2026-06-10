@@ -1,8 +1,4 @@
-#privByModuleForm .form-row select {height: 250px !important; background-image: none;}
-#privByModuleForm .form-row select option:hover {background: #2e7fff;}
-
 #featureBar > .menu {background: unset;}
-#versionSelect {flex: 0 1 12%;}
 
 .container #mainContent {padding-top: 0;}
 
