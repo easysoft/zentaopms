@@ -689,5 +689,6 @@ $lang->group->package->deleteArtifactDir     = 'Delete Artifact Directory';
 $lang->group->package->uploadArtifact        = 'Upload Artifact';
 $lang->group->package->deleteArtifact        = 'Delete Artifact';
 $lang->group->package->manageArtifact        = 'Manage Artifact';
+$lang->group->package->provider              = 'Service';
 
 include (dirname(__FILE__) . '/resource.php');
