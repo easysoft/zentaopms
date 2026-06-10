@@ -67,6 +67,12 @@ class aiModel extends model
                 $fieldList = $this->workflowfield->getList($workflowModule);
                 foreach($fieldList as $field => $value)
                 {
+                    if(in_array($field, array('deleted', 'version', 'subStatus')))
+                    {
+                        unset($fieldList[$field]);
+                        continue;
+                    }
+
                     $this->lang->ai->moduleList[$module][$field] = $value->name;
                 }
 
