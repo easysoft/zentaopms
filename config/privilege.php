@@ -6,6 +6,7 @@ $config->openModules[] = 'upgrade';
 
 /* 未登录用户可以访问的方法。The methods that can be accessed by the unlogged users. */
 $config->openMethods   = [];
+$config->openMethods[] = 'action.ajaxgetlist';
 $config->openMethods[] = 'admin.getcaptcha';
 $config->openMethods[] = 'admin.planmodal';
 $config->openMethods[] = 'admin.register';
