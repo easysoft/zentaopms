@@ -582,7 +582,7 @@ class testtaskZen extends testtask
             $menu = isset($menu->qa) ? $menu->qa['subMenu'] : array();
             if(isset($menu->testtask)) $menu->testtask['subModule'] = '';
         }
-        $menu->{$from}['subModule'] .= ',testtask';
+        if($from != 'work') $menu->{$from}['subModule'] .= ',testtask';
 
         $orderBy = str_replace('caseID_', 'id_', $orderBy);
         $cases = $this->dao->select('*')->from(TABLE_CASE)
@@ -590,7 +590,7 @@ class testtaskZen extends testtask
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
-        if($from != 'testtask') return $cases;
+        if($from != 'testtask' || $from != 'work') return $cases;
 
         /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
         /* If cases come from a testtask, check the version of these cases, if not the latest version, remove them. */
