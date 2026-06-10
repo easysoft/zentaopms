@@ -133,7 +133,7 @@ $config->ai->targetForm['productplan']['edit']           = (object)array('m' => 
 $config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
-$config->ai->targetForm['task']['create']                = (object)array('m' => 'task', 'f' => 'create', 'for' => 'task');
+$config->ai->targetForm['task']['create']                 = (object)array('m' => 'task', 'f' => 'create', 'for' => 'execution,project,task');
 $config->ai->targetForm['task']['edit']                  = (object)array('m' => 'task', 'f' => 'edit', 'for' => 'task');
 $config->ai->targetForm['task']['batchcreate']           = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
 $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit', 'for' => 'case');
@@ -238,14 +238,12 @@ $config->ai->contextRelations = array(
 /* 页面级对象类型 */
 $config->ai->contextPageLevel = array('product', 'project', 'execution');
 
+/* 使用通用表单流程的页面列表 */
+$config->ai->universalFormPages = array('task.create');
+
 /* AI 可操作字段白名单 */
 $config->ai->universalFormFields = array();
 $config->ai->universalFormFields['task']['create'] = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
-
-/* 使用通用表单流程的智能体 code 列表 */
-$config->ai->useUniversalForm = array(
-    'zt_create_task',
-);
 
 /**
  * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
@@ -265,15 +263,20 @@ $config->ai->menuPrint->locations = array();
 $config->ai->menuPrint->locations['story']['view'] = (object)array(
     'module'          => 'story',
     'targetContainer' => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type',
-    'stylesheet'      => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}'
+    'stylesheet'      => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}',
+    'objectVarName'   => 'story',
 );
 $config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['task']['view']->module     = 'task';
+$config->ai->menuPrint->locations['task']['view']->objectVarName = 'task';
 $config->ai->menuPrint->locations['testcase']['view']         = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['testcase']['view']->module = 'case';
+$config->ai->menuPrint->locations['testcase']['view']->objectVarName = 'case';
 $config->ai->menuPrint->locations['bug']['view']              = clone $config->ai->menuPrint->locations['story']['view'];
 $config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
+$config->ai->menuPrint->locations['bug']['view']->objectVarName = 'bug';
 $config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
+$config->ai->menuPrint->locations['projectstory']['view']->objectVarName = 'story';
 $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
 
 $config->ai->menuPrint->locations['task']['create'] = (object)array(
@@ -283,23 +286,23 @@ $config->ai->menuPrint->locations['task']['create'] = (object)array(
     'objectVarName'   => null,
 );
 
-$config->ai->menuPrint->locations['execution']['view'] = (object)array( // TODO: fix this.
+$config->ai->menuPrint->locations['execution']['view'] = (object)array(
     'module'          => 'execution',
     'injectMethod'    => 'prepend',
     'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right'
+    'class'           => 'pull-right',
+    'objectVarName'   => 'execution',
 );
 
 $config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
 $config->ai->menuPrint->locations['project']['view']->module = 'project';
-$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
-$config->ai->menuPrint->locations['project']['view']->module = 'project';
 
-$config->ai->menuPrint->locations['product']['view'] = (object)array( // TODO: fix this.
+$config->ai->menuPrint->locations['product']['view'] = (object)array(
     'module'          => 'product',
     'injectMethod'    => 'append',
     'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right'
+    'class'           => 'pull-right',
+    'objectVarName'   => 'product',
 );
 
 $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
@@ -311,15 +314,15 @@ $config->ai->menuPrint->locations['productplan']['view'] = (object)array(
 $config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];
 $config->ai->menuPrint->locations['release']['view']                       = clone $config->ai->menuPrint->locations['productplan']['view'];
 $config->ai->menuPrint->locations['release']['view']->module               = 'release';
-$config->ai->menuPrint->locations['release']['view']->objectVarName        = null;
 $config->ai->menuPrint->locations['projectrelease']['view']                = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = null;
+$config->ai->menuPrint->locations['projectrelease']['view']->module        = 'release';
 
 $config->ai->menuPrint->locations['doc']['view'] = (object)array(
     'module'          => 'doc',
     'targetContainer' => '#docMoreActionsBtn',
     'injectMethod'    => 'before',
-    'buttonPlacement' => 'bottom-end'
+    'buttonPlacement' => 'bottom-end',
+    'objectVarName'   => 'doc',
 );
 
 $config->ai->injectAuditButton = new stdclass();

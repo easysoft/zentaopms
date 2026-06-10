@@ -211,6 +211,62 @@ window.executeWithFormContext = async function(promptID)
     }
 };
 
+window.executeWithFormContextForTeammate = function(btn)
+{
+    var $btn       = $(btn);
+    var teammateID = $btn.attr('data-teammate-id');
+    var module     = $btn.attr('data-module');
+    var method     = $btn.attr('data-method');
+
+    var $form = $('form').first();
+    if(!$form.length) return;
+
+    var formHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($form) : null;
+    if(!formHelper || typeof formHelper.getFormSchema !== 'function') return;
+
+    var formSchema = formHelper.getFormSchema();
+    if(!formSchema) return;
+
+    sessionStorage.setItem('aiFormSchema', JSON.stringify(formSchema));
+    sessionStorage.setItem('aiFormPageUrl', window.location.href);
+
+    var url = $.createLink('aiteammate', 'assignagent',
+        'teammateID=' + teammateID + '&objectType=' + module + '&objectID=0&pageInfo=' + module + ',' + method + '&from=_&fromForm=1');
+    zui.Modal.open({url: url, size: 'sm'});
+    const checkInterval = setInterval(function(){
+        const formSchemaInput = $('input[name="formSchema"]');
+        if(formSchemaInput.length){
+            clearInterval(checkInterval);
+            const formSchema = sessionStorage.getItem('aiFormSchema');
+            if(formSchema) formSchemaInput.val(formSchema);
+            const formPageUrl = sessionStorage.getItem('aiFormPageUrl');
+            if(formPageUrl){
+                const formPageUrlInput = $('input[name="formPageUrl"]');
+                if(formPageUrlInput.length) formPageUrlInput.val(formPageUrl);
+            }
+        }
+    },100);
+};
+
+/**
+ * 将数字员工任务结果存入 Session，然后导航到目标表单页面。
+ * 目标表单页面加载时会从 Session 读取数据并自动填充。
+ * 仅用于表单页异步执行流程（_isFormPage=true），不干扰原有 openPageForm 路径。
+ */
+window.applyAITaskResultToForm = async function(taskID, formLocation, formData)
+{
+    const res = await $.ajax({
+        url: $.createLink('aitask', 'ajaxStorePendingFormData', 'taskID=' + taskID),
+        type: 'POST',
+        data: {formData: JSON.stringify(formData || {})},
+        dataType: 'json',
+    });
+    if(res && res.result === 'success' && formLocation)
+    {
+        openUrl(formLocation);
+    }
+};
+
 window.openAITaskPopup = async function(taskID)
 {
     const zaiPanel = await checkZAIPanel(true);

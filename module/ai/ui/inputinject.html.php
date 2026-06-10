@@ -149,6 +149,35 @@ $auditInject = function() use($module, $method)
     h::globalJS("(() => {requestAnimationFrame(() => {{$auditScript}});})();");
 };
 
+/* 数字员工异步执行结果自动填充：从 Session 读取待注入数据并回填表单 */
+$pendingFormInject = function() use($module, $method)
+{
+    if(!isset($this->config->ai->availableForms[$module]) || !in_array($method, $this->config->ai->availableForms[$module])) return;
+
+    $pendingData = $_SESSION['aiPendingFormData'] ?? null;
+    if(empty($pendingData)) return;
+
+    unset($_SESSION['aiPendingFormData']);
+
+    $encoded = json_encode($pendingData);
+    h::globalJS(<<< JAVASCRIPT
+    (() => {
+        var pendingData = {$encoded};
+        if(!pendingData) return;
+        var tryApply = function(tries) {
+            if(window.applyFormData) {
+                window.applyFormData(pendingData);
+                return;
+            }
+            if(tries < 10) setTimeout(function() { tryApply(tries + 1); }, 300);
+        };
+        tryApply(0);
+    })();
+    JAVASCRIPT);
+};
+
+$pendingFormInject();
+
 /* Inject input data. */
 $inputInject = function() use($module, $method, &$auditInject)
 {

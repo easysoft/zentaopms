@@ -3004,20 +3004,12 @@ class aiModel extends model
     public function getPromptsForTargetForm(string $module, string $method)
     {
         $targetForm = "{$module}.{$method}";
-        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
+        return $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('active')
             ->andWhere('targetForm')->eq($targetForm)
             ->orderBy('id_desc')
             ->fetchAll('id', false);
-
-        $useUniversalForm = (array)$this->config->ai->useUniversalForm;
-        if(empty($useUniversalForm)) return array();
-
-        return array_filter($prompts, function($prompt) use ($useUniversalForm)
-        {
-            return in_array($prompt->code, $useUniversalForm);
-        });
     }
 
     /**
