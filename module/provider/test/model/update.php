@@ -3,21 +3,9 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('ops_provider')->loadYaml('provider', false, 2)->gen(5);
+
 su('admin');
-
-global $tester;
-$tester->dao->delete()->from(TABLE_PROVIDER)->exec();
-
-$providerRows = array(
-    (object)array('type' => 'GitLab', 'name' => 'GitLab服务', 'url' => 'https://gitlab.example.com', 'token' => 'gitlab-token', 'deleted' => '0', 'createdBy' => 'admin', 'createdDate' => helper::now()),
-    (object)array('type' => 'Jenkins', 'name' => 'Jenkins服务', 'url' => 'https://jenkins.example.com', 'token' => base64_encode('jenkins-admin:jenkins-token'), 'deleted' => '0', 'createdBy' => 'admin', 'createdDate' => helper::now())
-);
-$providerIDs = array();
-foreach($providerRows as $providerRow)
-{
-    $tester->dao->insert(TABLE_PROVIDER)->data($providerRow)->exec();
-    $providerIDs[] = $tester->dao->lastInsertID();
-}
 
 /**
 
@@ -35,7 +23,7 @@ cid=0
 */
 
 $providerTester = new providerModelTest();
-$gitlabID       = $providerIDs[0];
+$gitlabID       = 1;
 
 r($providerTester->updateTest($gitlabID, array('name' => '更新后的GitLab服务'))) && p('name') && e('更新后的GitLab服务');                 // 步骤1：更新 GitLab 服务名称成功
 r($providerTester->updateTest($gitlabID, array('name' => '再次更新GitLab服务'))) && p('type') && e('GitLab');                            // 步骤2：更新 GitLab 服务名称时保留原服务类型

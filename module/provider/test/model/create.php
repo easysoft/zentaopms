@@ -3,6 +3,8 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('ops_provider')->gen(0);
+
 su('admin');
 
 /**
