@@ -42,7 +42,7 @@ class projectTao extends projectModel
      */
     protected function doSuspend(int $projectID, object $project): bool
     {
-        $this->dao->update(TABLE_PROJECT)->data($project)
+        $this->dao->update(TABLE_PROJECT)->data($project, 'comment')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq($projectID)
@@ -64,7 +64,7 @@ class projectTao extends projectModel
     protected function doClosed(int $projectID, object $project, object $oldProject): bool
     {
         $this->lang->error->ge = $this->lang->project->ge;
-        $this->dao->update(TABLE_PROJECT)->data($project)
+        $this->dao->update(TABLE_PROJECT)->data($project, 'comment')
             ->autoCheck()
             ->check($this->config->project->close->requiredFields, 'notempty')
             ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())

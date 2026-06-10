@@ -896,6 +896,12 @@ class projectZen extends project
         {
             $actionID = $this->loadModel('action')->create('project', $project->id, 'Started', $comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($comment)
+            {
+                $project->comment = $comment;
+                $this->loadModel('message')->sendMentionNotice('project', 'start', $actionID, $project);
+            }
         }
 
         $this->loadModel('common')->syncPPEStatus($project->id);
@@ -919,6 +925,14 @@ class projectZen extends project
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Suspended', $comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($comment)
+            {
+                $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+                $project->comment = $comment;
+
+                $this->loadModel('message')->sendMentionNotice('project', 'suspend', $actionID, $project);
+            }
         }
 
         $this->loadModel('common')->syncPPEStatus($projectID);
@@ -957,6 +971,14 @@ class projectZen extends project
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Closed', $comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($comment)
+            {
+                $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+                $project->comment = $comment;
+
+                $this->loadModel('message')->sendMentionNotice('project', 'close', $actionID, $project);
+            }
         }
 
         $this->loadModel('common')->syncPPEStatus($projectID);
@@ -1040,6 +1062,14 @@ class projectZen extends project
         {
             $actionID = $this->loadModel('action')->create('project', $projectID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $project = $this->dao->findById($projectID)->from(TABLE_PROJECT)->fetch();
+                $project->comment = $this->post->comment;
+
+                $this->loadModel('message')->sendMentionNotice('project', 'activate', $actionID, $project);
+            }
         }
 
         $this->executeHooks($projectID);
