@@ -1457,13 +1457,14 @@ class testtaskModel extends model
         if(empty($caseIdList)) return false;
 
         $runs = array();
-        if($runCaseType == 'testtask')
+        if($runCaseType == 'testtask' || $runCaseType == 'work')
         {
             /* 如果是从测试单中批量执行测试用例，查询出测试用例和测试执行的键值对便于更新本次执行结果。*/
             /* If batch run test cases from testtask, query the key-value pair of test cases and test execution for updating the execution results. */
             $runs = $this->dao->select('`case`, id')->from(TABLE_TESTRUN)
                 ->where('`case`')->in($caseIdList)
                 ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
+                ->orderBy('id_desc')
                 ->fetchPairs();
         }
 
@@ -1510,6 +1511,21 @@ class testtaskModel extends model
             if(dao::isError()) return false;
         }
 
+        /* 从我的地盘执行时需更新关联测试单的状态。*/
+        if($runCaseType == 'work')
+        {
+            $runIdList = array();
+            foreach($cases as $caseID => $postCase)
+            {
+                $runID = zget($runs, $caseID, 0);
+                if($runID) $runIdList[] = $runID;
+            }
+            if($runIdList)
+            {
+                $taskIdList = $this->dao->select('distinct task')->from(TABLE_TESTRUN)->where('id')->in($runIdList)->fetchPairs();
+                foreach($taskIdList as $taskID) $this->updateStatus((int)$taskID);
+            }
+        }
         return true;
     }
 
