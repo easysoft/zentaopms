@@ -444,7 +444,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID")));
         }
@@ -456,6 +456,18 @@ class ai extends control
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
         $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
+    }
+
+    /**
+     * Set input fields of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptSetInputFields($promptID)
+    {
+        $this->promptSelectDataSource($promptID);
     }
 
     /**
