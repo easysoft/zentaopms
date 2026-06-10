@@ -52,4 +52,50 @@ class providerModelTest extends baseTest
 
         return $providerList;
     }
+
+    /**
+     * Test getByID method.
+     *
+     * @param  int               $id
+     * @access public
+     * @return object|array|bool
+     */
+    public function getByIDTest(int $id): object|array|bool
+    {
+        $provider = $this->invokeArgs('getByID', array($id));
+        if(dao::isError()) return dao::getError();
+
+        return $provider;
+    }
+
+    /**
+     * Test update method.
+     *
+     * @param  int               $id
+     * @param  array             $params
+     * @access public
+     * @return object|array|bool
+     */
+    public function updateTest(int $id, array $params = array()): object|array|bool
+    {
+        $currentProvider = $this->instance->dao->select('*')->from(TABLE_PROVIDER)->where('id')->eq($id)->fetch();
+
+        $defaults = array(
+            'name'       => $currentProvider->name ?? '',
+            'url'        => $currentProvider->url ?? '',
+            'token'      => $currentProvider->token ?? '',
+            'editedBy'   => 'admin',
+            'editedDate' => helper::now()
+        );
+
+        $provider = new stdclass();
+        foreach($defaults as $field => $value) $provider->{$field} = $value;
+        foreach($params as $field => $value) $provider->{$field} = $value;
+
+        $updated = $this->invokeArgs('update', array($id, $provider));
+        if(dao::isError()) return dao::getError();
+        if(!$updated) return false;
+
+        return $this->instance->dao->select('*')->from(TABLE_PROVIDER)->where('id')->eq($id)->fetch();
+    }
 }

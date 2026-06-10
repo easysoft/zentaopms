@@ -78,6 +78,14 @@ class provider extends control
         $this->display();
     }
 
+    /**
+     * 编辑服务。
+     * Edit provider.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
     public function edit(int $id)
     {
         $provider = $this->provider->getById($id);
