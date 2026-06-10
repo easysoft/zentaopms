@@ -613,4 +613,110 @@ class programplan extends control
 
         return $this->send(array('result' => 'success', 'callback' => "loadCurrentPage('#versionList')"));
     }
+
+    /**
+     * 版本回滚。
+     * Rollback gantt version.
+     *
+     * @param  int    $projectID
+     * @param  int    $versionID
+     * @access public
+     * @return void
+     */
+    public function rollbackGanttVersion(int $projectID, int $versionID = 0)
+    {
+        /* 目标版本中执行的起止日期超出项目起止日期时提示无法回滚。*/
+        $targetVersion = $this->programplan->getGanttDataByVersion($versionID);
+        $targetData    = $targetVersion['data'] ?? array();
+        $project       = $this->programplan->fetchByID($projectID, 'project');
+        $minPlanBegin  = $maxPlanEnd = '';
+        foreach($targetData as $version)
+        {
+            if($version->type == 'plan')
+            {
+                if(empty($minPlanBegin) || $version->begin < $minPlanBegin) $minPlanBegin = $version->begin;
+                if(empty($maxPlanEnd) || $version->deadline > $maxPlanEnd) $maxPlanEnd = $version->deadline;
+            }
+        }
+        if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
+
+        /* 获取最新版本。*/
+        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
+        $currentStages  = $currentTasks = array();
+        foreach($currentVersion['data'] as $version)
+        {
+            if($version->type == 'plan') $currentStages[$version->id] = $version->id;
+
+            if($version->type == 'task')
+            {
+                $taskID = explode('-', $version->id)[1];
+                $currentTasks[$taskID] = $taskID;
+            }
+
+            $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
+        }
+
+        /* 将回滚前的版本存为临时版本。*/
+        $this->programplan->saveTmpGanttVersion($projectID, 'gantt', json_encode($currentVersion));
+
+        $this->dao->begin();
+
+        $parentStages = $parentTasks = array();
+        foreach($targetData as $version)
+        {
+            if($version->type == 'plan')
+            {
+                /* 回滚阶段。*/
+                $result = $this->programplan->rollbackStage($version);
+                if(!$result)
+                {
+                    $this->dao->rollback();
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+
+                if($version->parent == 0) $parentStages[$version->id] = $version->id;
+                if(isset($currentStages[$version->id])) unset($currentStages[$version->id]);
+            }
+            if($version->type == 'task')
+            {
+                /* 回滚任务。*/
+                $result = $this->programplan->rollbackTask($version);
+                if(!$result)
+                {
+                    $this->dao->rollback();
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+
+                $taskID = explode('-', $version->id)[1];
+                if(strpos((string)$version->parent, '-') === false) $parentTasks[$taskID] = $taskID;
+                if(isset($currentTasks[$taskID])) unset($currentTasks[$taskID]);
+            }
+        }
+
+        /* 回滚任务依赖关系。*/
+        $result = $this->programplan->rollbackTaskRelation($projectID, $targetVersion['links'] ?? array());
+        if(!$result)
+        {
+            $this->dao->rollback();
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        /* 删除回滚版本中没有的阶段和任务。*/
+        $result = $this->programplan->deleteExtraStageAndTask($currentStages, $currentTasks);
+        if(!$result)
+        {
+            $this->dao->rollback();
+            return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        $this->dao->commit();
+
+        /* 重置阶段和任务的path。*/
+        foreach($parentStages as $parentStageID) $this->programplan->setTreePath($parentStageID);
+        foreach($parentTasks as $parentTaskID) $this->programplan->setTaskPath((int)$parentTaskID);
+
+        $this->loadModel('action')->create('ganttversion', $versionID, 'rollbackversion');
+
+        return $this->sendSuccess(array('load' => true));
+    }
 }

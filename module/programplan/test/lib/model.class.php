@@ -1026,4 +1026,138 @@ class programplanModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test rollbackStage method.
+     *
+     * @param  object $stage
+     * @access public
+     * @return object|false
+     */
+    public function rollbackStageTest(object $stage): object|false
+    {
+        $this->instance->rollbackStage($stage);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($stage->id)->fetch();
+    }
+
+    /**
+     * Test rollbackTask method.
+     *
+     * @param  object $task
+     * @access public
+     * @return object|false
+     */
+    public function rollbackTaskTest(object $task): object|false
+    {
+        $this->instance->rollbackTask($task);
+
+        if(dao::isError()) return dao::getError();
+
+        $taskID = explode("-", $task->id);
+        return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID[1])->fetch();
+    }
+
+    /**
+     * Test rollbackTaskRelation method.
+     *
+     * @param  int   $projectID
+     * @param  array $relations
+     * @access public
+     * @return array|false
+     */
+    public function rollbackTaskRelationTest(int $projectID, array $relations): array|false
+    {
+        $result = $this->instance->rollbackTaskRelation($projectID, $relations);
+
+        if(dao::isError()) return dao::getError();
+
+        $relations = $this->instance->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchAll();
+        $output    = array('result' => $result, 'count' => count($relations));
+        foreach($relations as $relation) $output[] = $relation;
+        return $output;
+    }
+
+    /**
+     * Test deleteExtraStageAndTask method.
+     *
+     * @param  array $stages
+     * @param  array $tasks
+     * @access public
+     * @return array|false
+     */
+    public function deleteExtraStageAndTaskTest(array $stages, array $tasks): array|false
+    {
+        $result = $this->instance->deleteExtraStageAndTask($stages, $tasks);
+
+        if(dao::isError()) return dao::getError();
+
+        $output = array('result' => $result);
+
+        if(!empty($stages))
+        {
+            $stageList = $this->instance->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('id')->in($stages)->orderBy('id_asc')->fetchAll();
+            $output['stageCount'] = count($stageList);
+            foreach($stageList as $stage) $output[] = $stage;
+        }
+        else
+        {
+            $output['stageCount'] = 0;
+        }
+
+        if(!empty($tasks))
+        {
+            $taskList = $this->instance->dao->select('id, deleted')->from(TABLE_TASK)->where('id')->in($tasks)->orderBy('id_asc')->fetchAll();
+            $output['taskCount'] = count($taskList);
+            foreach($taskList as $task) $output[] = $task;
+        }
+        else
+        {
+            $output['taskCount'] = 0;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Test setTaskPath method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return array|false
+     */
+    public function setTaskPathTest(int $taskID): array|false
+    {
+        $result = $this->instance->setTaskPath($taskID);
+
+        if(dao::isError()) return dao::getError();
+
+        $tasks  = $this->instance->dao->select('id,parent,path')->from(TABLE_TASK)->orderBy('id_asc')->fetchAll();
+        $output = array('result' => $result);
+        foreach($tasks as $task) $output[] = $task;
+        return $output;
+    }
+
+    /**
+     * Test saveTmpGanttVersion method.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $data
+     * @access public
+     * @return array|false
+     */
+    public function saveTmpGanttVersionTest(int $projectID, string $type, string $data): array|false
+    {
+        $this->instance->saveTmpGanttVersion($projectID, $type, $data);
+
+        if(dao::isError()) return dao::getError();
+
+        $versions = $this->instance->dao->select('*')->from(TABLE_OBJECT)->where('status')->eq('tmpGantt')->andWhere('type')->eq('taged')->orderBy('id_asc')->fetchAll();
+        $output   = array('count' => count($versions));
+        foreach($versions as $version) $output[] = $version;
+        return $output;
+    }
 }
