@@ -357,7 +357,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputFields', "promptID=$promptID")));
         }
 
         if(empty($prompt->id)) $prompt->id = 0;
@@ -467,7 +467,17 @@ class ai extends control
      */
     public function promptSetInputFields($promptID)
     {
-        $this->promptSelectDataSource($promptID);
+        if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
+
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->locate($this->inlink('promptBasicInfo'));
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputfields'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->display();
     }
 
     /**
@@ -551,6 +561,8 @@ class ai extends control
     public function promptSetInputForm($promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+        if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
+
         $prompt = $this->ai->getPromptByID($promptID);
 
         $this->view->prompt         = $prompt;
