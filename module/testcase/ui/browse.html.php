@@ -29,6 +29,8 @@ $canBatchReview             = $canModify && hasPriv('testcase', 'batchReview') &
 $canBatchDelete             = $canModify && hasPriv('testcase', 'batchDelete');
 $canBatchChangeType         = $canModify && hasPriv('testcase', 'batchChangeType');
 $canBatchConfirmStoryChange = $canModify && hasPriv('testcase', 'batchConfirmStoryChange');
+$canBatchConfirmCaseChange  = $canModify && hasPriv('testcase', 'batchConfirmLibcaseChange');
+$canBatchIgnoreCaseChange   = $canModify && hasPriv('testcase', 'batchIgnoreLibcaseChange');
 $canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBranch') && isset($product->type) && $product->type != 'normal';
 $canBatchChangeModule       = $canModify && hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
 $canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene');
@@ -66,6 +68,8 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirm
         $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);
     }
     if($canBatchConfirmStoryChange) $navActions[] = array('text' => $lang->testcase->confirmStoryChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID"));
+    if($canBatchConfirmCaseChange)  $navActions[] = array('text' => $lang->testcase->confirmChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmLibcaseChange'));
+    if($canBatchIgnoreCaseChange)   $navActions[] = array('text' => $lang->testcase->ignoreLibcaseChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchIgnoreLibcaseChange'));
 }
 
 if($canBatchChangeModule)
