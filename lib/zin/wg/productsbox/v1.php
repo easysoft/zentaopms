@@ -67,6 +67,7 @@ class productsBox extends wg
         (
             setClass('productsBox', $hidden ? ' hidden' : ''),
             setData('linkType', $type),
+            setData('filterPlans', data('filterPlans') ? '1' : '0'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),

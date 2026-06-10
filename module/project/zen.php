@@ -306,7 +306,7 @@ class projectZen extends project
             }
             if(isset($output['branchID']))   $linkedBranches = array($output['branchID'] => $output['branchID']);
         }
-        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired|undone');
         foreach($productPlans as $productID => $branchPlans)
         {
             foreach($branchPlans as $branchID => $plans)
@@ -347,6 +347,7 @@ class projectZen extends project
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
         $this->view->groups              = $this->loadModel('group')->getPairs();
+        $this->view->filterPlans         = true;
 
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;

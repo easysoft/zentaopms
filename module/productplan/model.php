@@ -234,6 +234,7 @@ class productplanModel extends model
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(date('Y-m-d'))->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
@@ -302,6 +303,7 @@ class productplanModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
         $plans = $this->relationBranch($plans);

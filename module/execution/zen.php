@@ -1875,7 +1875,7 @@ class executionZen extends execution
         if(!empty($copyExecutionID))
         {
             $branches     = $this->project->getBranchesByProject($copyExecutionID);
-            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired');
+            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired|undone');
             $branchGroups = $this->execution->getBranchByProduct(array_keys($products), $projectID);
         }
 
