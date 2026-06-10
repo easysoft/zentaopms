@@ -409,6 +409,7 @@ $lang->ai->moduleList['release']['common']      = '发布';
 $lang->ai->moduleList['charter']['common']      = '立项';
 $lang->ai->moduleList['project']['common']      = '项目';
 $lang->ai->moduleList['execution']['common']    = '执行';
+$lang->ai->moduleList['build']['common']        = '版本';
 $lang->ai->moduleList['executions']['common']   = '执行列表';
 $lang->ai->moduleList['programplans']['common'] = '阶段列表';
 $lang->ai->moduleList['task']['common']         = '任务';

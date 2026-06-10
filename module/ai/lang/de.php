@@ -409,6 +409,7 @@ $lang->ai->moduleList['release']['common']      = 'Release';
 $lang->ai->moduleList['charter']['common']      = 'Charter';
 $lang->ai->moduleList['project']['common']      = 'Project';
 $lang->ai->moduleList['execution']['common']    = 'Execution';
+$lang->ai->moduleList['build']['common']        = 'Build';
 $lang->ai->moduleList['executions']['common']   = 'Execution List';
 $lang->ai->moduleList['programplans']['common'] = 'Program Plan List';
 $lang->ai->moduleList['task']['common']         = 'Task';
