@@ -176,7 +176,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
             setID('versionList'),
             setClass('ml-2'),
             setStyle(array('order' => '10010')),
-            $type == 'gantt' && $browseType != 'bysearch' ? versiondiff
+            empty($productID) && $type == 'gantt' && $browseType != 'bysearch' ? versiondiff
             (
                 setClass('inline-block'),
                 set::appendClass('fixed-item'),

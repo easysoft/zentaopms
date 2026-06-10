@@ -58,15 +58,17 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 $lang->testtask->myInvolved       = 'Involved';
 
-$lang->testtask->viewAction       = "View Request";
-$lang->testtask->casesAction      = 'Browse Cases List';
-$lang->testtask->activateAction   = "Activer Campagne";
-$lang->testtask->blockAction      = "Bloquer Campagne";
-$lang->testtask->closeAction      = "Clôturer Campagne";
-$lang->testtask->startAction      = "Démarrer Campagne";
-$lang->testtask->resultsAction    = "Résultats CasTest";
-$lang->testtask->reportAction     = 'Rapport CasTests';
-$lang->testtask->ignoreCaseChange = 'Ignore Case Change';
+$lang->testtask->viewAction             = "View Request";
+$lang->testtask->casesAction            = 'Browse Cases List';
+$lang->testtask->activateAction         = "Activer Campagne";
+$lang->testtask->blockAction            = "Bloquer Campagne";
+$lang->testtask->closeAction            = "Clôturer Campagne";
+$lang->testtask->startAction            = "Démarrer Campagne";
+$lang->testtask->resultsAction          = "Résultats CasTest";
+$lang->testtask->reportAction           = 'Rapport CasTests';
+$lang->testtask->ignoreCaseChange       = 'Ignore Case Change';
+$lang->testtask->batchConfirmCaseChange = 'Batch Confirm Case Change';
+$lang->testtask->batchIgnoreCaseChange  = 'Batch Ingore Case Change';
 
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Recette';

@@ -1292,4 +1292,49 @@ class testtask extends control
         $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($testtaskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
+
+    /**
+     * 批量确认用例的更新。
+     * Batch confirm case changed in testtask.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function batchConfirmCaseChange(int $taskID)
+    {
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $caseList    = $this->loadModel('testcase')->getByList($caseIdList);
+        $versionList = $this->dao->select('`case`,caseVersion,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchAll('case');
+        foreach($caseList as $case)
+        {
+            $versionInfo = $versionList[$case->id];
+            if(empty($versionInfo)) continue;
+            if($versionInfo->caseVersion == $versionInfo->version) continue;
+
+            $this->dao->update(TABLE_TESTRUN)
+                ->set('version')->eq($case->version)
+                ->where('`case`')->eq($case->id)
+                ->beginIF(!empty($taskID))->andWhere('task')->eq($taskID)->fi()
+                ->exec();
+        }
+
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+    }
+
+    /**
+     * 批量忽略用例的更新。
+     * Batch ignore case changed in testtask.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function batchIgnoreCaseChange(int $taskID)
+    {
+        $caseIdList  = zget($_POST, 'caseIdList',  array());
+        $versionList = $this->dao->select('`case`,version')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->andWhere('case')->in($caseIdList)->fetchPairs('case');
+        foreach($versionList as $caseID => $taskCaseVersion) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($taskCaseVersion)->where('case')->eq($caseID)->andWhere('task')->eq($taskID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+    }
 }
