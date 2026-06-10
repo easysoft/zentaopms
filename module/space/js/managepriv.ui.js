@@ -1,7 +1,6 @@
 $(function()
 {
     selectedPrivIdList = Object.values(selectedPrivIdList);
-    recommendSelect = new Array();
 
     $('.priv-footer').on('change', '.check-all', checkAllChange);
     $('#privList').on('change', 'tbody > tr > th .check-all', checkAllChange);
@@ -9,22 +8,6 @@ $(function()
     $('#privList').on('change', 'tbody > tr .group-item input[type=checkbox]', groupItemChange);
     $('#privPackageList .package-column').on('click', '.privs.popover input[type=checkbox]', groupItemChange);
 });
-
-window.handleSideRecommentCheckClick = function($target)
-{
-    const checked = $target.prop('checked');
-    if($target.attr('data-has-children') == 'true')
-    {
-        $target.closest('.checkbox-group').find('ul > li input[type=checkbox]').each(function(){
-            recommendChange($target, checked);
-        });
-    }
-    else
-    {
-        recommendChange($target, checked);
-    }
-    updatePrivTree(selectedPrivIdList);
-};
 
 window.handlePrivPackageListClick = function(event)
 {
@@ -212,7 +195,6 @@ function checkAllChange()
 
         changeParentChecked($(this), moduleName, packageID);
     }
-    updatePrivTree(null);
 }
 
 /**
@@ -284,41 +266,6 @@ function changeParentChecked($item, moduleName, packageID)
     $('#allChecker').prop('checked', allModules == allCheckedModules);
 }
 
-/**
-  * update comp tree after click checkbox-label.
-  *
-  * @param  obj objTree
-  * @access public
-  * @return void
-  */
-function updatePrivTree(privList)
-{
-    if(privList == null)
-    {
-        privList = new Array();
-        $('tbody .group-item input:checked').each(function()
-        {
-            var privID = $(this).closest('.group-item').attr('data-id');
-            if($(this).closest('popover-content').length == 0 && privList.indexOf(privID) < 0) privList.push(privID);
-        });
-        selectedPrivIdList = privList;
-    }
-
-    loadTarget($.createLink('group', 'ajaxGetRelatedPrivs'), '.side',
-    {
-        method: 'post',
-        data: {"selectPrivList" : privList.toString(), "recommendSelect": recommendSelect.toString(), "allPrivList": Object.values(allPrivList).toString()},
-        beforeUpdate: (data) =>
-        {
-            const $side = $('.side');
-            $side.children('.zin-page-css,.zin-page-js,.priv-panel').remove();
-            $side.append(data);
-            toggleLoading($side, false);
-            return false;
-        }
-    });
-}
-
 window.setNoChecked = function()
 {
     var noCheckValue = '';
@@ -357,77 +304,4 @@ function groupItemChange()
     var moduleName = $(this).closest('.group-item').attr('data-module');
     var packageID  = $(this).closest('.group-item').attr('data-package');
     changeParentChecked($(this), moduleName, packageID);
-
-    var privID = $(this).closest('.group-item').attr('data-id');
-    if(privID)
-    {
-        var index = selectedPrivIdList.indexOf(privID);
-
-        if(index < 0 && checked) selectedPrivIdList.push(privID);
-        if(index > -1 && !checked) selectedPrivIdList.splice(index, 1);
-
-        updatePrivTree(selectedPrivIdList);
-    }
-}
-
-/**
- * When recommend privs change.
- *
- * @param  object $item
- * @param  bool   $checked
- * @access public
- * @return void
- */
-function recommendChange($item, checked)
-{
-    var privModule  = $item.attr('data-module');
-    var privMethod  = $item.attr('data-method');
-    var $actionItem = $('#privList').length > 0 ? $('#privList input[data-id="' + privModule + '-' + privMethod + '"]') : $('#privPackageList input[data-id="' + privModule + '-' + privMethod + '"]');
-    $actionItem.prop('checked', checked);
-    if(checked)
-    {
-        $item.attr('checked', true);
-        $actionItem.attr('checked', true);
-    }
-    else
-    {
-        $item.removeAttr('checked');
-        $actionItem.removeAttr('checked');
-    }
-    var moduleName = $actionItem.closest('tr').find('.package').attr('data-module');
-    var packageID  = $('#privList').length > 0 ? $actionItem.closest('tr').find('.package').attr('data-package') : $actionItem.closest('.privs').attr('data-package');
-    changeParentChecked($actionItem, moduleName, packageID);
-
-    var $parentItem       = $item.closest('ul').closest('li').find('input[data-has-children="true"]');
-    var allItemLength     = $item.closest('ul').find('input[type=checkbox]').length;
-    var checkedItemLength = $item.closest('ul').find('input[type=checkbox]:checked').length;
-    if(checkedItemLength == 0)
-    {
-        $parentItem.removeAttr('checked');
-        $parentItem.closest('.checkbox-primary').find('label').removeClass('checkbox-indeterminate-block');
-    }
-    else if(allItemLength == checkedItemLength)
-    {
-        $parentItem.attr('checked', true);
-        $parentItem.closest('.checkbox-primary').find('label').removeClass('checkbox-indeterminate-block');
-    }
-    else
-    {
-        $parentItem.removeAttr('checked');
-        $parentItem.closest('.checkbox-primary').find('label').addClass('checkbox-indeterminate-block');
-    }
-
-    var privID = $item.attr('data-id');
-    if(privID)
-    {
-        var index = selectedPrivIdList.indexOf(privID);
-
-        if(index < 0 && checked) selectedPrivIdList.push(privID);
-        if(index > -1 && !checked) selectedPrivIdList.splice(index, 1);
-
-        index = recommendSelect.indexOf(privID);
-
-        if(index < 0 && checked) recommendSelect.push(privID);
-        if(index > -1 && !checked) recommendSelect.splice(index, 1);
-    }
 }
