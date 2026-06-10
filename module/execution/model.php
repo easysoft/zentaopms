@@ -826,6 +826,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'start', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -863,6 +869,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'putoff', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -894,6 +906,12 @@ class executionModel extends model
         {
             $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'suspend', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -995,6 +1013,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'activate', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -1035,6 +1059,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'close', $actionID, $oldExecution);
+            }
         }
 
         $this->loadModel('score')->create('execution', 'close', $oldExecution);
