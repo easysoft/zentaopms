@@ -6,6 +6,7 @@ su('admin');
 
 zenData('module')->gen(10);
 zenData('branch')->gen(0);
+zenData('story')->gen(10);
 
 $case = zenData('case');
 $case->id->range('1-3');
