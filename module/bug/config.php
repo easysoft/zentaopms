@@ -43,7 +43,7 @@ if(in_array($config->edition, array('max', 'ipd'))) $config->bug->list->customBa
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
 $config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,assignedTo,%s';
-$config->bug->custom->batchEditFields   = 'execution,steps,type,pri,deadline,severity,os,browser,resolvedBy,resolution';
+$config->bug->custom->batchEditFields   = 'type,assignedTo,pri,deadline,severity,resolvedBy,resolution';
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, plan, story, task,
     title, keywords, severity, pri, type, os, browser,
