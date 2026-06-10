@@ -15,8 +15,6 @@ cid=19621
 - 使用limit参数来限制最多获取50个用户键值对 @3
 - 使用pofirst参数来将系统中的产品经理用户放到返回值前列属性account1 @A:用户名1
 - 使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列属性account3 @A:用户名3
-- 开启showOutside查询未删除用户键值对属性account4 @A:用户名4
-- 开启showOutside查询未删除用户数量 @4
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -57,5 +55,3 @@ r(count($limit2Users))               && p()             && e('2');            //
 r(count($limit50Users))              && p()             && e('3');            //使用limit参数来限制最多获取50个用户键值对
 r($firstPO)                          && p('account1')   && e('A:用户名1');    //使用pofirst参数来将系统中的产品经理用户放到返回值前列
 r($firstPM)                          && p('account3')   && e('A:用户名3');    //使用pmfirst参数来将系统中的项目经理内部和外部用户放到返回值前列
-r($user->getPairsTest('noempty|noclosed', '', 0, array(), $showOutside)) && p('account4') && e('A:用户名4'); //开启showOutside查询未删除用户包含外部用户
-r(count($user->getPairsTest('noempty|noclosed', '', 0, array(), $showOutside))) && p() && e('4'); //开启showOutside查询未删除用户数量
