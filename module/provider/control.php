@@ -27,9 +27,16 @@ class provider extends control
      * @access public
      * @return void
      */
-    public function browse(string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1)
+    public function browse(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $this->view->title = $this->lang->provider->browse;
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title     = $this->lang->provider->browse;
+        $this->view->providers = $this->provider->getList($orderBy, $pager);
+        $this->view->orderBy   = $orderBy;
+        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager     = $pager;
         $this->display();
     }
 
