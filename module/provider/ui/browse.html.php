@@ -13,9 +13,9 @@ namespace zin;
 $createItem = array
 (
     'text'  => $lang->provider->create,
-    'url'   => createLink('provider', 'create'),
+    'url'   => createLink('provider', 'create', 'type=GitLab'),
     'icon'  => 'plus',
-    'class' => 'btn primary'
+    'class' => 'primary'
 );
 
 featureBar();
