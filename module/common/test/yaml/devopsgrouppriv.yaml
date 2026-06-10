@@ -1,0 +1,14 @@
+title: table zt_grouppriv
+desc: "DevOps空间分组权限"
+author: claude
+version: "1.0"
+fields:
+  - field: group
+    note: "分组ID"
+    range: 1-10
+  - field: module
+    note: "模块名"
+    range: 'repo{4},pipeline{4},artifact{4}'
+  - field: method
+    note: "方法名"
+    range: 'browse,view,edit,delete'
