@@ -22,7 +22,6 @@ window.renderStoryCell = function(result, info)
         priList = storyPriList;
         if(story.type == 'requirement') priList = requirementPriList;
         if(story.type == 'epic')        priList = epicPriList;
-        console.log(priList);
         result[0]['props']['text'] = priList[story.pri];
     }
 
