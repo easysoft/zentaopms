@@ -623,7 +623,7 @@ class project extends control
         $this->view->projects             = $projects;
         $this->view->programs             = $programs;
         $this->view->unauthorizedPrograms = $this->program->getPairsByList($unauthorizedIDList);
-        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst|all', $appendPMUsers);
+        $this->view->PMUsers              = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst', $appendPMUsers);
 
         $this->display();
     }
@@ -1327,7 +1327,7 @@ class project extends control
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'load' => $this->createLink('project', 'team', "projectID=$projectID")));
         }
 
-        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst|all');
+        $users          = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles          = $this->user->getUserRoles(array_keys($users));
         $deptUsers      = $dept === '' ? array() : $this->dept->getDeptUserPairs((int)$dept);
         $executions     = $this->project->getExecutionList(array($projectID));

@@ -1404,7 +1404,7 @@ class my extends control
             $tip   = '';
         }
 
-        $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted|all' : 'noletter|noempty|noclosed|noclosed|all';
+        $userParams = empty($this->config->user->showDeleted) ? 'noletter|noempty|noclosed|noclosed|nodeleted' : 'noletter|noempty|noclosed|noclosed';
         $users      = $this->user->getPairs($userParams, $mode == 'new' ? '' : $userList);
 
         $this->view->title = $this->lang->my->common . $this->lang->hyphen . $label;

@@ -37,7 +37,7 @@ class custom extends control
      * Set the language items of the object fields.
      *
      * @param  string $module todo|story|task|bug|testcase|testtask|user|project|block
-     * @param  string $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList|closed
+     * @param  string $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList|closed
      * @param  string $lang   all|zh-cn|zh-tw|en|de|fr
      * @access public
      * @return void

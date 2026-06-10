@@ -190,7 +190,7 @@ class userModel extends model
     {
         return $this->dao->select($fields)->from(TABLE_USER)
             ->where('1 = 1')
-            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq('inside')->fi()
+            ->beginIF(strpos($params, 'all') === false && empty($this->config->user->showOutside))->andWhere('type')->eq('inside')->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
             ->fetchAll('', false);
@@ -263,13 +263,14 @@ class userModel extends model
         if(strpos($params, 'pmfirst') !== false) $fields .= ", INSTR(',td,pm,', role) AS roleOrder";
         if(strpos($params, 'devfirst')!== false) $fields .= ", INSTR(',td,pm,qd,qa,dev,', role) AS roleOrder";
         $type     = (strpos($params, 'outside') !== false) ? 'outside' : 'inside';
+        $showAll  = strpos($params, 'all') !== false || !empty($this->config->user->showOutside);
         $orderBy  = (strpos($params, 'first')   !== false) ? 'roleOrder DESC, account' : 'account';
         $keyField = (strpos($params, 'useid')   !== false) ? 'id' : "account";
 
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1=1')
             ->beginIF(strpos($params, 'nodeleted') !== false || empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
-            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
+            ->beginIF(!$showAll)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->beginIF($this->config->vision && $this->app->rawModule !== 'kanban')->andWhere("FIND_IN_SET('{$this->config->vision}', visions)")->fi()
             ->orderBy($orderBy)
