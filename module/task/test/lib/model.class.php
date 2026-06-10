@@ -775,6 +775,8 @@ class taskModelTest extends baseTest
      */
     public function computeBeginAndEndTest($taskID)
     {
+        $taskID = (int)$taskID;
+
         $result = $this->instance->computeBeginAndEnd($taskID);
 
         if(dao::isError())
