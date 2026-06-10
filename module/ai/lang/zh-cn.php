@@ -826,12 +826,11 @@ $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 $lang->ai->models->promptFor = '输入给 %s';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['basicinfo']        = '基础信息';
-$lang->ai->designStepNav['assignrole']       = '指定角色';
-$lang->ai->designStepNav['selectdatasource'] = '选择对象';
-$lang->ai->designStepNav['setpurpose']       = '确认操作';
-$lang->ai->designStepNav['settargetform']    = '结果处理';
-$lang->ai->designStepNav['finalize']         = '准备发布';
+$lang->ai->designStepNav['basicinfo']      = '基础信息';
+$lang->ai->designStepNav['setinputfields'] = '设置输入字段';
+$lang->ai->designStepNav['setinputform']   = '设置输入表单';
+$lang->ai->designStepNav['setprompt']      = '设置提词';
+$lang->ai->designStepNav['preview']        = '结果预览';
 
 $lang->ai->dataTypeDesc = '%s是%s类型，%s';
 
