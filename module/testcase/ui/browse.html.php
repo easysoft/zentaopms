@@ -35,7 +35,7 @@ $canBatchChangeBranch       = $canModify && hasPriv('testcase', 'batchChangeBran
 $canBatchChangeModule       = $canModify && hasPriv('testcase', 'batchChangeModule') && !empty($productID) && ((isset($product->type) && $product->type == 'normal') || $branch !== 'all');
 $canBatchChangeScene        = $canModify && hasPriv('testcase', 'batchChangeScene');
 $canImportToLib             = $canModify && hasPriv('testcase', 'importToLib') && helper::hasFeature('caselib');
-$canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange);
+$canGroupBatch              = ($canBatchRun || $canBatchEdit || $canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirmStoryChange || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange);
 $canBatchAction             = ($canGroupBatch || $canBatchChangeBranch || $canBatchChangeModule || $canBatchChangeScene || $canImportToLib);
 
 jsVar('canImportToLib', $canImportToLib);
@@ -68,9 +68,10 @@ if($canBatchReview || $canBatchDelete || $canBatchChangeType || $canBatchConfirm
         $navActions[] = array('text' => $lang->testcase->type, 'class' => 'not-hide-menu', 'items' => $typeItems);
     }
     if($canBatchConfirmStoryChange) $navActions[] = array('text' => $lang->testcase->confirmStoryChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmStoryChange', "productID=$productID"));
-    if($canBatchConfirmCaseChange)  $navActions[] = array('text' => $lang->testcase->confirmChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmLibcaseChange'));
-    if($canBatchIgnoreCaseChange)   $navActions[] = array('text' => $lang->testcase->ignoreLibcaseChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchIgnoreLibcaseChange'));
 }
+
+if($canBatchConfirmCaseChange)  $navActions[] = array('text' => $lang->testcase->confirmChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchConfirmLibcaseChange'));
+if($canBatchIgnoreCaseChange)   $navActions[] = array('text' => $lang->testcase->ignoreLibcaseChange, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testcase', 'batchIgnoreLibcaseChange'));
 
 if($canBatchChangeModule)
 {
