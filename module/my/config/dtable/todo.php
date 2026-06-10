@@ -48,7 +48,7 @@ $config->my->todo->dtable->fieldList['id']['type']  = 'checkID';
 $config->my->todo->dtable->fieldList['name']['name']        = 'name';
 $config->my->todo->dtable->fieldList['name']['title']       = $lang->todo->name;
 $config->my->todo->dtable->fieldList['name']['type']        = 'title';
-$config->my->todo->dtable->fieldList['name']['link']        = array('module' => 'todo', 'method' => 'view', 'params' => 'id={id}&from=my', 'onlybody' => true);
+$config->my->todo->dtable->fieldList['name']['link']        = array('module' => 'todo', 'method' => 'view', 'params' => 'id={id}&from=my');
 $config->my->todo->dtable->fieldList['name']['data-toggle'] = 'modal';
 $config->my->todo->dtable->fieldList['name']['data-size']   = 'lg';
 $config->my->todo->dtable->fieldList['name']['fixed']       = 'left';
