@@ -331,6 +331,35 @@ class ai extends control
 
         $prompt = empty($promptID) ? new stdclass() : $this->ai->getPromptByID($promptID);
         if(empty($prompt)) $prompt = new stdclass();
+
+        if($_POST)
+        {
+            $data = form::data($this->config->ai->form->promptBasicInfo)->get();
+
+            if(empty($prompt->id))
+            {
+                $promptID = $this->ai->createPrompt($data);
+            }
+            else
+            {
+                $originalPrompt = clone $prompt;
+
+                $prompt->module          = $data->module;
+                $prompt->actionPurpose   = $data->actionPurpose;
+                $prompt->displayPosition = $data->displayPosition;
+                $prompt->name            = $data->name;
+                $prompt->model           = $data->model;
+                $prompt->desc            = $data->desc;
+
+                $this->ai->updatePrompt($prompt, $originalPrompt);
+                $promptID = $prompt->id;
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptAssignRole', "promptID=$promptID")));
+        }
+
         if(empty($prompt->id)) $prompt->id = 0;
         if(!isset($prompt->name)) $prompt->name = '';
         if(!isset($prompt->module)) $prompt->module = '';

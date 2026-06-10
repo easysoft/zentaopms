@@ -7,11 +7,12 @@ title=测试 aiModel::getLastActiveStep();
 timeout=0
 cid=15036
 
-- 步骤1：null参数 @assignrole
+- 步骤1：null参数 @basicinfo
 - 步骤2：active状态 @finalize
-- 步骤3：有targetForm @settargetform
-- 步骤4：有purpose @setpurpose
+- 步骤3：只有旧targetForm @basicinfo
+- 步骤4：基础信息完整 @assignrole
 - 步骤5：有source @selectdatasource
+- 步骤6：有purpose @setpurpose
 
 */
 
@@ -30,22 +31,43 @@ $promptNull = null;
 
 $promptActive = new stdClass();
 $promptActive->status = 'active';
+$promptActive->name = 'Active prompt';
+$promptActive->module = 'story';
+$promptActive->actionPurpose = 'story.change';
+$promptActive->displayPosition = 'detail';
 
 $promptWithTargetForm = new stdClass();
 $promptWithTargetForm->status = 'draft';
 $promptWithTargetForm->targetForm = 'product.create';
 
-$promptWithPurpose = new stdClass();
-$promptWithPurpose->status = 'draft';
-$promptWithPurpose->purpose = 'Generate product ideas';
+$promptWithBasicInfo = new stdClass();
+$promptWithBasicInfo->status = 'draft';
+$promptWithBasicInfo->name = 'Basic prompt';
+$promptWithBasicInfo->module = 'story';
+$promptWithBasicInfo->actionPurpose = 'story.change';
+$promptWithBasicInfo->displayPosition = 'detail';
 
 $promptWithSource = new stdClass();
 $promptWithSource->status = 'draft';
+$promptWithSource->name = 'Source prompt';
+$promptWithSource->module = 'story';
+$promptWithSource->actionPurpose = 'story.change';
+$promptWithSource->displayPosition = 'detail';
 $promptWithSource->source = 'database';
 
+$promptWithPurpose = new stdClass();
+$promptWithPurpose->status = 'draft';
+$promptWithPurpose->name = 'Purpose prompt';
+$promptWithPurpose->module = 'story';
+$promptWithPurpose->actionPurpose = 'story.change';
+$promptWithPurpose->displayPosition = 'detail';
+$promptWithPurpose->source = 'database';
+$promptWithPurpose->purpose = 'Generate product ideas';
+
 // 5. 强制要求：必须包含至少5个测试步骤
-r($aiTest->getLastActiveStepTest($promptNull)) && p() && e('assignrole'); // 步骤1：null参数
+r($aiTest->getLastActiveStepTest($promptNull)) && p() && e('basicinfo'); // 步骤1：null参数
 r($aiTest->getLastActiveStepTest($promptActive)) && p() && e('finalize'); // 步骤2：active状态
-r($aiTest->getLastActiveStepTest($promptWithTargetForm)) && p() && e('settargetform'); // 步骤3：有targetForm
-r($aiTest->getLastActiveStepTest($promptWithPurpose)) && p() && e('setpurpose'); // 步骤4：有purpose
+r($aiTest->getLastActiveStepTest($promptWithTargetForm)) && p() && e('basicinfo'); // 步骤3：只有旧targetForm
+r($aiTest->getLastActiveStepTest($promptWithBasicInfo)) && p() && e('assignrole'); // 步骤4：基础信息完整
 r($aiTest->getLastActiveStepTest($promptWithSource)) && p() && e('selectdatasource'); // 步骤5：有source
+r($aiTest->getLastActiveStepTest($promptWithPurpose)) && p() && e('setpurpose'); // 步骤6：有purpose
