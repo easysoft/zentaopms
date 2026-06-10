@@ -1,0 +1,21 @@
+title: zt_action
+desc: adminModel::genDateUsed() action data
+author: Codex
+version: "1.0"
+fields:
+- field: id
+  range: 1-10
+- field: objectType
+  range: user
+- field: objectID
+  range: 1
+- field: actor
+  range: user1
+- field: action
+  range: login
+- field: date
+  range: "`2025-01-01 00:00:00`"
+  type: timestamp
+  format: "YYYY-MM-DD hh:mm:ss"
+- field: read
+  range: "0"
