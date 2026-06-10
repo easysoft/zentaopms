@@ -450,7 +450,7 @@ class ai extends control
         }
 
         $this->view->activeDataSource = empty($prompt->module) ? current(array_keys($this->config->ai->dataSource)) : $prompt->module;
-        $this->view->dataSource       = $this->config->ai->dataSource;
+        $this->view->dataSource       = $this->ai->getDataSource();
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);

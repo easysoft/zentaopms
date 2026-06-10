@@ -35,6 +35,58 @@ class aiModel extends model
     public $errors = array();
 
     /**
+     * 获取数据源列表。
+     * Get data source list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataSource(): array
+    {
+        $dataSource = array();
+        $fieldCache = array();
+        $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
+
+        $this->loadModel('workflowfield');
+        foreach($this->config->ai->moduleGroup as $group => $modules)
+        {
+            foreach($modules as $module)
+            {
+                $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
+                if(!empty($dataSource[$group][$module])) continue;
+
+                $cacheKey = "$group.$module";
+                if(isset($fieldCache[$cacheKey]))
+                {
+                    $dataSource[$group][$module] = $fieldCache[$cacheKey];
+                    continue;
+                }
+
+                $workflowModule = zget($moduleMap, $module, $module);
+
+                $fieldList = $this->workflowfield->getList($workflowModule);
+                foreach($fieldList as $field => $value)
+                {
+                    if(in_array($field, array('deleted', 'version', 'subStatus')))
+                    {
+                        unset($fieldList[$field]);
+                        continue;
+                    }
+
+                    $this->lang->ai->moduleList[$module][$field] = $value->name;
+                }
+
+                $fields = array_keys($fieldList);
+
+                $fieldCache[$cacheKey]       = $fields;
+                $dataSource[$group][$module] = $fields;
+            }
+        }
+
+        return $dataSource;
+    }
+
+    /**
      * Check if object action is clickable, used in datatables.
      *
      * @param  object  $object  object to check, model objects are supported, add support for more if needed.
