@@ -17,6 +17,7 @@ $config->openMethods[] = 'misc.captcha';
 $config->openMethods[] = 'misc.checknetconnect';
 $config->openMethods[] = 'misc.checkupdate';
 $config->openMethods[] = 'misc.installevent';
+$config->openMethods[] = 'my.ajaxsavevisiontips';
 $config->openMethods[] = 'my.ajaxswitchvision';
 $config->openMethods[] = 'score.ajax';
 $config->openMethods[] = 'sso.bind';
