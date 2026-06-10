@@ -84,8 +84,13 @@ class formPanel extends panel
         if($moduleName == 'projectrelease') return data('release');
         if($moduleName == 'projectbuild')   return data('build');
         if($moduleName == 'cm')             return data('baseline');
-        if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
+        if($moduleName == 'project' && ($methodName == 'create' || $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
         if($moduleName == 'testtask' && $methodName == 'runcase') return data('run.case');
+        if($moduleName == 'story')
+        {
+            $story = data($moduleName);
+            if(data('storyFiles')) $story->files = data('storyFiles');
+        }
         return data($moduleName);
     }
 

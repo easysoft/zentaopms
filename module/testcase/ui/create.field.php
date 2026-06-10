@@ -7,6 +7,12 @@ $productID = data('productID');
 $moduleID  = data('currentModuleID');
 $branch    = data('branch');
 $storyID   = data('case.story') ? data('case.story') : '';
+$files     = data('case.files');
+
+foreach($files as $key => $fileInfo)
+{
+    if($fileInfo->extra != '') unset($files[$key]);
+}
 
 unset($lang->testcase->typeList['unit']);
 
@@ -86,7 +92,6 @@ $fields->field('keywords')
     ->width('full')
     ->value(data('case.keywords'));
 
-$files = data('case.files');
 $fields->field('files')
     ->width('full')
     ->control('fileSelector', array('defaultFiles' => ($files ? array_values($files) : array())));

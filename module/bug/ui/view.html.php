@@ -100,6 +100,13 @@ if(!$bug->deleted && $canModify)
     }
 }
 
+$files = array();
+foreach($bug->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
 $sections[] = setting()
@@ -107,12 +114,12 @@ $sections[] = setting()
     ->control('html')
     ->content($bug->steps);
 
-if($bug->files)
+if($files)
 {
     $sections[] = array
     (
         'control'    => 'fileList',
-        'files'      => $bug->files,
+        'files'      => $files,
         'object'     => $bug,
         'padding'    => false
     );
