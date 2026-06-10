@@ -715,6 +715,8 @@ class programplan extends control
         foreach($parentStages as $parentStageID) $this->programplan->setTreePath($parentStageID);
         foreach($parentTasks as $parentTaskID) $this->programplan->setTaskPath((int)$parentTaskID);
 
+        $this->loadModel('action')->create('ganttversion', $versionID, 'rollbackversion');
+
         return $this->sendSuccess(array('load' => true));
     }
 }
