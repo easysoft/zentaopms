@@ -264,7 +264,7 @@ class myModel extends model
      */
     public function getAssignedByMe(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
-        $module       = $objectType == 'requirement' ? 'story' : $objectType;
+        $module       = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
         $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
             ->andWhere('objectType')->eq($module)
@@ -273,7 +273,7 @@ class myModel extends model
         if(empty($objectIdList)) return array();
 
         if($objectType == 'task') return $this->getTaskAssignedByMe($pager, $orderBy, $objectIdList);
-        if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'bug') return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
+        if(in_array($objectType, array('epic', 'requirement', 'story', 'bug'))) return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
         if(in_array($objectType, array('risk', 'issue', 'nc')))
         {
             return $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')

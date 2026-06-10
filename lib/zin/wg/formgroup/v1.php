@@ -53,7 +53,7 @@ class formGroup extends wg
         'children?: array|object'               // 内部自定义内容。
     );
 
-    protected static array $controlExtendProps = array('required', 'name', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple');
+    protected static array $controlExtendProps = array('name', 'value', 'disabled', 'items', 'placeholder', 'readonly', 'multiple');
 
     protected bool $isHiddenField = false;
 
