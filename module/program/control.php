@@ -166,8 +166,8 @@ class program extends control
 
         $this->view->title          = isset($parentProgram->id) ? $this->lang->program->children : $this->lang->program->create;
         $this->view->gobackLink     = (isset($output['from']) && $output['from'] == 'global') ? $this->createLink('program', 'browse') : '';
-        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst|all');
-        $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst|all');
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
+        $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
         $this->view->parentProgram  = $parentProgram;
         $this->view->parents        = $this->program->getParentPairs();
@@ -220,7 +220,7 @@ class program extends control
 
         $this->view->title = $this->lang->program->edit;
 
-        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst|all',  $program->PM);
+        $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $program->PM);
         $this->view->program        = $program;
         $this->view->parents        = $parents;
         $this->view->disableParent  = $disableParent;

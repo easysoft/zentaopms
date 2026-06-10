@@ -191,6 +191,7 @@ $lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = 'Rôle';
 $lang->custom->user->fields['statusList']   = 'Statut';
 $lang->custom->user->fields['contactField'] = 'Contact';
+$lang->custom->user->fields['outside']      = 'Show External Users';
 $lang->custom->user->fields['deleted']      = 'Parti';
 
 $lang->custom->currentLang = 'Langage Courant';
@@ -200,6 +201,7 @@ $lang->custom->confirmRestore = 'Voulez-vous réinitialiser ?';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userFieldNotice     = 'Contrôlez si les champs ci-dessus sont affichés sur la page utilisateur. Laissez-le vide pour tout afficher.';
+$lang->custom->notice->outside             = 'External users can still be assigned in all personnel-related places, such as: program manager, product owner, project manager, execution manager, project team members, execution team members, whitelist, contacts, assignees, etc.';
 $lang->custom->notice->canNotAdd           = "Il sera calculé, donc la personnalisation n'est pas activée.";
 $lang->custom->notice->forceReview         = '%s un examen est requis pour les valideurs sélectionnés.';
 $lang->custom->notice->forceNotReview      = "%s un examen n'est pas requis pour les valideurs sélectionnés.";
@@ -253,6 +255,9 @@ $lang->custom->forceReview    = 'Validation Requise';
 $lang->custom->forceNotReview = 'Aucune Validation Requise';
 $lang->custom->reviewList[1]  = 'On';
 $lang->custom->reviewList[0]  = 'Off';
+
+$lang->custom->outsideList[1] = 'Montrer';
+$lang->custom->outsideList[0] = 'Cacher';
 
 $lang->custom->deletedList[1] = 'Montrer';
 $lang->custom->deletedList[0] = 'Cacher';
