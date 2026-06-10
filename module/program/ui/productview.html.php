@@ -252,7 +252,7 @@ featureBar
 (
     set::current($browseType),
     set::linkParams("status={key}&orderBy=$orderBy&param={$param}"),
-    li(searchToggle(set::open($browseType == 'bySearch'), set::module('program')))
+    li(searchToggle(set::open($browseType == 'bysearch'), set::module('program')))
 );
 toolbar($fnGenerateCreateProgramBtns());
 

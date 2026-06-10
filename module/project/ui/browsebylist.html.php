@@ -23,7 +23,8 @@ featureBar
         set::rootClass('ml-2 mr-4'),
         set::name('involved'),
         set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : '')
+        set::checked($this->cookie->involved ? 'checked' : ''),
+        on::change()->call('handleChangeInvolved', jsRaw('event'))
     ),
     li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
 );
@@ -64,7 +65,9 @@ toolbar
         'url'           => createLink('project', 'createGuide', "programID={$programID}"),
         'data-toggle'   => 'modal',
         'data-position' => 'center'
-    ))) : null
+    ))) : null,
+    on::click('.export')->call('handleClickExportBtn', jsRaw('event')),
+    on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
 );
 
 /* zin: Define the sidebar in main content. */
@@ -92,7 +95,7 @@ if($canBatchEdit)
         'type'  => 'btn-group',
         'items' => array
         (
-            array('text' => $lang->edit, 'className' => 'btn size-sm batch-btn', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit'))
+            array('text' => $lang->edit, 'className' => 'btn size-sm', 'btnType' => 'secondary', 'data-url' => createLink('project', 'batchEdit'), 'onClick' => jsRaw('(e) => handleBatchBtnClick(e)'))
         )
     );
 }

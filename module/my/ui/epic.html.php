@@ -11,9 +11,14 @@ declare(strict_types=1);
 namespace zin;
 
 include 'header.html.php';
-jsVar('window.globalSearchType', 'epic');
+jsVar('children',   $lang->story->children);
+jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('showGrade',  $showGrade);
 jsVar('gradeGroup', $gradeGroup);
+jsVar('window.globalSearchType', 'epic');
+
+jsVar('recall',       $lang->story->recall);
+jsVar('recallChange', $lang->story->recallChange);
 
 featureBar
 (
@@ -96,24 +101,28 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->epic->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->epic->dtable->fieldList, $this->story);
+$cols    = $this->loadModel('datatable')->getSetting('my', 'epic');
+if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
+
 foreach($stories as $id => $story)
 {
-    if(!isset($story->actions)) continue;
-    foreach($story->actions as $key => $action)
+    if(isset($story->actions))
     {
-        if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+        foreach($story->actions as $key => $action)
+        {
+            if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+        }
     }
+    $story->estimate = helper::formatHours($story->estimate);
 }
 
-if($viewType == 'tiled') $config->my->epic->dtable->fieldList['title']['nestedToggle'] = false;
-$cols = array_values($config->my->epic->dtable->fieldList);
 $data = array_values($stories);
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::customCols(true),
     set::checkable($canBatchAction ? true : false),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),

@@ -112,7 +112,7 @@ foreach($hasViewPriv as $type => $bool)
         foreach($data as $review)
         {
             $reviewType = $review->type;
-            if($reviewType == 'projectreview') $reviewType = 'review';
+            if(in_array($reviewType, array('projectreview', 'baseline'))) $reviewType = 'review';
 
             $review->module = $reviewType;
 
@@ -124,7 +124,7 @@ foreach($hasViewPriv as $type => $bool)
                 if($review->storyType == 'requirement') $typeName = $lang->URCommon;
                 if($review->storyType == 'epic')        $typeName = $lang->ERCommon;
             }
-            if($review->type == 'projectreview') $typeName = $lang->project->common;
+            if($review->type == 'projectreview') $typeName = $lang->my->projectReview;
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);

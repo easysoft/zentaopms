@@ -13,6 +13,15 @@ title=测试 branchModel->setDefault();
 timeout=0
 cid=15336
 
+- 测试将productID 0, branchID 0的分支设为默认分支 @0
+- 测试将productID 0, branchID 1的分支设为默认分支
+ - 属性name @分支1
+ - 属性default @1
+- 测试将productID 41, branchID 0的分支设为默认分支 @主干
+- 测试将productID 41, branchID 1的分支设为默认分支
+ - 属性name @分支1
+ - 属性default @1
+
 */
 
 $productIdList = array(0, 6);
@@ -20,7 +29,7 @@ $branchIdList  = array(0, 1);
 
 $branch = new branchModelTest();
 
-r($branch->setDefaultTest($productIdList[0], $branchIdList[0])) && p()               && e('0');  // 测试将productID 0, branchID 0的分支设为默认分支
-r($branch->setDefaultTest($productIdList[0], $branchIdList[1])) && p('name,default') && e('分支1,1');  // 测试将productID 0, branchID 1的分支设为默认分支
-r($branch->setDefaultTest($productIdList[1], $branchIdList[0])) && p()               && e('主干');  // 测试将productID 41, branchID 0的分支设为默认分支
-r($branch->setDefaultTest($productIdList[1], $branchIdList[1])) && p('name,default') && e('分支1,1');  // 测试将productID 41, branchID 0的分支设为默认分支
+r($branch->setDefaultTest($productIdList[0], $branchIdList[0])) && p() && e('0');
+r($branch->setDefaultTest($productIdList[0], $branchIdList[1])) && p('name,default') && e('分支1,1');
+r($branch->setDefaultTest($productIdList[1], $branchIdList[0])) && p() && e('主干');
+r($branch->setDefaultTest($productIdList[1], $branchIdList[1])) && p('name,default') && e('分支1,1');

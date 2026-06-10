@@ -105,6 +105,7 @@ $lang->testcase->caseType         = '用例类型';
 $lang->testcase->allType          = '所有类型';
 $lang->testcase->automated        = '自动化';
 $lang->testcase->automation       = '自动化设置';
+$lang->testcase->runCase          = '执行';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -185,7 +186,7 @@ $lang->testcase->openedByMe   = '我建的用例';
 $lang->testcase->allCases     = '全部';
 $lang->testcase->allTestcases = '所有用例';
 $lang->testcase->needConfirm  = "{$lang->common->story}变动";
-$lang->testcase->bySearch     = '搜索';
+$lang->testcase->bysearch     = '搜索';
 $lang->testcase->unexecuted   = '未执行';
 
 $lang->testcase->lblStory       = "相关{$lang->SRCommon}";

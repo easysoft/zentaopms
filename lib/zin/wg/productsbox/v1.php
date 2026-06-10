@@ -67,6 +67,7 @@ class productsBox extends wg
         (
             setClass('productsBox', $hidden ? ' hidden' : ''),
             setData('linkType', $type),
+            setData('filterPlans', data('filterPlans') ? '1' : '0'),
             jsVar('multiBranchProducts', data('multiBranchProducts')),
             jsVar('project', \zget($project, 'id', 0)),
             jsVar('errorSameProducts', $errorSameProducts),
@@ -109,7 +110,7 @@ class productsBox extends wg
                 on::change()->call('toggleNewProduct'),
                 set::width('1/2'),
                 setClass('linkProduct'),
-                set::required($this->prop('required') || ($project && in_array($project->model, array('waterfall', 'waterfallplus')))),
+                set::required($this->prop('required')),
                 set::label($lang->project->manageProducts),
                 set::labelFor('productBox'),
                 $hasNewProduct ? set::checkbox(array('text' => $lang->project->addProduct, 'name' => 'addProduct', 'checked' => false)) : false,
@@ -183,6 +184,8 @@ class productsBox extends wg
         list($currentPlan, $productPlans, $from) = $this->prop(array('currentPlan', 'productPlans', 'from'));
 
         $planProductID = current(array_keys($productItems));
+        if(!$planProductID) $planProductID = 0;
+
         $productsBox   = array();
         $productsBox[] = $from == 'execution' ? div
         (
@@ -190,6 +193,7 @@ class productsBox extends wg
             formGroup
             (
                 set::label($lang->execution->linkPlan),
+
                 set::className('planBox'),
                 picker
                 (

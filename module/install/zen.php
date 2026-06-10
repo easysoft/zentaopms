@@ -463,16 +463,19 @@ EOT;
      * 获取安装计划，包括安装SQL和语义化变更。
      * Get install plan, include install SQLs and semantic changes.
      *
+     * @param  string $file
      * @access protected
      * @return array
      */
-    protected function getInstallPlan(): array
+    protected function getInstallPlan(string $file = ''): array
     {
         $this->setDBParam((object)$this->session->myConfig);
 
+        if(empty($file)) $file = $this->config->db->fileName;
+
         $changes = [];
         $clearDB = $this->session->myConfig['clearDB'] ?? 0;
-        $dbFile  = $this->app->getAppRoot() . 'db' . DS . 'zentao.sql';
+        $dbFile  = $this->app->getAppRoot() . 'db' . DS . $file;
         $sqls    = explode(';', file_get_contents($dbFile));
 
         foreach($sqls as $key => $sql)

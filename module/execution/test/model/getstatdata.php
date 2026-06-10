@@ -88,7 +88,7 @@ zenData('user')->gen(5);
 su('admin');
 
 $projectIdList  = array(0, 10, 2);
-$browseTypeList = array('all', 'wait', 'doing', 'suspended', 'closed', 'involved', 'bySearch', 'review');
+$browseTypeList = array('all', 'wait', 'doing', 'suspended', 'closed', 'involved', 'bysearch', 'review');
 $productID      = 1;
 $branchID       = 0;
 $withTasksList  = array(false, true);

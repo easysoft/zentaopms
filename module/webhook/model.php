@@ -396,7 +396,7 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
         if(!$object) return false;
 
         $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
@@ -412,10 +412,9 @@ class webhookModel extends model
             $field          = $this->config->action->objectNameFields[$objectType];
             $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
             $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
-            $host           = (defined('RUN_MODE') and RUN_MODE == 'api') ? '' : $host;
             $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
         }
-        $action->text   = $text;
+        $action->text = $text;
 
         $mobile     = '';
         $email      = '';
@@ -494,6 +493,12 @@ class webhookModel extends model
      */
     public function getViewLink(string $objectType, int $objectID): string
     {
+        $isAPI = (defined('RUN_MODE') && RUN_MODE == 'api');
+        if($isAPI)
+        {
+            global $oldRequestType;
+            if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+        }
         $oldOnlyBody = '';
         $tab         = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
@@ -516,11 +521,13 @@ class webhookModel extends model
         {
             $viewLink = helper::createLink('aitask', 'view', "taskID={$objectID}", 'html') . $tab;
             if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+            if($isAPI) $this->config->requestType = 'GET';
             return $viewLink;
         }
 
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+        if($isAPI) $this->config->requestType = 'GET';
 
         return $viewLink;
     }

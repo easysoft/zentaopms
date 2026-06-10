@@ -103,6 +103,23 @@ class transferModel extends model
         /* 生成该模块的导出数据。 */
         /* Generate export datas. */
         $rows = $this->getRows($module, $fieldList);
+
+        /* Process duplicate bug value. */
+        if($module == 'bug' && in_array('duplicateBug', $fields))
+        {
+            $duplicateIdList = array_unique(array_filter(array_column($rows, 'duplicateBug')));
+            $duplicateBugs   = $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateBug = !empty($duplicateBugs[$row->duplicateBug]) ? '#' . $row->duplicateBug . ' ' . $duplicateBugs[$row->duplicateBug] : '';
+        }
+
+        /* Process duplicate story value. */
+        if(in_array($module, array('story', 'requirement', 'epic')) && in_array('duplicateStory', $fields))
+        {
+            $duplicateIdList  = array_unique(array_filter(array_column($rows, 'duplicateStory')));
+            $duplicateStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($duplicateIdList)->fetchPairs();
+            foreach($rows as $row) $row->duplicateStory = !empty($duplicateStories[$row->duplicateStory]) ? '#' . $row->duplicateStory . ' ' . $duplicateStories[$row->duplicateStory] : '';
+        }
+
         if($module == 'story')
         {
             $parentList  = array_unique(array_filter(array_column($rows, 'parent')));
@@ -237,7 +254,7 @@ class transferModel extends model
         if($action->extensionType == 'none' and $action->buildin == 1) return $fieldList;
 
         $notEmptyRule   = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $groupID);
+        $workflowFields = $this->workflowaction->getPageFields($moduleName, $methodName, true, null, 0, $action->group);
         foreach($workflowFields as $field)
         {
             if(empty($fieldList[$field->field])) continue;

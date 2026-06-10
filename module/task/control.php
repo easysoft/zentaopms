@@ -116,6 +116,26 @@ class task extends control
 
         /* Shows the variables needed to create the task page. */
         $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
+        $this->display();
+    }
+
+    /**
+     * 复制任务。
+     * Copy task.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $moduleID
+     * @param  int    $taskID
+     * @param  int    $todoID
+     * @param  string $cardPosition
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function copy(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
+    {
+        echo $this->fetch('task', 'create', "executionID=$executionID&storyID=$storyID&moduleID=$moduleID&taskID=$taskID&todoID=$todoID&cardPosition=$cardPosition&bugID=$bugID");
     }
 
     /**
@@ -1034,6 +1054,8 @@ class task extends control
         }
         if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
         if($task->story) $this->loadModel('story')->setStage($task->story);
+
+        $this->loadModel('program')->refreshProjectStats($task->project);
 
         $message = $this->executeHooks($taskID);
         $message = $message ?: $this->lang->saveSuccess;

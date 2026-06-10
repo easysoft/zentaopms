@@ -169,7 +169,7 @@ $lang->testcase->openedByMe   = '我建的用例';
 $lang->testcase->allCases     = '所有';
 $lang->testcase->allTestcases = '所有用例';
 $lang->testcase->needConfirm  = "{$lang->SRCommon}變動";
-$lang->testcase->bySearch     = '搜索';
+$lang->testcase->bysearch     = '搜索';
 $lang->testcase->unexecuted   = '未執行';
 
 $lang->testcase->lblStory       = "相關{$lang->SRCommon}";

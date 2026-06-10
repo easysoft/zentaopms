@@ -4049,7 +4049,7 @@ class testcaseZenTest extends baseTest
         );
 
         /* Simulate buildLinkCasesSearchForm method logic */
-        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bySearch&queryID=myQueryID";
+        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bysearch&queryID=myQueryID";
         $objectID = 0;
 
         if($tester->app->tab == 'project') $objectID = $case->project ?? 0;

@@ -191,6 +191,9 @@ class buildModelTest extends baseTest
 
         foreach($param as $key => $value) $createFields[$key] = $value;
 
+        $_SESSION['project'] = $createFields['project'];
+        $this->instance->session->set('project', $createFields['project']);
+
         $objectID = $this->instance->create((object)$createFields);
 
         if(dao::isError()) return dao::getError();

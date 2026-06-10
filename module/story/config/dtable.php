@@ -251,11 +251,12 @@ $config->story->dtable->fieldList['closedDate']['sortType'] = true;
 $config->story->dtable->fieldList['closedDate']['type']     = 'date';
 $config->story->dtable->fieldList['closedDate']['group']    = 8;
 
-$config->story->dtable->fieldList['closedReason']['name']     = 'closedReason';
-$config->story->dtable->fieldList['closedReason']['title']    = $lang->story->closedReason;
-$config->story->dtable->fieldList['closedReason']['sortType'] = true;
-$config->story->dtable->fieldList['closedReason']['width']    = '90';
-$config->story->dtable->fieldList['closedReason']['group']    = 8;
+$config->story->dtable->fieldList['closedReason']['name']       = 'closedReason';
+$config->story->dtable->fieldList['closedReason']['title']      = $lang->story->closedReason;
+$config->story->dtable->fieldList['closedReason']['sortType']   = true;
+$config->story->dtable->fieldList['closedReason']['width']      = '90';
+$config->story->dtable->fieldList['closedReason']['group']      = 8;
+$config->story->dtable->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 
 $config->story->dtable->fieldList['lastEditedBy']['name']     = 'lastEditedBy';
 $config->story->dtable->fieldList['lastEditedBy']['title']    = $lang->story->lastEditedBy;
@@ -399,11 +400,12 @@ $config->story->taskTable->fieldList['id']['type']     = 'checkID';
 $config->story->taskTable->fieldList['id']['sortType'] = false;
 $config->story->taskTable->fieldList['id']['group']    = 1;
 
-$config->story->taskTable->fieldList['name']['name']     = 'name';
-$config->story->taskTable->fieldList['name']['title']    = $lang->task->name;
-$config->story->taskTable->fieldList['name']['type']     = 'text';
-$config->story->taskTable->fieldList['name']['sortType'] = false;
-$config->story->taskTable->fieldList['name']['group']    = 2;
+$config->story->taskTable->fieldList['name']['name']         = 'name';
+$config->story->taskTable->fieldList['name']['title']        = $lang->task->name;
+$config->story->taskTable->fieldList['name']['type']         = 'nestedTitle';
+$config->story->taskTable->fieldList['name']['nestedToggle'] = true;
+$config->story->taskTable->fieldList['name']['sortType']     = false;
+$config->story->taskTable->fieldList['name']['group']        = 2;
 
 $config->story->taskTable->fieldList['pri']['name']     = 'pri';
 $config->story->taskTable->fieldList['pri']['title']    = $lang->priAB;

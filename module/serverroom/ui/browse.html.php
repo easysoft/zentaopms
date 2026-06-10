@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-$queryMenuLink = createLink('serverroom', 'browse', "browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('serverroom', 'browse', "browseType=bysearch&param={queryID}");
 featureBar
 (
     to::leading(backBtn

@@ -409,7 +409,7 @@ class upgradeModel extends model
             }
         }
 
-        return str_replace('zt_', $this->config->db->prefix, $confirmContent);
+        return str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $confirmContent);
     }
 
     /**
@@ -486,7 +486,7 @@ class upgradeModel extends model
         preg_match_all('/CREATE TABLE [^`]*`([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return $changes;
 
-        $table  = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        $table = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $out[1][0]);
         if($table == $this->config->db->prefix . 'metriclib') return $changes; // 度量库表数据量过大，检查到表结构不一致执行升级会导致长时间卡死，跳过检查。Skip checking metriclib table because it has too much data and checking it will cause long time stuck.
 
         $fields = array();
@@ -779,7 +779,7 @@ class upgradeModel extends model
     public function deleteFiles(string $script): string
     {
         $dir = dirname($script);
-        if(!is_writable($dir)) return "chmod 777 {$dir}";
+        if(!is_writable($dir)) return helper::buildGrantPermissionCommand($dir);
 
         $command = array();
         $zfile   = $this->app->loadClass('zfile');
@@ -800,7 +800,7 @@ class upgradeModel extends model
                     if(!is_writable($fullPath) || ($isDir && !$zfile->removeDir($fullPath)) ||
                        (!$isDir && !$zfile->removeFile($fullPath)))
                     {
-                        $command[] = 'rm -fr ' . $fullPath;
+                        $command[] = helper::buildDeleteCommand($fullPath, $isDir);
                     }
                 }
             }
@@ -815,18 +815,25 @@ class upgradeModel extends model
             if(!is_writable($patchPath) || ($isDir && !$zfile->removeDir($patchPath)) ||
                 (!$isDir && !$zfile->removeDir($patchPath)))
             {
-                $command[] = 'rm -fr ' . $patchPath;
+                $command[] = helper::buildDeleteCommand($patchPath, $isDir);
             }
         }
 
         if(!$command) return '';
 
-        asort($command);
+        return helper::writeCommandScript($script, $command);
+    }
 
-        $content = "#!/bin/bash\n" . implode("\n", $command);
-        file_put_contents($script, $content);
-
-        return "/bin/bash $script";
+    /**
+     * 获取删除脚本路径。
+     * Get delete script path.
+     *
+     * @access public
+     * @return string
+     */
+    public function getDeleteScriptPath(): string
+    {
+        return $this->app->getTmpRoot() . 'deleteFiles' . (helper::isWindows() ? '.bat' : '.sh');
     }
 
     /**
@@ -1297,7 +1304,6 @@ class upgradeModel extends model
 
         return $sqls;
     }
-
 
     /**
      * Add priv for version 4.0.1
@@ -5292,7 +5298,7 @@ class upgradeModel extends model
                 if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
-                    $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
+                    $response['command'] = helper::buildGrantPermissionCommand($customRoot, true, 'o=rwx');
 
                     return $response;
                 }
@@ -5317,7 +5323,7 @@ class upgradeModel extends model
     public function removeEncryptedDir(string $script): string
     {
         $dir = dirname($script);
-        if(!is_writable($dir)) return "chmod 777 {$dir}";
+        if(!is_writable($dir)) return helper::buildGrantPermissionCommand($dir);
 
         $command       = [];
         $zfile         = $this->app->loadClass('zfile');
@@ -5330,17 +5336,12 @@ class upgradeModel extends model
             if(in_array($module, $this->config->upgrade->openModules)) continue; // If the module is open module, skip it.
 
             $dirPath = $this->app->moduleRoot . $module;
-            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath; // If the directory can't be removed, append the command for deleting a directory.
+            if(!$zfile->removeDir($dirPath)) $command[] = helper::buildDeleteCommand($dirPath, true); // If the directory can't be removed, append the command for deleting a directory.
         }
 
         if(!$command) return '';
 
-        asort($command);
-
-        $content = "#!/bin/bash\n" . implode("\n", $command);
-        file_put_contents($script, $content);
-
-        return "/bin/bash $script";
+        return helper::writeCommandScript($script, $command);
     }
 
     /**
@@ -5793,7 +5794,6 @@ class upgradeModel extends model
     {
         /** @var array[] $chatTablePairs Associations of chats and partition tables, without main table. */
         $chatTablePairs = array();
-
 
         ini_set('memory_limit', '-1');
         set_time_limit(0);
@@ -7517,7 +7517,6 @@ class upgradeModel extends model
                     $data->fields = json_encode($fieldSettings);
                 }
 
-
                 $settings = json_decode($chart->settings);
 
                 if($settings && (!empty($settings->group) || !empty($settings->xaxis)))
@@ -8115,6 +8114,7 @@ class upgradeModel extends model
      */
     public function updateBISQL()
     {
+        $this->loadModel('install');
         $alpha1File = $this->getUpgradeFile('18.4.alpha1');
         $beta1File  = $this->getUpgradeFile('18.4.beta1');
 
@@ -8122,14 +8122,14 @@ class upgradeModel extends model
         $beta1SQL  = explode(";", file_get_contents($beta1File));
 
         $execSQL = array();
-        foreach($alpha1SQL as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
-        foreach($beta1SQL  as $sql) if(strpos($sql, '`zt_pivot`') !== false) $execSQL[] = $sql;
+        foreach($alpha1SQL as $sql) if(strpos($sql, "`{$this->config->db->defaultPrefix}pivot`") !== false) $execSQL[] = $sql;
+        foreach($beta1SQL  as $sql) if(strpos($sql, "`{$this->config->db->defaultPrefix}pivot`") !== false) $execSQL[] = $sql;
 
         /* Update stage to published and update sql. */
         foreach($execSQL as $sql)
         {
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
-            $sql = trim($sql);
+            $sql = $this->install->replaceContantsInSQL($sql);
+            if(empty($sql)) continue;
 
             $this->dbh->exec($sql);
         }
@@ -9207,6 +9207,7 @@ class upgradeModel extends model
      */
     public function upgradeScreenAndMetricData(): bool
     {
+        $this->loadModel('install');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
@@ -9220,14 +9221,10 @@ class upgradeModel extends model
         {
             foreach($upgradeSqls as $sql)
             {
-                $sql = trim($sql);
+                $sql = $this->install->replaceContantsInSQL($sql);
                 if(empty($sql)) continue;
 
                 $this->saveLogs($sql);
-
-                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
-                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
@@ -9250,12 +9247,12 @@ class upgradeModel extends model
      */
     public function upgradeBIData(): bool
     {
-        $this->loadModel('bi');
+        $this->loadModel('install');
         $this->saveLogs('Run Method ' . __FUNCTION__);
         $this->dao->clearTablesDescCache();
 
         /* Prepare built-in sqls of bi. */
-        $chartSQLs   = $this->bi->prepareBuiltinChartSQL('update');
+        $chartSQLs   = $this->loadModel('bi')->prepareBuiltinChartSQL('update');
         $pivotSQLs   = $this->bi->prepareBuiltinPivotSQL('update');
         $upgradeSqls = array_merge($chartSQLs, $pivotSQLs);
 
@@ -9265,14 +9262,10 @@ class upgradeModel extends model
         {
             foreach($upgradeSqls as $sql)
             {
-                $sql = trim($sql);
+                $sql = $this->install->replaceContantsInSQL($sql);
                 if(empty($sql)) continue;
 
                 $this->saveLogs($sql);
-
-                $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-                $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
-                $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
                 $this->dbh->exec($sql);
             }
         }
@@ -9463,7 +9456,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function importBuildinWorkflow($vision = 'all', $importModule = '')
+    public function importBuildinWorkflow($vision = 'all', $importModule = '', $importAction = '', $hasGroup = 0)
     {
         $this->loadModel('workflow');
         $this->loadModel('workflowaction');
@@ -9514,7 +9507,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
             }
         }
@@ -9533,6 +9526,7 @@ class upgradeModel extends model
             $data->module = $module;
             foreach($moduleActions as $action)
             {
+                if($importAction && strpos(",$importAction,", ",{$module}-{$action},") === false) continue;
                 $data->action = $action;
 
                 /* Use default action name if not set flow action name. */
@@ -9564,7 +9558,7 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
             }
         }
@@ -9608,7 +9602,7 @@ class upgradeModel extends model
 
                 if(is_object($data->options) or is_array($data->options)) $data->options = helper::jsonEncode($data->options);
 
-                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->exec();
+                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                 $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
@@ -9638,7 +9632,7 @@ class upgradeModel extends model
 
                     if($vision != 'all' && $vision != $data->vision) continue;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                     $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
                 }
             }
@@ -9708,7 +9702,7 @@ class upgradeModel extends model
                     $data->order = $order;
                     $order++;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->exec();
+                    $this->dao->delete()->from(TABLE_WORKFLOWLABEL)->where('module')->eq($module)->andWhere('code')->eq($key)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
                     $this->dao->insert(TABLE_WORKFLOWLABEL)->data($data)->exec();
                 }
             }
@@ -10099,11 +10093,11 @@ class upgradeModel extends model
         {
             $setting = json_decode($setting, true);
 
-            if($setting['from']['table'] && strpos($setting['from']['table'], 'zt_') === false) $setting['from']['table'] = $prefix . $setting['from']['table'];
+            if($setting['from']['table'] && strpos($setting['from']['table'], $this->config->db->defaultPrefix) === false) $setting['from']['table'] = $prefix . $setting['from']['table'];
 
             foreach($setting['joins'] as $index => $join)
             {
-                if($setting['joins'][$index]['table'] && strpos($setting['joins'][$index]['table'], 'zt_') === false) $setting['joins'][$index]['table'] = $prefix . $join['table'];
+                if($setting['joins'][$index]['table'] && strpos($setting['joins'][$index]['table'], $this->config->db->defaultPrefix) === false) $setting['joins'][$index]['table'] = $prefix . $join['table'];
             }
 
             $this->dao->update(TABLE_SQLBUILDER)->set('setting')->eq(json_encode($setting))->where('id')->eq($id)->exec();
@@ -11913,7 +11907,6 @@ class upgradeModel extends model
         return true;
     }
 
-
     /**
      * 升级项目和迭代的交付物配置。
      * Upgrade project deliverable.
@@ -13311,6 +13304,79 @@ class upgradeModel extends model
             $schedule = !empty($schedule) ? json_encode($schedule) : null;
             $this->dao->update(TABLE_PROJECT)->set('schedule')->eq($schedule)->where('id')->eq($project->id)->exec();
         }
+        return !dao::isError();
+    }
+
+    /**
+     * 为已开启审批流的工作流真实表补充 reviewedBy 字段，并从审批节点回填已审批人。
+     * Add reviewedBy field for workflow tables with approval enabled and backfill from approval nodes.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateReviewedByField(): bool
+    {
+        if($this->config->edition == 'open') return true;
+
+        $tables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)
+            ->where('approval')->eq('enabled')
+            ->fetchPairs();
+        if(empty($tables)) return true;
+
+        $nodes = $this->dao->select('approval,account')->from(TABLE_APPROVALNODE)
+            ->where('status')->eq('done')
+            ->andWhere('type')->eq('review')
+            ->orderBy('id')
+            ->fetchAll();
+
+        $reviewedByMap = array();
+        foreach($nodes as $node)
+        {
+            if(!isset($reviewedByMap[$node->approval])) $reviewedByMap[$node->approval] = array();
+            $reviewedByMap[$node->approval][$node->account] = $node->account;
+        }
+        foreach($reviewedByMap as $approvalID => $accounts) $reviewedByMap[$approvalID] = implode(',', $accounts);
+
+        foreach($tables as $table)
+        {
+            if(!$this->checkFieldsExists($table, 'reviewedBy')) $this->dbh->exec("ALTER TABLE `{$table}` ADD `reviewedBy` text NULL");
+            if(!$this->checkFieldsExists($table, 'approval')) continue;
+
+            $approvalIDs = $this->dao->select('approval')->from($table)->where('approval')->gt(0)->fetchPairs();
+            foreach($approvalIDs as $approvalID)
+            {
+                if(!isset($reviewedByMap[$approvalID])) continue;
+                $this->dao->update($table)->set('reviewedBy')->eq($reviewedByMap[$approvalID])->where('approval')->eq($approvalID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 升级时，当用户拥有某个权限的时候新增另一个权限。
+     * Add user group.
+     *
+     * @param  array  $checkedPrivs   array(0 => array('module' => 'bug', 'method' => 'create'))
+     * @param  array  $addPrivs       array(0 => array('module' => 'bug', 'method' => 'copy'))
+     * @access public
+     * @return bool
+     */
+    public function addUserGroup(array $checkedPrivs, array $addPrivs): bool
+    {
+        foreach($checkedPrivs as $index => $checkedPriv)
+        {
+            if(empty($addPrivs[$index])) continue;
+
+            $privList = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq($checkedPriv['module'])->andWhere('method')->eq($checkedPriv['method'])->fetchAll();
+            $addPriv  = $addPrivs[$index];
+            foreach($privList as $priv)
+            {
+                $this->dao->delete()->from(TABLE_GROUPPRIV)->where('group')->eq($priv->group)->andWhere('module')->eq($addPriv['module'])->andWhere('method')->eq($addPriv['method'])->exec();
+                $this->dao->insert(TABLE_GROUPPRIV)->set('group')->eq($priv->group)->set('module')->eq($addPriv['module'])->set('method')->eq($addPriv['method'])->exec();
+            }
+        }
+
         return !dao::isError();
     }
 }

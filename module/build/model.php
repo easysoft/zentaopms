@@ -87,6 +87,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -183,6 +184,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -869,31 +871,27 @@ class buildModel extends model
         if(!empty($oldBuild->execution)) return $build;
 
         $buildBranch = array();
-        foreach(explode(',', trim($build->branch, ',')) as $branchID) $buildBranch[$branchID] = $branchID;
+        $newBuilds   = array_filter(explode(',', (string)$build->builds));
+        $storyIdList = array_filter(explode(',', (string)$oldBuild->stories));
 
-        /* Get delete builds. */
-        $deleteBuilds = array();
-        $newBuilds    = isset($build->builds) ? explode(',', $build->builds) : array();
-        foreach($newBuilds as $oldBuildID)
+        if($newBuilds)
         {
-            if(empty($oldBuildID)) continue;
-            if(!in_array($oldBuildID, $newBuilds)) $deleteBuilds[$oldBuildID] = $oldBuildID;
+            $branches = $this->dao->select('id,branch')->from(TABLE_BUILD)->where('id')->in($newBuilds)->fetchPairs();
+            foreach($branches as $branch)
+            {
+                foreach(explode(',', trim((string)$branch, ',')) as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $buildBranch[$branchID] = $branchID;
+                }
+            }
         }
 
-        /* Delete the branch when the branch of the deleted build has no linked stories. */
-        $storyBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($oldBuild->stories)->fetchPairs('branch');
-        $branches      = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds + $deleteBuilds)->fetchPairs();
-        foreach($branches as $branch)
+        /* Keep story branches so linked stories remain searchable after child builds change. */
+        if($storyIdList)
         {
-            foreach(explode(',', $branch) as $branchID)
-            {
-                if(empty($branchID)) continue;
-                if(in_array($branchID, $deleteBuilds) && isset($storyBranches[$branchID])) continue;
-                if(in_array($branchID, $newBuilds)    && isset($buildBranch[$branchID]))   continue;
-
-                if(in_array($branchID, $deleteBuilds)) unset($buildBranch[$branchID]);
-                if(in_array($branchID, $newBuilds))    $buildBranch[$branchID] = $branchID;
-            }
+            $storyBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs('branch', 'branch');
+            foreach($storyBranches as $branchID) $buildBranch[$branchID] = $branchID;
         }
 
         $build->branch = implode(',', $buildBranch);

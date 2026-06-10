@@ -295,24 +295,25 @@ class myTao extends myModel
      */
     protected function buildReviewingFlows(array $objectGroup, array $flows, array $objectNameFields): array
     {
+        $this->loadModel('flow');
+
+        $dataPairs = array();
+        foreach($flows as $flow) $dataPairs[$flow->module] = $this->flow->getDataPairs($flow);
+
         $approvalList = array();
         foreach($objectGroup as $objectType => $objects)
         {
             $title           = '';
+            $flow            = isset($flows[$objectType]) ? $flows[$objectType] : array();
             $titleFieldName  = zget($objectNameFields, $objectType, '');
             $openedDateField = zget($this->config->my->openedDateField, $objectType, 'openedDate');
-            if(empty($titleFieldName) && isset($flows[$objectType]))
-            {
-                if(!empty($flows[$objectType]->titleField)) $titleFieldName = $flows[$objectType]->titleField;
-                if(empty($flows[$objectType]->titleField)) $title = $flows[$objectType]->name;
-                $openedDateField = 'createdDate';
-            }
+            if(empty($titleFieldName) && !empty($flow)) $openedDateField = 'createdDate';
 
             foreach($objects as $object)
             {
                 $data = new stdclass();
                 $data->id      = $object->id;
-                $data->title   = empty($titleFieldName) || !isset($object->$titleFieldName) ? $title . " #{$object->id}" : $object->{$titleFieldName};
+                $data->title   = !empty($flow) && !empty($dataPairs[$flow->module][$object->id]) ? $dataPairs[$flow->module][$object->id] : zget($object, $titleFieldName, $object->id);
                 $data->type    = $objectType;
                 $data->time    = $object->{$openedDateField};
                 $data->status  = $objectType == 'charter' ? $object->reviewStatus : 'doing';

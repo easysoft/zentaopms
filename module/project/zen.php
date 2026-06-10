@@ -306,7 +306,7 @@ class projectZen extends project
             }
             if(isset($output['branchID']))   $linkedBranches = array($output['branchID'] => $output['branchID']);
         }
-        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired|undone');
         foreach($productPlans as $productID => $branchPlans)
         {
             foreach($branchPlans as $branchID => $plans)
@@ -347,6 +347,7 @@ class projectZen extends project
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
         $this->view->groups              = $this->loadModel('group')->getPairs();
+        $this->view->filterPlans         = true;
 
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
@@ -681,7 +682,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function processBugSearchParams(object $project, string $type, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
+    protected function processBugSearchParams(object $project, string $browseType, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
     {
         $this->loadModel('bug');
         if(!$project->hasProduct)
@@ -692,10 +693,10 @@ class projectZen extends project
         if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
         unset($this->config->bug->search['fields']['project']);
 
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&browseType=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
     }
 
@@ -732,7 +733,7 @@ class projectZen extends project
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&browseType=bysearch&queryID=myQueryID");
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
     }
 
@@ -775,6 +776,13 @@ class projectZen extends project
             unset($this->lang->resource->projectplan);
         }
         if($project->model == 'scrum') unset($this->lang->resource->projectstory->track);
+
+        if(in_array($this->config->edition, array('max', 'ipd')) && (in_array($project->model, array('scrum', 'kanban')) || !empty($project->isTpl)))
+        {
+            unset($this->lang->resource->task->autoschedule);
+            unset($this->lang->resource->execution->taskAutoSchedule);
+        }
+        if(!empty($project->isTpl)) unset($this->lang->resource->programplan->taskAutoSchedule);
 
         if(!$project->multiple and !$project->hasProduct)
         {
@@ -1079,8 +1087,9 @@ class projectZen extends project
     protected function removeAssociatedExecutions(array $executionIdList): void
     {
         $this->project->deleteByTableName(TABLE_EXECUTION, array_keys($executionIdList));
-        foreach($executionIdList as $executionID => $execution) $this->loadModel('action')->create('execution', $executionID, 'deleted', '', actionModel::CAN_UNDELETED);
-        $this->loadModel('user')->updateUserView($executionIdList, 'sprint');
+        $this->loadModel('action');
+        foreach($executionIdList as $executionID => $execution) $this->action->create('execution', $executionID, 'deleted', '', actionModel::CAN_UNDELETED);
+        $this->loadModel('user')->updateUserView(array_keys($executionIdList), 'sprint');
     }
 
     /**

@@ -970,15 +970,15 @@ class bugZen extends bug
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1512,7 +1512,7 @@ class bugZen extends bug
             }
         }
 
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bySearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bysearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
     }
 
@@ -2466,7 +2466,7 @@ class bugZen extends bug
             if($this->config->edition != 'open')
             {
                 $fields       = array();
-                $extendFields = $this->loadModel('flow')->getExtendFields('bug', 'create');
+                $extendFields = $this->loadModel('flow')->getExtendFields('bug', $this->app->rawMethod);
                 foreach($extendFields as $field) $fields[$field->field] = $bugInfo->{$field->field};
                 $bug = $this->updateBug($bug, $fields);
             }

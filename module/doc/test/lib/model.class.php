@@ -116,7 +116,7 @@ class docModelTest extends baseTest
      * 通过类型获取文档列表数据。
      * Get doc list data by browse type.
      *
-     * @param  string $browseType all|bySearch|openedbyme|editedbyme|byediteddate|collectedbyme
+     * @param  string $browseType all|bysearch|openedbyme|editedbyme|byediteddate|collectedbyme
      * @param  int    $queryID
      * @param  int    $moduleID
      * @param  string $sort
@@ -298,7 +298,7 @@ class docModelTest extends baseTest
         $browseType = '';
         if($searchTitle !== false)
         {
-            $browseType = 'bySearch';
+            $browseType = 'bysearch';
             $_SESSION["{$type}DocTypeQuery"] = "title LIKE '%{$searchTitle}%'";
         }
         $files = $this->instance->getLibFiles($type, $objectID, $browseType);
@@ -3115,7 +3115,7 @@ class docModelTest extends baseTest
         // 根据参数模拟不同的返回结果，与zen.php中的实际逻辑保持一致
         if($docID) {
             // 文档移动的响应
-            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, (int)$spaceID, $libID));
+            $docAppAction = array('executeCommand', 'handleMovedDoc', array($docID, $space, $libID));
             return array('result' => 'success', 'message' => 'saveSuccess', 'closeModal' => true, 'docApp' => $docAppAction);
         }
 
@@ -3821,9 +3821,9 @@ class docModelTest extends baseTest
             $result->release = 0;
 
             // 模拟API列表数据
-            if($browseType == 'bySearch')
+            if($browseType == 'bysearch')
             {
-                $result->apiList = array('searchResult' => 'bySearch');
+                $result->apiList = array('searchResult' => 'bysearch');
             }
             else
             {
@@ -3833,7 +3833,7 @@ class docModelTest extends baseTest
         else
         {
             // 模拟文档数据
-            if($browseType == 'bySearch')
+            if($browseType == 'bysearch')
             {
                 $result->docs = array('searchResult' => 'docsBySearch');
             }

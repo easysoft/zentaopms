@@ -9,7 +9,7 @@ cid=19580
 
 - 传入空数组，返回 false。属性result @0
 - 更新用户失败，返回 false。属性result @0
-- 更新用户失败，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 更新用户失败，提示错误信息。第errors条的gender属性 @『性别』长度应当不超过『1』，且大于『0』。
 - 更新用户成功，返回 true。属性result @1
 - 创建日志成功，最后一条记录的对象类型是 user，对象 id 是 2，动作是 edited。
  - 属性objectType @user
@@ -41,6 +41,14 @@ cid=19580
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+global $tester;
+$tester->dao->delete()->from(TABLE_HISTORY)->exec();
+$tester->dao->delete()->from(TABLE_ACTION)->exec();
+$tester->dao->delete()->from(TABLE_USER)->exec();
+$tester->dao->exec('ALTER TABLE ' . TABLE_HISTORY . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_ACTION . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_USER . ' AUTO_INCREMENT = 1');
 
 zenData('user')->gen(2);
 zenData('action')->gen(0);
@@ -81,7 +89,7 @@ r($result) && p('result') && e(0); // 传入空数组，返回 false。
  */
 $result = $userTest->batchUpdateTest($users1, $verify);
 r($result) && p('result')        && e(0);                                        // 更新用户失败，返回 false。
-r($result) && p('errors:gender') && e('『性别』不符合格式，应当为:『/f|m/』。'); // 更新用户失败，提示错误信息。
+r($result) && p('errors:gender') && e('『性别』长度应当不超过『1』，且大于『0』。'); // 更新用户失败，提示错误信息。
 
 /**
  * 测试更新用户成功的情况。

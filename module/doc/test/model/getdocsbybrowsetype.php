@@ -506,7 +506,7 @@ zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
 su('admin');
 
-$browseTypes = array('', 'all', 'bySearch', 'openedbyme', 'editedbyme', 'byediteddate', 'collectedbyme', 'test');
+$browseTypes = array('', 'all', 'bysearch', 'openedbyme', 'editedbyme', 'byediteddate', 'collectedbyme', 'test');
 $queries     = array(0, 1, 2);
 $modules     = array(0, 1, 100);
 $sorts       = array('id_desc', 'id_asc', 'title_asc', 'title_desc');

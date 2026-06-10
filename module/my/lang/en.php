@@ -57,6 +57,7 @@ $lang->my->myContact       = 'My';
 $lang->my->publicContact   = 'Public';
 $lang->my->manageSelf      = 'You can only edit contacts you created.';
 $lang->my->adminView       = 'System administrators have permission to delete public contacts.';
+$lang->my->projectReview   = 'Project Review';
 
 $lang->my->indexAction      = 'Dashboard Overview';
 $lang->my->calendarAction   = 'My Calendar';

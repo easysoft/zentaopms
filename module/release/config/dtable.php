@@ -16,7 +16,7 @@ $config->release->dtable->defaultFields['linkBug']['leftBug'] = array('id', 'tit
 
 $config->release->dtable->fieldList['id']['title'] = $lang->idAB;
 $config->release->dtable->fieldList['id']['name']  = 'id';
-$config->release->dtable->fieldList['id']['type']  = 'id';
+$config->release->dtable->fieldList['id']['type']  = 'checkID';
 
 $config->release->dtable->fieldList['system']['name']         = 'system';
 $config->release->dtable->fieldList['system']['title']        = $lang->release->system;

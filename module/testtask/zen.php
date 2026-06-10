@@ -70,7 +70,7 @@ class testtaskZen extends testtask
         $searchConfig = $this->config->testcase->search;
         $searchConfig['module']    = 'testtask';
         $searchConfig['queryID']   = $queryID;
-        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bySearch&queryID=myQueryID");
+        $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bysearch&queryID=myQueryID");
 
         $searchConfig['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($product->id, 'case');
         $searchConfig['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
@@ -747,10 +747,11 @@ class testtaskZen extends testtask
      * @param  object    $run
      * @param  int       $caseID
      * @param  int       $version
+     * @param  string    $message
      * @access protected
      * @return void
      */
-    protected function responseAfterRunCase(string $caseResult, object $preAndNext, object $run, int $caseID, int $version)
+    protected function responseAfterRunCase(string $caseResult, object $preAndNext, object $run, int $caseID, int $version, string $message)
     {
         $runID = !empty($run->id) ? $run->id : 0;
         if(!empty($run->task)) $this->testtask->updateStatus((int)$run->task);
@@ -758,7 +759,7 @@ class testtaskZen extends testtask
         if($caseResult == 'fail')
         {
             $link = inlink('runCase', "runID={$runID}&caseID={$caseID}&version={$version}");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
+            return $this->send(array('result' => 'success', 'message' => $message, 'callback' => "loadModal('$link', 'runCaseModal')"));
         }
 
         /* set cookie for ajax load caselist when close colorbox. */
@@ -771,7 +772,7 @@ class testtaskZen extends testtask
             $nextVersion = $preAndNext->next->version;
             $link        = inlink('runCase', "runID={$nextRunID}&caseID={$nextCaseID}&version={$nextVersion}");
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => "loadModal('$link', 'runCaseModal')"));
+            return $this->send(array('result' => 'success', 'message' => $message, 'callback' => "loadModal('$link', 'runCaseModal')"));
         }
     }
 

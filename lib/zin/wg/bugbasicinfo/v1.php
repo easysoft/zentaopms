@@ -17,13 +17,16 @@ class bugBasicInfo extends wg
 
     protected function getModuleItems(object $bug, null|bool|object $product, array $branches): array
     {
+        global $app;
+
+        $bugModule  = $app->control->loadModel('bug')->fetchByID($bug->module, 'module');
         $modulePath = $this->prop('modulePath', data('modulePath'));
         $items      = array();
         if($modulePath)
         {
-            if($bug->branch and isset($branches[$bug->branch]))
+            if($bugModule->branch && isset($branches[$bugModule->branch]))
             {
-                $items[] = array('text' => $branches[$bug->branch]);
+                $items[] = array('text' => $branches[$bugModule->branch]);
             }
 
             foreach($modulePath as $key => $module)
@@ -95,7 +98,8 @@ class bugBasicInfo extends wg
             (
                 'control'  => 'link',
                 'url'      => $planLink,
-                'text'     => $bug->planName
+                'text'     => $bug->planName,
+                'data-app' => $product->shadow ? 'project' : null
             ) : $bug->planName;
         }
 

@@ -364,7 +364,7 @@ class designModel extends model
      *
      * @param  int|array $productID
      * @param  int|array $projectID
-     * @param  string    $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string    $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @param  int       $param
      * @param  string    $orderBy
      * @param  int       $pager
@@ -375,7 +375,7 @@ class designModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesigns();
 
-        if($type == 'bySearch')
+        if($type == 'bysearch')
         {
             $designs = $this->getBySearch($projectID, $productID, $param, $orderBy, $pager);
         }

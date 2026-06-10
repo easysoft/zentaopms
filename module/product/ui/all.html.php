@@ -29,9 +29,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
         $this->app->rawModule,
         $this->app->rawMethod,
         array(
-            'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
+            'browseType' => $browseType == 'bysearch' ? 'noclosed' : $browseType,
             'orderBy'    => $orderBy,
-            'param'      => $browseType == 'bySearch' ? 0 : $param,
+            'param'      => $browseType == 'bysearch' ? 0 : $param,
             'recTotal'   => 0,
             'recPerPage' => $recPerPage,
             'pageID'     => $pageID,
@@ -70,7 +70,7 @@ featureBar
             'programID'  => $programID
         )
     )),
-    li(searchToggle(set::open($browseType == 'bySearch')))
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 $canCreate     = hasPriv('product', 'create');

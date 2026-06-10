@@ -1074,7 +1074,7 @@ class storyModel extends model
 
         $status = $oldParentStory->status;
         if(count($childrenStatus) == 1 and current($childrenStatus) == 'closed')   $status = current($childrenStatus); // Close parent story.
-        if($oldParentStory->status == 'closed' && $childStory->status == 'active') $status = $this->getActivateStatus($parentID); // Activate parent story.
+        if($oldParentStory->status == 'closed' && $childStory->status != 'closed') $status = $this->getActivateStatus($parentID); // Activate parent story.
 
         $action    = '';
         $preStatus = '';
@@ -2345,14 +2345,14 @@ class storyModel extends model
      * Get the stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $browseType bySearch
+     * @param  string  $browseType bysearch
      * @param  int     $queryID
      * @param  object  $pager
      * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
+    public function getStories2Link(int $storyID, string $browseType = 'bysearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
     {
         $story    = $this->getById($storyID);
         $excludes = $this->storyTao->getRelation($storyID, $story->type);
@@ -2361,7 +2361,7 @@ class storyModel extends model
         $excludes[$storyID] = $storyID;
 
         $stories2Link = array();
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, $orderBy, 0, 'all', $excludes, '', $pager);
         }
@@ -3301,16 +3301,16 @@ class storyModel extends model
      * 获取零用例需求。
      * Get zero case.
      *
-     * @param  int     $productID
-     * @param  int     $projectID
-     * @param  int     $executionID
-     * @param  int     $branchID
-     * @param  string  $orderBy
-     * @param  object  $pager
+     * @param  int        $productID
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int|string $branchID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int|string $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $casedStories = $this->dao->select('DISTINCT t1.story')
             ->from(TABLE_CASE)->alias('t1')
@@ -5280,6 +5280,8 @@ class storyModel extends model
             $story->rawStatus = $story->status;
             $story->status    = zget($this->lang->{$story->type}->statusList, $story->status);
         }
+
+        if(!common::hasPriv($story->type, 'assignTo')) $story->assignedToName = zget(zget($options, 'users', array()), $story->assignedTo, empty($story->assignedTo) ? $this->lang->noAssigned : $story->assignedTo);
         return $story;
     }
 

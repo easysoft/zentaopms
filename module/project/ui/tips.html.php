@@ -29,7 +29,7 @@ $showBackToTaskList      = !$isKanbanProject && !$multiple;
 $showBackToKanban        = $isKanbanProject && !$multiple;
 $showBackToExecutionList = $multiple;
 
-$backUrl = createLink('project', 'execution', "status=undone&projectID={$projectID}");
+$backUrl = createLink('project', 'execution', "browseType=undone&projectID={$projectID}");
 if(!$isKanbanProject && !$multiple) $backUrl = createLink('execution', 'task', "executionID={$executionID}");
 if($isKanbanProject) $backUrl = $multiple ? createLink('project', 'index', "projectID={$projectID}") : createLink('execution', 'kanban', "executionID={$executionID}");
 
@@ -116,7 +116,7 @@ panel
             set::className('mr-2 tipBtn'),
             sprintf($lang->project->backToExecutionList, $executionLang),
             set::target('_blank'),
-            set::url(createLink('project', 'execution', "status=undone&projectID={$projectID}"))
+            set::url(createLink('project', 'execution', "browseType=undone&projectID={$projectID}"))
         ) : null,
         btn
         (

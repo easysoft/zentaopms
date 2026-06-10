@@ -234,7 +234,7 @@ class todoZen extends todo
      */
     protected function beforeBatchCreate(form $form): array|false
     {
-        $todos = $form->cleanInt('pri, begin, end')->get();
+        $todos = $form->cleanInt('pri')->get();
         foreach($todos as $rawID => $todo)
         {
             if($todo->end < $todo->begin)
@@ -294,7 +294,7 @@ class todoZen extends todo
 
         /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
-            ->cleanInt('pri, begin, end')
+            ->cleanInt('pri')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF(empty($postData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)

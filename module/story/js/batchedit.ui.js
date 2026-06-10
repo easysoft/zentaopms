@@ -107,6 +107,7 @@ window.renderRowData = function($row, index, story)
             options.onChange     = function(){loadBranches(story.product, e)};
             options.defaultValue = story.branch;
             options.required     = true;
+            options.disabled     = edition == 'ipd' && ['wait', 'inroadmap', 'incharter'].indexOf(story.stage) === -1;
 
             $picker.render(options);
         });

@@ -234,6 +234,7 @@ class productplanModel extends model
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(date('Y-m-d'))->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
@@ -302,6 +303,7 @@ class productplanModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
         $plans = $this->relationBranch($plans);
@@ -610,7 +612,8 @@ class productplanModel extends model
         $oldPlan = $this->getByID($planID);
         if(!$oldPlan) return false;
 
-        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason);
+        $plan = form::data($this->config->productplan->form->close)->get();
+        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason, $plan);
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 

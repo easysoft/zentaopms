@@ -1299,6 +1299,7 @@ class treeModel extends model
         $data->parent = (string)$module->parent;
         $data->name   = $module->name;
         $data->url    = helper::createLink('project', 'deliverable', "projectID={$extra}&browseType=bymodule&param={$module->id}");
+        $data->extra  = $module->extra;
 
         return $data;
     }

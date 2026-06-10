@@ -73,7 +73,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type       all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $browseType all|bysearch|HLDS|DDS|DBDS|ADS
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -82,9 +82,9 @@ class design extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $projectID = 0, int $productID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        $productID = $this->commonAction($projectID, $productID, 0, $type);
+        $productID = $this->commonAction($projectID, $productID, 0, $browseType);
         $project   = $this->project->getByID($projectID);
 
         /* Save session for design list. */
@@ -94,13 +94,13 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($projectID);
         $productIdList = $productID ? $productID : array_keys($products);
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
-        $queryID       = $type == 'bySearch' ? $param : 0;
+        $queryID       = $browseType == 'bysearch' ? $param : 0;
 
         /* Build Search Form. */
         $this->config->design->search['params']['story']['values'] = $stories;
         $this->config->design->search['params']['type']['values']  = $this->lang->design->typeList;
 
-        $this->config->design->search['actionURL'] = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&type=bySearch&queryID=myQueryID");
+        $this->config->design->search['actionURL'] = $this->createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&browseType=bysearch&queryID=myQueryID");
         $this->config->design->search['queryID']   = $queryID;
         $this->loadModel('search')->setSearchParams($this->config->design->search);
 
@@ -112,23 +112,34 @@ class design extends control
         if(isset($project->hasProduct) && $project->hasProduct) $this->config->design->dtable->fieldList['product']['map'] = $this->view->products;
         if(!helper::hasFeature('devops')) $this->config->design->dtable->fieldList['actions']['menu'] = array('edit', 'delete');
 
-        $designs = $this->design->getList($projectID, $productID, $type, $queryID, $orderBy, $pager);
+        $designs = $this->design->getList($projectID, $productID, $browseType, $queryID, $orderBy, $pager);
         if($this->config->edition != 'open')
         {
             $designRelatedObjectList = $this->loadModel('custom')->getRelatedObjectList(array_keys($designs), 'design', 'byRelation', true);
             foreach($designs as $design) $design->relatedObject = zget($designRelatedObjectList, $design->id, 0);
         }
 
-        $this->view->title     = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;
-        $this->view->designs   = $designs;
-        $this->view->projectID = $projectID;
-        $this->view->productID = $productID;
-        $this->view->type      = $type;
-        $this->view->param     = $param;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
-        $this->view->users     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->project   = $project;
+        if(in_array($this->config->edition, array('max', 'ipd')))
+        {
+            $designTypeList = $this->lang->design->typeList;
+            $designTypes    = array_unique(array_filter(array_column($designs, 'type')));
+            foreach($designTypes as $designType)
+            {
+                if(!isset($designTypeList[$designType])) $designTypeList[$designType] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($designType)->fetch('name');
+            }
+            $this->config->design->dtable->fieldList['type']['statusMap'] = $designTypeList;
+        }
+
+        $this->view->title      = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->browse;
+        $this->view->designs    = $designs;
+        $this->view->projectID  = $projectID;
+        $this->view->productID  = $productID;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->project    = $project;
 
         $this->display();
     }
@@ -139,7 +150,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @access public
      * @return void
      */
@@ -186,7 +197,7 @@ class design extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @access public
      * @return void
      */
@@ -240,6 +251,13 @@ class design extends control
         $products      = $this->product->getProductPairsByProject($design->project);
         $productIdList = $design->product ? $design->product : array_keys($products);
         $project       = $this->loadModel('project')->getByID($design->project);
+
+        $designTypeList = $this->lang->design->typeList;
+        if(in_array($this->config->edition, array('max', 'ipd')) && !isset($designTypeList[$design->type]))
+        {
+            $designTypeList[$design->type] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($design->type)->fetch('name');
+        }
+        $this->view->designTypeList = $designTypeList;
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->view;
         $this->view->design   = $design;
@@ -297,6 +315,13 @@ class design extends control
         $stories       = $this->loadModel('story')->getProductStoryPairs($productIdList, 'all', 0, 'active,launched,developing', 'id_desc', 0, 'full', 'full');
         $frozenType    = $this->design->getFrozenDesignType($design->project);
         foreach($frozenType as $type) unset($this->lang->design->typeList[$type]);
+
+        $designTypeList = $this->lang->design->typeList;
+        if(in_array($this->config->edition, array('max', 'ipd')) && !isset($designTypeList[$design->type]))
+        {
+            $designTypeList[$design->type] = $this->dao->select('name')->from(TABLE_DELIVERABLE)->where('id')->eq($design->type)->fetch('name');
+        }
+        $this->view->designTypeList = $designTypeList;
 
         $this->view->title    = $this->lang->design->common . $this->lang->hyphen . $this->lang->design->edit;
         $this->view->design   = $design;
