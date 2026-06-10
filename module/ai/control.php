@@ -530,6 +530,26 @@ class ai extends control
     }
 
     /**
+     * Set input form of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptSetInputForm($promptID)
+    {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+        $prompt = $this->ai->getPromptByID($promptID);
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputform'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
      * Set target form of prompt, prompt editing step 5.
      *
      * @param  int    $promptID
