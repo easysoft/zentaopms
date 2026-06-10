@@ -21,17 +21,6 @@ $items['dept']['items']    = $depts;
 $items['company']['items'] = $companies;
 $items['visions']['items'] = $visions;
 
-if($type == 'inside')
-{
-    $items['company']['hidden'] = true;
-}
-elseif($type == 'outside')
-{
-    $items['dept']['hidden']     = true;
-    $items['commiter']['hidden'] = true;
-    $items['join']['hidden']     = true;
-}
-
 foreach(explode(',', $config->user->edit->requiredFields) as $requiredField)
 {
     if(isset($items[$requiredField])) $items[$requiredField]['required'] = true;
