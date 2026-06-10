@@ -826,12 +826,11 @@ $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 $lang->ai->models->promptFor = 'ZenTao agent for %s';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['basicinfo']        = 'Basic Info';
-$lang->ai->designStepNav['assignrole']       = 'Specify Role';
-$lang->ai->designStepNav['selectdatasource'] = 'Select Object';
-$lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
-$lang->ai->designStepNav['settargetform']    = 'Process Result';
-$lang->ai->designStepNav['finalize']         = 'Ready to Publish';
+$lang->ai->designStepNav['basicinfo']      = 'Basic Info';
+$lang->ai->designStepNav['setinputfields'] = 'Set Input Fields';
+$lang->ai->designStepNav['setinputform']   = 'Set Input Form';
+$lang->ai->designStepNav['setprompt']      = 'Set Prompt';
+$lang->ai->designStepNav['preview']        = 'Result Preview';
 
 $lang->ai->dataTypeDesc = '%s is %s type, %s';
 
