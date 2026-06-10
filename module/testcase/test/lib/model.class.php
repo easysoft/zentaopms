@@ -4101,4 +4101,25 @@ class testcaseModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test confirmLibCaseChange method.
+     *
+     * @param  int $caseID
+     * @param  int $libCaseID
+     * @access public
+     * @return object|array|false
+     */
+    public function confirmLibCaseChangeTest(int $caseID, int $libCaseID): object|array|false
+    {
+        $this->instance->confirmLibCaseChange($caseID, $libCaseID);
+        if(dao::isError()) return dao::getError();
+
+        $case  = $this->instance->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+        $steps = $this->instance->dao->select('*')->from(TABLE_CASESTEP)->where('case')->eq($caseID)->fetchAll('', false);
+
+        $output = array('case' => $case, 'stepCount' => count($steps));
+        foreach($steps as $step) $output[] = $step;
+        return $output;
+    }
 }

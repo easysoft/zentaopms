@@ -1031,71 +1031,24 @@ class testcase extends control
      */
     public function confirmLibcaseChange(int $caseID, int $libCaseID)
     {
-        /** 获取用例和用例库的用例，设置用例版本。 /
-        /* Get case and lib case, set case version.*/
-        $case    = $this->testcase->getById($caseID);
-        $libCase = $this->testcase->getById($libCaseID);
-        $version = $case->version + 1;
-
-        /* 更新用例基础信息。 */
-        /* Update case base information. */
-        $this->dao->update(TABLE_CASE)
-            ->set('version')->eq($version)
-            ->set('fromCaseVersion')->eq($version)
-            ->set('precondition')->eq($libCase->precondition)
-            ->set('title')->eq($libCase->title)
-            ->set('keywords')->eq($libCase->keywords)
-            ->where('id')->eq($caseID)
-            ->exec();
-
-        /* 更新用例步骤。 */
-        /* Update case steps. */
-        $parentSteps = array();
-        foreach($libCase->steps as $step)
-        {
-            $data = new stdclass();
-            $data->parent  = zget($parentSteps, $step->parent, 0);
-            $data->case    = $caseID;
-            $data->version = $version;
-            $data->type    = $step->type;
-            $data->desc    = $step->desc;
-            $data->expect  = $step->expect;
-            $this->dao->insert(TABLE_CASESTEP)->data($data)->exec();
-            $parentSteps[$step->id] = $this->dao->lastInsertID();
-        }
-
-        /* 更新用例文件。 */
-        /* Update case files. */
-        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
-        foreach($libCase->files as $fileID => $file)
-        {
-            $fileName = pathinfo($file->pathname, PATHINFO_FILENAME);
-            $datePath = substr($file->pathname, 0, 6);
-            $realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $fileName;
-
-            $rand        = rand();
-            $newFileName = $fileName . 'copy' . $rand;
-            $newFilePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $newFileName;
-            copy($realPath, $newFilePath);
-
-            $newFileName = $file->pathname;
-            $newFileName = str_replace('.', "copy$rand.", $newFileName);
-            $file->title = $file->name;
-
-            unset($file->id, $file->name, $file->realPath, $file->webPath, $file->url);
-            $file->objectID = $caseID;
-            $file->pathname = $newFileName;
-            $this->dao->insert(TABLE_FILE)->data($file)->exec();
-        }
-
-        $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->ne(0)->fetchPairs();
-        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($version)->where('id')->in($testtaskCases)->exec();
-
-        $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($caseID)->andWhere('suite')->ne(0)->fetchPairs();
-        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($version)->where('id')->in($testsuiteCases)->exec();
-
+        $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
+
+    /**
+     * 批量确认用例库用例的更新。
+     * Batch confirm case changed from lib.
+     *
+     * @access public
+     * @return void
+     */
+     public function batchConfirmLibcaseChange()
+     {
+         $caseIdList     = zget($_POST, 'caseIdList',  array());
+         $fromCaseIdList = $this->dao->select('id, fromCaseID')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('fromCaseID')->ne(0)->fetchPairs('id');
+         foreach($fromCaseIdList as $caseID => $libCaseID) $this->testcase->confirmLibcaseChange($caseID, $libCaseID);
+         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+     }
 
     /**
      * 忽略用例库用例的更新。
@@ -1111,6 +1064,25 @@ class testcase extends control
         $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
     }
+
+    /**
+     * 批量忽略用例库用例的更新。
+     * Batch ignore case changed from lib.
+     *
+     * @access public
+     * @return void
+     */
+     public function batchIgnoreLibcaseChange()
+     {
+         $caseIdList = zget($_POST, 'caseIdList',  array());
+         $caseList   = $this->testcase->getByList($caseIdList, 'fromCaseID != 0');
+         foreach($caseList as $case)
+         {
+             if($case->fromCaseVersion == $case->version) continue;
+             $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($case->id)->exec();
+         }
+         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+     }
 
     /**
      * Confirm story changes.
