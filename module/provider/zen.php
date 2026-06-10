@@ -84,4 +84,24 @@ class providerZen extends provider
         if($path == $apiRoot || strpos($path, $apiRoot . '/') === 0) return $url . '/user';
         return $url . '/' . $apiRoot . '/user';
     }
+
+    /**
+     * 获取探活请求头。
+     * Get auth headers for checking provider connectivity.
+     *
+     * @param  string $type
+     * @param  string $token
+     * @access protected
+     * @return array
+     */
+    protected function getCheckHeaders(string $type, string $token): array
+    {
+        if(empty($token)) return array();
+
+        if($type == 'GitLab') return array('PRIVATE-TOKEN: ' . $token);
+        if($type == 'GitHub') return array('Authorization: Bearer ' . $token);
+        if($type == 'Jenkins') return array('Authorization: basic ' . $token);
+
+        return array('Authorization: token ' . $token);
+    }
 }
