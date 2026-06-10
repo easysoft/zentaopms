@@ -19,7 +19,16 @@ $createItem = array
 );
 
 featureBar();
-toolbar
+toolbar(hasPriv('provider', 'create') ? item(set($createItem)) : null);
+
+$data = initTableData($providers, $config->provider->dtable->fieldList);
+dtable
 (
-    hasPriv('provider', 'create') ? item(set($createItem)) : null
+    set::cols($config->provider->dtable->fieldList),
+    set::data($data),
+    set::userMap($users),
+    set::orderBy($orderBy),
+    set::sortLink(createLink('provider', 'browse', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager()),
+    set::emptyTip($lang->provider->notice->emptyProvider)
 );
