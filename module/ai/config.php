@@ -85,21 +85,29 @@ $config->ai->createprompt->requiredFields = 'name';
 $config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetForm';
 
 $config->ai->moduleGroup = [];
-$config->ai->moduleGroup['program']     = array('program', 'project', 'product');
-$config->ai->moduleGroup['product']     = array('product');
-$config->ai->moduleGroup['project']     = array('project', 'programplans', 'executions');
-$config->ai->moduleGroup['story']       = array('story');
-$config->ai->moduleGroup['productplan'] = array('productplan', 'stories', 'bugs');
-$config->ai->moduleGroup['release']     = array('release', 'stories', 'bugs');
-$config->ai->moduleGroup['execution']   = array('execution', 'tasks');
-$config->ai->moduleGroup['task']        = array('task');
-$config->ai->moduleGroup['build']       = array('build', 'stories', 'bugs');
-$config->ai->moduleGroup['caselib']     = array('caselib', 'case');
-$config->ai->moduleGroup['testsuite']   = array('testsuite', 'case');
-$config->ai->moduleGroup['testtask']    = array('testtask', 'case');
-$config->ai->moduleGroup['case']        = array('case');
-$config->ai->moduleGroup['bug']         = array('bug');
-$config->ai->moduleGroup['doc']         = array('doc');
+$config->ai->moduleGroup['program']       = array('program', 'project', 'product');
+$config->ai->moduleGroup['product']       = array('product');
+$config->ai->moduleGroup['project']       = array('project', 'programplans', 'executions');
+$config->ai->moduleGroup['story']         = array('story');
+$config->ai->moduleGroup['productplan']   = array('productplan', 'stories', 'bugs');
+$config->ai->moduleGroup['release']       = array('release', 'stories', 'bugs');
+$config->ai->moduleGroup['execution']     = array('execution', 'tasks');
+$config->ai->moduleGroup['task']          = array('task');
+$config->ai->moduleGroup['build']         = array('build', 'stories', 'bugs');
+$config->ai->moduleGroup['caselib']       = array('caselib', 'case');
+$config->ai->moduleGroup['testsuite']     = array('testsuite', 'case');
+$config->ai->moduleGroup['testtask']      = array('testtask', 'case');
+$config->ai->moduleGroup['case']          = array('case');
+$config->ai->moduleGroup['bug']           = array('bug');
+$config->ai->moduleGroup['doc']           = array('doc');
+$config->ai->moduleGroup['feedback']      = array('feedback');
+$config->ai->moduleGroup['ticket']        = array('ticket');
+$config->ai->moduleGroup['issue']         = array('issue');
+$config->ai->moduleGroup['opportunity']   = array('opportunity');
+$config->ai->moduleGroup['risk']          = array('risk');
+$config->ai->moduleGroup['projectchange'] = array('projectchange');
+$config->ai->moduleGroup['cm']            = array('cm');
+
 
 /* Data source object props definations, commented out ones are not supported for now. */
 $config->ai->moduleFields = array();
