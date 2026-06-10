@@ -86,6 +86,7 @@ $config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetFo
 
 $config->ai->moduleGroup = [];
 $config->ai->moduleGroup['program']       = array('program', 'project', 'product');
+$config->ai->moduleGroup['charter']       = array('charter');
 $config->ai->moduleGroup['product']       = array('product');
 $config->ai->moduleGroup['project']       = array('project', 'programplans', 'executions');
 $config->ai->moduleGroup['story']         = array('story');
@@ -112,6 +113,7 @@ $config->ai->moduleGroup['cm']            = array('cm');
 /* Data source object props definations, commented out ones are not supported for now. */
 $config->ai->moduleFields = array();
 $config->ai->moduleFields['program']   = array('name', 'desc', 'begin');
+$config->ai->moduleFields['charter']   = array('name', 'desc');
 $config->ai->moduleFields['testsuite'] = array('name', 'desc');
 $config->ai->moduleFields['testtask']  = array('name', 'desc', 'begin', 'end');
 $config->ai->moduleFields['caselib']   = array('name', 'desc');
