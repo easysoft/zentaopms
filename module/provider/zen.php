@@ -50,4 +50,38 @@ class providerZen extends provider
 
         return !dao::isError();
     }
+
+    /**
+     * 获取探活接口地址。
+     * Get api url for checking provider connectivity.
+     *
+     * @param  string $type
+     * @param  string $url
+     * @access protected
+     * @return string
+     */
+    protected function getCheckApiUrl(string $type, string $url): string
+    {
+        $url   = rtrim($url, '/');
+        $parts = parse_url($url);
+        $host  = strtolower((string)zget($parts, 'host', ''));
+        $path  = trim((string)zget($parts, 'path', ''), '/');
+
+        if($type == 'GitHub')
+        {
+            if($host == 'github.com' || $host == 'www.github.com') return 'https://api.github.com/user';
+            if($host == 'api.github.com') return $url . '/user';
+            if($path == 'api/v3' || strpos($path, 'api/v3/') === 0) return $url . '/user';
+            return $url . '/api/v3/user';
+        }
+
+        if($type == 'Jenkins') return $url . '/api/json';
+
+        $apiRoots = array('GitLab' => 'api/v4', 'Gitea' => 'api/v1', 'Gogs' => 'api/v1');
+        $apiRoot  = zget($apiRoots, $type, '');
+        if(empty($apiRoot)) return '';
+
+        if($path == $apiRoot || strpos($path, $apiRoot . '/') === 0) return $url . '/user';
+        return $url . '/' . $apiRoot . '/user';
+    }
 }
