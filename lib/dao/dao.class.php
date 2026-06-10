@@ -238,8 +238,8 @@ class dao extends baseDAO
             $productVar = in_array($module, array('feedback', 'ticket')) ? "{$module}Product" : 'product';
             if(!empty($data->product) || (!empty($_SESSION[$productVar]) && is_numeric($_SESSION[$productVar])))
             {
-                $productID = !empty($data->product) ? $data->product : $_SESSION[$productVar];
-                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '" . $productID . "'")->fetch(PDO::FETCH_OBJ);
+                $productID = !empty($data->product) ? (int)trim($data->product, ',') : $_SESSION[$productVar];
+                $result    = $this->dbh->query('SELECT `workflowGroup`, `shadow` FROM ' . TABLE_PRODUCT . " WHERE `id` = '{$productID}'")->fetch(PDO::FETCH_OBJ);
                 $groupID   = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
                 if(!empty($result->shadow))
                 {
