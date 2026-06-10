@@ -29,4 +29,22 @@ class providerModel extends model
 
         return $this->dao->lastInsertID();
     }
+
+    /**
+     * 获取服务列表。
+     * Get provider list.
+     *
+     * @param  string $orderBy
+     * @param  ?object $pager
+     * @access public
+     * @return array
+     */
+    public function getList(string $orderBy = 'id_desc', ?object $pager = null): array
+    {
+        return $this->dao->select('*')->from(TABLE_PROVIDER)
+            ->where('deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
 }
