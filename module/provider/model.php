@@ -11,4 +11,22 @@ declare(strict_types=1);
  */
 class providerModel extends model
 {
+    /**
+     * 创建一个服务。
+     * Create a provider.
+     *
+     * @param  object $formData
+     * @access public
+     * @return int
+     */
+    public function create(object $formData): int|false
+    {
+        $this->dao->insert(TABLE_PROVIDER)->data($formData)
+            ->batchCheck($this->config->provider->create->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
+    }
 }
