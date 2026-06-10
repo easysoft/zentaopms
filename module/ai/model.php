@@ -2730,14 +2730,18 @@ class aiModel extends model
      */
     public function getLastActiveStep($prompt)
     {
-        if(!empty($prompt))
+        if(empty($prompt)) return 'basicinfo';
+
+        $basicInfoComplete = !empty($prompt->name) && !empty($prompt->module) && !empty($prompt->actionPurpose) && !empty($prompt->displayPosition);
+        if($basicInfoComplete)
         {
-            if($prompt->status == 'active') return 'finalize';
-            if(!empty($prompt->targetForm)) return 'settargetform';
+            if(!empty($prompt->status) && $prompt->status == 'active') return 'finalize';
             if(!empty($prompt->purpose))    return 'setpurpose';
             if(!empty($prompt->source))     return 'selectdatasource';
+            return 'assignrole';
         }
-        return 'assignrole';
+
+        return 'basicinfo';
     }
 
     /**
