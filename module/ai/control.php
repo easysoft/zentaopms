@@ -494,21 +494,9 @@ class ai extends control
 
         if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            if(!empty($_POST))
-            {
-                $data = fixer::input('post')->get();
-            }
-            else
-            {
-                $input = file_get_contents('php://input');
-                $data  = json_decode($input);
-
-                if(json_last_error() !== JSON_ERROR_NONE)
-                {
-                    return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->jsonParseFail, json_last_error_msg())));
-                }
-            }
-
+            $error = '';
+            $data  = $this->aiZen->getPostData($error);
+            if($error) return $this->send(array('result' => 'fail', 'message' => $error));
             if(!is_object($data)) $data = new stdClass();
 
             $originalPrompt = clone $prompt;
@@ -567,21 +555,9 @@ class ai extends control
 
         if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            if(!empty($_POST))
-            {
-                $data = fixer::input('post')->get();
-            }
-            else
-            {
-                $input = file_get_contents('php://input');
-                $data  = json_decode($input);
-
-                if(json_last_error() !== JSON_ERROR_NONE)
-                {
-                    return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->jsonParseFail, json_last_error_msg())));
-                }
-            }
-
+            $error = '';
+            $data  = $this->aiZen->getPostData($error);
+            if($error) return $this->send(array('result' => 'fail', 'message' => $error));
             if(!is_object($data)) $data = new stdClass();
 
             $fields = isset($data->fields) && is_array($data->fields) ? $data->fields : array();
