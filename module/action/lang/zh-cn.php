@@ -216,6 +216,7 @@ $lang->action->objectTypes['codescanissue']    = '代码扫描问题';
 $lang->action->objectTypes['codescantask']     = '代码扫描任务';
 $lang->action->objectTypes['compile']          = '流水线执行记录';
 $lang->action->objectTypes['gitfoxbranch']     = '代码分支';
+$lang->action->objectTypes['provider']         = '服务';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
