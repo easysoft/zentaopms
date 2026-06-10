@@ -57,17 +57,17 @@ $case->color = '#FF0000';
 $case->module = 0;
 
 // 测试步骤1:新增用例到库(libCases为空)
-r($testcaseTest->initLibCaseTest($case, 1, 100, 50, array())) && p('lib,title,openedBy') && e('1,Test Case Title,admin');
+r($testcaseTest->initLibCaseTest(clone $case, 1, 100, 50, array())) && p('lib,title,openedBy') && e('1,Test Case Title,admin');
 // 测试步骤2:更新已存在的用例(libCases包含用例)
 $libCases = array(1 => array(10 => (object)array('version' => 2)));
-r($testcaseTest->initLibCaseTest($case, 1, 100, 50, $libCases)) && p('id,lastEditedBy,version') && e('10,admin,3');
+r($testcaseTest->initLibCaseTest(clone $case, 1, 100, 50, $libCases)) && p('id,lastEditedBy,version') && e('10,admin,3');
 // 测试步骤3:用例无模块(module为0)
 $case->module = 0;
-r($testcaseTest->initLibCaseTest($case, 1, 100, 50, array())) && p('module') && e('0');
+r($testcaseTest->initLibCaseTest(clone $case, 1, 100, 50, array())) && p('module') && e('0');
 // 测试步骤4:用例有模块(module大于0)
 $case->module = 5;
-r($testcaseTest->initLibCaseTest($case, 1, 100, 50, array())) && p('lib,fromCaseID') && e('1,1');
+r($testcaseTest->initLibCaseTest(clone $case, 1, 100, 50, array())) && p('lib,fromCaseID') && e('1,1');
 // 测试步骤5:验证order字段设置
-r($testcaseTest->initLibCaseTest($case, 2, 200, 100, array())) && p('lib,order') && e('2,200');
+r($testcaseTest->initLibCaseTest(clone $case, 2, 200, 100, array())) && p('lib,order') && e('2,200');
 // 测试步骤6:验证所有必需字段正确复制
-r($testcaseTest->initLibCaseTest($case, 1, 100, 50, array())) && p('title,pri,type,stage,status,color') && e('Test Case Title,2,feature,unittest,normal,#FF0000');
+r($testcaseTest->initLibCaseTest(clone $case, 1, 100, 50, array())) && p('title,pri,type,stage,status,color') && e('Test Case Title,2,feature,unittest,normal,#FF0000');

@@ -164,7 +164,7 @@ if($app->tab == 'project') $browseLink = createLink('project', 'testcase', $link
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $browseLink = createLink('execution', 'testcase', "executionID={$executionID}&productID=$productID&branch=$branch&browseType={key}");
 if($rawMethod == 'browseunits') $browseLink = createLink('testtask', 'browseUnits', "productID=$productID&browseType={key}");
 
-$queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}" . $suffixParam);
+$queryMenuLink = createLink('testcase', 'browse', $projectParam . "productID=$productID&branch=$branch&browseType=bysearch&param={queryID}" . $suffixParam);
 $objectID = 0;
 if($app->tab == 'project')   $objectID = $projectID;
 if($app->tab == 'execution' && $from != 'doc' && $from != 'ai') $objectID = $executionID;

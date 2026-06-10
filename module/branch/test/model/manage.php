@@ -4,10 +4,8 @@ declare(strict_types=1);
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// zendata数据准备
 zenData('product')->gen(10);
 zenData('branch')->gen(20);
-
 su('admin');
 
 /**
@@ -23,13 +21,6 @@ cid=15334
 - 测试新分支列表包含空值过滤后添加1个 @1
 
 */
-
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('product')->gen(10);
-zenData('branch')->gen(20);
-su('admin');
 
 $branchTest = new branchModelTest();
 

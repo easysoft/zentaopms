@@ -16,7 +16,7 @@ jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
 jsVar('from',           $from);
 
-$queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bysearch&param={queryID}");
 $currentType   = $browseType == 'bysearch' ? $param : ($browseType == 'bymodule' ? $this->session->bugBrowseType : $browseType);
 $isFromDoc     = $from === 'doc';
 $isFromAI      = $from === 'ai';

@@ -6,6 +6,7 @@ su('admin');
 
 zenData('projectcase')->gen(10);
 zenData('case')->gen(10);
+$app->user->view->products = '1,2,3,4,5,6,7,8,9,10';
 $userquery = zenData('userquery');
 $userquery->sql->range("(( 1   AND `title`  LIKE '%2%' ) AND ( 1  )) AND deleted = '0'");
 $userquery->gen(10);
@@ -32,7 +33,7 @@ $productID   = array(0, 1);
 $branchID    = array('all', 0);
 $paramID     = array(0, 1);
 $query       = array("`product` = 'all' and `branch` = 'all'", "`title` like '%1%'");
-$orderBy     = array('id_desc', 'id_asc');
+$orderBy     = array('t2.id_desc', 't2.id_asc');
 
 $testcase = new testcaseTaoTest();
 

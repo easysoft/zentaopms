@@ -1200,7 +1200,7 @@ class productZen extends product
 
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&productID=0" : "productID=$productID";
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from&blockID=$blockID");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bysearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from&blockID=$blockID");
 
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->config->product->search['module']    = $storyType;
@@ -1231,8 +1231,8 @@ class productZen extends product
         }
 
         /* Build search form. */
-        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bySearch&param=myQueryID&storyType=$storyType");
-        if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bySearch&param=myQueryID&storyType=$storyType");
+        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bysearch&param=myQueryID&storyType=$storyType");
+        if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bysearch&param=myQueryID&storyType=$storyType");
 
         $this->config->product->search['module'] = $this->app->rawModule . 'Track';
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;

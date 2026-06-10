@@ -418,10 +418,6 @@ class taskModel extends model
 
         if(isset($task->version) && $task->version > $oldTask->version) $this->recordTaskVersion($task);
 
-        /* Compute task's story stage. */
-        $this->loadModel('story')->setStage($task->story);
-        if($task->story != $oldTask->story) $this->story->setStage($oldTask->story);
-
         /* Create score. */
         if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $task->id);
         if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $task->id);
@@ -453,6 +449,10 @@ class taskModel extends model
             $actionID = $this->action->create('task', $oldTask->parent, 'unLinkChildrenTask', '', $task->id, '', false);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
+
+        /* Compute task's story stage. */
+        $this->loadModel('story')->setStage($task->story);
+        if(($task->story != $oldTask->story) || !empty($oldParentTask->story)) $this->story->setStage(!empty($oldParentTask->story) ? $oldParentTask->story : $oldTask->story);
 
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $oldTask->id);
         if(!empty($oldTask->mode) && empty($task->mode)) $this->dao->delete()->from(TABLE_TASKTEAM)->where('task')->eq($task->id)->exec();
@@ -2036,10 +2036,11 @@ class taskModel extends model
      * @param  int   $storyID
      * @param  int   $executionID
      * @param  int   $projectID
+     * @param  bool  $isTree
      * @access public
      * @return object[]
      */
-    public function getListByStory(int $storyID, int $executionID = 0, int $projectID = 0): array
+    public function getListByStory(int $storyID, int $executionID = 0, int $projectID = 0, bool $isTree = true): array
     {
         $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, isParent, estimate, consumed, closedReason, `left`')
             ->from(TABLE_TASK)
@@ -2049,16 +2050,20 @@ class taskModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->fetchAll('id');
 
-        $parentIdList = array();
-        foreach($tasks as $task)
+        if($isTree)
         {
-            /* 如果任务不是父任务，或者父任务已经在任务列表中，或者父任务已经在当前列表中，则跳过处理。*/
-            if($task->parent <= 0 || isset($parentIdList[$task->parent])) continue;
-            $parentIdList[$task->parent] = $task->parent;
+            $parentIdList = array();
+            foreach($tasks as $task)
+            {
+                /* 如果任务不是父任务，或者父任务已经在任务列表中，或者父任务已经在当前列表中，则跳过处理。*/
+                if($task->parent <= 0 || isset($parentIdList[$task->parent])) continue;
+                $parentIdList[$task->parent] = $task->parent;
+            }
+
+            $parentTasks = $this->getByIdList($parentIdList);
+            $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks); /* 将子任务放到父任务里，或者将父任务的名字放到子任务里。*/
         }
 
-        $parentTasks = $this->getByIdList($parentIdList);
-        $tasks       = $this->taskTao->buildTaskTree($tasks, $parentTasks); /* 将子任务放到父任务里，或者将父任务的名字放到子任务里。*/
         return $this->taskTao->batchComputeProgress($tasks); /* 通过任务的消耗和剩余工时计算任务及其子任务的进度，结果以百分比的数字部分显示。*/
     }
 

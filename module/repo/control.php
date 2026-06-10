@@ -588,7 +588,7 @@ class repo extends control
         $browseType = strtolower($browseType);
         $queryID    = $browseType == 'bysearch' ? $param : 0;
         $branchID   = helper::safe64Encode(base64_encode($branchID));
-        $actionURL  = $this->createLink('repo', 'log', "repoID={$repoID}&branchID={$branchID}&objectID={$objectID}&entry=&source={$source}&browseType=bySearch&param=myQueryID");
+        $actionURL  = $this->createLink('repo', 'log', "repoID={$repoID}&branchID={$branchID}&objectID={$objectID}&entry=&source={$source}&browseType=bysearch&param=myQueryID");
         $this->repoZen->buildSearchForm($queryID, $actionURL);
 
         $this->commonAction($repoID, $objectID);
@@ -929,7 +929,7 @@ class repo extends control
         $productIds = explode(',', $repo->product);
         $products   = $this->loadModel('product')->getByIdList($productIds);
         $modules    = $this->repoZen->getLinkModules($products, 'story');
-        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);

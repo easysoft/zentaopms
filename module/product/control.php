@@ -661,7 +661,7 @@ class product extends control
         $rootProgramList = $this->loadModel('program')->getRootProgramList();
 
         /* Save search form. */
-        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $actionURL = $this->createLink('product', 'all', "browseType=bysearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
         /* Assign. */

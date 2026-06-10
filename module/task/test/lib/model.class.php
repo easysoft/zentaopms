@@ -1460,7 +1460,7 @@ class taskModelTest extends baseTest
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
 
-        $objectID = $this->instance->create($task);
+        $objectID = $this->instance->create($task, false);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->getByID($objectID);

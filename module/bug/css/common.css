@@ -1,9 +1,0 @@
-.ke-toolbar .ke-outline[data-name='savetemplate'] {display: none;}
-#modulemenu .nav #dropMenu #searchResult .closed {text-decoration: none;}
-.nav #moreMenus {cursor: pointer;}
-
-#batchCreateForm .input-group, #batchEditForm .input-group,
-#batchCreateForm .input-group .form-control, #batchEditForm .input-group .form-control {position: static;}
-#batchCreateForm .input-group .colorpicker, #batchEditForm .input-group .colorpicker {z-index: 2;}
-#batchCreateForm .input-group .colorpicker.open, #batchEditForm .input-group .colorpicker.open {z-index: 5;}
-#branch_chosen .chosen-single span {word-break: break-all;}

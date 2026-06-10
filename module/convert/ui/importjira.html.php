@@ -12,7 +12,7 @@ namespace zin;
 
 include('jiraside.html.php');
 
-$importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=true");
+$importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=1&getApiData=" . ($this->session->jiraMethod == 'api' ? 1 : 0));
 
 jsVar('langImporting', $lang->convert->jira->importingAB);
 jsVar('langImportFailed', $lang->convert->importFailed);

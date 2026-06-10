@@ -42,8 +42,8 @@ if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $products = $this->loadModel('product')->getPairs();
-    $executionChangeLink = createLink('execution', 'story', "executionID={executionID}&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-    $insertListLink = createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
+    $executionChangeLink = createLink('execution', 'story', "executionID={executionID}&storyType=$storyType&orderBy=$orderBy&browseType=$browseType&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+    $insertListLink      = createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&browseType=$browseType&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -87,7 +87,7 @@ if($isFromDoc || $isFromAI)
 }
 
 /* Show feature bar. */
-$queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type=bySearch&param={queryID}&recTotal={$pager->recTotal}&recPerPae={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&browseType=bysearch&param={queryID}&recTotal={$pager->recTotal}&recPerPae={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
 if(empty($param) && $this->cookie->storyModuleParam) $param = $this->cookie->storyModuleParam;
 featureBar
@@ -118,7 +118,7 @@ featureBar
     set::param($param),
     set::searchModule('executionStory'),
     set::current($this->session->storyBrowseType),
-    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&type={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}")),
+    set::link(createLink($app->rawModule, $app->rawMethod, "&executionID=$execution->id&storyType=$storyType&orderBy=$orderBy&browseType={key}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}")),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#stories_table'),
@@ -126,7 +126,7 @@ featureBar
     (
         set::simple($isFromDoc || $isFromAI),
         set::module('executionStory'),
-        set::open($type == 'bysearch'),
+        set::open($browseType == 'bysearch'),
         ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
         ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))
@@ -277,7 +277,7 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
             setClass('text-primary font-bold shadow-inner bg-canvas'),
             set::icon('format-list-bulleted'),
             set::hint($lang->execution->list),
-            set::url(inlink('story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=all")),
+            set::url(inlink('story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&browseType=all")),
             setData('app', $app->tab)
         ),
         btn
@@ -293,14 +293,14 @@ if($product && !$isFromDoc && !$isFromAI) toolbar
         $reportText => $lang->story->report->common,
         'icon'      => 'bar-chart',
         'class'     => 'ghost',
-        'url'       => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$type}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
+        'url'       => createLink('story', 'report', "productID={$product->id}&branchID=&storyType={$storyType}&browseType={$browseType}&moduleID={$param}&chartType=pie&projectID={$execution->id}") . "#app={$app->tab}"
     ))) : null,
-    hasPriv('story', 'export') && ($linkedProductCount < 2 || $type == 'byproduct' || $type == 'bymodule') ? item(set(array
+    hasPriv('story', 'export') && ($linkedProductCount < 2 || $browseType == 'byproduct' || $browseType == 'bymodule') ? item(set(array
     (
         'text'        => $lang->export,
         'icon'        => 'export',
         'class'       => 'ghost',
-        'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$type&storyType=$storyType"),
+        'url'         => createLink('story', 'export', "productID={$product->id}&orderBy=$orderBy&executionID=$execution->id&browseType=$browseType&storyType=$storyType"),
         'data-toggle' => 'modal'
     ))) : null,
 
@@ -331,9 +331,9 @@ if(!$isFromDoc && !$isFromAI) sidebar
 (
     moduleMenu(set(array(
         'modules'     => $moduleTree,
-        'activeKey'   => $type == 'byproduct' ? "p_$param" : $param,
+        'activeKey'   => $browseType == 'byproduct' ? "p_$param" : $param,
         'settingLink' => !$execution->hasProduct && !$execution->multiple ? createLink('tree', 'browse', "rootID={$product->id}&viewType=story") : null,
-        'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&type=byModule&param=0"),
+        'closeLink'   => $this->createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={$orderBy}&browseType=bymodule&param=0"),
         'app'         => !$execution->multiple ? 'project' : '',
         'settingApp'  => !$execution->multiple ? 'project' : ''
     )))
@@ -615,14 +615,14 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&type={$type}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
+        'linkCreator' => helper::createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy=$orderBy&browseType={$browseType}&param={$param}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     set::emptyTip($lang->execution->noStory),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     ($isFromDoc || $isFromAI) ? null : set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"), 'globalUrl' => createLink('datatable', 'ajaxsaveglobal', "module={$app->moduleName}&method={$app->methodName}&extra={$storyType}"))),
-    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'story', "executionID={$execution->id}&storyType={$storyType}&orderBy={name}_{sortType}&browseType={$browseType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->story->create),
     ($isFromDoc || $isFromAI || $hasFrozenStories) ? null : set::createLink($createStoryLink)

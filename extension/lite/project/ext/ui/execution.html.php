@@ -138,8 +138,8 @@ $fnShowCards = function($kanbanList) use ($fnBuildSingleCard)
 data('recTotal', count($kanbanList));
 featureBar
 (
-    set::current($status),
-    set::linkParams("status={key}&projectID={$projectID}&orderBy=&productID=0&recTotal=0&recPerPage=10&pageID=1")
+    set::current($browseType),
+    set::linkParams("browseType={key}&projectID={$projectID}&orderBy=&productID=0&recTotal=0&recPerPage=10&pageID=1")
 );
 
 toolbar

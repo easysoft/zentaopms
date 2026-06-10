@@ -6,6 +6,13 @@ title=测试 buildModel->processBuildForUpdate();
 timeout=0
 cid=15505
 
+- 没有执行的版本属性branch @1,2
+- 没有执行的版本属性branch @~~
+- 没有关联需求的版本属性branch @~~
+- 没有关联需求的版本属性branch @1
+- 所有版本属性branch @~~
+- 所有版本属性branch @1
+
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -25,8 +32,8 @@ $type = array('noBranch', 'noBuild');
 
 $buildTester = new buildModelTest();
 
-r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[0])) && p('branch', '|') && e(',1,2');  // 没有执行的版本
-r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[1])) && p('branch', '|') && e('1');  // 没有执行的版本
+r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[0])) && p('branch', '|') && e('1,2');  // 没有执行的版本
+r($buildTester->processBuildForUpdate($buildID['noExecution'], $type[1])) && p('branch', '|') && e('~~');  // 没有执行的版本
 
 r($buildTester->processBuildForUpdate($buildID['noStory'], $type[0])) && p('branch', '|') && e('~~');  // 没有关联需求的版本
 r($buildTester->processBuildForUpdate($buildID['noStory'], $type[1])) && p('branch', '|') && e('1');  // 没有关联需求的版本

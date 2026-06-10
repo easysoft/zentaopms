@@ -1365,7 +1365,7 @@ class testtaskModel extends model
 
         /* 更新测试用例的执行结果。*/
         /* Update the execution results of the test case. */
-        $case = new stdclass();
+        $case = form::data()->get();
         $case->lastRunner    = $this->app->user->account;
         $case->lastRunDate   = $now;
         $case->lastRunResult = $caseResult;

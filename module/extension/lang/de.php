@@ -72,7 +72,7 @@ $lang->extension->obtainOfficial[2] = 'Offizielle Bescheinigung';
 $lang->extension->byDownloads   = 'Downloads';
 $lang->extension->byAddedTime   = 'Zuletzt hinzugefügt';
 $lang->extension->byUpdatedTime = 'Zuletzt bearbeitet';
-$lang->extension->bySearch      = 'Suche';
+$lang->extension->bysearch      = 'Suche';
 $lang->extension->byCategory    = 'Kategorie';
 
 $lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;

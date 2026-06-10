@@ -232,7 +232,7 @@ class repoZenTest
 
         // 构建搜索配置
         $searchConfig = array();
-        $searchConfig['actionURL'] = helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $searchConfig['actionURL'] = helper::createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bysearch&queryID=myQueryID");
         $searchConfig['queryID'] = $queryID;
         $searchConfig['style'] = 'simple';
 
@@ -325,7 +325,7 @@ class repoZenTest
         $mockStory3->status = 'active';
         $mockStory3->isParent = '1';
 
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             // 搜索模式
             foreach($products as $productID => $product)
@@ -418,7 +418,7 @@ class repoZenTest
 
         // 构建搜索配置
         $searchConfig = array();
-        $searchConfig['actionURL'] = helper::createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
+        $searchConfig['actionURL'] = helper::createLink('repo', 'linkBug', "repoID=$repoID&revision=$revision&browseType=bysearch&queryID=myQueryID");
         $searchConfig['queryID'] = $queryID;
         $searchConfig['style'] = 'simple';
 
@@ -532,7 +532,7 @@ class repoZenTest
         $mockBug3->product = 1;
         $mockBug3->status = 'closed';
 
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             // 搜索模式
             $allBugs = array($mockBug1, $mockBug2, $mockBug3);
@@ -608,7 +608,7 @@ class repoZenTest
 
         // 构建搜索配置
         $searchConfig = array();
-        $searchConfig['actionURL'] = helper::createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID", '', true);
+        $searchConfig['actionURL'] = helper::createLink('repo', 'linkTask', "repoID=$repoID&revision=$revision&browseType=bysearch&queryID=myQueryID", '', true);
         $searchConfig['queryID'] = $queryID;
         $searchConfig['style'] = 'simple';
 

@@ -104,6 +104,7 @@ $lang->testcase->caseType         = 'Case Type';
 $lang->testcase->allType          = 'All Types';
 $lang->testcase->automated        = 'Automated';
 $lang->testcase->automation       = 'Automation Test';
+$lang->testcase->runCase          = 'Run';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -184,7 +185,7 @@ $lang->testcase->openedByMe   = 'Von mir erstellt';
 $lang->testcase->allCases     = 'Alle';
 $lang->testcase->allTestcases = 'Alle Fälle';
 $lang->testcase->needConfirm  = 'Story geändert';
-$lang->testcase->bySearch     = 'Suche';
+$lang->testcase->bysearch     = 'Suche';
 $lang->testcase->unexecuted   = 'Wartend';
 
 $lang->testcase->lblStory       = 'Story';

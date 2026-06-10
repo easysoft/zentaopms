@@ -20,7 +20,7 @@ $config->host->featureBar['all']['badge']  = $pager->recTotal != '' ? array('tex
 featureBar
 (
     set::items($config->host->featureBar),
-    li(searchToggle(set::open($browseType == 'bySearch')))
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

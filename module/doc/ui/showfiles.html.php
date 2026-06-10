@@ -111,7 +111,7 @@ else
 include 'lefttree.html.php';
 featureBar
 (
-    li(searchToggle(set::module($type . 'DocFile'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module($type . 'DocFile'), set::open($browseType == 'bysearch')))
 );
 
 toolbar

@@ -497,7 +497,7 @@ if($isFromDoc || $isFromAI)
     );
 }
 
-$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
+$queryMenuLink = createLink($app->rawModule, $app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=bysearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&projectID=$projectID&from=$from&blockID=$blockID");
 featureBar
 (
     $hideGrade ? null : to::leading
@@ -588,7 +588,7 @@ if($storyType == 'requirement') $emptyTip = $lang->story->noRequirement;
 if($storyType == 'epic')        $emptyTip = $lang->story->noEpic;
 
 $createStoryLink = createLink($storyType, 'create', 'product=' . (empty($productID) ? current(array_keys($projectProducts)) : $productID) . "&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&storyType=$storyType") . ($isProjectStory ? '#app=project' : '');
-$createStoryLink = hasPriv($storyType, 'create') ?  $createStoryLink : '';
+$createStoryLink = hasPriv($storyType, 'create') && common::canModify('product', $product) ?  $createStoryLink : '';
 dtable
 (
     set::id('stories'),

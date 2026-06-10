@@ -74,7 +74,7 @@ $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfield
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:multicheckboxes'] = array('control' => 'checkbox',      'type' => 'text',     'length' => '0');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:datetime']        = array('control' => 'datetime',      'type' => 'datetime', 'length' => '0');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:datepicker']      = array('control' => 'date',          'type' => 'date',     'length' => '0');
-$config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:textarea']        = array('control' => 'textarea',      'type' => 'text',     'length' => '0');
+$config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:textarea']        = array('control' => 'richtext',      'type' => 'text',     'length' => '0');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:float']           = array('control' => 'decimal',       'type' => 'decimal',  'length' => '0');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:multiselect']     = array('control' => 'multi-select',  'type' => 'text',     'length' => '0');
 $config->convert->jiraFieldControl['com.atlassian.jira.plugin.system.customfieldtypes:cascadingselect'] = array('control' => 'multi-select',  'type' => 'text',     'length' => '0');

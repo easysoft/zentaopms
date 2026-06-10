@@ -1406,11 +1406,14 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bysearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
             ->fi()
             ->fetchAll('id');
 
@@ -1422,7 +1425,7 @@ class executionModel extends model
      * Get execution stat data.
      *
      * @param  int         $projectID
-     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bysearch|review
      * @param  int         $productID
      * @param  int         $branch
      * @param  bool        $withTasks
@@ -1525,7 +1528,7 @@ class executionModel extends model
      * Get execution list information.
      *
      * @param  int         $projectID
-     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bysearch|review
      * @param  int         $productID
      * @param  string      $orderBy
      * @param  int         $param
@@ -1537,7 +1540,7 @@ class executionModel extends model
     {
         if(strpos($orderBy, 'nameCol') !== false) $orderBy = str_replace('nameCol', 'name', $orderBy);
         /* Construct the query SQL at search executions. */
-        $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
+        $executionQuery = $browseType == 'bysearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
@@ -1552,12 +1555,15 @@ class executionModel extends model
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch', 'delayed')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bysearch', 'delayed')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'delayed')->andWhere('t1.end')->gt('1970-1-1')->andWhere('t1.end')->lt(date(DT_DATE1))->andWhere('t1.status')->notin('done,closed,suspended')->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')

@@ -180,7 +180,7 @@ class compileTaoTest extends baseTest
         global $tester;
 
         // 模拟compile zen的buildSearchForm逻辑
-        $actionURL = "compile-browse-{$repoID}-{$jobID}-bySearch-myQueryID.html";
+        $actionURL = "compile-browse-{$repoID}-{$jobID}-bysearch-myQueryID.html";
 
         // 初始化config结构
         if(!isset($tester->config->compile->search))

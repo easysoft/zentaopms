@@ -41,7 +41,7 @@ cid=18966
 $productID = array(0, 1, 41);
 $projectID = array(0, 11);
 $moduleID  = array(0, 1);
-$branch    = array('all', 0);
+$branch    = array('all', '0');
 
 $testcase = new testcaseModelTest();
 

@@ -5,6 +5,11 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 // 准备测试数据
+zenData('product')->gen(0);
+zenData('story')->gen(0);
+zenData('build')->gen(0);
+zenData('bug')->gen(0);
+
 $product = zenData('product');
 $product->id->range('1-3');
 $product->name->range('产品1,产品2,产品3');
@@ -42,25 +47,25 @@ timeout=0
 cid=15393
 
 - 测试product对象返回关联对象列表
- - 属性count @4
+ - 属性count @5
  - 属性hasEmpty @1
  - 属性hasZero @1
 - 测试story对象返回关联对象列表
- - 属性count @4
+ - 属性count @5
  - 属性hasEmpty @1
  - 属性hasZero @1
-- 测试build对象返回包含trunk选项
- - 属性count @4
+- 测试openedBuild对象返回包含trunk选项
+ - 属性count @5
  - 属性hasEmpty @1
  - 属性hasZero @1
  - 属性hasTrunk @1
 - 测试openedBuild对象转换为build处理
- - 属性count @4
+ - 属性count @5
  - 属性hasEmpty @1
  - 属性hasZero @1
  - 属性hasTrunk @1
 - 测试resolvedBuild对象转换为build处理
- - 属性count @4
+ - 属性count @5
  - 属性hasEmpty @1
  - 属性hasZero @1
  - 属性hasTrunk @1
@@ -69,8 +74,8 @@ cid=15393
 
 $bugTest = new bugModelTest();
 
-r($bugTest->getRelatedObjectsTest('product', 'id,name')) && p('count,hasEmpty,hasZero') && e('4,1,1'); // 测试product对象返回关联对象列表
-r($bugTest->getRelatedObjectsTest('story', 'id,title')) && p('count,hasEmpty,hasZero') && e('4,1,1'); // 测试story对象返回关联对象列表
-r($bugTest->getRelatedObjectsTest('build', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('4,1,1,1'); // 测试build对象返回包含trunk选项
-r($bugTest->getRelatedObjectsTest('openedBuild', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('4,1,1,1'); // 测试openedBuild对象转换为build处理
-r($bugTest->getRelatedObjectsTest('resolvedBuild', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('4,1,1,1'); // 测试resolvedBuild对象转换为build处理
+r($bugTest->getRelatedObjectsTest('product', 'id,name')) && p('count,hasEmpty,hasZero') && e('5,1,1'); // 测试product对象返回关联对象列表
+r($bugTest->getRelatedObjectsTest('story', 'id,title')) && p('count,hasEmpty,hasZero') && e('5,1,1'); // 测试story对象返回关联对象列表
+r($bugTest->getRelatedObjectsTest('openedBuild', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('5,1,1,1'); // 测试openedBuild对象返回包含trunk选项
+r($bugTest->getRelatedObjectsTest('openedBuild', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('5,1,1,1'); // 测试openedBuild对象转换为build处理
+r($bugTest->getRelatedObjectsTest('resolvedBuild', 'id,name')) && p('count,hasEmpty,hasZero,hasTrunk') && e('5,1,1,1'); // 测试resolvedBuild对象转换为build处理

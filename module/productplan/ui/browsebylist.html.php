@@ -80,7 +80,7 @@ featureBar
     (
         set::simple($isFromDoc || $isFromAI),
         set::module('productplan'),
-        set::open($browseType == 'bySearch'),
+        set::open($browseType == 'bysearch'),
         ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
         ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))

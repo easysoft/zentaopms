@@ -20,7 +20,7 @@ jsVar('canAssignTo', common::canModify('execution', $execution) && hasPriv('task
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$execution->id}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
+    set::linkParams("executionID={$execution->id}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
     li(searchToggle(set::module('task'), set::open($browseType == 'bysearch')))
 );
 
@@ -188,7 +188,7 @@ dtable
     set::data($tableData),
     set::checkable($canBatchAction),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::modules($modulePairs),
     set::footToolbar($footToolbar),
@@ -196,7 +196,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::customCols(true)

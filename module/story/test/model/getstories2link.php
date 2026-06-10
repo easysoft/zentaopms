@@ -41,7 +41,7 @@ $_SESSION = array();
 global $tester;
 
 su('admin');
-$stories1 = $tester->loadModel('story')->getStories2Link(1, 'bySearch', 0);
+$stories1 = $tester->loadModel('story')->getStories2Link(1, 'bysearch', 0);
 $stories2 = $tester->loadModel('story')->getStories2Link(2);
 
 r(count($stories1)) && p()                  && e('18');       // 获取需求1可关联的需求数量

@@ -366,7 +366,7 @@ class actionModel extends model
             if(isset($fieldList[$history->old])) $history->oldValue = $fieldList[$history->old];
             if(isset($fieldList[$history->new])) $history->newValue = $fieldList[$history->new];
         }
-         
+
         /* 如果是升级, 检查oldValue和newValue字段是否存在。以防止从老版本升级的时候，而这两个字段不存在，导致升级失败。 */
         if(!empty($this->app->upgrading) && (isset($history->oldValue) || isset($history->newValue)))
         {
@@ -1612,7 +1612,7 @@ class actionModel extends model
             {
                 $moduleName = 'execution';
                 $methodName = 'gantt';
-                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bySearch=0&param=&version={$ganttversion->id}";
+                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bysearch=0&param=&version={$ganttversion->id}";
             }
         }
 
@@ -1624,6 +1624,7 @@ class actionModel extends model
         if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';  // Set app for no multiple project.
+        if(!empty($action->objectLink) && $action->objectType == 'productplan' && isset($shadowProducts[$action->product])) $action->objectLink .= '#app=project';
         if(!empty($action->objectLink) && $action->objectType == 'meeting')    $action->objectLink .= '#app=' . $this->app->tab; // Set app for meeting by open tab.
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
         if($action->objectType == 'nc' && !empty($action->execution)) $action->objectLink .= '#app=execution';
@@ -2579,7 +2580,7 @@ class actionModel extends model
             if($task->parent > 0)
             {
                 $parentConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('consumed');
-                if($parentConsumed)
+                if((float)$parentConsumed > 0)
                 {
                     $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$task->id},")->where('id')->eq($task->id)->exec();
                 }

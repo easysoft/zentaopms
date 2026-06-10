@@ -56,8 +56,31 @@ cid=19642
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+global $tester;
+$tester->dao->delete()->from(TABLE_ACTION)->exec();
+$tester->dao->delete()->from(TABLE_ACTIONRECENT)->exec();
+$tester->dao->delete()->from(TABLE_GROUPPRIV)->exec();
+$tester->dao->delete()->from(TABLE_USERGROUP)->exec();
+$tester->dao->delete()->from(TABLE_GROUP)->exec();
+$tester->dao->delete()->from(TABLE_COMPANY)->exec();
+$tester->dao->delete()->from(TABLE_USER)->exec();
+$tester->dao->exec('ALTER TABLE ' . TABLE_ACTION . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_ACTIONRECENT . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_GROUPPRIV . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_USERGROUP . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_GROUP . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_COMPANY . ' AUTO_INCREMENT = 1');
+$tester->dao->exec('ALTER TABLE ' . TABLE_USER . ' AUTO_INCREMENT = 1');
+
 zenData('user')->gen(2);
+$userIDList = array_values($tester->dao->select('id')->from(TABLE_USER)->orderBy('id')->fetchPairs('id', 'id'));
+$tester->dao->update(TABLE_USER)->set('account')->eq('admin')->set('realname')->eq('admin')->set('password')->eq(md5('123456'))->set('deleted')->eq('0')->where('id')->eq($userIDList[0])->exec();
+$tester->dao->update(TABLE_USER)->set('account')->eq('user1')->set('realname')->eq('用户1')->set('password')->eq(md5('123456'))->set('deleted')->eq('0')->where('id')->eq($userIDList[1])->exec();
+
 zenData('company')->gen(1);
+$companyID = $tester->dao->select('id')->from(TABLE_COMPANY)->orderBy('id')->fetch('id');
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq($companyID)->exec();
+
 zenData('group')->gen(3);
 
 $userGroupTable = zenData('usergroup');
@@ -71,9 +94,9 @@ $groupPrivTable->module->range('company,dept,group,program,product,execution,qa,
 $groupPrivTable->method->range('browse{5},all,index,browse{2}');
 $groupPrivTable->gen(9);
 
-su('admin');
-
 global $app;
+$app->company = $tester->dao->select('*')->from(TABLE_COMPANY)->where('id')->eq($companyID)->fetch();
+$app->company->admins = ',admin,';
 
 $userTest = new userModelTest();
 $random   = updateSessionRandom();
