@@ -25,6 +25,13 @@ jsVar('edition',               $config->edition);
 jsVar('isShadowProduct',       !empty($product->shadow));
 jsVar('duplicateBugID',        !empty($bug->duplicateBug) ? $bug->duplicateBug : 0);
 
+$files = array();
+foreach($bug->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 $isEn = $app->getClientLang() == 'en';
 
 detailHeader
@@ -100,7 +107,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            fileSelector($bug->files ? set::defaultFiles(array_values($bug->files)) : null)
+            fileSelector($files ? set::defaultFiles($files) : null)
         ),
         section
         (

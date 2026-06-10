@@ -46,6 +46,13 @@ if($this->config->edition == 'ipd')
     if(!empty($task->confirmeActionType)) $config->task->actions->view['suffixActions'] = array();
 }
 
+$files = array();
+foreach($task->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 $task->executionInfo = $execution;
 $task->estimate      = helper::formatHours($task->estimate);
 $task->consumed      = helper::formatHours($task->consumed);
@@ -185,12 +192,12 @@ if($task->children)
         ->data($children)
         ->checkable(false);
 }
-if($task->files)
+if($files)
 {
     $sections[] = array
     (
         'control'    => 'fileList',
-        'files'      => $task->files,
+        'files'      => $files,
         'object'     => $task,
         'padding'    => false,
         'showEdit'   => false,

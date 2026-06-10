@@ -19,6 +19,13 @@ $isInModal = isInModal();
 $viewModule = $isLibCase ? 'caselib' : 'testcase';
 $viewMethod = $isLibCase ? 'viewCase' : 'view';
 
+$files = array();
+foreach($case->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 /* 版本列表。Version list. */
 $versions = array();
 for($i = $case->version; $i >= 1; $i--)
@@ -200,7 +207,7 @@ $sections[] = setting()
 
 $sections[] = setting()
     ->control('fileList')
-    ->files($case->files)
+    ->files($files)
     ->showDelete(false)
     ->padding(false)
     ->object($case);

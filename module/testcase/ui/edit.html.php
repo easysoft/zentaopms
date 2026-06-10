@@ -28,6 +28,13 @@ $createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewTy
 
 if($case->type != 'unit') unset($lang->testcase->typeList['unit']);
 
+$files = array();
+foreach($case->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 $linkCaseItems = array();
 if(isset($case->linkCaseTitles))
 {
@@ -137,7 +144,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            fileSelector($case->files ? set::defaultFiles(array_values($case->files)) : false)
+            fileSelector($files ? set::defaultFiles(array_values($files)) : false)
         ),
         section
         (

@@ -86,7 +86,8 @@ class story extends control
             {
                 $fileList = $this->post->fileList;
                 if($fileList) $fileList = json_decode($fileList, true);
-                $this->loadModel('file')->saveDefaultFiles($fileList, 'story', $storyID, 1);
+                foreach($fileList as $file) $file['extra'] = is_numeric($file['extra']) ? 1 : $file['extra'];
+                $this->loadModel('file')->saveDefaultFiles($fileList, 'story', $storyID);
             }
 
             $productID = $this->post->product ? $this->post->product : $productID;
@@ -124,6 +125,7 @@ class story extends control
         $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
         $this->view->type        = $storyType;
         $this->view->story       = $initStory;
+        $this->view->storyFiles  = $this->loadModel('file')->getByObject('story', $storyID);
         $this->view->forceReview = $this->story->checkForceReview($storyType);
 
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
