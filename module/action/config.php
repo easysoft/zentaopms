@@ -87,6 +87,8 @@ $config->action->objectNameFields['baseline']     = 'title';
 $config->action->objectNameFields['ganttversion'] = 'title';
 $config->action->objectNameFields['projectchange'] = 'name';
 
+$config->action->objectNameFields['provider'] = 'name';
+
 $config->action->commonImgSize = 870;
 
 $config->action->majorList = array();

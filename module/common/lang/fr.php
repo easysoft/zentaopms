@@ -500,6 +500,7 @@ $lang->scanplan->common     = 'Scan Plan';
 $lang->scantask->common     = 'Scan Task';
 $lang->scanissue->common    = 'Scan Issue';
 $lang->scanOverview->common = 'Scan Overview';
+$lang->provider->common     = 'Service';
 
 $lang->admin->module      = 'Module';
 $lang->admin->system      = 'System';

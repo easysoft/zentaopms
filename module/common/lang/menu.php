@@ -537,7 +537,7 @@ $lang->devops->homeMenu->artifact = array('link' => "{$lang->artifact->common}|a
 $lang->devops->homeMenu->codescan = array('link' => "{$lang->devops->codescan}|codescan|task", 'subModule' => 'codescan');
 $lang->devops->homeMenu->system   = array('link' => "{$lang->devops->system}|repo|browsesystem", 'subModule' => 'system', 'exclude' => 'system-dashboard,system-dblist,system-domainview,system-ossview');
 
-$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repobranchtype|browse|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,gitfox,jenkins,sonarqube,repobranchtype', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit,repo-binduser');
+$lang->devops->homeMenu->configure = array('link' => "{$lang->devops->configure}|repobranchtype|browse|", 'subModule' => 'system,store,instance,repo,gitlab,gitea,gogs,gitfox,jenkins,sonarqube,repobranchtype,provider', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit,repo-binduser');
 
 $lang->devops->homeMenu->spaceSetting = array('link' => "{$lang->devops->spaceSetting}|space|view|spaceID=%s", 'subModule' =>'space', 'exclude' => 'repo-maintain,repo-browsesystem,system-view,repo-create,repo-createrepo,repo-import,repo-edit');
 $lang->devops->homeMenu->spaceSetting['subMenu'] = new stdclass();
@@ -589,9 +589,11 @@ $lang->devops->menu->settings['subMenu']->webhooks   = array('link' => "Webhooks
 $lang->devops->homeMenu->configure['subMenu'] = new stdclass();
 $lang->devops->homeMenu->configure['subMenu']->branchType = array('link' => "{$lang->devops->branchType}|repobranchtype|browse|", 'alias' => 'create,edit,delete,import');
 $lang->devops->homeMenu->configure['subMenu']->rules      = array('link' => "{$lang->devops->rules}|repo|setrules|", 'subModule' => 'repo');
+$lang->devops->homeMenu->configure['subMenu']->provider   = array('link' => "{$lang->provider->common}|provider|browse|", 'alias' => 'create,edit');
 
 $lang->devops->homeMenu->configure['menuOrder'][5]  = 'branchType';
 $lang->devops->homeMenu->configure['menuOrder'][10] = 'rules';
+$lang->devops->homeMenu->configure['menuOrder'][15] = 'provider';
 
 /* The menu order $lang->devops->menuOrder[30] is a reserved position for 'artifactrepo'. */
 $lang->devops->menuOrder[5]   = 'space';
@@ -823,6 +825,7 @@ $lang->navGroup->instance         = 'devops';
 $lang->navGroup->deploy           = 'devops';
 $lang->navGroup->host             = 'devops';
 $lang->navGroup->artifact         = 'devops';
+$lang->navGroup->provider         = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';

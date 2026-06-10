@@ -216,6 +216,7 @@ $lang->action->objectTypes['codescanissue']    = 'Code Scan Issue';
 $lang->action->objectTypes['codescantask']     = 'Code Scan Task';
 $lang->action->objectTypes['compile']          = 'Pipeline Execution Record';
 $lang->action->objectTypes['gitfoxbranch']     = 'Repo Branch';
+$lang->action->objectTypes['provider']         = 'Provider';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

@@ -181,6 +181,7 @@ $lang->scanplan       = new stdclass();
 $lang->scantask       = new stdclass();
 $lang->scanissue      = new stdclass();
 $lang->scanOverview   = new stdclass();
+$lang->provider       = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';
