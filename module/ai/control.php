@@ -472,6 +472,33 @@ class ai extends control
         $prompt = $this->ai->getPromptByID($promptID);
         if(empty($prompt)) return $this->locate($this->inlink('promptBasicInfo'));
 
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            if(!empty($_POST))
+            {
+                $data = fixer::input('post')->get();
+            }
+            else
+            {
+                $input = file_get_contents('php://input');
+                $data  = json_decode($input);
+
+                if(json_last_error() !== JSON_ERROR_NONE)
+                {
+                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
+                }
+            }
+
+            if(!is_object($data)) $data = new stdClass();
+
+            $fields = isset($data->fields) && is_array($data->fields) ? $data->fields : array();
+            $this->ai->savePromptFields($promptID, $fields);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputFields', "promptID=$promptID")));
+        }
+
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
