@@ -9,9 +9,12 @@ $branch    = data('branch');
 $storyID   = data('case.story') ? data('case.story') : '';
 $files     = data('case.files');
 
-foreach($files as $key => $fileInfo)
+if($files)
 {
-    if($fileInfo->extra != '') unset($files[$key]);
+    foreach($files as $key => $fileInfo)
+    {
+        if($fileInfo->extra != '') unset($files[$key]);
+    }
 }
 
 unset($lang->testcase->typeList['unit']);
