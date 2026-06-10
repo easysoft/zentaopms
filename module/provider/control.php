@@ -118,4 +118,19 @@ class provider extends control
         $this->view->provider = $provider;
         $this->display();
     }
+
+    /**
+     * 删除服务。
+     * delete provider.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function delete(int $id)
+    {
+        $this->provider->delete(TABLE_PROVIDER, $id);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => true));
+    }
 }
