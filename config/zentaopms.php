@@ -784,6 +784,7 @@ $config->objectTables['reporeviewflow']  = TABLE_REVIEWFLOW;
 $config->objectTables['ops_review_flow'] = TABLE_REVIEWFLOW;
 
 $config->objectTables['repobranchtype'] = TABLE_BRANCHTYPE;
+$config->objectTables['provider']       = TABLE_PROVIDER;
 
 $config->newFeatures      = array('introduction', 'tutorial', 'youngBlueTheme', 'visions', 'aiPrompts', 'promptDesign', 'promptExec');
 $config->disabledFeatures = '';
