@@ -47,4 +47,31 @@ class providerModel extends model
             ->page($pager)
             ->fetchAll('id');
     }
+
+    /**
+     * 根据ID获取服务。
+     * Get provider by id.
+     *
+     * @param  int    $id
+     * @access public
+     * @return object|false
+     */
+    public function getByID(int $id): object|false
+    {
+        $provider = $this->fetchByID($id);
+        if(empty($provider)) return false;
+
+        if($provider->type == 'Jenkins')
+        {
+            list($account, $token) = explode(':', base64_decode($provider->token));
+            $provider->account = $account;
+            $provider->token   = $token;
+        }
+        else
+        {
+            $provider->account = '';
+        }
+
+        return $provider;
+    }
 }
