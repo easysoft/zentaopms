@@ -418,6 +418,7 @@ formPanel
         set::label($lang->todo->status),
         set::name('status'),
         set::items($lang->todo->statusList),
+        set::value('wait'),
         set::required(true)
     ),
     formRow
