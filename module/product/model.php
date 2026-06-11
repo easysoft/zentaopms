@@ -740,7 +740,7 @@ class productModel extends model
             $productID = key($products);
             $showAll   = true;
         }
-        $product = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? $products : array();
+        $product = $this->app->tab == 'project' || !empty($showAll) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
@@ -1626,6 +1626,9 @@ class productModel extends model
             ->beginIF($status == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($status == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
             ->fi()
             ->filterTpl('skip')
             ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")

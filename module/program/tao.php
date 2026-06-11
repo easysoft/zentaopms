@@ -278,7 +278,7 @@ class programTao extends programModel
         foreach($stats as $projectID => $project)
         {
             $totalRealNotDel = $project['totalConsumedNotDel'] + $project['totalLeftNotDel'];
-            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 1000) / 1000 * 100 : 0;
+            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 10000) / 10000 * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])

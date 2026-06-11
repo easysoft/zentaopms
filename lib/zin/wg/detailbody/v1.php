@@ -38,30 +38,39 @@ class detailBody extends wg
         foreach($fields as $field)
         {
             $fieldValue = !$isForm ? $app->control->flow->getFieldValue($field, $object) : null;
-            $extraMain[] = section
-            (
-                !empty($field->control['control']) && $field->control['control'] == 'fileSelector' && $object->files ? fileList
+            if(!empty($field->control['control']) && $field->control['control'] == 'fileSelector' && $object->files)
+            {
+                $extraMain[] = section
                 (
-                    set::files($object->files),
-                    set::extra($field->field),
-                    set::fieldset(false),
-                    set::showEdit(true),
-                    set::showDelete(true)
-                ) : null,
-                set::title($field->name),
-                set::required($field->required),
-                !$isForm ? (div(!empty($field->control['control']) && $field->control['control'] == 'editor' ? html($fieldValue) : $fieldValue)) : formGroup
+                    set::title($field->name),
+                    set::required($field->required),
+                    fileSelector
+                    (
+                        set::name($field->field),
+                        set::defaultFiles($object->files),
+                        set::extra($field->field)
+                    )
+                );
+            }
+            else
+            {
+                $extraMain[] = section
                 (
-                    set::id($field->field),
-                    set::name($field->field),
-                    set::disabled((bool)$field->readonly),
-                    set::control($field->control),
-                    set::items($field->items),
-                    set::value($field->value),
-                    set::placeholder($field->placeholder)
+                    set::title($field->name),
+                    set::required($field->required),
+                    !$isForm ? (div(!empty($field->control['control']) && $field->control['control'] == 'editor' ? html($fieldValue) : $fieldValue)) : formGroup
+                    (
+                        set::id($field->field),
+                        set::name($field->field),
+                        set::disabled((bool)$field->readonly),
+                        set::control($field->control),
+                        set::items($field->items),
+                        set::value($field->value),
+                        set::placeholder($field->placeholder)
 
-                )
-            );
+                    )
+                );
+            }
         }
         return empty($extraMain) ? null : sectionList($extraMain);
     }

@@ -548,12 +548,15 @@ class taskTao extends taskModel
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,reviewedby,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
+            ->beginIF($type == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
             ->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
@@ -607,7 +610,7 @@ class taskTao extends taskModel
             ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
-            ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->andWhere("((t5.`account` = '{$account}') OR t1.`assignedTo` = '{$account}' OR t1.`finishedby` = '{$account}')")
             ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -666,7 +669,7 @@ class taskTao extends taskModel
      * @param  object $task
      * @return float
      */
-    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    public function getLeftAfterDeleteWorkhour(object $effort, object $task): float
     {
         $left = $task->left;
         if($effort->isLast)
@@ -715,6 +718,12 @@ class taskTao extends taskModel
         if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
         {
             $newTeamInfo->status = 'doing';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
+
+        if(isset($newTeamInfo->consumed) && empty($newTeamInfo->consumed))
+        {
+            $newTeamInfo->status = 'wait';
             $newTeamInfo->left   = $currentTeam->estimate;
         }
         $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
@@ -778,7 +787,7 @@ class taskTao extends taskModel
             if($change['field'] == 'status' && $change['new'] == 'done')
             {
                 $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
-                return array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "').then((res) => {if(res) loadModal('{$confirmURL}')});", 'closeModal' => true);
+                return array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "').then((res) => {if(res) zui.Modal.open({url: '{$confirmURL}', size: 'lg'})});", 'closeModal' => true);
             }
         }
 

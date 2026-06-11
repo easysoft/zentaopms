@@ -20,9 +20,9 @@ jsVar('window.globalSearchType', 'story');
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=story&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Story'), set::open($type == 'bysearch')))
+    set::current($browseType),
+    set::linkParams("mode=story&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Story'), set::open($browseType == 'bysearch')))
 );
 
 $viewType = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
@@ -99,6 +99,8 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->story->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->story->dtable->fieldList, $this->story);
+$cols    = $this->loadModel('datatable')->getSetting('my', 'story');
+if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
 
 /* 父需求去掉创建用例按钮。 */
 foreach($stories as $id => $story)
@@ -114,19 +116,17 @@ foreach($stories as $id => $story)
     $story->estimate = helper::formatHours($story->estimate);
 }
 
-if($viewType == 'tiled') $config->my->story->dtable->fieldList['title']['nestedToggle'] = false;
-$cols = array_values($config->my->story->dtable->fieldList);
 $data = array_values($stories);
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::customCols(true),
     set::checkable($canBatchAction ? true : false),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip(sprintf($lang->my->noData, $lang->SRCommon))

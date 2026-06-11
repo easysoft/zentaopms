@@ -19,6 +19,13 @@ $isInModal = isInModal();
 $viewModule = $isLibCase ? 'caselib' : 'testcase';
 $viewMethod = $isLibCase ? 'viewCase' : 'view';
 
+$files = array();
+foreach($case->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 /* 版本列表。Version list. */
 $versions = array();
 for($i = $case->version; $i >= 1; $i--)
@@ -74,7 +81,11 @@ if($this->config->edition == 'ipd')
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$config->testcase->actionList['edit']['url'] = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}');
+$editModule = $isLibCase ? 'caselib' : 'testcase';
+$editMethod = $isLibCase ? 'editCase' : 'edit';
+$editParams = $isLibCase ? 'caseID={caseID}' : 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}';
+$config->testcase->actionList['edit']['url'] = array('module' => $editModule, 'method' => $editMethod, 'params' => $editParams);
+
 $actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
 if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
@@ -196,7 +207,7 @@ $sections[] = setting()
 
 $sections[] = setting()
     ->control('fileList')
-    ->files($case->files)
+    ->files($files)
     ->showDelete(false)
     ->padding(false)
     ->object($case);

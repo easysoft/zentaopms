@@ -926,12 +926,12 @@ class docZen extends doc
             $this->view->libs    = $libs;
             $this->view->apiID   = 0;
             $this->view->release = 0;
-            $this->view->apiList = $browseType == 'bySearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
+            $this->view->apiList = $browseType == 'bysearch' ? $this->api->getApiListBySearch($libID, $queryID, $type, array_keys($libs)) : $this->api->getListByModuleId($libID, $moduleID, $param, $pager);
         }
         else
         {
             if(in_array($type, array('product', 'project'))) $this->session->set('objectName', $this->lang->doc->common, 'doc');
-            $this->view->docs = $browseType == 'bySearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
+            $this->view->docs = $browseType == 'bysearch' ? $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $orderBy, $pager) : $this->doc->getDocs($libID, $moduleID, $browseType, $orderBy, $pager);
         }
 
         $apiObjectType = $type == 'product' || $type == 'project' ? $type : '';
@@ -960,7 +960,7 @@ class docZen extends doc
     public function buildSearchFormForShowFiles(string $type, int $objectID, string $viewType = '', int $param = 0)
     {
         $this->loadModel('file');
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "type={$type}&objectID={$objectID}&viewType={$viewType}&browseType=bysearch&queryID=myQueryID");
 
         $objectTypeList = array();
         if($type == 'product')

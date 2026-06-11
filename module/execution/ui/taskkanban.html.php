@@ -93,7 +93,7 @@ jsVar('priv', array(
         'canEditName'         => common::hasPriv('kanban', 'setColumn'),
         'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
         'canSetLane'          => common::hasPriv('kanban', 'setLane'),
-        'canSortCards'        => common::hasPriv('kanban', 'cardsSort'),
+        'canSortCards'        => common::hasPriv('kanban', 'sortCard'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
         'canCreateRisk'       => $canCreateRisk,

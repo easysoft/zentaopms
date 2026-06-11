@@ -113,6 +113,18 @@ $filter->api->default                   = new stdClass();
 $filter->api->index                     = new stdClass();
 $filter->api->create                    = new stdClass();
 $filter->api->edit                      = new stdClass();
+
+$filter->api->importopenapi = new stdClass();
+$filter->api->importopenapi->get['libID']   = 'int';
+$filter->api->importopenapi->get['mode']    = 'string';
+$filter->api->importopenapi->post['libID']  = 'int';
+$filter->api->importopenapi->post['mode']   = 'string';
+$filter->api->importopenapi->post['module'] = 'int';
+
+$filter->api->ajaxGetLibModules               = new stdClass();
+$filter->api->ajaxGetLibModules->get['libID'] = 'int';
+
+$filter->api->exportopenapi             = new stdClass();
 $filter->mail->ztcloud                  = new stdclass();
 $filter->mail->batchdelete              = new stdclass();
 $filter->misc->checkupdate              = new stdclass();
@@ -289,6 +301,21 @@ $filter->api->create->get['apiID']             = 'int';
 $filter->api->edit->get['libID']               = 'int';
 $filter->api->edit->get['module']              = 'int';
 $filter->api->edit->get['apiID']               = 'int';
+
+$filter->api->exportopenapi->get['libID']           = 'int';
+$filter->api->exportopenapi->get['version']         = 'int';
+$filter->api->exportopenapi->get['release']         = 'int';
+$filter->api->exportopenapi->get['moduleID']        = 'int';
+$filter->api->exportopenapi->get['apiID']           = 'int';
+$filter->api->exportopenapi->post['fileName']       = 'string';
+$filter->api->exportopenapi->post['range']          = 'string';
+$filter->api->exportopenapi->post['openAPIVersion'] = 'string';
+$filter->api->exportopenapi->post['fileType']       = 'string';
+$filter->api->exportopenapi->post['libID']          = 'int';
+$filter->api->exportopenapi->post['version']        = 'int';
+$filter->api->exportopenapi->post['release']        = 'int';
+$filter->api->exportopenapi->post['moduleID']       = 'int';
+$filter->api->exportopenapi->post['apiID']          = 'int';
 
 $filter->file->download->cookie[$config->sessionVar] = 'code';
 

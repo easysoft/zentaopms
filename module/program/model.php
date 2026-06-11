@@ -526,6 +526,9 @@ class programModel extends model
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
             ->andWhere('t1.reviewStatus')->eq('doing')
             ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
+            ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
             ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
 

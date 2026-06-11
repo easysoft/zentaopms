@@ -63,12 +63,10 @@ class storyZen extends story
         }
         if($this->app->tab == 'project')
         {
-            $projectID = $objectID;
-            if(!$this->session->multiple)
-            {
-                $projectID = $this->session->project;
-                $objectID  = $this->execution->getNoMultipleID($projectID);
-            }
+            $projectID = $objectID ? $objectID : $this->session->project;
+            $project   = $this->project->fetchByID($projectID);
+            if(in_array($project->type, array('sprint', 'stage', 'kanban'))) $projectID = $project->project;
+            if(empty($project->multiple) && $project->type == 'project') $objectID = $this->execution->getNoMultipleID($projectID);
 
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($projectID, $projects);
@@ -382,7 +380,7 @@ class storyZen extends story
 
         if($this->config->edition != 'open')
         {
-            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, 'create');
+            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, $this->app->rawMethod);
             foreach($extendFields as $field) $initStory->{$field->field} = $story->{$field->field};
         }
 
@@ -454,7 +452,7 @@ class storyZen extends story
         $products  = array();
         $branches  = array();
 
-        if($objectID != 0)
+        if(!empty($objectID))
         {
             $onlyNoClosed = empty($this->config->CRProduct) ? 'noclosed' : '';
             $products     = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
@@ -1741,8 +1739,7 @@ class storyZen extends story
         {
             helper::setcookie('storyModuleParam', '0', 0);
             $object = $this->loadModel('project')->fetchByID($objectID);
-            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
-            return $this->session->storyList;
+            return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
         }
 
         if($this->app->tab == 'product')

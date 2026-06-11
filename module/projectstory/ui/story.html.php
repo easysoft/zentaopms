@@ -57,7 +57,7 @@ formPanel
     )
 );
 
-$queryMenuLink = createLink('projectStory', 'story', "projectID=$projectID&productID=$productID&branch=$branch&browseType=bySearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+$queryMenuLink = createLink('projectStory', 'story', "projectID=$projectID&productID=$productID&branch=$branch&browseType=bysearch&param={queryID}&storyType=$storyType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 featureBar
 (
     set::param($param),

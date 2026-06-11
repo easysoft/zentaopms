@@ -667,20 +667,20 @@ class bugModel extends model
      * Get bugs to link.
      *
      * @param  int    $bugID
-     * @param  bool   $bySearch
+     * @param  bool   $bysearch
      * @param  int    $queryID
      * @param  string $excludeBugs
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, ?object $pager = null): array
+    public function getBugs2Link(int $bugID, bool $bysearch = false, string $excludeBugs = '', int $queryID = 0, ?object $pager = null): array
     {
         $bug = $this->getByID($bugID);
 
         $excludeBugs .= ",{$bug->id}";
 
-        if($bySearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
+        if($bysearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
 
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
@@ -867,7 +867,7 @@ class bugModel extends model
      */
     public function getUserBugs(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $limit = 0, ?object $pager = null, int $executionID = 0, int $queryID = 0): array
     {
-        if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
+        if($type != 'bysearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
 
         $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
         $queryName  = $moduleName . 'Query';
@@ -902,13 +902,13 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($type == 'bySearch')->andWhere($query)->fi()
+            ->beginIF($type == 'bysearch')->andWhere($query)->fi()
             ->beginIF($executionID)->andWhere('t1.execution')->eq($executionID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->beginIF($type != 'all' and $type != 'bysearch')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'bysearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
             ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
+            ->beginIF($type == 'bysearch' and $moduleName == 'contributeBug')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
@@ -1001,6 +1001,8 @@ class bugModel extends model
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'openedbyme')->andWhere('t1.openedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
@@ -1070,6 +1072,8 @@ class bugModel extends model
                 ->andWhere('t2.path')->like("%,$param,%")
                 ->andWhere('t2.deleted')->eq('0')
                 ->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)

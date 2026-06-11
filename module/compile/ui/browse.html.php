@@ -15,14 +15,14 @@ namespace zin;
 if(!empty($repoID)) dropmenu(set::objectID($repoID), set::tab('repo'));
 
 /* zin: Define the set::module('compile') feature bar on main menu. */
-$queryMenuLink = createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bysearch&param={queryID}");
 featureBar
 (
     set::current('compile'),
     set::link(createLink('{key}', 'browse', "repoID=$repoID")),
     set::itemLink(array('compile' => createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID"))),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('compile'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module('compile'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

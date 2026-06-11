@@ -312,7 +312,8 @@ class branchModelTest extends baseTest
         $this->instance->setDefault($productID, $branchID);
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getById($branchID, $productID, '');
+        if(!$branchID) return $productID ? $this->instance->getById('0', $productID, '') : '0';
+        return $this->instance->getById((string)$branchID, $productID, '');
     }
 
     /**

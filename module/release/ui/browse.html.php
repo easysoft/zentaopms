@@ -18,8 +18,8 @@ $isFromAI  = $from == 'ai';
 if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
-    $productChangeLink = createLink('release', 'browse', "productID={productID}&branch=$branch&type=$type&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-    $insertListLink = createLink('release', 'browse', "productID={$product->id}&branch=$branch&type=$type&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
+    $productChangeLink = createLink('release', 'browse', "productID={productID}&branch=$branch&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+    $insertListLink = createLink('release', 'browse', "productID={$product->id}&branch=$branch&browseType=$browseType&orderBy=$orderBy&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -66,14 +66,14 @@ if($isFromDoc || $isFromAI)
 /* zin: Define the set::module('release') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
-    set::linkParams("productID={$product->id}&branch={$branch}&type={key}&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
+    set::current($browseType),
+    set::linkParams("productID={$product->id}&branch={$branch}&browseType={key}&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
     set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#releases_table'),
     li(searchToggle
     (
         set::simple($isFromDoc || $isFromAI),
-        set::open(strtolower($type) == 'bysearch'),
+        set::open(strtolower($browseType) == 'bysearch'),
         set::module('release'),
         ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
         ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
@@ -81,6 +81,8 @@ featureBar
 );
 
 if($isFromDoc || $isFromAI) div(setID('docSearchForm'));
+
+$searchBrowseLink = createLink('release', 'browse', "productID={$product->id}&branch={$branch}&browseType=bysearch&orderBy={$orderBy}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}");
 
 /* zin: Define the toolbar on main menu. */
 $canCreateRelease = hasPriv('release', 'create') && common::canModify('product', $product);
@@ -96,8 +98,9 @@ toolbar
 
 jsVar('markerTitle', $lang->release->marker);
 jsVar('integratedLabel', $lang->release->integratedLabel);
+jsVar('searchBrowseLink', $searchBrowseLink);
 jsVar('showBranch', $showBranch);
-jsVar('type', $type);
+jsVar('browseType', $browseType);
 jsVar('isFromDoc', $isFromDoc);
 jsVar('isFromAI', $isFromAI);
 
@@ -141,18 +144,19 @@ dtable
     set::footPager(
         usePager
         (
-            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&from={$from}&blockID={$blockID}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
+            array('linkCreator' => helper::createLink('release', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&orderBy={$orderBy}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&pageID={page}&from={$from}&blockID={$blockID}"), 'recTotal' => $pager->recTotal, 'recPerPage' => $pager->recPerPage)
         )
     ),
     set::emptyTip($lang->release->noRelease),
     set::checkable($isFromDoc || $isFromAI),
     set::customCols(!$isFromDoc && !$isFromAI),
+    set::checkInfo(jsRaw("function(checkedIDList){return {html: '{$pageSummary}'}}")),
     ($isFromDoc || $isFromAI) ? set::footToolbar($footToolbar) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     (!$isFromDoc && !$isFromAI) ? null : set::colResize(true),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
-    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('release', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('release', 'browse', "productID={$product->id}&branch={$branch}&browseType={$browseType}&orderBy={name}_{sortType}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->release->create),
     ($isFromDoc || $isFromAI) ? null : set::createLink($createReleaseLink)
 );

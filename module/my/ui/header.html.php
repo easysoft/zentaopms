@@ -25,6 +25,11 @@ if($app->rawMethod == 'work')
     }
     if($isMax !== 0 || $isIPD !== 0)                 $nameMap = array_merge($nameMap, array('issue' => 'issue', 'risk' => 'risk', 'reviewissue' => 'reviewissue', 'nc' => 'qa', 'myMeeting' => 'meeting'));
     if($isIPD !== 0)                                 $nameMap = array_merge($nameMap, array('demand' => 'demand'));
+    if($config->edition != 'open')
+    {
+        $flowPairs = $this->loadModel('my')->getFlowPairs();
+        foreach($flowPairs as $flowModule => $flowName) $nameMap[$flowModule] = $flowModule;
+    }
 
     foreach($nameMap as $name => $countKey)
     {

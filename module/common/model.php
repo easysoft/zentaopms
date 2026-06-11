@@ -450,14 +450,27 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(in_array("$module.$method", $this->config->logonMethods)) return true;
-
-            if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
             if($module == 'my'       and $method == 'guidechangetheme') return true;
             if($module == 'product'  and $method == 'showerrornone') return true;
             if($module == 'misc'     and in_array($method, array('downloadclient', 'changelog'))) return true;
             if($module == 'tutorial' and in_array($method, array('start', 'index', 'quit', 'wizard'))) return true;
+
+            if(stripos($method, 'ajax') !== false && !empty($this->config->ajaxDependencies["$module.$method"]))
+            {
+                $dependentMethods = $this->config->ajaxDependencies["$module.$method"];
+                if(is_string($dependentMethods)) $dependentMethods = [$dependentMethods];
+                if(is_array($dependentMethods))
+                {
+                    foreach($dependentMethods as $dependentMethod)
+                    {
+                        if(strpos($dependentMethod, '.') === false) continue;
+                        list($dependentModule, $dependentMethod) = explode('.', $dependentMethod);
+                        if($this->isOpenMethod($dependentModule, $dependentMethod) || self::hasPriv($dependentModule, $dependentMethod)) return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -1411,7 +1424,7 @@ eof;
         }
 
         /* Check the parent object is closed. */
-        if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+        if(!empty($method) and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;

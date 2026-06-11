@@ -169,7 +169,7 @@ class releaseModel extends model
      *
      * @param  int      $productID
      * @param  string   $branch
-     * @param  string   $type         all|review|bySearch|normal|terminate
+     * @param  string   $type         all|review|bysearch|normal|terminate
      * @param  string   $orderBy
      * @param  string   $releaseQuery
      * @param  object   $pager
@@ -185,9 +185,10 @@ class releaseModel extends model
             ->where('t1.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere("FIND_IN_SET($branch, t1.branch)")->fi()
-            ->beginIF(!in_array($type, array('all', 'review', 'bySearch')))->andWhere('t1.status')->eq($type)->fi()
+            ->beginIF(!in_array($type, array('all', 'review', 'bysearch')))->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
-            ->beginIF($type == 'bySearch')->andWhere($releaseQuery)->fi()
+            ->beginIF($type == 'bysearch')->andWhere($releaseQuery)->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -842,11 +843,9 @@ class releaseModel extends model
      */
     public function changeStatus(int $releaseID, string $status, string $releasedDate = ''): bool
     {
-        $this->dao->update(TABLE_RELEASE)
-             ->set('status')->eq($status)
-             ->beginIF($releasedDate)->set('releasedDate')->eq($releasedDate)->fi()
-             ->where('id')->eq($releaseID)
-             ->exec();
+        $release = form::data($this->config->release->form->publish)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
+
+        $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
 
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();

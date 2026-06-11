@@ -146,27 +146,6 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
             );
         }
     }
-    if(!empty($jiraActions))
-    {
-        $rows[] = formRow
-        (
-            setClass('hidden'),
-            $buildHeader(sprintf($lang->convert->jira->jiraAction,   zget($issueTypeList[$step], 'pname', ''))),
-            $buildHeader(sprintf($lang->convert->jira->zentaoAction, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
-        );
-
-        $zentaoActions = $this->convert->getZentaoActions($jiraRelation['zentaoObject'][$step]);
-        foreach($jiraActions['actions'] as $id => $action)
-        {
-            $value = $action['name'];
-            $rows[] = formRow
-            (
-                setClass('hidden'),
-                $buildJira("jiraAction$step", $value, $id),
-                $buildZenTao("zentaoAction$step", $zentaoActions, $id, $value, 'add_action')
-            );
-        }
-    }
 
     if(in_array($jiraRelation['zentaoObject'][$step], array('bug', 'task', 'story', 'requirement', 'epic', 'feedback', 'ticket')))
     {
@@ -214,6 +193,43 @@ if(!empty($jiraRelation['zentaoObject']) && in_array($step, array_keys($jiraRela
             );
         }
     }
+
+    /* 无需配置字段映射的提示。*/
+    if(empty($rows))
+    {
+        $rows[] = formRow
+        (
+            div
+            (
+                setStyle(array('position' => 'absolute', 'top' => '50%', 'left' => '50%')),
+                setClass('text-gray'),
+                $lang->convert->jira->noCustomeFields
+            ),
+            input(set::name('nodata'), setClass('hidden'))
+        );
+    }
+
+    if(!empty($jiraActions))
+    {
+        $rows[] = formRow
+        (
+            setClass('hidden'),
+            $buildHeader(sprintf($lang->convert->jira->jiraAction,   zget($issueTypeList[$step], 'pname', ''))),
+            $buildHeader(sprintf($lang->convert->jira->zentaoAction, zget($zentaoObjects, $jiraRelation['zentaoObject'][$step])))
+        );
+
+        $zentaoActions = $this->convert->getZentaoActions($jiraRelation['zentaoObject'][$step]);
+        foreach($jiraActions['actions'] as $id => $action)
+        {
+            $value = $action['name'];
+            $rows[] = formRow
+            (
+                setClass('hidden'),
+                $buildJira("jiraAction$step", $value, $id),
+                $buildZenTao("zentaoAction$step", $zentaoActions, $id, $value, 'add_action')
+            );
+        }
+    }
 }
 
 if($step == 'relation')
@@ -246,6 +262,8 @@ if($step == 'relation')
         );
     }
 }
+
+
 
 div
 (

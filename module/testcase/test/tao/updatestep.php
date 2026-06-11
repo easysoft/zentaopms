@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
 
-zenData('case')->gen(10);
+zenData('case')->gen(3);
 zenData('casestep')->gen(10);
 zenData('story')->gen(10);
 
