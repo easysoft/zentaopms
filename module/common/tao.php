@@ -235,6 +235,7 @@ class commonTao extends commonModel
         if(empty($acls['views'])) return true;
         $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
         if($module == 'my' and $method == 'team') $menu = 'system'; // Fix bug #18642.
+        if($module == 'system' && in_array($method, array('browse', 'create', 'edit', 'active', 'inactive', 'delete'))) $menu = $app->tab == 'project' ? 'project' : 'product';
         $menu = strtolower($menu);
         if($menu == 'product' && $app->tab != 'product' && in_array($module, array('story', 'requirement', 'epic'))) return true;
         if($menu != 'qa' and $menu != 'project' and !isset($lang->$menu->menu)) return true;
