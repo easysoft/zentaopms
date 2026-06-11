@@ -35,6 +35,7 @@ class aiZenTest extends baseTest
             'data'       => $result,
             'error'      => $error,
             'fieldCount' => $fieldCount,
+            'hasError'   => empty($error) ? 0 : 1,
             'isNull'     => is_null($result) ? 1 : 0
         );
     }
