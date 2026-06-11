@@ -149,7 +149,7 @@ $auditInject = function() use($module, $method)
     h::globalJS("(() => {requestAnimationFrame(() => {{$auditScript}});})();");
 };
 
-/* 数字员工异步执行结果预填：从 Session 读取待注入数据到视图变量，由各表单模板逐字段处理 */
+/* 数字员工异步执行结果自动填充：从 Session 读取待注入数据并回填表单 */
 $pendingFormInject = function() use($module, $method)
 {
     if(!isset($this->config->ai->availableForms[$module]) || !in_array($method, $this->config->ai->availableForms[$module])) return;
@@ -159,17 +159,24 @@ $pendingFormInject = function() use($module, $method)
 
     unset($_SESSION['aiPendingFormData']);
 
-    $this->view->aiPendingFormData = $pendingData;
-
-    /* 复合控件 datePlan 子字段：common.field.php 通过 data('task.estStarted') 读取 */
-    if(isset($pendingData['estStarted']) || isset($pendingData['deadline']))
-    {
-        $taskObj = data('task');
-        if(!is_object($taskObj)) $taskObj = new \stdClass();
-        if(isset($pendingData['estStarted']) && $pendingData['estStarted'] !== '') $taskObj->estStarted = $pendingData['estStarted'];
-        if(isset($pendingData['deadline'])   && $pendingData['deadline']   !== '') $taskObj->deadline   = $pendingData['deadline'];
-        data('task', $taskObj);
-    }
+    $encoded = json_encode($pendingData);
+    h::globalJS(<<< JAVASCRIPT
+    (() => {
+        const pendingData = {$encoded};
+        if(!pendingData) return;
+        let tryApply = function(tries) {
+            let formEl = $('#mainContainer form').first();
+            if(!formEl.length) formEl = $('form').first();
+            if(formEl.length && window.zui && window.zui.zentaoFormHelper)
+            {
+                window.zui.zentaoFormHelper(formEl).fillFormData(pendingData);
+                return;
+            }
+            if(tries < 20) setTimeout(function() { tryApply(tries + 1); }, 400);
+        };
+        setTimeout(function() { tryApply(0); }, 600);
+    })();
+    JAVASCRIPT);
 };
 
 $pendingFormInject();

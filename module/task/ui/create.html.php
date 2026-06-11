@@ -61,26 +61,6 @@ if(empty($features['story']) && $execution->type != 'kanban' && !empty(data('exe
 }
 if($execution->lifetime == 'ops') $fields->fullModeOrders('type,module,storyBox,testStoryBox,parent,name,assignedToBox', 'desc,files,mailto,keywords');
 
-/* AI 跳转填充：逐字段注入默认值 */
-$ai = $this->view->aiPendingFormData ?? array();
-if(!empty($ai))
-{
-    if(!empty($ai['name']))              $fields->set('name', 'value', $ai['name']);
-    if(!empty($ai['assignedTo']))        $fields->set('assignedTo', 'value', $ai['assignedTo']);
-    if(!empty($ai['story']))             $fields->set('story', 'value', $ai['story']);
-    if(!empty($ai['module']))            $fields->set('module', 'value', $ai['module']);
-    if(!empty($ai['pri']))               $fields->set('pri', 'value', $ai['pri']);
-    if(!empty($ai['estimate']))          $fields->set('estimate', 'value', $ai['estimate']);
-    if(!empty($ai['desc']))              $fields->set('desc', 'value', $ai['desc']);
-    if(!empty($ai['after']))             $fields->set('after', 'value', $ai['after']);
-    if(!empty($ai['type']))              $fields->set('type', 'value', $ai['type']);
-    if(!empty($ai['keywords']))          $fields->set('keywords', 'value', $ai['keywords']);
-    if(!empty($ai['parent']))            $fields->set('parent', 'value', $ai['parent']);
-    if(!empty($ai['copyButton']))        $fields->set('copyButton', 'value', $ai['copyButton']);
-    if(!empty($ai['multiple']))          $fields->set('multiple', 'value', $ai['multiple']);
-    if(!empty($ai['selectTestStory']))   $fields->set('selectTestStory', 'value', $ai['selectTestStory']);
-}
-
 formGridPanel
 (
     set::title($lang->task->create),
