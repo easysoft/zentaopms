@@ -3993,10 +3993,10 @@ EOF;
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module = 'codescan' || ($module == 'space' && $method == 'browse') || ($module == 'repo' && $method == 'maintain') || ($module == 'repo' && in_array($method, array('browse', 'createRepo')))) return;
-
-        if(empty($spaceID) && !empty($_GET['spaceID'])) $spaceID = $_GET['spaceID'];
-        if(empty($spaceID) && !empty($_GET['space']))   $spaceID = $_GET['space'];
+        $params = $this->app->params;
+        
+        if(empty($spaceID) && !empty($params['space']))   $spaceID = $params['space'];
+        if(empty($spaceID) && !empty($params['spaceID'])) $spaceID = $params['spaceID'];
 
         if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
         if(empty($spaceID)) return;

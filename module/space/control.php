@@ -347,12 +347,13 @@ class space extends control
      * 权限分配页面。
      * Manage priv.
      *
-     * @param  int $spaceID
-     * @param  int $groupID
+     * @param  int    $spaceID
+     * @param  int    $groupID
+     * @param  string $type
      * @access public
      * @return void
      */
-    public function managePriv(int $spaceID, int $groupID)
+    public function managePriv(int $spaceID, int $groupID = 0, string $type = 'byPackage')
     {
         $this->loadModel('group');
         foreach($this->lang->resource as $moduleName => $action) $this->app->loadLang($moduleName);
@@ -388,11 +389,75 @@ class space extends control
             }
         }
 
+        /* Subsets — only those tagged with nav='devops'. */
+        $subsets = array();
+        foreach($this->config->group->subset as $subsetName => $subset)
+        {
+            if(!isset($subset->nav) || $subset->nav != 'devops') continue;
+
+            $subset->code        = $subsetName;
+            $subset->allCount    = 0;
+            $subset->selectCount = 0;
+
+            $subsets[$subset->code] = $subset;
+        }
+
+        $selectPrivs = $this->group->getPrivsByGroup($groupID);
+        $allPrivList = $this->group->getPrivsByNav('devops');
+
+        $selectedPrivList = array();
+        $packages         = array();
+        foreach($allPrivList as $privCode => $priv)
+        {
+            $subsetCode  = $priv->subset;
+            $packageCode = $priv->package;
+
+            /* Drop privs whose subset is not exposed on devops nav. */
+            if(!isset($subsets[$subsetCode])) continue;
+            if(!isset($this->lang->resource->{$priv->module})) continue;
+            if(!isset($this->lang->resource->{$priv->module}->{$priv->method})) continue;
+
+            if(!isset($packages[$subsetCode])) $packages[$subsetCode] = array();
+
+            if(!isset($packages[$subsetCode][$packageCode]))
+            {
+                $package = new stdclass();
+                $package->allCount    = 0;
+                $package->selectCount = 0;
+                $package->subset      = $subsetCode;
+                $package->privs       = array();
+
+                $packages[$subsetCode][$packageCode] = $package;
+            }
+
+            $packages[$subsetCode][$packageCode]->privs[$privCode] = $priv;
+
+            $packages[$subsetCode][$packageCode]->allCount ++;
+            $subsets[$subsetCode]->allCount ++;
+
+            if(isset($selectPrivs[$privCode]))
+            {
+                $packages[$subsetCode][$packageCode]->selectCount ++;
+                $subsets[$subsetCode]->selectCount ++;
+                $selectedPrivList[] = $privCode;
+            }
+        }
+
+        $allPrivList     = array_keys($allPrivList);
+        $relatedPrivData = $this->group->getRelatedPrivs($allPrivList, $selectedPrivList);
+
+        $this->view->allPrivList      = $allPrivList;
+        $this->view->selectedPrivList = $selectedPrivList;
+        $this->view->relatedPrivData  = $relatedPrivData;
+
         $this->view->title      = $group->name . $this->lang->hyphen . $this->lang->group->managePriv;
+        $this->view->subsets    = $subsets;
+        $this->view->packages   = $packages;
         $this->view->group      = $group;
         $this->view->groupPrivs = $getPrivs;
         $this->view->groupID    = $groupID;
         $this->view->spaceID    = $spaceID;
+        $this->view->type       = $type;
         $this->display();
     }
 
