@@ -126,6 +126,7 @@ $config->logonMethods[] = 'gogs.edit';
 $config->logonMethods[] = 'index.app';
 $config->logonMethods[] = 'index.changelog';
 $config->logonMethods[] = 'index.ajaxgetviewmethod';
+$config->logonMethods[] = 'index.ajaxiframemodal';
 $config->logonMethods[] = 'instance.autobackup';
 $config->logonMethods[] = 'instance.backuplist';
 $config->logonMethods[] = 'instance.backupsettings';
