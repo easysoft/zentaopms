@@ -48,7 +48,7 @@ class provider extends control
      * @access public
      * @return void
      */
-    public function create(string $type = 'GitLab')
+    public function create(string $type = 'GitLab', string $callback = '')
     {
         if($_POST)
         {
@@ -71,7 +71,11 @@ class provider extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             if($id) $this->loadModel('action')->create('provider', $id, 'created');
-            return $this->sendSuccess(array('load' => $this->createLink('provider', 'browse')));
+
+            $response = array();
+            $response['load'] = $this->createLink('provider', 'browse');
+            if($callback) $response['callback'] = $callback;
+            return $this->sendSuccess($response);
         }
         $this->view->title = $this->lang->provider->create;
         $this->view->type  = $type;
@@ -132,5 +136,20 @@ class provider extends control
         $this->provider->delete(TABLE_PROVIDER, $id);
         if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * AJAX获取服务列表。
+     * AJAX get provider list.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProviders($type = 'GitLab')
+    {
+        $providers = $this->provider->getPairs($type);
+        $items     = array_map(function($id, $name){return array('text' => $name, 'value' => $id);}, array_keys($providers), $providers);
+        return print(json_encode(array('items' => $items, 'value' => key($providers))));
     }
 }

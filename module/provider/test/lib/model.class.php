@@ -98,4 +98,19 @@ class providerModelTest extends baseTest
 
         return $this->instance->dao->select('*')->from(TABLE_PROVIDER)->where('id')->eq($id)->fetch();
     }
+
+    /**
+     * Test getPairs method.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getPairsTest(string $type = ''): array
+    {
+        $providerPairs = $this->invokeArgs('getPairs', array($type));
+        if(dao::isError()) return dao::getError();
+
+        return $providerPairs;
+    }
 }

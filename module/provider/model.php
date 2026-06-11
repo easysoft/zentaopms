@@ -94,4 +94,21 @@ class providerModel extends model
 
         return $provider;
     }
+
+    /**
+     * 获取服务键值对。
+     * Get provider pairs.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getPairs(string $type = ''): array
+    {
+        return $this->dao->select('*')->from(TABLE_PROVIDER)
+            ->where('deleted')->eq(0)
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id', 'name');
+    }
 }
