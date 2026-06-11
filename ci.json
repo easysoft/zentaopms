@@ -6,13 +6,13 @@
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "feature/projectflow-refine"
+      "gitVersion": "release/22.3"
     },
     "zentaomax": {
-      "gitVersion": "feature/projectflow-refine"
+      "gitVersion": "release/22.3"
     },
     "zentaoipd": {
-      "gitVersion": "feature/projectflow-refine"
+      "gitVersion": "release/22.3"
     },
     "devops": {
       "gitRepo": "zentao/devops"
