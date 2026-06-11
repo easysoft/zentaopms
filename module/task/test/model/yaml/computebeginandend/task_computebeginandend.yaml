@@ -4,21 +4,16 @@ author: auto_computeworkinghours
 version: "1.0"
 fields:
   - field: parent
-    range: 0{4},2{3},3{3}
+    range: 0{4},2{3},3{3},0,11{2}
   - field: status
-    range: wait{2},doing{5},cancel{3}
+    range: wait{2},doing{5},cancel{3},wait,doing{2}
   - field: realStarted
     range: "20210102 000000-20220101 230000:360000"
     type: timestamp
     format: "YYYY-MM-DD hh:mm:ss"
   - field: estStarted
-    range: "20201101 000000:1D"
-    type: timestamp
-    format: "YYYY-MM-DD"
+    range: "`2020-11-01`,`2020-11-02`,`2020-11-03`,`2020-11-04`,`2020-11-05`,`2020-11-06`,`2020-11-07`,`2020-11-08`,`2020-11-09`,`2020-11-10`,`0000-00-00`,`2020-11-28`,`2020-11-20`"
   - field: deadline
-    range: "20210101 000000:1D"
-    type: timestamp
-    format: "YYYY-MM-DD"
+    range: "`2021-01-01`,`2021-01-02`,`2021-01-03`,`2021-01-04`,`2021-01-05`,`2021-01-06`,`2021-01-07`,`2021-01-08`,`2021-01-09`,`2021-01-10`,`0000-00-00`,`2021-02-20`,`2021-02-28`"
     postfix: "\t"
 ...
-

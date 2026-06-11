@@ -13,6 +13,20 @@ declare(strict_types=1);
 class release extends control
 {
     /**
+     * 获取发布页面使用的分支导航上下文。
+     * Get branch context for release pages.
+     *
+     * @param  object $release
+     * @access private
+     * @return string
+     */
+    private function getBranchForMenu(object $release): string
+    {
+        $branches = array_filter(explode(',', trim((string)$release->branch, ',')), 'strlen');
+        return count($branches) == 1 ? (string)reset($branches) : 'all';
+    }
+
+    /**
      * 公共函数，设置产品菜单及页面基础数据。
      * Common action, set the menu and basic data.
      *
@@ -234,7 +248,7 @@ class release extends control
         }
 
         /* Get release and build. */
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
         $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product);
@@ -292,7 +306,7 @@ class release extends control
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
         $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
 
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
         if($this->app->tab == 'project')
         {
             $projectID = (int)$this->session->project;
@@ -431,7 +445,7 @@ class release extends control
         $this->session->set('storyList', $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $release = $this->release->getByID($releaseID);
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->releaseZen->buildLinkStorySearchForm($release, $queryID);
@@ -529,7 +543,7 @@ class release extends control
         /* Set menu. */
         $this->loadModel('bug');
         $release = $this->release->getByID($releaseID);
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
         /* Build the search form. */
         $queryID = $browseType == 'bysearch' ? (int)$param : 0;

@@ -17,17 +17,18 @@ cid=18017
 - 修改发布为wait第releasedDate条的0属性 @『实际发布日期』不能为空。
 - 任务ID为空测试 @0
 - 名称为空测试第name条的0属性 @『应用版本号』不能为空。
+- 编辑分支发布时不提交branch字段属性branch @2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('release')->loadYaml('release')->gen(6);
+zenData('release')->loadYaml('release')->gen(17);
 zenData('user')->gen(5);
 su('admin');
 
-$releases = array(1, 6, 0);
+$releases = array(1, 6, 0, 17);
 $today    = date('Y-m-d');
 
 $normalRelease    = array('name' => '修改正常发布',     'marker' => 0, 'build' => '1',  'status' => 'normal',    'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
@@ -35,6 +36,7 @@ $terminateRelease = array('name' => '修改停止维护发布', 'marker' => 1, '
 $waitRelease      = array('name' => '修改发布为wait',   'marker' => 0, 'build' => '1',  'status' => 'wait',      'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
 $noReleaseID      = array('name' => '测试任务ID为空',   'marker' => 0, 'build' => '1',  'status' => 'normal',    'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
 $noName           = array('name' => '',                 'marker' => 0, 'build' => '1',  'status' => 'normal',    'product' => 1 , 'branch' => 0, 'date' => $today, 'system' => '0');
+$branchRelease    = array('name' => '编辑分支发布',     'marker' => 0, 'build' => array(), 'status' => 'normal', 'product' => 1 , 'date' => $today, 'releasedDate' => $today, 'system' => '0');
 
 $releaseTester = new releaseModelTest();
 r($releaseTester->updateTest($releases[0], $normalRelease))    && p('id,name,build')  && e('1,修改正常发布,1');           //修改正常发布
@@ -42,3 +44,4 @@ r($releaseTester->updateTest($releases[1], $terminateRelease)) && p('id,name,bui
 r($releaseTester->updateTest($releases[0], $waitRelease))      && p('releasedDate:0') && e('『实际发布日期』不能为空。'); //修改发布为wait
 r($releaseTester->updateTest($releases[2], $noReleaseID))      && p()                 && e('0');                          //任务ID为空测试
 r($releaseTester->updateTest($releases[0], $noName))           && p('name:0')         && e('『应用版本号』不能为空。');   //名称为空测试
+r($releaseTester->updateByFormTest($releases[3], $branchRelease)) && p('branch')      && e('2');                          //编辑分支发布时不提交branch字段
