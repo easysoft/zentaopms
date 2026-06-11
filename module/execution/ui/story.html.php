@@ -425,11 +425,12 @@ $checkObject->execution = $execution->id;
 
 $canBatchEdit        = common::hasPriv('story', 'batchEdit');
 $canBatchClose       = common::hasPriv('story', 'batchClose') && $storyType != 'requirement';
+$canBatchReview      = common::hasPriv($storyType, 'batchReview');
 $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage') && $storyType != 'requirement';
 $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory') && ($execution->hasProduct || $app->tab == 'execution');
 $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject) && $storyType != 'requirement';
 $canBatchAssignTo    = common::hasPriv($storyType, 'batchAssignTo');
-$canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
+$canBatchAction      = $canBeChanged && in_array(true, array($canBatchEdit, $canBatchClose, $canBatchReview, $canBatchChangeStage, $canBatchUnlink, $canBatchToTask, $canBatchAssignTo));
 
 $footToolbar = array();
 
@@ -494,6 +495,38 @@ if($canBatchAction && !$isFromDoc && !$isFromAI)
             'text'      => $lang->close,
             'className' => 'btn batch-btn size-sm secondary',
             'data-url'  => $this->createLink('story', 'batchClose', "productID=0&executionID={$execution->id}")
+        );
+    }
+
+    if($canBatchReview)
+    {
+        $reviewResultItems = array();
+        $reviewRejectItems = array();
+        foreach($lang->story->reasonList as $key => $reason)
+        {
+            if(!$key || $key == 'subdivided' || $key == 'duplicate') continue;
+            $reviewRejectItems[] = array('text' => $reason, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink($storyType, 'batchReview', "result=reject&reason=$key&storyType=$storyType"));
+        }
+        foreach($lang->story->reviewResultList as $key => $result)
+        {
+            if(!$key || $key == 'revert') continue;
+            if($key == 'reject')
+            {
+                $reviewResultItems[] = array('text' => $result, 'class' => 'not-hide-menu', 'items' => $reviewRejectItems);
+            }
+            else
+            {
+                $reviewResultItems[] = array('text' => $result, 'innerClass' => 'batch-btn ajax-btn', 'data-url' => createLink($storyType, 'batchReview', "result=$key&storyType=$storyType"));
+            }
+        }
+
+        $footToolbar['items'][] = array(
+            'caret'          => 'up',
+            'text'           => $lang->story->review,
+            'className'      => 'btn btn-caret size-sm secondary batchReviewBtn',
+            'type'           => 'dropdown',
+            'items'          => $reviewResultItems,
+            'data-placement' => 'top-start'
         );
     }
 
