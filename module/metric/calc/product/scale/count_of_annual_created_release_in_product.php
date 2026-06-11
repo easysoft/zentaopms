@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度新增发布数是指某年度产品中新增加的发布数量，该度量项可以反映产品团队在该年度内对产品新功能和改进的发布能力和速度。新增发布数越多，说明产品团队在该年度内推出了更多的新功能和改进。
  * 定义：产品中发布个数求和;发布时间为某年;过滤已删除的发布;过滤已删除的产品;过滤无效时间;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

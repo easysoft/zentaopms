@@ -11,7 +11,7 @@
  * 描述：按代码库统计的每周代码提交次数是指代码库在单周的代码提交数量。这个度量项可以反映代码库的周开发活动频率和代码更新情况。
  * 定义：代码库中代码提交次数求和，提交时间为某周。
  *
- * @copyright Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2024 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

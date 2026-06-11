@@ -11,7 +11,7 @@
  * 描述：按产品统计的已关闭研发需求数是指产品中已经关闭的研发需求的数量。该度量项反映了产品研发的进展，可以用于评估产品的研发需求管理绩效和成果。较高的已关闭研发需求数可能代表团队取得了越多的研发成果。
  * 定义：产品中研发需求的个数求和;阶段为已关闭;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

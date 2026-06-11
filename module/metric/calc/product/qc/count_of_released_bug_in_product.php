@@ -11,7 +11,7 @@
  * 描述：[描述度量项的含义]
  * 定义：[描述度量项如何定义，计算规则等]
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    XXX <XXX@easycorp.ltd>
  * @package
  * @uses      func

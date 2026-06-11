@@ -11,7 +11,7 @@
  * 描述：按产品和模块统计的研发需求数。
  * 定义：和模块统计的研发需求数。
  *
- * @copyright Copyright 2009-2053 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2053 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

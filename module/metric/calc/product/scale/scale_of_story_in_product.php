@@ -11,7 +11,7 @@
  * 描述：按产品统计的研发需求规模总数表示产品中所有研发需求的总规模。这个度量项可以反映团队需进行研发工作的规模，可以用于评估产品团队的研发需求规模管理和成果。
  * 定义：产品中研发需求的规模数求和;过滤父研发需求;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按人员统计的待处理需求池需求数表示每个人待处理的需求池需求数量之和。反映了每个人员需要处理的需求池需求数量的规模。该数值越大，说明需要投入越多的时间处理需求池需求。
  * 定义：所有需求池需求个数求和，过滤已删除的需求池需求、过滤状态为已关闭的需求池需求
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

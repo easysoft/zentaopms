@@ -11,7 +11,7 @@
  * 描述：按执行统计的开发任务数是指执行中任务类型为开发的任务数求和。该度量项反映了执行中开发的工作量，可以帮助团队进行开发资源调配。
  * 复用：执行中满足以下条件的任务个数求和，条件是：任务类型为开发，过滤已删除的任务，过滤已删除的执行，过滤已删除的项目。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@zentao.com>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按执行统计的开发任务按计划完成率是指执行时已完成的开发任务数与执行开始时计划的开发任务数的比率。该度量项反映了团队能否按期完成规划的开发任务，可以帮助团队识别执行中存在的潜在问题。
  * 复用：按执行统计的执行关闭时已完成的开发任务数、按执行统计的开发任务数，公式：按执行统计的执行关闭时已完成的开发任务数÷按执行统计的开发任务数。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@zentao.com>
  * @package
  * @uses      func

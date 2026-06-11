@@ -11,7 +11,7 @@
  * 描述：按执行统计的截止执行开始当天的研发需求数表示执行开始当天已关联进执行的研发需求的数量。该度量项反映了本期执行计划完成的需求数量，可以用于评估执行团队的工作负载。
  * 定义：截止到执行开始当天的23:59分的研发需求个数求和，过滤已删除的研发需求，过滤已删除的执行，过滤已删除的项目，过滤已删除的产品。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    songchenxuan <songchenxuan@chandao.com>
  * @package
  * @uses      func

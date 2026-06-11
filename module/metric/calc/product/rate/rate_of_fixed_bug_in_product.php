@@ -11,7 +11,7 @@
  * 描述：按产品统计的Bug修复率是指按产品统计的修复Bug数相对于按产品统计的有效Bug数的比例。该度量项可以帮助我们了解开发团队对Bug修复的效率和质量，高的修复率可能说明Bug得到及时解决，产品质量得到有效保障。
  * 定义：复用：;按产品统计的修复Bug数;按产品统计的有效Bug数;公式：;按产品统计的Bug修复率=按产品统计的修复Bug数/按产品统计的有效Bug数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
