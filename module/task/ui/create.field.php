@@ -17,9 +17,12 @@ $fields->field('desc')
 
 $files = data('task.files') ? data('task.files') : array();
 
-foreach($files as $key => $fileInfo)
+if($files)
 {
-    if($fileInfo->extra != '') unset($files[$key]);
+    foreach($files as $key => $fileInfo)
+    {
+        if($fileInfo->extra != '') unset($files[$key]);
+    }
 }
 
 $fields->field('files')->control('fileSelector', array('defaultFiles' => array_values($files)));

@@ -9,17 +9,40 @@ zenData('testrun')->loadYaml('testrun')->gen(15);
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerRunResult();
-cid=19170
-pid=1
+timeout=0
+cid=19152
+
+- 测试单 0 中的用例数为 0。 @0
+- 获取测试单 1 中的未执行的用例数。
+ - 第0条的name属性 @未执行
+ - 第0条的value属性 @1
+- 获取测试单 1 中的执行结果为通过的用例数。
+ - 第pass条的name属性 @通过
+ - 第pass条的value属性 @2
+- 获取测试单 1 中的执行结果为失败的用例数。
+ - 第fail条的name属性 @失败
+ - 第fail条的value属性 @2
+- 获取测试单 1 中的执行结果为阻塞的用例数。
+ - 第blocked条的name属性 @阻塞
+ - 第blocked条的value属性 @3
+- 获取测试单 2 中的未执行的用例数。
+ - 第0条的name属性 @未执行
+ - 第0条的value属性 @1
+- 获取测试单 2 中的执行结果为通过的用例数。
+ - 第pass条的name属性 @通过
+ - 第pass条的value属性 @2
+- 获取测试单 2 中的执行结果为失败的用例数。
+ - 第fail条的name属性 @失败
+ - 第fail条的value属性
 
 */
 
 global $tester;
 $testtask = $tester->loadModel('testtask');
 
-$result1 = $testtask->getDataOfTestTaskPerRunResult(0);
-$result2 = $testtask->getDataOfTestTaskPerRunResult(1);
-$result3 = $testtask->getDataOfTestTaskPerRunResult(2);
+$result1 = $testtask->getDataOfTestTaskPerRunResult(0, '1=1', 0);
+$result2 = $testtask->getDataOfTestTaskPerRunResult(1, '1=1', 0);
+$result3 = $testtask->getDataOfTestTaskPerRunResult(2, '1=1', 0);
 
 foreach($result2 as $key => $value)
 {

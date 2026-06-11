@@ -270,6 +270,7 @@ $setting = $this->loadModel('datatable')->getSetting('product', 'browse', false,
 if($storyType != 'story') unset($setting['taskCount'], $setting['bugCount'], $setting['caseCount']);
 if($storyType == 'story' && $config->edition == 'ipd') unset($setting['roadmap']);
 if($viewType == 'tiled') $setting['title']['nestedToggle'] = false;
+$setting['pri']['priList'] = $lang->{$storyType}->priList;
 
 if($isFromDoc || $isFromAI)
 {
