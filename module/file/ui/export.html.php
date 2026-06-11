@@ -145,19 +145,26 @@ formPanel
     formGroup
     (
         set::label($lang->file->extension),
-        set::name('fileType'),
-        set::items($lang->exportFileTypeList),
-        on::change('onChangeFileType'),
-        set::required(true)
+        set::required(true),
+        picker
+        (
+            on::change('onChangeFileType'),
+            set::name('fileType'),
+            set::items($lang->exportFileTypeList),
+            set::required(true)
+        )
     ),
     formGroup
     (
         set::label($lang->file->encoding),
-        set::control('picker'),
-        set::name('encode'),
-        set::items($config->charsets[$this->cookie->lang]),
-        set::value($this->config->zin->lang == 'zh-cn' ? 'gbk' : 'utf-8'),
-        set::required(true)
+        set::required(true),
+        picker
+        (
+            set::name('encode'),
+            set::items($config->charsets[$this->cookie->lang]),
+            set::value($this->config->zin->lang == 'zh-cn' ? 'gbk' : 'utf-8'),
+            set::required(true)
+        )
     ),
     /* Fields for KanBan. */
     formRow
@@ -167,10 +174,13 @@ formPanel
         formGroup
         (
             set::label($lang->file->exportRange),
-            set::control('picker'),
-            set::name('exportType'),
-            set::items($lang->exportTypeList),
-            set::required(true)
+            set::required(true),
+            picker
+            (
+                set::name('exportType'),
+                set::items($lang->exportTypeList),
+                set::required(true)
+            )
         )
     ),
     formRow
