@@ -25,8 +25,8 @@ $todoIDList = range(1,5);
 
 $todo = new todoModelTest();
 
-r($todo->activateTest(1)) && p('status') && e('wait'); // 激活一个状态为wait的todo
-r($todo->activateTest(2)) && p('status') && e('wait'); // 激活一个状态为doing的todo
-r($todo->activateTest(3)) && p('status') && e('wait'); // 激活一个状态为done的todo
-r($todo->activateTest(4)) && p('status') && e('wait'); // 激活一个状态为closed的todo
-r($todo->activateTest(5)) && p('status') && e('wait'); // 激活一个状态为wait的todo
+r($todo->activateTest(1, 'admin'))  && p('status') && e('wait'); // 激活一个状态为wait的todo
+r($todo->activateTest(2, 'admin'))  && p('status') && e('wait'); // 激活一个状态为doing的todo
+r($todo->activateTest(3, 'admin'))  && p('status') && e('wait'); // 激活一个状态为done的todo
+r($todo->activateTest(4, 'closed')) && p('status') && e('wait'); // 激活一个状态为closed的todo
+r($todo->activateTest(5, 'admin'))  && p('status') && e('wait'); // 激活一个状态为wait的todo

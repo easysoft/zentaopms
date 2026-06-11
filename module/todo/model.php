@@ -386,12 +386,16 @@ class todoModel extends model
      * Activate a todo.
      *
      * @param  int    $todoID
+     * @param  object $oldTodo
      * @access public
      * @return bool
      */
-    public function activate(int $todoID): bool
+    public function activate(int $todoID, object $oldTodo): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
+        $todoData = new stdclass();
+        $todoData->status = 'wait';
+        if($oldTodo->assignedTo == 'closed') $todoData->assignedTo = $oldTodo->finishedBy;
+        $this->dao->update(TABLE_TODO)->data($todoData)->where('id')->eq($todoID)->exec();
 
         $todo = $this->fetchByID($todoID);
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
