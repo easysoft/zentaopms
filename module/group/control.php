@@ -266,7 +266,7 @@ class group extends control
         list($programs, $projects, $products, $executions) = $this->group->getObjectForAdminGroup();
 
         $group      = $this->group->getById($groupID);
-        $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+        $groupUsers = $this->dao->select('t1.realname, t2.account')->from(TABLE_USER)->alias('t1')->leftJoin(TABLE_PROJECTADMIN)->alias('t2')->on('t1.account = t2.account')->andWhere('t1.deleted')->eq('0')->fetchPairs();
 
         $this->view->title         = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->allUsers      = $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
