@@ -64,6 +64,10 @@ $fields->field('type')
     ->control('picker')
     ->items($lang->bug->typeList);
 
+$fields->field('subStatus')
+    ->control('picker')
+    ->items($lang->bug->subStatusList);
+
 $fields->field('severity')
     ->width('1/6')
     ->control('severityPicker', array('required' => true))

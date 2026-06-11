@@ -133,6 +133,9 @@ class bugBasicInfo extends wg
             'text'    => $statusText
         );
 
+        $subStatusText = zget($lang->bug->subStatusList, $bug->subStatus, $bug->subStatus);
+        $items[$lang->bug->subStatus] = array('control' => 'text', 'text' => $subStatusText, 'title' => $subStatusText);
+
         $items[$lang->bug->activatedCount] = $bug->activatedCount ? "{$bug->activatedCount}" : '';
         if($config->edition != 'open')
         {

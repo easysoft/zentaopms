@@ -122,6 +122,7 @@ $lang->custom->bug->fields['browserList']    = '瀏覽器';
 $lang->custom->bug->fields['typeList']       = '類型';
 $lang->custom->bug->fields['resolutionList'] = '解決方案';
 $lang->custom->bug->fields['statusList']     = '狀態';
+$lang->custom->bug->fields['subStatusList']  = '子狀態';
 $lang->custom->bug->fields['longlife']       = '久未處理天數';
 
 $lang->custom->testcase = new stdClass();

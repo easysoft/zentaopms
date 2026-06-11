@@ -1672,6 +1672,29 @@ class bugModel extends model
     }
 
     /**
+     * 按 bug 子状态统计。
+     * Statistics by bug sub status.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerSubStatus(): array
+    {
+        $datas = $this->dao->select('subStatus AS name, COUNT(1) AS value')
+            ->from(TABLE_BUG)
+            ->where($this->reportCondition())
+            ->andWhere('subStatus')->ne('')
+            ->groupBy('name')
+            ->orderBy('value DESC')
+            ->fetchAll('name');
+        if(!$datas) return array();
+
+        foreach($datas as $subStatus => $data) $data->name = zget($this->lang->bug->subStatusList, $subStatus, $subStatus);
+
+        return $datas;
+    }
+
+    /**
      * 按照 bug 优先级统计。
      * Statistics by bug pri.
      *

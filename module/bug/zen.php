@@ -2390,6 +2390,7 @@ class bugZen extends bug
         $bug->steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $bug->os          = '';
         $bug->browser     = '';
+        $bug->subStatus   = '';
         $bug->assignedTo  = '';
         $bug->deadline    = '';
         $bug->mailto      = '';
@@ -2438,8 +2439,8 @@ class bugZen extends bug
         if(isset($runID) && !$runID && isset($caseID) && $caseID)    $fields = $this->bug->getBugInfoFromResult($resultID, $caseID, isset($stepIdList) ? $stepIdList : '');// If not set runID but set caseID, get the result info by resultID and case info.
         if(isset($fields)) $bug = $this->updateBug($bug, $fields);
 
-        /* 获得bug的所属项目、所属模块、所属执行、关联产品、关联任务、关联需求、关联版本、关联用例、标题、步骤、严重程度、类型、指派给、截止日期、操作系统、浏览器、抄送给、关键词、颜色、所属测试单、反馈人、通知邮箱、优先级。 */
-        /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
+        /* 获得bug的所属项目、所属模块、所属执行、关联产品、关联任务、关联需求、关联版本、关联用例、标题、步骤、严重程度、类型、指派给、截止日期、操作系统、浏览器、子状态、抄送给、关键词、颜色、所属测试单、反馈人、通知邮箱、优先级。 */
+        /* Get projectID, moduleID, executionID, productID, taskID, storyID, buildID, caseID, title, steps, severity, type, assignedTo, deadline, os, browser, subStatus, mailto, keywords, color, testtask, feedbackBy, notifyEmail, pri from case. */
         if(isset($bugID) && $bugID)
         {
             $bugInfo       = $this->bug->getById((int)$bugID);
@@ -2447,7 +2448,7 @@ class bugZen extends bug
 
             $fields = array('projectID' => $bugInfo->project, 'moduleID' => $bugInfo->module, 'executionID' => $bugInfo->execution, 'taskID' => $bugInfo->task, 'storyID' => $isSameProduct ? $bugInfo->story : 0, 'buildID' => $bugInfo->openedBuild,
                 'caseID' => $bugInfo->case, 'title' => $bugInfo->title, 'steps' => $bugInfo->steps, 'severity' => $bugInfo->severity, 'type' => $bugInfo->type, 'assignedTo' => $bugInfo->assignedTo, 'deadline' => (helper::isZeroDate($bugInfo->deadline) ? '' : $bugInfo->deadline),
-                'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
+                'os' => $bugInfo->os, 'browser' => $bugInfo->browser, 'subStatus' => $bugInfo->subStatus, 'mailto' => $bugInfo->mailto, 'keywords' => $bugInfo->keywords, 'color' => $bugInfo->color, 'testtask' => $bugInfo->testtask, 'feedbackBy' => $bugInfo->feedbackBy, 'notifyEmail' => $bugInfo->notifyEmail,
                 'pri' => ($bugInfo->pri == 0 ? 3 : $bugInfo->pri),
                 'plan' => $bugInfo->plan,
                 'injection' => $bugInfo->injection,

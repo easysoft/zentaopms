@@ -2,7 +2,7 @@
 global $lang, $app;
 $isEn = $app->getClientLang() == 'en';
 $config->bug->dtable = new stdclass();
-$config->bug->dtable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'openedBy', 'openedDate', 'confirmed', 'assignedTo', 'resolution', 'actions');
+$config->bug->dtable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'subStatus', 'openedBy', 'openedDate', 'confirmed', 'assignedTo', 'resolution', 'actions');
 
 $config->bug->dtable->fieldList['id']['title']    = $lang->idAB;
 $config->bug->dtable->fieldList['id']['type']     = 'checkID';
@@ -47,6 +47,13 @@ $config->bug->dtable->fieldList['status']['statusMap'] = $lang->bug->statusList;
 $config->bug->dtable->fieldList['status']['show']      = true;
 $config->bug->dtable->fieldList['status']['group']     = 2;
 $config->bug->dtable->fieldList['status']['sortType']  = true;
+
+$config->bug->dtable->fieldList['subStatus']['title']    = $lang->bug->subStatus;
+$config->bug->dtable->fieldList['subStatus']['type']     = 'category';
+$config->bug->dtable->fieldList['subStatus']['map']      = $lang->bug->subStatusList;
+$config->bug->dtable->fieldList['subStatus']['show']     = true;
+$config->bug->dtable->fieldList['subStatus']['group']    = 2;
+$config->bug->dtable->fieldList['subStatus']['sortType'] = true;
 
 $config->bug->dtable->fieldList['type']['title']    = $lang->bug->type;
 $config->bug->dtable->fieldList['type']['type']     = 'category';

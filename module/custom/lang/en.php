@@ -159,6 +159,7 @@ $lang->custom->bug->fields['browserList']    = 'Browser';
 $lang->custom->bug->fields['typeList']       = 'Type';
 $lang->custom->bug->fields['resolutionList'] = 'Resolution';
 $lang->custom->bug->fields['statusList']     = 'Status';
+$lang->custom->bug->fields['subStatusList']  = 'Sub-status';
 $lang->custom->bug->fields['longlife']       = 'Stalled Days';
 
 $lang->custom->testcase = new stdClass();

@@ -9,6 +9,7 @@ $config->bug->search['fields']['assignedTo']     = $lang->bug->assignedTo;
 $config->bug->search['fields']['resolvedBy']     = $lang->bug->resolvedBy;
 
 $config->bug->search['fields']['status']         = $lang->bug->status;
+$config->bug->search['fields']['subStatus']      = $lang->bug->subStatus;
 $config->bug->search['fields']['confirmed']      = $lang->bug->confirmed;
 $config->bug->search['fields']['story']          = $lang->bug->story;
 
@@ -60,6 +61,7 @@ $config->bug->search['params']['assignedTo']    = array('operator' => '=',      
 $config->bug->search['params']['resolvedBy']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 
 $config->bug->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->statusList);
+$config->bug->search['params']['subStatus']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->subStatusList);
 $config->bug->search['params']['confirmed']     = array('operator' => '=',       'control' => 'select', 'values' => $lang->bug->confirmedList);
 $config->bug->search['params']['story']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 

@@ -87,6 +87,9 @@ $items[] = array('name' => 'steps', 'control' => 'textarea', 'label' => $lang->b
 /* Field of type. */
 $items[] = array('name' => 'type', 'label' => $lang->typeAB, 'control' => 'picker', 'items' => $lang->bug->typeList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['type']), 'ditto' => true);
 
+/* Field of sub status. */
+$items[] = array('name' => 'subStatus', 'label' => $lang->bug->subStatus, 'control'  => 'picker', 'items' => $lang->bug->subStatusList, 'width' => '160px', 'required' => isset($requiredFields['subStatus']));
+
 $items[] = array('name' => 'assignedTo', 'label' => $lang->bug->assignedTo, 'control' => 'picker', 'items' => $users, 'width' => '200px');
 
 /* Field of pri. */

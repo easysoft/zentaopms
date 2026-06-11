@@ -20,6 +20,7 @@ $config->bug->form->create['notifyEmail'] = array('required' => false, 'type' =>
 $config->bug->form->create['type']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->create['os']          = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->create['browser']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->create['subStatus']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->create['relatedBug']  = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->create['color']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->create['severity']    = array('required' => false, 'type' => 'int',    'default' => 3);
@@ -69,6 +70,7 @@ $config->bug->form->edit['uid']            = array('required' => false, 'type' =
 $config->bug->form->edit['color']          = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->edit['os']             = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['browser']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->bug->form->edit['subStatus']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->edit['relatedBug']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['mailto']         = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
 $config->bug->form->edit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
@@ -170,6 +172,7 @@ $config->bug->form->batchCreate['pri']         = array('required' => false, 'typ
 $config->bug->form->batchCreate['severity']    = array('required' => false, 'type' => 'int',    'default' => 0);
 $config->bug->form->batchCreate['os']          = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
 $config->bug->form->batchCreate['browser']     = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchCreate['subStatus']   = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchCreate['keywords']    = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchCreate['assignedTo']  = array('required' => false, 'type' => 'string', 'default' => '');
 
@@ -191,6 +194,7 @@ $config->bug->form->batchEdit['assignedTo']     = array('required' => false, 'ty
 $config->bug->form->batchEdit['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->batchEdit['os']             = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
 $config->bug->form->batchEdit['browser']        = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->batchEdit['subStatus']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
@@ -228,6 +232,7 @@ $config->bug->form->showImport['assignedTo']     = array('required' => false, 't
 $config->bug->form->showImport['deadline']       = array('required' => false, 'type' => 'date',   'default' => null);
 $config->bug->form->showImport['os']             = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
 $config->bug->form->showImport['browser']        = array('required' => false, 'type' => 'array',  'default' => '', 'filter' => 'join');
+$config->bug->form->showImport['subStatus']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->showImport['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->showImport['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->showImport['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');

@@ -272,6 +272,17 @@ formBatchPanel
             )
         )
     ),
+    /* Field of sub status. */
+    formBatchItem
+    (
+        set::name('subStatus'),
+        set::label($lang->bug->subStatus),
+        set::hidden(zget($visibleFields, 'subStatus', true, false)),
+        set::control('picker'),
+        set::items($lang->bug->subStatusList),
+        set::width('160px'),
+        set::required(isset($requiredFields['subStatus']))
+    ),
     formBatchItem
     (
         set::name('product'),

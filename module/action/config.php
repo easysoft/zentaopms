@@ -133,6 +133,7 @@ $config->action->objectFields['story']['closedReason']       = 'reasonList';
 $config->action->objectFields['requirement']['closedReason'] = 'reasonList';
 $config->action->objectFields['epic']['closedReason']        = 'reasonList';
 $config->action->objectFields['roadmap']['closedReason']     = 'reasonList';
+$config->action->objectFields['bug']['subStatus']            = 'subStatusList';
 
 $config->action->multipleObjectFields['bug']['os']        = 'osList';
 $config->action->multipleObjectFields['bug']['browser']   = 'browserList';

@@ -70,6 +70,8 @@ $fields->field('story')->foldable();
 
 $fields->field('task')->foldable();
 
+$fields->field('subStatus')->foldable();
+
 $fields->field('feedbackBy')->foldable();
 
 $fields->field('notifyEmail')->foldable();

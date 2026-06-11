@@ -23,7 +23,7 @@ $config->bug->browseTypeList = array('all', 'bymodule', 'assigntome', 'openedbym
 $config->bug->list = new stdclass();
 $config->bug->list->allFields = 'id, module, execution, story, task,
     title, keywords, severity, pri, type, os, browser, hardware,
-    found, steps, status, deadline, activatedCount, confirmed, mailto,
+    found, steps, status, subStatus, deadline, activatedCount, confirmed, mailto,
     openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
@@ -33,19 +33,19 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
     lastEditedBy,
     lastEditedDate';
 
-$config->bug->list->defaultFields           = 'id,title,severity,pri,openedBy,assignedTo,resolvedBy,resolution';
-$config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
-$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,assignedTo,pri,deadline,severity,os,browser,keywords';
+$config->bug->list->defaultFields           = 'id,title,severity,pri,status,subStatus,openedBy,assignedTo,resolvedBy,resolution';
+$config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,subStatus,os,browser,deadline,mailto,keywords';
+$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,subStatus,os,browser,keywords';
+$config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,subStatus,assignedTo,pri,deadline,severity,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,pri,severity,os,browser,assignedTo,%s';
+$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,subStatus,pri,severity,os,browser,assignedTo,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->exportFields = 'id, product, branch, module, project, execution, plan, story, task,
     title, keywords, severity, pri, type, os, browser,
-    steps, status, deadline, activatedCount, activatedDate, confirmed, mailto,
+    steps, status, subStatus, deadline, activatedCount, activatedDate, confirmed, mailto,
     openedBy, openedDate, openedBuild,
     assignedTo, assignedDate,
     resolvedBy, resolution, resolvedBuild, resolvedDate,
@@ -56,6 +56,8 @@ $config->bug->exportFields = 'id, product, branch, module, project, execution, p
     lastEditedDate, files ,feedbackBy, notifyEmail';
 
 $config->bug->excludeCheckFields = ',severities,oses,browsers,lanes,regions,executions,projects,branches,';
+$config->bug->listFields         = 'subStatus';
+$config->bug->sysLangFields      = ',pri,status,subStatus,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change,category,injection,identify';
 
 $config->bug->editor = new stdclass();
 $config->bug->editor->create   = array('id' => 'steps', 'tools' => 'bugTools');

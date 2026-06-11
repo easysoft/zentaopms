@@ -233,6 +233,19 @@ detailBody
             ),
             item
             (
+                set::name($lang->bug->subStatus),
+                formGroup
+                (
+                    picker
+                    (
+                        set::items($lang->bug->subStatusList),
+                        set::name('subStatus'),
+                        set::value($bug->subStatus)
+                    )
+                )
+            ),
+            item
+            (
                 set::name($lang->bug->confirmed),
                 picker
                 (
