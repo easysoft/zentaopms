@@ -380,7 +380,15 @@ class form extends fixer
                 $rawValue     = isset($this->rawdata->$field) ? $this->rawdata->$field : null;
                 $isShared     = isset($this->rawdata->$field) && !is_array($rawValue) && !is_object($rawValue);
 
-                $rowData->$field = isset($this->rawdata->$field) ? ($isShared ? $rawValue : zget($rawValue, $rowIndex, $defaultValue)) : $defaultValue;
+                if(isset($this->rawdata->$field))
+                {
+                    $rowData->$field = $isShared ? $rawValue : zget($rawValue, $rowIndex, $defaultValue);
+                }
+                else
+                {
+                    $rowData->$field = $defaultValue;
+                }
+
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
                 if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter'], zget($config, 'separator', ','));
 
@@ -430,7 +438,16 @@ class form extends fixer
                 $rawValue = isset($this->rawdata->$field) ? $this->rawdata->$field : null;
                 $isShared = isset($this->rawdata->$field) && !is_array($rawValue) && !is_object($rawValue);
                 $skip     = true;
-                $errorKey = $isShared ? $field : (isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]");
+
+                if($isShared)
+                {
+                    $errorKey = $field;
+                }
+                else
+                {
+                    $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+                }
+
                 foreach($config['skipRequired'] as $conditionField => $conditionValue)
                 {
                     if($rowData->$conditionField != $conditionValue)
