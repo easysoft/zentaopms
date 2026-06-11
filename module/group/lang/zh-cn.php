@@ -690,5 +690,6 @@ $lang->group->package->deleteArtifactDir     = '删除目录';
 $lang->group->package->uploadArtifact        = '上传制品';
 $lang->group->package->deleteArtifact        = '删除制品';
 $lang->group->package->manageArtifact        = '维护制品';
+$lang->group->package->provider              = '服务';
 
 include (dirname(__FILE__) . '/resource.php');

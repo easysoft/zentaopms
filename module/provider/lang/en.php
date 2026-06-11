@@ -4,6 +4,11 @@ $lang->provider->create = 'Create Provider';
 $lang->provider->edit   = 'Edit Provider';
 $lang->provider->delete = 'Delete Provider';
 
+$lang->provider->browseAction = 'Browse Providers';
+$lang->provider->createAction = 'Create Provider';
+$lang->provider->editAction   = 'Edit Provider';
+$lang->provider->deleteAction = 'Delete Provider';
+
 $lang->provider->name        = 'Name';
 $lang->provider->type        = 'Type';
 $lang->provider->url         = 'URL';

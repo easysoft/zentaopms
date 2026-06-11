@@ -2217,6 +2217,17 @@ $lang->editor->methodOrder[20] = 'newPage';
 $lang->editor->methodOrder[25] = 'save';
 $lang->editor->methodOrder[30] = 'delete';
 
+$lang->resource->provider = new stdclass();
+$lang->resource->provider->browse = 'browseAction';
+$lang->resource->provider->create = 'createAction';
+$lang->resource->provider->edit   = 'editAction';
+$lang->resource->provider->delete = 'deleteAction';
+
+$lang->provider->methodOrder[5]  = 'browse';
+$lang->provider->methodOrder[10] = 'create';
+$lang->provider->methodOrder[15] = 'edit';
+$lang->provider->methodOrder[20] = 'delete';
+
 $lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
 $lang->resource->researchplan       = new stdclass();

@@ -4,6 +4,11 @@ $lang->provider->create = '添加服务';
 $lang->provider->edit   = '编辑服务';
 $lang->provider->delete = '删除服务';
 
+$lang->provider->browseAction = '服务列表';
+$lang->provider->createAction = '新建服务';
+$lang->provider->editAction   = '编辑服务';
+$lang->provider->deleteAction = '删除服务';
+
 $lang->provider->name        = '服务名称';
 $lang->provider->type        = '服务类型';
 $lang->provider->url         = '服务器地址';
