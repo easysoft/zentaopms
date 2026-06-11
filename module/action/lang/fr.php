@@ -324,10 +324,11 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> a fait 
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> a délié le CasTest <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
-$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
-$lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->linkstory         = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug           = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkstory       = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->autounlinkstory   = '$date, <strong>$actor</strong> linked a story to <strong>$extra</strong> plan, automatically unlinked from this plan.' . "\n";
+$lang->action->desc->unlinkbug         = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Describes the history of operations when a document is saved as a draft or released. */
 $lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <strong>$extra</strong>.' . "\n";
