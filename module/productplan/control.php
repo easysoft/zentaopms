@@ -811,18 +811,9 @@ class productplan extends control
             }
         }
 
-        if($conflictStoryCounts and $conflictBugCounts)
-        {
-            return printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
-        }
-        elseif($conflictStoryCounts)
-        {
-            return printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
-        }
-        elseif($conflictBugCounts)
-        {
-            return printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
-        }
+        if($conflictStoryCounts && $conflictBugCounts) return printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
+        if($conflictStoryCounts)                       return printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
+        if($conflictBugCounts)                         return printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
         return true;
     }
 
