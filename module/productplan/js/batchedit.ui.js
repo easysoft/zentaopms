@@ -8,7 +8,7 @@ window.renderRowData = function($row, index, plan)
 
     if($branch.length > 0)
     {
-        let branchOptions = {name: 'branch[' + plan.id + ']', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
+        let branchOptions = {name: 'branch', 'multiple': true, defaultValue: plan.branch, onChange: function(){getConflictStories(index)}, 'items': branchPickerItems};
         if(plan.parent > 0 && typeof parentBranches[plan.parent] != 'undefined') branchOptions = $.extend({}, branchOptions, {items: parentBranches[plan.parent]});
         $row.find('[data-name="branch"]').find('.picker-box').on('inited', function(e, info)
         {
@@ -69,24 +69,34 @@ window.changeDate = function(index)
     }
 }
 
+let isReverting = false;
 window.getConflictStories = function(index)
 {
     let $row          = $('tr[data-index="' + index + '"]');
     let $branch       = $row.find('[name^="branch"]');
     let planID        = parseInt($row.find('.form-control-static[data-name="idIndex"]').text()).toString();
     let newBranch     = $branch.length == 0 ? '' : $branch.val();
-    $.get($.createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
+    $.get($.createLink('productplan', 'ajaxGetConflict', `planID=${planID}&oldBranch=${oldBranch[planID]}&newBranch=${newBranch}`), function(conflictStories)
     {
+
         if(conflictStories != '')
         {
             zui.Modal.confirm({message: conflictStories, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
             {
                 if(!res)
                 {
+                    isReverting = true;
                     const $branchPicker = $branch.zui('picker');
                     $branchPicker.$.setValue(oldBranch[planID]);
+                    isReverting = false;
+                }
+                else
+                {
+                    oldBranch[planID] = newBranch;
                 }
             });
+            return;
         }
+        oldBranch[planID] = newBranch;
     });
 }

@@ -51,7 +51,8 @@ formPanel
             set::name('branch[]'),
             set::items($branchTagOption),
             set::value($plan->branch),
-            set::multiple(true)
+            set::multiple(true),
+            on::change('branchChange')
         )
     ) : null,
     formGroup

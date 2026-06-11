@@ -1236,12 +1236,12 @@ class productplanModel extends model
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch && str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
+                    if($story->branch && !str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
                 }
 
                 foreach($planBugs as $bugID => $bug)
                 {
-                    if($bug->branch && str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
+                    if($bug->branch && !str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
                 }
             }
         }

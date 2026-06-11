@@ -777,14 +777,14 @@ class productplan extends control
      * AJAX: Get conflict story and bug.
      *
      * @param  int    $planID
-     * @param  int    $newBranch
+     * @param  string $oldBranch
+     * @param  string $newBranch
      * @access public
      * @return void
      */
-    public function ajaxGetConflict(int $planID, int $newBranch)
+    public function ajaxGetConflict(int $planID, string $oldBranch, string $newBranch)
     {
         $plan        = $this->productplan->getByID($planID);
-        $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
         $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
         $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
@@ -794,6 +794,7 @@ class productplan extends control
         {
             if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
         }
+        if(empty($removeBranches)) return true;
 
         $conflictStoryCounts = 0;
         $conflictBugCounts   = 0;
@@ -812,16 +813,17 @@ class productplan extends control
 
         if($conflictStoryCounts and $conflictBugCounts)
         {
-            printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
+            return printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
         }
         elseif($conflictStoryCounts)
         {
-            printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
+            return printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
         }
         elseif($conflictBugCounts)
         {
-            printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
+            return printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
         }
+        return true;
     }
 
     /**
