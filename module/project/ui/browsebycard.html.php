@@ -236,22 +236,6 @@ if(!empty($projectStats))
     }
 }
 
-$emptyTipCreateBtn = null;
-if(hasPriv('project', 'create'))
-{
-    $emptyTipCreateBtn = btn(set(array_merge(array
-    (
-        'icon'          => 'plus',
-        'text'          => $lang->project->create,
-        'data-toggle'   => 'modal',
-        'data-position' => 'center'
-    ), array
-    (
-        'class' => 'ml-2',
-        'url'   => createLink('project', 'createGuide')
-    ))));
-}
-
 div
 (
     setID('cards'),
@@ -264,7 +248,17 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        $emptyTipCreateBtn
+        hasPriv('project', 'create') ? btn(set(array_merge(array
+        (
+            'icon'          => 'plus',
+            'text'          => $lang->project->create,
+            'data-toggle'   => 'modal',
+            'data-position' => 'center'
+        ), array
+        (
+            'class' => 'ml-2',
+            'url'   => createLink('project', 'createGuide')
+        )))) : null,
     ) : $projectCards,
     !empty($projectStats) ? div
     (
