@@ -1826,7 +1826,6 @@ $lang->resource->tree->create      = 'create';
 $lang->resource->tree->updateOrder = 'updateOrder';
 $lang->resource->tree->manageChild = 'manageChild';
 $lang->resource->tree->edit        = 'edit';
-$lang->resource->tree->fix         = 'fix';
 $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';
