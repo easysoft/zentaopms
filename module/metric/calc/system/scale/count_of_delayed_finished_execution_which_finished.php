@@ -11,7 +11,7 @@
  * 描述：按系统统计的已完成执行中延期完成执行数表示在整个系统中延期完成的执行项的数量，可以用来评估任务的延期情况和团队的执行能力。
  * 定义：所有的执行个数求和;状态为已关闭;关闭日期>执行开始时计划截止日期;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日投入总人天是指团队每日投入的工作量。该度量项可以用来评估每日人力资源投入情况。
  * 定义：复用：;按系统统计的每日日志记录的工时总数;公式：;按系统统计的每日投入总人天=按系统统计的每日日志记录的工时总数/后台配置的每日可用工时;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

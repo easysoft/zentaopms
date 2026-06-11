@@ -11,7 +11,7 @@
  * 描述：按项目统计的严重程度为1、2级的Bug数是指在项目开发过程中发现的严重程度为1级和2级的Bug数量的总和。统计这些Bug的数量可以评估项目开发过程的质量和稳定性，同时也关注影响用户体验和功能完整性的问题。
  * 定义：复用： 按项目统计的严重程度为1级的Bug数、按项目统计的严重程度为2级的Bug数。公式： 按项目统计的严重程度为1、2级的Bug数=按项目统计的严重程度为1级的Bug数+按项目统计的严重程度为2级的Bug数
  *
- * @copyright Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2024 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    songchenxuan <songchenxuan@easycorp.ltd>
  * @package
  * @uses      func

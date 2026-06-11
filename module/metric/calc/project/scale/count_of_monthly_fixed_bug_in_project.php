@@ -11,7 +11,7 @@
  * 描述：按产品统计的月度修复Bug数是指每天在产品开发过程中被解决并关闭的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。
  * 定义：项目中Bug的个数求和\n关闭时间为某年某月\n解决方案为已解决\n过滤已删除的Bug\n过滤已删除的项目\n
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

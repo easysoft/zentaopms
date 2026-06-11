@@ -11,7 +11,7 @@
  * 描述：按产品统计的未关闭研发需求数是指产品中未关闭的研发需求的数量。这个度量项可以反映产品团队研发需求的开发进度。未关闭研发需求数越多，说明产品团队的开发工作还有一定的进行中，并需要进一步跟进和完成。
  * 定义：复用：;按产品统计的研发需求总数;按产品统计的已关闭研发需求数;按产品统计的关闭研发需求总数=按产品统计的研发需求总数-按产品统计的已关闭研发需求数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

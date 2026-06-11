@@ -11,7 +11,7 @@
  * 描述：按人员统计的已完成任务数表示每个人已完成的任务数量之和。
  * 定义：所有任务个数求和;完成者为某人;
  *
- * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2025 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

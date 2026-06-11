@@ -11,7 +11,7 @@
  * 描述：按系统统计的每周新增发布数表示每周新增加的发布数量。反映了组织每周增加的发布数量，用于评估组织产品发布的速度和规模。
  * 定义：所有的发布个数求和;发布时间为某周;过滤已删除的发布;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

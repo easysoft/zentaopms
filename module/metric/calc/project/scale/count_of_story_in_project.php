@@ -11,7 +11,7 @@
  * 描述：按项目统计的研发需求总数是指项目中创建或关联的所有研发需求的数量，反映了项目的规模和复杂度，提供了关于需求管理、进度控制、资源规划、风险评估和质量控制的有用信息。
  * 定义：项目中研发需求个数求和;过滤已删除的研发需求;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
