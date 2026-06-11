@@ -12,6 +12,7 @@ $config->openMethods[] = 'admin.planmodal';
 $config->openMethods[] = 'admin.register';
 $config->openMethods[] = 'admin.sendcode';
 $config->openMethods[] = 'api.getsessionid';
+$config->openMethods[] = 'file.ajaxsavetemplate';
 $config->openMethods[] = 'im.authorize';
 $config->openMethods[] = 'misc.ajaxsendevent';
 $config->openMethods[] = 'misc.captcha';
