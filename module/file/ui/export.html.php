@@ -147,6 +147,7 @@ formPanel
         set::label($lang->file->extension),
         set::name('fileType'),
         set::items($lang->exportFileTypeList),
+        set::value(key($lang->exportFileTypeList)),
         on::change('onChangeFileType'),
         set::required(true)
     ),
@@ -170,6 +171,7 @@ formPanel
             set::control('picker'),
             set::name('exportType'),
             set::items($lang->exportTypeList),
+            set::value(key($lang->exportTypeList)),
             set::required(true)
         )
     ),
