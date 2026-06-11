@@ -271,7 +271,7 @@ class productplanZen extends productplan
         $products = $this->loadModel('product')->getProductPairsByProject((int)$this->session->project);
 
         /* Build search form. */
-        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$plan->id&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$plan->id&type=story&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bysearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['fields']['title']             = $this->lang->productplan->storyTitle;
@@ -324,7 +324,7 @@ class productplanZen extends productplan
      */
     protected function buildBugSearchForm(object $plan, int $queryID, string $orderBy): void
     {
-        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={$orderBy}&link=true&param=" . helper::safe64Encode('&browseType=bysearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
 

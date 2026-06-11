@@ -137,6 +137,7 @@ class detail extends wg
         .ai-task-status .status-doing {color: #FAAE1A;}
         .ai-task-status .status-done {color: #3883FA;}
         .ai-task-status .status-cancel, .ai-task-status .status-closed {color: #9EA3B0;}
+        .detail-actions > div {margin-inline: auto; }
 CSS;
     }
 

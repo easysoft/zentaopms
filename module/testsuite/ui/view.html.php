@@ -51,8 +51,8 @@ detailHeader
 $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
 $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');
 $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-$canBatchConfirmCaseChange = common::hasPriv('testtask', 'batchConfirmCaseChange');
-$canBatchIgnoreCaseChange  = common::hasPriv('testtask', 'batchIgnoreCaseChange');
+$canBatchConfirmCaseChange = common::hasPriv('testsuite', 'batchConfirmCaseChange');
+$canBatchIgnoreCaseChange  = common::hasPriv('testsuite', 'batchIgnoreCaseChange');
 $hasCheckbox = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchRun || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange));
 
 $batchItems = array(

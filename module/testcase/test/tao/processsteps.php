@@ -26,7 +26,8 @@ $caseIDList = array(1, 2, 3, 1001);
 
 $testcase = new testcaseTaoTest();
 
-$steps = $testcase->objectModel->fetchStepsByList($caseIDList);
+global $tester;
+$steps = $tester->dao->select('t2.*')->from(TABLE_CASE)->alias('t1')->leftJoin(TABLE_CASESTEP)->alias('t2')->on('t1.id = t2.case')->where('t1.id')->in($caseIDList)->andWhere('t1.version=t2.version')->orderBy('t2.id')->fetchGroup('case');
 
 r($testcase->processStepsTest(zget($steps, $caseIDList[0], array()))) && p() && e('1 1.1 1.1.1'); // 测试处理case 1 version 2 的步骤
 r($testcase->processStepsTest(zget($steps, $caseIDList[1], array()))) && p() && e('1');           // 测试处理case 2 version 2 的步骤

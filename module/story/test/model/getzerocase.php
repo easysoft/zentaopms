@@ -18,6 +18,7 @@ cid=18570
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zenData('product')->gen(10);
 zenData('story')->gen(10);
 zenData('case')->gen(10);
 

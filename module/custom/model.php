@@ -1055,7 +1055,7 @@ class customModel extends model
      */
     public function disableFeaturesByMode(string $mode)
     {
-        $disabledFeatures = 'otherOA';
+        $disabledFeatures = 'otherOA,';
         if($mode == 'light')
         {
             /* Check whether the product or project data in the system is empty. */

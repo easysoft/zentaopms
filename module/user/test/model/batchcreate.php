@@ -11,7 +11,7 @@ cid=19579
 - 查看公司表只有 1 条记录。 @1
 - 公司表第 1 条记录的 id 是 1。第0条的id属性 @1
 - 创建用户失败，返回 false。属性result @0
-- 创建用户失败，提示错误信息。第errors条的gender属性 @『性别』不符合格式，应当为:『/f|m/』。
+- 创建用户失败，提示错误信息。第errors条的gender属性 @『性别』长度应当不超过『1』，且大于『0』。
 - 事务回滚成功，查看公司表只有 1 条记录。 @1
 - 公司表第 1 条记录的 id 是 1。第0条的id属性 @1
 - 查看用户权限组表没有记录。 @0
@@ -87,7 +87,7 @@ r($companies)        && p('0:id') && e(1); // 公司表第 1 条记录的 id 是
 
 $result = $userTest->batchCreateTest($users2, $verify);
 r($result) && p('result')        && e(0);                                        // 创建用户失败，返回 false。
-r($result) && p('errors:gender') && e('『性别』不符合格式，应当为:『/f|m/』。'); // 创建用户失败，提示错误信息。
+r($result) && p('errors:gender') && e('『性别』长度应当不超过『1』，且大于『0』。'); // 创建用户失败，提示错误信息。
 
 $companies = $tester->dao->select('*')->from(TABLE_COMPANY)->fetchAll();
 r(count($companies)) && p()       && e(1); // 事务回滚成功，查看公司表只有 1 条记录。

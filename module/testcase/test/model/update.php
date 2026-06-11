@@ -26,6 +26,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->gen('5');
+zenData('story')->gen('6');
 zenData('casestep')->gen('5');
 zenData('casespec')->gen('0');
 zenData('user')->gen('1');
@@ -45,7 +46,7 @@ $type       = array('type'  => 'install');
 $emptyType  = array('type'  => '');
 $steps      = array('steps' => array('步骤1'), 'stepType' => array('step'), 'expects' => array('预期1'), 'stepChanged' => true);
 
-$testcase = new testCaseTest();
+$testcase = new testcaseModelTest();
 r($testcase->updateTest($testcaseIdList[0], $title))      && p('0:field,old,new') && e('title,这个是测试用例1,修改后的用例'); // 测试更新用例名称
 r($testcase->updateTest($testcaseIdList[0], $emptyTitle)) && p('title:0')         && e('『用例名称』不能为空。');             // 测试名称不能为空
 r($testcase->updateTest($testcaseIdList[0], $type))       && p('0:field,old,new') && e('type,feature,install');               // 测试更新用例类型

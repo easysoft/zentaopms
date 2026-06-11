@@ -87,6 +87,13 @@ if($this->config->edition == 'ipd')
 
 if($taskStatus == 'wait') unset($statusOptions['pause']);
 
+$files = array();
+foreach($task->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 if(!empty($task->team))
 {
     foreach($task->team as $member)
@@ -219,7 +226,7 @@ detailBody
         (
             setID('files'),
             set::title($lang->files),
-            fileSelector($task->files ? set::defaultFiles(array_values($task->files)) : null)
+            fileSelector($files ? set::defaultFiles(array_values($files)) : null)
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),

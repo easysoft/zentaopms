@@ -32,7 +32,7 @@ class zahost extends control
         /* 构建搜索表单。*/
         /* Build the search form. */
         $param     = (int)$param;
-        $actionURL = $this->createLink('zahost', 'browse', "browseType=bySearch&param=myQueryID");
+        $actionURL = $this->createLink('zahost', 'browse', "browseType=bysearch&param=myQueryID");
         $this->config->zahost->search['actionURL'] = $actionURL;
         $this->config->zahost->search['queryID']   = $param;
         $this->config->zahost->search['onMenuBar'] = 'no';

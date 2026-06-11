@@ -1469,9 +1469,12 @@ class fileModel extends model
                 unset($file['id']);
                 $file['objectType'] = $objectType;
                 $file['objectID']   = $objectID;
-                $file['extra']      = $extra;
-                $fileIdList .= ',' . $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
+                $file['extra']      = $extra ?: zget($file, 'extra', '');
+
+                $fileID = $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
+                if(is_numeric($file['extra'])) $fileIdList .= ',' . $fileID;
             }
+
             if($objectType == 'story') $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($objectID)->exec();
         }
 

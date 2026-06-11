@@ -1461,9 +1461,9 @@ class doc extends control
         $libType = isset($lib->type) && $lib->type == 'api' ? 'api' : 'lib';
 
         /* Build the search form. */
-        $queryID = $browseType == 'bySearch' ? $param : 0;
+        $queryID = $browseType == 'bysearch' ? $param : 0;
         $queryID = $queryID == 'myQueryID' ? 0 : $queryID;
-        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bySearch&orderBy={$orderBy}&param=myQueryID";
+        $params  = "objectID={$objectID}&libID={$libID}&moduleID=0&browseType=bysearch&orderBy={$orderBy}&param=myQueryID";
         if($this->app->rawMethod == 'tablecontents') $params = "type={$type}&" . $params;
         $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params);
         if($libType == 'api') $this->loadModel('api')->buildSearchForm($lib, $queryID, $actionURL, $libs, $type);

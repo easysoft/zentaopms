@@ -194,7 +194,8 @@ class storyBasicInfo extends wg
                     (
                         'control' => 'link',
                         'url'     => !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null,
-                        'text'    => $planTitle . ' '
+                        'text'    => $planTitle . ' ',
+                        'data-app' => $product->shadow ? 'project' : null
                     ) : $planTitle;
                 }
             }

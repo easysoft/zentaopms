@@ -74,7 +74,7 @@ foreach($reviewList as $review)
     $review->typeKey = $review->type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-    if($review->type == 'projectreview')      $typeName = $lang->project->common;
+    if($review->type == 'projectreview')      $typeName = $lang->my->projectReview;
     if(isset($flows[$review->type]))          $typeName = $flows[$review->type];
     if($type == 'story')
     {

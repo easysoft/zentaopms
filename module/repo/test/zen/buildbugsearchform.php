@@ -57,8 +57,8 @@ su('admin');
 $repoTest = new repoZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($repoTest->buildBugSearchFormTest(1, 'abc123', 'bySearch', 1, array('1' => (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'), '2' => (object)array('id' => 2, 'name' => '产品2', 'type' => 'normal')), array('1' => '模块1', '2' => '模块2'))) && p('result') && e('success'); // 步骤1：正常情况
-r($repoTest->buildBugSearchFormTest(2, 'def456', 'bySearch', 2, array('4' => (object)array('id' => 4, 'name' => '产品4', 'type' => 'branch'), '5' => (object)array('id' => 5, 'name' => '产品5', 'type' => 'branch')), array('3' => '模块3', '4' => '模块4'))) && p('branchRemoved') && e('0'); // 步骤2：带分支产品
+r($repoTest->buildBugSearchFormTest(1, 'abc123', 'bysearch', 1, array('1' => (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'), '2' => (object)array('id' => 2, 'name' => '产品2', 'type' => 'normal')), array('1' => '模块1', '2' => '模块2'))) && p('result') && e('success'); // 步骤1：正常情况
+r($repoTest->buildBugSearchFormTest(2, 'def456', 'bysearch', 2, array('4' => (object)array('id' => 4, 'name' => '产品4', 'type' => 'branch'), '5' => (object)array('id' => 5, 'name' => '产品5', 'type' => 'branch')), array('3' => '模块3', '4' => '模块4'))) && p('branchRemoved') && e('0'); // 步骤2：带分支产品
 r($repoTest->buildBugSearchFormTest(3, 'ghi789', 'all', 3, array('1' => (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'), '3' => (object)array('id' => 3, 'name' => '产品3', 'type' => 'normal')), array('5' => '模块5'))) && p('branchRemoved') && e('1'); // 步骤3：无分支产品
-r($repoTest->buildBugSearchFormTest(4, 'jkl012', 'bySearch', 4, array(), array())) && p('productCount,moduleCount') && e('0,0'); // 步骤4：空产品列表
+r($repoTest->buildBugSearchFormTest(4, 'jkl012', 'bysearch', 4, array(), array())) && p('productCount,moduleCount') && e('0,0'); // 步骤4：空产品列表
 r($repoTest->buildBugSearchFormTest(5, 'mno345', 'all', 5, array('1' => (object)array('id' => 1, 'name' => '产品1', 'type' => 'normal'), '2' => (object)array('id' => 2, 'name' => '产品2', 'type' => 'normal'), '4' => (object)array('id' => 4, 'name' => '产品4', 'type' => 'branch')), array('1' => '模块1', '2' => '模块2', '3' => '模块3', '4' => '模块4', '5' => '模块5'))) && p('productCount,moduleCount,planCount') && e('3,5,3'); // 步骤5：多产品多模块

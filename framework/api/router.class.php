@@ -68,6 +68,33 @@ class api extends router
     public $responseExtractor = '*';
 
     /**
+     * APIV2当前命中的原始路由信息。
+     * The matched route info of APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $routeInfo = array();
+
+    /**
+     * APIV2 当前命中的原始路由信息。
+     * The original matched route info of APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $originRouteInfo = array();
+
+    /**
+     * APIV2 redirect 后的真实路由信息。
+     * The redirected route info of APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $realRouteInfo = array();
+
+    /**
      * 构造方法, 设置请求路径，版本等
      *
      * The construct function.
@@ -248,6 +275,9 @@ class api extends router
         $methodName = '';
 
         list($info, $paramValues) = $this->matchRoutes($routes);
+        $this->originRouteInfo = $info ?: array();
+        $this->routeInfo       = $this->originRouteInfo;
+        $this->realRouteInfo   = $this->originRouteInfo;
 
         if($info)
         {
@@ -275,6 +305,12 @@ class api extends router
 
                 list($info, $paramValues) = $this->matchRoutes($routes);
                 if(isset($info['method'])) $methodName = $info['method'];
+
+                $this->realRouteInfo = $info ?: array();
+            }
+            else
+            {
+                $this->realRouteInfo = $info ?: array();
             }
 
             if(isset($info['response']) && $this->responseExtractor == '*') $this->responseExtractor = $info['response'];
@@ -287,6 +323,528 @@ class api extends router
         }
 
         return $methodName;
+    }
+
+    /**
+     * APIV2请求是否带有搜索条件。
+     * Whether the APIV2 request contains search filters.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function hasSearchFilters(): bool
+    {
+        return isset($_GET['filters']);
+    }
+
+    /**
+     * 返回APIV2错误响应。
+     * Send APIV2 error response.
+     *
+     * @param  string $message
+     * @access protected
+     * @return void
+     */
+    protected function sendV2Error(string $message): void
+    {
+        header('Content-Type: application/json');
+        throw EndResponseException::create(helper::removeUTF8Bom(json_encode(array('status' => 'fail', 'message' => $message), JSON_UNESCAPED_UNICODE)));
+    }
+
+    /**
+     * 获取 APIV2 原始路由的搜索元数据。
+     * Resolve search metadata for origin APIV2 route.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function getOriginRouteSearch(): array
+    {
+        $search = zget($this->originRouteInfo, 'search', array());
+        if(empty($search['enabled'])) return array();
+
+        return $search;
+    }
+
+    /**
+     * 解析真实落点的搜索模块。
+     * Resolve search module for real handler.
+     *
+     * @param  array $routeSearch
+     * @access protected
+     * @return string
+     */
+    protected function resolveSearchModule(array $routeSearch): string
+    {
+        return zget($routeSearch, 'searchModule', $this->moduleName);
+    }
+
+    /**
+     * 解析真实落点的搜索 session key。
+     * Resolve query session key for real handler.
+     *
+     * @param  array  $routeSearch
+     * @access protected
+     * @return string
+     */
+    protected function resolveQuerySessionKey(array $routeSearch): string
+    {
+        $searchModule = $this->resolveSearchModule($routeSearch);
+        return zget($routeSearch, 'querySessionKey', $searchModule);
+    }
+
+    /**
+     * 按真实落点准备搜索上下文。
+     * Prepare search context for real handler.
+     *
+     * @param  array  $routeSearch
+     * @access protected
+     * @return array
+     */
+    protected function prepareRealRouteSearchContext(array $routeSearch): array
+    {
+        $searchModule    = $this->resolveSearchModule($routeSearch);
+        $querySessionKey = $this->resolveQuerySessionKey($routeSearch);
+
+        $this->loadModel($this->moduleName);
+        $this->control->app->rawModule = $this->moduleName;
+        $this->control->app->rawMethod = $this->methodName;
+
+        if($this->moduleName == 'program' && $this->methodName == 'browse')
+        {
+            $this->config->program->search['actionURL'] = helper::createLink('program', 'browse', 'browseType=bysearch&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&param=myQueryID');
+            $this->loadModel('search')->setSearchParams($this->config->program->search);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'project' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $actionURL = helper::createLink('project', 'browse', '&programID=' . (int)zget($_GET, 'programID', 0) . '&browseType=bysearch&queryID=myQueryID');
+            $this->project->buildSearchForm($queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'project' && $this->methodName == 'bug')
+        {
+            $projectID = (int)zget($_GET, 'projectID', 0);
+            $productID = (int)zget($_GET, 'productID', 0);
+            $branchID  = (string)zget($_GET, 'branchID', 'all');
+            $orderBy   = (string)zget($_GET, 'orderBy', 'status,id_desc');
+            $build     = (int)zget($_GET, 'build', 0);
+            $param     = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $project   = $this->project->getByID($projectID);
+            $products  = $this->loadModel('product')->getProducts($projectID);
+            $this->projectZen->processBugSearchParams($project, 'bysearch', $param, $projectID, $productID, $branchID, $orderBy, $build, $products);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'bug');
+        }
+
+        if($this->moduleName == 'project' && $this->methodName == 'build')
+        {
+            $projectID = (int)zget($_GET, 'projectID', 0);
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $productID = (int)zget($_GET, 'productID', 0);
+            $products  = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
+            $this->session->set('buildProductID', $productID);
+            $this->project->buildProjectBuildSearchForm($products, $queryID, $projectID, $productID, 'project');
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'build');
+        }
+
+        if($this->moduleName == 'execution' && $this->methodName == 'build')
+        {
+            $executionID = (int)zget($_GET, 'executionID', 0);
+            $queryID     = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $productID   = (int)zget($_GET, 'productID', 0);
+            $products    = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
+            $this->project->buildProjectBuildSearchForm($products, $queryID, $executionID, $productID, 'execution');
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'build');
+        }
+
+        if($this->moduleName == 'product' && $this->methodName == 'browse')
+        {
+            $productID  = (int)zget($_GET, 'productID', 0);
+            $branch     = (string)zget($_GET, 'branch', 'all');
+            $queryID    = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $storyType  = (string)zget($_GET, 'storyType', 'story');
+            $projectID  = (int)zget($_GET, 'projectID', 0);
+            $products   = $this->product->getPairs('nodeleted', 0, '', 0);
+            $actionURL  = helper::createLink('product', 'browse', "productID={$productID}&branch={$branch}&browseType=bysearch&queryID=myQueryID&storyType={$storyType}&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$projectID}&from=product&blockID=0");
+            $this->product->buildSearchForm($productID, $products, $queryID, $actionURL, $storyType, $branch, $projectID);
+            return $this->buildPreparedSearchConfig($storyType, $storyType, 'product');
+        }
+
+        if($this->moduleName == 'projectstory' && $this->methodName == 'story')
+        {
+            $projectID = (int)zget($_GET, 'projectID', 0);
+            $productID = (int)zget($_GET, 'productID', 0);
+            $branch    = (string)zget($_GET, 'branch', '0');
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $storyType = (string)zget($_GET, 'storyType', 'story');
+            $orderBy   = (string)zget($_GET, 'orderBy', '');
+            $blockID   = (int)zget($_GET, 'blockID', 0);
+            $project   = $this->loadModel('project')->getByID($projectID);
+            $products  = $this->product->getPairs('nodeleted', 0, '', 0);
+            $actionURL = helper::createLink('projectstory', 'story', "projectID={$projectID}&productID=0&branch={$branch}&browseType=bysearch&queryID=myQueryID&storyType={$storyType}&orderBy={$orderBy}&recTotal=0&recPerPage=20&pageID=1&projectID={$projectID}&from=doc&blockID={$blockID}");
+            $this->product->buildSearchForm($productID, $products, $queryID, $actionURL, $storyType, $branch, $project->id);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'product');
+        }
+
+        if($this->moduleName == 'productplan' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $productID = (int)zget($_GET, 'productID', 0);
+            $product   = $this->loadModel('product')->getByID($productID);
+            $actionURL = helper::createLink('productplan', 'browse', "productID={$productID}&branch=" . (string)zget($_GET, 'branch', 'all') . '&browseType=bysearch&queryID=myQueryID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=product&blockID=0');
+            $this->productplan->buildSearchForm($queryID, $actionURL, $product);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'release' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $productID = (int)zget($_GET, 'productID', 0);
+            $branch    = (string)zget($_GET, 'branch', 'all');
+            $product   = $this->loadModel('product')->getByID($productID);
+            $actionURL = helper::createLink('release', 'browse', "productID={$productID}&branch={$branch}&browseType=bysearch&orderBy=t1.date_desc&param=myQueryID&recTotal=0&recPerPage=20&pageID=1&from=product&blockID=0");
+            $this->releaseZen->buildSearchForm($queryID, $actionURL, $product, $branch);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'release');
+        }
+
+        if($this->moduleName == 'projectrelease' && $this->methodName == 'browse')
+        {
+            $projectID  = (int)zget($_GET, 'projectID', 0);
+            $products   = $this->loadModel('product')->getProducts($projectID, 'all', '', false);
+            $productID  = (int)(key($products) ?: 0);
+            $queryID    = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $branch     = 'all';
+            $product    = $this->loadModel('product')->getByID($productID);
+            $actionURL  = helper::createLink('projectrelease', 'browse', "projectID={$projectID}&executionID=0&browseType=bysearch&orderBy=t1.date_desc&param=myQueryID&recTotal=0&recPerPage=15&pageID=1&from=project&blockID=0");
+            $this->releaseZen->buildSearchForm($queryID, $actionURL, $product, $branch);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'release');
+        }
+
+        if($this->moduleName == 'bug' && $this->methodName == 'browse')
+        {
+            $productID = (int)zget($_GET, 'productID', 0);
+            $branch    = (string)zget($_GET, 'branch', '0');
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $actionURL = helper::createLink('bug', 'browse', "productID={$productID}&branch={$branch}&browseType=bysearch&queryID=myQueryID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=bug&blockID=0");
+            $this->bug->buildSearchForm($productID, $products, $queryID, $actionURL, $branch);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'execution' && $this->methodName == 'all')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $orderBy   = (string)zget($_GET, 'orderBy', 'order_asc');
+            $productID = (int)zget($_GET, 'productID', 0);
+            $actionURL = helper::createLink('execution', 'all', "browseType=bysearch&orderBy={$orderBy}&productID={$productID}&param=myQueryID");
+            $this->execution->buildSearchForm($queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'execution' && $this->methodName == 'story')
+        {
+            $executionID = (int)zget($_GET, 'executionID', 0);
+            $queryID     = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $storyType   = (string)zget($_GET, 'storyType', 'story');
+            $orderBy     = (string)zget($_GET, 'orderBy', 'order_desc');
+            $from        = (string)zget($_GET, 'from', 'execution');
+            $blockID     = (int)zget($_GET, 'blockID', 0);
+            $execution   = $this->execution->getByID($executionID);
+            $products    = $this->loadModel('product')->getProducts($executionID);
+            $actionURL   = helper::createLink('execution', 'story', "executionID={$executionID}&storyType={$storyType}&orderBy={$orderBy}&browseType=bysearch&queryID=myQueryID&recTotal=0&recPerPage=&pageID=1&from={$from}&blockID={$blockID}");
+            $this->loadModel('execution')->buildStorySearchForm($execution, 0, $products, $queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'product');
+        }
+
+        if($this->moduleName == 'execution' && $this->methodName == 'bug')
+        {
+            $executionID = (int)zget($_GET, 'executionID', 0);
+            $productID   = (int)zget($_GET, 'productID', 0);
+            $branch      = (string)zget($_GET, 'branch', 'all');
+            $orderBy     = (string)zget($_GET, 'orderBy', 'status,id_desc');
+            $build       = (string)zget($_GET, 'build', '');
+            $queryID     = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $products    = $this->loadModel('product')->getProducts($executionID);
+            $actionURL   = helper::createLink('execution', 'bug', "executionID={$executionID}&productID={$productID}&branch={$branch}&orderBy={$orderBy}&build={$build}&browseType=bysearch&queryID=myQueryID");
+            $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'bug');
+        }
+
+        if($this->moduleName == 'execution' && $this->methodName == 'testcase')
+        {
+            $executionID = (int)zget($_GET, 'executionID', 0);
+            $productID   = (int)zget($_GET, 'productID', 0);
+            $branchID    = (string)zget($_GET, 'branchID', 'all');
+            $queryID     = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $moduleID    = (int)zget($_GET, 'moduleID', 0);
+            $orderBy     = (string)zget($_GET, 'orderBy', 'id_desc');
+            $products    = $this->loadModel('product')->getProducts($executionID);
+            $actionURL   = helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&browseType=bysearch&queryID=myQueryID&moduleID={$moduleID}&orderBy={$orderBy}");
+            $this->execution->buildCaseSearchForm($products, $queryID, $actionURL, $executionID);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'company' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : ($this->app->getViewType() == 'json' ? (int)zget($_GET, 'param', 0) : 0);
+            $actionURL = helper::createLink('company', 'browse', "browseType=all&param=myQueryID&type=bysearch");
+            $this->company->buildSearchForm($queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'company');
+        }
+
+        if($this->moduleName == 'issue' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $objectID  = (int)zget($_GET, 'objectID', 0);
+            $from      = (string)zget($_GET, 'from', 'project');
+            $actionURL = helper::createLink('issue', 'browse', "objectID={$objectID}&from={$from}&browseType=bysearch&queryID=myQueryID");
+            $this->issue->buildSearchForm($actionURL, $queryID, $objectID);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'risk' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $projectID = (int)zget($_GET, 'projectID', zget($_GET, 'executionID', 0));
+            $from      = (string)zget($_GET, 'from', 'project');
+            $actionURL = helper::createLink('risk', 'browse', "projectID={$projectID}&from={$from}&browseType=bysearch&queryID=myQueryID");
+            $this->risk->buildSearchForm($queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'opportunity' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $projectID = (int)zget($_GET, 'projectID', zget($_GET, 'executionID', 0));
+            $from      = (string)zget($_GET, 'from', 'project');
+            $actionURL = helper::createLink('opportunity', 'browse', "projectID={$projectID}&from={$from}&browseType=bysearch&queryID=myQueryID");
+            $this->opportunity->buildSearchForm($queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'auditplan' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $projectID = (int)zget($_GET, 'projectID', zget($_GET, 'executionID', 0));
+            $actionURL = helper::createLink('auditplan', 'browse', "projectID={$projectID}&browseType=bysearch&param=myQueryID&orderBy=id_desc");
+            $this->auditplan->buildSearchForm($projectID, $queryID, $actionURL);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'feedback' && in_array($this->methodName, array('browse', 'admin')))
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $orderBy   = (string)zget($_GET, 'orderBy', 'id_desc');
+            $method    = $this->methodName;
+            $actionURL = helper::createLink('feedback', $method, "browseType=bysearch&param=myQueryID&orderBy={$orderBy}");
+
+            $this->config->feedback->search['actionURL'] = $actionURL;
+            $this->config->feedback->search['queryID']   = $queryID;
+            $this->config->feedback->search['onMenuBar'] = 'no';
+
+            $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
+            $this->config->feedback->search['params']['product']['values']     = arrayUnion(array('' => ''), $products);
+            $this->config->feedback->search['params']['openedBy']['values']    = arrayUnion(array('' => ''), $this->feedback->getFeedbackPairs());
+            $this->config->feedback->search['params']['processedBy']['values'] = arrayUnion(array('' => ''), $this->feedback->getFeedbackPairs('admin'));
+            $this->loadModel('search')->setSearchParams($this->config->feedback->search);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        if($this->moduleName == 'ticket' && $this->methodName == 'browse')
+        {
+            $queryID   = isset($_GET['browseType']) && $_GET['browseType'] == 'bysearch' ? (int)zget($_GET, 'param', 0) : 0;
+            $productID = (string)zget($_GET, 'productID', zget($_GET, 'param', 'all'));
+            $actionURL = helper::createLink('ticket', 'browse', "browseType=bysearch&param=myQueryID&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&from=ticket&blockID=0");
+            $this->ticket->buildSearchForm($queryID, $actionURL, $productID === '' ? 'all' : $productID);
+            return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+        }
+
+        $this->loadConfig('search');
+        $this->loadLang('search');
+        $this->loadConfig($searchModule);
+        $this->loadLang($searchModule);
+
+        $moduleConfig = zget($this->config, $searchModule, null);
+        $searchConfig = $moduleConfig->search ?? array();
+        if(empty($searchConfig)) $this->sendV2Error('Search config is not available for this route.');
+
+        return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
+    }
+
+    /**
+     * 从已准备的搜索参数构造搜索配置。
+     * Build search config from prepared search params.
+     *
+     * @param  string      $searchModule
+     * @param  string      $querySessionKey
+     * @param  string|null $configModule
+     * @access protected
+     * @return array
+     */
+    protected function buildPreparedSearchConfig(string $searchModule, string $querySessionKey, ?string $configModule = null): array
+    {
+        $configModule = $configModule ?: $searchModule;
+
+        $this->loadConfig('search');
+        $this->loadLang('search');
+        $this->loadConfig($configModule);
+        $this->loadLang($configModule);
+
+        $searchParams = $this->session->{$searchModule . 'searchParams'} ?? null;
+        if(empty($searchParams) && $configModule !== $searchModule) $searchParams = $this->session->{$configModule . 'searchParams'} ?? null;
+        if(empty($searchParams))
+        {
+            $moduleConfig = zget($this->config, $configModule, null);
+            $searchParams = $moduleConfig->search ?? array();
+        }
+        if(empty($searchParams)) $this->sendV2Error('Search config is not available for this route.');
+
+        $searchParams['module']  = $querySessionKey;
+        $searchParams['queryID'] = 0;
+
+        return $searchParams;
+    }
+
+    /**
+     * 规范化搜索条件。
+     * Normalize search filters.
+     *
+     * @param  mixed  $filters
+     * @param  array  $searchFields
+     * @access protected
+     * @return array
+     */
+    protected function normalizeSearchFilters(mixed $filters, array $searchFields): array
+    {
+        if(is_array($filters) && isset($filters['field'])) $filters = array($filters);
+        if(!is_array($filters) || empty($filters)) $this->sendV2Error('Filters must be a non-empty array.');
+
+        $operators  = array_keys($this->lang->search->operators);
+        $groupItems = max(1, (int)zget($this->config->search, 'groupItems', 3));
+        $maxGroups  = 2;
+        $maxTotal   = $groupItems * $maxGroups;
+        $groupCount = array(1 => 0, 2 => 0);
+        $normalized = array();
+
+        foreach($filters as $filter)
+        {
+            if(!is_array($filter)) $this->sendV2Error('Each filter must be an object-like array.');
+
+            $field    = (string)zget($filter, 'field', '');
+            $operator = (string)zget($filter, 'operator', '');
+            $join     = strtolower((string)zget($filter, 'join', 'and'));
+            $group    = (int)zget($filter, 'group', 1);
+
+            if($field === '' || !isset($searchFields[$field])) $this->sendV2Error("Unsupported search field: {$field}.");
+            if(!in_array($operator, $operators))               $this->sendV2Error("Unsupported search operator: {$operator}.");
+            if(!in_array($join, array('and', 'or')))           $this->sendV2Error("Unsupported search join: {$join}.");
+            if($group < 1 || $group > $maxGroups)              $this->sendV2Error('Search group must be 1 or 2.');
+            if(!array_key_exists('value', $filter))            $this->sendV2Error("Search filter {$field} is missing value.");
+
+            $value = $filter['value'];
+            if(is_array($value))
+            {
+                $value = implode(',', array_map('strval', $value));
+            }
+            elseif(is_bool($value))
+            {
+                $value = $value ? '1' : '0';
+            }
+            elseif(is_scalar($value) || $value === null)
+            {
+                $value = $value === null ? '' : (string)$value;
+            }
+            else
+            {
+                $this->sendV2Error("Search filter {$field} has invalid value.");
+            }
+
+            $groupCount[$group]++;
+            if($groupCount[$group] > $groupItems) $this->sendV2Error("Search group {$group} exceeds the limit of {$groupItems} filters.");
+
+            $normalized[] = array(
+                'field'    => $field,
+                'operator' => $operator,
+                'join'     => $join,
+                'group'    => $group,
+                'value'    => $value
+            );
+        }
+
+        if(count($normalized) > $maxTotal) $this->sendV2Error("Filters exceed the limit of {$maxTotal} conditions.");
+
+        return $normalized;
+    }
+
+    /**
+     * 组装搜索表单参数。
+     * Build search form payload.
+     *
+     * @param  array  $filters
+     * @param  string $querySessionKey
+     * @access protected
+     * @return array
+     */
+    protected function buildSearchFormPayload(array $filters, string $querySessionKey): array
+    {
+        $groupItems = max(1, (int)zget($this->config->search, 'groupItems', 3));
+        $groupJoin  = strtolower((string)zget($_GET, 'groupJoin', 'and'));
+        if(!in_array($groupJoin, array('and', 'or'))) $this->sendV2Error("Unsupported group join: {$groupJoin}.");
+
+        $payload = array('module' => $querySessionKey, 'groupAndOr' => $groupJoin);
+        $indexes = array(1 => 1, 2 => $groupItems + 1);
+
+        foreach($filters as $filter)
+        {
+            $index = $indexes[$filter['group']]++;
+            $payload["field{$index}"]    = $filter['field'];
+            $payload["operator{$index}"] = $filter['operator'];
+            $payload["value{$index}"]    = $filter['value'];
+            $payload["andOr{$index}"]    = $filter['join'];
+        }
+
+        return $payload;
+    }
+
+    /**
+     * 为APIV2列表请求准备搜索session和兼容参数。
+     * Prepare search session and internal params for APIV2 list requests.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareV2Search(): void
+    {
+        if($this->action != 'get' || !$this->hasSearchFilters()) return;
+
+        $routeSearch = $this->getOriginRouteSearch();
+        if(empty($routeSearch)) $this->sendV2Error('Filters are not supported for this route.');
+
+        $searchConfig      = $this->prepareRealRouteSearchContext($routeSearch);
+        $filters           = $this->normalizeSearchFilters($_GET['filters'], $searchConfig['fields'] ?? array());
+        $searchFormPayload = $this->buildSearchFormPayload($filters, $searchConfig['module']);
+
+        include_once $this->appRoot . 'module/search/model.php';
+        $searchModel = new searchModel();
+
+        $backupPost = $_POST;
+        $_POST      = $searchFormPayload;
+
+        try
+        {
+            $searchModel->setSearchParams($searchConfig);
+            $searchModel->buildQuery();
+        }
+        finally
+        {
+            $_POST = $backupPost;
+        }
+
+        $_GET['browseType'] = 'bysearch';
+        $_GET['param']      = 0;
     }
 
     /**
@@ -348,6 +906,7 @@ class api extends router
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+        $this->prepareV2Search();
 
         /* Set default params and post data to delete.*/
         if($this->action == 'delete')
@@ -722,7 +1281,7 @@ class api extends router
             else
             {
                 /* Browse all items in api mode defaultly. */
-                $this->params[$key] = in_array($key, ['browseType', 'status']) ? 'all' : $defaultItem['default'];
+                $this->params[$key] = $key == 'browseType' ? 'all' : $defaultItem['default'];
             }
         }
 

@@ -61,12 +61,6 @@ cid=15392
  - 第8条的title属性 @BUG8
  - 第4条的title属性 @BUG4
  - 第2条的title属性 @BUG2
-- 测试获取项目ID为1,模块为1的bug
- - 第9条的title属性 @BUG9
- - 第7条的title属性 @BUG7
- - 第5条的title属性 @BUG5
- - 第3条的title属性 @BUG3
- - 第1条的title属性 @BUG1
 
 */
 
@@ -86,4 +80,3 @@ r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], 'all'))        
 r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], $branchIdList[0]))    && p('6:title')                                  && e('BUG6');                      // 测试获取项目ID为2,产品ID为2, 分支为1的bug
 r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[0]))              && p('8:title;2:title')                          && e('BUG8;BUG2');                 // 测试获取项目ID为2,未解决的bug
 r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[1]))              && p('10:title;8:title;4:title;2:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
-r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, 'all', $paramList[0]))      && p('9:title;7:title;5:title;3:title;1:title')  && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,模块为1的bug

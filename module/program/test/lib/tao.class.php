@@ -527,10 +527,10 @@ class programTaoTest extends baseTest
      */
     public function updateStatsTest(array $projectIdList): array
     {
-        $this->program->updateStats($projectIdList);
+        $this->invokeArgs('updateStats', [$projectIdList]);
         if(dao::isError()) return dao::getError();
 
-        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
     }
 
     /**

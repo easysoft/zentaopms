@@ -8,11 +8,11 @@ title=测试 adminModel::getApiConfig();
 timeout=0
 cid=14979
 
-- 执行admin模块的getApiConfigTest方法  @null
-- 执行admin模块的getApiConfigWithCacheTest方法  @cached_config
-- 执行admin模块的getApiConfigExpiredTest方法  @expired_refresh_failed
-- 执行admin模块的getApiConfigNoResponseTest方法  @no_response
-- 执行admin模块的getApiConfigInvalidFormatTest方法  @invalid_format
+- 首次请求读取模拟配置 @1,mock_session_123,mocksid,3600
+- 使用 session 缓存配置 @1,test_session_123,zentaosid,3600
+- 过期配置刷新后重新获取 @1,fresh_session_456,freshsid,7200
+- 模拟接口无响应时返回空配置 @0
+- 模拟返回格式非法时返回空配置 @0
 
 */
 
@@ -23,8 +23,8 @@ su('admin');
 
 $admin = new adminModelTest();
 
-r($admin->getApiConfigTest()) && p() && e('null');
-r($admin->getApiConfigWithCacheTest()) && p() && e('cached_config');
-r($admin->getApiConfigExpiredTest()) && p() && e('expired_refresh_failed');
-r($admin->getApiConfigNoResponseTest()) && p() && e('no_response');
-r($admin->getApiConfigInvalidFormatTest()) && p() && e('invalid_format');
+r($admin->getApiConfigTest()) && p('hasConfig,sessionID,sessionVar,expiredTime') && e('1,mock_session_123,mocksid,3600');
+r($admin->getApiConfigWithCacheTest()) && p('hasConfig,sessionID,sessionVar,expiredTime') && e('1,test_session_123,zentaosid,3600');
+r($admin->getApiConfigExpiredTest()) && p('hasConfig,sessionID,sessionVar,expiredTime') && e('1,fresh_session_456,freshsid,7200');
+r($admin->getApiConfigNoResponseTest()) && p('hasConfig') && e('0');
+r($admin->getApiConfigInvalidFormatTest()) && p('hasConfig') && e('0');

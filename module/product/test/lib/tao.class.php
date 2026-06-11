@@ -735,8 +735,9 @@ class productTaoTest extends baseTest
      */
     public function buildExecutionPairsTest(string $mode = '', bool $withBranch = false): array
     {
+        global $tester;
         $orderBy    = 't2.begin_desc,t2.id_desc';
-        $executions = $this->objectModel->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $executions = $tester->dao->select('t2.id,t2.name,t2.project,t2.grade,t2.path,t2.parent,t2.attribute,t2.multiple,t3.name as projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
             ->where('t1.product')->eq('1')
@@ -745,7 +746,7 @@ class productTaoTest extends baseTest
             ->orderBy($orderBy)
             ->fetchAll('id');
 
-        $objects = $this->objectModel->buildExecutionPairs($executions, $mode, $withBranch);
+        $objects = $this->invokeArgs('buildExecutionPairs', [$executions, $mode, $withBranch]);
         if(dao::isError())
         {
             return dao::getError();

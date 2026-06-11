@@ -1,0 +1,10 @@
+.expressionDIV .detail {margin-bottom: 10px;}
+.expressionDIV .detail-heading {margin-bottom: 10px;}
+.expressionDIV .expression {border: 1px solid #ddd; padding: 10px; margin-bottom: 10px; min-height: 100px;}
+.expressionDIV .expression .item-expression {padding: 2px; margin: 3px; display: inline-block;}
+.expressionDIV .expression .item-target {border: 1px solid #ddd; border-radius: 4px;}
+.expressionDIV .expression .item-number {padding-right: 0px; margin-right: 0px;}
+.expressionDIV .expression .item-number + .item-number {padding-left: 0px; margin-left: 0px;}
+.expressionDIV .clear-expression {float: right; position: relative; top: -35px; right: 10px;}
+.expressionDIV .clear-expression .clear-last {margin-right: 10px;}
+.expressionDIV .btn-expression {min-width: 40px; padding-top: 10px; padding-bottom: 10px; margin-right: 5px; margin-bottom: 5px;}

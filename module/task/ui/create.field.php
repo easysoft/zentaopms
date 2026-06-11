@@ -16,8 +16,14 @@ $fields->field('desc')
     ->control(array('control' => 'editor', 'templateType' => 'task'));
 
 $files = data('task.files') ? data('task.files') : array();
+
+foreach($files as $key => $fileInfo)
+{
+    if($fileInfo->extra != '') unset($files[$key]);
+}
+
 $fields->field('files')->control('fileSelector', array('defaultFiles' => array_values($files)));
-$fields->field('fileList')->control('hidden')->value($files);
+$fields->field('fileList')->control('hidden')->value(data('task.files'));
 
 /* Set foldable attribute. */
 $fields->field('module')->foldable();

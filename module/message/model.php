@@ -331,7 +331,11 @@ class messageModel extends model
 
         if($objectType == 'testtask')
         {
-            $toList = array_merge(explode(',', $toList), explode(',', $object->members));
+            $toAndCcList = $this->loadModel('testtask')->getToAndCcList($object);
+            if(empty($toAndCcList)) return '';
+
+            list($toList, $ccList) = $toAndCcList;
+            $toList = array_merge(explode(',', $toList), explode(',', $ccList));
             $toList = array_filter(array_unique($toList));
             $toList = implode(',', $toList);
         }

@@ -174,7 +174,7 @@ class upgradeTao extends upgradeModel
         preg_match_all('/CREATE TABLE `([^`]*)`/', $createHead, $out);
         if(!isset($out[1][0])) return array_values($return);
 
-        $return['table'] = str_replace('zt_', $this->config->db->prefix, $out[1][0]);
+        $return['table'] = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $out[1][0]);
         try
         {
             $dbCreateSQL = $this->dbh->query("SHOW CREATE TABLE `{$return['table']}`")->fetch(PDO::FETCH_ASSOC);

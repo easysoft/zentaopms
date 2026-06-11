@@ -63,7 +63,7 @@ class zanode extends control
         /* 构建搜索表单。*/
         /* Build the search form. */
         $hosts     = $this->loadModel('zahost')->getPairs('host');
-        $actionURL = $this->createLink('zanode', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('zanode', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->config->zanode->search['actionURL'] = $actionURL;
         $this->config->zanode->search['queryID']   = $queryID;
         $this->config->zanode->search['onMenuBar'] = 'no';

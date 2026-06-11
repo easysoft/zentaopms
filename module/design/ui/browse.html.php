@@ -10,22 +10,22 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('+type', strtolower($type));
+jsVar('+browseType', strtolower($browseType));
 jsVar('projectID', $projectID);
 jsVar('productID', $productID);
 
 /* zin: Define the set::module('design') feature bar on main menu. */
 featureBar
 (
-    li(searchToggle(set::open($type == 'bySearch')))
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
 $canBeChanged    = common::canModify('project', $project);
 $canCreate       = $canBeChanged && hasPriv('design', 'create');
 $canBatchCreate  = $canBeChanged && hasPriv('design', 'batchCreate');
-$createItem      = array('text' => $lang->design->create,      'url' => helper::createLink('design', 'create', "projectID={$projectID}&productID={$productID}&type={$type}"));
-$batchCreateItem = array('text' => $lang->design->batchCreate, 'url' => helper::createLink('design', 'batchCreate', "projectID={$projectID}&productID={$productID}&type={$type}"));
+$createItem      = array('text' => $lang->design->create,      'url' => helper::createLink('design', 'create', "projectID={$projectID}&productID={$productID}&browseType={$browseType}"));
+$batchCreateItem = array('text' => $lang->design->batchCreate, 'url' => helper::createLink('design', 'batchCreate', "projectID={$projectID}&productID={$productID}&browseType={$browseType}"));
 toolbar
 (
     $canCreate && $canBatchCreate ? btnGroup
@@ -63,7 +63,7 @@ dtable
     set::cols($config->design->dtable->fieldList),
     set::data($tableData),
     set::orderBy($orderBy),
-    set::sortLink(createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('design', 'browse', "projectID={$projectID}&productID={$productID}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(
         usePager()
     )

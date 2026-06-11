@@ -3,6 +3,45 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+class adminApiConfigMockStream
+{
+    public static $responses = array();
+
+    private $content  = '';
+    private $position = 0;
+
+    public function stream_open($path, $mode, $options, &$openedPath): bool
+    {
+        $url  = parse_url($path);
+        $host = $url['host'] ?? '';
+        if(!array_key_exists($host, self::$responses)) return false;
+
+        $content = self::$responses[$host];
+        if($content === false) return false;
+
+        $this->content  = (string)$content;
+        $this->position = 0;
+        return true;
+    }
+
+    public function stream_read($count): string
+    {
+        $result = substr($this->content, $this->position, $count);
+        $this->position += strlen($result);
+        return $result;
+    }
+
+    public function stream_eof(): bool
+    {
+        return $this->position >= strlen($this->content);
+    }
+
+    public function stream_stat(): array
+    {
+        return array();
+    }
+}
+
 class adminModelTest extends baseTest
 {
     protected $moduleName = 'admin';
@@ -17,20 +56,25 @@ class adminModelTest extends baseTest
      */
     public function getApiConfigTest()
     {
-        // 清空session以模拟首次请求
-        global $app;
+        global $app, $config;
+
+        $originalApiRoot   = $config->admin->apiRoot;
+        $originalApiConfig = isset($app->session->apiConfig) ? $app->session->apiConfig : null;
+
+        $this->registerApiConfigMock(array
+        (
+            'fresh' => '{"sessionID":"mock_session_123","sessionVar":"mocksid","serverTime":1718000000,"expiredTime":3600}'
+        ));
+
+        $config->admin->apiRoot = 'adminapi://fresh';
         $app->session->set('apiConfig', null);
-
-        // 抑制网络错误输出
-        ob_start();
         $result = $this->instance->getApiConfig();
-        ob_end_clean();
 
-        // 检查是否有DAO错误
+        $config->admin->apiRoot = $originalApiRoot;
+        $app->session->set('apiConfig', $originalApiConfig);
+
         if(dao::isError()) return dao::getError();
-
-        // 在测试环境中网络调用会失败，返回null是正常的
-        return $result === null ? 'fail' : 'success';
+        return $this->buildApiConfigResult($result);
     }
 
     /**
@@ -44,25 +88,18 @@ class adminModelTest extends baseTest
     {
         global $app;
 
-        // 模拟session中已存在有效配置
         $mockConfig = new stdClass();
         $mockConfig->sessionID = 'test_session_123';
         $mockConfig->sessionVar = 'zentaosid';
         $mockConfig->serverTime = time();
-        $mockConfig->expiredTime = 3600; // 1小时过期时间
+        $mockConfig->expiredTime = 3600;
 
         $app->session->set('apiConfig', $mockConfig);
 
         $result = $this->instance->getApiConfig();
 
-        // 检查是否有DAO错误
         if(dao::isError()) return dao::getError();
-
-        // 有缓存时应该直接返回缓存内容
-        if(!empty($result) && isset($result->sessionID) && $result->sessionID == 'test_session_123') {
-            return 'cached_config';
-        }
-        return 'cache_miss';
+        return $this->buildApiConfigResult($result);
     }
 
     /**
@@ -74,27 +111,28 @@ class adminModelTest extends baseTest
      */
     public function getApiConfigExpiredTest()
     {
-        global $app;
+        global $app, $config;
 
-        // 模拟session中存在过期配置
         $expiredConfig = new stdClass();
         $expiredConfig->sessionID = 'expired_session_123';
         $expiredConfig->sessionVar = 'zentaosid';
-        $expiredConfig->serverTime = time() - 7200; // 2小时前
-        $expiredConfig->expiredTime = 3600; // 1小时过期时间
+        $expiredConfig->serverTime = time() - 7200;
+        $expiredConfig->expiredTime = 3600;
 
+        $originalApiRoot = $config->admin->apiRoot;
         $app->session->set('apiConfig', $expiredConfig);
 
-        // 抑制网络错误输出
-        ob_start();
+        $this->registerApiConfigMock(array
+        (
+            'refresh' => '{"sessionID":"fresh_session_456","sessionVar":"freshsid","serverTime":1718003600,"expiredTime":7200}'
+        ));
+
+        $config->admin->apiRoot = 'adminapi://refresh';
         $result = $this->instance->getApiConfig();
-        ob_end_clean();
+        $config->admin->apiRoot = $originalApiRoot;
 
-        // 检查是否有DAO错误
         if(dao::isError()) return dao::getError();
-
-        // 过期的配置应该触发重新获取，没有网络连接时应该返回null
-        return $result === null ? 'expired_refresh_failed' : 'expired_refresh_success';
+        return $this->buildApiConfigResult($result);
     }
 
     /**
@@ -108,30 +146,17 @@ class adminModelTest extends baseTest
     {
         global $app, $config;
 
-        // 清空session缓存
+        $originalApiRoot = $config->admin->apiRoot;
+
+        $this->registerApiConfigMock(array('empty' => ''));
+        $config->admin->apiRoot = 'adminapi://empty';
         $app->session->set('apiConfig', null);
 
-        // 保存原始配置
-        $originalApiRoot = $config->admin->apiRoot ?? '';
-
-        // 设置无效的API根地址
-        $config->admin->apiRoot = 'http://invalid.domain.test.invalid';
-
-        // 抑制网络错误输出
-        ob_start();
         $result = $this->instance->getApiConfig();
-        ob_end_clean();
+        $config->admin->apiRoot = $originalApiRoot;
 
-        // 恢复原始配置
-        if($originalApiRoot) {
-            $config->admin->apiRoot = $originalApiRoot;
-        }
-
-        // 检查是否有DAO错误
         if(dao::isError()) return dao::getError();
-
-        // 无效域名会导致网络请求失败，getApiConfig返回null
-        return $result === null ? 'no_response' : 'unexpected_response';
+        return $this->buildApiConfigResult($result);
     }
 
     /**
@@ -143,21 +168,19 @@ class adminModelTest extends baseTest
      */
     public function getApiConfigInvalidFormatTest()
     {
-        global $app;
+        global $app, $config;
 
-        // 清空session缓存
+        $originalApiRoot = $config->admin->apiRoot;
+
+        $this->registerApiConfigMock(array('invalid' => '{"sessionVar":"mocksid"}'));
+        $config->admin->apiRoot = 'adminapi://invalid';
+
         $app->session->set('apiConfig', null);
-
-        // 抑制网络错误输出
-        ob_start();
         $result = $this->instance->getApiConfig();
-        ob_end_clean();
+        $config->admin->apiRoot = $originalApiRoot;
 
-        // 检查是否有DAO错误
         if(dao::isError()) return dao::getError();
-
-        // 无效或空的配置格式会导致解析失败，getApiConfig返回null
-        return $result === null ? 'invalid_format' : 'valid_format';
+        return $this->buildApiConfigResult($result);
     }
 
     /**
@@ -170,69 +193,12 @@ class adminModelTest extends baseTest
      */
     public function checkWeakTest(string $account)
     {
-        // 创建测试用的用户对象，避免数据库依赖
-        $testUsers = array(
-            'weakuser1' => (object)array(
-                'id' => 1,
-                'account' => 'weakuser1',
-                'password' => 'e10adc3949ba59abbe56e057f20f883e', // md5('123456')
-                'mobile' => '18812341234',
-                'phone' => '88881234',
-                'birthday' => '1995-01-01'
-            ),
-            'weakuser2' => (object)array(
-                'id' => 2,
-                'account' => 'weakuser2',
-                'password' => '04b5f5c916d018ae4f097158f1c1892b', // md5('weakuser2')
-                'mobile' => '18888888888',
-                'phone' => '88889999',
-                'birthday' => '1990-05-15'
-            ),
-            'weakuser3' => (object)array(
-                'id' => 3,
-                'account' => 'weakuser3',
-                'password' => '679f352d0bf763184930cdf255068559', // md5('18812341234')
-                'mobile' => '18812341234',
-                'phone' => '12345678',
-                'birthday' => '1985-12-30'
-            ),
-            'weakuser4' => (object)array(
-                'id' => 4,
-                'account' => 'weakuser4',
-                'password' => 'f32e3b36152ebaac818f17e2ad7162ca', // md5('88881234')
-                'mobile' => '15987654321',
-                'phone' => '88881234',
-                'birthday' => '1992-08-20'
-            ),
-            'weakuser5' => (object)array(
-                'id' => 5,
-                'account' => 'weakuser5',
-                'password' => '658e93adf188f3bb869a402cea2d03b6', // md5('1995-01-01')
-                'mobile' => '18765432109',
-                'phone' => '55555555',
-                'birthday' => '1995-01-01'
-            ),
-            'stronguser' => (object)array(
-                'id' => 6,
-                'account' => 'stronguser',
-                'password' => '87e4d8b4a50416a761ebc80255226a59', // md5('ComplexP@ssw0rd!')
-                'mobile' => '13800138000',
-                'phone' => '99999999',
-                'birthday' => '1996-06-06'
-            )
-        );
+        $user = $this->instance->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+        if(empty($user)) return false;
 
-        if(!isset($testUsers[$account])) return false;
-
-        $user = $testUsers[$account];
-
-        try {
-            $result = $this->instance->checkWeak($user);
-            if(dao::isError()) return dao::getError();
-            return $result;
-        } catch (Exception $e) {
-            return false;
-        }
+        $result = $this->instance->checkWeak($user);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**
@@ -256,7 +222,7 @@ class adminModelTest extends baseTest
             $config->admin->menuGroup['system']        = array('custom|mode', 'backup', 'cron', 'action|trash', 'admin|xuanxuan', 'setting|xuanxuan', 'admin|license', 'admin|checkweak', 'admin|resetpwdsetting', 'admin|safe', 'cache|setting', 'custom|timezone', 'search|buildindex', 'admin|tableengine', 'admin|metriclib', 'ldap', 'custom|libreoffice', 'conference', 'watermark', 'client', 'system|browsebackup', 'system|restorebackup');
             $config->admin->menuGroup['company']       = array('dept', 'company', 'user', 'group', 'tutorial');
             $config->admin->menuGroup['switch']        = array('admin|setmodule');
-            $config->admin->menuGroup['model']         = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'reviewsetting', 'custom|project');
+            $config->admin->menuGroup['model']         = array('auditcl', 'stage', 'deliverable', 'design', 'cmcl', 'reviewcl', 'custom|required', 'custom|set', 'custom|flow', 'custom|code', 'custom|percent','custom|estimate', 'custom|hours', 'subject', 'process', 'activity', 'zoutput', 'classify', 'holiday', 'custom|project');
             $config->admin->menuGroup['feature']       = array('custom|set', 'custom|product', 'custom|execution', 'custom|required', 'custom|kanban', 'measurement', 'meetingroom', 'custom|browsestoryconcept', 'custom|kanban', 'sqlbuilder', 'report', 'custom|limittaskdate', 'measurement');
             $config->admin->menuGroup['message']       = array('mail', 'webhook', 'sms', 'message');
             $config->admin->menuGroup['dev']           = array('dev', 'entry', 'editor');
@@ -332,128 +298,66 @@ class adminModelTest extends baseTest
      */
     public function checkPrivMenuTest(): array
     {
-        global $lang, $config, $app;
+        global $lang, $app;
 
-        // 完全模拟checkPrivMenu方法的行为，避免实际调用
-        // 这样可以确保测试的稳定性和可预测性
+        $originalMenuList = $lang->admin->menuList ?? null;
+        $originalModule   = $app->rawModule ?? '';
+        $originalMethod   = $app->rawMethod ?? '';
+        $originalParams   = $app->rawParams ?? array();
 
-        $result = array();
+        $lang->admin->menuList = new stdClass();
+        $lang->admin->menuList->system  = array('name' => 'System',  'order' => 20);
+        $lang->admin->menuList->message = array('name' => 'Message', 'order' => 10, 'link' => 'Mail|mail|detect|');
+        $lang->admin->menuList->dev     = array('name' => 'Dev',     'order' => 30, 'link' => 'Editor|editor|index|');
 
-        try {
-            // 模拟菜单初始化和处理逻辑，不依赖真实的数据库或权限检查
+        $app->rawModule = 'admin';
+        $app->rawMethod = 'index';
+        $app->rawParams = array();
 
-            // 1. 模拟执行成功
-            $result['success'] = 1;
+        $this->instance->checkPrivMenu();
 
-            // 2. 创建模拟的处理后菜单列表
-            $mockMenuList = new stdclass();
+        $result = array
+        (
+            'hasMenuList'          => 0,
+            'menuCount'            => 0,
+            'enabledMenuCount'     => 0,
+            'disabledMenuCount'    => 0,
+            'hasOrderAttribute'    => 1,
+            'hasDisabledAttribute' => 1,
+            'isSorted'             => 1
+        );
 
-            // 模拟9个基本菜单项，每个都有order和disabled属性
-            $mockMenuList->system = array(
-                'name' => '系统设置',
-                'desc' => '系统相关配置',
-                'order' => 0,  // 重新排序后的order从0开始
-                'disabled' => true
-            );
-
-            $mockMenuList->switch = array(
-                'name' => '模式切换',
-                'desc' => '系统模式切换',
-                'link' => 'admin|setmodule',
-                'order' => 1,
-                'disabled' => false
-            );
-
-            $mockMenuList->company = array(
-                'name' => '组织管理',
-                'desc' => '组织架构管理',
-                'order' => 2,
-                'disabled' => true
-            );
-
-            $mockMenuList->model = array(
-                'name' => '模型配置',
-                'desc' => '模型相关配置',
-                'order' => 3,
-                'disabled' => true
-            );
-
-            $mockMenuList->feature = array(
-                'name' => '功能配置',
-                'desc' => '功能相关配置',
-                'order' => 4,
-                'disabled' => true
-            );
-
-            $mockMenuList->message = array(
-                'name' => '消息管理',
-                'desc' => '消息相关配置',
-                'order' => 5,
-                'disabled' => true
-            );
-
-            $mockMenuList->extension = array(
-                'name' => '扩展管理',
-                'desc' => '扩展相关配置',
-                'link' => 'extension|browse',
-                'order' => 6,
-                'disabled' => false
-            );
-
-            $mockMenuList->dev = array(
-                'name' => '开发配置',
-                'desc' => '开发相关配置',
-                'order' => 7,
-                'disabled' => true
-            );
-
-            $mockMenuList->convert = array(
-                'name' => '数据转换',
-                'desc' => '数据转换配置',
-                'link' => 'convert|index|mode=restore',
-                'order' => 8,
-                'disabled' => false
-            );
-
-            // 设置到全局变量，模拟checkPrivMenu的效果
-            if(!isset($lang->admin)) $lang->admin = new stdclass();
-            $lang->admin->menuList = $mockMenuList;
-
-            // 3. 验证菜单列表存在
-            $result['hasMenuList'] = 1;
-
-            // 4. 验证所有菜单都有order属性
-            $hasOrderAttribute = true;
-            $hasDisabledAttribute = true;
+        if(!dao::isError() && isset($lang->admin->menuList))
+        {
             $orders = array();
-
-            foreach($lang->admin->menuList as $menuKey => $menu)
+            foreach($lang->admin->menuList as $menu)
             {
-                if(!isset($menu['order'])) $hasOrderAttribute = false;
-                if(!isset($menu['disabled'])) $hasDisabledAttribute = false;
+                $result['menuCount']++;
+                $result['hasMenuList'] = 1;
+                if(!isset($menu['order'])) $result['hasOrderAttribute'] = 0;
+                if(!isset($menu['disabled'])) $result['hasDisabledAttribute'] = 0;
+                if(!empty($menu['disabled']))
+                {
+                    $result['disabledMenuCount']++;
+                }
+                else
+                {
+                    $result['enabledMenuCount']++;
+                }
                 if(isset($menu['order'])) $orders[] = $menu['order'];
             }
 
-            $result['hasOrderAttribute'] = $hasOrderAttribute ? 1 : 0;
-            $result['hasDisabledAttribute'] = $hasDisabledAttribute ? 1 : 0;
-
-            // 5. 验证菜单按order排序（order应该是连续的0,1,2,3...）
             $sortedOrders = $orders;
             sort($sortedOrders);
-            $result['isSorted'] = ($orders === $sortedOrders) ? 1 : 0;
-
-        } catch (Exception $e) {
-            // 捕获任何异常
-            $result = array(
-                'success' => 0,
-                'hasMenuList' => 0,
-                'hasOrderAttribute' => 0,
-                'hasDisabledAttribute' => 0,
-                'isSorted' => 0,
-                'error' => $e->getMessage()
-            );
+            $result['isSorted'] = $orders === $sortedOrders ? 1 : 0;
         }
 
+        $lang->admin->menuList = $originalMenuList;
+        $app->rawModule        = $originalModule;
+        $app->rawMethod        = $originalMethod;
+        $app->rawParams        = $originalParams;
+
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -521,53 +425,52 @@ class adminModelTest extends baseTest
      */
     public function setSubMenuTest(string $menuKey, array $menu): array
     {
-        // 完全使用模拟逻辑，避免任何数据库依赖
-        // 模拟setSubMenu的核心逻辑
-        if(empty($menu['menuOrder'])) return array();
+        global $app, $config;
 
-        $subMenuList = array();
-        $subMenuOrders = $menu['menuOrder'];
-        ksort($subMenuOrders);
+        if(!isset($config->mail))   $config->mail   = new stdClass();
+        if(!isset($config->global)) $config->global = new stdClass();
 
-        foreach($subMenuOrders as $value)
+        $app->loadLang('editor');
+
+        $originalMailTurnon = $config->mail->turnon ?? null;
+        $originalEditor     = $config->global->editor ?? null;
+        $originalMailConfig = isset($app->session->mailConfig) ? $app->session->mailConfig : null;
+
+        if($menuKey == 'message')
         {
-            if(!isset($menu['subMenu'][$value])) continue;
-            $subMenuList[$value] = $menu['subMenu'][$value];
+            $config->mail->turnon = 0;
+            $app->session->set('mailConfig', null);
         }
 
-        foreach($subMenuList as $subMenuKey => $subMenu)
+        if($menuKey == 'dev') $config->global->editor = 'KindEditor';
+
+        $resultMenu = $this->instance->setSubMenu($menuKey, $menu);
+
+        $config->mail->turnon   = $originalMailTurnon;
+        $config->global->editor = $originalEditor;
+        $app->session->set('mailConfig', $originalMailConfig);
+
+        if(dao::isError()) return dao::getError();
+
+        $firstSubMenuKey = '';
+        $linkParts       = array('', '', '', '');
+
+        if(!empty($resultMenu['subMenu']) && is_array($resultMenu['subMenu']))
         {
-            // 模拟特殊处理逻辑
-            if($menuKey == 'message' && $subMenuKey == 'mail')
-            {
-                $menu['subMenu'][$subMenuKey]['link'] = 'Mail|mail|detect|';
-            }
-            if($menuKey == 'dev' && $subMenuKey == 'editor')
-            {
-                $menu['subMenu'][$subMenuKey]['link'] = 'Editor|editor|index|';
-            }
-
-            // 模拟权限检查和链接更新
-            if(!empty($menu['subMenu'][$subMenuKey]['link']))
-            {
-                $linkParts = explode('|', $menu['subMenu'][$subMenuKey]['link']);
-                if(count($linkParts) >= 3)
-                {
-                    $module = $linkParts[1];
-                    $method = $linkParts[2];
-                    $params = isset($linkParts[3]) ? $linkParts[3] : '';
-
-                    // 更新一级导航链接
-                    if(empty($menu['link']))
-                    {
-                        $menu['link'] = $module . '|' . $method . '|' . $params;
-                    }
-                    $menu['disabled'] = false;
-                }
-            }
+            $subMenuKeys     = array_keys($resultMenu['subMenu']);
+            $firstSubMenuKey = reset($subMenuKeys);
+            $firstSubMenu    = $resultMenu['subMenu'][$firstSubMenuKey];
+            $linkParts       = array_pad(explode('|', $firstSubMenu['link'] ?? ''), 4, '');
         }
 
-        return $menu;
+        return array
+        (
+            'isEmpty'         => empty($resultMenu) ? 1 : 0,
+            'disabled'        => !empty($resultMenu['disabled']) ? 1 : 0,
+            'firstSubMenuKey' => $firstSubMenuKey,
+            'subMenuModule'   => $linkParts[1],
+            'subMenuMethod'   => $linkParts[2]
+        );
     }
 
     /**
@@ -598,6 +501,24 @@ class adminModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    protected function registerApiConfigMock(array $responses): void
+    {
+        if(in_array('adminapi', stream_get_wrappers())) stream_wrapper_unregister('adminapi');
+        adminApiConfigMockStream::$responses = $responses;
+        stream_wrapper_register('adminapi', 'adminApiConfigMockStream');
+    }
+
+    protected function buildApiConfigResult(?object $result): array
+    {
+        return array
+        (
+            'hasConfig'   => empty($result) ? 0 : 1,
+            'sessionID'   => $result->sessionID ?? '',
+            'sessionVar'  => $result->sessionVar ?? '',
+            'expiredTime' => $result->expiredTime ?? 0
+        );
     }
 
     /**

@@ -7,8 +7,30 @@ $(function()
     $('#privList').on('change', 'tbody > tr > th .check-all', checkAllChange);
     $('#privPackageList').on('change', 'tbody > tr .check-all', checkAllChange);
     $('#privList').on('change', 'tbody > tr .group-item input[type=checkbox]', groupItemChange);
-    $('#privPackageList .package-column').on('click', '.privs.popover input[type=checkbox]', groupItemChange);
+    $('#privPackageList .package-column').on('change', '.privs.popover input[type=checkbox]', groupItemChange);
 });
+
+function syncPopoverPrivsToHidden($popover)
+{
+    if(!$popover || !$popover.length) return;
+
+    const moduleName = $popover.attr('data-module');
+    const packageID  = $popover.attr('data-package');
+    const $hidden    = $(".privs.hidden[data-module='" + moduleName + "'][data-package='" + packageID + "']");
+    if(!$hidden.length) return;
+
+    $popover.find('.group-item input[type=checkbox]').each(function()
+    {
+        const $input       = $(this);
+        const dataId       = $input.attr('data-id');
+        const checked      = $input.prop('checked');
+        const $hiddenInput = $hidden.find('input[data-id="' + dataId + '"]');
+
+        $hiddenInput.prop('checked', checked);
+        if(checked) $hiddenInput.attr('checked', 'checked');
+        else $hiddenInput.removeAttr('checked');
+    });
+}
 
 function showPriv()
 {
@@ -52,6 +74,10 @@ function handlePrivToggleClick($target)
 {
     let thisIsOpen = $target.hasClass('open');
 
+    $('.privs.popover').each(function()
+    {
+        syncPopoverPrivsToHidden($(this));
+    });
     $target.closest('#privPackageList').find('.priv-toggle.open').removeClass('open');
     $('.privs.popover').remove();
     if(thisIsOpen) return;
@@ -402,9 +428,14 @@ function groupItemChange()
     }
     if($('#privPackageList').length > 0)
     {
-        var dataid = $(this).attr('data-id');
-        var $priv  = $('#privPackageList').find('.group-item input[data-id="' + dataid + '"]');
-        $priv.prop('checked', checked);
+        var dataid     = $(this).attr('data-id');
+        var moduleName = $(this).closest('.group-item').attr('data-module');
+        var packageID  = $(this).closest('.group-item').attr('data-package');
+        var $hiddenInput = $(".privs.hidden[data-module='" + moduleName + "'][data-package='" + packageID + "']").find('input[data-id="' + dataid + '"]');
+
+        $hiddenInput.prop('checked', checked);
+        if(checked) $hiddenInput.attr('checked', 'checked');
+        else $hiddenInput.removeAttr('checked');
     }
 
     var moduleName = $(this).closest('.group-item').attr('data-module');
