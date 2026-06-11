@@ -389,7 +389,15 @@ class form extends fixer
                 {
                     if($app->moduleName == 'task' && $app->methodName == 'batchcreate' && $field == 'estimate' && $this->rawdata->isParent[$rowIndex] == '1') continue;
 
-                    $errorKey  = $isShared ? $field : (isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]");
+                    if($isShared)
+                    {
+                        $errorKey = $field;
+                    }
+                    else
+                    {
+                        $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+                    }
+
                     $fieldName = $this->getFieldLabel($field, $config);
                     if($isShared && isset($this->errors[$errorKey])) continue;
                     if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
