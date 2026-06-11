@@ -43,14 +43,19 @@ if($type == 'assigntome')
 }
 foreach($config->my->testcase->dtable->fieldList['actions']['list'] as &$action) $action['url']['params'] = str_replace(array('{caseID}', '%executionID%', '{runID}'), array('{id}', '0', '0'), $action['url']['params']);
 
-$cases = initTableData($cases, $config->my->testcase->dtable->fieldList, $this->testcase);
+$products = $this->loadModel('product')->getPairs('', 0, '', 'all');
+$config->my->testcase->dtable->fieldList['product']['map'] = $products;
+
+$cols  = $this->loadModel('datatable')->getSetting('my', 'testcase');
+$cases = initTableData($cases, $cols, $this->testcase);
 $data  = array_values($cases);
 
 $defaultSummary = sprintf($lang->testcase->failSummary, count($cases), $failCount);
 dtable
 (
     set::data($data),
-    set::cols($config->my->testcase->dtable->fieldList),
+    set::cols($cols),
+    set::customCols(true),
     set::userMap($users),
     set::fixedLeftWidth('44%'),
     set::checkable(true),

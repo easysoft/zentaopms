@@ -19,6 +19,11 @@ $config->my->testcase->dtable->fieldList['pri']    = $config->testcase->dtable->
 $config->my->testcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
 $config->my->testcase->dtable->fieldList['status'] = $config->testcase->dtable->fieldList['status'];
 
+$config->my->testcase->dtable->fieldList['product']['title']    = $lang->testcase->product;
+$config->my->testcase->dtable->fieldList['product']['type']     = 'text';
+$config->my->testcase->dtable->fieldList['product']['sortType'] = true;
+$config->my->testcase->dtable->fieldList['product']['show']     = true;
+
 $config->my->testcase->dtable->fieldList['testtask']['name']     = 'taskName';
 $config->my->testcase->dtable->fieldList['testtask']['title']    = $lang->testtask->common;
 $config->my->testcase->dtable->fieldList['testtask']['type']     = 'text';
