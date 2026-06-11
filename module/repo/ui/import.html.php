@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 /**
- * The import view file of repo module of ZenTaoPMS.
+ * The create view file of repo module of ZenTaoPMS.
  * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
@@ -10,61 +10,43 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$items = array();
-$items[] = array('name' => 'no', 'label' => $lang->user->abbr->id, 'control' => 'static', 'width' => '32px', 'class' => 'no');
-$items[] = array('name' => 'serviceProject', 'label' => '', 'hidden' => true);
-$items[] = array('name' => $server->type == 'gitlab' ? 'name_with_namespace' : 'path', 'label' => $lang->repo->repo, 'control' => 'static');
-$items[] = array('name' => 'name', 'label' => $lang->repo->importName, 'className' => 'w-1/3');
-$items[] = array('name' => 'space', 'label' => $lang->repo->space, 'control' => array('control' => 'picker'), 'items' => $spaces, 'className' => 'w-1/4');
-$items[] = array('name' => 'product', 'label' => $lang->repo->product, 'control' => array('control' => 'picker', 'multiple' => true), 'items' => $products, 'className' => 'w-1/4');
+$fields = defineFieldList('repo');
+$fields->field('sourceRepo')->control(array('control' => 'formRowGroup', 'title' => $lang->repo->originRepo))->width('1/8')->wrapAfter(true);
+$fields->field('origin')->required(true)->control('picker')->items($lang->repo->sourceList)->value($type)->width('1/2');
+$fields->field('provider')->required(true)->width('1/2')
+   ->control('inputGroup')
+   ->itemBegin('providerID')->id('providerBox')->required(true)->control('picker')->items($providers)->itemEnd()
+   ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createProvider', 'data-size' => 'lg'))
+   ->text($lang->repo->create)->hint($lang->repo->create)
+   ->url(createLink('provider', 'create', 'type=' . $type . "&callBack=refreshProvider"))
+   ->itemEnd();
+$fields->field('organize')->required(true)->control('picker')->items($groups)->width('1/2')->hidden($type == 'Subversion');
+$fields->field('repo')->label($lang->repo->common)->required(true)->control('picker')->items($repos)->width('1/2')->wrapAfter(true)->hidden($type == 'Subversion');
+$fields->field('account')->required(true)->width('1/2')->hidden($type != 'Subversion');
+$fields->field('password')->required(true)->width('1/2')->hidden($type != 'Subversion');
+$fields->field('repoPath')->required(true)->width('1/2')->wrapAfter(true)->hidden($type != 'Subversion')
+   ->control('inputGroup')
+   ->itemBegin('path')->required(true)->title(zget($provider, 'url'))->value(zget($provider, 'url'))->disabled(true)->itemEnd()
+   ->itemBegin('slug')->itemEnd();
 
-$no = 1;
-foreach($repoList as $repo)
-{
-    $repo->serviceProject = $repo->id;
-    $repo->no             = $no ++;
-}
+$fields->field('target')->label('')->control(array('control' => 'formRowGroup', 'title' => $lang->repo->targetRepo))->width('1/8')->wrapAfter(true);
+$fields->field('name')->required(true)->width('1/2')->wrapAfter(true);
+$fields->field('space')->required(true)->control('picker')->items($spaces)->width('1/2');
+$fields->field('product')->required(true)->control('picker')->items($products)->multiple(true)->width('1/2');
+$fields->field('desc')->control(array('control' => 'textarea', 'rows' => 2))->width('full');
+$fields->field('mirror')->label($lang->repo->afterImport)->width('full')->control('radioList')->items($lang->repo->accessList)->value('writable');
+$fields->field('acl')->width('full')->control('radioList')->items($lang->repo->aclList)->value('open');
 
-\zin\featureBar
+$fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath');
+$fields->autoLoad('providerID', 'organize,repo,account,password,repoPath');
+$fields->autoLoad('organize', 'repo');
+
+formGridPanel
 (
-    h::a
-    (
-        setClass('form-title'),
-        set::href($this->createLink('repo', 'import')),
-        $lang->repo->batchCreate
-    ),
-    picker
-    (
-        setClass('ml-3'),
-        width('200px'),
-        on::change('selectServer'),
-        set::name('servers'),
-        set::id('servers'),
-        set::placeholder($lang->repo->importServer),
-        set::items(array('' => '') + $servers),
-        set::value($server->id)
-    )
+    setID('createForm'),
+    set::modeSwitcher(false),
+    set::title($title),
+    set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
+    set::fields($fields),
+    set::loadUrl(createLink('repo', 'import', "type={origin}&providerID={providerID}&groupID={organize}")),
 );
-
-jsVar('serverID', $server->id);
-jsVar('hiddenRepos', $hiddenRepos);
-jsVar('hideLang', $this->lang->repo->hide);
-jsVar('showLang', $this->lang->repo->show);
-formBatchPanel
-(
-    h::input
-    (
-        set::type('hidden'),
-        set::name('serverType'),
-        set::value(ucfirst($server->type))
-    ),
-    set::id('repoList'),
-    set::back('repo-maintain'),
-    set::mode(count($repoList) == 0 ? 'edit' : 'add'),
-    set::addRowIcon('false'),
-    set::items($items),
-    set::data($repoList),
-    set::maxRows(count($repoList)),
-);
-
-render();

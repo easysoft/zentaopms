@@ -111,4 +111,42 @@ class providerModel extends model
             ->orderBy('id_desc')
             ->fetchPairs('id', 'name');
     }
+
+    /**
+     * 根据ID获取服务接口地址。
+     * Get api root by id.
+     *
+     * @param  int $providerID
+     * @access public
+     * @return string|object
+     */
+    public function getApiRoot(int $providerID): string|object
+    {
+        $provider = $this->fetchByID($providerID);
+        if(empty($provider)) return '';
+
+        if($provider->type == 'GitLab')
+        {
+            return rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
+        }
+        elseIf($provider->type == 'Gitea')
+        {
+            return rtrim($provider->url, '/') . '/api/v1%s' . "?token={$provider->token}";
+        }
+        elseIf($provider->type == 'Gogs')
+        {
+            return rtrim($provider->url, '/') . '/api/v1%s' . "?token={$provider->token}";
+        }
+        elseIf($provider->type == 'GitHub')
+        {
+            return rtrim($provider->url, '/') . '/api/v3%s' . "?access_token={$provider->token}";
+            $appRoot = new stdClass();
+            $appRoot->url    = rtrim($provider->url, '/') . '/api/v3%s';
+            $appRoot->header = array('Authorization: token ' . $provider->token);
+        }
+        else
+        {
+            return '';
+        }
+    }
 }

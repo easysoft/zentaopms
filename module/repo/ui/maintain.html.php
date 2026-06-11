@@ -11,10 +11,10 @@ declare(strict_types=1);
 namespace zin;
 
 $createRepoURL = createLink('repo', 'createRepo', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
+$importURL     = createLink('repo', 'import', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
 
-$createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
-$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => $createRepoURL);
-$batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
+$createRepoItem = array('text' => $lang->repo->createRepoAction, 'url' => $createRepoURL, 'class' => 'btn primary', 'icon' => 'plus');
+$importItem     = array('text' => $lang->repo->import, 'url' => $importURL, 'class' => 'primary', 'icon' => 'download');
 
 foreach($repoList as $repo)
 {
@@ -111,7 +111,8 @@ featureBar
 
 toolbar
 (
-    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array('icon' => 'plus', 'class' => 'btn primary'))) : null
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem)) : null,
+    hasPriv('repo', 'import') ? item(set($importItem)) : null
 );
 
 dtable

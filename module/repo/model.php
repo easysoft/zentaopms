@@ -2186,28 +2186,43 @@ class repoModel extends model
     }
 
     /**
-     * Get repo groups.
+     * Get provider repo groups.
      *
      * @param  int    $serverID
-     * @param  int    $groupID
+     * @param  bool   $showPairs
      * @access public
-     * @return string|array|false
+     * @return array
      */
-    public function getGroups(int $serverID, int|string $groupID = 0): string|array|false
+    public function getProviderGroups(int $providerID, bool $showPairs = false): array
     {
-        $getGroupFunc = 'get' . $server->type . 'Groups';
-        $groups       = $this->$getGroupFunc($serverID);
+        $provider = $this->loadModel('provider')->getByID($providerID);
+        $getGroupFunc = 'get' . $provider->type . 'Groups';
+        $groups       = $this->$getGroupFunc($providerID);
+        if(!$showPairs) return $groups;
 
-        if($groupID !== 0)
+        $pairs = array();
+        foreach($groups as $group)
         {
-            foreach($groups as $group)
-            {
-                if($group['value'] == $groupID) return $group['text'];
-            }
-            return false;
+            $pairs[$group->id] = $group->name;
         }
 
-        return $groups;
+        return $pairs;
+    }
+
+    public function getProviderRepos(int $providerID, int $groupID = 0, bool $showPairs = false): array
+    {
+        $provider    = $this->loadModel('provider')->getByID($providerID);
+        $getRepoFunc = 'get' . $provider->type . 'Repos';
+        $repos       = $this->$getRepoFunc($providerID, $groupID);
+
+        if(!$showPairs) return $repos;
+
+        $pairs = array();
+        foreach($repos as $repo)
+        {
+            $pairs[$repo->id] = $repo->name;
+        }
+        return $pairs;
     }
 
     /**
@@ -3321,5 +3336,57 @@ class repoModel extends model
     public function getPairs(): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 获取gitlab项目列表。
+     * Get gitlab projects.
+     *
+     * @param  int    $gitlabID
+     * @param  string $projectFilter
+     * @access public
+     * @return array
+     */
+    public function getGitLabRepos(int $providerID, int $groupID = 0): array
+    {
+        $apiRoot = $this->loadModel('provider')->getApiRoot($providerID);
+        if(!$apiRoot) return array();
+
+        $url = $groupID ? sprintf($apiRoot, "/groups/{$groupID}/projects") : sprintf($apiRoot, "/projects");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&simple=true&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 获取gitlab组列表。
+     * Get gitlab groups.
+     *
+     * @param  int    $gitlabID
+     * @access public
+     * @return void
+     */
+    public function getGitlabGroups(int $providerID): array
+    {
+        $apiRoot = $this->loadModel('provider')->getApiRoot($providerID);
+        $url     = sprintf($apiRoot, "/groups");
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $pageUrl = $url . "&statistics=true&page={$page}&per_page=100&all_available=true";
+            $results = json_decode(commonModel::http($pageUrl));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+        return $allResults;
     }
 }

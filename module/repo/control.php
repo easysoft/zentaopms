@@ -1092,27 +1092,24 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function import(int $serverID = 0)
+    public function import(string $type = 'GitLab', int $providerID = 0, int $groupID = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
+        $providers = $this->loadModel('provider')->getPairs($type);
+        if((!$providerID && !empty($providers)) || !isset($providers[$providerID])) $providerID = key($providers);
+        $provider = $this->provider->getByID($providerID);
 
-        if($_POST)
-        {
-            if($this->post->product)
-            {
-                $repos = form::batchData($this->config->repo->form->import)->get();
+        $groups = $type == 'Subversion' ? array() : $this->repo->getProviderGroups($providerID, true);
+        if((!$groupID && !empty($groups)) || !isset($groups[$groupID])) $groupID = key($groups);
 
-                if($repos) $this->repo->batchCreate($repos, 0, (string)$this->post->serverType);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
-        }
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-
-        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
-        $this->view->products    = $products;
-        $this->view->spaces      = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->import;
+        $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->providers = $providers;
+        $this->view->provider  = $provider;
+        $this->view->type      = $type;
+        $this->view->groups    = $groups;
+        $this->view->repos     = $type == 'Subversion' ? array() : $this->repo->getProviderRepos($providerID, $groupID, true);
         $this->display();
     }
 
