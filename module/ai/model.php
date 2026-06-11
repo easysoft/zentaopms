@@ -2787,10 +2787,10 @@ class aiModel extends model
         $basicInfoComplete = !empty($prompt->name) && !empty($prompt->module) && !empty($prompt->actionPurpose) && !empty($prompt->displayPosition);
         if($basicInfoComplete)
         {
-            if(!empty($prompt->status) && $prompt->status == 'active') return 'finalize';
-            if(!empty($prompt->purpose))    return 'setpurpose';
-            if(!empty($prompt->source))     return 'selectdatasource';
-            return 'assignrole';
+            if(!empty($prompt->status) && $prompt->status == 'active') return 'preview';
+            if(!empty($prompt->purpose)) return 'setprompt';
+            if(!empty($prompt->source) || $prompt->displayPosition == 'form') return 'setinputform';
+            return 'setinputfields';
         }
 
         return 'basicinfo';

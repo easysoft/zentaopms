@@ -357,7 +357,8 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputFields', "promptID=$promptID")));
+            $nextMethod = $data->displayPosition == 'form' ? 'promptSetInputForm' : 'promptSetInputFields';
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink($nextMethod, "promptID=$promptID")));
         }
 
         if(empty($prompt->id)) $prompt->id = 0;
@@ -467,13 +468,29 @@ class ai extends control
      */
     public function promptSetInputFields(int $promptID = 0)
     {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
 
         $prompt = $this->ai->getPromptByID($promptID);
         if(empty($prompt)) return $this->locate($this->inlink('promptBasicInfo'));
+        if($prompt->displayPosition == 'form') return $this->locate($this->inlink('promptSetInputForm', "promptID=$promptID"));
+
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $originalPrompt = clone $prompt;
+            $prompt->source = ",$data->datasource,";
+
+            $this->ai->updatePrompt($prompt, $originalPrompt);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
+        }
 
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
+        $this->view->dataSource     = $this->ai->getDataSource();
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputfields'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
@@ -503,6 +520,7 @@ class ai extends control
 
             $prompt->purpose      = isset($data->purpose) ? $data->purpose : '';
             $prompt->elaboration  = '';
+            $prompt->role         = isset($data->role) ? $data->role : '';
             $prompt->knowledgeLib = $data->knowledgeLib ?? '';
 
             if(isset($data->fields))
@@ -516,7 +534,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID")));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
         }
 
@@ -634,13 +652,11 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $originalPrompt = clone $prompt;
-
-            $prompt->name = $data->name;
-            $prompt->desc = $data->desc;
-
-            $this->ai->updatePrompt($prompt, $originalPrompt);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($data->goTesting))
+            {
+                $location = $this->ai->getTestingLocation($prompt);
+                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+            }
 
             if(!empty($data->jumpToNext)) $this->ai->togglePromptStatus($prompt, 'active');
 
@@ -650,6 +666,11 @@ class ai extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
         }
 
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
+        $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->currentPrompt  = $currentPrompt;
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);

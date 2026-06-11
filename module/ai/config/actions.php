@@ -10,7 +10,7 @@ $config->ai->actionList = array();
 $config->ai->actionList['promptassignrole']['icon'] = 'design';
 $config->ai->actionList['promptassignrole']['text'] = $lang->ai->prompts->action->design;
 $config->ai->actionList['promptassignrole']['hint'] = $lang->ai->prompts->action->design;
-$config->ai->actionList['promptassignrole']['url']  = array('module' => 'ai', 'method' => 'promptassignrole', 'params' => 'prompt={id}');
+$config->ai->actionList['promptassignrole']['url']  = array('module' => 'ai', 'method' => 'promptbasicinfo', 'params' => 'promptID={id}');
 
 $config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
 $config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
