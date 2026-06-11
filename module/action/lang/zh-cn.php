@@ -325,10 +325,11 @@ $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关
 $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述计划关联和移除需求、bug时的历史操作记录。*/
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkstory         = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkbug           = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkstory       = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->autounlinkstory   = '$date, 由 <strong>$actor</strong> 关联需求到 <strong>$extra</strong>计划中,自动移除需求。' . "\n";
+$lang->action->desc->unlinkbug         = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档保存为草稿或发布时的历史操作记录。*/
 $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草稿 <strong>$extra</strong>。' . "\n";

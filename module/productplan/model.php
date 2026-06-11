@@ -901,6 +901,14 @@ class productplanModel extends model
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
+
+            /* If the story was linked to another plan of type 'story', record the unlink action on the old plan. */
+            if($oldPlanID !== '' && (int)$oldPlanID !== $planID)
+            {
+                $targetPlan = $this->getByID($planID);
+                $planTitle  = $targetPlan ? $targetPlan->title : '#' . $planID;
+                $this->action->create('productplan', (int)$oldPlanID, 'autounlinkstory', '', $planTitle);
+            }
         }
 
         $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
