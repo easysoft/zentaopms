@@ -47,6 +47,15 @@ $lang->repo->allSpace        = 'All Spaces';
 $lang->repo->members         = 'Members';
 $lang->repo->sshManager      = 'SSH Key Manager';
 $lang->repo->defaultArtifact = 'Default';
+$lang->repo->origin          = 'Origin';
+$lang->repo->originRepo      = 'Origin Repo';
+$lang->repo->provider        = 'Server';
+$lang->repo->providerID      = 'Server';
+$lang->repo->organize        = 'Organization';
+$lang->repo->targetRepo      = 'Target Repo';
+$lang->repo->afterImport     = 'After Import';
+$lang->repo->repoPath        = 'Repo Path';
+$lang->repo->slug            = 'Repo Path';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->createTagAction    = 'Create Tag';
@@ -495,3 +504,14 @@ $lang->repo->webhook->customEventList['pullreq_reopened']         = 'Reopen Pull
 $lang->repo->webhook->customEventList['pullreq_branch_updated']   = 'Update Pull Request Branch';
 $lang->repo->webhook->customEventList['pullreq_closed']           = 'Close Pull Request';
 $lang->repo->webhook->customEventList['pullreq_merged']           = 'Merge Pull Request';
+
+$lang->repo->sourceList = array();
+$lang->repo->sourceList['GitLab']     = 'GitLab';
+$lang->repo->sourceList['GitHub']     = 'Github';
+$lang->repo->sourceList['Gitea']      = 'Gitea';
+$lang->repo->sourceList['Gogs']       = 'Gogs';
+$lang->repo->sourceList['Subversion'] = 'Subversion';
+
+$lang->repo->accessList = array();
+$lang->repo->accessList['writable'] = 'Readable and writable';
+$lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
