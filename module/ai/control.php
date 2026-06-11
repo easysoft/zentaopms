@@ -325,7 +325,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptBasicInfo($promptID = 0)
+    public function promptBasicInfo(int $promptID = 0)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
 
@@ -382,7 +382,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptAssignRole($promptID)
+    public function promptAssignRole(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -414,7 +414,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->assignRole . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->assignRole . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->view->roleTemplates  = $this->ai->getRoleTemplates();
         $this->display();
     }
@@ -426,7 +426,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSelectDataSource($promptID)
+    public function promptSelectDataSource(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -454,7 +454,7 @@ class ai extends control
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
-        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -465,7 +465,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetInputFields($promptID)
+    public function promptSetInputFields(int $promptID = 0)
     {
         if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
 
@@ -476,7 +476,7 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputfields'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputfields'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -487,7 +487,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetPurpose($promptID)
+    public function promptSetPurpose(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -535,7 +535,7 @@ class ai extends control
         $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -546,7 +546,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetInputForm($promptID)
+    public function promptSetInputForm(int $promptID = 0)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
@@ -572,7 +572,7 @@ class ai extends control
         $this->view->promptID       = $promptID;
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputform'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputform'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -583,7 +583,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetTargetForm($promptID)
+    public function promptSetTargetForm(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -614,7 +614,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -625,7 +625,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptFinalize($promptID)
+    public function promptFinalize(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -653,7 +653,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->finalize . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->finalize . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
