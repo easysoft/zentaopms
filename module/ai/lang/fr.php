@@ -85,6 +85,7 @@ $lang->ai->store                  = 'Store';
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
 $lang->ai->saveFail               = 'Save failed';
+$lang->ai->jsonParseFail          = 'JSON parse failed: %s';
 $lang->ai->installPackage         = 'Installation package';
 $lang->ai->toPublish              = 'Publish after installation';
 $lang->ai->toZentaoStoreAIPage    = 'Click to jump to Zentao official app store general agents page.';

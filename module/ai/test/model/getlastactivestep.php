@@ -8,11 +8,11 @@ timeout=0
 cid=15036
 
 - 步骤1：null参数 @basicinfo
-- 步骤2：active状态 @finalize
+- 步骤2：active状态 @preview
 - 步骤3：只有旧targetForm @basicinfo
-- 步骤4：基础信息完整 @assignrole
-- 步骤5：有source @selectdatasource
-- 步骤6：有purpose @setpurpose
+- 步骤4：基础信息完整 @setinputfields
+- 步骤5：有source @setinputform
+- 步骤6：有purpose @setprompt
 
 */
 
@@ -65,9 +65,9 @@ $promptWithPurpose->source = 'database';
 $promptWithPurpose->purpose = 'Generate product ideas';
 
 // 5. 强制要求：必须包含至少5个测试步骤
-r($aiTest->getLastActiveStepTest($promptNull)) && p() && e('basicinfo'); // 步骤1：null参数
-r($aiTest->getLastActiveStepTest($promptActive)) && p() && e('finalize'); // 步骤2：active状态
-r($aiTest->getLastActiveStepTest($promptWithTargetForm)) && p() && e('basicinfo'); // 步骤3：只有旧targetForm
-r($aiTest->getLastActiveStepTest($promptWithBasicInfo)) && p() && e('assignrole'); // 步骤4：基础信息完整
-r($aiTest->getLastActiveStepTest($promptWithSource)) && p() && e('selectdatasource'); // 步骤5：有source
-r($aiTest->getLastActiveStepTest($promptWithPurpose)) && p() && e('setpurpose'); // 步骤6：有purpose
+r($aiTest->getLastActiveStepTest($promptNull))            && p() && e('basicinfo');     // 步骤1：null参数
+r($aiTest->getLastActiveStepTest($promptActive))          && p() && e('preview');       // 步骤2：active状态
+r($aiTest->getLastActiveStepTest($promptWithTargetForm))  && p() && e('basicinfo');     // 步骤3：只有旧targetForm
+r($aiTest->getLastActiveStepTest($promptWithBasicInfo))   && p() && e('setinputfields'); // 步骤4：基础信息完整
+r($aiTest->getLastActiveStepTest($promptWithSource))      && p() && e('setinputform');   // 步骤5：有source
+r($aiTest->getLastActiveStepTest($promptWithPurpose))     && p() && e('setprompt');      // 步骤6：有purpose
