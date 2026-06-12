@@ -944,18 +944,41 @@ class ai extends control
         $contextObjects  = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
         $contextDesc    = $this->ai->buildContextDescription($contextObjects);
 
-        $formDataLines = array();
-        if(!empty($formSchema['fields']))
+        $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
+        $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
+
+        $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
+        if($isBatchForm)
         {
+            /* 批量表单：构建 Markdown 表格 + 字段定义 + 返回数组指令 */
+            $headers   = array();
+            $values    = array();
+            $fieldDefs = array();
             foreach($formSchema['fields'] as $name => $field)
             {
                 $label    = $field['label'] ?? $name;
                 $input    = $field['controlType'] ?? 'input';
-                $valType  = $field['valueType'] ?? 'string';
                 $value    = $field['currentValue'] ?? '';
                 $required = !empty($field['required']) ? 'true' : 'false';
-                $line     = "- {$label}\n  name: {$name}\n  input: {$input}\n  type: {$valType}\n  required: {$required}\n  value: {$value}";
 
+                $headers[] = $label;
+
+                /* 将选项值转为显示文本 */
+                $displayValue = $value;
+                if($value !== '' && !empty($field['options']) && is_array($field['options']))
+                {
+                    foreach($field['options'] as $opt)
+                    {
+                        if((string)($opt['value'] ?? '') === (string)$value)
+                        {
+                            $displayValue = $opt['text'] ?? $value;
+                            break;
+                        }
+                    }
+                }
+                $values[] = $displayValue;
+
+                $def = "- {$name}({$label}): {$input}" . ($required === 'true' ? ' 必填' : '');
                 if(!empty($field['options']) && is_array($field['options']))
                 {
                     $optStrs = array();
@@ -965,22 +988,68 @@ class ai extends control
                         $optText  = $opt['text'] ?? '';
                         $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
                     }
-                    $line .= "\n  options: " . implode(', ', $optStrs);
+                    $def .= "，选项: " . implode(', ', $optStrs);
                 }
-
-                $formDataLines[] = $line;
+                $fieldDefs[] = $def;
             }
+
+            $sepLine = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
+            $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
+            $fullPrompt .= "当前表单为批量创建，每行数据包含以下字段：\n\n";
+            $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
+            $fullPrompt .= $sepLine . "\n";
+            $fullPrompt .= '| ' . implode(' | ', $values) . " |\n\n";
+            $fullPrompt .= "字段说明：\n" . implode("\n", $fieldDefs) . "\n\n";
+            $fullPrompt .= "[目标表单信息]\n";
+            $fullPrompt .= '表单: ' . ($prompt->name ?? $prompt->targetForm) . "\n\n";
+            if(!empty($filteredFields))
+            {
+                $fullPrompt .= "可填充字段:\n";
+                foreach($filteredFields as $fName => $fField)
+                {
+                    $fullPrompt .= "- {$fName}\n";
+                }
+            }
+            $fullPrompt .= "\n请返回 JSON 数组，每个数组元素对应表中的一行数据，元素为对象，对象键名对应上述可填充字段名。必填字段必须提供值。\n";
+        }
+        else
+        {
+            $formDataLines = array();
+            if(!empty($formSchema['fields']))
+            {
+                foreach($formSchema['fields'] as $name => $field)
+                {
+                    $label    = $field['label'] ?? $name;
+                    $input    = $field['controlType'] ?? 'input';
+                    $valType  = $field['valueType'] ?? 'string';
+                    $value    = $field['currentValue'] ?? '';
+                    $required = !empty($field['required']) ? 'true' : 'false';
+                    $line     = "- {$label}\n  name: {$name}\n  input: {$input}\n  type: {$valType}\n  required: {$required}\n  value: {$value}";
+
+                    if(!empty($field['options']) && is_array($field['options']))
+                    {
+                        $optStrs = array();
+                        foreach($field['options'] as $opt)
+                        {
+                            $optVal   = $opt['value'] ?? '';
+                            $optText  = $opt['text'] ?? '';
+                            $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
+                        }
+                        $line .= "\n  options: " . implode(', ', $optStrs);
+                    }
+
+                    $formDataLines[] = $line;
+                }
+            }
+
+            $fillableDesc = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
+
+            $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
+            $fullPrompt .= "当前表单数据：\n" . implode("\n", $formDataLines) . "\n\n";
+            $fullPrompt .= $fillableDesc;
         }
 
-        $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
-        $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
-        $fillableDesc    = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
-
-        $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
-        $fullPrompt .= "当前表单数据：\n" . implode("\n", $formDataLines) . "\n\n";
-        $fullPrompt .= $fillableDesc;
-
-        $schema = $this->ai->buildDynamicSchema($filteredFields, $prompt);
+        $schema = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
         $location = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
         $targetFormName = $this->lang->ai->targetForm[$targetFormParts[0]][$targetFormParts[1]] ?? '';
 

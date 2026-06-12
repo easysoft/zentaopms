@@ -1,3 +1,19 @@
+/**
+ * 获取当前页面中用于 AI 交互的目标表单。
+ * 优先选择 z-use 包含 BatchForm 的批量创建表单，
+ * 其次是包含 .form-batch-table 的表单，
+ * 最后回退到页面第一个表单。
+ * 修复批量创建页面中自定义字段表单排在最前面的问题。
+ */
+function getPageForm()
+{
+    var $batchForm = $('form[z-use*="BatchForm"]').first();
+    if($batchForm.length) return $batchForm;
+    var $batchTableForm = $('form').has('.form-batch-table').first();
+    if($batchTableForm.length) return $batchTableForm;
+    return $('form').first();
+}
+
 window.checkZAIPanel = async function(showMessage)
 {
     const zaiPanel = zui.AIPanel.shared;
@@ -160,7 +176,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
  */
 window.executeWithFormContext = async function(promptID)
 {
-    const $form = $('form').first();
+    const $form = getPageForm();
     if(!$form.length) return;
 
     const $btn = $form.closest('.panel').find('.prompts.dropdown .btn');
@@ -189,7 +205,7 @@ window.executeWithFormContext = async function(promptID)
             {
                 window.parent.openPageForm = function(url, data, callback)
                 {
-                    const $applyForm = $('form').first();
+                    const $applyForm = getPageForm();
                     if($applyForm.length)
                     {
                         const applyHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($applyForm) : null;
@@ -218,7 +234,7 @@ window.executeWithFormContextForTeammate = function(btn)
     var module     = $btn.attr('data-module');
     var method     = $btn.attr('data-method');
 
-    var $form = $('form').first();
+    var $form = getPageForm();
     if(!$form.length) return;
 
     var formHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($form) : null;

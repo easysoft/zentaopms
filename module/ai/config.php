@@ -202,11 +202,13 @@ $config->ai->menuPrint = new stdclass();
 $config->ai->formContextFields = array();
 $config->ai->formContextFields['_default']            = array('execution', 'story', 'bug');
 $config->ai->formContextFields['task']['create']      = array('execution', 'story');
+$config->ai->formContextFields['task']['batchcreate'] = array('execution', 'story');
 $config->ai->formContextFields['project']['create']   = array();
 
 /* getFormSchema 过滤的页面特定字段（按 targetForm 配置） */
 $config->ai->perPageSkipFields = array();
 $config->ai->perPageSkipFields['task']['create']      = array('storyEstimate', 'storyDesc', 'storyPri', 'taskName', 'taskEstimate', 'region', 'lane');
+$config->ai->perPageSkipFields['task']['batchcreate'] = array('storyEstimate', 'storyDesc', 'storyPri', 'region', 'lane');
 $config->ai->perPageSkipFields['project']['create']   = array('schedule', 'dateRangePicker');
 
 /* 对象类型中文标签 */
@@ -248,12 +250,13 @@ $config->ai->contextRelations = array(
 $config->ai->contextPageLevel = array('product', 'project', 'execution');
 
 /* 使用通用表单流程的页面列表 */
-$config->ai->universalFormPages = array('task.create', 'project.create');
+$config->ai->universalFormPages = array('task.create', 'task.batchcreate', 'project.create');
 
 /* AI 可操作字段白名单 */
 $config->ai->universalFormFields = array();
-$config->ai->universalFormFields['task']['create']    = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
-$config->ai->universalFormFields['project']['create'] = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
+$config->ai->universalFormFields['task']['create']      = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
+$config->ai->universalFormFields['task']['batchcreate'] = array('name', 'type', 'pri', 'estimate', 'estStarted', 'deadline', 'desc', 'assignedTo', 'module');
+$config->ai->universalFormFields['project']['create']   = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
 
 /**
  * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
@@ -290,6 +293,13 @@ $config->ai->menuPrint->locations['projectstory']['view']->objectVarName = 'stor
 $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
 
 $config->ai->menuPrint->locations['task']['create'] = (object)array(
+    'module'          => 'task',
+    'targetContainer' => '#mainContent .panel-heading .panel-actions',
+    'injectMethod'    => 'prepend',
+    'objectVarName'   => null,
+);
+
+$config->ai->menuPrint->locations['task']['batchcreate'] = (object)array(
     'module'          => 'task',
     'targetContainer' => '#mainContent .panel-heading .panel-actions',
     'injectMethod'    => 'prepend',

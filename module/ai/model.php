@@ -2096,7 +2096,7 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function buildDynamicSchema(array $fields, $prompt)
+    public function buildDynamicSchema(array $fields, $prompt, $isBatch = false)
     {
         $properties = array();
         $required   = array();
@@ -2119,7 +2119,12 @@ class aiModel extends model
             $properties[$name] = $prop;
         }
 
-        return array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
+        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
+        if($isBatch)
+        {
+            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->targetForm, 'items' => $objectSchema);
+        }
+        return $objectSchema;
     }
 
     /**
