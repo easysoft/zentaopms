@@ -331,6 +331,7 @@ class ai extends control
 
         $prompt = empty($promptID) ? new stdclass() : $this->ai->getPromptByID($promptID);
         if(empty($prompt)) $prompt = new stdclass();
+        if(!empty($prompt->status) && $prompt->status == 'active') return $this->locate($this->inlink('promptView', "id={$prompt->id}"));
 
         if($_POST)
         {
