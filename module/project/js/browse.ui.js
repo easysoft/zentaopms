@@ -24,6 +24,20 @@ window.renderCell = function(result, {col, row})
     return result;
 }
 
+window.footerSummary = function(element, checkedIDList)
+{
+    let totalCount = 0;
+    const rows = element.layout.allRows;
+
+    rows.forEach((row) =>
+    {
+        if(checkedIDList.length == 0 || checkedIDList.includes(row.id)) totalCount++;
+    });
+
+    const summary = checkedIDList.length > 0 ? checkedSummary.replace('{0}', totalCount) : totalCountTemplate.replace('{recTotal}', rows.length);
+    return {html: summary};
+}
+
 window.handleBatchBtnClick = function(event)
 {
     const $this = $(event.target).closest('a,.btn');
