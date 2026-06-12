@@ -7,147 +7,49 @@ title=测试 cneModel::tryAllocate();
 timeout=0
 cid=15632
 
-PASS
-PASS
-PASS
-PASS
-PASS
-
+- 步骤1：空资源数组会封装为空 requests @/api/cne/system/resource/try-allocate,0
+- 步骤2：单条资源请求会完整透传 @1,0.2
+- 步骤3：多条资源请求保持顺序和数量 @2,536870912
+- 步骤4：极大资源值不会在方法内被改写 @100
+- 步骤5：请求体使用对象并透传认证头 @1,1
 
 */
 
-// 模拟全局配置，避免数据库连接错误
-global $config;
-$config = new stdclass();
-$config->installed = true;
-$config->debug = false;
-$config->requestType = 'GET';
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 完全模拟的cneTest类
-class cneTest
+su('admin');
+
+$cneTest = new cneModelTest();
+
+class tryAllocateMockModel extends cneModel
 {
-    public function tryAllocateTest(array $resources)
+    public function apiPost(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
-        // 模拟tryAllocate方法的行为，避免实际API调用
-        // 根据不同的测试场景返回不同的模拟结果
-        if(empty($resources))
-        {
-            // 测试空资源数组的情况
-            $result = new stdclass();
-            $result->code = 200;
-            $result->message = 'success';
-            $result->data = new stdclass();
-            $result->data->total = 0;
-            $result->data->allocated = 0;
-            $result->data->failed = 0;
-            return $result;
-        }
+        $requests = $data->requests ?? array();
+        $lastRequest = empty($requests) ? array() : end($requests);
 
-        // 检查资源是否超出范围
-        $hasExcessiveResource = false;
-        foreach($resources as $resource)
-        {
-            if(isset($resource['cpu']) && $resource['cpu'] >= 100)
-            {
-                $hasExcessiveResource = true;
-                break;
-            }
-            if(isset($resource['memory']) && $resource['memory'] >= 1073741824000) // 1TB
-            {
-                $hasExcessiveResource = true;
-                break;
-            }
-        }
-
-        if($hasExcessiveResource)
-        {
-            // 测试超出范围的资源请求
-            $result = new stdclass();
-            $result->code = 41010;
-            $result->message = 'Resource allocation failed: insufficient resources';
-            $result->data = new stdclass();
-            return $result;
-        }
-
-        // 测试正常范围的资源分配
-        $result = new stdclass();
-        $result->code = 200;
-        $result->message = 'success';
-        $result->data = new stdclass();
-        $result->data->total = count($resources);
-        $result->data->allocated = count($resources);
-        $result->data->failed = 0;
-
-        return $result;
+        $response = new stdclass();
+        $response->url             = $url;
+        $response->requestCount    = count($requests);
+        $response->firstCPU        = empty($requests) ? 0 : ($requests[0]['cpu'] ?? 0);
+        $response->lastMemory      = $lastRequest['memory'] ?? 0;
+        $response->isObjectPayload = is_object($data) ? 1 : 0;
+        $response->headerCount     = count($header);
+        return $response;
     }
 }
 
-// 模拟测试框架函数
-function r($result) {
-    global $currentResult;
-    $currentResult = $result;
-    return new class {
-        public function __invoke() { return true; }
-        public function __call($name, $args) { return $this; }
-    };
-}
+$testModel = new tryAllocateMockModel();
 
-function p($path = '') {
-    global $currentResult, $currentPath;
-    $currentPath = $path;
-    return new class {
-        public function __invoke() { return true; }
-        public function __call($name, $args) { return $this; }
-    };
-}
+$result1 = $cneTest->tryAllocateTest(array(), $testModel);
+$result2 = $cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 268435456)), $testModel);
+$result3 = $cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 268435456), array('cpu' => 0.5, 'memory' => 536870912)), $testModel);
+$result4 = $cneTest->tryAllocateTest(array(array('cpu' => 100, 'memory' => 268435456)), $testModel);
+$result5 = $cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 1073741824000)), $testModel);
 
-function e($expected) {
-    global $currentResult, $currentPath;
-
-    if(!empty($currentPath)) {
-        $keys = explode(':', $currentPath);
-        $actual = $currentResult;
-        foreach($keys as $key) {
-            if(is_object($actual) && property_exists($actual, $key)) {
-                $actual = $actual->$key;
-            } elseif(is_array($actual) && isset($actual[$key])) {
-                $actual = $actual[$key];
-            } else {
-                $actual = null;
-                break;
-            }
-        }
-    } else {
-        $actual = $currentResult;
-    }
-
-    // 处理多个值的比较（如 "0,0,0"）
-    if(is_string($expected) && strpos($expected, ',') !== false) {
-        $expectedValues = explode(',', $expected);
-        $actualValues = array();
-        if(is_object($currentResult) && isset($currentResult->data)) {
-            $actualValues[] = $currentResult->data->total ?? 'null';
-            $actualValues[] = $currentResult->data->allocated ?? 'null';
-            $actualValues[] = $currentResult->data->failed ?? 'null';
-        }
-        $actualString = implode(',', $actualValues);
-        $actual = $actualString;
-    }
-
-    if($expected === '~~') $expected = null;
-
-    if($actual == $expected) {
-        echo "PASS\n";
-    } else {
-        echo "FAIL: Expected [$expected], got [" . (is_null($actual) ? 'null' : $actual) . "]\n";
-    }
-    return true;
-}
-
-$cneTest = new cneTest();
-
-r($cneTest->tryAllocateTest(array())) && p('data:total,allocated,failed') && e('0,0,0');
-r($cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 268435456)))) && p('data:total,allocated,failed') && e('1,1,0');
-r($cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 268435456), array('cpu' => 0.5, 'memory' => 536870912)))) && p('data:total,allocated,failed') && e('2,2,0');
-r($cneTest->tryAllocateTest(array(array('cpu' => 100, 'memory' => 268435456)))) && p('code') && e('41010');
-r($cneTest->tryAllocateTest(array(array('cpu' => 0.2, 'memory' => 1073741824000)))) && p('code') && e('41010');
+r($result1) && p('url,requestCount') && e('/api/cne/system/resource/try-allocate,0');
+r($result2) && p('requestCount,firstCPU') && e('1,0.2');
+r($result3) && p('requestCount,lastMemory') && e('2,536870912');
+r($result4) && p('firstCPU') && e('100');
+r((object) array('isObjectPayload' => $result5->isObjectPayload, 'hasHeaders' => $result5->headerCount > 0 ? 1 : 0)) && p('isObjectPayload,hasHeaders') && e('1,1');
