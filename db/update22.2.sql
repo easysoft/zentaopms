@@ -1,7 +1,7 @@
 UPDATE `zt_workflowfield` SET `control` = 'multi-select' WHERE `control` = 'multi-selec';
 
 DELETE FROM `zt_workflowaction` WHERE `action` IN ('link', 'unlink');
-DELETE FROM `zt_workflowlayout` WHERE `module` = 'caselib' and `action` = 'browse';
+DELETE FROM `zt_workflowlayout` WHERE `module` = 'caselib' AND `action` = 'browse';
 
 ALTER TABLE `zt_workflowlabel`
 ADD `type` enum('data', 'sql') NOT NULL DEFAULT 'data' AFTER `label`,
