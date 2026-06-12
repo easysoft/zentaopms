@@ -117,13 +117,13 @@ class providerModelTest extends baseTest
     /**
      * Test getApiRoot method.
      *
-     * @param  int                $providerID
+     * @param  object             $provider
      * @access public
      * @return string|object|array
      */
-    public function getApiRootTest(int $providerID): string|object|array
+    public function getApiRootTest(object $provider): string|object|array
     {
-        $apiRoot = $this->invokeArgs('getApiRoot', array($providerID));
+        $apiRoot = $this->invokeArgs('getApiRoot', array($provider));
         if(dao::isError()) return dao::getError();
 
         return $apiRoot;

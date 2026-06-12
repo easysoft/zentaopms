@@ -1092,24 +1092,15 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function import(string $type = 'GitLab', int $providerID = 0, int $groupID = 0)
+    public function import(string $type = 'GitLab', int $providerID = 0, string $groupID = '')
     {
         if($this->viewType !== 'json') $this->commonAction();
-        $providers = $this->loadModel('provider')->getPairs($type);
-        if((!$providerID && !empty($providers)) || !isset($providers[$providerID])) $providerID = key($providers);
-        $provider = $this->provider->getByID($providerID);
-
-        $groups = $type == 'Subversion' ? array() : $this->repo->getProviderGroups($providerID, true);
-        if((!$groupID && !empty($groups)) || !isset($groups[$groupID])) $groupID = key($groups);
+        $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
         $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->import;
         $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
-        $this->view->providers = $providers;
-        $this->view->provider  = $provider;
         $this->view->type      = $type;
-        $this->view->groups    = $groups;
-        $this->view->repos     = $type == 'Subversion' ? array() : $this->repo->getProviderRepos($providerID, $groupID, true);
         $this->display();
     }
 

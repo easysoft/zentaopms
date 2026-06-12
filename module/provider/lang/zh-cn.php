@@ -23,7 +23,6 @@ $lang->provider->error->apiWithMessage = '『服务器地址』无法调用通�
 
 $lang->provider->typeList = array();
 $lang->provider->typeList['GitLab']     = 'GitLab';
-$lang->provider->typeList['GitHub']     = 'Github';
 $lang->provider->typeList['Gitea']      = 'Gitea';
 $lang->provider->typeList['Gogs']       = 'Gogs';
 $lang->provider->typeList['Subversion'] = 'Subversion';

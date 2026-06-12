@@ -1712,4 +1712,57 @@ class repoZen extends repo
 
         return $systemQuery;
     }
+
+    /**
+     * 构造导入表单。
+     * Build import form.
+     *
+     * @param  int $providerID
+     * @param  string $groupID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildImportForm(int $providerID, string $groupID, string $type)
+    {
+        $providers = $this->loadModel('provider')->getPairs($type);
+        if((!$providerID && !empty($providers)) || !isset($providers[$providerID])) $providerID = empty($providers) ? 0 : key($providers);
+        $provider = $this->provider->getByID($providerID);
+
+        $repos   = $this->repo->getProviderRepos($provider);
+        $groupID = helper::safe64decode($groupID);
+        $groups  = $groupRepos = array();
+        foreach($repos as $repo)
+        {
+            if($type == 'GitLab')
+            {
+                if(empty($repo->namespace)) continue;
+                $groups[$repo->namespace->name] = $repo->namespace->name;
+            }
+            elseIf(in_array($type, array('Gitea', 'Gogs')))
+            {
+                if(empty($repo->owner)) continue;
+                $groups[$repo->owner->username] = $repo->owner->username;
+            }
+        }
+
+        foreach($repos as $repo)
+        {
+            if($type == 'GitLab')
+            {
+                if((!$groupID && !empty($repos)) || !isset($groups[$groupID])) $groupID = current($repos)->namespace->name;
+                if($groupID == $repo->namespace->name) $groupRepos[$repo->name] = $repo->name;
+            }
+            elseIf(in_array($type, array('Gitea', 'Gogs')))
+            {
+                if((!$groupID && !empty($repos)) || !isset($groups[$groupID])) $groupID = current($repos)->owner->username;
+                if($groupID == $repo->owner->username) $groupRepos[$repo->name] = $repo->name;
+            }
+        }
+
+        $this->view->providers = $providers;
+        $this->view->provider  = $provider;
+        $this->view->groups    = $groups;
+        $this->view->repos     = $groupRepos;
+    }
 }

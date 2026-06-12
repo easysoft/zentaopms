@@ -504,7 +504,6 @@ $lang->repo->webhook->customEventList['pullreq_merged']           = '合并评�
 
 $lang->repo->sourceList = array();
 $lang->repo->sourceList['GitLab']     = 'GitLab';
-$lang->repo->sourceList['GitHub']     = 'Github';
 $lang->repo->sourceList['Gitea']      = 'Gitea';
 $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';

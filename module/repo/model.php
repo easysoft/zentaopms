@@ -2186,34 +2186,23 @@ class repoModel extends model
     }
 
     /**
-     * Get provider repo groups.
+     * 获取代码库列表。
+     * Get provider repo list.
      *
-     * @param  int    $serverID
+     * @param  object $provider
+     * @param  string $groupID
      * @param  bool   $showPairs
      * @access public
      * @return array
      */
-    public function getProviderGroups(int $providerID, bool $showPairs = false): array
+    public function getProviderRepos(object $provider, bool $showPairs = false): array
     {
-        $provider = $this->loadModel('provider')->getByID($providerID);
-        $getGroupFunc = 'get' . $provider->type . 'Groups';
-        $groups       = $this->$getGroupFunc($providerID);
-        if(!$showPairs) return $groups;
+        if(empty($provider->type)) return array();
+        $apiRoot = $this->loadModel('provider')->getApiRoot($provider);
+        if(empty($apiRoot)) return array();
 
-        $pairs = array();
-        foreach($groups as $group)
-        {
-            $pairs[$group->id] = $group->name;
-        }
-
-        return $pairs;
-    }
-
-    public function getProviderRepos(int $providerID, int $groupID = 0, bool $showPairs = false): array
-    {
-        $provider    = $this->loadModel('provider')->getByID($providerID);
         $getRepoFunc = 'get' . $provider->type . 'Repos';
-        $repos       = $this->$getRepoFunc($providerID, $groupID);
+        $repos       = $this->$getRepoFunc($apiRoot);
 
         if(!$showPairs) return $repos;
 
@@ -2252,44 +2241,6 @@ class repoModel extends model
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
             }
         }
-    }
-
-    /**
-     * 检查gitea连接。
-     * Check gitea connection.
-     *
-     * @param  string      $scm
-     * @param  string      $name
-     * @param  int|string  $serviceHost
-     * @param  int|string  $serviceProject
-     * @access public
-     * @return string|false
-     */
-    public function checkGiteaConnection(string $scm, string $name, int|string $serviceHost, int|string $serviceProject): string|false
-    {
-        if($name != '' and $serviceProject != '')
-        {
-            $module  = strtolower($scm);
-            $project = $this->loadModel($module)->apiGetSingleProject($serviceHost, $serviceProject);
-            if(isset($project->tokenCloneUrl))
-            {
-                $path = $this->app->getAppRoot() . 'www/data/repo/' . $name . '_' . $module;
-                if(!realpath($path))
-                {
-                    $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$name}.log\" 2>&1 &";
-                    if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
-                    exec($cmd);
-                }
-                return $path;
-            }
-            else
-            {
-                dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
-                return false;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -3342,17 +3293,15 @@ class repoModel extends model
      * 获取gitlab项目列表。
      * Get gitlab projects.
      *
-     * @param  int    $gitlabID
-     * @param  string $projectFilter
+     * @param  string $apiRoot
      * @access public
      * @return array
      */
-    public function getGitLabRepos(int $providerID, int $groupID = 0): array
+    public function getGitLabRepos(string $apiRoot): array
     {
-        $apiRoot = $this->loadModel('provider')->getApiRoot($providerID);
         if(!$apiRoot) return array();
 
-        $url = $groupID ? sprintf($apiRoot, "/groups/{$groupID}/projects") : sprintf($apiRoot, "/projects");
+        $url = sprintf($apiRoot, "/projects");
 
         $allResults = array();
         for($page = 1; true; $page++)
@@ -3367,26 +3316,58 @@ class repoModel extends model
     }
 
     /**
-     * 获取gitlab组列表。
-     * Get gitlab groups.
+     * 获取Gitea项目列表。
+     * Get Gitea projects.
      *
-     * @param  int    $gitlabID
+     * @param  string $apiRoot
      * @access public
-     * @return void
+     * @return array
      */
-    public function getGitlabGroups(int $providerID): array
+    public function getGiteaRepos(string $apiRoot): array
     {
-        $apiRoot = $this->loadModel('provider')->getApiRoot($providerID);
-        $url     = sprintf($apiRoot, "/groups");
+        if(empty($apiRoot)) return array();
+
+        $url = sprintf($apiRoot, "/repos/search");
+
+        $page       = 1;
+        $allResults = array();
+        while(true)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(empty($results->data) || !is_array($results->data)) break;
+
+            $allResults = array_merge($allResults, $results->data);
+            if(count($results->data) < 50) break;
+
+            $page ++;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 获取Gogs代码库列表。
+     * Get gogs repo list.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGogsRepos(string $apiRoot): array
+    {
+        if(empty($apiRoot)) return array();
+
+        $url = sprintf($apiRoot, "/user/repos");
+
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $pageUrl = $url . "&statistics=true&page={$page}&per_page=100&all_available=true";
-            $results = json_decode(commonModel::http($pageUrl));
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results) < 100) break;
+            if(count($results) < 50) break;
         }
+
         return $allResults;
     }
 }
