@@ -20,6 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 1. 数据准备
+ob_start();
 $table = zenData('cron');
 $table->id->range('1-10');
 $table->m->range('0-59');
@@ -33,6 +34,7 @@ $table->type->range('zentao,system');
 $table->buildin->range('0,1');
 $table->status->range('normal{3},stop{2},running{1}');
 $table->gen(6);
+ob_end_clean();
 
 // 2. 用户登录
 su('admin');
@@ -41,30 +43,30 @@ su('admin');
 $cronTest = new cronModelTest();
 
 // 设置部分记录的lastTime为NULL且status不为stop
-$cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('normal')->where('id')->in('1,2,3')->exec();
+$tester->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('normal')->where('id')->in('1,2,3')->exec();
 
 // 4. 测试步骤执行
-r($cronTest->checkChangeTest()) && p() && e('1'); // 步骤1：存在lastTime为NULL且status不为stop的定时任务
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('1'); // 步骤1：存在lastTime为NULL且status不为stop的定时任务
 
 // 更新所有定时任务的lastTime
-$cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(helper::now())->exec();
-r($cronTest->checkChangeTest()) && p() && e('0'); // 步骤2：所有定时任务都有lastTime值
+$tester->dao->update(TABLE_CRON)->set('lastTime')->eq(helper::now())->exec();
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('0'); // 步骤2：所有定时任务都有lastTime值
 
 // 重置数据：设置一个lastTime为NULL但status为stop的定时任务
-$cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('stop')->where('id')->eq(1)->exec();
-r($cronTest->checkChangeTest()) && p() && e('0'); // 步骤3：存在lastTime为NULL但status为stop的定时任务
+$tester->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('stop')->where('id')->eq(1)->exec();
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('0'); // 步骤3：存在lastTime为NULL但status为stop的定时任务
 
 // 混合状态测试：部分有lastTime，部分为NULL但status为stop
-$cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(helper::now())->exec();
-$cronTest->objectModel->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('stop')->where('id')->in('1,2')->exec();
-r($cronTest->checkChangeTest()) && p() && e('0'); // 步骤4：混合状态测试
+$tester->dao->update(TABLE_CRON)->set('lastTime')->eq(helper::now())->exec();
+$tester->dao->update(TABLE_CRON)->set('lastTime')->eq(NULL)->set('status')->eq('stop')->where('id')->in('1,2')->exec();
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('0'); // 步骤4：混合状态测试
 
 // 清空所有数据
-$cronTest->objectModel->dao->delete()->from(TABLE_CRON)->exec();
-r($cronTest->checkChangeTest()) && p() && e('0'); // 步骤5：空数据库测试
+$tester->dao->delete()->from(TABLE_CRON)->exec();
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('0'); // 步骤5：空数据库测试
 
 // 重新插入多个lastTime为NULL且status不为stop的定时任务
-$cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
+$tester->dao->insert(TABLE_CRON)->data(array(
     'id' => 1,
     'm' => '0',
     'h' => '1',
@@ -78,7 +80,7 @@ $cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
     'status' => 'normal',
     'lastTime' => NULL
 ))->exec();
-$cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
+$tester->dao->insert(TABLE_CRON)->data(array(
     'id' => 2,
     'm' => '30',
     'h' => '2',
@@ -92,11 +94,11 @@ $cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
     'status' => 'normal',
     'lastTime' => NULL
 ))->exec();
-r($cronTest->checkChangeTest()) && p() && e('1'); // 步骤6：多个lastTime为NULL且status不为stop的定时任务
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('1'); // 步骤6：多个lastTime为NULL且status不为stop的定时任务
 
 // 边界状态测试：status为normal但lastTime为NULL
-$cronTest->objectModel->dao->delete()->from(TABLE_CRON)->exec();
-$cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
+$tester->dao->delete()->from(TABLE_CRON)->exec();
+$tester->dao->insert(TABLE_CRON)->data(array(
     'id' => 1,
     'm' => '15',
     'h' => '3',
@@ -110,4 +112,4 @@ $cronTest->objectModel->dao->insert(TABLE_CRON)->data(array(
     'status' => 'normal',
     'lastTime' => NULL
 ))->exec();
-r($cronTest->checkChangeTest()) && p() && e('1'); // 步骤7：边界状态测试
+r($cronTest->checkChangeTest() ? 1 : 0) && p() && e('1'); // 步骤7：边界状态测试

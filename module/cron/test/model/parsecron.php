@@ -24,7 +24,7 @@ $cron = new cronModelTest();
 $cron->init();
 
 // 获取现有cron数据进行测试
-$crons = $tester->cron->getCrons('nostop');
+$crons = $cron->getCronsTest('nostop');
 $parse = $cron->parseCronTest($crons);
 
 // 测试步骤1：验证id为2的定时任务解析结果
@@ -34,10 +34,11 @@ r($parse) && p('2:command') && e('moduleName=execution&methodName=computeburn');
 r($parse) && p('3:command') && e('moduleName=execution&methodName=computecfd');
 
 // 测试步骤3：验证id为1的定时任务解析结果（空命令）
+r(isset($parse[1]) ? 1 : 0) && p() && e('1');
 r($parse) && p('1:command') && e('~~');
 
 // 测试步骤4：测试空数组输入
-r($cron->parseCronTest(array())) && p() && e('0');
+r(count($cron->parseCronTest(array())) === 0 ? 1 : 0) && p() && e('1');
 
 // 测试步骤5：测试无效cron表达式处理
 $invalidCron = array((object)array(
@@ -49,7 +50,7 @@ $invalidCron = array((object)array(
     'dow' => '*',
     'command' => 'test'
 ));
-r($cron->parseCronTest($invalidCron)) && p() && e('0');
+r(count($cron->parseCronTest($invalidCron)) === 0 ? 1 : 0) && p() && e('1');
 
 // 测试步骤6：测试有效cron表达式的结构
 $validCron = array((object)array(
