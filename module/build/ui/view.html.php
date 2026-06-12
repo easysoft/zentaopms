@@ -38,6 +38,11 @@ foreach($actions as $actionType => $typeActions)
         if(isset($action['action']) && $action['icon'] == 'trash') $actions[$actionType][$key]['text'] = $lang->delete;
     }
 }
+
+$extendItems  = array();
+$extendFields = $this->printExtendFields($build, 'items', 'position=all', false);
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
+
 detailHeader
 (
     to::prefix
@@ -348,9 +353,9 @@ detailBody
                             (
                                 set::name($lang->build->desc),
                                 html($build->desc)
-                            )
+                            ),
+                            $extendItems
                         ),
-                        html($this->printExtendFields($build, 'html', 'position=all', false)),
                         $build->files ? h::hr(set::className('mt-6')) : null,
                         section
                         (
