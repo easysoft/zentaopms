@@ -127,6 +127,8 @@ if($isFromDoc || $isFromAI)
     }
 }
 $createReleaseLink = $canCreateRelease ? createLink('release', 'create', "productID={$product->id}&branch={$branch}") : '';
+
+$footToolbar = array();
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#releases', 'productRelease', $blockID, '$insertListLink')"));
 if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#releases', 'release')"));
 

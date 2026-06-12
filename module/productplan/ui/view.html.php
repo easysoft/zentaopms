@@ -203,6 +203,11 @@ foreach($actions as $actionType => $typeActions)
         }
     }
 }
+
+$extendItems  = array();
+$extendFields = $this->printExtendFields($plan, 'items', 'position=all', false);
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
+
 detailHeader
 (
     to::prefix
@@ -362,9 +367,9 @@ detailBody
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
+                    $extendItems
                 ),
-                html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
                 history(set::objectID($plan->id), set::commentBtn(false), set::objectType('productplan'))
             )

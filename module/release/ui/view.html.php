@@ -38,6 +38,11 @@ foreach($actions as $actionType => $typeActions)
         }
     }
 }
+
+$extendItems  = array();
+$extendFields = $this->printExtendFields($release, 'items', 'position=all', false);
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
+
 detailHeader
 (
     to::prefix
@@ -393,10 +398,10 @@ detailBody
                             (
                                 set::name($lang->release->desc),
                                 html($release->desc)
-                            )
+                            ),
+                            $extendItems
                         )
                     ),
-                    html($this->printExtendFields($release, 'html', 'position=all', false)),
                     fileList(set::files($release->files), set::showEdit(true), set::showDelete(true)),
                     h::hr(set::className('mt-6')),
                     history(set::objectID($release->id), set::objectType('release'))
