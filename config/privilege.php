@@ -211,6 +211,9 @@ $config->logonMethods[] = 'tree.ajaxgetdropmenu';
 $config->logonMethods[] = 'tree.viewhistory';
 $config->logonMethods[] = 'user.cropavatar';
 $config->logonMethods[] = 'user.deny';
+$config->logonMethods[] = 'user.ajaxdeletetemplate';
+$config->logonMethods[] = 'user.ajaxgettemplates';
+$config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
 
