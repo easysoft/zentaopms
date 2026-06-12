@@ -400,6 +400,8 @@ $lang->ai->moduleList = array();
 $lang->ai->moduleList['program']['common']       = 'Program';
 $lang->ai->moduleList['program']['name']         = 'Program Name';
 $lang->ai->moduleList['program']['desc']         = 'Program Description';
+$lang->ai->moduleList['program']['begin']        = 'Start Time';
+$lang->ai->moduleList['program']['end']          = 'End Time';
 $lang->ai->moduleList['product']['common']       = 'Product';
 $lang->ai->moduleList['story']['common']         = 'Story';
 $lang->ai->moduleList['story']['spec']           = 'Story Description';
@@ -452,20 +454,35 @@ $lang->ai->moduleList['cm']['common']            = 'Configuration Management';
 
 /* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
+$lang->ai->targetForm['program']['common']        = 'Program';
+$lang->ai->targetForm['charter']['common']        = 'Charter';
 $lang->ai->targetForm['product']['common']        = 'Product';
 $lang->ai->targetForm['story']['common']          = 'Story';
 $lang->ai->targetForm['productplan']['common']    = 'Plan';
 $lang->ai->targetForm['projectrelease']['common'] = 'Release';
 $lang->ai->targetForm['project']['common']        = 'Project';
+$lang->ai->targetForm['build']['common']          = 'Build';
 $lang->ai->targetForm['execution']['common']      = 'Execution';
 $lang->ai->targetForm['task']['common']           = 'Task';
 $lang->ai->targetForm['testcase']['common']       = 'Test Case';
+$lang->ai->targetForm['testsuite']['common']      = 'Test Suite';
+$lang->ai->targetForm['testtask']['common']       = 'Test Task';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = 'Document';
-$lang->ai->targetForm['empty']['common']          = '';
+$lang->ai->targetForm['feedback']['common']       = 'Feedback';
+$lang->ai->targetForm['ticket']['common']         = 'Ticket';
+$lang->ai->targetForm['issue']['common']          = 'Issue';
+$lang->ai->targetForm['opportunity']['common']    = 'Opportunity';
+$lang->ai->targetForm['risk']['common']           = 'Risk';
+$lang->ai->targetForm['projectchange']['common']  = 'Change';
+$lang->ai->targetForm['cm']['common']             = 'Configuration Management';
+
+$lang->ai->targetForm['program']['create'] = 'Create Program';
 
 $lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
 $lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
+
+$lang->ai->targetForm['charter']['create'] = 'Create Charter';
 
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
@@ -503,7 +520,16 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
-$lang->ai->targetForm['empty']['empty'] = 'Empty';
+$lang->ai->targetForm['build']['create']         = 'Create Build';
+$lang->ai->targetForm['testsuite']['create']     = 'Create Test Suite';
+$lang->ai->targetForm['testcase']['create']      = 'Create Test Task';
+$lang->ai->targetForm['feedback']['create']      = 'Create Feedback';
+$lang->ai->targetForm['ticket']['create']        = 'Create Ticket';
+$lang->ai->targetForm['issue']['create']         = 'Create Issue';
+$lang->ai->targetForm['opportunity']['create']   = 'Create Opportunity';
+$lang->ai->targetForm['risk']['create']          = 'Create Risk';
+$lang->ai->targetForm['projectchange']['create'] = 'Create Change';
+$lang->ai->targetForm['cm']['create']            = 'Create Baseline';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
@@ -515,18 +541,29 @@ $lang->ai->featureBar['prompts']['draft']  = 'Draft';
 $lang->ai->featureBar['prompts']['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
-$lang->ai->prompts->modules['']            = 'All';
-// $lang->ai->prompts->modules['my']          = 'My';
-$lang->ai->prompts->modules['product']     = 'Product';
-$lang->ai->prompts->modules['project']     = 'Project';
-$lang->ai->prompts->modules['story']       = 'Story';
-$lang->ai->prompts->modules['productplan'] = 'Product Plan';
-$lang->ai->prompts->modules['release']     = 'Release';
-$lang->ai->prompts->modules['execution']   = 'Execution';
-$lang->ai->prompts->modules['task']        = 'Task';
-$lang->ai->prompts->modules['case']        = 'Test Case';
-$lang->ai->prompts->modules['bug']         = 'Bug';
-$lang->ai->prompts->modules['doc']         = 'Document';
+$lang->ai->prompts->modules['program']       = 'Program';
+$lang->ai->prompts->modules['product']       = 'Product';
+$lang->ai->prompts->modules['project']       = 'Project';
+$lang->ai->prompts->modules['charter']       = 'Charter';
+$lang->ai->prompts->modules['story']         = 'Story';
+$lang->ai->prompts->modules['productplan']   = 'Plan';
+$lang->ai->prompts->modules['release']       = 'Release';
+$lang->ai->prompts->modules['build']         = 'Build';
+$lang->ai->prompts->modules['execution']     = 'Execution';
+$lang->ai->prompts->modules['task']          = 'Task';
+$lang->ai->prompts->modules['caselib']       = 'Test Case Library';
+$lang->ai->prompts->modules['testsuite']     = 'Test Suite';
+$lang->ai->prompts->modules['testtask']      = 'Test Task';
+$lang->ai->prompts->modules['case']          = 'Test Case';
+$lang->ai->prompts->modules['bug']           = 'Bug';
+$lang->ai->prompts->modules['doc']           = 'Document';
+$lang->ai->prompts->modules['feedback']      = 'Feedback';
+$lang->ai->prompts->modules['ticket']        = 'Ticket';
+$lang->ai->prompts->modules['issue']         = 'Issue';
+$lang->ai->prompts->modules['opportunity']   = 'Opportunity';
+$lang->ai->prompts->modules['risk']          = 'Risk';
+$lang->ai->prompts->modules['projectchange'] = 'Change';
+$lang->ai->prompts->modules['cm']            = 'Baseline';
 
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';

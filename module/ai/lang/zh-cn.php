@@ -400,6 +400,8 @@ $lang->ai->moduleList = array();
 $lang->ai->moduleList['program']['common']       = '项目集';
 $lang->ai->moduleList['program']['name']         = '项目集名称';
 $lang->ai->moduleList['program']['desc']         = '项目集描述';
+$lang->ai->moduleList['program']['begin']        = '开始时间';
+$lang->ai->moduleList['program']['end']          = '结束时间';
 $lang->ai->moduleList['product']['common']       = '产品';
 $lang->ai->moduleList['story']['common']         = '需求';
 $lang->ai->moduleList['stories']['common']       = '需求列表';
@@ -452,20 +454,35 @@ $lang->ai->moduleList['cm']['common']            = '配置管理';
 
 /* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
+$lang->ai->targetForm['program']['common']        = '项目集';
+$lang->ai->targetForm['charter']['common']        = '立项';
 $lang->ai->targetForm['product']['common']        = '产品';
 $lang->ai->targetForm['story']['common']          = '需求';
 $lang->ai->targetForm['productplan']['common']    = '计划';
 $lang->ai->targetForm['projectrelease']['common'] = '发布';
 $lang->ai->targetForm['project']['common']        = '项目';
+$lang->ai->targetForm['build']['common']          = '版本';
 $lang->ai->targetForm['execution']['common']      = '执行';
 $lang->ai->targetForm['task']['common']           = '任务';
 $lang->ai->targetForm['testcase']['common']       = '用例';
+$lang->ai->targetForm['testsuite']['common']      = '套件';
+$lang->ai->targetForm['testtask']['common']       = '测试单';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = '文档';
-$lang->ai->targetForm['empty']['common']          = '';
+$lang->ai->targetForm['feedback']['common']       = '反馈';
+$lang->ai->targetForm['ticket']['common']         = '工单';
+$lang->ai->targetForm['issue']['common']          = '问题';
+$lang->ai->targetForm['opportunity']['common']    = '机会';
+$lang->ai->targetForm['risk']['common']           = '风险';
+$lang->ai->targetForm['projectchange']['common']  = '变更';
+$lang->ai->targetForm['cm']['common']             = '配置管理';
+
+$lang->ai->targetForm['program']['create'] = '创建项目集';
 
 $lang->ai->targetForm['product']['tree/managechild'] = '维护模块';
 $lang->ai->targetForm['product']['doc/create']       = '创建文档';
+
+$lang->ai->targetForm['charter']['create'] = '创建立项';
 
 $lang->ai->targetForm['story']['create']         = '提需求';
 $lang->ai->targetForm['story']['batchcreate']    = '批量提需求';
@@ -503,7 +520,16 @@ $lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 $lang->ai->targetForm['doc']['create'] = '创建文档';
 $lang->ai->targetForm['doc']['edit']   = '编辑文档';
 
-$lang->ai->targetForm['empty']['empty'] = '空';
+$lang->ai->targetForm['build']['create']         = '创建版本';
+$lang->ai->targetForm['testsuite']['create']     = '创建套件';
+$lang->ai->targetForm['testcase']['create']      = '创建测试单';
+$lang->ai->targetForm['feedback']['create']      = '创建反馈';
+$lang->ai->targetForm['ticket']['create']        = '创建工单';
+$lang->ai->targetForm['issue']['create']         = '创建问题';
+$lang->ai->targetForm['opportunity']['create']   = '创建机会';
+$lang->ai->targetForm['risk']['create']          = '创建风险';
+$lang->ai->targetForm['projectchange']['create'] = '创建变更';
+$lang->ai->targetForm['cm']['create']            = '创建基线';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = '全部';
@@ -515,18 +541,29 @@ $lang->ai->featureBar['prompts']['draft']  = '未发布';
 $lang->ai->featureBar['prompts']['active'] = '已发布';
 
 $lang->ai->prompts->modules = array();
-$lang->ai->prompts->modules['']            = '所有分组';
-// $lang->ai->prompts->modules['my']          = '地盘';
-$lang->ai->prompts->modules['product']     = '产品';
-$lang->ai->prompts->modules['project']     = '项目';
-$lang->ai->prompts->modules['story']       = '需求';
-$lang->ai->prompts->modules['productplan'] = '计划';
-$lang->ai->prompts->modules['release']     = '发布';
-$lang->ai->prompts->modules['execution']   = '执行';
-$lang->ai->prompts->modules['task']        = '任务';
-$lang->ai->prompts->modules['case']        = '用例';
-$lang->ai->prompts->modules['bug']         = 'Bug';
-$lang->ai->prompts->modules['doc']         = '文档';
+$lang->ai->prompts->modules['program']       = '项目集';
+$lang->ai->prompts->modules['product']       = '产品';
+$lang->ai->prompts->modules['project']       = '项目';
+$lang->ai->prompts->modules['charter']       = '立项';
+$lang->ai->prompts->modules['story']         = '需求';
+$lang->ai->prompts->modules['productplan']   = '计划';
+$lang->ai->prompts->modules['release']       = '发布';
+$lang->ai->prompts->modules['build']         = '版本';
+$lang->ai->prompts->modules['execution']     = '执行';
+$lang->ai->prompts->modules['task']          = '任务';
+$lang->ai->prompts->modules['caselib']       = '用例库';
+$lang->ai->prompts->modules['testsuite']     = '套件';
+$lang->ai->prompts->modules['testtask']      = '测试单';
+$lang->ai->prompts->modules['case']          = '用例';
+$lang->ai->prompts->modules['bug']           = 'Bug';
+$lang->ai->prompts->modules['doc']           = '文档';
+$lang->ai->prompts->modules['feedback']      = '反馈';
+$lang->ai->prompts->modules['ticket']        = '工单';
+$lang->ai->prompts->modules['issue']         = '问题';
+$lang->ai->prompts->modules['opportunity']   = '机会';
+$lang->ai->prompts->modules['risk']          = '风险';
+$lang->ai->prompts->modules['projectchange'] = '变更';
+$lang->ai->prompts->modules['cm']            = '基线';
 
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = '会话';
