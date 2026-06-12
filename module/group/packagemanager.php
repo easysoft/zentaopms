@@ -3987,6 +3987,18 @@ $config->group->package->manageGeneralAgent->privs['ai-testMiniProgram']        
 $config->group->package->manageGeneralAgent->privs['ai-deleteMiniProgram']       = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 55, 'depend' => array('ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-createMiniProgram', 'ai-publishMiniProgram', 'ai-testMiniProgram', 'ai-editMiniProgram'));
 $config->group->package->manageGeneralAgent->privs['ai-exportMiniProgram']       = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 60, 'depend' => array('ai-miniPrograms', 'ai-miniProgramView'), 'recommend' => array('ai-importMiniProgram'));
 
+$config->group->package->aiSkill = new stdclass();
+$config->group->package->aiSkill->order  = 2073;
+$config->group->package->aiSkill->subset = 'aiapp';
+$config->group->package->aiSkill->privs  = array();
+$config->group->package->aiSkill->privs['skill-browse'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('skill-view'));
+$config->group->package->aiSkill->privs['skill-view']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('skill-browse'), 'recommend' => array());
+$config->group->package->aiSkill->privs['skill-create'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('skill-browse'), 'recommend' => array('skill-edit', 'skill-release'));
+$config->group->package->aiSkill->privs['skill-edit']   = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('skill-browse', 'skill-view'), 'recommend' => array('skill-release'));
+$config->group->package->aiSkill->privs['skill-delete'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('skill-browse'), 'recommend' => array());
+$config->group->package->aiSkill->privs['skill-release'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('skill-browse', 'skill-view'), 'recommend' => array());
+$config->group->package->aiSkill->privs['skill-disable'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('skill-browse', 'skill-view'), 'recommend' => array());
+
 $config->group->package->aiKnowledgeLib = new stdclass();
 $config->group->package->aiKnowledgeLib->order  = 2075;
 $config->group->package->aiKnowledgeLib->subset = 'aiapp';
