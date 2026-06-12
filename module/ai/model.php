@@ -115,7 +115,7 @@ class aiModel extends model
             $executable = $this->isExecutable($object);
             $published  = $object->status == 'active';
 
-            if($action == 'promptassignrole') return common::hasPriv('ai', 'designPrompt') && !$published;
+            if(in_array($action, array('promptassignrole', 'promptbasicinfo'))) return common::hasPriv('ai', 'designPrompt') && !$published;
             if($action == 'promptaudit')      return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
             if($action == 'promptedit')       return common::hasPriv('ai', 'promptedit');
             if($action == 'promptpublish')    return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
