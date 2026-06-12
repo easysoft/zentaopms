@@ -103,7 +103,8 @@ $config->ai->moduleGroup['doc']         = array('doc');
 
 /* Data source object props definations, commented out ones are not supported for now. */
 $config->ai->moduleFields = array();
-$config->ai->moduleFields['program']   = array('name', 'desc', 'begin');
+$config->ai->moduleFields['program']   = array('name', 'desc', 'begin', 'end');
+$config->ai->moduleFields['charter']   = array('name', 'desc');
 $config->ai->moduleFields['testsuite'] = array('name', 'desc');
 $config->ai->moduleFields['testtask']  = array('name', 'desc', 'begin', 'end');
 $config->ai->moduleFields['caselib']   = array('name', 'desc');
@@ -111,8 +112,10 @@ $config->ai->moduleFields['steps']     = array('desc', 'expect');
 $config->ai->moduleFields['doc']       = array('title', 'addedBy', 'addedDate', 'editedBy', 'editedDate', 'content');
 
 $config->ai->targetForm = array();
-$config->ai->targetForm['story']['create']               = (object)array('m' => 'story', 'f' => 'create', 'for' => 'product,project,productplan,release,execution,doc');
-$config->ai->targetForm['story']['batchcreate']          = (object)array('m' => 'story', 'f' => 'batchcreate', 'for' => 'product,project,productplan,release,execution,doc');
+$config->ai->targetForm['program']['create']             = (object)array('m' => 'program', 'f' => 'create', 'for' => 'program');
+$config->ai->targetForm['charter']['create']             = (object)array('m' => 'charter', 'f' => 'create', 'for' => 'charter');
+$config->ai->targetForm['story']['create']               = (object)array('m' => 'story', 'f' => 'create', 'for' => 'product,project,productplan,release,execution');
+$config->ai->targetForm['story']['batchcreate']          = (object)array('m' => 'story', 'f' => 'batchcreate', 'for' => 'product,project,productplan,release,execution');
 $config->ai->targetForm['story']['change']               = (object)array('m' => 'story', 'f' => 'change', 'for' => 'story');
 $config->ai->targetForm['story']['totask']               = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'story');
 $config->ai->targetForm['story']['testcasecreate']       = (object)array('m' => 'testcase', 'f' => 'create', 'for' => 'story');
