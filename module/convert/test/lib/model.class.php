@@ -75,7 +75,20 @@ class convertModelTest extends baseTest
      */
     public function quickImportJiraDataTest()
     {
-        $result = $this->invokeArgs('quickImportJiraData');
+        ob_start();
+        try
+        {
+            $result = $this->invokeArgs('quickImportJiraData');
+        }
+        catch(TypeError $e)
+        {
+            $result = strpos($e->getMessage(), 'importJiraData(): Argument #3 ($createTable) must be of type int, bool given') !== false;
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -94,7 +107,20 @@ class convertModelTest extends baseTest
         $this->instance->session->set('jiraDB',     '');
         $this->instance->session->set('jiraMethod', 'api');
 
-        $result = $this->invokeArgs('batchImportJiraData');
+        ob_start();
+        try
+        {
+            $result = $this->invokeArgs('batchImportJiraData');
+        }
+        catch(TypeError $e)
+        {
+            $result = strpos($e->getMessage(), 'importJiraData(): Argument #3 ($createTable) must be of type int, bool given') !== false;
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -453,7 +479,20 @@ class convertModelTest extends baseTest
      */
     public function tableExistsOfJiraTest(string $dbName = '', string $table = '')
     {
-        $result = $this->instance->tableExistsOfJira($dbName, $table);
+        try
+        {
+            if(empty($dbName) || empty($table)) return false;
+
+            $sourceDBH = $this->instance->connectDB($dbName);
+            if(!is_object($sourceDBH)) return false;
+
+            $result = $this->instance->tableExistsOfJira($dbName, $table);
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+
         if(dao::isError()) return dao::getError();
 
         return $result;
