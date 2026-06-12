@@ -13,8 +13,6 @@ namespace zin;
 
 jsVar('langManDay',   $lang->program->manDay);
 jsVar('delayWarning', $lang->task->delayWarning);
-jsVar('checkedSummary', $lang->selectedItems);
-jsVar('totalCountTemplate', $lang->pager->totalCount);
 
 /* zin: Define the sidebar in main content. */
 $settingLink = hasPriv('project', 'programTitle') ? createLink('project', 'programTitle') : '';
@@ -68,7 +66,6 @@ dtable
     set::cols($settings),
     set::data($tableData),
     set::checkable($canBatchEdit),
-    $canBatchEdit ? set::checkInfo(jsRaw('function(checkedIDList){ return window.footerSummary(this, checkedIDList);}')) : null,
     set::footToolbar($footToolbar),
     set::orderBy($orderBy),
     set::sortLink(createLink('project', 'browse', "programID=$programID&browseType=$browseType&param=$param&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
