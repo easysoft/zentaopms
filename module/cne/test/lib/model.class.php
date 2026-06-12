@@ -174,6 +174,22 @@ class cneModelTest extends baseTest
     }
 
     /**
+     * Test instancesMetrics method.
+     *
+     * @param  array       $instances
+     * @param  bool        $volumesMetrics
+     * @param  object|null $modelInstance
+     * @access public
+     * @return array
+     */
+    public function instancesMetricsTest(array $instances, bool $volumesMetrics = true, ?object $modelInstance = null): array
+    {
+        $result = $this->invokeModelMethod('instancesMetrics', [$instances, $volumesMetrics], $modelInstance);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test restore method.
      *
      * @param  object $instance
@@ -185,6 +201,21 @@ class cneModelTest extends baseTest
     public function restoreTest(object $instance, string $backupName, string $account = '')
     {
         $result = $this->invokeArgs('restore', [$instance, $backupName, $account]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test stopApp method.
+     *
+     * @param  object      $apiParams
+     * @param  object|null $modelInstance
+     * @access public
+     * @return mixed
+     */
+    public function stopAppTest(object $apiParams, ?object $modelInstance = null)
+    {
+        $result = $this->invokeModelMethod('stopApp', [$apiParams], $modelInstance);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -237,6 +268,38 @@ class cneModelTest extends baseTest
         $result = $this->invokeArgs('validateCert', [$certName, $pem, $key, $domain]);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    /**
+     * Test tryAllocate method.
+     *
+     * @param  array       $resources
+     * @param  object|null $modelInstance
+     * @access public
+     * @return object
+     */
+    public function tryAllocateTest(array $resources, ?object $modelInstance = null): object
+    {
+        $result = $this->invokeModelMethod('tryAllocate', [$resources], $modelInstance);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Invoke cneModel method with optional custom instance.
+     *
+     * @param  string      $methodName
+     * @param  array       $args
+     * @param  object|null $modelInstance
+     * @access private
+     * @return mixed
+     */
+    private function invokeModelMethod(string $methodName, array $args, ?object $modelInstance = null)
+    {
+        if($modelInstance === null) return $this->invokeArgs($methodName, $args);
+
+        $reflection = new ReflectionClass($modelInstance);
+        return $this->invokeArgs($methodName, $args, $this->moduleName, $this->className, $modelInstance, $reflection);
     }
 
     /**
