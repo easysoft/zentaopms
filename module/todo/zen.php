@@ -219,7 +219,9 @@ class todoZen extends todo
 
         if(!empty($todo->cycle)) $this->todo->createByCycle(array($todo->id => $todo));
 
-        $this->loadModel('action')->create('todo', $todo->id, 'opened');
+        $actionID = $this->loadModel('action')->create('todo', $todo->id, 'opened');
+
+        $this->loadModel('message')->sendMentionNotice('todo', 'create', $actionID, $todo);
 
         return $todo;
     }
@@ -337,22 +339,6 @@ class todoZen extends todo
         if($todo->private) $todo->assignedTo = $todo->assignedBy = $this->app->user->account;
 
         return $this->loadModel('file')->processImgURL($todo, $this->config->todo->editor->edit['id'], $this->post->uid);
-    }
-
-    /**
-     * 编辑完成待办后数据处理。
-     * Handle data after edit todo.
-     *
-     * @param  object    $todo
-     * @access protected
-     * @return void
-     */
-    protected function afterEdit(int $todoID, array $changes): void
-    {
-        if(empty($changes)) return;
-
-        $actionID = $this->loadModel('action')->create('todo', $todoID, 'edited');
-        $this->action->logHistory($actionID, $changes);
     }
 
     /**
