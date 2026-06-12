@@ -686,6 +686,12 @@ class testcaseModel extends model
         $changes  = common::createChanges($oldCase, $case);
         $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $this->post->comment, ucfirst($case->result));
         $this->action->logHistory($actionID, $changes);
+
+        if($this->post->comment)
+        {
+            $oldCase->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('testcase', 'review', $actionID, $oldCase);
+        }
         return true;
     }
 

@@ -301,7 +301,7 @@ class bugModelTest extends baseTest
         foreach($param as $key => $value) $bug->{$key} = $value;
 
         $this->instance->resolve($bug, $output);
-        if(dao::isError()) return str_replace('\n', '', dao::getError(true));
+        if(dao::isError()) return trim(str_replace('\n', '', dao::getError(true)));
 
         return $this->instance->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
     }

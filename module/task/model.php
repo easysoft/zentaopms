@@ -73,6 +73,12 @@ class taskModel extends model
         {
             $actionID = $this->loadModel('action')->create('task', $taskID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldTask->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('task', 'activate', $actionID, $oldTask);
+            }
         }
         if($this->config->edition != 'open' && $oldTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldTask->feedback, $task->status, $oldTask->status, $taskID);
 
@@ -250,6 +256,12 @@ class taskModel extends model
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('task', $task->id, $action, $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $task->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('task', $this->config->task->actionMaps[$action], $actionID, $task);
+            }
 
             if($this->config->edition != 'open' && in_array(strtolower($action), array('started', 'finished'))) $this->sendMessageForRelationTask($task->id, strtolower($action), $actionID);
         }
@@ -533,7 +545,7 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($task->id);
 
         $this->dao->update(TABLE_TASK)
-            ->data($task)
+            ->data($task, 'comment')
             ->autoCheck()
             ->checkFlow()
             ->where('id')->eq($task->id)
@@ -546,6 +558,12 @@ class taskModel extends model
         /* Record log. */
         $actionID = $this->loadModel('action')->create('task', $task->id, 'Assigned', $this->post->comment, $task->assignedTo);
         if($actionID) $this->action->logHistory($actionID, $changes);
+
+        if($this->post->comment)
+        {
+            $oldTask->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('task', 'assign', $actionID, $oldTask);
+        }
 
         return $changes;
     }
@@ -864,7 +882,7 @@ class taskModel extends model
      */
     public function close(object $oldTask, object $task, array $output = array()): bool|array
     {
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
+        $this->dao->update(TABLE_TASK)->data($task, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
         if(dao::isError()) return false;
 
         if(!empty($oldTask->mode)) $this->dao->update(TABLE_TASKTEAM)->set('`status`')->eq($task->status)->where('task')->eq($task->id)->exec();
@@ -1373,7 +1391,7 @@ class taskModel extends model
         }
 
         if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
+        $this->dao->update(TABLE_TASK)->data($task, 'comment')->autoCheck()->checkFlow()->where('id')->eq((int)$oldTask->id)->exec();
 
         if(dao::isError()) return false;
 
@@ -2745,7 +2763,7 @@ class taskModel extends model
         $oldTask = $this->getById($task->id);
 
         /* Update kanban status. */
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
+        $this->dao->update(TABLE_TASK)->data($task, 'comment')->autoCheck()->checkFlow()->where('id')->eq($task->id)->exec();
 
         /* If task has parent task, update status of the parent task by the child task. */
         if($oldTask->isParent) $this->updateChildrenStatus($task->id);
@@ -3229,7 +3247,7 @@ class taskModel extends model
 
         if(isset($task->consumed)) $task->consumed = round((float)$task->consumed, 2);
         if(isset($task->left)) $task->left = round((float)$task->left, 2);
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
+        $this->dao->update(TABLE_TASK)->data($task, 'comment')->autoCheck()->checkFlow()->where('id')->eq($oldTask->id)->exec();
 
         if(dao::isError()) return false;
 
