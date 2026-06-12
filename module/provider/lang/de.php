@@ -23,7 +23,6 @@ $lang->provider->error->apiWithMessage = 'The server URL cannot reach the provid
 
 $lang->provider->typeList = array();
 $lang->provider->typeList['GitLab']     = 'GitLab';
-$lang->provider->typeList['GitHub']     = 'Github';
 $lang->provider->typeList['Gitea']      = 'Gitea';
 $lang->provider->typeList['Gogs']       = 'Gogs';
 $lang->provider->typeList['Subversion'] = 'Subversion';
