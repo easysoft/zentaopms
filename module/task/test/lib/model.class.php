@@ -1836,7 +1836,7 @@ class taskModelTest extends baseTest
         if($status == 'done')   $action = 'Finished';
         if($status == 'closed') $action = 'Closed';
 
-        $oldTask = $this->instance->getByID($taskID);
+        $oldTask = $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $changes = common::createChanges($oldTask, $task);
         $result  = $this->instance->afterChangeStatus($oldTask, $changes, $action, array());
         return $changes;
