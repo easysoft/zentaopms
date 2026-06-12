@@ -36,7 +36,7 @@ $config->user->form->batchCreate['group']         = array('required' => false, '
 $config->user->form->batchCreate['email']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['commiter']      = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['gender']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->user->form->batchCreate['passwordfield'] = array('required' => true,  'type' => 'string', 'default' => '');
+$config->user->form->batchCreate['passwordfield'] = array('required' => true,  'type' => 'string', 'default' => '', 'specialchars' => 'no');
 $config->user->form->batchCreate['join']          = array('required' => false, 'type' => 'date',   'default' => null);
 $config->user->form->batchCreate['mobile']        = array('required' => false, 'type' => 'string', 'default' => '');
 $config->user->form->batchCreate['phone']         = array('required' => false, 'type' => 'string', 'default' => '');
