@@ -500,6 +500,7 @@ $lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
 $lang->ai->targetForm['project']['risk/create']        = '创建风险';
 $lang->ai->targetForm['project']['issue/create']       = '创建问题';
 $lang->ai->targetForm['project']['doc/create']         = '创建文档';
+$lang->ai->targetForm['project']['create']             = '创建项目';
 $lang->ai->targetForm['project']['programplan/create'] = '设置阶段';
 
 $lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';

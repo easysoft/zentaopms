@@ -149,6 +149,16 @@ $auditInject = function() use($module, $method)
     h::globalJS("(() => {requestAnimationFrame(() => {{$auditScript}});})();");
 };
 
+/* 页面特定字段过滤（通过 getFormSchema 排除内部字段） */
+$skipFieldsInject = function() use($module, $method)
+{
+    if(!isset($this->config->ai->perPageSkipFields[$module][$method])) return;
+
+    $fields = $this->config->ai->perPageSkipFields[$module][$method];
+    jsVar('window.zentaoSkipFields', $fields);
+};
+$skipFieldsInject();
+
 /* 数字员工异步执行结果自动填充：从 Session 读取待注入数据并回填表单 */
 $pendingFormInject = function() use($module, $method)
 {

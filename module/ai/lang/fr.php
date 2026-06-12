@@ -500,6 +500,7 @@ $lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
 $lang->ai->targetForm['project']['risk/create']        = 'Create Risk';
 $lang->ai->targetForm['project']['issue/create']       = 'Create Issue';
 $lang->ai->targetForm['project']['doc/create']         = 'Create Doc';
+$lang->ai->targetForm['project']['create']             = 'Create Project';
 $lang->ai->targetForm['project']['programplan/create'] = 'Set Program Plan';
 
 $lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';

@@ -3055,6 +3055,10 @@ class aiModel extends model
 
         foreach($fieldNames as $fieldName)
         {
+            if(is_array($fieldName)) $fieldName = $fieldName['field'] ?? $fieldName['name'] ?? '';
+            if(!is_string($fieldName) || $fieldName === '') continue;
+            if(empty($formSchema['fields'][$fieldName])) continue;
+
             if(empty($formSchema['fields'][$fieldName]['currentValue'])) continue;
             $id = (int)$formSchema['fields'][$fieldName]['currentValue'];
             if($id <= 0) continue;

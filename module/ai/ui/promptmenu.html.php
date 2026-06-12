@@ -82,63 +82,63 @@ $promptMenuInject = function() use ($generateAgents)
     if($isFormPage)
     {
         $prompts = $this->ai->getPromptsForTargetForm($module, $method);
-        if(!empty($prompts))
+        if(empty($prompts)) return;
+
+        $btnName = $this->lang->ai->prompts->common;
+        $html    = "<div class='flex gap-2 inline-block pull-right ml-2 mr-2'>";
+        $html   .= '<div class="prompts dropdown"><button class="btn ai-styled size-sm size-sm font-medium" type="button" data-toggle="dropdown" data-placement="bottom-end"><i class="icon icon-lightning"></i>' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
+        foreach($prompts as $prompt)
         {
-            $btnName = $this->lang->ai->prompts->common;
-            $html    = "<div class='flex gap-2 inline-block pull-right ml-2 mr-2'>";
-            $html   .= '<div class="prompts dropdown"><button class="btn ai-styled size-sm size-sm font-medium" type="button" data-toggle="dropdown" data-placement="bottom-end"><i class="icon icon-lightning"></i>' . $btnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
-            foreach($prompts as $prompt)
-            {
-                $html .= '<li class="menu-item">';
-                $html .= html::a('javascript:;', $prompt->name, '', "onclick='executeWithFormContext({$prompt->id})' style='width: 100%;'", 'btn ghost size-sm font-medium text-left');
-                $html .= '</li>';
-            }
-            $html .= '</menu></div>';
-
-            $promptIds = array_column($prompts, 'id');
-            $canAssign = !empty($this->config->enableAITeammate) && hasPriv('aiteammate', 'assignagent') && $this->config->edition != 'open';
-            if($canAssign)
-            {
-                $teammates      = $this->loadModel('aiteammate')->browse('0');
-                $showTeammates  = array_filter($teammates, function($item) use ($promptIds, $generateAgents)
-                {
-                    if(empty($item->agents)) return false;
-                    $agents = $generateAgents($item->agents);
-                    return !empty(array_intersect($promptIds, $agents));
-                });
-                if(!empty($showTeammates))
-                {
-                    $showTeammates = array_values($showTeammates);
-                    $assignedBtnName = sprintf($this->lang->ai->promptMenu->assignedTo, $this->lang->aiteammate->common);
-                    $html .= '<div class="prompts dropdown inline-block"><button class="btn ai-styled size-sm size-sm font-medium" type="button" data-toggle="dropdown" data-placement="bottom-end"><i class="icon icon-hand-right"></i>' . $assignedBtnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
-                    foreach($showTeammates as $teammate)
-                    {
-                        $avatar = html::avatar(array('avatar' => $teammate->avatar, 'account' => $teammate->name), '20', 'rounded-full');
-                        $name   = sprintf($this->lang->ai->promptMenu->assignedTo, $teammate->name);
-                        $html  .= '<li class="menu-item">';
-                        $html  .= html::a('javascript:;', $avatar . $name, '',
-                            "onclick='executeWithFormContextForTeammate(this)' data-teammate-id='{$teammate->id}' data-module='{$module}' data-method='{$method}' title='$name'",
-                            'btn ghost size-sm font-medium text-left'
-                        );
-                        $html .= '</li>';
-                    }
-                    $html .= '</menu></div>';
-                }
-            }
-
-            $html .= '</div>';
-
-            h::importJs($this->app->getWebRoot() . 'js/zui3/ai.js');
-
-            $script  = '(() => {';
-            $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
-            $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
-            $script .= '$aiMenu.' . $menuOptions->injectMethod . "(`$html`).css('z-index', 20);";
-            $script .= '})();';
-
-            h::globalJS($script);
-            return;
+            $html .= '<li class="menu-item">';
+            $html .= html::a('javascript:;', $prompt->name, '', "onclick='executeWithFormContext({$prompt->id})' style='width: 100%;'", 'btn ghost size-sm font-medium text-left');
+            $html .= '</li>';
         }
+        $html .= '</menu></div>';
+
+        $promptIds = array_column($prompts, 'id');
+        $canAssign = !empty($this->config->enableAITeammate) && hasPriv('aiteammate', 'assignagent') && $this->config->edition != 'open';
+        if($canAssign)
+        {
+            $teammates      = $this->loadModel('aiteammate')->browse('0');
+            $showTeammates  = array_filter($teammates, function($item) use ($promptIds, $generateAgents)
+            {
+                if(empty($item->agents)) return false;
+                $agents = $generateAgents($item->agents);
+                return !empty(array_intersect($promptIds, $agents));
+            });
+            if(!empty($showTeammates))
+            {
+                $showTeammates = array_values($showTeammates);
+                $assignedBtnName = sprintf($this->lang->ai->promptMenu->assignedTo, $this->lang->aiteammate->common);
+                $html .= '<div class="prompts dropdown inline-block"><button class="btn ai-styled size-sm size-sm font-medium" type="button" data-toggle="dropdown" data-placement="bottom-end"><i class="icon icon-hand-right"></i>' . $assignedBtnName . '<span class="caret-down"></span></button><menu class="dropdown-menu menu">';
+                foreach($showTeammates as $teammate)
+                {
+                    $avatar = html::avatar(array('avatar' => $teammate->avatar, 'account' => $teammate->name), '20', 'rounded-full');
+                    $name   = sprintf($this->lang->ai->promptMenu->assignedTo, $teammate->name);
+                    $html  .= '<li class="menu-item">';
+                    $html  .= html::a('javascript:;', $avatar . $name, '',
+                        "onclick='executeWithFormContextForTeammate(this)' data-teammate-id='{$teammate->id}' data-module='{$module}' data-method='{$method}' title='$name'",
+                        'btn ghost size-sm font-medium text-left'
+                    );
+                    $html .= '</li>';
+                }
+                $html .= '</menu></div>';
+            }
+        }
+
+        $html .= '</div>';
+
+        h::importJs($this->app->getWebRoot() . 'js/zui3/ai.js');
+
+        $script  = '(() => {';
+        $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
+        $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
+        $script .= 'else $aiMenu.find(".flex.gap-2.inline-block.pull-right.ml-2.mr-2").remove();';
+        $script .= '$aiMenu.' . $menuOptions->injectMethod . "(`$html`).css('z-index', 20);";
+        $script .= '})();';
+
+        h::globalJS($script);
+        return;
     }
 
     $prompts = $this->ai->getPromptsForUser($menuOptions->module);
@@ -182,7 +182,7 @@ $promptMenuInject = function() use ($generateAgents)
 
     if($module === 'productplan' && $method === 'view')
     {
-        /* 子计划不显示“拆分子计划智能体” */
+        /* 子计划不显示"拆分子计划智能体" */
         $plan = data('plan');
         if(is_object($plan) && $plan->parent > 0)
         {
@@ -288,7 +288,7 @@ $promptMenuInject = function() use ($generateAgents)
     $script .= 'window.aiSuggestions =' . json_encode($aiSuggestions) . ';';
     $script .= 'let $aiMenu = $("' . $menuOptions->targetContainer . '").first();';
     $script .= 'if(!$aiMenu.length) $aiMenu = $("#mainContent .ai-menu-box").empty();';
-    $script .= 'else $aiMenu.find(".prompts.dropdown").remove();';
+    $script .= 'else $aiMenu.find(".flex.gap-2.inline-block.pull-right.ml-2.mr-2").remove();';
     $script .= '$aiMenu.' . (!empty($menuOptions->injectMethod) ? $menuOptions->injectMethod : 'append') . "(`$html`).css('z-index', 20);\n";
     $script .= <<< JAVASCRIPT
         $('[data-toggle="popover"]').popover({template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div>'});

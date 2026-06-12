@@ -189,6 +189,7 @@ $config->ai->targetFormVars['testcase']['create']           = (object)array('for
 $config->ai->targetFormVars['testcase']['edit']             = (object)array('format' => 'caseID=%d', 'args' => array('case' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testreport']['create']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['execution']['testreport']      = (object)array('format' => '', 'args' => array(), 'app' => 'execution');
+$config->ai->targetFormVars['project']['create']            = (object)array('format' => 'model=%s&programID=%d', 'args' => array('model' => 0, 'program' => 0), 'app' => 'project');
 $config->ai->targetFormVars['execution']['batchcreatetask'] = (object)array('format' => 'executionID=%d', 'args' => array('execution' => 1), 'app' => 'execution');
   // $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'), 'app' => 'product');
 $config->ai->targetFormVars['programplan']['create'] = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
@@ -197,8 +198,16 @@ $config->ai->targetFormVars['doc']['edit']           = (object)array('format' =>
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
-/* 参与上下文加载的字段列表 */
-$config->ai->formContextFields = array('execution', 'story', 'bug');
+/* 参与上下文加载的字段列表（按 targetForm 配置，未配置时使用 _default） */
+$config->ai->formContextFields = array();
+$config->ai->formContextFields['_default']            = array('execution', 'story', 'bug');
+$config->ai->formContextFields['task']['create']      = array('execution', 'story');
+$config->ai->formContextFields['project']['create']   = array();
+
+/* getFormSchema 过滤的页面特定字段（按 targetForm 配置） */
+$config->ai->perPageSkipFields = array();
+$config->ai->perPageSkipFields['task']['create']      = array('storyEstimate', 'storyDesc', 'storyPri', 'taskName', 'taskEstimate', 'region', 'lane');
+$config->ai->perPageSkipFields['project']['create']   = array('schedule', 'dateRangePicker');
 
 /* 对象类型中文标签 */
 $config->ai->contextLabels = array(
@@ -239,11 +248,12 @@ $config->ai->contextRelations = array(
 $config->ai->contextPageLevel = array('product', 'project', 'execution');
 
 /* 使用通用表单流程的页面列表 */
-$config->ai->universalFormPages = array('task.create');
+$config->ai->universalFormPages = array('task.create', 'project.create');
 
 /* AI 可操作字段白名单 */
 $config->ai->universalFormFields = array();
-$config->ai->universalFormFields['task']['create'] = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
+$config->ai->universalFormFields['task']['create']    = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
+$config->ai->universalFormFields['project']['create'] = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
 
 /**
  * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
@@ -281,6 +291,13 @@ $config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->men
 
 $config->ai->menuPrint->locations['task']['create'] = (object)array(
     'module'          => 'task',
+    'targetContainer' => '#mainContent .panel-heading .panel-actions',
+    'injectMethod'    => 'prepend',
+    'objectVarName'   => null,
+);
+
+$config->ai->menuPrint->locations['project']['create'] = (object)array(
+    'module'          => 'project',
     'targetContainer' => '#mainContent .panel-heading .panel-actions',
     'injectMethod'    => 'prepend',
     'objectVarName'   => null,

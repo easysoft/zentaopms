@@ -939,7 +939,9 @@ class ai extends control
         $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
         if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
-        $contextObjects = $this->ai->loadFormContextObjects($formSchema, $this->config->ai->formContextFields ?? array(), $this->config->ai->contextRelations ?? array());
+        $targetFormParts = explode('.', $prompt->targetForm);
+        $contextFields   = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
+        $contextObjects  = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
         $contextDesc    = $this->ai->buildContextDescription($contextObjects);
 
         $formDataLines = array();
@@ -970,7 +972,6 @@ class ai extends control
             }
         }
 
-        $targetFormParts = explode('.', $prompt->targetForm);
         $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
         $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
         $fillableDesc    = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
