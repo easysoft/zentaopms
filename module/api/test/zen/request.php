@@ -22,8 +22,8 @@ su('admin');
 
 $apiTest = new apiZenTest();
 
-r($apiTest->requestTest('user', 'getById', 'extendModel', array('userID' => '1', 'account' => 'admin'))) && p('content') && e('mock_response_content');
-r($apiTest->requestTest('user', 'getList', 'extendModel', array('noparam' => true))) && p('content') && e('mock_response_content');
+r($apiTest->requestTest('user', 'getById', 'extendModel', array('userID' => '1', 'account' => 'admin')))   && p('content') && e('mock_response_content');
+r($apiTest->requestTest('user', 'getList', 'extendModel', array('noparam' => true)))                         && p('content') && e('mock_response_content');
 r($apiTest->requestTest('product', 'browse', 'extendControl', array('productID' => '1', 'branch' => '0'))) && p('content') && e('mock_response_content');
-r($apiTest->requestTest('task', 'browse', 'extendControl', array('noparam' => true))) && p('content') && e('mock_response_content');
-r($apiTest->requestTest('', 'getById', 'extendModel', array('userID' => '1'))) && p('content') && e('mock_response_content');
+r($apiTest->requestTest('task', 'browse', 'extendControl', array('noparam' => true)))                        && p('content') && e('mock_response_content');
+r($apiTest->requestTest('', 'getById', 'extendModel', array('userID' => '1')))                               && p('content') && e('mock_response_content');

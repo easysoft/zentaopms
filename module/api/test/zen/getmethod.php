@@ -24,17 +24,17 @@ su('admin');
 
 $apiTest = new apiZenTest();
 
-$zenFile = realpath(dirname(__FILE__, 3) . '/zen.php');
-$filePath1 = $zenFile . '/getMethod';
-$filePath2 = $zenFile . '/generateLibsDropMenu';
-$filePath3 = $zenFile . '/parseDocSpaceParam';
-$filePath4 = $zenFile . '/request';
+$zenFile     = realpath(dirname(__FILE__, 3) . '/zen.php');
+$filePath1   = $zenFile . '/getMethod';
+$filePath2   = $zenFile . '/generateLibsDropMenu';
+$filePath3   = $zenFile . '/parseDocSpaceParam';
+$filePath4   = $zenFile . '/request';
 $invalidPath = '/invalid/path/to/file.php/method';
 
-r($apiTest->getMethodTest($filePath1, 'Zen')) && p('className') && e('api');
-r($apiTest->getMethodTest($filePath1, 'Zen')) && p('methodName') && e('getMethod');
-r($apiTest->getMethodTest($filePath2, 'Zen')) && p('methodName') && e('generateLibsDropMenu');
-r($apiTest->getMethodTest($filePath3, 'Zen')) && p('methodName') && e('parseDocSpaceParam');
-r($apiTest->getMethodTest($filePath4, 'Zen')) && p('methodName') && e('request');
-r($apiTest->getMethodTest($filePath4, 'Zen')) && p('post') && e('1');
-r($apiTest->getMethodTest($invalidPath, 'Zen')) && p('error') && e('Class "toZen" does not exist');
+r($apiTest->getMethodTest($filePath1, 'Zen'))   && p('className')  && e('api');
+r($apiTest->getMethodTest($filePath1, 'Zen'))   && p('methodName') && e('getMethod');
+r($apiTest->getMethodTest($filePath2, 'Zen'))   && p('methodName') && e('generateLibsDropMenu');
+r($apiTest->getMethodTest($filePath3, 'Zen'))   && p('methodName') && e('parseDocSpaceParam');
+r($apiTest->getMethodTest($filePath4, 'Zen'))   && p('methodName') && e('request');
+r($apiTest->getMethodTest($filePath4, 'Zen'))   && p('post')       && e('1');
+r($apiTest->getMethodTest($invalidPath, 'Zen')) && p('error')      && e('Class "toZen" does not exist');
