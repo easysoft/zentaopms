@@ -50,8 +50,8 @@ $validPipelineJob->pipeline = '{"project":"1","reference":"master"}';
 $validPipelineJob->lastSyncDate = null;
 
 // 测试步骤：至少5个
-r($compileTest->syncGitlabBuildListTest($emptyGitlab, $validJob)) && p() && e('false');
-r($compileTest->syncGitlabBuildListTest($validGitlab, $emptyPipelineJob)) && p() && e('false');
-r(is_bool($compileTest->syncGitlabBuildListTest($validGitlab, $validPipelineJob))) && p() && e('true');
+r($compileTest->syncGitlabBuildListTest($emptyGitlab, $validJob) ? 1 : 0) && p() && e('0');
+r($compileTest->syncGitlabBuildListTest($validGitlab, $emptyPipelineJob) ? 1 : 0) && p() && e('1');
+r($compileTest->syncGitlabBuildListTest($validGitlab, $validPipelineJob) ? 1 : 0) && p() && e('1');
 r(dao::isError() ? 1 : 0) && p() && e('0');
-r($compileTest->syncGitlabBuildListTest('invalid', $validJob)) && p() && e('false');
+r($compileTest->syncGitlabBuildListTest('invalid', $validJob) ? 1 : 0) && p() && e('0');
