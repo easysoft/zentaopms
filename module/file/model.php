@@ -486,6 +486,7 @@ class fileModel extends model
             return false;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $condition = "`type`='export$module' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
         return $this->dao->lastInsertId();
