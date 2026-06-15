@@ -3370,4 +3370,70 @@ class repoModel extends model
 
         return $allResults;
     }
+
+    /**
+     * 导入代码库。
+     * Import repo.
+     *
+     * @param  object $formData
+     * @access public
+     * @return object|false
+     */
+    public function import(object $formData): object|false
+    {
+        if(empty($formData->providerID)) return false;
+
+        $provider = $this->loadModel('provider')->fetchByID((int)$formData->providerID);
+        if(empty($provider)) return false;
+
+        $repo = $provider->type == 'Subversion' ? array() : $this->getProviderRepo($provider, $provider->type == 'GitLab' ? $formData->repo : $formData->organize . '/' . $formData->repo);
+
+        $params = new stdClass();
+        $params->acl      = $formData->acl;
+        $params->name     = $formData->name;
+        $params->desc     = $formData->desc;
+        $params->product  = $formData->product;
+        $params->spaceID  = (int)$formData->space;
+        $params->mirror   = $formData->mirror != 'writable';
+        $params->provider = $provider;
+        $params->provider->host = $provider->url;
+        if($provider->type == 'Subversion')
+        {
+            $params->provider->password = $formData->password;
+            $params->provider->username = $formData->account;
+            $params->provider->slug     = rtrim($formData->path, '/') . '/' . $formData->slug;
+        }
+        else
+        {
+            $params->provider->projectID = (string)zget($repo, 'id', 0);
+            $params->provider->slug      = $provider->type == 'GitLab' ? zget($repo, 'path_with_namespace', '') : zget($repo, 'full_name', '');
+        }
+
+        $result = $this->loadModel('gitfox')->request('/repos/import', 'POST', $params);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * 获取代码库详情。
+     * Get repo detail.
+     *
+     * @param  object $provider
+     * @param  string $repoID
+     * @access public
+     * @return object|false
+     */
+    public function getProviderRepo(object $provider, string $repoID): object|false
+    {
+        if(empty($provider->type)) return false;
+        $apiRoot = $this->loadModel('provider')->getApiRoot($provider);
+        if(empty($apiRoot)) return false;
+
+        $url  = $provider->type == 'GitLab' ? sprintf($apiRoot, "/projects/{$repoID}") : sprintf($apiRoot, "/repos/{$repoID}");
+        $repo = json_decode(commonModel::http($url));
+        if(empty($repo) || isset($repo->message)) return false;
+
+        return $repo;
+    }
 }
