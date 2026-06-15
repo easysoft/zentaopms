@@ -76,13 +76,13 @@ else
         set::actions(array()),
         set::showExtra(false),
         set::onRenderRow(jsRaw('renderRowData')),
-        $module == 'story' && $this->session->insert ? set::ajax(array('beforeSubmit' => jsRaw('saveDraft'))) : null,
-        $module == 'story' && $this->session->insert ? formHidden('status', '') : null,
+        in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? set::ajax(array('beforeSubmit' => jsRaw('saveDraft'))) : null,
+        in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? formHidden('status', '') : null,
         div
         (
             setClass('toolbar form-actions form-group no-label'),
             $this->session->insert ? btn(set::btnType('submit'), setClass('primary btn-wide'), $submitText) : btn(set('data-toggle', 'modal'), set('data-target', '#importNoticeModal'), setClass('primary btn-wide'), $submitText),
-            $module == 'story' && $this->session->insert ? btn(set::btnType('submit'), setClass('secondary btn-wide'), set('data-status', 'draft'), $lang->story->saveDraft) : null,
+            in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? btn(set::btnType('submit'), setClass('secondary btn-wide'), set('data-status', 'draft'), $lang->story->saveDraft) : null,
             btn(set::url($backLink), setClass('btn-back btn-wide'), $lang->goback),
             $this->session->insert ? formHidden('insert', $dataInsert != '' ? $dataInsert : 1) : null,
             formHidden('isEndPage', $isEndPage ? 1 : 0),
