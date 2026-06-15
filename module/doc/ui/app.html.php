@@ -72,6 +72,9 @@ $privs['struct']       = hasPriv('api', 'struct');
 $privs['createOffice'] = $privs['create'];
 $privs['restoreDoc']   = $privs['edit'];
 
+$privs['exportApi']     = $this->config->edition != 'open' && hasPriv('api', 'export');
+$privs['exportOpenApi'] = $this->config->edition != 'open' && hasPriv('api', 'exportOpenApi');
+$privs['importOpenApi'] = $this->config->edition != 'open' && hasPriv('api', 'importOpenApi');
 $privs['addChapter']    = hasPriv('doc', 'addChapter');
 $privs['editChapter']   = hasPriv('doc', 'editChapter');
 $privs['deleteChapter'] = hasPriv('doc', 'deleteChapter');
