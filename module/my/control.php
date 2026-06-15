@@ -555,12 +555,12 @@ class my extends control
      * @access public
      * @return void
      */
-    public function testtask(string $type = 'wait', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(string $browseType = 'wait', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager    = pager::init($recTotal, $recPerPage, $pageID);
-        $queryID  = $type == 'bySearch' ? (int)$param : 0;
+        $queryID  = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Save session. */
         if($this->app->viewType != 'json')
@@ -577,7 +577,7 @@ class my extends control
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type, $queryID);
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
