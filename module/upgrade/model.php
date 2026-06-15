@@ -13318,7 +13318,7 @@ class upgradeModel extends model
     {
         if($this->config->edition == 'open') return true;
 
-        $tables = $this->dao->select('`table`')->from(TABLE_WORKFLOW)
+        $tables = $this->dao->select('`module`, `table`')->from(TABLE_WORKFLOW)
             ->where('approval')->eq('enabled')
             ->fetchPairs();
         if(empty($tables)) return true;
@@ -13337,7 +13337,7 @@ class upgradeModel extends model
         }
         foreach($reviewedByMap as $approvalID => $accounts) $reviewedByMap[$approvalID] = implode(',', $accounts);
 
-        foreach($tables as $table)
+        foreach($tables as $module => $table)
         {
             if(!$this->checkFieldsExists($table, 'reviewedBy')) $this->dbh->exec("ALTER TABLE `{$table}` ADD `reviewedBy` text NULL");
             if(!$this->checkFieldsExists($table, 'approval')) continue;
@@ -13348,6 +13348,20 @@ class upgradeModel extends model
                 if(!isset($reviewedByMap[$approvalID])) continue;
                 $this->dao->update($table)->set('reviewedBy')->eq($reviewedByMap[$approvalID])->where('approval')->eq($approvalID)->exec();
             }
+
+            $workflowField = new stdclass();
+            $workflowField->module      = $module;
+            $workflowField->field       = 'reviewedBy';
+            $workflowField->name        = $this->lang->workflowfield->approval->fields['reviewedBy'];
+            $workflowField->type        = 'text';
+            $workflowField->control     = 'multi-select';
+            $workflowField->options     = 'user';
+            $workflowField->readonly    = '1';
+            $workflowField->buildin     = '0';
+            $workflowField->role        = 'approval';
+            $workflowField->createdBy   = 'admin';
+            $workflowField->createdDate = helper::now();
+            $this->dao->insert(TABLE_WORKFLOWFIELD)->data($workflowField)->autoCheck()->exec();
         }
 
         return !dao::isError();
