@@ -39,7 +39,7 @@ $selectTargetForm = '';
 if(!empty($prompt->targetForm))
 {
     $targetForm       = explode('.', $prompt->targetForm);
-    $selectTargetForm = $lang->ai->targetForm[$targetForm[0]][$targetForm[1]];
+    $selectTargetForm = $lang->ai->targetForm[$targetForm[0]][$targetForm[1]] ?? '';
 }
 
 $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
@@ -97,7 +97,7 @@ detailBody
         section
         (
             set::title($lang->ai->prompts->object),
-            set::content($prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : '')
+            set::content($prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : '')
         ),
         section(set::title($lang->ai->prompts->field), set::content($dataPreview)),
         $fnBuildFieldConfig(),
@@ -132,7 +132,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : ''),
+                    item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : ''),
                     item(set::name($lang->prompt->desc),   div(setClass('w-64 text-clip'), set::title($prompt->desc), $prompt->desc)),
                     item(set::name($lang->prompt->status), $lang->ai->prompts->statuses[$prompt->status]),
                     item(set::name($lang->prompt->model), zui::aiModelName($prompt->model)),
