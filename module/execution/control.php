@@ -1413,6 +1413,7 @@ class execution extends control
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
         $frozenStages = '';
+        $hasStage     = false;
         foreach($executions as $key => $execution)
         {
             if(!empty($execution->frozen))
@@ -1420,6 +1421,7 @@ class execution extends control
                 $frozenStages .= "#{$execution->id} ";
                 unset($executions[$key]);
             }
+            if($execution->type == 'stage') $hasStage = true;
         }
         if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, $frozenStages), 'load' => true)));
 
@@ -1454,6 +1456,7 @@ class execution extends control
         $this->view->from         = $this->app->tab;
         $this->view->parents      = $this->execution->getByIdList($parentIdList);
         $this->view->frozenStages = $frozenStages;
+        $this->view->hasStage     = $hasStage;
         $this->display();
     }
 

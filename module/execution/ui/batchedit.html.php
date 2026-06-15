@@ -126,7 +126,7 @@ $items[] = array
     'width'    => '120px',
     'tipIcon'  => 'help',
     'hidden'   => strpos("{$showFields}", 'lifetime') === false,
-    'tip'      => $lang->execution->typeTip,
+    'tip'      => $hasStage ? $lang->execution->typeTip : '',
     'tipProps' => array
     (
         'id'              => 'tooltipHover',
