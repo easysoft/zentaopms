@@ -8,7 +8,7 @@ timeout=0
 cid=16019
 
 - 执行devTest模块的setFieldTest方法，参数是$enumField, $enumRawField, 'enum', 4
- - 第options条的enum属性 @open
+ - 第options条的enum属性 @open|done|closed
 - 执行devTest模块的setFieldTest方法，参数是$varcharField, $varcharRawField, 'varchar', 7 属性type @varchar
 - 执行devTest模块的setFieldTest方法，参数是$intField, $intRawField, 'int', 3 属性type @int
 - 执行devTest模块的setFieldTest方法，参数是$floatField, $floatRawField, 'double', 6 属性type @float
@@ -26,7 +26,7 @@ $devTest = new devModelTest();
 // 测试步骤1：enum类型字段处理，期望返回完整的枚举选项列表
 $enumField = array('name' => 'status', 'null' => 'NO');
 $enumRawField = (object)array('field' => 'status', 'type' => "enum('open','done','closed')", 'null' => 'NO');
-r($devTest->setFieldTest($enumField, $enumRawField, 'enum', 4)) && p('options:enum') && e('open,done,closed');
+r(str_replace(',', '|', $devTest->setFieldTest($enumField, $enumRawField, 'enum', 4)['options']['enum'])) && p() && e('open|done|closed');
 
 // 测试步骤2：varchar类型字段处理，期望返回varchar类型
 $varcharField = array('name' => 'title', 'null' => 'NO');

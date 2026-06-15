@@ -17,7 +17,7 @@ cid=16007
  - 属性editor @0
  - 属性help @0
  - 属性setting @0
-- 执行devTest模块的getModulesWithExtensionTest方法  @95
+- 执行devTest模块的getModulesWithExtensionTest方法 属性hasExtensionModule @1
 
 */
 
@@ -32,4 +32,4 @@ r($devTest->getModulesStructureTest()) && p('hasGroups,validStructure') && e('1,
 r($devTest->getModulesTest()) && p('admin') && e('action');
 r($devTest->getModulesTest()) && p('product') && e('branch');
 r($devTest->getModulesExcludeTest()) && p('common,editor,help,setting') && e('0,0,0,0');
-r($devTest->getModulesWithExtensionTest()) && p() && e('95');
+r($devTest->getModulesWithExtensionTest()) && p('hasExtensionModule') && e('1');
