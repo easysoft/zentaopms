@@ -1095,9 +1095,15 @@ class repo extends control
     public function import(string $type = 'GitLab', int $providerID = 0, string $groupID = '')
     {
         if($this->viewType !== 'json') $this->commonAction();
+        if($_POST)
+        {
+            $this->repoZen->setImportFormConfig($type);
+            $formData = form::data($this->config->repo->form->import)->get();
+            $this->repo->import($formData);
+        }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
-        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->import;
+        $this->view->title     = $this->lang->repo->import;
         $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
         $this->view->spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->view->type      = $type;
