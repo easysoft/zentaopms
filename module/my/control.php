@@ -95,7 +95,7 @@ class my extends control
             $flows = $this->my->getFlowPairs();
             if(isset($flows[$mode]))
             {
-                echo $this->fetch('my', 'flow', "module={$mode}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+                echo $this->fetch('my', 'flow', "module={$mode}&type={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
                 return;
             }
         }
