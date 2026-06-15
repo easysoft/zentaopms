@@ -13,6 +13,9 @@ set::zui(true);
 
 jsVar('importProgressLeaveTip', $lang->repo->importProgress->leaveTip);
 jsVar('importProgressAcknowledge', $lang->repo->importProgress->acknowledge);
+jsVar('importProgressRepoID', $repoID);
+jsVar('importProgressPollingLink', $this->createLink('repo', 'ajaxGetImportProgress', "repoID={$repoID}"));
+jsVar('importProgressListLink', $this->createLink('repo', 'ajaxImportResult', "repoID={$repoID}"));
 
 div
 (
