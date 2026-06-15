@@ -920,9 +920,6 @@ class story extends control
     {
         $url = $this->session->storyList ?: inlink('browse', "productID=$productID&storyType=$storyType");
 
-        // if($this->post->results)
-        // {
-        // }
         $storyIdList = array();
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
         if(empty($storyIdList)) $this->locate($url);
@@ -963,10 +960,17 @@ class story extends control
         }
         if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
 
+        /* Get reviewers. */
+        $product = $this->product->getById($productID);
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+
         $this->view->storyIdList        = $allowedStoryIdList;
         $this->view->invalidTypes       = $invalidTypes;
         $this->view->invalidStoryIdList = $invalidStoryIdList;
-        $this->view->reviewers          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->reviewers          = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->needReview         = $this->app->user->account == $product->PO ? "checked='checked'" : "";
+
 
         $this->display();
     }

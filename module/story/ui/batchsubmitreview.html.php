@@ -27,34 +27,44 @@ if(!empty($message))
     $jsMsg = json_encode($message);
     h::js("zui.Modal.alert({$jsMsg});");
 }
-modalHeader
+
+$needNotReviewBox = span
 (
-    set::title($lang->story->batchSubmitReview)
+    setClass('input-group-addon'),
+    checkbox
+    (
+        setID('needNotReview'),
+        set::name('needNotReview'),
+        set::text($lang->story->needNotReview),
+        set::value(1),
+        set::checked($needReview)
+    )
 );
 
-$hiddenInputs = array();
-foreach($storyIdList as $id)
-{
-    $hiddenInputs[] = input(set::type('hidden'), set::name('storyIdList[]'), set::value($id));
-}
+modalHeader(set::title($lang->story->batchSubmitReview));
 
 formPanel
 (
     set::submitBtnText($lang->story->submitReview),
+    on::change('#needNotReview', 'toggleReviewer(e.target)'),
     formGroup
     (
         setID('reviewerBox'),
         set::label($lang->story->reviewers),
         set::width('full'),
         set::required(true),
-        picker
+        inputGroup
         (
-            set::name('results[]'),
-            set::items($reviewers),
-            set::multiple(true)
+            picker
+            (
+                setID('reviewer'),
+                set::name('reviewer[]'),
+                set::multiple(true),
+                set::items($reviewers),
+                set::disabled($needReview)
+            ),
+            $needNotReviewBox
         )
-    ),
-    $hiddenInputs
+    )
 );
-
 render();
