@@ -730,7 +730,7 @@ class customTaoTest extends baseTest
      */
     public function getDataForUpdateProjectAclTest(string $key): array
     {
-        list($projectGroup, $programPM, $stakeholders) = $this->objectModel->getDataForUpdateProjectAcl();
+        list($projectGroup, $programPM, $stakeholders) = $this->invokeArgs('getDataForUpdateProjectAcl');
         return ${$key};
     }
 
@@ -778,12 +778,12 @@ class customTaoTest extends baseTest
      */
     public function getCustomLangTest(): array|false
     {
-        $oldVision = $this->objectModel->config->vision;
+        $oldVision = $this->instance->config->vision;
 
-        $this->objectModel->config->vision = 'rnd';
-        $allCustomLang = $this->objectModel->getCustomLang();
+        $this->instance->config->vision = 'rnd';
+        $allCustomLang = $this->invokeArgs('getCustomLang');
 
-        $this->objectModel->config->vision = $oldVision;
+        $this->instance->config->vision = $oldVision;
         if(dao::isError()) return dao::getError();
         return $allCustomLang;
     }
