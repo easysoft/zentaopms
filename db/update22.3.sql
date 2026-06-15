@@ -8,7 +8,7 @@ CREATE TABLE `zt_ai_skill` (
   `category` int(11) NOT NULL COMMENT '技能类型(模块ID)',
   `status` varchar(255) NOT NULL COMMENT '状态',
   `fromID` int(11) NOT NULL COMMENT '来源ID（可将公开技能复制成个人技能）',
-  `skillID` int(11) NOT NULL COMMENT 'ZAI中的skillID',
+  `skillID` varchar(255) NOT NULL COMMENT 'ZAI中的skillID',
   `desc` text DEFAULT NULL COMMENT '描述',
   `createdBy` varchar(255) NOT NULL COMMENT '创建人',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
