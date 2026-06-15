@@ -687,7 +687,7 @@ class testreportZen extends testreport
             if(strpos($chart, 'testTask') === false) continue;
 
             $chartFunc   = 'getDataOf' . $chart;
-            $chartData   = $this->testtask->$chartFunc($taskID);
+            $chartData   = $this->testtask->$chartFunc($taskID, '1=1');
             $chartOption = $this->config->testtask->report->options;
 
             $this->view->charts[$chart] = $chartOption;

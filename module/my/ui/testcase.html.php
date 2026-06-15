@@ -57,7 +57,6 @@ dtable
     set::cols($cols),
     set::customCols(true),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->testcase->failCheckedSummary),
