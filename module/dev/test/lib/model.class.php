@@ -425,12 +425,42 @@ class devModelTest extends baseTest
     public function getModulesWithExtensionTest()
     {
         $result = $this->instance->getModules();
-        $totalModules = 0;
-        foreach($result as $groupName => $modules)
+        $modules = array();
+        foreach($result as $groupName => $groupModules) $modules += $groupModules;
+
+        $baseModules = array();
+        foreach(glob($this->instance->app->getModuleRoot() . '*') as $path)
         {
-            $totalModules += count($modules);
+            if(!file_exists($path . DS . 'control.php')) continue;
+
+            $module = basename($path);
+            if(in_array($module, array('editor', 'help', 'setting', 'common'))) continue;
+            $baseModules[$module] = $module;
         }
-        return $totalModules;
+
+        $extensionModule = '';
+        foreach($this->instance->getModuleExtPath() as $extPath)
+        {
+            if(empty($extPath) || !is_dir($extPath)) continue;
+
+            foreach(glob($extPath . '*') as $path)
+            {
+                if(!file_exists($path . DS . 'control.php')) continue;
+
+                $module = basename($path);
+                if(in_array($module, array('editor', 'help', 'setting', 'common'))) continue;
+                if(isset($baseModules[$module])) continue;
+
+                $extensionModule = $module;
+                break 2;
+            }
+        }
+
+        $hasExtensionModule = empty($extensionModule)
+            ? (count($modules) >= count($baseModules) ? '1' : '0')
+            : (isset($modules[$extensionModule]) ? '1' : '0');
+
+        return array('hasExtensionModule' => $hasExtensionModule, 'extensionModule' => $extensionModule);
     }
 
     /**
@@ -773,8 +803,13 @@ class devModelTest extends baseTest
         {
             $extPaths = $this->instance->getModuleExtPath();
             $extensionInfo = array();
-            $extensionInfo['hasExtPaths'] = !empty($extPaths) ? '1' : '0';
-            $extensionInfo['extPathCount'] = count($extPaths);
+            $editionPath = zget($extPaths, 'common', '');
+
+            $extensionInfo['hasExtPaths']      = !empty($extPaths) ? '1' : '0';
+            $extensionInfo['extPathCount']     = count($extPaths);
+            $extensionInfo['editionPathValid'] = $this->instance->config->edition == 'open'
+                ? (empty($editionPath) ? '1' : '0')
+                : (!empty($editionPath) ? '1' : '0');
 
             return $extensionInfo;
         }

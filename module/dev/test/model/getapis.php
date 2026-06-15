@@ -11,7 +11,7 @@ cid=16001
 - 测试common模块特殊处理 @array
 - 测试dev模块特殊处理 @array
 - 测试API方法参数解析功能属性hasParams @1
-- 测试API扩展路径数量属性extPathCount @1
+- 测试当前版本扩展路径配置属性editionPathValid @1
 
 */
 
@@ -26,4 +26,4 @@ r($devTest->getAPIsExtensionTest()) && p('hasExtPaths') && e('1');             /
 r($devTest->getAPIsTest('common')) && p() && e('array');                      // 测试common模块特殊处理
 r($devTest->getAPIsTest('dev')) && p() && e('array');                         // 测试dev模块特殊处理
 r($devTest->getAPIsParameterTest('user')) && p('hasParams') && e('1');        // 测试API方法参数解析功能
-r($devTest->getAPIsExtensionTest()) && p('extPathCount') && e('1');            // 测试API扩展路径数量
+r($devTest->getAPIsExtensionTest()) && p('editionPathValid') && e('1');        // 测试当前版本扩展路径配置
