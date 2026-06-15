@@ -23,6 +23,7 @@ $docTable->addedBy->range('user1{2},admin');
 $docTable->gen(3);
 
 zenData('user')->gen(5);
+su('admin');
 
 $docIds = array(0, 1, 2, 3, 100);
 
