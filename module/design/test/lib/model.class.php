@@ -161,9 +161,19 @@ class designModelTest extends baseTest
      */
     public function getCommitTest($designID = 0, int $recPerPage = 20, int $pageID = 1): array|string
     {
+        global $app;
+
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'design';
+        if(empty($app->rawMethod)) $app->rawMethod = 'view';
+
         $this->instance->app->loadClass('pager', true);
         $pager  = pager::init(0, $recPerPage, $pageID);
         $design = $this->instance->getCommit($designID, $pager);
+
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
 
         if(dao::isError()) return dao::getError();
 
