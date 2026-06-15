@@ -19,16 +19,14 @@ cid=15973
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 2. zendata数据准备（根据需要配置）
+// 2. zendata数据准备（使用当前表结构下稳定的字段集）
 $table = zenData('dept');
 $table->id->range('1-10');
 $table->name->range('技术部,产品部,运营部,人事部,财务部,市场部,客服部,行政部,研发部,测试部');
 $table->parent->range('0{3},1{3},2{2},3{2}');
-$table->path->range(',1,,2,,3,,1,1,,1,2,,2,1,,2,2,,3,1,,3,2,');
-$table->grade->range('1{3},2{4},2{3}');
+$table->path->range(',1,,2,,3,,1,4,,1,5,,1,6,,2,7,,2,8,,3,9,,3,10,');
+$table->grade->range('1{3},2{7}');
 $table->order->range('10,20,30,40,50,60,70,80,90,100');
-$table->position->range('部长{3},主管{4},专员{3}');
-$table->function->range('技术开发,产品规划,运营管理,人力资源,财务管理,市场推广,客户服务,行政管理,研发创新,质量保障');
 $table->manager->range('admin,user1,user2,user3,user4,user5,user6,user7,user8,user9');
 $table->gen(10);
 
