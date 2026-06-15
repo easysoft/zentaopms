@@ -122,6 +122,7 @@ class repoModel extends model
     public function getListByPriv(string $type = 'all')
     {
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
 
@@ -489,6 +490,7 @@ class repoModel extends model
         $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
             ->andWhere('spaceID')->in(array_keys($userSpaces))
             ->fetchAll('id', false);
 
@@ -713,7 +715,10 @@ class repoModel extends model
      */
     public function getByIdList(array $idList): array
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id', false);
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
+            ->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
@@ -2704,6 +2709,7 @@ class repoModel extends model
 
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->beginIF($space)->andWhere('spaceID')->eq($space)->fi()
             ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
             ->beginIF(!empty($userSpaces) && !$space)->andWhere('spaceID')->in(array_keys($userSpaces))->fi()
@@ -2794,6 +2800,7 @@ class repoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->andWhere("FIND_IN_SET({$productID}, `product`)")
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
@@ -2811,6 +2818,7 @@ class repoModel extends model
         $importedProjects = $this->dao->select('serviceProject')->from(TABLE_REPO)
             ->where('serviceHost')->eq($hostID)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->fetchAll('serviceProject');
 
         if(dao::isError()) return array();
@@ -2937,6 +2945,7 @@ class repoModel extends model
             ->leftJoin(TABLE_SPACE)->alias('t2')->on('t1.spaceID = t2.id')
             ->where('t1.spaceID')->in($spaceIdList)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->ne('importing')
             ->fetchAll('id');
     }
 
@@ -3246,6 +3255,7 @@ class repoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
+            ->where('status')->ne('importing')
             ->fetchAll('id');
     }
 
@@ -3286,7 +3296,9 @@ class repoModel extends model
      */
     public function getPairs(): array
     {
-        return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetchPairs('id', 'name');
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')->fetchPairs('id', 'name');
     }
 
     /**

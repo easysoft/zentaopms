@@ -272,6 +272,7 @@ class spaceModel extends model
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('spaceID')->eq($spaceID)
             ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
             ->beginIF($acl)->andWhere('acl')->eq($acl)->fi()
             ->fetchAll('id');
     }
@@ -726,7 +727,10 @@ class spaceModel extends model
 
         $this->loadModel('repo');
 
-        $repos         = $this->dao->select('id,product,acl')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('spaceID')->eq($spaceID)->fetchAll();
+        $repos = $this->dao->select('id,product,acl')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
+            ->andWhere('spaceID')->eq($spaceID)->fetchAll();
         $productIdList = array();
         foreach($repos as $key => $repo)
         {
