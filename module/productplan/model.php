@@ -611,7 +611,7 @@ class productplanModel extends model
         if(!$oldPlan) return false;
 
         $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason);
-        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan, 'comment')->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldPlan, $plan);
