@@ -154,7 +154,7 @@ $config->bug->actionList['edit']['data-app'] = $app->tab;
 $config->bug->actionList['copy']['icon']       = 'copy';
 $config->bug->actionList['copy']['text']       = $lang->bug->copy;
 $config->bug->actionList['copy']['hint']       = $lang->bug->copy;
-$config->bug->actionList['copy']['url']        = array('module' => 'bug', 'method' => 'copy', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution}');
+$config->bug->actionList['copy']['url']        = array('module' => 'bug', 'method' => 'copy', 'params' => 'productID={product}&branch={branch}&extra=bugID={id},projectID={project},executionID={execution},allBuilds=on');
 $config->bug->actionList['copy']['notInModal'] = true;
 $config->bug->actionList['copy']['data-app']   = $app->tab;
 
