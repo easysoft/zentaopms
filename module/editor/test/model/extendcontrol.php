@@ -26,7 +26,7 @@ su('admin');
 
 $editor = new editorModelTest();
 
-$modulePath = $editor->objectModel->app->getModulePath('', 'todo');
+$modulePath = $editor->instance->app->getModulePath('', 'todo');
 $validFilePath = $modulePath . 'control.php' . DS . 'create';
 $invalidFilePath = '/nonexistent/path/control.php' . DS . 'create';
 $nonExistentMethodPath = $modulePath . 'control.php' . DS . 'nonexistentmethod';

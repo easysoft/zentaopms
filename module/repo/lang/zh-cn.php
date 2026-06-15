@@ -81,6 +81,7 @@ $lang->repo->gitlabList         = 'Gitlab代码库';
 $lang->repo->batchCreate        = '批量导入代码库';
 $lang->repo->browseTag          = '查看标签列表';
 $lang->repo->browseBranch       = '查看分支列表';
+$lang->repo->showImportProgress = '显示导入进度';
 
 $lang->repo->createRepoAction = '创建代码库';
 
@@ -511,3 +512,10 @@ $lang->repo->sourceList['Subversion'] = 'Subversion';
 $lang->repo->accessList = array();
 $lang->repo->accessList['writable'] = '可读、可写、可管理';
 $lang->repo->accessList['readonly'] = '只读（做镜像导入，在第三方代码库进行管理，由DevOps定期自动同步）';
+
+$lang->repo->importProgress = new stdclass();
+$lang->repo->importProgress->title       = '正在导入代码库...';
+$lang->repo->importProgress->desc        = '正在将您的第三方代码库导入系统，请稍后，此过程可能需要几分钟。';
+$lang->repo->importProgress->notice      = '请耐心等待数据导入完成，不要关闭本页面。';
+$lang->repo->importProgress->leaveTip    = '代码库正在导入中，请勿关闭页面。页面关闭后，将无法查看代码库导入进度。';
+$lang->repo->importProgress->acknowledge = '我知道了';
