@@ -1751,12 +1751,18 @@ class repoZen extends repo
             if($type == 'GitLab')
             {
                 if((!$groupID && !empty($repos)) || !isset($groups[$groupID])) $groupID = current($repos)->namespace->name;
-                if($groupID == $repo->namespace->name) $groupRepos[$repo->name] = $repo->name;
+                if($groupID == $repo->namespace->name)
+                {
+                    $groupRepos[$repo->id] = $repo->name;
+                }
             }
             elseIf(in_array($type, array('Gitea', 'Gogs')))
             {
                 if((!$groupID && !empty($repos)) || !isset($groups[$groupID])) $groupID = current($repos)->owner->username;
-                if($groupID == $repo->owner->username) $groupRepos[$repo->name] = $repo->name;
+                if($groupID == $repo->owner->username)
+                {
+                    $groupRepos[$repo->name] = $repo->name;
+                }
             }
         }
 
@@ -1764,5 +1770,30 @@ class repoZen extends repo
         $this->view->provider  = $provider;
         $this->view->groups    = $groups;
         $this->view->repos     = $groupRepos;
+    }
+
+    /**
+     * 设置导入表单的配置。
+     * Set import form config.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function setImportFormConfig(string $type): array
+    {
+        if($type == 'Subversion')
+        {
+            $this->config->repo->form->import['account']['required']  = true;
+            $this->config->repo->form->import['password']['required'] = true;
+            $this->config->repo->form->import['slug']['required']     = true;
+        }
+        else
+        {
+            $this->config->repo->form->import['organize']['required'] = true;
+            $this->config->repo->form->import['repo']['required']     = true;
+        }
+
+        return $this->config->repo->form->import;
     }
 }
