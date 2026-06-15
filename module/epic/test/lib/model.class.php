@@ -33,8 +33,13 @@ class epicModelTest extends baseTest
      */
     public function isClickableTest($data = null, $action = '')
     {
-        $result = $this->invokeArgs('isClickable', [$data, $action]);
+        global $tester, $app;
+
+        if(empty($app->control)) $app->control = $tester;
+
+        $result = $this->instance->isClickable($data, $action);
         if(dao::isError()) return dao::getError();
+
         return $result;
     }
 }
