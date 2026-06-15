@@ -81,6 +81,7 @@ $lang->repo->gitlabList         = 'Gitlab Repo';
 $lang->repo->batchCreate        = 'Batch import repo';
 $lang->repo->browseTag          = 'Browse Tag';
 $lang->repo->browseBranch       = 'Browse Branch';
+$lang->repo->showImportProgress = 'Show Import Progress';
 
 $lang->repo->createRepoAction = 'Create repository';
 
@@ -511,3 +512,10 @@ $lang->repo->sourceList['Subversion'] = 'Subversion';
 $lang->repo->accessList = array();
 $lang->repo->accessList['writable'] = 'Readable and writable';
 $lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
+
+$lang->repo->importProgress = new stdclass();
+$lang->repo->importProgress->title       = 'Importing repository...';
+$lang->repo->importProgress->desc        = 'The third-party repository is being imported into the system. Please wait. This may take a few minutes.';
+$lang->repo->importProgress->notice      = 'Please wait patiently for the import to complete and do not close this page.';
+$lang->repo->importProgress->leaveTip    = 'The repository is being imported. Please do not close this page. Once closed, the import progress will no longer be available.';
+$lang->repo->importProgress->acknowledge = 'I know';
