@@ -349,7 +349,6 @@ class dtable extends wg
         if(!empty($footToolbar))
         {
             $this->setProp('checkable', true);
-            $this->setProp('footer', null);
             $this->setProp('footToolbar', $footToolbar);
         }
     }

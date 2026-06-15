@@ -662,6 +662,70 @@ class api extends router
             return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
         }
 
+        if($this->moduleName == 'my' && in_array($this->methodName, array('work', 'contribute')))
+        {
+            $mode       = (string)zget($_GET, 'mode', 'task');
+            $browseType = (string)zget($_GET, 'browseType', '');
+            $queryID    = $browseType == 'bysearch' ? (int)zget($_GET, 'param', zget($_GET, 'queryID', 0)) : 0;
+            $param      = (string)zget($_GET, 'param', 'myQueryID');
+            $orderBy    = (string)zget($_GET, 'orderBy', 'id_desc');
+            $recTotal   = (int)zget($_GET, 'recTotal', 0);
+            $recPerPage = (int)zget($_GET, 'recPerPage', 20);
+            $pageID     = (int)zget($_GET, 'pageID', 1);
+            $actionURL  = helper::createLink('my', $this->methodName, "mode={$mode}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+
+            if($mode == 'task')
+            {
+                $this->my->buildTaskSearchForm($queryID, $actionURL, $this->methodName . 'Task', false);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'execution');
+            }
+            if($mode == 'bug')
+            {
+                $this->my->buildBugSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'bug');
+            }
+            if($mode == 'story')
+            {
+                $this->my->buildStorySearchForm($queryID, $actionURL, $this->methodName);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'product');
+            }
+            if($mode == 'epic')
+            {
+                $this->my->buildEpicSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'product');
+            }
+            if($mode == 'requirement')
+            {
+                $this->my->buildRequirementSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'product');
+            }
+            if($mode == 'testcase')
+            {
+                $this->my->buildTestCaseSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'testcase');
+            }
+            if($mode == 'risk')
+            {
+                $this->my->buildRiskSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'risk');
+            }
+            if($mode == 'reviewissue')
+            {
+                $this->my->buildReviewissueSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'reviewissue');
+            }
+            if($mode == 'feedback')
+            {
+                $this->myZen->buildSearchFormForFeedback($queryID, $orderBy);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'feedback');
+            }
+            if($mode == 'ticket')
+            {
+                $this->my->buildTicketSearchForm($queryID, $actionURL);
+                return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'ticket');
+            }
+        }
+
         $this->loadConfig('search');
         $this->loadLang('search');
         $this->loadConfig($searchModule);

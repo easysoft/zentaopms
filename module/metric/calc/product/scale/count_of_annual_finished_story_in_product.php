@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度完成研发需求数是指产品在某年度已关闭且关闭原因为已完成的研发需求数量。这个度量项可以反映产品团队在一年时间内的开发效率和成果。完成研发需求数量的增加说明产品团队在该年度内取得了更多的开发成果和交付物。
  * 定义：产品中关闭时间在某年且关闭原因为已完成的研发需求的个数求和;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

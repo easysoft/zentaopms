@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日代码提交次数是指本系统每日的全部代码提交的数量，这个度量项可以反映组织的每日开发活动频率和代码更新情况。
  * 定义：所有代码库的代码提交次数求和，提交时间为某日。
  *
- * @copyright Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2024 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yang Li <liyang@chandao.com>
  * @package
  * @uses      func

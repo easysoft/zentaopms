@@ -11,7 +11,7 @@
  * 描述：按项目统计的任务进度是指项目团队按已消耗的工时数与已消耗和剩余的工时数的比率。这个度量项能够反映项目进度的准确性和任务执行的效率。
  * 定义：复用：;按项目统计的任务消耗工时数;按项目统计的任务剩余工时数;公式：;按项目统计的任务进度=按项目统计的任务消耗工时数/（按项目统计的任务消耗工时数+按项目统计的任务剩余工时数）;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

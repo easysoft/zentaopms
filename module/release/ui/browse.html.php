@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browse view file of release module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     release
@@ -127,6 +127,8 @@ if($isFromDoc || $isFromAI)
     }
 }
 $createReleaseLink = $canCreateRelease ? createLink('release', 'create', "productID={$product->id}&branch={$branch}") : '';
+
+$footToolbar = array();
 if($isFromDoc) $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToDoc('#releases', 'productRelease', $blockID, '$insertListLink')"));
 if($isFromAI)  $footToolbar = array(array('text' => $lang->doc->insertText, 'data-on' => 'click', 'data-call' => "insertListToAI('#releases', 'release')"));
 
@@ -151,7 +153,7 @@ dtable
     set::checkable($isFromDoc || $isFromAI),
     set::customCols(!$isFromDoc && !$isFromAI),
     set::checkInfo(jsRaw("function(checkedIDList){return {html: '{$pageSummary}'}}")),
-    ($isFromDoc || $isFromAI) ? set::footToolbar($footToolbar) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
+    set::footToolbar($footToolbar),
     (!$isFromDoc && !$isFromAI) ? null : set::colResize(true),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),

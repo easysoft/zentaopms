@@ -11,7 +11,7 @@
  * 描述：按优先级统计的执行下的Bug数
  * 定义：按优先级统计的执行下的Bug数
  *
- * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2025 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Zemei Wang <wangzemei@easycorp.ltd>
  * @package
  * @uses      func

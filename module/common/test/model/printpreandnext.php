@@ -56,10 +56,16 @@ $docData->pre->id = 10;
 $docData->pre->title = '文档';
 $docData->pre->objectType = 'doc';
 
+$preOnlyOutput        = $commonTest->printPreAndNextTest($preOnlyData, '');
+$nextOnlyOutput       = $commonTest->printPreAndNextTest($nextOnlyData, '');
+$fullOutput           = $commonTest->printPreAndNextTest($fullData, '');
+$customTemplateOutput = $commonTest->printPreAndNextTest($customTemplateData, '/custom/link/%s');
+$docOutput            = $commonTest->printPreAndNextTest($docData, '');
+
 r($commonTest->printPreAndNextTest('', '', true)) && p() && e('0');  // 测试步骤1:在onlybody模式下调用printPreAndNext返回false
 r($commonTest->printPreAndNextTest($emptyPreAndNext, '')) && p() && e("<nav class='container'></nav>");  // 测试步骤2:传入空的preAndNext对象只输出nav标签
-r(strpos($commonTest->printPreAndNextTest($preOnlyData, ''), 'prevPage') !== false && strpos($commonTest->printPreAndNextTest($preOnlyData, ''), 'icon-chevron-left') !== false) && p() && e('1');  // 测试步骤3:传入包含pre对象生成上一个导航按钮
-r(strpos($commonTest->printPreAndNextTest($nextOnlyData, ''), 'nextPage') !== false && strpos($commonTest->printPreAndNextTest($nextOnlyData, ''), 'icon-chevron-right') !== false) && p() && e('1');  // 测试步骤4:传入包含next对象生成下一个导航按钮
-r(strpos($commonTest->printPreAndNextTest($fullData, ''), 'prevPage') !== false && strpos($commonTest->printPreAndNextTest($fullData, ''), 'nextPage') !== false) && p() && e('1');  // 测试步骤5:同时传入pre和next对象生成完整的导航按钮
-r(strpos($commonTest->printPreAndNextTest($customTemplateData, '/custom/link/%s'), '/custom/link/5') !== false) && p() && e('1');  // 测试步骤6:传入自定义链接模板生成导航链接
-r(strpos($commonTest->printPreAndNextTest($docData, ''), 'javascript:void(0)') !== false) && p() && e('1');  // 测试步骤7:传入文档类型对象生成特殊导航按钮
+r(strpos($preOnlyOutput, 'prevPage') !== false && strpos($preOnlyOutput, 'icon-chevron-left') !== false) && p() && e('1');  // 测试步骤3:传入包含pre对象生成上一个导航按钮
+r(strpos($nextOnlyOutput, 'nextPage') !== false && strpos($nextOnlyOutput, 'icon-chevron-right') !== false) && p() && e('1');  // 测试步骤4:传入包含next对象生成下一个导航按钮
+r(strpos($fullOutput, 'prevPage') !== false && strpos($fullOutput, 'nextPage') !== false) && p() && e('1');  // 测试步骤5:同时传入pre和next对象生成完整的导航按钮
+r(strpos($customTemplateOutput, '/custom/link/5') !== false) && p() && e('1');  // 测试步骤6:传入自定义链接模板生成导航链接
+r(strpos($docOutput, 'javascript:void(0)') !== false) && p() && e('1');  // 测试步骤7:传入文档类型对象生成特殊导航按钮

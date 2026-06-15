@@ -11,7 +11,7 @@
  * 描述：按项目统计的剩余工期表示项目在当前时间点上还剩下的工作时间。这个度量项可以帮助团队评估项目的剩余工作量和进度。通过比较剩余工期和剩余工时，可以预测项目是否能够按时完成，并采取适当的措施来调整进度，以确保项目的成功交付。
  * 定义：剩余工期=计划截止日期-当前日期；当剩余工期<0时，默认为0；当项目已关闭时，剩余工期默认为0；过滤已删除的项目。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

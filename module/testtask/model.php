@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of test task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -613,16 +613,19 @@ class testtaskModel extends model
      * Get report data of a testtask by execution results.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerRunResult(int $taskID): array
+    public function getDataOfTestTaskPerRunResult(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select("t1.lastRunResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')
-            ->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->leftJoin(TABLE_CASE)->alias('t2') ->on('t1.case = t2.id')
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t1.lastRunResult')
             ->orderBy('value DESC')
             ->fetchAll('name');
@@ -639,15 +642,19 @@ class testtaskModel extends model
      * Get report data of a testtask by case type.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerType(int $taskID): array
+    public function getDataOfTestTaskPerType(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select('t2.type AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t2.type')
             ->orderBy('value desc')
             ->fetchAll('name');
@@ -663,18 +670,23 @@ class testtaskModel extends model
      * Get report data of a testtask by case module.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerModule(int $taskID): array
+    public function getDataOfTestTaskPerModule(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select('t2.module AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t2.module')
             ->orderBy('value desc')
             ->fetchAll('name');
+
         if(!$datas) return array();
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
@@ -688,15 +700,19 @@ class testtaskModel extends model
      * Get report data of a testtask by executor.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerRunner($taskID)
+    public function getDataOfTestTaskPerRunner(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select('t1.lastRunner AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t1.lastRunner')
             ->orderBy('value DESC')
             ->fetchAll('name');

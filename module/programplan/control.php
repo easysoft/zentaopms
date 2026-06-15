@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * The control file of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -52,7 +52,7 @@ class programplan extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = 'id_asc', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '0')
+    public function browse(int $projectID = 0, int $productID = 0, string $type = '', string $orderBy = '', int $baselineID = 0, string $browseType = '', int $queryID = 0, string $from = 'project', int $blockID = 0, string $versionID = '0')
     {
         if($type == 'lists') return $this->locate($this->createLink('project', 'execution', "status=undone&projectID={$projectID}"));
         if($from == 'doc')

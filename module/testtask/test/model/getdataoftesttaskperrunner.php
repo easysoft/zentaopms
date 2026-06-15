@@ -10,17 +10,40 @@ zenData('user')->gen(5);
 /**
 
 title=测试 testtaskModel->getDataOfTestTaskPerRunner();
-cid=19169
-pid=1
+timeout=0
+cid=19152
+
+- 测试单 0 中的用例数为 0。 @0
+- 获取测试单 1 中的未执行的用例数。
+ - 第0条的name属性 @未执行
+ - 第0条的value属性 @1
+- 获取测试单 1 中的用户 1 执行的用例数。
+ - 第user1条的name属性 @用户1
+ - 第user1条的value属性 @2
+- 获取测试单 1 中的用户 2 执行的用例数。
+ - 第user2条的name属性 @用户2
+ - 第user2条的value属性 @2
+- 获取测试单 1 中的用户 3 执行的用例数。
+ - 第user3条的name属性 @用户3
+ - 第user3条的value属性 @3
+- 获取测试单 1 中的用户 4 执行的用例数。
+ - 第user4条的name属性 @用户4
+ - 第user4条的value属性 @4
+- 获取测试单 2 中的未执行的用例数。
+ - 第0条的name属性 @未执行
+ - 第0条的value属性 @3
+- 获取测试单 2 中的用户 1 执行的用例数。
+ - 第user1条的name属性 @用户1
+ - 第user1条的value属性
 
 */
 
 global $tester;
 $testtask = $tester->loadModel('testtask');
 
-$result1 = $testtask->getDataOfTestTaskPerRunner(0);
-$result2 = $testtask->getDataOfTestTaskPerRunner(1);
-$result3 = $testtask->getDataOfTestTaskPerRunner(2);
+$result1 = $testtask->getDataOfTestTaskPerRunner(0, '1=1', 0);
+$result2 = $testtask->getDataOfTestTaskPerRunner(1, '1=1', 0);
+$result3 = $testtask->getDataOfTestTaskPerRunner(2, '1=1', 0);
 
 foreach($result2 as $key => $value)
 {

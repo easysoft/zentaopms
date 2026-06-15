@@ -11,7 +11,7 @@
  * 描述：系统统计的待处理的合并请求总数是指代码库中等待合并的合并请求总数量，它反映了团队在合并代码方面的效率和进展情况，高数量可能意味着合并困难、合并冲突多、代码质量低等问题存在，需及时关注和处理以提升研发效能。
  * 定义：所有代码库的未关闭的合并请求个数求和;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按执行统计的研发需求总数是指执行中创建和关联的所有研发需求的数量。该度量项反映了执行的规模和复杂度，为执行计划和资源分配提供了参考。
  * 定义：执行中研发需求个数求和;过滤已删除的研发需求;过滤已删除的执行;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按产品统计的Bug总数是指在产品中发现的所有Bug的数量。这个度量项反映了产品整体Bug质量情况。Bug总数越多可能代表产品的代码质量存在问题，需要进行进一步的解决和改进。
  * 定义：产品中Bug的个数求和;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

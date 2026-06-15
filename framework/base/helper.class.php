@@ -729,6 +729,8 @@ class baseHelper
      */
     public static function writeCommandScript(string $script, array $commands): string
     {
+        $commands = array_unique($commands);
+
         asort($commands);
 
         if(static::isWindows())

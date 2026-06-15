@@ -11,7 +11,7 @@
  * 描述：按系统统计的进行中项目数是指系统中目前正在进行中的项目数量。这个度量项可以帮助团队了解当前正在进行的工作量和资源分配情况，以及项目的执行进度和效率。
  * 定义：所有的项目个数求和;状态为进行中;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

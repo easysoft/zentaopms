@@ -11,7 +11,7 @@
  * 描述：按系统统计的任务进度是指已消耗工时占相对于已消耗工时数+剩余工时数的比例。
  * 定义：按系统统计的已消耗工时数;按系统统计的剩余工时数;公式：已消耗工时数÷（已消耗工时数+剩余工时数）;
  *
- * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2025 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

@@ -238,12 +238,16 @@ class todoModelTest extends baseTest
      * Test activate todo.
      *
      * @param  int    $todoID
+     * @param  string $assignedTo
      * @access public
      * @return object
      */
-    public function activateTest($todoID)
+    public function activateTest(int $todoID, string $assignedTo = '')
     {
-        $this->instance->activate($todoID);
+        $todo = new stdclass();
+        $todo->assignedTo = $assignedTo;
+        $todo->finishedBy = 'admin';
+        $this->instance->activate($todoID, $todo);
 
         if(dao::isError()) return dao::getError();
 

@@ -2,7 +2,7 @@
 /**
  * The view file of datatable module of ZenTaoPMS.
  *
- * @copyright   Copyright 2014-2014 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2014-2014 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
  * @package     datatable

@@ -488,9 +488,13 @@ class control extends baseControl
         $methodName = $methodName ?: $this->app->getMethodName();
 
         $this->loadModel('flow');
-        if($type == 'html')
+        parse_str($extras, $result);
+        if($type == 'items')
         {
-            parse_str($extras, $result);
+            $html = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'), 'items');
+        }
+        elseif($type == 'html')
+        {
             $html  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
             $html .= $this->appendExtendCssAndJS($moduleName, $methodName, $object);
         }

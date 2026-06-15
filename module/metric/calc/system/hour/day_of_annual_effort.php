@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度投入总人天是指团队总共投入的工作天数。该度量项可以用来评估人力资源投入情况。投入总人天的增加可能意味着项目投入的工作时间和资源的增加。
  * 定义：复用：;按系统统计的年度日志记录的工时总数;公式：;按系统统计的年度投入总人天=按系统统计的年度日志记录的工时总数/后台配置的每日可用工时;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

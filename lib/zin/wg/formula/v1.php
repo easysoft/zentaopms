@@ -85,7 +85,7 @@ class formula extends wg
         jsVar('modules', $modules);
         jsVar('moduleFields', $moduleFields);
         jsVar('errorMessage', $lang->workflowfield->formula->error);
-
+        jsVar('functions', $lang->workflowfield->formula->functions);
 
         $operatorLinks = array();
         foreach($config->workflowfield->formula->operators as $operator => $label)
@@ -130,7 +130,7 @@ class formula extends wg
             div
             (
                 setClass('form-actions text-center'),
-                input(setClass('hiddena'), set::name('expressionData'), set::value('[]')),
+                input(setClass('hidden'), set::name('expressionData'), set::value('[]')),
                 a(setClass('btn primary save-expression'), set::href('javascript:;'), setData(array('on' => 'click', 'call' => 'saveFormula',   'params' => 'event')), $lang->save),
                 a(setClass('btn cancel-expression'),       set::href('javascript:;'), setData(array('on' => 'click', 'call' => 'cancelFormula', 'params' => 'event')), $lang->cancel)
             )
