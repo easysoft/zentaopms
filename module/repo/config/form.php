@@ -48,14 +48,20 @@ $config->repo->form->createTag['tagFrom']  = array('required' => true, 'type' =>
 $config->repo->form->createTag['comment']  = array('required' => true, 'type' => 'string', 'filter' => 'trim');
 
 $config->repo->form->import = array();
-$config->repo->form->import['serviceProject'] = array('required' => true,  'type' => 'string', 'filter' => 'trim');
-$config->repo->form->import['space']          = array('required' => false, 'type' => 'int', 'default' => 0);
-$config->repo->form->import['product']        = array('required' => false, 'type' => 'array',  'filter' => 'join', 'default' => array(), 'base' => true);
-$config->repo->form->import['projects']       = array('required' => false, 'type' => 'array',  'filter' => 'join', 'default' => array());
-$config->repo->form->import['name']           = array('required' => false, 'type' => 'string', 'filter' => 'trim');
-$config->repo->form->import['encoding']       = array('required' => false, 'type' => 'string', 'default' => 'utf-8');
-$config->repo->form->import['encrypt']        = array('required' => false, 'type' => 'string', 'default' => 'base64');
-$config->repo->form->import['acl']            = array('required' => false, 'type' => 'string', 'default' => '{"acl":"open","groups":[""],"users":[""]}');
+$config->repo->form->import['origin']     = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['providerID'] = array('required' => true, 'type' => 'int', 'default' => 0);
+$config->repo->form->import['organize']   = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['repo']       = array('required' => false, 'type' => 'string', 'filter' => 'trim', 'default' => '');
+$config->repo->form->import['account']    = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['password']   = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['path']       = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['slug']       = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['name']       = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['space']      = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['product']    = array('required' => true, 'type' => 'array', 'default' => array(), 'filter' => 'join');
+$config->repo->form->import['desc']       = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['mirror']     = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['acl']        = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
 
 $config->repo->form->createWebhook = array();
 $config->repo->form->createWebhook['name']         = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
