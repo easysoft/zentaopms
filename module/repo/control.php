@@ -1099,7 +1099,9 @@ class repo extends control
         {
             $this->repoZen->setImportFormConfig($type);
             $formData = form::data($this->config->repo->form->import)->get();
-            $this->repo->import($formData);
+            $result   = $this->repo->import($formData);
+            if(dao::isError()) $this->sendError(dao::getError());
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}")));
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
@@ -2899,5 +2901,20 @@ class repo extends control
             }
         }
         echo json_encode($retCommits);
+    }
+
+    /**
+     * 显示导入进度。
+     * Ajax show import progress.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    function ajaxShowImportProgress(int $repoID)
+    {
+        $this->view->title  = $this->lang->repo->showImportProgress;
+        $this->view->repoID = $repoID;
+        $this->display();
     }
 }
