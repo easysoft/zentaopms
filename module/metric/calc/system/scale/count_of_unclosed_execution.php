@@ -11,7 +11,7 @@
  * 描述：按系统统计的未关闭执行数表示在整个系统中未关闭的执行项的数量，可以用来了解执行的进度情况。
  * 定义：复用：;按系统统计的执行总数;按系统统计的已关闭执行数;公式：;按系统统计的未关闭执行数=按系统统计的执行总数-按系统统计的已关闭执行数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

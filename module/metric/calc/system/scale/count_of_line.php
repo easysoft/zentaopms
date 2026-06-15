@@ -11,7 +11,7 @@
  * 描述：按系统统计的产品线总数反映了组织中产品线的数量和广度，用于评估组织的产品组合策略和业务发展方向。
  * 定义：所有产品线的个数求和;过滤已删除的产品线;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

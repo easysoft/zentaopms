@@ -69,7 +69,7 @@ class deptModelTest extends baseTest
      */
     public function getOptionMenuTest($rootDeptID, $count)
     {
-        $objects = $this->instance->getOptionMenu($rootDeptID);
+        $objects = $this->instance->getOptionMenu((int)$rootDeptID);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);
@@ -208,7 +208,7 @@ class deptModelTest extends baseTest
      */
     public function getSonsTest($deptID, $count)
     {
-        $objects = $this->instance->getSons($deptID);
+        $objects = $this->instance->getSons((int)$deptID);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);
@@ -226,7 +226,7 @@ class deptModelTest extends baseTest
      */
     public function getAllChildIdTest($deptID, $count)
     {
-        $objects = $this->instance->getAllChildId($deptID);
+        $objects = $this->instance->getAllChildId((int)$deptID);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);
@@ -244,7 +244,7 @@ class deptModelTest extends baseTest
      */
     public function getParentsTest($deptID, $count)
     {
-        $objects = $this->instance->getParents($deptID);
+        $objects = $this->instance->getParents((int)$deptID);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);
@@ -320,7 +320,7 @@ class deptModelTest extends baseTest
      */
     public function manageChildTest($parentDeptID, $childs, $count)
     {
-        $objects = $this->instance->manageChild($parentDeptID, $childs);
+        $objects = $this->instance->manageChild((int)$parentDeptID, $childs);
 
         if(dao::isError()) return dao::getError();
         if($count == '1')  return count($objects);
@@ -365,7 +365,6 @@ class deptModelTest extends baseTest
     {
         global $config;
         if($showOutside !== null) $config->user->showOutside = $showOutside;
-
         $objects = $this->instance->getDeptUserPairs((int)$deptID, $key, $type, $params);
 
         if(dao::isError()) return dao::getError();
@@ -385,7 +384,7 @@ class deptModelTest extends baseTest
     {
         global $tester;
 
-        $this->instance->deleteDept($deptID);
+        $this->instance->deleteDept((int)$deptID);
 
         $objects = $tester->dao->select('*')->from(TABLE_DEPT)->fetchAll();
 

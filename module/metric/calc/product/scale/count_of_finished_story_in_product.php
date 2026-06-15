@@ -11,7 +11,7 @@
  * 描述：按产品统计的已完成研发需求数是指状态为已关闭且关闭原因为已完成的研发需求的数量。这个度量项可以反映产品团队在开发过程中的进展和交付能力。已完成研发需求数越多，说明产品团队可能取得了更多的研发成果。
  * 定义：产品中的研发需求个数求和;阶段为已关闭;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

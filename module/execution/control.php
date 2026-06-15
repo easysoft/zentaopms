@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -1421,6 +1421,7 @@ class execution extends control
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
         $frozenStages = '';
+        $hasStage     = false;
         foreach($executions as $key => $execution)
         {
             if(!empty($execution->frozen))
@@ -1428,6 +1429,7 @@ class execution extends control
                 $frozenStages .= "#{$execution->id} ";
                 unset($executions[$key]);
             }
+            if($execution->type == 'stage') $hasStage = true;
         }
         if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, $frozenStages), 'load' => true)));
 
@@ -1462,6 +1464,7 @@ class execution extends control
         $this->view->from         = $this->app->tab;
         $this->view->parents      = $this->execution->getByIdList($parentIdList);
         $this->view->frozenStages = $frozenStages;
+        $this->view->hasStage     = $hasStage;
         $this->display();
     }
 

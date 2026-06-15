@@ -11,7 +11,7 @@
  * 描述：按产品统计的严重程度为1级的Bug数是指在产品开发过程中发现的、对产品功能或性能产生重大影响的Bug数量。这些Bug可能会导致系统崩溃、功能无法正常运行、数据丢失等严重问题。统计这些Bug的数量可以帮助评估产品的稳定性和可靠性。
  * 定义：产品中Bug的个数求和;严重程度为1级;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

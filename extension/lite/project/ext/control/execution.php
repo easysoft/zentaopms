@@ -1,7 +1,7 @@
 <?php
 class project extends control
 {
-    public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function execution($browseType = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
         if($projectID == 0 and common::hasPriv('project', 'create')) $this->locate($this->createLink('project', 'create'));
@@ -9,7 +9,7 @@ class project extends control
 
         $this->project->setMenu($projectID);
 
-        $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $status);
+        $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
 
         $executionActions = array();
         foreach($kanbanList as $kanbanID => $kanban)
@@ -31,7 +31,7 @@ class project extends control
         $this->view->users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->usersAvatar      = $this->user->getAvatarPairs();
         $this->view->projectID        = $projectID;
-        $this->view->status           = $status;
+        $this->view->browseType       = $browseType;
         $this->view->executionActions = $executionActions;
 
         $this->display();

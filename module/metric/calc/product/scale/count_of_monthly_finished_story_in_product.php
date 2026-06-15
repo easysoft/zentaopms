@@ -11,7 +11,7 @@
  * 描述：按产品统计的月度完成研发需求数表示每月完成的研发需求的数量。该度量项反映了产品的月度研发成果，可以用于评估产品团队的研发需求完成情况和效率。
  * 定义：产品中关闭时间为某年某月且关闭原因为已完成的研发需求的个数求和;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按系统统计的制品库总数是指统计所有产品的制品库总数，它反映了研发团队所管理的制品数量。该度量项可以帮助团队可以评估制品管理的复杂性和效率，并根据需要进行合理的优化和调整。
  * 定义：所有制品库的个数求和;不统计已删除;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package
  * @uses      func

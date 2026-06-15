@@ -2,7 +2,7 @@
 /**
  * The zh-cn file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -125,8 +125,8 @@ $lang->block->summary = new stdclass();
 $lang->block->summary->welcome    = '禅道已陪伴您%s： %s今日期待优秀的您来处理！';
 $lang->block->summary->yesterday  = '<strong>昨日</strong>';
 $lang->block->summary->noWork     = '您暂未处理任务和Bug，';
-$lang->block->summary->finishTask = '完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a>个任务';
-$lang->block->summary->fixBug     = '解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a>个Bug';
+$lang->block->summary->finishTask = '完成了<a href="' .  helper::createLink('my', 'contribute', 'mode=task&browseType=finishedBy') . '" class="text-success">%s</a>个任务';
+$lang->block->summary->fixBug     = '解决了<a href="' . helper::createLink('my', 'contribute', 'mode=bug&browseType=resolvedBy') . '" class="text-success">%s</a>个Bug';
 
 $lang->block->dashboard['default'] = '仪表盘';
 $lang->block->dashboard['my']      = '地盘';

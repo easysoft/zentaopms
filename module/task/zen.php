@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easysoft.ltd>
  * @package     task
@@ -563,6 +563,7 @@ class taskZen extends task
         if($task->estimate < 0 or $task->left < 0 or $task->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
         if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, (string)$task->estStarted, (string)$task->deadline);
         if(!empty($_POST['lastEditedDate']) && $oldTask->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if($task->realStarted > $task->finishedDate) dao::$errors['finishedDate'][] = $this->lang->task->error->finishedDateSmall;
         if(dao::isError()) return false;
 
         $now  = helper::now();

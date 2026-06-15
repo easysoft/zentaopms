@@ -11,7 +11,7 @@
  * 描述：按瀑布项目统计的截止本周的进度偏差率是用来衡量项目截止本周的进度与计划进度之间的差异。它通过计算已完成的工作量与计划工作量之间的差异来评估项目的进展情况。
  * 定义：复用： 按瀑布项目统计的截止本周已完成任务工作的预计工时(EV) 、按瀑布项目统计的截止本周的任务的计划完成工时(PV)，公式： 按瀑布项目统计的截止本周的进度偏差率=(EV-PV)/PV*100%
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

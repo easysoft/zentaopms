@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -901,6 +901,14 @@ class productplanModel extends model
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
+
+            /* If the story was linked to another plan of type 'story', record the unlink action on the old plan. */
+            if($oldPlanID !== '' && (int)$oldPlanID !== $planID)
+            {
+                $targetPlan = $this->getByID($planID);
+                $planTitle  = $targetPlan ? $targetPlan->title : '#' . $planID;
+                $this->action->create('productplan', (int)$oldPlanID, 'autounlinkstory', '', $planTitle);
+            }
         }
 
         $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
@@ -1236,12 +1244,12 @@ class productplanModel extends model
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch && str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
+                    if($story->branch && !str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
                 }
 
                 foreach($planBugs as $bugID => $bug)
                 {
-                    if($bug->branch && str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
+                    if($bug->branch && !str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
                 }
             }
         }

@@ -11,7 +11,7 @@
  * 描述：按系统统计的有效Bug数是指系统或项目中真正具有影响和价值的Bug数量。反映了一个系统或软件中有效的Bug数量。有效Bug是指经过验证和确认的真实问题，需要进行修复和解决的Bug。用于评估系统质量、问题管理、资源管理、过程改进以及用户满意度等方面。通过跟踪和分析有效Bug数，可以及时发现问题、优化问题处理流程、合理安排资源，并为团队的质量管理和持续改进提供依据，同时提升用户满意度和系统质量。
  * 定义：所有Bug个数求和;解决方案为已解决和延期处理;或状态为激活的Bug数;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

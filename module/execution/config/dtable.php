@@ -275,6 +275,7 @@ $config->execution->linkStory->dtable->fieldList['title']['styleMap']     = arra
 
 $config->execution->linkStory->dtable->fieldList['pri']['title']    = $lang->story->pri;
 $config->execution->linkStory->dtable->fieldList['pri']['type']     = 'pri';
+$config->execution->linkStory->dtable->fieldList['pri']['priList']  = $lang->story->priList;
 $config->execution->linkStory->dtable->fieldList['pri']['sortType'] = true;
 $config->execution->linkStory->dtable->fieldList['pri']['fixed']    = 'left';
 $config->execution->linkStory->dtable->fieldList['pri']['group']    = 3;

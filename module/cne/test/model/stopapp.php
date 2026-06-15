@@ -7,146 +7,61 @@ title=测试 cneModel::stopApp();
 timeout=0
 cid=0
 
-
+- 步骤1：完整参数会调用停止接口并保留默认通道 @/api/cne/app/stop,stable
+- 步骤2：channel 为空时自动补齐默认通道 @stable
+- 步骤3：自定义 channel 会原样透传 @custom-channel
+- 步骤4：缺少 name 字段时不会被方法补齐 @0
+- 步骤5：调用时会透传认证头和命名空间 @1,test-namespace
 
 */
 
-// 简化测试，避免完整框架初始化的问题
-// 包含必要的测试函数定义
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-function r($result) {
-    return new TestResultWrapper($result);
-}
+su('admin');
 
-function p($property = '') {
-    // 在这个简化测试中，p()不做任何实际处理
-    return '';
-}
+$cneTest = new cneModelTest();
 
-function e($expected) {
-    return $expected;
-}
-
-class TestResultWrapper {
-    private $result;
-
-    public function __construct($result) {
-        $this->result = $result;
-    }
-
-    public function __call($name, $arguments) {
-        // 支持链式调用
-        return $this;
-    }
-}
-
-// 模拟CNE测试类
-class cneTest
+class stopAppMockModel extends cneModel
 {
-    private $config;
-
-    public function __construct()
+    public function apiPost(string $url, array|object $data, array $header = array(), string $host = ''): object
     {
-        $this->config = new stdclass();
-        $this->config->CNE = new stdclass();
-        $this->config->CNE->api = new stdclass();
-        $this->config->CNE->api->channel = 'stable';
-    }
-
-    /**
-     * 模拟stopApp方法的核心逻辑
-     */
-    private function mockStopApp($apiParams)
-    {
-        if(!$apiParams || !is_object($apiParams)) {
-            return null;
-        }
-
-        // 设置默认channel（如果为空）
-        if(empty($apiParams->channel)) {
-            $apiParams->channel = $this->config->CNE->api->channel;
-        }
-
-        // 返回模拟响应对象
         $response = new stdclass();
-        $response->code = 200;
-        $response->message = 'App stop request submitted';
-        $response->data = new stdclass();
-        $response->data->name = isset($apiParams->name) ? $apiParams->name : 'unknown';
-        $response->data->namespace = isset($apiParams->namespace) ? $apiParams->namespace : 'default';
-        $response->data->channel = $apiParams->channel;
-
+        $response->url         = $url;
+        $response->channel     = $data->channel ?? '';
+        $response->namespace   = $data->namespace ?? '';
+        $response->hasName     = property_exists($data, 'name') ? 1 : 0;
+        $response->headerCount = count($header);
         return $response;
     }
-
-    public function stopAppTest()
-    {
-        $apiParams = new stdclass();
-        $apiParams->cluster   = '';
-        $apiParams->name      = 'test-zentao-app';
-        $apiParams->chart     = 'zentao';
-        $apiParams->namespace = 'test-namespace';
-        $apiParams->channel   = 'stable';
-
-        return $this->mockStopApp($apiParams);
-    }
-
-    public function stopAppWithEmptyChannelTest()
-    {
-        $apiParams = new stdclass();
-        $apiParams->cluster   = '';
-        $apiParams->name      = 'test-zentao-app';
-        $apiParams->chart     = 'zentao';
-        $apiParams->namespace = 'test-namespace';
-        $apiParams->channel   = ''; // 测试空channel的情况
-
-        return $this->mockStopApp($apiParams);
-    }
-
-    public function stopAppWithInvalidParamsTest()
-    {
-        $apiParams = new stdclass();
-        $apiParams->cluster   = '';
-        $apiParams->name      = 'invalid-app-name';
-        $apiParams->chart     = 'invalid-chart';
-        $apiParams->namespace = 'invalid-namespace';
-        $apiParams->channel   = 'invalid-channel';
-
-        return $this->mockStopApp($apiParams);
-    }
-
-    public function stopAppWithMissingParamsTest()
-    {
-        // 创建缺少必要参数的对象
-        $apiParams = new stdclass();
-        $apiParams->cluster = '';
-        // 缺少name、chart、namespace等参数
-
-        return $this->mockStopApp($apiParams);
-    }
-
-    public function stopAppWithCustomChannelTest()
-    {
-        $apiParams = new stdclass();
-        $apiParams->cluster   = '';
-        $apiParams->name      = 'test-zentao-app';
-        $apiParams->chart     = 'zentao';
-        $apiParams->namespace = 'test-namespace';
-        $apiParams->channel   = 'custom-channel';
-
-        return $this->mockStopApp($apiParams);
-    }
-
-    public function stopAppWithNullParamsTest()
-    {
-        // 模拟传入null参数的情况
-        return $this->mockStopApp(null);
-    }
 }
 
-$cneTest = new cneTest();
-r($cneTest->stopAppTest()) && p() && e('object'); // 正常应用停止请求
-r($cneTest->stopAppWithEmptyChannelTest()) && p() && e('object'); // 空channel使用默认值
-r($cneTest->stopAppWithInvalidParamsTest()) && p() && e('object'); // 无效参数情况
-r($cneTest->stopAppWithCustomChannelTest()) && p() && e('object'); // 自定义channel参数
-r($cneTest->stopAppWithMissingParamsTest()) && p() && e('~~'); // 缺少参数情况
+function createStopParams(string $channel = 'stable'): object
+{
+    $apiParams = new stdclass();
+    $apiParams->cluster   = '';
+    $apiParams->name      = 'test-zentao-app';
+    $apiParams->chart     = 'zentao';
+    $apiParams->namespace = 'test-namespace';
+    $apiParams->channel   = $channel;
+    return $apiParams;
+}
+
+$testModel = new stopAppMockModel();
+
+$result1 = $cneTest->stopAppTest(createStopParams(), $testModel);
+$result2 = $cneTest->stopAppTest(createStopParams(''), $testModel);
+$result3 = $cneTest->stopAppTest(createStopParams('custom-channel'), $testModel);
+
+$missingName = new stdclass();
+$missingName->cluster   = '';
+$missingName->namespace = 'test-namespace';
+$missingName->channel   = '';
+$result4 = $cneTest->stopAppTest($missingName, $testModel);
+$result5 = $cneTest->stopAppTest(createStopParams(), $testModel);
+
+r($result1) && p('url,channel') && e('/api/cne/app/stop,stable');
+r($result2) && p('channel') && e('stable');
+r($result3) && p('channel') && e('custom-channel');
+r($result4) && p('hasName') && e('0');
+r((object) array('hasHeaders' => $result5->headerCount > 0 ? 1 : 0, 'namespace' => $result5->namespace)) && p('hasHeaders,namespace') && e('1,test-namespace');

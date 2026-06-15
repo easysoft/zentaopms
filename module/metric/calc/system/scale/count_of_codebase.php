@@ -11,7 +11,7 @@
  * 描述：按系统统计的代码库总数是指整个研发团队中维护的所有代码库的总数量。通过统计代码库总数可以了解团队的代码库规模和复杂性。
  * 定义：所有代码库的个数求和，不统计已删除;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package
  * @uses      func

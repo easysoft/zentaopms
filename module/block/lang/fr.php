@@ -2,7 +2,7 @@
 /**
  * The en file of block module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
@@ -125,8 +125,8 @@ $lang->block->summary = new stdclass();
 $lang->block->summary->welcome    = 'Zentao has been with you for %s: ';
 $lang->block->summary->yesterday  = '<strong>Yesterday</strong>';
 $lang->block->summary->noWork     = 'You have not yet processed tasks and bugs,';
-$lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&type=finishedBy') . '" class="text-success">%s</a> tasks';
-$lang->block->summary->fixBug     = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&type=resolvedBy') . '" class="text-success">%s</a> bugs';
+$lang->block->summary->finishTask = 'finished <a href="' . helper::createLink('my', 'contribute', 'mode=task&browseType=finishedBy') . '" class="text-success">%s</a> tasks';
+$lang->block->summary->fixBug     = 'resolved <a href="' . helper::createLink('my', 'contribute', 'mode=bug&browseType=resolvedBy') . '" class="text-success">%s</a> bugs';
 
 $lang->block->dashboard['default'] = 'Dashboard';
 $lang->block->dashboard['my']      = 'My';

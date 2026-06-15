@@ -11,7 +11,7 @@
  * 描述：按系统统计的执行总数表示在整个系统中所有执行项的数量，可以用来评估项目的规模和任务的总量。
  * 定义：所有的执行个数求和;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

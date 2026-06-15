@@ -11,7 +11,7 @@
  * 描述：按项目统计的年度完成研发需求数是指在某年度已关闭且关闭原因为已完成的研发需求规模数。这个度量项可以反映项目团队在某年度的开发效率和成果。完成研发需求规模数的增加说明项目团队在该年度内取得了更多的开发成果和交付物。
  * 定义：项目中研发需求的规模数求和;关闭时间在某年;关闭原因为已完成;过滤已删除的研发需求;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

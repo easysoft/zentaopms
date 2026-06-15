@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The view view file of productplan module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong <yidong@easycorp.ltd>
  * @package     productplan
@@ -25,20 +25,23 @@ $confirmLang['delete']   = $lang->productplan->confirmDelete;
 $decodeParam = helper::safe64Decode($param);
 $isInModal   = isInModal();
 
-jsVar('initLink',        $link);
-jsVar('type',            $type);
-jsVar('linkParams',      $decodeParam);
-jsVar('orderBy',         $orderBy);
-jsVar('planID',          $plan->id);
-jsVar('confirmLang',     $confirmLang);
-jsVar('unlinkURL',       $unlinkURL);
-jsVar('childrenAB',      $lang->story->childrenAB);
-jsVar('cases',           $storyCases);
-jsVar('summary',         $summary);
-jsVar('checkedSummary',  $lang->product->checkedSRSummary);
-jsVar('storyPageID',     $storyPager->pageID);
-jsVar('storyRecPerPage', $storyPager->recPerPage);
-jsVar('gradeGroup',      $gradeGroup);
+jsVar('initLink',           $link);
+jsVar('type',               $type);
+jsVar('linkParams',         $decodeParam);
+jsVar('orderBy',            $orderBy);
+jsVar('planID',             $plan->id);
+jsVar('confirmLang',        $confirmLang);
+jsVar('unlinkURL',          $unlinkURL);
+jsVar('childrenAB',         $lang->story->childrenAB);
+jsVar('cases',              $storyCases);
+jsVar('summary',            $summary);
+jsVar('checkedSummary',     $lang->product->checkedSRSummary);
+jsVar('storyPageID',        $storyPager->pageID);
+jsVar('storyRecPerPage',    $storyPager->recPerPage);
+jsVar('gradeGroup',         $gradeGroup);
+jsVar('storyPriList',       $lang->story->priList);
+jsVar('requirementPriList', $lang->requirement->priList);
+jsVar('epicPriList',        $lang->epic->priList);
 
 $bugCols   = array();
 $storyCols = array();
@@ -200,6 +203,11 @@ foreach($actions as $actionType => $typeActions)
         }
     }
 }
+
+$extendItems  = array();
+$extendFields = $this->printExtendFields($plan, 'items', 'position=all', false);
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
+
 detailHeader
 (
     to::prefix
@@ -359,9 +367,9 @@ detailBody
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
+                    $extendItems
                 ),
-                html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
                 history(set::objectID($plan->id), set::commentBtn(false), set::objectType('productplan'))
             )

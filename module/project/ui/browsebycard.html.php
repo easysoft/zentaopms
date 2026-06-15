@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browsebycard view file of project module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     project
@@ -236,22 +236,6 @@ if(!empty($projectStats))
     }
 }
 
-$emptyTipCreateBtn = null;
-if(hasPriv('project', 'create'))
-{
-    $emptyTipCreateBtn = btn(set(array_merge(array
-    (
-        'icon'          => 'plus',
-        'text'          => $lang->project->create,
-        'data-toggle'   => 'modal',
-        'data-position' => 'center'
-    ), array
-    (
-        'class' => 'ml-2',
-        'url'   => createLink('project', 'createGuide')
-    ))));
-}
-
 div
 (
     setID('cards'),
@@ -264,7 +248,17 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        $emptyTipCreateBtn
+        hasPriv('project', 'create') ? btn(set(array_merge(array
+        (
+            'icon'          => 'plus',
+            'text'          => $lang->project->create,
+            'data-toggle'   => 'modal',
+            'data-position' => 'center'
+        ), array
+        (
+            'class' => 'ml-2',
+            'url'   => createLink('project', 'createGuide')
+        )))) : null,
     ) : $projectCards,
     !empty($projectStats) ? div
     (
