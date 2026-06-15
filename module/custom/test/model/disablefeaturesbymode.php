@@ -13,6 +13,7 @@ cid=15894
 - 测试步骤4：空字符串模式参数 @0
 - 测试步骤5：验证URAndSR和enableER配置 @0
 - 测试步骤6：无业务需求数据但有用户需求数据时禁用业务需求 @1
+- 测试步骤7：有业务需求数据但没有用户需求数据时仍启用用户需求 @1
 
 */
 
@@ -55,3 +56,12 @@ $storyTable->gen(3);
 $light = $customTester->disableFeaturesByModeTestWithURAndSR('light');
 list($disabledFeatures, $URAndSR, $enableER) = explode('|', $light);
 r(strpos(",$disabledFeatures,", ',productER,') !== false && $URAndSR == '1' && $enableER == '0') && p() && e('1'); // 测试步骤6：无业务需求数据但有用户需求数据时禁用业务需求
+
+zenData('story')->gen(0);
+$storyTable = zenData('story');
+$storyTable->type->range('epic');
+$storyTable->deleted->range('0');
+$storyTable->gen(3);
+$light = $customTester->disableFeaturesByModeTestWithURAndSR('light');
+list($disabledFeatures, $URAndSR, $enableER) = explode('|', $light);
+r(strpos(",$disabledFeatures,", ',productUR,') === false && strpos(",$disabledFeatures,", ',productER,') === false && $URAndSR == '1' && $enableER == '1') && p() && e('1'); // 测试步骤7：有业务需求数据但没有用户需求数据时仍启用用户需求
