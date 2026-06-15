@@ -214,6 +214,7 @@ $config->logonMethods[] = 'user.deny';
 $config->logonMethods[] = 'user.ajaxdeletetemplate';
 $config->logonMethods[] = 'user.ajaxgetcontactlist';
 $config->logonMethods[] = 'user.ajaxgetcontactusers';
+$config->logonMethods[] = 'user.ajaxgetitems';
 $config->logonMethods[] = 'user.ajaxgettemplates';
 $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
