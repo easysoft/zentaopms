@@ -2917,4 +2917,20 @@ class repo extends control
         $this->view->repoID = $repoID;
         $this->display();
     }
+
+    /**
+     * 获取导入进度。
+     * Ajax get import progress.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetImportProgress(int $repoID)
+    {
+        $result = $this->loadModel('gitfox')->request("/repos/import-progress", 'GET', array('repoID' => $repoID));
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        echo json_encode(array('result' => 'success', 'data' => $result));
+    }
 }
