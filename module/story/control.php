@@ -909,6 +909,69 @@ class story extends control
     }
 
     /**
+     * Batch submit review.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID, string $storyType = 'story')
+    {
+        $url = $this->session->storyList ?: inlink('browse', "productID=$productID&storyType=$storyType");
+
+        // if($this->post->results)
+        // {
+        // }
+        $storyIdList = array();
+        if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
+        if(empty($storyIdList)) $this->locate($url);
+
+        $storyList = $this->story->getByList($storyIdList);
+        usort($storyList, function($a, $b)
+        {
+            return $a->id - $b->id;
+        });
+        $invalidTypes = '';
+        $typeList     = array_unique(array_column($storyList, 'type'));
+        foreach($typeList as $type)
+        {
+            if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes .= $invalidTypes ?  '、' . $this->lang->story->typeList[$type] : $this->lang->story->typeList[$type];
+        }
+        $invalidStoryIdList = '';
+        $allowedStoryIdList = [];
+        foreach($storyList as $story)
+        {
+            if(!common::hasPriv($story->type, 'batchsubmitreview'))
+                continue;
+            if(!in_array($story->status, ['draft', 'changing']))
+            {
+                $invalidStoryIdList .= '#' . $story->id . ', ';
+                continue;
+            }
+            $allowedStoryIdList[] = $story->id;
+        }
+        $invalidStoryIdList = rtrim($invalidStoryIdList, ', ');
+        $message = '';
+        if(!empty($invalidTypes))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewPrivTips, $invalidTypes);
+        }
+        if(!empty($invalidStoryIdList))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, $invalidStoryIdList);
+        }
+        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
+
+        $this->view->storyIdList        = $allowedStoryIdList;
+        $this->view->invalidTypes       = $invalidTypes;
+        $this->view->invalidStoryIdList = $invalidStoryIdList;
+        $this->view->reviewers          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+
+        $this->display();
+    }
+
+    /**
      * 关闭需求。
      * Close the story.
      *

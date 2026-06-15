@@ -31,6 +31,7 @@ $lang->story->recallAction       = '撤销';
 $lang->story->relation           = '查看关联需求';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
+$lang->story->batchSubmitReview  = '批量提交评审';
 $lang->story->edit               = "编辑";
 $lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
@@ -608,3 +609,6 @@ $lang->story->trackSortList['desc'] = '降序';
 
 $lang->story->error = new stdclass();
 $lang->story->error->length = "长度超过了%d个字符，无法保存，请修改后再试";
+
+$lang->story->batchSubmitReviewStatusTips = "需求%s不是草稿或变更中状态，不能提交评审！";
+$lang->story->batchSubmitReviewPrivTips   = "您没有%s批量提交评审权限，已自动过滤掉了无权限提交评审的需求。\n";
