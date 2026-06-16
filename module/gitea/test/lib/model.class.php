@@ -7,6 +7,14 @@ class giteaModelTest extends baseTest
 {
     protected $moduleName = 'gitea';
     protected $className  = 'model';
+    public    $gitea;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->gitea = $this->instance;
+    }
 
     /**
      * Test bindUser method.
