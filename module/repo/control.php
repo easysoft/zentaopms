@@ -2951,6 +2951,31 @@ class repo extends control
     public function ajaxGetImportProgress(int $repoID)
     {
         $result = $this->loadModel('gitfox')->request("/repos/import-progress", 'GET', array('repoID' => $repoID));
+        if(!dao::isError() && !empty($result->status) && $result->status == 'finished')
+        {
+            $repo = $this->repo->getByID($repoID);
+            if(empty($repo) || $repo->synced) return print(json_encode(array('result' => 'success', 'data' => $result)));
+
+            $this->commonAction($repoID);
+            $this->scm->setEngine($repo);
+
+            $branchID = (string)$this->cookie->syncBranch;
+            if(!$this->cookie->syncBranch)
+            {
+                $branches = $this->scm->branch();
+                if(empty($branches)) return print($this->lang->repo->error->empty);
+
+                $branchID = current($branches);
+            }
+
+            $branches = $this->repoZen->getSyncBranches($branchID);
+
+            $logs    = array();
+            $version = 1;
+
+            $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
+            $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount, 'batch');
+        }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         echo json_encode(array('result' => 'success', 'data' => $result));
