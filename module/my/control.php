@@ -574,17 +574,28 @@ class my extends control
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
         $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
             if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
             if(!empty($task->execution) && empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
+
+            $task->rawStatus = $task->status;
+            $task->status    = $this->processStatus('testtask', $task);
+
+            if(empty($task->members)) continue;
+
+            $members = array();
+            foreach(explode(',', $task->members) as $member) $members[] = zget($users, $member);
+            $task->members = implode(',', array_unique($members));
         }
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->myTestTask;
+        $this->view->users        = $users;
         $this->view->tasks        = $tasks;
         $this->view->browseType   = $browseType;
         $this->view->waitCount    = $count['wait'];
