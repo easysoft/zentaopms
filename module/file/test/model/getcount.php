@@ -21,11 +21,11 @@ su('admin');
 $file = new fileModelTest();
 
 // 测试数据1：多文件上传
-$fileNames1   = array('file1.jpg', 'file2.txt');
+$fileNames1   = array('file1.doc', 'file2.txt');
 $fileSizes1   = array(1888573, 2384);
 $fileTmpName1 = array('/tmp/phpus8Ebc', '/tmp/phpwNzwuS');
 $files1       = array('name' => $fileNames1, 'size' => $fileSizes1, 'tmp_name' => $fileTmpName1, 'error' => 0);
-$labels1      = array('file1.jpg', 'file2.txt');
+$labels1      = array('file1.doc', 'file2.txt');
 
 // 测试数据2：单文件上传
 $files2 = array('name' => 'file3.ppt', 'size' => '2893', 'tmp_name' => '/tmp/phpu2el', 'error' => 0);
