@@ -1,18 +1,2 @@
 ALTER TABLE `zt_ai_agent` ADD COLUMN `displayPosition` varchar(20) NOT NULL DEFAULT '' COMMENT '显示位置，目前包括：详情页（detail）、表单页（form）' AFTER `module`;
 ALTER TABLE `zt_ai_agent` ADD COLUMN `actionPurpose` varchar(100) NOT NULL DEFAULT '' COMMENT '操作目的编码' AFTER `displayPosition`;
-
-CREATE TABLE `zt_ai_skill` (
-    `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Skill名称',
-    `type` varchar(30) NOT NULL DEFAULT 'private' COMMENT '类型：private个人，public公开',
-    `category` int unsigned NOT NULL DEFAULT 0 COMMENT '技能类型，关联模块ID',
-    `status` varchar(30) NOT NULL DEFAULT 'draft' COMMENT '状态：draft未发布，published已发布',
-    `fromID` int unsigned NOT NULL DEFAULT 0 COMMENT '来源ID，可将公开技能复制成个人技能',
-    `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '描述',
-    `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
-    `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
-    `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改人',
-    `editedDate` datetime DEFAULT NULL COMMENT '最后修改时间',
-    `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
-    PRIMARY KEY (`id`)
-) ENGINE=InnoDB COMMENT='AI技能';
