@@ -27,8 +27,18 @@ su('admin');
 
 $gogsTest = new gogsModelTest();
 
+function getProjectByFullName(array $projects, string $fullName)
+{
+    foreach($projects as $project)
+    {
+        if(isset($project->full_name) && $project->full_name === $fullName) return $project;
+    }
+
+    return 0;
+}
+
 r($gogsTest->apiGetProjectsTest(1)) && p() && e('0');
 r($gogsTest->apiGetProjectsTest(999)) && p() && e('0');
-r($gogsTest->apiGetProjectsTest(5)) && p('0:id,full_name') && e('1,easycorp/unittest');
+r(getProjectByFullName($gogsTest->apiGetProjectsTest(5), 'easycorp/unittest')) && p('id,full_name') && e('1,easycorp/unittest');
 r($gogsTest->apiGetProjectsTest(0)) && p() && e('0');
 r($gogsTest->apiGetProjectsTest(-1)) && p() && e('0');

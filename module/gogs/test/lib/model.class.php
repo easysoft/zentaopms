@@ -8,6 +8,15 @@ class gogsModelTest extends baseTest
     protected $moduleName = 'gogs';
     protected $className  = 'model';
 
+    public $gogs = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->gogs = $this->instance;
+    }
+
     /**
      * Test bindUser method.
      *
