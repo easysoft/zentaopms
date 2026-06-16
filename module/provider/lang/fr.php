@@ -18,8 +18,8 @@ $lang->provider->createdBy   = 'Created By';
 $lang->provider->createdDate = 'Created Date';
 
 $lang->provider->error = new stdclass();
-$lang->provider->error->api            = 'The server URL cannot reach the provider API.';
-$lang->provider->error->apiWithMessage = 'The server URL cannot reach the provider API: %s';
+$lang->provider->error->api            = 'The server cannot be accessed.';
+$lang->provider->error->apiWithMessage = 'The server cannot be accessed: %s';
 
 $lang->provider->typeList = array();
 $lang->provider->typeList['GitLab']     = 'GitLab';
