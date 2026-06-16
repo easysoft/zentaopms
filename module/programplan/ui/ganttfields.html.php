@@ -37,6 +37,7 @@ $ganttLang->wrongRelationSource = $lang->execution->error->wrongGanttRelationSou
 $ganttLang->wrongRelationTarget = $lang->execution->error->wrongGanttRelationTarget;
 $ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
 $ganttLang->warningNoToday      = $lang->execution->gantt->warning->noTodayMarker;
+$ganttLang->deadline            = $lang->programplan->end;
 
 if($from == 'doc')
 {
