@@ -924,53 +924,44 @@ class story extends control
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
         if(empty($storyIdList)) $this->locate($url);
 
-        $storyList = $this->story->getByList($storyIdList);
-        usort($storyList, function($a, $b)
-        {
-            return $a->id - $b->id;
-        });
-        $invalidTypes = '';
+        $storyList    = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
         $typeList     = array_unique(array_column($storyList, 'type'));
-        foreach($typeList as $type)
-        {
-            if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes .= $invalidTypes ?  '、' . $this->lang->story->typeList[$type] : $this->lang->story->typeList[$type];
-        }
-        $invalidStoryIdList = '';
+        $invalidTypes = [];
+        foreach($typeList as $type) if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+
+        $invalidStoryIdList = [];
         $allowedStoryIdList = [];
         foreach($storyList as $story)
         {
-            if(!common::hasPriv($story->type, 'batchsubmitreview'))
-                continue;
+            if(!common::hasPriv($story->type, 'batchsubmitreview')) continue;
             if(!in_array($story->status, ['draft', 'changing']))
             {
-                $invalidStoryIdList .= '#' . $story->id . ', ';
+                $invalidStoryIdList[] = '#' . $story->id;
                 continue;
             }
             $allowedStoryIdList[] = $story->id;
         }
-        $invalidStoryIdList = rtrim($invalidStoryIdList, ', ');
+
         $message = '';
         if(!empty($invalidTypes))
         {
-            $message .= sprintf($this->lang->story->batchSubmitReviewPrivTips, $invalidTypes);
+            $message .= sprintf($this->lang->story->batchSubmitReviewPrivTips, implode('、', $invalidTypes));
         }
         if(!empty($invalidStoryIdList))
         {
-            $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, $invalidStoryIdList);
+            $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
         }
         if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
 
         /* Get reviewers. */
-        $product = $this->product->getById($productID);
+        $product   = $this->product->getById($productID);
         $reviewers = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
 
-        $this->view->storyIdList        = $allowedStoryIdList;
-        $this->view->invalidTypes       = $invalidTypes;
-        $this->view->invalidStoryIdList = $invalidStoryIdList;
-        $this->view->reviewers          = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-        $this->view->needReview         = $this->app->user->account == $product->PO ? "checked='checked'" : "";
-
+        $this->view->storyIdList = $allowedStoryIdList;
+        $this->view->message     = $message;
+        $this->view->reviewers   = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->needReview  = $this->app->user->account == $product->PO ? "checked='checked'" : "";
 
         $this->display();
     }

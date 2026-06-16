@@ -12,59 +12,8 @@ declare(strict_types=1);
 namespace zin;
 
 /* Build warning messages. */
-$message = '';
-if(!empty($invalidTypes))
-{
-    $message .= sprintf($lang->story->batchSubmitReviewPrivTips, $invalidTypes);
-}
-if(!empty($invalidStoryIdList))
-{
-    $message .= sprintf($lang->story->batchSubmitReviewStatusTips, $invalidStoryIdList);
-}
-
 if(!empty($message))
 {
     $jsMsg = json_encode($message);
     h::js("zui.Modal.alert({$jsMsg});");
 }
-
-$needNotReviewBox = span
-(
-    setClass('input-group-addon'),
-    checkbox
-    (
-        setID('needNotReview'),
-        set::name('needNotReview'),
-        set::text($lang->story->needNotReview),
-        set::value(1),
-        set::checked($needReview)
-    )
-);
-
-modalHeader(set::title($lang->story->batchSubmitReview));
-
-formPanel
-(
-    set::submitBtnText($lang->story->submitReview),
-    on::change('#needNotReview', 'toggleReviewer(e.target)'),
-    formGroup
-    (
-        setID('reviewerBox'),
-        set::label($lang->story->reviewers),
-        set::width('full'),
-        set::required(true),
-        inputGroup
-        (
-            picker
-            (
-                setID('reviewer'),
-                set::name('reviewer[]'),
-                set::multiple(true),
-                set::items($reviewers),
-                set::disabled($needReview)
-            ),
-            $needNotReviewBox
-        )
-    )
-);
-render();
