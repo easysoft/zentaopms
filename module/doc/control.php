@@ -2389,6 +2389,50 @@ class doc extends control
     }
 
     /**
+     * Ajax: Get light-weight spaces.
+     * Ajax: 获取轻量空间列表。
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaces(string $type = 'custom')
+    {
+        list($spaces) = $this->doc->getSpaces($type, 0);
+        $spaces = array_map(array($this, 'formatSpace'), $spaces);
+        $this->send(array('spaces' => array_values($spaces)));
+    }
+
+    /**
+     * Ajax: Get light-weight space.
+     * Ajax: 获取轻量空间详情。
+     *
+     * @param  string $type
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpace(string $type = '', int $spaceID = 0)
+    {
+        if(empty($spaceID)) return $this->sendError($this->lang->notFound);
+
+        if(empty($type))
+        {
+            $type = $this->doc->getSpaceType($spaceID);
+            if(!in_array($type, array('mine', 'custom'))) return $this->sendError($this->lang->notFound);
+        }
+
+        list($spaces) = $this->doc->getSpaces($type, 0);
+        foreach($spaces as $space)
+        {
+            if((int)zget($space, 'id', 0) !== $spaceID) continue;
+            return $this->send(array('space' => $this->formatSpace($space)));
+        }
+
+        return $this->sendError($this->lang->notFound);
+    }
+
+    /**
      * Ajax: Get doc space data.
      * Ajax: 获取文档空间数据。
      *
@@ -2457,6 +2501,29 @@ class doc extends control
         $data['libIds'] = $libIds;
 
         return $data;
+    }
+
+    /**
+     * Format light-weight space payload.
+     * 格式化轻量空间数据。
+     *
+     * @param  array $space
+     * @access private
+     * @return array
+     */
+    private function formatSpace(array $space): array
+    {
+        $type = zget($space, 'type', 'custom');
+        $scopeMap = array('mine' => 'my', 'custom' => 'team', 'product' => 'product', 'project' => 'project');
+
+        return array(
+            'id'        => (int)zget($space, 'id', 0),
+            'name'      => zget($space, 'name', ''),
+            'type'      => $type,
+            'scope'     => zget($scopeMap, $type, $type),
+            'canModify' => (bool)zget($space, 'canModify', false),
+            'isMine'    => (bool)zget($space, 'isMine', $type == 'mine')
+        );
     }
 
     /**

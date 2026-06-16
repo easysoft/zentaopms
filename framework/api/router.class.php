@@ -275,6 +275,9 @@ class api extends router
         $methodName = '';
 
         list($info, $paramValues) = $this->matchRoutes($routes);
+        $httpActions = array('get', 'post', 'put', 'delete', 'options');
+        if($info && array_intersect($httpActions, array_keys($info))) $info = zget($info, $this->action, array());
+
         $this->originRouteInfo = $info ?: array();
         $this->routeInfo       = $this->originRouteInfo;
         $this->realRouteInfo   = $this->originRouteInfo;
@@ -923,8 +926,7 @@ class api extends router
     {
         $this->action = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
-        $methodName = '';
-        if($this->action == 'get') $methodName = $this->parseRouteV2($routes);
+        $methodName = $this->parseRouteV2($routes);
 
         $pathItems  = explode('/', trim($this->path, '/'));
         $moduleName = $this->singular($pathItems[0]);
