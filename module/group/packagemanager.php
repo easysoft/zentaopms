@@ -3999,6 +3999,7 @@ $config->group->package->aiSkill->privs['ai-createskill']        = array('editio
 $config->group->package->aiSkill->privs['ai-editskill']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ai-browseskill', 'ai-viewskill'), 'recommend' => array('ai-releaseskill'));
 $config->group->package->aiSkill->privs['ai-deleteskill']        = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ai-browseskill'), 'recommend' => array());
 $config->group->package->aiSkill->privs['ai-publishskill']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 28, 'depend' => array('ai-myskill'), 'recommend' => array());
+$config->group->package->aiSkill->privs['ai-releaseskilltosquare'] = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 29, 'depend' => array('ai-myskill'), 'recommend' => array());
 $config->group->package->aiSkill->privs['ai-releaseskill']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 30, 'depend' => array('ai-browseskill', 'ai-viewskill'), 'recommend' => array());
 $config->group->package->aiSkill->privs['ai-disableskill']       = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 35, 'depend' => array('ai-browseskill', 'ai-viewskill'), 'recommend' => array());
 
