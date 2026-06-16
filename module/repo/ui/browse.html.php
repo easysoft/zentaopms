@@ -17,6 +17,9 @@ jsVar('copied', $lang->repo->copied);
 jsVar('base64BranchID', $base64BranchID);
 jsVar('repoID', $repoID);
 jsVar('objectID', $objectID);
+jsVar('mirrorSyncLink',         $this->createLink('repo', 'ajaxMirrorSync',         "repoID={$repoID}"));
+jsVar('mirrorSyncProgressLink', $this->createLink('repo', 'ajaxMirrorSyncProgress', "repoID={$repoID}"));
+jsVar('mirrorLang',             $lang->repo->mirror);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
@@ -218,11 +221,45 @@ $downloadWg = div
 
 toolbar
 (
-    a(
-        set::className('last-sync-time'),
-        empty($lastRevision->link) ? null : set::href($lastRevision->link),
-        $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
-    ),
+    (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
+    (
+        setClass('flex items-center'),
+        span
+        (
+            setClass('text-primary sync-progress-msg mr-3'),
+            $lang->repo->mirror->syncing
+        ),
+        btn
+        (
+            setClass('primary refresh-sync-btn'),
+            set::icon('refresh'),
+            $lang->repo->mirror->refreshSync
+        )
+    ) : null,
+    (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
+    (
+        setClass('flex items-center'),
+        (isset($repo->status) && $repo->status == 'syncFailed') ? div
+        (
+            setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
+            setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
+            set('data-failure', (string)$mirrorSyncFailure),
+            h::span(setClass('icon icon-exclamation-sign mr-2')),
+            h::span($lang->repo->mirror->failedTitle),
+            h::a
+            (
+                set::href('javascript:;'),
+                setClass('alert-link sync-failure-detail ml-2'),
+                $lang->repo->mirror->detail
+            )
+        ) : null,
+        btn
+        (
+            setClass('primary sync-code-btn'),
+            set::icon('refresh'),
+            $lang->repo->mirror->syncCode
+        )
+    ) : null,
     dropdown
     (
         set::staticMenu(true),

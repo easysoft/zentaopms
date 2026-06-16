@@ -569,6 +569,16 @@ class repo extends control
         $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag    = $branchOrTag;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+
+        /* 镜像仓库同步失败时，从 GitFox 拉取失败原因，供前端展示。 */
+        $mirrorSyncFailure = '';
+        if(!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncFailed')
+        {
+            $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+            if(!empty($progress) && is_object($progress) && !empty($progress->failure)) $mirrorSyncFailure = (string)$progress->failure;
+        }
+        $this->view->mirrorSyncFailure = $mirrorSyncFailure;
+
         $this->display();
     }
 
@@ -1320,6 +1330,52 @@ class repo extends control
      * @access public
      * @return void
      */
+    /**
+     * 触发镜像仓库同步。
+     * Ajax trigger mirror sync for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSync(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('code' => 'failure', 'message' => $this->lang->repo->error->noFound));
+
+        $response = $this->loadModel('gitfox')->apiMirrorSync((int)$repo->id);
+        if(empty($response) || !is_object($response)) return $this->send(array('code' => 'failure', 'message' => $this->lang->repo->mirror->syncRequestFailed));
+
+        return $this->send(array(
+            'code'    => isset($response->code)    ? (string)$response->code    : 'failure',
+            'message' => isset($response->message) ? (string)$response->message : ''
+        ));
+    }
+
+    /**
+     * 查询镜像仓库同步进度。
+     * Ajax get mirror sync progress for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSyncProgress(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+        $status   = (!empty($progress) && is_object($progress) && !empty($progress->status))  ? (string)$progress->status  : '';
+        $failure  = (!empty($progress) && is_object($progress) && !empty($progress->failure)) ? (string)$progress->failure : '';
+
+        return $this->send(array(
+            'result'  => 'success',
+            'status'  => $status,
+            'failure' => $failure
+        ));
+    }
+
     public function ajaxSyncBranchCommit(int $repoID = 0, string $branch = '')
     {
         set_time_limit(0);

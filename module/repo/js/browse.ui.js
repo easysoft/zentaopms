@@ -289,3 +289,106 @@ $(function()
 {
     if(base64BranchID) $.get($.createLink('repo', 'ajaxSyncBranchCommit', 'repoID=' + repo.id + '&branch=' + base64BranchID));
 });
+
+/**
+ * 查看镜像同步失败详情。
+ */
+/**
+ * 镜像仓库同步交互。三按钮共用工具：spin、响应解析。
+ */
+function mirrorBusy($btn, on)
+{
+    $btn.prop('disabled', !!on).toggleClass('disabled', !!on);
+    $btn.find('i.icon').toggleClass('spin', !!on);
+}
+
+function mirrorReload(){ setTimeout(function(){ window.location.reload(); }, 600); }
+
+function mirrorParse(res){ return typeof res === 'string' ? JSON.parse(res) : res; }
+
+/* 同步代码库：POST 触发 GitFox MirrorSync，依据 code 字段判定（success → reload，否则把 message 弹给用户）。 */
+$(document).on('click', '.sync-code-btn', function()
+{
+    var $btn = $(this);
+    if($btn.prop('disabled')) return;
+    mirrorBusy($btn, true);
+
+    $.post(mirrorSyncLink).done(function(res)
+    {
+        var data = mirrorParse(res);
+        if(data && data.code === 'success')
+        {
+            zui.Messager.show({type: 'success', content: mirrorLang.syncTriggered, time: 1500});
+            return mirrorReload();
+        }
+        zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.syncFailed, time: 2500});
+        mirrorBusy($btn, false);
+    }).fail(function(_, textStatus, errorThrown)
+    {
+        zui.Messager.show({type: 'danger', content: mirrorLang.syncRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
+        mirrorBusy($btn, false);
+    });
+});
+
+/* 刷新同步状态：GET 进度，running → toast 仍在同步；其他状态 → reload 让首屏重渲。 */
+$(document).on('click', '.refresh-sync-btn', function()
+{
+    var $btn = $(this);
+    if($btn.prop('disabled')) return;
+    mirrorBusy($btn, true);
+
+    $.get(mirrorSyncProgressLink).done(function(res)
+    {
+        var data = mirrorParse(res);
+        if(!data || data.result !== 'success')
+        {
+            zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
+            return mirrorBusy($btn, false);
+        }
+        if(data.status && data.status !== 'running')
+        {
+            zui.Messager.show({type: 'success', content: mirrorLang.statusUpdated, time: 1200});
+            return mirrorReload();
+        }
+        zui.Messager.show({type: 'info', content: mirrorLang.stillRunning, time: 1500});
+        mirrorBusy($btn, false);
+    }).fail(function(_, textStatus, errorThrown)
+    {
+        zui.Messager.show({type: 'danger', content: mirrorLang.queryRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
+        mirrorBusy($btn, false);
+    });
+});
+
+/* 查看详情：先拉最新进度，failed 才弹原因，其他状态按状态码 toast + reload 与首屏对齐。 */
+$(document).on('click', '.sync-failure-detail', function(e)
+{
+    e.preventDefault();
+    var $self  = $(this);
+    var $alert = $self.closest('.sync-failure-alert');
+    if($self.prop('disabled')) return;
+    $self.prop('disabled', true);
+
+    $.get(mirrorSyncProgressLink).done(function(res)
+    {
+        var data = mirrorParse(res);
+        if(!data || data.result !== 'success')
+        {
+            zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
+            return $self.prop('disabled', false);
+        }
+        if(data.status === 'failed')
+        {
+            zui.Modal.alert({title: mirrorLang.failureTitle, message: data.failure || $alert.attr('data-failure') || mirrorLang.noDetail});
+            return $self.prop('disabled', false);
+        }
+
+        var tipMap  = {running: mirrorLang.syncing, scheduled: mirrorLang.done, finished: mirrorLang.done};
+        var typeMap = {running: 'info', scheduled: 'success', finished: 'success'};
+        zui.Messager.show({type: typeMap[data.status] || 'info', content: tipMap[data.status] || mirrorLang.statusUpdated, time: 1200});
+        mirrorReload();
+    }).fail(function(_, textStatus, errorThrown)
+    {
+        zui.Messager.show({type: 'danger', content: mirrorLang.queryRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
+        $self.prop('disabled', false);
+    });
+});
