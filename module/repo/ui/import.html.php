@@ -15,25 +15,25 @@ $fields->field('sourceRepo')->control(array('control' => 'formRowGroup', 'title'
 $fields->field('origin')->required(true)->control('picker')->items($lang->repo->sourceList)->value(!empty($importRepo) ? zget($importRepo, 'origin') : $type)->width('1/2');
 $fields->field('provider')->required(true)->width('1/2')
    ->control('inputGroup')
-   ->itemBegin('providerID')->id('providerBox')->required(true)->control('picker')->items($providers)->value(zget($importRepo, 'providerID'))->itemEnd()
+   ->itemBegin('providerID')->id('providerBox')->required(true)->control('picker')->items($providers)->value(zget($importRepo, 'providerID', 0))->itemEnd()
    ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createProvider', 'data-size' => 'lg'))
    ->text($lang->repo->create)->hint($lang->repo->create)
    ->url(createLink('provider', 'create', 'type=' . $type . "&callBack=refreshProvider"))
    ->itemEnd();
-$fields->field('organize')->required(true)->control('picker')->items($groups)->width('1/2')->value(zget($importRepo, 'organize'))->hidden($type == 'Subversion');
-$fields->field('repo')->label($lang->repo->common)->required(true)->control('picker')->items($repos)->value(zget($importRepo, 'repo'))->width('1/2')->wrapAfter(true)->hidden($type == 'Subversion');
-$fields->field('account')->required(true)->width('1/2')->value(zget($importRepo, 'account'))->hidden($type != 'Subversion');
-$fields->field('password')->required(true)->width('1/2')->value(zget($importRepo, 'password'))->hidden($type != 'Subversion');
+$fields->field('organize')->required(true)->control('picker')->items($groups)->width('1/2')->value(zget($importRepo, 'organize', ''))->hidden($type == 'Subversion');
+$fields->field('repo')->label($lang->repo->common)->required(true)->control('picker')->items($repos)->value(zget($importRepo, 'repo', ''))->width('1/2')->wrapAfter(true)->hidden($type == 'Subversion');
+$fields->field('account')->required(true)->width('1/2')->value(zget($importRepo, 'account', ''))->hidden($type != 'Subversion');
+$fields->field('password')->required(true)->width('1/2')->value(zget($importRepo, 'password', ''))->hidden($type != 'Subversion');
 $fields->field('repoPath')->required(true)->width('1/2')->wrapAfter(true)->hidden($type != 'Subversion')
    ->control('inputGroup')
-   ->itemBegin('path')->required(true)->title(zget($provider, 'url'))->value(!empty($imortRepo) ? zget($importRepo, 'path') : zget($provider, 'url'))->disabled(true)->itemEnd()
+   ->itemBegin('path')->required(true)->title(zget($provider, 'url'))->value(!empty($importRepo) ? zget($importRepo, 'path') : zget($provider, 'url'))->disabled(true)->itemEnd()
    ->itemBegin('slug')->value(zget($importRepo, 'slug'))->itemEnd();
 
 $fields->field('target')->label('')->control(array('control' => 'formRowGroup', 'title' => $lang->repo->targetRepo))->width('1/8')->wrapAfter(true);
-$fields->field('name')->required(true)->width('1/2')->value(zget($importRepo, 'name'))->wrapAfter(true);
+$fields->field('name')->required(true)->width('1/2')->value(zget($importRepo, 'name', ''))->wrapAfter(true);
 $fields->field('space')->required(true)->control('picker')->items($spaces)->value(!empty($importRepo) ? zget($importRepo, 'space') : $spaceID)->width('1/2');
-$fields->field('product')->required(true)->control('picker')->items($products)->multiple(true)->value(zget($importRepo, 'product'))->width('1/2');
-$fields->field('desc')->control(array('control' => 'textarea', 'rows' => 2))->value(zget($importRepo, 'desc'))->width('full');
+$fields->field('product')->required(true)->control('picker')->items($products)->multiple(true)->value(zget($importRepo, 'product', ''))->width('1/2');
+$fields->field('desc')->control(array('control' => 'textarea', 'rows' => 2))->value(zget($importRepo, 'desc', ''))->width('full');
 $fields->field('mirror')->label($lang->repo->afterImport)->width('full')->control('radioList')->items($lang->repo->accessList)->value(!empty($importRepo) ? zget($importRepo, 'mirror') : 'writable');
 $fields->field('acl')->width('full')->control('radioList')->items($lang->repo->aclList)->value(!empty($importRepo) ? zget($importRepo, 'acl') : 'open');
 
