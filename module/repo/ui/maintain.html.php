@@ -11,7 +11,7 @@ declare(strict_types=1);
 namespace zin;
 
 $createRepoURL = createLink('repo', 'createRepo', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
-$importURL     = createLink('repo', 'import', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
+$importURL     = createLink('repo', 'import', $inSpace ? "spaceID={$spaceID}" : '');
 
 $createRepoItem = array('text' => $lang->repo->createRepoAction, 'url' => $createRepoURL, 'class' => 'btn primary', 'icon' => 'plus');
 $importItem     = array('text' => $lang->repo->import, 'url' => $importURL, 'class' => 'primary', 'icon' => 'download');

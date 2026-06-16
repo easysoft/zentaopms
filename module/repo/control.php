@@ -1088,27 +1088,47 @@ class repo extends control
      * 导入版本库。
      * Import repos.
      *
-     * @param  int    $serverID
+     * @param  int    $spaceID
+     * @param  string $type
+     * @param  int    $providerID
+     * @param  string $groupID
+     * @param  int    $isTryAgain
      * @access public
      * @return void
      */
-    public function import(string $type = 'GitLab', int $providerID = 0, string $groupID = '')
+    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', int $isTryAgain = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
         if($_POST)
         {
             $this->repoZen->setImportFormConfig($type);
             $formData = form::data($this->config->repo->form->import)->get();
+            $this->session->set('importRepo', json_encode($formData));
+
             $result   = $this->repo->import($formData);
             if(dao::isError()) $this->sendError(dao::getError());
-            return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}")));
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
+        }
+
+        if($isTryAgain && $this->session->importRepo)
+        {
+            $importRepo = json_decode($this->session->importRepo);
+            $type       = zget($importRepo, 'origin', 'GitLab');
+            $providerID = zget($importRepo, 'providerID', 0);
+            $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
+            $groupID    = helper::safe64encode($groupID);
+            $type       = zget($importRepo, 'origin', 'GitLab');
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
-        $this->view->title     = $this->lang->repo->import;
-        $this->view->products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $this->view->spaces    = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
-        $this->view->type      = $type;
+        $this->view->title      = $this->lang->repo->import;
+        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->type       = $type;
+        $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
+        $this->view->tryAgain   = $isTryAgain;
+        $this->view->spaceID    = $spaceID;
+        $this->view->inSpace    = !empty($spaceID);
         $this->display();
     }
 
@@ -2908,13 +2928,15 @@ class repo extends control
      * Ajax show import progress.
      *
      * @param  int $repoID
+     * @param  int $spaceID
      * @access public
      * @return void
      */
-    function ajaxShowImportProgress(int $repoID)
+    function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
     {
-        $this->view->title  = $this->lang->repo->showImportProgress;
-        $this->view->repoID = $repoID;
+        $this->view->title   = $this->lang->repo->showImportProgress;
+        $this->view->repoID  = $repoID;
+        $this->view->spaceID = $spaceID;
         $this->display();
     }
 
@@ -2932,5 +2954,37 @@ class repo extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         echo json_encode(array('result' => 'success', 'data' => $result));
+    }
+
+    /**
+     * 显示导入结果。
+     * Ajax show import result.
+     *
+     * @param  int $repoID
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxShowImportResult(int $repoID, int $spaceID = 0)
+    {
+        $result = $this->loadModel('gitfox')->request("/repos/import-progress", 'GET', array('repoID' => $repoID));
+
+        $message = '';
+        if(dao::isError() || empty($result->status) || $result->status != 'finished')
+        {
+            if(empty($result)) $message = $this->lang->repo->importProgress->importFailed;
+            if(dao::isError())
+            {
+                $error   = dao::getError();
+                $message = isset($error['apiMessage']) ? sprintf($this->lang->repo->importProgress->failMessage, $error['apiMessage']) : $error;
+            }
+            if(!empty($result->failure)) $message = sprintf($this->lang->repo->importProgress->failMessage, $result->failure);
+        }
+
+        $this->view->title   = $this->lang->repo->showImportResult;
+        $this->view->message = $message;
+        $this->view->repoID  = $repoID;
+        $this->view->spaceID = $spaceID;
+        $this->display();
     }
 }

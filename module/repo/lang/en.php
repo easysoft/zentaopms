@@ -52,6 +52,7 @@ $lang->repo->targetRepo      = 'Target Repo';
 $lang->repo->afterImport     = 'After Import';
 $lang->repo->repoPath        = 'Repo Path';
 $lang->repo->slug            = 'Repo Path';
+$lang->repo->tips            = 'Tips';
 
 $lang->repo->createBranchAction = 'Create Branch';
 $lang->repo->createTagAction    = 'Create Tag';
@@ -82,6 +83,7 @@ $lang->repo->batchCreate        = 'Batch import repo';
 $lang->repo->browseTag          = 'Browse Tag';
 $lang->repo->browseBranch       = 'Browse Branch';
 $lang->repo->showImportProgress = 'Show Import Progress';
+$lang->repo->showImportResult   = 'Show Import Result';
 
 $lang->repo->createRepoAction = 'Create repository';
 
@@ -514,8 +516,14 @@ $lang->repo->accessList['writable'] = 'Readable and writable';
 $lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
 
 $lang->repo->importProgress = new stdclass();
-$lang->repo->importProgress->title       = 'Importing repository...';
-$lang->repo->importProgress->desc        = 'The third-party repository is being imported into the system. Please wait. This may take a few minutes.';
-$lang->repo->importProgress->notice      = 'Please wait patiently for the import to complete and do not close this page.';
-$lang->repo->importProgress->leaveTip    = 'The repository is being imported. Please do not close this page. Once closed, the import progress will no longer be available.';
-$lang->repo->importProgress->acknowledge = 'I know';
+$lang->repo->importProgress->title        = 'Importing repository...';
+$lang->repo->importProgress->desc         = 'The third-party repository is being imported into the system. Please wait. This may take a few minutes.';
+$lang->repo->importProgress->notice       = 'Please wait patiently for the import to complete and do not close this page.';
+$lang->repo->importProgress->leaveTip     = 'The repository is being imported. Please do not close this page. Once closed, the import progress will no longer be available.';
+$lang->repo->importProgress->acknowledge  = 'I know';
+$lang->repo->importProgress->importFailed = 'Import failed';
+$lang->repo->importProgress->failMessage  = 'Repository import failed: %s';
+$lang->repo->importProgress->successTips  = 'Repository import successful. You can now perform the following actions:';
+$lang->repo->importProgress->toRepoBrowse = 'Browse repository';
+$lang->repo->importProgress->toRepoList   = 'Back to repository list';
+$lang->repo->importProgress->tryAgain     = 'Try again';
