@@ -12,8 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+aiFormInject();
 
 jsVar('window.executionID', $execution->id);
 jsVar('vision', $config->vision);
@@ -66,6 +65,7 @@ formGridPanel
     set::title($lang->task->create),
     set::fields($fields),
     set::loadUrl($loadUrl),
+    to('headingActions', aiAgentEntry(set::type('form'))),
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::change('[name=type]', 'typeChange'),
