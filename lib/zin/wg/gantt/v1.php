@@ -178,7 +178,7 @@ class gantt extends wg
                 set::title($ganttLang->edit),
                 inputGroup
                 (
-                    $ganttFields['column_deadline'],
+                    $ganttLang->deadline,
                     datePicker(set::name('deadline')),
                     formHidden('reviewID', ''),
                     formHidden('projectID', ''),

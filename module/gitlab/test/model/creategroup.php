@@ -19,8 +19,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-zenData('pipeline')->gen(5);
-
 $gitlab = new gitlabModelTest();
 
 $gitlabID = 1;
@@ -49,5 +47,7 @@ $invalidGitlabID = 999;
 r($gitlab->createGroupTest($invalidGitlabID, $group)) && p() && e('0'); // 步骤4：无效gitlabID测试
 
 su('user');
+global $app;
+$app->user->account = 'user';
 $group->path = 'unit_test_group_user';
 r($gitlab->createGroupTest($gitlabID, $group)) && p() && e('0'); // 步骤5：普通用户权限测试

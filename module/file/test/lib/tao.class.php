@@ -7,6 +7,16 @@ class fileTaoTest extends baseTest
 {
     protected $moduleName = 'file';
     protected $className  = 'tao';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance;
+    }
 
     /**
      * Test get files of an object.
