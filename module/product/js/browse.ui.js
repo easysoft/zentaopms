@@ -29,6 +29,13 @@ $(document).off('click', '.batchImportToLibBtn').on('click', '.batchImportToLibB
     $("[name='storyIdList'").val(checkedList.join(','));
 });
 
+$(document).off('click', '.batchSubmitReviewBtn').on('click', '.batchSubmitReviewBtn', function(e)
+{
+    const dtable      = zui.DTable.query($('#stories'));
+    const checkedList = dtable.$.getChecks();
+
+    $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
+});
 $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
 {
     const dtable      = zui.DTable.query($('#stories'));

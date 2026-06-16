@@ -253,6 +253,17 @@ class requirement extends control
     }
 
     /**
+     * Batch submit review.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview()
+    {
+        echo $this->fetch('story', 'batchSubmitReview', 'storyType=requirement');
+    }
+
+    /**
      * Recall the requirement review or requirement change.
      *
      * @param  int    $storyID

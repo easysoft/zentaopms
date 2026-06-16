@@ -909,6 +909,68 @@ class story extends control
     }
 
     /**
+     * Batch submit review.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID, string $storyType = 'story')
+    {
+        $url = $this->session->storyList ?: inlink('browse', "productID=$productID&storyType=$storyType");
+
+        $storyIdList = array();
+        if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
+        if(empty($storyIdList)) $this->locate($url);
+
+        $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
+
+        $invalidTypes       = [];
+        $invalidStoryIdList = [];
+        $allowedStoryIdList = [];
+
+        /* 判断是否有选中的需求类型的提交评审权限。 */
+        $typeList = array_unique(array_column($storyList, 'type'));
+        foreach($typeList as $type) if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+
+        /* 判断选中的需求状态是否符合提交评审的条件。 */
+        foreach($storyList as $story)
+        {
+            if(!common::hasPriv($story->type, 'batchsubmitreview')) continue;
+            if(!in_array($story->status, ['draft', 'changing']))
+            {
+                $invalidStoryIdList[] = '#' . $story->id;
+                continue;
+            }
+            $allowedStoryIdList[] = $story->id;
+        }
+
+        $message = '';
+        if(!empty($invalidTypes))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewPrivTips, implode('、', $invalidTypes));
+        }
+        if(!empty($invalidStoryIdList))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
+        }
+        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
+
+        /* Get reviewers. */
+        $product   = $this->product->getById($productID);
+        $reviewers = $product->reviewer;
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+
+        $this->view->storyIdList = $allowedStoryIdList;
+        $this->view->message     = $message;
+        $this->view->reviewers   = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->needReview  = $this->app->user->account == $product->PO ? "checked='checked'" : "";
+
+        $this->display();
+    }
+
+    /**
      * 关闭需求。
      * Close the story.
      *

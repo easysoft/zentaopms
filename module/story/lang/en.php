@@ -609,3 +609,6 @@ $lang->story->trackSortList['desc'] = 'Descending';
 
 $lang->story->error = new stdclass();
 $lang->story->error->length = "The input exceeds %d characters and cannot be saved. Please shorten it and try again.";
+
+$lang->story->batchSubmitReviewStatusTips = "Demand %s cannot be submitted for review as its status is neither Draft nor Under Change!";
+$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands without permission have been filtered automatically.\n";

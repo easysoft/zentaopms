@@ -759,8 +759,9 @@ $config->group->package->reviewStory = new stdclass();
 $config->group->package->reviewStory->order  = 15;
 $config->group->package->reviewStory->subset = 'story';
 $config->group->package->reviewStory->privs  = array();
-$config->group->package->reviewStory->privs['story-review']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('story-view'), 'recommend' => array('story-batchReview'));
-$config->group->package->reviewStory->privs['story-batchReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('product-browse'), 'recommend' => array('story-review'));
+$config->group->package->reviewStory->privs['story-review']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 40, 'depend' => array('story-view'), 'recommend' => array('story-batchReview'));
+$config->group->package->reviewStory->privs['story-batchReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 50, 'depend' => array('product-browse'), 'recommend' => array('story-review'));
+$config->group->package->reviewStory->privs['story-batchSubmitReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 55, 'depend' => array('product-browse'), 'recommend' => array('story-submitReview'));
 
 $config->group->package->deleteProduct = new stdclass();
 $config->group->package->deleteProduct->order  = 25;
@@ -821,8 +822,9 @@ $config->group->package->reviewRequirement = new stdclass();
 $config->group->package->reviewRequirement->order  = 15;
 $config->group->package->reviewRequirement->subset = 'requirement';
 $config->group->package->reviewRequirement->privs  = array();
-$config->group->package->reviewRequirement->privs['requirement-review']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('requirement-view'), 'recommend' => array('requirement-batchReview'));
-$config->group->package->reviewRequirement->privs['requirement-batchReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-requirement'), 'recommend' => array('requirement-review'));
+$config->group->package->reviewRequirement->privs['requirement-review']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('requirement-view'), 'recommend' => array('requirement-batchReview'));
+$config->group->package->reviewRequirement->privs['requirement-batchReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-requirement'), 'recommend' => array('requirement-review'));
+$config->group->package->reviewRequirement->privs['requirement-batchSubmitReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('product-requirement'), 'recommend' => array('requirement-submitReview'));
 
 $config->group->package->browseEpic = new stdclass();
 $config->group->package->browseEpic->order  = 5;
@@ -875,8 +877,9 @@ $config->group->package->reviewEpic = new stdclass();
 $config->group->package->reviewEpic->order  = 15;
 $config->group->package->reviewEpic->subset = 'epic';
 $config->group->package->reviewEpic->privs  = array();
-$config->group->package->reviewEpic->privs['epic-review']      = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('epic-view'), 'recommend' => array('epic-batchReview'));
-$config->group->package->reviewEpic->privs['epic-batchReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-epic'), 'recommend' => array('epic-review'));
+$config->group->package->reviewEpic->privs['epic-review']            = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 40, 'depend' => array('epic-view'), 'recommend' => array('epic-batchReview'));
+$config->group->package->reviewEpic->privs['epic-batchReview']       = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 50, 'depend' => array('product-epic'), 'recommend' => array('epic-review'));
+$config->group->package->reviewEpic->privs['epic-batchSubmitReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,or', 'order' => 55, 'depend' => array('product-epic'), 'recommend' => array('epic-submitReview'));
 
 $config->group->package->browseProductPlan = new stdclass();
 $config->group->package->browseProductPlan->order  = 5;

@@ -164,9 +164,11 @@ $filter->qa->default                    = new stdclass();
 $filter->story->create                  = new stdclass();
 $filter->story->export                  = new stdclass();
 $filter->story->batchchangeparent       = new stdclass();
+$filter->story->batchsubmitreview       = new stdclass();
 $filter->story->batchcreate             = new stdclass();
 $filter->story->track                   = new stdclass();
 $filter->epic->batchchangeparent        = new stdclass();
+$filter->epic->batchsubmitreview        = new stdclass();
 $filter->epic->export                   = new stdclass();
 $filter->sso->getbindusers              = new stdclass();
 $filter->sso->gettodolist               = new stdclass();
@@ -224,6 +226,7 @@ $filter->group->editmanagepriv          = new stdclass();
 $filter->group->default                 = new stdclass();
 $filter->caselib->default               = new stdclass();
 $filter->requirement->batchchangeparent = new stdclass();
+$filter->requirement->batchsubmitreview = new stdclass();
 $filter->requirement->export            = new stdclass();
 $filter->convert->mapjira2zentao        = new stdclass();
 $filter->admin->register                = new stdclass();
@@ -392,13 +395,16 @@ $filter->story->create->cookie['lastStoryModule']        = 'int';
 $filter->story->batchcreate->cookie['preProductID']      = 'int';
 $filter->story->export->cookie['checkedItem']            = 'reg::checked';
 $filter->story->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->story->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->story->track->cookie['preBranch']               = 'reg::word';
 $filter->story->track->cookie['preProductID']            = 'int';
 
 $filter->epic->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->epic->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->epic->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->requirement->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
+$filter->requirement->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->requirement->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
