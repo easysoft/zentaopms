@@ -84,7 +84,7 @@ formPanel
         )
     ) : null,
     $type == 'api' ? formHidden('root', $module->root) : null,
-    $module->type != 'line' && $module->type != 'deliverable' ? formGroup
+    $module->type != 'line' && $module->type != 'deliverable' && $module->type != 'aiskill' ? formGroup
     (
         set::className('moduleBox ', $hidden ? 'hidden' : ''),
         set::label(strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent),
