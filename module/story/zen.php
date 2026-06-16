@@ -1977,46 +1977,6 @@ class storyZen extends story
         return form::data($this->config->story->form->submitReview, $storyID)->get();
     }
 
-    /**
-     * Build stories for batch submit review.
-     *
-     * @access protected
-     * @return array
-     */
-    protected function buildStoriesForBatchSubmitReview(): array
-    {
-        $data       = form::batchData($this->config->story->form->batchSubmitReview)->get();
-        $oldStories = $this->story->getByList(array_keys($data));
-        $stories    = array();
-
-        foreach($data as $storyID => $story)
-        {
-            if(!isset($oldStories[$storyID])) continue;
-
-            $oldStory  = $oldStories[$storyID];
-            $storyType = $oldStory->type;
-
-            if(isset($story->reviewer)) $story->reviewer = array_filter((array)$story->reviewer);
-            $needNotReview = !empty($story->needNotReview);
-
-            $forceReview = $this->story->checkForceReview($storyType);
-            if(!$needNotReview && empty($story->reviewer) && $forceReview)
-            {
-                dao::$errors["reviewer[{$storyID}]"] = $this->lang->story->errorEmptyReviewedBy;
-                continue;
-            }
-
-            if($needNotReview || empty($story->reviewer))
-            {
-                $story->status   = 'active';
-                $story->reviewer = array();
-            }
-
-            $stories[$storyID] = $story;
-        }
-
-        return $stories;
-    }
 
     /**
      * Get linked objects. e.g. bugs,cases,linkedMRs,linkedCommits,twins,reviewers,relations.
