@@ -15163,6 +15163,24 @@ CREATE TABLE IF NOT EXISTS `zt_ai_knowledgeitem` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+-- DROP TABLE IF EXISTS `zt_ai_skill`;
+CREATE TABLE `zt_ai_skill` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `name` varchar(255) NOT NULL COMMENT 'Skill名称',
+  `type` varchar(255) NOT NULL DEFAULT 'private' COMMENT '类型：个人/公开',
+  `category` int(11) NOT NULL COMMENT '技能类型(模块ID)',
+  `status` varchar(255) NOT NULL COMMENT '状态',
+  `fromID` int(11) NOT NULL COMMENT '来源ID（可将公开技能复制成个人技能）',
+  `skillID` int(11) NOT NULL COMMENT 'ZAI中的skillID',
+  `desc` text DEFAULT NULL COMMENT '描述',
+  `createdBy` varchar(255) NOT NULL COMMENT '创建人',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(255) NOT NULL COMMENT '最后修改人ID',
+  `editedDate` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `deleted` tinyint(4) NOT NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
 -- DROP TABLE IF EXISTS `zt_market`;
 CREATE TABLE IF NOT EXISTS `zt_market` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
