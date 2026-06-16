@@ -52,6 +52,7 @@ $lang->repo->targetRepo      = '目标代码库';
 $lang->repo->afterImport     = '导入后';
 $lang->repo->repoPath        = '代码库地址';
 $lang->repo->slug            = '代码库地址';
+$lang->repo->tips            = '提示';
 
 $lang->repo->createBranchAction = '创建分支';
 $lang->repo->createTagAction    = '创建标签';
@@ -82,6 +83,7 @@ $lang->repo->batchCreate        = '批量导入代码库';
 $lang->repo->browseTag          = '查看标签列表';
 $lang->repo->browseBranch       = '查看分支列表';
 $lang->repo->showImportProgress = '显示导入进度';
+$lang->repo->showImportResult   = '显示导入结果';
 
 $lang->repo->createRepoAction = '创建代码库';
 
@@ -514,8 +516,14 @@ $lang->repo->accessList['writable'] = '可读、可写、可管理';
 $lang->repo->accessList['readonly'] = '只读（做镜像导入，在第三方代码库进行管理，由DevOps定期自动同步）';
 
 $lang->repo->importProgress = new stdclass();
-$lang->repo->importProgress->title       = '正在导入代码库...';
-$lang->repo->importProgress->desc        = '正在将您的第三方代码库导入系统，请稍后，此过程可能需要几分钟。';
-$lang->repo->importProgress->notice      = '请耐心等待数据导入完成，不要关闭本页面。';
-$lang->repo->importProgress->leaveTip    = '代码库正在导入中，请勿关闭页面。页面关闭后，将无法查看代码库导入进度。';
-$lang->repo->importProgress->acknowledge = '我知道了';
+$lang->repo->importProgress->title        = '正在导入代码库...';
+$lang->repo->importProgress->desc         = '正在将您的第三方代码库导入系统，请稍后，此过程可能需要几分钟。';
+$lang->repo->importProgress->notice       = '请耐心等待数据导入完成，不要关闭本页面。';
+$lang->repo->importProgress->leaveTip     = '代码库正在导入中，请勿关闭页面。页面关闭后，将无法查看代码库导入进度。';
+$lang->repo->importProgress->acknowledge  = '我知道了';
+$lang->repo->importProgress->importFailed = '导入失败';
+$lang->repo->importProgress->failMessage  = '代码库导入失败：%s';
+$lang->repo->importProgress->successTips  = '代码库导入成功, 您现在可以进行以下操作:';
+$lang->repo->importProgress->toRepoBrowse = '进入代码库';
+$lang->repo->importProgress->toRepoList   = '返回代码库列表';
+$lang->repo->importProgress->tryAgain     = '重新尝试';
