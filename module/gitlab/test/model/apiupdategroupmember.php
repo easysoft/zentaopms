@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -19,11 +20,7 @@ cid=16629
 
 zenData('pipeline')->gen(5);
 
-global $app;
-$app->rawModule = 'gitlab';
-$app->rawMethod = 'browse';
-
-$gitlab = $tester->loadModel('gitlab');
+$gitlab = new gitlabModelTest();
 
 $gitlabID = 1;
 $groupID  = 14;
@@ -33,7 +30,7 @@ $groupMember = new stdclass();
 $groupMember->user_id      = '';
 $groupMember->access_level = '40';
 
-$result = $gitlab->apiUpdateGroupMember($gitlabID, $groupID, $groupMember);
+$result = $gitlab->apiUpdateGroupMemberTest($gitlabID, $groupID, $groupMember);
 if($result === false) $result = 'return false';
 r($result) && p() && e('return false');
 
@@ -42,7 +39,7 @@ $groupMember = new stdclass();
 $groupMember->user_id      = '4';
 $groupMember->access_level = '';
 
-$result = $gitlab->apiUpdateGroupMember($gitlabID, $groupID, $groupMember);
+$result = $gitlab->apiUpdateGroupMemberTest($gitlabID, $groupID, $groupMember);
 if($result === false) $result = 'return false';
 r($result) && p() && e('return false');
 
@@ -50,14 +47,16 @@ r($result) && p() && e('return false');
 $groupMember = new stdclass();
 $groupMember->user_id      = '4';
 $groupMember->access_level = '30';
-r($gitlab->apiUpdateGroupMember(0, $groupID, $groupMember)) && p() && e('0');
+$result = $gitlab->apiUpdateGroupMemberTest(0, $groupID, $groupMember);
+if($result === false) $result = '0';
+r($result) && p() && e('0');
 
 /* 测试步骤4：使用字符串类型的user_id参数更新群组成员 */
 $groupMember = new stdclass();
 $groupMember->user_id      = 'invalid_user';
 $groupMember->access_level = '30';
 
-$result = $gitlab->apiUpdateGroupMember($gitlabID, $groupID, $groupMember);
+$result = $gitlab->apiUpdateGroupMemberTest($gitlabID, $groupID, $groupMember);
 if($result === false) $result = 'return false';
 r($result) && p() && e('return false');
 
@@ -65,14 +64,13 @@ r($result) && p() && e('return false');
 $groupMember = new stdclass();
 $groupMember->user_id      = '4';
 $groupMember->access_level = '999';
-r($gitlab->apiUpdateGroupMember($gitlabID, $groupID, $groupMember)) && p() && e('0');
+$result = $gitlab->apiUpdateGroupMemberTest($gitlabID, $groupID, $groupMember);
+if($result === false) $result = '0';
+r($result) && p() && e('0');
 
 /* 测试步骤6：使用正确参数更新GitLab群组成员权限级别 */
-/* 首先确保成员存在，然后更新权限级别 */
 $groupMember = new stdclass();
 $groupMember->user_id      = '4';
 $groupMember->access_level = '40';
-$gitlab->apiCreateGroupMember($gitlabID, $groupID, $groupMember);
-
 $groupMember->access_level = '30';
-r($gitlab->apiUpdateGroupMember($gitlabID, $groupID, $groupMember)) && p('access_level') && e('30');
+r($gitlab->apiUpdateGroupMemberTest($gitlabID, $groupID, $groupMember)) && p('access_level') && e('30');

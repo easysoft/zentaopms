@@ -33,9 +33,9 @@ su('admin');
 // 创建测试实例
 $gitlabTest = new gitlabModelTest();
 
-r($gitlabTest->apiGetMergeRequestsTest(1, 18)) && p() && e('~~'); // 步骤1：使用有效的GitLab ID和项目ID获取合并请求
+r(count($gitlabTest->apiGetMergeRequestsTest(1, 18)) > 0) && p() && e('1'); // 步骤1：使用有效的GitLab ID和项目ID获取合并请求
 $result = $gitlabTest->apiGetMergeRequestsTest(1, 18);
 r(is_array($result)) && p() && e('1'); // 步骤2：验证返回结果是数组类型
-r($gitlabTest->apiGetMergeRequestsTest(999, 18)) && p() && e('~~'); // 步骤3：使用无效的GitLab ID测试错误处理
-r($gitlabTest->apiGetMergeRequestsTest(1, 999999)) && p() && e('~~'); // 步骤4：使用无效的项目ID测试边界处理
-r($gitlabTest->apiGetMergeRequestsTest(1, 0)) && p() && e('~~'); // 步骤5：使用边界值项目ID为0测试参数验证
+r(count($gitlabTest->apiGetMergeRequestsTest(999, 18)) == 0) && p() && e('1'); // 步骤3：使用无效的GitLab ID测试错误处理
+r(count($gitlabTest->apiGetMergeRequestsTest(1, 999999)) == 0) && p() && e('1'); // 步骤4：使用无效的项目ID测试边界处理
+r(count($gitlabTest->apiGetMergeRequestsTest(1, 0)) == 0) && p() && e('1'); // 步骤5：使用边界值项目ID为0测试参数验证
