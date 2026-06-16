@@ -924,13 +924,17 @@ class story extends control
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
         if(empty($storyIdList)) $this->locate($url);
 
-        $storyList    = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
-        $typeList     = array_unique(array_column($storyList, 'type'));
-        $invalidTypes = [];
-        foreach($typeList as $type) if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+        $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
 
+        $invalidTypes       = [];
         $invalidStoryIdList = [];
         $allowedStoryIdList = [];
+
+        /* 判断是否有选中的需求类型的提交评审权限。 */
+        $typeList = array_unique(array_column($storyList, 'type'));
+        foreach($typeList as $type) if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+
+        /* 判断选中的需求状态是否符合提交评审的条件。 */
         foreach($storyList as $story)
         {
             if(!common::hasPriv($story->type, 'batchsubmitreview')) continue;
