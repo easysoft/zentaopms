@@ -31,6 +31,7 @@ $lang->story->recallAction       = 'Undo';
 $lang->story->relation           = 'Relations';
 $lang->story->needReview         = 'Need Review';
 $lang->story->batchReview        = 'Mehere prüfen';
+$lang->story->batchSubmitReview  = 'Batch Submit Review';
 $lang->story->edit               = "Bearbeiten";
 $lang->story->editDraft          = "Entwurf bearbeiten";
 $lang->story->batchEdit          = "Mehere bearbeiten";

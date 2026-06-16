@@ -31,6 +31,7 @@ $lang->story->recallAction       = 'Undo';
 $lang->story->relation           = 'Relations';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
+$lang->story->batchSubmitReview  = 'Batch Submit Review';
 $lang->story->edit               = "Editer Story";
 $lang->story->editDraft          = "Modifier le projet";
 $lang->story->batchEdit          = "Editer par Lot";

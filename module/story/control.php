@@ -909,6 +909,7 @@ class story extends control
     }
 
     /**
+     * 批量提交评审。
      * Batch submit review.
      *
      * @param  int    $productID
@@ -918,7 +919,18 @@ class story extends control
      */
     public function batchSubmitReview(int $productID, string $storyType = 'story')
     {
-        $url = $this->session->storyList ?: inlink('browse', "productID=$productID&storyType=$storyType");
+        if($_POST)
+        {
+            $this->story->replaceURLang($storyType);
+
+            $stories = $this->storyZen->buildStoriesForBatchSubmitReview();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->story->batchSubmitReview($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
 
         $storyIdList = array();
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
@@ -962,10 +974,12 @@ class story extends control
         $reviewers = $product->reviewer;
         if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
 
-        $this->view->storyIdList = $allowedStoryIdList;
-        $this->view->message     = $message;
-        $this->view->reviewers   = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-        $this->view->needReview  = $this->app->user->account == $product->PO ? "checked='checked'" : "";
+        $this->view->stories   = $this->story->getByList($allowedStoryIdList);
+        $this->view->product   = $product;
+        $this->view->productID = $productID;
+        $this->view->storyType = $storyType;
+        $this->view->message   = $message;
+        $this->view->reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
 
         $this->display();
     }

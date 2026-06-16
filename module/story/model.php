@@ -1529,6 +1529,30 @@ class storyModel extends model
     }
 
     /**
+     * Batch submit review.
+     *
+     * @param  array $stories
+     * @access public
+     * @return bool
+     */
+    public function batchSubmitReview(array $stories): bool
+    {
+        foreach($stories as $storyID => $story)
+        {
+            $changes = $this->submitReview((int)$storyID, $story);
+            if($changes === false) return false;
+
+            if($changes)
+            {
+                $actionID = $this->loadModel('action')->create('story', (int)$storyID, 'submitReview');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Subdivide story
      *
      * @param  int    $storyID
