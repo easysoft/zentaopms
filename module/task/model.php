@@ -2190,7 +2190,7 @@ class taskModel extends model
         if(!$taskID) return [];
 
         $task = $this->fetchByID($taskID);
-        if(!$task) return [];
+        if(!$task || empty($task->path)) return [];
 
         return $this->dao->select('id')->from(TABLE_TASK)
             ->where('path')->like($task->path . '%') // 去除左侧的模糊查询以利用索引提高性能。Remove the left fuzzy query to use index to improve performance.
