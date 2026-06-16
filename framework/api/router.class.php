@@ -256,6 +256,15 @@ class api extends router
             /* Cache URL params' names and values if this route matches the current HTTP request. */
             if(!preg_match('#^' . $patternAsRegex . '$#', $this->path, $paramValues)) continue;
 
+            $httpActions = array('get', 'post', 'put', 'delete', 'options');
+            $routeActions = is_array($info) ? array_intersect($httpActions, array_keys($info)) : array();
+
+            /*
+             * Routes without explicit method declarations are treated as GET-only.
+             * This avoids POST/PUT/DELETE requests being swallowed by generic resource redirects.
+             */
+            if(empty($routeActions) && $this->action != 'get') continue;
+
             return array($info, $paramValues);
         }
 
