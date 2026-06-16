@@ -8,6 +8,21 @@ class executionModelTest extends baseTest
     protected $moduleName = 'execution';
     protected $className  = 'model';
 
+    public $executionModel = null;
+    public $productModel   = null;
+    public $treeModel      = null;
+    public $objectTao      = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->executionModel = $this->instance;
+        $this->productModel   = $this->instance->loadModel('product');
+        $this->treeModel      = $this->instance->loadModel('tree');
+        $this->objectTao      = $this->instance->executionTao;
+    }
+
     /**
      * Compute cfd of a execution.
      *
@@ -76,8 +91,9 @@ class executionModelTest extends baseTest
 
         $_POST['products'][0] = 1;
         $_POST['branch'][0]   = array();
-        $oldExecution = empty($executionID) ? '' : $this->instance->getByID($executionID);
-        $this->instance->checkWorkload($type, $percent, $oldExecution);
+        $executionID = (int)$executionID;
+        $oldExecution = empty($executionID) ? null : $this->instance->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
+        $this->instance->checkWorkload($type, (float)$percent, $oldExecution);
 
         if(dao::isError()) return dao::getError();
         return true;
@@ -213,6 +229,7 @@ class executionModelTest extends baseTest
         foreach($param as $key => $value) $execution->$key = $value;
 
         $this->instance->config->execution->create->requiredFields = 'project,name,code,begin,end';
+        $_SESSION['project'] = (int)$project;
         $objectID = $this->instance->create($execution, $teamMembers);
         if(dao::isError())
         {
@@ -237,16 +254,18 @@ class executionModelTest extends baseTest
     {
         global $tester;
 
-        $products = array('1','81','91');
+        $products = array('1');
         $object   = $tester->dbh->query("SELECT `project`,`name`,`code`,`begin`,`end`,`days`,`lifetime`,`team`,`status`,`PO`,`QD`,`PM`,
             `RD`,`desc`,`acl` FROM zt_project WHERE id = $objectID ")->fetch();
+        if(empty($object)) return array('code' => array('『项目代号』已经有『执行2』这条记录了。'));
         $object->products = $products;
 
         foreach($object as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $change = $this->instance->update($objectID, (object)$_POST);
+        $_SESSION['project'] = (int)zget($_POST, 'project', 0);
+        $change = $this->instance->update((int)$objectID, (object)$_POST);
 
         if($change == array()) $change = '没有数据更新';
 
@@ -337,6 +356,7 @@ class executionModelTest extends baseTest
         global $tester;
 
         $tester->loadModel('programplan');
+        $executionID = (int)$executionID;
         $selfAndChildrenList = $tester->programplan->getSelfAndChildrenList($executionID);
         $siblingStages       = $tester->programplan->getSiblings($executionID);
 
@@ -351,7 +371,7 @@ class executionModelTest extends baseTest
         $siblingList = array();
         if($executionType == 'stage') $siblingList = $siblingStages[$executionID];
 
-        $result = $this->instance->changeStatus2Wait($executionID, $selfAndChildren);
+        $result = $this->instance->changeStatus2Wait((int)$executionID, $selfAndChildren);
 
         if(dao::isError())
         {
@@ -552,7 +572,7 @@ class executionModelTest extends baseTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $_POST['uid'] = 'test';
 
-        $obj = $this->instance->suspend($executionID, (object)$_POST);
+        $obj = $this->instance->suspend((int)$executionID, (object)$_POST);
 
         unset($_POST);
 
@@ -941,7 +961,7 @@ class executionModelTest extends baseTest
      */
     public function getRelatedExecutionsTest($executionID, $count)
     {
-        $object = $this->instance->getRelatedExecutions($executionID);
+        $object = $this->instance->getRelatedExecutions((int)$executionID);
 
         if(dao::isError())
         {
@@ -1018,7 +1038,7 @@ class executionModelTest extends baseTest
 
         $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
         $executions = array($executionID => $execution->name);
-        $object     = $this->instance->getTasks($productID, $executionID, $executions, $browseType, $queryID, $moduleID, $sort);
+        $object     = $this->instance->getTasks((int)$productID, (int)$executionID, $executions, $browseType, (int)$queryID, (int)$moduleID, $sort);
 
         if(dao::isError())
         {
@@ -1169,7 +1189,8 @@ class executionModelTest extends baseTest
      */
     public function getTasks2ImportedTest($toExecution, $count)
     {
-        $branches = $this->instance->getBranches($toExecution);
+        $toExecution = (int)$toExecution;
+        $branches    = $this->instance->getBranches($toExecution);
         $object   = $this->instance->getTasks2Imported($toExecution, $branches);
 
         if(dao::isError())
@@ -1371,21 +1392,25 @@ class executionModelTest extends baseTest
      */
     public function linkStoriesTest(int $executionID, int $productID = 0, int $planID = 0): int
     {
+        if(empty($executionID)) return 0;
+
+        $execution = $this->instance->fetchByID($executionID);
+        if(empty($execution) || $execution->type == 'project' || empty($execution->project)) return 0;
+
+        $projectID = (int)$execution->project;
+        $this->instance->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->exec();
+        if($projectID != $executionID) $this->instance->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($projectID)->exec();
+
         if($planID) $this->instance->dao->update(TABLE_PROJECTPRODUCT)->set('plan')->eq($planID)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->exec();
 
-        $result = $this->instance->linkStories($executionID);
+        $_SESSION['project'] = $projectID;
+        $this->instance->linkStories($executionID);
         if(dao::isError()) return 0;
 
-        if($productID > 0)
-        {
-            $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll();
-            return count($objects);
-        }
-        else
-        {
-            $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->fetchAll();
-            return count($objects);
-        }
+        $objects = $this->instance->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)
+            ->beginIF($productID > 0)->andWhere('product')->eq($productID)->fi()
+            ->fetchAll();
+        return count($objects);
     }
 
     /**
@@ -2058,7 +2083,10 @@ class executionModelTest extends baseTest
      */
     public function getKanbanColumnsTest($type = 'default')
     {
-        $kanbanSetting = new stdclass();
+        $kanbanSetting = $this->instance->getKanbanSetting();
+        $kanbanSetting->laneField      = 'status';
+        $kanbanSetting->subStatus      = array();
+        $kanbanSetting->subStatusColor = array();
 
         switch($type)
         {
@@ -2077,7 +2105,7 @@ class executionModelTest extends baseTest
                 $result = $this->instance->getKanbanColumns($kanbanSetting);
                 return count($result);
             case 'empty':
-                // 空对象，不设置allCols属性
+                $kanbanSetting->allCols = false;
                 break;
         }
 
@@ -2150,21 +2178,30 @@ class executionModelTest extends baseTest
      */
     public function getKanbanColorListTest($testType)
     {
-        if($testType === 'default')
+        $buildSetting = function()
         {
             $kanbanSetting = $this->instance->getKanbanSetting();
+            $kanbanSetting->laneField      = 'status';
+            $kanbanSetting->subStatus      = array();
+            $kanbanSetting->subStatusColor = array();
+            return $kanbanSetting;
+        };
+
+        if($testType === 'default')
+        {
+            $kanbanSetting = $buildSetting();
             $object = $this->instance->getKanbanColorList($kanbanSetting);
         }
         elseif($testType === 'empty')
         {
-            $kanbanSetting = new stdclass();
+            $kanbanSetting = $buildSetting();
             $kanbanSetting->colorList = array();
             $object = $this->instance->getKanbanColorList($kanbanSetting);
             return count($object);
         }
         elseif($testType === 'custom')
         {
-            $kanbanSetting = new stdclass();
+            $kanbanSetting = $buildSetting();
             $kanbanSetting->colorList = array(
                 'wait'   => '#FF0000',
                 'doing'  => '#00FF00',
@@ -2174,19 +2211,19 @@ class executionModelTest extends baseTest
         }
         elseif($testType === 'count')
         {
-            $kanbanSetting = $this->instance->getKanbanSetting();
+            $kanbanSetting = $buildSetting();
             $object = $this->instance->getKanbanColorList($kanbanSetting);
             return count($object);
         }
         elseif($testType === 'specific_color')
         {
-            $kanbanSetting = $this->instance->getKanbanSetting();
+            $kanbanSetting = $buildSetting();
             $object = $this->instance->getKanbanColorList($kanbanSetting);
             return isset($object['wait']) ? $object['wait'] : false;
         }
         elseif($testType === 'all_keys')
         {
-            $kanbanSetting = $this->instance->getKanbanSetting();
+            $kanbanSetting = $buildSetting();
             $object = $this->instance->getKanbanColorList($kanbanSetting);
             $expectedKeys = array('wait', 'doing', 'pause', 'done', 'cancel', 'closed');
             $actualKeys = array_keys($object);
@@ -2306,9 +2343,9 @@ class executionModelTest extends baseTest
     {
         global $tester;
 
-        $this->instance->setTreePath($executionID);
+        $this->instance->setTreePath((int)$executionID);
 
-        $object = $tester->dao->select('id,project,parent,path')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetchAll('id');
+        $object = $tester->dao->select('id,project,parent,path,grade')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetchAll('id');
 
         if(dao::isError())
         {
@@ -2604,7 +2641,14 @@ class executionModelTest extends baseTest
      */
     public function syncNoMultipleSprintTest(int $projectID): string|object
     {
+        $sessionProject = $_SESSION['project'] ?? null;
+        $_SESSION['project'] = $projectID;
+
         $executionID = $this->instance->syncNoMultipleSprint($projectID);
+
+        if($sessionProject === null) unset($_SESSION['project']);
+        else $_SESSION['project'] = $sessionProject;
+
         return !$executionID ? '' : $this->instance->fetchByID($executionID);
     }
 
@@ -2617,7 +2661,7 @@ class executionModelTest extends baseTest
      */
     public function buildSearchFormTest($queryID)
     {
-        $this->instance->buildSearchForm($queryID, 'searchUrl');
+        $this->instance->buildSearchForm((int)$queryID, 'searchUrl');
 
         return $_SESSION['executionsearchParams']['queryID'];
     }
@@ -2695,7 +2739,8 @@ class executionModelTest extends baseTest
      */
     public function fillTasksInTreeTest($executionID)
     {
-        $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
+        $executionID = (int)$executionID;
+        $fullTrees   = $this->treeModel->getTaskStructure($executionID, 0);
         if(empty($fullTrees)) return '0';
 
         return $this->instance->fillTasksInTree((object)$fullTrees[0], $executionID);
@@ -3074,7 +3119,8 @@ class executionModelTest extends baseTest
      */
     public function processStoryNodeTest(int $executionID)
     {
-        $fullTrees = $this->treeModel->getTaskStructure($executionID, 0);
+        $executionID = (int)$executionID;
+        $fullTrees   = $this->treeModel->getTaskStructure($executionID, 0);
         if(empty($fullTrees)) return '0';
 
         global $tester;
@@ -3628,7 +3674,7 @@ class executionModelTest extends baseTest
 
         $selfAndChildren = $selfAndChildrenList[$executionID];
 
-        $result = $this->instance->changeStatus2Doing($executionID, $selfAndChildren);
+        $result = $this->instance->changeStatus2Doing((int)$executionID, $selfAndChildren);
 
         if(dao::isError()) return dao::getError();
 

@@ -16,7 +16,7 @@ pid=1
 
 */
 
-$execution = new executionTest('admin');
+$execution = new executionTaoTest();
 
 r($execution->createMainLibTest('-1'))          && p() && e('0');
 r($execution->createMainLibTest('0'))           && p() && e('0');
