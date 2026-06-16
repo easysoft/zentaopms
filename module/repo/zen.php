@@ -1729,7 +1729,7 @@ class repoZen extends repo
         if((!$providerID && !empty($providers)) || !isset($providers[$providerID])) $providerID = empty($providers) ? 0 : key($providers);
         $provider = $this->provider->getByID($providerID);
 
-        $repos   = $this->repo->getProviderRepos($provider);
+        $repos   = !$provider ? array() : $this->repo->getProviderRepos($provider);
         $groupID = helper::safe64decode($groupID);
         $groups  = $groupRepos = array();
         foreach($repos as $repo)
@@ -1767,7 +1767,7 @@ class repoZen extends repo
         }
 
         $this->view->providers = $providers;
-        $this->view->provider  = $provider;
+        $this->view->provider  = $provider ? $provider : array();
         $this->view->groups    = $groups;
         $this->view->repos     = $groupRepos;
     }
