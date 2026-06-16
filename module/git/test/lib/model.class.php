@@ -8,6 +8,15 @@ class gitModelTest extends baseTest
     protected $moduleName = 'git';
     protected $className  = 'model';
 
+    public $gitModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->gitModel = $this->instance;
+    }
+
     /**
      * Test updateCommit method.
      *
