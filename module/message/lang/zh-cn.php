@@ -75,3 +75,4 @@ $lang->message->label->moved        = '移动';
 $lang->message->label->nearing      = '到期提醒';
 $lang->message->label->published    = '发布';
 $lang->message->label->changestatus = '修改发布状态';
+$lang->message->label->mentioned    = '@通知';

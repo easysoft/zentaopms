@@ -75,3 +75,4 @@ $lang->message->label->moved        = 'move';
 $lang->message->label->nearing      = 'Due Reminder';
 $lang->message->label->published    = 'publish';
 $lang->message->label->changestatus = 'change status';
+$lang->message->label->mentioned    = '@Mention';
