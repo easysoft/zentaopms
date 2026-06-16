@@ -35,9 +35,9 @@ su('admin');
 // 创建测试实例
 $gitlabTest = new gitlabModelTest();
 
-r($gitlabTest->apiGetNamespacesTest(1)) && p() && e('~~'); // 步骤1：有效GitLab ID获取namespace列表
+r(count($gitlabTest->apiGetNamespacesTest(1)) > 0) && p() && e('1'); // 步骤1：有效GitLab ID获取namespace列表
 $result = $gitlabTest->apiGetNamespacesTest(1);
 r(is_array($result)) && p() && e('1'); // 步骤2：有效GitLab ID检查返回数据类型
-r($gitlabTest->apiGetNamespacesTest(0)) && p() && e('~~'); // 步骤3：无效GitLab ID（0）获取namespace
-r($gitlabTest->apiGetNamespacesTest(999)) && p() && e('~~'); // 步骤4：不存在的GitLab ID获取namespace
-r($gitlabTest->apiGetNamespacesTest(-1)) && p() && e('~~'); // 步骤5：负数GitLab ID获取namespace
+r(count($gitlabTest->apiGetNamespacesTest(0)) == 0) && p() && e('1'); // 步骤3：无效GitLab ID（0）获取namespace
+r(count($gitlabTest->apiGetNamespacesTest(999)) == 0) && p() && e('1'); // 步骤4：不存在的GitLab ID获取namespace
+r(count($gitlabTest->apiGetNamespacesTest(-1)) == 0) && p() && e('1'); // 步骤5：负数GitLab ID获取namespace

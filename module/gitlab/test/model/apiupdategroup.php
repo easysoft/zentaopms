@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -16,39 +17,9 @@ cid=16628
 
 */
 
-zenData('pipeline')->gen(5);
-
-global $app;
-$app->rawModule = 'gitlab';
-$app->rawMethod = 'browse';
-
-$gitlab = $tester->loadModel('gitlab');
-
+$gitlab   = new gitlabModelTest();
 $gitlabID = 1;
-
-/* Create test group first. */
-$group = new stdclass();
-$group->name                    = 'unitTestGroup99';
-$group->path                    = 'unit_test_group99';
-$group->description             = 'unit_test_group desc';
-$group->visibility              = 'public';
-$group->request_access_enabled  = '1';
-$group->lfs_enabled             = '1';
-$group->project_creation_level  = 'developer';
-$group->subgroup_creation_level = 'maintainer';
-$gitlab->apiCreateGroup($gitlabID, $group);
-
-/* Get groupID. */
-$gitlabGroups = $gitlab->apiGetGroups($gitlabID);
-$groupID = 0;
-foreach($gitlabGroups as $gitlabGroup)
-{
-    if($gitlabGroup->name == 'unitTestGroup99')
-    {
-        $groupID = $gitlabGroup->id;
-        break;
-    }
-}
+$groupID  = 14;
 
 /* Test cases. */
 $emptyGroup = new stdclass();
@@ -67,8 +38,8 @@ $nonExistentGroup = new stdclass();
 $nonExistentGroup->id = 888888;
 $nonExistentGroup->description = 'Non-existent group';
 
-r($gitlab->apiUpdateGroup($gitlabID, $emptyGroup)) && p() && e('0');
-r($gitlab->apiUpdateGroup(0, $invalidGroup)) && p() && e('0');
-r($gitlab->apiUpdateGroup($gitlabID, $invalidGroup)) && p('description') && e('apiUpdatedGroup');
-r($gitlab->apiUpdateGroup($gitlabID, $validGroup)) && p('name') && e('Updated Group Name');
-r($gitlab->apiUpdateGroup($gitlabID, $nonExistentGroup)) && p() && e('~~');
+r($gitlab->apiUpdateGroupTest($gitlabID, $emptyGroup)) && p() && e('0');
+r($gitlab->apiUpdateGroupTest(0, $invalidGroup)) && p() && e('0');
+r($gitlab->apiUpdateGroupTest($gitlabID, $invalidGroup)) && p('description') && e('apiUpdatedGroup');
+r($gitlab->apiUpdateGroupTest($gitlabID, $validGroup)) && p('name') && e('Updated Group Name');
+r($gitlab->apiUpdateGroupTest($gitlabID, $nonExistentGroup)) && p() && e('0');

@@ -18,14 +18,6 @@ cid=16619
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('pipeline');
-$table->id->range('1-10');
-$table->name->range('pipeline{10}');
-$table->product->range('1-3');
-$table->execution->range('1-5');
-$table->url->range('http://localhost/gitlab/project/2/pipelines/8');
-$table->gen(5);
-
 su('admin');
 
 $gitlabTest = new gitlabModelTest();

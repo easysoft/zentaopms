@@ -19,12 +19,6 @@ cid=16665
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('task')->gen(20);
-zenData('bug')->gen(10);
-zenData('story')->gen(10);
-zenData('pipeline')->gen(5);
-zenData('relation')->loadYaml('relation')->gen(4);
-
 su('admin');
 
 $gitlab = new gitlabModelTest();
@@ -56,11 +50,11 @@ $projectID  = 999;
 $issueID    = 1;
 $objectType = 'task';
 $objectID   = 1;
-r($gitlab->saveImportedIssueTest($gitlabID, $projectID, $objectType, $objectID, $issueID)) && p() && e('~~'); // 测试步骤5：测试无效的GitLab项目ID的处理
+r($gitlab->saveImportedIssueTest($gitlabID, $projectID, $objectType, $objectID, $issueID) === null) && p() && e('1'); // 测试步骤5：测试无效的GitLab项目ID的处理
 
 $gitlabID   = 1;
 $projectID  = 2;
 $issueID    = 1;
 $objectType = 'task';
 $objectID   = 0;
-r($gitlab->saveImportedIssueTest($gitlabID, $projectID, $objectType, $objectID, $issueID)) && p() && e('~~'); // 测试步骤6：测试空对象ID的边界情况
+r($gitlab->saveImportedIssueTest($gitlabID, $projectID, $objectType, $objectID, $issueID) === null) && p() && e('1'); // 测试步骤6：测试空对象ID的边界情况
