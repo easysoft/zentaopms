@@ -641,8 +641,8 @@ class programplan extends control
         if((!empty($minPlanBegin) && $minPlanBegin < $project->begin) || (!empty($maxPlanEnd) && $maxPlanEnd > $project->end)) return $this->send(array('result' => 'fail', 'message' => $this->lang->programplan->canNotCallback));
 
         /* 获取最新版本。*/
-        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task', false, '', 0, 'id_asc');
-        $currentStages  = $currentTasks = array();
+        $currentVersion = $this->programplan->getDataForGantt($projectID, 0, 0, 'date,task,point', false, '', 0, 'id_asc');
+        $currentStages  = $currentTasks = $currentPoints = array();
         foreach($currentVersion['data'] as $version)
         {
             if($version->type == 'plan') $currentStages[$version->id] = $version->id;
@@ -652,6 +652,8 @@ class programplan extends control
                 $taskID = explode('-', $version->id)[1];
                 $currentTasks[$taskID] = $taskID;
             }
+
+            if($version->type == 'point') $currentPoints[$version->id] = $version;
 
             $version->end_date = date('d-m-Y', strtotime($version->endDate) + 86400);
         }
@@ -691,6 +693,17 @@ class programplan extends control
                 if(strpos((string)$version->parent, '-') === false) $parentTasks[$taskID] = $taskID;
                 if(isset($currentTasks[$taskID])) unset($currentTasks[$taskID]);
             }
+            if($version->type == 'point')
+            {
+                $currentPoint = $currentPoints[$version->id] ?? null;
+                $result = $this->programplan->rollbackPoint($version, $currentPoint);
+                if(!$result)
+                {
+                    $this->dao->rollback();
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
+                if(isset($currentPoints[$version->id])) unset($currentPoints[$version->id]);
+            }
         }
 
         /* 回滚任务依赖关系。*/
@@ -707,6 +720,16 @@ class programplan extends control
         {
             $this->dao->rollback();
             return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        }
+
+        /* 删除回滚版本中没有的评审点。*/
+        if(!empty($currentPoints))
+        {
+            foreach($currentPoints as $point)
+            {
+                $pointObjectID = explode('-', $point->id)[2];
+                $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(0)->where('id')->eq($pointObjectID)->exec();
+            }
         }
 
         $this->dao->commit();
