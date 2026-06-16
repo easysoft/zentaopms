@@ -13337,6 +13337,8 @@ class upgradeModel extends model
         }
         foreach($reviewedByMap as $approvalID => $accounts) $reviewedByMap[$approvalID] = implode(',', $accounts);
 
+        $this->app->loadLang('workflowlabel');
+        $this->app->loadLang('workflowfield');
         foreach($tables as $module => $table)
         {
             if(!$this->checkFieldsExists($table, 'reviewedBy')) $this->dbh->exec("ALTER TABLE `{$table}` ADD `reviewedBy` text NULL");
@@ -13362,6 +13364,17 @@ class upgradeModel extends model
             $workflowField->createdBy   = 'admin';
             $workflowField->createdDate = helper::now();
             $this->dao->insert(TABLE_WORKFLOWFIELD)->data($workflowField)->autoCheck()->exec();
+
+            $workflowlabel = new stdclass();
+            $workflowlabel->module      = $module;
+            $workflowlabel->action      = 'browse';
+            $workflowlabel->code        = 'reviewedby';
+            $workflowlabel->label       = $this->lang->workflowlabel->approval->labels['reviewedby'];
+            $workflowlabel->params      = '[{"field":"deleted","operator":"equal","value":"0"},{"field":"reviewedBy","operator":"include","value":"currentUser"}]';
+            $workflowlabel->role        = 'approval';
+            $workflowlabel->createdBy   = 'admin';
+            $workflowlabel->createdDate = helper::now();
+            $this->dao->insert(TABLE_WORKFLOWLABEL)->data($workflowlabel)->autoCheck()->exec();
         }
 
         return !dao::isError();
