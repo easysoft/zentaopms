@@ -560,9 +560,10 @@ class messageModel extends model
         }
         else
         {
-            if(empty($this->config->$objectType->form->{$method})) return;
+            $module = $method == 'comment' ? 'action' : $objectType;
+            if(empty($this->config->{$module}->form->{$method})) return;
 
-            $formConfig = $this->config->{$objectType}->form->{$method};
+            $formConfig = $this->config->{$module}->form->{$method};
 
             $mentionUsers = $this->extractMentionUsersFromForm($formConfig, $object);
             if($oldObject) $oldMentionUsers = $this->extractMentionUsersFromForm($formConfig, $oldObject);

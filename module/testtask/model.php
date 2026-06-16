@@ -36,7 +36,11 @@ class testtaskModel extends model
         if(dao::isError()) return false;
 
         $taskID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $actionID = $this->loadModel('action')->create('testtask', $taskID, 'opened');
+
+        $testtask->id = $taskID;
+        $this->loadModel('message')->sendMentionNotice('testtask', 'create', $actionID, $testtask);
 
         return $taskID;
     }
@@ -735,7 +739,7 @@ class testtaskModel extends model
      */
     public function update(object $task, object $oldTask): array|bool
     {
-        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files')
+        $this->dao->update(TABLE_TESTTASK)->data($task, 'deleteFiles,renameFiles,files,comment')
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)

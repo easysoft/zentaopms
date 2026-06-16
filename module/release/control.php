@@ -165,7 +165,10 @@ class release extends control
             $releaseID = $this->release->create($releaseData, $this->post->sync ? true : false);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('release', $releaseID, 'opened');
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'opened');
+
+            $releaseData->id = $releaseID;
+            $this->loadModel('message')->sendMentionNotice('release', 'create', $actionID, $releaseData);
 
             $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
@@ -240,6 +243,9 @@ class release extends control
             {
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+                $releaseData->id = $releaseID;
+                $this->loadModel('message')->sendMentionNotice('release', 'edit', $actionID, $releaseData, $release);
             }
 
             $result  = $this->executeHooks($releaseID);
@@ -647,8 +653,12 @@ class release extends control
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
-
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
+            if($this->post->comment)
+            {
+                $release->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('release', 'publish', $actionID, $release);
+            }
             $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }

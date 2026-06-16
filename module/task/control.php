@@ -736,6 +736,12 @@ class task extends control
             {
                 $actionID = $this->loadModel('action')->create('task', $taskID, 'Paused', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $oldTask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('task', 'pause', $actionID, $oldTask);
+                }
             }
 
             $message = $this->executeHooks($taskID);

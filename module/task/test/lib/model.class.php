@@ -18,8 +18,13 @@ class taskModelTest extends baseTest
      */
     public function updateObject($objectID, $param = array())
     {
-        $object = $this->instance->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
+        $object = $this->instance->dbh->query("SELECT id, `project`, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
             `mode`, `story`, `color`,`desc`,`assignedTo`,`realStarted`,`design`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
+
+         $_SESSION['project'] = $object->project;
+
+        unset($object->project);
+
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
@@ -1833,7 +1838,7 @@ class taskModelTest extends baseTest
         if($status == 'done')   $action = 'Finished';
         if($status == 'closed') $action = 'Closed';
 
-        $oldTask = $this->instance->getByID($taskID);
+        $oldTask = $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         $changes = common::createChanges($oldTask, $task);
         $result  = $this->instance->afterChangeStatus($oldTask, $changes, $action, array());
         return $changes;
