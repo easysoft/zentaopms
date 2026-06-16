@@ -227,26 +227,40 @@ window.executeWithFormContext = async function(promptID)
     }
 };
 
-window.executeWithFormContextForTeammate = function(btn)
+window.executeWithFormContextForTeammate = function(source)
 {
-    var $btn       = $(btn);
-    var teammateID = $btn.attr('data-teammate-id');
-    var module     = $btn.attr('data-module');
-    var method     = $btn.attr('data-method');
+    let $btn = null;
+    if(source)
+    {
+        if(source.currentTarget) $btn = $(source.currentTarget).closest('[data-teammate-id]');
+        if(!$btn.length && source.target) $btn = $(source.target).closest('[data-teammate-id]');
+        if(!$btn.length && source.nodeType) $btn = $(source).closest('[data-teammate-id]');
+    }
+    if(!$btn.length && window.event)
+    {
+        const eventTarget = window.event.currentTarget || window.event.target;
+        if(eventTarget) $btn = $(eventTarget).closest('[data-teammate-id]');
+    }
+    if(!$btn.length) return;
 
-    var $form = getPageForm();
+    const teammateID = $btn.attr('data-teammate-id');
+    const module     = $btn.attr('data-module') || (window.config ? window.config.currentModule : '');
+    const method     = $btn.attr('data-method') || (window.config ? window.config.currentMethod : '');
+    if(!teammateID || !module || !method) return;
+
+    const $form = getPageForm();
     if(!$form.length) return;
 
-    var formHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($form) : null;
+    const formHelper = zui.zentaoFormHelper ? zui.zentaoFormHelper($form) : null;
     if(!formHelper || typeof formHelper.getFormSchema !== 'function') return;
 
-    var formSchema = formHelper.getFormSchema();
+    const formSchema = formHelper.getFormSchema();
     if(!formSchema) return;
 
     sessionStorage.setItem('aiFormSchema', JSON.stringify(formSchema));
     sessionStorage.setItem('aiFormPageUrl', window.location.href);
 
-    var url = $.createLink('aiteammate', 'assignagent',
+    const url = $.createLink('aiteammate', 'assignagent',
         'teammateID=' + teammateID + '&objectType=' + module + '&objectID=0&pageInfo=' + module + ',' + method + '&from=_&fromForm=1');
     zui.Modal.open({url: url, size: 'sm'});
     const checkInterval = setInterval(function(){

@@ -12,8 +12,6 @@ declare(strict_types=1);
 namespace zin;
 global $app;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 /* 检查是否需要确认撤销/移除。*/
 /* Build confirmeObject. */
 if($this->config->edition == 'ipd')
@@ -104,6 +102,7 @@ if(!$bug->deleted && $canModify)
 $sections = array();
 $sections[] = setting()
     ->title($lang->bug->legendSteps)
+    ->titleActions(array(aiAgentEntry(set::renderMode('entry'), set::objectVarName('bug'))))
     ->control('html')
     ->content($bug->steps);
 

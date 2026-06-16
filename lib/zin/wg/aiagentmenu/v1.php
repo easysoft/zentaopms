@@ -18,13 +18,39 @@ class aiAgentMenu extends wg
         $items = $this->prop('items');
         if(empty($items)) return null;
 
-        list($btnName, $btnClass) = $this->prop(array('btnName', 'btnClass'));
+        list($btnName, $btnClass, $placement) = $this->prop(array('btnName', 'btnClass', 'placement'));
+        $itemClass = 'btn ghost size-sm font-medium text-left';
 
         if(empty($btnName))
         {
             global $lang;
             $btnName = $lang->ai->prompts->common;
         }
+
+        $isFormPage = $this->prop('isFormPage');
+        $objectID   = $this->prop('objectID');
+
+        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass)
+        {
+            $itemProps = array
+            (
+                set::text($prompt->name),
+                set('class', $itemClass),
+            );
+
+            if($isFormPage)
+            {
+                $itemProps[] = set('data-on', 'click');
+                $itemProps[] = set('data-call', "executeWithFormContext({$prompt->id})");
+            }
+            else
+            {
+                $itemProps[] = set('url', helper::createLink('ai', 'promptExecute',
+                    "promptId={$prompt->id}&objectId={$objectID}&auto=0"));
+            }
+
+            return item(...$itemProps);
+        }, array_values($items));
 
         return dropdown
         (
@@ -35,24 +61,15 @@ class aiAgentMenu extends wg
                 set::caret(true),
                 $btnName,
             ),
-            set::placement($this->prop('placement')),
-            set::items
+            set::placement($placement),
+            to::menu
             (
-                array_map(function($prompt)
-                {
-                    return array(
-                        'text'  => $prompt->name,
-                        'click' => $this->prop('isFormPage')
-                            ? "executeWithFormContext({$prompt->id})"
-                            : null,
-                        'url'   => !$this->prop('isFormPage')
-                            ? helper::createLink('ai', 'promptExecute',
-                                "promptId={$prompt->id}&objectId={$this->prop('objectID')}&auto=0")
-                            : null,
-                        'class' => 'btn ghost size-sm font-medium text-left',
-                    );
-                }, $items)
-            ),
+                menu
+                (
+                    setClass('dropdown-menu'),
+                    ...$menuItems
+                )
+            )
         );
     }
 }

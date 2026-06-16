@@ -13,6 +13,7 @@ class aiAgentEntry extends wg
         'objectID?:int',
         'objectVarName?:string',
         'type?:string="auto"',
+        'renderMode?:string="full"',
         'showAgent?:bool=true',
         'showTeammate?:bool=true',
         'loadJs?:bool=true',
@@ -48,7 +49,9 @@ class aiAgentEntry extends wg
     {
         global $app, $config;
 
+        $renderMode = $this->prop('renderMode');
         $resourceNodes = $this->importResources();
+        if($renderMode === 'resources') return null;
 
         $app->control->loadModel('ai');
         if(!commonModel::hasPriv('ai', 'promptExecute')) return $resourceNodes;
@@ -80,6 +83,7 @@ class aiAgentEntry extends wg
             }
         }
 
+        if($renderMode === 'entry') return $entryNode;
         if($resourceNodes === null) return $entryNode;
         if($entryNode === null) return $resourceNodes;
         return html($resourceNodes, $entryNode);
@@ -118,7 +122,7 @@ class aiAgentEntry extends wg
 
         return div
         (
-            setClass('flex gap-2 inline-block pull-right'),
+            setClass('flex gap-2 inline-block pull-right mx-2'),
             $children,
         );
     }

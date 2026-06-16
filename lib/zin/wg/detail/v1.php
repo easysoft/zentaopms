@@ -299,7 +299,7 @@ CSS;
             (
                 setClass('detail-section-title row items-center gap-2'),
                 span(setClass('text-md py-1 font-bold'), $title),
-                $titleActions ? toolbar::create($titleActions) : null
+                $titleActions ? div(setClass('ml-auto'), toolbar::create($titleActions)) : null
             ) : null,
             div
             (
