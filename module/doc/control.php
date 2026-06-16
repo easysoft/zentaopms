@@ -1034,7 +1034,15 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
+            $response = $this->docZen->responseAfterEdit($doc, $changes, $files);
+
+            if(!empty($response['actionID']))
+            {
+                $docData->id = $docID;
+                $this->loadModel('message')->sendMentionNotice('doc', 'edit', $response['actionID'], $docData, $doc);
+            }
+
+            return $this->send($response);
         }
 
         /* Get doc and set menu. */

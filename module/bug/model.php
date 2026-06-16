@@ -417,6 +417,11 @@ class bugModel extends model
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Assigned', $bug->comment, $bug->assignedTo);
         $changes  = common::createChanges($oldBug, $bug);
         if($changes) $this->action->logHistory($actionID, $changes);
+        if($bug->comment)
+        {
+            $oldBug->comment = $bug->comment;
+            $this->loadModel('message')->sendMentionNotice('bug', 'assignTo', $actionID, $oldBug);
+        }
 
         return !dao::isError();
     }
@@ -455,6 +460,11 @@ class bugModel extends model
         $changes  = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $oldBug->id, 'bugConfirmed', $bug->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
+        if($bug->comment)
+        {
+            $oldBug->comment = $bug->comment;
+            $this->loadModel('message')->sendMentionNotice('bug', 'confirm', $actionID, $oldBug);
+        }
 
         return !dao::isError();
     }
@@ -513,6 +523,11 @@ class bugModel extends model
         $changes    = common::createChanges($oldBug, $bug);
         $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Resolved', $fileAction . (!empty($bug->comment) ? $this->post->comment : ''), $bug->resolution . (isset($bug->duplicateBug) ? ':' . $bug->duplicateBug : ''));
         if($changes) $this->action->logHistory($actionID, $changes);
+        if($bug->comment)
+        {
+            $oldBug->comment = $bug->comment;
+            $this->loadModel('message')->sendMentionNotice('bug', 'resolve', $actionID, $oldBug);
+        }
 
         /* If the edition is not pms, update feedback. */
         if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
@@ -619,6 +634,11 @@ class bugModel extends model
             $fileAction = !empty($files) ? $this->lang->addFiles . implode(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('bug', $bug->id, 'Activated', $fileAction . $bug->comment);
             $this->action->logHistory($actionID, $changes);
+            if($bug->comment)
+            {
+                $oldBug->comment = $bug->comment;
+                $this->loadModel('message')->sendMentionNotice('bug', 'activate', $actionID, $oldBug);
+            }
         }
         if($this->config->edition != 'open' && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, $bug->status, $oldBug->status, $oldBug->id);
 
@@ -647,6 +667,11 @@ class bugModel extends model
         $changes = common::createChanges($oldBug, $bug);
         $actionID = $this->loadModel('action')->create('bug', $bug->id, 'Closed', $this->post->comment);
         if($changes) $this->action->logHistory($actionID, $changes);
+        if($bug->comment)
+        {
+            $oldBug->comment = $bug->comment;
+            $this->loadModel('message')->sendMentionNotice('bug', 'close', $actionID, $oldBug);
+        }
 
         if($oldBug->execution)
         {

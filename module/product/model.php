@@ -380,9 +380,14 @@ class productModel extends model
         $this->dao->update(TABLE_PRODUCT)->data($fixData)->where('id')->eq($productID)->exec();
 
         /* Update and create linked data. */
-        $this->loadModel('action')->create('product', $productID, 'opened');
+        $actionID = $this->loadModel('action')->create('product', $productID, 'opened');
+
+        $product->id = $productID;
+        $this->loadModel('message')->sendMentionNotice('product', 'create', $actionID, $product);
+
         $uid = empty($this->post->uid) ? '' : $this->post->uid;
         $this->loadModel('file')->updateObjectID($uid, $productID, 'product');
+
         $this->productTao->createMainLib($productID);
         if($product->whitelist)     $this->loadModel('personnel')->updateWhitelist(explode(',', $product->whitelist), 'product', $productID);
         if($product->acl != 'open') $this->loadModel('user')->updateUserView(array($productID), 'product');
@@ -426,6 +431,8 @@ class productModel extends model
         {
             $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            $this->loadModel('message')->sendMentionNotice('product', 'edit', $actionID, $product, $oldProduct);
         }
 
         return $changes;
@@ -500,12 +507,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function close(int $productID, object $product, string|false $comment = ''): array|false
+    public function close(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -513,10 +520,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Closed', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'close', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }
@@ -531,12 +544,12 @@ class productModel extends model
      * @access public
      * @return array|false
      */
-    public function activate(int $productID, object $product, string|false $comment = ''): array|false
+    public function activate(int $productID, object $product): array|false
     {
         $oldProduct = $this->getByID($productID);
         if(empty($product)) return false;
 
-        $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
+        $this->dao->update(TABLE_PRODUCT)->data($product, 'comment')->autoCheck()
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
@@ -544,10 +557,16 @@ class productModel extends model
         if(dao::isError()) return false;
 
         $changes = common::createChanges($oldProduct, $product);
-        if(!empty($comment) or !empty($changes))
+        if(!empty($product->comment) or !empty($changes))
         {
-            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $comment);
+            $actionID = $this->loadModel('action')->create('product', $productID, 'Activated', $product->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if(!empty($product->comment))
+            {
+                $oldProduct->comment = $product->comment;
+                $this->loadModel('message')->sendMentionNotice('product', 'activate', $actionID, $oldProduct);
+            }
         }
         return $changes;
     }

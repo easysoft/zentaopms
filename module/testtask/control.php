@@ -598,6 +598,8 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'edited', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                $this->loadModel('message')->sendMentionNotice('testtask', 'edit', $actionID, $task, $oldTask);
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -632,6 +634,7 @@ class testtask extends control
      */
     public function start(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForStart($testtaskID);
@@ -643,6 +646,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'start', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -650,7 +659,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -671,6 +679,8 @@ class testtask extends control
      */
     public function close(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
+
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForClose($testtaskID);
@@ -682,6 +692,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Closed', $this->post->comment);
                 if($changes) $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'close', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -689,7 +705,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -710,6 +725,7 @@ class testtask extends control
      */
     public function block(int $testtaskID)
     {
+        $testtask = $this->testtask->getByID($testtaskID);
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForBlock($testtaskID);
@@ -721,6 +737,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Blocked', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'block', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -728,7 +750,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 
@@ -749,6 +770,8 @@ class testtask extends control
      */
     public function activate(int $testtaskID)
     {
+        $testtask  = $this->testtask->getByID($testtaskID);
+
         if(!empty($_POST))
         {
             $task = $this->testtaskZen->buildTaskForActivate($testtaskID);
@@ -760,6 +783,12 @@ class testtask extends control
             {
                 $actionID = $this->loadModel('action')->create('testtask', $testtaskID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
+
+                if($this->post->comment)
+                {
+                    $testtask->comment = $this->post->comment;
+                    $this->loadModel('message')->sendMentionNotice('testtask', 'activate', $actionID, $testtask);
+                }
             }
 
             $message = $this->executeHooks($testtaskID) ?: $this->lang->saveSuccess;
@@ -767,7 +796,6 @@ class testtask extends control
         }
 
         /* Set menu. */
-        $testtask  = $this->testtask->getByID($testtaskID);
         $this->testtaskZen->setMenu($testtask->product, $testtask->branch, $testtask->project, $testtask->execution, $testtask);
         $this->loadModel('product')->checkAccess($testtask->product, $this->products);
 

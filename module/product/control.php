@@ -362,7 +362,7 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForActivate($productID);
 
-            $this->product->activate($productID, $productData, $this->post->comment);
+            $this->product->activate($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($productID);
@@ -395,7 +395,7 @@ class product extends control
         {
             $productData = $this->productZen->buildProductForClose($productID);
 
-            $this->product->close($productID, $productData, $this->post->comment);
+            $this->product->close($productID, $productData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->executeHooks($productID);

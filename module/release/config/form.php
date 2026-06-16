@@ -31,3 +31,4 @@ $config->release->form->edit['deleteFiles']  = array('type' => 'array',        '
 $config->release->form->edit['renameFiles']  = array('type' => 'array',        'required' => false, 'default' => array());
 
 $config->release->form->publish = array();
+$config->release->form->publish['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
