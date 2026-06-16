@@ -113,6 +113,7 @@ class treeZen extends tree
      */
     protected function updateBrowseLang(string $viewType)
     {
+        $common = $this->lang->tree->common;
         switch($viewType)
         {
             case 'host':
@@ -147,7 +148,7 @@ class treeZen extends tree
         }
 
         $viewType = ucfirst($viewType);
-        $this->lang->tree->manage = isset($this->lang->tree->$viewType) ? $this->lang->tree->$viewType : $this->lang->tree->common;
+        $this->lang->tree->manage = isset($this->lang->tree->$viewType) ? $this->lang->tree->$viewType : $common;
     }
 
     /**
