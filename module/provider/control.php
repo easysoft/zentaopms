@@ -74,11 +74,20 @@ class provider extends control
 
             $response = array();
             $response['load'] = $this->createLink('provider', 'browse');
-            if($callback) $response['callback'] = $callback;
+            if($callback)
+            {
+                $response['callback'] = $callback;
+                if($callback == 'refreshProvider')
+                {
+                    $provider = $this->provider->fetchById($id);
+                    $response['callback'] = "window.refreshProvider('{$provider->type}')";
+                }
+            }
             return $this->sendSuccess($response);
         }
-        $this->view->title = $this->lang->provider->create;
-        $this->view->type  = $type;
+        $this->view->title    = $this->lang->provider->create;
+        $this->view->type     = $type;
+        $this->view->callback = $callback;
         $this->display();
     }
 
