@@ -18,16 +18,28 @@ cid=18675
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$table = zenData('story');
-$table->id->range('1-5');
-$table->product->range('1');
-$table->title->range('需求标题{1-5}');
-$table->status->range('active');
-$table->stage->range('wait');
-$table->type->range('story');
-$table->version->range('1');
-$table->openedBy->range('admin');
-$table->gen(5);
+$product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品1');
+$product->status->range('normal');
+$product->gen(1);
+
+$story = zenData('story');
+$story->id->range('1-5');
+$story->product->range('1');
+$story->title->range('需求标题{1-5}');
+$story->status->range('active');
+$story->stage->range('wait');
+$story->type->range('story');
+$story->version->range('1');
+$story->openedBy->range('admin');
+$story->gen(5);
+
+$storySpec = zenData('storyspec');
+$storySpec->story->range('1-5');
+$storySpec->version->range('1');
+$storySpec->title->range('需求标题{1-5}');
+$storySpec->gen(5);
 
 su('admin');
 
