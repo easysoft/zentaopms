@@ -310,7 +310,7 @@ class kanbanTaoTest extends baseTest
      */
     public function createKanbanTest($param)
     {
-        $this->instance->createKanban($param);
+        $this->invokeArgs('createKanban', [$param]);
 
         if(dao::isError()) return dao::getError();
 
