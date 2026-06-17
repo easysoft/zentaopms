@@ -3,10 +3,56 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+class holidayHttpClientStub
+{
+    public array $responses;
+
+    public function __construct(array $responses = array())
+    {
+        $this->responses = $responses;
+    }
+
+    public function request(string $url, $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true): string|array|bool
+    {
+        return (string)zget($this->responses, $url, '{"days":[]}');
+    }
+}
+
 class holidayModelTest extends baseTest
 {
     protected $moduleName = 'holiday';
     protected $className  = 'model';
+
+    private function prepareYearPairsData(array $years): void
+    {
+        global $tester;
+
+        $tester->dao->delete()->from(TABLE_HOLIDAY)->exec();
+
+        foreach(array_values($years) as $index => $year)
+        {
+            $date = sprintf('%s-01-%02d', $year, $index + 1);
+            $tester->dao->insert(TABLE_HOLIDAY)->data(array(
+                'name'  => "测试节假日{$year}-{$index}",
+                'type'  => $index % 2 === 0 ? 'holiday' : 'working',
+                'year'  => $year,
+                'begin' => $date,
+                'end'   => $date,
+                'desc'  => "测试{$year}"
+            ))->exec();
+        }
+    }
+
+    private function buildHolidayApiResponse(string $year): string
+    {
+        return json_encode((object)array(
+            'days' => array(
+                (object)array('date' => "{$year}-01-01", 'isOffDay' => true,  'name' => '元旦'),
+                (object)array('date' => "{$year}-01-02", 'isOffDay' => false, 'name' => '元旦后补班'),
+                (object)array('date' => "{$year}-01-03", 'isOffDay' => false, 'name' => '元旦后补班')
+            )
+        ));
+    }
 
     /**
      * 测试通过 ID 获取节假日。
@@ -55,6 +101,7 @@ class holidayModelTest extends baseTest
      */
     public function getYearPairsTest(): int|array
     {
+        $this->prepareYearPairsData(array('2023', '2024'));
         $objects = $this->instance->getYearPairs();
 
         if(dao::isError()) return dao::getError();
@@ -72,12 +119,12 @@ class holidayModelTest extends baseTest
      */
     public function getYearPairsTestWithSpecificYear(string $year): string|array
     {
-        global $tester;
-        $objects = $tester->dao->select('year,year')->from(TABLE_HOLIDAY)->where('year')->eq($year)->groupBy('year')->orderBy('year_desc')->fetchPairs();
+        $this->prepareYearPairsData(array('2023', $year));
+        $objects = $this->instance->getYearPairs();
 
         if(dao::isError()) return dao::getError();
 
-        return count($objects) > 0 ? $year : '0';
+        return isset($objects[$year]) ? $year : '0';
     }
 
     /**
@@ -108,6 +155,7 @@ class holidayModelTest extends baseTest
     public function getYearPairsTestWithEmptyYear(): int|array
     {
         global $tester;
+        $this->prepareYearPairsData(array('2023', '2024'));
         $tester->dao->update(TABLE_HOLIDAY)->set('year')->eq('')->where('id')->eq('1')->exec();
         $objects = $this->instance->getYearPairs();
 
@@ -125,16 +173,7 @@ class holidayModelTest extends baseTest
      */
     public function getYearPairsTestMultiYear(): int|array
     {
-        global $tester;
-        $tester->dao->insert(TABLE_HOLIDAY)->data(array(
-            'name' => '测试节假日',
-            'type' => 'holiday',
-            'year' => '2024',
-            'begin' => '2024-01-01',
-            'end' => '2024-01-01',
-            'desc' => '测试'
-        ))->exec();
-
+        $this->prepareYearPairsData(array('2023', '2024', '2025'));
         $objects = $this->instance->getYearPairs();
 
         if(dao::isError()) return dao::getError();
@@ -151,6 +190,7 @@ class holidayModelTest extends baseTest
      */
     public function getYearPairsTestOrderValidation(): string|array
     {
+        $this->prepareYearPairsData(array('2023', '2024', '2025'));
         $objects = $this->instance->getYearPairs();
 
         if(dao::isError()) return dao::getError();
@@ -465,14 +505,25 @@ class holidayModelTest extends baseTest
     public function getHolidayByAPITest(string $year): int|array
     {
         global $app;
+        $oldWwwRoot    = $app->wwwRoot;
+        $oldHttpClient = common::$httpClient;
+        $currentYear   = date('Y');
+        $apiRoot       = $this->instance->config->holiday->apiRoot;
+
         $app->wwwRoot = dirname(__FILE__, 5) . DS . 'www' . DS;
-        common::$httpClient = new httpClient();
+        common::$httpClient = new holidayHttpClientStub(array(
+            sprintf($apiRoot, $currentYear) => $this->buildHolidayApiResponse($currentYear),
+            sprintf($apiRoot, 'invalid')    => $this->buildHolidayApiResponse('2024')
+        ));
 
         if($year == 'this year') $year = '2023';
         if($year == 'last year') $year = '2022';
         if($year == 'next year') $year = '2024';
         if($year == 'invalid') $year = 'invalid';
         $objects = $this->instance->getHolidayByAPI($year);
+
+        common::$httpClient = $oldHttpClient;
+        $app->wwwRoot       = $oldWwwRoot;
 
         if(dao::isError()) return dao::getError();
 

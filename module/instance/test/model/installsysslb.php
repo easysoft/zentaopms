@@ -64,14 +64,14 @@ $validApp->app_version = '1.0.0';
 $validApp->version = '1.0.0';
 
 // 测试方法参数默认值
-$reflection = new ReflectionMethod($instanceTest->objectModel, 'installSysSLB');
+$reflection = new ReflectionMethod($instanceTest->instance, 'installSysSLB');
 $parameters = $reflection->getParameters();
 $k8nameParam = $parameters[1];
 $channelParam = $parameters[2];
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r(method_exists($instanceTest->objectModel, 'installSysSLB')) && p() && e('1'); // 步骤1：验证installSysSLB方法存在
+r(method_exists($instanceTest->instance, 'installSysSLB')) && p() && e('1'); // 步骤1：验证installSysSLB方法存在
 r(is_object($validApp)) && p() && e('1'); // 步骤2：验证app对象有效
 r($k8nameParam->getDefaultValue()) && p() && e('cne-lb'); // 步骤3：验证k8name参数默认值
 r($channelParam->getDefaultValue()) && p() && e('stable'); // 步骤4：验证channel参数默认值
-r(is_callable(array($instanceTest->objectModel, 'installSysSLB'))) && p() && e('1'); // 步骤5：验证方法可调用性
+r(is_callable(array($instanceTest->instance, 'installSysSLB'))) && p() && e('1'); // 步骤5：验证方法可调用性

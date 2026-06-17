@@ -229,6 +229,7 @@ class zfile
     public function removeFile($file)
     {
         if(!file_exists($file)) return true;
+        if(PHP_OS == 'WINNT') return unlink($file);
 
         $parentDir = dirname($file);
         if(!is_writable($parentDir) || !is_executable($parentDir)) return false;
