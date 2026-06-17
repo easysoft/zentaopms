@@ -31,11 +31,13 @@ $task->left->range('5{10}');
 $task->deleted->range('0{10}');
 $task->gen(10);
 
+zenData('taskspec')->gen(0);
+
 $programplan = new programplanModelTest();
 
 $taskObj = new stdclass();
 $taskObj->id             = '1-5';
-$taskObj->story          = 1;
+$taskObj->story          = '#1';
 $taskObj->begin          = '2024-06-01';
 $taskObj->deadline       = '2024-06-30';
 $taskObj->parent         = '1';
