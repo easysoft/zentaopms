@@ -2005,16 +2005,8 @@ class storyZen extends story
                 dao::$errors["reviewer[{$storyID}]"] = $this->lang->story->errorEmptyReviewedBy;
                 continue;
             }
-
-            if($needNotReview || empty($story->reviewer))
-            {
-                $story->status   = 'active';
-                $story->reviewer = array();
-            }
-
             $stories[$storyID] = $story;
         }
-
         return $stories;
     }
 

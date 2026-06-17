@@ -934,7 +934,7 @@ class story extends control
 
         $storyIdList = array();
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
-        if(empty($storyIdList)) $this->locate($url);
+        if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
 
@@ -967,12 +967,16 @@ class story extends control
         {
             $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
         }
-        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
+        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $this->session->storyList)));
 
         /* Get reviewers. */
         $product   = $this->product->getById($productID);
-        $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        $reviewers = '';
+        if($product)
+        {
+            $reviewers = $product->reviewer;
+            if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        }
 
         $this->view->stories   = $this->story->getByList($allowedStoryIdList);
         $this->view->product   = $product;
