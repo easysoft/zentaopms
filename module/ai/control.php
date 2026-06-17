@@ -723,7 +723,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm))
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty')
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];

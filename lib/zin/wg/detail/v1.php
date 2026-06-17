@@ -315,7 +315,8 @@ CSS;
         $sections = $this->prop('sections', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
-        $list = array();
+        $list                = array();
+        $firstSectionHandled = false;
         foreach($sections as $key => $item)
         {
             if($item === '-')
@@ -323,6 +324,19 @@ CSS;
                 $list[] = hr();
                 continue;
             }
+
+            if(!$firstSectionHandled)
+            {
+                if($item instanceof setting) $item = $item->toArray();
+                if(is_array($item))
+                {
+                    $titleActions   = $item['titleActions'] ?? array();
+                    $titleActions[] = aiAgentEntry(set::type('detail'));
+                    $item['titleActions'] = $titleActions;
+                }
+                $firstSectionHandled = true;
+            }
+
             $list[] = $this->buildSection($item, is_string($key) ? $key : null);
         }
 

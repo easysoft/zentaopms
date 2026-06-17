@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-aiFormInject();
-
 jsVar('window.executionID', $execution->id);
 jsVar('vision', $config->vision);
 jsVar('window.lifetime', $execution->lifetime);
@@ -65,7 +63,6 @@ formGridPanel
     set::title($lang->task->create),
     set::fields($fields),
     set::loadUrl($loadUrl),
-    to('headingActions', aiAgentEntry(set::type('form'))),
     on::change('[name=module]', 'loadExecutionStories'),
     on::change('[name=story]', 'setStoryRelated'),
     on::change('[name=type]', 'typeChange'),

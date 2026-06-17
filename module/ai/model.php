@@ -2888,6 +2888,28 @@ class aiModel extends model
     }
 
     /**
+     * Get prompts available for current entry page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $displayPosition
+     * @access public
+     * @return array
+     */
+    public function getPromptsForEntryPage(string $module, string $method, string $displayPosition): array
+    {
+        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->andWhere('displayPosition')->eq($displayPosition);
+
+        $actionPurpose = "{$module}.{$method}";
+        $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+        $prompts = $this->filterPromptsForExecution($prompts, true);
+        return array_values($prompts);
+    }
+
+    /**
      * Filter prompts by user's privilege and executable state.
      *
      * @param  array   $prompts

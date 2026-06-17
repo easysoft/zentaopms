@@ -55,6 +55,7 @@ class aiAgentEntry extends wg
 
         $app->control->loadModel('ai');
         if(!commonModel::hasPriv('ai', 'promptExecute')) return $resourceNodes;
+        if(!$this->isZAIConfigured($app)) return $resourceNodes;
 
         $app->loadLang('ai');
         $app->loadConfig('ai');
@@ -93,9 +94,10 @@ class aiAgentEntry extends wg
     {
         $children = array();
         $objectID = $this->getObjectID();
+        $availablePrompts = array_values(array_filter($prompts, static fn($prompt) => empty($prompt->unauthorized)));
 
         $objectVarName = $this->getObjectVarName($module, $method, $config);
-        if($this->prop('showAgent'))
+        if($this->prop('showAgent') && !empty($availablePrompts))
         {
             $children[] = aiAgentMenu
             (
@@ -122,7 +124,7 @@ class aiAgentEntry extends wg
 
         return div
         (
-            setClass('flex gap-2 inline-block pull-right mx-2'),
+            setClass('flex gap-2 inline-block mx-2'),
             $children,
         );
     }
@@ -172,10 +174,7 @@ class aiAgentEntry extends wg
         $type = $this->prop('type');
         if($type !== 'auto') return $type;
 
-        $menuConfig = $config->ai->menuPrint->locations[$module][$method] ?? null;
-        if(!$menuConfig) return 'detail';
-
-        return empty($menuConfig->objectVarName) ? 'form' : 'detail';
+        return 'none';
     }
 
     protected function getObjectID(): int
@@ -188,36 +187,18 @@ class aiAgentEntry extends wg
         $objectVarName = $this->prop('objectVarName');
         if($objectVarName) return $objectVarName;
 
-        $menuConfig = $config ? $config->ai->menuPrint->locations[$module][$method] ?? null : null;
-        return $menuConfig->objectVarName ?? $menuConfig->module ?? $module;
+        return $module;
     }
 
     protected function fetchPrompts(string $module, string $method, string $type, $app, $config): array
     {
-        if($type === 'form') return $app->control->ai->getPromptsForTargetForm($module, $method);
-
-        $menuConfig = $config->ai->menuPrint->locations[$module][$method] ?? null;
-        $configModule = $menuConfig->module ?? $module;
-        $prompts = $app->control->ai->getPromptsForUser($configModule);
-        $prompts = $app->control->ai->filterPromptsForExecution($prompts, true);
-
-        $universalFormPages = (array)$config->ai->universalFormPages;
-        if(!empty($universalFormPages))
-        {
-            $prompts = array_filter($prompts, function($p) use ($universalFormPages)
-            {
-                return !in_array($p->targetForm, $universalFormPages);
-            });
-        }
-
-        return array_values($prompts);
+        if(!in_array($type, array('form', 'detail'))) return array();
+        return $app->control->ai->getPromptsForEntryPage($module, $method, $type);
     }
 
     protected function fetchTeammates(array $promptIds, $app, $config): array
     {
-        $canAssign = !empty($config->enableAITeammate)
-            && hasPriv('aiteammate', 'assignagent')
-            && $config->edition != 'open';
+        $canAssign = $this->isTeammateAvailable($app, $config);
         if(!$canAssign || empty($promptIds)) return array();
 
         $teammates = $app->control->loadModel('aiteammate')->browse('0');
@@ -262,7 +243,7 @@ class aiAgentEntry extends wg
             'statuses'      => $GLOBALS['lang']->ai->prompts->statuses,
         ));
 
-        $canAssign = !empty($config->enableAITeammate) && hasPriv('aiteammate', 'assignagent') && $config->edition != 'open';
+        $canAssign = $this->isTeammateAvailable($app, $config);
         if($canAssign)
         {
             $teammates = $app->control->loadModel('aiteammate')->browse('0');
@@ -283,5 +264,20 @@ class aiAgentEntry extends wg
         }
 
         return null;
+    }
+
+    protected function isZAIConfigured($app): bool
+    {
+        return (bool)$app->control->loadModel('zai')->getSetting();
+    }
+
+    protected function isTeammateAvailable($app, $config): bool
+    {
+        if(!$this->isZAIConfigured($app)) return false;
+        if(empty($config->enableAITeammate)) return false;
+        if($config->edition == 'open') return false;
+        if(!hasPriv('aiteammate', 'assignagent')) return false;
+
+        return true;
     }
 }

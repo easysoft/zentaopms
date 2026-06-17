@@ -220,6 +220,16 @@ class formPanel extends panel
             }
         }
 
+        global $app;
+        $moduleName = $app->getModuleName();
+        $methodName = $app->getMethodName();
+        $this->addToBlock('headingActions', aiAgentEntry
+        (
+            set::type('form'),
+            set::module($moduleName),
+            set::method($methodName)
+        ));
+
         if($this->prop('modeSwitcher'))
         {
             global $lang;
@@ -424,6 +434,11 @@ class formPanel extends panel
             setClass('panel-body ' . $this->prop('bodyClass')),
             set($this->prop('bodyProps')),
             $this->buildContainer($this->buildForm()),
+            aiFormInject
+            (
+                set::module($moduleName),
+                set::method($methodName)
+            ),
             html($app->control->appendExtendCssAndJS($moduleName, $methodName, $this->getData()))
         );
     }

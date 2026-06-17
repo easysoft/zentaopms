@@ -16,11 +16,22 @@ class aiFormInject extends wg
     {
         global $app, $config;
 
+        $app->control->loadModel('ai');
+        if(!commonModel::hasPriv('ai', 'promptExecute')) return null;
+        if(!$app->control->loadModel('zai')->getSetting()) return null;
+
         $app->loadLang('ai');
         $app->loadConfig('ai');
 
         $module = $this->prop('module') ?: $app->getModuleName();
         $method = $this->prop('method') ?: $app->getMethodName();
+        $page   = "{$module}.{$method}";
+
+        $universalFormPages = $config->ai->universalFormPages ?? array();
+        if(!in_array($page, $universalFormPages)) return null;
+
+        $prompts = $app->control->ai->getPromptsForEntryPage($module, $method, 'form');
+        if(empty($prompts)) return null;
 
         if($this->prop('enableSkipFields')) $this->injectSkipFields($module, $method);
 
