@@ -909,6 +909,7 @@ class story extends control
     }
 
     /**
+     * 批量提交评审。
      * Batch submit review.
      *
      * @param  int    $productID
@@ -918,11 +919,22 @@ class story extends control
      */
     public function batchSubmitReview(int $productID, string $storyType = 'story')
     {
-        $url = $this->session->storyList ?: inlink('browse', "productID=$productID&storyType=$storyType");
+        if($_POST)
+        {
+            $this->story->replaceURLang($storyType);
+
+            $stories = $this->storyZen->buildStoriesForBatchSubmitReview();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->story->batchSubmitReview($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
 
         $storyIdList = array();
         if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
-        if(empty($storyIdList)) $this->locate($url);
+        if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
 
         $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
 
@@ -955,17 +967,23 @@ class story extends control
         {
             $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
         }
-        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $url)));
+        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $this->session->storyList)));
 
         /* Get reviewers. */
         $product   = $this->product->getById($productID);
-        $reviewers = $product->reviewer;
-        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        $reviewers = '';
+        if($product)
+        {
+            $reviewers = $product->reviewer;
+            if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        }
 
-        $this->view->storyIdList = $allowedStoryIdList;
-        $this->view->message     = $message;
-        $this->view->reviewers   = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-        $this->view->needReview  = $this->app->user->account == $product->PO ? "checked='checked'" : "";
+        $this->view->stories   = $this->story->getByList($allowedStoryIdList);
+        $this->view->product   = $product;
+        $this->view->productID = $productID;
+        $this->view->storyType = $storyType;
+        $this->view->message   = $message;
+        $this->view->reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
 
         $this->display();
     }

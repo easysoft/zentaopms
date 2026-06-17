@@ -175,6 +175,11 @@ $config->story->form->submitReview['reviewedBy']   = array('type' => 'string',  
 $config->story->form->submitReview['reviewedDate'] = array('type' => 'datetime', 'control' => 'hidden',       'required' => false, 'default' => '');
 $config->story->form->submitReview['status']       = array('type' => 'string',   'control' => 'hidden',       'required' => false, 'default' => 'active');
 
+$config->story->form->batchSubmitReview = array();
+$config->story->form->batchSubmitReview['id']       = array('type' => 'int',    'required' => true,  'default' => '', 'base' => true);
+$config->story->form->batchSubmitReview['reviewer'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+$config->story->form->batchSubmitReview['status']   = array('type' => 'string', 'required' => false, 'default' => 'active');
+
 $config->story->form->batchToTask['module']     = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->story->form->batchToTask['story']      = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->story->form->batchToTask['name']       = array('type' => 'string', 'required' => false, 'default' => '', 'base' => true, 'filter' => 'trim');

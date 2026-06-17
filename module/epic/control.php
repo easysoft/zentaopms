@@ -279,9 +279,9 @@ class epic extends control
      * @access public
      * @return void
      */
-    public function batchSubmitReview()
+    public function batchSubmitReview(int $productID = 0)
     {
-        echo $this->fetch('story', 'batchSubmitReview', 'storyType=epic');
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=epic");
     }
 
     /**

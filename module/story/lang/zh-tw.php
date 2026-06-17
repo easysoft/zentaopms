@@ -420,4 +420,4 @@ $lang->story->categoryList['improve']     = '改進';
 $lang->story->categoryList['other']       = '其他';
 
 $lang->story->batchSubmitReviewStatusTips = "Demand %s cannot be submitted for review as its status is neither Draft nor Under Change!";
-$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands without permission have been filtered automatically.\n";
+$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands of this type have been filtered.\n";

@@ -31,6 +31,7 @@ $lang->story->recallAction       = 'Undo';
 $lang->story->relation           = 'Relations';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
+$lang->story->batchSubmitReview  = 'Batch Submit Review';
 $lang->story->edit               = "Editer Story";
 $lang->story->editDraft          = "Modifier le projet";
 $lang->story->batchEdit          = "Editer par Lot";
@@ -610,4 +611,4 @@ $lang->story->error = new stdclass();
 $lang->story->error->length = "Length exceeds %d characters, cannot save. Please modify it and try again.";
 
 $lang->story->batchSubmitReviewStatusTips = "Demand %s cannot be submitted for review as its status is neither Draft nor Under Change!";
-$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands without permission have been filtered automatically.\n";
+$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands of this type have been filtered.\n";
