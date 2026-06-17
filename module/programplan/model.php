@@ -1430,34 +1430,8 @@ class programplanModel extends model
         $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(1)->where('id')->eq($pointObjectID)->exec();
         if(dao::isError()) return false;
 
-        /* 当前版本中没有评审点，目标版本的评审撤销评审回滚到待评审。*/
-        if(empty($currentPoint))
-        {
-            if(empty($targetPoint->reviewID)) return true;
-
-            /* 恢复目标版本的评审。*/
-            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($targetPoint->reviewID)->exec();
-            if(dao::isError()) return false;
-
-            /* 目标版本的评审回滚为待评审。*/
-            $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($targetPoint->reviewID)->exec();
-            if(dao::isError()) return false;
-
-            $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
-                ->where('objectType')->eq('review')
-                ->andWhere('objectID')->eq($targetPoint->reviewID)
-                ->orderBy('id_desc')
-                ->limit(1)
-                ->fetch('approval');
-
-            $this->dao->update(TABLE_APPROVALNODE)
-                ->set('status')->eq('done')
-                ->set('result')->eq('ignore')
-                ->where('approval')->eq($approvalID)
-                ->andWhere('status')->notin('done,forward,reverted')
-                ->exec();
-            return !dao::isError();
-        }
+        /* 当前版本中没有评审点，目标版本的评审回滚到待评审。*/
+        if(empty($currentPoint)) return $this->recallReview((int)$targetPoint->reviewID);
 
         /* 目标版本与当前版本评审状态一致时，评审信息用最新的评审信息，不用改动直接返回。*/
         if($targetPoint->rawStatus == $currentPoint->rawStatus) return true;
@@ -1469,17 +1443,35 @@ class programplanModel extends model
             return !dao::isError();
         }
 
-        /* 目标版本与当前版本评审状态不一致的情况，撤销评审回滚到待评审。*/
-        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($targetPoint->reviewID)->exec();
-        if($targetPoint->reviewID != $currentPoint->reviewID)
-        {
-            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($targetPoint->reviewID)->exec();
-            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('id')->eq($currentPoint->reviewID)->exec();
-        }
+        /* 目标版本与当前版本评审状态不一致的情况，还原目标版本的评审并回滚到待评审，删除当前版本的评审。*/
+        if($targetPoint->reviewID != $currentPoint->reviewID) $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('id')->eq($currentPoint->reviewID)->exec();
+        return $this->recallReview((int)$targetPoint->reviewID);
+    }
 
+    /**
+     * Recall review.
+     * 撤销评审。
+     *
+     * @param  int    $reviewID
+     * @access public
+     * @return bool
+     */
+    public function recallReview(int $reviewID): bool
+    {
+        if(empty($reviewID)) return true;
+
+        /* 已删除的评审还原。*/
+        $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审状态回滚为待评审。*/
+        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审节点更新为done。*/
         $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
             ->where('objectType')->eq('review')
-            ->andWhere('objectID')->eq($targetPoint->reviewID)
+            ->andWhere('objectID')->eq($reviewID)
             ->orderBy('id_desc')
             ->limit(1)
             ->fetch('approval');
