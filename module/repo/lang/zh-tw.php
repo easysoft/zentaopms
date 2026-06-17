@@ -13,8 +13,6 @@ $lang->repo->showSyncCommit  = '顯示同步進度';
 $lang->repo->ajaxSyncCommit  = '介面：AJAX同步註釋';
 $lang->repo->setRules        = '指令配置';
 $lang->repo->download        = '下載';
-
-
 $lang->repo->downloadDiff    = '下載Diff';
 $lang->repo->addBug          = '添加評審';
 $lang->repo->editBug         = '編輯評審';
