@@ -17,7 +17,6 @@ jsVar('copied', $lang->repo->copied);
 jsVar('base64BranchID', $base64BranchID);
 jsVar('repoID', $repoID);
 jsVar('objectID', $objectID);
-jsVar('mirrorSyncLink',         $this->createLink('repo', 'ajaxMirrorSync',         "repoID={$repoID}"));
 jsVar('mirrorSyncProgressLink', $this->createLink('repo', 'ajaxMirrorSyncProgress', "repoID={$repoID}"));
 jsVar('mirrorLang',             $lang->repo->mirror);
 
@@ -221,45 +220,52 @@ $downloadWg = div
 
 toolbar
 (
-    (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
+    /* 镜像仓库状态工具栏区块。包裹在 #mirrorToolbar 内，便于 ajax-submit 后局部 reload（load: {selector: '#mirrorToolbar>*'}），无需整页刷新。 */
+    div
     (
+        setID('mirrorToolbar'),
         setClass('flex items-center'),
-        span
+        (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
         (
-            setClass('text-primary sync-progress-msg mr-3'),
-            $lang->repo->mirror->syncing
-        ),
-        btn
-        (
-            setClass('primary refresh-sync-btn'),
-            set::icon('refresh'),
-            $lang->repo->mirror->refreshSync
-        )
-    ) : null,
-    (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
-    (
-        setClass('flex items-center'),
-        (isset($repo->status) && $repo->status == 'syncFailed') ? div
-        (
-            setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
-            setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
-            set('data-failure', (string)$mirrorSyncFailure),
-            h::span(setClass('icon icon-exclamation-sign mr-2')),
-            h::span($lang->repo->mirror->failedTitle),
-            h::a
+            setClass('flex items-center'),
+            span
             (
-                set::href('javascript:;'),
-                setClass('alert-link sync-failure-detail ml-2'),
-                $lang->repo->mirror->detail
+                setClass('text-primary sync-progress-msg mr-3'),
+                $lang->repo->mirror->syncing
+            ),
+            btn
+            (
+                setClass('primary refresh-sync-btn'),
+                set::icon('refresh'),
+                $lang->repo->mirror->refreshSync
             )
         ) : null,
-        btn
+        (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
         (
-            setClass('primary sync-code-btn'),
-            set::icon('refresh'),
-            $lang->repo->mirror->syncCode
-        )
-    ) : null,
+            setClass('flex items-center'),
+            (isset($repo->status) && $repo->status == 'syncFailed') ? div
+            (
+                setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
+                setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
+                h::span(setClass('icon icon-exclamation-sign mr-2')),
+                h::span($lang->repo->mirror->failedTitle),
+                h::a
+                (
+                    set::href('javascript:;'),
+                    setClass('alert-link sync-failure-detail ml-2'),
+                    $lang->repo->mirror->detail
+                )
+            ) : null,
+            btn
+            (
+                setClass('primary sync-code-btn ajax-submit'),
+                set::url($this->createLink('repo', 'ajaxMirrorSync', "repoID={$repoID}")),
+                setData(array('method' => 'post')),
+                set::icon('refresh'),
+                $lang->repo->mirror->syncCode
+            )
+        ) : null
+    ),
     dropdown
     (
         set::staticMenu(true),
