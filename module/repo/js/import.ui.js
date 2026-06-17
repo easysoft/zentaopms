@@ -1,13 +1,25 @@
-window.refreshProvider = function()
+window.refreshProvider = function(providerType)
 {
-    const type = $('[name=origin]').val();
+    let type;
+    const $originPicker = $('[name=origin]').zui('picker');
+    const $providerPicker = $('[name=providerID]').zui('picker');
+
+    if (providerType === undefined || providerType === null)
+    {
+        type = $originPicker.$.getValue();
+    }
+    else
+    {
+        type = providerType;
+        $originPicker.$.setValue(type);
+    }
+
     $.getJSON($.createLink('provider', 'ajaxGetProviders', "type=" + type), function(data)
     {
-        $('[name=providerID]').zui('picker').render({items: data.items});
+        $providerPicker.render({items: data.items});
         if(data.value)
         {
-            console.log(data.value);
-            $('[name=providerID]').zui('picker').$.setValue(data.value);
+            $providerPicker.$.setValue(data.value);
         }
     });
 }
