@@ -1925,7 +1925,7 @@ class userModel extends model
         $oldUserView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(!$force)
         {
-            $userviewUpdateTime      = $this->config->userview->updateTime ?? 0; // 当前用户访问权限的更新时间。
+            $userviewUpdateTime      = $this->config->userview->updateTime ?? ($this->loadModel('setting')->getItem("owner=$account&module=common&section=userview&key=updateTime") ?: 0); // 当前用户访问权限的更新时间。
             $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
             $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
         }
