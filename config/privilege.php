@@ -357,6 +357,7 @@ $config->ajaxDependencies['programplan.ajaxgetstageattr']                     = 
 $config->ajaxDependencies['programplan.ajaxresponseganttdeleterelationevent'] = ['programplan.browse', 'execution.gantt'];
 $config->ajaxDependencies['programplan.ajaxresponseganttdragevent']           = ['programplan.browse', 'execution.gantt'];
 $config->ajaxDependencies['programplan.ajaxresponseganttmoveevent']           = ['programplan.browse', 'execution.gantt'];
+$config->ajaxDependencies['programplan.ajaxsetshowversion']                   = 'programplan.browse';
 $config->ajaxDependencies['project.ajaxcheckhasstagedata']                    = ['programplan.create', 'project.execution'];
 $config->ajaxDependencies['project.ajaxgetdropmenu']                          = ['api.createlib', 'doc.selectapi', 'doc.setdocbasic', 'doc.selectproject'];
 $config->ajaxDependencies['project.ajaxgetexecutions']                        = ['doc.create', 'doc.uploaddocs', 'doc.setdocbasic', 'risk.edit', 'issue.edit'];
