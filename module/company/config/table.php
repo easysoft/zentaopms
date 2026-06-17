@@ -119,8 +119,7 @@ $config->company->user->dtable->fieldList['actions']['list']     = $config->comp
 $config->company->user->dtable->fieldList['actions']['menu']     = array_keys($config->company->user->actionList);
 
 $config->company->user->dtable->defaultField = array('id', 'realname', 'account', 'gender', 'role', 'phone');
-if(!empty($this->config->isINT)) $config->company->user->dtable->defaultField = array_merge($config->company->user->dtable->defaultField, array('skype'));
-if( empty($this->config->isINT)) $config->company->user->dtable->defaultField = array_merge($config->company->user->dtable->defaultField, array('qq'));
+$config->company->user->dtable->defaultField = array_merge($config->company->user->dtable->defaultField, array(!empty($this->config->isINT) ? 'skype' : 'qq'));
 $config->company->user->dtable->defaultField = array_merge($config->company->user->dtable->defaultField, array('email', 'last', 'visits', 'actions'));
 
 $config->company->user->dtable->requiredFields = array('id', 'realname', 'account', 'gender', 'role', 'phone', 'email', 'last', 'visits', 'actions');
