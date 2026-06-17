@@ -1579,31 +1579,13 @@ class programplanModel extends model
             $this->loadModel('action');
             foreach($tasks as $taskID)
             {
-                $task = $this->task->fetchByID((int)$taskID);
-                if($task->isParent)
-                {
-                    $childIdList = $this->task->getAllChildId((int)$taskID, false);
-                    $childTasks  = $this->task->getByIdList($childIdList);
-                    foreach($childTasks as $childID => $childTask)
-                    {
-                        if(!isset($tasks[$childID])) continue;
-                        if(strpos(",{$childTask->path},", ",$taskID,") === false) continue;
-
-                        $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($childID)->exec();
-                        if(dao::isError()) return false;
-
-                        $this->action->create('task', (int)$childID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                        $this->action->create('task', (int)$childID, 'deletedbyrollback');
-                        if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
-                        if($childTask->story) $this->story->setStage($childTask->story);
-                    }
-                }
-
                 $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($taskID)->exec();
                 if(dao::isError()) return false;
 
                 $this->action->create('task', (int)$taskID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
                 $this->action->create('task', (int)$taskID, 'deletedbyrollback');
+
+                $task = $this->task->fetchByID((int)$taskID);
                 if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
                 if($task->story) $this->story->setStage($task->story);
             }
@@ -1629,7 +1611,13 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         $children = $this->dao->select('id')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->eq($taskID)->fetchPairs('id');
-        if(empty($children)) return true;
+        if(empty($children))
+        {
+            $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($taskID)->exec();
+            return true;
+        }
+
+        $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq($taskID)->exec();
 
         foreach($children as $id) $this->setTaskPath($id);
         return true;
