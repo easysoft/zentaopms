@@ -25,5 +25,5 @@ formGridPanel
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     set::fields($fields),
-    set::loadUrl(createLink('provider', 'create', "type={type}"))
+    set::loadUrl(createLink('provider', 'create', "type={type}&callback={$callback}"))
 );
