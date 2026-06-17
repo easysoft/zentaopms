@@ -49,5 +49,5 @@ r(count($jobTest->getListByRepoIDTest(2))) && p() && e('2'); // 测试步骤2：
 r(count($jobTest->getListByRepoIDTest(99999))) && p() && e('0'); // 测试步骤3：不存在的repo返回空
 r(count($jobTest->getListByRepoIDTest(0))) && p() && e('1'); // 测试步骤4：repo=0的边界值测试
 r($jobTest->getListByRepoIDTest(1)) && p('8:name') && e('Jenkins Job3'); // 测试步骤5：验证排序后第一个作业名称
-r($jobTest->getListByRepoIDTest(1)) && p('8:id,8:name,8:lastStatus') && e('8,Jenkins Job3,running'); // 测试步骤6：验证返回字段完整性
+r($jobTest->getListByRepoIDTest(1)) && p('8:id,name,lastStatus') && e('8,Jenkins Job3,running'); // 测试步骤6：验证返回字段完整性
 r($jobTest->getListByRepoIDTest(999)) && p('6:id') && e('6'); // 测试步骤7：验证特定repo的作业ID
