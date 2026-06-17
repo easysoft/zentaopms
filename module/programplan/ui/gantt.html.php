@@ -123,7 +123,7 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         if(hasPriv('programplan', 'rollbackGanttVersion'))
         {
             if(!isset($item['actions'])) $item['actions'] = array();
-            $item['actions'][] = array('icon' => 'undo', 'hint' => $hasFrozenStage ? $lang->programplan->frozenCallback : $lang->programplan->rollbackGanttVersion, 'url' => createLink('programplan', 'rollbackGanttVersion', "projectID={$projectID}&versionID={$version->id}"), 'data-confirm' => $lang->programplan->rollbackTip, 'className' => 'ajax-submit', 'disabled' => $hasFrozenStage);
+            $item['actions'][] = array('icon' => 'undo', 'hint' => $hasFrozenStage ? $lang->programplan->frozenCallback : $lang->programplan->rollbackGanttVersion, 'url' => createLink('programplan', 'rollbackGanttVersion', "projectID={$projectID}&versionID={$version->id}"), 'data-confirm' => $project->model == 'ipd' ? $lang->programplan->rollbackTip4IPD : $lang->programplan->rollbackTip, 'className' => 'ajax-submit', 'disabled' => $hasFrozenStage);
         }
 
         if($version->reviewType == 'deliverable') $versionItems['deliverable']['items'][$version->id] = $item;
