@@ -290,12 +290,7 @@ $(function()
     if(base64BranchID) $.get($.createLink('repo', 'ajaxSyncBranchCommit', 'repoID=' + repo.id + '&branch=' + base64BranchID));
 });
 
-/**
- * 查看镜像同步失败详情。
- */
-/**
- * 镜像仓库同步交互。三按钮共用工具：spin、响应解析。
- */
+
 function mirrorBusy($btn, on)
 {
     $btn.prop('disabled', !!on).toggleClass('disabled', !!on);
@@ -306,29 +301,22 @@ function mirrorReload(){ setTimeout(function(){ window.location.reload(); }, 600
 
 function mirrorParse(res){ return typeof res === 'string' ? JSON.parse(res) : res; }
 
-/* 同步代码库：POST 触发 GitFox MirrorSync，依据 code 字段判定（success → reload，否则把 message 弹给用户）。 */
-$(document).on('click', '.sync-code-btn', function()
-{
-    var $btn = $(this);
-    if($btn.prop('disabled')) return;
-    mirrorBusy($btn, true);
+/* 同步触发→刷新延时（ms）。GitFox 异步处理，立即拉进度可能拿不到最新 status；留 1500ms 缓冲，最常见场景下一次 fetch 就能拿到 syncing 或 finished。 */
+window.MIRROR_SYNC_RELOAD_DELAY = 1500;
 
-    $.post(mirrorSyncLink).done(function(res)
+/**
+ * ajax-submit 成功回调：延时后局部刷新 #main>*。
+ * #main 内涵盖工具栏（含 mirrorToolbar）、代码列表 dtable、commit 列表 sidebar；
+ * #main 外的一级导航 #navbar 与二级导航 #pageToolbar 保持不变，避免无意义重渲。
+ */
+window.mirrorSyncDelayedReload = function()
+{
+    setTimeout(function()
     {
-        var data = mirrorParse(res);
-        if(data && data.code === 'success')
-        {
-            zui.Messager.show({type: 'success', content: mirrorLang.syncTriggered, time: 1500});
-            return mirrorReload();
-        }
-        zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.syncFailed, time: 2500});
-        mirrorBusy($btn, false);
-    }).fail(function(_, textStatus, errorThrown)
-    {
-        zui.Messager.show({type: 'danger', content: mirrorLang.syncRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
-        mirrorBusy($btn, false);
-    });
-});
+        if(typeof loadPage === 'function') return loadPage({selector: '#main>*'});
+        window.location.reload();
+    }, window.MIRROR_SYNC_RELOAD_DELAY);
+};
 
 /* 刷新同步状态：GET 进度，running → toast 仍在同步；其他状态 → reload 让首屏重渲。 */
 $(document).on('click', '.refresh-sync-btn', function()
