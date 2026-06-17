@@ -33,6 +33,7 @@ $lang->repo->mirror->stillRunning        = 'Still syncing...';
 $lang->repo->mirror->done                = 'Sync finished';
 $lang->repo->mirror->failureTitle        = 'Sync Failure Detail';
 $lang->repo->mirror->noDetail            = 'No detail';
+
 $lang->repo->downloadDiff    = 'Download Diff';
 $lang->repo->addBug          = 'Add Review';
 $lang->repo->editBug         = 'Edit Bug';

@@ -14,22 +14,7 @@ $lang->repo->ajaxSyncCommit  = '介面：AJAX同步註釋';
 $lang->repo->setRules        = '指令配置';
 $lang->repo->download        = '下載';
 
-$lang->repo->mirror = new stdclass();
-$lang->repo->mirror->syncing             = '代碼同步中...';
-$lang->repo->mirror->refreshSync         = '刷新同步狀態';
-$lang->repo->mirror->failedTitle         = '代碼同步失敗';
-$lang->repo->mirror->detail              = '查看詳情';
-$lang->repo->mirror->syncCode            = '同步代碼庫';
-$lang->repo->mirror->syncTriggered       = '同步任務已觸發';
-$lang->repo->mirror->syncFailed          = '同步失敗';
-$lang->repo->mirror->syncRequestFailed   = '同步請求失敗';
-$lang->repo->mirror->queryFailed         = '查詢失敗';
-$lang->repo->mirror->queryRequestFailed  = '查詢請求失敗';
-$lang->repo->mirror->statusUpdated       = '同步狀態已更新';
-$lang->repo->mirror->stillRunning        = '仍在同步中...';
-$lang->repo->mirror->done                = '同步已完成';
-$lang->repo->mirror->failureTitle        = '代碼同步失敗原因';
-$lang->repo->mirror->noDetail            = '暫無詳情';
+
 $lang->repo->downloadDiff    = '下載Diff';
 $lang->repo->addBug          = '添加評審';
 $lang->repo->editBug         = '編輯評審';

@@ -33,6 +33,7 @@ $lang->repo->mirror->stillRunning        = '仍在同步中...';
 $lang->repo->mirror->done                = '同步已完成';
 $lang->repo->mirror->failureTitle        = '代码同步失败原因';
 $lang->repo->mirror->noDetail            = '暂无详情';
+
 $lang->repo->downloadDiff    = '下载Diff';
 $lang->repo->addBug          = '添加评审';
 $lang->repo->editBug         = '编辑评审';
