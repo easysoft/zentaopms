@@ -79,20 +79,36 @@ $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
 ) : null;
 
-if(common::hasPriv('user', 'batchEdit')) $this->config->company->user->dtable->fieldList['id']['type'] = 'checkID';
+if(common::hasPriv('user', 'batchEdit')) $this->config->company->browse->dtable->fieldList['id']['type'] = 'checkID';
 
 foreach($users as $user)
 {
     if(!$user->last) $user->last = '';
 }
 
-$tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
+$cols         = $this->loadModel('datatable')->getSetting('company');
+$defaultCols  = $this->datatable->getSetting('company', 'browse', true);
+$requiredCols = $this->config->company->browse->dtable->requiredFields;
+foreach($requiredCols as $field)
+{
+    if(!isset($defaultCols[$field])) continue;
+
+    $cols[$field] = isset($cols[$field]) ? array_merge($defaultCols[$field], $cols[$field]) : $defaultCols[$field];
+    $cols[$field]['required'] = true;
+    $cols[$field]['show']     = true;
+}
+uasort($cols, array('datatableModel', 'sortCols'));
+if(isset($cols['dept']))     $cols['dept']['map']     = $this->loadModel('dept')->getOptionMenu();
+if(isset($cols['superior'])) $cols['superior']['map'] = $userPairs;
+
+$tableData = initTableData($users, $cols, $this->loadModel('user'));
 dtable
 (
     setID('userList'),
+    set::customCols(true),
     set::orderBy($orderBy),
     set::sortLink(createLink('company', 'browse', "browseType={$browseType}&param={$param}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::cols($this->config->company->user->dtable->fieldList),
+    set::cols($cols),
     set::data($tableData),
     set::userMap($userPairs),
     set::checkable(common::hasPriv('user', 'batchEdit')),
