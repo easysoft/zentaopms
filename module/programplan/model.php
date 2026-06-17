@@ -1560,13 +1560,11 @@ class programplanModel extends model
         {
             $this->loadModel('execution');
             $this->loadModel('action');
-            $stageList = $this->execution->getByIdList($stages, 'all');
             foreach($stages as $stageID)
             {
                 $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
                 if(dao::isError()) return false;
 
-                $stage = $stageList[$stageID];
                 $this->action->create('execution', (int)$stageID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
                 $this->action->create('execution', (int)$stageID, 'deletedbyrollback');
                 $this->execution->updateUserView($stageID);
