@@ -65,6 +65,8 @@ class aiTeammateMenu extends wg
             {
                 $itemProps[] = set('url', helper::createLink('aiteammate', 'assignagent',
                     "teammateID={$teammate->id}&objectType={$objectVarName}&objectID={$objectID}&pageInfo={$module},{$method}"));
+                $itemProps[] = set('data-toggle', 'modal');
+                $itemProps[] = set('data-size', 'sm');
             }
 
             return item(...$itemProps);

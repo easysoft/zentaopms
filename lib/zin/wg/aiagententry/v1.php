@@ -83,7 +83,7 @@ class aiAgentEntry extends wg
             }
         }
 
-        if($renderMode === 'entry') return $entryNode;
+        if($renderMode === 'entry' && $resourceNodes !== null) return html($resourceNodes, $entryNode);
         if($resourceNodes === null) return $entryNode;
         if($entryNode === null) return $resourceNodes;
         return html($resourceNodes, $entryNode);
@@ -92,9 +92,9 @@ class aiAgentEntry extends wg
     protected function buildEntry(array $prompts, array $teammateItems, string $module, string $method, string $type, $app, $config): ?node
     {
         $children = array();
-        $objectID = $this->getObjectID($app);
-        $objectVarName = $this->getObjectVarName($module, $method, $config);
+        $objectID = $this->getObjectID();
 
+        $objectVarName = $this->getObjectVarName($module, $method, $config);
         if($this->prop('showAgent'))
         {
             $children[] = aiAgentMenu
@@ -132,7 +132,8 @@ class aiAgentEntry extends wg
         if($type === 'form' || $type === 'list') return;
 
         global $app;
-        $objectID = $this->getObjectID($app);
+        $objectID = $this->getObjectID();
+
         $objectVarName = $this->getObjectVarName($module, $method, $config);
         $suggestions = array();
 
@@ -177,17 +178,9 @@ class aiAgentEntry extends wg
         return empty($menuConfig->objectVarName) ? 'form' : 'detail';
     }
 
-    protected function getObjectID($app): int
+    protected function getObjectID(): int
     {
-        $objectID = $this->prop('objectID');
-        if($objectID) return (int)$objectID;
-
-        $objectVarName = $this->prop('objectVarName');
-        if(!$objectVarName) return 0;
-
-        $viewData = $app->view ?? null;
-        if($viewData && isset($viewData->$objectVarName)) return (int)($viewData->$objectVarName->id ?? 0);
-        return 0;
+        return (int)$this->prop('objectID');
     }
 
     protected function getObjectVarName(string $module, string $method, $config = null): string

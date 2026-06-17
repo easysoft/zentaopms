@@ -45,8 +45,8 @@ class aiAgentMenu extends wg
             }
             else
             {
-                $itemProps[] = set('url', helper::createLink('ai', 'promptExecute',
-                    "promptId={$prompt->id}&objectId={$objectID}&auto=0"));
+                $itemProps[] = set('data-on', 'click');
+                $itemProps[] = set('data-call', "callZentaoAgent({$prompt->id}, {$objectID})");
             }
 
             return item(...$itemProps);
