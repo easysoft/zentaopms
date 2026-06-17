@@ -86,19 +86,7 @@ foreach($users as $user)
     if(!$user->last) $user->last = '';
 }
 
-$cols         = $this->loadModel('datatable')->getSetting('company');
-$defaultCols  = $this->datatable->getSetting('company', 'browse', true);
-$requiredCols = $this->config->company->browse->dtable->requiredFields;
-foreach($requiredCols as $field)
-{
-    if(!isset($defaultCols[$field])) continue;
-
-    $cols[$field] = isset($cols[$field]) ? array_merge($defaultCols[$field], $cols[$field]) : $defaultCols[$field];
-    $cols[$field]['required'] = true;
-    $cols[$field]['show']     = true;
-}
-uasort($cols, array('datatableModel', 'sortCols'));
-if(isset($cols['dept']))     $cols['dept']['map']     = $this->loadModel('dept')->getOptionMenu();
+$cols = $this->loadModel('datatable')->getSetting('company');
 if(isset($cols['superior'])) $cols['superior']['map'] = $userPairs;
 
 $tableData = initTableData($users, $cols, $this->loadModel('user'));
