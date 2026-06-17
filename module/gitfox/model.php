@@ -1962,7 +1962,7 @@ class gitfoxModel extends model
      * @access public
      * @return object|array
      */
-    function apiGetBranchLabels(int $gitfoxID, int $repoID): object|array
+    public function apiGetBranchLabels(int $gitfoxID, int $repoID): object|array
     {
         $apiRoot = $this->getApiRoot($gitfoxID, false);
         $url     = sprintf($apiRoot->url, "/repos/{$repoID}/branch-labels");

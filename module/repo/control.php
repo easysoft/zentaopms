@@ -2984,7 +2984,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
+    public function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
     {
         $this->view->title   = $this->lang->repo->showImportProgress;
         $this->view->repoID  = $repoID;
