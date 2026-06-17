@@ -13410,4 +13410,47 @@ class upgradeModel extends model
 
         return !dao::isError();
     }
+
+    /**
+     * 添加默认工作流动作。
+     * Add default workflow action.
+     *
+     * @param  string $code
+     * @access public
+     * @return bool
+     */
+    public function addDefaultWorkflowAction(string $code): bool
+    {
+        $actionConfig = $this->config->workflowaction->default;
+        $action       = new stdclass();
+        $modules      = $this->dao->select('module')->from(TABLE_WORKFLOW)->where('buildin')->eq('0')->fetchPairs();
+        foreach($modules as $module)
+        {
+            $action->module      = $module;
+            $action->conditions  = '[]';
+            $action->hooks       = '[]';
+            $action->linkages    = '';
+            $action->createdBy   = $this->app->user->account;
+            $action->createdDate = helper::now();
+            $action->order       = '25';
+            $action->role        = 'default';
+            $action->action      = $code;
+            $action->name        = zget($this->lang->workflowaction->default->actions, $code);
+            $action->method      = zget($actionConfig->methods,    $code, 'operate');
+            $action->type        = zget($actionConfig->types,      $code, 'single');
+            $action->batchMode   = zget($actionConfig->batchModes, $code, 'same');
+            $action->open        = zget($actionConfig->opens,      $code, 'normal');
+            $action->position    = zget($actionConfig->positions,  $code, 'browseandview');
+            $action->show        = zget($actionConfig->shows,      $code, 'direct');
+            $action->status      = zget($actionConfig->statuses,   $code, 'enable');
+            $action->buildin     = zget($actionConfig->buildin,    $code, '0');
+            $action->conditions  = isset($actionConfig->conditions) ? helper::jsonEncode(zget($actionConfig->conditions, $code, array())) : '';
+            $action->linkages    = isset($actionConfig->linkages)   ? helper::jsonEncode(zget($actionConfig->linkages, $code, array()))   : '';
+            $action->vision      = 'rnd';
+
+            $this->dao->replace(TABLE_WORKFLOWACTION)->data($action)->autoCheck()->exec();
+        }
+
+        return true;
+    }
 }
