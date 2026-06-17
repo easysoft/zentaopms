@@ -2382,7 +2382,6 @@ class repo extends control
             $result = $this->repo->saveBug($repoID, $bug);
             if($result['result'] === 'fail')
             {
-                $result['message'] = $result['message'];
                 return $this->send($result);
             }
 
@@ -2394,14 +2393,10 @@ class repo extends control
             $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
             if(empty($v1))
             {
-                $revision = substr($v2, 0, 10);
                 $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
             }
             else
             {
-                $revision  = substr($v1, 0, 10);
-                $revision .= ' : ';
-                $revision .= substr($v2, 0, 10);
                 $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$changeFile}&oldRevision=$v1&newRevision=$v2&showBug=1", '', true) . "#L{$begin}";
             }
 
@@ -2422,7 +2417,7 @@ class repo extends control
                 if(!empty($commit->author->identity->name))
                 {
                     $historyLog->committer = $commit->author->identity->name;
-                }else if(!empty($commit->committer_name))
+                }elseif(!empty($commit->committer_name))
                 {
                     $historyLog->committer = $commit->committer_name;
                 }else
@@ -2723,7 +2718,7 @@ class repo extends control
         $this->view->products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
-        $this->view->param    = $param;;
+        $this->view->param    = $param;
         $this->view->type     = $type;
         $this->view->inSpace  = !empty($space);
         $this->view->spaceID  = $space;
