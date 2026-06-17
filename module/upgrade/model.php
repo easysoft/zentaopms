@@ -8792,6 +8792,8 @@ class upgradeModel extends model
             if(!isset($tables[$field->module])) continue;
 
             $table = $tables[$field->module];
+            if(!$this->checkFieldsExists($table, $field->field)) continue;
+
             $sqls[] = "ALTER TABLE `$table` MODIFY `$field->field` $field->type NULL;";
         }
 
@@ -8799,7 +8801,8 @@ class upgradeModel extends model
         {
             if(!isset($tables[$field->module])) continue;
 
-            $table    = $tables[$field->module];
+            $table = $tables[$field->module];
+            if(!$this->checkFieldsExists($table, $field->field)) continue;
             $isNumber = in_array($field->type, $this->config->workflowfield->numberTypes);
 
             if($field->length)
