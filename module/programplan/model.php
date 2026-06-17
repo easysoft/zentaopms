@@ -1260,8 +1260,8 @@ class programplanModel extends model
         $updateStage->name           = $stage->name;
         $updateStage->milestone      = $stage->milestonecode;
         $updateStage->status         = $stage->rawStatus;
-        $updateStage->begin          = $stage->begin ?: null;
-        $updateStage->end            = $stage->deadline ?: null;
+        $updateStage->begin          = date('Y-m-d', strtotime($stage->begin)) ?: null;
+        $updateStage->end            = date('Y-m-d', strtotime($stage->deadline)) ?: null;
         $updateStage->realBegan      = $stage->realBegan ?: null;
         $updateStage->realEnd        = $stage->realEnd ?: null;
         $updateStage->progress       = $stage->progress;
@@ -1340,8 +1340,8 @@ class programplanModel extends model
         $updateTask = new stdclass();
         $updateTask->execution      = $executionID;
         $updateTask->story          = $task->story ?: 0;
-        $updateTask->estStarted     = $task->begin ?: null;
-        $updateTask->deadline       = $task->deadline ?: null;
+        $updateTask->estStarted     = date('Y-m-d', strtotime($task->begin)) ?: null;
+        $updateTask->deadline       = date('Y-m-d', strtotime($task->deadline)) ?: null;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
