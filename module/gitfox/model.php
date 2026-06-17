@@ -321,9 +321,8 @@ class gitfoxModel extends model
         $apiRoot = $this->getApiRoot();
         if(!is_object($apiRoot)) return false;
 
-        $url      = sprintf($apiRoot->url, "/repos/mirror-sync?repoID=$repoID");
-        $response = json_decode(common::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), $apiRoot->header, 'json'));
-        return $response;
+        $url = sprintf($apiRoot->url, "/repos/mirror-sync?repoID=$repoID");
+        return json_decode(common::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), $apiRoot->header, 'json'));
     }
 
     public function __call($funcName, $arguments)
