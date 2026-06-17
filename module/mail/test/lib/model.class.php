@@ -7,6 +7,80 @@ class mailModelTest extends baseTest
 {
     protected $moduleName = 'mail';
     protected $className  = 'model';
+    public $objectTao     = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        global $tester;
+        $this->objectTao = $tester ? $tester->loadTao('mail') : null;
+    }
+
+    /**
+     * Set current user info for mail model.
+     *
+     * @param  string      $account
+     * @param  string|null $realname
+     * @access public
+     * @return void
+     */
+    public function setUserState(string $account, ?string $realname = null): void
+    {
+        $this->instance->app->user->account = $account;
+        if($realname !== null) $this->instance->app->user->realname = $realname;
+    }
+
+    /**
+     * Set mail config values for testing.
+     *
+     * @param  string      $charset
+     * @param  string|null $smtpCharset
+     * @access public
+     * @return void
+     */
+    public function setCharsetConfig(string $charset, ?string $smtpCharset): void
+    {
+        $this->instance->config->charset = $charset;
+        if(!isset($this->instance->config->mail->smtp)) $this->instance->config->mail->smtp = new stdclass();
+        $this->instance->config->mail->smtp->charset = $smtpCharset;
+    }
+
+    /**
+     * Set smtp config for testing.
+     *
+     * @param  array $config
+     * @access public
+     * @return void
+     */
+    public function setSMTPConfig(array $config): void
+    {
+        if(!isset($this->instance->config->mail->smtp)) $this->instance->config->mail->smtp = new stdclass();
+        foreach($config as $key => $value) $this->instance->config->mail->smtp->$key = $value;
+    }
+
+    /**
+     * Set mail errors for testing.
+     *
+     * @param  array $errors
+     * @access public
+     * @return void
+     */
+    public function setErrors(array $errors): void
+    {
+        $this->instance->errors = $errors;
+    }
+
+    /**
+     * Get mail errors for assertion.
+     *
+     * @access public
+     * @return array
+     */
+    public function getErrors(): array
+    {
+        return $this->instance->errors;
+    }
 
     /**
      * Create mock mail model for testing without database.
@@ -350,6 +424,8 @@ class mailModelTest extends baseTest
      */
     public function getSubjectTest($objectType, $object, $title, $actionType)
     {
+        $realname = $this->instance->app->user->realname;
+
         // 构造测试对象
         if(is_numeric($object))
         {
@@ -399,7 +475,7 @@ class mailModelTest extends baseTest
                 'edit'   => '%s编辑了测试单 #%s:%s'
             );
 
-            return sprintf($langMap[$titleType], 'admin', $object->id, $object->name);
+            return sprintf($langMap[$titleType], $realname, $object->id, $object->name);
         }
 
         if($objectType == 'doc')
@@ -412,7 +488,7 @@ class mailModelTest extends baseTest
                 'edit'        => '%s编辑了文档 #%s:%s'
             );
 
-            return sprintf($langMap[$titleType], 'admin', $object->id, $object->title);
+            return sprintf($langMap[$titleType], $realname, $object->id, $object->title);
         }
 
         // 对于story和bug，添加产品名称后缀
@@ -1170,37 +1246,48 @@ class mailModelTest extends baseTest
      */
     public function setSMTPTest()
     {
+        $this->instance->setSMTP();
+
         // 创建模拟的结果对象，属性名匹配测试脚本中p()函数的期望
         $result = new stdClass();
 
-        // 从配置中获取SMTP设置
-        $config = $this->instance->config;
-        if(isset($config->mail->smtp))
-        {
-            $smtp = $config->mail->smtp;
+        $result->host     = $this->instance->mta->Host;
+        $result->debug    = $this->instance->mta->SMTPDebug;
+        $result->charset  = $this->instance->mta->CharSet;
+        $result->port     = $this->instance->mta->Port;
+        $result->secure   = $this->instance->mta->SMTPSecure ?? '';
+        $result->auth     = $this->instance->mta->SMTPAuth ? 1 : '';
+        $result->username = $this->instance->mta->Username;
+        $result->password = $this->instance->mta->Password;
 
-            // 设置测试脚本期望的属性名（注意：这里使用小写的属性名，匹配测试脚本）
-            $result->host = isset($smtp->host) ? $smtp->host : 'localhost';
-            $result->debug = isset($smtp->debug) ? $smtp->debug : 0;
-            $result->charset = isset($smtp->charset) ? $smtp->charset : 'utf-8';
-            $result->port = isset($smtp->port) ? $smtp->port : 25;
-            $result->secure = isset($smtp->secure) && !empty($smtp->secure) ? strtolower($smtp->secure) : '';
-            $result->auth = isset($smtp->auth) ? ($smtp->auth ? 1 : '') : 1;
-            $result->username = isset($smtp->username) ? $smtp->username : '';
-            $result->password = isset($smtp->password) ? $smtp->password : '';
-        }
-        else
-        {
-            // 如果没有SMTP配置，使用默认值
-            $result->host = 'localhost';
-            $result->debug = 0;
-            $result->charset = 'utf-8';
-            $result->port = 25;
-            $result->secure = '';
-            $result->auth = 1;
-            $result->username = '';
-            $result->password = '';
-        }
+        return $result;
+    }
+
+    /**
+     * Test setGMail method.
+     *
+     * @param  string $username
+     * @param  string $password
+     * @param  int    $debug
+     * @access public
+     * @return object
+     */
+    public function setGMailTest(string $username, string $password, int $debug = 0): object
+    {
+        if(!isset($this->instance->config->mail->gmail)) $this->instance->config->mail->gmail = new stdclass();
+        $this->instance->config->mail->gmail->debug    = $debug;
+        $this->instance->config->mail->gmail->username = $username;
+        $this->instance->config->mail->gmail->password = $password;
+
+        $this->instance->setGMail();
+
+        $result = new stdClass();
+        $result->Mailer     = $this->instance->mta->Mailer;
+        $result->Host       = $this->instance->mta->Host;
+        $result->Port       = $this->instance->mta->Port;
+        $result->SMTPSecure = $this->instance->mta->SMTPSecure;
+        $result->Username   = $this->instance->mta->Username;
+        $result->Password   = $this->instance->mta->Password;
 
         return $result;
     }
@@ -1262,7 +1349,11 @@ class mailModelTest extends baseTest
      */
     public function getObjectForMailTest($objectType = '', $objectID = 0)
     {
-        $result = $this->objectTao->getObjectForMail($objectType, $objectID);
+        $reflection = new ReflectionClass($this->objectTao);
+        $method     = $reflection->getMethod('getObjectForMail');
+        if(!$method->isPublic()) $method->setAccessible(true);
+
+        $result = $method->invokeArgs($this->objectTao, array($objectType, $objectID));
         if(dao::isError()) return dao::getError();
 
         return $result;

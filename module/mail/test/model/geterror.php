@@ -26,23 +26,23 @@ su('admin');
 $mailTest = new mailModelTest();
 
 // 测试步骤1：获取单个错误信息
-$mailTest->objectModel->errors = array('用户邮箱不存在。');
+$mailTest->setErrors(array('用户邮箱不存在。'));
 r($mailTest->getErrorTest()) && p('0') && e('用户邮箱不存在。');
 
 // 测试步骤2：获取多个错误信息
-$mailTest->objectModel->errors = array('SMTP连接失败', '用户名密码错误', '端口配置错误');
+$mailTest->setErrors(array('SMTP连接失败', '用户名密码错误', '端口配置错误'));
 r($mailTest->getErrorTest()) && p('0,1,2') && e('SMTP连接失败,用户名密码错误,端口配置错误');
 
 // 测试步骤3：获取空错误信息
-$mailTest->objectModel->errors = array();
+$mailTest->setErrors(array());
 r($mailTest->getErrorTest()) && p() && e('0');
 
 // 测试步骤4：验证getError方法会清空errors属性
-$mailTest->objectModel->errors = array('测试错误信息');
+$mailTest->setErrors(array('测试错误信息'));
 $result = $mailTest->getErrorTest();
-r($mailTest->objectModel->errors) && p() && e('0');
+r($mailTest->getErrors()) && p() && e('0');
 
 // 测试步骤5：测试连续调用getError方法
-$mailTest->objectModel->errors = array('第一次错误信息', '第二次错误信息');
+$mailTest->setErrors(array('第一次错误信息', '第二次错误信息'));
 $firstCall = $mailTest->getErrorTest();
 r($mailTest->getErrorTest()) && p() && e('0');
