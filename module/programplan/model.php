@@ -1260,9 +1260,8 @@ class programplanModel extends model
         $updateStage->name           = $stage->name;
         $updateStage->milestone      = $stage->milestonecode;
         $updateStage->status         = $stage->rawStatus;
-        $updateStage->begin          = $stage->begin ?: null;
-        $updateStage->end            = $stage->deadline ?: null;
-        $updateStage->parent         = $stage->parent ?: 0;
+        $updateStage->begin          = date('Y-m-d', strtotime($stage->begin)) ?: null;
+        $updateStage->end            = date('Y-m-d', strtotime($stage->deadline)) ?: null;
         $updateStage->realBegan      = $stage->realBegan ?: null;
         $updateStage->realEnd        = $stage->realEnd ?: null;
         $updateStage->progress       = $stage->progress;
@@ -1282,6 +1281,7 @@ class programplanModel extends model
         $project  = $this->fetchByID($oldStage->project, 'project');
         $updateAttribute = array_search($stage->attribute, $project->model == 'ipd' ? $this->lang->stage->ipdTypeList : $this->lang->stage->typeList, true);
         if($updateAttribute) $updateStage->attribute = $updateAttribute;
+        $updateStage->parent = $stage->parent ?: $project->id;
 
         $this->dao->update(TABLE_PROJECT)->data($updateStage)->where('id')->eq($stage->id)->exec();
         if(dao::isError()) return false;
@@ -1340,8 +1340,8 @@ class programplanModel extends model
         $updateTask = new stdclass();
         $updateTask->execution      = $executionID;
         $updateTask->story          = $task->story ?: 0;
-        $updateTask->estStarted     = $task->begin ?: null;
-        $updateTask->deadline       = $task->deadline ?: null;
+        $updateTask->estStarted     = date('Y-m-d', strtotime($task->begin)) ?: null;
+        $updateTask->deadline       = date('Y-m-d', strtotime($task->deadline)) ?: null;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
@@ -1413,6 +1413,76 @@ class programplanModel extends model
             }
         }
         return true;
+    }
+
+    /**
+     * Rollback point.
+     * 回滚评审点。
+     *
+     * @param  object $targetPoint
+     * @param  object $currentPoint
+     * @access public
+     * @return bool
+     */
+    public function rollbackPoint(object $targetPoint, object $currentPoint = null): bool
+    {
+        $pointObjectID = explode('-', $targetPoint->id)[2];
+        $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(1)->where('id')->eq($pointObjectID)->exec();
+        if(dao::isError()) return false;
+
+        /* 当前版本中没有评审点，目标版本的评审回滚到待评审。*/
+        if(empty($currentPoint)) return $this->recallReview((int)$targetPoint->reviewID);
+
+        /* 目标版本与当前版本评审状态一致时，评审信息用最新的评审信息，不用改动直接返回。*/
+        if($targetPoint->rawStatus == $currentPoint->rawStatus) return true;
+
+        /* 目标版本为未提交时，将评审点对应的review都删除。*/
+        if(empty($targetPoint->reviewID))
+        {
+            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('object')->eq($pointObjectID)->andWhere('type')->eq('decision')->exec();
+            return !dao::isError();
+        }
+
+        /* 目标版本与当前版本评审状态不一致的情况，还原目标版本的评审并回滚到待评审，删除当前版本的评审。*/
+        if($targetPoint->reviewID != $currentPoint->reviewID) $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('id')->eq($currentPoint->reviewID)->exec();
+        return $this->recallReview((int)$targetPoint->reviewID);
+    }
+
+    /**
+     * Recall review.
+     * 撤销评审。
+     *
+     * @param  int    $reviewID
+     * @access public
+     * @return bool
+     */
+    public function recallReview(int $reviewID): bool
+    {
+        if(empty($reviewID)) return true;
+
+        /* 已删除的评审还原。*/
+        $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审状态回滚为待评审。*/
+        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($reviewID)->exec();
+        if(dao::isError()) return false;
+
+        /* 评审节点更新为done。*/
+        $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
+            ->where('objectType')->eq('review')
+            ->andWhere('objectID')->eq($reviewID)
+            ->orderBy('id_desc')
+            ->limit(1)
+            ->fetch('approval');
+
+        $this->dao->update(TABLE_APPROVALNODE)
+            ->set('status')->eq('done')
+            ->set('result')->eq('ignore')
+            ->where('approval')->eq($approvalID)
+            ->andWhere('status')->notin('done,forward,reverted')
+            ->exec();
+        return !dao::isError();
     }
 
     /**
