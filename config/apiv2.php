@@ -146,58 +146,57 @@ $routes['/my/activity/audits']       = array('redirect' => '/my/contribute?mode=
 $routes['/my/activity/feedbacks']    = array('redirect' => '/my/contribute?mode=feedback',    'response' => 'feedbacks(array),pager',      'search' => array('enabled' => true, 'searchModule' => 'my', 'querySessionKey' => 'contributeFeedback'));
 
 $routes['/doc/my/spaces'] = array(
-    'get'  => array('redirect' => '/doc/ajaxGetSpaces?type=mine'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&picks=space'),
     'post' => array('redirect' => '/doc/createSpace?type=mine')
 );
 $routes['/doc/team/spaces'] = array(
-    'get'  => array('redirect' => '/doc/ajaxGetSpaces?type=custom'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&picks=space'),
     'post' => array('redirect' => '/doc/createSpace?type=custom')
 );
-$routes['/doc/product/spaces'] = array('redirect' => '/doc/ajaxGetSpaces?type=product');
-$routes['/doc/project/spaces'] = array('redirect' => '/doc/ajaxGetSpaces?type=project');
+$routes['/doc/product/spaces'] = array('redirect' => '/doc/ajaxGetSpaceData?type=product&picks=space');
+$routes['/doc/project/spaces'] = array('redirect' => '/doc/ajaxGetSpaceData?type=project&picks=space');
 
 $routes['/doc/spaces/:spaceID'] = array(
-    'get'    => array('redirect' => '/doc/ajaxGetSpace?spaceID=:spaceID'),
+    'get'    => array('redirect' => '/doc/editSpace?spaceID=:spaceID', 'response' => 'lib|space'),
     'put'    => array('redirect' => '/doc/editSpace?spaceID=:spaceID'),
     'delete' => array('redirect' => '/doc/deleteSpace?libID=:spaceID')
 );
-$routes['/doc/product/spaces/:productID'] = array('redirect' => '/doc/ajaxGetSpace?type=product&spaceID=:productID');
-$routes['/doc/project/spaces/:projectID'] = array('redirect' => '/doc/ajaxGetSpace?type=project&spaceID=:projectID');
 
 $routes['/doc/my/spaces/:spaceID/libs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=mine&spaceID=:spaceID&picks=lib'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&picks=lib'),
     'post' => array('redirect' => '/doc/createLib?type=mine&objectID=:spaceID&libID=0')
 );
 $routes['/doc/team/spaces/:spaceID/libs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=custom&spaceID=:spaceID&picks=lib'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&picks=lib'),
     'post' => array('redirect' => '/doc/createLib?type=custom&objectID=:spaceID&libID=0')
 );
 $routes['/doc/product/spaces/:productID/libs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=product&spaceID=:productID&picks=lib'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&picks=lib'),
     'post' => array('redirect' => '/doc/createLib?type=product&objectID=:productID&libID=0')
 );
 $routes['/doc/project/spaces/:projectID/libs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=project&spaceID=:projectID&picks=lib'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&picks=lib'),
     'post' => array('redirect' => '/doc/createLib?type=project&objectID=:projectID&libID=0')
 );
 $routes['/doc/libs/:libID'] = array(
+    'get'    => array('redirect' => '/doc/editLib?libID=:libID', 'response' => 'lib'),
     'put'    => array('redirect' => '/doc/editLib?libID=:libID'),
     'delete' => array('redirect' => '/doc/deleteLib?libID=:libID')
 );
 $routes['/doc/my/spaces/:spaceID/libs/:libID/docs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=doc'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=doc'),
     'post' => array('redirect' => '/doc/create?objectType=mine&objectID=:spaceID&libID=:libID&moduleID=0&docType=')
 );
 $routes['/doc/team/spaces/:spaceID/libs/:libID/docs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=doc'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=doc'),
     'post' => array('redirect' => '/doc/create?objectType=custom&objectID=:spaceID&libID=:libID&moduleID=0&docType=')
 );
 $routes['/doc/product/spaces/:productID/libs/:libID/docs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=product&spaceID=:productID&libID=:libID&picks=doc'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&libID=:libID&picks=doc'),
     'post' => array('redirect' => '/doc/create?objectType=product&objectID=:productID&libID=:libID&moduleID=0&docType=')
 );
 $routes['/doc/project/spaces/:projectID/libs/:libID/docs'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=doc'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=doc'),
     'post' => array('redirect' => '/doc/create?objectType=project&objectID=:projectID&libID=:libID&moduleID=0&docType=')
 );
 $routes['/doc/docs/:docID'] = array(
@@ -208,20 +207,21 @@ $routes['/doc/docs/:docID'] = array(
 $routes['/doc/docs/:docID/collect'] = array(
     'post' => array('redirect' => '/doc/collect?objectID=:docID')
 );
+
 $routes['/doc/my/spaces/:spaceID/libs/:libID/modules'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=module'),
+    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&objectID=:libID&moduleType=doc')
 );
 $routes['/doc/team/spaces/:spaceID/libs/:libID/modules'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=module'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=module'),
     'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
 );
 $routes['/doc/product/spaces/:productID/libs/:libID/modules'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=product&spaceID=:productID&libID=:libID&picks=module'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&libID=:libID&picks=module'),
     'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
 );
 $routes['/doc/project/spaces/:projectID/libs/:libID/modules'] = array(
-    'get'  => array('redirect' => '/doc/ajaxFetchSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=module'),
+    'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=module'),
     'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
 );
 $routes['/doc/modules/:moduleID'] = array(
