@@ -1986,26 +1986,29 @@ class storyZen extends story
     protected function buildStoriesForBatchSubmitReview(): array
     {
         $data       = form::batchData($this->config->story->form->batchSubmitReview)->get();
-        $oldStories = $this->story->getByList(array_keys($data));
+        $idList     = array();
+        foreach($data as $item) if(isset($item->id)) $idList[] = $item->id;
+        $oldStories = $this->story->getByList($idList);
         $stories    = array();
 
-        foreach($data as $storyID => $story)
+        foreach($data as $item)
         {
+            $storyID  = $item->id;
             if(!isset($oldStories[$storyID])) continue;
 
             $oldStory  = $oldStories[$storyID];
             $storyType = $oldStory->type;
 
-            if(isset($story->reviewer)) $story->reviewer = array_filter((array)$story->reviewer);
-            $needNotReview = !empty($story->needNotReview);
+            if(isset($item->reviewer)) $item->reviewer = array_filter((array)$item->reviewer);
+            $needNotReview = !empty($item->needNotReview);
 
             $forceReview = $this->story->checkForceReview($storyType);
-            if(!$needNotReview && empty($story->reviewer) && $forceReview)
+            if(!$needNotReview && empty($item->reviewer) && $forceReview)
             {
                 dao::$errors["reviewer[{$storyID}]"] = $this->lang->story->errorEmptyReviewedBy;
                 continue;
             }
-            $stories[$storyID] = $story;
+            $stories[$storyID] = $item;
         }
         return $stories;
     }
