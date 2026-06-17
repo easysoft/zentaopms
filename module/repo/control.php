@@ -570,15 +570,6 @@ class repo extends control
         $this->view->branchOrTag    = $branchOrTag;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
 
-        /* 镜像仓库同步失败时，从 GitFox 拉取失败原因，供前端展示。 */
-        $mirrorSyncFailure = '';
-        if(!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncFailed')
-        {
-            $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
-            if(!empty($progress) && is_object($progress) && !empty($progress->failure)) $mirrorSyncFailure = (string)$progress->failure;
-        }
-        $this->view->mirrorSyncFailure = $mirrorSyncFailure;
-
         $this->display();
     }
 
@@ -1341,14 +1332,19 @@ class repo extends control
     public function ajaxMirrorSync(int $repoID = 0)
     {
         $repo = $this->repo->getByID($repoID);
-        if(empty($repo)) return $this->send(array('code' => 'failure', 'message' => $this->lang->repo->error->noFound));
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
         $response = $this->loadModel('gitfox')->apiMirrorSync((int)$repo->id);
-        if(empty($response) || !is_object($response)) return $this->send(array('code' => 'failure', 'message' => $this->lang->repo->mirror->syncRequestFailed));
+        if(empty($response) || !is_object($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->mirror->syncRequestFailed));
+
+        $code    = isset($response->code)    ? (string)$response->code    : '';
+        $message = isset($response->message) ? (string)$response->message : '';
+        if($code !== 'success') return $this->send(array('result' => 'fail', 'message' => $message ? $message : $this->lang->repo->mirror->syncFailed));
 
         return $this->send(array(
-            'code'    => isset($response->code)    ? (string)$response->code    : 'failure',
-            'message' => isset($response->message) ? (string)$response->message : ''
+            'result'   => 'success',
+            'message'  => $message ? $message : $this->lang->repo->mirror->syncTriggered,
+            'callback' => 'mirrorSyncDelayedReload'
         ));
     }
 
