@@ -729,6 +729,7 @@ class programplan extends control
             {
                 $pointObjectID = explode('-', $point->id)[2];
                 $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(0)->where('id')->eq($pointObjectID)->exec();
+                if(!empty($point->reviewID)) $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(1)->where('id')->eq($point->reviewID)->exec();
             }
         }
 

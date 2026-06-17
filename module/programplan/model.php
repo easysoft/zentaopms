@@ -1430,8 +1430,34 @@ class programplanModel extends model
         $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(1)->where('id')->eq($pointObjectID)->exec();
         if(dao::isError()) return false;
 
-        /* 当前版本中没有评审点，把目标版本的评审点生效后返回即可。*/
-        if(empty($currentPoint)) return true;
+        /* 当前版本中没有评审点，目标版本的评审撤销评审回滚到待评审。*/
+        if(empty($currentPoint))
+        {
+            if(empty($targetPoint->reviewID)) return true;
+
+            /* 恢复目标版本的评审。*/
+            $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($targetPoint->reviewID)->exec();
+            if(dao::isError()) return false;
+
+            /* 目标版本的评审回滚为待评审。*/
+            $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->where('id')->eq($targetPoint->reviewID)->exec();
+            if(dao::isError()) return false;
+
+            $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
+                ->where('objectType')->eq('review')
+                ->andWhere('objectID')->eq($targetPoint->reviewID)
+                ->orderBy('id_desc')
+                ->limit(1)
+                ->fetch('approval');
+
+            $this->dao->update(TABLE_APPROVALNODE)
+                ->set('status')->eq('done')
+                ->set('result')->eq('ignore')
+                ->where('approval')->eq($approvalID)
+                ->andWhere('status')->notin('done,forward,reverted')
+                ->exec();
+            return !dao::isError();
+        }
 
         /* 目标版本与当前版本评审状态一致时，评审信息用最新的评审信息，不用改动直接返回。*/
         if($targetPoint->rawStatus == $currentPoint->rawStatus) return true;
