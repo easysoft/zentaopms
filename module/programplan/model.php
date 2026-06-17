@@ -1339,14 +1339,14 @@ class programplanModel extends model
 
         $updateTask = new stdclass();
         $updateTask->execution      = $executionID;
-        $updateTask->story          = $task->story ?: 0;
+        $updateTask->story          = (int)trim($task->story, '#') ?: 0;
         $updateTask->estStarted     = date('Y-m-d', strtotime($task->begin)) ?: null;
         $updateTask->deadline       = date('Y-m-d', strtotime($task->deadline)) ?: null;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
         $updateTask->status         = $task->rawStatus;
-        $updateTask->pri            = $task->pri;
+        $updateTask->pri            = $task->pri ?: 0;
         $updateTask->mailto         = $task->mailto;
         $updateTask->keywords       = $task->keywords;
         $updateTask->finishedBy     = $task->finishedBy;
