@@ -13324,8 +13324,9 @@ class upgradeModel extends model
         if(empty($tables)) return true;
 
         $nodes = $this->dao->select('approval,account')->from(TABLE_APPROVALNODE)
-            ->where('status')->eq('done')
+            ->where('status')->in('done,reverted')
             ->andWhere('type')->eq('review')
+            ->andWhere('result')->ne('ignore')
             ->orderBy('id')
             ->fetchAll();
 
