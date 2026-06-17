@@ -1153,9 +1153,9 @@ $lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</
 $lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了' . $lang->projectCommon . '与代码库 $extra 的关联';
 
 $lang->action->desc->rollbackversion      = '$date, 由 <strong>$actor</strong> 回滚 项目甘特图 至 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->editedbyrollback     = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 编辑了 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->deletedbyrollback    = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 删除了 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->undeletedbyrollback  = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 还原了 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->editedbyrollback     = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 编辑。' . "\n";
+$lang->action->desc->deletedbyrollback    = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 删除。' . "\n";
+$lang->action->desc->undeletedbyrollback  = '$date, 由 <strong>$actor</strong> 通过 项目甘特图版本回滚 还原。' . "\n";
 $lang->action->label->editedbyrollback    = '通过 项目甘特图版本回滚 编辑了';
 $lang->action->label->deletedbyrollback   = '通过 项目甘特图版本回滚 删除了';
 $lang->action->label->undeletedbyrollback = '通过 项目甘特图版本回滚 还原了';

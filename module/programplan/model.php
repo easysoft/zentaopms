@@ -1310,14 +1310,14 @@ class programplanModel extends model
                 ->andWhere('action')->eq('deleted')
                 ->fetchPairs('id');
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
-            $this->action->create('execution', (int)$oldStage->id, 'undeletedbyrollback', '', "{$this->lang->execution->common} #{$oldStage->id} {$updateStage->name}");
+            $this->action->create('execution', (int)$oldStage->id, 'undeletedbyrollback');
         }
         else
         {
             $changes = common::createChanges($oldStage, $updateStage);
             if(!empty($changes))
             {
-                $actionID = $this->action->create('execution', (int)$oldStage->id, 'editedbyrollback', '', "{$this->lang->execution->common} #{$oldStage->id} {$updateStage->name}");
+                $actionID = $this->action->create('execution', (int)$oldStage->id, 'editedbyrollback');
                 if($actionID) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1401,14 +1401,14 @@ class programplanModel extends model
                 ->andWhere('action')->eq('deleted')
                 ->fetchPairs('id');
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
-            $this->action->create('task', (int)$taskID, 'undeletedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$updateTask->name}");
+            $this->action->create('task', (int)$taskID, 'undeletedbyrollback');
         }
         else
         {
             $changes = common::createChanges($oldTask, $updateTask);
             if(!empty($changes))
             {
-                $actionID = $this->action->create('task', (int)$taskID, 'editedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$updateTask->name}");
+                $actionID = $this->action->create('task', (int)$taskID, 'editedbyrollback');
                 if($actionID) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1568,7 +1568,7 @@ class programplanModel extends model
 
                 $stage = $stageList[$stageID];
                 $this->action->create('execution', (int)$stageID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                $this->action->create('execution', (int)$stageID, 'deletedbyrollback', '', "{$this->lang->execution->common} #{$stageID} {$stage->name}");
+                $this->action->create('execution', (int)$stageID, 'deletedbyrollback');
                 $this->execution->updateUserView($stageID);
             }
         }
@@ -1595,7 +1595,7 @@ class programplanModel extends model
                         if(dao::isError()) return false;
 
                         $this->action->create('task', (int)$childID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                        $this->action->create('task', (int)$childID, 'deletedbyrollback', '', "{$this->lang->task->common} #{$childID} {$childTask->name}");
+                        $this->action->create('task', (int)$childID, 'deletedbyrollback');
                         if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
                         if($childTask->story) $this->story->setStage($childTask->story);
                     }
@@ -1605,7 +1605,7 @@ class programplanModel extends model
                 if(dao::isError()) return false;
 
                 $this->action->create('task', (int)$taskID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                $this->action->create('task', (int)$taskID, 'deletedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$task->name}");
+                $this->action->create('task', (int)$taskID, 'deletedbyrollback');
                 if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
                 if($task->story) $this->story->setStage($task->story);
             }

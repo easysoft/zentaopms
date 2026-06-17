@@ -1151,9 +1151,9 @@ $lang->action->desc->linkedrepo                   = '$date, <strong>$actor</stro
 $lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';
 
 $lang->action->desc->rollbackversion      = '$date, <strong>$actor</strong> rolled back the project Gantt to <strong>$extra</strong>.' . "\n";
-$lang->action->desc->editedbyrollback     = '$date, <strong>$actor</strong> edited <strong>$extra</strong> through the project Gantt version rollback.' . "\n";
-$lang->action->desc->deletedbyrollback    = '$date, <strong>$actor</strong> deleted <strong>$extra</strong> through the project Gantt version rollback.' . "\n";
-$lang->action->desc->undeletedbyrollback  = '$date, <strong>$actor</strong> restored <strong>$extra</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->desc->editedbyrollback     = '$date, edited by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->desc->deletedbyrollback    = '$date, deleted by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->desc->undeletedbyrollback  = '$date, restored by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
 $lang->action->label->editedbyrollback    = 'through project Gantt version rollback edited';
 $lang->action->label->deletedbyrollback   = 'through project Gantt version rollback deleted';
 $lang->action->label->undeletedbyrollback = 'through project Gantt version rollback restored';
