@@ -28,7 +28,14 @@ foreach($stories as $story)
     $needNotReview  = false;
     if(!$rowForceReview)
     {
-        $needNotReview = ($app->user->account == $product->PO or $config->{$story->type}->needReview == 0) and empty($storyReviewers);
+        if($product)
+        {
+            $needNotReview = ($app->user->account == $product->PO or $config->{$story->type}->needReview == 0) and empty($storyReviewers);
+        }
+        else
+        {
+            $needNotReview = $config->{$story->type}->needReview == 0 and empty($storyReviewers);
+        }
     }
 
     $row = new stdClass();
@@ -40,6 +47,8 @@ foreach($stories as $story)
     $row->needNotReview = $needNotReview ? 1 : 0;
     $data[] = $row;
 }
+
+$hasForceReview = !empty(array_filter($data, function($row) {return $row->forceReview;}));
 
 formBatchPanel
 (
@@ -81,6 +90,7 @@ formBatchPanel
         set::name('reviewer'),
         set::label($lang->story->reviewers),
         set::control('picker'),
+        set::required($hasForceReview),
         set::multiple(true),
         set::items($reviewers),
         set::width('300px'),

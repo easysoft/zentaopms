@@ -1,6 +1,6 @@
 window.renderRowData = function($row, index, story)
 {
-    const forceReview = story.forceReview == 1 || story.forceReview == '1';
+    const forceReview    = story.forceReview == 1 || story.forceReview == '1';
     const $needNotReview = $row.find('[data-name="needNotReview"]');
     const $reviewer      = $row.find('[data-name="reviewer"]');
 

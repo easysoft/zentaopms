@@ -611,4 +611,4 @@ $lang->story->error = new stdclass();
 $lang->story->error->length = "长度超过了%d个字符，无法保存，请修改后再试";
 
 $lang->story->batchSubmitReviewStatusTips = "需求%s不是草稿或变更中状态，不能提交评审！";
-$lang->story->batchSubmitReviewPrivTips   = "您没有%s批量提交评审权限，已自动过滤掉了无权限提交评审的需求。\n";
+$lang->story->batchSubmitReviewPrivTips   = "您无%s批量提交评审权限，已过滤掉该类型的需求。\n";

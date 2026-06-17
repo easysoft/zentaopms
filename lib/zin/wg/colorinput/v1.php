@@ -38,6 +38,7 @@ class colorInput extends inputControl
         'colorValue?: string=""',        // 颜色默认值。
         'hint?: string',                 // 提示文本。
         'readonly?: bool',               // 是否只读。
+        'disabled?: bool',               // 是否禁用。
         'syncColor?: string|bool=true'   // 是否同步颜色
     );
 
@@ -48,7 +49,7 @@ class colorInput extends inputControl
      */
     protected function build()
     {
-        list($id, $name, $value, $readonly, $inputClass, $colorName, $colorValue, $syncColor, $hint) = $this->prop(array('id', 'name', 'value', 'readonly', 'inputClass', 'colorName', 'colorValue', 'syncColor', 'hint'));
+        list($id, $name, $value, $readonly, $disabled, $inputClass, $colorName, $colorValue, $syncColor, $hint) = $this->prop(array('id', 'name', 'value', 'readonly', 'disabled', 'inputClass', 'colorName', 'colorValue', 'syncColor', 'hint'));
 
         if($syncColor === true)
         {
@@ -64,6 +65,7 @@ class colorInput extends inputControl
                 set::id($id),
                 set::name($name),
                 set::readonly($readonly),
+                set::disabled($disabled),
                 set::value($value),
             ),
             set::suffixWidth('icon'),
