@@ -20,6 +20,12 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 su('admin');
 
+$product = zenData('product');
+$product->id->range('1');
+$product->name->range('产品1');
+$product->status->range('normal');
+$product->gen(1);
+
 $story = zenData('story');
 $story->product->range('1');
 $story->version->range('3');
