@@ -150,9 +150,9 @@ foreach($reviewList as $review)
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
-$cols = $this->loadModel('datatable')->getSetting('my', 'audit');
+$cols       = $this->loadModel('datatable')->getSetting('my', 'audit');
 $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-$data = array_values($reviewList);
+$data       = array_values($reviewList);
 
 dtable
 (
