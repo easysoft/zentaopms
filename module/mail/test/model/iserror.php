@@ -29,9 +29,14 @@ $mailTest = new mailModelTest();
 
 // 4. 执行测试步骤
 r($mailTest->isErrorTest()) && p() && e('0'); // 步骤1：初始状态无错误信息
-r($mailTest->objectModel->errors[] = 'SMTP connection failed') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤2：添加单个错误信息
-r($mailTest->objectModel->errors[] = 'Authentication failed') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤3：添加多个错误信息
-r($mailTest->objectModel->getError()) && r($mailTest->isErrorTest()) && p() && e('0'); // 步骤4：清空错误信息后检查
-r($mailTest->objectModel->errors[] = '') && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤5：添加空字符串错误信息
-r($mailTest->objectModel->errors = array()) && r($mailTest->isErrorTest()) && p() && e('0'); // 步骤6：重置errors数组为空
-r($mailTest->objectModel->errors[] = 500) && r($mailTest->isErrorTest()) && p() && e('1'); // 步骤7：添加数字错误信息
+$mailTest->setErrors(array('SMTP connection failed'));
+r($mailTest->isErrorTest()) && p() && e('1'); // 步骤2：添加单个错误信息
+$mailTest->setErrors(array('SMTP connection failed', 'Authentication failed'));
+r($mailTest->isErrorTest()) && p() && e('1'); // 步骤3：添加多个错误信息
+r($mailTest->getErrorTest()) && r($mailTest->isErrorTest()) && p() && e('0'); // 步骤4：清空错误信息后检查
+$mailTest->setErrors(array(''));
+r($mailTest->isErrorTest()) && p() && e('1'); // 步骤5：添加空字符串错误信息
+$mailTest->setErrors(array());
+r($mailTest->isErrorTest()) && p() && e('0'); // 步骤6：重置errors数组为空
+$mailTest->setErrors(array(500));
+r($mailTest->isErrorTest()) && p() && e('1'); // 步骤7：添加数字错误信息

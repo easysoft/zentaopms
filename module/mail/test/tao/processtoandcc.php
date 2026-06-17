@@ -19,11 +19,37 @@ cid=17036
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-su('admin');
-
-zenData('user')->gen(5);
 
 global $tester;
+$tester->dao->delete()->from(TABLE_USER)->where('id')->gt(0)->exec();
+
+$users = array(
+    array('account' => 'admin', 'realname' => 'admin', 'email' => '10001000@qq.com', 'gender' => 'f'),
+    array('account' => 'user1', 'realname' => '用户1', 'email' => '10021002@163.com', 'gender' => 'm'),
+    array('account' => 'user2', 'realname' => '用户2', 'email' => '10041004@gmail.com', 'gender' => 'f'),
+    array('account' => 'user3', 'realname' => '用户3', 'email' => '10061006@qq.com', 'gender' => 'm'),
+    array('account' => 'user4', 'realname' => '用户4', 'email' => '10081008@163.com', 'gender' => 'f'),
+);
+
+foreach($users as $userData)
+{
+    $user = new stdClass();
+    $user->company  = 1;
+    $user->type     = 'inside';
+    $user->dept     = 1;
+    $user->account  = $userData['account'];
+    $user->password = md5('123456');
+    $user->role     = 'qa';
+    $user->realname = $userData['realname'];
+    $user->gender   = $userData['gender'];
+    $user->email    = $userData['email'];
+    $user->visions  = 'rnd,lite,or';
+    $user->deleted  = '0';
+    $tester->dao->insert(TABLE_USER)->data($user)->exec();
+}
+
+su('admin');
+
 $mailModel = $tester->loadModel('mail');
 $mailModel->app->user->account = 'admin';
 
