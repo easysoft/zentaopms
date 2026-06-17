@@ -426,10 +426,12 @@ class api extends router
     {
         $searchModule    = $this->resolveSearchModule($routeSearch);
         $querySessionKey = $this->resolveQuerySessionKey($routeSearch);
+        $rawModule       = zget($this->originRouteInfo, 'rawModule', $this->moduleName);
+        $rawMethod       = zget($this->originRouteInfo, 'rawMethod', $this->methodName);
 
         $this->loadModel($this->moduleName);
-        $this->control->app->rawModule = $this->moduleName;
-        $this->control->app->rawMethod = $this->methodName;
+        $this->control->app->rawModule = $rawModule;
+        $this->control->app->rawMethod = $rawMethod;
 
         if($this->moduleName == 'program' && $this->methodName == 'browse')
         {
@@ -683,9 +685,9 @@ class api extends router
             return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
         }
 
-        if($this->moduleName == 'my' && in_array($this->methodName, array('work', 'contribute')))
+        if($this->moduleName == 'my' && in_array($rawMethod, array('work', 'contribute')))
         {
-            $mode       = (string)zget($_GET, 'mode', 'task');
+            $mode       = (string)zget($this->originRouteInfo, 'mode', zget($_GET, 'mode', 'task'));
             $browseType = (string)zget($_GET, 'browseType', '');
             $queryID    = $browseType == 'bysearch' ? (int)zget($_GET, 'param', zget($_GET, 'queryID', 0)) : 0;
             $param      = (string)zget($_GET, 'param', 'myQueryID');
@@ -693,11 +695,11 @@ class api extends router
             $recTotal   = (int)zget($_GET, 'recTotal', 0);
             $recPerPage = (int)zget($_GET, 'recPerPage', 20);
             $pageID     = (int)zget($_GET, 'pageID', 1);
-            $actionURL  = helper::createLink('my', $this->methodName, "mode={$mode}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+            $actionURL  = helper::createLink('my', $rawMethod, "mode={$mode}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
 
             if($mode == 'task')
             {
-                $this->my->buildTaskSearchForm($queryID, $actionURL, $this->methodName . 'Task', false);
+                $this->my->buildTaskSearchForm($queryID, $actionURL, $rawMethod . 'Task', false);
                 return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'execution');
             }
             if($mode == 'bug')
@@ -987,9 +989,13 @@ class api extends router
             $_GET['objectID']   = zget($_POST, 'objectID', '');
         }
 
+        if(isset($this->originRouteInfo['rawModule'])) $this->rawModule = (string)$this->originRouteInfo['rawModule'];
+        if(isset($this->originRouteInfo['rawMethod'])) $this->rawMethod = (string)$this->originRouteInfo['rawMethod'];
+
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+
         $this->prepareV2Search();
 
         /* Set default params and post data to delete.*/
@@ -1370,8 +1376,11 @@ class api extends router
             }
             else
             {
-                /* Browse all items in api mode defaultly. */
-                $this->params[$key] = $key == 'browseType' ? 'all' : $defaultItem['default'];
+                /*
+                 * Only force browse methods to use the broad "all" scope by default.
+                 * Custom list methods such as my/task rely on their own declared defaults.
+                 */
+                $this->params[$key] = ($key == 'browseType' && $this->methodName == 'browse') ? 'all' : $defaultItem['default'];
             }
         }
 
