@@ -23,7 +23,7 @@ form
     editor
     (
         set::name('lastComment'),
-        html(html_entity_decode($comment))
+        html($comment)
     ),
     $objectType != 'story' ? fileSelector(set::defaultFiles(array_values($files))) : null,
     set::actions($actions)
