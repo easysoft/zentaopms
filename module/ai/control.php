@@ -727,7 +727,14 @@ class ai extends control
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+
+            $dataPropNames = new stdclass();
+            $dataPropNames->{$prompt->module} = new stdclass();
+            foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label)
+            {
+                $dataPropNames->{$prompt->module}->{$name} = $label;
+            }
+            $response['dataPropNames'] = $dataPropNames;
         }
 
         $fields = array_values($this->ai->getPromptFields($promptId));
@@ -908,7 +915,7 @@ class ai extends control
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+            $response['dataPropNames']  = $this->lang->ai->moduleList[$prompt->module];
         }
 
         $response['objectType']   = $prompt->module;

@@ -1897,6 +1897,8 @@ class aiModel extends model
     {
         if(empty($data)) return '';
 
+        $this->getDataSource();
+
         /* Handle object data. */
         if(is_object($data)) $data = (array)$data;
 
@@ -1943,11 +1945,11 @@ class aiModel extends model
             $objectName = $source[0];
             $objectKey  = $source[1];
 
-            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
-            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
+            if(!isset($this->lang->ai->moduleList[$objectName]['common'])) continue;
+            if(!isset($this->lang->ai->moduleList[$objectName][$objectKey])) continue;
 
-            $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
-            $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
+            $semanticName = $this->lang->ai->moduleList[$objectName]['common'];
+            $semanticKey  = $this->lang->ai->moduleList[$objectName][$objectKey];
 
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
@@ -2942,7 +2944,7 @@ class aiModel extends model
         $source       = explode(',', $promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
-        $titleData = $this->lang->ai->dataSource[$module];
+        $titleData = $this->lang->ai->moduleList[$module];
         $testData  = $this->lang->ai->prompts->testData[$module];
 
         $categorized = array();
