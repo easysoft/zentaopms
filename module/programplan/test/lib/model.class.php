@@ -1160,4 +1160,32 @@ class programplanModelTest extends baseTest
         foreach($versions as $version) $output[] = $version;
         return $output;
     }
+
+    /**
+     * Test rollbackPoint method.
+     *
+     * @param  object      $targetPoint
+     * @param  object|null $currentPoint
+     * @access public
+     * @return array|false
+     */
+    public function rollbackPointTest(object $targetPoint, ?object $currentPoint = null): array|false
+    {
+        $result = $this->instance->rollbackPoint($targetPoint, $currentPoint);
+        if(dao::isError()) return dao::getError();
+
+        $pointObjectID = explode('-', $targetPoint->id)[2];
+        $object        = $this->instance->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($pointObjectID)->fetch();
+        $review        = $this->instance->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($targetPoint->reviewID)->fetch();
+        $approvalID    = $this->instance->dao->select('approval')->from(TABLE_APPROVALOBJECT)->where('objectType')->eq('review')->andWhere('objectID')->eq($targetPoint->reviewID)->orderBy('id_desc')->limit(1)->fetch('approval');
+        $approvalNodes = $this->instance->dao->select('*')->from(TABLE_APPROVALNODE)->where('approval')->eq($approvalID)->orderBy('id_asc')->fetchAll();
+
+        $output = array('result' => $result);
+        $output['objectEnabled'] = $object ? $object->enabled : '0';
+        $output['reviewDeleted'] = $review ? $review->deleted : '1';
+        $output['reviewStatus']  = $review ? $review->status : '';
+        $output['nodeCount']     = count($approvalNodes);
+        foreach($approvalNodes as $node) $output[] = $node;
+        return $output;
+    }
 }
