@@ -1440,7 +1440,7 @@ class programplanModel extends model
             if(dao::isError()) return false;
 
             /* 目标版本的评审回滚为待评审。*/
-            $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->where('id')->eq($targetPoint->reviewID)->exec();
+            $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($targetPoint->reviewID)->exec();
             if(dao::isError()) return false;
 
             $approvalID = $this->dao->select('approval')->from(TABLE_APPROVALOBJECT)
@@ -1470,7 +1470,7 @@ class programplanModel extends model
         }
 
         /* 目标版本与当前版本评审状态不一致的情况，撤销评审回滚到待评审。*/
-        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->where('id')->eq($targetPoint->reviewID)->exec();
+        $this->dao->update(TABLE_REVIEW)->set('status')->eq('draft')->set('result')->eq('')->where('id')->eq($targetPoint->reviewID)->exec();
         if($targetPoint->reviewID != $currentPoint->reviewID)
         {
             $this->dao->update(TABLE_REVIEW)->set('deleted')->eq(0)->where('id')->eq($targetPoint->reviewID)->exec();
