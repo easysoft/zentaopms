@@ -210,7 +210,7 @@ $routes['/doc/docs/:docID/collect'] = array(
 
 $routes['/doc/my/spaces/:spaceID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&objectID=:libID&moduleType=doc')
+    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
 );
 $routes['/doc/team/spaces/:spaceID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=module'),

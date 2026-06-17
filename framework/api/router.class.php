@@ -95,6 +95,15 @@ class api extends router
     public $realRouteInfo = array();
 
     /**
+     * APIV2 过滤前的原始 GET 参数。
+     * The original GET params before filtering in APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $rawGet = array();
+
+    /**
      * 构造方法, 设置请求路径，版本等
      *
      * The construct function.
@@ -1254,8 +1263,8 @@ class api extends router
     public function setFormData()
     {
         $requestBody = file_get_contents("php://input");
-
-        $_POST = json_decode($requestBody, true);
+        $postData = json_decode($requestBody, true);
+        $_POST    = is_array($postData) ? $postData : array();
 
         /* Avoid empty post body. */
         if(in_array($this->control->moduleName, ['feedback', 'ticket']))
@@ -1267,6 +1276,7 @@ class api extends router
             $_POST['verifyPassword'] = '1';
         }
 
+        $this->mergeRouteParamsToPost();
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
@@ -1302,6 +1312,7 @@ class api extends router
         $this->control                    = $control;
 
         $_POST = $postData;
+        $this->mergeRouteParamsToPost();
         foreach($this->control->formData as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
@@ -1318,6 +1329,26 @@ class api extends router
     }
 
     /**
+     * 合并 APIV2 路由和 redirect 参数到 POST。
+     * Merge APIV2 route and redirect params into POST.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mergeRouteParamsToPost(): void
+    {
+        foreach($this->rawGet as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
+
+        foreach($this->params as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
+    }
+
+    /**
      * 设置要被调用方法的参数。
      * Set the params of method calling.
      *
@@ -1329,23 +1360,7 @@ class api extends router
         $defaultParams = $this->getDefaultParams();
 
         $this->params = array();
-
-        /* POST/PUT/DELETE methods have no correct param name, use index. */
-        if($this->action != 'get')
-        {
-            $values = array_values($_GET);
-            $index  = 0;
-            foreach($defaultParams as $key => $defaultItem)
-            {
-                if(isset($values[$index]))
-                {
-                    $value = $values[$index];
-                    settype($value, $defaultItem['type']);
-                    $_GET[$key] = $value;
-                }
-                $index++;
-            }
-        }
+        $this->rawGet = $_GET;
 
         foreach($defaultParams as $key => $defaultItem)
         {
