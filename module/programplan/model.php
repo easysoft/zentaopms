@@ -1310,14 +1310,14 @@ class programplanModel extends model
                 ->andWhere('action')->eq('deleted')
                 ->fetchPairs('id');
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
-            $this->action->create('execution', (int)$oldStage->id, 'undeletedbyrollback', '', "{$this->lang->execution->common} #{$oldStage->id} {$updateStage->name}");
+            $this->action->create('execution', (int)$oldStage->id, 'undeletedbyrollback');
         }
         else
         {
             $changes = common::createChanges($oldStage, $updateStage);
             if(!empty($changes))
             {
-                $actionID = $this->action->create('execution', (int)$oldStage->id, 'editedbyrollback', '', "{$this->lang->execution->common} #{$oldStage->id} {$updateStage->name}");
+                $actionID = $this->action->create('execution', (int)$oldStage->id, 'editedbyrollback');
                 if($actionID) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1339,14 +1339,14 @@ class programplanModel extends model
 
         $updateTask = new stdclass();
         $updateTask->execution      = $executionID;
-        $updateTask->story          = $task->story ?: 0;
+        $updateTask->story          = (int)trim($task->story, '#') ?: 0;
         $updateTask->estStarted     = date('Y-m-d', strtotime($task->begin)) ?: null;
         $updateTask->deadline       = date('Y-m-d', strtotime($task->deadline)) ?: null;
         $updateTask->estimate       = $task->estimate;
         $updateTask->consumed       = $task->consumed;
         $updateTask->left           = $task->left;
         $updateTask->status         = $task->rawStatus;
-        $updateTask->pri            = $task->pri;
+        $updateTask->pri            = $task->pri ?: 0;
         $updateTask->mailto         = $task->mailto;
         $updateTask->keywords       = $task->keywords;
         $updateTask->finishedBy     = $task->finishedBy;
@@ -1401,14 +1401,14 @@ class programplanModel extends model
                 ->andWhere('action')->eq('deleted')
                 ->fetchPairs('id');
             $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->in($deleteActionID)->exec();
-            $this->action->create('task', (int)$taskID, 'undeletedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$updateTask->name}");
+            $this->action->create('task', (int)$taskID, 'undeletedbyrollback');
         }
         else
         {
             $changes = common::createChanges($oldTask, $updateTask);
             if(!empty($changes))
             {
-                $actionID = $this->action->create('task', (int)$taskID, 'editedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$updateTask->name}");
+                $actionID = $this->action->create('task', (int)$taskID, 'editedbyrollback');
                 if($actionID) $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1560,15 +1560,13 @@ class programplanModel extends model
         {
             $this->loadModel('execution');
             $this->loadModel('action');
-            $stageList = $this->execution->getByIdList($stages, 'all');
             foreach($stages as $stageID)
             {
                 $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($stageID)->exec();
                 if(dao::isError()) return false;
 
-                $stage = $stageList[$stageID];
                 $this->action->create('execution', (int)$stageID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                $this->action->create('execution', (int)$stageID, 'deletedbyrollback', '', "{$this->lang->execution->common} #{$stageID} {$stage->name}");
+                $this->action->create('execution', (int)$stageID, 'deletedbyrollback');
                 $this->execution->updateUserView($stageID);
             }
         }
@@ -1581,31 +1579,13 @@ class programplanModel extends model
             $this->loadModel('action');
             foreach($tasks as $taskID)
             {
-                $task = $this->task->fetchByID((int)$taskID);
-                if($task->isParent)
-                {
-                    $childIdList = $this->task->getAllChildId((int)$taskID, false);
-                    $childTasks  = $this->task->getByIdList($childIdList);
-                    foreach($childTasks as $childID => $childTask)
-                    {
-                        if(!isset($tasks[$childID])) continue;
-                        if(strpos(",{$childTask->path},", ",$taskID,") === false) continue;
-
-                        $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($childID)->exec();
-                        if(dao::isError()) return false;
-
-                        $this->action->create('task', (int)$childID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                        $this->action->create('task', (int)$childID, 'deletedbyrollback', '', "{$this->lang->task->common} #{$childID} {$childTask->name}");
-                        if($childTask->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($childTask->fromBug)->exec();
-                        if($childTask->story) $this->story->setStage($childTask->story);
-                    }
-                }
-
                 $this->dao->update(TABLE_TASK)->set('deleted')->eq(1)->where('id')->eq($taskID)->exec();
                 if(dao::isError()) return false;
 
                 $this->action->create('task', (int)$taskID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
-                $this->action->create('task', (int)$taskID, 'deletedbyrollback', '', "{$this->lang->task->common} #{$taskID} {$task->name}");
+                $this->action->create('task', (int)$taskID, 'deletedbyrollback');
+
+                $task = $this->task->fetchByID((int)$taskID);
                 if($task->fromBug != 0) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($task->fromBug)->exec();
                 if($task->story) $this->story->setStage($task->story);
             }
@@ -1631,7 +1611,13 @@ class programplanModel extends model
         if(dao::isError()) return false;
 
         $children = $this->dao->select('id')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('parent')->eq($taskID)->fetchPairs('id');
-        if(empty($children)) return true;
+        if(empty($children))
+        {
+            $this->dao->update(TABLE_TASK)->set('isParent')->eq(0)->where('id')->eq($taskID)->exec();
+            return true;
+        }
+
+        $this->dao->update(TABLE_TASK)->set('isParent')->eq(1)->where('id')->eq($taskID)->exec();
 
         foreach($children as $id) $this->setTaskPath($id);
         return true;
