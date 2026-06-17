@@ -636,8 +636,8 @@ class gitfoxRepo
         }
 
         $params = array();
-        $params['gitRef'] = $branch;
-        $params['limit']  = $count;
+        $params['gitRef']   = $branch;
+        $params['pageSize'] = $count;
 
         if($version and $version != 'HEAD')
         {
@@ -661,7 +661,7 @@ class gitfoxRepo
             }
         }
 
-        $list = $this->fetch($api, $params, true);
+        $list = $this->fetch($api, array(), true, $params);
         foreach($list as $commit)
         {
             if(!is_object($commit)) continue;
@@ -833,20 +833,35 @@ class gitfoxRepo
         if($needToLoop)
         {
             $allResults = array();
-            for($page = 1; true; $page++)
+            if(!empty($params))
             {
-                $results = json_decode(commonModel::http($api . "&page={$page}", $data, array(), $header));
-                if(is_array($results))
+                for($page = 1; true; $page++)
                 {
-                    $allResults = array_merge($allResults, $results);
-                    if(count($results) < $params['limit']) break;
-                    continue;
-                }
+                    $results = json_decode(commonModel::http($api . "&page={$page}", $data, array(), $header));
+                    if(is_array($results))
+                    {
+                        $allResults = array_merge($allResults, $results);
+                        if(count($results) < $params['limit']) break;
+                        continue;
+                    }
 
-                if(isset($results->content)) $results = $results->content;
-                if(empty($results->$field) || !is_array($results->$field)) break;
-                if(!empty($results->$field)) $allResults = array_merge($allResults, $results->$field);
-                if(count($results->$field) < $params['limit']) break;
+                    if(isset($results->content)) $results = $results->content;
+                    if(empty($results->$field) || !is_array($results->$field)) break;
+                    if(!empty($results->$field)) $allResults = array_merge($allResults, $results->$field);
+                    if(count($results->$field) < $params['limit']) break;
+                }
+            }
+            else
+            {
+                for($i = 0; true; $i++)
+                {
+                    $data['page'] = $i + 1;
+                    $results = json_decode(commonModel::http($api, $data, array(), $header, 'json'));
+                    if(empty($results) || empty($results->data)) break;
+                    if(isset($results->data->commits) && empty($results->data->commits)) break;
+                    $allResults = array_merge($allResults, strpos($api, 'commits/list') != false ? $results->data->commits : $results->data);
+                    if(!empty($results->pager) && $results->pager->pageSize < 100) break;
+                }
             }
 
             return $allResults;
