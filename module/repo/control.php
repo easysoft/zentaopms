@@ -2541,7 +2541,7 @@ class repo extends control
             }
             $line--;
         }
-        die($committer);
+        echo $committer;
     }
 
     /**
