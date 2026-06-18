@@ -3411,9 +3411,27 @@ class repoModel extends model
         $params->provider->host = $provider->url;
         if($provider->type == 'Subversion')
         {
-            $params->provider->password = $formData->password;
-            $params->provider->username = $formData->account;
-            $params->provider->slug     = rtrim($formData->path, '/') . '/' . $formData->slug;
+            if(strpos($provider->url, 'file://') === 0)
+            {
+                $path = explode('///', $provider->url);
+                $params->provider->host = 'file://';
+                $params->provider->slug = isset($path[1]) ? $path[1] : '';
+            }
+            elseIf(strpos($provider->url, 'svn://') === 0)
+            {
+                $path = explode('///', $provider->url);
+                $params->provider->host = 'svn://';
+                $params->provider->slug = isset($path[1]) ? $path[1] : '';
+            }
+            else
+            {
+                $path = parse_url($provider->url);
+                if(empty($path)) return false;
+                $params->provider->host     = $path['scheme'] . '://' . $path['host'];
+                $params->provider->password = $formData->password;
+                $params->provider->username = $formData->account;
+                $params->provider->slug     = $path['path'];
+            }
         }
         else
         {
