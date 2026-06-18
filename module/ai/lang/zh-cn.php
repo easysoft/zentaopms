@@ -146,19 +146,8 @@ $lang->ai->prompts->displayPositionList = array();
 $lang->ai->prompts->displayPositionList['detail'] = '详情';
 $lang->ai->prompts->displayPositionList['form']   = '表单';
 
-$lang->ai->prompts->summary           = '本页共 %s 个禅道智能体。';
-$lang->ai->prompts->fieldSeparator    = '、';
-$lang->ai->prompts->pageContext       = '当前页面上下文：';
-$lang->ai->prompts->currentFormData   = '当前表单数据：';
-$lang->ai->prompts->batchFormData     = '当前表单为批量创建，每行数据包含以下字段：';
-$lang->ai->prompts->fieldDefinition   = '字段说明：';
-$lang->ai->prompts->targetFormInfo    = '[目标表单信息]';
-$lang->ai->prompts->formLabel         = '表单: %s';
-$lang->ai->prompts->fillableFields    = '可填充字段：';
-$lang->ai->prompts->returnJSONObject  = '请返回 JSON 对象，键名对应上述字段名。必填字段必须提供值。';
-$lang->ai->prompts->returnJSONArray   = '请返回 JSON 数组，每个数组元素对应表中的一行数据，元素为对象，对象键名对应上述可填充字段名。必填字段必须提供值。';
-$lang->ai->prompts->processDataPrefix = "要进行处理的数据如下：\n%s";
-$lang->ai->prompts->useToolResult     = "请使用工具 `%s` 返回处理结果。";
+$lang->ai->prompts->summary = '本页共 %s 个禅道智能体。';
+$lang->ai->prompts->fieldSeparator = '、';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm  = '当前禅道智能体未完成，是否继续设计？';
@@ -406,7 +395,6 @@ $APPEALS模型通过结构化分析，将模糊的直觉转化为清晰的数据
 /* Finalize page. */
 $lang->ai->moduleDisableTip = '系统根据所选对象自动关联分组';
 
-/* Data source definition. */
 $lang->ai->moduleList = array();
 
 $lang->ai->moduleList['program']['common']       = '项目集';
@@ -476,7 +464,6 @@ $lang->ai->targetForm['project']['common']        = '项目';
 $lang->ai->targetForm['build']['common']          = '版本';
 $lang->ai->targetForm['execution']['common']      = '执行';
 $lang->ai->targetForm['task']['common']           = '任务';
-$lang->ai->targetForm['task']['create']           = '建任务';
 $lang->ai->targetForm['testcase']['common']       = '用例';
 $lang->ai->targetForm['testsuite']['common']      = '套件';
 $lang->ai->targetForm['testtask']['common']       = '测试单';
@@ -512,7 +499,6 @@ $lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
 $lang->ai->targetForm['project']['risk/create']        = '创建风险';
 $lang->ai->targetForm['project']['issue/create']       = '创建问题';
 $lang->ai->targetForm['project']['doc/create']         = '创建文档';
-$lang->ai->targetForm['project']['create']             = '创建项目';
 $lang->ai->targetForm['project']['programplan/create'] = '设置阶段';
 
 $lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';
@@ -1117,7 +1103,6 @@ $lang->ai->execute->failReasons['noPrompt']     = '禅道智能体不存在';
 $lang->ai->execute->failReasons['noObjectData'] = '对象数据获取失败';
 $lang->ai->execute->failReasons['noResponse']   = '请求返回值为空';
 $lang->ai->execute->failReasons['noTargetForm'] = '目标表单地址获取失败，或表单必要变量获取失败（可能原因为无法找到关联的对象，请检查对象间的关联关系）';
-$lang->ai->execute->failReasons['noFormSchema'] = '缺少表单结构数据';
 $lang->ai->execute->executeErrors = array();
 $lang->ai->execute->executeErrors['-1'] = '禅道智能体不存在';
 $lang->ai->execute->executeErrors['-2'] = '对象数据获取失败';
