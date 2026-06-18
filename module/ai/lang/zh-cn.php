@@ -507,6 +507,7 @@ $lang->ai->targetForm['execution']['createqa']         = '创建 QA';
 $lang->ai->targetForm['execution']['createrisk']       = '创建风险';
 $lang->ai->targetForm['execution']['createissue']      = '创建问题';
 
+$lang->ai->targetForm['task']['create']      = '创建任务';
 $lang->ai->targetForm['task']['edit']        = '编辑任务';
 $lang->ai->targetForm['task']['batchcreate'] = '批量创建子任务';
 

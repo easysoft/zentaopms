@@ -133,6 +133,7 @@ $config->ai->targetForm['productplan']['edit']           = (object)array('m' => 
 $config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
+$config->ai->targetForm['task']['create']                = (object)array('m' => 'task', 'f' => 'create', 'for' => 'task');
 $config->ai->targetForm['task']['edit']                  = (object)array('m' => 'task', 'f' => 'edit', 'for' => 'task');
 $config->ai->targetForm['task']['batchcreate']           = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
 $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit', 'for' => 'case');
