@@ -32,3 +32,4 @@ $lang->provider->typeList['Jenkins']    = 'Jenkins';
 $lang->provider->notice = new stdclass();
 $lang->provider->notice->confirmDelete = 'Are you sure to delete this provider?';
 $lang->provider->notice->emptyProvider = 'No providers.';
+$lang->provider->notice->svnPath       = 'Server address or file path';
