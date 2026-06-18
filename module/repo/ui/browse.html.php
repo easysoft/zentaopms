@@ -226,7 +226,7 @@ if(isset($repo->status) && $repo->status == 'syncFailed')
     (
         setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
         setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
-        h::span(setClass('icon icon-exclamation-sign mr-2')),
+        h::span(setClass('icon icon-exclamation-sign mr-1')),
         h::span($lang->repo->mirror->failedTitle),
         h::a
         (
