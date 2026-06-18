@@ -13,7 +13,7 @@ $requiresToken = in_array($type, array('GitLab', 'GitHub', 'Gitea', 'Gogs', 'Jen
 $fields = defineFieldList('provider');
 $fields->field('type')->required(true)->value($type)->width('1/2')->disabled(true)->wrapAfter(true);
 $fields->field('name')->required(true)->width('1/2')->value($provider->name)->wrapAfter(true);
-$fields->field('url')->required(true)->width('full')->value($provider->url);
+$fields->field('url')->required(true)->width('full')->value($provider->url)->placeholder($type == 'Subversion' ? $lang->provider->notice->svnPath : '');
 $fields->field('account')->required(true)->width('1/2')->hidden($type != 'Jenkins')->value($provider->account);
 $fields->field('token')->required($requiresToken)->control(array('control' => 'textarea', 'rows' => $type == 'Jenkins' ? 1 : 3))->hidden(!$requiresToken)->width($type == 'Jenkins' ? '1/2' : 'full')->value($provider->token);
 
