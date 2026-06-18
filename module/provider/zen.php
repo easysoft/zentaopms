@@ -23,7 +23,9 @@ class providerZen extends provider
     {
         $type = zget($provider, 'type', '');
         $url  = trim((string)zget($provider, 'url', ''));
-        if(empty($type) || $type == 'Subversion' || empty($url)) return true;
+        if(empty($type) || empty($url)) return true;
+
+        if($type == 'Subversion') return $this->checkSubversionUrl($url);
 
         if(!filter_var($url, FILTER_VALIDATE_URL))
         {
@@ -49,6 +51,133 @@ class providerZen extends provider
         }
 
         return !dao::isError();
+    }
+
+
+    /**
+     * 检查 Subversion 服务地址。
+     * Check Subversion provider url.
+     *
+     * @param  string $url
+     * @access protected
+     * @return bool
+     */
+    protected function checkSubversionUrl(string $url): bool
+    {
+        if(!$this->isValidSubversionUrl($url))
+        {
+            dao::$errors['url'][] = sprintf($this->lang->error->URL, $this->lang->provider->url);
+            return false;
+        }
+
+        commonModel::$requestErrors = array();
+        if($this->isAccessibleSubversionUrl($url)) return true;
+
+        $message = zget(commonModel::$requestErrors, 0, '');
+        dao::$errors['url'][] = empty($message) ? $this->lang->provider->error->api : sprintf($this->lang->provider->error->apiWithMessage, $message);
+        return false;
+    }
+
+    /**
+     * 检查 Subversion 服务地址格式。
+     * Check Subversion provider url format.
+     *
+     * @param  string $url
+     * @access protected
+     * @return bool
+     */
+    protected function isValidSubversionUrl(string $url): bool
+    {
+        $parts = parse_url($url);
+        if($parts === false) return false;
+
+        $scheme = strtolower((string)zget($parts, 'scheme', ''));
+        if(!in_array($scheme, array('svn', 'http', 'https', 'file'))) return false;
+
+        if($scheme == 'file') return strpos($url, 'file://') === 0 && !empty(zget($parts, 'path', ''));
+        return !empty(zget($parts, 'host', ''));
+    }
+
+    /**
+     * 检查 Subversion 服务地址可访问性。
+     * Check Subversion provider accessibility.
+     *
+     * @param  string $url
+     * @access protected
+     * @return bool
+     */
+    protected function isAccessibleSubversionUrl(string $url): bool
+    {
+        $parts  = parse_url($url);
+        $scheme = strtolower((string)zget($parts, 'scheme', ''));
+
+        if($scheme == 'file') return $this->checkSubversionFilePath((string)zget($parts, 'path', ''));
+        if($scheme == 'svn')  return $this->checkSubversionSocket((string)zget($parts, 'host', ''), (int)zget($parts, 'port', 3690));
+
+        return $this->checkSubversionHttpUrl($url);
+    }
+
+    /**
+     * 检查 Subversion HTTP 地址是否可访问。
+     * Check whether the Subversion HTTP url is accessible.
+     *
+     * @param  string $url
+     * @access protected
+     * @return bool
+     */
+    protected function checkSubversionHttpUrl(string $url): bool
+    {
+        $response = common::http($url, null, array(CURLOPT_NOBODY => true), array(), 'data', 'GET', 5, true, false);
+        return is_array($response) && empty($response['errno']) && !empty($response[1]);
+    }
+
+    /**
+     * 检查 Subversion svn 协议地址是否可访问。
+     * Check whether the Subversion svn protocol url is accessible.
+     *
+     * @param  string $host
+     * @param  int    $port
+     * @access protected
+     * @return bool
+     */
+    protected function checkSubversionSocket(string $host, int $port = 3690): bool
+    {
+        $errno   = 0;
+        $error   = '';
+        $handler = static function(int $level, string $message) use (&$error): bool
+        {
+            $error = $message;
+            return true;
+        };
+
+        set_error_handler($handler, E_WARNING | E_NOTICE);
+        $connection = fsockopen($host, $port, $errno, $error, 5);
+        restore_error_handler();
+        if($connection === false)
+        {
+            if($error) commonModel::$requestErrors[] = $error;
+            return false;
+        }
+
+        fclose($connection);
+        return true;
+    }
+
+    /**
+     * 检查 Subversion file 地址是否可访问。
+     * Check whether the Subversion file url is accessible.
+     *
+     * @param  string $path
+     * @access protected
+     * @return bool
+     */
+    protected function checkSubversionFilePath(string $path): bool
+    {
+        $path = rawurldecode($path);
+        if(file_exists($path) && is_readable($path)) return true;
+
+        commonModel::$requestErrors[] = $path;
+        return false;
     }
 
     /**
