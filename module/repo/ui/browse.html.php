@@ -218,6 +218,25 @@ $downloadWg = div
     )
 );
 
+/* zin: Build sync failure alert independently to avoid nested ternary in toolbar. */
+$syncFailureAlert = null;
+if(isset($repo->status) && $repo->status == 'syncFailed')
+{
+    $syncFailureAlert = div
+    (
+        setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
+        setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
+        h::span(setClass('icon icon-exclamation-sign mr-2')),
+        h::span($lang->repo->mirror->failedTitle),
+        h::a
+        (
+            set::href('javascript:;'),
+            setClass('alert-link sync-failure-detail ml-2'),
+            $lang->repo->mirror->detail
+        )
+    );
+}
+
 toolbar
 (
     /* 镜像仓库状态工具栏区块。包裹在 #mirrorToolbar 内，便于 ajax-submit 后局部 reload（load: {selector: '#mirrorToolbar>*'}），无需整页刷新。 */
@@ -243,19 +262,7 @@ toolbar
         (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
         (
             setClass('flex items-center'),
-            (isset($repo->status) && $repo->status == 'syncFailed') ? div
-            (
-                setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
-                setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
-                h::span(setClass('icon icon-exclamation-sign mr-2')),
-                h::span($lang->repo->mirror->failedTitle),
-                h::a
-                (
-                    set::href('javascript:;'),
-                    setClass('alert-link sync-failure-detail ml-2'),
-                    $lang->repo->mirror->detail
-                )
-            ) : null,
+            $syncFailureAlert,
             btn
             (
                 setClass('primary sync-code-btn ajax-submit'),
