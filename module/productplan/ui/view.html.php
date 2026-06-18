@@ -206,7 +206,7 @@ foreach($actions as $actionType => $typeActions)
 
 $extendItems  = array();
 $extendFields = $this->printExtendFields($plan, 'items', 'position=all', false);
-foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html(nl2br($field['value'])));
 
 detailHeader
 (
