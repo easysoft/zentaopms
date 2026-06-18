@@ -24,11 +24,11 @@ $config->my->testcase->dtable->fieldList['product']['type']     = 'text';
 $config->my->testcase->dtable->fieldList['product']['sortType'] = true;
 $config->my->testcase->dtable->fieldList['product']['show']     = true;
 
-$config->my->testcase->dtable->fieldList['testtask']['name']     = 'taskName';
-$config->my->testcase->dtable->fieldList['testtask']['title']    = $lang->testtask->common;
-$config->my->testcase->dtable->fieldList['testtask']['type']     = 'text';
-$config->my->testcase->dtable->fieldList['testtask']['group']    = 'testtask';
-$config->my->testcase->dtable->fieldList['testtask']['sortType'] = true;
+$config->my->testcase->dtable->fieldList['taskName']['name']     = 'taskName';
+$config->my->testcase->dtable->fieldList['taskName']['title']    = $lang->testtask->common;
+$config->my->testcase->dtable->fieldList['taskName']['type']     = 'text';
+$config->my->testcase->dtable->fieldList['taskName']['group']    = 'testtask';
+$config->my->testcase->dtable->fieldList['taskName']['sortType'] = true;
 
 $config->my->testcase->dtable->fieldList['openedBy']      = $config->testcase->dtable->fieldList['openedBy'];
 $config->my->testcase->dtable->fieldList['lastRunner']    = $config->testcase->dtable->fieldList['lastRunner'];

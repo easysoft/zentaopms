@@ -37,7 +37,7 @@ if($canBatchAction)
 
 if($browseType == 'openedbyme' || $app->rawMethod == 'contribute')
 {
-    unset($config->my->testcase->dtable->fieldList['testtask']);
+    unset($config->my->testcase->dtable->fieldList['taskName']);
     unset($config->my->testcase->dtable->fieldList['openedBy']);
 }
 
