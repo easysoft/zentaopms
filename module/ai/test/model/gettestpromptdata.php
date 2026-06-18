@@ -29,7 +29,7 @@ $storyPrompt->source = ',story.title,story.spec,';
 $projectPrompt = new stdClass();
 $projectPrompt->id = 2;
 $projectPrompt->module = 'project';
-$projectPrompt->source = ',project.name,project.type,project.desc,project.begin,project.end,';
+$projectPrompt->source = ',project.name,project.type,project.desc,project.begin,project.end,executions.name,';
 
 $bugPrompt = new stdClass();
 $bugPrompt->id = 3;
@@ -44,7 +44,7 @@ $releasePrompt->source = ',release.product,release.name,release.desc,';
 $unknownPrompt = new stdClass();
 $unknownPrompt->id = 5;
 $unknownPrompt->module = 'product';
-$unknownPrompt->source = '';
+$unknownPrompt->source = ',product.unknownField,';
 
 r($aiTest->getTestPromptDataTest($storyPrompt))   && p() && e('1'); // 获取禅道智能体中需求的示例数据。
 r($aiTest->getTestPromptDataTest($projectPrompt)) && p() && e('1'); // 获取禅道智能体中项目的示例数据。
