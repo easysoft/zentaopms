@@ -1084,6 +1084,23 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getPromptDataSourceDefinition method.
+     *
+     * @param  string $module
+     * @access public
+     * @return mixed
+     */
+    public function getPromptDataSourceDefinitionTest($module = '')
+    {
+        $this->mockWorkflowfieldForDatasource();
+
+        $result = $this->invokeArgs('getPromptDataSourceDefinition', array($module));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getUsedCustomCategories method.
      *
      * @access public
