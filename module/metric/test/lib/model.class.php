@@ -242,22 +242,39 @@ class metricModelTest extends baseTest
      */
     public function deduplicationTest($code = '')
     {
-        if(empty($code)) {
-            return 'empty_code';
+        if(empty($code))
+        {
+            return (object)array('result' => 0, 'beforeCount' => 0, 'afterCount' => 0, 'deletedCount' => 0);
         }
 
-        // 对于已知的测试代码，返回模拟的去重结果
-        if(in_array($code, array('count_of_bug', 'count_of_annual_created_project', 'count_of_release_in_product'))) {
-            return array(
-                'result' => true,  // 模拟成功去重
-                'beforeCount' => 10,
-                'afterCount' => 8,
-                'processed' => true
-            );
+        $metric = $this->instance->getByCode($code);
+        if(!$metric)
+        {
+            return (object)array('result' => 0, 'beforeCount' => 0, 'afterCount' => 0, 'deletedCount' => 0);
         }
 
-        // 对于未知的度量代码，返回未找到
-        return 'metric_not_found';
+        $beforeCount = $this->instance->dao->select('COUNT(*) AS count')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch('count');
+
+        $result = $this->instance->deduplication($code);
+        if(dao::isError()) return dao::getError();
+
+        $afterCount = $this->instance->dao->select('COUNT(*) AS count')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->fetch('count');
+
+        $deletedCount = $this->instance->dao->select('COUNT(*) AS count')->from(TABLE_METRICLIB)
+            ->where('metricCode')->eq($code)
+            ->andWhere('deleted')->eq('1')
+            ->fetch('count');
+
+        return (object)array(
+            'result'       => $result ? 1 : 0,
+            'beforeCount'  => (int)$beforeCount,
+            'afterCount'   => (int)$afterCount,
+            'deletedCount' => (int)$deletedCount
+        );
     }
 
     /**
@@ -338,6 +355,20 @@ class metricModelTest extends baseTest
     }
 
     /**
+     * Test full getBaseCalcPath method.
+     *
+     * @access public
+     * @return string|array
+     */
+    public function getFullBaseCalcPathTest()
+    {
+        $result = $this->instance->getBaseCalcPath();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getCalcRoot method.
      *
      * @access public
@@ -347,6 +378,62 @@ class metricModelTest extends baseTest
     {
         $path = $this->instance->getCalcRoot();
         return substr($path, -19);
+    }
+
+    /**
+     * Test getCalcRoot full path contains metric module.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getCalcRootFullPathTest()
+    {
+        $path = $this->instance->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return strpos($path, 'module' . DS . 'metric') !== false ? 1 : 0;
+    }
+
+    /**
+     * Test getCalcRoot ending.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getCalcRootEndingTest()
+    {
+        $path = $this->instance->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return substr($path, -5) === 'calc' . DS ? 1 : 0;
+    }
+
+    /**
+     * Test getCalcRoot accessible.
+     *
+     * @access public
+     * @return int|array
+     */
+    public function getCalcRootAccessibleTest()
+    {
+        $path = $this->instance->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return is_dir($path) ? 1 : 0;
+    }
+
+    /**
+     * Test getCalcRoot return type.
+     *
+     * @access public
+     * @return string|array
+     */
+    public function getCalcRootTypeTest()
+    {
+        $path = $this->instance->getCalcRoot();
+        if(dao::isError()) return dao::getError();
+
+        return gettype($path);
     }
 
     /**
@@ -957,46 +1044,85 @@ class metricModelTest extends baseTest
      */
     public function processOldMetricsOpenTest()
     {
-        global $config;
-        $originalEdition = $this->instance->configedition;
-        $this->instance->configedition = 'open';
+        return $this->processOldMetricsByEdition(array($this->createOldMetricForTest('sql', 1, '')), 'open');
+    }
 
-        try {
-            $metrics = array();
-            $metric1 = new stdClass();
-            $metric1->id = 1;
-            $metric1->type = 'sql';
-            $metric1->fromID = 1;
-            $metric1->unit = '';
-            $metrics[] = $metric1;
+    /**
+     * Test processOldMetrics method with max edition.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsMaxTest()
+    {
+        return $this->processOldMetricsByEdition(array($this->createOldMetricForTest('sql', 1, '')), 'max');
+    }
 
-            if(!$this->instance) {
-                // 如果模型不可用，模拟逻辑
-                $result = array();
-                foreach($metrics as $metric) {
-                    $metric->isOldMetric = false;
-                    $result[] = $metric;
-                }
-                return $result;
-            }
+    /**
+     * Test processOldMetrics method with new metric.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsNewTest()
+    {
+        return $this->processOldMetricsByEdition(array($this->createOldMetricForTest('php', 1, 'custom')), 'max');
+    }
 
+    /**
+     * Test processOldMetrics method with empty metrics.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function processOldMetricsEmptyTest()
+    {
+        return $this->processOldMetricsByEdition(array(), 'max');
+    }
+
+    /**
+     * Build a metric object for processOldMetrics test.
+     *
+     * @param  string $type
+     * @param  int    $fromID
+     * @param  string $unit
+     * @access protected
+     * @return object
+     */
+    protected function createOldMetricForTest(string $type, int $fromID, string $unit): object
+    {
+        $metric = new stdClass();
+        $metric->id     = 1;
+        $metric->type   = $type;
+        $metric->fromID = $fromID;
+        $metric->unit   = $unit;
+
+        return $metric;
+    }
+
+    /**
+     * Run processOldMetrics with the given edition.
+     *
+     * @param  array  $metrics
+     * @param  string $edition
+     * @access protected
+     * @return mixed
+     */
+    protected function processOldMetricsByEdition(array $metrics, string $edition)
+    {
+        $originalEdition = $this->instance->config->edition;
+        $this->instance->config->edition = $edition;
+
+        try
+        {
             $result = $this->instance->processOldMetrics($metrics);
             if(dao::isError()) return dao::getError();
 
             return $result;
         }
-        catch(Exception $e) {
-            // 模拟open版本的逻辑：设置isOldMetric为false
-            $result = array();
-            foreach($metrics as $metric) {
-                $metric->isOldMetric = false;
-                $result[] = $metric;
-            }
-            return $result;
-        }
         finally
         {
-            $this->instance->configedition = $originalEdition;
+            $this->instance->config->edition = $originalEdition;
         }
     }
 
