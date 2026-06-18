@@ -288,6 +288,43 @@ class gitfoxModel extends model
         return $this->repos[$repoID];
     }
 
+    /**
+     * 获取镜像仓库同步进度。
+     * Get mirror sync progress for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return object|null
+     */
+    public function apiGetMirrorSyncProgress(int $repoID): ?object
+    {
+        $apiRoot = $this->getApiRoot();
+        if(!is_object($apiRoot)) return null;
+
+        $url      = sprintf($apiRoot->url, "/repos/mirror-sync-progress?repoID=$repoID");
+        $response = json_decode(common::http($url, null, array(), $apiRoot->header));
+        $progress = $this->getResponse($response);
+        if(!$progress || !is_object($progress)) return null;
+        return $progress;
+    }
+
+    /**
+     * 触发镜像仓库同步。
+     * Trigger mirror sync for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return object|array|bool
+     */
+    public function apiMirrorSync(int $repoID)
+    {
+        $apiRoot = $this->getApiRoot();
+        if(!is_object($apiRoot)) return false;
+
+        $url = sprintf($apiRoot->url, "/repos/mirror-sync?repoID=$repoID");
+        return json_decode(common::http($url, array(), array(CURLOPT_CUSTOMREQUEST => 'POST'), $apiRoot->header, 'json'));
+    }
+
     public function __call($funcName, $arguments)
     {
         $funcName = strtolower($funcName);
@@ -1925,7 +1962,7 @@ class gitfoxModel extends model
      * @access public
      * @return object|array
      */
-    function apiGetBranchLabels(int $gitfoxID, int $repoID): object|array
+    public function apiGetBranchLabels(int $gitfoxID, int $repoID): object|array
     {
         $apiRoot = $this->getApiRoot($gitfoxID, false);
         $url     = sprintf($apiRoot->url, "/repos/{$repoID}/branch-labels");

@@ -569,6 +569,7 @@ class repo extends control
         $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag    = $branchOrTag;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 
@@ -1320,6 +1321,57 @@ class repo extends control
      * @access public
      * @return void
      */
+    /**
+     * 触发镜像仓库同步。
+     * Ajax trigger mirror sync for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSync(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        $response = $this->loadModel('gitfox')->apiMirrorSync((int)$repo->id);
+        if(empty($response) || !is_object($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->mirror->syncRequestFailed));
+
+        $code    = isset($response->code)    ? (string)$response->code    : '';
+        $message = isset($response->message) ? (string)$response->message : '';
+        if($code !== 'success') return $this->send(array('result' => 'fail', 'message' => $message ? $message : $this->lang->repo->mirror->syncFailed));
+
+        return $this->send(array(
+            'result'   => 'success',
+            'message'  => $message ? $message : $this->lang->repo->mirror->syncTriggered,
+            'callback' => 'mirrorSyncDelayedReload'
+        ));
+    }
+
+    /**
+     * 查询镜像仓库同步进度。
+     * Ajax get mirror sync progress for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSyncProgress(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+        $status   = (!empty($progress) && is_object($progress) && !empty($progress->status))  ? (string)$progress->status  : '';
+        $failure  = (!empty($progress) && is_object($progress) && !empty($progress->failure)) ? (string)$progress->failure : '';
+
+        return $this->send(array(
+            'result'  => 'success',
+            'status'  => $status,
+            'failure' => $failure
+        ));
+    }
+
     public function ajaxSyncBranchCommit(int $repoID = 0, string $branch = '')
     {
         set_time_limit(0);
@@ -2330,7 +2382,6 @@ class repo extends control
             $result = $this->repo->saveBug($repoID, $bug);
             if($result['result'] === 'fail')
             {
-                $result['message'] = $result['message'];
                 return $this->send($result);
             }
 
@@ -2342,14 +2393,10 @@ class repo extends control
             $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
             if(empty($v1))
             {
-                $revision = substr($v2, 0, 10);
                 $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
             }
             else
             {
-                $revision  = substr($v1, 0, 10);
-                $revision .= ' : ';
-                $revision .= substr($v2, 0, 10);
                 $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$changeFile}&oldRevision=$v1&newRevision=$v2&showBug=1", '', true) . "#L{$begin}";
             }
 
@@ -2370,7 +2417,7 @@ class repo extends control
                 if(!empty($commit->author->identity->name))
                 {
                     $historyLog->committer = $commit->author->identity->name;
-                }else if(!empty($commit->committer_name))
+                }elseif(!empty($commit->committer_name))
                 {
                     $historyLog->committer = $commit->committer_name;
                 }else
@@ -2494,7 +2541,7 @@ class repo extends control
             }
             $line--;
         }
-        die($committer);
+        echo $committer;
     }
 
     /**
@@ -2671,7 +2718,7 @@ class repo extends control
         $this->view->products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
         $this->view->orderBy  = $orderBy;
         $this->view->pager    = $pager;
-        $this->view->param    = $param;;
+        $this->view->param    = $param;
         $this->view->type     = $type;
         $this->view->inSpace  = !empty($space);
         $this->view->spaceID  = $space;
@@ -2932,7 +2979,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
+    public function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
     {
         $this->view->title   = $this->lang->repo->showImportProgress;
         $this->view->repoID  = $repoID;
