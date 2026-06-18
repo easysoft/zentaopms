@@ -1006,24 +1006,25 @@ class ai extends control
                 $fieldDefs[] = $def;
             }
 
-            $sepLine = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
-            $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
-            $fullPrompt .= "当前表单为批量创建，每行数据包含以下字段：\n\n";
+            $sepLine    = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
+            $promptLang = $this->lang->ai->prompts;
+            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
+            $fullPrompt .= "{$promptLang->batchFormData}\n\n";
             $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
             $fullPrompt .= $sepLine . "\n";
             $fullPrompt .= '| ' . implode(' | ', $values) . " |\n\n";
-            $fullPrompt .= "字段说明：\n" . implode("\n", $fieldDefs) . "\n\n";
-            $fullPrompt .= "[目标表单信息]\n";
-            $fullPrompt .= '表单: ' . ($prompt->name ?? $targetForm) . "\n\n";
+            $fullPrompt .= "{$promptLang->fieldDefinition}\n" . implode("\n", $fieldDefs) . "\n\n";
+            $fullPrompt .= "{$promptLang->targetFormInfo}\n";
+            $fullPrompt .= sprintf($promptLang->formLabel, $prompt->name ?? $targetForm) . "\n\n";
             if(!empty($filteredFields))
             {
-                $fullPrompt .= "可填充字段:\n";
+                $fullPrompt .= "{$promptLang->fillableFields}\n";
                 foreach($filteredFields as $fName => $fField)
                 {
                     $fullPrompt .= "- {$fName}\n";
                 }
             }
-            $fullPrompt .= "\n请返回 JSON 数组，每个数组元素对应表中的一行数据，元素为对象，对象键名对应上述可填充字段名。必填字段必须提供值。\n";
+            $fullPrompt .= "\n{$promptLang->returnJSONArray}\n";
         }
         else
         {
@@ -1056,9 +1057,10 @@ class ai extends control
             }
 
             $fillableDesc = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
+            $promptLang   = $this->lang->ai->prompts;
 
-            $fullPrompt  = "当前页面上下文：\n{$contextDesc}\n\n";
-            $fullPrompt .= "当前表单数据：\n" . implode("\n", $formDataLines) . "\n\n";
+            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
+            $fullPrompt .= "{$promptLang->currentFormData}\n" . implode("\n", $formDataLines) . "\n\n";
             $fullPrompt .= $fillableDesc;
         }
 

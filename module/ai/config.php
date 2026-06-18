@@ -124,7 +124,7 @@ $config->ai->targetForm['productplan']['edit']           = (object)array('m' => 
 $config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
-$config->ai->targetForm['task']['create']                 = (object)array('m' => 'task', 'f' => 'create', 'for' => 'execution,project,task');
+$config->ai->targetForm['task']['create']                = (object)array('m' => 'task', 'f' => 'create', 'for' => 'execution,project,task');
 $config->ai->targetForm['task']['edit']                  = (object)array('m' => 'task', 'f' => 'edit', 'for' => 'task');
 $config->ai->targetForm['task']['batchcreate']           = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
 $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit', 'for' => 'case');
@@ -248,100 +248,6 @@ $config->ai->universalFormFields = array();
 $config->ai->universalFormFields['task']['create']      = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
 $config->ai->universalFormFields['task']['batchcreate'] = array('name', 'type', 'pri', 'estimate', 'estStarted', 'deadline', 'desc', 'assignedTo', 'module');
 $config->ai->universalFormFields['project']['create']   = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
-
-/**
- * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
- * Some are identical except for module name, reuse them as much as possible.
- *
- * @param string $module           prompt module name (actual module could differ from prompt module name)
- * @param string $targetContainer  injection target container selector
- * @param string $class            class of menu or dropdown button
- * @param string $buttonClass      specified class of action menu buttons
- * @param string $dropdownClass    specified class of dropdown menu button
- * @param string $objectVarName    object variable name of view
- * @param string $stylesheet       stylesheet to be injected
- * @param string $injectMethod     injection jQuery method, `append` by default
- * @see ./view/promptmenu.html.php
- */
-$config->ai->menuPrint->locations = array();
-$config->ai->menuPrint->locations['story']['view'] = (object)array(
-    'module'          => 'story',
-    'targetContainer' => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type',
-    'stylesheet'      => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}',
-    'objectVarName'   => 'story',
-);
-$config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['task']['view']->module     = 'task';
-$config->ai->menuPrint->locations['task']['view']->objectVarName = 'task';
-$config->ai->menuPrint->locations['testcase']['view']         = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['testcase']['view']->module = 'case';
-$config->ai->menuPrint->locations['testcase']['view']->objectVarName = 'case';
-$config->ai->menuPrint->locations['bug']['view']              = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
-$config->ai->menuPrint->locations['bug']['view']->objectVarName = 'bug';
-$config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['projectstory']['view']->objectVarName = 'story';
-$config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
-
-$config->ai->menuPrint->locations['task']['create'] = (object)array(
-    'module'          => 'task',
-    'targetContainer' => '#mainContent .panel-heading .panel-actions',
-    'injectMethod'    => 'prepend',
-    'objectVarName'   => null,
-);
-
-$config->ai->menuPrint->locations['task']['batchcreate'] = (object)array(
-    'module'          => 'task',
-    'targetContainer' => '#mainContent .panel-heading .panel-actions',
-    'injectMethod'    => 'prepend',
-    'objectVarName'   => null,
-);
-
-$config->ai->menuPrint->locations['project']['create'] = (object)array(
-    'module'          => 'project',
-    'targetContainer' => '#mainContent .panel-heading .panel-actions',
-    'injectMethod'    => 'prepend',
-    'objectVarName'   => null,
-);
-
-$config->ai->menuPrint->locations['execution']['view'] = (object)array(
-    'module'          => 'execution',
-    'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right',
-    'objectVarName'   => 'execution',
-);
-
-$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
-$config->ai->menuPrint->locations['project']['view']->module = 'project';
-
-$config->ai->menuPrint->locations['product']['view'] = (object)array(
-    'module'          => 'product',
-    'injectMethod'    => 'append',
-    'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right',
-    'objectVarName'   => 'product',
-);
-
-$config->ai->menuPrint->locations['productplan']['view'] = (object)array(
-    'module'          => 'productplan',
-    'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent .tab-actions',
-    'objectVarName'   => 'plan'
-);
-$config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']                       = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']->module               = 'release';
-$config->ai->menuPrint->locations['projectrelease']['view']                = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['projectrelease']['view']->module        = 'release';
-
-$config->ai->menuPrint->locations['doc']['view'] = (object)array(
-    'module'          => 'doc',
-    'targetContainer' => '#docMoreActionsBtn',
-    'injectMethod'    => 'before',
-    'buttonPlacement' => 'bottom-end',
-    'objectVarName'   => 'doc',
-);
 
 $config->ai->injectAuditButton = new stdclass();
 $config->ai->injectAuditButton->locations = array();

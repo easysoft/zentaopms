@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('userAccount', $this->app->user->account);

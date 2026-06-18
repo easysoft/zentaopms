@@ -2074,21 +2074,22 @@ class aiModel extends model
      */
     public function getFormSchemaDescription($prompt, array $allowedFields)
     {
-        $desc  = "[目标表单信息]\n";
-        $desc .= '表单: ' . ($prompt->name ?? $prompt->targetForm) . "\n\n";
+        $promptLang = $this->lang->ai->prompts;
+        $formName   = $prompt->name ?? $prompt->targetForm;
+        $desc  = "{$promptLang->targetFormInfo}\n";
+        $desc .= sprintf($promptLang->formLabel, $formName) . "\n\n";
 
         if(!empty($allowedFields))
         {
-            $desc .= "可填充字段:\n";
+            $desc .= "{$promptLang->fillableFields}\n";
             foreach($allowedFields as $name => $field)
             {
                 if(!is_array($field)) continue;
-                $label = $field['label'] ?? $name;
                 $desc .= "- {$name}\n";
             }
         }
 
-        $desc .= "\n请返回 JSON 对象，键名对应上述字段名。必填字段必须提供值。\n";
+        $desc .= "\n{$promptLang->returnJSONObject}\n";
         return $desc;
     }
 
@@ -2330,9 +2331,9 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
-        $executable = true;
-        $displayPosition = zget($prompt, 'displayPosition', '');
-        $actionPurpose   = zget($prompt, 'actionPurpose', '');
+        $executable      = true;
+        $displayPosition = $prompt->displayPosition ?? '';
+        $actionPurpose   = $prompt->actionPurpose ?? '';
 
         if(!empty($displayPosition) && !empty($actionPurpose))
         {

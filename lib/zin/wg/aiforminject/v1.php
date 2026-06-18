@@ -39,9 +39,7 @@ class aiFormInject extends wg
         if(empty($prompts)) return null;
 
         if($this->prop('enableSkipFields')) $this->injectSkipFields($module, $method);
-
         if($this->prop('enablePending')) $this->injectPendingFormData($module, $method);
-
         if($this->prop('enableInject')) $this->injectInputData($module, $method);
 
         return null;
@@ -67,20 +65,20 @@ class aiFormInject extends wg
 
         $data = json_encode($pendingData);
         pageJS(<<<JS
-        (() => {
-            const data = {$data};
-            if(!data) return;
-            const tryFill = (tries) => {
-                let form = \$('#mainContainer form').first();
-                if(!form.length) form = \$('form').first();
-                if(form.length && window.zui?.zentaoFormHelper) {
-                    window.zui.zentaoFormHelper(form).fillFormData(data);
-                    return;
-                }
-                if(tries < 20) setTimeout(() => tryFill(tries + 1), 400);
-            };
-            setTimeout(() => tryFill(0), 600);
-        })();
+            (() => {
+                const data = {$data};
+                if(!data) return;
+                const tryFill = (tries) => {
+                    let form = \$('#mainContainer form').first();
+                    if(!form.length) form = \$('form').first();
+                    if(form.length && window.zui?.zentaoFormHelper) {
+                        window.zui.zentaoFormHelper(form).fillFormData(data);
+                        return;
+                    }
+                    if(tries < 20) setTimeout(() => tryFill(tries + 1), 400);
+                };
+                setTimeout(() => tryFill(0), 600);
+            })();
         JS);
     }
 

@@ -1,16 +1,14 @@
 /**
  * 获取当前页面中用于 AI 交互的目标表单。
- * 优先选择 z-use 包含 BatchForm 的批量创建表单，
- * 其次是包含 .form-batch-table 的表单，
- * 最后回退到页面第一个表单。
- * 修复批量创建页面中自定义字段表单排在最前面的问题。
  */
 function getPageForm()
 {
-    var $batchForm = $('form[z-use*="BatchForm"]').first();
+    const $batchForm = $('form[z-use*="BatchForm"]').first();
     if($batchForm.length) return $batchForm;
-    var $batchTableForm = $('form').has('.form-batch-table').first();
+
+    const $batchTableForm = $('form').has('.form-batch-table').first();
     if($batchTableForm.length) return $batchTableForm;
+
     return $('form').first();
 }
 
@@ -227,6 +225,12 @@ window.executeWithFormContext = async function(promptID)
     }
 };
 
+/**
+ * 使用当前表单上下文发起数字员工委派。
+ * Execute AI teammate assignment with current page form context.
+ *
+ * @param {Event|Element|jQuery|string} source
+ */
 window.executeWithFormContextForTeammate = function(source)
 {
     let $btn = null;
@@ -280,8 +284,6 @@ window.executeWithFormContextForTeammate = function(source)
 
 /**
  * 将数字员工任务结果存入 Session，然后导航到目标表单页面。
- * 目标表单页面加载时会从 Session 读取数据并自动填充。
- * 仅用于表单页异步执行流程（_isFormPage=true），不干扰原有 openPageForm 路径。
  */
 window.applyAITaskResultToForm = async function(taskID, formLocation, formData)
 {
@@ -291,10 +293,7 @@ window.applyAITaskResultToForm = async function(taskID, formLocation, formData)
         data: {formData: JSON.stringify(formData || {})},
         dataType: 'json',
     });
-    if(res && res.result === 'success' && formLocation)
-    {
-        openUrl(formLocation);
-    }
+    if(res && res.result === 'success' && formLocation) openUrl(formLocation);
 };
 
 window.openAITaskPopup = async function(taskID)

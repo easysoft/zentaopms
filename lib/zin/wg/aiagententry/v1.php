@@ -13,49 +13,31 @@ class aiAgentEntry extends wg
         'objectID?:int',
         'objectVarName?:string',
         'type:string',
-        'renderMode?:string="full"',
         'showAgent?:bool=true',
         'showTeammate?:bool=true',
-        'loadJs?:bool=true',
-        'loadCss?:bool=true',
     );
 
-    private static bool $resourcesImported = false;
-
-    protected function importResources(): ?node
+    public static function getPageCSS(): ?string
     {
-        if(static::$resourcesImported) return null;
-        static::$resourcesImported = true;
-
         global $app;
-        $webRoot = $app->getWebRoot();
+        $cssFile = $app->getAppRoot() . 'www/js/zui3/ai.css';
+        return file_exists($cssFile) ? file_get_contents($cssFile) : null;
+    }
 
-        if($this->prop('loadCss'))
-        {
-            $cssFile = $app->getAppRoot() . 'www/js/zui3/ai.css';
-            if(file_exists($cssFile)) pageCSS(file_get_contents($cssFile));
-        }
-
-        if($this->prop('loadJs'))
-        {
-            $jsFile = $app->getAppRoot() . 'www/js/zui3/ai.js';
-            if(file_exists($jsFile)) pageJS(file_get_contents($jsFile));
-        }
-
-        return null;
+    public static function getPageJS(): ?string
+    {
+        global $app;
+        $jsFile = $app->getAppRoot() . 'www/js/zui3/ai.js';
+        return file_exists($jsFile) ? file_get_contents($jsFile) : null;
     }
 
     protected function build(): ?node
     {
         global $app, $config;
 
-        $renderMode = $this->prop('renderMode');
-        $resourceNodes = $this->importResources();
-        if($renderMode === 'resources') return $resourceNodes;
-
         $app->control->loadModel('ai');
-        if(!commonModel::hasPriv('ai', 'promptExecute')) return $resourceNodes;
-        if(!$this->isZAIConfigured($app)) return $resourceNodes;
+        if(!commonModel::hasPriv('ai', 'promptExecute')) return null;
+        if(!$this->isZAIConfigured($app)) return null;
 
         $app->loadLang('ai');
         $app->loadConfig('ai');
@@ -67,19 +49,19 @@ class aiAgentEntry extends wg
         if(empty($module) || empty($method) || empty($type))
         {
             $this->triggerError('The module, method and type properties of widget "aiAgentEntry" are required.');
-            return $resourceNodes;
+            return null;
         }
 
         if($type === 'detail' && !$this->prop('objectID'))
         {
             $this->triggerError('The objectID property of widget "aiAgentEntry" is required when type is "detail".');
-            return $resourceNodes;
+            return null;
         }
 
         if($type === 'detail' && !$this->prop('objectVarName'))
         {
             $this->triggerError('The objectVarName property of widget "aiAgentEntry" is required when type is "detail".');
-            return $resourceNodes;
+            return null;
         }
 
         $entryNode = null;
@@ -92,7 +74,7 @@ class aiAgentEntry extends wg
             $prompts = $this->fetchPrompts($module, $method, $type, $app, $config);
             if(!empty($prompts))
             {
-                $promptIds = array_column($prompts, 'id');
+                $promptIds     = array_column($prompts, 'id');
                 $teammateItems = $this->fetchTeammates($promptIds, $app, $config);
 
                 $this->buildSuggestions($prompts, $teammateItems, $module, $method, $type, $config);
@@ -101,16 +83,13 @@ class aiAgentEntry extends wg
             }
         }
 
-        if($renderMode === 'entry' && $resourceNodes !== null) return html($resourceNodes, $entryNode);
-        if($resourceNodes === null) return $entryNode;
-        if($entryNode === null) return $resourceNodes;
-        return html($resourceNodes, $entryNode);
+        return $entryNode;
     }
 
     protected function buildEntry(array $prompts, array $teammateItems, string $module, string $method, string $type, $app, $config): ?node
     {
-        $children = array();
-        $objectID = $this->getObjectID();
+        $children         = array();
+        $objectID         = $this->getObjectID();
         $availablePrompts = array_values(array_filter($prompts, static fn($prompt) => empty($prompt->unauthorized)));
 
         $objectVarName = $this->getObjectVarName($module, $method, $config);
@@ -154,7 +133,7 @@ class aiAgentEntry extends wg
         $objectID = $this->getObjectID();
 
         $objectVarName = $this->getObjectVarName($module, $method, $config);
-        $suggestions = array();
+        $suggestions   = array();
 
         foreach($prompts as $prompt)
         {
@@ -220,7 +199,7 @@ class aiAgentEntry extends wg
 
     protected function parseAgentIds(string $agents, $app): array
     {
-        $ids = array();
+        $ids  = array();
         $list = explode(',', $agents);
         foreach($list as $agent)
         {
@@ -254,8 +233,8 @@ class aiAgentEntry extends wg
         $canAssign = $this->isTeammateAvailable($app, $config);
         if($canAssign)
         {
-            $teammates = $app->control->loadModel('aiteammate')->browse('0');
-            $promptIds = array_column($prompts, 'id');
+            $teammates     = $app->control->loadModel('aiteammate')->browse('0');
+            $promptIds     = array_column($prompts, 'id');
             $showTeammates = array_values(array_filter($teammates, function($t) use ($promptIds, $app)
             {
                 if(empty($t->agents)) return false;

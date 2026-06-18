@@ -146,8 +146,17 @@ $lang->ai->prompts->displayPositionList = array();
 $lang->ai->prompts->displayPositionList['detail'] = 'Detail';
 $lang->ai->prompts->displayPositionList['form']   = 'Form';
 
-$lang->ai->prompts->summary = 'There are %s zenTao agents on this page.';
-$lang->ai->prompts->fieldSeparator = ', ';
+$lang->ai->prompts->summary          = 'There are %s zenTao agents on this page.';
+$lang->ai->prompts->fieldSeparator   = ', ';
+$lang->ai->prompts->pageContext      = 'Current page context:';
+$lang->ai->prompts->currentFormData  = 'Current form data:';
+$lang->ai->prompts->batchFormData    = 'The current form is for batch creation, and each row contains the following fields:';
+$lang->ai->prompts->fieldDefinition  = 'Field definitions:';
+$lang->ai->prompts->targetFormInfo   = '[Target form information]';
+$lang->ai->prompts->formLabel        = 'Form: %s';
+$lang->ai->prompts->fillableFields   = 'Fillable fields:';
+$lang->ai->prompts->returnJSONObject = 'Please return a JSON object. The keys must match the field names above. Required fields must have values.';
+$lang->ai->prompts->returnJSONArray  = 'Please return a JSON array. Each element must match one row in the table and be an object whose keys match the fillable field names above. Required fields must have values.';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm  = 'The current zenTao agent is not complete, continue designing?';

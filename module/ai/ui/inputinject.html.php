@@ -171,21 +171,21 @@ $pendingFormInject = function() use($module, $method)
 
     $encoded = json_encode($pendingData);
     h::globalJS(<<< JAVASCRIPT
-    (() => {
-        const pendingData = {$encoded};
-        if(!pendingData) return;
-        let tryApply = function(tries) {
-            let formEl = $('#mainContainer form').first();
-            if(!formEl.length) formEl = $('form').first();
-            if(formEl.length && window.zui && window.zui.zentaoFormHelper)
-            {
-                window.zui.zentaoFormHelper(formEl).fillFormData(pendingData);
-                return;
-            }
-            if(tries < 20) setTimeout(function() { tryApply(tries + 1); }, 400);
-        };
-        setTimeout(function() { tryApply(0); }, 600);
-    })();
+        (() => {
+            const pendingData = {$encoded};
+            if(!pendingData) return;
+            let tryApply = function(tries) {
+                let formEl = $('#mainContainer form').first();
+                if(!formEl.length) formEl = $('form').first();
+                if(formEl.length && window.zui && window.zui.zentaoFormHelper)
+                {
+                    window.zui.zentaoFormHelper(formEl).fillFormData(pendingData);
+                    return;
+                }
+                if(tries < 20) setTimeout(function() { tryApply(tries + 1); }, 400);
+            };
+            setTimeout(function() { tryApply(0); }, 600);
+        })();
     JAVASCRIPT);
 };
 
@@ -337,7 +337,7 @@ $inputInject = function() use($module, $method, &$auditInject)
             }
             finally
             {
-                /* Set injected in oreder to cancel loading class on object view (see ./promptmenu.html.php). */
+                /* Set injected in oreder to cancel loading class on object view. */
                 sessionStorage.setItem('ai-prompt-data-injected', true);
 
                 const container = window.frameElement?.closest('.load-indicator');
