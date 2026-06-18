@@ -20,6 +20,7 @@ $lang->provider->createdDate = '创建时间';
 $lang->provider->error = new stdclass();
 $lang->provider->error->api            = '『服务器地址』无法访问服务器。';
 $lang->provider->error->apiWithMessage = '『服务器地址』无法访问服务器：%s';
+$lang->provider->error->svnClient      = '无法找到 Subversion 客户端。';
 
 $lang->provider->typeList = array();
 $lang->provider->typeList['GitLab']     = 'GitLab';

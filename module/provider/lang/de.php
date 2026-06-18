@@ -20,6 +20,7 @@ $lang->provider->createdDate = 'Created Date';
 $lang->provider->error = new stdclass();
 $lang->provider->error->api            = 'The server cannot be accessed.';
 $lang->provider->error->apiWithMessage = 'The server cannot be accessed: %s';
+$lang->provider->error->svnClient      = 'Subversion client is not available.';
 
 $lang->provider->typeList = array();
 $lang->provider->typeList['GitLab']     = 'GitLab';

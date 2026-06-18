@@ -11,6 +11,7 @@ declare(strict_types=1);
 namespace zin;
 $originValue = $type;
 if(!empty($importRepo)) $originValue = zget($importRepo, 'origin', '');
+$isFileSubversion = !empty($provider->type) && $provider->type == 'Subversion' && strpos($provider->url, 'file://') === 0;
 
 $fields = defineFieldList('repo');
 $fields->field('sourceRepo')->control(array('control' => 'formRowGroup', 'title' => $lang->repo->originRepo))->width('1/8')->wrapAfter(true);
@@ -24,8 +25,8 @@ $fields->field('provider')->required(true)->width('1/2')
    ->itemEnd();
 $fields->field('organize')->required(true)->control('picker')->items($groups)->width('1/2')->value(zget($importRepo, 'organize', ''))->hidden($type == 'Subversion');
 $fields->field('repo')->label($lang->repo->common)->required(true)->control('picker')->items($repos)->value(zget($importRepo, 'repo', ''))->width('1/2')->wrapAfter(true)->hidden($type == 'Subversion');
-$fields->field('account')->required(true)->width('1/2')->value(zget($importRepo, 'account', ''))->hidden($type != 'Subversion');
-$fields->field('password')->required(true)->width('1/2')->value(zget($importRepo, 'password', ''))->hidden($type != 'Subversion');
+$fields->field('account')->required(true)->width('1/2')->value(zget($importRepo, 'account', ''))->hidden($type != 'Subversion' || $isFileSubversion);
+$fields->field('password')->required(true)->width('1/2')->value(zget($importRepo, 'password', ''))->hidden($type != 'Subversion' || $isFileSubversion);
 $fields->field('repoPath')->required(true)->width('1/2')->wrapAfter(true)->hidden($type != 'Subversion')
    ->control('inputGroup')
    ->itemBegin('path')->required(true)->title(zget($provider, 'url'))->value(!empty($importRepo) ? zget($importRepo, 'path') : zget($provider, 'url'))->disabled(true)->itemEnd()
