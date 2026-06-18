@@ -1780,13 +1780,14 @@ class repoZen extends repo
      * @access public
      * @return array
      */
-    public function setImportFormConfig(string $type): array
+    public function setImportFormConfig(string $type, int $providerID = 0): array
     {
         if($type == 'Subversion')
         {
-            $this->config->repo->form->import['account']['required']  = true;
-            $this->config->repo->form->import['password']['required'] = true;
-            $this->config->repo->form->import['slug']['required']     = true;
+            $provider         = $this->loadModel('provider')->fetchByID($providerID);
+            $isFileSubversion = !empty($provider->type) && $provider->type == 'Subversion' && strpos($provider->url, 'file://') === 0;
+            $this->config->repo->form->import['account']['required']  = !$isFileSubversion;
+            $this->config->repo->form->import['password']['required'] = !$isFileSubversion;
         }
         else
         {
