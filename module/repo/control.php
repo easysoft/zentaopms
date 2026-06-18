@@ -1101,7 +1101,7 @@ class repo extends control
         if($this->viewType !== 'json') $this->commonAction();
         if($_POST)
         {
-            $this->repoZen->setImportFormConfig($type);
+            $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID);
             $formData = form::data($this->config->repo->form->import)->get();
             $this->session->set('importRepo', json_encode($formData));
 
@@ -2956,6 +2956,12 @@ class repo extends control
             $repo = $this->repo->getByID($repoID);
             if(empty($repo) || $repo->synced) return print(json_encode(array('result' => 'success', 'data' => $result)));
 
+            if($repo->scmType == 'svn')
+            {
+                $this->repo->markSynced($repo->id);
+                return print(json_encode(array('result' => 'success', 'data' => $result)));
+            }
+
             $this->commonAction($repoID);
             $this->scm->setEngine($repo);
 
@@ -3004,6 +3010,10 @@ class repo extends control
                 $message = isset($error['apiMessage']) ? sprintf($this->lang->repo->importProgress->failMessage, $error['apiMessage']) : $error;
             }
             if(!empty($result->failure)) $message = sprintf($this->lang->repo->importProgress->failMessage, $result->failure);
+        }
+        else
+        {
+            $this->loadModel('action')->create('repo', $repoID, 'imported');
         }
 
         $this->view->title   = $this->lang->repo->showImportResult;
