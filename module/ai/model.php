@@ -47,7 +47,7 @@ class aiModel extends model
         $fieldCache = array();
         $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
 
-        $this->loadModel('workflowfield');
+        if(empty($this->workflowfield)) $this->loadModel('workflowfield');
         foreach($this->config->ai->moduleGroup as $group => $modules)
         {
             foreach($modules as $module)
@@ -84,6 +84,37 @@ class aiModel extends model
         }
 
         return $dataSource;
+    }
+
+    /**
+     * Build localized prompt data source definition for a module.
+     *
+     * @param  string $module
+     * @access protected
+     * @return array
+     */
+    protected function getPromptDataSourceDefinition(string $module): array
+    {
+        if(empty($module)) return array();
+
+        $dataSource = $this->getDataSource();
+        $moduleData = zget($dataSource, $module, array());
+        if(empty($moduleData)) return array();
+
+        $definition = array();
+        foreach($moduleData as $objectName => $fields)
+        {
+            $moduleList = zget($this->lang->ai->moduleList, $objectName, array());
+            if(empty($moduleList)) continue;
+
+            $definition[$objectName] = array('common' => zget($moduleList, 'common', ''));
+            foreach($fields as $field)
+            {
+                $definition[$objectName][$field] = zget($moduleList, $field, '');
+            }
+        }
+
+        return $definition;
     }
 
     /**
@@ -1935,16 +1966,17 @@ class aiModel extends model
         $supplement = '';
         $supplementTypes = array();
 
+        $dataSourceDefinition = $this->getPromptDataSourceDefinition($module);
         foreach($sources as $source)
         {
             $objectName = $source[0];
             $objectKey  = $source[1];
 
-            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
-            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
+            if(!isset($dataSourceDefinition[$objectName]['common'])) continue;
+            if(!isset($dataSourceDefinition[$objectName][$objectKey])) continue;
 
-            $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
-            $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
+            $semanticName = $dataSourceDefinition[$objectName]['common'];
+            $semanticKey  = $dataSourceDefinition[$objectName][$objectKey];
 
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
@@ -2865,19 +2897,23 @@ class aiModel extends model
      */
     public function getTestPromptData(object $prompt): array
     {
-        $module       = $prompt->module;
-        $promptSource = $prompt->source;
-        $source       = explode(',', $promptSource);
+        $module       = $prompt->module ?? '';
+        $promptSource = $prompt->source ?? '';
+        $source       = explode(',', (string)$promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
-        $titleData = $this->lang->ai->dataSource[$module];
-        $testData  = $this->lang->ai->prompts->testData[$module];
+        $titleData = $this->getPromptDataSourceDefinition($module);
+        $testData  = $this->lang->ai->prompts->testData[$module] ?? array();
+        if(empty($module) || empty($source) || empty($titleData) || empty($testData)) return array($testData, '');
 
         $categorized = array();
         foreach($source as $value)
         {
-            $prefix = explode('.', $value)[0];
-            $column = explode('.', $value)[1];
+            $path = explode('.', $value, 2);
+            if(count($path) !== 2) continue;
+
+            $prefix = $path[0];
+            $column = $path[1];
             if(!isset($categorized[$prefix])) $categorized[$prefix] = [];
             $categorized[$prefix][] = $column;
         }
@@ -2885,30 +2921,56 @@ class aiModel extends model
         $result = '';
         foreach($categorized as $groupKey => $pathInfo)
         {
+            if(empty($titleData[$groupKey]) || empty($testData[$groupKey])) continue;
+
             if(in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps')))
             {
                 if($module == 'release' && $groupKey == 'bugs')
                 {
+                    if(!isset($titleData[$groupKey]['common']) || !isset($testData[$groupKey]['title'])) continue;
                     $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
                     $result .= $testData[$groupKey]['title'] . "\n";
                 }
                 else
                 {
+                    if(!isset($titleData[$groupKey]['common'])) continue;
                     $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
                     $result .= "| ";
-                    foreach($pathInfo as $value) $result .= $titleData[$groupKey][$value] . " | ";
+                    foreach($pathInfo as $value)
+                    {
+                        if(!isset($titleData[$groupKey][$value])) continue;
+                        $result .= $titleData[$groupKey][$value] . " | ";
+                    }
                     $result .= "\n";
 
                     $result .= "| ";
-                    foreach($pathInfo as $value) $result .= "--- | ";
+                    foreach($pathInfo as $value)
+                    {
+                        if(!isset($titleData[$groupKey][$value])) continue;
+                        $result .= "--- | ";
+                    }
                     $result .= "\n";
 
-                    $firstData = $pathInfo[0];
+                    $firstData = '';
+                    foreach($pathInfo as $value)
+                    {
+                        if(isset($testData[$groupKey][$value]))
+                        {
+                            $firstData = $value;
+                            break;
+                        }
+                    }
+                    if($firstData === '') continue;
+
                     $count     = count($testData[$groupKey][$firstData]);
                     for($i = 0; $i < $count; $i++)
                     {
                         $result .= "| ";
-                        foreach($pathInfo as $value) $result .= $testData[$groupKey][$value][$i] . " | ";
+                        foreach($pathInfo as $value)
+                        {
+                            if(!isset($testData[$groupKey][$value][$i])) continue;
+                            $result .= $testData[$groupKey][$value][$i] . " | ";
+                        }
                         $result .= "\n";
                     }
                 }
@@ -2918,6 +2980,7 @@ class aiModel extends model
                 foreach($pathInfo as $value)
                 {
                     if($groupKey == 'task' && $value == 'story') continue;
+                    if(!isset($titleData[$groupKey][$value]) || !isset($testData[$groupKey][$value])) continue;
 
                     $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
                     $result .= $testData[$groupKey][$value] . "\n";

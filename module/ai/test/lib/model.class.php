@@ -9,6 +9,56 @@ class aiModelTest extends baseTest
     protected $className  = 'model';
 
     /**
+     * Inject workflowfield mock for AI datasource related tests.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mockWorkflowfieldForDatasource(): void
+    {
+        $fieldMap = array(
+            'product'       => array('name' => '产品名称', 'PO' => '负责人'),
+            'project'       => array('name' => '项目名称', 'type' => '类型', 'desc' => '描述', 'begin' => '开始', 'end' => '结束', 'status' => '状态'),
+            'story'         => array('title' => '标题', 'spec' => '描述', 'deleted' => '删除', 'version' => '版本', 'subStatus' => '子状态', 'status' => '状态'),
+            'task'          => array('name' => '任务名', 'desc' => '描述'),
+            'bug'           => array('title' => '标题', 'steps' => '步骤', 'severity' => '严重程度'),
+            'testcase'      => array('title' => '标题', 'precondition' => '前置'),
+            'execution'     => array('name' => '名称', 'deleted' => '删除', 'begin' => '开始', 'desc' => '描述', 'status' => '状态', 'end' => '结束', 'realBegan' => '实际开始', 'realEnd' => '实际结束', 'estimate' => '预计', 'consumed' => '已消耗', 'left' => '剩余', 'progress' => '进度'),
+            'productplan'   => array('title' => '计划名'),
+            'release'       => array('product' => '所属产品', 'name' => '发布名', 'desc' => '描述'),
+            'build'         => array('name' => '构建名'),
+            'feedback'      => array('title' => '反馈标题'),
+            'ticket'        => array('title' => '工单标题'),
+            'issue'         => array('title' => '问题标题'),
+            'opportunity'   => array('title' => '机会标题'),
+            'risk'          => array('title' => '风险标题'),
+            'projectchange' => array('name' => '变更名称'),
+            'cm'            => array('title' => '配置标题'),
+        );
+
+        $this->instance->workflowfield = new class($fieldMap)
+        {
+            private $fieldMap;
+
+            public function __construct($fieldMap)
+            {
+                $this->fieldMap = $fieldMap;
+            }
+
+            public function getList($module)
+            {
+                $fields = $this->fieldMap[$module] ?? array('id' => 'ID');
+                $result = array();
+                foreach($fields as $field => $name)
+                {
+                    $result[$field] = (object)array('field' => $field, 'name' => $name);
+                }
+                return $result;
+            }
+        };
+    }
+
+    /**
      * Test isClickable method.
      *
      * @param  object $object
@@ -1025,46 +1075,7 @@ class aiModelTest extends baseTest
      */
     public function getDataSourceTest()
     {
-        $fieldMap = array(
-            'product'     => array('name' => '产品名称', 'PO' => '负责人'),
-            'project'     => array('name' => '项目名称', 'status' => '状态'),
-            'story'       => array('title' => '标题', 'spec' => '描述', 'deleted' => '删除', 'version' => '版本', 'subStatus' => '子状态', 'status' => '状态'),
-            'task'        => array('name' => '任务名', 'desc' => '描述'),
-            'bug'         => array('title' => '标题', 'steps' => '步骤'),
-            'testcase'    => array('title' => '标题', 'precondition' => '前置'),
-            'execution'   => array('name' => '名称', 'deleted' => '删除', 'begin' => '开始'),
-            'productplan' => array('title' => '计划名'),
-            'release'     => array('name' => '发布名'),
-            'build'       => array('name' => '构建名'),
-            'feedback'    => array('title' => '反馈标题'),
-            'ticket'      => array('title' => '工单标题'),
-            'issue'       => array('title' => '问题标题'),
-            'opportunity' => array('title' => '机会标题'),
-            'risk'        => array('title' => '风险标题'),
-            'projectchange' => array('name' => '变更名称'),
-            'cm'          => array('title' => '配置标题'),
-        );
-
-        $this->instance->workflowfield = new class($fieldMap)
-        {
-            private $fieldMap;
-
-            public function __construct($fieldMap)
-            {
-                $this->fieldMap = $fieldMap;
-            }
-
-            public function getList($module)
-            {
-                $fields = $this->fieldMap[$module] ?? array('id' => 'ID');
-                $result = array();
-                foreach($fields as $field => $name)
-                {
-                    $result[$field] = (object)array('field' => $field, 'name' => $name);
-                }
-                return $result;
-            }
-        };
+        $this->mockWorkflowfieldForDatasource();
 
         $result = $this->instance->getDataSource();
         if(dao::isError()) return dao::getError();
@@ -1391,7 +1402,7 @@ class aiModelTest extends baseTest
      */
     public function getAgentsByIDsTest($ids = null)
     {
-        $result = $this->objectModel->getAgentsByIDs($ids);
+        $result = $this->instance->getAgentsByIDs($ids);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1407,7 +1418,7 @@ class aiModelTest extends baseTest
      */
     public function getAgentsByCodesTest($codes = null, $status = '')
     {
-        $result = $this->objectModel->getAgentsByCodes($codes, $status);
+        $result = $this->instance->getAgentsByCodes($codes, $status);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2471,6 +2482,8 @@ class aiModelTest extends baseTest
      */
     public function getTestPromptDataTest($prompt)
     {
+        $this->mockWorkflowfieldForDatasource();
+
         $result = $this->instance->getTestPromptData($prompt);
         if(dao::isError()) return dao::getError();
         return !empty($result[1]) ? '1' : '0';
