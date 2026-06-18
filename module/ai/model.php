@@ -35,22 +35,13 @@ class aiModel extends model
     public $errors = array();
 
     /**
-     * 根据config.php中的$config->ai->dataSource，和$config->ai->moduleGroup，生成数据源列表。
-     * 如果模块有dataSource定义，则直接使用
-     * 如果模块没有dataSource定义，则通过工作流（workflow）获取模块字段。
-     * 特殊的模块：programplans/executions 使用execution字段。stories使用story字段,bugs使用bug字段。
-     * 返回数据结构为：
-     * array(
-     *     'program' => array('name', 'desc', 'begin'),
-     *     'testsuite' => array('name', 'desc'),
-     *     'testtask' => array('name', 'desc', 'begin', 'end'),
-     *     'caselib' => array('name', 'desc'),
-     * )
+     * 获取数据源列表。
+     * Get data source list.
      *
      * @access public
      * @return array
      */
-    public function getDataSource()
+    public function getDataSource(): array
     {
         $dataSource = array();
         $fieldCache = array();
@@ -73,9 +64,15 @@ class aiModel extends model
 
                 $workflowModule = zget($moduleMap, $module, $module);
 
-                $fieldList = $this->loadModel('workflowfield')->getList($workflowModule);
+                $fieldList = $this->workflowfield->getList($workflowModule);
                 foreach($fieldList as $field => $value)
                 {
+                    if(in_array($field, array('deleted', 'version', 'subStatus')))
+                    {
+                        unset($fieldList[$field]);
+                        continue;
+                    }
+
                     $this->lang->ai->moduleList[$module][$field] = $value->name;
                 }
 
@@ -1897,8 +1894,6 @@ class aiModel extends model
     {
         if(empty($data)) return '';
 
-        $this->getDataSource();
-
         /* Handle object data. */
         if(is_object($data)) $data = (array)$data;
 
@@ -1945,11 +1940,11 @@ class aiModel extends model
             $objectName = $source[0];
             $objectKey  = $source[1];
 
-            if(!isset($this->lang->ai->moduleList[$objectName]['common'])) continue;
-            if(!isset($this->lang->ai->moduleList[$objectName][$objectKey])) continue;
+            if(!isset($this->lang->ai->dataSource[$module][$objectName]['common'])) continue;
+            if(!isset($this->lang->ai->dataSource[$module][$objectName][$objectKey])) continue;
 
-            $semanticName = $this->lang->ai->moduleList[$objectName]['common'];
-            $semanticKey  = $this->lang->ai->moduleList[$objectName][$objectKey];
+            $semanticName = $this->lang->ai->dataSource[$module][$objectName]['common'];
+            $semanticKey  = $this->lang->ai->dataSource[$module][$objectName][$objectKey];
 
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
@@ -2061,76 +2056,6 @@ class aiModel extends model
         $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
 
         return empty($schema) ? array() : $schema;
-    }
-
-    /**
-     * 构建可填充字段描述
-     * Build fillable fields description for prompt.
-     *
-     * @param  object $prompt
-     * @param  array  $allowedFields
-     * @access public
-     * @return string
-     */
-    public function getFormSchemaDescription($prompt, array $allowedFields)
-    {
-        $promptLang = $this->lang->ai->prompts;
-        $formName   = $prompt->name ?? $prompt->targetForm;
-        $desc  = "{$promptLang->targetFormInfo}\n";
-        $desc .= sprintf($promptLang->formLabel, $formName) . "\n\n";
-
-        if(!empty($allowedFields))
-        {
-            $desc .= "{$promptLang->fillableFields}\n";
-            foreach($allowedFields as $name => $field)
-            {
-                if(!is_array($field)) continue;
-                $desc .= "- {$name}\n";
-            }
-        }
-
-        $desc .= "\n{$promptLang->returnJSONObject}\n";
-        return $desc;
-    }
-
-    /**
-     * 构建动态 JSON Schema
-     * Build dynamic JSON schema for function calling.
-     *
-     * @param  array  $fields
-     * @param  object $prompt
-     * @access public
-     * @return array
-     */
-    public function buildDynamicSchema(array $fields, $prompt, $isBatch = false)
-    {
-        $properties = array();
-        $required   = array();
-
-        foreach($fields as $name => $field)
-        {
-            $prop = array('type' => 'string', 'description' => $field['label'] ?? $name);
-            if(!empty($field['options']))
-            {
-                $options = $field['options'];
-                if(is_array($options))
-                {
-                    $prop['enum'] = array_map(function($opt)
-                    {
-                        return is_array($opt) ? ($opt['value'] ?? $opt) : $opt;
-                    }, $options);
-                }
-            }
-            if(!empty($field['required'])) $required[] = $name;
-            $properties[$name] = $prop;
-        }
-
-        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
-        if($isBatch)
-        {
-            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->targetForm, 'items' => $objectSchema);
-        }
-        return $objectSchema;
     }
 
     /**
@@ -2331,16 +2256,8 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
-        $executable      = true;
-        $displayPosition = $prompt->displayPosition ?? '';
-        $actionPurpose   = $prompt->actionPurpose ?? '';
-
-        if(!empty($displayPosition) && !empty($actionPurpose))
-        {
-            $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
-            if($displayPosition !== 'form') $requiredFields[] = 'source';
-        }
-        else $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $executable = true;
+        $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
 
         foreach($requiredFields as $field)
         {
@@ -2897,37 +2814,6 @@ class aiModel extends model
     }
 
     /**
-     * Get prompts available for current entry page.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @param  string $displayPosition
-     * @access public
-     * @return array
-     */
-    public function getPromptsForEntryPage(string $module, string $method, string $displayPosition): array
-    {
-        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->andWhere('displayPosition')->eq($displayPosition);
-
-        if($displayPosition === 'detail')
-        {
-            if($method !== 'view') return array();
-            $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
-        }
-        else
-        {
-            $actionPurpose = "{$module}.{$method}";
-            $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
-        }
-
-        $prompts = $this->filterPromptsForExecution($prompts, true);
-        return array_values($prompts);
-    }
-
-    /**
      * Filter prompts by user's privilege and executable state.
      *
      * @param  array   $prompts
@@ -2945,24 +2831,6 @@ class aiModel extends model
         /* Check user's priv to targetForm. */
         foreach($prompts as $idx => $prompt)
         {
-            if(!empty($prompt->displayPosition) && !empty($prompt->actionPurpose) && empty($prompt->targetForm))
-            {
-                $page = explode('.', $prompt->actionPurpose, 2);
-                if(count($page) !== 2)
-                {
-                    unset($prompts[$idx]);
-                    continue;
-                }
-
-                list($m, $f) = $page;
-                if(!commonModel::hasPriv($m, $f))
-                {
-                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
-                    else unset($prompts[$idx]);
-                }
-                continue;
-            }
-
             list($m, $f) = explode('.', $prompt->targetForm);
             if($m === 'empty' && $f === 'empty') continue;
 
@@ -3002,7 +2870,7 @@ class aiModel extends model
         $source       = explode(',', $promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
-        $titleData = $this->lang->ai->moduleList[$module];
+        $titleData = $this->lang->ai->dataSource[$module];
         $testData  = $this->lang->ai->prompts->testData[$module];
 
         $categorized = array();
@@ -3061,26 +2929,6 @@ class aiModel extends model
     }
 
     /**
-     * 获取目标表单页面的智能体列表
-     * Get prompts for target form page.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return array
-     */
-    public function getPromptsForTargetForm(string $module, string $method)
-    {
-        $targetForm = "{$module}.{$method}";
-        return $this->dao->select('*')->from(TABLE_AI_AGENT)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->andWhere('targetForm')->eq($targetForm)
-            ->orderBy('id_desc')
-            ->fetchAll('id', false);
-    }
-
-    /**
      * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
      *
      * @param  string|array  $form  'module.method' or array('module', 'method').
@@ -3099,176 +2947,6 @@ class aiModel extends model
         if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
-    }
-
-    /**
-     * 加载表单上下文的关联对象
-     * Load context objects from form schema fields.
-     *
-     * @param  array $formSchema
-     * @param  array $fieldNames  表单字段名列表，字段值作为对象 ID 加载
-     * @param  array $relations
-     * @access public
-     * @return array
-     */
-    public function loadFormContextObjects(array $formSchema, array $fieldNames, array $relations = array())
-    {
-        $context = array();
-        if(empty($formSchema['fields'])) return $context;
-
-        $pageLevelTypes = (array)$this->config->ai->contextPageLevel;
-        $pageLevelFields = array('name', 'desc', 'model', 'attribute', 'begin', 'end');
-        $associatedFields = array('title', 'spec', 'verify', 'type', 'pri', 'estimate', 'status');
-        $loadedObjects = array();
-
-        foreach($fieldNames as $fieldName)
-        {
-            if(is_array($fieldName)) $fieldName = $fieldName['field'] ?? $fieldName['name'] ?? '';
-            if(!is_string($fieldName) || $fieldName === '') continue;
-            if(empty($formSchema['fields'][$fieldName])) continue;
-
-            if(empty($formSchema['fields'][$fieldName]['currentValue'])) continue;
-            $id = (int)$formSchema['fields'][$fieldName]['currentValue'];
-            if($id <= 0) continue;
-
-            if(!$this->loadModel('zai')->canViewObject($fieldName, $id)) continue;
-
-            $object = $this->loadModel($fieldName)->getById($id);
-            if(empty($object)) continue;
-
-            $loadedObjects[$fieldName] = $object;
-
-            $fields = in_array($fieldName, $pageLevelTypes) ? $pageLevelFields : $associatedFields;
-            $data = array('id' => $object->id);
-            foreach($fields as $field)
-            {
-                if(!isset($object->$field) || $object->$field === '') continue;
-                $data[$field] = in_array($field, array('desc', 'spec', 'verify')) ? strip_tags($object->$field) : $object->$field;
-            }
-            $context[$fieldName] = $data;
-        }
-
-        if(!empty($relations) && !empty($loadedObjects))
-        {
-            foreach($relations as $fromKey => $toMapping)
-            {
-                if(empty($loadedObjects[$fromKey])) continue;
-                $fromObject = $loadedObjects[$fromKey];
-
-                foreach($toMapping as $toKey => $toConfig)
-                {
-                    if(isset($context[$toKey])) continue;
-
-                    $toModule  = is_string($toConfig) ? $toConfig : ($toConfig['module'] ?? $toKey);
-                    $field     = is_array($toConfig) ? ($toConfig['field'] ?? $toKey) : $toKey;
-                    $via       = is_array($toConfig) ? ($toConfig['via'] ?? '') : '';
-
-                    if($via === 'projectproduct')
-                    {
-                        $productId = $this->loadModel('product')->getProductIDByProject($fromObject->id, true);
-                        if(empty($productId)) continue;
-                        $relId = (int)$productId;
-                    }
-                    else
-                    {
-                        if(!isset($fromObject->$field)) continue;
-                        $relId = (int)$fromObject->$field;
-                    }
-
-                    if($relId <= 0) continue;
-                    if(!$this->loadModel('zai')->canViewObject($toModule, $relId)) continue;
-
-                    $object = $this->loadModel($toModule)->getById($relId);
-                    if(empty($object)) continue;
-
-                    $loadedObjects[$toKey] = $object;
-
-                    $fields = in_array($toKey, $pageLevelTypes) ? $pageLevelFields : $associatedFields;
-                    $data = array('id' => $object->id);
-                    foreach($fields as $field)
-                    {
-                        if(!isset($object->$field) || $object->$field === '') continue;
-                        $data[$field] = in_array($field, array('desc')) ? strip_tags($object->$field) : $object->$field;
-                    }
-                    $context[$toKey] = $data;
-                }
-            }
-        }
-
-        return $context;
-    }
-
-    /**
-     * 构建上下文描述字符串
-     * Build context description string for prompt.
-     *
-     * @param  array $contextObjects
-     * @access public
-     * @return string
-     */
-    public function buildContextDescription(array $contextObjects)
-    {
-        $topLabels      = (array)$this->config->ai->contextLabels;
-        $fieldLabels    = (array)$this->config->ai->contextFieldLabels;
-        $pageLevelTypes = (array)$this->config->ai->contextPageLevel;
-        $desc           = '';
-
-        foreach($contextObjects as $key => $data)
-        {
-            $desc .= "{$topLabels[$key]}：" . (in_array($key, $pageLevelTypes) ? '' : "#{$data['id']}") . "\n";
-
-            if(in_array($key, $pageLevelTypes))
-            {
-                $hasBeginEnd = !empty($data['begin']) && !empty($data['end']);
-                foreach($data as $field => $value)
-                {
-                    if(in_array($field, array('id'))) continue;
-                    if($field === 'begin' || $field === 'end') continue;
-                    $label = $fieldLabels[$field] ?? $field;
-                    $desc .= "  {$label}：{$value}\n";
-                }
-                if($hasBeginEnd)
-                {
-                    $pairLabel = $fieldLabels['begin_end'] ?? '日期';
-                    $desc .= "  {$pairLabel}：{$data['begin']} ~ {$data['end']}\n";
-                }
-            }
-            else
-            {
-                $fieldOrder = array('title', 'spec', 'verify', 'type', 'pri', 'estimate', 'status');
-                foreach($fieldOrder as $field)
-                {
-                    if(empty($data[$field])) continue;
-                    $label = $fieldLabels[$field] ?? '';
-                    if(!$label) continue;
-                    $value = $data[$field];
-                    if($field === 'estimate') $value .= 'h';
-                    $desc .= "  {$label}：{$value}\n";
-                }
-            }
-        }
-
-        return rtrim($desc);
-    }
-
-    /**
-     * 过滤字段白名单
-     * Filter fields to only allowed ones.
-     *
-     * @param  array $fields
-     * @param  array $allowed
-     * @access public
-     * @return array
-     */
-    public function filterAllowedFields(array $fields, array $allowed)
-    {
-        if(empty($allowed)) return $fields;
-        $filtered = array();
-        foreach($fields as $name => $field)
-        {
-            if(in_array($name, $allowed)) $filtered[$name] = $field;
-        }
-        return $filtered ?: $fields;
     }
 
     /**

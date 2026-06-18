@@ -723,18 +723,11 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty')
+        if(!empty($prompt->targetForm))
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-
-            $dataPropNames = new stdclass();
-            $dataPropNames->{$prompt->module} = new stdclass();
-            foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label)
-            {
-                $dataPropNames->{$prompt->module}->{$name} = $label;
-            }
-            $response['dataPropNames'] = $dataPropNames;
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
         }
 
         $fields = array_values($this->ai->getPromptFields($promptId));
@@ -915,7 +908,7 @@ class ai extends control
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->moduleList[$prompt->module];
+            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
         }
 
         $response['objectType']   = $prompt->module;
@@ -926,182 +919,6 @@ class ai extends control
         $response['content']      = $showText;
 
         return $this->send(array('result' => 'success', 'data' => $response));
-    }
-
-    /**
-     * 执行通用表单提示词
-     * Execute universal form prompt for target form pages.
-     *
-     * @param  int    $promptID
-     * @access public
-     * @return void
-     */
-    public function executeUniversalPrompt($promptID)
-    {
-        $prompt = $this->ai->getPromptByID($promptID);
-        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
-
-        if(!common::hasPriv('ai', 'promptExecute')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
-
-        $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
-        if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
-
-        $targetForm = '';
-        if(!empty($prompt->displayPosition) && $prompt->displayPosition === 'form' && !empty($prompt->actionPurpose)) $targetForm = $prompt->actionPurpose;
-        elseif(!empty($prompt->targetForm)) $targetForm = $prompt->targetForm;
-
-        $targetFormParts = explode('.', $targetForm, 2);
-        if(count($targetFormParts) !== 2) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
-
-        $contextFields   = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
-        $contextObjects  = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
-        $contextDesc    = $this->ai->buildContextDescription($contextObjects);
-
-        $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
-        $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
-
-        $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
-        if($isBatchForm)
-        {
-            /* 批量表单：构建 Markdown 表格 + 字段定义 + 返回数组指令 */
-            $headers   = array();
-            $values    = array();
-            $fieldDefs = array();
-            foreach($formSchema['fields'] as $name => $field)
-            {
-                $label    = $field['label'] ?? $name;
-                $input    = $field['controlType'] ?? 'input';
-                $value    = $field['currentValue'] ?? '';
-                $required = !empty($field['required']) ? 'true' : 'false';
-
-                $headers[] = $label;
-
-                /* 将选项值转为显示文本 */
-                $displayValue = $value;
-                if($value !== '' && !empty($field['options']) && is_array($field['options']))
-                {
-                    foreach($field['options'] as $opt)
-                    {
-                        if((string)($opt['value'] ?? '') === (string)$value)
-                        {
-                            $displayValue = $opt['text'] ?? $value;
-                            break;
-                        }
-                    }
-                }
-                $values[] = $displayValue;
-
-                $def = "- {$name}({$label}): {$input}" . ($required === 'true' ? ' 必填' : '');
-                if(!empty($field['options']) && is_array($field['options']))
-                {
-                    $optStrs = array();
-                    foreach($field['options'] as $opt)
-                    {
-                        $optVal   = $opt['value'] ?? '';
-                        $optText  = $opt['text'] ?? '';
-                        $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
-                    }
-                    $def .= "，选项: " . implode(', ', $optStrs);
-                }
-                $fieldDefs[] = $def;
-            }
-
-            $sepLine    = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
-            $promptLang = $this->lang->ai->prompts;
-            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
-            $fullPrompt .= "{$promptLang->batchFormData}\n\n";
-            $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
-            $fullPrompt .= $sepLine . "\n";
-            $fullPrompt .= '| ' . implode(' | ', $values) . " |\n\n";
-            $fullPrompt .= "{$promptLang->fieldDefinition}\n" . implode("\n", $fieldDefs) . "\n\n";
-            $fullPrompt .= "{$promptLang->targetFormInfo}\n";
-            $fullPrompt .= sprintf($promptLang->formLabel, $prompt->name ?? $targetForm) . "\n\n";
-            if(!empty($filteredFields))
-            {
-                $fullPrompt .= "{$promptLang->fillableFields}\n";
-                foreach($filteredFields as $fName => $fField)
-                {
-                    $fullPrompt .= "- {$fName}\n";
-                }
-            }
-            $fullPrompt .= "\n{$promptLang->returnJSONArray}\n";
-        }
-        else
-        {
-            $formDataLines = array();
-            if(!empty($formSchema['fields']))
-            {
-                foreach($formSchema['fields'] as $name => $field)
-                {
-                    $label    = $field['label'] ?? $name;
-                    $input    = $field['controlType'] ?? 'input';
-                    $valType  = $field['valueType'] ?? 'string';
-                    $value    = $field['currentValue'] ?? '';
-                    $required = !empty($field['required']) ? 'true' : 'false';
-                    $line     = "- {$label}\n  name: {$name}\n  input: {$input}\n  type: {$valType}\n  required: {$required}\n  value: {$value}";
-
-                    if(!empty($field['options']) && is_array($field['options']))
-                    {
-                        $optStrs = array();
-                        foreach($field['options'] as $opt)
-                        {
-                            $optVal   = $opt['value'] ?? '';
-                            $optText  = $opt['text'] ?? '';
-                            $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
-                        }
-                        $line .= "\n  options: " . implode(', ', $optStrs);
-                    }
-
-                    $formDataLines[] = $line;
-                }
-            }
-
-            $fillableDesc = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
-            $promptLang   = $this->lang->ai->prompts;
-
-            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
-            $fullPrompt .= "{$promptLang->currentFormData}\n" . implode("\n", $formDataLines) . "\n\n";
-            $fullPrompt .= $fillableDesc;
-        }
-
-        $schema = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
-        $location = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-        $targetFormName = $this->lang->ai->targetForm[$targetFormParts[0]][$targetFormParts[1]] ?? '';
-
-        $dataPropNames = new stdclass();
-        $dataPropNames->{$prompt->module} = new stdclass();
-        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
-        foreach($filteredFields as $name => $field)
-        {
-            $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
-        }
-
-        $originObject = new stdclass();
-        foreach($filteredFields as $name => $field)
-        {
-            if(isset($field['currentValue']) && $field['currentValue'] !== '')
-            {
-                $originObject->$name = $field['currentValue'];
-            }
-        }
-
-        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array(array(
-            'role'           => $prompt->role . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''),
-            'schema'         => $schema,
-            'dataPrompt'     => $fullPrompt,
-            'name'           => $prompt->name,
-            'purpose'        => $prompt->purpose,
-            'targetForm'     => $targetForm,
-            'promptID'       => $prompt->id,
-            'formLocation'   => $location,
-            'objectID'       => 0,
-            'objectType'     => $prompt->module,
-            'object'         => array($prompt->module => $originObject),
-            'model'          => $prompt->model,
-            'targetFormName' => $targetFormName,
-            'dataPropNames'  => $dataPropNames,
-            'knowledgeLib'   => $prompt->knowledgeLib ?? '',
-        ), false))));
     }
 
     /**
