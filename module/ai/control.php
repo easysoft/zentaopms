@@ -946,7 +946,13 @@ class ai extends control
         $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
         if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
-        $targetFormParts = explode('.', $prompt->targetForm);
+        $targetForm = '';
+        if(!empty($prompt->displayPosition) && $prompt->displayPosition === 'form' && !empty($prompt->actionPurpose)) $targetForm = $prompt->actionPurpose;
+        elseif(!empty($prompt->targetForm)) $targetForm = $prompt->targetForm;
+
+        $targetFormParts = explode('.', $targetForm, 2);
+        if(count($targetFormParts) !== 2) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
+
         $contextFields   = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
         $contextObjects  = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
         $contextDesc    = $this->ai->buildContextDescription($contextObjects);
@@ -1008,7 +1014,7 @@ class ai extends control
             $fullPrompt .= '| ' . implode(' | ', $values) . " |\n\n";
             $fullPrompt .= "字段说明：\n" . implode("\n", $fieldDefs) . "\n\n";
             $fullPrompt .= "[目标表单信息]\n";
-            $fullPrompt .= '表单: ' . ($prompt->name ?? $prompt->targetForm) . "\n\n";
+            $fullPrompt .= '表单: ' . ($prompt->name ?? $targetForm) . "\n\n";
             if(!empty($filteredFields))
             {
                 $fullPrompt .= "可填充字段:\n";
@@ -1062,7 +1068,7 @@ class ai extends control
 
         $dataPropNames = new stdclass();
         $dataPropNames->{$prompt->module} = new stdclass();
-        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
+        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
         foreach($filteredFields as $name => $field)
         {
             $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
@@ -1083,7 +1089,7 @@ class ai extends control
             'dataPrompt'     => $fullPrompt,
             'name'           => $prompt->name,
             'purpose'        => $prompt->purpose,
-            'targetForm'     => $prompt->targetForm,
+            'targetForm'     => $targetForm,
             'promptID'       => $prompt->id,
             'formLocation'   => $location,
             'objectID'       => 0,

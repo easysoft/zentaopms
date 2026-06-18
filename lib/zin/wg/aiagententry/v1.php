@@ -8,11 +8,11 @@ require_once dirname(__DIR__) . DS . 'aiteammatemenu' . DS . 'v1.php';
 class aiAgentEntry extends wg
 {
     protected static array $defineProps = array(
-        'module?:string',
-        'method?:string',
+        'module:string',
+        'method:string',
         'objectID?:int',
         'objectVarName?:string',
-        'type?:string="auto"',
+        'type:string',
         'renderMode?:string="full"',
         'showAgent?:bool=true',
         'showTeammate?:bool=true',
@@ -29,7 +29,6 @@ class aiAgentEntry extends wg
 
         global $app;
         $webRoot = $app->getWebRoot();
-        $nodes = array();
 
         if($this->prop('loadCss'))
         {
@@ -39,10 +38,11 @@ class aiAgentEntry extends wg
 
         if($this->prop('loadJs'))
         {
-            $nodes[] = h::importJs($webRoot . 'js/zui3/ai.js');
+            $jsFile = $app->getAppRoot() . 'www/js/zui3/ai.js';
+            if(file_exists($jsFile)) pageJS(file_get_contents($jsFile));
         }
 
-        return empty($nodes) ? null : (count($nodes) === 1 ? $nodes[0] : html(...$nodes));
+        return null;
     }
 
     protected function build(): ?node
@@ -51,7 +51,7 @@ class aiAgentEntry extends wg
 
         $renderMode = $this->prop('renderMode');
         $resourceNodes = $this->importResources();
-        if($renderMode === 'resources') return null;
+        if($renderMode === 'resources') return $resourceNodes;
 
         $app->control->loadModel('ai');
         if(!commonModel::hasPriv('ai', 'promptExecute')) return $resourceNodes;
@@ -60,8 +60,27 @@ class aiAgentEntry extends wg
         $app->loadLang('ai');
         $app->loadConfig('ai');
 
-        $module = $this->prop('module') ?: $app->getModuleName();
-        $method = $this->prop('method') ?: $app->getMethodName();
+        $module = $this->prop('module');
+        $method = $this->prop('method');
+        $type   = $this->prop('type');
+
+        if(empty($module) || empty($method) || empty($type))
+        {
+            $this->triggerError('The module, method and type properties of widget "aiAgentEntry" are required.');
+            return $resourceNodes;
+        }
+
+        if($type === 'detail' && !$this->prop('objectID'))
+        {
+            $this->triggerError('The objectID property of widget "aiAgentEntry" is required when type is "detail".');
+            return $resourceNodes;
+        }
+
+        if($type === 'detail' && !$this->prop('objectVarName'))
+        {
+            $this->triggerError('The objectVarName property of widget "aiAgentEntry" is required when type is "detail".');
+            return $resourceNodes;
+        }
 
         $entryNode = null;
         if($module === 'doc' && $method === 'app')
@@ -70,8 +89,6 @@ class aiAgentEntry extends wg
         }
         else
         {
-            $type = $this->resolvePageType($module, $method, $config);
-
             $prompts = $this->fetchPrompts($module, $method, $type, $app, $config);
             if(!empty($prompts))
             {
@@ -169,14 +186,6 @@ class aiAgentEntry extends wg
         jsVar('window.aiSuggestions', $suggestions);
     }
 
-    protected function resolvePageType(string $module, string $method, $config): string
-    {
-        $type = $this->prop('type');
-        if($type !== 'auto') return $type;
-
-        return 'none';
-    }
-
     protected function getObjectID(): int
     {
         return (int)$this->prop('objectID');
@@ -186,7 +195,6 @@ class aiAgentEntry extends wg
     {
         $objectVarName = $this->prop('objectVarName');
         if($objectVarName) return $objectVarName;
-
         return $module;
     }
 

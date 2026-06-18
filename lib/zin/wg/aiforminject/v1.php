@@ -5,8 +5,8 @@ namespace zin;
 class aiFormInject extends wg
 {
     protected static array $defineProps = array(
-        'module?:string',
-        'method?:string',
+        'module:string',
+        'method:string',
         'enableSkipFields?:bool=true',
         'enablePending?:bool=true',
         'enableInject?:bool=true',
@@ -23,8 +23,13 @@ class aiFormInject extends wg
         $app->loadLang('ai');
         $app->loadConfig('ai');
 
-        $module = $this->prop('module') ?: $app->getModuleName();
-        $method = $this->prop('method') ?: $app->getMethodName();
+        $module = $this->prop('module');
+        $method = $this->prop('method');
+        if(empty($module) || empty($method))
+        {
+            $this->triggerError('The module and method properties of widget "aiFormInject" are required.');
+            return null;
+        }
         $page   = "{$module}.{$method}";
 
         $universalFormPages = $config->ai->universalFormPages ?? array();

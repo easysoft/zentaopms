@@ -220,9 +220,7 @@ class formPanel extends panel
             }
         }
 
-        global $app;
-        $moduleName = $app->getModuleName();
-        $methodName = $app->getMethodName();
+        list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
         $this->addToBlock('headingActions', aiAgentEntry
         (
             set::type('form'),

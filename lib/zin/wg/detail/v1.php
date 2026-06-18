@@ -327,14 +327,26 @@ CSS;
 
             if(!$firstSectionHandled)
             {
-                if($item instanceof setting) $item = $item->toArray();
-                if(is_array($item))
+                $normalizedItem = $item instanceof setting ? $item->toArray() : $item;
+                $title = is_string($key) ? $key : null;
+
+                if(is_array($normalizedItem) && isset($normalizedItem['title'])) $title = $normalizedItem['title'];
+
+                if($title && is_array($normalizedItem))
                 {
-                    $titleActions   = $item['titleActions'] ?? array();
-                    $titleActions[] = aiAgentEntry(set::type('detail'));
-                    $item['titleActions'] = $titleActions;
+                    $titleActions   = $normalizedItem['titleActions'] ?? array();
+                    $titleActions[] = aiAgentEntry
+                    (
+                        set::type('detail'),
+                        set::module($this->prop('objectType')),
+                        set::method('view'),
+                        set::objectID((int)$this->prop('objectID')),
+                        set::objectVarName($this->prop('objectType'))
+                    );
+                    $normalizedItem['titleActions'] = $titleActions;
+                    $item = $normalizedItem;
+                    $firstSectionHandled = true;
                 }
-                $firstSectionHandled = true;
             }
 
             $list[] = $this->buildSection($item, is_string($key) ? $key : null);

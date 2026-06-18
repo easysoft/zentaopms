@@ -12,8 +12,6 @@ namespace zin;
 
 use function zin\utils\flat;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 jsVar('gradeGroup', $gradeGroup);
 
 $isInModal     = isInModal();

@@ -100,17 +100,8 @@ if(!$bug->deleted && $canModify)
 
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
-$aiAgentEntry = aiAgentEntry
-(
-    set::renderMode('entry'),
-    set::objectVarName('bug'),
-    set::objectID($bug->id)
-);
-skipRenderInGlobal($aiAgentEntry);
-
 $sections[] = setting()
     ->title($lang->bug->legendSteps)
-    ->titleActions(array($aiAgentEntry))
     ->control('html')
     ->content($bug->steps);
 

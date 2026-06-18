@@ -2331,7 +2331,15 @@ class aiModel extends model
         if(empty($prompt)) return false;
 
         $executable = true;
-        $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $displayPosition = zget($prompt, 'displayPosition', '');
+        $actionPurpose   = zget($prompt, 'actionPurpose', '');
+
+        if(!empty($displayPosition) && !empty($actionPurpose))
+        {
+            $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
+            if($displayPosition !== 'form') $requiredFields[] = 'source';
+        }
+        else $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
 
         foreach($requiredFields as $field)
         {
@@ -2903,8 +2911,17 @@ class aiModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('displayPosition')->eq($displayPosition);
 
-        $actionPurpose = "{$module}.{$method}";
-        $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+        if($displayPosition === 'detail')
+        {
+            if($method !== 'view') return array();
+            $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
+        }
+        else
+        {
+            $actionPurpose = "{$module}.{$method}";
+            $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+        }
+
         $prompts = $this->filterPromptsForExecution($prompts, true);
         return array_values($prompts);
     }
@@ -2927,6 +2944,24 @@ class aiModel extends model
         /* Check user's priv to targetForm. */
         foreach($prompts as $idx => $prompt)
         {
+            if(!empty($prompt->displayPosition) && !empty($prompt->actionPurpose) && empty($prompt->targetForm))
+            {
+                $page = explode('.', $prompt->actionPurpose, 2);
+                if(count($page) !== 2)
+                {
+                    unset($prompts[$idx]);
+                    continue;
+                }
+
+                list($m, $f) = $page;
+                if(!commonModel::hasPriv($m, $f))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+                continue;
+            }
+
             list($m, $f) = explode('.', $prompt->targetForm);
             if($m === 'empty' && $f === 'empty') continue;
 
