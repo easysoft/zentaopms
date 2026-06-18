@@ -4,6 +4,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+zenData('kanbanlane')->gen(0);
+$kanbanlane = zenData('kanbanlane');
+$kanbanlane->id->range('1-5');
+$kanbanlane->execution->range('0');
+$kanbanlane->name->range('默认泳道{5}');
+$kanbanlane->region->range('1-5');
+$kanbanlane->type->range('common{5}');
+$kanbanlane->group->range('1-5');
+$kanbanlane->color->range('#7ec5ff');
+$kanbanlane->deleted->range('0');
+$kanbanlane->gen(5);
+
 /**
 
 title=测试 kanbanModel->getLaneById();

@@ -29,6 +29,8 @@ $task1 = new stdclass();
 $task1->id = 1;
 $task1->name = '任务1';
 $task1->type = 'devel';
+$task1->story = 0;
+$task1->taskVersion = 1;
 $task1->status = 'wait';
 $task1->pri = 3;
 $task1->estimate = 4;
@@ -46,7 +48,7 @@ $tasks[] = $task1;
 $executionTest = new executionTaoTest();
 
 r($executionTest->formatTasksForTreeTest(array())) && p() && e('0'); // 测试步骤1：空任务数组输入
-r($executionTest->formatTasksForTreeTest($tasks)) && p() && e('1'); // 测试步骤2：单个任务格式化
+r(count($executionTest->formatTasksForTreeTest($tasks))) && p() && e('1'); // 测试步骤2：单个任务格式化
 r($executionTest->formatTasksForTreeTest($tasks)) && p('0:type') && e('task'); // 测试步骤3：验证任务type属性
 r($executionTest->formatTasksForTreeTest($tasks)) && p('0:title') && e('任务1'); // 测试步骤4：验证任务title属性
 r($executionTest->formatTasksForTreeTest($tasks)) && p('0:status') && e('wait'); // 测试步骤5：验证任务status属性

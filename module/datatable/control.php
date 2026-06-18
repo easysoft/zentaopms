@@ -109,7 +109,11 @@ class datatable extends control
                 foreach($attrs as $attr)
                 {
                     if(!isset($field->$attr)) continue;
-                    if($attr == 'show') $field->$attr = $field->$attr ? true : false;
+                    if($attr == 'show')
+                    {
+                        $field->$attr = $field->$attr ? true : false;
+                        if(isset($cols[$id]['required']) && $cols[$id]['required']) $field->$attr = true;
+                    }
                     $fields[$id][$attr] = $field->$attr;
                 }
             }

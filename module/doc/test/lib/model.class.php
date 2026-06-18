@@ -284,6 +284,22 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 获取所有子空间。
+     * Get all sub spaces.
+     *
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function getAllSubSpacesTest(string $spaceType = 'all'): array
+    {
+        $spaces = $this->instance->getAllSubSpaces($spaceType);
+
+        if(dao::isError()) return dao::getError();
+        return $spaces;
+    }
+
+    /**
      * 获取文档库的附件。
      * Get lib files.
      *
@@ -501,7 +517,16 @@ class docModelTest extends baseTest
      */
     public function setMenuByTypeTest(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
+        $app               = $this->instance->app;
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'doc';
+        if(empty($app->rawMethod)) $app->rawMethod = 'browse';
+
         $objects = $this->instance->setMenuByType($type, $objectID, $libID, $appendLib);
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
+
         if(dao::isError()) return dao::getError();
 
         return $objects;
@@ -1429,12 +1454,21 @@ class docModelTest extends baseTest
      */
     public function getDynamicTest(int $recPerPage, int $pageID): array|int
     {
+        $app               = $this->instance->app;
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'doc';
+        if(empty($app->rawMethod)) $app->rawMethod = 'dynamic';
+
         $this->instance->app->loadClass('pager', true);
         $pager = new pager(0, $recPerPage, $pageID);
 
         $actions = $this->instance->getDynamic($pager);
         $idList  = array();
         foreach($actions as $action) $idList []= $action->id;
+
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
 
         if(dao::isError()) return dao::getError();
         return count($idList);
@@ -1723,7 +1757,7 @@ class docModelTest extends baseTest
      * @access public
      * @return int|bool
      */
-    public function updateDoclibOrderTest(int $id, int $order): int|bool
+    public function updateDoclibOrderTest(int $id, int $order): int|string|bool
     {
         $this->instance->updateDoclibOrder($id, $order);
 

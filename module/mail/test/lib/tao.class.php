@@ -7,6 +7,13 @@ class mailTaoTest extends baseTest
 {
     protected $moduleName = 'mail';
     protected $className  = 'tao';
+    public $objectModel   = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * Create mock mail model for testing without database.
@@ -917,42 +924,29 @@ class mailTaoTest extends baseTest
      */
     public function getMailContentTest($objectType = '', $object = null, $action = null)
     {
-        global $tester;
-        if(!$tester)
-        {
-            // 模拟测试场景，不依赖数据库
-            // 实现getMailContent的核心逻辑
+        if(empty($objectType) || empty($object) || empty($action)) return '';
+        if($objectType == 'mr') return '';
 
-            // 验证参数
-            if(empty($objectType) || empty($object) || empty($action)) return '';
+        $modulePath = $this->instance->app->getModulePath('', $objectType);
+        if(!file_exists($modulePath)) return '';
 
-            // 特殊处理mr类型
-            if($objectType == 'mr') return '';
+        $result = $this->invokeArgs('getMailContent', array($objectType, $object, $action));
+        if(dao::isError()) return dao::getError();
 
-            // 模拟检查模块路径是否存在
-            $validObjectTypes = array('story', 'task', 'bug', 'doc', 'testtask', 'build', 'release');
-            if(!in_array($objectType, $validObjectTypes)) return '';
+        return $result;
+    }
 
-            // 模拟检查sendmail.html.php文件是否存在
-            if($objectType == 'nonexistent') return '';
-
-            // 模拟成功的邮件内容生成
-            $domain = 'http://localhost';
-            $mailTitle = strtoupper($objectType) . ' #' . $object->id;
-
-            // 根据不同对象类型返回不同的邮件内容
-            $mockContent = "<html><body>";
-            $mockContent .= "<h2>{$mailTitle}</h2>";
-            $mockContent .= "<p>This is a test mail content for {$objectType}.</p>";
-            $mockContent .= "<p>Object ID: {$object->id}</p>";
-            if(isset($object->title)) $mockContent .= "<p>Title: {$object->title}</p>";
-            if(isset($object->name)) $mockContent .= "<p>Name: {$object->name}</p>";
-            $mockContent .= "</body></html>";
-
-            return $mockContent;
-        }
-
-        $result = $tester->loadTao('mail')->getMailContent($objectType, $object, $action);
+    /**
+     * Test replaceImageURL method.
+     *
+     * @param  string $body
+     * @param  array  $images
+     * @access public
+     * @return mixed
+     */
+    public function replaceImageURLTest(string $body, array $images)
+    {
+        $result = $this->invokeArgs('replaceImageURL', array($body, $images));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1262,7 +1256,7 @@ class mailTaoTest extends baseTest
      */
     public function getObjectForMailTest($objectType = '', $objectID = 0)
     {
-        $result = $this->instance->getObjectForMail($objectType, $objectID);
+        $result = $this->invokeArgs('getObjectForMail', array($objectType, $objectID));
         if(dao::isError()) return dao::getError();
 
         return $result;

@@ -474,7 +474,16 @@ class todo extends control
         $date       = !empty($formData->data->date) ? $formData->data->date : date::today();
         if(!$todoIdList) $this->locate((string)$this->session->todoList);
 
-        $this->todo->editDate((array)$todoIdList, (string)$date);
+        $allChanges = $this->todo->editDate((array)$todoIdList, (string)$date);
+        if(!empty($allChanges))
+        {
+            $this->loadModel('action');
+            foreach($allChanges as $todoID => $changes)
+            {
+                $actionID = $this->action->create('todo', $todoID, 'edited');
+                if($actionID) $this->action->logHistory($actionID, $changes);
+            }
+        }
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 

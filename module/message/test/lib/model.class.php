@@ -140,26 +140,32 @@ class messageModelTest extends baseTest
     public function saveNoticeTest(string $objectType, int $objectID, string $actionType, int $actionID, string $actor = ''): object|array
     {
         global $tester;
+        $originalAccount = $tester->app->user->account;
         if($actor == 'empty')
         {
             $actor = '';
             $tester->app->user->account = '';
         }
-        $result = $this->instance->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
 
         $table  = $tester->config->objectTables[$objectType];
         $object = $tester->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
-        if(!$object) return array();
+        if(!$object)
+        {
+            $tester->app->user->account = $originalAccount;
+            return array();
+        }
 
-        $result = $this->objectModel->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
+        $result = $this->instance->saveNotice($objectType, $objectID, $actionType, $actionID, $actor);
 
         if(dao::isError())
         {
             $error = dao::getError(true);
+            $tester->app->user->account = $originalAccount;
             return is_string($error) ? array('code' => 'fail', 'message' => $error) : array('code' => 'fail', 'message' => 'dao_error');
         }
 
         if($result) $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->orderBy('id_desc')->fetch();
+        $tester->app->user->account = $originalAccount;
         return !empty($notify) ? $notify : array();
     }
 

@@ -22,7 +22,7 @@ formPanel
 (
     set::className('createLibForm'),
     set::title($title),
-    set::labelWidth('100px'),
+    set::labelWidth('110px'),
     formHidden('createMode', $createMode),
     formGroup
     (

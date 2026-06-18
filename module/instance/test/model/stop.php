@@ -50,7 +50,9 @@ $validInstance = new stdclass();
 $validInstance->id = 1;
 $validInstance->k8name = 'test-k8-1';
 $validInstance->chart = 'zentao';
+$validInstance->appName = 'zentao';
 $validInstance->channel = 'stable';
+$validInstance->source = 'cloud';
 $validInstance->spaceData = new stdclass();
 $validInstance->spaceData->k8space = 'default';
 
@@ -58,7 +60,9 @@ $runningInstance = new stdclass();
 $runningInstance->id = 2;
 $runningInstance->k8name = 'test-k8-2';
 $runningInstance->chart = 'gitlab';
+$runningInstance->appName = 'gitlab';
 $runningInstance->channel = 'stable';
+$runningInstance->source = 'cloud';
 $runningInstance->spaceData = new stdclass();
 $runningInstance->spaceData->k8space = 'test-space';
 
@@ -66,7 +70,9 @@ $abnormalInstance = new stdclass();
 $abnormalInstance->id = 3;
 $abnormalInstance->k8name = 'test-k8-3';
 $abnormalInstance->chart = 'jenkins';
+$abnormalInstance->appName = 'jenkins';
 $abnormalInstance->channel = 'stable';
+$abnormalInstance->source = 'cloud';
 $abnormalInstance->spaceData = new stdclass();
 $abnormalInstance->spaceData->k8space = 'dev-space';
 
@@ -74,7 +80,9 @@ $stoppedInstance = new stdclass();
 $stoppedInstance->id = 4;
 $stoppedInstance->k8name = 'test-k8-4';
 $stoppedInstance->chart = 'sonar';
+$stoppedInstance->appName = 'sonar';
 $stoppedInstance->channel = 'stable';
+$stoppedInstance->source = 'cloud';
 $stoppedInstance->spaceData = new stdclass();
 $stoppedInstance->spaceData->k8space = 'prod-space';
 

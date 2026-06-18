@@ -7,6 +7,13 @@ class jenkinsModelTest extends baseTest
 {
     protected $moduleName = 'jenkins';
     protected $className  = 'model';
+    public $jenkins       = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->jenkins = $this->instance;
+    }
 
     /**
      * 测试获取流水线列表。

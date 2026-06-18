@@ -22,6 +22,7 @@ zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('action')->loadYaml('action')->gen(50);
 zenData('user')->gen(5);
+su('admin');
 
 $recPerPages = array(5, 10, 20);
 $pagerIds    = array(1, 2);

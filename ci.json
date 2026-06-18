@@ -24,7 +24,10 @@
       "gitRepo": "ci/zentaoext-downgrade"
     },
     "blocksuite": {
-        "version": "0.19.5"
+      "version": "0.19.5"
+    },
+    "whiteboard": {
+      "version": "0.18.1"
     }
   },
   "image": {

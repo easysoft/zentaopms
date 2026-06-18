@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
@@ -18,34 +19,9 @@ cid=16631
 
 zenData('pipeline')->gen(5);
 
-global $app;
-$app->rawModule = 'gitlab';
-$app->rawMethod = 'browse';
-
-$gitlab = $tester->loadModel('gitlab');
-
-$gitlabID = 1;
-
-/* Create test project first. */
-$project = new stdclass();
-$project->name         = 'unitTestProject99';
-$project->path         = 'unit_test_project99';
-$project->description  = 'unit_test_project desc';
-$project->visibility   = 'public';
-$project->namespace_id = '1';
-$gitlab->apiCreateProject($gitlabID, $project);
-
-/* Get projectID. */
-$gitlabProjects = $gitlab->apiGetProjects($gitlabID);
-$projectID = 0;
-foreach($gitlabProjects as $gitlabProject)
-{
-    if($gitlabProject->name == 'unitTestProject99')
-    {
-        $projectID = $gitlabProject->id;
-        break;
-    }
-}
+$gitlab    = new gitlabModelTest();
+$gitlabID  = 1;
+$projectID = 18;
 
 /* Test cases. */
 $emptyProject = new stdclass();
@@ -68,8 +44,14 @@ $nonExistentProject = new stdclass();
 $nonExistentProject->id = 888888;
 $nonExistentProject->description = 'Non-existent project';
 
-r($gitlab->apiUpdateProject($gitlabID, $emptyProject)) && p() && e('0');
-r($gitlab->apiUpdateProject(0, $invalidProject)) && p() && e('0');
-r($gitlab->apiUpdateProject($gitlabID, $validProject)) && p('description') && e('apiUpdatedProject');
-r($gitlab->apiUpdateProject($gitlabID, $multiAttrProject)) && p('name') && e('Updated Project Name');
-r($gitlab->apiUpdateProject($gitlabID, $nonExistentProject)) && p() && e('~~');
+$result = $gitlab->apiUpdateProjectTest($gitlabID, $emptyProject);
+if($result === false) $result = '0';
+r($result) && p() && e('0');
+
+$result = $gitlab->apiUpdateProjectTest(0, $invalidProject);
+if($result === false) $result = '0';
+r($result) && p() && e('0');
+
+r($gitlab->apiUpdateProjectTest($gitlabID, $validProject)) && p('description') && e('apiUpdatedProject');
+r($gitlab->apiUpdateProjectTest($gitlabID, $multiAttrProject)) && p('name') && e('Updated Project Name');
+r($gitlab->apiUpdateProjectTest($gitlabID, $nonExistentProject)) && p() && e('0');

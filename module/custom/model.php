@@ -946,8 +946,7 @@ class customModel extends model
         $disabledFeatures = array('program', 'productLine');
         foreach($this->config->custom->dataFeatures as $feature)
         {
-            $function = 'has' . ucfirst($feature) . 'Data';
-            if(!$this->$function())
+            if(!$this->hasDataFeature($feature))
             {
                 if(in_array($feature, $this->config->custom->projectFeatures))
                 {
@@ -1061,8 +1060,7 @@ class customModel extends model
             /* Check whether the product or project data in the system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
-                $function = 'has' . ucfirst($feature) . 'Data';
-                if(!$this->$function())
+                if(!$this->hasDataFeature($feature))
                 {
                     if(in_array($feature, $this->config->custom->projectFeatures)) $feature = 'project' . ucfirst($feature);
                     /* If the data is empty, this feature is disabled. */
@@ -1084,6 +1082,23 @@ class customModel extends model
         $this->setting->setItem('system.custom.enableER', $enableER);
 
         $this->processMeasrecordCron();
+    }
+
+    /**
+     * 检查系统中是否有指定数据功能的数据。
+     * Check whether the system has data for a data feature.
+     *
+     * @param  string $feature
+     * @access public
+     * @return bool
+     */
+    public function hasDataFeature(string $feature): bool
+    {
+        $function = 'has' . ucfirst($feature) . 'Data';
+        $hasData  = (bool)$this->$function();
+        if($feature == 'productUR' && !$hasData) $hasData = (bool)$this->hasProductERData();
+
+        return $hasData;
     }
 
     /**

@@ -19,13 +19,7 @@ cid=0
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 2. zendata数据准备(根据需要配置)
-$userTable = zenData('user');
-$userTable->account->range('admin,user1,user2');
-$userTable->realname->range('管理员,用户1,用户2');
-$userTable->password->range('123456{3}');
-$userTable->deleted->range('0{3}');
-$userTable->gen(3);
+// 2. 当前配置下该用例不依赖数据库初始化数据。
 
 // 3. 用户登录(选择合适角色)
 su('admin');
@@ -48,6 +42,8 @@ $dbInfo1->port = 3306;
 
 $instance1 = new stdClass();
 $instance1->id = 1;
+$instance1->appID = 1;
+$instance1->appName = 'ZenTao';
 $instance1->chart = 'zentao';
 $instance1->source = 'cloud';
 
@@ -59,6 +55,8 @@ $customData2->dbService = '';
 
 $instance2 = new stdClass();
 $instance2->id = 2;
+$instance2->appID = 2;
+$instance2->appName = 'GitLab';
 $instance2->chart = 'gitlab';
 $instance2->source = 'cloud';
 
@@ -81,6 +79,8 @@ $customData4->dbService = '';
 
 $instance4 = new stdClass();
 $instance4->id = 4;
+$instance4->appID = 4;
+$instance4->appName = 'TestApp';
 $instance4->chart = 'testapp';
 $instance4->source = 'cloud';
 
@@ -92,6 +92,8 @@ $customData5->dbService = 'mysql-service';
 
 $instance5 = new stdClass();
 $instance5->id = 5;
+$instance5->appID = 5;
+$instance5->appName = 'ZenTao';
 $instance5->chart = 'zentao';
 $instance5->source = 'cloud';
 
@@ -114,6 +116,8 @@ $customData7->dbService = '';
 
 $instance7 = new stdClass();
 $instance7->id = 7;
+$instance7->appID = 7;
+$instance7->appName = 'Nexus';
 $instance7->chart = 'nexus3';
 $instance7->source = 'cloud';
 
