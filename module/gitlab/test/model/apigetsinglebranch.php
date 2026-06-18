@@ -20,9 +20,6 @@ cid=16615
 
 */
 
-// 准备测试数据
-zendata('pipeline')->loadYaml('pipeline_apigetsinglebranch', false, 2)->gen(10);
-
 $gitlab = new gitlabModelTest();
 
 // 执行测试

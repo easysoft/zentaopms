@@ -159,6 +159,8 @@ class executionModel extends model
             unset($this->lang->execution->menu->build);
             unset($this->lang->execution->menu->release);
             unset($this->lang->execution->menu->effort);
+            unset($this->lang->execution->menu->deliverable);
+            unset($this->lang->execution->menu->review);
             unset($this->lang->execution->menu->more);
 
             if(!empty($this->lang->execution->menu->view['subMenu']->gantt))

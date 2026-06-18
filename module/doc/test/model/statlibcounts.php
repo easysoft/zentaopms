@@ -20,6 +20,7 @@ zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
+su('admin');
 
 $libIds[0] = array();
 $libIds[1] = range(1, 30);

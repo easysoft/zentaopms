@@ -8,6 +8,15 @@ class gogsZenTest extends baseTest
     protected $moduleName = 'gogs';
     protected $className  = 'zen';
 
+    public $gogs = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->gogs = $this->instance->loadModel('gogs');
+    }
+
     /**
      * Test bindUser method.
      *
@@ -54,20 +63,12 @@ class gogsZenTest extends baseTest
      */
     public function checkTokenTest(object $gogs): mixed
     {
-        global $tester;
+        $this->instance->gogs = $this->gogs;
 
-        // 创建zen实例并设置必需的依赖
-        $zen = initReference('gogs');
-        $method = $zen->getMethod('checkToken');
+        $method = $this->reflection->getMethod('checkToken');
         $method->setAccessible(true);
 
-        // 创建一个zen实例
-        $zenInstance = $zen->newInstance();
-
-        // 动态添加gogs属性
-        $zenInstance->gogs = $this->gogs;
-
-        $result = $method->invoke($zenInstance, $gogs);
+        $result = $method->invoke($this->instance, $gogs);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -83,17 +84,10 @@ class gogsZenTest extends baseTest
      */
     public function getMatchedUsersTest(int $gogsID, array $gogsUsers): mixed
     {
-        global $tester;
-
-        // 创建zen实例并设置必需的依赖
-        $zen = initReference('gogs');
-        $method = $zen->getMethod('getMatchedUsers');
+        $method = $this->reflection->getMethod('getMatchedUsers');
         $method->setAccessible(true);
 
-        // 创建一个zen实例
-        $zenInstance = $zen->newInstance();
-
-        $result = $method->invoke($zenInstance, $gogsID, $gogsUsers);
+        $result = $method->invoke($this->instance, $gogsID, $gogsUsers);
         if(dao::isError()) return dao::getError();
 
         return $result;

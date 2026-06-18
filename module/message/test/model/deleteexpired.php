@@ -47,7 +47,7 @@ $messageTest = new messageModelTest();
 
 // 设置部分记录的 createdDate 为32天前，使其在 maxDays=30 时被删除
 $oldDate = date('Y-m-d H:i:s', strtotime('-32 days'));
-$tester->dao->update(TABLE_NOTIFY)
+$messageTest->instance->dao->update(TABLE_NOTIFY)
     ->set('createdDate')->eq($oldDate)
     ->where('toList')->eq(',admin,')
     ->andWhere('objectType')->eq('message')
@@ -57,7 +57,7 @@ $tester->dao->update(TABLE_NOTIFY)
 r($messageTest->deleteExpiredTest(30)) && p() && e('4');
 
 $createdDate = date('Y-m-d H:i:s', strtotime('-8 days'));
-$tester->dao->update(TABLE_NOTIFY)->set('createdDate')->eq($createdDate)->where('toList')->eq(',admin,')->andWhere('objectType')->eq('message')->exec();
+$messageTest->instance->dao->update(TABLE_NOTIFY)->set('createdDate')->eq($createdDate)->where('toList')->eq(',admin,')->andWhere('objectType')->eq('message')->exec();
 r($messageTest->deleteExpiredTest(7)) && p() && e('4');
 
 zenData('notify')->gen(0);
@@ -82,9 +82,9 @@ $table->data->range('other user message');
 $table->createdBy->range('user1{2},user2{1}');
 $table->gen(3);
 
-$otherUserCountBefore = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('toList')->ne(',admin,')->andWhere('objectType')->eq('message')->fetch('count');
+$otherUserCountBefore = $messageTest->instance->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('toList')->ne(',admin,')->andWhere('objectType')->eq('message')->fetch('count');
 $messageTest->deleteExpiredTest(0);
-$otherUserCountAfter = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('toList')->ne(',admin,')->andWhere('objectType')->eq('message')->fetch('count');
+$otherUserCountAfter = $messageTest->instance->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('toList')->ne(',admin,')->andWhere('objectType')->eq('message')->fetch('count');
 r($otherUserCountAfter) && p() && e('3');
 
 zenData('notify')->gen(0);
@@ -97,7 +97,7 @@ $table->data->range('action notification');
 $table->createdBy->range('admin');
 $table->gen(5);
 
-$nonMessageCountBefore = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->ne('message')->fetch('count');
+$nonMessageCountBefore = $messageTest->instance->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->ne('message')->fetch('count');
 $messageTest->deleteExpiredTest(0);
-$nonMessageCountAfter = $tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->ne('message')->fetch('count');
+$nonMessageCountAfter = $messageTest->instance->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->ne('message')->fetch('count');
 r($nonMessageCountAfter) && p() && e('5');

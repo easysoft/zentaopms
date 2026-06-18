@@ -89,11 +89,17 @@ $lang->my->storyMenu->closedByMe   = 'Closed by Me';
 $lang->my->storyMenu->assignedByMe = 'Assigned by Me';
 
 $lang->my->auditField = new stdclass();
-$lang->my->auditField->title  = 'Title';
-$lang->my->auditField->time   = 'Submission Time';
-$lang->my->auditField->type   = 'Type';
-$lang->my->auditField->result = 'Result';
-$lang->my->auditField->status = 'Status';
+$lang->my->auditField->title      = 'Title';
+$lang->my->auditField->status     = 'Status';
+$lang->my->auditField->type       = 'Type';
+$lang->my->auditField->project    = 'Project';
+$lang->my->auditField->product    = 'Product';
+$lang->my->auditField->reviewer   = 'Approver';
+$lang->my->auditField->opinion    = 'Opinion';
+$lang->my->auditField->result     = 'Result';
+$lang->my->auditField->openedBy   = 'Submitted By';
+$lang->my->auditField->time       = 'Submission Time';
+$lang->my->auditField->reviewTime = 'Review Time';
 
 $lang->my->auditField->oaTitle['attend']   = '%ss Attendance Request: %s';
 $lang->my->auditField->oaTitle['leave']    = '%ss Leave Request: %s';

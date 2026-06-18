@@ -145,7 +145,7 @@ formPanel
         set::label($lang->testtask->status),
         set::name('status'),
         set::required(true),
-        set::control('picker'),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items($lang->testtask->statusList)
     ),
     formGroup

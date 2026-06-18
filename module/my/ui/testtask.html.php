@@ -24,15 +24,18 @@ foreach($config->my->testtask->dtable->fieldList['actions']['list'] as $actionKe
     if(!isset($action['data-toggle']) && !isset($action['data-confirm'])) $config->my->testtask->dtable->fieldList['actions']['list'][$actionKey]['data-app'] = 'qa';
 }
 
-$tasks      = initTableData($tasks, $config->my->testtask->dtable->fieldList, $this->testtask);
-$cols       = array_values($config->my->testtask->dtable->fieldList);
-$data       = array_values($tasks);
+$cols  = $this->loadModel('datatable')->getSetting('my', 'testtask');
+$tasks = initTableData($tasks, $cols, $this->testtask);
+$data  = array_values($tasks);
+
 $footerHTML = $app->rawMethod == 'work' ? sprintf($lang->testtask->mySummary, count($tasks), $waitCount, $testingCount, $blockedCount) : sprintf($lang->testtask->pageSummary, count($tasks));
 dtable
 (
     set::cols($cols),
     set::data($data),
-    set::onRenderCell(jsRaw('window.renderCell')),
+    set::userMap($users),
+    set::customCols(true),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::fixedLeftWidth('20%'),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),

@@ -1,8 +1,12 @@
-window.renderCell = function(result, info)
+window.onRenderCell = function(result, {row, col})
 {
-    if(info.col.name == 'buildName' && typeof result[0] == 'object' && (!info.row.data.execution || !info.row.data.executionMultiple))
+    if(result && col.name == 'buildName' && (!row.data.execution || !row.data.executionMultiple))
     {
-        result[0].props['data-app'] = 'project';
+        if(result[0].props) result[0].props['data-app'] = 'project';
+    }
+    else if(col.name == 'status' && result)
+    {
+        result[0] = {html: `<span class='status-${row.data.rawStatus}'>` + row.data.status + "</span>"};
     }
     return result;
 }

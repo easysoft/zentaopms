@@ -5,37 +5,6 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备基础测试数据
 zenData('user')->gen(5);
-zenData('config')->gen(10);
-
-// 准备权限组数据
-$group = zenData('group');
-$group->id->range('1-5');
-$group->name->range('管理员,开发,测试,产品,项目经理');
-$group->role->range('admin,dev,qa,po,pm');
-$group->gen(5);
-
-// 准备用户组关系数据
-$userGroup = zenData('usergroup');
-$userGroup->account->range('admin,user1,user2,user3,user4');
-$userGroup->group->range('1,2,3,4,5');
-$userGroup->gen(5);
-
-// 准备权限数据
-$groupPriv = zenData('grouppriv');
-$groupPriv->group->range('1{20},2{15},3{10}');
-$groupPriv->module->range('execution{15},task{10},story{10}');
-$groupPriv->method->range('treeTask{10},treeStory{5},browse{5},view{5}');
-$groupPriv->gen(35);
-
-// 准备语言包数据
-$lang = zenData('lang');
-$lang->lang->range('zh-cn');
-$lang->module->range('task,story,requirement,epic,branch');
-$lang->section->range('common');
-$lang->key->range('common');
-$lang->value->range('任务,需求,需求,史诗,分支');
-$lang->gen(5);
-
 su('admin');
 
 /**
@@ -78,7 +47,7 @@ $singleTask = array(
 r($executionTest->buildTreeTestDirect($singleTask)) && p('0:className') && e('py-2 cursor-pointer task');
 
 // 步骤3：任务节点内容HTML结构验证
-r($executionTest->buildTreeTestDirect($singleTask)) && p('0:content:html') && e('*tree-link*');
+r(strpos($executionTest->buildTreeTestDirect($singleTask)[0]['content']['html'], 'tree-link') !== false && strpos($executionTest->buildTreeTestDirect($singleTask)[0]['content']['html'], '测试任务') !== false) && p() && e('1');
 
 // 步骤4：product类型节点构建验证
 $productNode = array(
@@ -140,7 +109,8 @@ $branchNode = array(
     (object)array(
         'id' => 1,
         'type' => 'branch',
-        'name' => '测试分支'
+        'name' => '测试分支',
+        'common' => '分支'
     )
 );
 r($executionTest->buildTreeTestDirect($branchNode)) && p('0:className') && e('py-2 cursor-pointer branch');
@@ -170,8 +140,8 @@ $nestedTree = array(
         )
     )
 );
-r($executionTest->buildTreeTestDirect($nestedTree)) && p('0:items:0:className') && e('py-2 cursor-pointer task');
+r($executionTest->buildTreeTestDirect($nestedTree)[0]['items'][0]['className']) && p() && e('py-2 cursor-pointer task');
 
 // 步骤10：权限控制验证无权限用户访问
 su('user2');
-r($executionTest->buildTreeTestDirect($singleTask)) && p('0:url') && e('');
+r($executionTest->buildTreeTestDirect($singleTask)) && p('0:url') && e('~~');

@@ -7,6 +7,13 @@ class instanceModelTest extends baseTest
 {
     protected $moduleName = 'instance';
     protected $className  = 'model';
+    public $objectModel   = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * Test installationSettingsMap method.
@@ -67,6 +74,22 @@ class instanceModelTest extends baseTest
     public function backupTest(object $instance, object $user)
     {
         $result = $this->instance->backup($instance, $user);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test autoBackup method.
+     *
+     * @param  object $instance
+     * @param  object $user
+     * @access public
+     * @return mixed
+     */
+    public function autoBackupTest(object $instance, object $user)
+    {
+        $result = $this->instance->autoBackup($instance, $user);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -527,6 +550,22 @@ class instanceModelTest extends baseTest
     public function updateCpuSizeTest(object $instance, int|string $size)
     {
         $result = $this->instance->updateCpuSize($instance, $size);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateMemorySize method.
+     *
+     * @param  object $instance
+     * @param  int    $size
+     * @access public
+     * @return mixed
+     */
+    public function updateMemorySizeTest(object $instance, int $size = 0)
+    {
+        $result = $this->instance->updateMemorySize($instance, $size);
         if(dao::isError()) return dao::getError();
 
         return $result;

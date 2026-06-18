@@ -509,14 +509,29 @@ class todoModel extends model
      * 修改待办事项的时间。
      * Edit the date of todo.
      *
-     * @param  array  $todoIdList
-     * @param  string $date
+     * @param  array      $todoIdList
+     * @param  string     $date
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function editDate(array $todoIdList, string $date): bool
+    public function editDate(array $todoIdList, string $date): bool|array
     {
-        return $this->todoTao->updateDate($todoIdList, $date);
+        $oldTodoList = $this->dao->select('id,date')->from(TABLE_TODO)->where('id')->in($todoIdList)->fetchAll('id');
+
+        $this->todoTao->updateDate($todoIdList, $date);
+        if(dao::isError()) return false;
+
+        $todo       = new stdClass();
+        $todo->date = $date;
+        $allChanges = array();
+        foreach($todoIdList as $todoID)
+        {
+            $oldTodo = $oldTodoList[$todoID];
+
+            $todo->id = $todoID;
+            $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
+        }
+        return $allChanges;
     }
 
     /**

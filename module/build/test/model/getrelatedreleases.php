@@ -13,7 +13,7 @@ cid=15498
 - 步骤4：不存在的产品ID查询 @0
 - 步骤5：project对象过滤查询 @0
 - 步骤6：execution对象过滤查询 @0
-- 步骤7：带参数nowaitrelease过滤 @0
+- 步骤7：带参数noreleased过滤 @0
 
 */
 
@@ -30,4 +30,4 @@ r($buildTest->getRelatedReleasesTest(array())) && p() && e('0'); // 步骤3：�
 r($buildTest->getRelatedReleasesTest(array(999))) && p() && e('0'); // 步骤4：不存在的产品ID查询
 r($buildTest->getRelatedReleasesTest(array(1), '', false, 'project', 11)) && p() && e('0'); // 步骤5：project对象过滤查询
 r($buildTest->getRelatedReleasesTest(array(1), '', false, 'execution', 101)) && p() && e('0'); // 步骤6：execution对象过滤查询
-r($buildTest->getRelatedReleasesTest(array(1), '', false, '', 0, 'nowaitrelease')) && p() && e('0'); // 步骤7：带参数nowaitrelease过滤
+r($buildTest->getRelatedReleasesTest(array(1), '', false, '', 0, 'noreleased')) && p() && e('0'); // 步骤7：带参数noreleased过滤

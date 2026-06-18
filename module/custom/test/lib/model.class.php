@@ -1205,6 +1205,22 @@ class customModelTest extends baseTest
     }
 
     /**
+     * 检查系统中是否有指定数据功能的数据。
+     * Test hasDataFeature method.
+     *
+     * @param  string $feature
+     * @access public
+     * @return int|array
+     */
+    public function hasDataFeatureTest(string $feature): int|array
+    {
+        $result = (int)$this->instance->hasDataFeature($feature);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test assignFieldListForSet method.
      *
      * @param  string $module
