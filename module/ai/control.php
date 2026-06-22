@@ -960,6 +960,7 @@ class ai extends control
         $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
         $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
 
+        $promptLang  = $this->lang->ai->prompts;
         $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
         if($isBatchForm)
         {
@@ -1005,7 +1006,6 @@ class ai extends control
             }
 
             $sepLine    = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
-            $promptLang = $this->lang->ai->prompts;
             $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
             $fullPrompt .= "{$promptLang->batchFormData}\n\n";
             $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
