@@ -2101,7 +2101,7 @@ class aiModel extends model
      * @access public
      * @return string
      */
-    public function getFormSchemaDescription($prompt, array $allowedFields)
+    public function getFormSchemaDescription($prompt, array $allowedFields): string
     {
         $promptLang = $this->lang->ai->prompts;
         $formName   = $prompt->name ?? $prompt->targetForm;
@@ -2131,7 +2131,7 @@ class aiModel extends model
      * @access public
      * @return array
      */
-    public function buildDynamicSchema(array $fields, $prompt, $isBatch = false)
+    public function buildDynamicSchema(array $fields, $prompt, $isBatch = false): array
     {
         $properties = array();
         $required   = array();
@@ -2926,6 +2926,7 @@ class aiModel extends model
     }
 
     /**
+     * 获取当前入口页面可用的智能体列表
      * Get prompts available for current entry page.
      *
      * @param  string $module
@@ -2936,16 +2937,14 @@ class aiModel extends model
      */
     public function getPromptsForEntryPage(string $module, string $method, string $displayPosition): array
     {
+        if($displayPosition === 'detail' && $method !== 'view') return array();
+
         $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
             ->where('deleted')->eq(0)
             ->andWhere('status')->eq('active')
             ->andWhere('displayPosition')->eq($displayPosition);
 
-        if($displayPosition === 'detail')
-        {
-            if($method !== 'view') return array();
-            $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
-        }
+        if($displayPosition === 'detail') $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
         else
         {
             $actionPurpose = "{$module}.{$method}";
