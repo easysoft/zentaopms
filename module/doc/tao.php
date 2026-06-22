@@ -12,23 +12,6 @@ declare(strict_types=1);
 class docTao extends docModel
 {
     /**
-     * 获取编辑过的文档ID列表。
-     * Get the list of doc id list that have been edited.
-     *
-     * @access protected
-     * @return array
-     */
-    protected function getEditedDocIdList(): array
-    {
-        return $this->dao->select('objectID')->from(TABLE_ACTION)
-            ->where('objectType')->eq('doc')
-            ->andWhere('action')->in('edited')
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->fetchPairs();
-    }
-
-    /**
      * 获取已排序的执行数据。
      * Get ordered executions.
      *
