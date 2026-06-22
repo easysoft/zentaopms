@@ -217,17 +217,6 @@ class messageModel extends model
         $isonlybody = isInModal();
         if($isonlybody) unset($_GET['onlybody']);
 
-        $methodNmae = 'view';
-        $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        if($objectType == 'kanbancard') $moduleName = 'kanban';
-        if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
-        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
-        $space      = common::checkNotCN() ? ' ' : '';
-        $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
-        $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}") . "#app={$this->app->tab}";
-        $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
-
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
             $url     = helper::createLink('aitask', 'view', "taskID={$objectID}");
@@ -240,11 +229,18 @@ class messageModel extends model
             $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
             if($objectType == 'kanbancard') $moduleName = 'kanban';
             if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
-            $space      = common::checkNotCN() ? ' ' : '';
-            $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
-            $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-            $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
-            $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
+            if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
+            if($objectType == 'issue' && !empty($object->lib))
+            {
+                $moduleName = 'assetlib';
+                $methodNmae = 'issueView';
+            }
+
+            $space  = common::checkNotCN() ? ' ' : '';
+            $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
+            $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+            $url    = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
+            $data   .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
         }
 
         $sendTime = null;
