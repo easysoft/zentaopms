@@ -81,7 +81,7 @@ formBatchPanel
     (
         set::name('title'),
         set::label($lang->story->title),
-        set::control('colorInput'),
+        set::control('input'),
         set::disabled(true),
         set::width('240px')
     ),
