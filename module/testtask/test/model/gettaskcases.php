@@ -25,7 +25,7 @@ $testrun->id->range('1-10');
 $testrun->task->range('1');
 $testrun->case->range('1-10');
 $testrun->version->range('1{10}');
-$testrun->assignedTo->range('user1{3},[]:7');
+$testrun->assignedTo->range('admin');
 $testrun->status->range('normal,blocked,done,normal,wait,normal,done,done,normal,done');
 $testrun->gen(10);
 
@@ -45,7 +45,7 @@ $module->root->range('1');
 $module->name->range('模块1');
 $module->gen(1);
 
-su('user1');
+su('admin');
 
 /**
 
@@ -153,7 +153,7 @@ cid=19195
  - 第1条的storyTitle属性 @用户需求1
 - 执行testtask模块的getTaskCases方法，参数是1, 'assignedtome', 0, 1, 'id_asc', $pager, $task1  @0
 - 执行testtask模块的getTaskCases方法，参数是1, 'assignedtome', 0, 1, 'id_asc', $pager, $task3  @0
-- 执行$cases @3
+- 执行$cases @4
 - 执行$cases
  - 第0条的id属性 @1
  - 第0条的title属性 @测试用例1
@@ -168,20 +168,20 @@ cid=19195
  - 第1条的status属性 @blocked
  - 第1条的caseStatus属性 @normal
  - 第1条的storyTitle属性 @用户需求1
-- 执行$cases @3
+- 执行$cases @4
 - 执行$cases
- - 第0条的id属性 @3
- - 第0条的title属性 @测试用例3
+ - 第0条的id属性 @4
+ - 第0条的title属性 @测试用例4
  - 第0条的version属性 @1
- - 第0条的status属性 @done
- - 第0条的caseStatus属性 @blocked
+ - 第0条的status属性 @normal
+ - 第0条的caseStatus属性 @investigate
  - 第0条的storyTitle属性 @用户需求1
 - 执行$cases
- - 第1条的id属性 @2
- - 第1条的title属性 @测试用例2
+ - 第1条的id属性 @3
+ - 第1条的title属性 @测试用例3
  - 第1条的version属性 @1
- - 第1条的status属性 @blocked
- - 第1条的caseStatus属性 @normal
+ - 第1条的status属性 @done
+ - 第1条的caseStatus属性 @blocked
  - 第1条的storyTitle属性 @用户需求1
 - 执行testtask模块的getTaskCases方法，参数是1, 'bysearch', 0, 1, 'id_asc', $pager, $task1  @0
 - 执行testtask模块的getTaskCases方法，参数是1, 'bysearch', 0, 1, 'id_asc', $pager, $task3  @0
@@ -297,16 +297,16 @@ r($testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task3)) &&
 /* assignedtome, id asc. */
 $cases = $testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_asc', $pager, $task2);
 $cases = array_values($cases);
-r(count($cases)) && p() && e(3);
+r(count($cases)) && p() && e(4);
 r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('1,测试用例1,1,normal,wait,用户需求1');
 r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,normal,用户需求1');
 
 /* assignedtome, id desc. */
 $cases = $testtask->getTaskCases(1, 'assignedtome', 0, 1, 'id_desc', $pager, $task2);
 $cases = array_values($cases);
-r(count($cases)) && p() && e(3);
-r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1');
-r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('2,测试用例2,1,blocked,normal,用户需求1');
+r(count($cases)) && p() && e(4);
+r($cases) && p('0:id,title,version,status,caseStatus,storyTitle') && e('4,测试用例4,1,normal,investigate,用户需求1');
+r($cases) && p('1:id,title,version,status,caseStatus,storyTitle') && e('3,测试用例3,1,done,blocked,用户需求1');
 
 /* bysearch with invalid task. */
 $_SESSION['testtaskQuery'] = ' 1 = 1';
