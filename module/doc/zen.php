@@ -698,6 +698,7 @@ class docZen extends doc
             {
                 $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
                 $this->action->logHistory($actionID, $changes);
+                $this->doc->createAction($doc->id, 'edited');
             }
         }
 
