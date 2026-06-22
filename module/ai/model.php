@@ -2093,6 +2093,76 @@ class aiModel extends model
     }
 
     /**
+     * 构建可填充字段描述
+     * Build fillable fields description for prompt.
+     *
+     * @param  object $prompt
+     * @param  array  $allowedFields
+     * @access public
+     * @return string
+     */
+    public function getFormSchemaDescription($prompt, array $allowedFields): string
+    {
+        $promptLang = $this->lang->ai->prompts;
+        $formName   = $prompt->name ?? $prompt->targetForm;
+        $desc       = "{$promptLang->targetFormInfo}\n";
+        $desc      .= sprintf($promptLang->formLabel, $formName) . "\n\n";
+
+        if(!empty($allowedFields))
+        {
+            $desc .= "{$promptLang->fillableFields}\n";
+            foreach($allowedFields as $name => $field)
+            {
+                if(!is_array($field)) continue;
+                $desc .= "- {$name}\n";
+            }
+        }
+
+        $desc .= "\n{$promptLang->returnJSONObject}\n";
+        return $desc;
+    }
+
+    /**
+     * 构建动态 JSON Schema
+     * Build dynamic JSON schema for function calling.
+     *
+     * @param  array  $fields
+     * @param  object $prompt
+     * @access public
+     * @return array
+     */
+    public function buildDynamicSchema(array $fields, $prompt, $isBatch = false): array
+    {
+        $properties = array();
+        $required   = array();
+
+        foreach($fields as $name => $field)
+        {
+            $prop = array('type' => 'string', 'description' => $field['label'] ?? $name);
+            if(!empty($field['options']))
+            {
+                $options = $field['options'];
+                if(is_array($options))
+                {
+                    $prop['enum'] = array_map(function($opt)
+                    {
+                        return is_array($opt) ? ($opt['value'] ?? $opt) : $opt;
+                    }, $options);
+                }
+            }
+            if(!empty($field['required'])) $required[] = $name;
+            $properties[$name] = $prop;
+        }
+
+        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
+        if($isBatch)
+        {
+            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->targetForm, 'items' => $objectSchema);
+        }
+        return $objectSchema;
+    }
+
+    /**
      * Get object data for prompt by id.
      *
      * @param  object        $prompt    prompt object
@@ -2853,6 +2923,36 @@ class aiModel extends model
             ->andWhere('status')->eq('active')
             ->orderBy('id_desc')
             ->fetchAll('id', false);
+    }
+
+    /**
+     * 获取当前入口页面可用的智能体列表
+     * Get prompts available for current entry page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $displayPosition
+     * @access public
+     * @return array
+     */
+    public function getPromptsForEntryPage(string $module, string $method, string $displayPosition): array
+    {
+        if($displayPosition === 'detail' && $method !== 'view') return array();
+
+        $prompts = $this->dao->select('*')->from(TABLE_AI_AGENT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->andWhere('displayPosition')->eq($displayPosition);
+
+        if($displayPosition === 'detail') $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
+        else
+        {
+            $actionPurpose = "{$module}.{$method}";
+            $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+        }
+
+        $prompts = $this->filterPromptsForExecution($prompts, true);
+        return array_values($prompts);
     }
 
     /**
