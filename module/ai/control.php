@@ -953,8 +953,8 @@ class ai extends control
         $targetFormParts = explode('.', $targetForm, 2);
         if(count($targetFormParts) !== 2) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
-        $contextFields   = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
-        $contextObjects  = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
+        $contextFields  = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
+        $contextObjects = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
         $contextDesc    = $this->ai->buildContextDescription($contextObjects);
 
         $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
@@ -996,8 +996,8 @@ class ai extends control
                     $optStrs = array();
                     foreach($field['options'] as $opt)
                     {
-                        $optVal   = $opt['value'] ?? '';
-                        $optText  = $opt['text'] ?? '';
+                        $optVal    = $opt['value'] ?? '';
+                        $optText   = $opt['text'] ?? '';
                         $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
                     }
                     $def .= "{$promptLang->fieldSeparator}{$promptLang->optionsLabel}" . implode(', ', $optStrs);
@@ -1043,8 +1043,8 @@ class ai extends control
                         $optStrs = array();
                         foreach($field['options'] as $opt)
                         {
-                            $optVal   = $opt['value'] ?? '';
-                            $optText  = $opt['text'] ?? '';
+                            $optVal    = $opt['value'] ?? '';
+                            $optText   = $opt['text'] ?? '';
                             $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
                         }
                         $line .= "\n  options: " . implode(', ', $optStrs);
@@ -1062,25 +1062,20 @@ class ai extends control
             $fullPrompt .= $fillableDesc;
         }
 
-        $schema = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
-        $location = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        $schema         = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
+        $location       = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
         $targetFormName = $this->lang->ai->targetForm[$targetFormParts[0]][$targetFormParts[1]] ?? '';
 
         $dataPropNames = new stdclass();
         $dataPropNames->{$prompt->module} = new stdclass();
         $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
-        foreach($filteredFields as $name => $field)
-        {
-            $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
-        }
+
+        foreach($filteredFields as $name => $field) $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
 
         $originObject = new stdclass();
         foreach($filteredFields as $name => $field)
         {
-            if(isset($field['currentValue']) && $field['currentValue'] !== '')
-            {
-                $originObject->$name = $field['currentValue'];
-            }
+            if(isset($field['currentValue']) && $field['currentValue'] !== '') $originObject->$name = $field['currentValue'];
         }
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array(array(
