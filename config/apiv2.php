@@ -229,6 +229,12 @@ $routes['/doc/modules/:moduleID'] = array(
     'delete' => array('redirect' => '/tree/delete?moduleID=:moduleID')
 );
 
+$routes['/dynamics/date/:timestamp'] = array('redirect' => '/companies/dynamic?browseType=date&date=:timestamp&limit=100000', 'response' => 'dateGroups|actions');
+$routes['/dynamics/product/:productID'] = array('redirect' => '/companies/dynamic?browseType=all&productID=:productID&limit=100000', 'response' => 'dateGroups|actions');
+$routes['/dynamics/project/:projectID'] = array('redirect' => '/companies/dynamic?browseType=all&projectID=:projectID&limit=100000', 'response' => 'dateGroups|actions');
+$routes['/dynamics/execution/:executionID'] = array('redirect' => '/companies/dynamic?browseType=all&executionID=:executionID&limit=100000', 'response' => 'dateGroups|actions');
+$routes['/dynamics/user/:userID'] = array('redirect' => '/companies/dynamic?browseType=all&userID=:userID&limit=10000', 'response' => 'dateGroups|actions');
+
 $routes['/depts']         = array('response' => 'sons|depts');
 $routes['/depts/browse']  = array();
 $routes['/depts/:deptID'] = array('redirect' => '/depts/browse?deptID=:deptID', 'response' => 'sons');

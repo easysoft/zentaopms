@@ -14,6 +14,14 @@ include dirname(__FILE__, 2) . '/router.class.php';
 class api extends router
 {
     /**
+     * The cached default params of the real target control method.
+     *
+     * @var array|null
+     * @access protected
+     */
+    protected $resolvedDefaultParams = null;
+
+    /**
      * 请求API的路径
      * The requested path of api.
      *
@@ -342,6 +350,8 @@ class api extends router
             if(is_numeric($key)) continue;
             $_GET[$key] = $value;
         }
+
+        $this->resolvedDefaultParams = null;
 
         return $methodName;
     }
@@ -995,15 +1005,70 @@ class api extends router
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+        $this->prepareRedirectParamsForControl();
 
         $this->prepareV2Search();
 
         /* Set default params and post data to delete.*/
         if($this->action == 'delete')
         {
-            $defaultParams = $this->getDefaultParams();
+            $defaultParams = $this->resolveDefaultParams();
             if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
         }
+    }
+
+    /**
+     * Normalize redirect params according to the target control method signature.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareRedirectParamsForControl(): void
+    {
+        if(empty($this->originRouteInfo['redirect'])) return;
+
+        $defaultParams = $this->resolveDefaultParams();
+        $typedParams   = $this->normalizeGetParams($defaultParams, $_GET);
+
+        foreach($typedParams as $key => $value) $_GET[$key] = $value;
+    }
+
+    /**
+     * Resolve and cache default params of current target control method.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function resolveDefaultParams(): array
+    {
+        if($this->resolvedDefaultParams !== null) return $this->resolvedDefaultParams;
+        return $this->resolvedDefaultParams = $this->getDefaultParams();
+    }
+
+    /**
+     * Normalize GET params according to current target control method signature.
+     *
+     * @param  array $defaultParams
+     * @param  array $sourceParams
+     * @access protected
+     * @return array
+     */
+    protected function normalizeGetParams(array $defaultParams, array $sourceParams): array
+    {
+        $params = array();
+        foreach($defaultParams as $key => $defaultItem)
+        {
+            if(isset($sourceParams[$key]))
+            {
+                $params[$key] = helper::convertType(strip_tags((string) $sourceParams[$key]), $defaultItem['type']);
+            }
+            else
+            {
+                $params[$key] = ($key == 'browseType' && $this->methodName == 'browse') ? 'all' : $defaultItem['default'];
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -1363,26 +1428,9 @@ class api extends router
      */
     public function setParams()
     {
-        $defaultParams = $this->getDefaultParams();
-
-        $this->params = array();
+        $defaultParams = $this->resolveDefaultParams();
         $this->rawGet = $_GET;
-
-        foreach($defaultParams as $key => $defaultItem)
-        {
-            if(isset($_GET[$key]))
-            {
-                $this->params[$key] = helper::convertType(strip_tags((string) $_GET[$key]), $defaultItem['type']);
-            }
-            else
-            {
-                /*
-                 * Only force browse methods to use the broad "all" scope by default.
-                 * Custom list methods such as my/task rely on their own declared defaults.
-                 */
-                $this->params[$key] = ($key == 'browseType' && $this->methodName == 'browse') ? 'all' : $defaultItem['default'];
-            }
-        }
+        $this->params = $this->normalizeGetParams($defaultParams, $_GET);
 
         if($this->config->framework->filterParam == 2)
         {
