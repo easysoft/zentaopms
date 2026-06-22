@@ -959,6 +959,11 @@ class api extends router
         $methodName = $this->parseRouteV2($routes);
 
         $pathItems  = explode('/', trim($this->path, '/'));
+
+        /* Workflow apis. */
+        $isWorkflowRequest = $this->originRouteInfo == array() && isset($pathItems[0]) && $pathItems[0] == 'workflow';
+        if($isWorkflowRequest) return $this->handleWorkflowNamespaceRoute($pathItems);
+
         $moduleName = $this->singular($pathItems[0]);
 
         $actionToMethod = array(
@@ -1005,16 +1010,81 @@ class api extends router
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
-        $this->prepareRedirectParamsForControl();
+        $this->prepareRedirectParams();
 
         $this->prepareV2Search();
 
-        /* Set default params and post data to delete.*/
-        if($this->action == 'delete')
+        $this->prepareDeleteConfirmParam();
+    }
+
+    /**
+     * 解析 workflow 命名空间路径。
+     * Parse the workflow namespace path.
+     *
+     * workflow 命名空间下的模块编码应保持原样，不经过 singular() 转换。
+     *
+     * @param  array $pathItems
+     * @access protected
+     * @return array
+     */
+    protected function parseWorkflowNamespaceRoute(array $pathItems): array
+    {
+        $moduleName = zget($pathItems, 1, '');
+        $actionMap  = array('get' => 'browse', 'post' => 'create', 'put' => 'edit', 'delete' => 'delete');
+        $methodName = zget($actionMap, $this->action, 'browse');
+
+        if(isset($pathItems[2]))
         {
-            $defaultParams = $this->resolveDefaultParams();
-            if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
+            if(is_numeric($pathItems[2]))
+            {
+                $_GET['dataID'] = (int)$pathItems[2];
+                if($this->action == 'get') $methodName = 'view';
+            }
+            else
+            {
+                $methodName = $pathItems[2];
+            }
         }
+
+        if(isset($pathItems[3])) $methodName = $pathItems[3];
+
+        return array($moduleName, $methodName);
+    }
+
+    /**
+     * 处理 workflow 命名空间路由。
+     * Handle workflow namespace route.
+     *
+     * @param  array $pathItems
+     * @access protected
+     * @return void
+     */
+    protected function handleWorkflowNamespaceRoute(array $pathItems): void
+    {
+        list($moduleName, $methodName) = $this->parseWorkflowNamespaceRoute($pathItems);
+
+        $this->rawModule = $moduleName;
+        $this->rawMethod = $methodName;
+
+        $this->setModuleName($moduleName);
+        $this->setMethodName($methodName);
+        $this->setControlFile();
+
+        $this->prepareDeleteConfirmParam();
+    }
+
+    /**
+     * Set confirm param for delete request when target method supports it.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareDeleteConfirmParam(): void
+    {
+        if($this->action != 'delete') return;
+
+        $defaultParams = $this->resolveDefaultParams();
+        if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
     }
 
     /**
@@ -1023,7 +1093,7 @@ class api extends router
      * @access protected
      * @return void
      */
-    protected function prepareRedirectParamsForControl(): void
+    protected function prepareRedirectParams(): void
     {
         if(empty($this->originRouteInfo['redirect'])) return;
 
