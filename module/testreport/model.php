@@ -149,6 +149,7 @@ class testreportModel extends model
                 $case->lastRunDate   = $result ? $result->date       : '';
                 $case->lastRunResult = $result ? $result->caseResult : '';
                 $case->status        = ($result && $result->caseResult == 'blocked') ? 'blocked' : 'normal';
+                $case->title         = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
             }
         }
 
