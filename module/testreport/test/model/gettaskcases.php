@@ -6,6 +6,8 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('testreport')->gen(2);
 zenData('testtask')->gen(30);
+zenData('testrun')->gen(30);
+zenData('testresult')->gen(30);
 zenData('user')->gen(1);
 
 su('admin');

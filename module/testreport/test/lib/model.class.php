@@ -115,11 +115,9 @@ class testreportModelTest extends baseTest
      */
     public function getTaskCasesTest(int $taskID, int $reportID, string $idList = '', ?object $pager = null): array
     {
-        $tasks  = $taskID ? $this->testtask->getByList((array)$taskID) : array();
-        $report = $this->instance->getByID($reportID);
-
+        $tasks   = $taskID ? array($taskID => $taskID) : array();
+        $report  = $this->instance->getByID($reportID);
         $objects = $this->instance->getTaskCases($tasks, $report->begin, $report->end, $idList, $pager);
-
         if(dao::isError()) return dao::getError();
 
         return $objects;
