@@ -291,6 +291,9 @@ CSS;
         $className    = isset($item['className']) ? $item['className'] : null;
         if($titleActions) unset($item['titleActions']);
 
+        $titleActionNode = null;
+        if($titleActions) $titleActionNode = div(setClass('ml-auto'), toolbar::create($titleActions));
+
         return div
         (
             setClass('detail-section'),
@@ -299,7 +302,7 @@ CSS;
             (
                 setClass('detail-section-title row items-center gap-2'),
                 span(setClass('text-md py-1 font-bold'), $title),
-                $titleActions ? div(setClass('ml-auto'), toolbar::create($titleActions)) : null
+                $titleActionNode
             ) : null,
             div
             (
