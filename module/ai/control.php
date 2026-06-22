@@ -207,7 +207,7 @@ class ai extends control
         $userList  = $this->user->getList('nodeleted');
 
         /* Set pager and order. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
 
@@ -701,7 +701,11 @@ class ai extends control
         list($objectData, $rawObject) = $object;
 
         list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(!empty($stop)) return header("location: $location", true, 302);
+        if(!empty($stop))
+        {
+            header("location: $location", true, 302);
+            return;
+        }
 
         /* Execute prompt and catch exceptions. */
         try
@@ -730,6 +734,7 @@ class ai extends control
 
             $dataPropNames = new stdclass();
             $dataPropNames->{$prompt->module} = new stdclass();
+            $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
             foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label)
             {
                 $dataPropNames->{$prompt->module}->{$name} = $label;
@@ -911,11 +916,17 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty')
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty')
         {
             $targetFormPaths            = explode('.', $prompt->targetForm);
             $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->moduleList[$prompt->module];
+            $dataPropNames = new stdclass();
+            $dataPropNames->{$prompt->module} = new stdclass();
+            $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
+
+            foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label) $dataPropNames->{$prompt->module}->{$name} = $label;
+
+            $response['dataPropNames']  = $dataPropNames;
         }
 
         $response['objectType']   = $prompt->module;
@@ -960,8 +971,8 @@ class ai extends control
         $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
         $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
 
-        $promptLang  = $this->lang->ai->prompts;
         $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
+        $promptLang  = $this->lang->ai->prompts;
         if($isBatchForm)
         {
             $headers   = array();
@@ -1055,7 +1066,6 @@ class ai extends control
             }
 
             $fillableDesc = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
-            $promptLang   = $this->lang->ai->prompts;
 
             $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
             $fullPrompt .= "{$promptLang->currentFormData}\n" . implode("\n", $formDataLines) . "\n\n";
@@ -1069,7 +1079,6 @@ class ai extends control
         $dataPropNames = new stdclass();
         $dataPropNames->{$prompt->module} = new stdclass();
         $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
-
         foreach($filteredFields as $name => $field) $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
 
         $originObject = new stdclass();
@@ -1127,6 +1136,9 @@ class ai extends control
                 case 'edit':
                     $result = $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
                     $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
+                    break;
+                default:
+                    $message = $this->lang->ai->saveFail;
                     break;
             }
 
