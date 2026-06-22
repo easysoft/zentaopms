@@ -565,7 +565,8 @@ class tree extends control
      */
     public function ajaxCreateModule()
     {
-        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+        $isAPIRequest = $this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api');
+        if(!helper::isAjaxRequest() && !$isAPIRequest) return $this->send(array('result' => 'fail', 'message' => ''));
 
         $module = $this->tree->createModule();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode('\n', dao::getError())));

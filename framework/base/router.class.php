@@ -1212,7 +1212,11 @@ class baseRouter
             $savePath = $this->getTmpRoot() . ($apiMode ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
-            if(is_writable($savePath))
+            /*
+             * API token auth must read from the dedicated apisession directory even when the
+             * current process cannot write there. Read access is enough to restore the user.
+             */
+            if(is_writable($savePath) || ($apiMode && is_readable($savePath)))
             {
                 session_save_path($savePath);
 

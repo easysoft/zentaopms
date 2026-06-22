@@ -14,6 +14,14 @@ include dirname(__FILE__, 2) . '/router.class.php';
 class api extends router
 {
     /**
+     * The cached default params of the real target control method.
+     *
+     * @var array|null
+     * @access protected
+     */
+    protected $resolvedDefaultParams = null;
+
+    /**
      * 请求API的路径
      * The requested path of api.
      *
@@ -93,6 +101,15 @@ class api extends router
      * @access public
      */
     public $realRouteInfo = array();
+
+    /**
+     * APIV2 过滤前的原始 GET 参数。
+     * The original GET params before filtering in APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $rawGet = array();
 
     /**
      * 构造方法, 设置请求路径，版本等
@@ -256,6 +273,15 @@ class api extends router
             /* Cache URL params' names and values if this route matches the current HTTP request. */
             if(!preg_match('#^' . $patternAsRegex . '$#', $this->path, $paramValues)) continue;
 
+            $httpActions = array('get', 'post', 'put', 'delete', 'options');
+            $routeActions = is_array($info) ? array_intersect($httpActions, array_keys($info)) : array();
+
+            /*
+             * Routes without explicit method declarations are treated as GET-only.
+             * This avoids POST/PUT/DELETE requests being swallowed by generic resource redirects.
+             */
+            if(empty($routeActions) && $this->action != 'get') continue;
+
             return array($info, $paramValues);
         }
 
@@ -275,6 +301,9 @@ class api extends router
         $methodName = '';
 
         list($info, $paramValues) = $this->matchRoutes($routes);
+        $httpActions = array('get', 'post', 'put', 'delete', 'options');
+        if($info && array_intersect($httpActions, array_keys($info))) $info = zget($info, $this->action, array());
+
         $this->originRouteInfo = $info ?: array();
         $this->routeInfo       = $this->originRouteInfo;
         $this->realRouteInfo   = $this->originRouteInfo;
@@ -321,6 +350,8 @@ class api extends router
             if(is_numeric($key)) continue;
             $_GET[$key] = $value;
         }
+
+        $this->resolvedDefaultParams = null;
 
         return $methodName;
     }
@@ -405,10 +436,12 @@ class api extends router
     {
         $searchModule    = $this->resolveSearchModule($routeSearch);
         $querySessionKey = $this->resolveQuerySessionKey($routeSearch);
+        $rawModule       = zget($this->originRouteInfo, 'rawModule', $this->moduleName);
+        $rawMethod       = zget($this->originRouteInfo, 'rawMethod', $this->methodName);
 
         $this->loadModel($this->moduleName);
-        $this->control->app->rawModule = $this->moduleName;
-        $this->control->app->rawMethod = $this->methodName;
+        $this->control->app->rawModule = $rawModule;
+        $this->control->app->rawMethod = $rawMethod;
 
         if($this->moduleName == 'program' && $this->methodName == 'browse')
         {
@@ -662,9 +695,9 @@ class api extends router
             return $this->buildPreparedSearchConfig($searchModule, $querySessionKey);
         }
 
-        if($this->moduleName == 'my' && in_array($this->methodName, array('work', 'contribute')))
+        if($this->moduleName == 'my' && in_array($rawMethod, array('work', 'contribute')))
         {
-            $mode       = (string)zget($_GET, 'mode', 'task');
+            $mode       = (string)zget($this->originRouteInfo, 'mode', zget($_GET, 'mode', 'task'));
             $browseType = (string)zget($_GET, 'browseType', '');
             $queryID    = $browseType == 'bysearch' ? (int)zget($_GET, 'param', zget($_GET, 'queryID', 0)) : 0;
             $param      = (string)zget($_GET, 'param', 'myQueryID');
@@ -672,11 +705,11 @@ class api extends router
             $recTotal   = (int)zget($_GET, 'recTotal', 0);
             $recPerPage = (int)zget($_GET, 'recPerPage', 20);
             $pageID     = (int)zget($_GET, 'pageID', 1);
-            $actionURL  = helper::createLink('my', $this->methodName, "mode={$mode}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+            $actionURL  = helper::createLink('my', $rawMethod, "mode={$mode}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
 
             if($mode == 'task')
             {
-                $this->my->buildTaskSearchForm($queryID, $actionURL, $this->methodName . 'Task', false);
+                $this->my->buildTaskSearchForm($queryID, $actionURL, $rawMethod . 'Task', false);
                 return $this->buildPreparedSearchConfig($searchModule, $querySessionKey, 'execution');
             }
             if($mode == 'bug')
@@ -923,10 +956,14 @@ class api extends router
     {
         $this->action = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
-        $methodName = '';
-        if($this->action == 'get') $methodName = $this->parseRouteV2($routes);
+        $methodName = $this->parseRouteV2($routes);
 
         $pathItems  = explode('/', trim($this->path, '/'));
+
+        /* Workflow apis. */
+        $isWorkflowRequest = $this->originRouteInfo == array() && isset($pathItems[0]) && $pathItems[0] == 'workflow';
+        if($isWorkflowRequest) return $this->handleWorkflowNamespaceRoute($pathItems);
+
         $moduleName = $this->singular($pathItems[0]);
 
         $actionToMethod = array(
@@ -967,17 +1004,141 @@ class api extends router
             $_GET['objectID']   = zget($_POST, 'objectID', '');
         }
 
+        if(isset($this->originRouteInfo['rawModule'])) $this->rawModule = (string)$this->originRouteInfo['rawModule'];
+        if(isset($this->originRouteInfo['rawMethod'])) $this->rawMethod = (string)$this->originRouteInfo['rawMethod'];
+
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
+        $this->prepareRedirectParams();
+
         $this->prepareV2Search();
 
-        /* Set default params and post data to delete.*/
-        if($this->action == 'delete')
+        $this->prepareDeleteConfirmParam();
+    }
+
+    /**
+     * 解析 workflow 命名空间路径。
+     * Parse the workflow namespace path.
+     *
+     * workflow 命名空间下的模块编码应保持原样，不经过 singular() 转换。
+     *
+     * @param  array $pathItems
+     * @access protected
+     * @return array
+     */
+    protected function parseWorkflowNamespaceRoute(array $pathItems): array
+    {
+        $moduleName = zget($pathItems, 1, '');
+        $actionMap  = array('get' => 'browse', 'post' => 'create', 'put' => 'edit', 'delete' => 'delete');
+        $methodName = zget($actionMap, $this->action, 'browse');
+
+        if(isset($pathItems[2]))
         {
-            $defaultParams = $this->getDefaultParams();
-            if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
+            if(is_numeric($pathItems[2]))
+            {
+                $_GET['dataID'] = (int)$pathItems[2];
+                if($this->action == 'get') $methodName = 'view';
+            }
+            else
+            {
+                $methodName = $pathItems[2];
+            }
         }
+
+        if(isset($pathItems[3])) $methodName = $pathItems[3];
+
+        return array($moduleName, $methodName);
+    }
+
+    /**
+     * 处理 workflow 命名空间路由。
+     * Handle workflow namespace route.
+     *
+     * @param  array $pathItems
+     * @access protected
+     * @return void
+     */
+    protected function handleWorkflowNamespaceRoute(array $pathItems): void
+    {
+        list($moduleName, $methodName) = $this->parseWorkflowNamespaceRoute($pathItems);
+
+        $this->rawModule = $moduleName;
+        $this->rawMethod = $methodName;
+
+        $this->setModuleName($moduleName);
+        $this->setMethodName($methodName);
+        $this->setControlFile();
+
+        $this->prepareDeleteConfirmParam();
+    }
+
+    /**
+     * Set confirm param for delete request when target method supports it.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareDeleteConfirmParam(): void
+    {
+        if($this->action != 'delete') return;
+
+        $defaultParams = $this->resolveDefaultParams();
+        if(isset($defaultParams['confirm'])) $_GET['confirm'] = 'yes';
+    }
+
+    /**
+     * Normalize redirect params according to the target control method signature.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function prepareRedirectParams(): void
+    {
+        if(empty($this->originRouteInfo['redirect'])) return;
+
+        $defaultParams = $this->resolveDefaultParams();
+        $typedParams   = $this->normalizeGetParams($defaultParams, $_GET);
+
+        foreach($typedParams as $key => $value) $_GET[$key] = $value;
+    }
+
+    /**
+     * Resolve and cache default params of current target control method.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function resolveDefaultParams(): array
+    {
+        if($this->resolvedDefaultParams !== null) return $this->resolvedDefaultParams;
+        return $this->resolvedDefaultParams = $this->getDefaultParams();
+    }
+
+    /**
+     * Normalize GET params according to current target control method signature.
+     *
+     * @param  array $defaultParams
+     * @param  array $sourceParams
+     * @access protected
+     * @return array
+     */
+    protected function normalizeGetParams(array $defaultParams, array $sourceParams): array
+    {
+        $params = array();
+        foreach($defaultParams as $key => $defaultItem)
+        {
+            if(isset($sourceParams[$key]))
+            {
+                $params[$key] = helper::convertType(strip_tags((string) $sourceParams[$key]), $defaultItem['type']);
+            }
+            else
+            {
+                $params[$key] = ($key == 'browseType' && $this->methodName == 'browse') ? 'all' : $defaultItem['default'];
+            }
+        }
+
+        return $params;
     }
 
     /**
@@ -1243,8 +1404,8 @@ class api extends router
     public function setFormData()
     {
         $requestBody = file_get_contents("php://input");
-
-        $_POST = json_decode($requestBody, true);
+        $postData = json_decode($requestBody, true);
+        $_POST    = is_array($postData) ? $postData : array();
 
         /* Avoid empty post body. */
         if(in_array($this->control->moduleName, ['feedback', 'ticket']))
@@ -1256,6 +1417,7 @@ class api extends router
             $_POST['verifyPassword'] = '1';
         }
 
+        $this->mergeRouteParamsToPost();
 
         /* 以POST的值为准。 Set GET value from POST data. */
         foreach($_POST as $key => $value)
@@ -1291,6 +1453,7 @@ class api extends router
         $this->control                    = $control;
 
         $_POST = $postData;
+        $this->mergeRouteParamsToPost();
         foreach($this->control->formData as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
@@ -1307,6 +1470,26 @@ class api extends router
     }
 
     /**
+     * 合并 APIV2 路由和 redirect 参数到 POST。
+     * Merge APIV2 route and redirect params into POST.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mergeRouteParamsToPost(): void
+    {
+        foreach($this->rawGet as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
+
+        foreach($this->params as $key => $value)
+        {
+            if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
+    }
+
+    /**
      * 设置要被调用方法的参数。
      * Set the params of method calling.
      *
@@ -1315,39 +1498,9 @@ class api extends router
      */
     public function setParams()
     {
-        $defaultParams = $this->getDefaultParams();
-
-        $this->params = array();
-
-        /* POST/PUT/DELETE methods have no correct param name, use index. */
-        if($this->action != 'get')
-        {
-            $values = array_values($_GET);
-            $index  = 0;
-            foreach($defaultParams as $key => $defaultItem)
-            {
-                if(isset($values[$index]))
-                {
-                    $value = $values[$index];
-                    settype($value, $defaultItem['type']);
-                    $_GET[$key] = $value;
-                }
-                $index++;
-            }
-        }
-
-        foreach($defaultParams as $key => $defaultItem)
-        {
-            if(isset($_GET[$key]))
-            {
-                $this->params[$key] = helper::convertType(strip_tags((string) $_GET[$key]), $defaultItem['type']);
-            }
-            else
-            {
-                /* Browse all items in api mode defaultly. */
-                $this->params[$key] = $key == 'browseType' ? 'all' : $defaultItem['default'];
-            }
-        }
+        $defaultParams = $this->resolveDefaultParams();
+        $this->rawGet = $_GET;
+        $this->params = $this->normalizeGetParams($defaultParams, $_GET);
 
         if($this->config->framework->filterParam == 2)
         {

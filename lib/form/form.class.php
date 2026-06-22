@@ -78,7 +78,7 @@ class form extends fixer
      * @param  int        $flowGroupID
      * @return form
      */
-    public static function data(array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
+    public static function data(?array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
     {
         global $app, $config;
 
