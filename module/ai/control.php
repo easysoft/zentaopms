@@ -727,20 +727,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty')
-        {
-            $targetFormPaths            = explode('.', $prompt->targetForm);
-            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-
-            $dataPropNames = new stdclass();
-            $dataPropNames->{$prompt->module} = new stdclass();
-            $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
-            foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label)
-            {
-                $dataPropNames->{$prompt->module}->{$name} = $label;
-            }
-            $response['dataPropNames'] = $dataPropNames;
-        }
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->targetForm));
 
         $fields = array_values($this->ai->getPromptFields($promptId));
         if($fields)
@@ -916,18 +903,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty')
-        {
-            $targetFormPaths            = explode('.', $prompt->targetForm);
-            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $dataPropNames = new stdclass();
-            $dataPropNames->{$prompt->module} = new stdclass();
-            $dataPropNames->{$prompt->module}->common = $prompt->name ?: $prompt->targetForm;
-
-            foreach((array)$this->lang->ai->moduleList[$prompt->module] as $name => $label) $dataPropNames->{$prompt->module}->{$name} = $label;
-
-            $response['dataPropNames']  = $dataPropNames;
-        }
+        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->targetForm));
 
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
@@ -1072,14 +1048,9 @@ class ai extends control
             $fullPrompt .= $fillableDesc;
         }
 
-        $schema         = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
-        $location       = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
-        $targetFormName = $this->lang->ai->targetForm[$targetFormParts[0]][$targetFormParts[1]] ?? '';
-
-        $dataPropNames = new stdclass();
-        $dataPropNames->{$prompt->module} = new stdclass();
-        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
-        foreach($filteredFields as $name => $field) $dataPropNames->{$prompt->module}->{$name} = $field['label'] ?? $name;
+        $schema       = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
+        $location     = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        $formMetaData = $this->buildPromptFormMeta($prompt, $filteredFields, $targetForm);
 
         $originObject = new stdclass();
         foreach($filteredFields as $name => $field)
@@ -1100,10 +1071,32 @@ class ai extends control
             'objectType'     => $prompt->module,
             'object'         => array($prompt->module => $originObject),
             'model'          => $prompt->model,
-            'targetFormName' => $targetFormName,
-            'dataPropNames'  => $dataPropNames,
+            'targetFormName' => $formMetaData['targetFormName'],
+            'dataPropNames'  => $formMetaData['dataPropNames'],
             'knowledgeLib'   => $prompt->knowledgeLib ?? '',
         ), false))));
+    }
+
+    /**
+     * Build prompt target form metadata.
+     *
+     * @param  object $prompt
+     * @param  array  $fields
+     * @param  string $targetForm
+     * @access private
+     * @return array
+     */
+    private function buildPromptFormMeta(object $prompt, array $fields, string $targetForm): array
+    {
+        $targetFormPaths = explode('.', $targetForm, 2);
+        $targetFormName  = count($targetFormPaths) === 2 ? ($this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]] ?? '') : '';
+
+        $dataPropNames = new stdclass();
+        $dataPropNames->{$prompt->module} = new stdclass();
+        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
+        foreach($fields as $name => $field) $dataPropNames->{$prompt->module}->{$name} = is_array($field) ? ($field['label'] ?? $name) : $field;
+
+        return array('targetFormName' => $targetFormName, 'dataPropNames' => $dataPropNames);
     }
 
     /**
