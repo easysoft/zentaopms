@@ -2507,6 +2507,68 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getFormSchemaDescription method.
+     *
+     * @param  object $prompt
+     * @param  array  $allowedFields
+     * @access public
+     * @return mixed
+     */
+    public function getFormSchemaDescriptionTest($prompt, array $allowedFields = array())
+    {
+        $result = $this->instance->getFormSchemaDescription($prompt, $allowedFields);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildDynamicSchema method.
+     *
+     * @param  array  $fields
+     * @param  object $prompt
+     * @param  bool   $isBatch
+     * @access public
+     * @return mixed
+     */
+    public function buildDynamicSchemaTest(array $fields, $prompt, $isBatch = false)
+    {
+        $result = $this->instance->buildDynamicSchema($fields, $prompt, $isBatch);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptsForEntryPage method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  string $displayPosition
+     * @access public
+     * @return mixed
+     */
+    public function getPromptsForEntryPageTest(string $module, string $method, string $displayPosition)
+    {
+        $result = $this->instance->getPromptsForEntryPage($module, $method, $displayPosition);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptsForTargetForm method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function getPromptsForTargetFormTest(string $module, string $method)
+    {
+        $result = $this->instance->getPromptsForTargetForm($module, $method);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test AIResponseException::__construct method.
      *
      * @param  string $type
