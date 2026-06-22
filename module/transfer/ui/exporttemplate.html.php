@@ -41,7 +41,7 @@ form
         set::name('fileType'),
         set::required(true),
         set::value('xlsx'),
-        set::control('picker'),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items(array('xlsx' => 'xlsx'))
     ),
     set::actions(array('submit'))
