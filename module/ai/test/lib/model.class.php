@@ -2569,6 +2569,59 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test filterAllowedFields method.
+     *
+     * @param  array $fields
+     * @param  array $allowed
+     * @access public
+     * @return mixed
+     */
+    public function filterAllowedFieldsTest(array $fields, array $allowed = array())
+    {
+        $result = $this->instance->filterAllowedFields($fields, $allowed);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildContextDescription method.
+     *
+     * @param  array $contextObjects
+     * @access public
+     * @return mixed
+     */
+    public function buildContextDescriptionTest(array $contextObjects)
+    {
+        $result = $this->instance->buildContextDescription($contextObjects);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test loadFormContextObjects method.
+     *
+     * @param  array $formSchema
+     * @param  array $fieldNames
+     * @param  array $relations
+     * @access public
+     * @return mixed
+     */
+    public function loadFormContextObjectsTest(array $formSchema, array $fieldNames, array $relations = array())
+    {
+        $this->instance->zai = new class()
+        {
+            public function canViewObject($module, $id)
+            {
+                return true;
+            }
+        };
+
+        $result = $this->instance->loadFormContextObjects($formSchema, $fieldNames, $relations);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test AIResponseException::__construct method.
      *
      * @param  string $type
