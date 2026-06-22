@@ -1004,10 +1004,7 @@ class ai extends control
             if(!empty($filteredFields))
             {
                 $fullPrompt .= "{$promptLang->fillableFields}\n";
-                foreach($filteredFields as $fName => $fField)
-                {
-                    $fullPrompt .= "- {$fName}\n";
-                }
+                foreach($filteredFields as $fName => $fField) $fullPrompt .= "- {$fName}\n";
             }
             $fullPrompt .= "\n{$promptLang->returnJSONArray}\n";
         }
