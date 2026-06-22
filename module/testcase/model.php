@@ -146,7 +146,7 @@ class testcaseModel extends model
 
         if($browseType == 'needconfirm')
         {
-            return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            $cases = $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->leftJoin(TABLE_MODULE)->alias('t4')->on('t2.module = t4.id')
@@ -160,10 +160,12 @@ class testcaseModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);
+            foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+            return $cases;
         }
         if($browseType == 'bysearch') return $this->testcaseTao->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy, $pager);
 
-        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+        $cases = $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
             ->where('t1.project')->eq($executionID)
@@ -175,6 +177,8 @@ class testcaseModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+        foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+        return $cases;
     }
 
     /**
@@ -389,7 +393,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -401,6 +405,8 @@ class testcaseModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll(strpos($auto, 'run') !== false ? 'run' : 'id');
+        foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+        return $cases;
     }
 
     /**
