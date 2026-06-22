@@ -41,7 +41,6 @@ foreach($stories as $story)
     $row = new stdClass();
     $row->id            = $story->id;
     $row->title         = $story->title;
-    $row->color         = $story->color;
     $row->reviewer      = $storyReviewers;
     $row->forceReview   = $rowForceReview ? 1 : 0;
     $row->needNotReview = $needNotReview ? 1 : 0;
@@ -80,8 +79,8 @@ formBatchPanel
     formBatchItem
     (
         set::name('title'),
-        set::label($lang->story->title),
-        set::control('colorInput'),
+        set::label($lang->story->name),
+        set::control('input'),
         set::disabled(true),
         set::width('240px')
     ),
