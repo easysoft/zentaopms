@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 $releaseModule = $app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
 $isInModal     = isInModal();
 

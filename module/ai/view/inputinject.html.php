@@ -136,7 +136,7 @@
           }
           finally
           {
-            /* Set injected in oreder to cancel loading class on object view (see promptmenu.html.php). */
+            /* Set injected in oreder to cancel loading class on object view. */
             sessionStorage.setItem('ai-prompt-data-injected', true);
 
             const container = window.frameElement?.closest('.load-indicator');

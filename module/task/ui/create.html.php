@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 jsVar('window.executionID', $execution->id);
 jsVar('vision', $config->vision);
 jsVar('window.lifetime', $execution->lifetime);

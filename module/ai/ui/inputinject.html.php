@@ -149,6 +149,48 @@ $auditInject = function() use($module, $method)
     h::globalJS("(() => {requestAnimationFrame(() => {{$auditScript}});})();");
 };
 
+/* 页面特定字段过滤（通过 getFormSchema 排除内部字段） */
+$skipFieldsInject = function() use($module, $method)
+{
+    if(!isset($this->config->ai->perPageSkipFields[$module][$method])) return;
+
+    $fields = $this->config->ai->perPageSkipFields[$module][$method];
+    jsVar('window.zentaoSkipFields', $fields);
+};
+$skipFieldsInject();
+
+/* 数字员工异步执行结果自动填充：从 Session 读取待注入数据并回填表单 */
+$pendingFormInject = function() use($module, $method)
+{
+    if(!isset($this->config->ai->availableForms[$module]) || !in_array($method, $this->config->ai->availableForms[$module])) return;
+
+    $pendingData = $_SESSION['aiPendingFormData'] ?? null;
+    if(empty($pendingData)) return;
+
+    unset($_SESSION['aiPendingFormData']);
+
+    $encoded = json_encode($pendingData);
+    h::globalJS(<<< JAVASCRIPT
+        (() => {
+            const pendingData = {$encoded};
+            if(!pendingData) return;
+            let tryApply = function(tries) {
+                let formEl = $('#mainContainer form').first();
+                if(!formEl.length) formEl = $('form').first();
+                if(formEl.length && window.zui && window.zui.zentaoFormHelper)
+                {
+                    window.zui.zentaoFormHelper(formEl).fillFormData(pendingData);
+                    return;
+                }
+                if(tries < 20) setTimeout(function() { tryApply(tries + 1); }, 400);
+            };
+            setTimeout(function() { tryApply(0); }, 600);
+        })();
+    JAVASCRIPT);
+};
+
+$pendingFormInject();
+
 /* Inject input data. */
 $inputInject = function() use($module, $method, &$auditInject)
 {
@@ -249,9 +291,9 @@ $inputInject = function() use($module, $method, &$auditInject)
                         }
                     }
                 }
-                else if(typeof obj[key] === 'Object')
+                else if(typeof obj[key] === 'object' && obj[key] !== null && !Array.isArray(obj[key]))
                 {
-                    inject(obj[key]);
+                    window.inject(obj[key]);
                 }
                 else
                 {
@@ -259,7 +301,6 @@ $inputInject = function() use($module, $method, &$auditInject)
                 }
             }
         }
-
         window.dealWithSpecialInputType = (key, value) =>
         {
             if(key === 'steps')
@@ -278,7 +319,6 @@ $inputInject = function() use($module, $method, &$auditInject)
                 }
             }
         }
-
         requestAnimationFrame(() =>
         {
             try
@@ -297,7 +337,7 @@ $inputInject = function() use($module, $method, &$auditInject)
             }
             finally
             {
-                /* Set injected in oreder to cancel loading class on object view (see ./promptmenu.html.php). */
+                /* Set injected in oreder to cancel loading class on object view. */
                 sessionStorage.setItem('ai-prompt-data-injected', true);
 
                 const container = window.frameElement?.closest('.load-indicator');

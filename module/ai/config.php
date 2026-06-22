@@ -85,30 +85,21 @@ $config->ai->createprompt->requiredFields = 'name';
 $config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetForm';
 
 $config->ai->moduleGroup = [];
-$config->ai->moduleGroup['program']       = array('program', 'project', 'product');
-$config->ai->moduleGroup['charter']       = array('charter');
-$config->ai->moduleGroup['product']       = array('product');
-$config->ai->moduleGroup['project']       = array('project', 'programplans', 'executions');
-$config->ai->moduleGroup['story']         = array('story');
-$config->ai->moduleGroup['productplan']   = array('productplan', 'stories', 'bugs');
-$config->ai->moduleGroup['release']       = array('release', 'stories', 'bugs');
-$config->ai->moduleGroup['execution']     = array('execution', 'tasks');
-$config->ai->moduleGroup['task']          = array('task');
-$config->ai->moduleGroup['build']         = array('build', 'stories', 'bugs');
-$config->ai->moduleGroup['caselib']       = array('caselib', 'case');
-$config->ai->moduleGroup['testsuite']     = array('testsuite', 'case');
-$config->ai->moduleGroup['testtask']      = array('testtask', 'case');
-$config->ai->moduleGroup['case']          = array('case');
-$config->ai->moduleGroup['bug']           = array('bug');
-$config->ai->moduleGroup['doc']           = array('doc');
-$config->ai->moduleGroup['feedback']      = array('feedback');
-$config->ai->moduleGroup['ticket']        = array('ticket');
-$config->ai->moduleGroup['issue']         = array('issue');
-$config->ai->moduleGroup['opportunity']   = array('opportunity');
-$config->ai->moduleGroup['risk']          = array('risk');
-$config->ai->moduleGroup['projectchange'] = array('projectchange');
-$config->ai->moduleGroup['cm']            = array('cm');
-
+$config->ai->moduleGroup['program']     = array('program', 'project', 'product');
+$config->ai->moduleGroup['product']     = array('product');
+$config->ai->moduleGroup['project']     = array('project', 'programplans', 'executions');
+$config->ai->moduleGroup['story']       = array('story');
+$config->ai->moduleGroup['productplan'] = array('productplan', 'stories', 'bugs');
+$config->ai->moduleGroup['release']     = array('release', 'stories', 'bugs');
+$config->ai->moduleGroup['execution']   = array('execution', 'tasks');
+$config->ai->moduleGroup['task']        = array('task');
+$config->ai->moduleGroup['build']       = array('build', 'stories', 'bugs');
+$config->ai->moduleGroup['caselib']     = array('caselib', 'case');
+$config->ai->moduleGroup['testsuite']   = array('testsuite', 'case');
+$config->ai->moduleGroup['testtask']    = array('testtask', 'case');
+$config->ai->moduleGroup['case']        = array('case');
+$config->ai->moduleGroup['bug']         = array('bug');
+$config->ai->moduleGroup['doc']         = array('doc');
 
 /* Data source object props definations, commented out ones are not supported for now. */
 $config->ai->moduleFields = array();
@@ -133,7 +124,7 @@ $config->ai->targetForm['productplan']['edit']           = (object)array('m' => 
 $config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
-$config->ai->targetForm['task']['create']                = (object)array('m' => 'task', 'f' => 'create', 'for' => 'task');
+$config->ai->targetForm['task']['create']                = (object)array('m' => 'task', 'f' => 'create', 'for' => 'execution,project,task');
 $config->ai->targetForm['task']['edit']                  = (object)array('m' => 'task', 'f' => 'edit', 'for' => 'task');
 $config->ai->targetForm['task']['batchcreate']           = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
 $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit', 'for' => 'case');
@@ -189,6 +180,7 @@ $config->ai->targetFormVars['testcase']['create']           = (object)array('for
 $config->ai->targetFormVars['testcase']['edit']             = (object)array('format' => 'caseID=%d', 'args' => array('case' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testreport']['create']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['execution']['testreport']      = (object)array('format' => '', 'args' => array(), 'app' => 'execution');
+$config->ai->targetFormVars['project']['create']            = (object)array('format' => 'model=%s&programID=%d', 'args' => array('model' => 0, 'program' => 0), 'app' => 'project');
 $config->ai->targetFormVars['execution']['batchcreatetask'] = (object)array('format' => 'executionID=%d', 'args' => array('execution' => 1), 'app' => 'execution');
   // $config->ai->targetFormVars['tree']['browse']          = (object)array('format' => 'rootID=%d&view=%s', 'args' => array('root', 'view'), 'app' => 'product');
 $config->ai->targetFormVars['programplan']['create'] = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
@@ -197,73 +189,65 @@ $config->ai->targetFormVars['doc']['edit']           = (object)array('format' =>
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
-/**
- * Menu location definations, defines acceptable module-methods and on page menu locations, etc.
- * Some are identical except for module name, reuse them as much as possible.
- *
- * @param string $module           prompt module name (actual module could differ from prompt module name)
- * @param string $targetContainer  injection target container selector
- * @param string $class            class of menu or dropdown button
- * @param string $buttonClass      specified class of action menu buttons
- * @param string $dropdownClass    specified class of dropdown menu button
- * @param string $objectVarName    object variable name of view
- * @param string $stylesheet       stylesheet to be injected
- * @param string $injectMethod     injection jQuery method, `append` by default
- * @see ./view/promptmenu.html.php
- */
-$config->ai->menuPrint->locations = array();
-$config->ai->menuPrint->locations['story']['view'] = (object)array(
-    'module'          => 'story',
-    'targetContainer' => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type',
-    'stylesheet'      => '#mainContent .detail-body .detail-section:first-of-type > div:first-of-type {width: 100%; justify-content: space-between;}'
-);
-$config->ai->menuPrint->locations['task']['view']             = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['task']['view']->module     = 'task';
-$config->ai->menuPrint->locations['testcase']['view']         = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['testcase']['view']->module = 'case';
-$config->ai->menuPrint->locations['bug']['view']              = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['bug']['view']->module      = 'bug';
-$config->ai->menuPrint->locations['projectstory']['view']     = clone $config->ai->menuPrint->locations['story']['view'];
-$config->ai->menuPrint->locations['execution']['storyView']   = $config->ai->menuPrint->locations['story']['view'];
+/* 参与上下文加载的字段列表（按 targetForm 配置，未配置时使用 _default） */
+$config->ai->formContextFields = array();
+$config->ai->formContextFields['_default']            = array('execution', 'story', 'bug');
+$config->ai->formContextFields['task']['create']      = array('execution', 'story');
+$config->ai->formContextFields['task']['batchcreate'] = array('execution', 'story');
+$config->ai->formContextFields['project']['create']   = array();
 
-$config->ai->menuPrint->locations['execution']['view'] = (object)array( // TODO: fix this.
-    'module'          => 'execution',
-    'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right'
+/* getFormSchema 过滤的页面特定字段（按 targetForm 配置） */
+$config->ai->perPageSkipFields = array();
+$config->ai->perPageSkipFields['task']['create']      = array('storyEstimate', 'storyDesc', 'storyPri', 'taskName', 'taskEstimate', 'region', 'lane');
+$config->ai->perPageSkipFields['task']['batchcreate'] = array('storyEstimate', 'storyDesc', 'storyPri', 'region', 'lane');
+$config->ai->perPageSkipFields['project']['create']   = array('schedule', 'dateRangePicker');
+
+/* 对象类型中文标签 */
+$config->ai->contextLabels = array(
+    'execution' => '执行',
+    'project'   => '项目',
+    'story'     => '关联需求',
+    'product'   => '产品',
+    'bug'       => '关联Bug',
 );
 
-$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
-$config->ai->menuPrint->locations['project']['view']->module = 'project';
-$config->ai->menuPrint->locations['project']['view']         = clone $config->ai->menuPrint->locations['execution']['view'];
-$config->ai->menuPrint->locations['project']['view']->module = 'project';
-
-$config->ai->menuPrint->locations['product']['view'] = (object)array( // TODO: fix this.
-    'module'          => 'product',
-    'injectMethod'    => 'append',
-    'targetContainer' => '#mainContent .ai-menu-box',
-    'class'           => 'pull-right'
+/* 字段中文标签 */
+$config->ai->contextFieldLabels = array(
+    'name'      => '名称',
+    'title'     => '名称',
+    'desc'      => '描述',
+    'model'     => '流程',
+    'attribute' => '类型',
+    'spec'      => '描述',
+    'verify'    => '验收标准',
+    'type'      => '类别',
+    'pri'       => '优先级',
+    'estimate'  => '预计工时',
+    'status'    => '状态',
+    'begin_end' => '日期',
 );
 
-$config->ai->menuPrint->locations['productplan']['view'] = (object)array(
-    'module'          => 'productplan',
-    'injectMethod'    => 'prepend',
-    'targetContainer' => '#mainContent .tab-actions',
-    'objectVarName'   => 'plan'
+/* 关联链配置 */
+$config->ai->contextRelations = array(
+    'execution' => array(
+        'project' => array('module' => 'project', 'field' => 'project'),
+    ),
+    'project' => array(
+        'product' => array('module' => 'product', 'via' => 'projectproduct'),
+    ),
 );
-$config->ai->menuPrint->locations['projectplan']['view']                   = $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']                       = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['release']['view']->module               = 'release';
-$config->ai->menuPrint->locations['release']['view']->objectVarName        = null;
-$config->ai->menuPrint->locations['projectrelease']['view']                = clone $config->ai->menuPrint->locations['productplan']['view'];
-$config->ai->menuPrint->locations['projectrelease']['view']->objectVarName = null;
 
-$config->ai->menuPrint->locations['doc']['view'] = (object)array(
-    'module'          => 'doc',
-    'targetContainer' => '#docMoreActionsBtn',
-    'injectMethod'    => 'before',
-    'buttonPlacement' => 'bottom-end'
-);
+/* 页面级对象类型 */
+$config->ai->contextPageLevel = array('product', 'project', 'execution');
+
+/* 使用通用表单流程的页面列表 */
+$config->ai->universalFormPages = array('task.create', 'task.batchcreate', 'project.create');
+
+/* AI 可操作字段白名单 */
+$config->ai->universalFormFields = array();
+$config->ai->universalFormFields['task']['create']      = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
+$config->ai->universalFormFields['task']['batchcreate'] = array('name', 'type', 'pri', 'estimate', 'estStarted', 'deadline', 'desc', 'assignedTo', 'module');
+$config->ai->universalFormFields['project']['create']   = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
 
 $config->ai->injectAuditButton = new stdclass();
 $config->ai->injectAuditButton->locations = array();
