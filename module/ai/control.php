@@ -1005,7 +1005,7 @@ class ai extends control
                 $fieldDefs[] = $def;
             }
 
-            $sepLine    = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
+            $sepLine     = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
             $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
             $fullPrompt .= "{$promptLang->batchFormData}\n\n";
             $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
