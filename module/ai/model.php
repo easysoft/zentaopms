@@ -3521,7 +3521,7 @@ class aiModel extends model
                 }
                 if($hasBeginEnd)
                 {
-                    $pairLabel = $fieldLabels['begin_end'] ?? ((($fieldLabels['begin'] ?? 'begin') . ' / ' . ($fieldLabels['end'] ?? 'end')));
+                    $pairLabel = $fieldLabels['begin_end'] ?? (($fieldLabels['begin'] ?? 'begin') . ' / ' . ($fieldLabels['end'] ?? 'end'));
                     $desc     .= "  {$pairLabel}：{$data['begin']} ~ {$data['end']}\n";
                 }
             }
