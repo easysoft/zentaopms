@@ -1925,6 +1925,8 @@ class aiModel extends model
     {
         if(empty($data)) return '';
 
+        $this->getDataSource();
+
         /* Handle object data. */
         if(is_object($data)) $data = (array)$data;
 
@@ -2288,8 +2290,16 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return false;
 
-        $executable = true;
-        $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $executable      = true;
+        $displayPosition = $prompt->displayPosition ?? '';
+        $actionPurpose   = $prompt->actionPurpose ?? '';
+
+        if(!empty($displayPosition) && !empty($actionPurpose))
+        {
+            $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
+            if($displayPosition !== 'form') $requiredFields[] = 'source';
+        }
+        else $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
 
         foreach($requiredFields as $field)
         {
@@ -2863,6 +2873,24 @@ class aiModel extends model
         /* Check user's priv to targetForm. */
         foreach($prompts as $idx => $prompt)
         {
+            if(!empty($prompt->displayPosition) && !empty($prompt->actionPurpose) && empty($prompt->targetForm))
+            {
+                $page = explode('.', $prompt->actionPurpose, 2);
+                if(count($page) !== 2)
+                {
+                    unset($prompts[$idx]);
+                    continue;
+                }
+
+                list($m, $f) = $page;
+                if(!commonModel::hasPriv($m, $f))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+                continue;
+            }
+
             list($m, $f) = explode('.', $prompt->targetForm);
             if($m === 'empty' && $f === 'empty') continue;
 
@@ -2989,6 +3017,26 @@ class aiModel extends model
         }
 
         return array($testData, $result);
+    }
+
+    /**
+     * 获取目标表单页面的智能体列表
+     * Get prompts for target form page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getPromptsForTargetForm(string $module, string $method)
+    {
+        $targetForm = "{$module}.{$method}";
+        return $this->dao->select('*')->from(TABLE_AI_AGENT)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->eq('active')
+            ->andWhere('targetForm')->eq($targetForm)
+            ->orderBy('id_desc')
+            ->fetchAll('id', false);
     }
 
     /**
