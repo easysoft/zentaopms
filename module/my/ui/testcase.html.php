@@ -65,6 +65,7 @@ dtable
     set::cols($cols),
     set::customCols(true),
     set::userMap($users),
+    set::rowKey('run'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->testcase->failCheckedSummary),

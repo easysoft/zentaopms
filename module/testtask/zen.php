@@ -573,7 +573,7 @@ class testtaskZen extends testtask
      * @access protected
      * @return array
      */
-    protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList): array
+    protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList, array $runIdList = array()): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
         $menu = isset($this->lang->{$this->app->tab}->menu) ? $this->lang->{$this->app->tab}->menu : array();
@@ -590,7 +590,30 @@ class testtaskZen extends testtask
             ->beginIF($confirm == 'yes')->andWhere('auto')->ne('auto')->fi()
             ->orderBy($orderBy)
             ->fetchAll('id', false);
-        if($from != 'testtask' || $from != 'work') return $cases;
+        if($from != 'testtask' && $from != 'work') return $cases;
+
+        /* 如果批量执行的用例来自我的地盘-待处理，检查这些用例的版本，如果不是最新版就移除它们。*/
+        /* If cases come from my, check the version of these cases, if not the latest version, remove them. */
+        if($from == 'work' && $runIdList)
+        {
+            $runs = $this->dao->select('t1.id, t1.`case`, t1.version, t1.task, t2.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task = t2.id')
+                ->where('t1.id')->in($runIdList)
+                ->orderBy('t1.id_desc')
+                ->fetchAll('id');
+
+            $workCases = array();
+            foreach($runs as $runID => $run)
+            {
+                if($run->version < $cases[$run->case]->version) continue;
+
+                $case = clone $cases[$run->case];
+                $case->caseID   = (int)$run->case;
+                $case->taskName = $run->taskName;
+                $workCases[$runID] = $case;
+            }
+            return $workCases;
+        }
 
         /* 如果批量执行的用例来自测试单，检查这些用例的版本，如果不是最新版就移除它们。*/
         /* If cases come from a testtask, check the version of these cases, if not the latest version, remove them. */
