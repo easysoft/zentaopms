@@ -654,8 +654,9 @@ class actionModel extends model
         foreach($changes as $change)
         {
             $change = is_array($change) ? json_decode(json_encode($change)) : $change;
-            $change->action = $actionID;
+            if(!is_object($change)) continue;
 
+            $change->action = $actionID;
             $change = $this->processHistory($change);
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
             if(dao::isError()) return false;
