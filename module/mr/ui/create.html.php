@@ -63,11 +63,11 @@ formPanel
     formGroup
     (
         set::width('1/2'),
-        set::readonly(true),
+        set::disabled(true),
         set::label($lang->repo->common),
         set::name('sourceProject'),
         set::id('sourceProject'),
-        set::items($projectItem),
+        set::items(array($repo->id => $repo->name)),
         set::value($repo->id),
         setClass(count($repoPairs) > 1 ? 'hidden' : '')
     ),
