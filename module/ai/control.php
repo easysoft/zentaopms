@@ -659,11 +659,12 @@ class ai extends control
                 return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
-            if(!empty($data->jumpToNext)) $this->ai->togglePromptStatus($prompt, 'active');
+            $publish = !empty($data->publish);
+            if($publish) $this->ai->togglePromptStatus($prompt, 'active');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts')));
+            if($publish) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts')));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
         }
 
