@@ -48,7 +48,8 @@ featureBar
 
 toolBar
 (
-    hasPriv('repo', 'createTag') ? item(set(array
+    /* 镜像代码库（$repo->mirror == 1）不允许创建标签，隐藏入口。 */
+    (empty($repo->mirror) && hasPriv('repo', 'createTag')) ? item(set(array
     (
         'text'  => $lang->repo->createTagAction,
         'icon'  => 'plus',
