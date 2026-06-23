@@ -21,17 +21,21 @@ toolbar
     ) : null
 );
 
+$cols = $this->loadModel('datatable')->getSetting('my', 'team');
+if(isset($cols['dept']))     $cols['dept']['map']     = $this->loadModel('dept')->getOptionMenu();
+if(isset($cols['superior'])) $cols['superior']['map'] = $userPairs;
+
+$tableData = initTableData($users, $cols, $this->loadModel('user'));
 dtable
 (
-    set::cols($this->config->my->team->dtable->fieldList),
-    set::data($users),
+    set::customCols(true),
+    set::cols($cols),
+    set::data($tableData),
     set::checkable(false),
     set::orderBy($orderBy),
     set::userMap($userPairs),
     set::sortLink(inlink('team', "orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::fixedLeftWidth('0.2'),
     set::footPager(usePager())
 );
 
 render();
-
