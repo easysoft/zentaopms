@@ -60,6 +60,9 @@ toolBar
 
 $config->repo->dtable->tag->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->tag->fieldList['commitID']['link']);
+
+/* 镜像代码库（$repo->mirror == 1）隐藏标签操作列。 */
+if(!empty($repo->mirror)) unset($config->repo->dtable->tag->fieldList['actions']);
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
 $urlParams = array(
     'repoID'     => $repo->id,
