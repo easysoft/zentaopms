@@ -225,8 +225,9 @@ if(isset($repo->status) && $repo->status == 'syncFailed')
     $syncFailureAlert = div
     (
         setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
-        setStyle(array('--alert-bg' => 'var(--color-danger-50)')),
-        h::span(setClass('icon icon-exclamation-sign mr-1')),
+        /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
+        setStyle(array('--alert-bg' => 'var(--color-danger-50)', 'gap' => '.25rem')),
+        h::span(setClass('icon icon-exclamation-sign')),
         h::span($lang->repo->mirror->failedTitle),
         h::a
         (
