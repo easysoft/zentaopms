@@ -1477,7 +1477,7 @@ class testtaskModel extends model
         if(empty($caseIdList)) return false;
 
         $runs = array();
-        if($runCaseType == 'testtask' || $runCaseType == 'work')
+        if($runCaseType == 'testtask')
         {
             /* 如果是从测试单中批量执行测试用例，查询出测试用例和测试执行的键值对便于更新本次执行结果。*/
             /* If batch run test cases from testtask, query the key-value pair of test cases and test execution for updating the execution results. */
@@ -1486,6 +1486,19 @@ class testtaskModel extends model
                 ->beginIF($taskID)->andWhere('task')->eq($taskID)->fi()
                 ->orderBy('id_desc')
                 ->fetchPairs();
+        }
+        elseif($runCaseType == 'work')
+        {
+            /* 从我的地盘执行时，数组的键是 runID，需要从隐藏字段获取真实的用例ID。*/
+            $caseIdList = array();
+            foreach($cases as $postCase)
+            {
+                if(isset($postCase->caseID)) $caseIdList[] = (int)$postCase->caseID;
+            }
+            $caseIdList = array_unique($caseIdList);
+
+            $runIdKeys    = array_keys($cases);
+            $runTaskPairs = $this->dao->select('id, task')->from(TABLE_TESTRUN)->where('id')->in($runIdKeys)->fetchPairs();
         }
 
         $now    = helper::now();
@@ -1502,9 +1515,19 @@ class testtaskModel extends model
         $run->lastRunDate = $now;
 
         $this->loadModel('action');
-        foreach($cases as $caseID => $postCase)
+        foreach($cases as $caseKey => $postCase)
         {
-            $runID       = zget($runs, $caseID, 0);
+            if($runCaseType == 'work')
+            {
+                $runID  = $caseKey;
+                $caseID = (int)$postCase->caseID;
+            }
+            else
+            {
+                $caseID = $caseKey;
+                $runID  = zget($runs, $caseID, 0);
+            }
+
             $postSteps   = zget($postCase, 'steps', array());
             $postReals   = zget($postCase, 'reals', array());
             $caseResult  = $postCase->results ? $postCase->results : 'pass';
@@ -1520,6 +1543,7 @@ class testtaskModel extends model
             $case->lastRunResult = $caseResult;
             $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
 
+            $taskID = $runCaseType == 'work' ? (isset($runTaskPairs[$runID]) ? (int)$runTaskPairs[$runID] : 0) : $taskID;
             $this->action->create('case', $caseID, 'run', '', $taskID . ',' . $caseResult);
 
             if(!$runID) continue;
@@ -1534,12 +1558,7 @@ class testtaskModel extends model
         /* 从我的地盘执行时需更新关联测试单的状态。*/
         if($runCaseType == 'work')
         {
-            $runIdList = array();
-            foreach($cases as $caseID => $postCase)
-            {
-                $runID = zget($runs, $caseID, 0);
-                if($runID) $runIdList[] = $runID;
-            }
+            $runIdList = array_keys($cases);
             if($runIdList)
             {
                 $taskIdList = $this->dao->select('distinct task')->from(TABLE_TESTRUN)->where('id')->in($runIdList)->fetchPairs();

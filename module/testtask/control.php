@@ -992,6 +992,11 @@ class testtask extends control
         if($this->post->results)
         {
             $cases = form::batchData($this->config->testtask->form->batchRun)->get();
+            if($from == 'work')
+            {
+                $postCaseID = (array)$this->post->caseID;
+                foreach($cases as $runID => $case) $case->caseID = isset($postCaseID[$runID]) ? (int)$postCaseID[$runID] : 0;
+            }
             $this->testtask->batchRun($cases, $from, $testtaskID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!empty($testtaskID)) $this->testtask->updateStatus((int)$testtaskID);
@@ -1000,9 +1005,10 @@ class testtask extends control
         }
 
         $caseIdList = (array)$this->post->caseIdList;
+        $runIdList  = (array)$this->post->runIdList;
         if(empty($caseIdList)) $this->locate($url);
 
-        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList);
+        $cases = $this->testtaskZen->prepareCasesForBatchRun($productID, $orderBy, $from, $testtaskID, $confirm, $caseIdList, $runIdList);
         if(empty($cases)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->testtask->skipChangedCases, 'locate' => $url)));
 
         $steps = $this->loadModel('testcase')->getStepGroupByIdList($caseIdList);
