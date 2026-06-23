@@ -915,6 +915,8 @@ class productModel extends model
         $programList = $this->loadModel('program')->getParentPairs('', 'all');
         foreach($projectList as $id => $project)
         {
+            $project->name = htmlspecialchars_decode((string)$project->name, ENT_QUOTES);
+
             $programName = $project->parent ? zget($programList, $project->parent, '') : '';
             $projectList[$id]->programName = preg_replace('/\//', '', $programName, 1);
         }
