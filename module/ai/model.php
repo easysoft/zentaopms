@@ -2331,6 +2331,7 @@ class aiModel extends model
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return -1;
+        $targetForm = $this->getPromptTargetForm($prompt);
 
         if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
         if(empty($object)) return -2;
@@ -2341,11 +2342,24 @@ class aiModel extends model
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-        $schema = $this->getFunctionCallSchema($prompt->targetForm);
+        $schema = $this->getFunctionCallSchema($targetForm);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $targetForm, 'promptID' => $prompt->id);
+    }
+
+    /**
+     * Get prompt target form.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return string
+     */
+    public function getPromptTargetForm(object $prompt): string
+    {
+        if(!empty($prompt->displayPosition) && $prompt->displayPosition == 'form' && !empty($prompt->actionPurpose)) return $prompt->actionPurpose;
+        return !empty($prompt->targetForm) ? $prompt->targetForm : '';
     }
 
     /**
@@ -2505,7 +2519,7 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return array(false, true);
 
-        $targetForm = $prompt->targetForm;
+        $targetForm = $this->getPromptTargetForm($prompt);
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 
