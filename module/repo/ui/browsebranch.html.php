@@ -51,7 +51,8 @@ featureBar
 
 toolBar
 (
-    hasPriv('repo', 'createBranch') ? item(set(array
+    /* 镜像代码库（$repo->mirror == 1）不允许创建分支，隐藏入口。 */
+    (empty($repo->mirror) && hasPriv('repo', 'createBranch')) ? item(set(array
     (
         'text'  => $lang->repo->createBranchAction,
         'icon'  => 'plus',
