@@ -87,6 +87,7 @@ foreach($users as $user)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('company');
+if(isset($cols['dept']))     $cols['dept']['map']     = $this->loadModel('dept')->getOptionMenu();
 if(isset($cols['superior'])) $cols['superior']['map'] = $userPairs;
 
 $tableData = initTableData($users, $cols, $this->loadModel('user'));
