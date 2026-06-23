@@ -23,14 +23,16 @@ featureBar
 );
 
 $linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
+/* 镜像代码库（$repo->mirror == 1）不允许提交合并请求，按钮置灰禁点。 */
+$isMirrorRepo = !empty($repo->mirror);
 toolBar
 (
     hasPriv($app->rawModule, 'create') ? item(set(array
     (
         'text'  => $lang->ppm->create,
         'icon'  => 'plus',
-        'class' => 'btn primary',
-        'url'   => createLink($app->rawModule, 'create', $linkParams)
+        'class' => 'btn primary' . ($isMirrorRepo ? ' disabled' : ''),
+        'url'   => $isMirrorRepo ? 'javascript:;' : createLink($app->rawModule, 'create', $linkParams)
     ))) : null
 );
 
