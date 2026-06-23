@@ -59,7 +59,7 @@ $config->pipeline->actionList = array();
 $config->pipeline->actionList['execution']['icon'] = 'file-log';
 $config->pipeline->actionList['execution']['text'] = $lang->pipeline->execution;
 $config->pipeline->actionList['execution']['hint'] = $lang->pipeline->execution;
-$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={type}&pipelineID={id}");
+$config->pipeline->actionList['execution']['url']  = array('module' => 'pipeline', 'method' => 'execution', 'params' => "spaceID={spaceID}&repoID={repoID}&type={scope}&pipelineID={id}");
 
 $config->pipeline->actionList['exec']['icon']        = 'play';
 $config->pipeline->actionList['exec']['text']        = $lang->pipeline->exec;
@@ -88,12 +88,12 @@ $config->pipeline->execution->dtable->fieldList['id']['fixed']    = 'left';
 $config->pipeline->execution->dtable->fieldList['id']['type']     = 'id';
 $config->pipeline->execution->dtable->fieldList['id']['sortType'] = false;
 
-$config->pipeline->execution->dtable->fieldList['type']['title']    = $lang->pipeline->level;
-$config->pipeline->execution->dtable->fieldList['type']['name']     = 'type';
-$config->pipeline->execution->dtable->fieldList['type']['sortType'] = false;
-$config->pipeline->execution->dtable->fieldList['type']['width']    = '100';
-$config->pipeline->execution->dtable->fieldList['type']['hint']     = true;
-$config->pipeline->execution->dtable->fieldList['type']['map']      = $lang->pipeline->typeList;
+$config->pipeline->execution->dtable->fieldList['scope']['title']    = $lang->pipeline->level;
+$config->pipeline->execution->dtable->fieldList['scope']['name']     = 'scope';
+$config->pipeline->execution->dtable->fieldList['scope']['sortType'] = false;
+$config->pipeline->execution->dtable->fieldList['scope']['width']    = '100';
+$config->pipeline->execution->dtable->fieldList['scope']['hint']     = true;
+$config->pipeline->execution->dtable->fieldList['scope']['map']      = $lang->pipeline->typeList;
 
 $config->pipeline->execution->dtable->fieldList['ref']['title']    = $lang->pipeline->branch;
 $config->pipeline->execution->dtable->fieldList['ref']['name']     = 'ref';

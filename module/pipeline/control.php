@@ -140,7 +140,7 @@ class pipeline extends control
                 ->add('createdBy', $this->app->user->account)
                 ->add('repoID', $repoID)
                 ->add('spaceID', ($repoID && !empty($repo)) ? $repo->spaceID : $spaceID)
-                ->add('type', $repoID ? 'repo' : 'space')
+                ->add('scope', $repoID ? 'repo' : 'space')
                 ->add('status', 'draft')
                 ->get();
 
@@ -514,7 +514,7 @@ class pipeline extends control
     public function ajaxGetFlowInfo(int $pipelineID)
     {
         $pipeline = $this->pipeline->getById($pipelineID);
-        if(!empty($pipeline) && !empty($pipeline->repoID) && $pipeline->type == 'repo')
+        if(!empty($pipeline) && !empty($pipeline->repoID) && $pipeline->scope == 'repo')
         {
             $repo = $this->loadModel('repo')->fetchByID($pipeline->repoID);
 
@@ -653,7 +653,9 @@ class pipeline extends control
             $this->pipeline->updateContent($pipelineID, $object);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $pipeline = $this->pipeline->fetchById($pipelineID);
+            $fullPipeline = $this->pipeline->fetchById($pipelineID);
+            $pipeline = new stdClass();
+            $pipeline->name       = $fullPipeline->name;
             $pipeline->status     = $type;
             $pipeline->editedBy   = $this->app->user->account;
             $pipeline->editedDate = helper::now();

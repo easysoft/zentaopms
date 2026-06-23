@@ -23,7 +23,7 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object|false
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
@@ -31,7 +31,7 @@ class pipelineModel extends model
         if(empty($pipeline)) return false;
 
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
-        $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->trigger);
+        $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->event);
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
 
@@ -79,7 +79,7 @@ class pipelineModel extends model
             $pipeline->lastExecStatus = zget($execution, 'status', '');
             $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
             $pipeline->triggerType    = zget($execution, 'trigger', '');
-            $pipeline->lastExecDate   = zget($execution, 'finished', '');
+            $pipeline->lastExecDate   = zget($execution, 'finishedDate', '');
         }
 
         return $pipelines;
@@ -101,7 +101,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.`type`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.repoID')->eq($repoID)->fi()
@@ -314,7 +314,7 @@ class pipelineModel extends model
             {
                 $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
 
-                $content->trigger = $copyTrigger->trigger;
+                $content->event = $copyTrigger->event;
                 $content->cron    = $copyTrigger->cron;
             }
             unset($content->data, $content->variables);
