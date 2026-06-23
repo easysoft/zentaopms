@@ -987,6 +987,7 @@ $config->group->package->manageProjectStory->privs['projectstory-batchClose']   
 $config->group->package->manageProjectStory->privs['projectstory-batchChangePlan']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 70, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->manageProjectStory->privs['projectstory-batchAssignTo']     = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 80, 'depend' => array('projectstory-story'), 'recommend' => array());
 $config->group->package->manageProjectStory->privs['projectstory-batchEdit']         = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 90, 'depend' => array('projectstory-story'), 'recommend' => array());
+$config->group->package->manageProjectStory->privs['projectstory-batchSubmitReview'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd,lite', 'order' => 95, 'depend' => array('projectstory-story'), 'recommend' => array());
 
 $config->group->package->importProjectStory = new stdclass();
 $config->group->package->importProjectStory->order  = 15;
