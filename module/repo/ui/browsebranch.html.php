@@ -51,7 +51,8 @@ featureBar
 
 toolBar
 (
-    hasPriv('repo', 'createBranch') ? item(set(array
+    /* 镜像代码库（$repo->mirror == 1）不允许创建分支，隐藏入口。 */
+    (empty($repo->mirror) && hasPriv('repo', 'createBranch')) ? item(set(array
     (
         'text'  => $lang->repo->createBranchAction,
         'icon'  => 'plus',
@@ -63,6 +64,14 @@ toolBar
 
 $config->repo->dtable->branch->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->branch->fieldList['commitID']['link']);
+
+/* 镜像代码库（$repo->mirror == 1）隐藏分支类型、规则控制、操作三列。 */
+if(!empty($repo->mirror))
+{
+    unset($config->repo->dtable->branch->fieldList['type']);
+    unset($config->repo->dtable->branch->fieldList['rule']);
+    unset($config->repo->dtable->branch->fieldList['actions']);
+}
 $branchList = initTableData($branchList, $config->repo->dtable->branch->fieldList);
 $urlParams = array(
     'repoID'       => $repo->id,
