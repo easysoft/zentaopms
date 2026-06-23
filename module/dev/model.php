@@ -68,7 +68,7 @@ class devModel extends model
         catch (PDOException $e)
         {
             $this->dbh->setAttribute(PDO::ATTR_CASE, PDO::CASE_NATURAL);
-            $this->sqlError($e);
+            $this->dbh->sqlError($e);
         }
 
         foreach($rawFields as $rawField)
