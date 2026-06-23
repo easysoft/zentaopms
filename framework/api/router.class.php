@@ -1066,6 +1066,15 @@ class api extends router
         $this->rawModule = $moduleName;
         $this->rawMethod = $methodName;
 
+        if($methodName == 'browse')
+        {
+            $this->responseExtractor = 'dataList(array),pager';
+        }
+        elseif($methodName == 'view')
+        {
+            $this->responseExtractor = 'data';
+        }
+
         $this->setModuleName($moduleName);
         $this->setMethodName($methodName);
         $this->setControlFile();
