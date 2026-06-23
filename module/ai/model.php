@@ -2376,14 +2376,10 @@ class aiModel extends model
 
         $executable      = true;
         $displayPosition = $prompt->displayPosition ?? '';
-        $actionPurpose   = $prompt->actionPurpose ?? '';
+        if(empty($displayPosition)) return false;
 
-        if(!empty($displayPosition) && !empty($actionPurpose))
-        {
-            $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
-            if($displayPosition !== 'form') $requiredFields[] = 'source';
-        }
-        else $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition', 'targetForm');
+        if($displayPosition !== 'form') $requiredFields[] = 'source';
 
         foreach($requiredFields as $field)
         {
@@ -2958,7 +2954,12 @@ class aiModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('displayPosition')->eq($displayPosition);
 
-        if($displayPosition === 'detail') $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
+        if($displayPosition === 'detail')
+        {
+            $moduleMap = $this->config->ai->moduleNameMap ?? array();
+            $queryModule = $moduleMap[$module] ?? $module;
+            $prompts = $prompts->andWhere('module')->eq($queryModule)->fetchAll('id', false);
+        }
         else
         {
             $actionPurpose = "{$module}.{$method}";
@@ -2984,10 +2985,14 @@ class aiModel extends model
         /* Remove the unexecutable ones. */
         $prompts = array_filter($prompts, array($this, 'isExecutable'));
 
-        /* Check user's priv to targetForm. */
+        $moduleMap        = $this->config->ai->moduleNameMap ?? array();
+        $reverseModuleMap = array_flip($moduleMap);
+
+        /* Check user's privilege to the entry page. */
         foreach($prompts as $idx => $prompt)
         {
-            if(!empty($prompt->displayPosition) && !empty($prompt->actionPurpose) && empty($prompt->targetForm))
+            $displayPosition = $prompt->displayPosition ?? '';
+            if($displayPosition === 'form')
             {
                 $page = explode('.', $prompt->actionPurpose, 2);
                 if(count($page) !== 2)
@@ -3002,28 +3007,20 @@ class aiModel extends model
                     if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
                     else unset($prompts[$idx]);
                 }
-                continue;
             }
-
-            list($m, $f) = explode('.', $prompt->targetForm);
-            if($m === 'empty' && $f === 'empty') continue;
-
-            $targetFormConfig = $this->config->ai->targetForm[$m][$f];
-            if(empty($targetFormConfig))
+            elseif($displayPosition === 'detail')
+            {
+                $entryModule = $reverseModuleMap[$prompt->module] ?? $prompt->module;
+                if(!commonModel::hasPriv($entryModule, 'view'))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+            }
+            else
             {
                 unset($prompts[$idx]);
                 continue;
-            }
-            if(!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f))
-            {
-                if($keepUnauthorized)
-                {
-                    $prompts[$idx]->unauthorized = true;
-                }
-                else
-                {
-                    unset($prompts[$idx]);
-                }
             }
         }
         return array_values($prompts);
@@ -3235,25 +3232,6 @@ class aiModel extends model
         return $result . "\n";
     }
 
-    /**
-     * 获取目标表单页面的智能体列表
-     * Get prompts for target form page.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return array
-     */
-    public function getPromptsForTargetForm(string $module, string $method)
-    {
-        $targetForm = "{$module}.{$method}";
-        return $this->dao->select('*')->from(TABLE_AI_AGENT)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->andWhere('targetForm')->eq($targetForm)
-            ->orderBy('id_desc')
-            ->fetchAll('id', false);
-    }
 
     /**
      * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
