@@ -112,6 +112,14 @@ class api extends router
     public $rawGet = array();
 
     /**
+     * Workflow create actions need save step only for the final dispatch.
+     *
+     * @var bool
+     * @access public
+     */
+    public $workflowSaveStep = false;
+
+    /**
      * 构造方法, 设置请求路径，版本等
      *
      * The construct function.
@@ -1066,7 +1074,10 @@ class api extends router
         $this->rawModule = $moduleName;
         $this->rawMethod = $methodName;
 
-        if($methodName == 'browse')
+        /* 工作流必须传step参数才能提交，setFormData不能提交，所以先标记一下，在最终真实POST时注入。 */
+        if($this->action == 'post' && in_array($methodName, array('create', 'batchcreate'))) $this->workflowSaveStep = true;
+
+        if($this->action == 'get' && $methodName == 'browse')
         {
             $this->responseExtractor = 'dataList(array),pager';
         }
@@ -1370,6 +1381,8 @@ class api extends router
                 {
                     $this->checkAccess();
                 }
+
+                if($this->workflowSaveStep && in_array($this->methodName, array('create', 'batchcreate'))) $this->params['step'] = 'save';
 
                 return parent::loadModule();
             }
