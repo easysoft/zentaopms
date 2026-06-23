@@ -278,6 +278,7 @@ $lang->resource->projectstory->batchClose        = 'batchClose';
 $lang->resource->projectstory->batchChangePlan   = 'batchChangePlan';
 $lang->resource->projectstory->batchAssignTo     = 'batchAssignTo';
 $lang->resource->projectstory->batchEdit         = 'batchEdit';
+$lang->resource->projectstory->batchSubmitReview = 'batchSubmitReview';
 
 $lang->projectstory->methodOrder[5]  = 'story';
 $lang->projectstory->methodOrder[10] = 'track';
@@ -292,6 +293,7 @@ $lang->projectstory->methodOrder[45] = 'batchClose';
 $lang->projectstory->methodOrder[50] = 'batchChangePlan';
 $lang->projectstory->methodOrder[55] = 'batchAssignTo';
 $lang->projectstory->methodOrder[60] = 'batchEdit';
+$lang->projectstory->methodOrder[65] = 'batchSubmitReview';
 
 /* Release. */
 $lang->resource->projectrelease = new stdclass();
