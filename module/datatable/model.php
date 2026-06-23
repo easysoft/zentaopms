@@ -455,7 +455,6 @@ class datatableModel extends model
 
         $this->loadModel('workflow');
         $this->loadModel('workflowgroup');
-        $this->loadModel('workflowaction');
         if(($this->app->tab == 'project' || $this->app->tab == 'execution') && in_array($module, $this->config->workflowgroup->modules['product']))
         {
             $groupIdList = array();
@@ -472,6 +471,8 @@ class datatableModel extends model
                 $flow = $this->workflow->getByModule($module, false, $groupID);
                 if(empty($flow)) continue;
 
+                if(!isset($this->workflowaction)) $this->loadModel('workflowaction');
+
                 if($groupID != $flow->group) $groupID = 0;
                 if($flow->buildin)
                 {
@@ -485,18 +486,19 @@ class datatableModel extends model
         {
             $groupID = $this->workflowgroup->getGroupIDBySession($module);
             $flow    = $this->workflow->getByModule($module, false, $groupID);
-            if(empty($flow)) return [];
+            if(empty($flow)) return array();
 
+            $this->loadModel('workflowaction');
             if($groupID != $flow->group) $groupID = 0;
             if($flow->buildin)
             {
                 $action = $this->workflowaction->getByModuleAndAction($module, $method, $groupID);
-                if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return []; // 不扩展不追加字段。
+                if(!$action || (isset($action->extensionType) && $action->extensionType != 'extend')) return array(); // 不扩展不追加字段。
             }
 
             $fields = $this->workflowaction->getPageFields($module, $method, true, array(), 0, $groupID);
         }
 
-        return $this->loadModel('flow')->buildDtableCols($fields, [], [], isset($flow->buildin) && !$flow->buildin);
+        return $this->loadModel('flow')->buildDtableCols($fields, array(), array(), isset($flow->buildin) && !$flow->buildin);
     }
 }
