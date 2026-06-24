@@ -48,6 +48,30 @@ class pipelineModelTest extends baseTest
     }
 
     /**
+     * Get pipeline execution list.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function getExecutionListTest(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
+    {
+        $this->instance->app->loadClass('pager', true);
+
+        $pager         = new pager(0, $recPerPage, $pageID);
+        $executionList = $this->instance->getExecutionList($spaceID, $repoID, $type, $pipelineID, '', $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+        return $executionList;
+    }
+
+    /**
      * 创建服务器。
      * Create a server.
      *
