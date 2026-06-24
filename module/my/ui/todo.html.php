@@ -100,8 +100,9 @@ $footToolbar = array('items' => array
 if($browseType == 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedBy']);
 if($browseType != 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedTo']);
 
-$todos          = initTableData($todos, $config->my->todo->dtable->fieldList, $this->todo);
-$cols           = array_values($config->my->todo->dtable->fieldList);
+$cols = $this->loadModel('datatable')->getSetting('my', 'todo');
+
+$todos          = initTableData($todos, $cols, $this->todo);
 $data           = array_values($todos);
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
@@ -110,8 +111,8 @@ dtable
     set::data($data),
     set::userMap($users),
     set::priList($lang->todo->priList),
-    set::fixedLeftWidth('44%'),
     set::checkable(true),
+    set::customCols(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->todo->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),

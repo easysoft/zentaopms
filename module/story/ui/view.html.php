@@ -64,6 +64,7 @@ if(empty($story->frozen) && !$isInModal && hasPriv($story->type, 'create') && $c
 $sections = array();
 $sections[] = setting()
     ->title($lang->story->legendSpec)
+    ->className('legendSpec')
     ->control('html')
     ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
 if($this->config->vision != 'lite')
