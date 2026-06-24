@@ -101,6 +101,7 @@ foreach($actions as $key => $action)
 $sections = array();
 $sections[] = setting()
     ->title($lang->task->legendDesc)
+    ->className('legendDesc')
     ->control('html')
     ->content(empty($task->desc) ? $lang->noDesc : $task->desc);
 if($task->fromBug)
