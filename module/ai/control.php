@@ -935,10 +935,7 @@ class ai extends control
         $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
         if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
-        if(empty($prompt->displayPosition) || $prompt->displayPosition !== 'form' || empty($prompt->actionPurpose))
-        {
-            return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
-        }
+        if(empty($prompt->displayPosition) || $prompt->displayPosition !== 'form' || empty($prompt->actionPurpose)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
         $targetForm = $prompt->actionPurpose;
 

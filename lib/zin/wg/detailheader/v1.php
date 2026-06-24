@@ -73,8 +73,8 @@ class detailHeader extends wg
         $showAIEntry = $this->prop('showAIEntry');
         if($showAIEntry === false) return null;
 
-        $module        = $this->prop('module') ?: $app->rawModule;
-        $method        = $this->prop('method') ?: $app->rawMethod;
+        $module = $this->prop('module') ?: $app->rawModule;
+        $method = $this->prop('method') ?: $app->rawMethod;
         if(empty($module) || empty($method) || $method !== 'view' || isAjaxRequest('modal')) return null;
 
         list($objectID, $objectVarName) = $this->resolveAIObject($module);
@@ -94,9 +94,9 @@ class detailHeader extends wg
 
     protected function build()
     {
-        $prefix = $this->block('prefix');
-        $title  = $this->block('title');
-        $suffix = $this->block('suffix');
+        $prefix  = $this->block('prefix');
+        $title   = $this->block('title');
+        $suffix  = $this->block('suffix');
         $aiEntry = $this->buildAIEntry();
 
         if(empty($prefix) && !isAjaxRequest('modal')) $prefix = $this->backBtn();

@@ -2156,10 +2156,7 @@ class aiModel extends model
         }
 
         $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->actionPurpose, 'properties' => $properties, 'required' => $required);
-        if($isBatch)
-        {
-            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->actionPurpose, 'items' => $objectSchema);
-        }
+        if($isBatch) return array('type' => 'array', 'title' => $prompt->name ?: $prompt->actionPurpose, 'items' => $objectSchema);
         return $objectSchema;
     }
 
@@ -2955,14 +2952,14 @@ class aiModel extends model
 
         if($displayPosition === 'detail')
         {
-            $moduleMap = $this->config->ai->moduleNameMap ?? array();
+            $moduleMap   = $this->config->ai->moduleNameMap ?? array();
             $queryModule = $moduleMap[$module] ?? $module;
-            $prompts = $prompts->andWhere('module')->eq($queryModule)->fetchAll('id', false);
+            $prompts     = $prompts->andWhere('module')->eq($queryModule)->fetchAll('id', false);
         }
         else
         {
             $actionPurpose = "{$module}.{$method}";
-            $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+            $prompts       = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
         }
 
         $prompts = $this->filterPromptsForExecution($prompts, true);
