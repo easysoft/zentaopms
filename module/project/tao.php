@@ -1011,7 +1011,7 @@ class projectTao extends projectModel
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         $postData = new stdclass();
-        $postData->status  = $status;
+        $postData->status  = $status == 'close' ? 'closed' : $status;
         $postData->begin   = $execution->begin;
         $postData->end     = $execution->end;
         $postData->uid     = '';
