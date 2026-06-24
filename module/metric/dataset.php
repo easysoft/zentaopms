@@ -106,8 +106,8 @@ class dataset
     public function getAllProjects($fieldList)
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_PROJECT)->alias('t1')
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('project');
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.type')->eq('project');
 
         return $this->defaultWhere($stmt, 't1');
     }
