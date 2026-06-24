@@ -29,15 +29,17 @@ $routes['/products/:productID/releases'] = array('redirect' => '/releases?produc
 $routes['/projects/:projectID/releases'] = array('redirect' => '/projectreleases?projectID=:projectID', 'response' => 'releases,pager', 'search' => array('enabled' => true, 'searchModule' => 'release'));
 $routes['/releases/:releaseID']          = array('response' => 'release,actions(array)');
 
-$routes['/projects']                  = array('response' => 'projectStats|projects,pager', 'search' => array('enabled' => true));
-$routes['/projects/list/:browseType'] = array('redirect' => '/projects?browseType=:browseType');
-$routes['/projects/execution']        = array('response' => 'executionStats|executions,pager');
-$routes['/projects/build']            = array('response' => 'builds,pager', 'search' => array('enabled' => true, 'searchModule' => 'build', 'querySessionKey' => 'projectBuild'));
-$routes['/projects/bug']              = array('response' => 'bugs,pager', 'response' => 'bugs(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'bug', 'querySessionKey' => 'projectBug'));
-$routes['/projects/testcase']         = array('response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
-$routes['/projects/testtask']         = array('response' => 'tasks(array)|testtasks,pager');
-$routes['/projects/testreport']       = array('response' => 'reports(array)|testreports,pager');
-$routes['/projects/:projectID']       = array('response' => 'project');
+$routes['/projects']                    = array('response' => 'projectStats|projects,pager', 'search' => array('enabled' => true));
+$routes['/projects/list/:browseType']   = array('redirect' => '/projects?browseType=:browseType');
+$routes['/projects/execution']          = array('response' => 'executionStats|executions,pager');
+$routes['/projects/build']              = array('response' => 'builds,pager', 'search' => array('enabled' => true, 'searchModule' => 'build', 'querySessionKey' => 'projectBuild'));
+$routes['/projects/bug']                = array('response' => 'bugs,pager', 'response' => 'bugs(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'bug', 'querySessionKey' => 'projectBug'));
+$routes['/projects/testcase']           = array('response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
+$routes['/projects/testtask']           = array('response' => 'tasks(array)|testtasks,pager');
+$routes['/projects/testreport']         = array('response' => 'reports(array)|testreports,pager');
+$routes['/projects/team']               = array('response' => 'teamMembers(array)|members');
+$routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
+$routes['/projects/:projectID']         = array('response' => 'project');
 
 $routes['/executions']                     = array('method' => 'all', 'response' => 'executionStats|executions,pager', 'search' => array('enabled' => true, 'searchModule' => 'execution', 'querySessionKey' => 'execution'));
 $routes['/projects/:projectID/executions'] = array('redirect' => '/projects/execution?projectID=:projectID');
