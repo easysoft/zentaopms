@@ -1834,22 +1834,24 @@ class taskModel extends model
         $tasks = $this->taskTao->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy, $pager);
         if(empty($tasks)) return array();
 
-        $taskTeam = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
+        $taskTeam     = $this->taskTao->getTeamMembersByIdList(array_keys($tasks));
+        $parentIdList = array();
         foreach($tasks as $task)
         {
             if(isset($taskTeam[$task->id])) $tasks[$task->id]->team = $taskTeam[$task->id];
+
+            if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
+            $parentIdList[$task->parent] = $task->parent;
         }
 
         if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
 
-        $userList     = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $parentIdList = array();
+        $parents  = $this->dao->select('id, name')->from(TABLE_TASK)->where('id')->in($parentIdList)->fetchPairs();
+        $userList = $this->loadModel('user')->getPairs('noletter|noclosed');
         foreach($tasks as &$task)
         {
             $task->assignedToRealName = zget($userList, $task->assignedTo);
-
-            if($task->parent <= 0 || isset($tasks[$task->parent]) || isset($parentIdList[$task->parent])) continue;
-            $parentIdList[$task->parent] = $task->parent;
+            if(!empty($parents[$task->parent])) $task->name = $parents[$task->parent] . ' / ' . $task->name;
         }
 
         return $this->processTasks($tasks);
