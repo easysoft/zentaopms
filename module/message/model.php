@@ -235,6 +235,16 @@ class messageModel extends model
                 $moduleName = 'assetlib';
                 $methodNmae = 'issueView';
             }
+            elseif($objectType == 'risk' && !empty($object->lib))
+            {
+                $moduleName = 'assetlib';
+                $methodNmae = 'riskView';
+            }
+            elseif($objectType == 'opportunity' && !empty($object->lib))
+            {
+                $moduleName = 'assetlib';
+                $methodNmae = 'opportunityView';
+            }
 
             $space  = common::checkNotCN() ? ' ' : '';
             $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
