@@ -25,7 +25,6 @@ featureBar
 $linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
 /* 镜像代码库（$repo->mirror == 1）不允许提交合并请求，按钮置灰禁点，并在左侧展示橙色提醒。 */
 $isMirrorRepo = !empty($repo->mirror);
-$mirrorRepoTip = isset($lang->ppm->mirrorRepoTip) ? $lang->ppm->mirrorRepoTip : (isset($lang->mr->mirrorRepoTip) ? $lang->mr->mirrorRepoTip : '');
 
 /* 提取嵌套三元：按钮 class 与 url 在镜像态下的取值。 */
 $createBtnClass = 'btn primary';
@@ -38,7 +37,7 @@ $mirrorRepoAlert = $isMirrorRepo ? div
     /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
     setStyle(array('--alert-bg' => 'var(--color-warning-50)', 'gap' => '.25rem')),
     h::span(setClass('icon icon-exclamation-sign')),
-    h::span($mirrorRepoTip)
+    h::span($lang->ppm->mirrorRepoTip)
 ) : null;
 
 toolBar

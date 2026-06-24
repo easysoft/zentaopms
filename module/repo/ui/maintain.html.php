@@ -50,7 +50,16 @@ $queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$ob
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
 {
-    if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') break;
+    /* 镜像代码库屏蔽"执行扫描/扫描问题"两个操作项。 */
+    if(!empty($repo->mirror) && !empty($repo->actions))
+    {
+        $repo->actions = array_values(array_filter($repo->actions, function($action)
+        {
+            return empty($action['name']) || !in_array($action['name'], array('scanExec', 'scanIssue'), true);
+        }));
+    }
+
+    if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') continue;
 
     /* Set the url and check status for visiting the repo. */
     $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
