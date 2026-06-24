@@ -10,6 +10,8 @@ declare(strict_types=1);
  */
 namespace zin;
 
+include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
+
 /* ====== Preparing and processing page data ====== */
 jsVar('edition', $config->edition);
 jsVar('parentID', (int)$parent);

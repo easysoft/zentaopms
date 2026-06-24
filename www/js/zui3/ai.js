@@ -32,6 +32,12 @@ window.checkZAIPanel = async function(showMessage)
 
 window.openPageForm = function(url, data, callback)
 {
+    if(data && typeof data === 'object' && !Array.isArray(data))
+    {
+        const keys = Object.keys(data);
+        if(keys.length === 1 && Array.isArray(data[keys[0]])) data = data[keys[0]];
+    }
+
     return new Promise((resolve, reject) => {
         localStorage.setItem('aiResult', JSON.stringify(data));
         const openedApp = openUrl(url);

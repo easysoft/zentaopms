@@ -1993,7 +1993,8 @@ class aiModel extends model
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     if(!isset($dataObject[$semanticName][$idx][$semanticKey])) $dataObject[$semanticName][$idx][$semanticKey] = '';
-                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
+                    $row = zget($data[$objectName], $idx, array());
+                    $dataObject[$semanticName][$idx][$semanticKey] = zget($row, $objectKey, '');
                 }
             }
             if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);
@@ -2104,7 +2105,7 @@ class aiModel extends model
     public function getFormSchemaDescription(object $prompt, array $allowedFields): string
     {
         $promptLang = $this->lang->ai->prompts;
-        $formName   = $prompt->name ?? $prompt->targetForm;
+        $formName = $prompt->name ?? $prompt->actionPurpose;
         $desc       = "{$promptLang->targetFormInfo}\n";
         $desc      .= sprintf($promptLang->formLabel, $formName) . "\n\n";
 
@@ -2154,10 +2155,10 @@ class aiModel extends model
             $properties[$name] = $prop;
         }
 
-        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
+        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->actionPurpose, 'properties' => $properties, 'required' => $required);
         if($isBatch)
         {
-            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->targetForm, 'items' => $objectSchema);
+            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->actionPurpose, 'items' => $objectSchema);
         }
         return $objectSchema;
     }
@@ -2342,11 +2343,11 @@ class aiModel extends model
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-        $schema = $this->getFunctionCallSchema($targetForm);
+        $schema = $this->getFunctionCallSchema($prompt->actionPurpose);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->actionPurpose, 'promptID' => $prompt->id);
     }
 
     /**
@@ -2359,8 +2360,7 @@ class aiModel extends model
     public function getPromptTargetForm(object $prompt): string
     {
         if(!empty($prompt->displayPosition) && $prompt->displayPosition == 'form' && !empty($prompt->actionPurpose)) return $prompt->actionPurpose;
-        return !empty($prompt->targetForm) ? $prompt->targetForm : '';
-    }
+        return !empty($prompt->targetForm) ? $prompt->targetForm : '';    }
 
     /**
      * Check if prompt can be tested.
@@ -2378,7 +2378,7 @@ class aiModel extends model
         $displayPosition = $prompt->displayPosition ?? '';
         if(empty($displayPosition)) return false;
 
-        $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition', 'targetForm');
+        $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
         if($displayPosition !== 'form') $requiredFields[] = 'source';
 
         foreach($requiredFields as $field)
@@ -2430,7 +2430,7 @@ class aiModel extends model
         elseif($module == 'project')
         {
             /* programplan/create only exist in the waterfall model project. */
-            if(strpos($prompt->targetForm, 'programplan/create'))
+            if(strpos($prompt->actionPurpose, 'programplan/create'))
             {
                 $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
@@ -2515,7 +2515,7 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return array(false, true);
 
-        $targetForm = $this->getPromptTargetForm($prompt);
+        $targetForm = $prompt->actionPurpose;
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 

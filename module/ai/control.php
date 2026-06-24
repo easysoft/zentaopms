@@ -613,7 +613,8 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->targetForm = $data->targetForm;
+            $prompt->targetForm    = $data->targetForm;
+            $prompt->actionPurpose = $data->targetForm;
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -728,8 +729,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        $targetForm = $this->ai->getPromptTargetForm($prompt);
-        if(!empty($targetForm) && $targetForm != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $targetForm));
+        if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
 
         $fields = array_values($this->ai->getPromptFields($promptId));
         if($fields)
@@ -905,8 +905,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        $targetForm = $this->ai->getPromptTargetForm($prompt);
-        if(!empty($targetForm) && $targetForm != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $targetForm));
+        if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
 
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;

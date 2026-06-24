@@ -174,9 +174,20 @@ $pendingFormInject = function() use($module, $method)
         (() => {
             const pendingData = {$encoded};
             if(!pendingData) return;
+            const getTargetForm = () => {
+                let formEl = $('form[z-use*="BatchForm"]').first();
+                if(formEl.length) return formEl;
+
+                formEl = $('form').has('.form-batch-table').first();
+                if(formEl.length) return formEl;
+
+                formEl = $('#mainContainer form').first();
+                if(formEl.length) return formEl;
+
+                return $('form').first();
+            };
             let tryApply = function(tries) {
-                let formEl = $('#mainContainer form').first();
-                if(!formEl.length) formEl = $('form').first();
+                const formEl = getTargetForm();
                 if(formEl.length && window.zui && window.zui.zentaoFormHelper)
                 {
                     window.zui.zentaoFormHelper(formEl).fillFormData(pendingData);
