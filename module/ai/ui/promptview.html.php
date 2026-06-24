@@ -36,10 +36,10 @@ detailHeader
 );
 
 $selectTargetForm = '';
-if(!empty($prompt->targetForm))
+if(!empty($prompt->actionPurpose))
 {
-    $targetForm       = explode('.', $prompt->targetForm);
-    $selectTargetForm = $lang->ai->targetForm[$targetForm[0]][$targetForm[1]] ?? '';
+    $targetFormPath   = explode('.', $prompt->actionPurpose);
+    $selectTargetForm = $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]] ?? '';
 }
 
 $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)

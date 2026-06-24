@@ -1993,7 +1993,8 @@ class aiModel extends model
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     if(!isset($dataObject[$semanticName][$idx][$semanticKey])) $dataObject[$semanticName][$idx][$semanticKey] = '';
-                    $dataObject[$semanticName][$idx][$semanticKey] = $data[$objectName][$idx][$objectKey];
+                    $row = zget($data[$objectName], $idx, array());
+                    $dataObject[$semanticName][$idx][$semanticKey] = zget($row, $objectKey, '');
                 }
             }
             if(!empty($storyData)) $dataObject[$semanticName] = array_merge($dataObject[$semanticName], $storyData);
@@ -2104,7 +2105,7 @@ class aiModel extends model
     public function getFormSchemaDescription(object $prompt, array $allowedFields): string
     {
         $promptLang = $this->lang->ai->prompts;
-        $formName   = $prompt->name ?? $prompt->targetForm;
+        $formName = $prompt->name ?? $prompt->actionPurpose;
         $desc       = "{$promptLang->targetFormInfo}\n";
         $desc      .= sprintf($promptLang->formLabel, $formName) . "\n\n";
 
@@ -2154,11 +2155,8 @@ class aiModel extends model
             $properties[$name] = $prop;
         }
 
-        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->targetForm, 'properties' => $properties, 'required' => $required);
-        if($isBatch)
-        {
-            return array('type' => 'array', 'title' => $prompt->name ?: $prompt->targetForm, 'items' => $objectSchema);
-        }
+        $objectSchema = array('type' => 'object', 'title' => $prompt->name ?: $prompt->actionPurpose, 'properties' => $properties, 'required' => $required);
+        if($isBatch) return array('type' => 'array', 'title' => $prompt->name ?: $prompt->actionPurpose, 'items' => $objectSchema);
         return $objectSchema;
     }
 
@@ -2331,7 +2329,6 @@ class aiModel extends model
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return -1;
-        $targetForm = $this->getPromptTargetForm($prompt);
 
         if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
         if(empty($object)) return -2;
@@ -2342,11 +2339,11 @@ class aiModel extends model
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-        $schema = $this->getFunctionCallSchema($targetForm);
+        $schema = $this->getFunctionCallSchema($prompt->actionPurpose);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->actionPurpose, 'promptID' => $prompt->id);
     }
 
     /**
@@ -2359,8 +2356,7 @@ class aiModel extends model
     public function getPromptTargetForm(object $prompt): string
     {
         if(!empty($prompt->displayPosition) && $prompt->displayPosition == 'form' && !empty($prompt->actionPurpose)) return $prompt->actionPurpose;
-        return !empty($prompt->targetForm) ? $prompt->targetForm : '';
-    }
+        return !empty($prompt->targetForm) ? $prompt->targetForm : '';    }
 
     /**
      * Check if prompt can be tested.
@@ -2376,14 +2372,10 @@ class aiModel extends model
 
         $executable      = true;
         $displayPosition = $prompt->displayPosition ?? '';
-        $actionPurpose   = $prompt->actionPurpose ?? '';
+        if(empty($displayPosition)) return false;
 
-        if(!empty($displayPosition) && !empty($actionPurpose))
-        {
-            $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
-            if($displayPosition !== 'form') $requiredFields[] = 'source';
-        }
-        else $requiredFields = explode(',', $this->config->ai->testPrompt->requiredFields);
+        $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
+        if($displayPosition !== 'form') $requiredFields[] = 'source';
 
         foreach($requiredFields as $field)
         {
@@ -2434,7 +2426,7 @@ class aiModel extends model
         elseif($module == 'project')
         {
             /* programplan/create only exist in the waterfall model project. */
-            if(strpos($prompt->targetForm, 'programplan/create'))
+            if(strpos($prompt->actionPurpose, 'programplan/create'))
             {
                 $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
@@ -2519,7 +2511,7 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return array(false, true);
 
-        $targetForm = $this->getPromptTargetForm($prompt);
+        $targetForm = $prompt->actionPurpose;
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 
@@ -2958,11 +2950,16 @@ class aiModel extends model
             ->andWhere('status')->eq('active')
             ->andWhere('displayPosition')->eq($displayPosition);
 
-        if($displayPosition === 'detail') $prompts = $prompts->andWhere('module')->eq($module)->fetchAll('id', false);
+        if($displayPosition === 'detail')
+        {
+            $moduleMap   = $this->config->ai->moduleNameMap ?? array();
+            $queryModule = $moduleMap[$module] ?? $module;
+            $prompts     = $prompts->andWhere('module')->eq($queryModule)->fetchAll('id', false);
+        }
         else
         {
             $actionPurpose = "{$module}.{$method}";
-            $prompts = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
+            $prompts       = $prompts->andWhere('actionPurpose')->eq($actionPurpose)->fetchAll('id', false);
         }
 
         $prompts = $this->filterPromptsForExecution($prompts, true);
@@ -2984,10 +2981,14 @@ class aiModel extends model
         /* Remove the unexecutable ones. */
         $prompts = array_filter($prompts, array($this, 'isExecutable'));
 
-        /* Check user's priv to targetForm. */
+        $moduleMap        = $this->config->ai->moduleNameMap ?? array();
+        $reverseModuleMap = array_flip($moduleMap);
+
+        /* Check user's privilege to the entry page. */
         foreach($prompts as $idx => $prompt)
         {
-            if(!empty($prompt->displayPosition) && !empty($prompt->actionPurpose) && empty($prompt->targetForm))
+            $displayPosition = $prompt->displayPosition ?? '';
+            if($displayPosition === 'form')
             {
                 $page = explode('.', $prompt->actionPurpose, 2);
                 if(count($page) !== 2)
@@ -3002,28 +3003,19 @@ class aiModel extends model
                     if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
                     else unset($prompts[$idx]);
                 }
-                continue;
             }
-
-            list($m, $f) = explode('.', $prompt->targetForm);
-            if($m === 'empty' && $f === 'empty') continue;
-
-            $targetFormConfig = $this->config->ai->targetForm[$m][$f];
-            if(empty($targetFormConfig))
+            elseif($displayPosition === 'detail')
+            {
+                $entryModule = $reverseModuleMap[$prompt->module] ?? $prompt->module;
+                if(!commonModel::hasPriv($entryModule, 'view'))
+                {
+                    if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
+                    else unset($prompts[$idx]);
+                }
+            }
+            else
             {
                 unset($prompts[$idx]);
-                continue;
-            }
-            if(!commonModel::hasPriv($targetFormConfig->m, $targetFormConfig->f))
-            {
-                if($keepUnauthorized)
-                {
-                    $prompts[$idx]->unauthorized = true;
-                }
-                else
-                {
-                    unset($prompts[$idx]);
-                }
             }
         }
         return array_values($prompts);
@@ -3235,25 +3227,6 @@ class aiModel extends model
         return $result . "\n";
     }
 
-    /**
-     * 获取目标表单页面的智能体列表
-     * Get prompts for target form page.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return array
-     */
-    public function getPromptsForTargetForm(string $module, string $method)
-    {
-        $targetForm = "{$module}.{$method}";
-        return $this->dao->select('*')->from(TABLE_AI_AGENT)
-            ->where('deleted')->eq(0)
-            ->andWhere('status')->eq('active')
-            ->andWhere('targetForm')->eq($targetForm)
-            ->orderBy('id_desc')
-            ->fetchAll('id', false);
-    }
 
     /**
      * Set inject data for a form. For how injection works, see view/inputinject.html.php file.

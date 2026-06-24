@@ -247,6 +247,12 @@ $config->ai->contextRelations = array(
     ),
 );
 
+/* URL 模块名到 AI 系统模块名的映射 */
+$config->ai->moduleNameMap = array(
+    'testcase'       => 'case',
+    'projectrelease' => 'release',
+);
+
 /* 页面级对象类型 */
 $config->ai->contextPageLevel = array('product', 'project', 'execution');
 

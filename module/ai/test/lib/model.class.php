@@ -2683,21 +2683,6 @@ class aiModelTest extends baseTest
     }
 
     /**
-     * Test getPromptsForTargetForm method.
-     *
-     * @param  string $module
-     * @param  string $method
-     * @access public
-     * @return mixed
-     */
-    public function getPromptsForTargetFormTest(string $module, string $method)
-    {
-        $result = $this->instance->getPromptsForTargetForm($module, $method);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test filterAllowedFields method.
      *
      * @param  array $fields
