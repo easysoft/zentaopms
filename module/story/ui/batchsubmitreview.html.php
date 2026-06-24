@@ -100,7 +100,7 @@ formBatchPanel
         set::label(''),
         set::control('checkbox'),
         set::items(array(1 => $lang->story->needNotReview)),
-        set::width('120px')
+        set::width('180px')
     )
 );
 

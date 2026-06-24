@@ -919,7 +919,7 @@ class story extends control
      */
     public function batchSubmitReview(int $productID, string $storyType = 'story')
     {
-        if($_POST)
+        if($this->post->reviewer)
         {
             $this->story->replaceURLang($storyType);
 
