@@ -92,7 +92,7 @@ formBatchPanel
         set::required($hasForceReview),
         set::multiple(true),
         set::items($reviewers),
-        set::width('300px')
+        set::width('270px')
     ),
     formBatchItem
     (
@@ -100,7 +100,7 @@ formBatchPanel
         set::label(''),
         set::control('checkbox'),
         set::items(array(1 => $lang->story->needNotReview)),
-        set::width('180px')
+        set::width('160px')
     )
 );
 
