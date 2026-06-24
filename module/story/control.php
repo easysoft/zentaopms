@@ -943,13 +943,14 @@ class story extends control
         $allowedStoryIdList = [];
 
         /* 判断是否有选中的需求类型的提交评审权限。 */
+        $privModule = $this->app->tab == 'project' ? 'projectstory' : '';
         $typeList = array_unique(array_column($storyList, 'type'));
-        foreach($typeList as $type) if(!common::hasPriv($type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+        foreach($typeList as $type) if(!common::hasPriv($privModule ? $privModule : $type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
 
         /* 判断选中的需求状态是否符合提交评审的条件。 */
         foreach($storyList as $story)
         {
-            if(!common::hasPriv($story->type, 'batchsubmitreview')) continue;
+            if(!common::hasPriv($privModule ? $privModule : $story->type, 'batchsubmitreview')) continue;
             if(!in_array($story->status, ['draft', 'changing']))
             {
                 $invalidStoryIdList[] = '#' . $story->id;
