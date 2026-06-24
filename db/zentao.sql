@@ -1564,7 +1564,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `type` varchar(30) NOT NULL DEFAULT 'sprint',
   `category` varchar(30) NOT NULL DEFAULT '',
   `lifetime` varchar(30) NOT NULL DEFAULT '',
-  `budget` decimal(12,2) unsigned NOT NULL DEFAULT 0.00,
+  `budget` decimal(14,2) unsigned NOT NULL DEFAULT 0.00 COMMENT '预算',
   `budgetUnit` varchar(30) NOT NULL DEFAULT 'CNY',
   `attribute` varchar(30) NOT NULL DEFAULT '',
   `percent` decimal(5,2) unsigned NOT NULL DEFAULT 0.00,

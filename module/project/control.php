@@ -595,7 +595,7 @@ class project extends control
     {
         $this->app->loadLang('build');
 
-        $project = $this->project->fetchByID($projectID);
+        $project = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->project->fetchByID($projectID);
         if(!empty($project->deleted)) return $this->sendError($this->lang->project->deletedTip, $this->createLink('project', 'browse'));
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
