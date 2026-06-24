@@ -2085,10 +2085,10 @@ class aiModel extends model
         $formPath = explode('.', $form);
         if(count($formPath) !== 2) return array();
 
-        $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]];
+        $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]] ?? null;
         if(empty($targetForm)) return array();
 
-        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
+        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
 
         return empty($schema) ? array() : $schema;
     }
@@ -2544,7 +2544,7 @@ class aiModel extends model
             }
             if($prompt->module == 'doc') $objectType = 'mine';
 
-            return array(helper::createLink($module, $method, "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
+            return array(helper::createLink('doc', 'selectLibType', "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
         }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
@@ -3229,7 +3229,7 @@ class aiModel extends model
 
 
     /**
-     * Set inject data for a form. For how injection works, see view/inputinject.html.php file.
+     * Set inject data for a form. For how injection works, see lib/zin/wg/aiforminject/v1.php.
      *
      * @param  string|array  $form  'module.method' or array('module', 'method').
      * @param  string|object $data  data to inject, object will be json encoded.

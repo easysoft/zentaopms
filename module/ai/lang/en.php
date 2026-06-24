@@ -1046,6 +1046,7 @@ $lang->ai->formSchema['doc']['edit']->properties->contentType->type        = 'st
 $lang->ai->formSchema['doc']['edit']->properties->contentType->description = 'Content type';
 $lang->ai->formSchema['doc']['edit']->properties->contentType->enum        = array('html', 'markdown');
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
+$lang->ai->formSchema['doc']['setdocbasic'] = $lang->ai->formSchema['doc']['edit'];
 
 $lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
 
