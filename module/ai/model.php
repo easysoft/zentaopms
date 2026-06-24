@@ -2332,7 +2332,6 @@ class aiModel extends model
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return -1;
-        $targetForm = $this->getPromptTargetForm($prompt);
 
         if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
         if(empty($object)) return -2;
@@ -3020,7 +3019,6 @@ class aiModel extends model
             else
             {
                 unset($prompts[$idx]);
-                continue;
             }
         }
         return array_values($prompts);
