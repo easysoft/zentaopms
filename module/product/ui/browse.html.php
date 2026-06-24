@@ -409,7 +409,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
         /* AssignedTo button. */
         array('caret' => 'up', 'text' => $lang->story->assignedTo, 'className' => ($canBatchAssignTo ? 'secondary batchAssignToBtn' : 'hidden'), 'items' => $assignItems, 'type' => 'dropdown', 'data-placement' => 'top-start', 'data-menu' => array('searchBox' => true)),
         /* Change parent button. */
-        array('text' => $lang->story->changeParent, 'className' => $canBatchChangeParent ? 'secondary batchChangeParentBtn' : 'hidden', 'data-toggle' => 'modal', 'url' => createLink($storyType, 'batchChangeParent', "productID=$productID&storyType=$storyType")),
+        array('text' => $lang->story->changeParent, 'className' => $canBatchChangeParent ? 'secondary batchChangeParentBtn' : 'hidden'),
         /* Batch import to lib button .*/
         $canBatchImportToLib && $storyType != 'requirement' ? array('text' => $lang->story->importToLib, 'className' => 'btn secondary batchImportToLibBtn', 'id' => 'importToLib', 'data-toggle' => 'modal', 'url' => '#batchImportToLib', 'data-on' => 'click', 'data-call' => 'importToLib') : null
     );

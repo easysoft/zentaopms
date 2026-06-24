@@ -15,6 +15,7 @@ namespace zin;
 modalHeader(set::title($lang->story->batchChangeParent));
 formPanel
 (
+    formHidden('storyIdList', implode(',', $storyIdList)),
     formGroup
     (
         set::label($lang->story->parent),
