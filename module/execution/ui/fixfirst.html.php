@@ -39,6 +39,9 @@ formPanel
             input
             (
                 set::name('estimate'),
+                set::type('number'),
+                set::step('0.01'),
+                set::min('0.01'),
                 set::value(!empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : '')),
                 set::placeholder($lang->execution->placeholder->totalLeft)
             ),
