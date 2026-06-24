@@ -30,11 +30,11 @@ foreach($stories as $story)
     {
         if($product)
         {
-            $needNotReview = ($app->user->account == $product->PO or $config->{$story->type}->needReview == 0) and empty($storyReviewers);
+            $needNotReview = ($app->user->account == $product->PO or $config->{$story->type}->needReview == 0) && empty($storyReviewers);
         }
         else
         {
-            $needNotReview = $config->{$story->type}->needReview == 0 and empty($storyReviewers);
+            $needNotReview = $config->{$story->type}->needReview == 0 && empty($storyReviewers);
         }
     }
 
@@ -92,8 +92,7 @@ formBatchPanel
         set::required($hasForceReview),
         set::multiple(true),
         set::items($reviewers),
-        set::width('300px'),
-        set::ditto(true)
+        set::width('300px')
     ),
     formBatchItem
     (
@@ -101,7 +100,7 @@ formBatchPanel
         set::label(''),
         set::control('checkbox'),
         set::items(array(1 => $lang->story->needNotReview)),
-        set::width('120px')
+        set::width('180px')
     )
 );
 
