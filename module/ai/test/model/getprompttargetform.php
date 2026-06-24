@@ -45,5 +45,5 @@ $defaultPrompt->targetForm = 'bug.edit';
 r($aiTest->getPromptTargetFormTest($formPrompt))         && p() && e('story.change');
 r($aiTest->getPromptTargetFormTest($pagePrompt))         && p() && e('story.create');
 r($aiTest->getPromptTargetFormTest($emptyPurposePrompt)) && p() && e('story.create');
-r($aiTest->getPromptTargetFormTest($emptyPrompt))        && p() && e('');
+r($aiTest->getPromptTargetFormTest($emptyPrompt) === '') && p() && e('1');
 r($aiTest->getPromptTargetFormTest($defaultPrompt))      && p() && e('bug.edit');

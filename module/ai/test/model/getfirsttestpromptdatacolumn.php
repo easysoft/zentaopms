@@ -25,6 +25,6 @@ $testData = array('stories' => array('title' => array('需求一'), 'pri' => arr
 
 r($aiTest->getFirstTestPromptDataColumnTest('stories', array('title', 'pri'), $testData)) && p() && e('title');
 r($aiTest->getFirstTestPromptDataColumnTest('stories', array('ghost', 'pri'), $testData)) && p() && e('pri');
-r($aiTest->getFirstTestPromptDataColumnTest('stories', array('ghost'), $testData))        && p() && e('');
-r($aiTest->getFirstTestPromptDataColumnTest('stories', array(), $testData))               && p() && e('');
-r($aiTest->getFirstTestPromptDataColumnTest('tasks', array('name'), $testData))           && p() && e('');
+r($aiTest->getFirstTestPromptDataColumnTest('stories', array('ghost'), $testData) === '') && p() && e('1');
+r($aiTest->getFirstTestPromptDataColumnTest('stories', array(), $testData) === '')        && p() && e('1');
+r($aiTest->getFirstTestPromptDataColumnTest('tasks', array('name'), $testData) === '')    && p() && e('1');
