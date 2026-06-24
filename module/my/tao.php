@@ -139,7 +139,7 @@ class myTao extends myModel
             $storyIdList = !empty($storiesAssignedByMe) ? array_keys($storiesAssignedByMe) : array();
             $stories     = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
+                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.story')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story')
                 ->where($myStoryQuery)
@@ -158,7 +158,7 @@ class myTao extends myModel
         {
             $stories = $this->dao->select("distinct t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder, t2.name as productTitle, t2.shadow as shadow, t4.title as planTitle")->from(TABLE_STORY)->alias('t1')
                 ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
-                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
+                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.story')
                 ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
                 ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story AND t1.version=t5.version')
                 ->where($myStoryQuery)
