@@ -36,13 +36,21 @@ class dingapi
      */
     public function getToken()
     {
+        $dingKey = 'ding' . md5("{$this->appKey}{$this->appSecret}");
+
+        global $config;
+        if(!isset($config->dingTokens)) $config->dingTokens = array();
+        if(isset($config->dingTokens[$dingKey])) list($this->token, $this->expires) = $config->dingTokens[$dingKey];
+
         if($this->token and (time() - $this->expires) >= 0) return $this->token;
 
         $response = $this->queryAPI($this->apiUrl . "gettoken?appkey={$this->appKey}&appsecret={$this->appSecret}");
         if($this->isError()) return false;
 
-        $this->token   = $response->access_token;
-        $this->expires = time() + $response->expires_in;
+        $this->token   = zget($response, 'access_token', '');
+        $this->expires = time() + zget($response, 'expires_in', 0);
+
+        $config->dingTokens[$dingKey] = array($this->token, $this->expires);
         return $this->token;
     }
 
