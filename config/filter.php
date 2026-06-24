@@ -391,14 +391,11 @@ $filter->qa->default->cookie['preProductID'] = 'int';
 $filter->story->create->cookie['lastStoryModule']        = 'int';
 $filter->story->batchcreate->cookie['preProductID']      = 'int';
 $filter->story->export->cookie['checkedItem']            = 'reg::checked';
-$filter->story->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
 $filter->story->track->cookie['preBranch']               = 'reg::word';
 $filter->story->track->cookie['preProductID']            = 'int';
 
-$filter->epic->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
 $filter->epic->export->cookie['checkedItem']            = 'reg::checked';
 
-$filter->requirement->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
 $filter->requirement->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';

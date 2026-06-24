@@ -1314,16 +1314,22 @@ class story extends control
      */
     public function batchChangeParent(int $productID = 0, string $storyType = 'story')
     {
-        if($_POST)
+        $storyIdList = $this->post->storyIdList ?? '';
+
+        if(isset($_POST['parent']))
         {
-            $storyIdList = $this->cookie->checkedItem;
-            $result      = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
+            if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => true));
+
+            $result = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
             if($result) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('$result');", 'closeModal' => true, 'load' => true));
 
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->parents = $this->story->getParentStoryPairs($productID, '', $storyType);
+        if(empty($storyIdList)) return;
+
+        $this->view->storyIdList = $storyIdList;
+        $this->view->parents     = $this->story->getParentStoryPairs($productID, '', $storyType);
         $this->display();
     }
 

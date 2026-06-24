@@ -31,10 +31,23 @@ $(document).off('click', '.batchImportToLibBtn').on('click', '.batchImportToLibB
 
 $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
 {
+    e.preventDefault();
+
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
 
-    $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
+    const postData = new FormData();
+    checkedList.forEach((id) => postData.append('storyIdList[]', id));
+
+    zui.Modal.open({
+        type: 'ajax',
+        request: {
+            url: $.createLink(storyType, 'batchChangeParent', 'productID=' + productID + '&storyType=' + storyType),
+            method: 'post',
+            data: postData
+        }
+    });
 });
 
 $(document).off('click', '.switchButton').on('click', '.switchButton', function()
