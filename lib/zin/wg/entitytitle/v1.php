@@ -99,7 +99,7 @@ class entityTitle extends wg
                     $color ? setStyle('color', $color) : null,
                     $title
                 ),
-            $deleted ? span(setClass('label danger'), $lang->deleted) : null
+            $deleted ? span(setClass('label danger ml-1'), $lang->deleted) : null
         );
     }
 
