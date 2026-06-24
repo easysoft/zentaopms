@@ -893,6 +893,7 @@ class project extends control
         $product   = $this->product->getById($productID);
         $project   = $this->project->getByID($projectID);
         $browseType = strtolower($browseType);
+        $param      = $browseType == 'bysearch' ? (int)$param : 0;
         $products   = $this->product->getProducts($projectID);
 
         $this->session->set('currentProductType', !isset($product->type) ? 'normal' : $product->type);
