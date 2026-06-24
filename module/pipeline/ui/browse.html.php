@@ -17,11 +17,18 @@ $app->loadLang('runner');
 jsVar('repoID', $repoID);
 jsVar('type', $type);
 
+/* 空间级别或镜像代码库的流水线需显示服务器列。 */
+$needServer = !$repoID || !empty($repo->mirror);
+
 if($repoID)
 {
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
     unset($lang->pipeline->featureBar['browse']);
     unset($config->pipeline->dtable->fieldList['repo']);
+    if(!empty($repo->mirror))
+    {
+        unset($config->pipeline->dtable->fieldList['status']);
+    }
     featureBar(div(searchToggle(set::module('pipeline'), set::open($type == 'bySearch'))));
 }
 else
@@ -36,6 +43,8 @@ else
 }
 if($type == 'space') unset($config->pipeline->dtable->fieldList['repo']);
 
+if($needServer) $config->pipeline->dtable->fieldList['server']['show'] = true;
+
 /* zin: Define the toolbar on main menu. */
 $canCreate     = hasPriv('pipeline', 'create');
 $runnerPriv    = hasPriv('runner', 'browse');
@@ -44,8 +53,13 @@ $executionPriv = hasPriv('pipeline', 'execution');
 $createItem    = array('text' => $lang->pipeline->create,     'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
 //$runnerItem    = array('text' => $lang->runner->manageRunner, 'url' => createLink('runner', 'browse'), 'class' => 'primary');
 $executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('execution', "spaceID={$spaceID}&repoID={$repoID}&type={$type}"), 'class' => 'primary');
-$config->pipeline->dtable->fieldList['actions']['list']['arrange']['url'] = helper::createLink('pipeline', 'arrange',"id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}");
-$config->pipeline->dtable->fieldList['actions']['list']['exec']['url']    = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}&space={$spaceID}&repoID={$repoID}&type={$type}");
+$config->pipeline->dtable->fieldList['actions']['list']['arrange'] = array('icon' => 'pencil-alt', 'text' => $lang->pipeline->arrange, 'hint' => $lang->pipeline->arrange, 'url' => helper::createLink('pipeline', 'arrange', "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
+$config->pipeline->dtable->fieldList['actions']['list']['edit']    = array('icon' => 'edit', 'text' => $lang->pipeline->edit, 'hint' => $lang->pipeline->edit, 'url' => helper::createLink('pipeline', 'edit', "id={id}"));
+$config->pipeline->dtable->fieldList['actions']['list']['exec']['url'] = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}&space={$spaceID}&repoID={$repoID}&type={$type}");
+if($needServer)
+{
+    $config->pipeline->dtable->fieldList['actions']['menu'] = array('exec', 'execution', 'arrange', 'edit', 'delete');
+}
 
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);

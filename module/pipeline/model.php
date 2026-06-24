@@ -54,9 +54,10 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables')->from(TABLE_PIPELINE)->alias('t1')
+        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.pipelineID')
+            ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.providerID=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.name')->ne('_codescan')
             ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
@@ -71,15 +72,20 @@ class pipelineModel extends model
         if(empty($pipelines)) return array();
 
         $executions = $this->getExecutionByPipeline(array_keys($pipelines), true);
-        if(empty($executions)) return $pipelines;
 
         foreach($pipelines as $pipeline)
         {
-            $execution = zget($executions, $pipeline->id, array());
-            $pipeline->lastExecStatus = zget($execution, 'status', '');
-            $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
-            $pipeline->triggerType    = zget($execution, 'trigger', '');
-            $pipeline->lastExecDate   = zget($execution, 'finishedDate', '');
+            if(!empty($executions))
+            {
+                $execution = zget($executions, $pipeline->id, array());
+                $pipeline->lastExecStatus = zget($execution, 'status', '');
+                $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
+                $pipeline->triggerType    = zget($execution, 'trigger', '');
+                $pipeline->lastExecDate   = zget($execution, 'finishedDate', '');
+            }
+
+            /* 非 gitfox 引擎的流水线状态均为激活。 */
+            if($pipeline->engine != 'gitfox') $pipeline->status = 'active';
         }
 
         return $pipelines;

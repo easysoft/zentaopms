@@ -159,6 +159,18 @@ class pipeline extends control
     }
 
     /**
+     * Edit a pipeline.
+     *
+     * @param  int $id
+     * @access public
+     * @return void
+     */
+    public function edit(int $id)
+    {
+        $this->display();
+    }
+
+    /**
      * View pipeline and compile.
      *
      * @param  int    $pipelineID
