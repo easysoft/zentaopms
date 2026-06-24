@@ -873,7 +873,7 @@ class productModel extends model
     public function getProjectPairsByProduct(int $productID, string $branch = '0', string|array $appendProject = '', string $status = '', string $param = ''): array
     {
         $product = $this->getByID($productID);
-        if(empty($product)) return array();
+        if(empty($product)) return $this->loadModel('project')->getPairs();
 
         $appendProject = $this->productTao->formatAppendParam($appendProject);
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -959,7 +959,7 @@ class productModel extends model
      */
     public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = '', array $unAllowedStage = array()): array
     {
-        if(empty($productID)) return array();
+        if(empty($productID)) return $this->loadModel('execution')->getPairs();
 
         /* Determine executions order. */
         $projects         = $this->loadModel('project')->getByIdList(array($projectID));
