@@ -571,6 +571,6 @@ class tree extends control
         $module = $this->tree->createModule();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode('\n', dao::getError())));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'module' => $module));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'id' => $module->id, 'module' => $module));
     }
 }

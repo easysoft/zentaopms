@@ -2051,7 +2051,7 @@ class treeModel extends model
      */
     public function update(int $moduleID, string $type = ''): bool
     {
-        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->get();
+        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->remove('moduleID,verifyPassword')->get();
         $self    = $this->getById($moduleID);
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
