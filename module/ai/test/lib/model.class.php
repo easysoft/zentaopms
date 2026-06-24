@@ -2507,6 +2507,135 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test buildTestPromptDataPreview method.
+     *
+     * @param  string $module
+     * @param  array  $categorized
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataPreviewTest($module, $categorized, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataPreview', array($module, $categorized, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test isMultiRowTestPromptDataGroup method.
+     *
+     * @param  string $groupKey
+     * @access public
+     * @return mixed
+     */
+    public function isMultiRowTestPromptDataGroupTest($groupKey)
+    {
+        $result = $this->invokeArgs('isMultiRowTestPromptDataGroup', array($groupKey));
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test buildMultiRowTestPromptDataPreview method.
+     *
+     * @param  string $module
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildMultiRowTestPromptDataPreviewTest($module, $groupKey, $pathInfo, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildMultiRowTestPromptDataPreview', array($module, $groupKey, $pathInfo, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildSingleRowTestPromptDataPreview method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function buildSingleRowTestPromptDataPreviewTest($groupKey, $pathInfo, $titleData, $testData)
+    {
+        $result = $this->invokeArgs('buildSingleRowTestPromptDataPreview', array($groupKey, $pathInfo, $titleData, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildTestPromptDataTableHead method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataTableHeadTest($groupKey, $pathInfo, $titleData)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataTableHead', array($groupKey, $pathInfo, $titleData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getFirstTestPromptDataColumn method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @access public
+     * @return mixed
+     */
+    public function getFirstTestPromptDataColumnTest($groupKey, $pathInfo, $testData)
+    {
+        $result = $this->invokeArgs('getFirstTestPromptDataColumn', array($groupKey, $pathInfo, $testData));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildTestPromptDataTableRow method.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @param  int    $index
+     * @access public
+     * @return mixed
+     */
+    public function buildTestPromptDataTableRowTest($groupKey, $pathInfo, $testData, $index)
+    {
+        $result = $this->invokeArgs('buildTestPromptDataTableRow', array($groupKey, $pathInfo, $testData, $index));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getPromptTargetForm method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getPromptTargetFormTest($prompt)
+    {
+        $result = $this->instance->getPromptTargetForm($prompt);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test getFormSchemaDescription method.
      *
      * @param  object $prompt

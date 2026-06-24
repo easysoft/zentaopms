@@ -2331,6 +2331,7 @@ class aiModel extends model
     {
         if(is_numeric($prompt)) $prompt = $this->getPromptById($prompt);
         if(empty($prompt)) return -1;
+        $targetForm = $this->getPromptTargetForm($prompt);
 
         if(is_numeric($object)) $object = $this->getObjectForPromptById($prompt, $object);
         if(empty($object)) return -2;
@@ -2341,11 +2342,24 @@ class aiModel extends model
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-        $schema = $this->getFunctionCallSchema($prompt->targetForm);
+        $schema = $this->getFunctionCallSchema($targetForm);
         if(empty($schema)) return -5;
 
         $this->useLanguageModel($prompt->model);
-        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $prompt->targetForm, 'promptID' => $prompt->id);
+        return array('role' => $role, 'schema' => $schema, 'dataPrompt' => $dataPrompt, 'name' => $prompt->name, 'purpose' => $prompt->purpose, 'status' => $prompt->status, 'targetForm' => $targetForm, 'promptID' => $prompt->id);
+    }
+
+    /**
+     * Get prompt target form.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return string
+     */
+    public function getPromptTargetForm(object $prompt): string
+    {
+        if(!empty($prompt->displayPosition) && $prompt->displayPosition == 'form' && !empty($prompt->actionPurpose)) return $prompt->actionPurpose;
+        return !empty($prompt->targetForm) ? $prompt->targetForm : '';
     }
 
     /**
@@ -2505,7 +2519,7 @@ class aiModel extends model
         if(is_numeric($prompt)) $prompt = $this->getByID($prompt);
         if(empty($prompt)) return array(false, true);
 
-        $targetForm = $prompt->targetForm;
+        $targetForm = $this->getPromptTargetForm($prompt);
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 
@@ -3042,81 +3056,183 @@ class aiModel extends model
 
             $prefix = $path[0];
             $column = $path[1];
-            if(!isset($categorized[$prefix])) $categorized[$prefix] = [];
+            if(!isset($categorized[$prefix])) $categorized[$prefix] = array();
             $categorized[$prefix][] = $column;
         }
 
+        $result = $this->buildTestPromptDataPreview($module, $categorized, $titleData, $testData);
+
+        return array($testData, $result);
+    }
+
+    /**
+     * 构建智能体测试数据预览。
+     * Build prompt test data preview.
+     *
+     * @param  string $module
+     * @param  array  $categorized
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function buildTestPromptDataPreview(string $module, array $categorized, array $titleData, array $testData): string
+    {
         $result = '';
         foreach($categorized as $groupKey => $pathInfo)
         {
             if(empty($titleData[$groupKey]) || empty($testData[$groupKey])) continue;
 
-            if(in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps')))
-            {
-                if($module == 'release' && $groupKey == 'bugs')
-                {
-                    if(!isset($titleData[$groupKey]['common']) || !isset($testData[$groupKey]['title'])) continue;
-                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
-                    $result .= $testData[$groupKey]['title'] . "\n";
-                }
-                else
-                {
-                    if(!isset($titleData[$groupKey]['common'])) continue;
-                    $result .= '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
-                    $result .= "| ";
-                    foreach($pathInfo as $value)
-                    {
-                        if(!isset($titleData[$groupKey][$value])) continue;
-                        $result .= $titleData[$groupKey][$value] . " | ";
-                    }
-                    $result .= "\n";
-
-                    $result .= "| ";
-                    foreach($pathInfo as $value)
-                    {
-                        if(!isset($titleData[$groupKey][$value])) continue;
-                        $result .= "--- | ";
-                    }
-                    $result .= "\n";
-
-                    $firstData = '';
-                    foreach($pathInfo as $value)
-                    {
-                        if(isset($testData[$groupKey][$value]))
-                        {
-                            $firstData = $value;
-                            break;
-                        }
-                    }
-                    if($firstData === '') continue;
-
-                    $count     = count($testData[$groupKey][$firstData]);
-                    for($i = 0; $i < $count; $i++)
-                    {
-                        $result .= "| ";
-                        foreach($pathInfo as $value)
-                        {
-                            if(!isset($testData[$groupKey][$value][$i])) continue;
-                            $result .= $testData[$groupKey][$value][$i] . " | ";
-                        }
-                        $result .= "\n";
-                    }
-                }
-            }
-            else
-            {
-                foreach($pathInfo as $value)
-                {
-                    if($groupKey == 'task' && $value == 'story') continue;
-                    if(!isset($titleData[$groupKey][$value]) || !isset($testData[$groupKey][$value])) continue;
-
-                    $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
-                    $result .= $testData[$groupKey][$value] . "\n";
-                }
-            }
+            $result .= $this->isMultiRowTestPromptDataGroup($groupKey)
+                ? $this->buildMultiRowTestPromptDataPreview($module, $groupKey, $pathInfo, $titleData, $testData)
+                : $this->buildSingleRowTestPromptDataPreview($groupKey, $pathInfo, $titleData, $testData);
         }
 
-        return array($testData, $result);
+        return $result;
+    }
+
+    /**
+     * 判断测试数据分组是否为多行数据。
+     * Check whether test prompt data group is multi-row.
+     *
+     * @param  string $groupKey
+     * @access private
+     * @return bool
+     */
+    private function isMultiRowTestPromptDataGroup(string $groupKey): bool
+    {
+        return in_array($groupKey, array('programplans', 'executions', 'stories', 'bugs', 'tasks', 'steps'));
+    }
+
+    /**
+     * 构建多行测试数据预览。
+     * Build multi-row test prompt data preview.
+     *
+     * @param  string $module
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function buildMultiRowTestPromptDataPreview(string $module, string $groupKey, array $pathInfo, array $titleData, array $testData): string
+    {
+        if($module == 'release' && $groupKey == 'bugs')
+        {
+            if(!isset($titleData[$groupKey]['common']) || !isset($testData[$groupKey]['title'])) return '';
+            return '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n" . $testData[$groupKey]['title'] . "\n";
+        }
+
+        if(!isset($titleData[$groupKey]['common'])) return '';
+
+        $result  = '##### ' . $titleData[$groupKey]['common'] . $this->lang->colon . "\n";
+        $result .= $this->buildTestPromptDataTableHead($groupKey, $pathInfo, $titleData);
+
+        $firstData = $this->getFirstTestPromptDataColumn($groupKey, $pathInfo, $testData);
+        if($firstData === '') return $result;
+
+        $count = count($testData[$groupKey][$firstData]);
+        for($i = 0; $i < $count; $i++)
+        {
+            $result .= $this->buildTestPromptDataTableRow($groupKey, $pathInfo, $testData, $i);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 构建单行测试数据预览。
+     * Build single-row test prompt data preview.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function buildSingleRowTestPromptDataPreview(string $groupKey, array $pathInfo, array $titleData, array $testData): string
+    {
+        $result = '';
+        foreach($pathInfo as $value)
+        {
+            if($groupKey == 'task' && $value == 'story') continue;
+            if(!isset($titleData[$groupKey][$value]) || !isset($testData[$groupKey][$value])) continue;
+
+            $result .= '##### ' . $titleData[$groupKey][$value] . $this->lang->colon . "\n";
+            $result .= $testData[$groupKey][$value] . "\n";
+        }
+
+        return $result;
+    }
+
+    /**
+     * 构建测试数据表头。
+     * Build test prompt data table head.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $titleData
+     * @access private
+     * @return string
+     */
+    private function buildTestPromptDataTableHead(string $groupKey, array $pathInfo, array $titleData): string
+    {
+        $titleRow = '| ';
+        $splitRow = '| ';
+        foreach($pathInfo as $value)
+        {
+            if(!isset($titleData[$groupKey][$value])) continue;
+
+            $titleRow .= $titleData[$groupKey][$value] . ' | ';
+            $splitRow .= '--- | ';
+        }
+
+        return $titleRow . "\n" . $splitRow . "\n";
+    }
+
+    /**
+     * 获取第一列存在的测试数据。
+     * Get the first existing test prompt data column.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @access private
+     * @return string
+     */
+    private function getFirstTestPromptDataColumn(string $groupKey, array $pathInfo, array $testData): string
+    {
+        foreach($pathInfo as $value)
+        {
+            if(isset($testData[$groupKey][$value])) return $value;
+        }
+
+        return '';
+    }
+
+    /**
+     * 构建测试数据表格行。
+     * Build test prompt data table row.
+     *
+     * @param  string $groupKey
+     * @param  array  $pathInfo
+     * @param  array  $testData
+     * @param  int    $index
+     * @access private
+     * @return string
+     */
+    private function buildTestPromptDataTableRow(string $groupKey, array $pathInfo, array $testData, int $index): string
+    {
+        $result = '| ';
+        foreach($pathInfo as $value)
+        {
+            if(!isset($testData[$groupKey][$value][$index])) continue;
+            $result .= $testData[$groupKey][$value][$index] . ' | ';
+        }
+
+        return $result . "\n";
     }
 
     /**

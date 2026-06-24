@@ -3998,6 +3998,7 @@ $config->group->package->aiSkill->privs['ai-viewskill']            = array('edit
 $config->group->package->aiSkill->privs['ai-createskill']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('ai-browseskill'), 'recommend' => array('ai-editskill', 'ai-releaseskill'));
 $config->group->package->aiSkill->privs['ai-editskill']            = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('ai-browseskill', 'ai-viewskill'), 'recommend' => array('ai-releaseskill'));
 $config->group->package->aiSkill->privs['ai-deleteskill']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 25, 'depend' => array('ai-browseskill'), 'recommend' => array());
+$config->group->package->aiSkill->privs['ai-deletesquareskill']    = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 26, 'depend' => array('ai-browseskill', 'ai-viewskill'), 'recommend' => array());
 $config->group->package->aiSkill->privs['ai-addskill']             = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 27, 'depend' => array('ai-browseskill'), 'recommend' => array('ai-myskill'));
 $config->group->package->aiSkill->privs['ai-removeskill']          = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 27, 'depend' => array('ai-myskill'), 'recommend' => array());
 $config->group->package->aiSkill->privs['ai-publishskill']         = array('edition' => 'biz,max,ipd', 'vision' => 'rnd', 'order' => 28, 'depend' => array('ai-myskill'), 'recommend' => array());
