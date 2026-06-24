@@ -95,7 +95,7 @@ class testreportModelTest extends baseTest
      */
     public function getListTest(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', ?object $pager = null): array|string
     {
-        $objects = $this->instance->getList($objectID, $objectType, $extra, $orderBy, $pager);
+        $objects = $this->instance->getList($objectID, $objectType, $extra, '', 0, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -307,5 +307,29 @@ class testreportModelTest extends baseTest
         }
 
         return implode(',', $result);
+    }
+
+    /**
+     * Test buildTestreportSearchForm method.
+     *
+     * @param  string $objectType
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return object|string
+     */
+    public function buildTestreportSearchFormTest(string $objectType = 'product', int $queryID = 0, string $actionURL = ''): object|string
+    {
+        $searchConfig = $this->instance->buildTestreportSearchForm($objectType, $queryID, $actionURL, true);
+        if(dao::isError()) return dao::getError();
+
+        $result = new stdclass();
+        $result->module             = $searchConfig['module'];
+        $result->hasProductField    = isset($searchConfig['fields']['product']) ? 1 : 0;
+        $result->hasProjectField    = isset($searchConfig['fields']['project']) ? 1 : 0;
+        $result->hasExecutionField  = isset($searchConfig['fields']['execution']) ? 1 : 0;
+        $result->hasTitleParam      = isset($searchConfig['params']['title']) ? 1 : 0;
+
+        return $result;
     }
 }

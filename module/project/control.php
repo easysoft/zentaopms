@@ -964,6 +964,8 @@ class project extends control
      * @param  int    $projectID
      * @param  string $objectType   project|execution|product
      * @param  string $extra
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -971,9 +973,9 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testreport(int $projectID = 0, string $objectType = 'project', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testreport(int $projectID = 0, string $objectType = 'project', string $extra = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('testreport', 'browse', "objectID=$projectID&objectType=$objectType&extra=$extra&browseType=$browseType&queryID=$queryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
