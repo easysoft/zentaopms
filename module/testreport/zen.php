@@ -66,6 +66,8 @@ class testreportZen extends testreport
      * @param  int       $objectID
      * @param  string    $objectType
      * @param  int       $extra
+     * @param  string    $browseType
+     * @param  int       $queryID
      * @param  string    $orderBy
      * @param  int       $recTotal
      * @param  int       $recPerPage
@@ -73,14 +75,14 @@ class testreportZen extends testreport
      * @access protected
      * @return array
      */
-    protected function getReportsForBrowse(int $objectID = 0, string $objectType = 'product', int $extra = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): array
+    protected function getReportsForBrowse(int $objectID = 0, string $objectType = 'product', int $extra = 0, string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1): array
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $reports = $this->testreport->getList($objectID, $objectType, $extra, $orderBy, $pager);
+        $reports = $this->testreport->getList($objectID, $objectType, $extra, $browseType, $queryID, $orderBy, $pager);
 
         if(strpos('|project|execution|', $objectType) !== false && ($extra || isset($_POST['taskIdList'])))
         {
