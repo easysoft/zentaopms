@@ -11,6 +11,7 @@ cid=0
 - 非表单位置使用 targetForm @story.create
 - 表单位置 actionPurpose 为空时回退 targetForm @story.create
 - targetForm 为空时返回空字符串 @
+- displayPosition 为空时使用 targetForm @bug.edit
 
 */
 
@@ -38,7 +39,11 @@ $emptyPurposePrompt->targetForm = 'story.create';
 
 $emptyPrompt = new stdClass();
 
+$defaultPrompt = new stdClass();
+$defaultPrompt->targetForm = 'bug.edit';
+
 r($aiTest->getPromptTargetFormTest($formPrompt))         && p() && e('story.change');
 r($aiTest->getPromptTargetFormTest($pagePrompt))         && p() && e('story.create');
 r($aiTest->getPromptTargetFormTest($emptyPurposePrompt)) && p() && e('story.create');
 r($aiTest->getPromptTargetFormTest($emptyPrompt))        && p() && e('');
+r($aiTest->getPromptTargetFormTest($defaultPrompt))      && p() && e('bug.edit');

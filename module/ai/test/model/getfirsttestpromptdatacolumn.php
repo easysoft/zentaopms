@@ -10,6 +10,8 @@ cid=0
 - 返回第一个存在测试数据的字段 @title
 - 跳过不存在字段后返回下一个字段 @pri
 - 无匹配字段时返回空字符串 @
+- 空字段列表返回空字符串 @
+- 分组不存在时返回空字符串 @
 
 */
 
@@ -24,3 +26,5 @@ $testData = array('stories' => array('title' => array('需求一'), 'pri' => arr
 r($aiTest->getFirstTestPromptDataColumnTest('stories', array('title', 'pri'), $testData)) && p() && e('title');
 r($aiTest->getFirstTestPromptDataColumnTest('stories', array('ghost', 'pri'), $testData)) && p() && e('pri');
 r($aiTest->getFirstTestPromptDataColumnTest('stories', array('ghost'), $testData))        && p() && e('');
+r($aiTest->getFirstTestPromptDataColumnTest('stories', array(), $testData))               && p() && e('');
+r($aiTest->getFirstTestPromptDataColumnTest('tasks', array('name'), $testData))           && p() && e('');

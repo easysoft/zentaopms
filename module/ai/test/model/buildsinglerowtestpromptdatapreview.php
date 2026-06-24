@@ -10,6 +10,8 @@ cid=0
 - 普通字段生成标题和值 @1
 - task.story 字段被跳过 @0
 - 缺少字段时返回空字符串 @1
+- 普通字段生成第二个标题和值 @1
+- 分组不存在时返回空字符串 @1
 
 */
 
@@ -25,7 +27,10 @@ $testData  = array('story' => array('title' => '需求标题', 'spec' => '需求
 $storyPreview = $aiTest->buildSingleRowTestPromptDataPreviewTest('story', array('title', 'spec'), $titleData, $testData);
 $taskPreview  = $aiTest->buildSingleRowTestPromptDataPreviewTest('task', array('story'), $titleData, $testData);
 $emptyPreview = $aiTest->buildSingleRowTestPromptDataPreviewTest('story', array('ghost'), $titleData, $testData);
+$ghostPreview = $aiTest->buildSingleRowTestPromptDataPreviewTest('ghost', array('name'), $titleData, $testData);
 
 r(strpos($storyPreview, "##### 标题：\n需求标题") !== false) && p() && e('1');
 r(strpos($taskPreview, '相关需求') === false)                 && p() && e('1');
 r($emptyPreview === '')                                      && p() && e('1');
+r(strpos($storyPreview, "##### 描述：\n需求描述") !== false) && p() && e('1');
+r($ghostPreview === '')                                      && p() && e('1');

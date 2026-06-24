@@ -11,6 +11,7 @@ cid=0
 - 普通多行数据包含第一行 @1
 - release bugs 使用纯文本列表 @1
 - 缺少 common 时返回空字符串 @1
+- 普通多行数据包含第二行 @1
 
 */
 
@@ -39,3 +40,4 @@ r(strpos($preview, '##### 需求：') !== false)          && p() && e('1');
 r(strpos($preview, '| 需求一 | 5 |') !== false)        && p() && e('1');
 r(strpos($releasePreview, "Bug一、Bug二\n") !== false) && p() && e('1');
 r($emptyPreview === '')                                && p() && e('1');
+r(strpos($preview, '| 需求二 | 3 |') !== false)        && p() && e('1');
