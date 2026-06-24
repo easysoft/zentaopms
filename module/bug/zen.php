@@ -2232,8 +2232,8 @@ class bugZen extends bug
             if(!$task->deleted)
             {
                 $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
-                $canceledURL  = $this->createLink('bug', 'view', "bugID={$bug->id}");
-                return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $bug->toTask), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                $confirmTips  = sprintf($this->lang->bug->notice->remindTask, $bug->toTask);
+                return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$confirmTips}'}).then((res) => {if(res) zui.Modal.open({url:'{$confirmedURL}', size: 'lg'})});", 'load' => true));
             }
         }
 
