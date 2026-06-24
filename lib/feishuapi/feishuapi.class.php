@@ -34,13 +34,21 @@ class feishuapi
      */
     public function getToken()
     {
+        $hookKey = 'feishu' . md5("{$this->appId}{$this->appSecret}");
+
+        global $config;
+        if(!isset($config->feishuTokens)) $config->feishuTokens = array();
+        if(isset($config->feishuTokens[$hookKey])) list($this->token, $this->expires) = $config->feishuTokens[$hookKey];
+
         if($this->token and (time() - $this->expires) >= 0) return $this->token;
 
         $response = $this->queryAPI($this->apiUrl . "auth/v3/tenant_access_token/internal/", json_encode(array('app_id' => $this->appId, 'app_secret' => $this->appSecret)));
         if($this->isError()) return false;
 
-        $this->token   = $response->tenant_access_token;
-        $this->expires = time() + $response->expire;
+        $this->token   = zget($response, 'tenant_access_token', '');
+        $this->expires = time() + zget($response, 'expires_in', 0);
+
+        $config->feishuTokens[$hookKey] = array($this->token, $this->expires);
         return $this->token;
     }
 

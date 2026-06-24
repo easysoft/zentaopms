@@ -17,6 +17,7 @@ class wechatapi
      * @param  string $agentId
      * @param  string $apiUrl
      * @access public
+     * @return void
      */
     public function __construct($appKey, $appSecret, $agentId, $apiUrl = '')
     {
@@ -36,13 +37,21 @@ class wechatapi
      */
     public function getToken()
     {
+        $wechatKey = 'wechat' . md5("{$this->appKey}{$this->appSecret}");
+
+        global $config;
+        if(!isset($config->wechatTokens)) $config->wechatTokens = array();
+        if(isset($config->wechatTokens[$wechatKey])) list($this->token, $this->expires) = $config->wechatTokens[$wechatKey];
+
         if($this->token and (time() - $this->expires) >= 0) return $this->token;
 
         $response = $this->queryAPI($this->apiUrl . "gettoken?corpid={$this->appKey}&corpsecret={$this->appSecret}");
         if($this->isError()) return false;
 
-        $this->token   = $response->access_token;
-        $this->expires = time() + $response->expires_in;
+        $this->token   = zget($response, 'access_token', '');
+        $this->expires = time() + zget($response, 'expires_in', 0);
+
+        $config->wechatTokens[$wechatKey] = array($this->token, $this->expires);
         return $this->token;
     }
 
