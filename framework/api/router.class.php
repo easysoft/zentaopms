@@ -1428,6 +1428,7 @@ class api extends router
         $requestBody = file_get_contents("php://input");
         $postData = json_decode($requestBody, true);
         $_POST    = is_array($postData) ? $postData : array();
+        $this->normalizeBatchPostData();
 
         /* Avoid empty post body. */
         if(in_array($this->control->moduleName, ['feedback', 'ticket']))
@@ -1446,6 +1447,7 @@ class api extends router
         {
             if(isset($this->params[$key])) $this->params[$key] = $value;
         }
+        $this->normalizeRouteParamsAfterPostMerge();
 
         $this->checkAccess();
 
@@ -1508,6 +1510,96 @@ class api extends router
         foreach($this->params as $key => $value)
         {
             if(!isset($_POST[$key])) $_POST[$key] = $value;
+        }
+    }
+
+    /**
+     * 将按行组织的批量 JSON 请求体标准化为按列组织的表单数组。
+     *
+     * @access protected
+     * @return void
+     */
+    protected function normalizeBatchPostData(): void
+    {
+        if(empty($_POST) || !array_is_list($_POST)) return;
+
+        $formConfig = $this->getCurrentFormConfig();
+        if(empty($formConfig) || !is_array($formConfig)) return;
+
+        $baseFields = array_filter($formConfig, function($config)
+        {
+            return is_array($config) && !empty($config['base']);
+        });
+        if(empty($baseFields)) return;
+
+        $_POST = $this->transposeBatchPostRows($_POST);
+    }
+
+    /**
+     * 将按行组织的批量 JSON 数据转置为按字段组织的列式数组。
+     *
+     * @param  array $rows
+     * @access protected
+     * @return array
+     */
+    protected function transposeBatchPostRows(array $rows): array
+    {
+        $fieldNames = array();
+        foreach($rows as $row)
+        {
+            if(is_object($row)) $row = (array)$row;
+            if(!is_array($row)) return $rows;
+            $fieldNames = array_unique(array_merge($fieldNames, array_keys($row)));
+        }
+
+        $columns = array();
+        foreach($rows as $rowIndex => $row)
+        {
+            $row = (array)$row;
+            foreach($fieldNames as $field)
+            {
+                $columns[$field][$rowIndex] = array_key_exists($field, $row) ? $row[$field] : null;
+            }
+        }
+
+        return $columns;
+    }
+
+    /**
+     * 按当前模块和方法获取表单配置，方法名匹配时忽略大小写。
+     *
+     * @access protected
+     * @return array|null
+     */
+    protected function getCurrentFormConfig(): ?array
+    {
+        $moduleConfig = zget($this->config, $this->moduleName, null);
+        if(empty($moduleConfig) || empty($moduleConfig->form) || !is_object($moduleConfig->form)) return null;
+
+        if(isset($moduleConfig->form->{$this->methodName})) return $moduleConfig->form->{$this->methodName};
+
+        foreach(get_object_vars($moduleConfig->form) as $methodName => $formConfig)
+        {
+            if(strtolower($methodName) !== $this->methodName) continue;
+            return $formConfig;
+        }
+
+        return null;
+    }
+
+    /**
+     * 在 POST 数据覆盖路由参数后，按目标方法签名重新标准化当前参数类型。
+     *
+     * @access protected
+     * @return void
+     */
+    protected function normalizeRouteParamsAfterPostMerge(): void
+    {
+        $defaultParams = $this->resolveDefaultParams();
+        foreach($defaultParams as $key => $defaultItem)
+        {
+            if(!array_key_exists($key, $this->params)) continue;
+            $this->params[$key] = helper::convertType($this->params[$key], $defaultItem['type']);
         }
     }
 
