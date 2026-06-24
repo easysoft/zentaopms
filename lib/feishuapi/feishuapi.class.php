@@ -46,7 +46,7 @@ class feishuapi
         if($this->isError()) return false;
 
         $this->token   = zget($response, 'tenant_access_token', '');
-        $this->expires = time() + zget($response, 'expires_in', 0);
+        $this->expires = time() + zget($response, 'expires', 0);
 
         $config->feishuTokens[$hookKey] = array($this->token, $this->expires);
         return $this->token;
