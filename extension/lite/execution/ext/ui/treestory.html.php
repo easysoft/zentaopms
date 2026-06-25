@@ -33,6 +33,53 @@ if(count($reviewedBy) > 1)
     foreach($reviewedBy as $account) $reviewed .= ' ' . zget($users, trim($account));
 }
 
+$moduleTitle = '';
+$moduleItems = array();
+if(empty($modulePath))
+{
+    $moduleTitle .= '/';
+    $moduleItems[] = '/';
+}
+else
+{
+    foreach($modulePath as $key => $module)
+    {
+        $moduleTitle .= $module->name;
+        if(!common::hasPriv('projectstory', 'story'))
+        {
+            $moduleItems[] = $module->name;
+            continue;
+        }
+
+        $arrow = '';
+        if(isset($modulePath[$key + 1]))
+        {
+            $moduleTitle .= '/';
+            $arrow        = $lang->arrow;
+        }
+        $moduleItems[] = a
+        (
+            setClass('text-primary'),
+            set::href(createLink('projectstory', 'story', "projectID={$this->session->project}&productID={$product->id}&branch=&browseType=byModule&param={$module->id}")),
+            html($module->name . $arrow)
+        );
+    }
+}
+
+$mailtoList = array();
+$mailto     = explode(',', $story->mailto);
+if(empty($mailto))
+{
+    $mailtoList[] = $lang->noData;
+}
+else
+{
+    foreach($mailto as $account)
+    {
+        $mailtoList[] = span(setClass('mr-1'), zget($users, trim($account)));
+    }
+}
+
 div
 (
     setClass('section-list', 'canvas', 'pt-4', 'pb-6', 'px-4', 'mb-4'),
