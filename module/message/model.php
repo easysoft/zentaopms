@@ -211,6 +211,8 @@ class messageModel extends model
         $toList = $this->getToList($object, $objectType, $actionID);
         if(empty($toList) || $toList == $actor) return false;
 
+        if(in_array($objectType, array('issue', 'risk', 'opportunity')) && !empty($object->lib)) return false; // 资产库中的数据不发送通知
+
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
 
@@ -230,21 +232,6 @@ class messageModel extends model
             if($objectType == 'kanbancard') $moduleName = 'kanban';
             if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
             if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
-            if($objectType == 'issue' && !empty($object->lib))
-            {
-                $moduleName = 'assetlib';
-                $methodNmae = 'issueView';
-            }
-            elseif($objectType == 'risk' && !empty($object->lib))
-            {
-                $moduleName = 'assetlib';
-                $methodNmae = 'riskView';
-            }
-            elseif($objectType == 'opportunity' && !empty($object->lib))
-            {
-                $moduleName = 'assetlib';
-                $methodNmae = 'opportunityView';
-            }
 
             $space  = common::checkNotCN() ? ' ' : '';
             $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
