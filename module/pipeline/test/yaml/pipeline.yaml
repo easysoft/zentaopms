@@ -1,26 +1,26 @@
 title: zt_pipeline
-author: Zeng gang
+author: Claude
 version: "1.0"
 fields:
   - field: id
-    range: 1-5
-  - field: type
-    range: gitlab,sonarqube,jenkins,gitea,gogs
+    range: 1-10
   - field: name
-    range: GitLab服务器,SonarQube服务器,Jenkins服务器,Gitea服务器,Gogs服务器
-  - field: url
-    range: "[https://gitlabdev.qc.oop.cc],[http://10.0.7.242:9990],[https://jenkinsdev.qc.oop.cc],[https://giteadev.qc.oop.cc],[https://gogsdev.qc.oop.cc]"
-  - field: account
-    range: "[],[admin],[jenkins],[]{2}"
-  - field: password
-    range: "[],[U2h3N0NldHlsc1ozYkVTVjBreXM=],[MXJZN1JWREEyQlZrak81ME9qTUo=],[]{2}"
-  - field: token
-    range: "glpat-b8Sa1pM9k9ygxMZYPN6w,YWRtaW46U2h3N0NldHlsc1ozYkVTVjBreXM=,11ae7f2332f0d84501b55adfa94b59e3ac,6149a6013047301b116389d50db5cbf599772082,0c37d25758930f24e955dd0307bd37e975e3b457"
-  - field: private
-    range: efe54b3725150d55d8d896622c34b18f,228b25587479f2fc7570428e8bcbabdc,598825e90a8ac1ce5c48306c53dc1609,22e2f01322e89a725ba98d77f0feec85,4fabcbd31314365506ebc56c0c83c1ec
+    range: 流水线1,流水线2,流水线3,流水线4,流水线5,流水线6,流水线7,流水线8,流水线9,流水线10
+  - field: engine
+    range: gitfox,gitlab,jenkins,gitfox,gitlab,jenkins,gitfox,gitlab,jenkins,gitfox
+  - field: providerID
+    range: 0{10}
+  - field: scope
+    range: repo,repo,space,space,repo,space,repo,space,repo,space
+  - field: spaceID
+    range: 1{5},2{5}
+  - field: repoID
+    range: 1,2,0,0,3,0,4,0,5,0
+  - field: status
+    range: active{10}
   - field: createdBy
     range: admin
   - field: createdDate
-    range: "[2022-12-11 15:37:37]"
+    range: "[(M)-(w)]"
   - field: deleted
     range: 0

@@ -23,7 +23,7 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object|false
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`trigger`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
@@ -31,7 +31,7 @@ class pipelineModel extends model
         if(empty($pipeline)) return false;
 
         $pipeline->variables = empty($pipeline->variables) ? array() : json_decode($pipeline->variables);
-        $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->trigger);
+        $pipeline->triggers  = $this->parseTriggers($pipeline->cron, $pipeline->event);
 
         $pipeline = $this->loadModel('file')->replaceImgURL($pipeline, 'desc');
 
@@ -54,9 +54,10 @@ class pipelineModel extends model
      */
     public function getList(int $spaceID = 0, int $repoID = 0, $type = '', string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables')->from(TABLE_PIPELINE)->alias('t1')
+        $pipelines = $this->dao->select('t1.*, t2.spaceID AS space, t2.name AS repoName, t3.variables as variables, t4.name AS providerName')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID=t2.id')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t3')->on('t1.id=t3.pipelineID')
+            ->leftJoin(TABLE_PROVIDER)->alias('t4')->on('t1.providerID=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.name')->ne('_codescan')
             ->beginIF($repoID)->andWhere('t1.repoID')->eq($repoID)->fi()
@@ -71,15 +72,20 @@ class pipelineModel extends model
         if(empty($pipelines)) return array();
 
         $executions = $this->getExecutionByPipeline(array_keys($pipelines), true);
-        if(empty($executions)) return $pipelines;
 
         foreach($pipelines as $pipeline)
         {
-            $execution = zget($executions, $pipeline->id, array());
-            $pipeline->lastExecStatus = zget($execution, 'status', '');
-            $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
-            $pipeline->triggerType    = zget($execution, 'trigger', '');
-            $pipeline->lastExecDate   = zget($execution, 'finished', '');
+            if(!empty($executions))
+            {
+                $execution = zget($executions, $pipeline->id, array());
+                $pipeline->lastExecStatus = zget($execution, 'status', '');
+                $pipeline->triggerPerson  = zget($execution, 'createdBy', '');
+                $pipeline->triggerType    = zget($execution, 'trigger', '');
+                $pipeline->lastExecDate   = zget($execution, 'finishedDate', '');
+            }
+
+            /* 非 gitfox 引擎的流水线状态均为激活。 */
+            if($pipeline->engine != 'gitfox') $pipeline->status = 'active';
         }
 
         return $pipelines;
@@ -101,7 +107,7 @@ class pipelineModel extends model
      */
     public function getExecutionList(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $pipelineQuery = '', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.`type`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
+        return $this->dao->select('t1.*, t2.`scope`, t2.`spaceID` AS space, t2.`repoID` AS repo, t2.`name` AS pipelineName')->from(TABLE_PIPELINEEXEC)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
             ->where('1=1')
             ->beginIF($repoID)->andWhere('t2.repoID')->eq($repoID)->fi()
@@ -314,7 +320,7 @@ class pipelineModel extends model
             {
                 $copyTrigger = $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('pipelineID')->eq($copyPipelineID)->fetch();
 
-                $content->trigger = $copyTrigger->trigger;
+                $content->event = $copyTrigger->event;
                 $content->cron    = $copyTrigger->cron;
             }
             unset($content->data, $content->variables);
@@ -907,7 +913,7 @@ class pipelineModel extends model
      * @param int $seconds 秒数（必须为非负整数）
      * @return string 格式化后的时间字符串
      */
-    function formatSeconds($seconds): string
+    public function formatSeconds($seconds): string
     {
         // 确保入参是数字且非负
         $seconds = max(0, (int)$seconds);

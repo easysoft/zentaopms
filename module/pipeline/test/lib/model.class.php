@@ -26,25 +26,51 @@ class pipelineModelTest extends baseTest
     }
 
     /**
-     * 获取服务器列表。
+     * 获取流水线列表。
      * Get pipeline list.
      *
-     * @param  string $type       jenkins|gitlab
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type        repo|space
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function getListTest(string $type = 'jenkins', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
+    public function getListTest(int $spaceID = 0, int $repoID = 0, string $type = '', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
     {
         $this->instance->app->loadClass('pager', true);
 
         $pager        = new pager(0, $recPerPage, $pageID);
-        $pipelineList = $this->instance->getList($type, $orderBy, $pager);
+        $pipelineList = $this->instance->getList($spaceID, $repoID, $type, '', $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
         return $pipelineList;
+    }
+
+    /**
+     * Get pipeline execution list.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function getExecutionListTest(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
+    {
+        $this->instance->app->loadClass('pager', true);
+
+        $pager         = new pager(0, $recPerPage, $pageID);
+        $executionList = $this->instance->getExecutionList($spaceID, $repoID, $type, $pipelineID, '', $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+        return $executionList;
     }
 
     /**

@@ -230,9 +230,9 @@ class navbar extends wg
                 if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
             }
             if(empty($types)) return;
-            $condition .= ' AND `type` in (' . trim($types, ',') . ')';
+            $condition .= ' AND `scope` in (' . trim($types, ',') . ')';
         }
-        $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        $pipelineList = $app->dbh->query("SELECT scope,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by scope")->fetchAll();
         if(empty($pipelineList)) return;
 
         $dropItems = array();
@@ -240,7 +240,7 @@ class navbar extends wg
         {
             $dropItems[] = array(
                 'url' => $pipeline->url,
-                'text' => "[{$pipeline->type}] {$pipeline->name}",
+                'text' => "[{$pipeline->scope}] {$pipeline->name}",
                 'hint' => $pipeline->name,
                 'class' => 'text-ellipsis',
                 'target' => '_blank'

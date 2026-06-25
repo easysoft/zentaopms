@@ -19,13 +19,13 @@ if($repoID)
     dropmenu(set::objectID($repoID), set::text($repo->name), set::tab('repo'));
     unset($lang->pipeline->featureBar['execution']);
     unset($config->pipeline->execution->dtable->fieldList['repo']);
-    unset($config->pipeline->execution->dtable->fieldList['type']);
+    unset($config->pipeline->execution->dtable->fieldList['scope']);
 }
 
 if($type == 'space')
 {
     unset($config->pipeline->execution->dtable->fieldList['ref']);
-    unset($config->pipeline->execution->dtable->fieldList['type']);
+    unset($config->pipeline->execution->dtable->fieldList['scope']);
 }
 
 featureBar
