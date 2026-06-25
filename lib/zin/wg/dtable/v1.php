@@ -348,7 +348,10 @@ class dtable extends wg
 
         if(!empty($footToolbar))
         {
+            $footToolbar['btnProps'] = array('className' => 'secondary', 'size' => 'sm');
+
             $this->setProp('checkable', true);
+            $this->setProp('footer', array('checkbox', 'toolbar', 'checkedInfo', 'flex', 'pager'));
             $this->setProp('footToolbar', $footToolbar);
         }
     }
