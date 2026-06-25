@@ -11,8 +11,6 @@ declare(strict_types=1);
 */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 data('storyType', $type);
 data('gradeRule', $gradeRule);
 if($app->tab == 'product') data('activeMenuID', $type);

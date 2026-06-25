@@ -77,6 +77,8 @@ class detailBody extends wg
         $isForm       = $this->prop('isForm');
         $hasExtraMain = $this->prop('hasExtraMain');
         $extraMain    = $hasExtraMain ? $this->buildExtraMain() : null;
+        $moduleName   = $app->rawModule;
+        $methodName   = $app->rawMethod;
 
         if(!$isForm)
         {
@@ -123,6 +125,11 @@ class detailBody extends wg
                     ),
                     $side
                 )
+            ),
+            aiFormInject
+            (
+                set::module($moduleName),
+                set::method($methodName)
             ),
             html($app->control->appendExtendCssAndJS('', '', data($app->getModuleName())))
         );

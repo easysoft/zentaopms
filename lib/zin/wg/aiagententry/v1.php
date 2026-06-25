@@ -27,8 +27,15 @@ class aiAgentEntry extends wg
     public static function getPageJS(): ?string
     {
         global $app;
-        $jsFile = $app->getAppRoot() . 'www/js/zui3/ai.js';
-        return file_exists($jsFile) ? file_get_contents($jsFile) : null;
+
+        $scripts  = array();
+        $commonJS = $app->getAppRoot() . 'www/js/zui3/ai.js';
+        $entryJS  = __DIR__ . DS . 'js' . DS . 'v1.js';
+
+        if(file_exists($commonJS)) $scripts[] = file_get_contents($commonJS);
+        if(file_exists($entryJS))  $scripts[] = file_get_contents($entryJS);
+
+        return empty($scripts) ? null : implode("\n", $scripts);
     }
 
     protected function build(): ?node
