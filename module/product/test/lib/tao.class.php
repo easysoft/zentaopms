@@ -718,7 +718,7 @@ class productTaoTest extends baseTest
      */
     public function getExecutionPairsByProductTest(int $productID, int $projectID = 0, string $mode = ''): array
     {
-        $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, $projectID, $mode);
+        $objects = $this->objectModel->getExecutionPairsByProduct($productID, '', $projectID, $mode);
 
         if(dao::isError()) return dao::getError();
         return $objects;

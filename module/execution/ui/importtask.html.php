@@ -55,8 +55,12 @@ toolbar
     )))
 );
 
-$config->task->dtable->importTask->fieldList['execution']['map'] = $executions;
-if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($config->task->dtable->importTask->fieldList['story']);
+$this->loadModel('task');
+$cols = $this->loadModel('datatable')->getSetting('execution', 'task');
+
+if($execution->lifetime == 'ops' || in_array($execution->attribute, array('request', 'review'))) unset($cols['story']);
+if($execution->type != 'stage') unset($cols['design']);
+if(isset($cols['execution'])) $cols['execution']['map'] = $executions;
 
 $footToolbar['items'][] = array(
     'text'      => $lang->execution->importTask,
@@ -73,18 +77,32 @@ if(!isInModal())
     );
 }
 
+$lang->task->statusList['changed'] = $lang->task->storyChange;
+$tableData = initTableData($tasks2Imported, $cols, $this->task);
+foreach($tableData as $task)
+{
+    if(!isset($task->rawStatus)) $task->rawStatus = $task->status;
+    $task->status   = $this->processStatus('task', $task);
+    $task->rawStory = $task->story;
+    $task->story    = $task->storyTitle;
+    if(helper::isZeroDate($task->deadline))   $task->deadline   = '';
+    if(helper::isZeroDate($task->estStarted)) $task->estStarted = '';
+}
+
 jsVar('executionID', $execution->id);
 jsVar('childrenAB', $lang->task->childrenAB);
 jsVar('parentAB', $lang->task->parentAB);
-if($viewType == 'tiled') $config->task->dtable->importTask->fieldList['name']['nestedToggle'] = false;
-$cols = array_values($config->task->dtable->importTask->fieldList);
+if($viewType == 'tiled') $cols['name']['nestedToggle'] = false;
+unset($cols['actions']);
 dtable
 (
     set::userMap($memberPairs),
     set::cols($cols),
-    set::data($tasks2Imported),
+    set::data($tableData),
     set::showToolbarOnChecked(false),
     set::orderBy($orderBy),
+    set::customCols(true),
+    set::methodName('task'),
     set::sortLink(createLink('execution', 'importTask', "executionID={$execution->id}&fromExecution={$fromExecution}&orderBy={name}_{sortType}&recPerPage={$pager->recPerPage}")),
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.renderCell')),
