@@ -1546,7 +1546,7 @@ class storyTao extends storyModel
      */
     protected function getDefaultStages(string $planIdList, array $linkedBranches): array
     {
-        if(empty($planIdList) && empty($linkedBranches)) return array();
+        if(empty($planIdList) && empty($linkedBranches)) return array('wait');
 
         $stages = array();
         if($planIdList)
