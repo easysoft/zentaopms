@@ -11,6 +11,7 @@ $config->datatable->moduleAlias['execution-testcase'] = 'testcase';
 
 $config->datatable->workflowLayoutMap['build-build']           = array('module' => 'build', 'method' => 'browse'); // 版本加载build-browse的layout配置。
 $config->datatable->workflowLayoutMap['task-task']             = array('module' => 'task', 'method' => 'browse'); // 任务加载task-browse的layout配置。
+$config->datatable->workflowLayoutMap['task-importTask']       = array('module' => 'task', 'method' => 'browse'); // 转入任务加载task-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-task']               = array('module' => 'task', 'method' => 'browse'); // 地盘任务加载task-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-story']              = array('module' => 'story', 'method' => 'browse'); // 地盘需求加载story-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-requirement']        = array('module' => 'requirement', 'method' => 'browse'); // 地盘用户需求加载requirement-browse的layout配置。
