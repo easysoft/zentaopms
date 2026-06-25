@@ -5237,6 +5237,7 @@ class executionModel extends model
         $executionData->openedDate  = helper::now();
         $executionData->parent      = $projectID;
         $executionData->isTpl       = $project->isTpl;
+        $executionData->schedule    = $project->schedule;
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
@@ -5296,6 +5297,7 @@ class executionModel extends model
         $postData->products  = '';
         $postData->code      = empty($project->code) ? $project->name : $project->code;
         $postData->uid       = '';
+        $postData->schedule  = $project->schedule;
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
