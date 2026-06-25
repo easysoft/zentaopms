@@ -97,7 +97,7 @@ jsVar('feedbackSource', $config->story->feedbackSource);
 $pinnedItems = !empty($this->config->{$type}->custom->createFields) ? $this->config->{$type}->custom->createFields : array();
 
 $createFields->autoLoad('product', array('items' => 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,' . (!empty($lang->{$type}->flowExtraFields) ? implode(',', $lang->{$type}->flowExtraFields) : ''), 'updateOrders' => true));
-if($type != 'story') $createFields->autoLoad('branch', 'module');
+if($type != 'story') $createFields->autoLoad('branch', 'module,plan');
 
 formGridPanel
 (

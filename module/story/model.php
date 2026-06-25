@@ -3620,6 +3620,7 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
+        if($storyType != 'story') $this->app->loadLang($storyType);
         foreach($datas as $status => $data) if(isset($this->lang->{$storyType}->statusList[$status])) $data->name = $this->lang->{$storyType}->statusList[$status];
         return $datas;
     }
