@@ -1005,8 +1005,8 @@ class projectTao extends projectModel
     {
         if(!in_array($action, array('start', 'suspend', 'activate', 'close'))) return false;
 
-        $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch();
-        if(!$execution) return false;
+        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
@@ -1014,8 +1014,8 @@ class projectTao extends projectModel
         $postData->uid            = '';
         $postData->comment        = '';
         $postData->status         = $project->status;
-        $postData->begin          = $execution->begin;
-        $postData->end            = $execution->end;
+        $postData->begin          = $project->begin;
+        $postData->end            = $project->end;
         $postData->realEnd        = null;
         $postData->closedBy       = '';
         $postData->closedDate     = null;
@@ -1029,7 +1029,7 @@ class projectTao extends projectModel
             $postData->closedBy   = $project->closedBy;
             $postData->closedDate = $project->closedDate;
         }
-        return $this->loadModel('execution')->$action($execution->id, $postData);
+        return $this->loadModel('execution')->$action($executionID, $postData);
     }
 
     /**
