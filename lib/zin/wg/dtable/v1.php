@@ -342,7 +342,11 @@ class dtable extends wg
             {
                 $groupID = $app->control->loadModel('workflowgroup')->getGroupIDByData($module, current($this->prop('data')));
                 $flowFooterBar = $app->control->loadModel('flow')->buildDtableFootToolbar($module, $groupID);
-                if($flowFooterBar) $footToolbar['items'][] = current($flowFooterBar);
+                if($flowFooterBar)
+                {
+                    $this->setProp('footer', array('checkbox', 'toolbar', 'checkedInfo', 'flex', 'pager'));
+                    $footToolbar['items'][] = current($flowFooterBar);
+                }
             }
         }
 
@@ -351,7 +355,6 @@ class dtable extends wg
             $footToolbar['btnProps'] = array('className' => 'secondary', 'size' => 'sm');
 
             $this->setProp('checkable', true);
-            $this->setProp('footer', array('checkbox', 'toolbar', 'checkedInfo', 'flex', 'pager'));
             $this->setProp('footToolbar', $footToolbar);
         }
     }
