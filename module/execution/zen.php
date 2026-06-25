@@ -1587,6 +1587,7 @@ class executionZen extends execution
      */
     protected function getLink(string $module, string $method, string $type = ''): string
     {
+        $rawModule = $module;
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport', 'doc');
         if(in_array($module, array('task', 'testcase', 'story', 'testtask')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report', 'batchrun', 'groupcase'))) $method = $module;
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
@@ -1596,8 +1597,10 @@ class executionZen extends execution
 
         if($this->config->edition != 'open')
         {
-            $flow = $this->loadModel('workflow')->getByModule($module);
+            $flow    = $this->loadModel('workflow')->getByModule($module);
+            $actions = $this->dao->select('action')->from(TABLE_WORKFLOWACTION)->where('buildin')->eq('0')->andWhere('module')->eq($rawModule)->fetchPairs();
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
+            if(in_array($rawModule, $executionModules) && in_array($method, $actions)) $method = $rawModule;
         }
 
         $link = helper::createLink($module, $method, "executionID=%s");

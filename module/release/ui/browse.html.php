@@ -153,7 +153,7 @@ dtable
     set::checkable($isFromDoc || $isFromAI),
     set::customCols(!$isFromDoc && !$isFromAI),
     set::checkInfo(jsRaw("function(checkedIDList){return {html: '{$pageSummary}'}}")),
-    set::footToolbar($footToolbar),
+    ($isFromDoc || $isFromAI) ? set::footToolbar($footToolbar) : set::footer([jsRaw("function(){return {html: '{$pageSummary}'};}"), 'flex', 'pager']),
     (!$isFromDoc && !$isFromAI) ? null : set::colResize(true),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),

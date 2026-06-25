@@ -13486,7 +13486,11 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '机会影响程度',     'opportunityImpact',         '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'opportunityImpact',         '', '', ''),
 ('lang',        '机会发生概率',     'opportunityChance',         '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'opportunityChance',         '', '', ''),
 ('lang',        '机会优先级',       'opportunityPri',            '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'opportunityPri',            '', '', ''),
-('lang',        '机会取消原因',     'opportunityCancelReason',   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'opportunityCancelReason',   '', '', '');
+('lang',        '机会取消原因',     'opportunityCancelReason',   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'opportunityCancelReason',   '', '', ''),
+('sql',         '需求池',           'demandPool',                '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_demandpool WHERE `deleted`=\'0\'', 'view_datasource_119', 'id', 'name'),
+('sql',         '需求池需求',       'demand',                    '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_demand WHERE `deleted`=\'0\'',    'view_datasource_120', 'id', 'title'),
+('sql',         '路标',             'roadmap',                   '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_roadmap WHERE `deleted`=\'0\'',    'view_datasource_121', 'id', 'name'),
+('sql',         '分发需求',         'demandStory',               '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_story WHERE `deleted`=\'0\'',      'view_datasource_122', 'id', 'title');
 
 DROP VIEW IF EXISTS `view_datasource_2`;
 DROP VIEW IF EXISTS `view_datasource_3`;
@@ -13499,20 +13503,28 @@ DROP VIEW IF EXISTS `view_datasource_12`;
 DROP VIEW IF EXISTS `view_datasource_41`;
 DROP VIEW IF EXISTS `view_datasource_54`;
 DROP VIEW IF EXISTS `view_datasource_55`;
+DROP VIEW IF EXISTS `view_datasource_119`;
+DROP VIEW IF EXISTS `view_datasource_120`;
+DROP VIEW IF EXISTS `view_datasource_121`;
+DROP VIEW IF EXISTS `view_datasource_122`;
 DROP VIEW IF EXISTS `ztv_projectnotpl`;
 DROP VIEW IF EXISTS `ztv_tasknotpl`;
 
-CREATE VIEW `view_datasource_2`  AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'epic';
-CREATE VIEW `view_datasource_3`  AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'requirement';
-CREATE VIEW `view_datasource_4`  AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'story';
-CREATE VIEW `view_datasource_5`  AS SELECT `id`,`name`  FROM `zt_task`        WHERE `deleted` = '0' AND vision = 'rnd';
-CREATE VIEW `view_datasource_6`  AS SELECT `id`,`title` FROM `zt_bug`         WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_10` AS SELECT `id`,`name`  FROM `zt_build`       WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_11` AS SELECT `id`,`name`  FROM `zt_module`      WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_12` AS SELECT `id`,`title` FROM `zt_productplan` WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_41` AS SELECT `id`,`title` FROM `zt_case`        WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_54` AS SELECT `id`,`name`  FROM `zt_task`        WHERE `deleted` = '0' AND vision = 'lite';
-CREATE VIEW `view_datasource_55` AS SELECT `id`,`title` FROM `zt_feedback`    WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_2`   AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'epic';
+CREATE VIEW `view_datasource_3`   AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'requirement';
+CREATE VIEW `view_datasource_4`   AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'story';
+CREATE VIEW `view_datasource_5`   AS SELECT `id`,`name`  FROM `zt_task`        WHERE `deleted` = '0' AND vision = 'rnd';
+CREATE VIEW `view_datasource_6`   AS SELECT `id`,`title` FROM `zt_bug`         WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_10`  AS SELECT `id`,`name`  FROM `zt_build`       WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_11`  AS SELECT `id`,`name`  FROM `zt_module`      WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_12`  AS SELECT `id`,`title` FROM `zt_productplan` WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_41`  AS SELECT `id`,`title` FROM `zt_case`        WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_54`  AS SELECT `id`,`name`  FROM `zt_task`        WHERE `deleted` = '0' AND vision = 'lite';
+CREATE VIEW `view_datasource_55`  AS SELECT `id`,`title` FROM `zt_feedback`    WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_119` AS SELECT `id`,`name`  FROM `zt_demandpool`  WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_120` AS SELECT `id`,`title` FROM `zt_demand`      WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_121` AS SELECT `id`,`name`  FROM `zt_roadmap`     WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_122` AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0';
 CREATE VIEW `ztv_projectnotpl`   AS SELECT *            FROM `zt_project`     WHERE `deleted` = '0' AND `isTpl` = 0;
 CREATE VIEW `ztv_tasknotpl`      AS SELECT *            FROM `zt_task`        WHERE `deleted` = '0' AND `isTpl` = 0;
 
