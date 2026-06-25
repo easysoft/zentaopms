@@ -477,12 +477,13 @@ class control extends baseControl
      * @param  string $moduleName
      * @param  string $methodName
      * @access public
-     * @return void
+     * @return string|array
      */
     public function printExtendFields(object|string $object, string $type, string $extras = '', bool $print = true, string $moduleName = '', string $methodName = '')
     {
-        if($this->config->edition == 'open') return false;
-        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return false;
+        $content = $type == 'items' ? array() : '';
+        if($this->config->edition == 'open') return $content;
+        if(!empty($this->app->installing) || !empty($this->app->upgrading)) return $content;
 
         $moduleName = $moduleName ?: $this->app->getModuleName();
         $methodName = $methodName ?: $this->app->getMethodName();
@@ -491,25 +492,24 @@ class control extends baseControl
         parse_str($extras, $result);
         if($type == 'items')
         {
-            $items = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'), 'items');
-            if(!is_array($items)) $items = array();
-            return $items;
+            $content = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'), 'items');
+            if(!is_array($content)) $content = array();
         }
         elseif($type == 'html')
         {
-            $html  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
-            $html .= $this->appendExtendCssAndJS($moduleName, $methodName, $object);
+            $content  = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'));
+            $content .= $this->appendExtendCssAndJS($moduleName, $methodName, $object);
         }
         else
         {
             ob_start();
             $this->flow->printFields($moduleName, $methodName, $object, $type, $extras);
-            $html = ob_get_contents();
+            $content = ob_get_contents();
             ob_end_clean();
         }
 
-        if(!$print) return $html;
-        echo $html;
+        if(!$print) return $content;
+        echo $content;
     }
 
     /**
