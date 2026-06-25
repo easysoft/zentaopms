@@ -2446,7 +2446,11 @@ class doc extends control
         $data   = array();
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
         $libIds = array_keys($libs);
-        foreach($libs as $lib) $lib->order = (int)$lib->order;
+        foreach($libs as $lib)
+        {
+            $lib->order = (int)$lib->order;
+            if($spaceID && empty($lib->space)) $lib->space = $spaceID;
+        }
 
         if($noPicks || strpos($picks, ',space,') !== false)  $data['spaces']  = $spaces;
         if($noPicks || strpos($picks, ',lib,') !== false)    $data['libs']    = array_values($libs);
