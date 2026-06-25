@@ -1735,7 +1735,7 @@ class projectModel extends model
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);
         if(!$daoSuccess) return false;
 
-        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+        if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'activate');
 
         /* Update start and end date of tasks in this project. */
         if($project->readjustTask)
