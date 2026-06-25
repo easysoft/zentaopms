@@ -2876,6 +2876,7 @@ class userModel extends model
      */
     public function saveUserTemplate(object $template): bool
     {
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_USERTPL)->data($template)
             ->batchCheck('title, content', 'notempty')
             ->check('title', 'unique', "`type`='{$template->type}' AND account='{$template->account}'")
