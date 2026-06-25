@@ -12,6 +12,8 @@ namespace zin;
 
 jsVar('confirmFinish', $lang->task->confirmFinish);
 jsVar('confirmTeamFinish', $lang->task->confirmTeamFinish);
+jsVar('consumedSmallError', $lang->task->error->consumedSmall);
+jsVar('recordedConsumed', !empty($currentTeam) ? (float)$currentTeam->consumed : (float)$task->consumed);
 jsVar('currentTeam', $currentTeam);
 
 /* zin: Set variables to define control for form. */

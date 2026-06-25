@@ -1,8 +1,17 @@
-/* If left = 0, warning. */
+/* If left = 0 or consumed < recordedConsumed, warning. */
 window.clickSubmit = function()
 {
-    var left     = parseFloat($("#left").val());
-    var consumed = parseFloat($("#consumed").val());
+    let left     = parseFloat($("#left").val());
+    let consumed = parseFloat($("#consumed").val());
+
+    if(consumed < recordedConsumed)
+    {
+        const $consumed = $('#restartForm #consumed');
+        $('#restartForm #consumedTip').remove();
+        $consumed.closest('.input-control').after(`<div class='form-tip text-danger' id='consumedTip'>${consumedSmallError}</div>`);
+        $consumed.addClass('has-error').trigger('focus');
+        return false;
+    }
     if(!left && consumed)
     {
         const formUrl    = $('#restartForm form').attr('action');
