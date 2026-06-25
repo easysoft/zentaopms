@@ -39,6 +39,7 @@ class myZen extends my
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;
             $task->parentName    = '';
+            $task->executionName = !empty($task->executionMultiple) ? $task->executionName : '';
 
             if($task->status == 'changed') $task->rawStatus = 'changed';
             if($task->parent > 0)
