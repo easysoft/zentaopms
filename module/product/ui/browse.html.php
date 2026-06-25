@@ -373,7 +373,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
 
     $navActionItems = array();
     if($canBatchClose)        $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink($storyModule, 'batchClose', "productID={$productID}&executionID=0"));
-    if($canBatchSubmitReview) $navActionItems[] = array('class' => 'batchSubmitReviewBtn', 'text' => $lang->story->submitReview, 'data-toggle' => 'modal', 'url' => createLink($storyModule, 'batchSubmitReview', "productID={$productID}&storyType=$storyType"));
+    if($canBatchSubmitReview) $navActionItems[] = array('class' => 'batchSubmitReviewBtn', 'text' => $lang->story->submitReview);
     if($canBatchChangeGrade)  $navActionItems[] = array('class' => 'not-hide-menu batchGradeBtn', 'text' => $lang->story->grade, 'items' => $gradeItems);
     if($canBatchReview)       $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu batchChangeStageBtn', 'text' => $lang->story->stageAB, 'items' => $stageItems);

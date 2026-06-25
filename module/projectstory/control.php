@@ -422,9 +422,9 @@ class projectStory extends control
      * @access public
      * @return void
      */
-    public function batchSubmitReview(int $productID = 0, string $storyType = 'story')
+    public function batchSubmitReview(int $productID = 0, string $storyType = 'story', string $storyIdList = '')
     {
-        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType");
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType&storyIdList=$storyIdList");
     }
 
 

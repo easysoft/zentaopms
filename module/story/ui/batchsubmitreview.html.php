@@ -11,13 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-/* Build warning messages. */
-if(!empty($message))
-{
-    $jsMsg = json_encode($message);
-    pageJS("zui.Modal.alert({$jsMsg});");
-}
-
 /* Build form field value for batch submit review. */
 $data = array();
 foreach($stories as $story)

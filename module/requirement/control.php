@@ -258,9 +258,9 @@ class requirement extends control
      * @access public
      * @return void
      */
-    public function batchSubmitReview(int $productID = 0)
+    public function batchSubmitReview(int $productID = 0, string $storyType = 'requirement', string $storyIdList = '')
     {
-        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=requirement");
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType&storyIdList=$storyIdList");
     }
 
     /**
