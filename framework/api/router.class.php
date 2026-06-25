@@ -112,6 +112,15 @@ class api extends router
     public $rawGet = array();
 
     /**
+     * APIV2 路由中显式声明并写入 POST/PUT 请求体的数据。
+     * The route-declared payload merged into POST/PUT requests in APIV2.
+     *
+     * @var array
+     * @access public
+     */
+    public $routeData = array();
+
+    /**
      * Workflow create actions need save step only for the final dispatch.
      *
      * @var bool
@@ -307,14 +316,17 @@ class api extends router
     public function parseRouteV2($routes)
     {
         $methodName = '';
+        $this->routeData = array();
 
         list($info, $paramValues) = $this->matchRoutes($routes);
+        $originParamValues = $paramValues;
         $httpActions = array('get', 'post', 'put', 'delete', 'options');
         if($info && array_intersect($httpActions, array_keys($info))) $info = zget($info, $this->action, array());
 
         $this->originRouteInfo = $info ?: array();
         $this->routeInfo       = $this->originRouteInfo;
         $this->realRouteInfo   = $this->originRouteInfo;
+        if($info && isset($info['data'])) $this->routeData = $this->parseRouteData((string) $info['data'], $originParamValues);
 
         if($info)
         {
@@ -326,7 +338,7 @@ class api extends router
                 {
                     if(is_numeric($key)) continue;
 
-                    $_GET[$key]       = $value;
+                    $_GET[$key] = $value;
                     $info['redirect'] = str_replace(':'.$key, $value, $info['redirect']);
                 }
                 if(isset($info['response'])) $this->responseExtractor = $info['response'];
@@ -991,7 +1003,7 @@ class api extends router
                 }
                 else
                 {
-                    $_GET[$moduleName.'ID'] = $pathItems[1];
+                    $_GET[$moduleName . 'ID'] = $pathItems[1];
                 }
             }
             else
@@ -1174,6 +1186,26 @@ class api extends router
     {
         $this->paramNames[] = $m[1];
         return '(?P<' . $m[1] . '>[^/]+)';
+    }
+
+    /**
+     * Parse one route data template into a payload array.
+     *
+     * @param  string $data
+     * @param  array  $paramValues
+     * @access protected
+     * @return array
+     */
+    protected function parseRouteData(string $data, array $paramValues): array
+    {
+        foreach($paramValues as $key => $value)
+        {
+            if(is_numeric($key)) continue;
+            $data = str_replace(':' . $key, (string) $value, $data);
+        }
+
+        parse_str($data, $payload);
+        return $payload;
     }
 
     /**
@@ -1502,14 +1534,12 @@ class api extends router
      */
     protected function mergeRouteParamsToPost(): void
     {
-        foreach($this->rawGet as $key => $value)
+        if(in_array($this->action, array('post', 'put')))
         {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
-        }
-
-        foreach($this->params as $key => $value)
-        {
-            if(!isset($_POST[$key])) $_POST[$key] = $value;
+            foreach($this->routeData as $key => $value)
+            {
+                if(!isset($_POST[$key])) $_POST[$key] = $value;
+            }
         }
     }
 

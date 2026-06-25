@@ -3018,7 +3018,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function computeSchedule(string $begin, string $end, array $schedule, object $project = null): object
+    public function computeSchedule(string $begin, string $end, array $schedule, ?object $project = null): object
     {
         $calendar        = array();
         $weekends        = array(1, 2);

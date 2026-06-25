@@ -144,7 +144,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo(string $browseType = 'before', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function todo(string $browseType = 'all', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);

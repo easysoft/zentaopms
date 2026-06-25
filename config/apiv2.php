@@ -149,11 +149,11 @@ $routes['/my/activity/feedbacks']    = array('redirect' => '/my/contribute?mode=
 
 $routes['/doc/my/spaces'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&picks=space'),
-    'post' => array('redirect' => '/doc/createSpace?type=mine')
+    'post' => array('redirect' => '/doc/createSpace?type=mine', 'data' => 'type=mine')
 );
 $routes['/doc/team/spaces'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&picks=space'),
-    'post' => array('redirect' => '/doc/createSpace?type=custom')
+    'post' => array('redirect' => '/doc/createSpace?type=custom', 'data' => 'type=custom')
 );
 $routes['/doc/product/spaces'] = array('redirect' => '/doc/ajaxGetSpaceData?type=product&picks=space');
 $routes['/doc/project/spaces'] = array('redirect' => '/doc/ajaxGetSpaceData?type=project&picks=space');
@@ -166,19 +166,19 @@ $routes['/doc/spaces/:spaceID'] = array(
 
 $routes['/doc/my/spaces/:spaceID/libs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&picks=lib'),
-    'post' => array('redirect' => '/doc/createLib?type=mine&objectID=:spaceID&libID=0')
+    'post' => array('redirect' => '/doc/createLib?type=mine&objectID=:spaceID&libID=0', 'data' => 'type=mine&parent=:spaceID')
 );
 $routes['/doc/team/spaces/:spaceID/libs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&picks=lib'),
-    'post' => array('redirect' => '/doc/createLib?type=custom&objectID=:spaceID&libID=0')
+    'post' => array('redirect' => '/doc/createLib?type=custom&objectID=:spaceID&libID=0', 'data' => 'type=custom&parent=:spaceID')
 );
 $routes['/doc/product/spaces/:productID/libs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&picks=lib'),
-    'post' => array('redirect' => '/doc/createLib?type=product&objectID=:productID&libID=0')
+    'post' => array('redirect' => '/doc/createLib?type=product&objectID=:productID&libID=0', 'data' => 'type=product&product=:productID')
 );
 $routes['/doc/project/spaces/:projectID/libs'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&picks=lib'),
-    'post' => array('redirect' => '/doc/createLib?type=project&objectID=:projectID&libID=0')
+    'post' => array('redirect' => '/doc/createLib?type=project&objectID=:projectID&libID=0', 'data' => 'type=project&project=:projectID')
 );
 $routes['/doc/libs/:libID'] = array(
     'get'    => array('redirect' => '/doc/editLib?libID=:libID', 'response' => 'lib'),
@@ -229,19 +229,19 @@ $routes['/files/:fileID/download'] = array('method' => 'download');
 /* Modules. */
 $routes['/doc/my/spaces/:spaceID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=mine&spaceID=:spaceID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:libID&moduleType=doc')
 );
 $routes['/doc/team/spaces/:spaceID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=custom&spaceID=:spaceID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:libID&moduleType=doc')
 );
 $routes['/doc/product/spaces/:productID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=product&spaceID=:productID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:libID&moduleType=doc')
 );
 $routes['/doc/project/spaces/:projectID/libs/:libID/modules'] = array(
     'get'  => array('redirect' => '/doc/ajaxGetSpaceData?type=project&spaceID=:projectID&libID=:libID&picks=module'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:libID&moduleType=doc')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:libID&moduleType=doc')
 );
 $routes['/doc/modules/:moduleID'] = array(
     'put'    => array('redirect' => '/tree/edit?moduleID=:moduleID&type=doc'),
@@ -250,25 +250,25 @@ $routes['/doc/modules/:moduleID'] = array(
 
 $routes['/executions/:executionID/task/modules'] = array(
     'get'  => array('redirect' => '/tree/browsetask?rootID=:executionID', 'response' => 'tree'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:executionID&moduleType=task')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:executionID&moduleType=task')
 );
 $routes['/products/:productID/story/modules'] = array(
     'get'  => array('redirect' => '/tree/browse?viewType=story&rootID=:productID', 'response' => 'tree'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:productID&moduleType=story')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:productID&moduleType=story')
 );
 $routes['/products/:productID/bug/modules'] = array(
     'get'  => array('redirect' => '/tree/browse?viewType=bug&rootID=:productID', 'response' => 'tree'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:productID&moduleType=bug')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:productID&moduleType=bug')
 );
 $routes['/products/:productID/testcase/modules'] = array(
     'get'  => array('redirect' => '/tree/browse?viewType=case&rootID=:productID', 'response' => 'tree'),
-    'post' => array('redirect' => '/tree/ajaxCreateModule?libID=:productID&moduleType=case')
+    'post' => array('redirect' => '/tree/ajaxCreateModule', 'data' => 'libID=:productID&moduleType=case')
 );
 $routes['/testcase/modules/:moduleID'] = array(
-    'put'    => array('redirect' => '/tree/edit?moduleID=:moduleID&type=case'),
+    'put'    => array('redirect' => '/tree/edit?moduleID=:moduleID&type=case', 'data' => 'moduleID=:moduleID&type=case'),
     'delete' => array('redirect' => '/tree/delete?moduleID=:moduleID')
 );
 $routes['/:type/modules/:moduleID'] = array(
-    'put'    => array('redirect' => '/tree/edit?moduleID=:moduleID&type=:type'),
+    'put'    => array('redirect' => '/tree/edit?moduleID=:moduleID&type=:type', 'data' => 'moduleID=:moduleID&type=:type'),
     'delete' => array('redirect' => '/tree/delete?moduleID=:moduleID')
 );

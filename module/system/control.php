@@ -605,13 +605,13 @@ class system extends control
      * 编辑应用。
      * Edit application.
      *
-     * @param  int $id
+     * @param  int $systemID
      * @access public
      * @return void
      */
-    public function edit(int $id)
+    public function edit(int $systemID)
     {
-        $system = $this->system->fetchByID($id);
+        $system = $this->system->fetchByID($systemID);
         if($_POST)
         {
             $integrated = $system->integrated;
@@ -623,7 +623,7 @@ class system extends control
                 ->setDefault('editedBy', $this->app->user->account)
                 ->get();
 
-            $this->system->update($id, $formData);
+            $this->system->update($systemID, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->sendSuccess(array('load' => true));
