@@ -13,6 +13,7 @@ cid=15036
 - 步骤4：基础信息完整 @setinputfields
 - 步骤5：有source @setinputform
 - 步骤6：有purpose @setprompt
+- 步骤7：表单显示位置无需source @setinputform
 
 */
 
@@ -55,6 +56,13 @@ $promptWithSource->actionPurpose = 'story.change';
 $promptWithSource->displayPosition = 'detail';
 $promptWithSource->source = 'database';
 
+$promptWithFormPosition = new stdClass();
+$promptWithFormPosition->status = 'draft';
+$promptWithFormPosition->name = 'Form prompt';
+$promptWithFormPosition->module = 'story';
+$promptWithFormPosition->actionPurpose = 'story.create';
+$promptWithFormPosition->displayPosition = 'form';
+
 $promptWithPurpose = new stdClass();
 $promptWithPurpose->status = 'draft';
 $promptWithPurpose->name = 'Purpose prompt';
@@ -71,3 +79,4 @@ r($aiTest->getLastActiveStepTest($promptWithTargetForm))  && p() && e('basicinfo
 r($aiTest->getLastActiveStepTest($promptWithBasicInfo))   && p() && e('setinputfields'); // 步骤4：基础信息完整
 r($aiTest->getLastActiveStepTest($promptWithSource))      && p() && e('setinputform');   // 步骤5：有source
 r($aiTest->getLastActiveStepTest($promptWithPurpose))     && p() && e('setprompt');      // 步骤6：有purpose
+r($aiTest->getLastActiveStepTest($promptWithFormPosition)) && p() && e('setinputform');   // 步骤7：表单显示位置无需source
