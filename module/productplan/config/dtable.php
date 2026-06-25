@@ -271,6 +271,31 @@ $config->productplan->view->dtable->fieldList['feedbackBy']['sortType'] = true;
 $config->productplan->view->dtable->fieldList['feedbackBy']['width']    = '90';
 $config->productplan->view->dtable->fieldList['feedbackBy']['group']    = 11;
 
+$config->productplan->view->dtable->fieldList['notifyEmail']['title']    = $lang->story->notifyEmail;
+$config->productplan->view->dtable->fieldList['notifyEmail']['sortType'] = true;
+$config->productplan->view->dtable->fieldList['notifyEmail']['width']    = '100';
+$config->productplan->view->dtable->fieldList['notifyEmail']['group']    = 11;
+
+$config->productplan->view->dtable->fieldList['mailto']['title']    = $lang->story->mailto;
+$config->productplan->view->dtable->fieldList['mailto']['sortType'] = true;
+$config->productplan->view->dtable->fieldList['mailto']['width']    = '100';
+$config->productplan->view->dtable->fieldList['mailto']['group']    = 11;
+
+$config->productplan->view->dtable->fieldList['version']['title']    = $lang->story->version;
+$config->productplan->view->dtable->fieldList['version']['sortType'] = true;
+$config->productplan->view->dtable->fieldList['version']['type']     = 'number';
+$config->productplan->view->dtable->fieldList['version']['group']    = 11;
+
+$config->productplan->view->dtable->fieldList['childItem']['title']    = $lang->story->childItem;
+$config->productplan->view->dtable->fieldList['childItem']['sortType'] = false;
+$config->productplan->view->dtable->fieldList['childItem']['type']     = 'text';
+$config->productplan->view->dtable->fieldList['childItem']['group']    = 6;
+
+$config->productplan->view->dtable->fieldList['activatedDate']['title']    = $lang->story->activatedDate;
+$config->productplan->view->dtable->fieldList['activatedDate']['sortType'] = true;
+$config->productplan->view->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->productplan->view->dtable->fieldList['activatedDate']['group']    = 12;
+
 $config->productplan->view->dtable->fieldList['actions']['title']    = $lang->actions;
 $config->productplan->view->dtable->fieldList['actions']['width']    = 'auto';
 $config->productplan->view->dtable->fieldList['actions']['type']     = 'actions';
