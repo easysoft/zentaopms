@@ -2907,7 +2907,8 @@ class aiModel extends model
         {
             if(!empty($prompt->status) && $prompt->status == 'active') return 'preview';
             if(!empty($prompt->purpose)) return 'setprompt';
-            if(!empty($prompt->source) || $prompt->displayPosition == 'form') return 'setinputform';
+            if($prompt->displayPosition == 'form') return 'setinputform';
+            if(!empty($prompt->source)) return 'setinputform';
             return 'setinputfields';
         }
 
