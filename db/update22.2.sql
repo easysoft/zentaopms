@@ -11,20 +11,20 @@ ALTER TABLE `zt_workflowlayout` ADD `ditto` tinyint unsigned NOT NULL DEFAULT 0 
 ALTER TABLE `zt_project` MODIFY COLUMN `budget` decimal(14,2) unsigned NOT NULL DEFAULT 0.00 COMMENT '预算';
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
-('sql', '需求池',     'demandPool',  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_demandpool WHERE `deleted`=\'0\'', 'view_datasource_119', 'id', 'name'),
-('sql', '需求池需求', 'demand',      '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_demand WHERE `deleted`=\'0\'',    'view_datasource_120', 'id', 'title'),
-('sql', '路标',       'roadmap',     '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_roadmap WHERE `deleted`=\'0\'',    'view_datasource_121', 'id', 'name'),
-('sql', '分发需求',   'demandStory', '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_story WHERE `deleted`=\'0\'',      'view_datasource_122', 'id', 'title');
+('sql', '需求池',     'demandPool',  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_demandpool WHERE `deleted`=\'0\'', 'view_datasource_demandpool',  'id', 'name'),
+('sql', '需求池需求', 'demand',      '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_demand WHERE `deleted`=\'0\'',    'view_datasource_demand',      'id', 'title'),
+('sql', '路标',       'roadmap',     '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_roadmap WHERE `deleted`=\'0\'',    'view_datasource_roadmap',     'id', 'name'),
+('sql', '分发需求',   'demandStory', '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_story WHERE `deleted`=\'0\'',      'view_datasource_demandstory', 'id', 'title');
 
-DROP VIEW IF EXISTS `view_datasource_119`;
-DROP VIEW IF EXISTS `view_datasource_120`;
-DROP VIEW IF EXISTS `view_datasource_121`;
-DROP VIEW IF EXISTS `view_datasource_122`;
+DROP VIEW IF EXISTS `view_datasource_demandpool`;
+DROP VIEW IF EXISTS `view_datasource_demand`;
+DROP VIEW IF EXISTS `view_datasource_roadmap`;
+DROP VIEW IF EXISTS `view_datasource_demandstory`;
 
-CREATE VIEW `view_datasource_119` AS SELECT `id`,`name`  FROM `zt_demandpool`  WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_120` AS SELECT `id`,`title` FROM `zt_demand`      WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_121` AS SELECT `id`,`name`  FROM `zt_roadmap`     WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_122` AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_demandpool`  AS SELECT `id`,`name`  FROM `zt_demandpool`  WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_demand`      AS SELECT `id`,`title` FROM `zt_demand`      WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_roadmap`     AS SELECT `id`,`name`  FROM `zt_roadmap`     WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_demandstory` AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0';
 
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandPool')  WHERE `module` = 'demand' AND `field` = 'pool';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'products')    WHERE `module` = 'demand' AND `field` = 'product';
