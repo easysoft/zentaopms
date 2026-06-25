@@ -12,11 +12,11 @@ title=测试 projectTao::changeExecutionStatus();
 timeout=0
 cid=17890
 
-- 测试修改无迭代项目下执行的状态为suspend属性status @suspend
-- 测试修改无迭代项目下执行的状态为start属性status @start
-- 测试修改无迭代项目下执行的状态为wait属性status @wait
-- 测试修改无迭代项目下执行的状态为close属性status @closed
-- 测试修改无迭代项目下执行的状态为none @~~
+- 测试修改无迭代项目下执行的状态为suspend属性status @suspended
+- 测试修改无迭代项目下执行的状态为start属性status @doing
+- 测试修改无迭代项目下执行的状态为wait属性status @doing
+- 测试修改无迭代项目下执行的状态为closed属性status @closed
+- 测试修改无迭代项目下执行的状态为closed属性status @closed
 
 */
 
@@ -28,15 +28,36 @@ $_POST['uid']       = '0';
 
 global $tester;
 
-$statusList = array('suspend', 'start', 'activate', 'close', 'none');
-foreach($statusList as $status)
+$projectModel = $tester->loadModel('project');
+$actionList   = array('suspend', 'start', 'activate', 'close', 'none');
+$resultList   = array();
+foreach($actionList as $action)
 {
-    $tester->loadModel('project')->changeExecutionStatus(1, $status);
-    ${$status} = $tester->project->getByID(2);
+    $project = new stdclass();
+    $project->lastEditedBy   = 'admin';
+    $project->lastEditedDate = helper::now();
+    $project->status         = 'doing';
+    if($action == 'start') $project->realBegan = helper::today();
+    if($action == 'suspend')
+    {
+        $project->status = 'suspended';
+        $project->suspendedDate = helper::now();
+    }
+    if($action == 'close')
+    {
+        $project->status     = 'closed';
+        $project->realEnd    = helper::today();
+        $project->closedBy   = 'admin';
+        $project->closedDate = helper::now();
+    }
+    $projectModel->dao->update(TABLE_PROJECT)->data($project)->where('id')->eq(1)->exec();
+    $projectModel->changeExecutionStatus(1, $action);
+    $resultList[$action] = $projectModel->dao->select('id,status')->from(TABLE_PROJECT)->where('id')->eq(2)->fetch();
+
 }
 
-r($suspend)  && p('status') && e("suspend"); // 测试修改无迭代项目下执行的状态为suspend
-r($start)    && p('status') && e("start");   // 测试修改无迭代项目下执行的状态为start
-r($activate) && p('status') && e("wait");    // 测试修改无迭代项目下执行的状态为wait
-r($close)    && p('status') && e("closed");  // 测试修改无迭代项目下执行的状态为closed
-r($none)     && p()         && e("~~");      // 测试修改无迭代项目下执行的状态为none
+r($resultList['suspend'])  && p('status') && e("suspended"); // 测试修改无迭代项目下执行的状态为suspend
+r($resultList['start'])    && p('status') && e("doing");     // 测试修改无迭代项目下执行的状态为start
+r($resultList['activate']) && p('status') && e("doing");     // 测试修改无迭代项目下执行的状态为wait
+r($resultList['close'])    && p('status') && e("closed");    // 测试修改无迭代项目下执行的状态为closed
+r($resultList['none'])     && p('status') && e("closed");    // 测试修改无迭代项目下执行的状态为closed

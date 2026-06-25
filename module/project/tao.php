@@ -1029,7 +1029,6 @@ class projectTao extends projectModel
             $postData->closedBy   = $project->closedBy;
             $postData->closedDate = $project->closedDate;
         }
-
         return $this->loadModel('execution')->$action($execution->id, $postData);
     }
 
