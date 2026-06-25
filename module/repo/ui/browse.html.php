@@ -214,7 +214,7 @@ $downloadWg = div
             set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip)
         ) : null,
-        btn(on::click()->call('loadSSHmanager'), setClass('ml-2'), set::icon('cog'), $lang->repo->sshManager)
+        empty($repo->mirror) ? btn(on::click()->call('loadSSHmanager'), setClass('ml-2'), set::icon('cog'), $lang->repo->sshManager) : null
     )
 );
 
