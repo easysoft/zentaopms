@@ -44,32 +44,38 @@ jsVar('requirementPriList', $lang->requirement->priList);
 jsVar('epicPriList',        $lang->epic->priList);
 
 $bugCols   = array();
-$storyCols = array();
-foreach($config->productplan->defaultFields['story'] as $field)
-{
-    if($field == 'branch' && $product->type == 'normal') continue;
-    $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
-    if($field == 'id' && common::hasPriv('execution', 'storySort'))
-    {
-        $storyCols['sort']['title'] = $lang->productplan->updateOrder;
-        $storyCols['sort']['fixed'] = 'left';
-        $storyCols['sort']['align'] = 'center';
-        $storyCols['sort']['group'] = 1;
-        $storyCols['sort']['width'] = 60;
-    }
-}
-if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
-foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
+/* Get story column setting from datatable. */
+$storyCols = $this->loadModel('datatable')->getSetting('productplan', 'view');
+
+/* Hide branch field for normal products. */
+if(isset($storyCols['branch']) && $product->type == 'normal') unset($storyCols['branch']);
+
+/* Customize columns for plan context. */
 $storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
 $storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
 $storyCols['module']['sortType']    = true;
+if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 $storyCols['actions']['list']       = $config->productplan->actionList;
 $storyCols['actions']['menu']       = array('unlinkStory');
 $storyCols['actions']['minWidth']   = 60;
+
+/* Sort column for drag-and-drop sorting. */ if(common::hasPriv('execution', 'storySort'))
+{
+    $sortCol = array('title' => $lang->productplan->updateOrder, 'fixed' => 'left', 'align' => 'center', 'group' => 1, 'width' => 60);
+    $newCols = array();
+    foreach($storyCols as $key => $col)
+    {
+        $newCols[$key] = $col;
+        if($key == 'id') $newCols['sort'] = $sortCol;
+    }
+    $storyCols = $newCols;
+}
+
+foreach($config->productplan->defaultFields['bug'] as $field) $bugCols[$field] = zget($config->bug->dtable->fieldList, $field, array());
 $bugCols['assignedTo']['type']      = 'user';
 $bugCols['actions']['list']         = $config->productplan->actionList;
 $bugCols['actions']['menu']         = array('unlinkBug');
@@ -159,7 +165,22 @@ if($canBatchActionBug)
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
+foreach($planStories as $story)
+{
+    $storyType = $story->type;
+    $story->estimate     = helper::formatHours($story->estimate) . $config->hourUnit;
+    $story->category     = zget($lang->$storyType->categoryList, $story->category, $story->category);
+    $story->source       = zget($lang->$storyType->sourceList, $story->source, $story->source);
+    $story->closedReason = zget($lang->$storyType->reasonList, $story->closedReason, $story->closedReason);
+
+    $reviewer = array_filter(explode(',', (string)$story->reviewedBy));
+    foreach($reviewer as $i => $account) $reviewer[$i] = zget($users, $account, $account);
+    $story->reviewedBy = implode(' ', $reviewer);
+
+    $mailto = array_filter(explode(',', (string)$story->mailto));
+    foreach($mailto as $i => $account) $mailto[$i] = zget($users, $account, $account);
+    $story->mailto = implode(' ', $mailto);
+}
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
@@ -296,6 +317,7 @@ detailBody
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
                     set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
+                    set::customCols(true),
                     set::footPager
                     (
                         usePager('storyPager', '', array(
