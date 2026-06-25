@@ -997,13 +997,13 @@ class projectTao extends projectModel
      * Modify the execution status when changing the status of no execution project.
      *
      * @param  int             $projectID
-     * @param  string          $status
+     * @param  string          $action
      * @access protected
      * @return array|false|int
      */
-    protected function changeExecutionStatus(int $projectID, string $status): array|false|int
+    protected function changeExecutionStatus(int $projectID, string $action): array|false|int
     {
-        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
+        if(!in_array($action, array('start', 'suspend', 'activate', 'close'))) return false;
 
         $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch();
         if(!$execution) return false;
@@ -1011,13 +1011,25 @@ class projectTao extends projectModel
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         $postData = new stdclass();
-        $postData->status  = $status == 'close' ? 'closed' : $status;
-        $postData->begin   = $execution->begin;
-        $postData->end     = $execution->end;
-        $postData->uid     = '';
-        $postData->comment = '';
-        if($status == 'close') $postData->realEnd = $project->realEnd;
-        return $this->loadModel('execution')->$status($execution->id, $postData);
+        $postData->uid            = '';
+        $postData->comment        = '';
+        $postData->status         = $project->status;
+        $postData->begin          = $execution->begin;
+        $postData->end            = $execution->end;
+        $postData->realEnd        = null;
+        $postData->closedBy       = '';
+        $postData->closedDate     = null;
+        $postData->lastEditedBy   = $project->lastEditedBy;
+        $postData->lastEditedDate = $project->lastEditedDate;
+        if($action == 'start')   $postData->realBegan     = $project->realBegan;
+        if($action == 'suspend') $postData->suspendedDate = $project->suspendedDate;
+        if($action == 'close')
+        {
+            $postData->realEnd    = $project->realEnd;
+            $postData->closedBy   = $project->closedBy;
+            $postData->closedDate = $project->closedDate;
+        }
+        return $this->loadModel('execution')->$action($execution->id, $postData);
     }
 
     /**
