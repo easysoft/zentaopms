@@ -917,7 +917,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function batchSubmitReview(int $productID, string $storyType = 'story')
+    public function batchSubmitReview(int $productID, string $storyType = 'story', string $storyIdList = '')
     {
         if($this->post->reviewer)
         {
@@ -932,15 +932,46 @@ class story extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
         }
 
-        $storyIdList = array();
-        if($this->cookie->checkedItem) $storyIdList = explode(',', $this->cookie->checkedItem);
+        $storyIdList = $storyIdList ? explode(',', $storyIdList) : array();
         if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+
+        /* Get reviewers. */
+        $product   = $this->product->getById($productID);
+        $reviewers = '';
+        if($product)
+        {
+            $reviewers = $product->reviewer;
+            if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        }
+
+        $this->view->stories   = $this->story->getByList($storyIdList);
+        $this->view->product   = $product;
+        $this->view->productID = $productID;
+        $this->view->storyType = $storyType;
+        $this->view->message   = '';
+        $this->view->reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+
+        $this->display();
+    }
+
+    /**
+     * AJAX检查批量提交评审的需求是否满足条件.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckBatchSubmitReview(int $productID, string $storyType = 'story', string $storyIdList = '')
+    {
+        $storyIdList = $storyIdList ? explode(',', $storyIdList) : array();
+        if(empty($storyIdList)) return print(json_encode(array('result' => 'fail')));
 
         $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
 
-        $invalidTypes       = [];
-        $invalidStoryIdList = [];
-        $allowedStoryIdList = [];
+        $invalidTypes       = array();
+        $invalidStoryIdList = array();
+        $allowedStoryIdList = array();
 
         /* 判断是否有选中的需求类型的提交评审权限。 */
         $privModule = $this->app->tab == 'project' ? 'projectstory' : '';
@@ -951,7 +982,7 @@ class story extends control
         foreach($storyList as $story)
         {
             if(!common::hasPriv($privModule ? $privModule : $story->type, 'batchsubmitreview')) continue;
-            if(!in_array($story->status, ['draft', 'changing']))
+            if(!in_array($story->status, array('draft', 'changing')))
             {
                 $invalidStoryIdList[] = '#' . $story->id;
                 continue;
@@ -968,25 +999,8 @@ class story extends control
         {
             $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
         }
-        if(empty($allowedStoryIdList)) return $this->send(array('result' => 'fail', 'load' => array('alert' => $message, 'locate' => $this->session->storyList)));
 
-        /* Get reviewers. */
-        $product   = $this->product->getById($productID);
-        $reviewers = '';
-        if($product)
-        {
-            $reviewers = $product->reviewer;
-            if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
-        }
-
-        $this->view->stories   = $this->story->getByList($allowedStoryIdList);
-        $this->view->product   = $product;
-        $this->view->productID = $productID;
-        $this->view->storyType = $storyType;
-        $this->view->message   = $message;
-        $this->view->reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
-
-        $this->display();
+        return print(json_encode(array('result' => 'success', 'message' => $message, 'hasValid' => !empty($allowedStoryIdList), 'allowedStoryIdList' => $allowedStoryIdList)));
     }
 
     /**

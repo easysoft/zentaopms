@@ -31,10 +31,45 @@ $(document).off('click', '.batchImportToLibBtn').on('click', '.batchImportToLibB
 
 $(document).off('click', '.batchSubmitReviewBtn').on('click', '.batchSubmitReviewBtn', function(e)
 {
+    e.preventDefault();
+
     const dtable      = zui.DTable.query($('#stories'));
     const checkedList = dtable.$.getChecks();
+    if(!checkedList.length) return;
 
-    $.cookie.set('checkedItem', checkedList.join(','), {expires:config.cookieLife, path:config.webRoot});
+    const storyIdList   = checkedList.join(',');
+    const storyModule   = typeof tab !== 'undefined' && tab === 'project' ? 'projectstory' : window.storyType || 'story';
+    const checkLink     = $.createLink('story', 'ajaxCheckBatchSubmitReview', 'productID=' + productID + '&storyType=' + storyType + '&storyIdList=' + storyIdList);
+
+    $.getJSON(checkLink, function(data)
+    {
+        if(data.result != 'success') return;
+
+        const hasMessage = data.message;
+        const hasValid   = data.hasValid;
+        const allowedIds = data.allowedStoryIdList;
+
+        const openModal = function(idList)
+        {
+            loadModal($.createLink(storyModule, 'batchSubmitReview', 'productID=' + productID + '&storyType=' + storyType + '&storyIdList=' + idList));
+        };
+
+        if(hasMessage && hasValid && allowedIds && allowedIds.length)
+        {
+            zui.Modal.confirm({message: hasMessage}).then(function(res)
+            {
+                if(res) openModal(allowedIds.join(','));
+            });
+        }
+        else if(hasMessage)
+        {
+            zui.Modal.alert(hasMessage);
+        }
+        else
+        {
+            openModal(storyIdList);
+        }
+    });
 });
 $(document).off('click', '.batchChangeParentBtn').on('click', '.batchChangeParentBtn', function(e)
 {

@@ -387,7 +387,6 @@ $filter->projectstory->story->cookie['storyModuleParam']        = 'int';
 $filter->projectstory->story->cookie['pagerProductBrowse']      = 'int';
 $filter->projectstory->story->cookie['storyViewType']           = 'code';
 $filter->projectstory->export->cookie['checkedItem']            = 'reg::checked';
-$filter->projectstory->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 
 $filter->qa->default->cookie['lastProduct']  = 'int';
 $filter->qa->default->cookie['preBranch']    = 'reg::word';
@@ -397,16 +396,13 @@ $filter->story->create->cookie['lastStoryModule']        = 'int';
 $filter->story->batchcreate->cookie['preProductID']      = 'int';
 $filter->story->export->cookie['checkedItem']            = 'reg::checked';
 $filter->story->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
-$filter->story->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->story->track->cookie['preBranch']               = 'reg::word';
 $filter->story->track->cookie['preProductID']            = 'int';
 
 $filter->epic->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
-$filter->epic->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->epic->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->requirement->batchchangeparent->cookie['checkedItem'] = 'reg::checked';
-$filter->requirement->batchsubmitreview->cookie['checkedItem'] = 'reg::checked';
 $filter->requirement->export->cookie['checkedItem']            = 'reg::checked';
 
 $filter->productplan->browse->cookie['viewType'] = 'code';
