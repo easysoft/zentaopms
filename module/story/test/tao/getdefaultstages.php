@@ -4,9 +4,10 @@
 /**
 
 title=测试 storyModel->getDefaultStages();
+timeout=0
 cid=0
 
-- 不传入任何数据。 @0
+- 不传入任何数据。 @wait
 - 传入不是多分支的计划。 @planned
 - 传入多分支计划。
  -  @planned
@@ -29,7 +30,7 @@ $productplan->gen(4);
 
 global $tester;
 $storyModel = $tester->loadModel('story');
-r($storyModel->getDefaultStages('0',   array()))     && p() && e('0');                                  //不传入任何数据。
+r($storyModel->getDefaultStages('0',   array()))     && p('0') && e('wait');                            //不传入任何数据。
 r($storyModel->getDefaultStages('1',   array()))     && p('0') && e('planned');                         //传入不是多分支的计划。
 r($storyModel->getDefaultStages('2,3', array()))     && p('0,1') && e('planned,planned');               //传入多分支计划。
 r($storyModel->getDefaultStages('1',   array(0)))    && p('0') && e('projected');                       //传入不是多分支的计划，传入关联项目的分支。
