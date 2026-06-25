@@ -41,8 +41,8 @@ class aiFormInject extends wg
         }
 
         $page = "{$module}.{$method}";
-        if(isset(self::$injectedPages[$page])) return null;
-        self::$injectedPages[$page] = true;
+        if(isset(static::$injectedPages[$page])) return null;
+        static::$injectedPages[$page] = true;
 
         if($this->prop('enableSkipFields')) $this->injectSkipFields($module, $method);
         if($this->prop('enablePending'))    $this->injectPendingFormData($module, $method);
