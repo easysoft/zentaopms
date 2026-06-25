@@ -491,7 +491,9 @@ class control extends baseControl
         parse_str($extras, $result);
         if($type == 'items')
         {
-            $html = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'), 'items');
+            $items = $this->flow->buildExtendHtmlValue($object, zget($result, 'position', 'info'), 'items');
+            if(!is_array($items)) $items = array();
+            return $items;
         }
         elseif($type == 'html')
         {
