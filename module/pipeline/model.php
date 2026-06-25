@@ -913,7 +913,7 @@ class pipelineModel extends model
      * @param int $seconds 秒数（必须为非负整数）
      * @return string 格式化后的时间字符串
      */
-    function formatSeconds($seconds): string
+    public function formatSeconds($seconds): string
     {
         // 确保入参是数字且非负
         $seconds = max(0, (int)$seconds);
