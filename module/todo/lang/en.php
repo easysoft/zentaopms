@@ -83,6 +83,7 @@ $lang->todo->advance      = 'In advance';
 $lang->todo->cycleType    = 'Recurring per';
 $lang->todo->monthly      = 'Per Month';
 $lang->todo->weekly       = 'Per Week';
+$lang->todo->dateHoder    = 'Select Date';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';

@@ -65,14 +65,12 @@ window.generateHtml = function(event)
         const checkedList = dtable.$.getChecks();
         if(!checkedList.length) return;
 
-        let html = "<div class='toolbar input-group mr-2'>";
-        html += "<input class='form-control size-sm' type='date' autocomplete='off' id='formDate' name='date'>";
-        html += "<button class='btn secondary toolbar-item batch-btn ajax-btn size-sm' data-url='" + $.createLink('todo', 'import2Today') + "' id='changeDate'>";
-        html += "<span class='text'>" + changeDateLabel + "</span>";
-        html += "</button>";
-        html += "</div>";
-
-        return {html};
+        return zui.jsx`<div class="toolbar input-group mr-2 size-sm">
+            <${zui.DatePicker.Component} name="date" id="formDate" className="size-sm" style="width: 110px;" placeholder="${dtable.options.dateHoder}" />
+            <button class="btn secondary toolbar-item batch-btn ajax-btn size-sm" data-url=${$.createLink('todo', 'import2Today')} id="changeDate">
+                <span class="text">${dtable.options.changeDateLabel}</span>
+            </button>
+        </div>`;
     }
     catch(error){}
 };

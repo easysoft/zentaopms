@@ -9,7 +9,6 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('changeDateLabel', $lang->todo->changeDate);
 
 featureBar
 (
@@ -124,7 +123,7 @@ dtable
     set::createAttr('data-toggle="modal"'),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $browseType != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager'))
+    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $browseType != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),
+    set::changeDateLabel($lang->todo->changeDate),
+    set::dateHoder($lang->todo->dateHoder)
 );
-
-render();
