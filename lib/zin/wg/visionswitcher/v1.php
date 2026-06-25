@@ -48,7 +48,7 @@ class visionSwitcher extends wg
                 on::click()->do
                 (
                     '$this.closest(".vision-tips").remove()',
-                    '$.post($.createLink("my", "ajaxSaveVisionTips"), {fields: 1})'
+                    '$.ajax({url: $.createLink("my", "ajaxSaveVisionTips"), data: {fields: 1}, keepalive: true})'
                 ),
                 $lang->IKnow
             ),
