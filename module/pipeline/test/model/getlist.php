@@ -22,25 +22,39 @@ global $app;
 $app->rawModule = 'pipeline';
 $app->rawMethod = 'browse';
 
-$tester = new pipelineModelTest();
-$dbh    = $tester->instance->dao->dbh;
+/* 使用 zendata 准备测试数据 */
+$pipeline = zenData('ops_pipeline');
+$pipeline->id->range('1-5');
+$pipeline->name->range('流水线1,流水线2,流水线3,流水线4,流水线5');
+$pipeline->engine->range('gitfox,gitlab,jenkins,gitfox,gitlab');
+$pipeline->providerID->range('1,1,0,0,1');
+$pipeline->scope->range('repo,repo,space,space,repo');
+$pipeline->spaceID->range('1,1,1,1,2');
+$pipeline->repoID->range('1,2,0,0,3');
+$pipeline->status->range('active{5}');
+$pipeline->defaultBranch->range('main{5}');
+$pipeline->createdBy->range('admin{5}');
+$pipeline->deleted->range('0');
+$pipeline->gen(5);
 
-/* 写入测试数据 */
-$dbh->exec('DELETE FROM ' . TABLE_PIPELINE);
-$dbh->exec('DELETE FROM ' . TABLE_PIPELINECONTENT);
-$dbh->exec('DELETE FROM ' . TABLE_PROVIDER);
+$pipelineContent = zenData('ops_pipeline_content');
+$pipelineContent->id->range('1-5');
+$pipelineContent->pipelineID->range('1-5');
+$pipelineContent->version->range('1{5}');
+$pipelineContent->createdBy->range('admin{5}');
+$pipelineContent->gen(5);
 
-$dbh->exec('INSERT INTO ' . TABLE_PIPELINE . ' (id, name, engine, providerID, scope, spaceID, repoID, status, defaultBranch, deleted) VALUES
-  (1, "流水线1", "gitfox",  1, "repo",  1, 1, "active", "main", 0),
-  (2, "流水线2", "gitlab",  1, "repo",  1, 2, "active", "main", 0),
-  (3, "流水线3", "jenkins", 0, "space", 1, 0, "active", "main", 0),
-  (4, "流水线4", "gitfox",  0, "space", 1, 0, "active", "main", 0),
-  (5, "流水线5", "gitlab",  1, "repo",  2, 3, "active", "main", 0)');
-
-$dbh->exec("INSERT INTO " . TABLE_PROVIDER . " (id, type, name, url, deleted) VALUES (1, 'gitlab', 'GitLab', 'https://gitlabdev.qc.oop.cc', 0)");
-$dbh->exec('INSERT INTO ' . TABLE_PIPELINECONTENT . ' (id, pipelineID, version, data, variables) VALUES (1,1,1,"","{}"),(2,2,1,"","{}"),(3,3,1,"","{}"),(4,4,1,"","{}"),(5,5,1,"","{}")');
+$provider = zenData('ops_provider');
+$provider->id->range('1');
+$provider->type->range('gitlab');
+$provider->name->range('GitLab');
+$provider->url->range('[https://gitlabdev.qc.oop.cc]');
+$provider->deleted->range('0');
+$provider->gen(1);
 
 su('admin');
+
+$tester = new pipelineModelTest();
 
 r($tester->getListTest()) && p('1:name;5:name') && e('流水线1;流水线5');            // 全列表含id=1和id=5
 r($tester->getListTest(0, 0, 'repo')) && p('1:name;5:name') && e('流水线1;流水线5'); // repo级含id=1和id=5

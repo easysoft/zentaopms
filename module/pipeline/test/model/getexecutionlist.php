@@ -19,55 +19,32 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-global $dbh, $app;
+global $app;
 $app->rawModule = 'pipeline';
 $app->rawMethod = 'getexecutionlist';
-$dbh->exec("CREATE TABLE IF NOT EXISTS `ops_pipeline` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `engine` varchar(30) NOT NULL DEFAULT '',
-  `scope` varchar(30) NOT NULL DEFAULT '',
-  `spaceID` int unsigned NOT NULL DEFAULT 0,
-  `repoID` int unsigned NOT NULL DEFAULT 0,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `deleted` tinyint(1) NOT NULL DEFAULT 0,
-  `yamlPath` varchar(255) NOT NULL DEFAULT '',
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `desc` varchar(255) NOT NULL DEFAULT '',
-  `latestVersion` int NOT NULL DEFAULT 0,
-  `createdDate` datetime DEFAULT NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
-  `lastExec` datetime DEFAULT NULL,
-  `lastResult` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-$dbh->exec("CREATE TABLE IF NOT EXISTS `ops_pipeline_executions` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `pipelineID` int unsigned NOT NULL DEFAULT 0,
-  `status` varchar(30) NOT NULL DEFAULT '',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `trigger` varchar(30) NOT NULL DEFAULT '',
-  `finishedDate` datetime DEFAULT NULL,
-  `duration` int unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+/* 使用 zendata 准备测试数据 */
+$pipeline = zenData('ops_pipeline');
+$pipeline->id->range('1-2');
+$pipeline->name->range('流水线A,流水线B');
+$pipeline->engine->range('gitfox,jenkins');
+$pipeline->scope->range('space,repo');
+$pipeline->spaceID->range('1{2}');
+$pipeline->repoID->range('0,1');
+$pipeline->status->range('active{2}');
+$pipeline->defaultBranch->range('master{2}');
+$pipeline->createdBy->range('admin{2}');
+$pipeline->deleted->range('0');
+$pipeline->gen(2);
 
-$dbh->exec("TRUNCATE TABLE `ops_pipeline_executions`");
-$dbh->exec("TRUNCATE TABLE `ops_pipeline`");
-
-$dbh->exec("INSERT INTO `ops_pipeline` (`id`,`name`,`engine`,`scope`,`spaceID`,`repoID`,`status`,`defaultBranch`,`createdBy`,`deleted`) VALUES
-(1,'流水线A','gitfox','space',1,0,'active','master','admin',0),
-(2,'流水线B','jenkins','repo',1,1,'active','master','admin',0)");
-
-$dbh->exec("INSERT INTO `ops_pipeline_executions` (`id`,`pipelineID`,`status`,`createdBy`,`createdDate`,`trigger`) VALUES
-(1,1,'success','admin','2024-06-01 10:00:00','commit'),
-(2,1,'failure','admin','2024-06-02 10:00:00','tag'),
-(3,2,'success','user','2024-06-03 10:00:00','manual')");
+$execution = zenData('ops_pipeline_executions');
+$execution->id->range('1-3');
+$execution->pipelineID->range('1,1,2');
+$execution->status->range('success,failure,success');
+$execution->createdBy->range('admin,admin,user');
+$execution->createdDate->range('[2024-06-01 10:00:00],[2024-06-02 10:00:00],[2024-06-03 10:00:00]');
+$execution->trigger->range('commit,tag,manual');
+$execution->gen(3);
 
 $tester = new pipelineModelTest();
 
