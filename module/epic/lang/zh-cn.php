@@ -25,3 +25,13 @@ $lang->epic->stageList['developing'] = '研发中';
 $lang->epic->stageList['delivering'] = '交付中';
 $lang->epic->stageList['delivered']  = '已交付';
 $lang->epic->stageList['closed']     = '已关闭';
+
+$lang->epic->reasonList = array();
+$lang->epic->reasonList['']           = '';
+$lang->epic->reasonList['done']       = '已完成';
+$lang->epic->reasonList['subdivided'] = '已拆分';
+$lang->epic->reasonList['duplicate']  = '重复';
+$lang->epic->reasonList['postponed']  = '延期';
+$lang->epic->reasonList['willnotdo']  = '不做';
+$lang->epic->reasonList['cancel']     = '已取消';
+$lang->epic->reasonList['bydesign']   = '设计如此';

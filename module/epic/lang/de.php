@@ -25,3 +25,13 @@ $lang->epic->stageList['developing'] = 'Developing';
 $lang->epic->stageList['delivering'] = 'Delivering';
 $lang->epic->stageList['delivered']  = 'Delivered';
 $lang->epic->stageList['closed']     = 'Closed';
+
+$lang->epic->reasonList = array();
+$lang->epic->reasonList['']           = '';
+$lang->epic->reasonList['done']       = 'Completed';
+$lang->epic->reasonList['subdivided'] = 'Decomposed';
+$lang->epic->reasonList['duplicate']  = 'Duplicate';
+$lang->epic->reasonList['postponed']  = 'Postponed';
+$lang->epic->reasonList['willnotdo']  = "Won't Do";
+$lang->epic->reasonList['cancel']     = 'Cancelled';
+$lang->epic->reasonList['bydesign']   = 'As Designed';
