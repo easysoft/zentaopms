@@ -11,6 +11,23 @@ foreach($lang->requirement as $key => $value)
 
 $lang->requirement->common = $lang->URCommon;
 
+$lang->requirement->sourceList = array();
+$lang->requirement->sourceList['']           = '';
+$lang->requirement->sourceList['customer']   = '客户';
+$lang->requirement->sourceList['user']       = '用户';
+$lang->requirement->sourceList['po']         = $lang->productCommon . '经理';
+$lang->requirement->sourceList['market']     = '市场';
+$lang->requirement->sourceList['service']    = '客服';
+$lang->requirement->sourceList['operation']  = '运营';
+$lang->requirement->sourceList['support']    = '技术支持';
+$lang->requirement->sourceList['competitor'] = '竞争对手';
+$lang->requirement->sourceList['partner']    = '合作伙伴';
+$lang->requirement->sourceList['dev']        = '开发人员';
+$lang->requirement->sourceList['tester']     = '测试人员';
+$lang->requirement->sourceList['bug']        = 'Bug';
+$lang->requirement->sourceList['forum']      = '论坛';
+$lang->requirement->sourceList['other']      = '其他';
+
 $lang->requirement->priList = array();
 $lang->requirement->priList[0] = '';
 $lang->requirement->priList[1] = '1';
