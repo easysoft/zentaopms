@@ -101,7 +101,16 @@ class action extends control
 
         /* 获取任务的执行名称。 */
         /* Get the executions name of task. */
-        if($browseType == 'task') $this->view->executionList = $executionList = $this->loadModel('execution')->getByIdList(array_column($trashes, 'execution'), 'all');
+        $executionIdList = array();
+        if($browseType == 'task' || $browseType == 'all')
+        {
+            foreach($trashes as $trash)
+            {
+                if($trash->objectType != 'task' || isset($executionIdList[$trash->execution])) continue;
+                $executionIdList[$trash->execution] = $trash->execution;
+            }
+        }
+        if($browseType == 'task' || $browseType == 'all') $this->view->executionList = $executionList = $this->loadModel('execution')->getByIdList($executionIdList, 'all');
 
         /* 补充操作记录的信息。 */
         /* Supplement the information recorded by the operation. */
