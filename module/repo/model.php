@@ -66,6 +66,14 @@ class repoModel extends model
         $this->session->set('repoID', $repoID);
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
+
+        /* 镜像代码库屏蔽"扫描(repoCodeScan)"与"代码问题(review)"两个一级菜单。 */
+        if($repo && !empty($repo->mirror))
+        {
+            unset($this->lang->devops->menu->repoCodeScan);
+            unset($this->lang->devops->menu->review);
+        }
+
         if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';
     }
 
@@ -3087,7 +3095,7 @@ class repoModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
         helper::setCookie("repoPairs[$repoID]", $bug->product);
 
-        $result = array(
+        return array(
             'result'     => 'success',
             'id'         => $bugID,
             'realname'   => $this->app->user->realname,
@@ -3101,7 +3109,6 @@ class repoModel extends model
             'file'       => $bug->entry,
             'revision'   => $bug->v2,
         );
-        return $result;
     }
 
     /**
@@ -3176,27 +3183,24 @@ class repoModel extends model
 
         if(preg_match_all($taskReg, $comment, $matches))
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
-                $links = $matches[2][$i] . ' ' . $matches[4][$i];
                 preg_match_all('/\d+/', $idList, $idMatches);
             }
             $tasks = $idMatches[0];
         }
         if(preg_match_all($bugReg, $comment, $matches))
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
-                $links = $matches[2][$i] . ' ' . $matches[4][$i];
                 preg_match_all('/\d+/', $idList, $idMatches);
             }
             $bugs = $idMatches[0];
         }
         if(preg_match_all($storyReg, $comment, $matches))
         {
-            foreach($matches[3] as $i => $idList)
+            foreach($matches[3] as $idList)
             {
-                $links = $matches[2][$i] . ' ' . $matches[4][$i];
                 preg_match_all('/\d+/', $idList, $idMatches);
             }
             $stories = $idMatches[0];
@@ -3398,8 +3402,13 @@ class repoModel extends model
         $provider = $this->loadModel('provider')->fetchByID((int)$formData->providerID);
         if(empty($provider)) return false;
 
-        $repo = $provider->type == 'Subversion' ? array() : $this->getProviderRepo($provider, $provider->type == 'GitLab' ? $formData->repo : $formData->organize . '/' . $formData->repo);
-
+         /* 提取嵌套三元：仅在非 Subversion 时按 provider 类型拼仓库标识并调用接口取仓库，与原三元短路语义一致。 */
+        $repo = array();
+        if($provider->type != 'Subversion')
+        {
+            $repoIdentifier = $provider->type == 'GitLab' ? $formData->repo : $formData->organize . '/' . $formData->repo;
+            $repo = $this->getProviderRepo($provider, $repoIdentifier);
+        }
         $params = new stdClass();
         $params->acl      = $formData->acl;
         $params->name     = $formData->name;
@@ -3417,7 +3426,7 @@ class repoModel extends model
                 $params->provider->host = 'file://';
                 $params->provider->slug = isset($path[1]) ? $path[1] : '';
             }
-            elseIf(strpos($provider->url, 'svn://') === 0)
+            elseif(strpos($provider->url, 'svn://') === 0)
             {
                 $path = explode('///', $provider->url);
                 $params->provider->host = 'svn://';
