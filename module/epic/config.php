@@ -21,3 +21,5 @@ $config->epic->custom = new stdclass();
 $config->epic->custom->createFields      = '';
 $config->epic->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->epic->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
+
+unset($config->epic->reviewRules, $config->epic->superReviewers);
