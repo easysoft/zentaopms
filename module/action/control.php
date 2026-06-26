@@ -205,10 +205,10 @@ class action extends control
         elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
         {
             $task       = $this->loadModel('task')->getById($oldAction->objectID);
-            $childStage = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($task->execution)->andWhere('deleted')->eq(0)->fetch();
+            $childStage = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($task->execution)->andWhere('deleted')->eq(0)->limit(1)->fetch();
             if(!empty($childStage)) return $this->send(array('result' => 'fail', 'message' => $this->lang->action->taskHasParentStage));
 
-            $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->limit(1)->fetch('deleted');
+            $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('deleted');
             $url       = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
             if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTaskTip}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));
         }
