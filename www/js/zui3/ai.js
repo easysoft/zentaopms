@@ -873,7 +873,7 @@ $(() =>
             }
         );
 
-        aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
+        aiStore.waitInited().then(() => {window.isZaiOK = aiStore.ok;});
     }
 
     /* Bind AI commands in app when app is loaded. */
