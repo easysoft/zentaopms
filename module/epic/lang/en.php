@@ -11,6 +11,15 @@ foreach($lang->epic as $key => $value)
 
 $lang->epic->common = $lang->ERCommon;
 
+$lang->epic->categoryList = array();
+$lang->epic->categoryList['feature']     = 'Feature';
+$lang->epic->categoryList['interface']   = 'API';
+$lang->epic->categoryList['performance'] = 'Performance';
+$lang->epic->categoryList['safe']        = 'Safety';
+$lang->epic->categoryList['experience']  = 'User Experience';
+$lang->epic->categoryList['improve']     = 'Improvement';
+$lang->epic->categoryList['other']       = 'Others';
+
 $lang->epic->stageList = array();
 $lang->epic->stageList[''] = '';
 $lang->epic->stageList['wait'] = 'Not started';
