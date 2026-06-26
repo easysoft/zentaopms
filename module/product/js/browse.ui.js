@@ -38,7 +38,7 @@ $(document).off('click', '.batchSubmitReviewBtn').on('click', '.batchSubmitRevie
     if(!checkedList.length) return;
 
     const storyIdList   = checkedList.join(',');
-    const storyModule   = typeof tab !== 'undefined' && tab === 'project' ? 'projectstory' : window.storyType || 'story';
+    const storyModule   = typeof tab !== 'undefined' && tab === 'project' ? 'projectstory' : storyType || 'story';
     const checkLink     = $.createLink('story', 'ajaxCheckBatchSubmitReview', 'productID=' + productID + '&storyType=' + storyType + '&storyIdList=' + storyIdList);
 
     $.getJSON(checkLink, function(data)

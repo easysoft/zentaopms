@@ -407,6 +407,7 @@ $config->ajaxDependencies['story.ajaxgetproductstories']                      = 
 $config->ajaxDependencies['story.ajaxgetcasestories']                         = ['testcase.create', 'testcase.edit'];
 $config->ajaxDependencies['story.ajaxgetuserstories']                         = ['todo.create', 'todo.edit', 'todo.batchcreate'];
 $config->ajaxDependencies['story.ajaxrelievetwins']                           = 'story.edit';
+$config->ajaxDependencies['story.ajaxcheckbatchsubmitreview']                 = ['story.batchsubmitreview', 'requirement.batchsubmitreview', 'epic.batchsubmitreview', 'projectstory.batchsubmitreview'];
 $config->ajaxDependencies['system.ajaxcnemetrics']                            = 'system.dashboard';
 $config->ajaxDependencies['system.ajaxdbauthurl']                             = 'system.dblist';
 $config->ajaxDependencies['system.ajaxgetbackupprogress']                     = ['system.backupplatform', 'backup.index'];
