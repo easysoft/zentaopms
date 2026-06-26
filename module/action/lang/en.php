@@ -76,6 +76,7 @@ $lang->action->undeleteModuleTip   = 'Restoring a subdirectory will also restore
 $lang->action->undeleteTaskTip     = 'The execution this task belongs to has been deleted. The task will not be visible after restoration. Do you want to continue?';
 $lang->action->undeleteBoardTip    = 'Please restore the space this whiteboard belongs to before restoring the whiteboard.';
 $lang->action->undeleteTemplateTip = 'The category (and scope) of this document template has been deleted. Do you want to restore it as well?';
+$lang->action->taskHasParentStage  = 'This task belongs to the parent stage, cannot be restored.';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "The parent of the current phase now only allows child items of type {Slang->executionCommon} or Kanban. Therefore, this phase cannot be restored.";

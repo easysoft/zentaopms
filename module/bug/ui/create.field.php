@@ -4,7 +4,7 @@ namespace zin;
 global $lang, $app;
 
 $isShadowProduct   = data('product.shadow');
-$noMultipleProject = data('project.multiple') === '0';
+$noMultipleProject = (string)data('project.multiple') === '0';
 $isOriginalProduct = (int)data('bug.productID') === (int)data('productID');
 $resultFiles       = data('resultFiles');
 $copyFiles         = data('bug.files');
