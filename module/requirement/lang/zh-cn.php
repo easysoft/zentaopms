@@ -11,6 +11,15 @@ foreach($lang->requirement as $key => $value)
 
 $lang->requirement->common = $lang->URCommon;
 
+$lang->requirement->categoryList = array();
+$lang->requirement->categoryList['feature']     = '功能';
+$lang->requirement->categoryList['interface']   = '接口';
+$lang->requirement->categoryList['performance'] = '性能';
+$lang->requirement->categoryList['safe']        = '安全';
+$lang->requirement->categoryList['experience']  = '体验';
+$lang->requirement->categoryList['improve']     = '改进';
+$lang->requirement->categoryList['other']       = '其他';
+
 $lang->requirement->stageList = array();
 $lang->requirement->stageList[''] = '';
 $lang->requirement->stageList['wait'] = '未开始';
