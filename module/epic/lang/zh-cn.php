@@ -11,6 +11,13 @@ foreach($lang->epic as $key => $value)
 
 $lang->epic->common = $lang->ERCommon;
 
+$lang->epic->priList = array();
+$lang->epic->priList[0] = '';
+$lang->epic->priList[1] = '1';
+$lang->epic->priList[2] = '2';
+$lang->epic->priList[3] = '3';
+$lang->epic->priList[4] = '4';
+
 $lang->epic->categoryList = array();
 $lang->epic->categoryList['feature']     = '功能';
 $lang->epic->categoryList['interface']   = '接口';
