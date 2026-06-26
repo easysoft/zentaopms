@@ -1,7 +1,9 @@
 <?php
 $lang->job->common        = '構建任務';
 $lang->job->browse        = '瀏覽流水線';
-$lang->job->create        = '創建流水線';
+$lang->job->create        = '創建/導入流水線';
+$lang->job->createBtn     = '創建流水線';
+$lang->job->importBtn     = '導入流水線';
 $lang->job->edit          = '編輯流水線';
 $lang->job->exec          = '執行構建';
 $lang->job->runPipeline   = '運行流水線';

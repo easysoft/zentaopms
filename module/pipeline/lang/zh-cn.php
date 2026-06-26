@@ -1,6 +1,8 @@
 <?php
 $lang->pipeline->browse        = '流水线列表';
-$lang->pipeline->create        = '创建流水线';
+$lang->pipeline->create        = '创建/导入流水线';
+$lang->pipeline->createBtn     = '创建流水线';
+$lang->pipeline->importBtn     = '导入流水线';
 $lang->pipeline->edit          = '编辑流水线';
 $lang->pipeline->exec          = '执行流水线';
 $lang->pipeline->runPipeline   = '运行流水线';
