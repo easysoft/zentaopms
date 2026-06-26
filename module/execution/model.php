@@ -918,11 +918,12 @@ class executionModel extends model
         /* Check the date which user input. */
         $begin = $postData->begin;
         $end   = $postData->end;
-        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin); /* The begin date should larger than end. */
+        if(empty($begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->execution->begin); /* The begin date can't be empty. */
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $this->lang->execution->end, $begin); /* The begin date should larger than end. */
         if(dao::isError()) return false;
 
         /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
-        if($oldExecution->parent != 0)
+        if($oldExecution->parent != 0 && $oldExecution->project != $oldExecution->parent)
         {
             $parent = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
             if(!$parent) return false;
