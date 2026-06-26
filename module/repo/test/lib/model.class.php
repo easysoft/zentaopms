@@ -73,6 +73,33 @@ class repoModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method's mirror branch by observing lang side-effects.
+     * Returns "repoCodeScan:{0|1}|review:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuMirrorCheckTest(int $repoID)
+    {
+        /* 调用前重置菜单结构，确保上一轮 unset 不污染本次断言。 */
+        if(!isset($this->instance->lang->devops)) $this->instance->lang->devops             = new stdclass();
+        if(!isset($this->instance->lang->devops->menu)) $this->instance->lang->devops->menu = new stdclass();
+
+        $this->instance->lang->devops->menu->repoCodeScan = array('link' => 'codescan');
+        $this->instance->lang->devops->menu->review       = array('link' => 'review');
+
+        $repos = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->instance->setMenu($repos, $repoID);
+        ob_end_clean();
+
+        $codeScan = isset($this->instance->lang->devops->menu->repoCodeScan) ? 1 : 0;
+        $review   = isset($this->instance->lang->devops->menu->review)       ? 1 : 0;
+        return "repoCodeScan:{$codeScan}|review:{$review}";
+    }
+
+    /**
      * Test getListByCondition method.
      *
      * @param  string $repoQuery
