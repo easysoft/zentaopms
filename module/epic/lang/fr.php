@@ -11,6 +11,23 @@ foreach($lang->epic as $key => $value)
 
 $lang->epic->common = $lang->ERCommon;
 
+$lang->epic->sourceList = array();
+$lang->epic->sourceList['']           = '';
+$lang->epic->sourceList['customer']   = 'Customer';
+$lang->epic->sourceList['user']       = 'User';
+$lang->epic->sourceList['po']         = $lang->productCommon . ' Owner';
+$lang->epic->sourceList['market']     = 'Marketing';
+$lang->epic->sourceList['service']    = 'Customer Service';
+$lang->epic->sourceList['operation']  = 'Operations';
+$lang->epic->sourceList['support']    = 'Technical Support';
+$lang->epic->sourceList['competitor'] = 'Competitor';
+$lang->epic->sourceList['partner']    = 'Partner';
+$lang->epic->sourceList['dev']        = 'Dev Team';
+$lang->epic->sourceList['tester']     = 'Test Team';
+$lang->epic->sourceList['bug']        = 'Bug';
+$lang->epic->sourceList['forum']      = 'Forum';
+$lang->epic->sourceList['other']      = 'Others';
+
 $lang->epic->priList = array();
 $lang->epic->priList[0] = '';
 $lang->epic->priList[1] = '1';
