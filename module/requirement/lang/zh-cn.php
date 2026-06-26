@@ -25,3 +25,13 @@ $lang->requirement->stageList['developing'] = '研发中';
 $lang->requirement->stageList['delivering'] = '交付中';
 $lang->requirement->stageList['delivered']  = '已交付';
 $lang->requirement->stageList['closed']     = '已关闭';
+
+$lang->requirement->reasonList = array();
+$lang->requirement->reasonList['']           = '';
+$lang->requirement->reasonList['done']       = '已完成';
+$lang->requirement->reasonList['subdivided'] = '已拆分';
+$lang->requirement->reasonList['duplicate']  = '重复';
+$lang->requirement->reasonList['postponed']  = '延期';
+$lang->requirement->reasonList['willnotdo']  = '不做';
+$lang->requirement->reasonList['cancel']     = '已取消';
+$lang->requirement->reasonList['bydesign']   = '设计如此';

@@ -25,3 +25,13 @@ $lang->requirement->stageList['developing'] = 'In Development';
 $lang->requirement->stageList['delivering'] = 'In Delivery';
 $lang->requirement->stageList['delivered']  = 'Delivered';
 $lang->requirement->stageList['closed']     = 'Closed';
+
+$lang->requirement->reasonList = array();
+$lang->requirement->reasonList['']           = '';
+$lang->requirement->reasonList['done']       = 'Completed';
+$lang->requirement->reasonList['subdivided'] = 'Decomposed';
+$lang->requirement->reasonList['duplicate']  = 'Duplicate';
+$lang->requirement->reasonList['postponed']  = 'Postponed';
+$lang->requirement->reasonList['willnotdo']  = "Won't Do";
+$lang->requirement->reasonList['cancel']     = 'Cancelled';
+$lang->requirement->reasonList['bydesign']   = 'As Designed';
