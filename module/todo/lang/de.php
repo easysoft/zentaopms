@@ -83,6 +83,7 @@ $lang->todo->advance      = 'Advance';
 $lang->todo->cycleType    = 'Cycle type';
 $lang->todo->monthly      = 'Monthly';
 $lang->todo->weekly       = 'Weekly';
+$lang->todo->dateHoder    = 'Select Date';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';
