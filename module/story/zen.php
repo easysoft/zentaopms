@@ -1608,9 +1608,9 @@ class storyZen extends story
             if($story->closedBy     || $story->closedReason)    $story->status   = 'closed';
             if($story->closedReason && empty($story->closedBy)) $story->closedBy = $account;
 
-            if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
-            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
-            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            if($story->closedBy && empty($story->closedReason)) dao::$errors["closedReason[$storyID]"] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
+            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors["stage[$storyID]"] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors["duplicateStory[{$storyID}]"] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
             if($this->config->vision == 'or' && $this->config->edition == 'ipd')
             {
                 if($story->stage == 'wait' && !empty($story->roadmap) && isset($roadmaps[$story->roadmap])) $story->stage = $roadmaps[$story->roadmap]->status == 'launched' ? 'incharter' : 'inroadmap';
