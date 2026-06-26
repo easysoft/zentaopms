@@ -1,6 +1,8 @@
 <?php
 $lang->pipeline->browse        = 'Browse Pipeline';
-$lang->pipeline->create        = 'Create Pipeline';
+$lang->pipeline->create        = 'Create/Import Pipeline';
+$lang->pipeline->createBtn     = 'Create Pipeline';
+$lang->pipeline->importBtn     = 'Import Pipeline';
 $lang->pipeline->edit          = 'Edit Pipeline';
 $lang->pipeline->exec          = 'Execute Pipeline';
 $lang->pipeline->runPipeline   = 'Run pipeline';
