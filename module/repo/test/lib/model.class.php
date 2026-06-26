@@ -73,6 +73,33 @@ class repoModelTest extends baseTest
     }
 
     /**
+     * Test setMenu method's mirror branch by observing lang side-effects.
+     * Returns "repoCodeScan:{0|1}|review:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuMirrorCheckTest(int $repoID)
+    {
+        /* 调用前重置菜单结构，确保上一轮 unset 不污染本次断言。 */
+        if(!isset($this->instance->lang->devops)) $this->instance->lang->devops             = new stdclass();
+        if(!isset($this->instance->lang->devops->menu)) $this->instance->lang->devops->menu = new stdclass();
+
+        $this->instance->lang->devops->menu->repoCodeScan = array('link' => 'codescan');
+        $this->instance->lang->devops->menu->review       = array('link' => 'review');
+
+        $repos = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->instance->setMenu($repos, $repoID);
+        ob_end_clean();
+
+        $codeScan = isset($this->instance->lang->devops->menu->repoCodeScan) ? 1 : 0;
+        $review   = isset($this->instance->lang->devops->menu->review)       ? 1 : 0;
+        return "repoCodeScan:{$codeScan}|review:{$review}";
+    }
+
+    /**
      * Test getListByCondition method.
      *
      * @param  string $repoQuery
@@ -2098,5 +2125,88 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  string $comment
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedObjectsTest(string $comment)
+    {
+        $result = $this->instance->getLinkedObjects($comment);
+        if(dao::isError()) return dao::getError();
+
+        $result['stories'] = implode('|', $result['stories']);
+        $result['tasks']   = implode('|', $result['tasks']);
+        $result['bugs']    = implode('|', $result['bugs']);
+        return $result;
+    }
+
+    /**
+     * Test saveBug method.
+     *
+     * @param  int    $repoID
+     * @param  array  $bugData
+     * @access public
+     * @return mixed
+     */
+    public function saveBugTest(int $repoID, array $bugData)
+    {
+        $bug = new stdclass();
+        foreach($bugData as $key => $value) $bug->$key = $value;
+        if(!isset($bug->execution)) $bug->execution = 0;
+        if(!isset($bug->openedDate)) $bug->openedDate = '2026-06-26 10:00:00';
+        if(!isset($bug->openedBy))   $bug->openedBy   = 'admin';
+        if(!isset($bug->lines))      $bug->lines      = '';
+        if(!isset($bug->entry))      $bug->entry      = '';
+        if(!isset($bug->v1))         $bug->v1         = '';
+        if(!isset($bug->v2))         $bug->v2         = '';
+        if(!isset($bug->steps))      $bug->steps      = '';
+
+        $_POST['uid']   = 'unittest';
+        $_POST['begin'] = isset($bugData['begin']) ? $bugData['begin'] : '0';
+
+        ob_start();
+        $result = $this->instance->saveBug($repoID, $bug);
+        ob_end_clean();
+
+        if(isset($result['result']) && $result['result'] == 'fail') return 'fail';
+        if(isset($result['result']) && $result['result'] == 'success')
+        {
+            $saved = $this->instance->dao->select('id,product,execution,title,openedBy')->from(TABLE_BUG)->where('id')->eq((int)$result['id'])->fetch();
+            return $saved ? $saved : 'not_saved';
+        }
+        return 'unknown';
+    }
+
+    /**
+     * Test import method.
+     *
+     * @param  array $formDataArr
+     * @access public
+     * @return mixed
+     */
+    public function importTest(array $formDataArr)
+    {
+        $formData = new stdclass();
+        foreach($formDataArr as $key => $value) $formData->$key = $value;
+
+        ob_start();
+        try
+        {
+            $result = $this->instance->import($formData);
+        }
+        catch(\Throwable $e)
+        {
+            $result = false;
+        }
+        ob_end_clean();
+
+        if($result === false) return 'false';
+        if(is_object($result)) return 'object';
+        return 'other';
     }
 }
