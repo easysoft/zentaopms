@@ -11,6 +11,13 @@ foreach($lang->requirement as $key => $value)
 
 $lang->requirement->common = $lang->URCommon;
 
+$lang->requirement->priList = array();
+$lang->requirement->priList[0] = '';
+$lang->requirement->priList[1] = '1';
+$lang->requirement->priList[2] = '2';
+$lang->requirement->priList[3] = '3';
+$lang->requirement->priList[4] = '4';
+
 $lang->requirement->categoryList = array();
 $lang->requirement->categoryList['feature']     = 'Feature';
 $lang->requirement->categoryList['interface']   = 'API';
