@@ -176,6 +176,18 @@ class dbh
     }
 
     /**
+     * 获取默认连接的数据库名。
+     * Get the default database name.
+     *
+     * @access private
+     * @return string
+     */
+    private function getDefaultDatabase(): string
+    {
+        return zget($this->config->db->defaultDatabaseMap, $this->dbConfig->driver, $this->dbConfig->driver);
+    }
+
+    /**
      * 初始化PDO对象。
      * Init pdo.
      *
@@ -194,7 +206,7 @@ class dbh
         }
         elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $dsn .= ";dbname={$this->dbConfig->driver}"; // default database
+            $dsn .= ";dbname={$this->getDefaultDatabase()}";
         }
 
         $password = helper::decryptPassword($this->dbConfig->password);
