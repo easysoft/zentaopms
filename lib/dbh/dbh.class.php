@@ -599,6 +599,8 @@ class dbh
                 if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
                 if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
+            case 'DELETE':
+                if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
                 break;
             case 'CREATE':
                 if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
