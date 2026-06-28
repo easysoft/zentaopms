@@ -201,7 +201,14 @@ class installModel extends model
         foreach($tables as $table)
         {
             $table = $this->replaceContantsInSQL($table);
-            if($table) $this->dbh->exec($table);
+            try
+            {
+                if($table) $this->dbh->exec($table);
+            }
+            catch (Throwable $e)
+            {
+                /* Some databases in MySQL model have default functions, will throw errors. */
+            }
         }
 
         return true;
@@ -233,7 +240,14 @@ class installModel extends model
         foreach($tables as $table)
         {
             $table = $this->replaceContantsInSQL($table);
-            if($table) $this->dbh->exec($table);
+            try
+            {
+                if($table) $this->dbh->exec($table);
+            }
+            catch(throwable $e)
+            {
+                /* GaussDB has no gin index. */
+            }
         }
 
         return true;
