@@ -4,6 +4,9 @@ $app->loadLang('sonarqube');
 $app->loadLang('bug');
 
 $config->repo->dtable = new stdclass();
+$config->repo->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->repo->dtable->fieldList['id']['type']  = 'id';
+
 $config->repo->dtable->fieldList['name']['name']  = 'name';
 $config->repo->dtable->fieldList['name']['title'] = $lang->repo->name;
 $config->repo->dtable->fieldList['name']['type']  = 'title';

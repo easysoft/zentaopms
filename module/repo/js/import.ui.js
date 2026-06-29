@@ -23,3 +23,19 @@ window.refreshProvider = function(providerType)
         }
     });
 }
+
+window.loadName = function()
+{
+    console.log('123');
+    const $repoPicker = $('[name=repo]').zui('picker');
+    const $nameInput  = $('[name=name]');
+    const selections  = $repoPicker && $repoPicker.$ ? $repoPicker.$.state.selections : [];
+    const repoName    = selections.length > 0 ? selections[0].text : '';
+
+    $nameInput.val(repoName);
+}
+
+$(function()
+{
+    loadName();
+});

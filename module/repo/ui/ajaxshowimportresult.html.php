@@ -49,14 +49,12 @@ div
                     (
                         set::className('mr-2 tipBtn'),
                         $message ? $lang->repo->importProgress->tryAgain : $lang->repo->importProgress->toRepoBrowse,
-                        set::target('_blank'),
                         $message ? set::url(createLink('repo', 'import', "spaceID={$spaceID}&type=GitLab&providerID=0&repoID=&isTryAgain=1")) : set::url(createLink('repo', 'browse', "repoID={$repoID}"))
                     ),
                     btn
                     (
                         set::className('mr-2 tipBtn'),
                         $lang->repo->importProgress->toRepoList,
-                        set::target('_blank'),
                         set::url(createLink('repo', 'maintain'))
                     )
                 )
