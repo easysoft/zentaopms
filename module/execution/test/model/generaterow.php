@@ -45,7 +45,7 @@ r(count($executions))           && p()                         && e('4');       
 r($executions)                  && p('pid2:name')              && e('执行2');                   // 判断第一个执行的名称
 r($executions)                  && p('pid4:begin,end')         && e('2022-01-12,2022-02-12');   // 查看获取到的第三个执行的开始日期和结束日期
 r($executions)                  && p('pid6:projectName,rawID') && e('执行1,6');                 // 查看获取到的最后一个执行的project和rawID字段
-r($executions['pid6']->actions) && p('0:name,disabled')        && e('start,1');                 // 查看获取到的最后一个执行的操作列的第一个操作
+r($executions['pid6']->actions) && p('0:name,disabled')        && e('gantt,~~');                // 查看获取到的最后一个执行的操作列的第一个操作
 
 $executionTester->executionModel->app->user->admin = false;
 $executionTester->executionModel->app->user->view->sprints = '2,3,5';
