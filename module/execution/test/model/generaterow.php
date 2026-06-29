@@ -29,11 +29,11 @@ cid=16297
  - 第pid4条的begin属性 @2022-01-12
  - 第pid4条的end属性 @2022-02-12
 - 查看获取到的最后一个执行的project和rawID字段
- - 第pid6条的project属性 @执行1
+ - 第pid6条的projectName属性 @执行1
  - 第pid6条的rawID属性 @6
 - 查看获取到的最后一个执行的操作列的第一个操作
- - 第0条的name属性 @gantt
- - 第0条的disabled属性 @~~
+ - 第0条的name属性 @start
+ - 第0条的disabled属性 @1
 - 不是超级超级管理员账号，判断执行数据。 @pid2|pid3
 
 */
@@ -41,11 +41,11 @@ $executionTester = new executionModelTest();
 $executionTester->instance->app->user->admin = true;
 
 $executions = $executionTester->generateRowTest();
-r(count($executions))           && p()                     && e('4');                       // 判断执行数量
-r($executions)                  && p('pid2:name')          && e('执行2');                   // 判断第一个执行的名称
-r($executions)                  && p('pid4:begin,end')     && e('2022-01-12,2022-02-12');   // 查看获取到的第三个执行的开始日期和结束日期
-r($executions)                  && p('pid6:project,rawID') && e('执行1,6');                 // 查看获取到的最后一个执行的project和rawID字段
-r($executions['pid6']->actions) && p('0:name,disabled')    && e('gantt,~~');                 // 查看获取到的最后一个执行的操作列的第一个操作
+r(count($executions))           && p()                         && e('4');                       // 判断执行数量
+r($executions)                  && p('pid2:name')              && e('执行2');                   // 判断第一个执行的名称
+r($executions)                  && p('pid4:begin,end')         && e('2022-01-12,2022-02-12');   // 查看获取到的第三个执行的开始日期和结束日期
+r($executions)                  && p('pid6:projectName,rawID') && e('执行1,6');                 // 查看获取到的最后一个执行的project和rawID字段
+r($executions['pid6']->actions) && p('0:name,disabled')        && e('start,1');                 // 查看获取到的最后一个执行的操作列的第一个操作
 
 $executionTester->executionModel->app->user->admin = false;
 $executionTester->executionModel->app->user->view->sprints = '2,3,5';
