@@ -2999,6 +2999,12 @@ class aiModel extends model
                 }
 
                 list($m, $f) = $page;
+                if(!empty($this->config->ai->targetForm[$m][$f]))
+                {
+                    $targetFormConfig = $this->config->ai->targetForm[$m][$f];
+                    $m                = strtolower($targetFormConfig->m);
+                    $f                = strtolower($targetFormConfig->f);
+                }
                 if(!commonModel::hasPriv($m, $f))
                 {
                     if($keepUnauthorized) $prompts[$idx]->unauthorized = true;
