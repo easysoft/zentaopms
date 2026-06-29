@@ -149,9 +149,9 @@ class repoModelTest extends baseTest
         return $objects;
     }
 
-    public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest(int $projectID = 0, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0)
     {
-        $objects = $this->instance->getList($projectID , $SCM, $orderBy , $pager );
+        $objects = $this->instance->getList($projectID, $space, $orderBy, $pager, $getCodePath, $lastSubmitTime, $type, $param);
 
         if(dao::isError()) return dao::getError();
 
