@@ -2235,6 +2235,7 @@ class doc extends control
             $mode = ($isNotDocTab || $type == 'execution' || $showList) ? 'list' : 'home';
         }
 
+        $this->app->loadModuleConfig('api');
         $this->app->loadLang('file');
 
         /* For product drop menu. */
