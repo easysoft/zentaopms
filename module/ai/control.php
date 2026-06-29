@@ -907,6 +907,15 @@ class ai extends control
 
         if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
 
+        $fields = array_values($this->ai->getPromptFields($promptID));
+        if($fields)
+        {
+            $response['fields']     = $fields;
+            $response['formConfig'] = array();
+            $response['formConfig']['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $response['formConfig']['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
+        }
+
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
         $response['formLocation'] = '';
