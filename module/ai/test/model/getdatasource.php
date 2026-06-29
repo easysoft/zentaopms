@@ -12,6 +12,8 @@ cid=15082
 - doc模块使用配置的字段 @title
 - testsuite模块字段数量 @2
 - story模块过滤deleted等系统字段 @0
+- story模块补充子表需求描述字段 @1
+- story模块补充子表验收标准字段 @1
 
 */
 
@@ -28,3 +30,5 @@ r($result['program']['program'][0]) && p() && e('name'); // program模块使用�
 r($result['doc']['doc'][0]) && p() && e('title'); // doc模块使用配置的字段
 r(count($result['testsuite']['testsuite'])) && p() && e('2'); // testsuite模块字段数量
 r(in_array('deleted', $result['story']['story']) ? 1 : 0) && p() && e('0'); // story模块过滤deleted等系统字段
+r(in_array('spec', $result['story']['story']) ? 1 : 0) && p() && e('1'); // story模块补充子表需求描述字段
+r(in_array('verify', $result['story']['story']) ? 1 : 0) && p() && e('1'); // story模块补充子表验收标准字段
