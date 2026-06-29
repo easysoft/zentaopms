@@ -3,7 +3,7 @@
 
 /**
 
-title=productpanModel->unlinkBug();
+title=productplanModel->unlinkBug();
 timeout=0
 cid=17648
 
@@ -19,7 +19,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('bug')->gen(10);
 
-$tester = new productPlan();
+$tester = new productplanModelTest();
 
 r($tester->unlinkBugTest(1))  && p('title') && e('BUG1'); // 正确的bug
 r($tester->unlinkBugTest(2))  && p('title') && e('BUG2'); // 正确的bug
