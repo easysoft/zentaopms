@@ -715,6 +715,9 @@ class commonModel extends model
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
 
+            /* 6. 检查文档落地页权限。*/
+            if($currentModule == 'doc' && $currentMethod == 'lastViewedSpace' && !common::hasPriv('doc', 'mySpace')) $display = false;
+
             /* Check whether the homeMenu of this group have permissions. If yes, point to them. */
             if($display == false and isset($lang->$group->homeMenu))
             {
