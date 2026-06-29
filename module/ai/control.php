@@ -372,7 +372,7 @@ class ai extends control
 
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
-        $this->view->lastActiveStep = 'basicinfo';
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = $this->lang->ai->promptBasicInfo;
         $this->display();
     }
