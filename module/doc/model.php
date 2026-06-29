@@ -834,7 +834,7 @@ class docModel extends model
      * @access public
      * @return array
      */
-    public function getDocsWithPager(array $libs, string $spaceType, int $excludeID = 0, bool $queryTemplate = false, string $filterType = '', object $pager = null, string $search = '', string $searchType = 'all'): array
+    public function getDocsWithPager(array $libs, string $spaceType, int $excludeID = 0, bool $queryTemplate = false, string $filterType = '', ?object $pager = null, string $search = '', string $searchType = 'all'): array
     {
         $searchCond = array();
         if(!empty($search))

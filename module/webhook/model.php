@@ -828,7 +828,7 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', object $aitaskObject = null): bool
+    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', ?object $aitaskObject = null): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
 
