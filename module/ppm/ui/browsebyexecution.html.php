@@ -34,15 +34,42 @@ featureBar
     set::linkParams("repoID={$repoID}&mode=status&param={key}&objectID={$objectID}")
 );
 
-toolBar
+/* 项目/执行视角下的镜像代码库限制：全镜像 → 按钮禁用 + 黄条提示；部分镜像 → 按钮正常 + 黄条提示；无镜像 → 静默；无创建权限 → 整条工具条沉默。 */
+$canCreate       = hasPriv($app->rawModule, 'create');
+$totalRepoCount  = 0;
+$mirrorRepoCount = 0;
+foreach($repoList as $repoItem)
+{
+    $totalRepoCount++;
+    if(!empty($repoItem->mirror)) $mirrorRepoCount++;
+}
+$hasMirrorRepo = $mirrorRepoCount > 0;
+$allMirrorRepo = $totalRepoCount > 0 && $mirrorRepoCount === $totalRepoCount;
+
+$createBtnClass = 'btn primary';
+if($allMirrorRepo) $createBtnClass .= ' disabled';
+$targetRepoID = $repoID ? $repoID : key($repoList);
+$createBtnUrl  = $allMirrorRepo ? 'javascript:;' : createLink($app->rawModule, 'create', "repoID={$targetRepoID}&objectID={$objectID}");
+
+$mirrorRepoAlert = ($canCreate && $hasMirrorRepo) ? div
 (
-    hasPriv($app->rawModule, 'create') ? item(
+    setClass('alert with-icon mr-3 text-warning flex items-center mb-0'),
+    /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
+    setStyle(array('--alert-bg' => 'var(--color-warning-50)', 'gap' => '.25rem')),
+    h::span(setClass('icon icon-exclamation-sign')),
+    h::span($lang->ppm->mirrorRepoTip)
+) : null;
+
+if($canCreate) toolBar
+(
+    $mirrorRepoAlert,
+    item(
         set::text($lang->ppm->create),
         set::icon('plus'),
-        set::className('btn primary'),
-        set::url(createLink($app->rawModule, 'create', "repoID=" . ($repoID ? $repoID : key($repoList)) . "&objectID={$objectID}")),
+        set::className($createBtnClass),
+        set::url($createBtnUrl),
         set('data-app', $app->tab)
-    ) : null
+    )
 );
 
 dtable

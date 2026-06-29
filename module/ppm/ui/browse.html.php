@@ -23,7 +23,8 @@ featureBar
 );
 
 $linkParams = $app->tab == 'devops' ? "repoID={$repo->id}" : '';
-/* 镜像代码库（$repo->mirror == 1）不允许提交合并请求，按钮置灰禁点，并在左侧展示橙色提醒。 */
+/* 镜像代码库（$repo->mirror == 1）不允许提交合并请求，按钮置灰禁点，并在左侧展示橙色提醒；无创建权限时整条工具条沉默。 */
+$canCreate    = hasPriv($app->rawModule, 'create');
 $isMirrorRepo = !empty($repo->mirror);
 
 /* 提取嵌套三元：按钮 class 与 url 在镜像态下的取值。 */
@@ -31,7 +32,7 @@ $createBtnClass = 'btn primary';
 if($isMirrorRepo) $createBtnClass .= ' disabled';
 $createBtnUrl = $isMirrorRepo ? 'javascript:;' : createLink($app->rawModule, 'create', $linkParams);
 
-$mirrorRepoAlert = $isMirrorRepo ? div
+$mirrorRepoAlert = ($canCreate && $isMirrorRepo) ? div
 (
     setClass('alert with-icon mr-3 text-warning flex items-center mb-0'),
     /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
@@ -40,16 +41,16 @@ $mirrorRepoAlert = $isMirrorRepo ? div
     h::span($lang->ppm->mirrorRepoTip)
 ) : null;
 
-toolBar
+if($canCreate) toolBar
 (
     $mirrorRepoAlert,
-    hasPriv($app->rawModule, 'create') ? item(set(array
+    item(set(array
     (
         'text'  => $lang->ppm->create,
         'icon'  => 'plus',
         'class' => $createBtnClass,
         'url'   => $createBtnUrl
-    ))) : null
+    )))
 );
 
 dtable
