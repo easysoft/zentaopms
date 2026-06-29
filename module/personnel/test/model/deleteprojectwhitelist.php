@@ -36,7 +36,7 @@ cid=17324
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $projectIdList = array(0, 11, 16, 1000);
 $account       = array('admin', 'user11', 'user12');
