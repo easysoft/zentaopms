@@ -334,7 +334,7 @@ class actionTao extends actionModel
 
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
-            ->where("objectType IN('project', 'testtask', 'build')")
+            ->where("`objectType` IN('project', 'testtask', 'build')")
             ->andWhere('project')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'story')

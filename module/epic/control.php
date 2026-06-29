@@ -78,14 +78,14 @@ class epic extends control
     /**
      * Edit a epic.
      *
-     * @param  int    $storyID
+     * @param  int    $epicID
      * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit(int $storyID, string $kanbanGroup = 'default')
+    public function edit(int $epicID, string $kanbanGroup = 'default')
     {
-        echo $this->fetch('story', 'edit', "storyID=$storyID&kanbanGroup=$kanbanGroup&storyType=epic");
+        echo $this->fetch('story', 'edit', "storyID=$epicID&kanbanGroup=$kanbanGroup&storyType=epic");
     }
 
     /**

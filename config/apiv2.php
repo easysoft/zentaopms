@@ -23,7 +23,7 @@ $routes['/products/:productID/requirements'] = array('redirect' => '/products/br
 $routes['/requirements/:storyID']            = array('response' => 'story|requirement,actions(array)');
 
 $routes['/products/:productID/productplans'] = array('redirect' => '/productplans?productID=:productID', 'response' => 'plans(array)|productplans,pager', 'search' => array('enabled' => true));
-$routes['/productplans/:planID']             = array('response' => 'plan|productplan,actions(array)');
+$routes['/productplans/:planID']             = array('get' => array ('response' => 'plan|productplan,actions(array)'), 'put' => array ('response' => '*'));
 
 $routes['/products/:productID/releases'] = array('redirect' => '/releases?productID=:productID', 'response' => 'releases,pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/releases'] = array('redirect' => '/projectreleases?projectID=:projectID', 'response' => 'releases,pager', 'search' => array('enabled' => true, 'searchModule' => 'release'));
@@ -67,7 +67,7 @@ $routes['/bugs/:bugID']                  = array('response' => 'bug,actions(arra
 $routes['/products/:productID/testcases']     = array('redirect' => '/testcases?productID=:productID', 'response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
 $routes['/projects/:projectID/testcases']     = array('redirect' => '/projects/testcase?projectID=:projectID', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
 $routes['/executions/:executionID/testcases'] = array('redirect' => '/executions/testcase?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'executionCase'));
-$routes['/testcases/:caseID']                 = array('response' => 'testcase,actions(array)');
+$routes['/testcases/:caseID']                 = array('get' => array('response' => 'testcase,actions(array)'), 'put' => array());
 
 $routes['/products/:productID/testtasks']     = array('redirect' => '/testtasks?productID=:productID', 'response' => 'tasks(array)|testtasks,pager');
 $routes['/projects/:projectID/testtasks']     = array('redirect' => '/projects/testtask?projectID=:projectID');

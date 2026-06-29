@@ -388,7 +388,7 @@ class file extends control
             if($this->app->clientDevice == 'mobile') return $this->send(array('load' => true));
 
             $newFile->status = 'success';
-            return print(json_encode($newFile));
+            return $this->send($newFile);
         }
 
         if($this->app->clientDevice == 'mobile')

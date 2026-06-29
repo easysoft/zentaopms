@@ -78,14 +78,14 @@ class requirement extends control
     /**
      * Edit a requirement.
      *
-     * @param  int    $storyID
+     * @param  int    $requirementID
      * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit(int $storyID, string $kanbanGroup = 'default')
+    public function edit(int $requirementID, string $kanbanGroup = 'default')
     {
-        echo $this->fetch('story', 'edit', "storyID=$storyID&kanbanGroup=$kanbanGroup&storyType=requirement");
+        echo $this->fetch('story', 'edit', "storyID=$requirementID&kanbanGroup=$kanbanGroup&storyType=requirement");
     }
 
     /**
