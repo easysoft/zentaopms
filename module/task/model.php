@@ -3705,6 +3705,7 @@ class taskModel extends model
 
         $parentStatus = $parentTask->status;
         if(!in_array($parentStatus, array('doing', 'pause', 'cancel', 'closed'))) return;
+        if(empty(trim($parentTask->path, ','))) return;
 
         $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('path')->like("{$parentTask->path}%")->andWhere('id')->ne($taskID)->fetchAll('id', false);
         if(empty($childrenTasks)) return;
