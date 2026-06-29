@@ -42,6 +42,8 @@ class aiAgentEntry extends wg
     {
         global $app, $config;
 
+        if(!empty($app->installing)) return null;
+
         $app->control->loadModel('ai');
         if(!commonModel::hasPriv('ai', 'promptExecute')) return null;
         if(!$this->isZAIConfigured($app)) return null;

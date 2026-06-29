@@ -25,6 +25,8 @@ class aiFormInject extends wg
     {
         global $app;
 
+        if(!empty($app->installing)) return null;
+
         $app->control->loadModel('ai');
         if(!commonModel::hasPriv('ai', 'promptExecute')) return null;
         if(!$app->control->loadModel('zai')->getSetting()) return null;
