@@ -29,15 +29,6 @@ foreach($repoList as $repo)
     }
     $repo->productNames = implode('，', $productNames);
 
-    if(!empty($repo->mirror) && !empty($repo->providerID))
-    {
-        $provider = $this->loadModel('provider')->fetchByID((int)$repo->providerID);
-        $repo->origin = !empty($provider->type) ? $provider->type : '';
-    }
-    else
-    {
-        $repo->origin = 'GitFox';
-    }
 }
 
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
