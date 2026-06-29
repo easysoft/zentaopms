@@ -3428,9 +3428,11 @@ class repoModel extends model
             }
             elseif(strpos($provider->url, 'svn://') === 0)
             {
-                $path = explode('///', $provider->url);
-                $params->provider->host = 'svn://';
-                $params->provider->slug = isset($path[1]) ? $path[1] : '';
+                $path = explode('//', $provider->url);
+                $params->provider->host     = 'svn:/';
+                $params->provider->slug     = isset($path[1]) ? $path[1] : '';
+                $params->provider->password = $formData->password;
+                $params->provider->username = $formData->account;
             }
             else
             {
