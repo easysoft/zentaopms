@@ -77,6 +77,13 @@ class aiModel extends model
                 }
 
                 $fields = array_keys($fieldList);
+                if($module == 'story')
+                {
+                    foreach(array('spec', 'verify') as $field)
+                    {
+                        if(!in_array($field, $fields)) $fields[] = $field;
+                    }
+                }
 
                 $fieldCache[$cacheKey]       = $fields;
                 $dataSource[$group][$module] = $fields;
