@@ -1347,7 +1347,7 @@ class executionModel extends model
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-                ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
+                ->andWhere('t2.`openedBy`', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('order_desc')
@@ -1362,7 +1362,7 @@ class executionModel extends model
                 ->andWhere('t1.type')->in('sprint,stage,kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+                ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('t1.order_desc')
@@ -1413,10 +1413,10 @@ class executionModel extends model
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
             ->fi()
             ->beginIF($browseType == 'reviewedby')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->fetchAll('id');
 
@@ -1563,10 +1563,10 @@ class executionModel extends model
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
             ->fi()
             ->beginIF($browseType == 'reviewedby')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -2513,7 +2513,7 @@ class executionModel extends model
         $branches = str_replace(',', "','", $branches);
         return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.status')->in('wait,doing,pause,cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.execution')->in(array_keys($executions))
@@ -3889,9 +3889,9 @@ class executionModel extends model
         {
             return strpos($value, '.') === false ? 't1.' . $value : $value;
         }, explode(',', $orderBy));
-        $orderBy = str_replace('t1.storyTitle', 't2.title', implode(',', $orderBy));
+        $orderBy = str_replace('t1.`storyTitle`', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
-        $orderBy = str_replace('t1.beginDate', 'beginDate', $orderBy);
+        $orderBy = str_replace('t1.`beginDate`', 'beginDate', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
@@ -3908,10 +3908,10 @@ class executionModel extends model
             t2.status AS storyStatus,
             t3.realname AS assignedToRealName,
             IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder,
-            IF(t1.estStarted IS NULL, t4.`begin`, t1.estStarted) as beginDate')
+            IF(t1.`estStarted` IS NULL, t4.`begin`, t1.`estStarted`) as beginDate')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
@@ -4350,10 +4350,10 @@ class executionModel extends model
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->cookie->showParent)->andWhere('t1.isParent')->ne('1')->fi()
+            ->beginIF(!$this->cookie->showParent)->andWhere('t1.`isParent`')->ne('1')->fi()
             ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -5547,7 +5547,7 @@ class executionModel extends model
         $deliverables = $this->dao->select('t1.id, t2.required')->from(TABLE_DELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
+            ->andWhere('t1.`workflowGroup`')->eq((int)$project->workflowGroup)
             ->andWhere('t1.status')->eq('enabled')
             ->andWhere('t2.required')->ne('0')
             ->andWhere('t2.stage')->eq($stageType)

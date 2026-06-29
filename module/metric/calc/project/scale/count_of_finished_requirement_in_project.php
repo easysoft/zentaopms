@@ -22,7 +22,7 @@ class count_of_finished_requirement_in_project extends baseCalc
 {
     public $dataset = 'getRequirementsWithProject';
 
-    public $fieldList = array('t3.project', 't1.status', 't1.closedReason');
+    public $fieldList = array('t3.project', 't1.status', 't1.`closedReason`');
 
     public $result = array();
 

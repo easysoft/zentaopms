@@ -22,7 +22,7 @@ class count_of_test_task_in_execution_when_starting extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.openedDate', 't1.execution', 't2.realBegan');
+    public $fieldList = array('t1.type', 't1.status', 't1.`openedDate`', 't1.execution', 't2.`realBegan`');
 
     public $result = array();
 

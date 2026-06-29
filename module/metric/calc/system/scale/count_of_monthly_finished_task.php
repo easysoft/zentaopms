@@ -22,7 +22,7 @@ class count_of_monthly_finished_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

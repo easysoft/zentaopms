@@ -22,7 +22,7 @@ class count_of_daily_review_story_in_user extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.reviewedBy', 't1.reviewedDate');
+    public $fieldList = array('t1.`reviewedBy`', 't1.`reviewedDate`');
 
     public $result = array();
 

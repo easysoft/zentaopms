@@ -22,7 +22,7 @@ class count_of_assigned_ticket_in_user extends baseCalc
 {
     public $dataset = 'getAllTickets';
 
-    public $fieldList = array('t1.assignedTo');
+    public $fieldList = array('t1.`assignedTo`');
 
     public $result = array();
 

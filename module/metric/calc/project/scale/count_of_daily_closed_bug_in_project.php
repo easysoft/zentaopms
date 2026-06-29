@@ -22,7 +22,7 @@ class count_of_daily_closed_bug_in_project extends baseCalc
 {
     public $dataset = 'getProjectBugs';
 
-    public $fieldList = array('t1.project', 't1.status', 't1.closedDate');
+    public $fieldList = array('t1.project', 't1.status', 't1.`closedDate`');
 
     public $result = array();
 

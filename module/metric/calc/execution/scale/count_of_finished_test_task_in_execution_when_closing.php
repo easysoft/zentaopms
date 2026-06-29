@@ -22,7 +22,7 @@ class count_of_finished_test_task_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.finishedDate', 't1.closedDate', 't1.execution', 't2.closedDate AS executionClosedDate');
+    public $fieldList = array('t1.type', 't1.status', 't1.`closedReason`', 't1.`finishedDate`', 't1.`closedDate`', 't1.execution', 't2.`closedDate` AS executionClosedDate');
 
     public $result = array();
 

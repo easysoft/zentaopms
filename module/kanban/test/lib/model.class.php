@@ -1294,7 +1294,7 @@ class kanbanModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANGROUP)->where('region')->eq($region)->orderBy('order_asc')->fetchAll('id');
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANGROUP)->where('region')->eq($region)->orderBy('`order`_asc')->fetchAll('id');
         return implode(array_keys($objects), ',');
     }
 

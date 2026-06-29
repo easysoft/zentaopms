@@ -186,10 +186,10 @@ class webhookModel extends model
      */
     public function getFeishuBoundOpenId(string $assignedTo): string
     {
-        return $this->dao->select('t1.openID')->from(TABLE_OAUTH)->alias('t1')
-            ->leftJoin(TABLE_WEBHOOK)->alias('t2')->on('t1.providerID = t2.id')
+        return $this->dao->select('t1.`openID`')->from(TABLE_OAUTH)->alias('t1')
+            ->leftJoin(TABLE_WEBHOOK)->alias('t2')->on('t1.`providerID` = t2.id')
             ->where('t1.account')->eq($assignedTo)
-            ->andWhere('t1.providerType')->eq('webhook')
+            ->andWhere('t1.`providerType`')->eq('webhook')
             ->andWhere('t2.type')->eq('feishuuser')
             ->fetch('openID');
     }

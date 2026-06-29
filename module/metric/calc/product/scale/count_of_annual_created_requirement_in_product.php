@@ -22,7 +22,7 @@ class count_of_annual_created_requirement_in_product extends baseCalc
 {
     public $dataset = 'getStories';
 
-    public $fieldList = array('t1.product', 't1.type', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.type', 't1.`openedDate`');
 
     public $result = array();
 

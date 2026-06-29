@@ -22,7 +22,7 @@ class count_of_annual_created_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.openedDate', 't1.product');
+    public $fieldList = array('t1.`openedDate`', 't1.product');
 
     public $result = array();
 

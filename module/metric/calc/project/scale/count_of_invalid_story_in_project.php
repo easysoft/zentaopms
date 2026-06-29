@@ -22,7 +22,7 @@ class count_of_invalid_story_in_project extends baseCalc
 {
     public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.closedReason');
+    public $fieldList = array('t3.project', 't1.`closedReason`');
 
     public $result = array();
 

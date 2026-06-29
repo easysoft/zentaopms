@@ -22,7 +22,7 @@ class count_of_assigned_bug_in_user extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.assignedTo', 't1.status');
+    public $fieldList = array('t1.`assignedTo`', 't1.status');
 
     public $result = array();
 

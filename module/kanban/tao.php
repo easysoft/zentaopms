@@ -241,7 +241,7 @@ class kanbanTao extends kanbanModel
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
                 ->andWhere('t2.model')->ne('scrum')
-                ->andWhere('t2.hasProduct')->eq('0')
+                ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }
         elseif($objectType == 'release')
@@ -250,7 +250,7 @@ class kanbanTao extends kanbanModel
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
                 ->andWhere('t2.model')->eq('kanban')
-                ->andWhere('t2.hasProduct')->eq('0')
+                ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }
 

@@ -22,7 +22,7 @@ class count_of_annual_finished_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('t1.status', 't1.realEnd');
+    public $fieldList = array('t1.status', 't1.`realEnd`');
 
     public $result = array();
 

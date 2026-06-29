@@ -533,9 +533,9 @@ class personnelModel extends model
     {
         return $this->dao->select('t1.id,t1.account,t2.realname,t2.dept,t2.role,t2.phone,t2.qq,t2.weixin,t2.email')->from(TABLE_ACL)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('t1.objectID')->eq($objectID)
+            ->where('t1.`objectID`')->eq($objectID)
             ->andWhere('t1.type')->eq('whitelist')
-            ->andWhere('t1.objectType')->eq($objectType)
+            ->andWhere('t1.`objectType`')->eq($objectType)
             ->andWhere('t2.realname')->ne('')
             ->orderBy($orderBy)
             ->page($pager)

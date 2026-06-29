@@ -433,9 +433,9 @@ class dataset
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t1.id=t3.project')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
             ->leftJoin(TABLE_PROJECT)->alias('t5')->on('t1.project=t5.id')
-            ->leftJoin(TABLE_ACTION)->alias('t6')->on('t3.story=t6.objectID')
+            ->leftJoin(TABLE_ACTION)->alias('t6')->on('t3.story=t6.`objectID`')
             ->where('t1.type')->in('sprint,stage,kanban')
-            ->andWhere('t6.objectType')->eq('story')
+            ->andWhere('t6.`objectType`')->eq('story')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t4.type')->eq('story')
             ->andWhere('t4.deleted')->eq(0)
@@ -486,7 +486,7 @@ class dataset
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
             ->andWhere('t4.deleted')->eq('0')
-            ->andWhere('t1.isParent')->eq('0')
+            ->andWhere('t1.`isParent`')->eq('0')
             ->andWhere('t4.type')->eq('project');
 
         return $this->defaultWhere($stmt, 't1');
@@ -555,7 +555,7 @@ class dataset
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t1.type')->eq('story')
-                ->andWhere('t1.isParent')->eq('0')
+                ->andWhere('t1.`isParent`')->eq('0')
                 ->andWhere('t2.shadow')->eq('0');
 
             return $this->defaultWhere($stmt, 't1');
@@ -581,7 +581,7 @@ class dataset
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t1.isParent')->eq('0')
+            ->andWhere('t1.`isParent`')->eq('0')
             ->andWhere('t2.shadow')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
@@ -602,7 +602,7 @@ class dataset
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t1.isParent')->eq('0');
+            ->andWhere('t1.`isParent`')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
@@ -611,12 +611,12 @@ class dataset
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-            ->leftJoin(TABLE_RELATION)->alias('t3')->on("t1.id = t3.AID and t3.AType = 'story' and t3.BType = 'bug'")
-            ->leftJoin(TABLE_BUG)->alias('t4')->on("t3.BType = 'bug' and t3.BID = t4.id")
+            ->leftJoin(TABLE_RELATION)->alias('t3')->on("t1.id = t3.`AID` and t3.`AType` = 'story' and t3.`BType` = 'bug'")
+            ->leftJoin(TABLE_BUG)->alias('t4')->on("t3.`BType` = 'bug' and t3.`BID` = t4.id")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq('story')
-            ->andWhere('t1.isParent')->eq('0');
+            ->andWhere('t1.`isParent`')->eq('0');
 
         $stmt = $this->defaultWhere($stmt, 't1');
         return $stmt->groupBy('t1.id');
@@ -720,7 +720,7 @@ class dataset
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.shadow')->eq(0)
             ->andWhere('t1.stage', true)->eq('released')
-            ->orWhere('t1.closedReason')->eq('done')
+            ->orWhere('t1.`closedReason`')->eq('done')
             ->markRight(1);
 
         return $this->defaultWhere($stmt, 't1')->groupBy('t1.product');
@@ -893,7 +893,7 @@ class dataset
     public function getTasksWithBuildInfo($fieldList)
     {
         $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.fromBug = t2.id')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.`fromBug` = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t3.project=t4.id')
             ->leftJoin(TABLE_BUILD)->alias('t5')->on('t5.execution=t3.id')
@@ -901,8 +901,8 @@ class dataset
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t4.deleted')->eq('0')
-            ->andWhere('t1.fromBug')->ne(0)
-            ->andWhere('t1.isParent')->eq('0');
+            ->andWhere('t1.`fromBug`')->ne(0)
+            ->andWhere('t1.`isParent`')->eq('0');
 
         return $this->defaultWhere($stmt, 't1');
     }
@@ -1125,10 +1125,10 @@ class dataset
     public function getMRs($fieldList)
     {
         return $this->dao->select($fieldList)->from(TABLE_MR)->alias('t1')
-            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repoID = t2.id')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.`repoID` = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t1.isFlow')->eq('0');
+            ->andWhere('t1.`isFlow`')->eq('0');
     }
 
     /**
@@ -1216,7 +1216,7 @@ class dataset
         $stmt = $this->dao->select($fieldList)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project = t3.id')
-            ->where('t1.isParent')->eq(0)
+            ->where('t1.`isParent`')->eq(0)
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.status')->ne('cancel')
             ->andWhere('t2.deleted')->eq('0')
@@ -1300,7 +1300,7 @@ class dataset
         $task = $this->dao->select('SUM(t1.consumed) AS consumed, t1.project')
             ->from(TABLE_TASK)->alias('t1')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.isParent')->eq('0');
+            ->andWhere('t1.`isParent`')->eq('0');
 
         $query = $this->defaultWhere($task, 't1')->groupBy('t1.project')->get();
 
@@ -1398,7 +1398,7 @@ class dataset
      */
     public function getQAs($fieldList)
     {
-        $fieldList = 't1.id, t1.assignedTo, t2.vision';
+        $fieldList = 't1.id, t1.`assignedTo`, t2.vision';
         $auditplanTable = $this->config->objectTables['auditplan'];
         $ncTable        = $this->config->objectTables['nc'];
         $userTable      = $this->config->objectTables['user'];
@@ -1407,7 +1407,7 @@ class dataset
         $auditplan = $this->dao->select($fieldList)
             ->from(TABLE_AUDITPLAN)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.status')->eq('wait')
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t1.deleted')->eq('0')
@@ -1417,7 +1417,7 @@ class dataset
         $nc = $this->dao->select($fieldList)
             ->from(TABLE_NC)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.status')->eq('active')
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t1.deleted')->eq('0')
@@ -1443,7 +1443,7 @@ class dataset
     {
         return $this->dao->select($fieldList)->from(TABLE_REPO)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t2.repo=t1.id')
-            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t3.id=t1.serviceHost')
+            ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t3.id=t1.`serviceHost`')
             ->where('t1.deleted')->eq(0);
     }
 

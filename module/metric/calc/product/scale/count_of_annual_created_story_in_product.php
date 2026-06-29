@@ -22,7 +22,7 @@ class count_of_annual_created_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.`openedDate`');
 
     public $result = array();
 

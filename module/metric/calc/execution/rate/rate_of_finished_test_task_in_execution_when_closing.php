@@ -22,7 +22,7 @@ class rate_of_finished_test_task_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.closedReason', 't1.closedDate', 't1.execution', 't2.multiple', 't2.closedDate as executionClosed', 't3.closedDate as projectClosed');
+    public $fieldList = array('t1.type', 't1.status', 't1.`closedReason`', 't1.`closedDate`', 't1.execution', 't2.multiple', 't2.`closedDate` as executionClosed', 't3.`closedDate` as projectClosed');
 
     public $result = array();
 

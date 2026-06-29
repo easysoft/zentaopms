@@ -22,7 +22,7 @@ class rate_of_delivered_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedReason', 't1.stage');
+    public $fieldList = array('t1.`closedReason`', 't1.stage');
 
     public $result = array('valid' => 0, 'delivered' => 0);
 

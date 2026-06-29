@@ -22,7 +22,7 @@ class ev_of_weekly_finished_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.project', 't1.estimate', 't1.consumed', 't1.left', 't1.status', 't1.closedReason');
+    public $fieldList = array('t1.project', 't1.estimate', 't1.consumed', 't1.left', 't1.status', 't1.`closedReason`');
 
     public $result = array();
 

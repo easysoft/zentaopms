@@ -521,7 +521,7 @@ class testtaskModel extends model
         $query = str_replace('t1.`lastRunDate`', 't2.`lastRunDate`', $query);
         $query = str_replace('t1.`lastRunResult`', 't2.`lastRunResult`', $query);
 
-        return $this->dao->select('t1.*, t2.lastRunner, t2.lastRunDate, t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.`lastRunner`, t2.`lastRunDate`, t2.`lastRunResult`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
             ->where('t2.task')->eq($testTask)
             ->andWhere('t1.status')->ne('wait')
@@ -567,13 +567,13 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunResult(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
-        $datas = $this->dao->select("t1.lastRunResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select("t1.`lastRunResult` AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2') ->on('t1.case = t2.id')
             ->where($caseQuery)
             ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
-            ->groupBy('t1.lastRunResult')
+            ->groupBy('t1.`lastRunResult`')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -654,13 +654,13 @@ class testtaskModel extends model
      */
     public function getDataOfTestTaskPerRunner(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
-        $datas = $this->dao->select('t1.lastRunner AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t1.`lastRunner` AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where($caseQuery)
             ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
-            ->groupBy('t1.lastRunner')
+            ->groupBy('t1.`lastRunner`')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -1114,7 +1114,7 @@ class testtaskModel extends model
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
-            ->andWhere('t1.assignedTo')->eq($user)
+            ->andWhere('t1.`assignedTo`')->eq($user)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)

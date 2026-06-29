@@ -22,7 +22,7 @@ class count_of_monthly_created_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

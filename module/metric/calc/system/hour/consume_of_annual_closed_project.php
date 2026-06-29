@@ -22,7 +22,7 @@ class consume_of_annual_closed_project extends baseCalc
 {
     public $dataset = 'getProjectTasks';
 
-    public $fieldList = array('t1.closedDate', 't2.consumed', 't1.id as project', 't1.status');
+    public $fieldList = array('t1.`closedDate`', 't2.consumed', 't1.id as project', 't1.status');
 
     public $result = array();
 

@@ -22,7 +22,7 @@ class count_of_pending_issue extends baseCalc
 {
     public $dataset = 'getRepoIssues';
 
-    public $fieldList = array('t1.resolvedBy');
+    public $fieldList = array('t1.`resolvedBy`');
 
     public $result = 0;
 

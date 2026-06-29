@@ -22,7 +22,7 @@ class count_of_story_in_execution_when_starting extends baseCalc
 {
     public $dataset = 'getExecutionDevStories';
 
-    public $fieldList = array('t1.id as execution', 't1.multiple', "if(t1.multiple = '1', t1.realBegan, t5.realBegan) as realBegan", 't3.story', 't6.action', 't6.id as actionID', 't6.date as actionDate');
+    public $fieldList = array('t1.id as execution', 't1.multiple', "if(t1.multiple = '1', t1.`realBegan`, t5.`realBegan`) as realBegan", 't3.story', 't6.action', 't6.id as actionID', 't6.date as actionDate');
 
     public $result = array();
 

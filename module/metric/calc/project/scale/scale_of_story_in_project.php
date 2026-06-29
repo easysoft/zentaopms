@@ -22,7 +22,7 @@ class scale_of_story_in_project extends baseCalc
 {
     public $dataset = 'getAllStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.estimate', 't1.isParent');
+    public $fieldList = array('t3.project', 't1.estimate', 't1.`isParent`');
 
     public $result = array();
 

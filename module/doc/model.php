@@ -108,7 +108,7 @@ class docModel extends model
             ->andWhere('execution')->eq(0)
             ->fi()
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->orderBy('order_asc, id_asc')
+            ->orderBy('`order`_asc, id_asc')
             ->fetchAll('id', false);
 
         return array_filter($libs, array($this, 'checkPrivLib'));
@@ -135,7 +135,7 @@ class docModel extends model
             if($object->isTpl) dao::$filterTpl = 'never';
         }
 
-        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc');
+        $projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, '`order`_asc');
         $products   = $this->loadModel('product')->getPairs();
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
         $waterfalls = array();
@@ -593,10 +593,10 @@ class docModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere($query)
             ->andWhere('t1.lib')->in($allLibIDList)
-            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.`templateType`')->eq('')
             ->andWhere('t1.vision')->in($this->config->vision)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->andWhere('t1.addedBy', 1)->eq($this->app->user->account)
+            ->andWhere('t1.`addedBy`', 1)->eq($this->app->user->account)
             ->orWhere('t1.id')->in(array_keys($docIDList))
             ->markRight(1)
             ->orderBy($sort)
@@ -670,13 +670,13 @@ class docModel extends model
         return $this->dao->select('t1.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t2.type')->eq('docTemplate')
-            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.`builtIn`')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere("(t1.`status` = 'normal' or (t1.`status` = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($libID)->andWhere('t1.lib')->eq($libID)->fi()
             ->beginIF($type == 'draft')->andWhere('t1.status')->eq('draft')->fi()
             ->beginIF($type == 'released')->andWhere('t1.status')->eq('normal')->fi()
-            ->beginIF($type == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'createdByMe')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
             ->beginIF($searchName)->andWhere('t1.title')->like("%{$searchName}%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -780,9 +780,9 @@ class docModel extends model
             ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->andWhere('t2.type')->eq('doc')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
-            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->beginIF(!$queryTemplate)->andWhere('t1.`templateType`')->eq('')->andWhere('t2.type')->eq('doc')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.`templateType`')->ne('')->andWhere('t1.`builtIn`')->eq('0')->andWhere('t2.type')->eq('docTemplate')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")
             ->andWhere("(t2.deleted = '0' or t1.parent != '0')")
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('t1.`order` asc, t1.id asc')
@@ -792,9 +792,9 @@ class docModel extends model
             ->leftJoin(TABLE_DOCCONTENT)->alias('t3')->on('t1.id=t3.doc and t1.version=t3.version')
             ->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('builtIn')->eq('0')->fi()
-            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")
+            ->beginIF(!$queryTemplate)->andWhere('t1.`templateType`')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.`templateType`')->ne('')->andWhere('builtIn')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")
             ->andWhere('t1.module')->in(array('0', ''))
             ->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
             ->orderBy('`order` asc, id_asc')
@@ -920,9 +920,9 @@ class docModel extends model
 
         $query->where('t1.lib')->in($libs)
             ->andWhere('t1.vision')->eq($this->config->vision)
-            ->beginIF(!$queryTemplate)->andWhere('t1.templateType')->eq('')->fi()
-            ->beginIF($queryTemplate)->andWhere('t1.templateType')->ne('')->andWhere('t1.builtIn')->eq('0')->fi()
-            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))");
+            ->beginIF(!$queryTemplate)->andWhere('t1.`templateType`')->eq('')->fi()
+            ->beginIF($queryTemplate)->andWhere('t1.`templateType`')->ne('')->andWhere('t1.`builtIn`')->eq('0')->fi()
+            ->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.`addedBy`='{$this->app->user->account}'))");
 
         if($hasModule)
         {
@@ -938,8 +938,8 @@ class docModel extends model
         $query->beginIF(!empty($excludeID))->andWhere("NOT FIND_IN_SET('{$excludeID}', t1.`path`)")->andWhere('t1.id')->ne($excludeID)->fi()
               ->beginIF($filterType === 'draft')->andWhere('t1.status')->eq('draft')->fi()
               ->beginIF($filterType === 'collect')->andWhere('t4.actor')->eq($this->app->user->account)->fi()
-              ->beginIF($filterType === 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-              ->beginIF($filterType === 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+              ->beginIF($filterType === 'createdByMe')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
+              ->beginIF($filterType === 'editedByMe')->andWhere('t1.`editedBy`')->eq($this->app->user->account)->fi()
               ->beginIF(!empty($searchCond))->andWhere('(' . implode(' OR ', $searchCond) . ')')->fi();
 
         if($pager) $query->limit(($pager->page - 1) * $pager->recPerPage, $pager->recPerPage);
@@ -1175,13 +1175,13 @@ class docModel extends model
      */
     private function appendDocFilters(object $dao, string $browseType, string $queryString, string $filterType, array $hasPrivDocIdList, string $filterDocs, string $appendDocs, string $orderBy): object
     {
-        $dao->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.addedBy='{$this->app->user->account}'))")->fi()
-            ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+        $dao->beginIF(in_array($browseType, array('all', 'bysearch')))->andWhere("(t1.status = 'normal' or (t1.status = 'draft' and t1.`addedBy`='{$this->app->user->account}'))")->fi()
+            ->beginIF($browseType == 'draft')->andWhere('t1.status')->eq('draft')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($queryString)->fi()
             ->beginIF($browseType == 'bykeyword')->andWhere('t1.status')->eq('normal')->fi()
             ->beginIF($browseType == 'bykeyword' && $queryString)->andWhere('t1.title')->like("%$queryString%")->fi()
-            ->beginIF($filterType == 'createdByMe')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
-            ->beginIF($filterType == 'editedByMe')->andWhere('t1.editedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType == 'createdByMe')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
+            ->beginIF($filterType == 'editedByMe')->andWhere('t1.`editedBy`')->eq($this->app->user->account)->fi()
             ->beginIF(!empty($hasPrivDocIdList))->andWhere('t1.id')->in($hasPrivDocIdList)->fi()
             ->beginIF($filterDocs)->andWhere('t1.id')->notIN($filterDocs)->fi()
             ->beginIF($appendDocs)->orWhere('t1.id')->in($appendDocs)->fi()
@@ -1208,7 +1208,7 @@ class docModel extends model
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.templateType')->eq('')
+                ->andWhere('t1.`templateType`')->eq('')
                 ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->andWhere('t1.vision')->eq($this->config->vision)
@@ -1226,10 +1226,10 @@ class docModel extends model
             $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne(0)
-                ->andWhere('t1.templateType')->eq('')
+                ->andWhere('t1.`templateType`')->eq('')
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
-                ->beginIF($type == 'createdby')->andWhere('t1.addedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'createdby')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
@@ -2604,7 +2604,7 @@ class docModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($append)->orWhere('id')->eq($append)->fi()
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchAll('id', false);
         foreach($objects as $objectID => $object)
         {
@@ -3098,7 +3098,7 @@ class docModel extends model
 
         $statistic->todayEditedDocs = $this->dao->select('count(DISTINCT `objectID`) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType`='doc'")
-            ->where('t1.objectType')->eq('doc')
+            ->where('t1.`objectType`')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
             ->andWhere('t1.vision')->eq($this->config->vision)
@@ -3109,7 +3109,7 @@ class docModel extends model
 
         $statistic->myEditedDocs = $this->dao->select('count(DISTINCT t1.`objectID`) as count')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType`='doc'")
-            ->where('t1.objectType')->eq('doc')
+            ->where('t1.`objectType`')->eq('doc')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t1.actor')->eq($this->app->user->account)
             ->andWhere('t1.vision')->eq($this->config->vision)
@@ -3964,7 +3964,7 @@ class docModel extends model
         if($this->app->rawMethod == 'contribute')
         {
             $this->config->doc->search['module'] = 'contributeDoc';
-            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, 'order_asc') + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram(0, 'all', false, '`order`_asc') + array('all' => $this->lang->doc->allProjects);
             $this->config->doc->search['params']['execution']['values'] = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf,noprefix,withobject') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
             $this->config->doc->search['params']['product']['values']   = $this->product->getPairs() + array('all' => $this->lang->doc->allProduct);
@@ -4076,7 +4076,7 @@ class docModel extends model
         $sortedIdList = array_values(array_filter(array_map(function($id){return (is_numeric($id) and $id > 0) ? $id : null;}, $sortedIdList)));
         if(empty($sortedIdList)) return;
 
-        $docs = $this->dao->select('`order`, id')->from(TABLE_DOC)->where('id')->in($sortedIdList)->orderBy('order_asc')->fetchPairs('order', 'id');
+        $docs = $this->dao->select('`order`, id')->from(TABLE_DOC)->where('id')->in($sortedIdList)->orderBy('`order`_asc')->fetchPairs('order', 'id');
 
         /* Update order by sorted id list. */
         foreach($docs as $order => $id)
@@ -4310,7 +4310,7 @@ class docModel extends model
         }
 
         $usedTemplateTypes = $this->dao->select('`key`, `value`')->from(TABLE_LANG)->alias('t1')
-            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.templateType')
+            ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.key = t2.`templateType`')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t1.module = t3.id')
             ->where('t1.module')->eq('baseline')
             ->andWhere('t1.section')->eq('objectList')
@@ -4557,10 +4557,10 @@ class docModel extends model
      */
     public function getHotTemplates($scopeID = 0, $limit = 0)
     {
-        return $this->dao->select('t1.*, CASE WHEN t1.addedDate > t1.editedDate THEN t1.addedDate ELSE t1.editedDate END as hotDate')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, CASE WHEN t1.`addedDate` > t1.`editedDate` THEN t1.`addedDate` ELSE t1.`editedDate` END as hotDate')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
             ->where('t2.type')->eq('docTemplate')
-            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.`builtIn`')->eq('0')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t1.status')->eq('normal')
             ->andWhere('t1.parent')->eq(0)
@@ -4637,7 +4637,7 @@ class docModel extends model
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.type')->eq('docTemplate')
-            ->andWhere('t1.builtIn')->eq('0')
+            ->andWhere('t1.`builtIn`')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF(!is_null($type))->andWhere('t1.module')->in($types)->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
@@ -4777,10 +4777,10 @@ class docModel extends model
     {
         return $this->dao->select('t2.*')
             ->from(JIRA_TMPRELATION)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.BID = t2.account')
-            ->where('t1.AID')->eq($userName)
-            ->andWhere('t1.Btype')->eq('zuser')
-            ->andWhere('t1.Atype')->eq('juser')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.`BID` = t2.account')
+            ->where('t1.`AID`')->eq($userName)
+            ->andWhere('t1.`Btype`')->eq('zuser')
+            ->andWhere('t1.`Atype`')->eq('juser')
             ->andWhere('t2.deleted')->eq('0')
             ->fetch();
     }

@@ -102,7 +102,7 @@ class testcaseTao extends testcaseModel
             ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
             ->where('t2.status')->eq('active')
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t2.version > t1.`storyVersion`')
             ->beginIF(!empty($productID))->andWhere('t1.product')->in($productID)->fi()
             ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()

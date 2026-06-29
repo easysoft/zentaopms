@@ -22,7 +22,7 @@ class count_of_finished_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.status', 't1.closedReason');
+    public $fieldList = array('t1.status', 't1.`closedReason`');
 
     public $result = 0;
 

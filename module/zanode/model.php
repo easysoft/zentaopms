@@ -575,7 +575,7 @@ class zanodemodel extends model
      */
     public function getNodeByID(int $id): object|bool
     {
-        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.hostType='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.hostType='', t3.osName, t1.osName) osName, if(t1.hostType='', t2.tokenSN, t1.tokenSN) tokenSN, if(t1.hostType='', t2.secret, t1.secret) secret")
+        $node = $this->dao->select("t1.*, t2.name as hostName, if(t1.`hostType`='', t2.extranet, t1.extranet) ip,t2.zap as hzap,if(t1.`hostType`='', t3.`osName`, t1.`osName`) osName, if(t1.`hostType`='', t2.`tokenSN`, t1.`tokenSN`) tokenSN, if(t1.`hostType`='', t2.secret, t1.secret) secret")
             ->from(TABLE_ZAHOST)->alias('t1')
             ->leftJoin(TABLE_ZAHOST)->alias('t2')->on('t1.parent = t2.id')
             ->leftJoin(TABLE_IMAGE)->alias('t3')->on('t3.id = t1.image')

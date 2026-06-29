@@ -22,7 +22,7 @@ class pv_of_weekly_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.id', 't1.estStarted', 't1.deadline', 't1.estimate', 't1.status', 't1.closedReason', 't2.begin as executionBegin', 't2.end as executionEnd', 't3.id as project');
+    public $fieldList = array('t1.id', 't1.`estStarted`', 't1.deadline', 't1.estimate', 't1.status', 't1.`closedReason`', 't2.begin as executionBegin', 't2.end as executionEnd', 't3.id as project');
 
     public $result = array();
 

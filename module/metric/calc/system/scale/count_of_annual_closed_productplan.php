@@ -22,7 +22,7 @@ class count_of_annual_closed_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

@@ -22,7 +22,7 @@ class count_of_annual_finished_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.realEnd');
+    public $fieldList = array('t1.`realEnd`');
 
     public $result = array();
 

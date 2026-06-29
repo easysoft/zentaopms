@@ -22,7 +22,7 @@ class rate_of_delivery_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedReason', 't1.stage');
+    public $fieldList = array('t1.product', 't1.`closedReason`', 't1.stage');
 
     public $result = array();
 

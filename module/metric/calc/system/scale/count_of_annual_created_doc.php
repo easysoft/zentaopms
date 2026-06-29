@@ -22,7 +22,7 @@ class count_of_annual_created_doc extends baseCalc
 {
     public $dataset = 'getDocs';
 
-    public $fieldList = array('t1.addedDate');
+    public $fieldList = array('t1.`addedDate`');
 
     public $result = array();
 

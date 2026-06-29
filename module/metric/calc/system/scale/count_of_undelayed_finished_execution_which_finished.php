@@ -22,7 +22,7 @@ class count_of_undelayed_finished_execution_which_finished extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
+    public $fieldList = array('t1.status', 't1.`closedDate`', 't1.`firstEnd`');
 
     public $result = 0;
 

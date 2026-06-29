@@ -22,7 +22,7 @@ class count_of_annual_finished_story_in_project extends baseCalc
 {
     public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.closedDate', 't1.closedReason');
+    public $fieldList = array('t3.project', 't1.`closedDate`', 't1.`closedReason`');
 
     public $result = array();
 

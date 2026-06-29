@@ -1287,7 +1287,7 @@ class storyZen extends story
 
         if(dao::isError()) return false;
 
-        $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $hasProduct = $this->dao->select('t2.`hasProduct`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($oldStory->product)
             ->andWhere('t2.deleted')->eq(0)

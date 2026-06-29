@@ -7,7 +7,7 @@ title=测试 testtaskModel::addPrefixToOrderBy();
 timeout=0
 cid=19153
 
-- 步骤1：特殊字段assignedTo @t1.assignedTo
+- 步骤1：特殊字段assignedTo @t1.`assignedTo`
 - 步骤2：特殊字段status倒序 @t1.status_desc
 - 步骤3：普通字段id @t2.id
 - 步骤4：特殊字段lastRunResult正序 @t1.lastRunResult_asc
@@ -26,7 +26,7 @@ su('admin');
 $testtaskTest = new testtaskModelTest();
 
 // 4. 强制要求：必须包含至少5个测试步骤
-r($testtaskTest->addPrefixToOrderByTest('assignedTo')) && p() && e('t1.assignedTo'); // 步骤1：特殊字段assignedTo
+r($testtaskTest->addPrefixToOrderByTest('assignedTo')) && p() && e('t1.`assignedTo`'); // 步骤1：特殊字段assignedTo
 r($testtaskTest->addPrefixToOrderByTest('status_desc')) && p() && e('t1.status_desc'); // 步骤2：特殊字段status倒序
 r($testtaskTest->addPrefixToOrderByTest('id')) && p() && e('t2.id'); // 步骤3：普通字段id
 r($testtaskTest->addPrefixToOrderByTest('lastRunResult_asc')) && p() && e('t1.lastRunResult_asc'); // 步骤4：特殊字段lastRunResult正序

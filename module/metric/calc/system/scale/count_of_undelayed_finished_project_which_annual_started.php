@@ -22,7 +22,7 @@ class count_of_undelayed_finished_project_which_annual_started extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('t1.realBegan', 't1.realEnd', 't1.firstEnd');
+    public $fieldList = array('t1.`realBegan`', 't1.`realEnd`', 't1.`firstEnd`');
 
     public $result = array();
 

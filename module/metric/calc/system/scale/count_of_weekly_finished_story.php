@@ -22,7 +22,7 @@ class count_of_weekly_finished_story extends baseCalc
 {
     public $dataset = 'getStories';
 
-    public $fieldList = array('t1.status', 't1.closedReason', 't1.closedDate');
+    public $fieldList = array('t1.status', 't1.`closedReason`', 't1.`closedDate`');
 
     public $result = array();
 

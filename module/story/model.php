@@ -322,7 +322,7 @@ class storyModel extends model
                 ->where('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
-                ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.isParent')->eq('0')->fi()
+                ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.`isParent`')->eq('0')->fi()
                 ->beginIF($storyType != 'all')->andWhere('t2.type')->in($storyType)->fi()
                 ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
@@ -426,7 +426,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq($executionID)
             ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
-            ->beginIF(!$hasParent)->andWhere('t2.isParent')->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere('t2.`isParent`')->eq('0')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
@@ -2444,7 +2444,7 @@ class storyModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF(!$hasParent)->andWhere('t1.isParent')->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere('t1.`isParent`')->eq('0')->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($type != 'full' && $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
@@ -3168,11 +3168,11 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
-            ->beginIF($type == 'assignedTo')->andWhere('t1.assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'assignedTo')->andWhere('t1.`assignedTo`')->eq($account)->fi()
             ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->andWhere('t1.status')->in('reviewing')->fi()
-            ->beginIF($type == 'openedBy')->andWhere('t1.openedBy')->eq($account)->fi()
-            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.reviewedBy, ',')")->like("%,$account,%")->fi()
-            ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
+            ->beginIF($type == 'openedBy')->andWhere('t1.`openedBy`')->eq($account)->fi()
+            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.`reviewedBy`, ',')")->like("%,$account,%")->fi()
+            ->beginIF($type == 'closedBy')->andWhere('t1.`closedBy`')->eq($account)->fi()
             ->fi()
             ->beginIF(!$includeLibStories and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->beginIF($shadow !== 'all')->andWhere('t2.shadow')->eq((int)$shadow)->fi()
@@ -4327,7 +4327,7 @@ class storyModel extends model
     public function linkStory(int $executionID, int $productID, int $storyID): void
     {
         if(empty($executionID) || empty($productID) || empty($storyID)) return;
-        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('`order`_desc')->limit(1)->fetch('order');
 
         $projectStory = new stdclass();
         $projectStory->project = $executionID;
@@ -4541,7 +4541,7 @@ class storyModel extends model
 
         /* Merge to get a new sort list. */
         $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, 'order_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
+        if(strpos($orderBy, '`order`_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
 
         /* Loop update the story order of plan. */
         $order = 1;
@@ -5142,8 +5142,8 @@ class storyModel extends model
     {
         return $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
-            ->where('t1.objectType')->eq('story')
-            ->andWhere('t1.objectID')->eq($storyID)
+            ->where('t1.`objectType`')->eq('story')
+            ->andWhere('t1.`objectID`')->eq($storyID)
             ->andWhere('t2.field')->in('reviewer,reviewers')
             ->andWhere('t2.new')->ne('')
             ->orderBy('t1.id_desc')
@@ -5682,8 +5682,8 @@ class storyModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.AType='story' AND t2.AID=t3.id")
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.`BType`='commit' AND t2.`BID`=t1.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.`AType`='story' AND t2.`AID`=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->notNULL()

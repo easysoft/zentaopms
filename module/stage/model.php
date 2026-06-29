@@ -334,7 +334,7 @@ class stageModel extends model
     {
         $stage = $this->dao->select('*')->from(TABLE_STAGE)->where('id')->eq($stageID)->fetch();
         return $this->dao->select('t1.*,t2.flow')->from(TABLE_DECISION)->alias('t1')
-            ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.objectID AND t2.objectType = 'decision'")
+            ->leftJoin(TABLE_APPROVALFLOWOBJECT)->alias('t2')->on("t1.id = t2.`objectID` AND t2.`objectType` = 'decision'")
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.stage')->eq($stageID)
             ->andWhere('t1.type')->eq($type)

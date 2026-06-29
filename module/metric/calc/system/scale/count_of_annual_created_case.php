@@ -22,7 +22,7 @@ class count_of_annual_created_case extends baseCalc
 {
     public $dataset = 'getAllCases';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

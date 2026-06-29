@@ -22,7 +22,7 @@ class scale_of_annual_closed_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.estimate', 't1.status', 't1.closedDate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.status', 't1.`closedDate`', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

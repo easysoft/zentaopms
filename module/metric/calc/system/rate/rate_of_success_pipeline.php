@@ -22,7 +22,7 @@ class rate_of_success_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.status', 't1.createdDate');
+    public $fieldList = array('t1.status', 't1.`createdDate`');
 
     public $result = array();
 

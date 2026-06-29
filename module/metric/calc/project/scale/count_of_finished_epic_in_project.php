@@ -22,7 +22,7 @@ class count_of_finished_epic_in_project extends baseCalc
 {
     public $dataset = 'getEpicWithProject';
 
-    public $fieldList = array('t2.project', 't1.status', 't1.closedReason');
+    public $fieldList = array('t2.project', 't1.status', 't1.`closedReason`');
 
     public $result = array();
 

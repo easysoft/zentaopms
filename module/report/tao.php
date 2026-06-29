@@ -24,7 +24,7 @@ class reportTao extends reportModel
     {
         /* Get created plans, created stories and closed stories in this year. */
         $planGroups = $this->dao->select('t1.id,t1.product')->from(TABLE_PRODUCTPLAN)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.objectID and t2.objectType='productplan'")
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id=t2.`objectID` and t2.`objectType`='productplan'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('LEFT(t2.date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('t2.actor')->in($accounts)->fi()
@@ -117,7 +117,7 @@ class reportTao extends reportModel
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.project')->in(array_keys($executions))
             ->andWhere('t2.stage', true)->in(array('verified', 'released'))
-            ->orWhere('t2.closedReason')->eq('done')
+            ->orWhere('t2.`closedReason`')->eq('done')
             ->markRight(1)
             ->groupBy('t1.project')
             ->fetchPairs();
@@ -149,8 +149,8 @@ class reportTao extends reportModel
     {
         /* Build create case stat. */
         $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq('case')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.`objectID`=t2.id')
+            ->where('t1.`objectType`')->eq('case')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.action')->eq('opened')
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
@@ -179,8 +179,8 @@ class reportTao extends reportModel
 
         /* Build testcase create bug stat. */
         $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq('bug')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.`objectID`=t2.id')
+            ->where('t1.`objectType`')->eq('bug')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t1.action')->eq('opened')
@@ -239,8 +239,8 @@ class reportTao extends reportModel
 
         /* Get output case data. */
         $outputData['case']['createBug'] = $this->dao->select('count(t2.id) as count')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
-            ->where('t1.objectType')->eq('bug')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.`objectID`=t2.id')
+            ->where('t1.`objectType`')->eq('bug')
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t1.action')->eq('opened')
@@ -251,7 +251,7 @@ class reportTao extends reportModel
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+            ->beginIF($accounts)->andWhere('t1.`lastRunner`')->in($accounts)->fi()
             ->fetch('count');
         return $outputData;
     }

@@ -22,7 +22,7 @@ class avg_of_compile_time_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.createdDate', 't1.updateDate');
+    public $fieldList = array('t1.`createdDate`', 't1.`updateDate`');
 
     public $result = array();
 

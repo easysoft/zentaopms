@@ -127,7 +127,7 @@ class projectModel extends model
     public function leftJoinInvolvedTable($stmt)
     {
         return $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.`objectID`');
     }
 
     /**
@@ -141,8 +141,8 @@ class projectModel extends model
     public function appendInvolvedCondition($stmt)
     {
         return $stmt->andWhere('t2.type')->eq('project')
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
+            ->orWhere('t1.`PM`')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
             ->orWhere('(t3.user')->eq($this->app->user->account)
             ->andWhere('t3.deleted')->eq(0)
@@ -582,7 +582,7 @@ class projectModel extends model
     public function getProjectsConsumed(array $projectIdList, string $time = ''): array
     {
         $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType` = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.parent')->lt(1)
@@ -896,7 +896,7 @@ class projectModel extends model
     {
         return $this->dao->select('t1.product, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t2.hasProduct')->eq(0)
+            ->where('t2.`hasProduct`')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
     }

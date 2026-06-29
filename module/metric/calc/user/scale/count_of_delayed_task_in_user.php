@@ -24,7 +24,7 @@ class count_of_delayed_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.assignedTo', 't1.deadline');
+    public $fieldList = array('t1.`assignedTo`', 't1.deadline');
 
     public $result = array();
 

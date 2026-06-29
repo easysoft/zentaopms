@@ -22,7 +22,7 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.status', 't1.resolvedDate');
+    public $fieldList = array('t1.product', 't1.status', 't1.`resolvedDate`');
 
     public $result = array();
 

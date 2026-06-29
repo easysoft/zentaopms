@@ -22,7 +22,7 @@ class count_of_assigned_reviewissue_in_user extends baseCalc
 {
     public $dataset = 'getReviewissues';
 
-    public $fieldList = array('t1.status', 't1.assignedTo');
+    public $fieldList = array('t1.status', 't1.`assignedTo`');
 
     public $result = array();
 

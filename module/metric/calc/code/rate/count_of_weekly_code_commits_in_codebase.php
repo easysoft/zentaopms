@@ -24,7 +24,7 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
 
     public $dataset = 'getRepoCommits';
 
-    public $fieldList = array('t1.id', 't1.name', 't1.serviceHost', 't1.serviceProject', 't1.SCM', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
+    public $fieldList = array('t1.id', 't1.name', 't1.`serviceHost`', 't1.`serviceProject`', 't1.`SCM`', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
 
     public $result = array();
 

@@ -22,7 +22,7 @@ class rate_of_undelayed_closed_execution_which_annual_finished extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
+    public $fieldList = array('t1.status', 't1.`closedDate`', 't1.`firstEnd`');
 
     public $result = array();
 

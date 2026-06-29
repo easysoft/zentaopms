@@ -22,7 +22,7 @@ class count_of_monthly_created_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

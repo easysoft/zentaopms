@@ -22,7 +22,7 @@ class estimate_of_annual_closed_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.estimate', 't1.parent', 't1.status', 't1.isParent', 't3.status AS projectStatus', 't3.closedDate');
+    public $fieldList = array('t1.estimate', 't1.parent', 't1.status', 't1.`isParent`', 't3.status AS projectStatus', 't3.`closedDate`');
 
     public $result = array();
 

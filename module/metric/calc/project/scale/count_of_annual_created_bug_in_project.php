@@ -22,7 +22,7 @@ class count_of_annual_created_bug_in_project extends baseCalc
 {
     public $dataset = 'getProjectBugs';
 
-    public $fieldList = array('t1.openedDate', 't1.project');
+    public $fieldList = array('t1.`openedDate`', 't1.project');
 
     public $result = array();
 

@@ -475,7 +475,7 @@ class apiModel extends model
     public function getStructByQuery(int $libID, ?object $pager = null, string $orderBy = ''): array
     {
         return $this->dao->select('t1.*,t2.realname as addedName')->from(TABLE_APISTRUCT)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.addedBy')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t2.account = t1.`addedBy`')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->eq($libID)
             ->orderBy($orderBy)

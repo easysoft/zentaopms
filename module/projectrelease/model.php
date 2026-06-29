@@ -33,7 +33,7 @@ class projectreleaseModel extends model
             ->andWhere("FIND_IN_SET($projectID, t1.project)")
             ->beginIF($type != 'all' && $type != 'review')->andWhere('t1.status')->eq($type)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
-            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('', false);

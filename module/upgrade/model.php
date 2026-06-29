@@ -1653,10 +1653,10 @@ class upgradeModel extends model
     public function processImport2TaskBugs()
     {
         $bugs = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.toTask = t2.id')
-            ->where('t1.toTask')->ne(0)
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.`toTask` = t2.id')
+            ->where('t1.`toTask`')->ne(0)
             ->andWhere('t1.status')->eq('active')
-            ->andWhere('t2.canceledBy')->ne('')
+            ->andWhere('t2.`canceledBy`')->ne('')
             ->fetchPairs();
 
         $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->in($bugs)->exec();
@@ -1741,13 +1741,13 @@ class upgradeModel extends model
     {
         $tasks = $this->dao->select('t1.id,t2.actor,t2.date')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')
-            ->on('t1.id = t2.objectID')
+            ->on('t1.id = t2.`objectID`')
             ->leftJoin(TABLE_HISTORY)->alias('t3')
             ->on('t2.id = t3.action')
             ->where('t3.new')->eq(0)
             ->andWhere('t3.field')->eq('left')
-            ->andWhere('t2.objectType')->eq('task')
-            ->andWhere('t1.finishedBy')->eq('')
+            ->andWhere('t2.`objectType`')->eq('task')
+            ->andWhere('t1.`finishedBy`')->eq('')
             ->andWhere('t1.status')->in('done,closed')
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
@@ -2739,10 +2739,10 @@ class upgradeModel extends model
      */
     public function fixTaskFinishedInfo()
     {
-        $stmt = $this->dao->select('t1.id as historID,t2.objectType,t2.objectID,t2.actor')->from(TABLE_HISTORY)->alias('t1')
+        $stmt = $this->dao->select('t1.id as historID,t2.`objectType`,t2.`objectID`,t2.actor')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
             ->where('t1.field')->eq('finishedBy')
-            ->andWhere('t2.objectType')->eq('task')
+            ->andWhere('t2.`objectType`')->eq('task')
             ->andWhere('t2.action')->eq('finished')
             ->andWhere('t2.actor != t1.`new`')
             ->query();
@@ -2853,10 +2853,10 @@ class upgradeModel extends model
      */
     public function fixProjectClosedInfo()
     {
-        $stmt = $this->dao->select('t1.id as historID, t2.id, t2.objectType,t2.objectID,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
+        $stmt = $this->dao->select('t1.id as historID, t2.id, t2.`objectType`,t2.`objectID`,t2.actor,t2.date')->from(TABLE_HISTORY)->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on('t1.action=t2.id')
             ->where('t1.field')->eq('status')
-            ->andWhere('t2.objectType')->eq('project')
+            ->andWhere('t2.`objectType`')->eq('project')
             ->andWhere('t2.action')->eq('closed')
             ->query();
 
@@ -5461,7 +5461,7 @@ class upgradeModel extends model
 
         if(!$isOldVersion) return;
 
-        $stories = $this->dao->select('t1.*,t2.PO,t2.createdBy')->from(TABLE_STORY)->alias('t1')
+        $stories = $this->dao->select('t1.*,t2.`PO`,t2.`createdBy`')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
@@ -6044,8 +6044,8 @@ class upgradeModel extends model
     public function updateSearchIndex()
     {
         $requirementIds = $this->dao->select('t1.id')->from(TABLE_SEARCHINDEX)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
-            ->where('t1.objectType')->eq('story')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.`objectID` = t2.id')
+            ->where('t1.`objectType`')->eq('story')
             ->andWhere('t2.type')->eq('requirement')
             ->fetchPairs('id');
         $this->dao->update(TABLE_SEARCHINDEX)->set('objectType')->eq('requirement')->where('id')->in($requirementIds)->exec();
@@ -7134,10 +7134,10 @@ class upgradeModel extends model
     {
         $nodes = $this->dao->select('t1.id,t3.id as reviewID,t3.title,t2.id as approvalID,t1.extra as consumed')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVAL)->alias('t2')->on("t1.approval=t2.id")
-            ->leftJoin(TABLE_REVIEW)->alias('t3')->on("t2.objectID=t3.id")
+            ->leftJoin(TABLE_REVIEW)->alias('t3')->on("t2.`objectID`=t3.id")
             ->where('t3.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.objectType')->eq('review')
+            ->andWhere('t2.`objectType`')->eq('review')
             ->andWhere('t1.extra')->ne('')
             ->andWhere('t1.extra')->ne(0)
             ->orderBy('t1.approval,t1.id')
@@ -8982,8 +8982,8 @@ class upgradeModel extends model
     public function processStoryRelation()
     {
         $this->loadModel('story');
-        $relations = $this->dao->select('t1.*, t2.parent as BParent, t2.isParent')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.BID = t2.id')
+        $relations = $this->dao->select('t1.*, t2.parent as BParent, t2.`isParent`')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.`BID` = t2.id')
             ->where('AType')->eq('requirement')
             ->andWhere('BType')->eq('story')
             ->andWhere('relation')->eq('subdivideinto')
@@ -9823,9 +9823,9 @@ class upgradeModel extends model
      */
     public function updateStoryVerifiedDate()
     {
-        $verifiedDatePairs = $this->dao->select('t1.objectID, t1.date')->from(TABLE_ACTION)->alias('t1')
+        $verifiedDatePairs = $this->dao->select('t1.`objectID`, t1.date')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
-            ->where('t1.objectType')->eq('story')
+            ->where('t1.`objectType`')->eq('story')
             ->andWhere('t1.action')->eq('edited')
             ->andWhere('t2.field')->eq('stage')
             ->andWhere('t2.new')->eq('verified')
@@ -10747,14 +10747,14 @@ class upgradeModel extends model
      */
     public function getUpgradeDocs(): array
     {
-        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type AS contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+        $docs = $this->dao->select('t1.*,t2.title,t2.content,t2.type AS contentType,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t2.type')->in(array('doc', 'html'))
             ->andWhere('t1.status')->ne('draft')
-            ->andWhere('t2.rawContent')->in(null)
-            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t2.`rawContent`')->in(null)
+            ->andWhere('t1.`templateType`')->eq('')
             ->andWhere('t1.template')->eq('')
-            ->andWhere('t2.fromVersion')->eq(0)
+            ->andWhere('t2.`fromVersion`')->eq(0)
             ->fetchAll('id', false);
 
         $newDocs = array();
@@ -11128,7 +11128,7 @@ class upgradeModel extends model
         $templateList = $this->dao->select('t1.*, t2.title, t2.content, t2.type AS contentType, t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id = t2.doc && t1.version = t2.version')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.templateType')->notIn(array('', 'reportTemplate', 'projectReport'))
+            ->andWhere('t1.`templateType`')->notIn(array('', 'reportTemplate', 'projectReport'))
             ->andWhere('t1.lib')->eq(0)
             ->andWhere('t1.module')->eq('')
             ->fetchAll('id', false);
@@ -11405,11 +11405,11 @@ class upgradeModel extends model
         if($plusTypeList) $this->lang->design->plusTypeList = $plusTypeList;
 
         $modelList  = array('waterfall', 'waterfallplus', 'ipd');
-        $moduleList = $this->dao->select('t1.id,t1.name,t2.projectModel,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
+        $moduleList = $this->dao->select('t1.id,t1.name,t2.`projectModel`,t2.id as workflowGroup')->from(TABLE_MODULE)->alias('t1')
             ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t2')->on('t1.root=t2.id')
             ->where('t1.type')->eq('deliverable')
             ->andWhere('t1.extra')->eq('design')
-            ->andWhere('t2.projectModel')->in($modelList)
+            ->andWhere('t2.`projectModel`')->in($modelList)
             ->fetchAll();
 
         $activityList = $this->dao->select('t1.*')->from(TABLE_ACTIVITY)->alias('t1')->leftJoin(TABLE_PROCESS)->alias('t2')->on('t1.process=t2.id')
@@ -11978,7 +11978,7 @@ class upgradeModel extends model
         }
 
         /* 之前交付物没存文档名称、版本，升级的时候补上。 */
-        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version,t2.addedBy,t2.addedDate')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
+        $emptyNameDocs = $this->dao->select('t1.id,t2.title,t2.version,t2.`addedBy`,t2.`addedDate`')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DOC)->alias('t2')->on('t1.doc=t2.id')
             ->where('t1.name')->eq('')
             ->andWhere('t2.deleted')->eq('0')
@@ -12219,8 +12219,8 @@ class upgradeModel extends model
             {
                 $projectActivity = $this->dao->select('t1.id')->from(TABLE_PROGRAMACTIVITY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t3')->on('t2.workflowGroup=t3.id')
-                    ->where('t3.projectModel')->eq($group->projectModel)
+                    ->leftJoin(TABLE_WORKFLOWGROUP)->alias('t3')->on('t2.`workflowGroup`=t3.id')
+                    ->where('t3.`projectModel`')->eq($group->projectModel)
                     ->limit(1)
                     ->fetch('id');
 
@@ -12268,10 +12268,10 @@ class upgradeModel extends model
      */
     public function getUpgradeProjectReports(): array
     {
-        $reports = $this->dao->select('t1.id,t1.project,t1.weekStart,t2.model AS projectModel,t2.status AS projectStatus,t2.realBegan,t2.realEnd,t2.suspendedDate')->from(TABLE_WEEKLYREPORT)->alias('t1')
+        $reports = $this->dao->select('t1.id,t1.project,t1.`weekStart`,t2.model AS projectModel,t2.status AS projectStatus,t2.`realBegan`,t2.`realEnd`,t2.`suspendedDate`')->from(TABLE_WEEKLYREPORT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.status')->ne('wait')
-            ->orderBy('t1.project asc, t1.weekStart asc')
+            ->orderBy('t1.project asc, t1.`weekStart` asc')
             ->fetchAll();
 
         $projectReports = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('model')->in('waterfall,waterfallplus,ipd')->fetchAll();
@@ -12578,7 +12578,7 @@ class upgradeModel extends model
             ->fetchAll('id');
 
         $projectDeliverables = $this->dao->select('t1.id, t2.id as deliverable, t2.category')->from(TABLE_PROJECT)->alias('t1')
-            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.workflowGroup=t2.workflowGroup')
+            ->leftJoin(TABLE_DELIVERABLE)->alias('t2')->on('t1.`workflowGroup`=t2.`workflowGroup`')
             ->where('t2.category')->ne('')
             ->fetchGroup('id', 'category');
 

@@ -22,7 +22,7 @@ class scale_of_annual_finished_story_in_project extends baseCalc
 {
     public $dataset = 'getDevStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t3.project', 't1.`closedDate`', 't1.`closedReason`', 't1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

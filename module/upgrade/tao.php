@@ -301,13 +301,13 @@ class upgradeTao extends upgradeModel
 
         return $this->dao->select('t2.id, t1.date')
             ->from("($linked2releaseActions)")->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.objectID = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.`objectID` = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
             ->leftJoin(TABLE_RELEASE)->alias('t4')->on('t1.extra = t4.id')
             ->where('t2.deleted')->eq('0')
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t2.stage', true)->eq('released')
-            ->orWhere('t2.closedReason')->eq('done')
+            ->orWhere('t2.`closedReason`')->eq('done')
             ->markRight(1)
             ->fetchAll();
     }
@@ -1122,7 +1122,7 @@ class upgradeTao extends upgradeModel
         $outputList = $this->dao->select('t1.*')->from(TABLE_ZOUTPUT)
             ->alias('t1')->leftJoin(TABLE_ACTIVITY)
             ->alias('t2')->on('t1.activity = t2.id')
-            ->where('t2.workflowGroup')->eq($group->id)
+            ->where('t2.`workflowGroup`')->eq($group->id)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchAll('id');
 

@@ -22,7 +22,7 @@ class count_of_daily_closed_bug extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

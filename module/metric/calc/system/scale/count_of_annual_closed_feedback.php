@@ -22,7 +22,7 @@ class count_of_annual_closed_feedback extends baseCalc
 {
     public $dataset = 'getAllFeedbacks';
 
-    public $fieldList = array('t1.status', 't1.closedDate');
+    public $fieldList = array('t1.status', 't1.`closedDate`');
 
     public $result = array();
 

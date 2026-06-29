@@ -22,7 +22,7 @@ class count_of_assigned_case_in_user extends baseCalc
 {
     public $dataset = 'getTestRuns';
 
-    public $fieldList = array('t1.assignedTo', 't3.status');
+    public $fieldList = array('t1.`assignedTo`', 't3.status');
 
     public $result = array();
 

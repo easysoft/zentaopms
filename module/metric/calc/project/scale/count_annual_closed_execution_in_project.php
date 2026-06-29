@@ -22,7 +22,7 @@ class count_annual_closed_execution_in_project extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.project', 't1.closedDate');
+    public $fieldList = array('t1.project', 't1.`closedDate`');
 
     public $result = array();
 

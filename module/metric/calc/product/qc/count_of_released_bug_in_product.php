@@ -31,7 +31,7 @@ class xxx_of_xxx_in_xxx extends baseCalc
      * 如 public $dataset = "getProjectBugs";
      * 涉及的表有 zt_bug t1, zt_product t2, zt_project t3
      * 那么$fieldList可以使用 zt_bug表、zt_product表、zt_project表的所有字段；
-     * 例如 public $fieldList = array('t1.resolvedBy', 't1.resolvedDate', 't2.name as productName', 't3.name as projectName');
+     * 例如 public $fieldList = array('t1.`resolvedBy`', 't1.`resolvedDate`', 't2.name as productName', 't3.name as projectName');
      */
     public $fieldList = array();
 
@@ -61,7 +61,7 @@ class xxx_of_xxx_in_xxx extends baseCalc
          *       ->andWhere('t2.deleted')->eq(0)
          *       ->andWhere('t2.shadow')->eq(0)
          *       ->andWhere('t1.type')->eq('story')
-         *       ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel');
+         *       ->andWhere('t1.`closedReason`')->notin('duplicate,willnotdo,bydesign,cancel');
          */
         return $this->dao->XXX->query();
     }

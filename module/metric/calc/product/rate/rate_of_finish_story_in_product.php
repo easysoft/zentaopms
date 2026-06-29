@@ -22,7 +22,7 @@ class rate_of_finish_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.id', 't1.status', 't1.closedReason');
+    public $fieldList = array('t1.product', 't1.id', 't1.status', 't1.`closedReason`');
 
     public $result = array();
 

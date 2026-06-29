@@ -22,7 +22,7 @@ class count_of_daily_finished_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.finishedDate', 't1.finishedBy', 't3.status as projectStatus', 't2.status as executionStatus');
+    public $fieldList = array('t1.`finishedDate`', 't1.`finishedBy`', 't3.status as projectStatus', 't2.status as executionStatus');
 
     public $result = array();
 

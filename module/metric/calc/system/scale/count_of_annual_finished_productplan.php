@@ -22,7 +22,7 @@ class count_of_annual_finished_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.finishedDate');
+    public $fieldList = array('t1.`finishedDate`');
 
     public $result = array();
 

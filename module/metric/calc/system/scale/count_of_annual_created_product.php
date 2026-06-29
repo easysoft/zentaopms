@@ -22,7 +22,7 @@ class count_of_annual_created_product extends baseCalc
 {
     public $dataset = 'getProducts';
 
-    public $fieldList = array('t1.createdDate');
+    public $fieldList = array('t1.`createdDate`');
 
     public $result = array();
 

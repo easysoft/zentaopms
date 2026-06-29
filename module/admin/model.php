@@ -513,7 +513,7 @@ class adminModel extends model
         return $this->dao->select('t1.id, t1.review')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('1=1')
-            ->beginIF($groupID)->andWhere('t2.workflowGroup')->eq($groupID)->fi()
+            ->beginIF($groupID)->andWhere('t2.`workflowGroup`')->eq($groupID)->fi()
             ->fetchPairs('id');
     }
 }

@@ -22,7 +22,7 @@ class count_of_valid_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.id', 't1.closedReason');
+    public $fieldList = array('t1.id', 't1.`closedReason`');
 
     public $result = 0;
 

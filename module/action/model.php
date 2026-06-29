@@ -579,16 +579,16 @@ class actionModel extends model
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
-        $queryFields = $objectType != 'pipeline' ? "t1.*, {$nameField} AS objectName" : 't1.*, t1.objectType AS type, t2.name AS objectName, t2.type AS objectType';
+        $queryFields = $objectType != 'pipeline' ? "t1.*, {$nameField} AS objectName" : 't1.*, t1.`objectType` AS type, t2.name AS objectName, t2.type AS objectType';
 
         $trashes = $this->dao->select($queryFields)->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+            ->leftJoin($table)->alias('t2')->on('t1.`objectID`=t2.id')
             ->where('t1.action')->eq('deleted')
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
-            ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
+            ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.`objectType`')->eq($objectType)->fi()
 
             ->beginIF($objectType == 'pipeline')
             ->andWhere('(t2.type')->eq('gitlab')

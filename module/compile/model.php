@@ -79,7 +79,7 @@ class compileModel extends model
         }
 
         if(strpos($orderBy, 'id') === false) $orderBy .= ', id_desc';
-        return $this->dao->select('t1.id, t1.branch, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.svnDir, t2.comment, t2.atDay, t2.atTime, t2.engine, t2.triggerActions, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.branch, t1.name, t1.job, t1.status, t1.`createdDate`, t1.testtask, t2.pipeline, t2.`triggerType`, t2.`svnDir`, t2.comment, t2.`atDay`, t2.`atTime`, t2.engine, t2.`triggerActions`, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
@@ -372,7 +372,7 @@ class compileModel extends model
      */
     public function exec(object $compile): bool
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.product,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server,t1.lastTag')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.product,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.`triggerType`,t1.`customParam`,t1.server,t1.`lastTag`')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)

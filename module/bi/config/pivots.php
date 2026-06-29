@@ -17,9 +17,9 @@ select
     t2.program1,
     t1.begin,
     t1.`end`,
-    t1.realBegan,
-    t1.realEnd,
-    t1.closedDate,
+    t1.`realBegan`,
+    t1.`realEnd`,
+    t1.`closedDate`,
     t1.realduration,
     t1.realduration - t1.planduration as duration_deviation,
     round((t1.realduration - t1.planduration) / t1.planduration, 3) as rate
@@ -113,7 +113,7 @@ select
     coalesce(t3.storys, 0) as "finishedstorys",
     coalesce(t3.storyestimate, 0) as "finishedstorysmate",
     round(coalesce(t3.storyestimate, 0) / coalesce(t2.consumed, 0), 2) as "demandsizesperunittime",
-    t1.closedDate as "closeddate"
+    t1.`closedDate` as "closeddate"
 from
     (
         select
@@ -151,7 +151,7 @@ from
                     left join zt_projectstory tt2 on tt1.id = tt2.story
                 where tt1.deleted = '0'
                 and tt1.status = 'closed'
-                and tt1.closedReason = 'done'
+                and tt1.`closedReason` = 'done'
             ) tt3
         group by
             tt3.project
@@ -374,7 +374,7 @@ $config->bi->builtin->pivots[] = array
 select
     t1.product,
     t2.name,
-    (case when t1.closedReason = 'done' or t1.stage = 'released' then 1=1 else 1=0 end) as done,
+    (case when t1.`closedReason` = 'done' or t1.stage = 'released' then 1=1 else 1=0 end) as done,
     1 as count from zt_story as t1
 left join zt_product as t2 on t1.product=t2.id
 left join zt_project as t3 on t2.program=t3.id
@@ -424,7 +424,7 @@ EOT,
         (
             'field'     => 'done',
             'object'    => 'story',
-            'whereSql'  => "WHERE t1.deleted='0'  and t1.closedReason = 'done' or t1.stage = 'released'",
+            'whereSql'  => "WHERE t1.deleted='0'  and t1.`closedReason` = 'done' or t1.stage = 'released'",
             'condition' => array
             (
                 array('drillObject' => 'zt_story', 'drillAlias' => 't1', 'drillField' => 'product', 'queryField' => 'product')
@@ -894,7 +894,7 @@ select
     t4.id as project,
     t1.name as executionname,
     t2.execution as execution,
-    (case when t3.account is not null then t3.account else t2.assignedTo end) as assignedTo,
+    (case when t3.account is not null then t3.account else t2.`assignedTo` end) as assignedTo,
     t2.id as taskID,
     t1.status as executionstatus
 from zt_project as t1
@@ -999,22 +999,22 @@ select
  t3.id as project,
  t1.name as executionname,
  t2.execution as execution,
- t2.finishedBy,
+ t2.`finishedBy`,
  t2.id as taskID,
  t1.status as executionstatus
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t1.project=t3.id
-left join zt_user as t4 on t2.finishedBy=t4.account
+left join zt_user as t4 on t2.`finishedBy`=t4.account
 where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and t2.deleted='0'
-and t2.finishedBy!=''
+and t2.`finishedBy`!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
 and (case when \$project='' then 1=1 else t3.id=\$project end)
 and (case when \$dept='' then 1=1 else t4.dept=\$dept end)
-and (case when \$user='' then 1=1 else t2.finishedBy=\$user end)
+and (case when \$user='' then 1=1 else t2.`finishedBy`=\$user end)
 and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
 EOT,
     'settings'  => array
@@ -1073,7 +1073,7 @@ EOT,
         (
             'field'     => 'taskID',
             'object'    => 'task',
-            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_user t3 on t1.finishedBy=t3.account WHERE t1.deleted='0' AND t1.finishedBy!=''",
+            'whereSql'  => "left join zt_project t2 on t1.execution=t2.id left join zt_user t3 on t1.`finishedBy`=t3.account WHERE t1.deleted='0' AND t1.`finishedBy`!=''",
             'condition' => array
             (
                 array('drillObject' => 'zt_task', 'drillAlias' => 't1', 'drillField' => 'finishedBy', 'queryField' => 'finishedBy'),
@@ -1632,7 +1632,7 @@ select
     t1.name as executionname,
     t1.id as execution,
     t2.id as bugID,
-    t2.openedBy
+    t2.`openedBy`
 from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
@@ -1728,14 +1728,14 @@ select
     t1.name as executionname,
     t1.id as execution,
     t2.id as bugID,
-    t2.resolvedBy
+    t2.`resolvedBy`
 from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
 where t1.deleted='0'
 and t2.deleted='0'
 and t2.status!='active'
-and t2.resolvedBy!=''
+and t2.`resolvedBy`!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
 and (case when \$project='' then 1=1 else t3.id=\$project end)
@@ -1794,7 +1794,7 @@ EOT,
         (
             'field'     => 'resolvedBy',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution left join zt_project as t3 on t3.id=t2.project where t1.deleted='0' and t2.deleted='0' and t1.status!='active' and t1.resolvedBy!=''",
+            'whereSql'  => "left join zt_project as t2 on t2.id=t1.execution left join zt_project as t3 on t3.id=t2.project where t1.deleted='0' and t2.deleted='0' and t1.status!='active' and t1.`resolvedBy`!=''",
             'condition' => array
             (
                 array('drillObject' => 'zt_project', 'drillAlias' => 't2', 'drillField' => 'name', 'queryField' => 'executionname'),
@@ -1826,7 +1826,7 @@ select
     t1.name as execution,
     t1.id as executionID,
     t2.id as bugID,
-    t2.assignedTo
+    t2.`assignedTo`
 from zt_project as t1
 left join zt_bug as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
@@ -1928,7 +1928,7 @@ select
     ifnull(t4.resolutions, 0) as resolutions,
     ifnull(round(t4.bugs/(t2.stories-t2.undone),2), 0) as bugthanstory,
     ifnull(round(t4.bugs/(t3.number-t3.undone),2), 0) as bugthantask,
-    ifnull(t4.seriousBugs, 0) as seriousBugs
+    ifnull(t4.`seriousBugs`, 0) as seriousBugs
 from zt_project as t1
 left join ztv_projectstories as t2 on t1.id=t2.execution
 left join ztv_executionsummary as t3 on t1.id=t3.execution
@@ -2191,7 +2191,7 @@ select
     ifnull(t3.bugs, 0) as bugs,
     ifnull(t3.resolutions, 0) as resolutions,
     ifnull(round(t3.bugs/(t2.stories-t2.undone),2), 0) as bugthanstory,
-    ifnull(t3.seriousBugs, 0) as seriousBugs
+    ifnull(t3.`seriousBugs`, 0) as seriousBugs
 from zt_product as t1
 left join ztv_productstories as t2 on t1.id=t2.product
 left join ztv_productbugs as t3 on t1.id=t3.product
@@ -2549,7 +2549,7 @@ EOT,
         (
             'field'     => 'userlogin',
             'object'    => 'action',
-            'whereSql'  => "left join ztv_dayuserlogin  t2 on date(t1.date)=t2.day where ((t1.objectType = 'user') and (t1.action = 'login')) and if(\$startDate='',1,t2.day>=\$startDate)  and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "left join ztv_dayuserlogin  t2 on date(t1.date)=t2.day where ((t1.`objectType` = 'user') and (t1.action = 'login')) and if(\$startDate='',1,t2.day>=\$startDate)  and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillObject' => 'ztv_dayuserlogin', 'drillAlias' => 't2', 'drillField' => 'day', 'queryField' => 'day')
@@ -2569,7 +2569,7 @@ EOT,
         (
             'field'     => 'storyopen',
             'object'    => 'story',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'story' and  action = 'opened') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'story' and  action = 'opened') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillAlias' => 't2', 'queryField' => 'day', 'drillObject' => '', 'drillField' => 'day')
@@ -2579,7 +2579,7 @@ EOT,
         (
             'field'     => 'storyclose',
             'object'    => 'story',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'story' and  action = 'closed') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'story' and  action = 'closed') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillAlias' => 't2', 'queryField' => 'day', 'drillObject' => '', 'drillField' => 'day')
@@ -2589,7 +2589,7 @@ EOT,
         (
             'field'     => 'taskopen',
             'object'    => 'task',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'task' and  action = 'opened') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'task' and  action = 'opened') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillAlias' => 't2', 'queryField' => 'day', 'drillObject' => '', 'drillField' => 'day')
@@ -2599,7 +2599,7 @@ EOT,
         (
             'field'     => 'taskfinish',
             'object'    => 'task',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'task' and  action = 'finished') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'task' and  action = 'finished') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillAlias' => 't2', 'queryField' => 'day', 'drillObject' => '', 'drillField' => 'day')
@@ -2609,7 +2609,7 @@ EOT,
         (
             'field'     => 'bugopen',
             'object'    => 'bug',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'bug' and  action = 'opened') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'bug' and  action = 'opened') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillAlias' => 't2', 'queryField' => 'day', 'drillObject' => '', 'drillField' => 'day')
@@ -2619,7 +2619,7 @@ EOT,
         (
             'field'     => 'bugresolve',
             'object'    => 'bug',
-            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'bug' and  action = 'resolved') t2 on t2.objectID=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
+            'whereSql'  => "right join (select objectID,date(`date`) day from zt_action where objectType = 'bug' and  action = 'resolved') t2 on t2.`objectID`=t1.id where if(\$startDate='',1,t2.day>=\$startDate) and if(\$endDate='',1,t2.day<=\$endDate)",
             'condition' => array
             (
                 array('drillObject' => '', 'drillAlias' => 't2', 'drillField' => 'day', 'queryField' => 'day')
@@ -2653,14 +2653,14 @@ $config->bi->builtin->pivots[] = array
     'createdDate' => '2009-03-14',
     'sql'         => <<<EOT
 select
-    t1.resolvedBy,t1.resolution
+    t1.`resolvedBy`,t1.resolution
 from zt_bug as t1
 left join zt_product as t2 on t1.product = t2.id
 where t1.deleted='0'
 and t2.deleted='0'
 and t1.resolution!=''
-and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
+and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1=1 else t1.product=\$product end)
 and not (\$product='' and \$startDate='' and \$endDate='')
 EOT,
@@ -2704,7 +2704,7 @@ EOT,
         (
             'field'     => 'resolution',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
             'condition' => array
             (
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),
@@ -2741,7 +2741,7 @@ select
     t3.stories,
     t2.undone as undoneTask,
     t3.undone as undoneStory,
-    t2.totalReal from zt_project as t1
+    t2.`totalReal` from zt_project as t1
 left join ztv_executionsummary as t2 on t1.id=t2.execution
 left join ztv_projectstories as t3 on t1.id=t3.execution
 left join zt_project as t4 on t4.id=t1.project
@@ -3067,14 +3067,14 @@ $config->bi->builtin->pivots[] = array
     'createdDate' => '2009-03-14',
     'sql'         => <<<EOT
 select
-    t1.resolvedBy,t1.resolution
+    t1.`resolvedBy`,t1.resolution
 from zt_bug as t1
 left join zt_product as t2 on t1.product = t2.id
 where t1.deleted='0'
 and t2.deleted='0'
 and t1.resolution!=''
-and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)
-and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)
+and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)
+and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1=1 else t1.product=\$product end)
 and not (\$product='' and \$startDate='' and \$endDate='')
 EOT,
@@ -3118,7 +3118,7 @@ EOT,
         (
             'field'     => 'resolution',
             'object'    => 'bug',
-            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.resolvedDate as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.resolvedDate as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
+            'whereSql'  => "left join zt_product as t2 on t1.product = t2.id WHERE t1.deleted='0' AND t1.resolution!=''  and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)  and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)  and (case when \$product = '' then 1=1 else t1.product=\$product end)",
             'condition' => array
             (
                 array('drillObject' => 'zt_bug', 'drillAlias' => 't1', 'drillField' => 'resolvedBy', 'queryField' => 'resolvedBy'),

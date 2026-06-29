@@ -22,7 +22,7 @@ class count_of_assigned_feedback_in_user extends baseCalc
 {
     public $dataset = 'getAllFeedbacks';
 
-    public $fieldList = array('t1.assignedTo');
+    public $fieldList = array('t1.`assignedTo`');
 
     public $result = array();
 

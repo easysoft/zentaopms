@@ -22,7 +22,7 @@ class consume_of_task_in_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.consumed', 't1.project', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.consumed', 't1.project', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

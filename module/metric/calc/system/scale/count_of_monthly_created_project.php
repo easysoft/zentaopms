@@ -22,7 +22,7 @@ class count_of_monthly_created_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

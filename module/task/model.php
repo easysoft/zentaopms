@@ -1871,7 +1871,7 @@ class taskModel extends model
     {
         $tasks = $this->dao->select('t1.id,t1.name,t1.parent,t2.realname AS finishedByRealName')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.finishedBy = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.`finishedBy` = t2.account')
             ->where('t1.execution')->eq((int)$executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
@@ -2416,7 +2416,7 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.project = t3.id")
-            ->where('t1.assignedTo')->eq($account)
+            ->where('t1.`assignedTo`')->eq($account)
             ->andWhere('(t2.status')->eq('suspended')
             ->orWhere('t3.status')->eq('suspended')
             ->markRight(1)
@@ -2472,7 +2472,7 @@ class taskModel extends model
         $tasks = $this->dao->select('t1.id, t1.name, t2.name as executionName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.assignedTo')->eq($account)
+            ->where('t1.`assignedTo`')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
@@ -3847,8 +3847,8 @@ class taskModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.name AS name')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
-            ->leftJoin(TABLE_TASK)->alias('t3')->on("t2.AType='task' AND t2.AID=t3.id")
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.`BType`='commit' AND t2.`BID`=t1.id")
+            ->leftJoin(TABLE_TASK)->alias('t3')->on("t2.`AType`='task' AND t2.`AID`=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->notNULL()
@@ -4017,7 +4017,7 @@ class taskModel extends model
      */
     public function sendMessageForRelationTask(int $taskID, string $action, int $actionID): bool
     {
-        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.assignedTo,t2.mode')->from(TABLE_RELATIONOFTASKS)->alias('t1')
+        $relationTasks = $this->dao->select('t1.action,t2.id,t2.name,t2.`assignedTo`,t2.mode')->from(TABLE_RELATIONOFTASKS)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.task=t2.id')
             ->where('t1.pretask')->eq($taskID)
             ->beginIF($action == 'started')->andWhere('t1.condition')->eq('begin')->fi()

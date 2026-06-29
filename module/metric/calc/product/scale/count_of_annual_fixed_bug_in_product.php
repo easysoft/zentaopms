@@ -22,7 +22,7 @@ class count_of_annual_fixed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.resolution', 't1.closedDate');
+    public $fieldList = array('t1.product', 't1.resolution', 't1.`closedDate`');
 
     public $result = array();
 

@@ -360,9 +360,9 @@ class programModel extends model
         }
 
         /* All involves in stakeholder table. */
-        $stakeholders = $this->dao->select('t1.objectID, t2.type')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.objectID = t2.id')
-            ->where('t1.objectType')->in("program,project")
+        $stakeholders = $this->dao->select('t1.`objectID`, t2.type')->from(TABLE_STAKEHOLDER)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.`objectID` = t2.id')
+            ->where('t1.`objectType`')->in("program,project")
             ->andWhere('t1.user')->eq($account)
             ->fetchAll('objectID');
         foreach($stakeholders as $objectID => $object)
@@ -524,10 +524,10 @@ class programModel extends model
             ->beginIF($browseType == 'delayed')->andWhere('t1.status')->notIn('done,closed,suspend')->andWhere('t1.end')->lt(helper::today())->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
             ->fi()
             ->beginIF($browseType == 'reviewedby')
-            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewedBy)")
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
             ->beginIF(!$queryAll && !$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi();
@@ -581,8 +581,8 @@ class programModel extends model
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
-            ->where('t1.objectID')->eq($programID)
-            ->andWhere('t1.objectType')->eq('program')
+            ->where('t1.`objectID`')->eq($programID)
+            ->andWhere('t1.`objectType`')->eq('program')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

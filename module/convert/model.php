@@ -257,8 +257,8 @@ class convertModel extends model
             $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
                 ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
                 ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
-                ->orderBy('t1.ID asc')->limit($limit)
+                ->beginIF($lastID)->andWhere('t1.`ID`')->gt($lastID)->fi()
+                ->orderBy('t1.`ID` asc')->limit($limit)
                 ->fetchAll('id');
         }
         elseif($module == 'nodeassociation')
