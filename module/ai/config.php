@@ -129,6 +129,7 @@ $config->ai->targetForm['project']['risk/create']        = (object)array('m' => 
 $config->ai->targetForm['project']['issue/create']       = (object)array('m' => 'issue', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['project']['doc/create']         = (object)array('m' => 'doc', 'f' => 'setDocBasic', 'for' => 'project');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
+$config->ai->targetForm['project']['create']             = (object)array('m' => 'project', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['execution']['batchcreatetask']  = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'execution');
 $config->ai->targetForm['execution']['createtestreport'] = (object)array('m' => 'execution', 'f' => 'testreport', 'for' => 'execution');
 $config->ai->targetForm['execution']['createqa']         = (object)array('m' => 'testtask', 'f' => 'create', 'for' => 'execution');
