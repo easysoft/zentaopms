@@ -40,6 +40,7 @@ cid=18847
 
 */
 
+zenData('action')->gen(0);
 zenData('user')->loadYaml('user')->gen(3);
 zenData('project')->loadYaml('project')->gen(3);
 zenData('task')->loadYaml('task')->gen(9);

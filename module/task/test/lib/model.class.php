@@ -977,6 +977,8 @@ class taskModelTest extends baseTest
         if(empty($child)) return 0;
 
         $action = $this->instance->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($child->id)->orderBy('id_desc')->limit(1)->fetch();
+        if(empty($action)) return $child;
+
         $child->action = $action->action;
         $child->extra  = $action->extra;
         return $child;
