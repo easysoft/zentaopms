@@ -71,47 +71,47 @@ $product->app->rawModule  = 'product';
 $product->app->rawMethod  = 'project';
 
 r(count($product->fetchInvolvedProductProjects($productID = 0, 'all',    '',    'order_desc')))   && p() && e('0');
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('8');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('8');
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('8');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('8');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '0',   'order_desc')))   && p() && e('8');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('5');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('8');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '0', 'order_desc', $pager))) && p() && e('8');
 
 $pager = new pager(0, 5, 1);
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('5');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '0', 'order_desc', $pager))) && p() && e('5');
 
 su('user1');
 $product->app->user->view->projects = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,48,49,50';
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('3');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('3');
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('2');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('3');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '0',   'order_desc')))   && p() && e('2');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('0');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('3');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '0', 'order_desc', $pager))) && p() && e('3');
 
 su('user2');
 $product->app->user->view->projects = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,48,49,50';
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('7');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('7');
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('6');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('7');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '0',   'order_desc')))   && p() && e('6');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('2');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('7');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '0', 'order_desc', $pager))) && p() && e('7');
 
 su('user4');
 $product->app->user->view->projects = '1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,48,49,50';
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '',    'order_desc')))   && p() && e('7');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('7');
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '',    'order_desc')))   && p() && e('6');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all',    '0',   'order_desc')))   && p() && e('7');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'undone', '0',   'order_desc')))   && p() && e('6');
 r(count($product->fetchInvolvedProductProjects($productID = 1, 'wait',   'all', 'order_desc')))   && p() && e('2');
 
 $product->app->loadClass('pager', $static = true);
 $pager = new pager(0, 50, 1);
-r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '', 'order_desc', $pager))) && p() && e('7');
+r(count($product->fetchInvolvedProductProjects($productID = 1, 'all', '0', 'order_desc', $pager))) && p() && e('7');

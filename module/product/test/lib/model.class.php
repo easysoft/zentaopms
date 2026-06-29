@@ -7,6 +7,45 @@ class productModelTest extends baseTest
 {
     protected $moduleName = 'product';
     protected $className  = 'model';
+    public    $objectModel = null;
+
+    public function __construct(string $account = '')
+    {
+        if($account) su($account);
+
+        parent::__construct();
+        $this->objectModel = new class($this, $this->instance)
+        {
+            private $test;
+            private $instance;
+
+            public function __construct(productModelTest $test, object $instance)
+            {
+                $this->test     = $test;
+                $this->instance = $instance;
+            }
+
+            public function __call(string $method, array $args)
+            {
+                return $this->test->callObjectMethod($method, $args);
+            }
+
+            public function __get(string $name)
+            {
+                return $this->instance->$name;
+            }
+
+            public function __set(string $name, $value): void
+            {
+                $this->instance->$name = $value;
+            }
+        };
+    }
+
+    public function callObjectMethod(string $method, array $args = [])
+    {
+        return $this->invokeArgs($method, $args);
+    }
 
     /**
      * Test create a product.
@@ -399,6 +438,7 @@ class productModelTest extends baseTest
      */
     public function getProductPairsByProjectTest($projectID, $status = 'all')
     {
+        if(!is_array($projectID)) $projectID = (int)$projectID;
         $objects = $this->instance->getProductPairsByProject($projectID, $status);
 
         if(dao::isError())
@@ -635,7 +675,7 @@ class productModelTest extends baseTest
         global $app;
         $app->rawModule = 'product';
         $app->rawMethod = 'getStories';
-        $objects = $this->instance->getStories($productID, $branch, $browseType, $queryID, $moduleID);
+        $objects = $this->instance->getStories($productID, (string)$branch, $browseType, $queryID, $moduleID);
 
         if(dao::isError())
         {
@@ -765,7 +805,7 @@ class productModelTest extends baseTest
      */
     public function getRoadmapTest($productID)
     {
-        $objects = $this->instance->getRoadmap($productID);
+        $objects = $this->instance->getRoadmap((int)$productID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1325,9 +1365,9 @@ class productModelTest extends baseTest
      *
      * @param  int    $productID
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getSwitcherTest(int $productID = 0): string
+    public function getSwitcherTest(int $productID = 0): bool
     {
         $productName = $this->instance->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch('name');
         $output      = $this->instance->getSwitcher($productID);
@@ -3248,5 +3288,12 @@ class productModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+}
+
+if(!class_exists('productTest', false))
+{
+    class productTest extends productModelTest
+    {
     }
 }

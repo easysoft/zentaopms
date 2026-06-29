@@ -7,6 +7,46 @@ class productTaoTest extends baseTest
 {
     protected $moduleName = 'product';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct(string $account = '')
+    {
+        if($account) su($account);
+
+        parent::__construct();
+        $this->instance->productTao = $this->instance;
+        $this->objectModel = new class($this, $this->instance)
+        {
+            private $test;
+            private $instance;
+
+            public function __construct(productTaoTest $test, object $instance)
+            {
+                $this->test     = $test;
+                $this->instance = $instance;
+            }
+
+            public function __call(string $method, array $args)
+            {
+                return $this->test->callObjectMethod($method, $args);
+            }
+
+            public function __get(string $name)
+            {
+                return $this->instance->$name;
+            }
+
+            public function __set(string $name, $value): void
+            {
+                $this->instance->$name = $value;
+            }
+        };
+    }
+
+    public function callObjectMethod(string $method, array $args = [])
+    {
+        return $this->invokeArgs($method, $args);
+    }
 
     /**
      * Test create a product.
@@ -3249,5 +3289,12 @@ class productTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+}
+
+if(!class_exists('productTest', false))
+{
+    class productTest extends productTaoTest
+    {
     }
 }
