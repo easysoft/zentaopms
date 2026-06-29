@@ -32,13 +32,13 @@ if(isset($config->setCode) and $config->setCode == 1)
     $config->execution->dtable->fieldList['code']['show']     = 'true';
 }
 
-$config->execution->dtable->fieldList['project']['title']    = $lang->execution->project;
-$config->execution->dtable->fieldList['project']['name']     = 'project';
-$config->execution->dtable->fieldList['project']['type']     = 'desc';
-$config->execution->dtable->fieldList['project']['sortType'] = true;
-$config->execution->dtable->fieldList['project']['width']    = '160';
-$config->execution->dtable->fieldList['project']['group']    = '1';
-$config->execution->dtable->fieldList['project']['show']     = true;
+$config->execution->dtable->fieldList['projectName']['title']    = $lang->execution->project;
+$config->execution->dtable->fieldList['projectName']['name']     = 'projectName';
+$config->execution->dtable->fieldList['projectName']['type']     = 'desc';
+$config->execution->dtable->fieldList['projectName']['sortType'] = true;
+$config->execution->dtable->fieldList['projectName']['width']    = '160';
+$config->execution->dtable->fieldList['projectName']['group']    = '1';
+$config->execution->dtable->fieldList['projectName']['show']     = true;
 
 $config->execution->dtable->fieldList['status']['title']     = $lang->execution->execStatus;
 $config->execution->dtable->fieldList['status']['name']      = 'status';
