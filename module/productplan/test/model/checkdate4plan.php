@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=productpanModel->checkDate4Plan();
+title=productplanModel->checkDate4Plan();
 timeout=0
 cid=17625
 
@@ -26,7 +27,7 @@ $planIdList = array(1, 2, 3);
 $beginList  = array('2030-01-01', '2021-06-02', '2020-01-01');
 $endList    = array('2030-01-01', '2021-06-14', '2021-07-30');
 
-$planTester = new productplan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的开始日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[0], $endList[0])) && p('0')     && e('测试通过');                                                       // 父计划输入正确的结束日期，检查通过
 r($planTester->checkDate4PlanTest($planIdList[0], $beginList[1], $endList[0])) && p('begin') && e('子计划的开始日期：2021-06-01，开始日期不能大于子计划的开始日期'); // 父计划输入错误的开始日期，检查报错提示信息
