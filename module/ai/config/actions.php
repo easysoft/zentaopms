@@ -15,7 +15,7 @@ $config->ai->actionList['promptbasicinfo']['url']  = array('module' => 'ai', 'me
 $config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
 $config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
 $config->ai->actionList['promptaudit']['hint'] = $lang->ai->prompts->action->test;
-$config->ai->actionList['promptaudit']['url']  = 'javascript:getTestingLocation("{id}")';
+$config->ai->actionList['promptaudit']['url']  = 'javascript:goPromptTesting("{id}")';
 
 $config->ai->actionList['promptedit']['icon']        = 'edit';
 $config->ai->actionList['promptedit']['text']        = $lang->ai->prompts->action->edit;
