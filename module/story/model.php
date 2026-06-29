@@ -952,7 +952,7 @@ class storyModel extends model
 
         if(!empty($story->reviewer))
         {
-            if(strpos(',draft,changing,', ",{$oldStory->status},") !== false && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($oldStory->version)->exec();
+            if(strpos(',draft,changing,', ",{$oldStory->status},") !== false && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
@@ -964,6 +964,10 @@ class storyModel extends model
                 if($story->status != $oldStatus) $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
                 if($story->status == 'active')   $story->finalResult = $story->status;
             }
+        }
+        else
+        {
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec(); // 勾选了不需要评审，要将评审人删除。
         }
 
         $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
