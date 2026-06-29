@@ -7,6 +7,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('story')->loadYaml('story_reviewing')->gen('10');
 zenData('storyreview')->loadYaml('storyreview')->gen('10');
 zenData('case')->gen('20');
+zenData('product')->gen('20');
 zenData('demand')->loadYaml('demand_reviewing')->gen('20');
 zenData('demandreview')->gen('20');
 zenData('user')->gen('10');
@@ -34,6 +35,7 @@ global $tester, $config, $app;
 $app->rawModule  = 'my';
 $app->rawMethod  = 'getReviewingList';
 $config->edition = 'open';
+$config->testcase->needReview = 1;
 
 $tester->app->moduleName = 'my';
 $tester->app->methodName = 'getReviewingList';
