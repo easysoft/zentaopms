@@ -21,6 +21,12 @@ $config->repo->dtable->fieldList['product']['type']     = 'text';
 $config->repo->dtable->fieldList['product']['sortType'] = false;
 $config->repo->dtable->fieldList['product']['hint']     = true;
 
+$config->repo->dtable->fieldList['origin']['name']     = 'origin';
+$config->repo->dtable->fieldList['origin']['title']    = $lang->repo->origin;
+$config->repo->dtable->fieldList['origin']['type']     = 'text';
+$config->repo->dtable->fieldList['origin']['sortType'] = false;
+$config->repo->dtable->fieldList['origin']['hint']     = true;
+
 $config->repo->dtable->fieldList['acl']['name']     = 'acl';
 $config->repo->dtable->fieldList['acl']['title']    = $lang->repo->acl;
 $config->repo->dtable->fieldList['acl']['sortType'] = false;
