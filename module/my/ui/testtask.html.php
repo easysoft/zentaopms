@@ -35,7 +35,6 @@ dtable
     set::userMap($users),
     set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::fixedLeftWidth('20%'),
     set::orderBy($orderBy),
     set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),

@@ -923,21 +923,23 @@ class executionModel extends model
         if(dao::isError()) return false;
 
         /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
-        if($oldExecution->parent != 0 && $oldExecution->project != $oldExecution->parent)
+        if($oldExecution->parent != 0)
         {
-            $parent = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            $parent = $this->dao->select('begin,end,type')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
             if(!$parent) return false;
 
             $parentBegin = $parent->begin;
             $parentEnd   = $parent->end;
             if($begin < $parentBegin)
             {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLesserParent, $parentBegin); /* The begin date of child execution should larger than parent. */
+                $message = $parent->type == 'project' ? $this->lang->execution->errorBegin : $this->lang->execution->errorLesserParent;
+                dao::$errors['begin'] = sprintf($message, $parentBegin); /* The begin date of child execution should larger than parent. */
             }
 
             if($end > $parentEnd)
             {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd); /* The end date of child execution should lesser than parent. */
+                $message = $parent->type == 'project' ? $this->lang->execution->errorEnd : $this->lang->execution->errorGreaterParent;
+                dao::$errors['end'] = sprintf($message, $parentEnd); /* The end date of child execution should lesser than parent. */
             }
         }
 
