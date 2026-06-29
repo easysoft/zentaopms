@@ -112,8 +112,6 @@ class repoModel extends model
 
                 if(!$hasPriv) unset($repos[$i]);
             }
-
-            $repo = $this->processGitService($repo, $getCodePath);
         }
 
         return $repos;
