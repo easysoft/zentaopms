@@ -1076,7 +1076,6 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
         if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'mr';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
@@ -1112,7 +1111,6 @@ class myModel extends model
         if($browseType == 'all' || $browseType == 'requirement')                                                            $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'mr'))                                                $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
@@ -1499,74 +1497,6 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-        return $reviewList;
-    }
-
-    /**
-     * 获取评审中的OA。
-     * Get reviewing OA.
-     *
-     * @param  string     $orderBy
-     * @param  bool       $checkExists
-     * @access public
-     * @return array|bool
-     */
-    public function getReviewingOA(string $orderBy = 'status', bool $checkExists = false): array|bool
-    {
-        if($this->config->edition == 'open') return array();
-
-        /* Check attend exist or not. */
-        $this->loadModel('dept');
-        $this->loadModel('attend');
-        if(!method_exists($this->dept, 'getDeptManagedByMe')) return array();
-        if(!isset($this->attend)) return array();
-
-        /* Get dept info. */
-        $allDeptList = $this->dept->getDeptPairs();
-        $allDeptList['0'] = '/';
-        $managedDeptList = array();
-        $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);
-        foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
-
-        $oa = array();
-        if(common::hasPriv('attend',   'review'))                                        $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
-        if(common::hasPriv('leave',    'review') && common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('overtime', 'review') && common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('makeup',   'review') && common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('lieu',     'review') && common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
-        if($checkExists)
-        {
-            foreach($oa as $type => $reviewings)
-            {
-                if(!empty($reviewings)) return true;
-            }
-        }
-
-        $reviewList = array();
-        $users      = $this->loadModel('user')->getPairs('noletter');
-        foreach($oa as $type => $reviewings)
-        {
-            foreach($reviewings as $object)
-            {
-                $review = new stdclass();
-                $review->id     = $object->id;
-                $review->type   = $type;
-                $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
-                $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
-                $review->title  = '';
-                $review->product = isset($object->product) ? $object->product : 0;
-                $review->project = isset($object->project) ? $object->project : 0;
-                if($type == 'attend')
-                {
-                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->account), $object->date);
-                }
-                elseif(isset($this->lang->my->auditField->oaTitle[$type]))
-                {
-                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
-                }
-                $reviewList[] = $review;
-            }
-        }
         return $reviewList;
     }
 
