@@ -26,7 +26,6 @@ window.refreshProvider = function(providerType)
 
 window.loadName = function()
 {
-    console.log('123');
     const $repoPicker = $('[name=repo]').zui('picker');
     const $nameInput  = $('[name=name]');
     const selections  = $repoPicker && $repoPicker.$ ? $repoPicker.$.state.selections : [];
