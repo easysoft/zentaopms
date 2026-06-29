@@ -2341,8 +2341,15 @@ class aiModel extends model
         if(empty($object)) return -2;
 
         list($objectData) = $object;
-        $dataPrompt = $this->serializeDataToPrompt($prompt->module, $prompt->source, $objectData);
-        if(empty($dataPrompt)) return -3;
+
+        $displayPosition = isset($prompt->displayPosition) ? $prompt->displayPosition : '';
+        $source          = isset($prompt->source) ? $prompt->source : '';
+        $dataPrompt = $this->serializeDataToPrompt($prompt->module, $source, $objectData);
+        if(empty($dataPrompt))
+        {
+            if($displayPosition != 'form') return -3;
+            $dataPrompt = '';
+        }
 
         $role   = static::tryPunctuate($prompt->role);
         $role  .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
