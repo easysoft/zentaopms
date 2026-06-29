@@ -3530,6 +3530,27 @@ class baseRouter
 
         return true;
     }
+
+    /**
+     * 清理临时目录。
+     * Clean the tmp dirs.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanTmpDirs()
+    {
+        $zfile   = $this->loadClass('zfile');
+        $tmpRoot = $this->getTmpRoot();
+        foreach(['model', 'zen', 'tao'] as $dir)
+        {
+            foreach(glob($tmpRoot . DS . $dir . DS . '*') as $file)
+            {
+                if(is_file($file)) $zfile->removeFile($file);
+                if(is_dir($file))  $zfile->removeDir($file);
+            }
+        }
+    }
 }
 
 #[AllowDynamicProperties]
