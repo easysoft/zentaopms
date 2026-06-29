@@ -30,7 +30,7 @@ div
             setStyle(array('display' => 'flex', 'justify-content' => 'center', 'padding-top' => '40px')),
             panel
             (
-                setStyle(array('width' => '100%', 'max-width' => '640px')),
+                setStyle(array('width' => '100%', 'max-width' => '800px', 'margin-top' => '10%')),
                 set::title($lang->repo->importProgress->title),
                 set::titleClass('text-xl font-bold text-secondary'),
                 div
