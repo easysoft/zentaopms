@@ -1682,7 +1682,8 @@ class aiModelTest extends baseTest
 
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            $data[$objectName][$objectKey] = isset($demoData[$module][$objectName][$objectKey]) ? $demoData[$module][$objectName][$objectKey] : '';
+            $objectData = zget($demoData[$module], $objectName, array());
+            $data[$objectName][$objectKey] = zget($objectData, $objectKey, '');
         }
 
         // 模拟serializeDataToPrompt的行为

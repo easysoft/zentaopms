@@ -2048,19 +2048,19 @@ class aiModel extends model
             if(empty($data[$objectName])) $data[$objectName] = array();
 
             $moduleDemoData = $this->lang->ai->demoData->$module;
-            if(!isset($moduleDemoData[$objectName])) continue;
+            $demoData       = zget($moduleDemoData, $objectName, array());
+            if(empty($demoData)) continue;
 
-            $demoData = $moduleDemoData[$objectName];
             if(static::isAssoc($demoData))
             {
-                $data[$objectName][$objectKey] = isset($demoData[$objectKey]) ? $demoData[$objectKey] : '';
+                $data[$objectName][$objectKey] = zget($demoData, $objectKey, '');
             }
             else
             {
                 foreach($demoData as $index => $value)
                 {
                     if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
-                    $data[$objectName][$index][$objectKey] = isset($value[$objectKey]) ? $value[$objectKey] : '';
+                    $data[$objectName][$index][$objectKey] = zget($value, $objectKey, '');
                 }
             }
         }
