@@ -3,6 +3,27 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+class pipelineZenTest extends baseTest
+{
+    protected $moduleName = 'pipeline';
+    protected $className  = 'zen';
+
+    /**
+     * Test getJenkinsPipelineList method.
+     *
+     * @param  int $providerID
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getJenkinsPipelineListTest(int $providerID, int $repoID = 0): array
+    {
+        $result = $this->invokeArgs('getJenkinsPipelineList', [$providerID, $repoID]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+}
+
 class jobZenTest extends baseTest
 {
     protected $moduleName = 'job';
