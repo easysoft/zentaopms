@@ -52,7 +52,7 @@ $runnerPriv    = hasPriv('runner', 'browse');
 $executionPriv = hasPriv('pipeline', 'execution');
 
 $createItem    = array('text' => $lang->pipeline->createBtn, 'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'plus', 'data-toggle' => 'modal');
-$importItem    = array('text' => $lang->pipeline->importBtn, 'url' => inLink('create', "spaceID={$spaceID}&repoID={$repoID}"), 'class' => 'primary', 'icon' => 'import', 'data-toggle' => 'modal');
+$importItem    = array('text' => $lang->pipeline->importBtn, 'url' => inLink('import', "repoID={$repoID}"), 'class' => 'primary', 'icon' => 'import');
 //$runnerItem    = array('text' => $lang->runner->manageRunner, 'url' => createLink('runner', 'browse'), 'class' => 'primary');
 $executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('execution', "spaceID={$spaceID}&repoID={$repoID}&type={$type}"), 'class' => 'primary');
 $config->pipeline->dtable->fieldList['actions']['list']['arrange'] = array('icon' => 'pencil-alt', 'text' => $lang->pipeline->arrange, 'hint' => $lang->pipeline->arrange, 'url' => helper::createLink('pipeline', 'arrange', "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
