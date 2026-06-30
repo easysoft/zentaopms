@@ -2047,17 +2047,20 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            $demoData = $this->lang->ai->demoData->$module[$objectName];
+            $moduleDemoData = $this->lang->ai->demoData->$module;
+            if(!isset($moduleDemoData[$objectName])) continue;
+
+            $demoData = $moduleDemoData[$objectName];
             if(static::isAssoc($demoData))
             {
-                $data[$objectName][$objectKey] = $demoData[$objectKey];
+                $data[$objectName][$objectKey] = isset($demoData[$objectKey]) ? $demoData[$objectKey] : '';
             }
             else
             {
                 foreach($demoData as $index => $value)
                 {
                     if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
-                    $data[$objectName][$index][$objectKey] = $value[$objectKey];
+                    $data[$objectName][$index][$objectKey] = isset($value[$objectKey]) ? $value[$objectKey] : '';
                 }
             }
         }

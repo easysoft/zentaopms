@@ -1682,10 +1682,7 @@ class aiModelTest extends baseTest
 
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            if(isset($demoData[$module][$objectName][$objectKey]))
-            {
-                $data[$objectName][$objectKey] = $demoData[$module][$objectName][$objectKey];
-            }
+            $data[$objectName][$objectKey] = isset($demoData[$module][$objectName][$objectKey]) ? $demoData[$module][$objectName][$objectKey] : '';
         }
 
         // 模拟serializeDataToPrompt的行为
@@ -1700,6 +1697,7 @@ class aiModelTest extends baseTest
             'verify' => '验收标准',
             'category' => '需求类型',
             'name' => '执行名称',
+            'openedDate' => '创建日期',
         );
 
         $dataObject = array();

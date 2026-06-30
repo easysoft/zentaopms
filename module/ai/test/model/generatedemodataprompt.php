@@ -12,6 +12,7 @@ cid=15025
 - 执行aiTest模块的generateDemoDataPromptTest方法，参数是'story', 'story.verify'  @{"需求":{"验收标准":"1. 所有功能均能够正常运行，没有明显的错误和异常。2. 界面美观、易用性好。3. 平台能够满足用户需求，具有较高的用户满意度。4. 代码质量好，结构清晰、易于维护。"}}
 - 执行aiTest模块的generateDemoDataPromptTest方法，参数是'story', 'story.category'  @{"需求":{"需求类型":"feature"}}
 - 执行aiTest模块的generateDemoDataPromptTest方法，参数是'execution', 'execution.name'  @{"执行":{"执行名称":"在线学习平台软件开发"}}
+- 执行aiTest模块的generateDemoDataPromptTest方法，参数是'story', 'story.openedDate'  @{"需求":{"创建日期":""}}
 
 */
 
@@ -73,10 +74,7 @@ if (!$useRealTest) {
 
                 if(empty($data[$objectName])) $data[$objectName] = array();
 
-                if(isset($demoData[$module][$objectName][$objectKey]))
-                {
-                    $data[$objectName][$objectKey] = $demoData[$module][$objectName][$objectKey];
-                }
+                $data[$objectName][$objectKey] = isset($demoData[$module][$objectName][$objectKey]) ? $demoData[$module][$objectName][$objectKey] : '';
             }
 
             // 模拟serializeDataToPrompt的行为
@@ -91,6 +89,7 @@ if (!$useRealTest) {
                 'verify' => '验收标准',
                 'category' => '需求类型',
                 'name' => '执行名称',
+                'openedDate' => '创建日期',
             );
 
             $dataObject = array();
@@ -141,3 +140,4 @@ r($aiTest->generateDemoDataPromptTest('story', 'story.spec')) && p() && e('{"需
 r($aiTest->generateDemoDataPromptTest('story', 'story.verify')) && p() && e('{"需求":{"验收标准":"1. 所有功能均能够正常运行，没有明显的错误和异常。2. 界面美观、易用性好。3. 平台能够满足用户需求，具有较高的用户满意度。4. 代码质量好，结构清晰、易于维护。"}}');
 r($aiTest->generateDemoDataPromptTest('story', 'story.category')) && p() && e('{"需求":{"需求类型":"feature"}}');
 r($aiTest->generateDemoDataPromptTest('execution', 'execution.name')) && p() && e('{"执行":{"执行名称":"在线学习平台软件开发"}}');
+r($aiTest->generateDemoDataPromptTest('story', 'story.openedDate')) && p() && e('{"需求":{"创建日期":""}}');
