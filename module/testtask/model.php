@@ -95,13 +95,12 @@ class testtaskModel extends model
         $searchConfig['queryID']   = $queryID;
 
         $products  = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $projectID = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
 
         /* Get params. */
         $productParams   = ($productID && isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams   = $productParams + array('all' => $this->lang->all);
         $projectParams   = $this->loadModel('product')->getProjectPairsByProduct($productID) + array('all' => $this->lang->testtask->allProject);
-        $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID, "0", (int)$projectID);
+        $executionParams = $this->loadModel('product')->getExecutionPairsByProduct($productID);
 
         $searchConfig['params']['product']['values']   = $productParams;
         $searchConfig['params']['project']['values']   = $projectParams;

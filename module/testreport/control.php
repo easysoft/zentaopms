@@ -108,7 +108,8 @@ class testreport extends control
         $actionURL = $this->createLink('testreport', 'browse', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         if($objectType == 'project')   $actionURL = $this->createLink('project', 'testreport', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         if($objectType == 'execution') $actionURL = $this->createLink('execution', 'testreport', "objectID={$objectID}&objectType={$objectType}&extra={$extra}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
-        $this->testreport->buildTestreportSearchForm($objectType, $queryID, $actionURL);
+
+        $this->testreport->buildTestreportSearchForm($objectID, $objectType, $queryID, $actionURL);
 
         $reports = $this->testreportZen->getReportsForBrowse($objectID, $objectType, $extra, $browseType, $queryID, $orderBy, $recTotal, $recPerPage, $pageID);
         if(empty($reports) && common::hasPriv('testreport', 'create'))

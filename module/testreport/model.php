@@ -123,7 +123,7 @@ class testreportModel extends model
      * @access public
      * @return array|void
      */
-    public function buildTestreportSearchForm(string $objectType, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    public function buildTestreportSearchForm(int $objectID, string $objectType, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
     {
         $searchConfig           = $this->config->testreport->search;
         $searchConfig['module'] = 'testreport';
@@ -146,9 +146,34 @@ class testreportModel extends model
             unset($searchConfig['params']['execution']);
         }
 
-        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        if(isset($searchConfig['params']['project']))   $searchConfig['params']['project']['values']   = $this->loadModel('project')->getPairsByProgram();
-        if(isset($searchConfig['params']['execution'])) $searchConfig['params']['execution']['values'] = $this->loadModel('execution')->getPairs();
+        if($objectType == 'product')
+        {
+            $products                                      = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productParams                                 = ($objectID && isset($products[$objectID])) ? array($objectID => $products[$objectID]) : $products;
+            $searchConfig['params']['product']['values']   = $productParams;
+            $searchConfig['params']['project']['values']   = $this->loadModel('product')->getProjectPairsByProduct($objectID);
+            $searchConfig['params']['execution']['values'] = $this->loadModel('product')->getExecutionPairsByProduct($objectID);
+            $searchConfig['params']['tasks']['values']     = $this->loadModel('testtask')->getPairs($objectID);
+        }
+        else
+        {
+            $products     = $this->loadModel('product')->getProducts($objectID);
+            $productPairs = array(0 => '');
+            foreach($products as $product) $productPairs[$product->id] = $product->name;
+            $searchConfig['params']['product']['values'] = $productPairs;
+
+            if($objectType == 'project')
+            {
+                $searchConfig['params']['execution']['values'] = $this->loadModel('execution')->getPairs($objectID);
+                $tasks = $this->loadModel('testtask')->getProjectTasks($objectID);
+                $searchConfig['params']['tasks']['values'] = helper::arrayColumn($tasks, 'name', 'id');
+            }
+            elseif($objectType == 'execution')
+            {
+                $tasks = $this->loadModel('testtask')->getExecutionTasks($objectID);
+                $searchConfig['params']['tasks']['values'] = helper::arrayColumn($tasks, 'name', 'id');
+            }
+        }
 
         $this->loadModel('search')->setSearchParams($searchConfig);
 
