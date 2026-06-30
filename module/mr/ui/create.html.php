@@ -67,8 +67,8 @@ formPanel
         set::label($lang->repo->common),
         set::name('sourceProject'),
         set::id('sourceProject'),
-        set::items(array($repo->id => $repo->name)),
-        set::value($repo->id),
+        set::items($projectItem),
+        set::value(key($projectItem)),
         setClass(count($repoPairs) > 1 ? 'hidden' : '')
     ),
     formGroup
@@ -77,7 +77,7 @@ formPanel
         set::name('targetProject'),
         set::id('targetProject'),
         set::items($projectItem),
-        set::value($repo->id)
+        set::value(key($projectItem))
     ),
     formRow
     (
