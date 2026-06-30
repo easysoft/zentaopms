@@ -2047,17 +2047,20 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            $demoData = $this->lang->ai->demoData->$module[$objectName];
+            $moduleDemoData = $this->lang->ai->demoData->$module;
+            $demoData       = zget($moduleDemoData, $objectName, array());
+            if(empty($demoData)) continue;
+
             if(static::isAssoc($demoData))
             {
-                $data[$objectName][$objectKey] = $demoData[$objectKey];
+                $data[$objectName][$objectKey] = zget($demoData, $objectKey, '');
             }
             else
             {
                 foreach($demoData as $index => $value)
                 {
                     if(empty($data[$objectName][$index])) $data[$objectName][$index] = array();
-                    $data[$objectName][$index][$objectKey] = $value[$objectKey];
+                    $data[$objectName][$index][$objectKey] = zget($value, $objectKey, '');
                 }
             }
         }
