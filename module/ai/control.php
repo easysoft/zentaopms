@@ -1066,6 +1066,14 @@ class ai extends control
             if(isset($field['currentValue']) && $field['currentValue'] !== '') $originObject->$name = $field['currentValue'];
         }
 
+        $extraFields = array_values($this->ai->getPromptFields($promptID));
+        $formConfig  = array();
+        if($extraFields)
+        {
+            $formConfig['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $formConfig['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
+        }
+
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array(array(
             'role'           => $prompt->role . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''),
             'schema'         => $schema,
@@ -1082,6 +1090,8 @@ class ai extends control
             'targetFormName' => $formMetaData['targetFormName'],
             'dataPropNames'  => $formMetaData['dataPropNames'],
             'knowledgeLib'   => $prompt->knowledgeLib ?? '',
+            'fields'         => $extraFields,
+            'formConfig'     => $formConfig,
         ), false))));
     }
 
