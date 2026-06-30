@@ -221,6 +221,7 @@ $config->logonMethods[] = 'user.ajaxgettemplates';
 $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
+$config->logonMethods[] = 'repo.ajaxgeteditorcontent';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
@@ -375,7 +376,6 @@ $config->ajaxDependencies['repo.ajaxgetbranchoptions']                        = 
 $config->ajaxDependencies['repo.ajaxgetcommitinfo']                           = ['repo.ajaxgeteditorcontent', 'repo.diff', 'repo.view', 'repo.browse'];
 $config->ajaxDependencies['repo.ajaxgetcommitrelation']                       = ['repo.ajaxgeteditorcontent', 'mr.browse', 'mr.view'];
 $config->ajaxDependencies['repo.ajaxgetdiffeditorcontent']                    = ['mr.diff', 'repo.diff', 'repo.browse', 'repo.view'];
-$config->ajaxDependencies['repo.ajaxgeteditorcontent']                        = ['repo.view', 'repo.diff', 'repo.browse', 'mr.browse'];
 $config->ajaxDependencies['repo.ajaxgetexecutions']                           = 'repo.ajaxgeteditorcontent';
 $config->ajaxDependencies['repo.ajaxgetfilecommitinfo']                       = 'repo.browse';
 $config->ajaxDependencies['repo.ajaxgetgroups']                               = 'repo.createrepo';
