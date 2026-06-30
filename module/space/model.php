@@ -262,7 +262,7 @@ class spaceModel extends model
             return false;
         }
 
-        if(empty($oldManager) || array_intersect($newManager, $oldManager))
+        if(empty($oldManager) || !empty($newManager))
         {
             $this->dao->delete()->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($space->id)->andWhere('role')->eq('manager')->exec();
             foreach($newManager as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $space->id, 'account' => $account, 'role' => 'manager'))->exec();
