@@ -89,10 +89,10 @@ class releaseModelTest extends baseTest
         if(!$oldRelease) return false;
 
         $oldPost       = $_POST;
-        $oldModuleName = $app->getModuleName();
-        $oldMethodName = $app->getMethodName();
-        $oldRawModule  = $app->rawModule;
-        $oldRawMethod  = $app->rawMethod;
+        $oldModuleName = $app->moduleName ?? '';
+        $oldMethodName = $app->methodName ?? '';
+        $oldRawModule  = $app->rawModule ?? '';
+        $oldRawMethod  = $app->rawMethod ?? '';
 
         try
         {
@@ -108,8 +108,8 @@ class releaseModelTest extends baseTest
         finally
         {
             $_POST = $oldPost;
-            $app->setModuleName($oldModuleName);
-            $app->setMethodName($oldMethodName);
+            $app->moduleName = $oldModuleName;
+            $app->methodName = $oldMethodName;
             $app->rawModule = $oldRawModule;
             $app->rawMethod = $oldRawMethod;
         }
