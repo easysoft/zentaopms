@@ -1332,12 +1332,13 @@ class metricModel extends model
             }
             if(strpos($field, '.') !== false)
             {
-                $alias = str_replace('.', '_', $field);
-                list($table, $field) = explode('.', $field);
-                $aliasList[] = "`$table`.`$field` AS `$alias`";
+                $cleanField = str_replace('`', '', $field);
+                list($table, $column) = explode('.', $cleanField, 2);
+                $alias = "{$table}_{$column}";
+                $aliasList[] = "`$table`.`$column` AS `$alias`";
                 continue;
             }
-            $aliasList[] = "`$field`";
+            $aliasList[] = '`' . str_replace('`', '', $field) . '`';
         }
         return implode(',', $aliasList);
     }

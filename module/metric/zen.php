@@ -644,8 +644,8 @@ class metricZen extends metric
             else
             {
                 $extractField = explode('.', $field);
-                $pureField    = end($extractField);
-                $aliasField   = str_replace('.', '_', $field);
+                $pureField    = str_replace('`', '', end($extractField));
+                $aliasField   = str_replace(array('.', '`'), array('_', ''), $field);
             }
 
             $pureRow->$pureField = $row->$aliasField;
