@@ -7,6 +7,44 @@ class projectModelTest extends baseTest
 {
     protected $moduleName = 'project';
     protected $className  = 'model';
+    public    $objectModel = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->objectModel = new class($this, $this->instance)
+        {
+            private $test;
+            private $instance;
+
+            public function __construct(projectModelTest $test, object $instance)
+            {
+                $this->test     = $test;
+                $this->instance = $instance;
+            }
+
+            public function __call(string $method, array $args)
+            {
+                return $this->test->callObjectMethod($method, $args);
+            }
+
+            public function __get(string $name)
+            {
+                return $this->instance->$name;
+            }
+
+            public function __set(string $name, $value): void
+            {
+                $this->instance->$name = $value;
+            }
+        };
+    }
+
+    public function callObjectMethod(string $method, array $args = [])
+    {
+        return $this->invokeArgs($method, $args);
+    }
 
     public function setMockUser($user)
     {
@@ -84,8 +122,10 @@ class projectModelTest extends baseTest
      */
     public function getInvolvedListByCurrentUserTest($fields = 't1.*')
     {
-        // 为了确保测试稳定性，优先使用模拟数据
-        return $this->mockGetInvolvedListByCurrentUserResult($fields);
+        $result = $this->instance->getInvolvedListByCurrentUser($fields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**

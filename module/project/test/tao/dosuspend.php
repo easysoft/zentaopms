@@ -48,6 +48,6 @@ $newProduct2  = $tester->project->fetchById(2);
 $newProduct10 = $tester->project->fetchById(10);
 
 r($oldProduct2)  && p('status,suspendedDate,lastEditedBy,lastEditedDate') && e('wait,~~,~~,~~'); // 项目2修改前的状态
-r($newProduct2)  && p('status,suspendedDate,lastEditedBy,lastEditedDate') && e('suspended,2023-04-27,admin,2023-04-27 00:00:00'); // 项目2修改后的状态
+r($newProduct2)  && p('status,suspendedDate,lastEditedBy,lastEditedDate') && e('suspended,2023-04-27 00:00:00,admin,2023-04-27 00:00:00'); // 项目2修改后的状态
 r($oldProduct10) && p() && e('0'); // 项目10修改前的状态
 r($newProduct10) && p() && e('0'); // 项目10修改后的状态

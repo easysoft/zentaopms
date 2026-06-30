@@ -26,7 +26,7 @@ zenData('project')->loadYaml('project_getlistbyacl', false, 2)->gen(15);
 su('admin');
 
 // 4. 创建测试实例
-$projectTest = new ProjectTest();
+$projectTest = new projectModelTest();
 
 // 5. 测试步骤（必须包含至少5个测试步骤）
 r(count($projectTest->getListByAclTest('open')))                 && p() && e('5'); // 步骤1：查询open权限的项目

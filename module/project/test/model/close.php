@@ -47,13 +47,14 @@ $_POST['uid']     = '0';
 $_POST['realEnd'] = '2022-05-03';
 
 $data = new stdclass();
-$data->status   = 'closed';
-$data->realEnd  = '2022-10-10';
-$data->closedBy = 'admin';
+$data->status      = 'closed';
+$data->realEnd     = '2022-10-10';
+$data->closedBy    = 'admin';
+$data->deliverable = array();
 
-$changes1 = $tester->project->close(1, $data);
-$changes2 = $tester->project->close(5, $data);
-$changes3 = $tester->project->close(3, $data);
+$changes1 = $tester->project->close(1, clone $data);
+$changes2 = $tester->project->close(5, clone $data);
+$changes3 = $tester->project->close(3, clone $data);
 
 $newPorject = $tester->project->getByID(3);
 $closedBy   = $newPorject->closedBy;
