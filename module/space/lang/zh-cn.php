@@ -68,6 +68,7 @@ $lang->space->notice->accessRepo          = '仅展示用户可访问的非公�
 $lang->space->notice->accessArtifact      = '仅展示用户可访问的非公开制品库';
 $lang->space->notice->confirmRemoveMember = '您确定从该空间中移除该用户吗？';
 $lang->space->notice->confirmDelete       = '您确定删除“ %s” 权限分组吗？';
+$lang->space->notice->managerMemberConflict = '%s为空间用户，如需配置为管理员可先移除用户。';
 
 $lang->space->placeholder       = new stdclass();
 $lang->space->placeholder->desc = '请输入空间描述';

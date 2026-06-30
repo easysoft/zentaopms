@@ -101,7 +101,11 @@ class space extends control
         {
             foreach($space->members as $account)
             {
-                if($account->role != 'manager') continue;
+                if($account->role != 'manager')
+                {
+                    $space->member[] = $account->account;
+                    continue;
+                }
                 $space->manager[] = $account->account;
             }
         }

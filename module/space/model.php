@@ -244,6 +244,23 @@ class spaceModel extends model
         if(dao::isError()) return false;
 
         $oldManager = zget($space, 'manager', array());
+        $member     = zget($space, 'member', array());
+
+        $conflictUsers = array_intersect($newManager, $member);
+
+        if(!empty($conflictUsers))
+        {
+            $userList = $this->loadModel('user')->getListByAccounts($conflictUsers, 'account');
+            $userNames = array();
+            foreach($conflictUsers as $account)
+            {
+                $userNames[] = isset($userList[$account]) && !empty($userList[$account]->realname) ? $userList[$account]->realname : $account;
+            }
+
+            $message = sprintf($this->lang->space->notice->managerMemberConflict, implode(', ', $userNames));
+            dao::$errors[] = $message;
+            return false;
+        }
 
         if(empty($oldManager) || array_intersect($newManager, $oldManager))
         {
