@@ -383,7 +383,7 @@ and t2.deleted='0'
 and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
-and (case when \$product='' then 1=1 else t2.id=\$product end)
+and (case when \$product='0' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -468,7 +468,7 @@ and t2.deleted='0'
 and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
-and (case when \$product='' then 1=1 else t2.id=\$product end)
+and (case when \$product='0' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -540,7 +540,7 @@ and t2.deleted='0'
 and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
-and (case when \$product='' then 1=1 else t2.id=\$product end)
+and (case when \$product='0' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -614,7 +614,7 @@ and t2.deleted='0'
 and t2.shadow='0'
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
-and (case when \$product='' then 1=1 else t2.id=\$product end)
+and (case when \$product='0' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -697,11 +697,11 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate='')
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -801,11 +801,11 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate='')
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -906,11 +906,11 @@ and t1.type in ('sprint','stage')
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t4.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t4.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate = '')
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$beginDate='' and \$endDate = '')
 EOT,
     'settings'  => array
     (
@@ -1012,10 +1012,10 @@ and t2.deleted='0'
 and t2.`finishedBy`!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
 and (case when \$dept='' then 1=1 else t4.dept=\$dept end)
 and (case when \$user='' then 1=1 else t2.`finishedBy`=\$user end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='' and \$dept='' and \$user='')
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0' and \$dept='' and \$user='')
 EOT,
     'settings'  => array
     (
@@ -1118,10 +1118,10 @@ where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and (case when \$projectStatus='' then 1=1 else t5.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t5.id=\$project end)
+and (case when \$project='0' then 1=1 else t5.id=\$project end)
 and (case when \$beginDate='' then 1=1 else t1.begin>=cast(\$beginDate as date) end)
 and (case when \$endDate='' then 1=1 else t1.end<=cast(\$endDate as date) end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$beginDate='' and \$endDate='')
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$beginDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -1259,9 +1259,9 @@ where t2.deleted='0' and t3.deleted='0'
 and t2.type in('sprint', 'stage')
 and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t2.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t4.id=\$project end)
-and (case when \$execution='' then 1=1 else t2.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t4.id=\$project end)
+and (case when \$execution='0' then 1=1 else t2.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1353,9 +1353,9 @@ where t2.deleted='0' and t3.deleted='0'
 and t2.type in('sprint', 'stage')
 and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t2.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t4.id=\$project end)
-and (case when \$execution='' then 1=1 else t2.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t4.id=\$project end)
+and (case when \$execution='0' then 1=1 else t2.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1448,9 +1448,9 @@ and t2.deleted='0'
 and t2.resolution!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1544,9 +1544,9 @@ where t1.deleted='0'
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1640,9 +1640,9 @@ where t1.deleted='0'
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1738,9 +1738,9 @@ and t2.status!='active'
 and t2.`resolvedBy`!=''
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
-and not (\$projectStatus='' and \$executionStatus='' and \$project='' and \$execution='')
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
+and not (\$projectStatus='' and \$executionStatus='' and \$project='0' and \$execution='0')
 EOT,
     'settings'  => array
     (
@@ -1834,8 +1834,8 @@ where t1.deleted='0'
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -1939,8 +1939,8 @@ and t1.type in ('sprint','stage')
 and t1.grade='1'
 and (case when \$projectStatus='' then 1=1 else t5.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t5.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t5.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -2119,7 +2119,7 @@ and t1.shadow='0'
 and t2.deleted='0'
 and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t1.type=\$productType end)
-and (case when \$product='' then 1=1 else t1.id=\$product end)
+and (case when \$product='0' then 1=1 else t1.id=\$product end)
 order by t3.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
@@ -2200,7 +2200,7 @@ where t1.deleted='0'
 and t1.shadow='0'
 and (case when \$productStatus='' then 1=1 else t1.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t1.type=\$productType end)
-and (case when \$product='' then 1=1 else t1.id=\$product end)
+and (case when \$product='0' then 1=1 else t1.id=\$product end)
 order by t4.`order` asc, t1.line desc, t1.`order` asc
 EOT,
     'settings'  => array
@@ -2662,7 +2662,7 @@ and t1.resolution!=''
 and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)
 and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1=1 else t1.product=\$product end)
-and not (\$product='' and \$startDate='' and \$endDate='')
+and not (\$product='0' and \$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (
@@ -2749,8 +2749,8 @@ where t1.deleted='0'
 and t1.type in ('sprint','stage')
 and (case when \$projectStatus='' then 1=1 else t4.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t4.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t4.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -2914,8 +2914,8 @@ where t1.deleted='0'
 and t2.deleted='0'
 and (case when \$projectStatus='' then 1=1 else t3.status=\$projectStatus end)
 and (case when \$executionStatus='' then 1=1 else t1.status=\$executionStatus end)
-and (case when \$project='' then 1=1 else t3.id=\$project end)
-and (case when \$execution='' then 1=1 else t1.id=\$execution end)
+and (case when \$project='0' then 1=1 else t3.id=\$project end)
+and (case when \$execution='0' then 1=1 else t1.id=\$execution end)
 EOT,
     'settings'  => array
     (
@@ -3002,7 +3002,7 @@ and t2.shadow='0'
 and t1.resolution != ''
 and (case when \$productStatus='' then 1=1 else t2.status=\$productStatus end)
 and (case when \$productType='' then 1=1 else t2.type=\$productType end)
-and (case when \$product='' then 1=1 else t2.id=\$product end)
+and (case when \$product='0' then 1=1 else t2.id=\$product end)
 order by t3.`order` asc, t2.line desc, t2.`order` asc
 EOT,
     'settings'  => array
@@ -3076,7 +3076,7 @@ and t1.resolution!=''
 and (case when \$startDate='' then 1=1 else cast(t1.`resolvedDate` as date)>=cast(\$startDate as date) end)
 and (case when \$endDate='' then 1=1 else cast(t1.`resolvedDate` as date)<=cast(\$endDate as date) end)
 and (case when \$product = '' then 1=1 else t1.product=\$product end)
-and not (\$product='' and \$startDate='' and \$endDate='')
+and not (\$product='0' and \$startDate='' and \$endDate='')
 EOT,
     'settings'  => array
     (

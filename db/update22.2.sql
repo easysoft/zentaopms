@@ -33,3 +33,7 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'roadmap')     WHERE `module` = 'demand' AND `field` = 'roadmap';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')      WHERE `module` = 'demand' AND `field` = 'duplicateDemand';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')      WHERE `module` = 'demand' AND `field` = 'childDemands';
+
+UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "product=''", "product = '0'") WHERE `sql` LIKE "%product=''%";
+UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "project=''", "project = '0'") WHERE `sql` LIKE "%project=''%";
+UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "execution=''", "execution = '0'") WHERE `sql` LIKE "%execution=''%";
