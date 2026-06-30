@@ -6,6 +6,8 @@ $config->pipeline->create = new stdclass();
 $config->pipeline->edit   = new stdclass();
 $config->pipeline->create->requiredFields = 'name';
 $config->pipeline->edit->requiredFields   = 'name';
+$config->pipeline->import = new stdclass();
+$config->pipeline->import->requiredFields = 'providerID,name';
 
 $config->pipeline->editor = new stdclass();
 $config->pipeline->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
