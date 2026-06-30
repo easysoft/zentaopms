@@ -423,6 +423,50 @@ class pipeline extends control
     }
 
     /**
+     * 导入流水线。
+     * Import pipeline from CI server.
+     *
+     * @param  int    $repoID
+     * @param  int    $providerID
+     * @access public
+     * @return void
+     */
+    public function import(int $repoID = 0, int $providerID = 0)
+    {
+        if($_POST)
+        {
+            $formData = fixer::input('post')
+                ->setDefault('providerID', $providerID)
+                ->setDefault('pipeline', '')
+                ->setDefault('name', '')
+                ->setDefault('desc', '')
+                ->get();
+            $repo = $this->loadModel('repo')->getByID($repoID);
+            if(!$repo) return $this->sendError($this->lang->pipeline->importFailed);
+
+            $pipelineID = $this->pipeline->importFromProvider($repo, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            return $this->sendSuccess(array('locate' => $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$repoID}&type=repo")));
+        }
+
+        $this->commonAction();
+
+        /* 首次进入：从 repo 推导 providerID 并记录返回链接；后续 AJAX reload 直接复用 */
+        if(!$providerID)
+        {
+            $repo       = $this->loadModel('repo')->getByID($repoID);
+            $providerID = $repo ? (int)$repo->providerID : 0;
+            $this->session->set('pipelineImportGoback', $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$repoID}&type=repo"));
+        }
+        $this->pipelineZen->buildImportForm($repoID, $providerID);
+
+        $this->view->title      = $this->lang->pipeline->importBtn . $this->lang->hyphen . $this->lang->pipeline->importAction;
+        $this->view->gobackLink = $this->session->pipelineImportGoback ?: $this->createLink('pipeline', 'browse', "repoID={$repoID}");
+        $this->display();
+    }
+
+    /**
      * 流水线触发器。
      * Pipeline trigger.
      *
