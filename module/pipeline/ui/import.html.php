@@ -14,53 +14,43 @@ namespace zin;
 
 jsVar('repoID', $repoID);
 
-btn
-(
-    set::icon('back'),
-    setClass('btn secondary mr-2'),
-    set::url($gobackLink),
-    $lang->goback
-);
+$fields = defineFieldList('pipeline', $pipeline);
 
-formPanel
+$fields->field('providerID')
+    ->label($lang->pipeline->server)
+    ->required(true)
+    ->control('picker')
+    ->items($providers)
+    ->value($defaultProviderID)
+    ->width('2/3');
+
+$fields->field('pipeline')
+    ->label($lang->pipeline->pipeline)
+    ->required(!$hidePipeline)
+    ->control('picker')
+    ->items($pipelines)
+    ->width('2/3')
+    ->hidden($hidePipeline);
+
+$fields->field('name')
+    ->label($lang->pipeline->pipelineName)
+    ->required(true)
+    ->value($defaultName)
+    ->width('2/3');
+
+$fields->field('desc')
+    ->label($lang->pipeline->desc)
+    ->control(array('control' => 'textarea', 'rows' => 3))
+    ->width('2/3');
+
+$fields->autoLoad('providerID', 'pipeline,name,desc');
+
+formGridPanel
 (
+    setID('importForm'),
+    set::modeSwitcher(false),
     set::title($lang->pipeline->importBtn),
+    set::labelWidth('8em'),
+    set::fields($fields),
     set::loadUrl(createLink('pipeline', 'import', "repoID={$repoID}&providerID={providerID}")),
-
-    formGroup
-    (
-        set::width('2/3'),
-        set::label($lang->pipeline->server),
-        set::name('providerID'),
-        set::required(true),
-        set::control(array('type' => 'picker', 'items' => $providers)),
-        set::value($defaultProviderID)
-    ),
-    on::change('[name=providerID]')->do("loadForm({target: 'form', partial: true, url: $.createLink('pipeline', 'import', 'repoID={$repoID}&providerID=') + $(this).val()})"),
-    formGroup
-    (
-        set::width('2/3'),
-        setClass($hidePipeline ? 'hidden' : ''),
-        set::label($lang->pipeline->pipeline),
-        set::name('pipeline'),
-        set::required(!$hidePipeline),
-        set::control(array('type' => 'picker', 'items' => $pipelines))
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::label($lang->pipeline->pipelineName),
-        set::name('name'),
-        set::required(true),
-        set::value($defaultName)
-    ),
-    formGroup
-    (
-        set::width('2/3'),
-        set::label($lang->pipeline->desc),
-        set::name('desc'),
-        set::control(array('type' => 'textarea', 'rows' => 3))
-    )
 );
-
-render();

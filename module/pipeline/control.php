@@ -452,17 +452,15 @@ class pipeline extends control
 
         $this->commonAction();
 
-        /* 首次进入：从 repo 推导 providerID 并记录返回链接；后续 AJAX reload 直接复用 */
         if(!$providerID)
         {
             $repo       = $this->loadModel('repo')->getByID($repoID);
             $providerID = $repo ? (int)$repo->providerID : 0;
-            $this->session->set('pipelineImportGoback', $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$repoID}&type=repo"));
         }
-        $this->pipelineZen->buildImportForm($repoID, $providerID);
 
-        $this->view->title      = $this->lang->pipeline->importBtn . $this->lang->hyphen . $this->lang->pipeline->importAction;
-        $this->view->gobackLink = $this->session->pipelineImportGoback ?: $this->createLink('pipeline', 'browse', "repoID={$repoID}");
+        $this->view->title = $this->lang->pipeline->importBtn . $this->lang->hyphen . $this->lang->pipeline->importAction;
+
+        $this->pipelineZen->buildImportForm($repoID, $providerID);
         $this->display();
     }
 
