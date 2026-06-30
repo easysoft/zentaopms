@@ -22,7 +22,7 @@ $config->testreport->search['params']['project']     = array('operator' => '=', 
 $config->testreport->search['params']['execution']   = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testreport->search['params']['tasks']       = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->testreport->search['params']['owner']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->testreport->search['params']['members']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->testreport->search['params']['members']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->testreport->search['params']['createdBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->testreport->search['params']['createdDate'] = array('operator' => '=',       'control' => 'date',   'values' => '');
 $config->testreport->search['params']['begin']       = array('operator' => '=',       'control' => 'date',   'values' => '');
