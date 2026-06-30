@@ -4032,8 +4032,8 @@ $config->group->package->provider = new stdclass();
 $config->group->package->provider->order  = 2385;
 $config->group->package->provider->subset = 'configure';
 $config->group->package->provider->privs  = array();
-$config->group->package->provider->privs['provider-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repobranchtype-browse'), 'recommend' => array('provider-create', 'provider-edit', 'provider-delete'));
-$config->group->package->provider->privs['provider-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('provider-browse'), 'recommend' => array('provider-edit', 'provider-delete'));
+$config->group->package->provider->privs['provider-browse'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('provider-create', 'provider-edit', 'provider-delete'));
+$config->group->package->provider->privs['provider-create'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array(), 'recommend' => array('provider-edit', 'provider-delete'));
 $config->group->package->provider->privs['provider-edit']   = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('provider-browse'), 'recommend' => array('provider-create', 'provider-delete'));
 $config->group->package->provider->privs['provider-delete'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('provider-browse'), 'recommend' => array('provider-create', 'provider-edit'));
 
