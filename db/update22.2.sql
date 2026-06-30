@@ -10,6 +10,8 @@ ALTER TABLE `zt_workflowlayout` ADD `ditto` tinyint unsigned NOT NULL DEFAULT 0 
 
 ALTER TABLE `zt_project` MODIFY COLUMN `budget` decimal(14,2) unsigned NOT NULL DEFAULT 0.00 COMMENT '预算';
 
+ALTER TABLE `zt_workflowdatasource` MODIFY COLUMN `view` varchar(50) NOT NULL DEFAULT '' COMMENT '视图';
+
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('sql', '需求池',     'demandPool',  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_demandpool WHERE `deleted`=\'0\'', 'view_datasource_demandpool',  'id', 'name'),
 ('sql', '需求池需求', 'demand',      '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_demand WHERE `deleted`=\'0\'',    'view_datasource_demand',      'id', 'title'),
