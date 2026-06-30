@@ -466,4 +466,25 @@ class epic extends control
     {
         echo $this->fetch('story', 'processStoryChange', "storyID=$storyID");
     }
+
+    /**
+     * 需求详情页关联需求。
+     * Link story in view.
+     *
+     * @param  int    $storyID
+     * @param  string $type          link|remove
+     * @param  int    $linkedStoryID
+     * @param  string $browseType    ''|bysearch
+     * @param  int    $queryID       0|
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $orderBy = 'id_desc')
+    {
+        echo $this->fetch('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=$browseType&queryID=$queryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&orderBy=$orderBy&storyType=epic");
+    }
 }

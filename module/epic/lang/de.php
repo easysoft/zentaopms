@@ -68,3 +68,5 @@ $lang->epic->reasonList['postponed']  = 'Postponed';
 $lang->epic->reasonList['willnotdo']  = "Won't Do";
 $lang->epic->reasonList['cancel']     = 'Cancelled';
 $lang->epic->reasonList['bydesign']   = 'As Designed';
+
+$lang->epic->linkStory = "Link Story";
