@@ -827,6 +827,7 @@ class dbh
         {
             $sql = str_replace('`', '"', $sql);
             $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
+            $sql = preg_replace('/(?<!\w)year\(/i', 'MYSQL_YEAR(', $sql);
         }
 
         return $sql;
