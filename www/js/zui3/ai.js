@@ -155,7 +155,9 @@ window.executeZentaoPrompt = async function(info, testingMode)
             memories : klibs.length ? [{collections: klibs}] : undefined,
         },
     };
-    zaiPanel.openPopup(popupOptions);
+    const popup = zaiPanel.openPopup(popupOptions);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    return popup;
 };
 
 /**
