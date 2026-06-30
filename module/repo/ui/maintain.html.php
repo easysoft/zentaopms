@@ -61,10 +61,6 @@ foreach($repos as $repo)
     }
 
     if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') continue;
-
-    /* Set the url and check status for visiting the repo. */
-    $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
-    $repo->actions[0]['url']      = $repo->path;
 }
 
 $spaceItems = array();

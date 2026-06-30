@@ -1117,7 +1117,7 @@ class repo extends control
             $type       = zget($importRepo, 'origin', 'GitLab');
             $providerID = zget($importRepo, 'providerID', 0);
             $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
-            $groupID    = helper::safe64encode($groupID);
+            $groupID    = urlencode($groupID);
             $type       = zget($importRepo, 'origin', 'GitLab');
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
