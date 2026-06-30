@@ -237,6 +237,7 @@ class messageModel extends model
             $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
             $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
             $url    = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
+            if(in_array($objectType, array('story', 'task')) && $this->app->tab == 'project') $url .= '#app=project'; // 无迭代项目要跳转到项目下
             $data   .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
         }
 
