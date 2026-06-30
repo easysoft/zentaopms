@@ -68,3 +68,5 @@ $lang->requirement->reasonList['postponed']  = 'Postponed';
 $lang->requirement->reasonList['willnotdo']  = "Won't Do";
 $lang->requirement->reasonList['cancel']     = 'Cancelled';
 $lang->requirement->reasonList['bydesign']   = 'As Designed';
+
+$lang->requirement->linkStory = 'Link Story';

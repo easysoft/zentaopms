@@ -614,6 +614,7 @@ $lang->resource->requirement->batchChangeParent  = 'batchChangeParent';
 $lang->resource->requirement->batchChangeGrade   = 'batchChangeGrade';
 $lang->resource->requirement->batchChangePlan    = 'batchChangePlan';
 $lang->resource->requirement->processStoryChange = 'processStoryChange';
+$lang->resource->requirement->linkStory          = 'linkStory';
 
 $lang->requirement->methodOrder[5]   = 'create';
 $lang->requirement->methodOrder[10]  = 'batchCreate';
@@ -640,6 +641,7 @@ $lang->requirement->methodOrder[100] = 'batchChangeParent';
 $lang->requirement->methodOrder[105] = 'batchChangeGrade';
 $lang->requirement->methodOrder[110] = 'batchChangePlan';
 $lang->requirement->methodOrder[115] = 'processStoryChange';
+$lang->requirement->methodOrder[120] = 'linkStory';
 
 /* Epic. */
 $lang->resource->epic = new stdclass();
@@ -668,6 +670,7 @@ $lang->resource->epic->batchChangeParent  = 'batchChangeParent';
 $lang->resource->epic->batchChangeGrade   = 'batchChangeGrade';
 $lang->resource->epic->batchChangePlan    = 'batchChangePlan';
 $lang->resource->epic->processStoryChange = 'processStoryChange';
+$lang->resource->epic->linkStory          = 'linkStory';
 
 $lang->epic->methodOrder[5]   = 'create';
 $lang->epic->methodOrder[10]  = 'batchCreate';
@@ -695,6 +698,7 @@ $lang->epic->methodOrder[100] = 'batchChangeParent';
 $lang->epic->methodOrder[105] = 'batchChangeGrade';
 $lang->epic->methodOrder[110] = 'batchChangePlan';
 $lang->epic->methodOrder[115] = 'processStoryChange';
+$lang->epic->methodOrder[120] = 'linkStory';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

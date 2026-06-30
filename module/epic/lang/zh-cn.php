@@ -68,3 +68,5 @@ $lang->epic->reasonList['postponed']  = '延期';
 $lang->epic->reasonList['willnotdo']  = '不做';
 $lang->epic->reasonList['cancel']     = '已取消';
 $lang->epic->reasonList['bydesign']   = '设计如此';
+
+$lang->epic->linkStory = "关联需求";

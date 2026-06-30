@@ -68,3 +68,5 @@ $lang->requirement->reasonList['postponed']  = '延期';
 $lang->requirement->reasonList['willnotdo']  = '不做';
 $lang->requirement->reasonList['cancel']     = '已取消';
 $lang->requirement->reasonList['bydesign']   = '设计如此';
+
+$lang->requirement->linkStory = '关联需求';
