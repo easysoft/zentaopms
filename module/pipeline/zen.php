@@ -206,7 +206,7 @@ class pipelineZen extends pipeline
         $isJenkins          = $selectedProvider && $selectedProvider->type !== 'Gitlab';
         $jenkinsPipelines   = array();
         $hidePipeline       = false;
-        $defaultName        = $repo->name;
+        $defaultName        = $isJenkins ? '' : $repo->name;
 
         if($selectedProvider)
         {
@@ -244,11 +244,47 @@ class pipelineZen extends pipeline
         $provider = $this->loadModel('provider')->getByID($providerID);
         if(!$provider || $provider->type !== 'Jenkins') return array();
 
-        $options                 = array();
-        $options['job_sample_1'] = 'job_sample_1';
-        $options['job_sample_2'] = 'job_sample_2';
-        $options['job_sample_3'] = 'job_sample_3';
+        $userPWD  = "$provider->account:$provider->token";
+        $response = common::http($provider->url . '/api/json/items/list?depth=1', '', array(CURLOPT_USERPWD => $userPWD));
+        $response = json_decode($response);
 
-        return $options;
+        $tasks = array();
+        if(isset($response->jobs)) $tasks = $this->loadModel('jenkins')->getDepthJobs($response->jobs, $userPWD, 1);
+
+        return $this->buildJenkinsTree($tasks);
+    }
+
+    /**
+     * 构建 Jenkins 任务树形结构。
+     * Build Jenkins task tree.
+     *
+     * @param  array  $tasks
+     * @access private
+     * @return array
+     */
+    private function buildJenkinsTree(array $tasks): array
+    {
+        $result = array();
+        foreach($tasks as $key => $task)
+        {
+            if(empty($task)) continue;
+
+            $item = array(
+                'text' => is_array($task) ? urldecode($key) : urldecode($task),
+                'keys' => urldecode(zget(common::convert2Pinyin(array($key)), $key, '')),
+            );
+            if(is_array($task))
+            {
+                $item['items'] = $this->buildJenkinsTree($task);
+                $item['type']  = 'folder';
+            }
+            else
+            {
+                $item['value'] = $key;
+            }
+
+            $result[] = $item;
+        }
+        return $result;
     }
 }

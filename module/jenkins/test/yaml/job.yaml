@@ -1,0 +1,11 @@
+title: table zt_job
+desc: "构建任务"
+author: Mengyi Liu
+version: "1.0"
+fields:
+  - field: engine
+    note: "引擎"
+    range: jenkins{3},gitlab
+  - field: server
+    note: "服务器ID"
+    range: 1-5
