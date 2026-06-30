@@ -312,15 +312,17 @@ class testreportModelTest extends baseTest
     /**
      * Test buildTestreportSearchForm method.
      *
+     * @param  int    $objectID
      * @param  string $objectType
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
      * @access public
      * @return object|string
      */
-    public function buildTestreportSearchFormTest(string $objectType = 'product', int $queryID = 0, string $actionURL = ''): object|string
+    public function buildTestreportSearchFormTest(int $objectID = 0, string $objectType = 'product', int $queryID = 0, string $actionURL = '', bool $cacheSearchFunc = true): object|string
     {
-        $searchConfig = $this->instance->buildTestreportSearchForm($objectType, $queryID, $actionURL, true);
+        $searchConfig = $this->instance->buildTestreportSearchForm($objectID, $objectType, $queryID, $actionURL, $cacheSearchFunc);
         if(dao::isError()) return dao::getError();
 
         $result = new stdclass();
