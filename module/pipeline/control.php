@@ -444,7 +444,7 @@ class pipeline extends control
             $repo = $this->loadModel('repo')->getByID($repoID);
             if(!$repo) return $this->sendError($this->lang->pipeline->importFailed);
 
-            $pipelineID = $this->pipeline->importFromProvider($repo, $formData);
+            $this->pipeline->importFromProvider($repo, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
             return $this->sendSuccess(array('locate' => $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$repoID}&type=repo")));
