@@ -136,6 +136,54 @@ class projectZenTest extends baseTest
     }
 
     /**
+     * Test prepareCreateExtras method.
+     *
+     * @param  array $postData
+     * @param  int   $copyProjectID
+     * @access public
+     * @return object|array|false
+     */
+    public function prepareCreateExtrasTest(array $postData = array(), int $copyProjectID = 0)
+    {
+        global $tester, $app;
+
+        dao::$errors = array();
+
+        $app->rawModule = 'project';
+        $app->rawMethod = 'create';
+
+        $_POST = array_merge(array(
+            'name'       => '',
+            'begin'      => '2025-07-07',
+            'end'        => '',
+            'days'       => 0,
+            'delta'      => 0,
+            'longTime'   => false,
+            'acl'        => 'private',
+            'multiple'   => '0',
+            'model'      => 'waterfall',
+            'newProduct' => 'off',
+            'whitelist'  => array(),
+            'auth'       => array(),
+            'storyType'  => array(),
+            'budget'     => 0,
+            'future'     => false
+        ), $postData);
+
+        $formData = form::data($tester->config->project->form->create);
+        $result = $this->invokeArgs('prepareCreateExtras', [$formData, $copyProjectID]);
+        if($result !== false)
+        {
+            if(dao::isError()) dao::getError();
+            return $result;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test prepareStartExtras method.
      *
      * @param  object $postData POST数据对象

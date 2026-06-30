@@ -22,7 +22,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('acl')->loadYaml('acl_getacllistbyobjecttype', false, 2)->gen(20);
 su('admin');
 
-$projectTester = new ProjectTest();
+$projectTester = new projectModelTest();
 
 r(count($projectTester->getAclListByObjectTypeTest('project')))         && p() && e('5'); // 步骤1：查询project类型记录数量
 r(count($projectTester->getAclListByObjectTypeTest('product')))         && p() && e('5'); // 步骤2：查询product类型记录数量

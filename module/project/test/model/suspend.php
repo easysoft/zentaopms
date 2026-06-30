@@ -48,4 +48,4 @@ $changes = $tester->project->suspend(2, $project);
 r($changes[0])                            && p('field,new') && e('status,suspended');          // 暂停 projectID=2 后，检查$changes[0]
 r($changes[1])                            && p('field,new') && e('suspendedDate,2023-05-03');  // 暂停 projectID=2 后，检查$changes[1]
 r($tester->project->suspend(4, $project)) && p('0:new')     && e('suspended');                 // 暂停 projectID=4
-r($tester->project->suspend(4, $project)) && p()            && e('0');                         // 执行已经暂停的项目
+r(count($tester->project->suspend(4, $project))) && p()     && e('1');                         // 执行已经暂停的项目
