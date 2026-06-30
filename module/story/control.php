@@ -51,7 +51,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
+    public function create(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
         /* Set menu. */
         $this->story->replaceURLang($storyType);

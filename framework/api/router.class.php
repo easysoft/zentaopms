@@ -1148,6 +1148,25 @@ class api extends router
     }
 
     /**
+     * Validate that all required params declared by the target method are present.
+     *
+     * @param  array $defaultParams
+     * @param  array $sourceParams
+     * @access protected
+     * @return void
+     */
+    protected function validateRequiredParams(array $defaultParams, array $sourceParams): void
+    {
+        foreach($defaultParams as $key => $defaultItem)
+        {
+            if($defaultItem['default'] !== '_NOT_SET') continue;
+            if(array_key_exists($key, $sourceParams)) continue;
+
+            $this->sendV2Error("Missing required parameter: {$key}.");
+        }
+    }
+
+    /**
      * Normalize GET params according to current target control method signature.
      *
      * @param  array $defaultParams
@@ -1644,6 +1663,7 @@ class api extends router
     {
         $defaultParams = $this->resolveDefaultParams();
         $this->rawGet = $_GET;
+        $this->validateRequiredParams($defaultParams, $_GET);
         $this->params = $this->normalizeGetParams($defaultParams, $_GET);
 
         if($this->config->framework->filterParam == 2)
