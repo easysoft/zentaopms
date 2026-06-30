@@ -96,6 +96,7 @@ class repoModel extends model
 
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        $providerParis = $this->loadModel('provider')->getList();
         foreach($repos as $i => $repo)
         {
             if(!$this->checkPriv($repo))
@@ -111,6 +112,15 @@ class repoModel extends model
                 }
 
                 if(!$hasPriv) unset($repos[$i]);
+            }
+
+            if(!empty($repo->mirror))
+            {
+                $repo->origin = isset($providerParis[$repo->providerID]) ? $providerParis[$repo->providerID]->type : '';
+            }
+            else
+            {
+                $repo->origin = 'GitFox';
             }
         }
 
