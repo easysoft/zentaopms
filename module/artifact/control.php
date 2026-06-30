@@ -17,6 +17,8 @@ class artifact extends control
     function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
+
+        if(in_array($this->app->rawMethod, array('ajaxgetfolders'))) return;
         $this->spaces = $this->loadModel('space')->getPairs($this->app->user->account);
         $this->repos  = $this->loadModel('repo')->getRepoPairs($this->app->user->account);
     }
