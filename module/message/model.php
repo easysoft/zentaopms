@@ -445,6 +445,10 @@ class messageModel extends model
         $days       = (int)$this->config->message->browser->maxDays;
         $account    = $this->app->user->account;
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
+
+        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->fetchPairs('id', 'id');
+        if(empty($expiredIdList)) return;
+
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($expiredIdList)->exec();
     }
 }
