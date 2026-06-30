@@ -635,7 +635,14 @@ class giteaRepo
             execCmd(escapeCmd("$this->client pull"));
         }
 
-        $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
+        if(PHP_OS == 'WINNT')
+        {
+            $list = execCmd("$this->client log $count $revision -- ./", 'array');
+        }
+        else
+        {
+            $list = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
+        }
         $commits = $this->parseLog($list);
 
         $logs = array();
