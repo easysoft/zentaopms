@@ -3,6 +3,9 @@ window.renderRowData = function($row, index, story)
     const forceReview    = story.forceReview == 1 || story.forceReview == '1';
     const $needNotReview = $row.find('[data-name="needNotReview"]');
     const $reviewer      = $row.find('[data-name="reviewer"]');
+    const $titleInput    = $row.find('[data-name="title"] input');
+
+    if($titleInput.length) $titleInput.attr('title', story.title);
 
     if(forceReview)
     {
