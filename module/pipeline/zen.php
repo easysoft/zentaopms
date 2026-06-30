@@ -176,4 +176,79 @@ class pipelineZen extends pipeline
         }
         return $pipelineItems;
     }
+
+    /**
+     * 构建导入表单数据。
+     * Build import form data.
+     *
+     * @param  int    $repoID
+     * @param  int    $providerID
+     * @access public
+     * @return void
+     */
+    public function buildImportForm(int $repoID, int $providerID = 0)
+    {
+        $repo = $this->loadModel('repo')->getByID($repoID);
+        if(!$repo) return;
+
+        $repoProvider     = $this->loadModel('provider')->getByID((int)$repo->providerID);
+        $gitlabProviders  = array();
+        $jenkinsProviders = $this->loadModel('provider')->getPairs('Jenkins');
+
+        if($repoProvider && $repoProvider->type === 'Gitlab')
+        {
+            $gitlabProviders[$repoProvider->id] = $repoProvider->name;
+        }
+        $providers = $gitlabProviders + $jenkinsProviders;
+
+        $selectedProviderID = $providerID ?: (int)key($providers);
+        $selectedProvider   = $selectedProviderID ? $this->loadModel('provider')->getByID($selectedProviderID) : null;
+        $isJenkins          = $selectedProvider && $selectedProvider->type !== 'Gitlab';
+        $jenkinsPipelines   = array();
+        $hidePipeline       = false;
+        $defaultName        = $repo->name;
+
+        if($selectedProvider)
+        {
+            if($isJenkins)
+            {
+                $jenkinsPipelines = $this->getJenkinsPipelineList($selectedProviderID, $repoID);
+            }
+            else
+            {
+                $hidePipeline = true;
+            }
+        }
+
+        $this->view->repo               = $repo;
+        $this->view->repoID             = $repoID;
+        $this->view->providers          = $providers;
+        $this->view->defaultProviderID  = $selectedProviderID;
+        $this->view->isJenkins          = $isJenkins;
+        $this->view->pipelines          = $jenkinsPipelines;
+        $this->view->defaultName        = $defaultName;
+        $this->view->hidePipeline       = $hidePipeline;
+    }
+
+    /**
+     * 获取 Jenkins 流水线列表。
+     * Get Jenkins pipeline list from provider.
+     *
+     * @param  int    $providerID
+     * @param  int    $repoID
+     * @access public
+     * @return array
+     */
+    public function getJenkinsPipelineList(int $providerID, int $repoID = 0): array
+    {
+        $provider = $this->loadModel('provider')->getByID($providerID);
+        if(!$provider || $provider->type !== 'Jenkins') return array();
+
+        $options                 = array();
+        $options['job_sample_1'] = 'job_sample_1';
+        $options['job_sample_2'] = 'job_sample_2';
+        $options['job_sample_3'] = 'job_sample_3';
+
+        return $options;
+    }
 }

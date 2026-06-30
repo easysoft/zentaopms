@@ -264,4 +264,18 @@ class pipelineModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $pairs;
     }
+
+    /**
+     * 从provider导入流水线。
+     * Import pipeline from a selected provider.
+     *
+     * @param  object       $repo
+     * @param  object       $formData
+     * @access public
+     * @return int|false|array
+     */
+    public function importFromProviderTest(object $repo, object $formData): int|false
+    {
+        return $this->instance->importFromProvider($repo, $formData);
+    }
 }

@@ -711,6 +711,74 @@ class pipelineModel extends model
     }
 
     /**
+     * 从provider导入流水线。
+     * Import pipeline from a selected provider.
+     *
+     * @param  object $repo       The repo object
+     * @param  object $formData   Form data: providerID, pipeline, name, desc
+     * @access public
+     * @return int|false
+     */
+    public function importFromProvider(object $repo, object $formData): int|false
+    {
+        $provider = $this->loadModel('provider')->getByID((int)$formData->providerID);
+        if(!$provider) return false;
+
+        $existPipeline = $this->dao->select('id')->from(TABLE_PIPELINE)
+            ->where('spaceID')->eq($repo->spaceID)
+            ->andWhere('repoID')->eq($repo->id)
+            ->andWhere('name')->eq($formData->name)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+        if($existPipeline)
+        {
+            dao::$errors['name'][] = sprintf($this->lang->pipeline->nameExist, $formData->name);
+            return false;
+        }
+
+        $this->loadModel('file')->processImgURL($formData, 'desc', (string)$this->post->uid);
+
+        $engine   = strtolower($provider->type);
+        $pipeline = new stdclass();
+        $pipeline->name          = $formData->name;
+        $pipeline->desc          = zget($formData, 'desc', '');
+        $pipeline->repoID        = $repo->id;
+        $pipeline->spaceID       = $repo->spaceID;
+        $pipeline->engine        = $engine;
+        $pipeline->providerID    = $provider->id;
+        $pipeline->scope         = 'repo';
+        $pipeline->status        = 'active';
+        $pipeline->defaultBranch = $repo->defaultBranch;
+        $pipeline->createdBy     = $this->app->user->account;
+        $pipeline->createdDate   = helper::now();
+
+        /* Set externalPipeline: Gitlab uses repo connector projectID, Jenkins uses form-selected pipeline. */
+        if($engine == 'gitlab')
+        {
+            $connector = json_decode($repo->connector);
+            $pipeline->externalPipeline = $connector && !empty($connector->projectID) ? $connector->projectID : '';
+        }
+        else
+        {
+            $pipeline->externalPipeline = $formData->pipeline;
+        }
+
+        $this->dao->insert(TABLE_PIPELINE)->data($pipeline, 'pipeline')
+            ->batchCheck($this->config->pipeline->import->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        $pipelineID = $this->dao->lastInsertID();
+
+        $this->file->updateObjectID($this->post->uid, $pipelineID, 'pipeline');
+        $this->loadModel('action')->create('pipeline', $pipelineID, 'imported');
+
+        return $pipelineID;
+    }
+
+    /**
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *

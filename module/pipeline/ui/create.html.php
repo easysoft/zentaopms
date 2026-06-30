@@ -13,6 +13,7 @@ namespace zin;
 formPanel
 (
     set::title($lang->pipeline->createBtn),
+    set::submitBtnText($lang->pipeline->createBtn),
     on::change('[name="createType"]')->call('loadExistPipeline'),
     on::change('[name="existPipeline"]')->call('copyPipeline'),
     formGroup
