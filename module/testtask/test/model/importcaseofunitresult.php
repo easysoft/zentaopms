@@ -40,7 +40,7 @@ su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
 $testtaskTest  = new testtaskModelTest();
-$testtaskModel = $testtaskTest->objectModel;
+$testtaskModel = $testtaskTest->instance;
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 $cases = [

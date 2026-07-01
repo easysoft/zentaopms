@@ -44,7 +44,7 @@ su('admin');
 $testtaskTest = new testtaskZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($testtaskTest->processRowspanForGroupCaseTest(array(), '')) && p() && e('0'); // 步骤1：空用例数组测试
+r($testtaskTest->processRowspanForGroupCaseTest(array(), 0)) && p() && e('0'); // 步骤1：空用例数组测试
 
 // 构造测试数据：多个需求的用例
 $cases = array();
@@ -69,7 +69,7 @@ $case3->title = '测试用例3';
 $case3->rowspan = 0;
 $cases[] = $case3;
 
-r($testtaskTest->processRowspanForGroupCaseTest($cases, '')) && p('0:rowspan') && e('2'); // 步骤2：多个需求正常处理，第一个需求的第一个用例rowspan为2
+r($testtaskTest->processRowspanForGroupCaseTest($cases, 0)) && p('0:rowspan') && e('2'); // 步骤2：多个需求正常处理，第一个需求的第一个用例rowspan为2
 
 // 构造单个需求单个用例的测试数据
 $singleCases = array();
@@ -80,7 +80,7 @@ $singleCase->title = '单个测试用例';
 $singleCase->rowspan = 0;
 $singleCases[] = $singleCase;
 
-r($testtaskTest->processRowspanForGroupCaseTest($singleCases, '')) && p('0:rowspan') && e('1'); // 步骤3：单个需求单个用例，rowspan为1
+r($testtaskTest->processRowspanForGroupCaseTest($singleCases, 0)) && p('0:rowspan') && e('1'); // 步骤3：单个需求单个用例，rowspan为1
 
 // 测试带构建ID的情况
 $casesWithBuild = array();
@@ -98,7 +98,7 @@ $buildCase2->title = '构建测试用例2';
 $buildCase2->rowspan = 0;
 $casesWithBuild[] = $buildCase2;
 
-r($testtaskTest->processRowspanForGroupCaseTest($casesWithBuild, '1')) && p('0:rowspan') && e('1'); // 步骤4：带构建ID的正常处理
+r($testtaskTest->processRowspanForGroupCaseTest($casesWithBuild, 1)) && p('0:rowspan') && e('1'); // 步骤4：带构建ID的正常处理
 
 // 测试需求ID为0的边界情况
 $zeroCases = array();
@@ -109,4 +109,4 @@ $zeroCase->title = '无需求用例';
 $zeroCase->rowspan = 0;
 $zeroCases[] = $zeroCase;
 
-r($testtaskTest->processRowspanForGroupCaseTest($zeroCases, '')) && p('0:rowspan') && e('1'); // 步骤5：需求ID为0的边界处理
+r($testtaskTest->processRowspanForGroupCaseTest($zeroCases, 0)) && p('0:rowspan') && e('1'); // 步骤5：需求ID为0的边界处理
