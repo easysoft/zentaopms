@@ -44,10 +44,18 @@ $fields->field('name')->required(true)->width('1/2')->value(zget($importRepo, 'n
 $fields->field('space')->required(true)->control('picker')->items($spaces)->value(!empty($importRepo) ? zget($importRepo, 'space') : $spaceID)->width('1/2');
 $fields->field('product')->required(true)->control('picker')->items($products)->multiple(true)->value(zget($importRepo, 'product', ''))->width('1/2');
 $fields->field('desc')->control(array('control' => 'textarea', 'rows' => 2))->value(zget($importRepo, 'desc', ''))->width('full');
-$fields->field('mirror')->label($lang->repo->afterImport)->width('full')->control('radioList')->items($lang->repo->accessList)->value(!empty($importRepo) ? zget($importRepo, 'mirror') : 'writable');
+
+$mirrorValue = !empty($importRepo) ? zget($importRepo, 'mirror') : 'writable';
+if($type == 'Subversion') $mirrorValue = 'readonly';
+$fields->field('mirror')->label($lang->repo->afterImport)
+    ->width('full')
+    ->control('radioList')
+    ->items($lang->repo->accessList)
+    ->hidden($type == 'Subversion')
+    ->value($mirrorValue);
 $fields->field('acl')->width('full')->control('radioList')->items($lang->repo->aclList)->value(!empty($importRepo) ? zget($importRepo, 'acl') : 'open');
 
-$fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath');
+$fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath,mirror');
 $fields->autoLoad('providerID', 'organize,repo,account,password,repoPath');
 $fields->autoLoad('organize', 'repo');
 
