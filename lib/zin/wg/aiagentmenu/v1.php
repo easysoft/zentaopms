@@ -11,10 +11,14 @@ class aiAgentMenu extends wg
         'placement?:string="bottom-end"',
         'objectID?:int',
         'isFormPage?:bool',
+        'module?:string',
+        'method?:string',
     );
 
     protected function build()
     {
+        global $app;
+
         $items = $this->prop('items');
         if(empty($items)) return null;
 
@@ -30,7 +34,17 @@ class aiAgentMenu extends wg
         $isFormPage = $this->prop('isFormPage');
         $objectID   = $this->prop('objectID');
 
-        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass)
+        $app->control->loadModel('ai');
+
+        global $config;
+        $formModule = $this->prop('module');
+        $formMethod = $this->prop('method');
+        if($isFormPage && $formModule && $formMethod)
+        {
+            $app->loadConfig('ai');
+        }
+
+        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass, $app, $config, $formModule, $formMethod)
         {
             $itemProps = array
             (
@@ -40,8 +54,14 @@ class aiAgentMenu extends wg
 
             if($isFormPage)
             {
+                $promptFields  = $app->control->ai->getPromptFields((int)$prompt->id);
+                $fieldsData    = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
+                $allowedFields = $config->ai->universalFormFields[$formModule][$formMethod] ?? array();
+
                 $itemProps[] = set('data-on', 'click');
                 $itemProps[] = set('data-call', "executeWithFormContext({$prompt->id})");
+                $itemProps[] = set('data-prompt-fields', $fieldsData);
+                $itemProps[] = set('data-allowed-fields', helper::jsonEncode($allowedFields));
             }
             else
             {

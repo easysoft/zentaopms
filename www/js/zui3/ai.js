@@ -167,6 +167,206 @@ window.executeZentaoPrompt = async function(info, testingMode)
 };
 
 /**
+ * 执行通用表单智能体。
+ *
+ * @param {Object} formSchema - 表单结构和当前值
+ * @param {Object} contextIDs - 上下文字段 ID 映射
+ * @param {number} promptID - 智能体 ID
+ * @param {Array}  promptFields - 自定义输入字段列表
+ * @param {Array}  allowedFields - 可操作字段白名单
+ */
+window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields)
+{
+    const zaiPanel = await checkZAIPanel(true);
+    if(!zaiPanel) return;
+
+    const langData = zaiPanel.options.langData || {};
+    const rawFields = (formSchema && formSchema.fields) ? formSchema.fields : {};
+    const hasWhitelist = Array.isArray(allowedFields) && allowedFields.length > 0;
+    const skipFields = new Set(['uid', 'token', 'referrer', 'fileList', 'contactList', 'color']);
+
+    const fields = Object.values(rawFields).filter(f =>
+    {
+        if(!f.name || skipFields.has(f.name)) return false;
+        if(typeof f.currentValue === 'string' && f.currentValue.startsWith('[')) return false;
+        if(hasWhitelist && !allowedFields.includes(f.name)) return false;
+        return true;
+    });
+
+    const properties = {};
+    const required = [];
+    fields.forEach(field =>
+    {
+        const name = field.name;
+        const prop = {
+            type: 'string',
+            description: field.label || name,
+        };
+        if(Array.isArray(field.options) && field.options.length)
+        {
+            prop.enum = field.options.map(o =>
+            {
+                if(typeof o === 'string') return o;
+                return o.value !== undefined ? String(o.value) : String(o);
+            });
+        }
+        properties[name] = prop;
+        if(field.required) required.push(name);
+    });
+
+    const schema = {
+        type: 'object',
+        properties,
+        required,
+    };
+
+    const formConfig = getPromptFormConfig(promptFields, {
+        title: langData.formFillTitle,
+        submitBtnText: langData.submitFormDisplayName,
+    });
+
+    const toolName = 'submitFormData';
+    const agentToolDef = {
+        name: toolName,
+        displayName: langData.submitFormDisplayName,
+        description: langData.submitFormDescription,
+        parameters: {
+            type: 'object',
+            properties: {
+                data: schema,
+                title: {
+                    type: 'string',
+                    description: langData.promptResultTitle,
+                },
+                summary: {
+                    type: 'string',
+                    description: langData.agentResultSummary,
+                },
+            },
+            required: ['data', 'summary'],
+        },
+    };
+
+    const contextLines = [];
+    if(contextIDs && typeof contextIDs === 'object')
+    {
+        Object.keys(contextIDs).forEach(type =>
+        {
+            const id = contextIDs[type];
+            if(id > 0) contextLines.push(`  ${type}：#${id}`);
+        });
+    }
+    const contextStr = contextLines.length ? `${langData.formPageContext}：\n${contextLines.join('\n')}\n` : '';
+
+    const fieldsList = fields.map(f =>
+    {
+        let optionsStr = '';
+        if(Array.isArray(f.options) && f.options.length)
+        {
+            const opts = f.options.map(o =>
+            {
+                const val = (typeof o === 'string') ? o : (o.value !== undefined ? o.value : '');
+                const txt = (typeof o === 'string') ? o : (o.text || o.value || '');
+                return `${val}(${txt})`;
+            });
+            optionsStr = `\n  options: ${opts.join(', ')}`;
+        }
+        return [
+            `- ${f.label || f.name}`,
+            `  name: ${f.name}`,
+            `  input: ${f.type || f.controlType || 'input'}`,
+            `  type: string`,
+            `  required: ${!!f.required}`,
+            `  value: ${f.currentValue ?? ''}`,
+            optionsStr,
+        ].filter(Boolean).join('\n');
+    }).join('\n');
+
+    const fillableFields = Object.keys(properties).map(n => `- ${n}`).join('\n');
+
+    const dataPrompt = [
+        contextStr,
+        langData.formCurrentData,
+        fieldsList,
+        '',
+        langData.formFillableFields,
+        fillableFields,
+        '',
+        langData.formZentaoAPITip,
+    ].filter(Boolean).join('\n');
+    const prompt = zui.formatString(langData.processDataPrefix, {data: dataPrompt});
+
+    const tools = [
+        {
+            ...agentToolDef,
+            fn: (response) =>
+            {
+                const result = response.data;
+                const taskResult = {
+                    agentID: 'zentao-api',
+                    id: `zentao-agent-result-${Date.now()}`,
+                    tool: agentToolDef,
+                    title: response.title,
+                    result: response,
+                    formLocation: window.top ? window.top.location.href : window.location.href,
+                    targetFormName: langData.formCurrentTarget,
+                    targetForm: 'current',
+                    objectID: 0,
+                    objectType: 'form',
+                    objectData: result,
+                    objectProps: {},
+                    actions: [],
+                };
+                const message = {
+                    role: 'user',
+                    content: [
+                        langData.formResultGenerated,
+                        JSON.stringify(result),
+                        '',
+                        langData.formApplyDataTip,
+                    ].join('\n\n'),
+                    custom_data: {
+                        taskResults: [taskResult],
+                        asRole: 'assistant',
+                    },
+                };
+                return {
+                    message,
+                };
+            },
+        },
+    ];
+
+    const popupOptions = {
+        id: 'zentao-prompt-popup',
+        viewType: 'chat',
+        width: 600,
+        postMessage: {
+            content: [
+                {
+                    role: 'user',
+                    content: langData.formFillUserMessage,
+                    custom_data: {
+                        invisible: true,
+                    },
+                },
+            ],
+        },
+        creatingChat: {
+            agent: 'zentao-api',
+            title: langData.formFillTitle,
+            prompt: prompt,
+            tools: tools,
+            form: formConfig,
+        },
+    };
+
+    const popup = zaiPanel.openPopup(popupOptions);
+    await new Promise(resolve => requestAnimationFrame(resolve));
+    return popup;
+};
+
+/**
  * 将数字员工任务结果存入 Session，然后导航到目标表单页面。
  */
 window.applyAITaskResultToForm = async function(taskID, formLocation, formData)

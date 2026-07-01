@@ -958,9 +958,8 @@ class ai extends control
         $contextFields  = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
         $contextObjects = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
         $contextDesc    = $this->ai->buildContextDescription($contextObjects);
-
-        $allowedFields   = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
-        $filteredFields  = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
+        $allowedFields  = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
+        $filteredFields = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
 
         $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
         $promptLang  = $this->lang->ai->prompts;

@@ -161,6 +161,7 @@ $lang->ai->prompts->returnJSONObject  = '请返回 JSON 对象，键名对应上
 $lang->ai->prompts->returnJSONArray   = '请返回 JSON 数组，每个数组元素对应表中的一行数据，元素为对象，对象键名对应上述可填充字段名。必填字段必须提供值。';
 $lang->ai->prompts->processDataPrefix = "要进行处理的数据如下：\n%s";
 $lang->ai->prompts->useToolResult     = "请使用工具 `%s` 返回处理结果。";
+$lang->ai->prompts->useZentaoAPITip   = '如需获取关联对象的详细信息，请通过禅道 API 获取。';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm  = '当前禅道智能体未完成，是否继续设计？';
@@ -1121,7 +1122,6 @@ $lang->ai->execute->failReasons['noPrompt']     = '禅道智能体不存在';
 $lang->ai->execute->failReasons['noObjectData'] = '对象数据获取失败';
 $lang->ai->execute->failReasons['noResponse']   = '请求返回值为空';
 $lang->ai->execute->failReasons['noTargetForm'] = '目标表单地址获取失败，或表单必要变量获取失败（可能原因为无法找到关联的对象，请检查对象间的关联关系）';
-$lang->ai->execute->failReasons['noFormSchema'] = '缺少表单结构数据';
 $lang->ai->execute->executeErrors = array();
 $lang->ai->execute->executeErrors['-1'] = '禅道智能体不存在';
 $lang->ai->execute->executeErrors['-2'] = '对象数据获取失败';

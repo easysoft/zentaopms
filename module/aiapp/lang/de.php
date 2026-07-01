@@ -81,7 +81,19 @@ $lang->aiapp->langData->promptTestDataIntro= 'Hier ist das Beispiel {type} von {
 $lang->aiapp->langData->searchingKLibs     = 'Suche nach Wissensdatenbanken...';
 $lang->aiapp->langData->recentChats        = 'Letzte Chats';
 $lang->aiapp->langData->aiTeammateTasks    = 'Digitale Mitarbeiter-Aufgaben';
-$lang->aiapp->langData->searchTasks        = 'Suche nach digitalen Mitarbeiter-Aufgaben';
+
+$lang->aiapp->langData->searchTasks           = 'Suche nach digitalen Mitarbeiter-Aufgaben';
+$lang->aiapp->langData->formFillTitle         = 'Formularausfüllung';
+$lang->aiapp->langData->formFillUserMessage   = 'Bitte füllen Sie das Formular basierend auf den aktuellen Seiteninformationen aus';
+$lang->aiapp->langData->formPageContext       = 'Aktueller Seitenkontext';
+$lang->aiapp->langData->formCurrentData       = 'Aktuelle Formulardaten';
+$lang->aiapp->langData->formFillableFields    = 'Ausfüllbare Felder';
+$lang->aiapp->langData->formZentaoAPITip      = "Bitte verwenden Sie zuerst die zentao-api-Tools, um die erforderlichen Kontextdaten abzurufen, und verwenden Sie dann das submitFormData-Tool, um die ausgefüllten Formulardaten zurückzugeben. Pflichtfelder müssen Werte haben.\nNormalerweise muss submitFormData nur einmal aufgerufen werden, es sei denn, der Benutzer benötigt mehrere Lösungen.";
+$lang->aiapp->langData->formResultGenerated   = 'Formulardaten wurden generiert.';
+$lang->aiapp->langData->formCurrentTarget     = 'Aktuelles Formular';
+$lang->aiapp->langData->formApplyDataTip      = 'Bitte klicken Sie auf die Schaltfläche "Auf das aktuelle Formular anwenden", um die Daten in das Formular zu übernehmen.';
+$lang->aiapp->langData->submitFormDisplayName = 'Formulardaten einreichen';
+$lang->aiapp->langData->submitFormDescription = 'Die ausgefüllten Formulardaten an den Benutzer zurückgeben';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

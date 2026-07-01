@@ -82,6 +82,18 @@ $lang->aiapp->langData->searchingKLibs      = '正在查找知识库...';
 $lang->aiapp->langData->recentChats         = '最近聊天';
 $lang->aiapp->langData->aiTeammateTasks     = '数字员工任务';
 $lang->aiapp->langData->searchTasks         = '搜索数字员工任务';
+$lang->aiapp->langData->formFillTitle       = '表单填充';
+$lang->aiapp->langData->formFillUserMessage = '请根据当前页面信息填写表单';
+$lang->aiapp->langData->formPageContext     = '当前页面上下文';
+$lang->aiapp->langData->formCurrentData     = '当前表单数据';
+$lang->aiapp->langData->formFillableFields  = '可填充字段';
+$lang->aiapp->langData->formZentaoAPITip    = "请先使用 zentao-api 工具获取所需的上下文数据，然后使用 submitFormData 工具返回填充后的表单数据。必填字段必须提供值。\n通常 submitFormData 只需要调用一次，除非用户特殊要求提供多个方案。";
+$lang->aiapp->langData->formResultGenerated = '表单数据已生成。';
+$lang->aiapp->langData->formCurrentTarget   = '当前表单';
+$lang->aiapp->langData->formApplyDataTip    = '请点击"应用到当前表单"按钮将数据填充到表单中。';
+
+$lang->aiapp->langData->submitFormDisplayName = '提交表单数据';
+$lang->aiapp->langData->submitFormDescription = '将填充后的表单数据返回给用户';
 
 $lang->aiapp->toolkitTitle = '禅道智能工具箱';
 $lang->aiapp->toolkitItems = array();
