@@ -85,9 +85,9 @@ EOT;
 $sqls[4] = <<<EOT
 SELECT
     t1.name,
-    t1.PM,
+    t1.`PM`,
     t1.begin,
-    t1.realBegan,
+    t1.`realBegan`,
     t3.realname
 FROM
     zt_project AS t1
@@ -96,7 +96,7 @@ LEFT JOIN
 LEFT JOIN
     zt_user AS t3 ON t2.account = t3.account
 WHERE t1.name LIKE '%zentaopms%'
-    AND t1.realBegan > '2022-01-01'
+    AND t1.`realBegan` > '2022-01-01'
 order by t1.id
 EOT;
 

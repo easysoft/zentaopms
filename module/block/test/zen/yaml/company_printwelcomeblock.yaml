@@ -14,7 +14,7 @@ fields:
   format: ""
 - field: name
   note: 公司名称
-  range: "禅道软件（青岛）有限公司{1}"
+  range: "禅道软件（青岛）集团有限公司{1}"
   prefix: ""
   postfix: ""
   loop: 0

@@ -1986,7 +1986,7 @@
             });
         }
         if(data.modal) return loadModal(data.modal);
-        if(data.load)  return openUrl(data);
+        if(data.load || data.back)  return openUrl(data);
         if(data.app)   return openPage(data.url + (data.selector ? (' ' + data.selector) : ''), data.app);
         loadPage(data);
     });

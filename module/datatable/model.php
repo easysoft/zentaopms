@@ -2,7 +2,7 @@
 /**
  * The view file of datatable module of ZenTaoPMS.
  *
- * @copyright   Copyright 2014-2014 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2014-2014 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
  * @package     datatable
@@ -446,35 +446,11 @@ class datatableModel extends model
      */
     public function appendWorkflowFields(string $module, string $method): array
     {
-        if($module == 'build' && $method == 'build')
+        $layoutMap = zget($this->config->datatable->workflowLayoutMap, "$module-$method", []);
+        if(!empty($layoutMap))
         {
-            $module = 'build';
-            $method = 'browse'; // 版本加载build-browse的layout配置。
-        }
-        elseif($module == 'task' && $method == 'task')
-        {
-            $method = 'browse'; // 任务加载task-browse的layout配置。
-        }
-        elseif($module == 'my' && $method == 'task')
-        {
-            $module = 'task';
-            $method = 'browse'; // 地盘任务加载task-browse的layout配置。
-        }
-        elseif($module == 'bug' && $method == 'bug')
-        {
-            $method = 'browse'; // 执行bug列表加载bug-browse的layout配置。
-        }
-        elseif($module == 'story' && $method == 'story')
-        {
-            $method = 'browse'; // 执行需求列表加载story-browse的layout配置。
-        }
-        elseif($module == 'testcase' && $method == 'testcase')
-        {
-            $method = 'browse'; // 执行用例列表加载testcase-browse的layout配置。
-        }
-        elseif($module == 'projectrelease')
-        {
-            $module = 'release'; // 项目发布加载release-browse的layout配置。
+            if(isset($layoutMap['module'])) $module = $layoutMap['module'];
+            if(isset($layoutMap['method'])) $method = $layoutMap['method'];
         }
 
         $this->loadModel('workflow');

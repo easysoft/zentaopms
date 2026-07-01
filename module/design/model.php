@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of design module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
@@ -360,7 +360,7 @@ class designModel extends model
      *
      * @param  int|array $productID
      * @param  int|array $projectID
-     * @param  string    $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string    $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @param  int       $param
      * @param  string    $orderBy
      * @param  int       $pager
@@ -371,7 +371,7 @@ class designModel extends model
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getDesigns();
 
-        if($type == 'bySearch')
+        if($type == 'bysearch')
         {
             $designs = $this->getBySearch($projectID, $productID, $param, $orderBy, $pager);
         }
@@ -490,8 +490,8 @@ class designModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.name AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
-            ->leftJoin(TABLE_DESIGN)->alias('t3')->on("t2.AType='design' AND t2.AID=t3.id")
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.`BType`='commit' AND t2.`BID`=t1.id")
+            ->leftJoin(TABLE_DESIGN)->alias('t3')->on("t2.`AType`='design' AND t2.`AID`=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->notNULL()

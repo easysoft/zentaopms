@@ -34,8 +34,8 @@ $app->session->jiraUser = array();
 $convertTest = new convertModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($convertTest->importJiraDataTest()) && p('finished') && e('1'); // 步骤1：默认参数调用，无会话数据返回finished结果
-r($convertTest->importJiraDataTest('', 0, true)) && p('finished') && e('1'); // 步骤2：创建表参数为true，返回finished结果
-r($convertTest->importJiraDataTest('user', 0, false)) && p('finished') && e('1'); // 步骤3：指定type为user，返回finished结果
-r($convertTest->importJiraDataTest('project', 100, false)) && p('finished') && e('1'); // 步骤4：指定lastID为100，返回finished结果
-r($convertTest->importJiraDataTest('issue', 50, true)) && p('finished') && e('1'); // 步骤5：多参数组合调用，返回finished结果
+r($convertTest->importJiraDataTest('', 0, 1)) && p('finished') && e('1'); // 步骤1：默认参数调用，无会话数据返回finished结果
+r($convertTest->importJiraDataTest('', 1, 1)) && p('finished') && e('1'); // 步骤2：创建表参数为true，返回finished结果
+r($convertTest->importJiraDataTest('user', 0, 1)) && p('finished') && e('1'); // 步骤3：指定type为user，返回finished结果
+r($convertTest->importJiraDataTest('project', 100, 1)) && p('finished') && e('1'); // 步骤4：指定lastID为100，返回finished结果
+r($convertTest->importJiraDataTest('issue', 50, 1)) && p('finished') && e('1'); // 步骤5：多参数组合调用，返回finished结果

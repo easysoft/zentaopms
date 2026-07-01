@@ -25,6 +25,8 @@ $moduleName = array('task', 'bug', 'story');
 
 $file = new fileModelTest();
 
+$file->objectModel->app->user = new stdclass();
+
 $file->objectModel->app->user->account = 'admin';
 r($file->getExportTemplateTest($moduleName[0])) && p() && e('1'); // 测试获取 用户admin task 模块的用户模板
 r($file->getExportTemplateTest($moduleName[1])) && p() && e('0'); // 测试获取 用户admin bug 模块的用户模板

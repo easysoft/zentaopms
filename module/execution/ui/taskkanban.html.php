@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The taskkanban view file of execution module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wangy <yidong@easycorp.ltd>
  * @package     execution
@@ -93,7 +93,7 @@ jsVar('priv', array(
         'canEditName'         => common::hasPriv('kanban', 'setColumn'),
         'canSetWIP'           => common::hasPriv('kanban', 'setWIP'),
         'canSetLane'          => common::hasPriv('kanban', 'setLane'),
-        'canSortCards'        => common::hasPriv('kanban', 'cardsSort'),
+        'canSortCards'        => common::hasPriv('kanban', 'sortCard'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
         'canCreateRisk'       => $canCreateRisk,

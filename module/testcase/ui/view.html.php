@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The view view file of testcase module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     testcase
@@ -18,6 +18,13 @@ $isInModal = isInModal();
 
 $viewModule = $isLibCase ? 'caselib' : 'testcase';
 $viewMethod = $isLibCase ? 'viewCase' : 'view';
+
+$files = array();
+foreach($case->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
 
 /* 版本列表。Version list. */
 $versions = array();
@@ -74,7 +81,11 @@ if($this->config->edition == 'ipd')
 }
 
 /* 初始化底部操作栏。Init bottom actions. */
-$config->testcase->actionList['edit']['url'] = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}');
+$editModule = $isLibCase ? 'caselib' : 'testcase';
+$editMethod = $isLibCase ? 'editCase' : 'edit';
+$editParams = $isLibCase ? 'caseID={caseID}' : 'caseID={caseID}&comment=false&executionID=%executionID%&from={from}';
+$config->testcase->actionList['edit']['url'] = array('module' => $editModule, 'method' => $editMethod, 'params' => $editParams);
+
 $actions = !$testcase->deleted ? $this->loadModel('common')->buildOperateMenu($case) : array();
 if(!$testcase->deleted) $actions = array_merge($actions['mainActions'], !empty($actions['mainActions']) && !empty($actions['suffixActions']) ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);
 foreach($actions as $index => $action)
@@ -196,7 +207,7 @@ $sections[] = setting()
 
 $sections[] = setting()
     ->control('fileList')
-    ->files($case->files)
+    ->files($files)
     ->showDelete(false)
     ->padding(false)
     ->object($case);

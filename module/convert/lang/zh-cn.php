@@ -2,7 +2,7 @@
 /**
  * The convert module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
@@ -106,7 +106,7 @@ $lang->convert->errorGroupExists   = '分组 %s 已存在';
 $lang->convert->errorBuildExists   = 'Build %s 已存在';
 $lang->convert->errorReleaseExists = '发布 %s 已存在';
 $lang->convert->errorCopyFailed    = '文件 %s 拷贝失败';
-$lang->convert->importFailed       = '导入失败';
+$lang->convert->importFailed       = '导入失败，请刷新页面重新尝试。';
 
 $lang->convert->setParam = '请设置转换参数';
 
@@ -194,11 +194,14 @@ $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
 $lang->convert->jira->passwordLess       = '密码不能少于六位！';
 $lang->convert->jira->importSuccessfully = 'Jira导入完成！';
+$lang->convert->jira->getDataResult      = "正在获取Jira <strong class='text-danger'>%s</strong> 数据, 已获取 <strong class='%scount'>%s</strong> 条记录；";
+$lang->convert->jira->getDataSuccess     = '获取Jira数据完成，开始导入jira数据。';
 $lang->convert->jira->importResult       = "导入 <strong class='text-danger'>%s</strong> 数据, 已处理 <strong class='%scount'>%s</strong> 条记录；";
 $lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
 $lang->convert->jira->importingAB        = '数据导入中';
 $lang->convert->jira->imported           = '数据导入完成';
 $lang->convert->jira->restore            = '上次导入信息没有完成，是否从上次流程继续填写？';
+$lang->convert->jira->noCustomeFields    = '此对象没有需要配置的字段，请点击下一步。';
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = '业务需求';

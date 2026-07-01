@@ -23,6 +23,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('oauth')->loadYaml('oauth')->gen(5);
+su('admin');
 
 $providerTypes = array('', 'gitlab', 'test');
 $accounts      = array('', 'user1', 'test');

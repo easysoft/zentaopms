@@ -90,9 +90,9 @@ $lang->my->menu             = new stdclass();
 $lang->my->menu->index      = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar   = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->work       = array('link' => "{$lang->my->work}|my|work|mode=task");
-$lang->my->menu->audit      = array('link' => "{$lang->review->common}|my|audit|type=all&param=&orderBy=time_desc", 'subModule' => 'review');
+$lang->my->menu->audit      = array('link' => "{$lang->review->common}|my|audit|browseType=all&param=&orderBy=time_desc", 'subModule' => 'review');
 $lang->my->menu->project    = array('link' => "{$lang->project->common}|my|project|");
-$lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|type=undone");
+$lang->my->menu->execution  = array('link' => "{$lang->execution->common}|my|execution|browseType=undone");
 $lang->my->menu->contribute = array('link' => "$lang->contribute|my|contribute|mode=task");
 $lang->my->menu->dynamic    = array('link' => "$lang->dynamic|my|dynamic|");
 $lang->my->menu->score      = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
@@ -143,7 +143,7 @@ $lang->my->menu->contribute['subMenu']->epic        = array('link' => "$lang->ER
 $lang->my->menu->contribute['subMenu']->bug         = array('link' => "{$lang->bug->common}|my|contribute|mode=bug", 'alias' => 'bug');
 $lang->my->menu->contribute['subMenu']->testcase    = array('link' => "{$lang->testcase->shortCommon}|my|contribute|mode=testcase", 'alias' => 'testcase');
 $lang->my->menu->contribute['subMenu']->testtask    = array('link' => "{$lang->testtask->common}|my|contribute|mode=testtask", 'alias' => 'testtask');
-$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&type=reviewedbyme", 'subModule' => 'review', 'alias' => 'audit');
+$lang->my->menu->contribute['subMenu']->audit       = array('link' => "{$lang->review->common}|my|contribute|mode=audit&browseType=reviewedbyme", 'subModule' => 'review', 'alias' => 'audit');
 $lang->my->menu->contribute['subMenu']->doc         = array('link' => "{$lang->doc->common}|my|contribute|mode=doc", 'alias' => 'doc');
 
 $lang->my->menu->contribute['menuOrder'][5]  = 'task';

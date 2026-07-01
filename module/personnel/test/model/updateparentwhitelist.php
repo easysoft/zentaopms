@@ -53,7 +53,7 @@ su('admin');
 $personnelTest = new personnelModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($personnelTest->updateParentWhitelistTest('product', 1, array('user1', 'user2', 'user3'), 'sync', 'replace', array(), TABLE_PRODUCT)) && p() && e('parent_whitelist:user3,user1,user2;parent_acls:user3:sync,user1:sync,user2:sync;'); // 步骤1：product类型更新父级program白名单
+r($personnelTest->updateParentWhitelistTest('product', 1, array('user1', 'user2', 'user3'), 'sync', 'replace', array(), TABLE_PRODUCT)) && p() && e('parent_whitelist:user3,user1,user2;parent_acls:user1:sync,user2:sync,user3:sync;'); // 步骤1：product类型更新父级program白名单
 r($personnelTest->updateParentWhitelistTest('sprint', 21, array('user4', 'user5'), 'sync', 'replace', array(), TABLE_PROJECT)) && p() && e('parent_whitelist:user4,user5;parent_acls:user4:sync,user5:sync;'); // 步骤2：sprint类型更新父级project白名单
 r($personnelTest->updateParentWhitelistTest('project', 16, array('user1', 'user2'), 'add', 'replace', array(), TABLE_PROJECT)) && p() && e('false'); // 步骤3：非支持类型返回false
 r($personnelTest->updateParentWhitelistTest('product', 999, array('user1'), 'sync', 'replace', array(), TABLE_PRODUCT)) && p() && e('false'); // 步骤4：不存在对象处理

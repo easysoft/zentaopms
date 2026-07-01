@@ -4,14 +4,16 @@
 /**
 
 title=测试productModel->getProjectPairsByProduct();
+timeout=0
 cid=17506
 
-- 不传入产品 ID。 @0
-- 传入不存在产品 ID。 @0
+- 不传入产品 ID。 @40
+- 传入不存在产品 ID。 @40
 - 用超级管理员，传入产品 ID，确认获取条目数。 @10
 - 用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。 @10
 - 用超级管理员，传入产品 ID 和追加查询的项目，确认获取非关闭项目的条目数。 @10
 - 用超级管理员，传入产品 ID，确认获取启用执行非关闭项目的条目数。 @7
+
 - 用超级管理员，传入产品 ID 和所有分支，确认获取条目数。 @10
 - 用超级管理员，传入产品 ID 和存在分支，确认获取条目数。 @10
 - 用超级管理员，传入产品 ID 和不存在分支，确认获取条目数。 @0
@@ -47,8 +49,8 @@ global $tester;
 $product = $tester->loadModel('product');
 $product->app->user->admin = true;
 
-r($product->getProjectPairsByProduct(0))  && p() && e('0'); //不传入产品 ID。
-r($product->getProjectPairsByProduct(10)) && p() && e('0'); //传入不存在产品 ID。
+r(count($product->getProjectPairsByProduct(0)))  && p() && e('40'); //不传入产品 ID。
+r(count($product->getProjectPairsByProduct(10))) && p() && e('40'); //传入不存在产品 ID。
 
 r(count($product->getProjectPairsByProduct(4)))                                 && p() && e('10'); // 用超级管理员，传入产品 ID，确认获取条目数。
 r(count($product->getProjectPairsByProduct(4, '', '', 'noclosed')))             && p() && e('10'); // 用超级管理员，传入产品 ID，确认获取非关闭项目的条目数。

@@ -11,7 +11,7 @@
  * 描述：按系统统计的已关闭一级项目集数反映了系统中不同战略目标的项目集数量及情况，用于评估组织的项目集战略目标管理绩效和成果。
  * 定义：所有一级项目集的个数求和;状态为已关闭;过滤已删除的项目集;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

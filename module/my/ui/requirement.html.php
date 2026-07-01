@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The requirement view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     my
@@ -11,18 +11,21 @@ declare(strict_types=1);
 namespace zin;
 
 include 'header.html.php';
-jsVar('window.globalSearchType', 'requirement');
+
+jsVar('children',   $lang->story->children);
+jsVar('childrenAB', $lang->story->childrenAB);
 jsVar('showGrade',  $showGrade);
 jsVar('gradeGroup', $gradeGroup);
+jsVar('window.globalSearchType', 'requirement');
 
 jsVar('recall',       $lang->story->recall);
 jsVar('recallChange', $lang->story->recallChange);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=requirement&type={key}&param="),
-    li(searchToggle(set::module($this->app->rawMethod . 'Requirement'), set::open($type == 'bysearch')))
+    set::current($browseType),
+    set::linkParams("mode=requirement&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Requirement'), set::open($browseType == 'bysearch')))
 );
 
 $viewType = $this->cookie->storyViewType ? $this->cookie->storyViewType : 'tree';
@@ -99,28 +102,32 @@ $footToolbar = array('items' => array
 if($canBatchAction) $config->my->requirement->dtable->fieldList['id']['type'] = 'checkID';
 
 $stories = initTableData($stories, $config->my->requirement->dtable->fieldList, $this->story);
+$cols    = $this->loadModel('datatable')->getSetting('my', 'requirement');
+if($viewType == 'tiled') $cols['title']['nestedToggle'] = false;
+
 foreach($stories as $id => $story)
 {
-    if(!isset($story->actions)) continue;
-    foreach($story->actions as $key => $action)
+    if(isset($story->actions))
     {
-        if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+        foreach($story->actions as $key => $action)
+        {
+            if(!empty($story->frozen) && in_array($action['name'], array('edit', 'change'))) $stories[$id]->actions[$key]['hint'] = sprintf($lang->story->frozenTip, $lang->story->{$action['name']});
+        }
     }
+    $story->estimate = helper::formatHours($story->estimate);
 }
 
-if($viewType == 'tiled') $config->my->requirement->dtable->fieldList['title']['nestedToggle'] = false;
-$cols = array_values($config->my->requirement->dtable->fieldList);
 $data = array_values($stories);
 dtable
 (
     set::cols($cols),
     set::data($data),
     set::userMap($users),
-    set::fixedLeftWidth('44%'),
+    set::customCols(true),
     set::checkable($canBatchAction ? true : false),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip(sprintf($lang->my->noData, $lang->URCommon))

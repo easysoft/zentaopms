@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度关闭项目数是指在某年度关闭的项目数量。这个度量项可以帮助团队了解某年度项目的执行情况和成果，并进行项目交付能力的评估。较高的年度关闭项目数表明团队在项目交付方面具有较高的效率。
  * 定义：所有的项目个数求和;关闭时间为某年;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_closed_project extends baseCalc
 {
     public $dataset = 'getAllProjects';
 
-    public $fieldList = array('t1.status', 't1.closedDate');
+    public $fieldList = array('t1.status', 't1.`closedDate`');
 
     public $result = array();
 

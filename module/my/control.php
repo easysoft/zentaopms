@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -70,7 +70,7 @@ class my extends control
      */
     public function calendar()
     {
-        $this->locate($this->createLink('my', 'todo', 'type=all&userID=&status=all'));
+        $this->locate($this->createLink('my', 'todo', 'browseType=all&userID=&status=all'));
     }
 
     /**
@@ -78,7 +78,7 @@ class my extends control
      * My work view.
      *
      * @param  string $mode
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -87,12 +87,23 @@ class my extends control
      * @access public
      * @return void
      */
-    public function work(string $mode = 'task', string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function work(string $mode = 'task', string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if(in_array($mode, array('testcase', 'feedback')) && $type == 'assignedTo') $type = 'assigntome';
+        if($this->config->edition != 'open')
+        {
+            $this->my->appendWorkFlowMenu();
+            $flows = $this->my->getFlowPairs();
+            if(isset($flows[$mode]))
+            {
+                echo $this->fetch('my', 'flow', "module={$mode}&type={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+                return;
+            }
+        }
+
+        if(in_array($mode, array('testcase', 'feedback')) && $browseType == 'assignedTo') $browseType = 'assigntome';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
-        echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('my', $mode, "browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
@@ -100,7 +111,7 @@ class my extends control
      * My contribute view.
      *
      * @param  string $mode
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -109,21 +120,21 @@ class my extends control
      * @access public
      * @return void
      */
-    public function contribute(string $mode = 'task', string $type = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function contribute(string $mode = 'task', string $browseType = 'openedBy', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        if((in_array($mode, array('issue', 'risk', 'reviewissue'))) && $type == 'openedBy') $type = 'createdBy';
-        if($mode == 'testtask' && $type == 'openedBy') $type = 'done';
-        if(($mode == 'doc' || $mode == 'testcase') && $type == 'openedBy') $type = 'openedbyme';
+        if((in_array($mode, array('issue', 'risk', 'reviewissue'))) && $browseType == 'openedBy') $browseType = 'createdBy';
+        if($mode == 'testtask' && $browseType == 'openedBy') $browseType = 'done';
+        if(($mode == 'doc' || $mode == 'testcase') && $browseType == 'openedBy') $browseType = 'openedbyme';
         $this->lang->my->featureBar[$this->app->rawMethod] = $this->lang->my->featureBar[$this->app->rawMethod][strtolower($mode)];
 
-        echo $this->fetch('my', $mode, "type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('my', $mode, "browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**
      * 待办列表。
      * My todos.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $userID
      * @param  string $status
      * @param  string $orderBy
@@ -133,7 +144,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function todo(string $type = 'before', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function todo(string $browseType = 'all', string $userID = '', string $status = 'all', string $orderBy = "date_desc,status,begin", int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -154,8 +165,8 @@ class my extends control
 
         /* Append id for second sort, get todos and tasks. */
         $sort = common::appendOrder($orderBy);
-        if($type == 'before') $status = 'undone';
-        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        if($browseType == 'before') $status = 'undone';
+        $todos = $this->loadModel('todo')->getList($browseType, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
 
         $count = array('wait' => 0, 'doing' => 0);
@@ -169,8 +180,8 @@ class my extends control
         /* Assign. */
         $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->todo;
         $this->view->todos        = $todos;
-        $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
-        $this->view->type         = $type;
+        $this->view->date         = (int)$browseType == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($browseType));
+        $this->view->browseType   = $browseType;
         $this->view->status       = $status;
         $this->view->user         = $user;
         $this->view->users        = $this->user->getPairs('noletter');
@@ -188,7 +199,7 @@ class my extends control
      * 需求列表。
      * My stories.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -197,7 +208,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function story(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function story(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
@@ -211,20 +222,20 @@ class my extends control
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = $type == 'bysearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
 
         $this->loadModel('story');
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'story');
         }
-        elseif($type == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
-            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $browseType, $sort, $pager, 'story', false, 'all');
         }
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
@@ -232,7 +243,7 @@ class my extends control
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=story&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -241,7 +252,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->mode       = 'story';
         $this->view->pager      = $pager;
@@ -255,7 +266,7 @@ class my extends control
      * 业务需求列表。
      * My epics.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -264,7 +275,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function epic(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function epic(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
@@ -278,21 +289,21 @@ class my extends control
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $this->loadModel('story');
         $this->loadModel('epic');
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'epic');
         }
-        elseif($type == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             $stories = $this->my->getEpicsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
-            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'epic', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $browseType, $sort, $pager, 'epic', false, 'all');
         }
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
@@ -300,7 +311,7 @@ class my extends control
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=epic&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=epic&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildEpicSearchForm($queryID, $actionURL, $currentMethod);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -309,7 +320,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->mode       = 'epic';
         $this->view->pager      = $pager;
@@ -323,7 +334,7 @@ class my extends control
      * 用户需求列表。
      * My requirements.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -332,7 +343,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function requirement(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function requirement(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
@@ -344,23 +355,24 @@ class my extends control
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
+        if(strpos($sort, 'planTitle') !== false) $sort = str_replace('planTitle', 'plan', $sort);
         if(strpos($sort, 'productTitle') !== false) $sort = str_replace('productTitle', 'product', $sort);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         $this->loadModel('story');
         $this->loadModel('requirement');
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $stories = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'requirement');
         }
-        elseif($type == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $sort, $pager);
         }
         else
         {
-            $stories = $this->story->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement', false, 'all');
+            $stories = $this->story->getUserStories($this->app->user->account, $browseType, $sort, $pager, 'requirement', false, 'all');
         }
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
@@ -368,7 +380,7 @@ class my extends control
 
          /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -377,7 +389,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->story;
         $this->view->stories    = $stories;
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->mode       = 'requirement';
         $this->view->pager      = $pager;
@@ -400,10 +412,10 @@ class my extends control
      * @access public
      * @return void
      */
-    public function task(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function task(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
-        if($type != 'bySearch')            $this->session->set('myTaskType', $type);
+        if($browseType != 'bysearch')            $this->session->set('myTaskType', $browseType);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
@@ -417,23 +429,23 @@ class my extends control
 
         /* Get tasks. */
         $this->loadModel('task');
-        $queryID = $type == 'bySearch' ? (int)$param : 0;
-        if($type == 'assignedBy')
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+        if($browseType == 'assignedBy')
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'task');
         }
-        elseif($type == 'bySearch')
+        elseif($browseType == 'bysearch')
         {
             $tasks = $this->my->getTasksBySearch($this->app->user->account, 0, $pager, $sort, $queryID);
         }
         else
         {
-            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
+            $tasks = $this->task->getUserTasks($this->app->user->account, $browseType, 0, $pager, $sort, $queryID);
         }
         $summary = $this->loadModel('execution')->summary($tasks);
         $tasks   = $this->myZen->buildTaskData($tasks);
 
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bysearch&queryID=myQueryID");
         $this->my->buildTaskSearchForm($queryID, $actionURL, $this->app->rawMethod . 'Task');
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -443,7 +455,7 @@ class my extends control
         $this->view->tabID      = 'task';
         $this->view->tasks      = $this->app->viewType == 'json' ?  array_values($tasks) : $tasks;
         $this->view->summary    = $summary;
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->pager      = $pager;
@@ -457,7 +469,7 @@ class my extends control
      * bug 列表。
      * My bugs.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -465,12 +477,12 @@ class my extends control
      * @access public
      * @return void
      */
-    public function bug(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        $queryID  = $type == 'bySearch' ? (int)$param : 0;
-        if($type != 'bySearch')            $this->session->set('myBugType', $type);
+        $queryID  = $browseType == 'bysearch' ? (int)$param : 0;
+        if($browseType != 'bysearch')            $this->session->set('myBugType', $browseType);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
@@ -482,22 +494,23 @@ class my extends control
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         if(strpos($sort, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $bugs = $this->my->getAssignedByMe($this->app->user->account, $pager, $sort, 'bug');
         }
         else
         {
-            $bugs = $this->bug->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, 0, $queryID);
+            $bugs = $this->bug->getUserBugs($this->app->user->account, $browseType, $sort, 0, $pager, 0, $queryID);
         }
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
+        $bugs = $this->bug->processBuildForBugs($bugs);
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bysearch&queryID=myQueryID");
         $this->my->buildBugSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
-        if($type == 'resolvedBy')
+        if($browseType == 'resolvedBy')
         {
             $unclosedCount = 0;
             foreach($bugs as $bug)
@@ -518,7 +531,7 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noletter');
         $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->tabID       = 'bug';
-        $this->view->type        = $type;
+        $this->view->browseType  = $browseType;
         $this->view->recTotal    = $recTotal;
         $this->view->recPerPage  = $recPerPage;
         $this->view->pageID      = $pageID;
@@ -533,7 +546,7 @@ class my extends control
      * 测试单列表。
      * My test task.
      *
-     * @param  string $type       wait|done
+     * @param  string $browseType wait|done
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -542,7 +555,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function testtask(string $type = 'wait', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(string $browseType = 'wait', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -561,19 +574,30 @@ class my extends control
         $this->app->loadLang('project');
         $sort  = common::appendOrder($orderBy);
         $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type == 'assignedTo' ? 'wait' : $type);
+        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
             if($task->build == 'trunk' || empty($task->buildName)) $task->buildName = $this->lang->trunk;
             if(!empty($task->execution) && empty($task->executionMultiple)) $task->executionName = $task->projectName . "({$this->lang->project->disableExecution})";
+
+            $task->rawStatus = $task->status;
+            $task->status    = $this->processStatus('testtask', $task);
+
+            if(empty($task->members)) continue;
+
+            $members = array();
+            foreach(explode(',', $task->members) as $member) $members[] = zget($users, $member);
+            $task->members = implode(',', array_unique($members));
         }
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
 
         $this->view->title        = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->myTestTask;
+        $this->view->users        = $users;
         $this->view->tasks        = $tasks;
-        $this->view->type         = $type;
+        $this->view->browseType   = $browseType;
         $this->view->waitCount    = $count['wait'];
         $this->view->testingCount = $count['doing'];
         $this->view->blockedCount = $count['blocked'];
@@ -588,7 +612,7 @@ class my extends control
      * 用例列表。
      * My test case.
      *
-     * @param  string $type      assigntome|openedbyme
+     * @param  string $browseType assigntome|openedbyme
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -597,7 +621,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function testcase(string $type = 'assigntome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testcase(string $browseType = 'assigntome', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
@@ -610,21 +634,21 @@ class my extends control
 
         /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
-        $queryID = $type == 'bysearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
 
         $this->loadModel('testcase');
         $cases = array();
-        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
-        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
-        if($type == 'bysearch' && $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
-        if($type == 'bysearch' && $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
+        if($browseType == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, 'skip|run', $sort, $pager);
+        if($browseType == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, 'skip', $sort, $pager);
+        if($browseType == 'bysearch' && $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
+        if($browseType == 'bysearch' && $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
-        $cases = $this->myZen->buildCaseData($cases, $type);
+        $cases = $this->myZen->buildCaseData($cases, $browseType);
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTestCaseSearchForm($queryID, $actionURL, $currentMethod);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -634,7 +658,7 @@ class my extends control
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->param      = $param;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -650,7 +674,7 @@ class my extends control
      * 文档列表。
      * Doc page of my.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -659,7 +683,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function doc(string $type = 'openedbyme', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function doc(string $browseType = 'openedbyme', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session, load lang. */
         $uri = $this->app->getURI(true);
@@ -674,17 +698,17 @@ class my extends control
 
         /* Append id for second sort. */
         $sort    = common::appendOrder($orderBy);
-        $queryID = $type == 'bySearch' ? (int)$param : 0;
-        $docs    = $this->loadModel('doc')->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+        $docs    = $this->loadModel('doc')->getDocsByBrowseType($browseType, $queryID, 0, $sort, $pager);
 
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bysearch&queryID=myQueryID");
         $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->doc;
         $this->view->docs       = $docs;
         $this->view->users      = $this->user->getPairs('noletter');
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -700,7 +724,7 @@ class my extends control
      * 我的项目列表。
      * My projects.
      *
-     * @param  string  $status doing|wait|suspended|closed|openedbyme
+     * @param  string  $browseType doing|wait|suspended|closed|openedbyme
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
@@ -708,7 +732,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function project(string $status = 'doing', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
+    public function project(string $browseType = 'doing', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->app->loadLang('project');
 
@@ -722,7 +746,7 @@ class my extends control
 
         /* Get PM id list. */
         $accounts = array();
-        $projects = $this->user->getProjects($this->app->user->account, $status, $orderBy, $pager);
+        $projects = $this->user->getProjects($this->app->user->account, $browseType, $orderBy, $pager);
         foreach($projects as $project)
         {
             if(!empty($project->PM) && !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -736,7 +760,7 @@ class my extends control
         $this->view->projects    = $projects;
         $this->view->PMList      = $PMList;
         $this->view->pager       = $pager;
-        $this->view->status      = $status;
+        $this->view->browseType  = $browseType;
         $this->view->recTotal    = $recTotal;
         $this->view->recPerPage  = $recPerPage;
         $this->view->pageID      = $pageID;
@@ -749,7 +773,7 @@ class my extends control
      * 我的执行列表。
      * My executions.
      *
-     * @param  string  $type       undone|done
+     * @param  string  $browseType undone|done
      * @param  string  $orderBy
      * @param  int     $recTotal
      * @param  int     $recPerPage
@@ -757,7 +781,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function execution(string $type = 'undone', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
+    public function execution(string $browseType = 'undone', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->app->loadLang('execution');
 
@@ -765,13 +789,13 @@ class my extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $executions  = $this->user->getExecutions($this->app->user->account, $type, $orderBy, $pager);
+        $executions = $this->user->getExecutions($this->app->user->account, $browseType, $orderBy, $pager);
 
         $this->view->title       = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->execution;
         $this->view->tabID       = 'project';
         $this->view->executions  = $executions;
         $this->view->parentGroup = $this->loadModel('execution')->getChildIdGroup(array_keys($executions));
-        $this->view->type        = $type;
+        $this->view->browseType  = $browseType;
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
         $this->view->mode        = 'execution';
@@ -783,7 +807,7 @@ class my extends control
      * 问题列表。
      * My issues.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -792,7 +816,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function issue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function issue(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Set session. */
         $this->app->session->set('issueList', $this->app->getURI(true), 'project');
@@ -802,8 +826,8 @@ class my extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build the search form. */
-        $queryID    = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bysearch&param=myQueryID");
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&browseType=bysearch&param=myQueryID");
         $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -813,9 +837,9 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->type        = $type;
+        $this->view->browseType  = $browseType;
         $this->view->param       = $param;
-        $this->view->issues      = $type == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
+        $this->view->issues      = $browseType == 'assignedBy' ? $this->my->getAssignedByMe($this->app->user->account, $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($browseType, $queryID, $this->app->user->account, $orderBy, $pager);
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
         $this->display();
     }
@@ -824,7 +848,7 @@ class my extends control
      * 风险列表。
      * My risks.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -833,7 +857,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function risk(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function risk(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('risk');
 
@@ -846,22 +870,22 @@ class my extends control
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $queryID       = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");
+        $queryID       = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&browseType=bysearch&param=myQueryID");
         $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Get risks by type*/
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $risks = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'risk');
         }
-        elseif($type == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
         }
         else
         {
-            $risks = $this->risk->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+            $risks = $this->risk->getUserRisks($browseType, $this->app->user->account, $orderBy, $pager);
         }
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -871,7 +895,7 @@ class my extends control
         $this->view->users       = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
-        $this->view->type        = $type;
+        $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->mode        = 'risk';
         $this->view->projectList = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
@@ -882,7 +906,7 @@ class my extends control
      * 评审意见列表。
      * My reviewissues.
      *
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -891,7 +915,7 @@ class my extends control
      * @access public
      * @return void
      */
-    public function reviewissue(string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function reviewissue(string $browseType = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('reviewissue');
 
@@ -901,22 +925,22 @@ class my extends control
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $queryID       = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL     = $this->createLink('my', $currentMethod, "mode=reviewissue&type=bysearch&param=myQueryID");
+        $queryID       = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=reviewissue&browseType=bysearch&param=myQueryID");
         $this->my->buildReviewissueSearchForm($queryID, $actionURL);
 
         /* Get reviewissues by type*/
-        if($type == 'assignedBy')
+        if($browseType == 'assignedBy')
         {
             $reviewissues = $this->my->getAssignedByMe($this->app->user->account, $pager, $orderBy, 'reviewissue');
         }
-        elseif($type == 'bysearch')
+        elseif($browseType == 'bysearch')
         {
             $reviewissues = $this->my->getReviewissuesBySearch($queryID, $currentMethod, $orderBy, $pager);
         }
         else
         {
-            $reviewissues = $this->reviewissue->getUserReviewissues($type, $this->app->user->account, $orderBy, $pager);
+            $reviewissues = $this->reviewissue->getUserReviewissues($browseType, $this->app->user->account, $orderBy, $pager);
         }
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -926,7 +950,7 @@ class my extends control
         $this->view->users        = $this->user->getPairs('noclosed|noletter');
         $this->view->orderBy      = $orderBy;
         $this->view->pager        = $pager;
-        $this->view->type         = $type;
+        $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->mode         = 'reviewissue';
         $this->view->projectList  = array(0 => '') + $this->loadModel('project')->getPairsByProgram();
@@ -1176,7 +1200,7 @@ class my extends control
 
         $this->view->title       = $this->lang->my->feedback;
         $this->view->mode        = 'feedback';
-        $this->view->type        = $browseType;
+        $this->view->browseType  = $browseType;
         $this->view->feedbacks   = $feedbacks;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
@@ -1222,7 +1246,7 @@ class my extends control
         }
         foreach($tickets as $ticket) $ticket->feedbackTip = $ticket->feedback != 0 ? '#' . $ticket->feedback : '';
 
-        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=ticket&browseType=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->my->buildTicketSearchForm($queryID, $actionURL);
 
         $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
@@ -1240,6 +1264,90 @@ class my extends control
     }
 
     /**
+     * 待处理中的自定义工作流列表，展示指派给当前用户的数据。
+     * Assigned custom workflow list in my work.
+     *
+     * @param  string $module
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function flow(string $module, string $type = 'assignedTo', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        $this->loadModel('flow');
+        $this->loadModel('workflow');
+        $this->loadModel('approval');
+
+        $this->myZen->showWorkCount($recTotal, $recPerPage, $pageID);
+
+        /* Load flow zen.*/
+        if(!class_exists('flow', false))
+        {
+            $flowControlFile = $this->app->getModulePath('', 'flow') . 'control.php';
+            if(is_file($flowControlFile)) helper::import($flowControlFile);
+        }
+        $this->loadZen('flow');
+
+        $flow = $this->workflow->getByModule($module);
+
+        $mode  = $type == 'bysearch' ? 'bysearch' : 'browse';
+        $label = (int)$param;
+
+        $searchURL = $this->createLink('my', 'work', "mode={$module}&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->flow->setSearchParams($flow, null, $searchURL);
+
+        $labels = $this->loadModel('workflowlabel', 'flow')->getList($module);
+        if(!$label && $mode != 'bysearch')
+        {
+            $currentLabel = reset($labels);
+            if(!empty($currentLabel->id)) $label = (int)$currentLabel->id;
+        }
+
+        $this->app->loadClass('pager', true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        $dataList = $this->flow->getUserDataList($flow, $mode, $orderBy, $pager);
+
+        $fields = $this->loadModel('workflowaction', 'flow')->getPageFields($flow->module, 'browse', true, null, 0, $flow->group);
+
+        $this->app->rawModule = $flow->module; // 获取数据表格列的自定义项
+
+        $menu        = $this->flowZen->buildDtableMenu($flow->module);
+        $actions     = $this->flowZen->buildDtableActions($flow->module, $flow->navigator);
+        $cols        = $this->flow->buildDtableCols($fields, $menu, $actions);
+        $footToolbar = $this->flow->buildDtableFootToolbar($flow->module);
+
+        $this->app->rawModule = 'my'; // 切换回my模块
+
+        $browseLink = $this->createLink('my', 'work', "mode={$module}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->session->set($module . 'List', $browseLink, 'my');
+
+        $this->view->title            = $flow->name;
+        $this->view->flow             = $flow;
+        $this->view->flowModule       = $module;
+        $this->view->dataList         = $dataList;
+        $this->view->fields           = $fields;
+        $this->view->cols             = $cols;
+        $this->view->footToolbar      = $footToolbar;
+        $this->view->mode             = $module;
+        $this->view->browseMode       = $mode;
+        $this->view->label            = $label;
+        $this->view->type             = $type;
+        $this->view->param            = $param;
+        $this->view->orderBy          = $orderBy;
+        $this->view->pager            = $pager;
+        $this->view->pendingReviews   = $flow->approval == 'enabled' ? $this->approval->getPendingReviews($flow->module) : array();
+        $this->view->canSearch        = common::hasPriv($module, 'search') && !empty($this->config->{$module}->search['fields']);
+
+        $this->display();
+    }
+
+    /**
      * 团队列表。
      * My team.
      *
@@ -1253,6 +1361,9 @@ class my extends control
     public function team(string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1)
     {
         $this->lang->navGroup->my = 'system';
+
+        /* Save session. */
+        $this->session->set('userList', $this->app->getURI(true), 'my');
 
         /* Set the pager. */
         $this->app->loadClass('pager', true);

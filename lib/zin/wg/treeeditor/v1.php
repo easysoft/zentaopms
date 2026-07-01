@@ -39,6 +39,7 @@ class treeEditor extends wg
         $treeType = (!empty($treeProps['onSort']) || !empty($treeProps['sortable'])) ? 'sortableTree' : 'tree';
         return div
         (
+            $treeType == 'tree' ? setClass('h-full overflow-y-auto') : null,
             setStyle('--menu-selected-bg', 'none'),
             zui::$treeType
             (
@@ -46,6 +47,7 @@ class treeEditor extends wg
                 set::_tag('menu'),
                 set::lines(),
                 set::preserve($id),
+                $treeType == 'tree' ? setClass('h-full') : null,
                 set($treeProps)
             )
         );

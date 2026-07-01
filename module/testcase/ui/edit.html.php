@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The edit view file of testcase module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     testcase
@@ -27,6 +27,13 @@ $viewType = $isLibCase ? 'caselib' : 'case';
 $createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}");
 
 if($case->type != 'unit') unset($lang->testcase->typeList['unit']);
+
+$files = array();
+foreach($case->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
 
 $linkCaseItems = array();
 if(isset($case->linkCaseTitles))
@@ -137,7 +144,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            fileSelector($case->files ? set::defaultFiles(array_values($case->files)) : false)
+            fileSelector($files ? set::defaultFiles(array_values($files)) : false)
         ),
         section
         (

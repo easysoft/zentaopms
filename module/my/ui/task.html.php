@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The task view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     my
@@ -21,9 +21,9 @@ jsVar('delayWarning', $lang->task->delayWarning);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode={$mode}&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($type == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("mode={$mode}&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module($this->app->rawMethod . 'Task'), set::open($browseType == 'bysearch')))
 );
 
 $viewType = $this->cookie->taskViewType ? $this->cookie->taskViewType : 'tree';
@@ -54,16 +54,16 @@ if($viewType == 'tiled')
 }
 
 $canBatchEdit  = common::hasPriv('task', 'batchEdit');
-$canBatchClose = common::hasPriv('task', 'batchClose') && $type != 'closedBy';
+$canBatchClose = common::hasPriv('task', 'batchClose') && $browseType != 'closedBy';
 $footToolbar = array('items' => array
 (
     $canBatchEdit  ? array('text' => $lang->edit,  'className' => 'batch-btn',          'data-url' => helper::createLink('task', 'batchEdit', "executionID=0&from={$app->rawMethod}"))  : array(),
     $canBatchClose ? array('text' => $lang->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('task', 'batchClose')) : array()
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
-if($type == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
-if($type == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
-if($type == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
+if($browseType == 'assignedTo') unset($config->my->task->dtable->fieldList['assignedTo']);
+if($browseType == 'openedBy')   unset($config->my->task->dtable->fieldList['openedBy']);
+if($browseType == 'finishedBy') unset($config->my->task->dtable->fieldList['finishedBy']);
 
 $tasks = initTableData($tasks, $config->my->task->dtable->fieldList, $this->task);
 $cols = $this->loadModel('datatable')->getSetting('my', 'task');
@@ -119,7 +119,7 @@ dtable
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::canRowCheckable(jsRaw('function(rowID){return this.getRowInfo(rowID).data.canBeChanged;}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::emptyTip($lang->task->noTask)

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of my module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     my
@@ -39,6 +39,7 @@ class myZen extends my
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;
             $task->parentName    = '';
+            $task->executionName = !empty($task->executionMultiple) ? $task->executionName : '';
 
             if($task->status == 'changed') $task->rawStatus = 'changed';
             if($task->parent > 0)
@@ -226,6 +227,7 @@ class myZen extends my
 
         /* Get the number of testtasks assigned to me. */
         $pager->recTotal = 0;
+
         $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
@@ -268,6 +270,9 @@ class myZen extends my
             $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
+
+            $flows = $this->loadModel('my')->getFlowPairs();
+            foreach($flows as $module => $name) $count[$module] = $this->my->getAssignedFlowCount($module);
         }
 
         if($isMax || $isIPD)

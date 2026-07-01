@@ -231,6 +231,25 @@ class commonModelTest extends baseTest
      */
     public function printPreAndNextTest($preAndNext = '', string $linkTemplate = '', bool $onlyBody = false)
     {
+        global $app, $lang;
+
+        if(!isset($lang)) $lang = new stdclass();
+
+        $hasOnlyBody          = array_key_exists('onlybody', $_GET);
+        $originalOnlyBody     = $_GET['onlybody'] ?? '';
+        $hasPreShortcutKey    = isset($lang->preShortcutKey);
+        $originalPreShortcut  = $lang->preShortcutKey ?? '';
+        $hasNextShortcutKey   = isset($lang->nextShortcutKey);
+        $originalNextShortcut = $lang->nextShortcutKey ?? '';
+        $originalModuleName   = $app->moduleName ?? null;
+        $originalMethodName   = $app->methodName ?? null;
+        $originalRawModule    = $app->rawModule;
+        $originalRawMethod    = $app->rawMethod;
+        $originalTab          = $app->tab;
+        $obLevel              = ob_get_level();
+        $result               = null;
+        $output               = '';
+
         // 设置onlybody模式
         if($onlyBody)
         {
@@ -244,10 +263,71 @@ class commonModelTest extends baseTest
         // 设置语言
         if(!isset($lang->preShortcutKey)) $lang->preShortcutKey = '(←)';
         if(!isset($lang->nextShortcutKey)) $lang->nextShortcutKey = '(→)';
+        $app->setModuleName('task');
+        $app->setMethodName('view');
+        $app->rawModule = 'task';
+        $app->rawMethod = 'view';
+        $app->tab       = 'my';
 
-        ob_start();
-        $result = commonModel::printPreAndNext($preAndNext, $linkTemplate);
-        $output = ob_get_clean();
+        try
+        {
+            ob_start();
+            $result = commonModel::printPreAndNext($preAndNext, $linkTemplate);
+            $output = (string)ob_get_clean();
+        }
+        finally
+        {
+            while(ob_get_level() > $obLevel) $output .= (string)ob_get_clean();
+
+            if($hasOnlyBody)
+            {
+                $_GET['onlybody'] = $originalOnlyBody;
+            }
+            else
+            {
+                unset($_GET['onlybody']);
+            }
+
+            if($hasPreShortcutKey)
+            {
+                $lang->preShortcutKey = $originalPreShortcut;
+            }
+            else
+            {
+                unset($lang->preShortcutKey);
+            }
+
+            if($hasNextShortcutKey)
+            {
+                $lang->nextShortcutKey = $originalNextShortcut;
+            }
+            else
+            {
+                unset($lang->nextShortcutKey);
+            }
+
+            if(is_string($originalModuleName) && $originalModuleName !== '')
+            {
+                $app->setModuleName($originalModuleName);
+            }
+            else
+            {
+                $app->moduleName = $originalModuleName;
+            }
+
+            if(is_string($originalMethodName) && $originalMethodName !== '')
+            {
+                $app->setMethodName($originalMethodName);
+            }
+            else
+            {
+                $app->methodName = $originalMethodName;
+            }
+
+            $app->rawModule = $originalRawModule;
+            $app->rawMethod = $originalRawMethod;
+            $app->tab       = $originalTab;
+        }
 
         if(dao::isError()) return dao::getError();
 

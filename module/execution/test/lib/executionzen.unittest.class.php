@@ -2204,7 +2204,7 @@ class executionZenTest
         if(!isset($config->bug->search)) $config->bug->search = array();
 
         // 模拟actionURL设置
-        $view->actionURL = "execution-importBug-{$executionID}-bySearch-myQueryID";
+        $view->actionURL = "execution-importBug-{$executionID}-bysearch-myQueryID";
 
         // 模拟产品配置
         if(!empty($products)) {

@@ -11,7 +11,7 @@
  * 描述：按系统统计的研发需求规模总数反映了组织在所有研发需求上的规模总数，用于评估组织对于研发资源规划、技术能力评估、需求管理、风险评估和绩效评估具有重要意义。
  * 定义：所有的研发需求规模数求和;过滤父研发需求;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = 0;
 

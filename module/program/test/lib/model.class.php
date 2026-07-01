@@ -7,6 +7,14 @@ class programModelTest extends baseTest
 {
     protected $moduleName = 'program';
     protected $className  = 'model';
+    public    $program;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->program = $this->instance;
+    }
 
     /**
      * Get list by search.
@@ -571,9 +579,11 @@ class programModelTest extends baseTest
      * @access public
      * @return int
      */
-    public function hasUnfinishedChildrenTest(int $programID): int
+    public function hasUnfinishedChildrenTest(int $programID): bool
     {
         $program = $this->program->getByID($programID);
+        if(!$program) return false;
+
         return $this->program->hasUnfinishedChildren($program);
     }
 
@@ -633,50 +643,10 @@ class programModelTest extends baseTest
      */
     public function checkPrivTest(int $programID)
     {
-        try {
-            // 如果遇到数据库问题，返回模拟的结果
-            $result = $this->program->checkPriv($programID);
-            if(dao::isError())
-            {
-                // 模拟checkPriv的核心逻辑
-                global $app;
+        $result = $this->program->checkPriv($programID);
+        if(dao::isError()) return dao::getError();
 
-                // 对于空值或负数返回false
-                if(empty($programID) || $programID <= 0) return 0;
-
-                // 检查用户是否是管理员
-                if(!empty($app->user->admin) && $app->user->admin == 'super') return 1;
-
-                // 检查用户视图权限
-                if(!empty($app->user->view->programs))
-                {
-                    $programs = $app->user->view->programs;
-                    if(strpos(",{$programs},", ",{$programID},") !== false) return 1;
-                }
-
-                return 0;
-            }
-
-            return $result ? 1 : 0;
-        } catch (Exception $e) {
-            // 出现异常时，直接模拟业务逻辑
-            global $app;
-
-            // 对于空值或负数返回false
-            if(empty($programID) || $programID <= 0) return 0;
-
-            // 检查用户是否是管理员
-            if(!empty($app->user->admin) && $app->user->admin == 'super') return 1;
-
-            // 检查用户视图权限
-            if(!empty($app->user->view->programs))
-            {
-                $programs = $app->user->view->programs;
-                if(strpos(",{$programs},", ",{$programID},") !== false) return 1;
-            }
-
-            return 0;
-        }
+        return $result ? 1 : 0;
     }
 
     /**
@@ -762,54 +732,13 @@ class programModelTest extends baseTest
      * @access public
      * @return string
      */
-    public function getSwitcherTest(int $programID): string
+    public function getSwitcherTest(int $programID): bool
     {
-        // 优先使用mock方法，避免复杂的环境依赖
-        return $this->mockGetSwitcher($programID);
-    }
+        $programName = $this->program->dao->select('name')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('name');
+        $output      = $this->program->getSwitcher($programID);
 
-    /**
-     * Mock getSwitcher method.
-     *
-     * @param  int $programID
-     * @access private
-     * @return string
-     */
-    private function mockGetSwitcher(int $programID): string
-    {
-        // 模拟getSwitcher方法的核心功能，避免依赖环境初始化问题
-        $currentProgramName = '';
-
-        // 模拟getSwitcher的核心逻辑
-        if($programID > 0)
-        {
-            // 模拟获取项目集信息 - 这些应该匹配zenData设置的测试数据
-            $mockPrograms = array(
-                1 => '项目集1',
-                2 => '项目集2',
-                3 => '项目集3',
-                4 => '项目集4',
-                5 => '项目集5',
-                6 => '项目集6',
-                7 => '项目集7',
-                8 => '项目集8',
-                9 => '项目集9',
-                10 => '项目集10'
-            );
-            $currentProgramName = isset($mockPrograms[$programID]) ? $mockPrograms[$programID] : '所有项目集';
-        }
-        else
-        {
-            $currentProgramName = '所有项目集';
-        }
-
-        // 返回符合getSwitcher方法格式的HTML输出
-        $dropMenuLink = "#";
-        $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentProgramName}'><span class='text'>{$currentProgramName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='dropmenu' data-url='$dropMenuLink'>";
-        $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-        $output .= "</div></div>";
-
-        return $output;
+        if(!$output) return false;
+        return strpos($output, $programName) !== false;
     }
 
     /**

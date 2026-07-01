@@ -4,9 +4,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-$config = zenData('config');
-$config->vision->range('``,rnd,lite');
-$config->gen(10);
+$configTable = zenData('config');
+$configTable->vision->range('``,rnd,lite');
+$configTable->gen(10);
 
 /**
 

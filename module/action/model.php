@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * The model file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -586,7 +586,7 @@ class actionModel extends model
         $queryFields = "t1.*, {$nameField} AS objectName";
 
         $trashes = $this->dao->select($queryFields)->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+            ->leftJoin($table)->alias('t2')->on('t1.`objectID`=t2.id')
             ->where('t1.action')->eq('deleted')
             ->andWhere($trashQuery)
             ->andWhere('t1.extra')->eq($extra)
@@ -651,8 +651,9 @@ class actionModel extends model
         foreach($changes as $change)
         {
             $change = is_array($change) ? json_decode(json_encode($change)) : $change;
-            $change->action = $actionID;
+            if(!is_object($change)) continue;
 
+            $change->action = $actionID;
             $change = $this->processHistory($change);
             $this->dao->insert(TABLE_HISTORY)->data($change)->exec();
             if(dao::isError()) return false;
@@ -1638,7 +1639,7 @@ class actionModel extends model
             {
                 $moduleName = 'execution';
                 $methodName = 'gantt';
-                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bySearch=0&param=&version={$ganttversion->id}";
+                $params     = "executionID={$ganttversion->execution}&type={$ganttversion->category}&orderBy=id_asc&productID={$ganttversion->product}&bysearch=0&param=&version={$ganttversion->id}";
             }
         }
 
@@ -1650,6 +1651,7 @@ class actionModel extends model
         if(empty($action->hasLink) && $this->actionTao->checkActionClickable($action, $deptUsers, $moduleName, $methodName)) $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
         if(!empty($action->objectLink) && !empty($project) && empty($project->multiple)) $action->objectLink .= '#app=project';  // Set app for no multiple project.
+        if(!empty($action->objectLink) && $action->objectType == 'productplan' && isset($shadowProducts[$action->product])) $action->objectLink .= '#app=project';
         if(!empty($action->objectLink) && $action->objectType == 'meeting')    $action->objectLink .= '#app=' . $this->app->tab; // Set app for meeting by open tab.
         if($this->config->vision == 'lite' && $action->objectType == 'module') $action->objectLink .= '#app=project';
         if($action->objectType == 'nc' && !empty($action->execution)) $action->objectLink .= '#app=execution';
@@ -2607,7 +2609,7 @@ class actionModel extends model
             if($task->parent > 0)
             {
                 $parentConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('consumed');
-                if($parentConsumed)
+                if((float)$parentConsumed > 0)
                 {
                     $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->set('path')->eq(",{$task->id},")->where('id')->eq($task->id)->exec();
                 }

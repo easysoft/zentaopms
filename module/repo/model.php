@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@cnezsoft.com>
  * @package     repo
@@ -91,7 +91,7 @@ class repoModel extends model
      */
     public function getList(int $projectID = 0, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
-        $repoQuery = $type == 'bySearch' ? $this->repoTao->processSearchQuery($param) : '';
+        $repoQuery = $type == 'bysearch' ? $this->repoTao->processSearchQuery($param) : '';
         $repos     = $this->getListByCondition($repoQuery, $space, $orderBy, $pager);
 
         /* Get products. */
@@ -1922,7 +1922,7 @@ class repoModel extends model
         $parent = '/' . ltrim($parent, '/');
         if($repo->prefix) $parent = rtrim($repo->prefix . $parent, '/');
 
-        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.oldPath,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
+        $fileCommits = $this->dao->select('t1.id,t1.path,t1.type,t1.action,t1.`oldPath`,t1.parent,t2.revision,t2.comment,t2.committer,t2.time')->from(TABLE_REPOFILES)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
             ->beginIF($repo->SCM != 'Subversion' && $branch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
             ->where('t1.repo')->eq($repo->id)
@@ -2029,12 +2029,12 @@ class repoModel extends model
      */
     public function getRelationByCommit(int $repoID, string $commit, string $type = ''): array
     {
-        $relationList = $this->dao->select('t1.BID as id, t1.BType as type')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
+        $relationList = $this->dao->select('t1.`BID` as id, t1.`BType` as type')->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.`AID` = t2.id')
             ->where('t2.revision')->eq($commit)
             ->andWhere('t2.repo')->eq($repoID)
-            ->andWhere('t1.AType')->eq('revision')
-            ->beginIF($type)->andWhere('t1.BType')->eq($type)->fi()
+            ->andWhere('t1.`AType`')->eq('revision')
+            ->beginIF($type)->andWhere('t1.`BType`')->eq($type)->fi()
             ->fetchGroup('type', 'id');
 
         $stories = empty($relationList['story']) ? array() : $this->loadModel('story')->getByList(array_keys($relationList['story']));
@@ -2087,10 +2087,10 @@ class repoModel extends model
     public function getCommitsByObject(int $objectID, string $objectType): array
     {
         return $this->dao->select('t2.*')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.AID = t2.id')
-            ->where('t1.BID')->eq($objectID)
-            ->andWhere('t1.BType')->eq($objectType)
-            ->andWhere('t1.AType')->eq('revision')
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.`AID` = t2.id')
+            ->where('t1.`BID`')->eq($objectID)
+            ->andWhere('t1.`BType`')->eq($objectType)
+            ->andWhere('t1.`AType`')->eq('revision')
             ->andWhere('t1.relation')->eq('commit')
             ->fetchAll('', false);
     }

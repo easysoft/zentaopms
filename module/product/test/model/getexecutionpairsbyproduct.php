@@ -4,6 +4,7 @@
 /**
 
 title=productModel->getExecutionPairsByProduct();
+timeout=0
 cid=17489
 
 - 不传入任何数据。 @0
@@ -25,19 +26,24 @@ cid=17489
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('project')->loadYaml('execution')->gen(32);
+$project = zenData('project')->loadYaml('execution');
+$project->gen(32, true, false);
 $projectProduct = zenData('projectproduct');
 $projectProduct->project->range('101-150');
 $projectProduct->product->range('1');
-$projectProduct->gen(28);
+$projectProduct->gen(28, true, false);
 
 $productIDList = array(0, 1, 1000001);
 $projectIDList = array(11, 21, 60, 61, 100);
 
-$product = new productTest('admin');
-$product->objectModel->app->user->view->sprints = implode(',', array_keys(array_fill('101', 28, 'test')));
+zenData('user')->gen(5);
+su('admin');
 
-r($product->getExecutionPairsByProductTest($productIDList[0])) && p() && e('0');  // 不传入任何数据。
+global $tester;
+$product = new productModelTest();
+$tester->app->user->view->sprints = implode(',', array_keys(array_fill(101, 28, 'test')));
+
+r(count($product->getExecutionPairsByProductTest($productIDList[0]))) && p() && e('0');  // 不传入任何数据。
 
 $executions = $product->getExecutionPairsByProductTest($productIDList[1]);
 r($executions[101]) && p() && e('敏捷项目1/迭代5');             // 只传入产品，不传入项目，检查敏捷项目。
@@ -58,4 +64,4 @@ r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDLi
 r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[3]))) && p() && e('6'); // 传入产品，传入无子阶段的瀑布项目。
 r(count($product->getExecutionPairsByProductTest($productIDList[1], $projectIDList[4]))) && p() && e('4'); // 传入产品，传入看板项目。
 
-r($product->getExecutionPairsByProductTest($productIDList[2])) && p() && e('0'); // 传入无关联关系的产品。
+r(count($product->getExecutionPairsByProductTest($productIDList[2]))) && p() && e('0'); // 传入无关联关系的产品。

@@ -21,3 +21,5 @@ $config->requirement->custom = new stdclass();
 $config->requirement->custom->createFields      = '';
 $config->requirement->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->requirement->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
+
+unset($config->requirement->reviewRules, $config->requirement->superReviewers);

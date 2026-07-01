@@ -11,7 +11,7 @@
  * 描述：按人员统计任务消耗工时数表示每个人任务消耗工时数量之和。
  * 定义：所有任务消耗工时数求和;
  *
- * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2025 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

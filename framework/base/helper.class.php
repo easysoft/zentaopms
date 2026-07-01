@@ -621,6 +621,133 @@ class baseHelper
     }
 
     /**
+     * 检查当前服务器是否为 Windows。
+     * Check whether current server OS is Windows.
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isWindows(): bool
+    {
+        return strtoupper(substr(PHP_OS, 0, 3)) === 'WIN';
+    }
+
+    /**
+     * 将 Windows 路径包装为命令行参数。
+     * Quote Windows path for cli command.
+     *
+     * @param  string $path
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function quoteWindowsPath(string $path): string
+    {
+        return '"' . str_replace('/', '\\', $path) . '"';
+    }
+
+    /**
+     * 构建目录授权命令。
+     * Build grant permission command.
+     *
+     * @param  string $path
+     * @param  bool   $recursive
+     * @param  string $mode
+     * @param  string $linuxPrefix
+     * @param  bool   $isDir
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function buildGrantPermissionCommand(string $path, bool $recursive = false, string $mode = '777', string $linuxPrefix = '', bool $isDir = true): string
+    {
+        if(static::isWindows())
+        {
+            $path      = static::quoteWindowsPath($path);
+            /* 将 o=rwx 映射到内置 Users，其余 mode 统一映射到 Everyone，以便在 Windows 上保留粗粒度权限差异。 Map o=rwx to builtin Users and all other modes to Everyone to keep a coarse permission distinction on Windows. */
+            $principal = $mode == 'o=rwx' ? '*S-1-5-32-545' : '*S-1-1-0';
+            $grant     = $isDir ? ':(OI)(CI)F' : ':F';
+            $command   = "icacls {$path} /grant {$principal}{$grant}";
+
+            if($isDir && $recursive) $command .= ' /T';
+
+            return $command;
+        }
+
+        return $linuxPrefix . 'chmod ' . ($recursive ? '-R ' : '') . $mode . ' ' . escapeshellarg($path);
+    }
+
+    /**
+     * 构建创建目录命令。
+     * Build make directory command.
+     *
+     * @param  string $path
+     * @param  string $linuxPrefix
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function buildMkdirCommand(string $path, string $linuxPrefix = ''): string
+    {
+        if(static::isWindows()) return 'mkdir ' . static::quoteWindowsPath($path);
+
+        return $linuxPrefix . 'mkdir -p ' . escapeshellarg($path);
+    }
+
+    /**
+     * 构建删除文件或目录的命令。
+     * Build delete file or directory command.
+     *
+     * @param  string $path
+     * @param  bool   $isDir
+     * @param  string $linuxPrefix
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function buildDeleteCommand(string $path, bool $isDir, string $linuxPrefix = ''): string
+    {
+        if(static::isWindows())
+        {
+            $path = static::quoteWindowsPath($path);
+            return $isDir ? "rmdir /s /q {$path}" : "del /f /q {$path}";
+        }
+
+        return $linuxPrefix . 'rm -fr ' . escapeshellarg($path);
+    }
+
+    /**
+     * 写入命令脚本并返回执行命令。
+     * Write command script and return execute command.
+     *
+     * @param  string $script
+     * @param  array  $commands
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function writeCommandScript(string $script, array $commands): string
+    {
+        $commands = array_unique($commands);
+
+        asort($commands);
+
+        if(static::isWindows())
+        {
+            $content = "@echo off\r\n" . implode("\r\n", $commands);
+            file_put_contents($script, $content);
+
+            return 'cmd /c ' . static::quoteWindowsPath($script);
+        }
+
+        $content = "#!/bin/bash\n" . implode("\n", $commands);
+        file_put_contents($script, $content);
+
+        return '/bin/bash ' . escapeshellarg($script);
+    }
+
+    /**
      *  计算两个日期相差的天数，取整。
      *  Compute the diff days of two date.
      *

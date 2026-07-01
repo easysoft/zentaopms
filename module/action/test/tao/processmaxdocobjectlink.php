@@ -34,8 +34,8 @@ su('admin');
 
 $actionTest = new actionTaoTest();
 
-r($actionTest->processMaxDocObjectLinkTest(1, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('assetlib,practiceView');
-r($actionTest->processMaxDocObjectLinkTest(2, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('assetlib,componentView');
+r($actionTest->processMaxDocObjectLinkTest(1, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('doc,view');
+r($actionTest->processMaxDocObjectLinkTest(2, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('doc,view');
 r($actionTest->processMaxDocObjectLinkTest(5, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('doc,view');
-r($actionTest->processMaxDocObjectLinkTest(1, 'task', 'view', 'taskID=%s')) && p('moduleName,methodName') && e('assetlib,taskView');
+r($actionTest->processMaxDocObjectLinkTest(1, 'story', 'view', 'storyID=%s')) && p('moduleName,methodName') && e('assetlib,storyView');
 r($actionTest->processMaxDocObjectLinkTest(999, 'doc', 'view', 'docID=%s')) && p('moduleName,methodName') && e('doc,view');

@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productplanModel->reorder4Children();
@@ -19,14 +20,14 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('productplan')->gen(150);
 
-$plan = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 
 $planID = array();
 $planID[0] = array(100, 102, 103, 101);
 $planID[1] = array(1000, 10000);
 
-r($plan->reorder4ChildrenTest($planID[0])) && p('100:id') && e('100');  //传入四个子计划id100,102,101,排序第一个
-r($plan->reorder4ChildrenTest($planID[0])) && p('101:id') && e('101');  //第二个
-r($plan->reorder4ChildrenTest($planID[0])) && p('102:id') && e('102');  //第三个
-r($plan->reorder4ChildrenTest($planID[0])) && p('103:id') && e('103');  //第四个，会输出正序排列的数组100，101，102, 103
-r($plan->reorder4ChildrenTest($planID[1])) && p()         && e('0');    //传入不存在的id时
+r($planTester->reorder4ChildrenTest($planID[0])) && p('100:id') && e('100');  //传入四个子计划id100,102,101,排序第一个
+r($planTester->reorder4ChildrenTest($planID[0])) && p('101:id') && e('101');  //第二个
+r($planTester->reorder4ChildrenTest($planID[0])) && p('102:id') && e('102');  //第三个
+r($planTester->reorder4ChildrenTest($planID[0])) && p('103:id') && e('103');  //第四个，会输出正序排列的数组100，101，102, 103
+r($planTester->reorder4ChildrenTest($planID[1])) && p()         && e('0');    //传入不存在的id时

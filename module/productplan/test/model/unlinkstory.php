@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=productpanModel->unlinkStory();
+title=productplanModel->unlinkStory();
 timeout=0
 cid=17650
 
@@ -14,14 +15,15 @@ cid=17650
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+zenData('user')->gen(5);
+su('admin');
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
 
 $story = zenData('story');
 $story->plan->range('1,`2,3`,4,`5,6,7,8`,9,10');
 $story->gen(10);
 
-$tester = new productPlan();
+$tester = new productplanModelTest();
 
 r($tester->unlinkStoryTest(20, 2))  && p('plan', '|') && e('0');      // 不存在的需求
 r($tester->unlinkStoryTest(1, 2))   && p('plan', '|') && e(',1');     // 移除不存在的计划

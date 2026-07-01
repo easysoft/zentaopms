@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of dashboard module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
@@ -264,7 +264,7 @@ class myModel extends model
      */
     public function getAssignedByMe(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $objectType = ''): array
     {
-        $module       = $objectType == 'requirement' ? 'story' : $objectType;
+        $module       = in_array($objectType, array('epic', 'requirement')) ? 'story' : $objectType;
         $objectIdList = $this->dao->select('objectID')->from(TABLE_ACTION)
             ->where('actor')->eq($account)
             ->andWhere('objectType')->eq($module)
@@ -273,7 +273,7 @@ class myModel extends model
         if(empty($objectIdList)) return array();
 
         if($objectType == 'task') return $this->getTaskAssignedByMe($pager, $orderBy, $objectIdList);
-        if($objectType == 'requirement' || $objectType == 'story' || $objectType == 'bug') return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
+        if(in_array($objectType, array('epic', 'requirement', 'story', 'bug'))) return $this->myTao->getProductRelatedAssignedByMe($objectIdList, $objectType, $module, $orderBy, $pager);
         if(in_array($objectType, array('risk', 'issue', 'nc')))
         {
             return $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
@@ -288,7 +288,7 @@ class myModel extends model
         if($objectType == 'feedback' || $objectType == 'ticket')
         {
             return $this->dao->select('t1.*,t2.dept')->from($this->config->objectTables[$module])->alias('t1')
-                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+                ->leftJoin(TABLE_USER)->alias('t2')->on('t1.`openedBy` = t2.account')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
@@ -429,7 +429,7 @@ class myModel extends model
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
                 ->where($myTestcaseQuery)
-                ->andWhere('t1.openedBy')->eq($this->app->user->account)
+                ->andWhere('t1.`openedBy`')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -441,7 +441,7 @@ class myModel extends model
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t2.task = t3.id')
                 ->where($myTestcaseQuery)
-                ->andWhere('t2.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t2.`assignedTo`')->eq($this->app->user->account)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t3.status')->ne('done')
@@ -764,7 +764,7 @@ class myModel extends model
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
                 ->where($reviewissueQuery)
                 ->andWhere('t1.deleted')->eq('0')
-                ->andWhere('t1.createdBy',1)->eq($this->app->user->account)
+                ->andWhere('t1.`createdBy`',1)->eq($this->app->user->account)
                 ->orWhere('t1.id')->in(array_keys($assignedByMe))
                 ->markRight(1)
                 ->orderBy("t1.$orderBy")
@@ -777,7 +777,7 @@ class myModel extends model
                 ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.review = t2.id')
                 ->where($reviewissueQuery)
                 ->andWhere('t1.deleted')->eq('0')
-                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.`assignedTo`')->eq($this->app->user->account)
                 ->orderBy("t1.$orderBy")
                 ->page($pager)
                 ->fetchAll('id', false);
@@ -1076,7 +1076,6 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        if($this->config->vision != 'or' && $this->getReviewingOA('status', true))         $typeList[] = 'oa';
         if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'ppm';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
@@ -1113,7 +1112,6 @@ class myModel extends model
         if($browseType == 'all' || $browseType == 'requirement')                                                            $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'oa'))                                                $reviewList = array_merge($reviewList, $this->getReviewingOA());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'ppm') && $gitfoxServer)                              $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
@@ -1431,12 +1429,12 @@ class myModel extends model
     {
         if($this->config->edition == 'open') return array();
 
-        $dataList = $this->dao->select('t2.objectType,t2.objectID')->from(TABLE_APPROVALNODE)->alias('t1')
+        $dataList = $this->dao->select('t2.`objectType`,t2.`objectID`')->from(TABLE_APPROVALNODE)->alias('t1')
             ->leftJoin(TABLE_APPROVALOBJECT)->alias('t2')->on('t2.approval = t1.approval')
-            ->where('t2.objectType')->ne('review')
+            ->where('t2.`objectType`')->ne('review')
             ->andWhere('objectType')->ne('projectchange')
             ->andWhere('objectType')->ne('baseline')
-            ->beginIF($objectType != 'all')->andWhere('t2.objectType')->eq($objectType)->fi()
+            ->beginIF($objectType != 'all')->andWhere('t2.`objectType`')->eq($objectType)->fi()
             ->andWhere('t1.account')->eq($this->app->user->account)
             ->andWhere('t1.status')->eq('doing')
             ->andWhere('t1.type')->eq('review')
@@ -1521,74 +1519,6 @@ class myModel extends model
 
         if($checkExists) return !empty($reviewList);
 
-        return $reviewList;
-    }
-
-    /**
-     * 获取评审中的OA。
-     * Get reviewing OA.
-     *
-     * @param  string     $orderBy
-     * @param  bool       $checkExists
-     * @access public
-     * @return array|bool
-     */
-    public function getReviewingOA(string $orderBy = 'status', bool $checkExists = false): array|bool
-    {
-        if($this->config->edition == 'open') return array();
-
-        /* Check attend exist or not. */
-        $this->loadModel('dept');
-        $this->loadModel('attend');
-        if(!method_exists($this->dept, 'getDeptManagedByMe')) return array();
-        if(!isset($this->attend)) return array();
-
-        /* Get dept info. */
-        $allDeptList = $this->dept->getDeptPairs();
-        $allDeptList['0'] = '/';
-        $managedDeptList = array();
-        $tmpDept = $this->dept->getDeptManagedByMe($this->app->user->account);
-        foreach($tmpDept as $d) $managedDeptList[$d->id] = $d->name;
-
-        $oa = array();
-        if(common::hasPriv('attend',   'review'))                                        $oa['attend']   = $this->getReviewingAttends($allDeptList, $managedDeptList);
-        if(common::hasPriv('leave',    'review') && common::hasPriv('leave',    'view')) $oa['leave']    = $this->getReviewingLeaves($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('overtime', 'review') && common::hasPriv('overtime', 'view')) $oa['overtime'] = $this->getReviewingOvertimes($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('makeup',   'review') && common::hasPriv('makeup',   'view')) $oa['makeup']   = $this->getReviewingMakeups($allDeptList, $managedDeptList, $orderBy);
-        if(common::hasPriv('lieu',     'review') && common::hasPriv('lieu',     'view')) $oa['lieu']     = $this->getReviewingLieus($allDeptList, $managedDeptList, $orderBy);
-        if($checkExists)
-        {
-            foreach($oa as $type => $reviewings)
-            {
-                if(!empty($reviewings)) return true;
-            }
-        }
-
-        $reviewList = array();
-        $users      = $this->loadModel('user')->getPairs('noletter');
-        foreach($oa as $type => $reviewings)
-        {
-            foreach($reviewings as $object)
-            {
-                $review = new stdclass();
-                $review->id     = $object->id;
-                $review->type   = $type;
-                $review->time   = $type == 'attend' ? $object->date : $object->createdDate;
-                $review->status = $type == 'attend' ? $object->reviewStatus : $object->status;
-                $review->title  = '';
-                $review->product = isset($object->product) ? $object->product : 0;
-                $review->project = isset($object->project) ? $object->project : 0;
-                if($type == 'attend')
-                {
-                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->account), $object->date);
-                }
-                elseif(isset($this->lang->my->auditField->oaTitle[$type]))
-                {
-                    $review->title = sprintf($this->lang->my->auditField->oaTitle[$type], zget($users, $object->createdBy), $object->begin . ' ' . substr($object->start, 0, 5) . ' ~ ' . $object->end . ' ' . substr($object->finish, 0, 5));
-                }
-                $reviewList[] = $review;
-            }
-        }
         return $reviewList;
     }
 
@@ -1770,7 +1700,7 @@ class myModel extends model
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'undone')->andWhere('t1.status')->eq('normal')->fi()
-            ->beginIF($type == 'ownbyme')->andWhere('t1.PO')->eq($this->app->user->account)->fi()
+            ->beginIF($type == 'ownbyme')->andWhere('t1.`PO`')->eq($this->app->user->account)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->filterTpl('skip')
             ->orderBy('t1.order_asc')

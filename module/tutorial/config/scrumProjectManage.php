@@ -68,7 +68,7 @@ $scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
     'type'   => 'clickNavbar',
     'target' => 'settings',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageProject->step7->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageProject->step7->desc
 );
@@ -107,7 +107,7 @@ $scrumProjectManage->basic->tasks['manageProject']['steps'][] = array(
 $scrumProjectManage->basic->tasks['manageExecution'] = array();
 $scrumProjectManage->basic->tasks['manageExecution']['name']     = 'manageExecution';
 $scrumProjectManage->basic->tasks['manageExecution']['title']    = $lang->tutorial->scrumProjectManage->manageExecution->title;
-$scrumProjectManage->basic->tasks['manageExecution']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
+$scrumProjectManage->basic->tasks['manageExecution']['startUrl'] = array('project', 'execution', 'browseType=all&projectID=2');
 $scrumProjectManage->basic->tasks['manageExecution']['steps']    = array();
 
 $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
@@ -122,7 +122,7 @@ $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#mainMenu #actionBar a.create-execution-btn',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step2->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step2->desc
 );
@@ -147,7 +147,7 @@ $scrumProjectManage->basic->tasks['manageExecution']['steps'][] = array(
     'type'   => 'click',
     'target' => '#table-project-execution .dtable-cell[data-row="pid3"][data-col="nameCol"] a',
     'page'   => 'project-execution',
-    'url'    => array('project', 'execution', 'status=all&projectID=2'),
+    'url'    => array('project', 'execution', 'browseType=all&projectID=2'),
     'app'    => 'project',
     'title'  => $lang->tutorial->scrumProjectManage->manageExecution->step5->name,
     'desc'   => $lang->tutorial->scrumProjectManage->manageExecution->step5->desc
@@ -714,7 +714,7 @@ if(in_array($config->edition, array('max', 'ipd')) && $config->systemMode != 'li
     $scrumProjectManage->advance->tasks['manageIssue'] = array();
     $scrumProjectManage->advance->tasks['manageIssue']['name']     = 'manageIssue';
     $scrumProjectManage->advance->tasks['manageIssue']['title']    = $lang->tutorial->scrumProjectManage->manageIssue->title;
-    $scrumProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
+    $scrumProjectManage->advance->tasks['manageIssue']['startUrl'] = array('project', 'execution', 'browseType=all&projectID=2');
     $scrumProjectManage->advance->tasks['manageIssue']['steps']    = array();
 
     $scrumProjectManage->advance->tasks['manageIssue']['steps'][] = array(
@@ -828,7 +828,7 @@ if(in_array($config->edition, array('max', 'ipd')) && $config->systemMode != 'li
     $scrumProjectManage->advance->tasks['manageRisk'] = array();
     $scrumProjectManage->advance->tasks['manageRisk']['name']     = 'manageRisk';
     $scrumProjectManage->advance->tasks['manageRisk']['title']    = $lang->tutorial->scrumProjectManage->manageRisk->title;
-    $scrumProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'execution', 'status=all&projectID=2');
+    $scrumProjectManage->advance->tasks['manageRisk']['startUrl'] = array('project', 'execution', 'browseType=all&projectID=2');
     $scrumProjectManage->advance->tasks['manageRisk']['steps']    = array();
 
     $scrumProjectManage->advance->tasks['manageRisk']['steps'][] = array(

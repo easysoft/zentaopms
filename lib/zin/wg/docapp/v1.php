@@ -245,6 +245,17 @@ class docApp extends wg
         $langData->officeNotSupported = $lang->file->officeNotSupported;
         $langData->officeNotInstalled = $lang->file->officeNotInstalled;
 
+        if($config->edition != 'open')
+        {
+            $langData->exportOpenAPI      = $lang->api->exportOpenAPI;
+            $langData->exportScopeLabel   = $lang->api->exportScopeLabel;
+            $langData->exportVersionLabel = $lang->api->exportVersionLabel;
+            $langData->exportFormatLabel  = $lang->api->exportFormatLabel;
+            $langData->exportVersionList  = $lang->api->exportVersionList;
+            $langData->exportFormatList   = $lang->api->exportFormatList;
+            $langData->importOpenAPI      = $lang->api->importOpenAPI;
+        }
+
         /**
          * 通过语言项定义文档表格列显示名称。
          * Define the table columns for doc app.

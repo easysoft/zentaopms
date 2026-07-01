@@ -2,7 +2,7 @@
 /**
  * The control file of company module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
@@ -143,10 +143,11 @@ class company extends control
      * @param  string|int $productID
      * @param  string|int $projectID
      * @param  string|int $executionID
+     * @param  int        $limit
      * @access public
      * @return void
      */
-    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0)
+    public function dynamic(string $browseType = 'today', string $param = '', int $recTotal = 0, string $date = '', string $direction = 'next', int $userID = 0, string|int $productID = 0, string|int $projectID = 0, string|int $executionID = 0, int $limit = 50)
     {
         $this->loadModel('action');
 
@@ -165,16 +166,15 @@ class company extends control
 
         if($browseType != 'bysearch')
         {
-            $actions = $this->action->getDynamic($account, $browseType, $orderBy, 50, $productID, $projectID, $executionID, $date, $direction);
+            $actions = $this->action->getDynamic($account, $browseType, $orderBy, $limit, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($queryID, $orderBy, 50, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($queryID, $orderBy, $limit, $date, $direction);
         }
 
-        /* 根据日期补充动态数据。*/
-        /* Supplement action by date.*/
-        $dateGroups = $this->action->buildDateGroup($actions, $direction, $orderBy);
+        /* 根据日期补充动态数据。Supplement action by date.*/
+        $dateGroups = $this->app->apiVersion ? $actions : $this->action->buildDateGroup($actions, $direction, $orderBy);
         if(empty($recTotal) && $dateGroups && $browseType != 'bysearch') $recTotal = $this->action->getDynamicCount($browseType);
 
         /* Assign.*/

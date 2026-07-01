@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
 * The UI file of product module of ZenTaoPMS.
 *
-* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
 * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      chen.tao <chentao@easycorp.ltd>
 * @package     product
@@ -29,9 +29,9 @@ $fnGenerateProgramMenu = function($programList) use($lang, $programID, $browseTy
         $this->app->rawModule,
         $this->app->rawMethod,
         array(
-            'browseType' => $browseType == 'bySearch' ? 'noclosed' : $browseType,
+            'browseType' => $browseType == 'bysearch' ? 'noclosed' : $browseType,
             'orderBy'    => $orderBy,
-            'param'      => $browseType == 'bySearch' ? 0 : $param,
+            'param'      => $browseType == 'bysearch' ? 0 : $param,
             'recTotal'   => 0,
             'recPerPage' => $recPerPage,
             'pageID'     => $pageID,
@@ -70,7 +70,7 @@ featureBar
             'programID'  => $programID
         )
     )),
-    li(searchToggle(set::open($browseType == 'bySearch')))
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 $canCreate     = hasPriv('product', 'create');

@@ -127,7 +127,7 @@ class projectModel extends model
     public function leftJoinInvolvedTable($stmt)
     {
         return $stmt->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID');
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.`objectID`');
     }
 
     /**
@@ -141,8 +141,8 @@ class projectModel extends model
     public function appendInvolvedCondition($stmt)
     {
         return $stmt->andWhere('t2.type')->eq('project')
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
+            ->orWhere('t1.`PM`')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
             ->orWhere('(t3.user')->eq($this->app->user->account)
             ->andWhere('t3.deleted')->eq(0)
@@ -582,7 +582,7 @@ class projectModel extends model
     public function getProjectsConsumed(array $projectIdList, string $time = ''): array
     {
         $totalConsumeds = $this->dao->select('t2.project,ROUND(SUM(t1.consumed), 1) AS totalConsumed')->from(TABLE_EFFORT)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.objectID=t2.id and t1.objectType = 'task'")
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.`objectID`=t2.id and t1.`objectType` = 'task'")
             ->where('t2.project')->in($projectIdList)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.parent')->lt(1)
@@ -614,8 +614,13 @@ class projectModel extends model
      */
     public function getProjectLink(string $module, string $method, int $projectID, string $extra = '') :string
     {
-        $link    = helper::createLink('project', 'index', "projectID=%s");
+        if($this->config->edition != 'open')
+        {
+            $flow = $this->loadModel('workflow')->getByModule($module);
+            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module") . '#app=' . $flow->app;
+        }
 
+        $link    = helper::createLink('project', 'index', "projectID=%s");
         $project = $this->projectTao->fetchProjectInfo($projectID);
 
         if(empty($project->multiple)) return $link;
@@ -644,11 +649,6 @@ class projectModel extends model
             if(!$linkParams[0]) $linkParams[0] = $module;
 
             return helper::createLink($linkParams[0], $linkParams[1], $linkParams[2]) . $linkParams[3];
-        }
-        if($this->config->edition != 'open')
-        {
-            $flow = $this->loadModel('workflow')->getByModule($module);
-            if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
         }
 
         if(in_array($module, $this->config->waterfallModules)) return helper::createLink($module, 'browse', "projectID=%s");
@@ -896,7 +896,7 @@ class projectModel extends model
     {
         return $this->dao->select('t1.product, t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->where('t2.hasProduct')->eq(0)
+            ->where('t2.`hasProduct`')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->fetchAll('id');
     }
@@ -1093,8 +1093,9 @@ class projectModel extends model
             $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => $executionPairs);
         }
 
+        $objectIDField                            = $type == 'project' ? 'projectID' : 'executionID';
         $this->config->build->search['module']    = $type == 'project' ? 'projectBuild' : 'executionBuild';
-        $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "projectID=$projectID&type=bysearch&queryID=myQueryID");
+        $this->config->build->search['actionURL'] = helper::createLink($this->app->rawModule, $this->app->rawMethod, "{$objectIDField}=$projectID&browseType=bysearch&queryID=myQueryID");
         $this->config->build->search['queryID']   = (int)$queryID;
         $this->config->build->search['params']['product']['values'] = $products;
         $this->config->build->search['params']['system']['values']  = $this->loadModel('system')->getPairs($queryID ? 0 : (int)$productID, '0');
@@ -1734,7 +1735,7 @@ class projectModel extends model
         $daoSuccess = $this->projectTao->doActivate($projectID, $project);
         if(!$daoSuccess) return false;
 
-        if(empty($oldProject->multiple) and $oldProject->model != 'waterfall') $this->loadModel('execution')->syncNoMultipleSprint($projectID);
+        if(!$oldProject->multiple) $this->projectTao->changeExecutionStatus($projectID, 'activate');
 
         /* Update start and end date of tasks in this project. */
         if($project->readjustTask)
@@ -2394,7 +2395,7 @@ class projectModel extends model
 
         /* Replace url params. */
         common::setMenuVars('project', $projectID);
-        $this->setNoMultipleMenu($projectID);
+        if($this->app->tab == 'project') $this->setNoMultipleMenu($projectID);
 
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
@@ -3017,7 +3018,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function computeSchedule(string $begin, string $end, array $schedule, object $project = null): object
+    public function computeSchedule(string $begin, string $end, array $schedule, ?object $project = null): object
     {
         $calendar        = array();
         $weekends        = array(1, 2);

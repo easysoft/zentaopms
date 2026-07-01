@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度新增研发需求数是指产品在某年度新增的研发需求数量。这个度量项可以反映产品团队在该年度内需求的增长或变化情况。
  * 定义：产品中研发需求的个数求和;创建时间为某年;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.`openedDate`');
 
     public $result = array();
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of doc module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     doc
@@ -148,9 +148,9 @@ class docTao extends docModel
             ->andWhere('t1.lib')->ne(0)
             ->andWhere('t1.id')->in($hasPrivDocIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
-            ->andWhere('t1.addedBy')->eq($this->app->user->account)
+            ->andWhere('t1.`addedBy`')->eq($this->app->user->account)
             ->andWhere('t1.vision')->in($this->config->vision)
-            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.`templateType`')->eq('')
             ->orderBy($sort)
             ->page($pager)
             ->fetchAll('id');
@@ -226,7 +226,7 @@ class docTao extends docModel
             ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc AND t2.action='collect'")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.lib')->ne(0)
-            ->andWhere('t1.templateType')->eq('')
+            ->andWhere('t1.`templateType`')->eq('')
             ->andWhere('t1.id')->in($hasPrivDocIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
             ->andWhere('t2.actor')->eq($this->app->user->account)

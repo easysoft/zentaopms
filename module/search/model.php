@@ -2,7 +2,7 @@
 /**
  * The model file of search module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
@@ -145,11 +145,12 @@ class searchModel extends model
             $operatorName = "operator$i";
             $valueName    = "value$i";
 
-            $field        = $this->post->$fieldName;
-            $value        = $this->post->$valueName;
-            $fieldControl = $fieldParams[$field]['control'] ?? '';
-            if(empty($field) || $value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
+            $field = $this->post->$fieldName;
+            if(empty($field)) continue;
             if(!preg_match('/^[a-zA-Z0-9]+$/', $field)) continue; // Fix sql injection.
+
+            $fieldControl = $fieldParams[$field]['control'] ?? '';
+            $value        = $this->post->$valueName;
 
             /* 如果是输入框，并且输入框的值为'0'，或者 id 的值为'0'，将值设置为zero。*/
             if($fieldControl == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
@@ -158,6 +159,9 @@ class searchModel extends model
             /* set queryForm. */
             list($andOr, $operator, $value) = $this->searchTao->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
             $queryForm[$formIndex] = array('field' => $field, 'andOr' => strtolower($andOr), 'operator' => $operator, 'value' => $value);
+
+            /* Skip empty values in where clause, but keep field selection in session. */
+            if($value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
 
             /* Set where. */
             $where = $this->searchTao->setWhere($where, $field, $operator, $value, $andOr, $fieldControl);

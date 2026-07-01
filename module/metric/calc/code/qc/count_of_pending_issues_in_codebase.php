@@ -11,7 +11,7 @@
  * 描述：按代码库统计的代码问题库存总数是指在代码库中记录的所有未解决的代码问题的总数，它反映了代码质量和稳定性。
  * 定义：代码库中所有未关闭的问题数量相加。;不包含已删除。;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_pending_issues_in_codebase extends baseCalc
 {
     public $dataset = 'getRepoIssues';
 
-    public $fieldList = array('t1.resolvedBy', 't1.repo');
+    public $fieldList = array('t1.`resolvedBy`', 't1.repo');
 
     public $result = array();
 

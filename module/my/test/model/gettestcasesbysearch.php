@@ -5,8 +5,16 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('case')->loadYaml('case_admin_create')->gen('20');
-zenData('testrun')->gen('20');
+zenData('testtask')->gen('1');
+zenData('testrun')->gen('0');
 zenData('user')->gen('1');
+
+$testrun = zenData('testrun');
+$testrun->case->range('1');
+$testrun->task->range('1');
+$testrun->assignedTo->range('admin');
+$testrun->status->range('normal');
+$testrun->gen(1);
 
 su('admin');
 
@@ -28,7 +36,7 @@ cid=17304
 */
 
 $my    = new myModelTest();
-$type  = array('contribute', 'openedbyme');
+$type  = array('contribute', 'work');
 $order = 'id_desc';
 
 global $tester;

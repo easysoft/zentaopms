@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of admin module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
@@ -202,75 +202,6 @@ class admin extends control
         $this->view->closedFeatures   = $closedFeatures;
         $this->view->useScore         = $this->setting->getItem('owner=system&module=common&global&key=scoreStatus');
         $this->view->disabledFeatures = $this->setting->getItem('owner=system&module=common&section=&key=disabledFeatures');
-        $this->display();
-    }
-
-    /**
-     * 认证邮箱。
-     * Certify ztEmail.
-     *
-     * @param  string $email
-     * @access public
-     * @return void
-     */
-    public function certifyZtEmail(string $email = '')
-    {
-        if($_POST)
-        {
-            $response = $this->adminZen->certifyByAPI('mail');
-            $response = json_decode($response);
-            if($response->result == 'fail') return print(js::alert($response->message));
-            return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
-        }
-
-        $this->view->title = $this->lang->admin->certifyEmail;
-        $this->view->email = helper::safe64Decode($email);
-        $this->display();
-    }
-
-    /**
-     * 认证手机。
-     * Certify ztMobile.
-     *
-     * @param  string $mobile
-     * @access public
-     * @return void
-     */
-    public function certifyZtMobile(string $mobile = '')
-    {
-        if($_POST)
-        {
-            $response = $this->adminZen->certifyByAPI('mobile');
-            $response = json_decode($response);
-            if($response->result == 'fail') return print(js::alert($response->message));
-            return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
-        }
-
-        $this->view->title  = $this->lang->admin->certifyMobile;
-        $this->view->mobile = helper::safe64Decode($mobile);
-        $this->display();
-    }
-
-    /**
-     * 认证公司。
-     * Set ztCompany.
-     *
-     * @param  string $fields
-     * @access public
-     * @return void
-     */
-    public function ztCompany(string $fields = 'company')
-    {
-        if($_POST)
-        {
-            $response = $this->adminZen->setCompanyByAPI();
-            $response = json_decode($response);
-            if($response->result == 'fail') return print(js::alert($response->message));
-            return print(js::locate($this->createLink('mail', 'ztCloud'), 'parent'));
-        }
-
-        $this->view->title  = $this->lang->admin->ztCompany;
-        $this->view->fields = explode(',', $fields);
         $this->display();
     }
 

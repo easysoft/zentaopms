@@ -158,9 +158,9 @@ foreach($data as $programID => $program)
 
 featureBar
 (
-    set::current($status),
-    set::linkParams("status={key}&orderBy={$orderBy}"),
-    li(searchToggle(set::module('program'), set::open($status == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("browseType={key}&orderBy={$orderBy}"),
+    li(searchToggle(set::module('program'), set::open($browseType == 'bysearch')))
 );
 
 $canCreateProject = hasPriv('project', 'create');
@@ -204,7 +204,7 @@ dtable
     set::canRowCheckable(jsRaw("function(rowID){return this.getRowInfo(rowID).data.type == 'project';}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('program', 'browse', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param={$param}")),
+    set::sortLink(createLink('program', 'browse', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&param={$param}")),
     set::footPager(usePager()),
     set::footToolbar(array
     (

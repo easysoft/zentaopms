@@ -47,6 +47,9 @@ r($ci->saveTestTaskForZtfTest($productID, $taskID, $name)) && p() && e('0'); // 
 $taskID = 1;
 r($ci->saveTestTaskForZtfTest($productID, $taskID, $name)) && p('name,auto') && e('测试单1,unit'); // 正常的测试单
 
+global $tester;
+$tester->dao->exec("SET @@sql_mode=''");
+
 $taskID    = 0;
 $productID = 1;
 r($ci->saveTestTaskForZtfTest($productID, $taskID, $name)) && p('id,auto') && e('6,unit'); // 有产品ID，创建测试单

@@ -59,5 +59,5 @@ $projectproduct->gen(8);
 $product = new productTest('admin');
 
 r($product->getProjectStatsByProductTest($productID = 0, 'all', '', false, 'order_desc')) && p() && e('0');
-r($product->getProjectStatsByProductTest($productID = 1, 'all', '', false, 'order_desc')) && p('11:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('25,10,6,80.60,0');
-r($product->getProjectStatsByProductTest($productID = 1, 'all', '', true,  'order_desc')) && p('61:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('45,40,34,56.90,0');
+r($product->getProjectStatsByProductTest($productID = 1, 'all', '', false, 'order_desc')) && p('11:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('25.00,10.00,6.00,80.64,0');
+r($product->getProjectStatsByProductTest($productID = 1, 'all', '', true,  'order_desc')) && p('61:totalConsumed,totalEstimate,totalLeft,progress,teamCount') && e('45.00,40.00,34.00,56.96,0');

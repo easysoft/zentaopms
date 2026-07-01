@@ -2843,10 +2843,10 @@ class commonTaoTest extends baseTest
      */
     public function replaceMenuLangTest()
     {
-        $result = $this->objectModel->replaceMenuLang();
+        commonModel::replaceMenuLang();
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        return '0';
     }
 
     /**

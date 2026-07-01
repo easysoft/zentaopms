@@ -47,7 +47,7 @@ pid=1
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $projectIdList = array(2, 3, 100);
 $accounts  = array(array('admin' => 'admin', 'user1' => 'user1'), array('user2' => 'user2'));

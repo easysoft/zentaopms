@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of testreport module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     testreport
@@ -687,7 +687,7 @@ class testreportZen extends testreport
             if(strpos($chart, 'testTask') === false) continue;
 
             $chartFunc   = 'getDataOf' . $chart;
-            $chartData   = $this->testtask->$chartFunc($taskID);
+            $chartData   = $this->testtask->$chartFunc($taskID, '1=1');
             $chartOption = $this->config->testtask->report->options;
 
             $this->view->charts[$chart] = $chartOption;

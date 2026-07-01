@@ -30,6 +30,7 @@ $startTime = getTime();
 
 /* Instance the app. */
 $app = router::createApp('pms', dirname(dirname(__FILE__)), 'api');
+$oldRequestType = zget($config, 'requestType', '');
 
 /* Run the app. */
 $common = $app->loadCommon();

@@ -357,7 +357,10 @@ class searchTaoTest extends baseTest
     {
         $_SESSION['project'] = 0;
 
-        return $this->instance->getParamValues('bug', $fields, $params);
+        $result = $this->invokeArgs('getParamValues', ['bug', $fields, $params]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -370,7 +373,10 @@ class searchTaoTest extends baseTest
      */
     public function getSqlParamsTest(string $keywords): array
     {
-        return $this->instance->getSqlParams($keywords);
+        $result = $this->invokeArgs('getSqlParams', [$keywords]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -418,6 +424,23 @@ class searchTaoTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $_SESSION[$formSessionName] ?? array();
+    }
+
+    /**
+     * Test initSession method.
+     *
+     * @param  string $module
+     * @param  array  $fields
+     * @param  array  $fieldParams
+     * @access public
+     * @return array
+     */
+    public function initSessionTest(string $module, array $fields, array $fieldParams): array
+    {
+        $result = $this->instance->initSession($module, $fields, $fieldParams);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -493,7 +516,7 @@ class searchTaoTest extends baseTest
      */
     public function processResultsTest(array $results, array $objectList, string $words): array
     {
-        $result = $this->instance->processResults($results, $objectList, $words);
+        $result = $this->invokeArgs('processResults', [$results, $objectList, $words]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -510,6 +533,52 @@ class searchTaoTest extends baseTest
     {
         $result = $this->invokeArgs('replaceDynamic', [$query]);
         if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test setResultsInPage method.
+     *
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return array
+     */
+    public function setResultsInPageTest(int $recPerPage, int $pageID): array
+    {
+        $results = $this->instance->dao->select('*')->from(TABLE_SEARCHINDEX)->orderBy('id')->fetchAll('id');
+        $pager = new class($recPerPage, $pageID)
+        {
+            public int $recPerPage;
+            public int $pageID;
+            public int $recTotal = 0;
+            public int $pageTotal = 0;
+
+            public function __construct(int $recPerPage, int $pageID)
+            {
+                $this->recPerPage = $recPerPage;
+                $this->pageID     = $pageID;
+            }
+
+            public function setRecTotal(int $recTotal): void
+            {
+                $this->recTotal = $recTotal;
+            }
+
+            public function setPageTotal(): void
+            {
+                $this->pageTotal = $this->recPerPage ? (int)ceil($this->recTotal / $this->recPerPage) : 0;
+            }
+
+            public function setPageID(int $pageID): void
+            {
+                $this->pageID = $pageID;
+            }
+        };
+
+        $result = $this->invokeArgs('setResultsInPage', [$results, $pager]);
+        if(dao::isError()) return dao::getError();
+
         return $result;
     }
 

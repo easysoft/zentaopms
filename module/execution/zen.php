@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     execution
@@ -21,7 +21,7 @@ class executionZen extends execution
      * @param  string    $branch
      * @param  array     $products
      * @param  string    $orderBy
-     * @param  string    $type
+     * @param  string    $browseType
      * @param  string    $build
      * @param  int       $param
      * @param  array     $bugs
@@ -29,12 +29,12 @@ class executionZen extends execution
      * @access protected
      * @return void
      */
-    protected function assignBugVars(object $execution, object $project, int $productID, string $branch, array $products, string $orderBy, string $type, int $param, string $build, array $bugs, object $pager)
+    protected function assignBugVars(object $execution, object $project, int $productID, string $branch, array $products, string $orderBy, string $browseType, int $param, string $build, array $bugs, object $pager)
     {
         $this->loadModel('product');
         $this->loadModel('tree');
 
-        $moduleID = $type == 'bymodule' ? $param : 0;
+        $moduleID = $browseType == 'bymodule' ? $param : 0;
 
         /* Get module tree.*/
         $extra = array('projectID' => $execution->id, 'orderBy' => $orderBy, 'type' => 'byModule', 'build' => $build, 'branchID' => $branch);
@@ -59,7 +59,7 @@ class executionZen extends execution
         $this->view->title            = $execution->name . $this->lang->hyphen . $this->lang->execution->bug;
         $this->view->project          = $project;
         $this->view->orderBy          = $orderBy;
-        $this->view->type             = $type;
+        $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;
         $this->view->bugs             = $bugs;
         $this->view->summary          = $this->loadModel('bug')->summary($bugs);
@@ -276,7 +276,7 @@ class executionZen extends execution
         $this->view->title             = $execution->name . $this->lang->hyphen . $this->lang->execution->story;
         $this->view->storyType         = $storyType;
         $this->view->param             = $param;
-        $this->view->type              = $this->session->executionStoryBrowseType;
+        $this->view->browseType        = $this->session->executionStoryBrowseType;
         $this->view->orderBy           = $orderBy;
         $this->view->pager             = $pager;
         $this->view->product           = $this->product->getById($productID);
@@ -395,17 +395,17 @@ class executionZen extends execution
      * @param  int       $moduleID
      * @param  int       $param
      * @param  string    $orderBy
-     * @param  string    $type
+     * @param  string    $browseType
      * @param  object    $pager
      * @access protected
      * @return void
      */
-    protected function assignTestcaseVars(int $executionID, int $productID, string $branchID, int $moduleID, int $param, string $orderBy, string $type, object $pager)
+    protected function assignTestcaseVars(int $executionID, int $productID, string $branchID, int $moduleID, int $param, string $orderBy, string $browseType, object $pager)
     {
         $this->loadModel('tree');
 
         /* Get cases. */
-        $cases = $this->loadModel('testcase')->getExecutionCases($type, $executionID, $productID, $branchID, $moduleID, $param, $orderBy, $pager);
+        $cases = $this->loadModel('testcase')->getExecutionCases($browseType, $executionID, $productID, $branchID, $moduleID, $param, $orderBy, $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
@@ -432,7 +432,7 @@ class executionZen extends execution
         $this->view->product         = $this->loadModel('product')->getByID((int)$productID);
         $this->view->orderBy         = $orderBy;
         $this->view->pager           = $pager;
-        $this->view->type            = $type;
+        $this->view->browseType      = $browseType;
         $this->view->branchID        = $branchID;
         $this->view->branchTagOption = $this->loadModel('branch')->getPairs($productID, 'withClosed');
         $this->view->recTotal        = $pager->recTotal;
@@ -793,7 +793,7 @@ class executionZen extends execution
     {
         $project = $this->loadModel('project')->getByID($execution->project);
 
-        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$execution->id&browseType=bySearch&param=myQueryID");
+        $this->config->bug->search['actionURL'] = $this->createLink('execution', 'importBug', "executionID=$execution->id&browseType=bysearch&param=myQueryID");
         $this->config->bug->search['queryID']   = $queryID;
         if(!empty($products))
         {
@@ -1587,6 +1587,7 @@ class executionZen extends execution
      */
     protected function getLink(string $module, string $method, string $type = ''): string
     {
+        $rawModule = $module;
         $executionModules = array('task', 'testcase', 'build', 'bug', 'case', 'testtask', 'testreport', 'doc');
         if(in_array($module, array('task', 'testcase', 'story', 'testtask')) && in_array($method, array('view', 'edit', 'batchedit', 'create', 'batchcreate', 'report', 'batchrun', 'groupcase'))) $method = $module;
         if(in_array($module, $executionModules) && in_array($method, array('view', 'edit', 'create'))) $method = $module;
@@ -1596,8 +1597,10 @@ class executionZen extends execution
 
         if($this->config->edition != 'open')
         {
-            $flow = $this->loadModel('workflow')->getByModule($module);
+            $flow    = $this->loadModel('workflow')->getByModule($module);
+            $actions = $this->dao->select('action')->from(TABLE_WORKFLOWACTION)->where('buildin')->eq('0')->andWhere('module')->eq($rawModule)->fetchPairs();
             if(!empty($flow) && $flow->buildin == '0') return helper::createLink('flow', 'ajaxSwitchBelong', "objectID=%s&moduleName=$module");
+            if(in_array($rawModule, $executionModules) && in_array($method, $actions)) $method = $rawModule;
         }
 
         $link = helper::createLink($module, $method, "executionID=%s");
@@ -1675,7 +1678,7 @@ class executionZen extends execution
      * Set the cookie and session.
      *
      * @param  string    $executionID
-     * @param  string    $type        all|byModule|byProduct|byBranch|bySearch
+     * @param  string    $type        all|bymodule|byproduct|bybranch|bysearch
      * @param  string    $param
      * @param  string    $orderBy
      * @access protected
@@ -1875,7 +1878,7 @@ class executionZen extends execution
         if(!empty($copyExecutionID))
         {
             $branches     = $this->project->getBranchesByProject($copyExecutionID);
-            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired');
+            $plans        = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipparent|unexpired|undone');
             $branchGroups = $this->execution->getBranchByProduct(array_keys($products), $projectID);
         }
 
@@ -2283,7 +2286,7 @@ class executionZen extends execution
 
         if(!empty($projectID) and $model == 'kanban')
         {
-            if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            if($this->app->tab == 'project') return $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "browseType=all&projectID=$projectID");
             return inlink('kanban', "executionID=$executionID");
         }
         $execution = $this->execution->fetchByID($executionID);

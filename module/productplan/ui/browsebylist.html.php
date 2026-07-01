@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browses view file of productplan module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     productplan
@@ -80,7 +80,7 @@ featureBar
     (
         set::simple($isFromDoc || $isFromAI),
         set::module('productplan'),
-        set::open($browseType == 'bySearch'),
+        set::open($browseType == 'bysearch'),
         ($isFromDoc || $isFromAI) ? set::target('#docSearchForm') : null,
         ($isFromDoc || $isFromAI) ? set::onSearch(jsRaw('function(){$(this.element).closest(".modal").find("#featureBar .nav-item>.active").removeClass("active").find(".label").hide()}')) : null
     ))

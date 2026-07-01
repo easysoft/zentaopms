@@ -11,7 +11,7 @@
  * 描述：按项目统计的已关闭业务需求数是指项目中状态为已关闭的业务需求的数量，反映了项目团队在满足组织业务目标和需求方面的已经实现的任务和计划。已关闭业务需求数量的增加表示项目团队已经成功完成了一定数量的业务需求工作，并取得了一定的成果。
  * 定义：项目中业务需求个数求和 过滤已删除的业务需求 状态为已关闭 过滤已删除的项目
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

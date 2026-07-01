@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
 * The assigntome view file of block module of ZenTaoPMS.
-* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
 * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Yuting Wang <wangyuting@easycorp.ltd>
 * @package     block
@@ -124,7 +124,7 @@ foreach($hasViewPriv as $type => $bool)
                 if($review->storyType == 'requirement') $typeName = $lang->URCommon;
                 if($review->storyType == 'epic')        $typeName = $lang->ERCommon;
             }
-            if($review->type == 'projectreview') $typeName = $lang->project->common;
+            if($review->type == 'projectreview') $typeName = $lang->my->projectReview;
 
             if(isset($lang->$reviewType->statusList)) $statusList = array_merge($statusList, $lang->$reviewType->statusList);
             if($reviewType == 'attend')               $statusList = array_merge($statusList, $lang->attend->reviewStatusList);

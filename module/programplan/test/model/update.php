@@ -15,9 +15,10 @@ cid=17758
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-su('admin');
 
-zenData('project')->loadYaml('project')->gen(10);
+zenData('project')->loadYaml('project')->gen(10)->fixPath();
+zenData('projectspec')->gen(0);
+su('admin');
 
 $planID    = 8;
 $projectID = 1;
@@ -32,5 +33,5 @@ $plan = $programplan->updateTest($planID, $projectID, $changeName);
 $childPlans = $programplan->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($planID)->fetchAll();
 r((array)$plan) && p('name')   && e('修改后的阶段'); // 测试修改plan的 name 值
 r((array)$plan) && p('id')     && e('8');            // 测试修改plan的 id 值
-r($childPlans)  && p('0:acl')  && e('program');      // 测试子阶段的 acl 值
+r($childPlans)  && p('0:acl')  && e('private');      // 测试子阶段的 acl 值
 r($childPlans)  && p('0:id')   && e('9');            // 测试子阶段的 id 值

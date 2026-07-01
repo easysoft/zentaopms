@@ -64,7 +64,7 @@ $app->rawMethod = 'task';
 
 $condition = array();
 $condition[] = "t1.execution = '3' AND t1.deleted = '0' AND t1.parent >= 0";
-$condition[] = "t1.type = 'devel' AND t1.fromBug != '0' AND t1.parent >= 0";
+$condition[] = "t1.type = 'devel' AND t1.`fromBug` != '0' AND t1.parent >= 0";
 $condition[] = "t1.execution = '3' AND t1.story != '0' AND t1.parent >= 0";
 $condition[] = "t1.module LIKE '%2%' AND t1.type = 'design' AND t1.parent >= 0";
 

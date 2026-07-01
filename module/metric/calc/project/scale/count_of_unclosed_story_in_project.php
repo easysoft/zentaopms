@@ -11,7 +11,7 @@
  * 描述：按项目统计的未关闭研发需求数是指项目中未关闭的研发需求的数量反映了项目团队在开发过程中的进行中的任务和计划，未关闭研发需求数越多，说明项目团队未完成的开发工作越多，需要进一步跟进从而完成。
  * 定义：复用：;按项目统计的研发需求总数;按项目统计的已关闭研发需求数;公式：;按项目统计的关闭研发需求数=按项目统计的研发需求总数-按项目统计的已关闭研发需求数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

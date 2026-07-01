@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of test suite module of ZenTaoPMS.
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license   ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package   testsuite
@@ -57,6 +57,7 @@ class testsuiteModel extends model
             ->andWhere('`addedBy`')->eq($this->app->user->account)
             ->markRight(2)
             ->beginIF(strpos($param, 'review') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF(strpos($param, 'reviewedby') !== false)->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -257,7 +258,7 @@ class testsuiteModel extends model
             }
         }
 
-        $query = $browseType == 'bySearch' ? $this->session->testsuiteQuery : ' 1 = 1';
+        $query = $browseType == 'bysearch' ? $this->session->testsuiteQuery : ' 1 = 1';
         $allProduct = "`product` = 'all'";
         if(strpos($query, '`product` =') === false) $query .= " AND `product` = {$suite->product}";
         if(strpos($query, $allProduct) !== false) $query = str_replace($allProduct, '1', $query);

@@ -12,6 +12,13 @@ zenData('meeting')->loadYaml('meeting')->gen(1);
 zenData('mr')->gen(1);
 zenData('release')->gen(1);
 
+$tester->dao->update(TABLE_TESTTASK)
+    ->set('owner')->eq('user3')
+    ->set('members')->eq('user4,user5')
+    ->set('mailto')->eq('user1,user2')
+    ->where('id')->eq(1)
+    ->exec();
+
 // 使用字段范围设置，避免生成 SQL 文件
 $task = zenData('task');
 $task->id->range('1-9');
@@ -37,7 +44,7 @@ timeout=0
 cid=17055
 
 - 测试获取 todo 1 action 0 的 toList @admin
-- 测试获取 testtask 1 action 0 的 toList @user3
+- 测试获取 testtask 1 action 0 的 toList @user3,user4,user5,user1,user2
 - 测试获取 mr 1 action 0 的 toList @admin,admin
 
 - 测试获取 release 1 action 0 的 toList @admin,,po1,dev1
@@ -56,7 +63,7 @@ $objectID   = array(1, 9);
 $actionID   = array(0, 2);
 
 r($message->getToListTest($objectType[0], $objectID[0], $actionID[0])) && p() && e('admin');           // 测试获取 todo 1 action 0 的 toList
-r($message->getToListTest($objectType[1], $objectID[0], $actionID[0])) && p() && e('user3');           // 测试获取 testtask 1 action 0 的 toList
+r($message->getToListTest($objectType[1], $objectID[0], $actionID[0])) && p() && e('user3,user4,user5,user1,user2'); // 测试获取 testtask 1 action 0 的 toList
 r($message->getToListTest($objectType[2], $objectID[0], $actionID[0])) && p() && e('admin,admin');     // 测试获取 mr 1 action 0 的 toList
 r($message->getToListTest($objectType[3], $objectID[0], $actionID[0])) && p() && e('admin,,po1,dev1'); // 测试获取 release 1 action 0 的 toList
 r($message->getToListTest($objectType[4], $objectID[0], $actionID[0])) && p() && e('dev1');            // 测试获取 task 1 action 0 的 toList

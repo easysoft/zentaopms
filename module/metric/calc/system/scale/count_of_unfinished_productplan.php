@@ -11,7 +11,7 @@
  * 描述：按系统统计的未完成的产品计划数量反映了组织在特定年度内未能完成的产品计划数量，用于评估组织的评估绩效、资源管理和风险控制，并用于规划和改进。
  * 定义：复用：;按系统统计的已完成计划数;按系统统计的计划总数;公式：;按系统统计的未完成计划数=按系统统计的计划总数-按系统统计的已完成计划数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_unfinished_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.status', 't1.closedReason');
+    public $fieldList = array('t1.status', 't1.`closedReason`');
 
     public $result = 0;
 

@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * The zen file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      sunguangming <sunguangming@easycorp.ltd>
  * @link        https://www.zentao.net
@@ -306,7 +306,7 @@ class projectZen extends project
             }
             if(isset($output['branchID']))   $linkedBranches = array($output['branchID'] => $output['branchID']);
         }
-        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired');
+        $productPlans = $this->loadModel('productplan')->getGroupByProduct(array_keys($allProducts), 'skipparent|unexpired|undone');
         foreach($productPlans as $productID => $branchPlans)
         {
             foreach($branchPlans as $branchID => $plans)
@@ -347,6 +347,7 @@ class projectZen extends project
         $this->view->branchGroups        = $this->loadModel('execution')->getBranchByProduct(array_keys($allProducts));
         $this->view->productPlans        = $productPlans;
         $this->view->groups              = $this->loadModel('group')->getPairs();
+        $this->view->filterPlans         = true;
 
         if(!isset($this->view->linkedProducts)) $this->view->linkedProducts = $linkedProducts;
         if(!isset($this->view->linkedBranches)) $this->view->linkedBranches = $linkedBranches;
@@ -624,7 +625,7 @@ class projectZen extends project
      *
      * @param  int    $productID
      * @param  int    $projectID
-     * @param  string $type
+     * @param  string $browseType
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $build
@@ -633,13 +634,13 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function prepareModuleForBug(int $productID, int $projectID, string $type, int $param, string $orderBy, int $build, string $branchID, array $products)
+    protected function prepareModuleForBug(int $productID, int $projectID, string $browseType, int $param, string $orderBy, int $build, string $branchID, array $products)
     {
-        $moduleID = $type != 'bysearch' ? $param : 0;
+        $moduleID = $browseType != 'bysearch' ? $param : 0;
         $modules  = $this->loadModel('tree')->getAllModulePairs('bug');
 
         /* Get module tree.*/
-        $extra = array('projectID' => $projectID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branchID);
+        $extra = array('projectID' => $projectID, 'orderBy' => $orderBy, 'type' => $browseType, 'build' => $build, 'branchID' => $branchID);
         if($projectID and empty($productID) and count($products) > 1)
         {
             $moduleTree = $this->tree->getBugTreeMenu($projectID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
@@ -670,7 +671,7 @@ class projectZen extends project
      * Process search form for project bug list.
      *
      * @param  object     $project
-     * @param  string     $type
+     * @param  string     $browseType
      * @param  int        $param
      * @param  int        $projectID
      * @param  int        $productID
@@ -681,7 +682,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function processBugSearchParams(object $project, string $type, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
+    protected function processBugSearchParams(object $project, string $browseType, int $param, int $projectID, int $productID, string $branchID, string $orderBy, int $build, array $products)
     {
         $this->loadModel('bug');
         if(!$project->hasProduct)
@@ -692,10 +693,10 @@ class projectZen extends project
         if(!$project->multiple and !$project->hasProduct) unset($this->config->bug->search['fields']['plan']);
         unset($this->config->bug->search['fields']['project']);
 
-        $queryID = ($type == 'bysearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&browseType=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
     }
 
@@ -732,7 +733,7 @@ class projectZen extends project
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = $type == 'bysearch' ? (int)$param : 0;
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&browseType=bysearch&queryID=myQueryID");
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project', $project);
     }
 
@@ -808,7 +809,7 @@ class projectZen extends project
      * @access protected
      * @return void
      */
-    protected function buildBugView(int $productID, int $projectID, object $project, string $type, int $param, string $orderBy, int $build, string $branchID, array $products, int $recTotal, int $recPerPage, int $pageID)
+    protected function buildBugView(int $productID, int $projectID, object $project, string $browseType, int $param, string $orderBy, int $build, string $branchID, array $products, int $recTotal, int $recPerPage, int $pageID)
     {
         $this->loadModel('bug');
         $this->loadModel('user');
@@ -818,7 +819,7 @@ class projectZen extends project
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
 
-        $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
+        $bugs = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $browseType, $param, $sort, '', $pager);
         $bugs = $this->bug->processBuildForBugs($bugs);
         $bugs = $this->bug->batchAppendDelayedDays($bugs);
 
@@ -843,7 +844,7 @@ class projectZen extends project
         $this->view->buildID          = $this->view->build ? $this->view->build->id : 0;
         $this->view->pager            = $pager;
         $this->view->orderBy          = $orderBy;
-        $this->view->type             = $type;
+        $this->view->browseType       = $browseType;
         $this->view->param            = $param;
         $this->view->productID        = $productID;
         $this->view->project          = $project;

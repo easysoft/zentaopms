@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The build view file of execution module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     execution
@@ -13,8 +13,8 @@ namespace zin;
 /* zin: Define the set::module('executionBuild') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
-    set::linkParams("executionID={$execution->id}&type={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::current($browseType),
+    set::linkParams("executionID={$execution->id}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     set::module('execution'),
     set::method('build'),
     div
@@ -29,7 +29,7 @@ featureBar
             on::change('changeProduct')
         )
     ),
-    li(searchToggle(set::module('executionBuild'), set::open($type == 'bysearch')))
+    li(searchToggle(set::module('executionBuild'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -38,7 +38,7 @@ if($canCreateBuild) $createItem = array('icon' => 'plus', 'class' => 'primary', 
 toolbar(!empty($createItem) ? item(set($createItem)) : null);
 
 jsVar('executionID', $execution->id);
-jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID={$execution->id}&type=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
+jsVar('changeProductLink', helper::createLink('execution', 'build', "executionID={$execution->id}&browseType=product&param={productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"));
 jsVar('scmPathTip', $lang->build->scmPath);
 jsVar('filePathTip', $lang->build->filePath);
 jsVar('confirmDelete', $lang->build->confirmDelete);
@@ -63,7 +63,7 @@ dtable
     set::onRenderCell(jsRaw('window.renderCell')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'build', "executionID={$execution->id}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'build', "executionID={$execution->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::emptyTip($lang->build->noBuild),
     set::createTip($lang->build->create),

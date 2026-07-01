@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度修复Bug数是指在某年度解决并关闭的Bug数量。这个度量项反映了产品在某年度解决的问题数量。年度修复Bug数越多可能说明开发团队在Bug解决方面的工作效率较高。
  * 定义：产品中Bug的个数求和;关闭时间为某年;解决方案为已解决;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_fixed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.resolution', 't1.closedDate');
+    public $fieldList = array('t1.product', 't1.resolution', 't1.`closedDate`');
 
     public $result = array();
 

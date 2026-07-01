@@ -2,7 +2,7 @@
 /**
  * The all avaliabe actions in ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -526,6 +526,7 @@ $lang->resource->story->linkStory          = 'linkStory';
 $lang->resource->story->batchEdit          = 'batchEdit';
 $lang->resource->story->export             = 'exportAction';
 $lang->resource->story->delete             = 'deleteAction';
+$lang->resource->story->copy               = 'copy';
 $lang->resource->story->view               = 'view';
 $lang->resource->story->change             = 'changeAction';
 $lang->resource->story->review             = 'reviewAction';
@@ -558,6 +559,7 @@ $lang->story->methodOrder[15]  = 'edit';
 $lang->story->methodOrder[17]  = 'batchEdit';
 $lang->story->methodOrder[20]  = 'export';
 $lang->story->methodOrder[25]  = 'delete';
+$lang->story->methodOrder[28]  = 'copy';
 $lang->story->methodOrder[30]  = 'view';
 $lang->story->methodOrder[35]  = 'change';
 $lang->story->methodOrder[40]  = 'review';
@@ -593,6 +595,7 @@ $lang->resource->requirement->edit               = 'editAction';
 $lang->resource->requirement->batchEdit          = 'batchEdit';
 $lang->resource->requirement->export             = 'exportAction';
 $lang->resource->requirement->delete             = 'deleteAction';
+$lang->resource->requirement->copy               = 'copy';
 $lang->resource->requirement->view               = 'view';
 $lang->resource->requirement->change             = 'changeAction';
 $lang->resource->requirement->review             = 'reviewAction';
@@ -611,12 +614,14 @@ $lang->resource->requirement->batchChangeParent  = 'batchChangeParent';
 $lang->resource->requirement->batchChangeGrade   = 'batchChangeGrade';
 $lang->resource->requirement->batchChangePlan    = 'batchChangePlan';
 $lang->resource->requirement->processStoryChange = 'processStoryChange';
+$lang->resource->requirement->linkStory          = 'linkStory';
 
 $lang->requirement->methodOrder[5]   = 'create';
 $lang->requirement->methodOrder[10]  = 'batchCreate';
 $lang->requirement->methodOrder[15]  = 'edit';
 $lang->requirement->methodOrder[20]  = 'export';
 $lang->requirement->methodOrder[25]  = 'delete';
+$lang->requirement->methodOrder[28]  = 'copy';
 $lang->requirement->methodOrder[30]  = 'view';
 $lang->requirement->methodOrder[35]  = 'change';
 $lang->requirement->methodOrder[40]  = 'review';
@@ -636,6 +641,7 @@ $lang->requirement->methodOrder[100] = 'batchChangeParent';
 $lang->requirement->methodOrder[105] = 'batchChangeGrade';
 $lang->requirement->methodOrder[110] = 'batchChangePlan';
 $lang->requirement->methodOrder[115] = 'processStoryChange';
+$lang->requirement->methodOrder[120] = 'linkStory';
 
 /* Epic. */
 $lang->resource->epic = new stdclass();
@@ -645,6 +651,7 @@ $lang->resource->epic->edit               = 'editAction';
 $lang->resource->epic->batchEdit          = 'batchEdit';
 $lang->resource->epic->export             = 'exportAction';
 $lang->resource->epic->delete             = 'deleteAction';
+$lang->resource->epic->copy               = 'copy';
 $lang->resource->epic->view               = 'view';
 $lang->resource->epic->change             = 'changeAction';
 $lang->resource->epic->review             = 'reviewAction';
@@ -663,6 +670,7 @@ $lang->resource->epic->batchChangeParent  = 'batchChangeParent';
 $lang->resource->epic->batchChangeGrade   = 'batchChangeGrade';
 $lang->resource->epic->batchChangePlan    = 'batchChangePlan';
 $lang->resource->epic->processStoryChange = 'processStoryChange';
+$lang->resource->epic->linkStory          = 'linkStory';
 
 $lang->epic->methodOrder[5]   = 'create';
 $lang->epic->methodOrder[10]  = 'batchCreate';
@@ -671,6 +679,7 @@ $lang->epic->methodOrder[16]  = 'batchEdit';
 $lang->epic->methodOrder[17]  = 'linkStory';
 $lang->epic->methodOrder[20]  = 'export';
 $lang->epic->methodOrder[25]  = 'delete';
+$lang->epic->methodOrder[28]  = 'copy';
 $lang->epic->methodOrder[30]  = 'view';
 $lang->epic->methodOrder[35]  = 'change';
 $lang->epic->methodOrder[40]  = 'review';
@@ -689,6 +698,7 @@ $lang->epic->methodOrder[100] = 'batchChangeParent';
 $lang->epic->methodOrder[105] = 'batchChangeGrade';
 $lang->epic->methodOrder[110] = 'batchChangePlan';
 $lang->epic->methodOrder[115] = 'processStoryChange';
+$lang->epic->methodOrder[120] = 'linkStory';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
@@ -990,6 +1000,7 @@ $lang->resource->task->batchAssignTo      = 'batchAssignTo';
 $lang->resource->task->batchChangeModule  = 'batchChangeModule';
 $lang->resource->task->activate           = 'activateAction';
 $lang->resource->task->delete             = 'deleteAction';
+$lang->resource->task->copy               = 'copy';
 $lang->resource->task->view               = 'view';
 $lang->resource->task->export             = 'exportAction';
 $lang->resource->task->confirmStoryChange = 'confirmStoryChange';
@@ -1015,6 +1026,7 @@ $lang->task->methodOrder[60]  = 'close';
 $lang->task->methodOrder[65]  = 'batchClose';
 $lang->task->methodOrder[70]  = 'activate';
 $lang->task->methodOrder[75]  = 'delete';
+$lang->task->methodOrder[78]  = 'copy';
 $lang->task->methodOrder[80]  = 'view';
 $lang->task->methodOrder[85]  = 'export';
 $lang->task->methodOrder[90]  = 'confirmStoryChange';
@@ -1065,6 +1077,7 @@ $lang->resource->bug->create             = 'create';
 $lang->resource->bug->batchCreate        = 'batchCreate';
 $lang->resource->bug->confirm            = 'confirmAction';
 $lang->resource->bug->batchConfirm       = 'batchConfirm';
+$lang->resource->bug->copy               = 'copy';
 $lang->resource->bug->view               = 'view';
 $lang->resource->bug->edit               = 'edit';
 $lang->resource->bug->linkBugs           = 'linkBugs';
@@ -1094,6 +1107,7 @@ $lang->bug->methodOrder[15]  = 'batchCreate';
 $lang->bug->methodOrder[20]  = 'batchEdit';
 $lang->bug->methodOrder[25]  = 'confirm';
 $lang->bug->methodOrder[30]  = 'batchConfirm';
+$lang->bug->methodOrder[33]  = 'copy';
 $lang->bug->methodOrder[35]  = 'view';
 $lang->bug->methodOrder[40]  = 'edit';
 $lang->bug->methodOrder[45]  = 'assignTo';
@@ -1122,6 +1136,7 @@ $lang->resource->testcase->zeroCase                = 'zeroCase';
 $lang->resource->testcase->create                  = 'create';
 $lang->resource->testcase->batchCreate             = 'batchCreate';
 $lang->resource->testcase->createBug               = 'createBug';
+$lang->resource->testcase->copy                    = 'copy';
 $lang->resource->testcase->view                    = 'view';
 $lang->resource->testcase->edit                    = 'edit';
 $lang->resource->testcase->showScript              = 'showScript';
@@ -1167,6 +1182,7 @@ $lang->testcase->methodOrder[15]  = 'zeroCase';
 $lang->testcase->methodOrder[20]  = 'create';
 $lang->testcase->methodOrder[25]  = 'batchCreate';
 $lang->testcase->methodOrder[30]  = 'createBug';
+$lang->testcase->methodOrder[33]  = 'copy';
 $lang->testcase->methodOrder[35]  = 'view';
 $lang->testcase->methodOrder[40]  = 'edit';
 $lang->testcase->methodOrder[45]  = 'delete';
@@ -1881,7 +1897,6 @@ $lang->resource->tree->create      = 'create';
 $lang->resource->tree->updateOrder = 'updateOrder';
 $lang->resource->tree->manageChild = 'manageChild';
 $lang->resource->tree->edit        = 'edit';
-$lang->resource->tree->fix         = 'fix';
 $lang->resource->tree->delete      = 'delete';
 
 $lang->tree->methodOrder[5]  = 'browse';

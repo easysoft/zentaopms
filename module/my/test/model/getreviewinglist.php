@@ -7,6 +7,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('story')->loadYaml('story_reviewing')->gen('10');
 zenData('storyreview')->loadYaml('storyreview')->gen('10');
 zenData('case')->gen('20');
+zenData('product')->gen('20');
 zenData('demand')->loadYaml('demand_reviewing')->gen('20');
 zenData('demandreview')->gen('20');
 zenData('user')->gen('10');
@@ -19,10 +20,14 @@ title=测试 myModel->getReviewingList();
 timeout=0
 cid=17295
 
-- 测试获取用户 admin 类型 all 排序 id_desc 不分页 的待评审类型。 @testcase,17;testcase,13;story,10;testcase,9;story,8;story,6;testcase,5;story,4;story,2;testcase,1;mr,1;
-- 测试获取用户 admin 类型 all 排序 id_asc 不分页 的待评审类型。 @testcase,1;mr,1;story,2;story,4;testcase,5;story,6;story,8;testcase,9;story,10;testcase,13;testcase,17;
-- 测试获取用户 admin 类型 all 排序 id_desc 获取前两个 的待评审类型。 @testcase,17;testcase,13;
-- 测试获取用户 admin 类型 all 排序 id_asc 获取前两个 的待评审类型。 @testcase,1;mr,1;
+- 测试获取用户 admin 类型 all 排序 id_desc 不分页 的待评审类型。 @story,10;story,8;story,6;story,4;story,2;mr,1;
+
+- 测试获取用户 admin 类型 all 排序 id_asc 不分页 的待评审类型。 @mr,1;story,2;story,4;story,6;story,8;story,10;
+
+- 测试获取用户 admin 类型 all 排序 id_desc 获取前两个 的待评审类型。 @story,10;story,8;
+
+- 测试获取用户 admin 类型 all 排序 id_asc 获取前两个 的待评审类型。 @mr,1;story,2;
+
 - 测试获取用户 admin 类型 createdbyme 排序 id_desc 不分页 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_asc 不分页 的待评审类型。 @0
 - 测试获取用户 admin 类型 createdbyme 排序 id_desc 获取前两个 的待评审类型。 @0
@@ -34,6 +39,7 @@ global $tester, $config, $app;
 $app->rawModule  = 'my';
 $app->rawMethod  = 'getReviewingList';
 $config->edition = 'open';
+$config->testcase->needReview = 1;
 
 $tester->app->moduleName = 'my';
 $tester->app->methodName = 'getReviewingList';

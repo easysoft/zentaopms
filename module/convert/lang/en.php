@@ -2,7 +2,7 @@
 /**
  * The convert module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
@@ -106,7 +106,7 @@ $lang->convert->errorGroupExists   = 'Group %s already exists.';
 $lang->convert->errorBuildExists   = 'Build %s already exists.';
 $lang->convert->errorReleaseExists = 'Release %s already exists.';
 $lang->convert->errorCopyFailed    = 'Failed to copy file %s.';
-$lang->convert->importFailed       = 'Migration failed.';
+$lang->convert->importFailed       = 'Import failed. Please refresh the page and try again.';
 
 $lang->convert->setParam = 'Please set the migration match items.';
 
@@ -194,11 +194,14 @@ $lang->convert->jira->passwordDifferent  = 'Passwords do not match.';
 $lang->convert->jira->passwordEmpty      = 'Password cannot be empty.';
 $lang->convert->jira->passwordLess       = 'Password must be at least six characters long.';
 $lang->convert->jira->importSuccessfully = 'Jira migration completed.';
+$lang->convert->jira->getDataResult      = "Get <strong class='text-danger'>%s</strong> Data. <strong class='%scount'>%s</strong> pieces of data processed；";
+$lang->convert->jira->getDataSuccess     = 'Get Jira Data processed. jira Data import in progress.';
 $lang->convert->jira->importResult       = "Imported <strong class='text-danger'>%s</strong> data entries, processed <strong class='%s count'>%s</strong> records.";
 $lang->convert->jira->importing          = 'Data import in progress — please do not navigate away from this page.';
 $lang->convert->jira->importingAB        = 'Migrating data...';
 $lang->convert->jira->imported           = 'Data migration completed.';
 $lang->convert->jira->restore            = 'The previous migration was not completed. Would you like to continue from where you left off?';
+$lang->convert->jira->noCustomeFields    = 'This object has no fields that require configuration. Please click Next.';
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = 'Epic';

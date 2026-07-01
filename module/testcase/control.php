@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of case currentModule of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -122,7 +122,7 @@ class testcase extends control
         $projectParam   = ($this->app->tab == 'project' && $from != 'doc' && $from != 'ai') ? "projectID={$this->session->project}&" : '';
         $suffixParam    = "&caseType=$caseType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
         if($from == 'doc' || $from == 'ai') $suffixParam .= "&projectID=$projectID&from=$from&blockID=$blockID";
-        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID" . $suffixParam);
+        $actionURL      = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bysearch&queryID=myQueryID" . $suffixParam);
         $this->testcaseZen->buildBrowseSearchForm($productID, $queryID, $projectID, $actionURL);
 
         $this->testcaseZen->assignCasesForBrowse($productID, $branch, $browseType, ($browseType == 'bysearch' ? $queryID : $suiteID), $moduleID, $caseType, $orderBy, $recTotal, $recPerPage, $pageID, $from);
@@ -260,17 +260,17 @@ class testcase extends control
     /**
      * Show zero case story.
      *
-     * @param  int    $productID
-     * @param  int    $branchID
-     * @param  string $orderBy
-     * @param  int    $objectID
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int        $productID
+     * @param  int|string $branchID
+     * @param  string     $orderBy
+     * @param  int        $objectID
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function zeroCase(int $productID = 0, int $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function zeroCase(int $productID = 0, int|string $branchID = 0, string $orderBy = 'id_desc', int $objectID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->testcaseZen->checkProducts(); // 如果不存在产品，则跳转到产品创建页面。
 
@@ -402,6 +402,25 @@ class testcase extends control
         $this->view->needReview   = $this->testcase->forceNotReview() == true ? 0 : 1;
         $this->view->onlyAutoCase = $this->cookie->onlyAutoCase;
         $this->display();
+    }
+
+    /**
+     * 复制一个测试用例。
+     * Copy a test case.
+     *
+     * @param  int    $productID
+     * @param  string $branch
+     * @param  int    $moduleID
+     * @param  string $from
+     * @param  int    $param
+     * @param  int    $storyID
+     * @param  string $extras
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID, string $branch = '', int $moduleID = 0, string $from = '', int $param = 0, int $storyID = 0, string $extras = '')
+    {
+        echo $this->fetch('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&from=$from&param=$param&storyID=$storyID&extras=$extras");
     }
 
     /**
@@ -927,7 +946,7 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->testcaseZen->buildLinkCasesSearchForm($case, $queryID);
 
         /* 获取可关联的用例。*/
@@ -973,7 +992,7 @@ class testcase extends control
 
         /* 构建搜索表单。*/
         /* Build the search form. */
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->testcaseZen->buildLinkBugsSearchForm($case, $queryID);
 
         /* 获取关联的bug。*/

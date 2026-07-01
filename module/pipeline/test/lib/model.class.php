@@ -41,6 +41,8 @@ class pipelineModelTest extends baseTest
     public function getListTest(int $spaceID = 0, int $repoID = 0, string $type = '', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
     {
         $this->instance->app->loadClass('pager', true);
+        $this->instance->app->moduleName = $this->instance->app->rawModule = 'pipeline';
+        $this->instance->app->methodName = $this->instance->app->rawMethod = 'browse';
 
         $pager        = new pager(0, $recPerPage, $pageID);
         $pipelineList = $this->instance->getList($spaceID, $repoID, $type, '', $orderBy, $pager);

@@ -1,7 +1,0 @@
-.color-picker-item {width: 20px; height: 20px; margin-right: 10px; border-radius: 50% 50%; float: left; cursor: pointer; text-align: center; line-height: 20px;}
-.color-picker-item > .icon {color: #fff; display: none}
-.checked > .icon {display: inline-block;}
-.p-10px {padding: 10px}
-#kanbanActionMenu li a {text-align: left}
-
-.importModal {min-height: 300px;}

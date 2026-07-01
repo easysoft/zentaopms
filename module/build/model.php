@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -87,6 +87,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -183,6 +184,7 @@ class buildModel extends model
             ->beginIF($type == 'product' && $param)->andWhere('t1.product')->eq((int)$param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -430,15 +432,15 @@ class buildModel extends model
     public function getRelatedReleases(array|int $productIdList, string|int $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
         $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
-            ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.objectType='build'")
-            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t5.objectID=t2.id')
-            ->leftJoin(TABLE_RELEASERELATED)->alias('t6')->on("t1.id=t6.release AND t6.objectType='branch'")
-            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t6.objectID=t3.id')
+            ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.`objectType`='build'")
+            ->leftJoin(TABLE_BUILD)->alias('t2')->on('t5.`objectID`=t2.id')
+            ->leftJoin(TABLE_RELEASERELATED)->alias('t6')->on("t1.id=t6.release AND t6.`objectType`='branch'")
+            ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t6.`objectID`=t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product=t4.id')
             ->where('t1.product')->in($productIdList)
             ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t2.execution')->eq($objectID)->fi()
-            ->beginIF(strpos($params, 'nowaitrelease') !== false)->andWhere('t1.status')->ne('wait')->fi()
+            ->beginIF(strpos($params, 'noreleased') !== false)->andWhere('t1.status')->ne('wait')->fi()
             ->beginIF(strpos($params, 'nofail') !== false)->andWhere('t1.status')->ne('fail')->fi()
             ->andWhere('((t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->ne(0)
@@ -452,8 +454,8 @@ class buildModel extends model
         {
             /* Append releases of only shadow and not link build. */
             $releases += $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
-                ->leftJoin(TABLE_RELEASERELATED)->alias('t4')->on("t1.id=t4.release AND t4.objectType='branch'")
-                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t4.objectID=t2.id')
+                ->leftJoin(TABLE_RELEASERELATED)->alias('t4')->on("t1.id=t4.release AND t4.`objectType`='branch'")
+                ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t4.`objectID`=t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
                 ->where('t1.shadow')->in($shadows)
                 ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
@@ -869,31 +871,27 @@ class buildModel extends model
         if(!empty($oldBuild->execution)) return $build;
 
         $buildBranch = array();
-        foreach(explode(',', trim($build->branch, ',')) as $branchID) $buildBranch[$branchID] = $branchID;
+        $newBuilds   = array_filter(explode(',', (string)$build->builds));
+        $storyIdList = array_filter(explode(',', (string)$oldBuild->stories));
 
-        /* Get delete builds. */
-        $deleteBuilds = array();
-        $newBuilds    = isset($build->builds) ? explode(',', $build->builds) : array();
-        foreach($newBuilds as $oldBuildID)
+        if($newBuilds)
         {
-            if(empty($oldBuildID)) continue;
-            if(!in_array($oldBuildID, $newBuilds)) $deleteBuilds[$oldBuildID] = $oldBuildID;
+            $branches = $this->dao->select('id,branch')->from(TABLE_BUILD)->where('id')->in($newBuilds)->fetchPairs();
+            foreach($branches as $branch)
+            {
+                foreach(explode(',', trim((string)$branch, ',')) as $branchID)
+                {
+                    if($branchID === '') continue;
+                    $buildBranch[$branchID] = $branchID;
+                }
+            }
         }
 
-        /* Delete the branch when the branch of the deleted build has no linked stories. */
-        $storyBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($oldBuild->stories)->fetchPairs('branch');
-        $branches      = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->in($newBuilds + $deleteBuilds)->fetchPairs();
-        foreach($branches as $branch)
+        /* Keep story branches so linked stories remain searchable after child builds change. */
+        if($storyIdList)
         {
-            foreach(explode(',', $branch) as $branchID)
-            {
-                if(empty($branchID)) continue;
-                if(in_array($branchID, $deleteBuilds) && isset($storyBranches[$branchID])) continue;
-                if(in_array($branchID, $newBuilds)    && isset($buildBranch[$branchID]))   continue;
-
-                if(in_array($branchID, $deleteBuilds)) unset($buildBranch[$branchID]);
-                if(in_array($branchID, $newBuilds))    $buildBranch[$branchID] = $branchID;
-            }
+            $storyBranches = $this->dao->select('branch')->from(TABLE_STORY)->where('id')->in($storyIdList)->fetchPairs('branch', 'branch');
+            foreach($storyBranches as $branchID) $buildBranch[$branchID] = $branchID;
         }
 
         $build->branch = implode(',', $buildBranch);

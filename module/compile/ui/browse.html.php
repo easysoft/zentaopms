@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The browse view file of compile module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao<zhaoke@easycorp.ltd>
  * @package     compile
@@ -15,14 +15,14 @@ namespace zin;
 if(!empty($repoID)) dropmenu(set::objectID($repoID), set::tab('repo'));
 
 /* zin: Define the set::module('compile') feature bar on main menu. */
-$queryMenuLink = createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('compile', 'browse', "repoID={$repoID}&jobID={$jobID}&browseType=bysearch&param={queryID}");
 featureBar
 (
     set::current('compile'),
     set::link(createLink('{key}', 'browse', "repoID=$repoID")),
     set::itemLink(array('compile' => createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID"))),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('compile'), set::open($browseType == 'bySearch')))
+    li(searchToggle(set::module('compile'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */

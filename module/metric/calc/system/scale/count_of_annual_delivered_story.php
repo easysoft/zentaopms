@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度交付的研发需求数量反映了组织在一年内交付的研发需求数量，可以用于评估组织的交付能力评估、项目管理、客户满意度、绩效评估和持续改进具有重要意义。
  * 定义：所有的研发需求个数求和;阶段为已发布且发布时间为某年或关闭原因为已完成且关闭时间为某年的;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_delivered_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate');
+    public $fieldList = array('t1.stage', 't1.`releasedDate`', 't1.`closedReason`', 't1.`closedDate`');
 
     public $result = array();
 

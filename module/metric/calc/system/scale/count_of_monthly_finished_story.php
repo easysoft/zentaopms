@@ -11,7 +11,7 @@
  * 描述：按系统统计的月度完成研发需求数量反映了组织每个月内完成的研发需求数量，用于评估组织的绩效评估、进度跟踪、资源规划、经验积累和持续改进具有重要意义。
  * 定义：所有的研发需求个数求和;关闭时间为某年某月;关闭原因为已完成;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_monthly_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`');
 
     public $result = array();
 

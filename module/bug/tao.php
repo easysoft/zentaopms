@@ -71,6 +71,7 @@ class bugTao extends bugModel
             ->beginIF($browseType == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->beginIF($browseType == 'postponedbugs')->andWhere('resolution')->eq('postponed')->fi()
             ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+            ->beginIF($browseType == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
             ->beginIF($browseType == 'feedback')->andWhere('feedback')->ne('0')->fi()
 
             ->beginIF($browseType == 'longlifebugs')
@@ -118,7 +119,7 @@ class bugTao extends bugModel
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.status')->eq('active')
-            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t2.version > t1.`storyVersion`')
             ->andWhere('t1.product')->in($productIdList)
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF($this->app->tab !== 'qa')->andWhere('t1.execution')->in($executionIdList)->fi()

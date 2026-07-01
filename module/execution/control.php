@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -119,7 +119,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task(int $executionID = 0, string $status = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
+    public function task(int $executionID = 0, string $browseType = 'unclosed', int $param = 0, string $orderBy = '', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         $this->app->loadLang('doc');
         if(($from == 'doc' || $from == 'ai') && empty($this->executions)) return $this->send(array('result' => 'fail', 'message' => $this->lang->doc->tips->noExecution));
@@ -130,8 +130,8 @@ class execution extends control
         $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Set browse type. */
-        $browseType  = strtolower($status);
-        $execution   = $this->commonAction($executionID, $status);
+        $browseType  = strtolower($browseType);
+        $execution   = $this->commonAction($executionID, $browseType);
         $executionID = $execution->id;
         if($execution->type == 'kanban' && $this->config->vision != 'lite' && $this->app->getViewType() != 'json' && $from != 'doc') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
@@ -197,7 +197,7 @@ class execution extends control
 
         /* Build the search form. */
         $modules   = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, $showModule);
-        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID&orderBy=$orderBy&recTotal=0&recPerPage=100&pageID=1&from=$from&blockID=$blockID");
+        $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&browseType=bysearch&param=myQueryID&orderBy=$orderBy&recTotal=0&recPerPage=100&pageID=1&from=$from&blockID=$blockID");
         $this->execution->buildTaskSearchForm($executionID, $this->executions, $queryID, $actionURL);
 
         $this->view->title       = $execution->name . $this->lang->hyphen . $this->lang->execution->task;
@@ -205,7 +205,6 @@ class execution extends control
         $this->view->pager       = $pager;
         $this->view->orderBy     = $orderBy;
         $this->view->browseType  = $browseType;
-        $this->view->status      = $status;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
         $this->view->modules     = $modules;
@@ -440,7 +439,7 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $storyType   story|requirement
      * @param  string $orderBy
-     * @param  string $type        all|byModule|byProduct|byBranch|bySearch
+     * @param  string $browseType  all|bymodule|byproduct|bybranch|bysearch
      * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -448,7 +447,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1, string $from = 'execution', int $blockID = 0)
+    public function story(int $executionID = 0, string $storyType = 'story', string $orderBy = 'order_desc', string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 50, int $pageID = 1, string $from = 'execution', int $blockID = 0)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -474,9 +473,9 @@ class execution extends control
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
 
-        $param     = (int)$param;
-        $type      = strtolower($type);
-        $productID = $this->executionZen->setStorageForStory((string)$executionID, $type, (string)$param, $orderBy);
+        $param      = (int)$param;
+        $browseType = strtolower($browseType);
+        $productID  = $this->executionZen->setStorageForStory((string)$executionID, $browseType, (string)$param, $orderBy);
 
         /* Append id for second sort. */
         $sort = common::appendOrder($orderBy);
@@ -488,22 +487,22 @@ class execution extends control
 
         /* Build the search form. */
         $products  = $this->product->getProducts($executionID);
-        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&type=bySearch&queryID=myQueryID&recTotal=0&recPerPage=&pageID=1&from=$from&blockID=$blockID");
-        $this->executionZen->buildStorySearchForm($execution, $productID, $products, $type == 'bysearch' ? $param : 0, $actionURL);
+        $actionURL = $this->createLink('execution', 'story', "executionID=$executionID&storyType=$storyType&orderBy=$orderBy&browseType=bysearch&queryID=myQueryID&recTotal=0&recPerPage=&pageID=1&from=$from&blockID=$blockID");
+        $this->executionZen->buildStorySearchForm($execution, $productID, $products, $browseType == 'bysearch' ? $param : 0, $actionURL);
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $type, (string)$param, $project->storyType ?? 'story', '', $pager);
+        $stories = $this->story->getExecutionStories($executionID, 0, $sort, $browseType, (string)$param, $project->storyType ?? 'story', '', $pager);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
         if($this->config->edition == 'ipd') $stories = $this->loadModel('story')->getAffectObject($stories, 'story');
 
         $this->executionZen->assignCountForStory($executionID, $stories, $storyType);
-        $this->executionZen->assignRelationForStory($execution, $products, $productID, $type, $storyType, $param, $orderBy, $pager);
+        $this->executionZen->assignRelationForStory($execution, $products, $productID, $browseType, $storyType, $param, $orderBy, $pager);
 
         $this->view->from    = $from;
         $this->view->blockID = $blockID;
@@ -561,19 +560,19 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', string $build = '', string $type = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $executionID = 0, int $productID = 0, string $branch = 'all', string $orderBy = 'status,id_desc', string $build = '', string $browseType = 'all', int $param = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session and load model. */
         $this->loadModel('bug');
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
         $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
-        $type        = strtolower($type);
+        $browseType  = strtolower($browseType);
         $execution   = $this->commonAction($executionID);
         $project     = $this->loadModel('project')->getByID($execution->project);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
-        $param       = in_array($type, array('bysearch', 'bymodule')) ? (int)$param : 0;
+        $param       = in_array($browseType, array('bysearch', 'bymodule')) ? (int)$param : 0;
 
         if(count($products) === 1) $productID = current($products)->id;
 
@@ -598,15 +597,15 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $browseType, $param, $sort, '', $pager);
         $bugs  = $this->bug->batchAppendDelayedDays($bugs);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&browseType=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $param, $actionURL);
 
         $bugs = $this->bug->processBuildForBugs($bugs);
-        $this->executionZen->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $type, $param, $build, $bugs, $pager);
+        $this->executionZen->assignBugVars($execution, $project, $productID, $branch, $products, $orderBy, $browseType, $param, $build, $bugs, $pager);
 
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
@@ -622,7 +621,7 @@ class execution extends control
         $this->view->plans          = $this->loadModel('productplan')->getForProducts(array_keys($products));
         $this->view->tasks          = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->view->stories        = $this->loadModel('story')->getPairsByList($storyIdList);
-        $this->view->moduleID       = $type == 'bymodule' ? $param : 0;
+        $this->view->moduleID       = $browseType == 'bymodule' ? $param : 0;
         $this->view->switcherParams = "executionID={$executionID}&productID={$productID}&currentMethod=bug";
         $this->view->switcherText   = isset($products[$productID]) ? $products[$productID]->name : $this->lang->product->all;
         if(empty($project->hasProduct)) $this->config->excludeSwitcherList[] = 'execution-bug';
@@ -645,7 +644,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $type = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testcase(int $executionID = 0, int $productID = 0, string $branchID = 'all', string $browseType = 'all', int $param = 0, int $moduleID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->commonAction($executionID);
         $uri = $this->app->getURI(true);
@@ -671,10 +670,10 @@ class execution extends control
         if($productID && $products[$productID]->type == 'normal') unset($this->config->testcase->dtable->fieldList['branch']);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=bysearch&queryID=myQueryID&moduleID=0&orderBy=$orderBy");
+        $actionURL = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&browseType=bysearch&queryID=myQueryID&moduleID=0&orderBy=$orderBy");
         $this->execution->buildCaseSearchForm($products, $param, $actionURL, $executionID);
 
-        $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $param, $orderBy, $type, $pager);
+        $this->executionZen->assignTestcaseVars($executionID, $productID, $branchID, $moduleID, $param, $orderBy, $browseType, $pager);
 
         $this->view->execution        = $execution;
         $this->view->productOption    = $productOption;
@@ -710,7 +709,7 @@ class execution extends control
      * Browse builds of a execution.
      *
      * @param  int    $executionID
-     * @param  string $type        all|product|bysearch
+     * @param  string $browseType  all|product|bysearch
      * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -719,7 +718,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function build(int $executionID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function build(int $executionID = 0, string $browseType = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $execution   = $this->commonAction($executionID);
         $executionID = (int)$execution->id;
@@ -728,8 +727,8 @@ class execution extends control
         $products = $this->product->getProducts($executionID, 'all', '', false);
 
         /* Build the search form. */
-        $type = strtolower($type);
-        $this->project->buildProjectBuildSearchForm($products, $type == 'bysearch' ? (int)$param : 0, $executionID, $param, 'execution');
+        $browseType = strtolower($browseType);
+        $this->project->buildProjectBuildSearchForm($products, $browseType == 'bysearch' ? (int)$param : 0, $executionID, $param, 'execution');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -737,26 +736,26 @@ class execution extends control
 
         /* Get builds. */
         $this->loadModel('build');
-        if($type == 'bysearch')
+        if($browseType == 'bysearch')
         {
             $builds = $this->loadModel('build')->getExecutionBuildsBySearch($executionID, (int)$param, $pager);
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds($executionID, $type, (string)$param, $orderBy, $pager);
+            $builds = $this->loadModel('build')->getExecutionBuilds($executionID, $browseType, (string)$param, $orderBy, $pager);
         }
 
         /* Set view data. */
-        $this->view->title    = $execution->name . $this->lang->hyphen . $this->lang->execution->build;
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
-        $this->view->builds   = $this->executionZen->processBuildListData($builds, $executionID);
-        $this->view->product  = $type == 'product' ? $param : '';
-        $this->view->products = $products;
-        $this->view->system   = $this->loadModel('system')->getPairs();
-        $this->view->type     = $type;
-        $this->view->param    = $param;
-        $this->view->orderBy  = $orderBy;
-        $this->view->pager    = $pager;
+        $this->view->title      = $execution->name . $this->lang->hyphen . $this->lang->execution->build;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->builds     = $this->executionZen->processBuildListData($builds, $executionID);
+        $this->view->product    = $browseType == 'product' ? $param : '';
+        $this->view->products   = $products;
+        $this->view->system     = $this->loadModel('system')->getPairs();
+        $this->view->browseType = $browseType;
+        $this->view->param      = $param;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -1159,6 +1158,7 @@ class execution extends control
         $this->view->isKanban            = isset($output['type']) && $output['type'] == 'kanban';
         $this->view->project             = $project;
         $this->view->planID              = $planID;
+        $this->view->filterPlans         = true;
 
         $this->display();
     }
@@ -1413,6 +1413,7 @@ class execution extends control
         $projects        = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($relatedProjects)->fetchAll('id');        /* 获取执行所属的项目列表中每个项目的项目信息。*/
 
         $frozenStages = '';
+        $hasStage     = false;
         foreach($executions as $key => $execution)
         {
             if(!empty($execution->frozen))
@@ -1420,6 +1421,7 @@ class execution extends control
                 $frozenStages .= "#{$execution->id} ";
                 unset($executions[$key]);
             }
+            if($execution->type == 'stage') $hasStage = true;
         }
         if(empty($executions) && !empty($frozenStages)) return $this->send(array('result' => 'fail', 'load' => array('alert' => sprintf($this->lang->execution->frozenTip, $frozenStages), 'load' => true)));
 
@@ -1454,6 +1456,7 @@ class execution extends control
         $this->view->from         = $this->app->tab;
         $this->view->parents      = $this->execution->getByIdList($parentIdList);
         $this->view->frozenStages = $frozenStages;
+        $this->view->hasStage     = $hasStage;
         $this->display();
     }
 
@@ -1844,7 +1847,7 @@ class execution extends control
         $this->app->loadLang('kanban');
 
         if($this->config->vision != 'lite') $this->lang->execution->menu = new stdclass();
-        $execution = $this->execution->fetchByID($executionID);
+        $execution = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getExecution() : $this->execution->fetchByID($executionID);
         if(!$execution || $execution->deleted) return $this->sendError($this->lang->notFound, $this->createLink('execution', 'all'));
         $execution = $this->commonAction($executionID);
         if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID={$execution->id}"));
@@ -2286,7 +2289,7 @@ class execution extends control
             $locate = true;
             if($execution->type == 'kanban')
             {
-                $locate = $this->config->vision == 'lite' ? $this->createLink('project', 'execution', "status=all&projectID=$execution->project") : $this->createLink('execution', 'all');
+                $locate = $this->config->vision == 'lite' ? $this->createLink('project', 'execution', "browseType=all&projectID=$execution->project") : $this->createLink('execution', 'all');
             }
             if($this->app->tab == 'project' && $this->session->executionList) $locate = $this->session->executionList;
             return $this->send(array('result' => 'success', 'load' => $locate));
@@ -2510,16 +2513,16 @@ class execution extends control
         }
 
         /* Build the search form. */
-        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recPerPage=$recPerPage&pageID=$pageID&extra=$extra&storyType=$storyType");
+        $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bysearch&queryID=myQueryID&orderBy=$orderBy&recPerPage=$recPerPage&pageID=$pageID&extra=$extra&storyType=$storyType");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $queryID      = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID      = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
         $project   = (strpos('sprint,stage,kanban', $object->type) !== false) ? $this->loadModel('project')->getByID($object->project) : $object;
         $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
 
-        if($browseType == 'bySearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
-        if($browseType != 'bySearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
+        if($browseType == 'bysearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
+        if($browseType != 'bysearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);
         $linkedStories    = $this->story->getExecutionStoryPairs($objectID, 0, 'all', 0, 'full', 'all', $storyType);
         $hasFrozenStories = $this->project->hasFrozenObject($project->id, 'SRS');
         if($hasFrozenStories) $projectLinkedStories = $this->story->getExecutionStoryPairs($project->id, 0, 'all', 0, 'full', 'all', $storyType);
@@ -2974,7 +2977,7 @@ class execution extends control
      * 查看执行列表。
      * All execution.
      *
-     * @param  string $status
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $productID
      * @param  string $param
@@ -2984,7 +2987,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all(string $status = 'undone', string $orderBy = 'order_asc', int $productID = 0, string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function all(string $browseType = 'undone', string $orderBy = 'order_asc', int $productID = 0, string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('stage');
@@ -3006,15 +3009,16 @@ class execution extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $queryID   = ($status == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
+        $browseType = strtolower($browseType);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL  = $this->createLink('execution', 'all', "browseType=bysearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchForm($queryID, $actionURL);
 
         $sort = $orderBy;
         if(strpos($sort, 'rawID_') !== false) $sort = str_replace('rawID_', 'id_', $sort);
         if(strpos($sort, 'nameCol_') !== false) $sort = str_replace('nameCol_', 'name_', $sort);
 
-        $executionStats = $this->execution->getStatData(0, $status, $productID, 0, false, $queryID, $sort, $pager);
+        $executionStats = $this->execution->getStatData(0, $browseType, $productID, 0, false, $queryID, $sort, $pager);
 
         $this->view->title            = $this->lang->execution->allExecutions;
         $this->view->executionStats   = $executionStats;
@@ -3025,7 +3029,7 @@ class execution extends control
         $this->view->orderBy          = $orderBy;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
         $this->view->projects         = array('') + $this->project->getPairsByProgram();
-        $this->view->status           = $status;
+        $this->view->browseType       = $browseType;
         $this->view->from             = $from;
         $this->view->param            = $param;
         $this->view->showBatchEdit    = $this->cookie->showExecutionBatchEdit;

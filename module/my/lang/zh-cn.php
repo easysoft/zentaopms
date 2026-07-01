@@ -57,6 +57,7 @@ $lang->my->myContact       = '我的联系人';
 $lang->my->publicContact   = '公共联系人';
 $lang->my->manageSelf      = '仅可维护自己创建的联系人';
 $lang->my->adminView       = '系统管理员具备删除公共联系人权限';
+$lang->my->projectReview   = '项目评审';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';
@@ -88,11 +89,17 @@ $lang->my->storyMenu->closedByMe   = '由我关闭';
 $lang->my->storyMenu->assignedByMe = '由我指派';
 
 $lang->my->auditField = new stdclass();
-$lang->my->auditField->title  = '评审标题';
-$lang->my->auditField->time   = '提交时间';
-$lang->my->auditField->type   = '评审对象';
-$lang->my->auditField->result = '评审结果';
-$lang->my->auditField->status = '状态';
+$lang->my->auditField->title      = '评审标题';
+$lang->my->auditField->status     = '状态';
+$lang->my->auditField->type       = '评审对象';
+$lang->my->auditField->project    = '所属项目';
+$lang->my->auditField->product    = '所属产品';
+$lang->my->auditField->reviewer   = '审批人';
+$lang->my->auditField->opinion    = '审批意见';
+$lang->my->auditField->result     = '评审结果';
+$lang->my->auditField->openedBy   = '提交人';
+$lang->my->auditField->time       = '提交时间';
+$lang->my->auditField->reviewTime = '评审时间';
 
 $lang->my->auditField->oaTitle['attend']   = '%s的考勤申请：%s';
 $lang->my->auditField->oaTitle['leave']    = '%s的请假申请：%s';

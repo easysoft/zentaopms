@@ -7,6 +7,18 @@ class programplanZenTest extends baseTest
 {
     protected $moduleName = 'programplan';
     protected $className  = 'zen';
+    public    $objectModel;
+    public    $objectTao;
+    public    $zenInstance;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->zenInstance = $this->instance;
+        $this->objectModel = $this->instance->programplan;
+        $this->objectTao   = $this->objectModel->programplanTao;
+    }
 
     /**
      * Test get plan by id.

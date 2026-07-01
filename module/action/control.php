@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of action module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -101,7 +101,16 @@ class action extends control
 
         /* 获取任务的执行名称。 */
         /* Get the executions name of task. */
-        if($browseType == 'task') $this->view->executionList = $executionList = $this->loadModel('execution')->getByIdList(array_column($trashes, 'execution'), 'all');
+        $executionIdList = array();
+        if($browseType == 'task' || $browseType == 'all')
+        {
+            foreach($trashes as $trash)
+            {
+                if($trash->objectType != 'task' || isset($executionIdList[$trash->execution])) continue;
+                $executionIdList[$trash->execution] = $trash->execution;
+            }
+        }
+        if($browseType == 'task' || $browseType == 'all') $this->view->executionList = $executionList = $this->loadModel('execution')->getByIdList($executionIdList, 'all');
 
         /* 补充操作记录的信息。 */
         /* Supplement the information recorded by the operation. */
@@ -195,7 +204,10 @@ class action extends control
         }
         elseif($oldAction->objectType == 'task' && $confirmChange == 'no')
         {
-            $task      = $this->loadModel('task')->getById($oldAction->objectID);
+            $task       = $this->loadModel('task')->getById($oldAction->objectID);
+            $childStage = $this->dao->select('id')->from(TABLE_EXECUTION)->where('parent')->eq($task->execution)->andWhere('deleted')->eq(0)->limit(1)->fetch();
+            if(!empty($childStage)) return $this->send(array('result' => 'fail', 'message' => $this->lang->action->taskHasParentStage));
+
             $isDeleted = $this->dao->select('deleted')->from(TABLE_EXECUTION)->where('id')->eq($task->execution)->fetch('deleted');
             $url       = $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes");
             if($isDeleted) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message: '{$this->lang->action->undeleteTaskTip}'}).then((res) => {if(res) $.ajaxSubmit({url: '{$url}'});});"));

@@ -2,7 +2,7 @@
 /**
  * The control file of upgrade module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
@@ -174,7 +174,7 @@ class upgrade extends control
             return $this->display('upgrade', 'sqlfail');
         }
 
-        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $script  = $this->upgrade->getDeleteScriptPath();
         $command = $this->upgrade->deleteFiles($script);
         if($command) return $this->displayCommand($command);
 
@@ -594,7 +594,7 @@ class upgrade extends control
 
         /* 移除收费版本目录，如果有错误，显示移除命令。*/
         /* Remove encrypted directories. */
-        $script  = $this->app->getTmpRoot() . 'deleteFiles.sh';
+        $script  = $this->upgrade->getDeleteScriptPath();
         $command = $this->upgrade->removeEncryptedDir($script);
         if($command) return $this->displayCommand($command);
         if(is_file($script)) unlink($script);
@@ -832,7 +832,7 @@ class upgrade extends control
 
         if($files)
         {
-            $command = 'rm -f ' . implode(' ', $files);
+            $command = implode("\n", array_map(fn($file) => helper::buildDeleteCommand($file, false), $files));
             $tips    = $this->lang->upgrade->safeDeleteFile . ' ' . $this->lang->upgrade->execCommand;
             return $this->displayCommand($command, $tips, $referer);
         }
@@ -911,7 +911,7 @@ class upgrade extends control
      */
     public function ajaxUpgradeDoc(int $docID)
     {
-        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.rawContent,t1.version')->from(TABLE_DOC)->alias('t1')
+        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();

@@ -2,7 +2,7 @@
 /**
  * The extension module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
@@ -72,7 +72,7 @@ $lang->extension->obtainOfficial[2] = '官方认证';
 $lang->extension->byDownloads   = '最多下载';
 $lang->extension->byAddedTime   = '最新添加';
 $lang->extension->byUpdatedTime = '最近更新';
-$lang->extension->bySearch      = '搜索';
+$lang->extension->bysearch      = '搜索';
 $lang->extension->byCategory    = '分类浏览';
 
 $lang->extension->featureBar['browse']['installed']   = $lang->extension->installed;

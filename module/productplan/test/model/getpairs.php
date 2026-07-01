@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productpanModel->getPairs();
@@ -37,7 +38,7 @@ $branchIdList  = array('', 'all', '2');
 $paramList     = array('', 'unexpired', 'noclosed');
 $skipParent    = array(false, true);
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->getPairs($productIdList[0], $branchIdList[0], $paramList[0], $skipParent[0])) && p('3')  && e('计划3 [2022-01-01 ~ 2022-01-30]');          // 获取产品1下的所有计划
 r($planTester->getPairs($productIdList[1], $branchIdList[0], $paramList[0], $skipParent[0])) && p('5')  && e('计划5 待定');                               // 获取产品2下的所有计划
 r($planTester->getPairs($productIdList[2], $branchIdList[0], $paramList[0], $skipParent[0])) && p('16') && e('计划16 [2021-01-01 ~ 2021-06-30] / 主干');  // 获取产品6下的所有计划

@@ -282,6 +282,7 @@ class personnelModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
+        natsort($objects);
         return implode(',', $objects);
     }
 
@@ -310,6 +311,7 @@ class personnelModelTest extends baseTest
         $acls = $tester->dao->select('account,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchPairs();
         if($acls)
         {
+            uksort($acls, 'strnatcasecmp');
             $return = 'acls: ';
             foreach($acls as $account => $source) $return .= "{$account}:{$source},";
             $return = trim($return, ',');
@@ -318,6 +320,7 @@ class personnelModelTest extends baseTest
             $userViews = $tester->dao->select("account,{$objectType}s")->from(TABLE_USERVIEW)->where('account')->in(array_keys($acls))->fetchPairs();
             if($userViews)
             {
+                uksort($userViews, 'strnatcasecmp');
                 $return   .= 'views: ';
                 foreach($userViews as $account => $views) $return .="{$account}:{$views},";
                 $return = trim($return, ',');
@@ -535,6 +538,7 @@ class personnelModelTest extends baseTest
                     ->fetchPairs();
                 if($acls)
                 {
+                    uksort($acls, 'strnatcasecmp');
                     $return .= 'parent_acls:';
                     foreach($acls as $account => $source) $return .= "{$account}:{$source},";
                     $return = trim($return, ',');
@@ -556,6 +560,7 @@ class personnelModelTest extends baseTest
                     ->fetchPairs();
                 if($acls)
                 {
+                    uksort($acls, 'strnatcasecmp');
                     $return .= 'parent_acls:';
                     foreach($acls as $account => $source) $return .= "{$account}:{$source},";
                     $return = trim($return, ',');

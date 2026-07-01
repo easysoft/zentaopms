@@ -2,7 +2,7 @@
 /**
  * The caselib module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     caselib
@@ -14,9 +14,9 @@ $lang->caselib->all    = '所有用例库';
 
 $lang->caselib->create          = "创建用例库";
 $lang->caselib->edit            = '编辑用例库';
-$lang->caselib->browse          = '浏览用例库';
+$lang->caselib->browse          = '用例列表';
 $lang->caselib->view            = '查看库概况';
-$lang->caselib->viewCase        = '查看用例';
+$lang->caselib->viewCase        = '用例详情';
 $lang->caselib->createCase      = '创建用例';
 $lang->caselib->editCase        = '编辑用例';
 $lang->caselib->delete          = "删除";
@@ -30,7 +30,7 @@ $lang->caselib->import          = '导入';
 $lang->caselib->showImport      = '显示导入数据';
 $lang->caselib->type            = '类型';
 $lang->caselib->product         = '所属' . $lang->productCommon;
-$lang->caselib->browseAction    = '用例库列表';
+$lang->caselib->browseAction    = '用例列表';
 $lang->caselib->deleteAction    = "删除用例库";
 $lang->caselib->importAction    = '导入用例';
 $lang->caselib->linkVersion     = "版本";

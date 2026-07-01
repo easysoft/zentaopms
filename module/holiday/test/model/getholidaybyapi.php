@@ -18,7 +18,6 @@ cid=16742
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('holiday')->gen(50);
 zenData('user')->gen(1);
 
 su('admin');

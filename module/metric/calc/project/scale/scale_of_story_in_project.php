@@ -11,7 +11,7 @@
  * 描述：按项目统计的所有研发需求规模数表示研发需求的规模总数反映了项目研发需求的规模总数，可以用于评估项目团队的研发需求规模管理和成果。
  * 定义：项目中研发需求的规模数求和;过滤已删除的研发需求;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_story_in_project extends baseCalc
 {
     public $dataset = 'getAllStoriesWithProject';
 
-    public $fieldList = array('t3.project', 't1.estimate', 't1.isParent');
+    public $fieldList = array('t3.project', 't1.estimate', 't1.`isParent`');
 
     public $result = array();
 

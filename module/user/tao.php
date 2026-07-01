@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@easycorp.ltd>
  * @package     user
@@ -34,7 +34,7 @@ class userTao extends userModel
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('t2.status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('t2.status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('t2.status')->notin('done,closed')->fi()
-            ->beginIF($status == 'openedbyme')->andWhere('t2.openedBy')->eq($account)->fi()
+            ->beginIF($status == 'openedbyme')->andWhere('t2.`openedBy`')->eq($account)->fi()
             ->beginIF($status == 'delayed')->andWhere('t2.status')->notIn('done,closed,suspend')->andWhere('t2.end')->lt(helper::today())->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->orderBy("t2.$orderBy")
@@ -110,7 +110,7 @@ class userTao extends userModel
             ->beginIF(strpos('doing|wait|suspended|closed', $status) !== false)->andWhere('t2.status')->eq($status)->fi()
             ->beginIF($status == 'done')->andWhere('t2.status')->in('done,closed')->fi()
             ->beginIF($status == 'undone')->andWhere('t2.status')->notin('done,closed')->fi()
-            ->beginIF($status == 'openedbyme')->andWhere('t2.openedBy')->eq($account)->fi()
+            ->beginIF($status == 'openedbyme')->andWhere('t2.`openedBy`')->eq($account)->fi()
             ->beginIF($status == 'delayed')->andWhere('t2.end')->gt('1970-1-1')->andWhere('t2.end')->lt(date(DT_DATE1))->andWhere('t2.status')->notin('done,closed,suspended')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy("t2.$orderBy")

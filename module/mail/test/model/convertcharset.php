@@ -26,20 +26,17 @@ $mailTest = new mailModelTest();
 
 r($mailTest->convertCharsetTest('')) && p() && e('0');
 
-$mailTest->objectModel->config->charset = 'utf-8';
-$mailTest->objectModel->config->mail->smtp->charset = 'utf-8';
+$mailTest->setCharsetConfig('utf-8', 'utf-8');
 r($mailTest->convertCharsetTest('测试文本')) && p() && e('测试文本');
 
-$mailTest->objectModel->config->charset = 'gbk';
-$mailTest->objectModel->config->mail->smtp->charset = 'utf-8';
+$mailTest->setCharsetConfig('gbk', 'utf-8');
 $gbkString = iconv('utf-8', 'gbk', '中文测试');
 r($mailTest->convertCharsetTest($gbkString)) && p() && e('中文测试');
 
-$mailTest->objectModel->config->mail->smtp->charset = '';
+$mailTest->setCharsetConfig('gbk', '');
 r($mailTest->convertCharsetTest('无需转换')) && p() && e('无需转换');
 
-$mailTest->objectModel->config->charset = 'utf-8';
-$mailTest->objectModel->config->mail->smtp->charset = 'utf-8';
+$mailTest->setCharsetConfig('utf-8', 'utf-8');
 r($mailTest->convertCharsetTest('相同编码')) && p() && e('相同编码');
 
 r($mailTest->convertCharsetTest('123456')) && p() && e('123456');

@@ -26,7 +26,7 @@ zenData('team')->loadYaml('team_getteamlistbytype', false, 2)->gen(15);
 su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
-$projectTester = new ProjectTest();
+$projectTester = new projectModelTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r(count($projectTester->getTeamListByTypeTest('project')))   && p() && e(15); // 步骤1：查询project类型

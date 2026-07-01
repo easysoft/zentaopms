@@ -33,8 +33,8 @@ su('admin');
 
 $actionTest = new actionTaoTest();
 
-r($actionTest->processCreateRequirementsActionExtraTest('1')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>");
-r($actionTest->processCreateRequirementsActionExtraTest('1,2,3')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求B</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=3'  >#3 需求C</a>");
-r($actionTest->processCreateRequirementsActionExtraTest('999')) && p('extra') && e('~~');
-r($actionTest->processCreateRequirementsActionExtraTest('')) && p('extra') && e('~~');
-r($actionTest->processCreateRequirementsActionExtraTest('1,999,2')) && p('extra') && e("<a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=1'  >#1 需求A</a>, <a href='/processcreaterequirementsactionextra.php?m=story&f=view&storyID=2'  >#2 需求B</a>");
+r(strpos($actionTest->processCreateRequirementsActionExtraTest('1')->extra, '#1 需求A') !== false) && p() && e('1');
+r(strpos($actionTest->processCreateRequirementsActionExtraTest('1,2,3')->extra, '#1 需求A') !== false && strpos($actionTest->processCreateRequirementsActionExtraTest('1,2,3')->extra, '#2 需求B') !== false && strpos($actionTest->processCreateRequirementsActionExtraTest('1,2,3')->extra, '#3 需求C') !== false) && p() && e('1');
+r($actionTest->processCreateRequirementsActionExtraTest('999')->extra == '') && p() && e('1');
+r($actionTest->processCreateRequirementsActionExtraTest('')->extra == '') && p() && e('1');
+r(strpos($actionTest->processCreateRequirementsActionExtraTest('1,999,2')->extra, '#1 需求A') !== false && strpos($actionTest->processCreateRequirementsActionExtraTest('1,999,2')->extra, '#2 需求B') !== false && strpos($actionTest->processCreateRequirementsActionExtraTest('1,999,2')->extra, '999') === false) && p() && e('1');

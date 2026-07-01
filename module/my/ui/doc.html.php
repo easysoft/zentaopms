@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The doc view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     my
@@ -16,13 +16,13 @@ jsVar('objectIconList', $config->doc->objectIconList);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("mode=doc&type={key}&param=&orderBy={$orderBy}"),
-    li(searchToggle(set::module('contributeDoc'), set::open($type == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("mode=doc&browseType={key}&param=&orderBy={$orderBy}"),
+    li(searchToggle(set::module('contributeDoc'), set::open($browseType == 'bysearch')))
 );
 
-if($type == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);
-if($type == 'editedbyme') unset($config->my->doc->dtable->fieldList['editedBy']);
+if($browseType == 'openedbyme') unset($config->my->doc->dtable->fieldList['addedBy']);
+if($browseType == 'editedbyme') unset($config->my->doc->dtable->fieldList['editedBy']);
 
 $docs = initTableData($docs, $config->my->doc->dtable->fieldList, $this->doc);
 $cols = array_values($config->my->doc->dtable->fieldList);
@@ -45,7 +45,7 @@ dtable
     set::userMap($users),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', $app->rawMethod, "mode=doc&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', $app->rawMethod, "mode=doc&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager()),
     set::emptyTip($lang->doc->noDoc)
 );

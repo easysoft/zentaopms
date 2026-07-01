@@ -767,7 +767,7 @@ class mrTaoTest extends baseTest
             // 模拟核心业务逻辑
             $config->product->search['queryID'] = $queryID;
             $config->product->search['style'] = 'simple';
-            $config->product->search['actionURL'] = "mr-linkStory-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->product->search['actionURL'] = "mr-linkStory-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
 
             // 模拟移除字段
             unset($config->product->search['fields']['plan']);
@@ -835,7 +835,7 @@ class mrTaoTest extends baseTest
             // 模拟核心业务逻辑
             $config->bug->search['queryID'] = $queryID;
             $config->bug->search['style'] = 'simple';
-            $config->bug->search['actionURL'] = "mr-linkBug-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->bug->search['actionURL'] = "mr-linkBug-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
 
             // 模拟移除字段
             unset($config->bug->search['fields']['product']);
@@ -911,7 +911,7 @@ class mrTaoTest extends baseTest
             $config->execution->search['params']['module'] = array();
 
             // 模拟核心业务逻辑
-            $config->execution->search['actionURL'] = "mr-linkTask-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->execution->search['actionURL'] = "mr-linkTask-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
             $config->execution->search['queryID'] = $queryID;
             $config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
 

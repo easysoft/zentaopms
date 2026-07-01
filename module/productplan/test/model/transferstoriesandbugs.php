@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试productplanModel->transferStoriesAndBugs();
@@ -34,7 +35,7 @@ $bug = zenData('bug');
 $bug->plan->range('1');
 $bug->gen(5);
 
-$planTester = new productPlan();
+$planTester = new productplanModelTest();
 r($planTester->transferStoriesAndBugsTest(1)) && p() && e('1'); // 测试转移父计划下父计划的需求和bug
 r($planTester->transferStoriesAndBugsTest(2)) && p() && e('2'); // 测试转移父计划下子计划的需求和bug
 r($planTester->transferStoriesAndBugsTest(3)) && p() && e('2'); // 测试转移普通计划下父计划的需求和bug

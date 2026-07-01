@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
 * The UI file of story module of ZenTaoPMS.
 *
-* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
 * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Wang Yidong <yidong@easycorp.ltd>
 * @package     story
@@ -97,7 +97,7 @@ jsVar('feedbackSource', $config->story->feedbackSource);
 $pinnedItems = !empty($this->config->{$type}->custom->createFields) ? $this->config->{$type}->custom->createFields : array();
 
 $createFields->autoLoad('product', array('items' => 'product,module,twinsStory,plan,parent,grade,reviewer,region,lane,assignedTo,' . (!empty($lang->{$type}->flowExtraFields) ? implode(',', $lang->{$type}->flowExtraFields) : ''), 'updateOrders' => true));
-if($type != 'story') $createFields->autoLoad('branch', 'module');
+if($type != 'story') $createFields->autoLoad('branch', 'module,plan');
 
 formGridPanel
 (

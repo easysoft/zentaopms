@@ -34,13 +34,13 @@ $executionTest = new executionModelTest();
 r($executionTest->getLimitedExecutionTest()) && p() && e('1');
 
 su('user1');
-r($executionTest->getLimitedExecutionTest()) && p() && e('103');
+r($executionTest->getLimitedExecutionTest()) && p() && e('0');
 
 su('user3');
-r($executionTest->getLimitedExecutionTest()) && p() && e('103,104');
-
-su('user4');
 r($executionTest->getLimitedExecutionTest()) && p() && e('103');
 
+su('user4');
+r($executionTest->getLimitedExecutionTest()) && p() && e('104');
+
 su('user9');
-r($executionTest->getLimitedExecutionTest()) && p() && e('');
+r($executionTest->getLimitedExecutionTest()) && p() && e('0');

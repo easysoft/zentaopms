@@ -41,7 +41,7 @@ $release->gen(10);
 
 $products     = array(0, 1, 100);
 $branches     = array('all', '0', '1');
-$types        = array('all', 'normal', 'terminate', 'bySearch');
+$types        = array('all', 'normal', 'terminate', 'bysearch');
 $releaseQuery = array("", "( 1   AND t1.`name`  LIKE '%1%' )");
 
 global $tester;

@@ -11,7 +11,7 @@
  * 描述：按系统统计的流水线执行平均耗时是指在一定时间内的流水线执行时间/执行的数量，通过统计在一定时间范围内每次流水线执行的耗时，并计算出平均值，团队能够深入了解构建和部署过程的性能，及时识别潜在的瓶颈并优化工作流程。
  * 定义：系统的流水线执行时间/执行数量   不统计已删除代码库 不统计已删除流水线
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    liyang <liyang@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class avg_of_compile_time_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.createdDate', 't1.updateDate');
+    public $fieldList = array('t1.`createdDate`', 't1.`updateDate`');
 
     public $result = array();
 

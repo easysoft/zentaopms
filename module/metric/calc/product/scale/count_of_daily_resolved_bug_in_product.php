@@ -11,7 +11,7 @@
  * 描述：按产品统计的每日解决Bug数是指产品每日解决的Bug的数量。该度量项可以帮助我们了解开发团队解决Bug的速度和效率。
  * 定义：产品中Bug数求和;解决日期为某日;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_resolved_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.status', 't1.resolvedDate');
+    public $fieldList = array('t1.product', 't1.status', 't1.`resolvedDate`');
 
     public $result = array();
 

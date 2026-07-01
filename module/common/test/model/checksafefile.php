@@ -10,8 +10,8 @@ cid=15663
 - 步骤1：容器环境返回false @0
 - 步骤2：有效安全文件返回false @0
 - 步骤3：upgrade模块升级中返回false @0
-- 步骤4：无安全文件返回路径 @1
-- 步骤5：安全文件过期返回路径 @1
+- 步骤4：CLI环境下无安全文件仍返回false @0
+- 步骤5：CLI环境下安全文件过期仍返回false @0
 
 */
 
@@ -29,5 +29,5 @@ $commonTest = new commonModelTest();
 r($commonTest->checkSafeFileTest('inContainer')) && p() && e('0'); // 步骤1：容器环境返回false
 r($commonTest->checkSafeFileTest('validSafeFile')) && p() && e('0'); // 步骤2：有效安全文件返回false
 r($commonTest->checkSafeFileTest('upgradeModule')) && p() && e('0'); // 步骤3：upgrade模块升级中返回false
-r(strpos($commonTest->checkSafeFileTest('noSafeFile'), 'ok.txt') !== false) && p() && e('1'); // 步骤4：无安全文件返回路径
-r(strpos($commonTest->checkSafeFileTest('expiredSafeFile'), 'ok.txt') !== false) && p() && e('1'); // 步骤5：安全文件过期返回路径
+r($commonTest->checkSafeFileTest('noSafeFile')) && p() && e('0'); // 步骤4：CLI环境下无安全文件仍返回false
+r($commonTest->checkSafeFileTest('expiredSafeFile')) && p() && e('0'); // 步骤5：CLI环境下安全文件过期仍返回false

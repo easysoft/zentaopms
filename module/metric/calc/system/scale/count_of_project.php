@@ -11,7 +11,7 @@
  * 描述：按系统统计的项目总数是指目前系统内的总项目数量。这个度量项可以帮助团队了解当前的项目规模和工作量，并作为项目管理的基础数据之一。
  * 定义：所有的项目个数求和;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

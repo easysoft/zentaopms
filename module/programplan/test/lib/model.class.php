@@ -7,6 +7,28 @@ class programplanModelTest extends baseTest
 {
     protected $moduleName = 'programplan';
     protected $className  = 'model';
+    public    $objectModel;
+    public    $objectTao;
+    public    $zenInstance;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance->programplanTao;
+    }
+
+    protected function getZenInstance(): object
+    {
+        if($this->zenInstance) return $this->zenInstance;
+
+        global $app;
+        require_once dirname(__FILE__, 3) . '/control.php';
+        $this->zenInstance = $app->loadTarget($this->moduleName, '', 'zen');
+
+        return $this->zenInstance;
+    }
 
     /**
      * Test get plan by id.
@@ -241,7 +263,7 @@ class programplanModelTest extends baseTest
      */
     public function buildPlansForCreateTest(int $projectID, int $parentID)
     {
-        $result = $this->zenInstance->buildPlansForCreate($projectID, $parentID);
+        $result = $this->getZenInstance()->buildPlansForCreate($projectID, $parentID);
 
         if(dao::isError()) return dao::getError();
 
@@ -610,7 +632,7 @@ class programplanModelTest extends baseTest
      */
     public function prepareEditPlanTest(int $planID, int $projectID, object $plan, ?object $parentStage = null): object|false
     {
-        $result = $this->zenInstance->prepareEditPlan($planID, $projectID, $plan, $parentStage);
+        $result = $this->getZenInstance()->prepareEditPlan($planID, $projectID, $plan, $parentStage);
 
         if(dao::isError()) return dao::getError();
 
@@ -703,11 +725,12 @@ class programplanModelTest extends baseTest
     {
         try
         {
-            $reflection = new ReflectionClass($this->zenInstance);
+            $zenInstance = $this->getZenInstance();
+            $reflection  = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('computeFieldsCreateView');
             $method->setAccessible(true);
 
-            $result = $method->invoke($this->zenInstance, $viewData);
+            $result = $method->invoke($zenInstance, $viewData);
 
             if(dao::isError()) return dao::getError();
 
@@ -744,11 +767,12 @@ class programplanModelTest extends baseTest
     {
         try
         {
-            $reflection = new ReflectionClass($this->zenInstance);
+            $zenInstance = $this->getZenInstance();
+            $reflection  = new ReflectionClass($zenInstance);
             $method = $reflection->getMethod('buildStages');
             $method->setAccessible(true);
 
-            $result = $method->invoke($this->zenInstance, $projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
+            $result = $method->invoke($zenInstance, $projectID, $productID, $baselineID, $type, $orderBy, $browseType, $queryID);
 
             if(dao::isError()) return 'error';
 
@@ -820,7 +844,7 @@ class programplanModelTest extends baseTest
      */
     public function sortPlansTest(array $plans): array
     {
-        $result = $this->zenInstance->sortPlans($plans);
+        $result = $this->getZenInstance()->sortPlans($plans);
 
         if(dao::isError()) return dao::getError();
 

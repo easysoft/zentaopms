@@ -203,7 +203,7 @@ class designTaoTest extends baseTest
      *
      * @param  int    $projectID
      * @param  int    $productID
-     * @param  string $type      all|bySearch|HLDS|DDS|DBDS|ADS
+     * @param  string $type      all|bysearch|HLDS|DDS|DBDS|ADS
      * @param  int    $param
      * @param  string $orderBy
      * @access public

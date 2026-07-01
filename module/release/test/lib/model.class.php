@@ -74,6 +74,52 @@ class releaseModelTest extends baseTest
     }
 
     /**
+     * Simulate editing a release with form data.
+     *
+     * @param  int               $releaseID
+     * @param  array             $postData
+     * @access public
+     * @return array|object|false
+     */
+    public function updateByFormTest(int $releaseID, array $postData = array()): array|object|false
+    {
+        global $app;
+
+        $oldRelease = $this->instance->getByID($releaseID);
+        if(!$oldRelease) return false;
+
+        $oldPost       = $_POST;
+        $oldModuleName = $app->moduleName ?? '';
+        $oldMethodName = $app->methodName ?? '';
+        $oldRawModule  = $app->rawModule ?? '';
+        $oldRawMethod  = $app->rawMethod ?? '';
+
+        try
+        {
+            $_POST = $postData;
+            $app->setModuleName('release');
+            $app->setMethodName('edit');
+            $app->rawModule = 'release';
+            $app->rawMethod = 'edit';
+
+            $release = form::data(null, $releaseID)->get();
+            $this->instance->update($release, $oldRelease);
+        }
+        finally
+        {
+            $_POST = $oldPost;
+            $app->moduleName = $oldModuleName;
+            $app->methodName = $oldMethodName;
+            $app->rawModule = $oldRawModule;
+            $app->rawMethod = $oldRawMethod;
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->getByID($releaseID);
+    }
+
+    /**
      * 获取通知的人员。
      * Get notify persons.
      *

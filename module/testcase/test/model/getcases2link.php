@@ -22,7 +22,7 @@ cid=18986
 */
 
 $caseIDList     = array('1');
-$browseTypeList = array('bySearch');
+$browseTypeList = array('bysearch');
 
 $testcase = new testcaseModelTest();
 

@@ -2,7 +2,7 @@
 /**
  * The model file of install module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -115,10 +115,13 @@ class installModel extends model
      */
     public function replaceContantsInSQL(string $sql): string
     {
+        $sql = trim($sql);
+        if(!$sql) return '';
+
         $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-        $sql    = str_replace('`zt_', $prefix . '.`zt_', $sql);
+        $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
         $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
-        $sql    = str_replace('zt_', $this->config->db->prefix, $sql);
+        $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
         $sql    = str_replace('__DATABASE__', $this->config->db->name, $sql);
         return $sql;
     }
@@ -195,15 +198,17 @@ class installModel extends model
             $tables = explode('--', file_get_contents($dbFile));
         }
 
-
         foreach($tables as $table)
         {
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = trim($table);
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
-            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
-            if($table) $this->dbh->exec($table);
+            $table = $this->replaceContantsInSQL($table);
+            try
+            {
+                if($table) $this->dbh->exec($table);
+            }
+            catch (Throwable $e)
+            {
+                /* Some databases in MySQL model have default functions, will throw errors. */
+            }
         }
 
         return true;
@@ -234,12 +239,15 @@ class installModel extends model
 
         foreach($tables as $table)
         {
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = trim($table);
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
-            $table = str_replace('`ztv_', $prefix . '.`ztv_', $table);
-            if($table) $this->dbh->exec($table);
+            $table = $this->replaceContantsInSQL($table);
+            try
+            {
+                if($table) $this->dbh->exec($table);
+            }
+            catch(throwable $e)
+            {
+                /* GaussDB has no gin index. */
+            }
         }
 
         return true;
@@ -403,16 +411,14 @@ class installModel extends model
     {
         $demoDataFile = $this->app->clientLang == 'en' ? 'endemo.sql' : 'demo.sql';
         $demoDataFile = $this->app->getAppRoot() . 'db' . DS . $demoDataFile;
+        if(!is_file($demoDataFile)) return false;
+
         $insertTables = explode(";\n", file_get_contents($demoDataFile));
         foreach($insertTables as $table)
         {
-            $table = trim($table);
+            $table = $this->replaceContantsInSQL($table);
             if(empty($table)) continue;
 
-            $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? 'public' : $this->config->db->name;
-
-            $table = str_replace('`zt_', $prefix . '.`zt_', $table);
-            $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
 
             /* Make the deleted user of demo data undeleted.*/
@@ -460,10 +466,9 @@ class installModel extends model
         {
             foreach($insertTables as $table)
             {
-                $table = trim($table);
+                $table = $this->replaceContantsInSQL($table);
                 if(empty($table)) continue;
 
-                $table = str_replace('zt_', $this->config->db->prefix, $table);
                 if(!$this->dbh->query($table)) return false;
             }
         }

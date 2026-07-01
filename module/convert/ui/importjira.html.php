@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The import jira view file of convert module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@easycorp.ltd>
  * @package     convert
@@ -12,7 +12,7 @@ namespace zin;
 
 include('jiraside.html.php');
 
-$importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=true");
+$importUrl = inlink('importJira', "method={$method}&mode=import&type=user&lastID=0&createTable=1&getApiData=" . ($this->session->jiraMethod == 'api' ? 1 : 0));
 
 jsVar('langImporting', $lang->convert->jira->importingAB);
 jsVar('langImportFailed', $lang->convert->importFailed);

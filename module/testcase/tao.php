@@ -102,7 +102,7 @@ class testcaseTao extends testcaseModel
             ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
             ->where('t2.status')->eq('active')
             ->andWhere('t1.deleted')->eq('0')
-            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t2.version > t1.`storyVersion`')
             ->beginIF(!empty($productID))->andWhere('t1.product')->in($productID)->fi()
             ->beginIF(!empty($productID) && $branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
@@ -826,7 +826,7 @@ class testcaseTao extends testcaseModel
         $caseQuery = str_replace(array('`version`', ' `product`', ' `project`'), array('t2.`version`', ' t2.`product`', ' t1.`project`'), $caseQuery);
         $caseQuery .= ')';
 
-        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+        $cases = $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->where('t1.project')->eq($executionID)
             ->andWhere('t2.deleted')->eq('0')
@@ -834,5 +834,7 @@ class testcaseTao extends testcaseModel
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+        foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+        return $cases;
     }
 }

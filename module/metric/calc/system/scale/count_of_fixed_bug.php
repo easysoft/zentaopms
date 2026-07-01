@@ -11,7 +11,7 @@
  * 描述：按系统统计的已修复Bug数是指解决并关闭的Bug数量。反映了组织在特定时间段内已经修复的Bug数量，用于评估系统质量、问题管理、进度管理、资源管理以及过程改进等方面。通过跟踪和分析已修复的Bug数，可以及时发现问题、优化问题处理流程、提高项目进度，并为团队的质量管理和持续改进提供依据。
  * 定义：所有Bug个数求和;状态为已关闭;解决方案为已解决;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

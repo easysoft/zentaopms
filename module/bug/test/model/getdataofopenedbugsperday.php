@@ -21,7 +21,13 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 1. 准备测试数据
-zenData('bug')->loadYaml('getdataofopenedbugsperday/openeddate')->gen(10);
+zenData('bug')->gen(0);
+zenData('bug')->gen(10);
+global $tester;
+$tester->dao->update(TABLE_BUG)->set('openedDate')->eq('2023-01-01 09:00:00')->where('id')->in('1,2,3,4,5')->exec();
+$tester->dao->update(TABLE_BUG)->set('openedDate')->eq('2023-01-02 10:00:00')->where('id')->in('6,7,8')->exec();
+$tester->dao->update(TABLE_BUG)->set('openedDate')->eq('2023-01-03 11:00:00')->where('id')->in('9,10')->exec();
+unset($_SESSION['bugQueryCondition'], $_SESSION['bugOnlyCondition']);
 
 // 2. 用户登录
 su('admin');

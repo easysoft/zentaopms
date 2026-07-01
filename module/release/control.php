@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -12,6 +12,20 @@ declare(strict_types=1);
  */
 class release extends control
 {
+    /**
+     * 获取发布页面使用的分支导航上下文。
+     * Get branch context for release pages.
+     *
+     * @param  object $release
+     * @access private
+     * @return string
+     */
+    private function getBranchForMenu(object $release): string
+    {
+        $branches = array_filter(explode(',', trim((string)$release->branch, ',')), 'strlen');
+        return count($branches) == 1 ? (string)reset($branches) : 'all';
+    }
+
     /**
      * 公共函数，设置产品菜单及页面基础数据。
      * Common action, set the menu and basic data.
@@ -42,7 +56,7 @@ class release extends control
      *
      * @param  int    $productID
      * @param  string $branch
-     * @param  string $type       all|normal|terminate
+     * @param  string $browseType all|normal|terminate
      * @param  string $orderBy
      * @param  string $param
      * @param  int    $recTotal
@@ -53,7 +67,7 @@ class release extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID, string $branch = 'all', string $type = 'all', string $orderBy = 't1.date_desc', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
+    public function browse(int $productID, string $branch = 'all', string $browseType = 'all', string $orderBy = 't1.date_desc', string $param = '', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $from = 'product', int $blockID = 0)
     {
         if($from === 'doc' || $from == 'ai')
         {
@@ -87,12 +101,12 @@ class release extends control
         $sort = $orderBy;
         if(strpos($sort, 'branchName_') !== false) $sort = str_replace('branchName_', 'branch_', $sort);
 
-        $queryID   = $type == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&type=bySearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $queryID   = $browseType == 'bysearch' ? (int)$param : 0;
+        $actionURL = $this->createLink('release', 'browse', "productID={$productID}&branch={$branch}&browseType=bysearch&orderBy={$sort}&param=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->releaseZen->buildSearchForm($queryID, $actionURL, $this->view->product, $branch);
 
-        $releaseQuery    = $type == 'bySearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
-        $currentReleases = $this->release->getList($productID, $branch, $type, $sort, $releaseQuery, $pager);
+        $releaseQuery    = $browseType == 'bysearch' ? $this->releaseZen->getSearchQuery($queryID) : '';
+        $currentReleases = $this->release->getList($productID, $branch, $browseType, $sort, $releaseQuery, $pager);
         $children        = implode(',', array_column($currentReleases, 'releases'));
 
         $childReleases = $this->release->getListByCondition(explode(',', $children), 0, true);
@@ -106,8 +120,8 @@ class release extends control
 
         $this->view->title         = $this->view->product->name . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->releases      = $releases;
-        $this->view->pageSummary   = $this->release->getPageSummary($currentReleases, $type);
-        $this->view->type          = $type;
+        $this->view->pageSummary   = $this->release->getPageSummary($currentReleases, $browseType);
+        $this->view->browseType    = $browseType;
         $this->view->orderBy       = $orderBy;
         $this->view->param         = $param;
         $this->view->pager         = $pager;
@@ -234,7 +248,7 @@ class release extends control
         }
 
         /* Get release and build. */
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
         $builds         = $this->loadModel('build')->getBuildPairs(array($release->product), $release->branch, 'notrunk|withbranch|hasproject', 0, 'project', $release->build, false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product);
@@ -292,7 +306,7 @@ class release extends control
         $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
         $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
 
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
         if($this->app->tab == 'project')
         {
             $projectID = (int)$this->session->project;
@@ -431,9 +445,9 @@ class release extends control
         $this->session->set('storyList', $this->createLink($this->app->rawModule, 'view', "releaseID={$releaseID}&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
         $release = $this->release->getByID($releaseID);
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+        $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $this->releaseZen->buildLinkStorySearchForm($release, $queryID);
 
         $builds          = $this->loadModel('build')->getByList(explode(',', $release->build));
@@ -448,7 +462,7 @@ class release extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $excludeStoryIdList = $this->releaseZen->getExcludeStoryIdList($release);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $executionIdList, 'story', $excludeStoryIdList, 'draft,reviewing,changing', $pager);
         }
@@ -507,7 +521,7 @@ class release extends control
      * Link bugs.
      *
      * @param  int    $releaseID
-     * @param  string $browseType  bug|leftBug|bySearch
+     * @param  string $browseType  bug|leftBug|bysearch
      * @param  int    $param
      * @param  string $type        bug|leftBug
      * @param  int    $recTotal
@@ -529,10 +543,10 @@ class release extends control
         /* Set menu. */
         $this->loadModel('bug');
         $release = $this->release->getByID($releaseID);
-        $this->commonAction($release->product);
+        $this->commonAction($release->product, $this->getBranchForMenu($release));
 
         /* Build the search form. */
-        $queryID = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
         $this->releaseZen->buildLinkBugSearchForm($release, $queryID, $type);
 
         /* Load pager. */
@@ -542,7 +556,7 @@ class release extends control
         $builds      = $this->loadModel('build')->getByList(explode(',', $release->build));
         $allBugs     = array();
         $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allBugs = $this->bug->getBySearch('bug', $release->product, $release->branch, 0, 0 , $queryID, $releaseBugs, 'id_desc', $pager);
         }
@@ -633,7 +647,9 @@ class release extends control
             if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
-            return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+
+            $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }
 
         $this->view->release = $release;

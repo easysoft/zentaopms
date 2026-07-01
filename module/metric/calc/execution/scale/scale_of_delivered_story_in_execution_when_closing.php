@@ -11,7 +11,7 @@
  * 描述：按执行统计的执行关闭时已交付研发需求规模数表示执行关闭时需求阶段为已发布或状态为已关闭且关闭原因为已完成的研发需求的规模。该度量项反映了执行关闭时能够交付给用户的研发需求的规模，可以用于评估执行团队的研发需求交付能力。
  * 定义：执行关闭时，满足以下条件的执行中研发需求规模数求和，条件是：所处阶段为已发布或关闭原因为已完成，过滤已删除的研发需求，过滤已删除的执行，过滤已删除的项目，过滤已删除的产品。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    songchenxuan <songchenxuan@chandao.com>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_delivered_story_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array('t4.id as execution', 't1.id', 't1.estimate', "if(t4.multiple = '1', t4.closedDate, t5.closedDate) as executionClosed", 't1.closedDate as storyClosedDate', 't1.releasedDate as storyReleasedDate', 't1.stage', 't1.closedReason');
+    public $fieldList = array('t4.id as execution', 't1.id', 't1.estimate', "if(t4.multiple = '1', t4.`closedDate`, t5.`closedDate`) as executionClosed", 't1.`closedDate` as storyClosedDate', 't1.`releasedDate` as storyReleasedDate', 't1.stage', 't1.`closedReason`');
 
     public $result = array();
 

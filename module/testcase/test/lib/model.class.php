@@ -1378,7 +1378,7 @@ class testcaseModelTest extends baseTest
     {
         $this->instance->saveMindConfig($type, $configList);
 
-        if(dao::isError()) return dao::getError()[0];
+        if(dao::isError()) return current(dao::getError());
 
         $return    = '';
         global $tester;
@@ -1782,7 +1782,7 @@ class testcaseModelTest extends baseTest
      */
     public function getSceneMenuTest(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array|string
     {
-        $scenes = $this->instance->getSceneMenu($productID, $moduleID, $branch, $startScene, $currentScene, $emptyMenu);
+        $scenes = $this->instance->getSceneMenu($productID, $moduleID, (string)$branch, $startScene, $currentScene, $emptyMenu);
         if(dao::isError()) return dao::getError();
         return implode(',', $scenes);
     }
@@ -1998,7 +1998,7 @@ class testcaseModelTest extends baseTest
      */
     public function buildSearchFormTest(int $productID, int $projectID, int $moduleID, int|string $branchID): string
     {
-        $this->instance->buildSearchForm($productID, array(), 0, 'actionURL', $projectID, $moduleID, $branchID);
+        $this->instance->buildSearchForm($productID, array(), 0, 'actionURL', $projectID, $moduleID, (string)$branchID);
 
         global $tester;
         return implode(',', array_keys($tester->config->testcase->search['fields']));
@@ -4049,7 +4049,7 @@ class testcaseModelTest extends baseTest
         );
 
         /* Simulate buildLinkCasesSearchForm method logic */
-        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bySearch&queryID=myQueryID";
+        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bysearch&queryID=myQueryID";
         $objectID = 0;
 
         if($tester->app->tab == 'project') $objectID = $case->project ?? 0;

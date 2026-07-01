@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -51,7 +51,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function create(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
+    public function create(int $productID, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
     {
         /* Set menu. */
         $this->story->replaceURLang($storyType);
@@ -86,7 +86,8 @@ class story extends control
             {
                 $fileList = $this->post->fileList;
                 if($fileList) $fileList = json_decode($fileList, true);
-                $this->loadModel('file')->saveDefaultFiles($fileList, 'story', $storyID, 1);
+                foreach($fileList as $file) $file['extra'] = is_numeric($file['extra']) ? 1 : $file['extra'];
+                $this->loadModel('file')->saveDefaultFiles($fileList, 'story', $storyID);
             }
 
             $productID = $this->post->product ? $this->post->product : $productID;
@@ -102,7 +103,7 @@ class story extends control
             if($this->post->newStory)
             {
                 $response['message'] = $message . $this->lang->story->newStory;
-                $response['load']  = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=$copyStoryID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
+                $response['load']    = $this->createLink('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&story=$copyStoryID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
                 return $this->send($response);
             }
 
@@ -124,15 +125,38 @@ class story extends control
         $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
         $this->view->type        = $storyType;
         $this->view->story       = $initStory;
+        $this->view->storyFiles  = $this->loadModel('file')->getByObject('story', $storyID);
         $this->view->forceReview = $this->story->checkForceReview($storyType);
 
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
         parse_str($extras, $params);
         if(!isset($params['needNotReview'])) $extra .= ',needNotReview={needNotReview}';
         $this->view->needNotReview = $params['needNotReview'] ?? !$this->view->forceReview;
-        $this->view->loadUrl       = $this->createLink($storyType, 'create', "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
+        $this->view->loadUrl       = $this->createLink($storyType, $this->app->rawMethod, "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
 
         $this->display();
+    }
+
+    /**
+     * 复制一个需求。
+     * Copy a story.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  int    $objectID  projectID|executionID
+     * @param  int    $bugID
+     * @param  int    $planID
+     * @param  int    $todoID
+     * @param  string $extra for example feedbackID=0
+     * @param  string $storyType requirement|story
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '', string $storyType = 'story')
+    {
+        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=story");
     }
 
     /**
@@ -782,7 +806,7 @@ class story extends control
         $response = array();
         $response['result'] = 'success';
         $response['load']   = false;
-        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', message: '{$message}'}).then((res) => {loadCurrentPage()});";
+        if($message) $response['callback'] = "zui.Modal.alert({icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x', size: 'md', message: '{$message}'}).then((res) => {loadCurrentPage()});";
         if(empty($message)) $response['load'] = true;
         return $this->send($response);
     }
@@ -1290,16 +1314,22 @@ class story extends control
      */
     public function batchChangeParent(int $productID = 0, string $storyType = 'story')
     {
-        if($_POST)
+        $storyIdList = $this->post->storyIdList ?? '';
+
+        if(isset($_POST['parent']))
         {
-            $storyIdList = $this->cookie->checkedItem;
-            $result      = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
+            if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => true));
+
+            $result = $this->story->batchChangeParent($storyIdList, (int)$this->post->parent, $storyType);
             if($result) return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('$result');", 'closeModal' => true, 'load' => true));
 
             return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->parents = $this->story->getParentStoryPairs($productID, '', $storyType);
+        if(empty($storyIdList)) return;
+
+        $this->view->storyIdList = $storyIdList;
+        $this->view->parents     = $this->story->getParentStoryPairs($productID, '', $storyType);
         $this->display();
     }
 
@@ -1391,7 +1421,7 @@ class story extends control
      */
     public function tasks(int $storyID, int $executionID = 0)
     {
-        $tasks = $this->loadModel('task')->getListByStory($storyID, $executionID);
+        $tasks = $this->loadModel('task')->getListByStory($storyID, $executionID, 0, false);
 
         $this->view->tasks   = $tasks;
         $this->view->users   = $this->user->getPairs('noletter');
@@ -1463,7 +1493,7 @@ class story extends control
      * @param  int    $storyID
      * @param  string $type          link|remove
      * @param  int    $linkedStoryID
-     * @param  string $browseType    ''|bySearch
+     * @param  string $browseType    ''|bysearch
      * @param  int    $queryID       0|
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1495,7 +1525,7 @@ class story extends control
         $products = $this->product->getPairs('', 0, '', 'all');
 
         /* Build search form. */
-        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bySearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $actionURL = $this->createLink('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=bysearch&queryID=myQueryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL, 'all', (string)$story->branch);
 
         /* Load pager. */

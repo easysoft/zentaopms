@@ -26,11 +26,11 @@ su('admin');
 
 $file = new fileModelTest();
 
-$fileNames   = array('file1.jpg', 'file2.txt');
+$fileNames   = array('file1.doc', 'file2.txt');
 $fileSizes   = array(1888573, 2384);
 $fileTmpName = array('/tmp/phpus8Ebc', '/tmp/phpwNzwuS');
 $files1      = array('name' => $fileNames, 'size' => $fileSizes, 'tmp_name' => $fileTmpName, 'error' => 0);
-$labels1     = array('file1.jpg', 'file2.txt');
+$labels1     = array('file1.doc', 'file2.txt');
 
 $files2      = array('name' => 'file3.ppt', 'size' => '2893', 'tmp_name' => '/tmp/phpu2el', 'error' => 0);
 $labels2     = array('file3.ppt');
@@ -53,7 +53,7 @@ $fileTmpName = array('/tmp/phpu2ssbc', '/tmp/phpe0e9uS', '/tmp/phpjf93jf9');
 $files5      = array('name' => $fileNames, 'size' => $fileSizes, 'tmp_name' => $fileTmpName, 'error' => 0);
 $labels5     = array('file9.ppt', 'file10.mp4', 'file11.wri');
 
-r($file->getUploadTest($files1, $labels1)) && p('0:title;1:title')         && e('file1.jpg,file2.txt');             // 测试获取上传的文件信息1
+r($file->getUploadTest($files1, $labels1)) && p('0:title;1:title')         && e('file1.doc,file2.txt');             // 测试获取上传的文件信息1
 r($file->getUploadTest($files2, $labels2)) && p('0:title')                 && e('file3.ppt');                       // 测试获取上传的文件信息2
 r($file->getUploadTest($files3, $labels3)) && p('0:title')                 && e('file5');                           // 测试获取上传的文件信息3
 r($file->getUploadTest($files4, $labels4)) && p('0:title;1:title')         && e('file6.ppt,file7.mp4');             // 测试获取上传的文件信息4

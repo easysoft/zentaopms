@@ -26,6 +26,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('project')->gen(50);
 zenData('user')->gen(5);
 zenData('projectproduct')->gen(50);
+zenData('product')->gen(10);
 
 $projectIDList = array('11', '12', '13', '14', '15', '1000001');
 $statusList    = array('all', 'noclosed');

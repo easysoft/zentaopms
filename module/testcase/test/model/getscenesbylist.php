@@ -56,6 +56,9 @@ cid=18999
 $testcase    = new testcaseModelTest();
 $sceneIdList = array(array(1, 2), array(1, 2, 3, 4));
 
+global $tester;
+$testcaseModel = $tester->loadModel('testcase');
+
 r(count($testcase->getScenesByListTest(array())))         && p() && e('0'); // 测试获取编号为空数组的场景条数。
 r(count($testcase->getScenesByListTest($sceneIdList[0]))) && p() && e('2'); // 测试获取编号为 1、2 的场景条数。
 r(count($testcase->getScenesByListTest($sceneIdList[1]))) && p() && e('4'); // 测试获取编号为 1、2、3、4 的场景条数。
@@ -72,7 +75,7 @@ r(count($testcase->getScenesByListTest($sceneIdList[0], "module = '0'"))) && p()
 r(count($testcase->getScenesByListTest($sceneIdList[0], "branch != '0'"))) && p() && e('0'); // 测试获取编号为 1、2 并且分支不为 0 的场景条数。
 r(count($testcase->getScenesByListTest($sceneIdList[0], "module != '0'"))) && p() && e('0'); // 测试获取编号为 1、2 并且模块不为 0 的场景条数。
 
-$testcase->objectModel->batchDelete(array(), $sceneIdList[0]);              // 删除编号为 1、2 的场景。
+$testcaseModel->batchDelete(array(), $sceneIdList[0]);              // 删除编号为 1、2 的场景。
 
 r(count($testcase->getScenesByListTest($sceneIdList[0]))) && p() && e('0'); // 测试删除编号为 1、2 的场景后获取编号为 1、2 的场景条数。
 r(count($testcase->getScenesByListTest($sceneIdList[1]))) && p() && e('2'); // 测试删除编号为 1、2 的场景后获取编号为 1、2、3、4 的场景条数。

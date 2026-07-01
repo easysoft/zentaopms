@@ -2,7 +2,7 @@
 /**
  * The model file of pivot module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     pivot
@@ -2387,13 +2387,6 @@ class pivotModel extends model
     {
         foreach($filters as &$filter)
         {
-            $isSelect = isset($filter['type']) && $filter['type'] === 'select';
-
-            if($isSelect && isset($filter['default']) && $filter['default'] === '0')
-            {
-                $filter['default'] = '';
-            }
-
             if(!isset($filter['default']) || empty($filter['default'])) continue;
             if($processDateVar && is_string($filter['default'])) $filter['default']= $this->processDateVar($filter['default']);
         }
