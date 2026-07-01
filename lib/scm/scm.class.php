@@ -115,11 +115,10 @@ class scm
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
-     * @param  int    $count
      * @access public
      * @return array
      */
-    public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
+    public function log($path, $fromRevision = 0, $toRevision = 'HEAD')
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();

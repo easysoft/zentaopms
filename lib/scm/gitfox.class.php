@@ -13,17 +13,15 @@ class gitfoxRepo
      *
      * @param  string $client    gitfox api url.
      * @param  string $root      id of gitfox project.
-     * @param  string $username  null
      * @param  string $password  token of gitfox api.
-     * @param  string $encoding
      * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
+    public function __construct($client, $root ,$password,  $repo = null)
     {
         $this->client = $client;
-        $this->root   = rtrim($root, '/') . '/';
+        $this->root   = rtrim($root, '/') . '/';    
         $this->token  = $password;
         $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : 'HEAD';
         $this->repo   = $repo;
@@ -120,15 +118,13 @@ class gitfoxRepo
      * Get tags
      *
      * @param  string $showDetail
-     * @param  string $revision
-     * @param  bool   $onlyDir
      * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function tags($showDetail = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 0)
+    public function tags($showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 0)
     {
         $api  = 'tags/list';
         $tags = array();
@@ -365,7 +361,6 @@ class gitfoxRepo
     /**
      * Diff file.
      *
-     * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $extra
@@ -373,7 +368,7 @@ class gitfoxRepo
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision, $extra = '', $isMr = false)
+    public function diff( $fromRevision, $toRevision, $extra = '', $isMr = false)
     {
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
@@ -757,11 +752,10 @@ class gitfoxRepo
     /**
      * Get files by commit.
      *
-     * @param  string  $commit
      * @access public
      * @return void
      */
-    public function getFilesByCommit($revision)
+    public function getFilesByCommit()
     {
         return array();
     }
@@ -770,8 +764,6 @@ class gitfoxRepo
      * Repository/tree api.
      *
      * @param  string    $path
-     * @param  bool      $recursive
-     * @param  bool      $loop
      * @access public
      * @return mixed
      */
@@ -804,7 +796,7 @@ class gitfoxRepo
         if(empty($data)) $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
         $accept = empty($data) ? 'text/plain' : '*/*';
-        $header = self::buildAuthHeader($this->token, '', '', $accept);
+        $header = static::buildAuthHeader($this->token, '', '', $accept);
         if(!empty($data))
         {
             if(is_array($data) && isset($data['pageSize']) && isset($data['page']))
@@ -861,7 +853,7 @@ class gitfoxRepo
         else
         {
             $response = commonModel::http($api, $data, array(), $header, 'json');
-            if(self::clearHttpErrors()) return array();
+            if(static::clearHttpErrors()) return array();
 
             $result = json_decode($response);
             return $result ? $result : $response;
@@ -1097,7 +1089,7 @@ class gitfoxRepo
      *
      * @param  int    $MRID
      * @access public
-     * @return array
+     * @return object|null
      */
     public function getSingleMR(int $MRID): null|object
     {

@@ -129,7 +129,7 @@ class subversionRepo
      * @access public
      * @return array
      */
-    public function tags($path = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
+    public function tags($path = '', $revision = 'HEAD', $onlyDir = true)
     {
         if(!scm::checkRevision($revision)) return array();
 
@@ -156,19 +156,6 @@ class subversionRepo
         }
 
         return $tags;
-    }
-
-    /**
-     * Get branch.
-     *
-     * 签名兼容 scm::branch 透传的 6 参数; SVN 无原生分支语义,直返空数组。
-     *
-     * @access public
-     * @return array
-     */
-    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', string $showArchived = 'active')
-    {
-        return array();
     }
 
     /**
@@ -551,7 +538,7 @@ class subversionRepo
      */
     public function getFirstRevision()
     {
-        $logs     = $this->log('', 0, 'HEAD', 1, $quiet = true);
+        $logs     = $this->log('', 0, 'HEAD', 1);
         if(empty($logs)) return 0;
         $firstLog = end($logs);
         return $firstLog->revision;
@@ -622,32 +609,6 @@ class subversionRepo
     }
 
     /**
-     * Exec svn cmd. 已废弃,保留空壳兼容 scm::exec 转发,不再支持任意 svn 子命令。
-     *
-     * @param  string $cmd
-     * @access public
-     * @return array
-     */
-    public function exec($cmd)
-    {
-        return array();
-    }
-
-    /**
-     * Get download url. 暂未实现,gitfox 的 svn export 接口待下一 PR 接入,保留空壳兼容 scm::getDownloadUrl 转发。
-     *
-     * @param  string $branch
-     * @param  string $savePath
-     * @param  string $ext
-     * @access public
-     * @return string
-     */
-    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
-    {
-        return '';
-    }
-
-    /**
      * List all files.
      *
      * @param  string $path
@@ -705,11 +666,10 @@ class subversionRepo
     /**
      * 按 commit 取文件列表。SVN 用 log -v 拼回——本 PR 暂返空数组,后续接入 svnLogByRev 解析。
      *
-     * @param  string $revision
      * @access public
      * @return array
      */
-    public function getFilesByCommit($revision)
+    public function getFilesByCommit()
     {
         return array();
     }
@@ -748,7 +708,7 @@ class subversionRepo
         $head = (int)$this->getLatestRevision();
         if($head <= 0) return array();
 
-        self::$lastCommitsTotal = $head;
+        static::$lastCommitsTotal = $head;
 
         /* 按 page 推 revision 区间。SVN log -r FROM:TO 是闭区间,FROM>TO 时倒序输出。 */
         $top    = $head - ($page - 1) * $perPage;
@@ -783,7 +743,7 @@ class subversionRepo
             $filtered[] = $log;
         }
 
-        self::$lastCommitsTotal = count($filtered);
+        static::$lastCommitsTotal = count($filtered);
 
         if($perPage > 0)
         {
@@ -826,29 +786,4 @@ class subversionRepo
     /** 最近一次 getCommitsByPath 过滤后的总条数;供上层回写真实 recTotal。 */
     public static $lastCommitsTotal = 0;
 
-    /**
-     * 获取 MR commits。SVN 无 MR 语义,返空数组兼容 scm 转发。
-     *
-     * @param  string $sourceBranch
-     * @param  string $targetBranch
-     * @access public
-     * @return array
-     */
-    public function getMRCommits($sourceBranch, $targetBranch)
-    {
-        return array();
-    }
-
-    /**
-     * 创建 MR。SVN 无 MR 语义,返 null。
-     *
-     * @param  object $MR
-     * @param  string $openID
-     * @access public
-     * @return null
-     */
-    public function createMR($MR, $openID = '', $assignee = '')
-    {
-        return null;
-    }
 }
