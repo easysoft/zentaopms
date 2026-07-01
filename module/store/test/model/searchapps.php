@@ -25,7 +25,7 @@ zenData('user')->gen(5);
 su('admin');
 
 $orderBy    = array('', 'update_time', 'create_time');
-$keyword    = array('', '禅道');
+$keyword    = array('', '__no_such_app__');
 $categories = 0;
 $page       = array(1, 2);
 $pageSize   = array(5, 10);
