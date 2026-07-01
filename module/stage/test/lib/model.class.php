@@ -95,15 +95,16 @@ class stageModelTest extends baseTest
      *
      * @param  string $orderBy
      * @param  int    $projectID
-     * @param  string $type      waterfall|waterfallplus
+     * @param  int    $groupID
+     * @param  int    $grade
      * @access public
      * @return array
      */
-    public function getStagesTest(string $orderBy = 'id_desc', int $projectID = 0, string $type = ''): array
+    public function getStagesTest(string $orderBy = 'id_desc', int $projectID = 0, int $groupID = 0, int $grade = 0): array
     {
         su('admin', true);
 
-        $stages = $this->instance->getStages($orderBy, $projectID, $type);
+        $stages = $this->instance->getStages($orderBy, $projectID, $groupID, $grade);
 
         if(dao::isError()) return dao::getError();
         return $stages;
@@ -131,9 +132,9 @@ class stageModelTest extends baseTest
      *
      * @param  int       $groupID
      * @access public
-     * @return int|array
+     * @return float|array
      */
-    public function getTotalPercentTest(int $groupID): int|array
+    public function getTotalPercentTest(int $groupID): float|array
     {
         $totalPercent = $this->instance->getTotalPercent($groupID);
 
@@ -145,24 +146,47 @@ class stageModelTest extends baseTest
      * 设置阶段导航。
      * Set menu.
      *
-     * @param  string $type   waterfall|waterfallplus
-     * @param  string $method browse|browseplus
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return string
      */
-    public function setMenuType(string $type, string $method): string
+    public function setMenuType(string $module, string $method): string
     {
         global $app;
+
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        $originalRawParams = $app->rawParams ?? null;
+
+        $app->rawModule = $module;
         $app->rawMethod = $method;
+        $app->rawParams = array();
 
-        $this->instance->setMenu($type);
+        $admin   = $this->getInstance('admin', 'model');
+        $menuKey = $admin->getMenuKey();
 
-        $exclude = '';
-        if(in_array($type, array('waterfall', 'waterfallplus')))
+        if(empty($menuKey))
         {
-            $exclude = $this->instance->lang->admin->menuList->model['subMenu'][$type]['exclude'];
+            $app->rawModule = $originalRawModule;
+            $app->rawMethod = $originalRawMethod;
+            $app->rawParams = $originalRawParams;
+            return '0';
         }
 
-        return $exclude;
+        $admin->setMenu();
+        $stageTab = $admin->lang->admin->menuList->feature['tabMenu']['execution']['stage'] ?? null;
+
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
+        $app->rawParams = $originalRawParams;
+
+        if(empty($stageTab)) return '0';
+
+        $linkParts = explode('|', $stageTab['link']);
+        $link      = isset($linkParts[1], $linkParts[2], $linkParts[3]) ? "{$linkParts[1]}|{$linkParts[2]}|{$linkParts[3]}" : '';
+        $links     = empty($stageTab['links']) ? '' : implode(',', $stageTab['links']);
+
+        return trim(implode(',', array_filter(array($link, $stageTab['subModule'] ?? '', $links), fn($value) => $value !== '')), ',');
     }
 }
