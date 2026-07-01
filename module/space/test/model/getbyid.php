@@ -20,6 +20,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
 zenData('space')->loadYaml('space')->gen(5);
+su('admin');
 
 $idList = array(0, 1, 6);
 
