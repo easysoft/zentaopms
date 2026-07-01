@@ -197,7 +197,8 @@ class gitfoxRepo
             $i = 1;
             foreach($branchList as $branch)
             {
-                $branch->id = $i++;
+                $id = $i++;
+                $branch->id = $id;
                 if(!isset($branch->name)) continue;
                 if($branch->isDefault)
                 {
@@ -558,12 +559,11 @@ class gitfoxRepo
     /**
      * Get commit count.
      *
-     * @param  int    $commits
      * @param  string $lastVersion
      * @access public
      * @return int
      */
-    public function getCommitCount($commits = 0, $lastVersion = '')
+    public function getCommitCount($lastVersion = '')
     {
         if(!scm::checkRevision($lastVersion)) return false;
         return true;
@@ -962,12 +962,11 @@ class gitfoxRepo
      * Get download url.
      *
      * @param  string $branch
-     * @param  string $savePath
      * @param  string $ext
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = 'main', $savePath = '', $ext = 'zip')
+    public function getDownloadUrl($branch = 'main', $ext = 'zip')
     {
         $url  = "{$this->repo->client}/api/v2/na/repos/{$this->repo->id}/archive";
         return "{$url}/{$branch}.{$ext}";
@@ -1030,8 +1029,7 @@ class gitfoxRepo
         $params['page']  = 1;
         $params['limit'] = 100;
 
-        $api = $this->root . $target . '?' . http_build_query($params);
-        return $api;
+        return $this->root . $target . '?' . http_build_query($params);
     }
 
     /**
