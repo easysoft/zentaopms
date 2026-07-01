@@ -166,18 +166,18 @@ $promptCard = function($prompt) use ($lang, $buildDropdown, $userListMap)
             ),
             div(
                 setClass('card-meta'),
+                span(
+                    setClass('created-date'),
+                    sprintf($lang->ai->prompts->createdDate . '：%s', substr($prompt->createdDate, 0, 10))
+                ),
                 div(
                     setClass('creator'),
+                    set::title($creatorName),
                     avatar(
                         set::size('sm'),
                         set::text($creatorName),
                         $creator && !empty($creator->avatar) ? set::src($creator->avatar) : null
-                    ),
-                    span($creatorName)
-                ),
-                span(
-                    setClass('created-date'),
-                    sprintf($lang->ai->prompts->createdDate . '：%s', substr($prompt->createdDate, 0, 10))
+                    )
                 )
             )
         ),
