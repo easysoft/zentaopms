@@ -79,8 +79,7 @@ $dbh->exec("INSERT INTO `ops_repouser` (`repo`,`account`) VALUES (1,'admin'),(2,
 
 /* 让 gitfoxModel::getServer() 返回非空，避免 processGitService 里 sprintf(null,...) fatal。 */
 zenData('entry')->loadYaml('entry')->gen(1);
-$dbh->exec("DELETE FROM `zt_entry` WHERE `code`='gitfox'");
-$dbh->exec("INSERT INTO `zt_entry` (`id`,`name`,`account`,`code`,`key`,`freePasswd`,`ip`,`createdBy`,`createdDate`,`calledTime`,`editedBy`,`editedDate`,`deleted`) VALUES (1,'GitFox入口','admin','gitfox','testkey1234567890testkey1234567',0,'*','admin','2026-01-01 00:00:00',0,'admin','2026-01-01 00:00:00','0')");
+$dbh->exec("REPLACE INTO `zt_entry` (`id`,`name`,`account`,`code`,`key`,`freePasswd`,`ip`,`createdBy`,`createdDate`,`calledTime`,`editedBy`,`editedDate`,`deleted`) VALUES (1,'GitFox入口','admin','gitfox','testkey1234567890testkey1234567',0,'*','admin','2026-01-01 00:00:00',0,'admin','2026-01-01 00:00:00','0')");
 
 su('admin');
 
