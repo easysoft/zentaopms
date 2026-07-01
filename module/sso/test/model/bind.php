@@ -100,8 +100,8 @@ $ssoData->account    = 'ranzhi5';
 $_SESSION['ssoData'] = $ssoData;
 
 global $tester;
-$ssoTest->objectModel->config->safe = new stdclass();
-$ssoTest->objectModel->config->safe->mode = 2;
+if(!isset($tester->config->safe)) $tester->config->safe = new stdclass();
+$tester->config->safe->mode = 2;
 
 r($ssoTest->bindTest()) && p('0') && e('该用户名已经存在，请更换用户名，或直接绑定到该用户。');
 
