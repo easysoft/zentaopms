@@ -92,7 +92,7 @@ class repoModel extends model
         {
             unset($this->lang->devops->menu->branch);
             unset($this->lang->devops->menu->tag);
-            unset($this->lang->devops->menu->review);
+            unset($this->lang->devops->menu->ppm);
             unset($this->lang->devops->menu->artifact);
             unset($this->lang->devops->menu->settings);
         }

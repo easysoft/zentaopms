@@ -188,6 +188,37 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
+     * Test getCommits method.
+     *
+     * @param  object      $repo
+     * @param  string      $entry
+     * @param  object|null $pager
+     * @param  string      $begin
+     * @param  string      $end
+     * @param  object|null $query
+     * @param  string|null $apiResponse
+     * @access public
+     * @return mixed
+     */
+    public function getCommitsTest(object $repo, string $entry = '', ?object $pager = null, string $begin = '', string $end = '', ?object $query = null, ?string $apiResponse = null)
+    {
+        if($apiResponse !== null)
+        {
+            $client = $this->resetHttpClient();
+            $client->setResponse('commits/list', $apiResponse);
+        }
+        else
+        {
+            $this->restoreHttpClient();
+        }
+        dao::$errors = array();
+
+        $result = $this->invokeArgs('getCommits', array($repo, $entry, $pager, $begin, $end, $query));
+        $this->restoreHttpClient();
+        return $result;
+    }
+
+    /**
      * Test __call method.
      *
      * 该方法将 funcName 中的 project 替换为 repo，再尝试调用同名方法。

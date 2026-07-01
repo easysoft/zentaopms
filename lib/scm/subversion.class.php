@@ -785,5 +785,17 @@ class subversionRepo
 
     /** 最近一次 getCommitsByPath 过滤后的总条数;供上层回写真实 recTotal。 */
     public static $lastCommitsTotal = 0;
+    /**
+     * Get branch.
+     *
+     * 签名兼容 scm::branch 透传的 6 参数; SVN 无原生分支语义,直返空数组。
+     *
+     * @access public
+     * @return array
+     */
+    public function branch()
+    {
+        return array();
+    }
 
 }
