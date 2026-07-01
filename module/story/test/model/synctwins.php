@@ -46,5 +46,5 @@ $changes[] = array('field' => 'estimate', 'old' => '10', 'new' => '100', 'diff' 
 $story = new storyModelTest();
 $twins = $story->syncTwinsTest(5, '6,7', $changes);
 
-r($twins[0]) && p('id,pri,estimate') && e('6,5,100');
-r($twins[1]) && p('id,pri,estimate') && e('7,5,100');
+r($twins[0]) && p('id,pri,estimate') && e('6,5,100.00');
+r($twins[1]) && p('id,pri,estimate') && e('7,5,100.00');
