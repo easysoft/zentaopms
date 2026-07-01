@@ -59,7 +59,13 @@ cid=18860
 
 */
 
-zenData('user')->loadYaml('user')->gen(5);
+$user = zenData('user');
+$user->id->range('101-104');
+$user->account->range('user1,user2,user3,user4');
+$user->realname->range('用户1,用户2,用户3,用户4');
+$user->password->range('123456')->format('md5');
+$user->gen(4);
+
 su('user4');
 
 $task = new taskTaoTest();

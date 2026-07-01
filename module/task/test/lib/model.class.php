@@ -7,6 +7,35 @@ class taskModelTest extends baseTest
 {
     protected $moduleName = 'task';
     protected $className  = 'model';
+    public    $objectModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $_SESSION['project'] = $_SESSION['project'] ?? 0;
+
+        $this->objectModel = $this->instance;
+        $this->instance->taskTao = $this->getInstance($this->moduleName, 'tao');
+        $this->instance->taskTao->taskTao = $this->instance->taskTao;
+    }
+
+    protected function setTaskProjectSession(object $task): void
+    {
+        $projectID = (int)zget($task, 'project', 0);
+
+        if(!$projectID && !empty($task->execution))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
+        }
+
+        if(!$projectID && !empty($task->id))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_TASK)->where('id')->eq($task->id)->fetch('project');
+        }
+
+        $_SESSION['project'] = $projectID;
+    }
 
     /**
      * Test update a task.
@@ -18,8 +47,10 @@ class taskModelTest extends baseTest
      */
     public function updateObject($objectID, $param = array())
     {
-        $object = $this->instance->dbh->query("SELECT id, `parent`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
+        $object = $this->instance->dbh->query("SELECT id, `parent`,`project`,`estStarted`,`deadline`,`execution`,`module`,`name`,`type`,`pri`,`estimate`,`consumed`,`left`,`status`,
             `mode`, `story`, `color`,`desc`,`assignedTo`,`realStarted`,`design`,`finishedBy`,`canceledBy`,`closedReason` FROM zt_task WHERE id = $objectID")->fetch();
+        $this->setTaskProjectSession($object);
+
         foreach($object as $field => $value)
         {
             if(in_array($field, array_keys($param)))
@@ -95,6 +126,8 @@ class taskModelTest extends baseTest
             $tasks[$rowIndex] = $task;
         }
 
+        if(!empty($tasks)) $this->setTaskProjectSession(reset($tasks));
+
         $taskIdList = $this->instance->batchCreate($tasks, $output);
 
         if(dao::isError()) return dao::getError();
@@ -144,6 +177,8 @@ class taskModelTest extends baseTest
             }
             $taskData[$task->id] = $task;
         }
+
+        if(!empty($taskData)) $this->setTaskProjectSession(reset($taskData));
 
         $allChanges = $this->instance->batchUpdate($taskData);
         $this->instance->config->task->batchedit->requiredFields = $requiredFields;
@@ -209,6 +244,7 @@ class taskModelTest extends baseTest
     {
         $oldTask = $this->instance->fetchByID($taskID);
         $task    = clone $oldTask;
+        $this->setTaskProjectSession($oldTask);
 
         foreach($task as $field => $value)
         {
@@ -363,6 +399,7 @@ class taskModelTest extends baseTest
         $task->status       = $status;
         $task->lastEditedBy = $this->instance->app->user->account;
         $task->project      = 10 + $taskID;
+        $this->setTaskProjectSession($task);
 
         $postData = new stdclass();
         $postData->team         = $team;
@@ -706,7 +743,7 @@ class taskModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function deleteWorkhourTest($estimateID)
+    public function deleteWorkhourTest(int $estimateID)
     {
         $object = $this->instance->deleteWorkhour($estimateID);
         unset($_POST);
@@ -1099,7 +1136,7 @@ class taskModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function checkEstStartedAndDeadlineTest($executionID, $estStarted, $deadline)
+    public function checkEstStartedAndDeadlineTest(int $executionID, string $estStarted, string $deadline)
     {
         $this->instance->config->limitTaskDate = 1;
         $object = $this->instance->checkEstStartedAndDeadline($executionID, $estStarted, $deadline);
@@ -1420,6 +1457,7 @@ class taskModelTest extends baseTest
         $task = new stdclass();
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
+        $this->setTaskProjectSession($task);
         if($requiredField)
         {
             if(!empty($testTasks) and $requiredField == 'estStarted') unset($task->estStarted);

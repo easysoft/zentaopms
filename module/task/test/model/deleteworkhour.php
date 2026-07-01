@@ -34,6 +34,6 @@ cid=18786
 $estimateID = '1';
 
 $task = new taskModelTest();
-r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,3,2'); // 根据estimateID查看消耗工时
-r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,2,1'); // 根据estimateID查看消耗工时
-r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,1,0'); // 根据estimateID查看消耗工时
+r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,3.00,2'); // 根据estimateID查看消耗工时
+r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,2.00,1'); // 根据estimateID查看消耗工时
+r($task->deleteWorkhourTest($estimateID)) && p('0:field,old,new') && e('consumed,1.00,0'); // 根据estimateID查看消耗工时

@@ -8,6 +8,7 @@ zenData('task')->gen(0);
 zenData('taskspec')->gen(0);
 zenData('taskteam')->gen(0);
 zenData('project')->loadYaml('project')->gen(5);
+zenData('story')->gen(2);
 
 /**
 
