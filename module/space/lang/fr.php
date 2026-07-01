@@ -60,14 +60,15 @@ $lang->space->roleList['manager'] = 'Manager';
 $lang->space->roleList['member']  = 'Member';
 
 $lang->space->notice = new stdclass();
-$lang->space->notice->noSpaces            = 'No space exists';
-$lang->space->notice->confirmDeleteSpace  = 'Are you sure to delete this space?';
-$lang->space->notice->deleteFail          = 'The space exists repositories or artifact repositories, cannot be deleted.';
-$lang->space->notice->apiCreateFail       = 'Create space failed.';
-$lang->space->notice->accessRepo          = 'Only display users who can access private repositories';
-$lang->space->notice->accessArtifact      = 'Only display users who can access private artifact repositories';
-$lang->space->notice->confirmRemoveMember = 'Are you sure to remove this user from this space?';
-$lang->space->notice->confirmDelete       = 'Are you sure delete %s permission group?';
+$lang->space->notice->noSpaces              = 'No space exists';
+$lang->space->notice->confirmDeleteSpace    = 'Are you sure to delete this space?';
+$lang->space->notice->deleteFail            = 'The space exists repositories or artifact repositories, cannot be deleted.';
+$lang->space->notice->apiCreateFail         = 'Create space failed.';
+$lang->space->notice->accessRepo            = 'Only display users who can access private repositories';
+$lang->space->notice->accessArtifact        = 'Only display users who can access private artifact repositories';
+$lang->space->notice->confirmRemoveMember   = 'Are you sure to remove this user from this space?';
+$lang->space->notice->confirmDelete         = 'Are you sure delete %s permission group?';
+$lang->space->notice->managerMemberConflict = '%s is a space user. To configure them as an administrator, you can remove the user first.';
 
 $lang->space->placeholder = new stdclass();
 $lang->space->placeholder->desc = 'Description of this space';

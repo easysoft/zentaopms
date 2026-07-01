@@ -244,8 +244,25 @@ class spaceModel extends model
         if(dao::isError()) return false;
 
         $oldManager = zget($space, 'manager', array());
+        $member     = zget($space, 'member', array());
 
-        if(empty($oldManager) || array_intersect($newManager, $oldManager))
+        $conflictUsers = array_intersect($newManager, $member);
+
+        if(!empty($conflictUsers))
+        {
+            $userList  = $this->loadModel('user')->getListByAccounts($conflictUsers, 'account');
+            $userNames = array();
+            foreach($conflictUsers as $account)
+            {
+                $userNames[] = isset($userList[$account]) && !empty($userList[$account]->realname) ? $userList[$account]->realname : $account;
+            }
+
+            $message       = sprintf($this->lang->space->notice->managerMemberConflict, implode(', ', $userNames));
+            dao::$errors[] = $message;
+            return false;
+        }
+
+        if(empty($oldManager) || !empty($newManager))
         {
             $this->dao->delete()->from(TABLE_DEVOPSSPACEUSER)->where('space')->eq($space->id)->andWhere('role')->eq('manager')->exec();
             foreach($newManager as $account) $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $space->id, 'account' => $account, 'role' => 'manager'))->exec();
