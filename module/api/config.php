@@ -33,7 +33,8 @@ $config->api->editor->createRelease = array('id' => 'desc', 'tools' => 'simpleTo
 $config->api->editor->createstruct  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->editstruct    = array('id' => 'desc', 'tools' => 'simpleTools');
 
-global $lang;
+global $lang, $app;
+$app->loadLang('api');
 $config->api->search['module']               = 'api';
 $config->api->search['fields']['title']      = $lang->api->title;
 $config->api->search['fields']['id']         = $lang->api->id;
