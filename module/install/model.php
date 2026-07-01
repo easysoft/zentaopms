@@ -203,7 +203,8 @@ class installModel extends model
             $table = $this->replaceContantsInSQL($table);
             try
             {
-                if($table) $this->dbh->exec($table);
+                /* Run function DDL without SQL formatting to avoid rewriting function names like YEAR(). */
+                if($table) $this->dbh->rawQuery($table);
             }
             catch (Throwable $e)
             {
