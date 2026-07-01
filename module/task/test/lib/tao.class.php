@@ -7,6 +7,34 @@ class taskTaoTest extends baseTest
 {
     protected $moduleName = 'task';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $_SESSION['project'] = $_SESSION['project'] ?? 0;
+
+        $this->objectModel = $this->instance;
+        $this->instance->taskTao = $this->instance;
+    }
+
+    protected function setTaskProjectSession(object $task): void
+    {
+        $projectID = (int)zget($task, 'project', 0);
+
+        if(!$projectID && !empty($task->execution))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
+        }
+
+        if(!$projectID && !empty($task->id))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_TASK)->where('id')->eq($task->id)->fetch('project');
+        }
+
+        $_SESSION['project'] = $projectID;
+    }
 
     /**
      * Test formatDatetime method.
@@ -69,7 +97,13 @@ class taskTaoTest extends baseTest
     public function buildTaskForEffortTest(object $record, int $taskID, string $lastDate, bool $isFinishTask): array
     {
         $task = $this->instance->getByID($taskID);
-        return $this->invokeArgs('buildTaskForEffort', [$record, $task, $lastDate, $isFinishTask]);
+
+        $installing = $this->instance->app->installing;
+        $this->instance->app->installing = true;
+        $result = $this->invokeArgs('buildTaskForEffort', [$record, $task, $lastDate, $isFinishTask]);
+        $this->instance->app->installing = $installing;
+
+        return $result;
     }
 
     /**
@@ -199,7 +233,10 @@ class taskTaoTest extends baseTest
      */
     public function createAutoUpdateTaskActionTest(object $oldParentTask)
     {
+        $installing = $this->instance->app->installing;
+        $this->instance->app->installing = true;
         $this->invokeArgs('createAutoUpdateTaskAction', [$oldParentTask]);
+        $this->instance->app->installing = $installing;
 
         return $this->instance->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldParentTask->id)->orderBy('`id` desc')->fetch();;
     }
@@ -263,6 +300,7 @@ class taskTaoTest extends baseTest
     {
         $oldTask = $this->instance->fetchByID($taskID);
         $task    = clone $oldTask;
+        $this->setTaskProjectSession($oldTask);
 
         foreach($task as $field => $value)
         {

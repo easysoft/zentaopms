@@ -36,9 +36,9 @@ cid=18846
  - 第0条的old属性 @2
  - 第0条的new属性 @1
 - 测试修改任务所属执行
- - 第0条的field属性 @execution
- - 第0条的old属性 @7
- - 第0条的new属性 @8
+ - 第1条的field属性 @execution
+ - 第1条的old属性 @7
+ - 第1条的new属性 @8
 - 测试修改任务截止时间
  - 第0条的field属性 @deadline
  - 第0条的new属性 @2022-03-29
@@ -92,7 +92,7 @@ r($task->updateObject($taskIDList[2], $changeassign))     && p('0:field,old,new'
 r($task->updateObject($taskIDList[3], $changetype))       && p('0:field,old,new') && e('type,study,devel');            // 测试修改任务类型
 r($task->updateObject($taskIDList[4], $changestatus))     && p('0:field,old,new') && e('status,cancel,doing');         // 测试修改任务状态
 r($task->updateObject($taskIDList[5], $changepri))        && p('0:field,old,new') && e('pri,2,1');                     // 测试修改任务优先级
-r($task->updateObject($taskIDList[6], $changeexecution))  && p('0:field,old,new') && e('execution,7,8');               // 测试修改任务所属执行
+r($task->updateObject($taskIDList[6], $changeexecution))  && p('1:field,old,new') && e('execution,7,8');               // 测试修改任务所属执行
 r($task->updateObject($taskIDList[8], $changedeadline))   && p('0:field,new')     && e("deadline,2022-03-29");         // 测试修改任务截止时间
 r($task->updateObject($taskIDList[0], $closedReason))     && p('closedReason:0')  && e(' 『关闭原因』必须为空。');     // 测试修改任务关闭原因
 r($task->updateObject($taskIDList[8], $changeParent))     && p()                  && e('没有数据更新');                // 测试修改任务的父任务

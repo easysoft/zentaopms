@@ -27,7 +27,7 @@ cid=18884
 
 - 删除ID为1的工时
  - 属性consumed @0
- - 属性left @2
+ - 属性left @2.00
  - 属性status @wait
 - 删除ID为2的工时
  - 属性consumed @1
@@ -41,6 +41,6 @@ cid=18884
 */
 
 $task = new taskTaoTest();
-r($task->getTaskAfterDeleteWorkhourTest(1)) && p('consumed,left,status') && e('0,2,wait');  // 删除ID为1的工时
+r($task->getTaskAfterDeleteWorkhourTest(1)) && p('consumed,left,status') && e('0,2.00,wait'); // 删除ID为1的工时
 r($task->getTaskAfterDeleteWorkhourTest(2)) && p('consumed,left,status') && e('1,0,done');  // 删除ID为2的工时
 r($task->getTaskAfterDeleteWorkhourTest(3)) && p('consumed,left,status') && e('1,1,doing'); // 删除ID为3的工时
