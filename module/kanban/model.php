@@ -1452,7 +1452,6 @@ class kanbanModel extends model
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->beginIF(!empty($execution->attribute) && !in_array($execution->attribute, array('mix', 'request', 'design')))->andWhere('type')->notIn('epic,requirement')->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
 
@@ -2469,8 +2468,8 @@ class kanbanModel extends model
 
         foreach($defaults as $type => $lane)
         {
-            /* 只有综合、需求、设计阶段，才可关联业需、用需。 */
-            if($execution->type != 'stage' && !in_array($execution->attribute, array('mix', 'request', 'design')) && in_array($type, array('epic', 'requirement'))) continue;
+            /* 阶段可关联业需、用需，非阶段跳过。 */
+            if($execution->type != 'stage' && in_array($type, array('epic', 'requirement'))) continue;
 
             $lane->type      = $type;
             $lane->execution = $execution->id;

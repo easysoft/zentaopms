@@ -2418,7 +2418,7 @@ class executionModel extends model
         $gradePairs = array();
         $gradeList  = $this->loadModel('story')->getGradeList('');
         $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
-        if(!($execution->type == 'stage' && in_array($project->model, (array)$this->config->project->waterfallList))) $storyTypes = 'story';
+        if($execution->type != 'stage') $storyTypes = 'story';
         foreach($gradeList as $grade)
         {
             if(strpos($storyTypes, $grade->type) === false) continue;
@@ -2955,7 +2955,7 @@ class executionModel extends model
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false && $this->config->vision == 'rnd') continue;
 
-            if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($project->model, (array)$this->config->project->waterfallList)) && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
+            if($execution->multiple && $story->type != 'story' && ($execution->type != 'stage' && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
@@ -3080,7 +3080,7 @@ class executionModel extends model
                 {
                     if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
-                    if(!in_array($project->model, (array)$this->config->project->waterfallList) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
+                    if($execution->type != 'stage' && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
