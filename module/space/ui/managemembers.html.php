@@ -69,7 +69,6 @@ formBatchPanel
     set::model('edit'),
     set::title($title),
     set::items($fnGenerateFields()),
-    set::maxRows(count($members)),
     set::onRenderRow(jsRaw('onRenderRow')),
     set::actions(array
     (
