@@ -151,7 +151,7 @@ class testreportModelTest extends baseTest
      */
     public function getResultSummaryTest(int $taskID, int $reportID): array|string
     {
-        $tasks   = $taskID ? $this->testtask->getByList((array)$taskID) : array();
+        $tasks  = $taskID ? $this->instance->loadModel('testtask')->getByList((array)$taskID) : array();
         $report = $this->instance->getByID($reportID);
         $cases  = $this->instance->getTaskCases($tasks, $report->begin, $report->end);
 
@@ -173,7 +173,7 @@ class testreportModelTest extends baseTest
      */
     public function getPerCaseResult4ReportTest(string $taskIdList, int $reportID): string|array
     {
-        $tasks  = $taskIdList ? $this->testtask->getByList(explode(',', $taskIdList)) : array();
+        $tasks  = $taskIdList ? $this->instance->loadModel('testtask')->getByList(explode(',', $taskIdList)) : array();
         $report = $this->instance->getByID($reportID);
 
         $objects = $this->instance->getPerCaseResult4Report($tasks, explode(',', $report->cases), $report->begin, $report->end);
@@ -197,8 +197,8 @@ class testreportModelTest extends baseTest
      */
     public function getPerCaseRunner4ReportTest(string $taskIdList, int $reportID): string|array
     {
-        $tasks  = $taskIdList ? $this->testtask->getByList(explode(',', $taskIdList)) : array();
-        $report = $this->instance->getByID($reportID);
+        $tasks   = $taskIdList ? $this->instance->loadModel('testtask')->getByList(explode(',', $taskIdList)) : array();
+        $report  = $this->instance->getByID($reportID);
         $objects = $this->instance->getPerCaseRunner4Report($tasks, $report->cases, $report->begin, $report->end);
 
         if(dao::isError()) return dao::getError();
@@ -222,8 +222,8 @@ class testreportModelTest extends baseTest
      */
     public function getBugs4TestTest(array $buildIdList, int $productID, int $taskID, string $type = 'build'): array|string|false
     {
-        $task    = $this->testtask->getByID($taskID);
-        $builds  = $this->build->getByList($buildIdList);
+        $task    = $this->instance->loadModel('testtask')->getByID($taskID);
+        $builds  = $this->instance->loadModel('build')->getByList($buildIdList);
         if(empty($builds)) $builds = false;
         $objects = $this->instance->getBugs4Test($builds, $productID, $task->begin, $task->end, $type);
 
@@ -242,7 +242,7 @@ class testreportModelTest extends baseTest
      */
     public function getStories4TestTest(string $buildIdList): array|string|false
     {
-        $builds  = $this->build->getByList(explode(',', $buildIdList));
+        $builds  = $this->instance->loadModel('build')->getByList(explode(',', $buildIdList));
         $objects = $this->instance->getStories4Test($builds);
 
         if(dao::isError()) return dao::getError();
@@ -291,7 +291,7 @@ class testreportModelTest extends baseTest
      */
     public function getChildBuildsTest(array $buildIdList): array|string
     {
-        $builds = $this->build->getByList($buildIdList);
+        $builds = $this->instance->loadModel('build')->getByList($buildIdList);
         $childBuilds = $this->instance->getChildBuilds($builds);
 
         if(dao::isError()) return dao::getError();
