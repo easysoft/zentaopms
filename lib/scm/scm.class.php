@@ -12,10 +12,20 @@ class scm
      */
     public function setEngine($repo)
     {
-        $scm = empty($repo->SCM) ? 'gitfox' : strtolower($repo->SCM);
-        $className = $scm . 'Repo';
-        if($scm == 'git') $scm = 'gitrepo';
-        if(!class_exists($className)) require($scm . '.class.php');
+        /* ops_repo.scmType 是当前真值('svn'/'git'); 旧版字段 SCM 已无;
+         * scmType='svn' 走 subversionRepo, 其余 (含 git) 走 gitfoxRepo。 */
+        $scmType = isset($repo->scmType) ? strtolower($repo->scmType) : '';
+        if($scmType == 'svn')
+        {
+            $className = 'subversionRepo';
+            if(!class_exists($className)) require('subversion.class.php');
+        }
+        else
+        {
+            $className = 'gitfoxRepo';
+            if(!class_exists($className)) require('gitfox.class.php');
+        }
+
         $this->engine = new $className($repo->client, $repo->apiPath, '', $repo->password, '', $repo);
     }
 

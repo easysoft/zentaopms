@@ -798,23 +798,15 @@ class gitfoxRepo
      */
     public function fetch($api = '', $params = array(), $needToLoop = false, $data = array(), $field = 'details')
     {
-        global $app;
         ini_set('memory_limit', '-1');
 
         $params = (array) $params;
         if(empty($data)) $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
-        $apiLanguage = common::checkNotCN() ? 'en-US' : 'zh-CN';
-        $header = array(
-            "Authorization: {$this->token}",
-            "Accept: text/plain",
-            "APP: zentao",
-            "Operator: {$app->user->account}",
-            'Accept-Language: ' . $apiLanguage
-        );
+        $accept = empty($data) ? 'text/plain' : '*/*';
+        $header = self::buildAuthHeader($this->token, '', '', $accept);
         if(!empty($data))
         {
-            $header[1] = 'Accept: */*';
             if(is_array($data) && isset($data['pageSize']) && isset($data['page']))
             {
                 $data['pageSize'] = (int)$data['pageSize'];
@@ -869,15 +861,57 @@ class gitfoxRepo
         else
         {
             $response = commonModel::http($api, $data, array(), $header, 'json');
-            if(!empty(commonModel::$requestErrors))
-            {
-                commonModel::$requestErrors = array();
-                return array();
-            }
+            if(self::clearHttpErrors()) return array();
 
             $result = json_decode($response);
             return $result ? $result : $response;
         }
+    }
+
+    /**
+     * 构造 gitfox 接口鉴权请求头。
+     * Build common auth headers for gitfox HTTP requests, reused by gitfoxRepo and subversionRepo.
+     *
+     * @param  string $token       gitfox token,会原样放进 Authorization
+     * @param  string $operator    操作人账号,缺省时取 $app->user->account
+     * @param  string $contentType 请求体 Content-Type,默认 application/json；传空串则不带此头
+     * @param  string $accept      Accept 头值,默认 text/plain
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildAuthHeader($token, $operator = '', $contentType = 'application/json', $accept = 'text/plain')
+    {
+        global $app;
+
+        if($operator === '') $operator = isset($app->user->account) ? $app->user->account : '';
+        $apiLanguage = common::checkNotCN() ? 'en-US' : 'zh-CN';
+
+        $headers = array(
+            "Authorization: {$token}",
+            "Accept: {$accept}",
+            "APP: zentao",
+            "Operator: {$operator}",
+            "Accept-Language: {$apiLanguage}"
+        );
+        if($contentType !== '') $headers[] = "Content-Type: {$contentType}";
+
+        return $headers;
+    }
+
+    /**
+     * 检查并清空 commonModel 残留请求错误。有错时返 true,无错返 false。
+     * Drain commonModel::$requestErrors, return true if there were errors.
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function clearHttpErrors()
+    {
+        if(empty(commonModel::$requestErrors)) return false;
+        commonModel::$requestErrors = array();
+        return true;
     }
 
     /**

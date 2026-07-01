@@ -15,6 +15,19 @@ declare(strict_types=1);
 class repoModel extends model
 {
     /**
+     * 判断是否为 SVN 类型代码库。
+     * Check if repo is subversion type.
+     *
+     * @param  object $repo
+     * @access public
+     * @return bool
+     */
+    public function isSvn(object $repo): bool
+    {
+        return isset($repo->scmType) && strtolower($repo->scmType) == 'svn';
+    }
+
+    /**
      * 检查代码库的权限。
      * Check repo priv.
      *
@@ -72,6 +85,16 @@ class repoModel extends model
         {
             unset($this->lang->devops->menu->repoCodeScan);
             unset($this->lang->devops->menu->review);
+        }
+
+        /* SVN 代码库屏蔽分支、标签、代码评审、制品库、设置 5 个一级菜单。SVN 无原生分支/MR/制品库等概念。 */
+        if($repo && $this->isSvn($repo))
+        {
+            unset($this->lang->devops->menu->branch);
+            unset($this->lang->devops->menu->tag);
+            unset($this->lang->devops->menu->review);
+            unset($this->lang->devops->menu->artifact);
+            unset($this->lang->devops->menu->settings);
         }
 
         if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';

@@ -103,7 +103,8 @@ $inModal ? null : sidebar
     div
     (
         setClass('surface'),
-        dropmenu
+        /* SVN 无原生分支/标签概念,不渲染分支下拉。 */
+        $this->repo->isSvn($repo) ? null : dropmenu
         (
             setID('repoBranchDropMenu'),
             setClass('px-2'),

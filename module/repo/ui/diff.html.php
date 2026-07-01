@@ -78,22 +78,53 @@ $breadcrumbItems[] = input(set::type('hidden'), set::name('oldRevision'), set::v
 $breadcrumbItems[] = input(set::type('hidden'), set::name('newRevision'), set::value($newRevision));
 $breadcrumbItems[] = input(set::type('hidden'), set::name('isBranchOrTag'), set::value($isBranchOrTag));
 $breadcrumbItems[] = span($lang->repo->source . ':', setClass('ml-3'));
-$breadcrumbItems[] = dropmenu
-(
-    setID('source'),
-    set::objectID($objectID),
-    set::text($isBranchOrTag ? $oldRevision : mb_substr($oldRevision, 0, 10)),
-    set::data(array('data' => $menuData, 'tabs' => $tabs))
-);
+
+$isSvnRepo = $this->repo->isSvn($repo);
+if($isSvnRepo)
+{
+    /* SVN 无分支/标签概念,source/target 直接由用户输入 revision 号。 */
+    $breadcrumbItems[] = input
+    (
+        setID('source'),
+        set::type('text'),
+        set::value((string)$oldRevision),
+        setClass('form-control w-20 mr-2'),
+        set::placeholder($lang->repo->revision)
+    );
+}
+else
+{
+    $breadcrumbItems[] = dropmenu
+    (
+        setID('source'),
+        set::objectID($objectID),
+        set::text($isBranchOrTag ? $oldRevision : mb_substr($oldRevision, 0, 10)),
+        set::data(array('data' => $menuData, 'tabs' => $tabs))
+    );
+}
 $breadcrumbItems[] = span(on::click()->call('changeDiff'), setID('exchange'), setClass('label label-exchange mr-2 text-white'), icon('exchange'));
 $breadcrumbItems[] = span($lang->repo->target . ':');
-$breadcrumbItems[] = dropmenu
-(
-    setID('target'),
-    set::objectID($objectID),
-    set::text($isBranchOrTag ? $newRevision : mb_substr($newRevision, 0, 10)),
-    set::data(array('data' => $menuData, 'tabs' => $tabs))
-);
+if($isSvnRepo)
+{
+    $breadcrumbItems[] = input
+    (
+        setID('target'),
+        set::type('text'),
+        set::value((string)$newRevision),
+        setClass('form-control w-20 mr-2'),
+        set::placeholder($lang->repo->revision)
+    );
+}
+else
+{
+    $breadcrumbItems[] = dropmenu
+    (
+        setID('target'),
+        set::objectID($objectID),
+        set::text($isBranchOrTag ? $newRevision : mb_substr($newRevision, 0, 10)),
+        set::data(array('data' => $menuData, 'tabs' => $tabs))
+    );
+}
 $breadcrumbItems[] = btn
 (
     set::type('primary'),

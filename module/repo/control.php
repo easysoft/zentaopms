@@ -523,7 +523,7 @@ class repo extends control
         /* Set branch or tag for git. */
         $branchID = helper::safe64Decode(base64_decode($branchID));
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if($this->app->tab == 'devops' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && !$this->repo->isSvn($repo) && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
@@ -617,7 +617,7 @@ class repo extends control
         /* Set branch or tag for git. */
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if($this->app->tab == 'devops' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && !$this->repo->isSvn($repo) && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         /* Build the search form. */
         $browseType = strtolower($browseType);
@@ -693,10 +693,21 @@ class repo extends control
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
 
-        $oldRevision = '^';
-        if($revision) $oldRevision = "{$revision}^";
+        /* SVN 用数字前驱 revision 作 oldRevision;首个 commit(revision=1) 与自身比,无差异。
+         * git 用 sha^ 语法取父级。 */
+        if($this->repo->isSvn($repo))
+        {
+            $newRevision = (int)$log[0]->revision;
+            $oldRevision = $newRevision > 1 ? $newRevision - 1 : $newRevision;
+        }
+        else
+        {
+            $oldRevision = '^';
+            if($revision) $oldRevision = "{$revision}^";
+            $newRevision = $log[0]->revision;
+        }
 
-        $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
+        $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$newRevision}"));
     }
 
     /**
@@ -1156,8 +1167,9 @@ class repo extends control
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
-        $revision  = str_replace('*', '-', $oldRevision);
-        $nRevision = str_replace('*', '-', $newRevision);
+        /* 前端 diff.ui.js 把 revision 走 btoa(encodeURIComponent(...)) 加密;此处走已有的 decodeEditorRevision 复原。 */
+        $revision  = $this->decodeEditorRevision(str_replace('*', '-', $oldRevision));
+        $nRevision = $this->decodeEditorRevision(str_replace('*', '-', $newRevision));
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
@@ -1295,7 +1307,7 @@ class repo extends control
         $this->scm->setEngine($repo);
 
         $branchID = (string)$this->cookie->syncBranch;
-        if(!$this->cookie->syncBranch)
+        if(!$this->cookie->syncBranch && !$this->repo->isSvn($repo))
         {
             $branches = $this->scm->branch();
             if(empty($branches)) return print($this->lang->repo->error->empty);
@@ -1423,7 +1435,7 @@ class repo extends control
     public function ajaxGetSVNDirs(int $repoID, string $path = '')
     {
         $repo = $this->repo->getByID($repoID);
-        if($repo->SCM != 'Subversion') return print(json_encode(array()));
+        if(!$this->repo->isSvn($repo)) return print(json_encode(array()));
 
         $path = $this->repo->decodePath($path);
         $dirs = array();
@@ -3003,7 +3015,7 @@ class repo extends control
             $repo = $this->repo->getByID($repoID);
             if(empty($repo) || $repo->synced) return print(json_encode(array('result' => 'success', 'data' => $result)));
 
-            if($repo->scmType == 'svn')
+            if($this->repo->isSvn($repo))
             {
                 $this->repo->markSynced($repo->id);
                 return print(json_encode(array('result' => 'success', 'data' => $result)));
@@ -3013,7 +3025,7 @@ class repo extends control
             $this->scm->setEngine($repo);
 
             $branchID = (string)$this->cookie->syncBranch;
-            if(!$this->cookie->syncBranch)
+            if(!$this->cookie->syncBranch && !$this->repo->isSvn($repo))
             {
                 $branches = $this->scm->branch();
                 if(empty($branches)) return print($this->lang->repo->error->empty);

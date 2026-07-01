@@ -91,13 +91,14 @@ featureBar(
             set::objectID($repo->id),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
-        ($branches || $tags) ? dropmenu
+        /* SVN 无原生分支/标签概念,不渲染分支下拉。 */
+        ($this->repo->isSvn($repo) || (!$branches && !$tags)) ? null : dropmenu
         (
             setID('repoBranchDropMenu'),
             set::objectID($selected),
             set::text($selected),
             set::data(array('data' => $menuData, 'tabs' => $tabs))
-        ) : null
+        )
     ),
     ...$breadcrumbItems
 );
