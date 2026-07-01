@@ -22,6 +22,55 @@ class pipelineZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test buildImportForm method.
+     *
+     * @param  int $repoID
+     * @param  int $providerID
+     * @access public
+     * @return array
+     */
+    public function buildImportFormTest(int $repoID, int $providerID = 0): array
+    {
+        ob_start();
+        $this->invokeArgs('buildImportForm', [$repoID, $providerID]);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
+
+        $view = $this->getProperty('view');
+
+        return array(
+            'repoID'            => isset($view->repoID) ? (int)$view->repoID : 0,
+            'defaultProviderID' => isset($view->defaultProviderID) ? (int)$view->defaultProviderID : 0,
+            'isJenkins'         => isset($view->isJenkins) ? ($view->isJenkins ? 1 : 0) : 0,
+            'hidePipeline'      => isset($view->hidePipeline) ? ($view->hidePipeline ? 1 : 0) : 0,
+            'defaultName'       => isset($view->defaultName) ? (string)$view->defaultName : '',
+            'providersCount'    => isset($view->providers) ? count($view->providers) : 0,
+            'pipelinesCount'    => isset($view->pipelines) ? count($view->pipelines) : 0,
+        );
+    }
+
+    /**
+     * Test buildJenkinsTree method.
+     *
+     * @param  array $tasks
+     * @access public
+     * @return array
+     */
+    public function buildJenkinsTreeTest(array $tasks): array
+    {
+        $result = $this->invokeArgs('buildJenkinsTree', [$tasks]);
+        if(dao::isError()) return dao::getError();
+
+        return array(
+            'count'         => count($result),
+            'firstText'     => $result[0]['text'] ?? '',
+            'firstValue'    => $result[0]['value'] ?? '',
+            'firstType'     => $result[0]['type'] ?? '',
+            'firstChildren' => isset($result[0]['items']) ? count($result[0]['items']) : 0,
+        );
+    }
 }
 
 class jobZenTest extends baseTest

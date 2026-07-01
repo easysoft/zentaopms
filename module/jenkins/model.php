@@ -13,44 +13,6 @@ declare(strict_types=1);
 class jenkinsModel extends model
 {
     /**
-     * 获取流水线列表。
-     * Get jenkins tasks.
-     *
-     * @param  int    $jenkinsID
-     * @param  int    $depth
-     * @access public
-     * @return array
-     */
-    public function getTasks(int $jenkinsID, int $depth = 0): array
-    {
-        $jenkins = $this->loadModel('pipeline')->getByID($jenkinsID);
-        if(!$jenkins) return array();
-
-        $jenkinsServer   = $jenkins->url;
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : $jenkins->password;
-
-        $userPWD  = "$jenkinsUser:$jenkinsPassword";
-        $response = common::http($jenkinsServer . '/api/json/items/list' . ($depth ? "?depth=1" : ''), '', array(CURLOPT_USERPWD => $userPWD));
-        $response = json_decode($response);
-
-        $tasks = array();
-        if($depth)
-        {
-            /* Support up to 4 levels. */
-            if(isset($response->jobs)) $tasks = $this->getDepthJobs($response->jobs, $userPWD, 1);
-        }
-        else
-        {
-            if(isset($response->jobs))
-            {
-                foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
-            }
-        }
-        return $tasks;
-    }
-
-    /**
      * 根据深度获取流水线。
      * Get jobs by depth.
      *
@@ -94,23 +56,6 @@ class jenkinsModel extends model
         }
 
         return $tasks;
-    }
-
-    /**
-     * 获取Jenkins流水线。
-     * Get jobs by jenkins.
-     *
-     * @param  int    $jenkinsID
-     * @access public
-     * @return array
-     */
-    public function getJobPairs(int $jenkinsID): array
-    {
-        return $this->dao->select('id, name')->from(TABLE_JOB)
-            ->where('server')->eq($jenkinsID)
-            ->andWhere('engine')->eq('jenkins')
-            ->andWhere('deleted')->eq('0')
-            ->fetchPairs();
     }
 
     /**
