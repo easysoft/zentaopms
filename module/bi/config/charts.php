@@ -3419,7 +3419,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   budget DESC
@@ -3549,7 +3549,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   consumed DESC
@@ -3622,7 +3622,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC
@@ -3698,7 +3698,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC
@@ -3770,7 +3770,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   bug DESC
@@ -3844,7 +3844,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC
@@ -3921,7 +3921,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC
@@ -3995,7 +3995,7 @@ WHERE
 GROUP BY
   `year`,
   t1.id,
-  program
+  t1.name
 ORDER BY
   `year`,
   bug DESC
@@ -4473,7 +4473,7 @@ SELECT YEAR(t2.`openedDate`) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS 
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
-GROUP BY `year`, t1.id, product
+GROUP BY `year`, t1.id, t1.name
 ORDER BY `year`, story DESC LIMIT 999999
 EOT
 ,
@@ -4527,7 +4527,7 @@ SELECT YEAR(t2.`closedDate`) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.`closedReason` = 'done'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.type = 'story' AND t2.id IS NOT NULL
-GROUP BY `year`, t1.id, product
+GROUP BY `year`, t1.id, t1.name
 ORDER BY `year`, story DESC LIMIT 999999
 EOT
 ,
@@ -4581,7 +4581,7 @@ SELECT YEAR(t2.`openedDate`) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS 
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, t1.id, product
+GROUP BY `year`, t1.id, t1.name
 ORDER BY `year`, bug DESC LIMIT 999999
 EOT
 ,
@@ -4635,7 +4635,7 @@ SELECT YEAR(t2.`closedDate`) AS `year`, t1.id, t1.name AS product, COUNT(1) AS b
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = '0' AND t2.resolution = 'fixed' AND t2.status = 'closed'
 WHERE t1.deleted = '0' AND t1.shadow = '0' AND t1.vision = 'rnd' AND t2.id IS NOT NULL
-GROUP BY `year`, t1.id, product
+GROUP BY `year`, t1.id, t1.name
 ORDER BY `year`, bug DESC LIMIT 999999
 EOT
 ,
