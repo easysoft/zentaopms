@@ -612,6 +612,7 @@ class dbh
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
                 if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
             case 'DELETE':
+            case 'TRUNCATE':
                 if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
                 break;
             case 'CREATE':

@@ -117,7 +117,7 @@ class pager extends basePager
     public function limit()
     {
         $limit = '';
-        if($this->pageTotal > 1) $limit = ' lImiT ' . ($this->offset + ($this->pageID - 1) * $this->recPerPage) . ", $this->recPerPage";
+        if($this->pageTotal > 1) $limit = ' lImiT ' . $this->recPerPage . ' OFFSET ' . ($this->offset + ($this->pageID - 1) * $this->recPerPage);
         return $limit;
     }
 
