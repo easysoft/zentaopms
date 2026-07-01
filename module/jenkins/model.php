@@ -71,7 +71,7 @@ class jenkinsModel extends model
 
             $isJob = true;
             if(stripos($job->_class, '.multibranch') !== false || stripos($job->_class, '.folder') !== false || stripos($job->_class, '.OrganizationFolder') !== false) $isJob = false;
-            if(!empty($job->buildable) && $job->buildable == true) $isJob = true;
+            if(!empty($job->buildable) && $job->buildable) $isJob = true;
 
             if($isJob)
             {
@@ -125,8 +125,7 @@ class jenkinsModel extends model
     {
         $jenkinsUser     = $jenkins->account;
         $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
-        $userPWD         = "$jenkinsUser:$jenkinsPassword";
 
-        return $userPWD;
+        return "$jenkinsUser:$jenkinsPassword";
     }
 }
