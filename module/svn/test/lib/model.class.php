@@ -64,23 +64,14 @@ class svnModelTest extends baseTest
      * @access public
      * @return string
      */
-    public function getRepoLogsTest($version)
+    public function getRepoLogsTest(object $repo, int $version)
     {
-        // 对于测试环境，由于缺少真实的SVN仓库和工具，统一返回固定结果
-        if($version === null) return 'null';
-
-        // 尝试设置仓库，但忽略所有输出和错误
         ob_start();
-        $this->instance->setRepos();
+        $logs = $this->instance->getRepoLogs($repo, $version);
         ob_end_clean();
+        if(dao::isError()) return dao::getError();
 
-        // 对于不同的版本号返回不同的固定测试结果
-        // 这样可以确保测试的稳定性和可预测性
-        if($version < 0) return 'negative_version';
-        if($version == 0) return 'zero_version';
-        if($version > 1000) return 'large_version';
-
-        return 'normal_version';
+        return count($logs);
     }
 
     /**
@@ -213,32 +204,22 @@ class svnModelTest extends baseTest
      * @access public
      * @return string
      */
-    public function diffTest(string $url, int $revision): string
+    public function diffTest(string $url, int $revision)
     {
         ob_start();
         $result = $this->instance->diff($url, $revision);
         $output = ob_get_clean();
 
-        if(dao::isError()) return 'dao_error';
+        if(dao::isError()) return dao::getError();
 
-        // 如果有svn命令未找到的错误输出，返回相应信息
-        if($output && strpos($output, 'svn: not found') !== false) {
-            return 'svn_not_found';
-        }
+        $content = $output;
+        if(is_string($result)) $content .= $result;
 
-        // 如果结果是false，表示无法获取diff（没有找到repo或其他错误）
-        if($result === false) return 'false';
-
-        // 如果结果是字符串但为空，返回标识
-        if($result === '') return 'empty';
-
-        // 如果是有效的diff内容（包含svn命令错误），返回标识
-        if(is_string($result)) {
-            if(strpos($result, 'svn: not found') !== false) return 'svn_not_found';
-            if(strlen($result) > 0) return 'diff_content';
-        }
-
-        return 'unknown';
+        return array(
+            'isFalse'    => $result === false ? '1' : '0',
+            'hasContent' => is_string($result) && $result !== '' ? '1' : '0',
+            'hasOutput'  => $content !== '' ? '1' : '0'
+        );
     }
 
     /**
@@ -282,14 +263,12 @@ class svnModelTest extends baseTest
      */
     public function getRepoTagsTest(object $repo, string $path)
     {
-        // 对于测试环境，由于缺少真实的SVN客户端和仓库
-        // 直接返回稳定的测试结果，确保测试的可重复性和稳定性
+        ob_start();
+        $tags = $this->instance->getRepoTags($repo, $path);
+        ob_end_clean();
+        if(dao::isError()) return dao::getError();
 
-        // 在真实环境中，getRepoTags方法调用scm->tags()
-        // 如果SVN仓库没有tags或SVN客户端不可用，通常返回空数组
-        // 因此返回0（空数组的count）是合理的预期结果
-
-        return 0;
+        return count($tags);
     }
 
     /**
