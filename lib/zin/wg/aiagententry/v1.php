@@ -104,12 +104,31 @@ class aiAgentEntry extends wg
         $objectVarName = $this->getObjectVarName($module, $method, $config);
         if($this->prop('showAgent') && !empty($availablePrompts))
         {
-            $children[] = aiAgentMenu
-            (
-                set::items($prompts),
-                set::isFormPage($type === 'form'),
-                set::objectID($objectID),
-            );
+            if(count($availablePrompts) === 1)
+            {
+                $singlePrompt  = $availablePrompts[0];
+                $clickHandler  = $type === 'form'
+                    ? "executeWithFormContext({$singlePrompt->id})"
+                    : "callZentaoAgent({$singlePrompt->id}, {$objectID})";
+
+                $children[] = btn
+                (
+                    setClass('btn ai-styled size-sm font-medium'),
+                    set::icon('lightning'),
+                    set('data-on', 'click'),
+                    set('data-call', $clickHandler),
+                    $singlePrompt->name,
+                );
+            }
+            else
+            {
+                $children[] = aiAgentMenu
+                (
+                    set::items($prompts),
+                    set::isFormPage($type === 'form'),
+                    set::objectID($objectID),
+                );
+            }
         }
 
         if($this->prop('showTeammate') && !empty($teammateItems))
