@@ -29,8 +29,8 @@ su('admin');
 
 $storyTest = new storyModelTest();
 
-r($storyTest->batchGetStoryStageTest(array(100,101,102))) && p('100:0:stage') && e('wait');
-r($storyTest->batchGetStoryStageTest(array(101))) && p('101:0:stage') && e('planned');
-r($storyTest->batchGetStoryStageTest(array(999))) && p() && e('~~');
-r($storyTest->batchGetStoryStageTest(array())) && p() && e('~~');
-r($storyTest->batchGetStoryStageTest(array(103))) && p('103:0:stage') && e('developing');
+r($storyTest->batchGetStoryStageTest(array(100,101,102))) && p('100') && e('wait');
+r($storyTest->batchGetStoryStageTest(array(101))) && p('101') && e('planned');
+r($storyTest->batchGetStoryStageTest(array(999))) && p() && e('0');
+r($storyTest->batchGetStoryStageTest(array())) && p() && e('0');
+r($storyTest->batchGetStoryStageTest(array(103))) && p('103') && e('developing');
