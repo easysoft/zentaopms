@@ -28,6 +28,20 @@ class repoModelTest extends baseTest
     }
 
     /**
+     * Test isSvn method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return string
+     */
+    public function isSvnTest($repo)
+    {
+        $result = $this->instance->isSvn($repo);
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
+    }
+
+    /**
      * Test isClickable method.
      *
      * @param  object $repo
