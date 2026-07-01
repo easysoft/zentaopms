@@ -13,15 +13,17 @@ class gitfoxRepo
      *
      * @param  string $client    gitfox api url.
      * @param  string $root      id of gitfox project.
+     * @param  string $username  null
      * @param  string $password  token of gitfox api.
+     * @param  string $encoding
      * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root ,$password,  $repo = null)
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         $this->client = $client;
-        $this->root   = rtrim($root, '/') . '/';    
+        $this->root   = rtrim($root, '/') . '/';
         $this->token  = $password;
         $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : 'HEAD';
         $this->repo   = $repo;
@@ -118,13 +120,15 @@ class gitfoxRepo
      * Get tags
      *
      * @param  string $showDetail
+     * @param  string $revision
+     * @param  bool   $onlyDir
      * @param  string $orderBy
      * @param  int    $limit
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function tags($showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 0)
+    public function tags($showDetail = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 0)
     {
         $api  = 'tags/list';
         $tags = array();
@@ -197,8 +201,7 @@ class gitfoxRepo
             $i = 1;
             foreach($branchList as $branch)
             {
-                $id = $i++;
-                $branch->id = $id;
+                $branch->id = $i++;
                 if(!isset($branch->name)) continue;
                 if($branch->isDefault)
                 {
@@ -362,6 +365,7 @@ class gitfoxRepo
     /**
      * Diff file.
      *
+     * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $extra
@@ -369,7 +373,7 @@ class gitfoxRepo
      * @access public
      * @return array
      */
-    public function diff( $fromRevision, $toRevision, $extra = '', $isMr = false)
+    public function diff($path, $fromRevision, $toRevision, $extra = '', $isMr = false)
     {
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
@@ -559,11 +563,12 @@ class gitfoxRepo
     /**
      * Get commit count.
      *
+     * @param  int    $commits
      * @param  string $lastVersion
      * @access public
      * @return int
      */
-    public function getCommitCount($lastVersion = '')
+    public function getCommitCount($commits = 0, $lastVersion = '')
     {
         if(!scm::checkRevision($lastVersion)) return false;
         return true;
@@ -752,10 +757,11 @@ class gitfoxRepo
     /**
      * Get files by commit.
      *
+     * @param  string  $commit
      * @access public
      * @return void
      */
-    public function getFilesByCommit()
+    public function getFilesByCommit($revision)
     {
         return array();
     }
@@ -764,6 +770,8 @@ class gitfoxRepo
      * Repository/tree api.
      *
      * @param  string    $path
+     * @param  bool      $recursive
+     * @param  bool      $loop
      * @access public
      * @return mixed
      */
@@ -790,15 +798,23 @@ class gitfoxRepo
      */
     public function fetch($api = '', $params = array(), $needToLoop = false, $data = array(), $field = 'details')
     {
+        global $app;
         ini_set('memory_limit', '-1');
 
         $params = (array) $params;
         if(empty($data)) $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
-        $accept = empty($data) ? 'text/plain' : '*/*';
-        $header = static::buildAuthHeader($this->token, '', '', $accept);
+        $apiLanguage = common::checkNotCN() ? 'en-US' : 'zh-CN';
+        $header = array(
+            "Authorization: {$this->token}",
+            "Accept: text/plain",
+            "APP: zentao",
+            "Operator: {$app->user->account}",
+            'Accept-Language: ' . $apiLanguage
+        );
         if(!empty($data))
         {
+            $header[1] = 'Accept: */*';
             if(is_array($data) && isset($data['pageSize']) && isset($data['page']))
             {
                 $data['pageSize'] = (int)$data['pageSize'];
@@ -853,57 +869,15 @@ class gitfoxRepo
         else
         {
             $response = commonModel::http($api, $data, array(), $header, 'json');
-            if(static::clearHttpErrors()) return array();
+            if(!empty(commonModel::$requestErrors))
+            {
+                commonModel::$requestErrors = array();
+                return array();
+            }
 
             $result = json_decode($response);
             return $result ? $result : $response;
         }
-    }
-
-    /**
-     * 构造 gitfox 接口鉴权请求头。
-     * Build common auth headers for gitfox HTTP requests, reused by gitfoxRepo and subversionRepo.
-     *
-     * @param  string $token       gitfox token,会原样放进 Authorization
-     * @param  string $operator    操作人账号,缺省时取 $app->user->account
-     * @param  string $contentType 请求体 Content-Type,默认 application/json；传空串则不带此头
-     * @param  string $accept      Accept 头值,默认 text/plain
-     * @static
-     * @access public
-     * @return array
-     */
-    public static function buildAuthHeader($token, $operator = '', $contentType = 'application/json', $accept = 'text/plain')
-    {
-        global $app;
-
-        if($operator === '') $operator = isset($app->user->account) ? $app->user->account : '';
-        $apiLanguage = common::checkNotCN() ? 'en-US' : 'zh-CN';
-
-        $headers = array(
-            "Authorization: {$token}",
-            "Accept: {$accept}",
-            "APP: zentao",
-            "Operator: {$operator}",
-            "Accept-Language: {$apiLanguage}"
-        );
-        if($contentType !== '') $headers[] = "Content-Type: {$contentType}";
-
-        return $headers;
-    }
-
-    /**
-     * 检查并清空 commonModel 残留请求错误。有错时返 true,无错返 false。
-     * Drain commonModel::$requestErrors, return true if there were errors.
-     *
-     * @static
-     * @access public
-     * @return bool
-     */
-    public static function clearHttpErrors()
-    {
-        if(empty(commonModel::$requestErrors)) return false;
-        commonModel::$requestErrors = array();
-        return true;
     }
 
     /**
@@ -962,11 +936,12 @@ class gitfoxRepo
      * Get download url.
      *
      * @param  string $branch
+     * @param  string $savePath
      * @param  string $ext
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = 'main', $ext = 'zip')
+    public function getDownloadUrl($branch = 'main', $savePath = '', $ext = 'zip')
     {
         $url  = "{$this->repo->client}/api/v2/na/repos/{$this->repo->id}/archive";
         return "{$url}/{$branch}.{$ext}";
@@ -1029,7 +1004,8 @@ class gitfoxRepo
         $params['page']  = 1;
         $params['limit'] = 100;
 
-        return $this->root . $target . '?' . http_build_query($params);
+        $api = $this->root . $target . '?' . http_build_query($params);
+        return $api;
     }
 
     /**
@@ -1087,7 +1063,7 @@ class gitfoxRepo
      *
      * @param  int    $MRID
      * @access public
-     * @return object|null
+     * @return array
      */
     public function getSingleMR(int $MRID): null|object
     {

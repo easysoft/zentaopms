@@ -40,7 +40,6 @@ class subversionRepo
 
     /**
      * 调 gitfox 统一 SVN 执行接口,返回 svn 原生 stdout 字符串。
-     * Call gitfox /svn/exec, return raw svn stdout content.
      *
      * @param  string $func ls|log|blame|cat|info|diff
      * @param  array  $args 对应 *XxxParams 字段(Revision/XML/Verbose/...)
@@ -49,8 +48,7 @@ class subversionRepo
      */
     public function fetchContent($func, $args = array())
     {
-        /* SVN /svn/exec 发 JSON body,svn stdout 走原文回,故 Accept 用通配。 */
-        $header = gitfoxRepo::buildAuthHeader($this->token, '', 'application/json', '*/*');
+        $header = static::buildAuthHeader($this->token, '', 'application/json', '*/*');
 
         $url     = $this->apiRoot . '/svn/exec';
         $payload = json_encode(array(
@@ -59,9 +57,8 @@ class subversionRepo
         ));
 
         $response = commonModel::http($url, $payload, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header, 'data');
-        if(gitfoxRepo::clearHttpErrors()) return false;
+        if(static::clearHttpErrors()) return false;
 
-        /* gitfox 错误时回 JSON {code:fail,message:"..."}; 成功时回原 svn stdout */
         if(!empty($response) && $response[0] === '{')
         {
             $maybe = json_decode($response);
@@ -102,7 +99,6 @@ class subversionRepo
             $info->name     = (string)$list->name;
             $info->path     = $resourcePath . '/' . $list->name;
             $info->kind     = (string)$list['kind'];
-            /* revision 强转字符串,zen 层会做 substr,SVN int 与 git hash 共用 */
             $info->revision = (string)$list->commit['revision'];
             $info->account  = (string)$list->commit->author;
             $info->date     = date('Y-m-d H:i:s', strtotime($list->commit->date));
@@ -798,4 +794,50 @@ class subversionRepo
         return array();
     }
 
+    /**
+     * 构造 gitfox 接口鉴权请求头。
+     * Build common auth headers for gitfox HTTP requests, reused by gitfoxRepo and subversionRepo.
+     *
+     * @param  string $token       gitfox token,会原样放进 Authorization
+     * @param  string $operator    操作人账号,缺省时取 $app->user->account
+     * @param  string $contentType 请求体 Content-Type,默认 application/json；传空串则不带此头
+     * @param  string $accept      Accept 头值,默认 text/plain
+     * @static
+     * @access public
+     * @return array
+     */
+    public static function buildAuthHeader($token, $operator = '', $contentType = 'application/json', $accept = 'text/plain')
+    {
+        global $app;
+
+        if($operator === '') $operator = isset($app->user->account) ? $app->user->account : '';
+        $apiLanguage = common::checkNotCN() ? 'en-US' : 'zh-CN';
+
+        $headers = array(
+            "Authorization: {$token}",
+            "Accept: {$accept}",
+            "APP: zentao",
+            "Operator: {$operator}",
+            "Accept-Language: {$apiLanguage}"
+        );
+        if($contentType !== '') $headers[] = "Content-Type: {$contentType}";
+
+        return $headers;
+    }
+
+    /**
+     * 检查并清空 commonModel 残留请求错误。有错时返 true,无错返 false。
+     * Drain commonModel::$requestErrors, return true if there were errors.
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function clearHttpErrors()
+    {
+        if(empty(commonModel::$requestErrors)) return false;
+        commonModel::$requestErrors = array();
+        return true;
+    }
+    
 }

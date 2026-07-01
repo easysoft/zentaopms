@@ -58,6 +58,8 @@ class scm
     public function tags($path = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         if(!scm::checkRevision($revision)) return array();
+        /* gitfoxRepo::tags 签名与 svn/git 不同，需按 engine 分派。 */
+        if(get_class($this->engine) == 'gitfoxRepo') return $this->engine->tags($path, $orderBy, $limit, (int)$pageID);
         return $this->engine->tags($path, $revision, $onlyDir, $orderBy, $limit, $pageID);
     }
 
