@@ -24,9 +24,12 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 $process = zenData('process');
 $process->id->range('1-15');
 $process->name->range('过程名称1,过程名称2,过程名称3,过程名称4,过程名称5,过程名称6,过程名称7,过程名称8,过程名称9,过程名称10,过程名称11,过程名称12,过程名称13,过程名称14,过程名称15');
+$process->workflowGroup->range('1-15');
+$process->module->range('1-15');
+$process->abbr->range('1-15')->prefix('缩写');
+$process->desc->range('1-15')->prefix('过程描述');
+$process->order->range('10-150:10');
 $process->deleted->range('0{10},1{5}');
-$process->model->range('waterfall{8},scrum{4},kanban{3}');
-$process->type->range('type1{5},type2{5},type3{5}');
 $process->status->range('active{10},inactive{5}');
 $process->gen(15);
 
