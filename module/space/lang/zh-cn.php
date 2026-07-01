@@ -60,14 +60,14 @@ $lang->space->roleList['manager'] = '管理员';
 $lang->space->roleList['member']  = '成员';
 
 $lang->space->notice = new stdclass();
-$lang->space->notice->noSpaces            = '暂无任何空间';
-$lang->space->notice->confirmDeleteSpace  = '您确定要删除该空间吗？';
-$lang->space->notice->deleteFail          = '空间下存在代码库或制品库, 无法删除。';
-$lang->space->notice->apiCreateFail       = '创建空间失败。';
-$lang->space->notice->accessRepo          = '仅展示用户可访问的非公开代码库';
-$lang->space->notice->accessArtifact      = '仅展示用户可访问的非公开制品库';
-$lang->space->notice->confirmRemoveMember = '您确定从该空间中移除该用户吗？';
-$lang->space->notice->confirmDelete       = '您确定删除“ %s” 权限分组吗？';
+$lang->space->notice->noSpaces              = '暂无任何空间';
+$lang->space->notice->confirmDeleteSpace    = '您确定要删除该空间吗？';
+$lang->space->notice->deleteFail            = '空间下存在代码库或制品库, 无法删除。';
+$lang->space->notice->apiCreateFail         = '创建空间失败。';
+$lang->space->notice->accessRepo            = '仅展示用户可访问的非公开代码库';
+$lang->space->notice->accessArtifact        = '仅展示用户可访问的非公开制品库';
+$lang->space->notice->confirmRemoveMember   = '您确定从该空间中移除该用户吗？';
+$lang->space->notice->confirmDelete         = '您确定删除“ %s” 权限分组吗？';
 $lang->space->notice->managerMemberConflict = '%s为空间用户，如需配置为管理员可先移除用户。';
 
 $lang->space->placeholder       = new stdclass();
