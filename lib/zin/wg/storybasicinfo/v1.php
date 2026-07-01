@@ -190,10 +190,11 @@ class storyBasicInfo extends wg
             {
                 foreach($story->planTitle as $planID => $planTitle)
                 {
+                    $planUrl = !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null;
                     $planTitleItems[] = hasPriv('productplan', 'view') ? array
                     (
                         'control' => 'link',
-                        'url'     => !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null,
+                        'url'     => $planUrl,
                         'text'    => $planTitle . ' ',
                         'data-app' => $product->shadow ? 'project' : null
                     ) : $planTitle;
