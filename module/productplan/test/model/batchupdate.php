@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
-title=productpanModel->batchUpdate();
+title=productplanModel->batchUpdate();
 timeout=0
 cid=17620
 
@@ -55,7 +55,7 @@ $plans[3]->begin  = '2022-01-01';
 $plans[3]->end    = '2022-02-28';
 $plans[3]->status = 'doing';
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 $changes = $planTester->batchUpdateTest($productID, $plans);
 r($changes[1]) && p('0:field,old,new') && e('title,计划1,修改计划名称1'); // 测试修改父计划的名称
 r($changes[2]) && p('0:field,old,new') && e('title,计划2,修改计划名称2'); // 测试修改子计划的名称

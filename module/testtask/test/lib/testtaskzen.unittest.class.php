@@ -979,7 +979,7 @@ class testtaskZenTest
      * @access public
      * @return mixed
      */
-    public function responseAfterRunCaseTest($caseResult = '', $preAndNext = null, $run = null, $caseID = 0, $version = 1)
+    public function responseAfterRunCaseTest($caseResult = '', $preAndNext = null, $run = null, $caseID = 0, $version = 1, $message = '')
     {
         // 保存原始环境
         $originalTab = $this->tester->app->tab ?? 'qa';
@@ -1005,7 +1005,7 @@ class testtaskZenTest
 
             // 开始输出缓冲以捕获可能的输出
             ob_start();
-            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($caseResult, $preAndNext, $run, $caseID, $version));
+            $result = $method->invokeArgs($this->testtaskZenTest->newInstance(), array($caseResult, $preAndNext, $run, $caseID, $version, $message));
             $output = ob_get_clean();
             if(dao::isError()) return dao::getError();
 

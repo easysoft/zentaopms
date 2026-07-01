@@ -71,6 +71,6 @@ window.loadProduct = function(e)
     const productID = $this.val();
     const $modal    = $this.closest('.modal');
     const inModal   = $modal.length > 0;
-    if(inModal)  loadModal($.createLink('testcase', 'create', 'productID=' + productID + '&' + createParams), $modal.attr('id'));
-    if(!inModal) loadPage($.createLink('testcase', 'create', 'productID=' + productID + '&' + createParams));
+    if(inModal)  loadModal($.createLink('testcase', methodName, 'productID=' + productID + '&' + createParams), $modal.attr('id'));
+    if(!inModal) loadPage($.createLink('testcase', methodName, 'productID=' + productID + '&' + createParams));
 };

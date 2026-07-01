@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browse view file of bug module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     bug
@@ -16,7 +16,7 @@ jsVar('today',          date('Y-m-d'));
 jsVar('caseCommonLang', $this->lang->testcase->common);
 jsVar('from',           $from);
 
-$queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bySearch&param={queryID}");
+$queryMenuLink = createLink('bug', 'browse', "productID={$product->id}&branch={$branch}&browseType=bysearch&param={queryID}");
 $currentType   = $browseType == 'bysearch' ? $param : ($browseType == 'bymodule' ? $this->session->bugBrowseType : $browseType);
 $isFromDoc     = $from === 'doc';
 $isFromAI      = $from === 'ai';

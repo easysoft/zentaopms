@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2021 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming <sunguangming@easycorp.ltd>
  * @package     kanban
@@ -241,7 +241,7 @@ class kanbanTao extends kanbanModel
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
                 ->andWhere('t2.model')->ne('scrum')
-                ->andWhere('t2.hasProduct')->eq('0')
+                ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }
         elseif($objectType == 'release')
@@ -250,7 +250,7 @@ class kanbanTao extends kanbanModel
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.type')->eq('project')
                 ->andWhere('t2.model')->eq('kanban')
-                ->andWhere('t2.hasProduct')->eq('0')
+                ->andWhere('t2.`hasProduct`')->eq('0')
                 ->fetchPairs();
         }
 

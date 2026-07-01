@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of caselib module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
@@ -159,6 +159,7 @@ class caselibModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -181,6 +182,7 @@ class caselibModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq('library')
             ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+            ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchPairs();
@@ -239,22 +241,22 @@ class caselibModel extends model
             if($queryID)
             {
                 $query = $this->loadModel('search')->getQuery($queryID);
-                $this->session->set('caselibQuery', ' 1 = 1');
+                $this->session->set('testcaseQuery', ' 1 = 1');
                 if($query)
                 {
-                    $this->session->set('caselibQuery', $query->sql);
-                    $this->session->set('caselibForm', $query->form);
+                    $this->session->set('testcaseQuery', $query->sql);
+                    $this->session->set('testcaseForm', $query->form);
                 }
             }
             else
             {
-                if($this->session->caselibQuery == false) $this->session->set('caselibQuery', ' 1 = 1');
+                if($this->session->testcaseQuery == false) $this->session->set('testcaseQuery', ' 1 = 1');
             }
 
             $queryLibID = $libID;
             $allLib     = "`lib` = 'all'";
-            $caseQuery  = '(' . $this->session->caselibQuery;
-            if(strpos($this->session->caselibQuery, $allLib) !== false)
+            $caseQuery  = '(' . $this->session->testcaseQuery;
+            if(strpos($this->session->testcaseQuery, $allLib) !== false)
             {
                 $caseQuery = str_replace($allLib, '1', $caseQuery);
                 $queryLibID = 'all';
@@ -267,7 +269,7 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->andWhere($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq($libID)->fi()
-                ->beginIF($this->app->tab != 'qa' && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
+                ->beginIF(!in_array($this->app->tab, array('qa', 'assetlib')) && $from != 'doc')->andWhere('project')->eq($this->session->project)->fi();
         }
         else
         {
@@ -277,7 +279,8 @@ class caselibModel extends model
                 ->andWhere('deleted')->eq('0')
                 ->beginIF($moduleIdList)->andWhere('module')->in($moduleIdList)->fi()
                 ->beginIF($browseType == 'wait')->andWhere('status')->eq($browseType)->fi()
-                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi();
+                ->beginIF($browseType == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewers`)")->fi()
+                ->beginIF($browseType == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi();
         }
         return $stmt->orderBy($sort)->page($pager)->fetchAll('id');
     }

@@ -2,7 +2,7 @@
 /**
  * The action module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -78,6 +78,7 @@ $lang->action->undeleteModuleTip   = 'Restoring a subdirectory will also restore
 $lang->action->undeleteTaskTip     = 'The execution this task belongs to has been deleted. The task will not be visible after restoration. Do you want to continue?';
 $lang->action->undeleteBoardTip    = 'Please restore the space this whiteboard belongs to before restoring the whiteboard.';
 $lang->action->undeleteTemplateTip = 'The category (and scope) of this document template has been deleted. Do you want to restore it as well?';
+$lang->action->taskHasParentStage  = 'This task belongs to the parent stage, cannot be restored.';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "The parent of the current phase now only allows child items of type {Slang->executionCommon} or Kanban. Therefore, this phase cannot be restored.";
@@ -346,10 +347,11 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked 
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a test case <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
-$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> linked a  bug <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> unlink a story <strong>$extra</strong> from plan.' . "\n";
-$lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> unlink a bug <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->linkstory         = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug           = '$date, <strong>$actor</strong> linked a  bug <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkstory       = '$date, <strong>$actor</strong> unlink a story <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->autounlinkstory   = '$date, <strong>$actor</strong> linked a story to <strong>$extra</strong> plan, automatically unlinked from this plan.' . "\n";
+$lang->action->desc->unlinkbug         = '$date, <strong>$actor</strong> unlink a bug <strong>$extra</strong> from plan.' . "\n";
 
 /* Describes the history of operations when a document is saved as a draft or released. */
 $lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <strong>$extra</strong>.' . "\n";

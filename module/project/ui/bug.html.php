@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The bug view file of project module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     project
@@ -11,12 +11,12 @@ declare(strict_types=1);
 namespace zin;
 jsVar('caseCommonLang', $this->lang->testcase->common);
 
-$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type={key}&param={$param}&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
+$linkParams = "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&browseType={key}&param={$param}&recTotal={$pager->recTotal}&recPerpage={$pager->recPerPage}";
 featureBar
 (
-    set::current($type),
+    set::current($browseType),
     set::linkParams($linkParams),
-    li(searchToggle(set::module('projectBug'), set::open($type == 'bysearch')))
+    li(searchToggle(set::module('projectBug'), set::open($browseType == 'bysearch')))
 );
 
 $canModify = common::canModify('project', $project);
@@ -44,7 +44,7 @@ toolbar
     ) : null
 );
 
-$closeLink = $type != 'bysearch' ? createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID=$branchID&orderBy=$orderBy&build=$buildID&type=$type&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("bugModule")';
+$closeLink = $browseType != 'bysearch' ? createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID=$branchID&orderBy=$orderBy&build=$buildID&browseType=$browseType&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey(\"bugModule\")';
 sidebar
 (
     moduleMenu(set(array
@@ -101,7 +101,7 @@ dtable
     set::customCols(true),
     set::checkable($canBatchAssignTo),
     set::orderBy($orderBy),
-    set::sortLink(createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID={$branchID}&orderBy={name}_{sortType}&build={$buildID}&type={$type}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('project', 'bug', "projectID={$project->id}&productID={$productID}&branchID={$branchID}&orderBy={name}_{sortType}&build={$buildID}&browseType={$browseType}&param={$param}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
     set::onRenderCell(jsRaw('window.onRenderCell')),

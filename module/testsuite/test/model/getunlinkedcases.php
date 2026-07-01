@@ -40,6 +40,6 @@ $testsuite = new testsuiteModelTest();
 
 r($testsuite->getUnlinkedCasesTest($suiteID[0], 'all',      $param[0])) && p('2:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为1,param值为0
 r($testsuite->getUnlinkedCasesTest($suiteID[1], 'all',      $param[0])) && p('2:id,title;1:id,title') && e('2,这个是测试用例2;1,这个是测试用例1');  //测试suiteID值为2,param值为0
-r($testsuite->getUnlinkedCasesTest($suiteID[1], 'bySearch', $param[1])) && p('1:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为2,param值为1
-r($testsuite->getUnlinkedCasesTest($suiteID[0], 'bySearch', $param[1])) && p('1:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为1,param值为1
+r($testsuite->getUnlinkedCasesTest($suiteID[1], 'bysearch', $param[1])) && p('1:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为2,param值为1
+r($testsuite->getUnlinkedCasesTest($suiteID[0], 'bysearch', $param[1])) && p('1:id,title')            && e('1,这个是测试用例1');                    //测试suiteID值为1,param值为1
 r($testsuite->getUnlinkedCasesTest(3,           'all',      $param[1])) && p()                        && e('~~');                                   //测试不存在的suiteID

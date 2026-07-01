@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The create view file of testtask module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     testtask
@@ -145,7 +145,7 @@ formPanel
         set::label($lang->testtask->status),
         set::name('status'),
         set::required(true),
-        set::control('picker'),
+        set::control(array('control' => 'picker', 'required' => true)),
         set::items($lang->testtask->statusList)
     ),
     formGroup

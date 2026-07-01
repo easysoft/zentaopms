@@ -9,6 +9,85 @@ class actionTaoTest extends baseTest
     protected $className  = 'tao';
 
     /**
+     * Test fetchBaseInfo method.
+     *
+     * @param  int $actionID
+     * @access public
+     * @return object|bool
+     */
+    public function fetchBaseInfo(int $actionID)
+    {
+        $result = $this->instance->fetchBaseInfo($actionID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getObjectBaseInfo method.
+     *
+     * @param  string $table
+     * @param  array  $queryParam
+     * @param  string $field
+     * @param  string $orderby
+     * @access public
+     * @return object|bool
+     */
+    public function getObjectBaseInfo(string $table, array $queryParam, string $field = '*', string $orderby = '')
+    {
+        $result = $this->instance->getObjectBaseInfo($table, $queryParam, $field, $orderby);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getNoFilterRequiredRelation method.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getNoFilterRequiredRelation(string $objectType, int $objectID): array
+    {
+        $result = $this->instance->getNoFilterRequiredRelation($objectType, $objectID);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getCaseRelated method.
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  int    $objectID
+     * @param  int    $extra
+     * @access public
+     * @return array
+     */
+    public function getCaseRelated(string $objectType, string $actionType, int $objectID, int $extra): array
+    {
+        $result = $this->instance->getCaseRelated($objectType, $actionType, $objectID, $extra);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test fetchObjectInfoByID method.
+     *
+     * @param  string $table
+     * @param  int    $objectID
+     * @param  string $field
+     * @access public
+     * @return object|bool
+     */
+    public function fetchObjectInfoByID(string $table, int $objectID, string $field = '*')
+    {
+        $result = $this->instance->fetchObjectInfoByID($table, $objectID, $field);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test processLinkStoryAndBugActionExtra method.
      *
      * @param  string $ids
@@ -251,17 +330,30 @@ class actionTaoTest extends baseTest
     /**
      * Test processMaxDocObjectLink method.
      *
-     * @param  object $action
-     * @param  string $moduleName
-     * @param  string $methodName
-     * @param  string $vars
+     * @param  object|int $action
+     * @param  string     $moduleName
+     * @param  string     $methodName
+     * @param  string     $vars
      * @access public
      * @return object
      */
-    public function processMaxDocObjectLinkTest(object $action, string $moduleName, string $methodName, string $vars): object
+    public function processMaxDocObjectLinkTest(object|int $action, string $moduleName, string $methodName, string $vars): object
     {
+        if(is_int($action))
+        {
+            $actionObject = new stdClass();
+            $actionObject->objectID   = $action;
+            $actionObject->objectType = $moduleName;
+            $action                   = $actionObject;
+        }
+
         $this->instance->processMaxDocObjectLink($action, $moduleName, $methodName, $vars);
         if(dao::isError()) return dao::getError();
+
+        $query = parse_url(htmlspecialchars_decode($action->objectLink ?? ''), PHP_URL_QUERY);
+        parse_str((string)$query, $params);
+        $action->moduleName = $params['m'] ?? $moduleName;
+        $action->methodName = $params['f'] ?? $methodName;
         return $action;
     }
 

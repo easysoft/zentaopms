@@ -2,7 +2,7 @@
 /**
  * The control file of ZenAgent Node of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      liyuchun <liyuchun@easycorp.ltd>
  * @package     qa
@@ -63,7 +63,7 @@ class zanode extends control
         /* 构建搜索表单。*/
         /* Build the search form. */
         $hosts     = $this->loadModel('zahost')->getPairs('host');
-        $actionURL = $this->createLink('zanode', 'browse', "browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('zanode', 'browse', "browseType=bysearch&queryID=myQueryID");
         $this->config->zanode->search['actionURL'] = $actionURL;
         $this->config->zanode->search['queryID']   = $queryID;
         $this->config->zanode->search['onMenuBar'] = 'no';

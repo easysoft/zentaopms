@@ -2,7 +2,7 @@
 /**
  * The model file of webhook module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     webhook
@@ -186,10 +186,10 @@ class webhookModel extends model
      */
     public function getFeishuBoundOpenId(string $assignedTo): string
     {
-        return $this->dao->select('t1.openID')->from(TABLE_OAUTH)->alias('t1')
-            ->leftJoin(TABLE_WEBHOOK)->alias('t2')->on('t1.providerID = t2.id')
+        return $this->dao->select('t1.`openID`')->from(TABLE_OAUTH)->alias('t1')
+            ->leftJoin(TABLE_WEBHOOK)->alias('t2')->on('t1.`providerID` = t2.id')
             ->where('t1.account')->eq($assignedTo)
-            ->andWhere('t1.providerType')->eq('webhook')
+            ->andWhere('t1.`providerType`')->eq('webhook')
             ->andWhere('t2.type')->eq('feishuuser')
             ->fetch('openID');
     }
@@ -493,6 +493,12 @@ class webhookModel extends model
      */
     public function getViewLink(string $objectType, int $objectID): string
     {
+        $isAPI = (defined('RUN_MODE') && RUN_MODE == 'api');
+        if($isAPI)
+        {
+            global $oldRequestType;
+            if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
+        }
         $oldOnlyBody = '';
         $tab         = '';
         if(isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes')
@@ -515,11 +521,13 @@ class webhookModel extends model
         {
             $viewLink = helper::createLink('aitask', 'view', "taskID={$objectID}", 'html') . $tab;
             if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+            if($isAPI) $this->config->requestType = 'GET';
             return $viewLink;
         }
 
         $viewLink = helper::createLink($objectType, 'view', "id=$objectID", 'html') . $tab;
         if($oldOnlyBody) $_GET['onlybody'] = $oldOnlyBody;
+        if($isAPI) $this->config->requestType = 'GET';
 
         return $viewLink;
     }
@@ -820,7 +828,7 @@ class webhookModel extends model
      * @access public
      * @return bool
      */
-    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', object $aitaskObject = null): bool
+    public function saveData(int $webhookID, int $actionID, string $data, string $actor = '', ?object $aitaskObject = null): bool
     {
         if(empty($actor)) $actor = $this->app->user->account;
 

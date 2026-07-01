@@ -299,7 +299,7 @@ class context extends \zin\utils\dataset
     {
         $e         = new \Exception();
         $trace     = $e->getTraceAsString();
-        $trace     = str_replace($this->control->app->basePath, '', $trace);
+        $trace     = empty($this->control) ? '' : str_replace($this->control->app->basePath, '', $trace);
         $stack     = explode("\n", $trace);
         if(str_contains($stack[0], 'lib/zin/core/context.func.php')) array_shift($stack);
 

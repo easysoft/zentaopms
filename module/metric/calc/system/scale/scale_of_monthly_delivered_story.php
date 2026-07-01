@@ -11,7 +11,7 @@
  * 描述：按系统统计的月度交付的研发需求规模数反映了组织在每个月交付的研发需求的规模总数，用于评估组织对于交付能力评估、绩效评估、项目管理和控制、客户满意度和信任建立、持续改进和效率提升具有重要意义。
  * 定义：所有的研发需求规模数求和;阶段为已发布且发布时间为某年某月或关闭原因为已完成且关闭时间为某年某月;过滤父研发需求;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_monthly_delivered_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.stage', 't1.releasedDate', 't1.closedReason', 't1.closedDate', 't1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.stage', 't1.`releasedDate`', 't1.`closedReason`', 't1.`closedDate`', 't1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

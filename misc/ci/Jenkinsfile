@@ -252,6 +252,7 @@ pipeline {
           matrix {
             agent {
               kubernetes {
+                inheritFrom "upload-tencentcloud"
                 containerTemplate {
                     name "package"
                     image "${MIDDLE_IMAGE_REPO}:${MIDDLE_IMAGE_TAG}"
@@ -345,16 +346,23 @@ pipeline {
                     }
                   }
 
-                  stage("Upload External Path") {
+                  stage("UploadToCOS") {
                     when {
                       environment name: 'BUILD_KIND', value: 'release'
                     }
 
                     steps {
                       sh 'ls -l ${OUTPUT_PKG_PATH}'
-                      container('package') {
-                        sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
-                      }
+                      withCredentials([
+                        string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
+                        string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
+                        string(credentialsId: 'COS_BUCKET', variable: 'COS_BUCKET'),
+                        string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
+                      ]) {
+                            container('coscmd') {
+                              sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                            }
+                         }
                     }
                   }
 
@@ -401,7 +409,7 @@ pipeline {
                 stage("Zbox win") {
                   agent {
                     kubernetes {
-                      inheritFrom "code-sign"
+                      inheritFrom "upload-tencentcloud code-sign"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -432,7 +440,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload External Path") {
+                    stage("UploadToCOS") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -441,9 +449,16 @@ pipeline {
                         script {
                           buildZboxWin.copyToPreUploadDir()
                         }
-                        // container('package') {
-                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
-                        // }
+                        withCredentials([
+                            string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
+                            string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
+                            string(credentialsId: 'COS_BUCKET', variable: 'COS_BUCKET'),
+                            string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
+                        ]) {
+                              container('coscmd') {
+                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                              }
+                        }
                       }
                     } // End Upload
                   }
@@ -452,6 +467,7 @@ pipeline {
                 stage("Zbox linux") {
                   agent {
                     kubernetes {
+                      inheritFrom "upload-tencentcloud"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -478,7 +494,7 @@ pipeline {
                       }
                     }
 
-                    stage("Upload External Path") {
+                    stage("UploadToCOS") {
                       when {
                         environment name: 'BUILD_KIND', value: 'release'
                       }
@@ -487,9 +503,16 @@ pipeline {
                         script {
                           buildZboxLinux.copyToPreUploadDir()
                         }
-                        // container('package') {
-                        //   sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
-                        // }
+                        withCredentials([
+                            string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
+                            string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
+                            string(credentialsId: 'COS_BUCKET', variable: 'COS_BUCKET'),
+                            string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
+                        ]) {
+                            container('coscmd') {
+                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                            }
+                        }
                       }
                     } // End Upload
                   }
@@ -501,7 +524,7 @@ pipeline {
                   }
                   agent {
                     kubernetes {
-                      inheritFrom "zentao-package"
+                      inheritFrom "zentao-package upload-tencentcloud"
                       yamlFile 'misc/ci/publish-zbox.yaml'
                     }
                   }
@@ -512,8 +535,15 @@ pipeline {
                     script {
                       buildPkg.doConvertTarXz()
                     }
-                    container('package') {
-                      sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
+                    withCredentials([
+                        string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
+                        string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
+                        string(credentialsId: 'COS_BUCKET', variable: 'COS_BUCKET'),
+                        string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
+                    ]) {
+                          container('coscmd') {
+                            sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                          }
                     }
                   }
                 }
@@ -544,7 +574,7 @@ pipeline {
 
           agent {
             kubernetes {
-              inheritFrom "dind2 xuanim"
+              inheritFrom "dind2 xuanim upload-tencentcloud"
               yamlFile 'misc/ci/publish-image.yaml'
             }
           }
@@ -593,7 +623,6 @@ pipeline {
                     sh 'make build74-biz-k8s'
                   }
 
-
                   if (env.PUBLISH_MAX=="true") {
                     sh 'make test-max'
                     sh 'make build-max'
@@ -608,14 +637,12 @@ pipeline {
                     sh 'make build74-max-k8s'
                   }
 
-
                   if (env.PUBLISH_IPD=="true") {
                     sh 'make test-ipd'
                     sh 'make build-ipd'
 
                     sh 'make test-ipd-k8s'
                     sh 'make build-ipd-k8s'
-
 
                     sh 'make test74-ipd'
                     sh 'make build74-ipd'
@@ -665,7 +692,7 @@ pipeline {
         stage("Upload rongpm") {
           agent {
             kubernetes {
-              inheritFrom "zentao-package-test xuanim"
+              inheritFrom "zentao-package-test xuanim upload-tencentcloud"
               yamlFile 'misc/ci/normal.yaml'
             }
           }
@@ -686,18 +713,27 @@ pipeline {
               container('package') {
                 sh 'mkdir -p output/rongpm/${PMS_VERSION}'
                 sh 'cd output/rongpm/${PMS_VERSION} && php7.2 $WORKSPACE/system/bin/buildpractice.php && rm -rf rongpm'
-                sh '${ZENTAO_BUILD_PATH}/script/sync_files_to_external_host.sh'
               }
+
+              withCredentials([
+                string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
+                string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
+                string(credentialsId: 'COS_BUCKET', variable: 'COS_BUCKET'),
+                string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
+              ]) {
+                    container('coscmd') {
+                        sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                    }
+                 }
             }
           }
         } // End Upload rongpm
 
-      }
-
+        }
 
     } // end publish
 
-  }
+    }
 
   post {
     failure {
@@ -705,5 +741,4 @@ pipeline {
     }
   }
 
-}
-
+  }

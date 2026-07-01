@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The view view file of story module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong <yidong@easycorp.ltd>
  * @package     story
@@ -75,6 +75,7 @@ if(empty($story->frozen) && !$isInModal && hasPriv($story->type, 'create') && $c
 $sections = array();
 $sections[] = setting()
     ->title($lang->story->legendSpec)
+    ->className('legendSpec')
     ->control('html')
     ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
 if($this->config->vision != 'lite')

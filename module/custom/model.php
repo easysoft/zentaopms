@@ -2,7 +2,7 @@
 /**
  * The model file of custom module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
@@ -946,8 +946,7 @@ class customModel extends model
         $disabledFeatures = array('program', 'productLine');
         foreach($this->config->custom->dataFeatures as $feature)
         {
-            $function = 'has' . ucfirst($feature) . 'Data';
-            if(!$this->$function())
+            if(!$this->hasDataFeature($feature))
             {
                 if(in_array($feature, $this->config->custom->projectFeatures))
                 {
@@ -1055,14 +1054,13 @@ class customModel extends model
      */
     public function disableFeaturesByMode(string $mode)
     {
-        $disabledFeatures = 'otherOA';
+        $disabledFeatures = 'otherOA,';
         if($mode == 'light')
         {
             /* Check whether the product or project data in the system is empty. */
             foreach($this->config->custom->dataFeatures as $feature)
             {
-                $function = 'has' . ucfirst($feature) . 'Data';
-                if(!$this->$function())
+                if(!$this->hasDataFeature($feature))
                 {
                     if(in_array($feature, $this->config->custom->projectFeatures)) $feature = 'project' . ucfirst($feature);
                     /* If the data is empty, this feature is disabled. */
@@ -1084,6 +1082,23 @@ class customModel extends model
         $this->setting->setItem('system.custom.enableER', $enableER);
 
         $this->processMeasrecordCron();
+    }
+
+    /**
+     * 检查系统中是否有指定数据功能的数据。
+     * Check whether the system has data for a data feature.
+     *
+     * @param  string $feature
+     * @access public
+     * @return bool
+     */
+    public function hasDataFeature(string $feature): bool
+    {
+        $function = 'has' . ucfirst($feature) . 'Data';
+        $hasData  = (bool)$this->$function();
+        if($feature == 'productUR' && !$hasData) $hasData = (bool)$this->hasProductERData();
+
+        return $hasData;
     }
 
     /**

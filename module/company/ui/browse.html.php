@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browse view file of company module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     company
@@ -79,24 +79,28 @@ $footToolbar = common::hasPriv('user', 'batchEdit') ? array(
     'btnProps' => array('size' => 'sm', 'btnType' => 'secondary')
 ) : null;
 
-if(common::hasPriv('user', 'batchEdit')) $this->config->company->user->dtable->fieldList['id']['type'] = 'checkID';
+if(common::hasPriv('user', 'batchEdit')) $this->config->company->browse->dtable->fieldList['id']['type'] = 'checkID';
 
 foreach($users as $user)
 {
     if(!$user->last) $user->last = '';
 }
 
-$tableData = initTableData($users, $this->config->company->user->dtable->fieldList, $this->loadModel('user'));
+$cols = $this->loadModel('datatable')->getSetting('company');
+if(isset($cols['dept']))     $cols['dept']['map']     = $this->loadModel('dept')->getOptionMenu();
+if(isset($cols['superior'])) $cols['superior']['map'] = $userPairs;
+
+$tableData = initTableData($users, $cols, $this->loadModel('user'));
 dtable
 (
     setID('userList'),
+    set::customCols(true),
     set::orderBy($orderBy),
     set::sortLink(createLink('company', 'browse', "browseType={$browseType}&param={$param}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::cols($this->config->company->user->dtable->fieldList),
+    set::cols($cols),
     set::data($tableData),
     set::userMap($userPairs),
     set::checkable(common::hasPriv('user', 'batchEdit')),
-    set::fixedLeftWidth('0.2'),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footToolbar($footToolbar),
     set::footPager(usePager())

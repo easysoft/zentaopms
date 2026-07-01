@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -249,8 +249,8 @@ class bugModel extends model
         return $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.product = t2.product')
             ->where("((t1.status = 'resolved' AND t1.resolution = 'postponed') OR (t1.status = 'active'))")
-            ->andWhere('t1.toTask')->eq(0)
-            ->andWhere('t1.toStory')->eq(0)
+            ->andWhere('t1.`toTask`')->eq(0)
+            ->andWhere('t1.`toStory`')->eq(0)
             ->beginIF(!empty($products))->andWhere('t1.product')->in($products)->fi()
             ->beginIF(empty($products))->andWhere('t1.execution')->eq($executionID)->fi()
             ->andWhere('t2.project')->eq($executionID)
@@ -662,20 +662,20 @@ class bugModel extends model
      * Get bugs to link.
      *
      * @param  int    $bugID
-     * @param  bool   $bySearch
+     * @param  bool   $bysearch
      * @param  int    $queryID
      * @param  string $excludeBugs
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $bugID, bool $bySearch = false, string $excludeBugs = '', int $queryID = 0, ?object $pager = null): array
+    public function getBugs2Link(int $bugID, bool $bysearch = false, string $excludeBugs = '', int $queryID = 0, ?object $pager = null): array
     {
         $bug = $this->getByID($bugID);
 
         $excludeBugs .= ",{$bug->id}";
 
-        if($bySearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
+        if($bysearch) return $this->getBySearch('bug', (array)$bug->product, 'all', 0, 0, $queryID, $excludeBugs, 'id desc', $pager);
 
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
@@ -862,7 +862,7 @@ class bugModel extends model
      */
     public function getUserBugs(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $limit = 0, ?object $pager = null, int $executionID = 0, int $queryID = 0): array
     {
-        if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
+        if($type != 'bysearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
 
         $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
         $queryName  = $moduleName . 'Query';
@@ -897,16 +897,16 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($type == 'bySearch')->andWhere($query)->fi()
+            ->beginIF($type == 'bysearch')->andWhere($query)->fi()
             ->beginIF($executionID)->andWhere('t1.execution')->eq($executionID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->beginIF($type != 'all' and $type != 'bysearch')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'bysearch' and $moduleName == 'workBug')->andWhere("t1.`assignedTo`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
-            ->andWhere('t1.openedBy', 1)->eq($account)
-            ->orWhere('t1.closedBy')->eq($account)
-            ->orWhere('t1.resolvedBy')->eq($account)
+            ->beginIF($type == 'bysearch' and $moduleName == 'contributeBug')
+            ->andWhere('t1.`openedBy`', 1)->eq($account)
+            ->orWhere('t1.`closedBy`')->eq($account)
+            ->orWhere('t1.`resolvedBy`')->eq($account)
             ->orWhere('t1.id')->in(!empty($bugsAssignedByMe) ? array_keys($bugsAssignedByMe) : array())
             ->markRight(1)
             ->fi()
@@ -938,7 +938,7 @@ class bugModel extends model
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product=t2.id')
-            ->where('t1.assignedTo')->eq($account)
+            ->where('t1.`assignedTo`')->eq($account)
             ->andWhere('t1.status')->ne('closed')
             ->beginIF(!empty($deletedProjectIdList))->andWhere('t1.execution')->notin($deletedProjectIdList)->fi()
             ->beginIF(!empty($skipProductIdList))->andWhere('t1.product')->notin($skipProductIdList)->fi()
@@ -994,10 +994,12 @@ class bugModel extends model
                 ->beginIF(!empty($productID) and $branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
-                ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'openedbyme')->andWhere('t1.openedBy')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'assignedtome')->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'openedbyme')->andWhere('t1.`openedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
-                ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($build)->andWhere("CONCAT(',', t1.`openedBuild`, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1046,7 +1048,7 @@ class bugModel extends model
                 $conditions = array();
 
                 if(!is_array($builds)) $builds = array_filter(array_unique(explode(',', $builds)));
-                foreach($builds as $build) $conditions[] = "FIND_IN_SET('$build', t1.openedBuild)";
+                foreach($builds as $build) $conditions[] = "FIND_IN_SET('$build', t1.`openedBuild`)";
 
                 $condition = implode(' OR ', $conditions);
                 $condition = "($condition)";
@@ -1065,6 +1067,8 @@ class bugModel extends model
                 ->andWhere('t2.path')->like("%,$param,%")
                 ->andWhere('t2.deleted')->eq('0')
                 ->fi()
+                ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -2244,8 +2248,8 @@ class bugModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
-            ->leftJoin(TABLE_BUG)->alias('t3')->on("t2.AType='bug' AND t2.AID=t3.id")
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.`BType`='commit' AND t2.`BID`=t1.id")
+            ->leftJoin(TABLE_BUG)->alias('t3')->on("t2.`AType`='bug' AND t2.`AID`=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->notNULL()

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of admin module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
@@ -513,7 +513,7 @@ class adminModel extends model
         return $this->dao->select('t1.id, t1.review')->from(TABLE_PROJECTDELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('1=1')
-            ->beginIF($groupID)->andWhere('t2.workflowGroup')->eq($groupID)->fi()
+            ->beginIF($groupID)->andWhere('t2.`workflowGroup`')->eq($groupID)->fi()
             ->fetchPairs('id');
     }
 }

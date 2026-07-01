@@ -80,6 +80,7 @@ zenData('module')->loadYaml('module')->gen(3);
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
 zenData('user')->gen(5);
+su('admin');
 
 $libIds = array(0, 11, 13, 14);
 

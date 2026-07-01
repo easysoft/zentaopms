@@ -3,9 +3,9 @@ $(document).off('click', '#showTask').on('click', '#showTask', function()
     const show = $(this).is(':checked') ? 1 : 0;
     $.cookie.set('showTask', show, {expires:config.cookieLife, path:config.webRoot});
 
-    if(show == 0 && status == 'bysearch')
+    if(show == 0 && browseType == 'bysearch')
     {
-        loadPage($.createLink('project', 'execution', 'status=undone&projectID=' + projectID));
+        loadPage($.createLink('project', 'execution', 'browseType=undone&projectID=' + projectID));
     }
     else
     {

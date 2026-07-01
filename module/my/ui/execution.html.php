@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The execution view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     execution
@@ -16,8 +16,8 @@ jsVar('delayWarning', $lang->task->delayWarning);
 
 featurebar
 (
-    set::current($type),
-    set::linkParams("type={key}&orderBy={$orderBy}")
+    set::current($browseType),
+    set::linkParams("browseType={key}&orderBy={$orderBy}")
 );
 
 foreach($executions as $execution) $execution->isParent = isset($parentGroup[$execution->id]);
@@ -31,11 +31,11 @@ dtable
     set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderExecutionCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'execution', "type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', 'execution', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager(array(
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => createLink('my', 'execution', "type={$type}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}")
+        'linkCreator' => createLink('my', 'execution', "browseType={$browseType}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPaga={recPerPage}&page={page}")
     ))),
     set::emptyTip($lang->execution->noExecutions)
 );

@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=productpanModel->getGroupByProduct();
@@ -21,7 +22,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('branch')->loadYaml('branch')->gen(10);
 zenData('productplan')->loadYaml('productplan')->gen(10);
 
-$plan = new productPlan('admin');
+$plan = new productplanModelTest('admin');
 
 $products = array();
 $products[0] = array(1, 2);

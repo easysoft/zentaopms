@@ -3,19 +3,13 @@ declare(strict_types=1);
 /**
  * The ajaxgetdropmenu view file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     project
  * @version     $Id
  * @link        https://www.zentao.net
  */
 namespace zin;
-if(in_array("{$module}-{$method}", $config->index->oldPages))
-{
-    include '../view/ajaxgetdropmenu.html.php';
-    return;
-}
-
 /**
  * 获取项目所属分组。
  * Get project group.
@@ -95,7 +89,7 @@ elseif(!empty($project->isTpl))
             $item['icon']     = $project->model == 'scrum' ? 'sprint' : $project->model;
             $item['keys']     = zget($projectPinyinNames, $project->name, '');
             $item['involved'] = isset($involvedProjects[$project->id]);
-            $item['url']      = helper::createLink('project', 'execution', "status=undone&projectID={$project->id}");
+            $item['url']      = helper::createLink('project', 'execution', "browseType=undone&projectID={$project->id}");
 
             $data[] = $item;
         }

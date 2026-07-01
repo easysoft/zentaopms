@@ -43,7 +43,7 @@ zenData('project')->loadYaml('program')->gen(40);
 su('admin');
 
 $tester = new programTaoTest();
-$programList = $tester->program->getRootProgramList();
+$programList = $tester->getRootProgramListTest();
 
 r(count($programList)) && p() && e('10');
 r($programList) && p('0:id,name,PM,type') && e('1,项目集1,pm1,program');

@@ -1,9 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=productpanModel->updateParentStatus();
-timout=0
+title=productplanModel->updateParentStatus();
+timeout=0
 cid=17652
 
 - 测试将计划1的状态更新为wait
@@ -39,7 +40,7 @@ $plan->gen(9);
 
 $parentIdList = array(1, 3, 4, 6, 8);
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->updateParentStatusTest($parentIdList[0])) && p('0:field,old,new') && e('status,doing,wait');   // 测试将计划1的状态更新为wait
 r($planTester->updateParentStatusTest($parentIdList[1])) && p('0:field,old,new') && e('parent,2,0');          // 测试更新计划3的状态
 r($planTester->updateParentStatusTest($parentIdList[2])) && p('0:field,old,new') && e('status,doing,closed'); // 测试将计划4的状态更新为closed

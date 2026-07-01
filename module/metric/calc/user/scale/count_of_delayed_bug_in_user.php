@@ -13,7 +13,7 @@
  * 度量库：
  * 收集方式：realtime
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -24,7 +24,7 @@ class count_of_delayed_bug_in_user extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.assignedTo', 't1.status', 't1.assignedDate', 'DATEDIFF(CURDATE(), t1.assignedDate) as delayDays');
+    public $fieldList = array('t1.`assignedTo`', 't1.status', 't1.`assignedDate`', 'DATEDIFF(CURDATE(), t1.`assignedDate`) as delayDays');
 
     public $result = array();
 
@@ -38,14 +38,14 @@ class count_of_delayed_bug_in_user extends baseCalc
 
         if(!$longlife) $longlife = 7;
 
-        return $this->dao->select('t1.assignedTo as user, count(t1.id) as value')->from(TABLE_BUG)->alias('t1')
+        return $this->dao->select('t1.`assignedTo` as user, count(t1.id) as value')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.status')->eq('active')
-            ->andWhere('t1.assignedDate')->notZeroDatetime()
+            ->andWhere('t1.`assignedDate`')->notZeroDatetime()
             ->andWhere('DATEDIFF(CURDATE(), assignedDate)')->gt($longlife)
-            ->groupBy('t1.assignedTo');
+            ->groupBy('t1.`assignedTo`');
     }
 
     public function calculate($row)

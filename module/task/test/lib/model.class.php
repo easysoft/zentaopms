@@ -775,6 +775,8 @@ class taskModelTest extends baseTest
      */
     public function computeBeginAndEndTest($taskID)
     {
+        $taskID = (int)$taskID;
+
         $result = $this->instance->computeBeginAndEnd($taskID);
 
         if(dao::isError())
@@ -975,6 +977,8 @@ class taskModelTest extends baseTest
         if(empty($child)) return 0;
 
         $action = $this->instance->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($child->id)->orderBy('id_desc')->limit(1)->fetch();
+        if(empty($action)) return $child;
+
         $child->action = $action->action;
         $child->extra  = $action->extra;
         return $child;
@@ -1460,7 +1464,7 @@ class taskModelTest extends baseTest
         foreach($createFields as $field => $defaultValue) $task->$field = $defaultValue;
         foreach($param as $key => $value) $task->$key = $value;
 
-        $objectID = $this->instance->create($task);
+        $objectID = $this->instance->create($task, false);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->getByID($objectID);

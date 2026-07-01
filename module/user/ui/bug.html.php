@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The bug view file of user module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong <yidong@easycorp.ltd>
  * @package     user
@@ -12,11 +12,11 @@ namespace zin;
 include './featurebar.html.php';
 
 $that = zget($lang->user->thirdPerson, $user->gender);
-$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&type=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
-$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
-$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&type=resolvedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
-$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&type=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
-if(isset($bugNavs[$type])) $bugNavs[$type]['active'] = true;
+$bugNavs['assignedTo'] = array('text' => sprintf($lang->user->assignedTo, $that), 'url' => inlink('bug', "userID={$user->id}&browseType=assignedTo&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['openedBy']   = array('text' => sprintf($lang->user->openedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&browseType=openedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['resolvedBy'] = array('text' => sprintf($lang->user->resolvedBy, $that), 'url' => inlink('bug', "userID={$user->id}&browseType=resolvedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+$bugNavs['closedBy']   = array('text' => sprintf($lang->user->closedBy,   $that), 'url' => inlink('bug', "userID={$user->id}&browseType=closedBy&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"), 'load' => 'table');
+if(isset($bugNavs[$browseType])) $bugNavs[$browseType]['active'] = true;
 
 $cols = array();
 foreach($config->user->defaultFields['bug'] as $field) $cols[$field] = $config->bug->dtable->fieldList[$field];
@@ -50,7 +50,7 @@ div
         set::priList($lang->bug->priList),
         set::severityList($lang->bug->severityList),
         set::orderBy($orderBy),
-        set::sortLink(inlink('bug', "userID={$user->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+        set::sortLink(inlink('bug', "userID={$user->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
         set::footPager(usePager())
     )
 );

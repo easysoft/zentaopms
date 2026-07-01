@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日新增需求数表示每日新增加的需求的数量，可以用于评估组织的需求增长和规模扩展情况。
  * 定义：所有的需求个数求和;创建时间为某日;过滤已删除的需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_created_story extends baseCalc
 {
     public $dataset = 'getAllStories';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

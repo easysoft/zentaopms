@@ -11,7 +11,7 @@ cid=17241
 - 使用已存在的mr请求数据 @存在重复并且未关闭的合并请求: ID1
 - 使用源项目分支与目标项目分支相同的mr请求数据属性result @存在另外一个同样的合并请求在源项目分支中: ID30
 - 使用源项目分支与目标项目分支相同的mr请求数据 @源项目分支与目标项目分支不能相同
-- 使用正确的mr请求数据属性result @success
+- 使用正确的数据但远端已存在开放MR @~f:^存在另外一个同样的合并请求在源项目分支中: ID[0-9]+$
 
 */
 
@@ -55,4 +55,4 @@ $MR->targetBranch = 'laudantium-unde-et-iste-et';
 r($mrModel->createTester($MR)) && p() && e('源项目分支与目标项目分支不能相同'); // 使用源项目分支与目标项目分支相同的mr请求数据
 
 $MR->sourceBranch = 'test';
-r($mrModel->createTester($MR)) && p('result') && e('success'); // 使用正确的mr请求数据
+r($mrModel->createTester($MR)) && p() && e('~f:^存在另外一个同样的合并请求在源项目分支中: ID[0-9]+$~'); // 使用正确的数据但远端已存在开放MR

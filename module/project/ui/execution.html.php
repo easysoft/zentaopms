@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The all view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     execution
@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-jsVar('status',    $status);
+jsVar('browseType', $browseType);
 jsVar('projectID', $projectID);
 jsVar('orderBy',   $orderBy);
 jsVar('productID', $productID);
@@ -23,7 +23,7 @@ jsVar('pageExecSummary', $lang->execution->pageExecSummary);
 jsVar('checkedExecSummary', $lang->execution->checkedExecSummary);
 jsVar('confirmCreateStage', $lang->project->confirmCreateStage);
 
-$searchTask = strtolower($status) == 'bysearch';
+$searchTask = strtolower($browseType) == 'bysearch';
 
 $footToolbar = array();
 $canModify            = common::canModify('project', $project);
@@ -90,7 +90,7 @@ foreach($executions as $execution) $execution->nameCol = $execution->name;
 
 /* zin: Define the feature bar on main menu. */
 $productItems = array();
-foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "status={$status}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
+foreach($productList as $key => $value) $productItems[] = array('text' => $value, 'active' => $key == $productID, 'url' => createLink('project', 'execution', "browseType={$browseType}&projectID={$projectID}&orderBy={$orderBy}&productID={$key}"));
 
 $productName  = !empty($product) ? $product->name : '';
 $showProduct  = (in_array($project->model, array('waterfall', 'waterfallplus', 'ipd')) && $project->stageBy == 'product') || in_array($project->model, array('agileplus', 'scrum'));
@@ -107,8 +107,8 @@ featureBar
     ) : null,
     set::module('project'),
     set::method('execution'),
-    set::current($status),
-    set::link('project', 'execution', "status={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::current($browseType),
+    set::link('project', 'execution', "browseType={key}&projectID={$projectID}&orderBy={$orderBy}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     li
     (
         checkbox
@@ -151,7 +151,7 @@ toolbar
         'text'        => $lang->programplan->exporting,
         'class'       => "ghost export",
         'data-toggle' => "modal",
-        'url'         => createLink('execution', 'export', "status={$status}&productID={$productID}&orderBy={$orderBy}&from=project")
+        'url'         => createLink('execution', 'export', "status={$browseType}&productID={$productID}&orderBy={$orderBy}&from=project")
     ))) : null,
     $canModifyProject && common::hasPriv('programplan', 'create') && $isStage && empty($product->deleted) ? item(set(array
     (
@@ -197,8 +197,8 @@ dtable
     set::checkInfo(jsRaw("function(checkedIDList){ return window.footerSummary(this, checkedIDList);}")),
     set::footToolbar($footToolbar),
     set::orderBy($orderBy),
-    set::sortLink(createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
-    set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "status={$status}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
+    set::sortLink(createLink('project', 'execution', "browseType={$browseType}&projectID=$projectID&orderBy={name}_{sortType}&productID={$productID}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::footPager(usePager(array('linkCreator' => createLink('project', 'execution', "browseType={$browseType}&projectID=$projectID&orderBy={$orderBy}&productID={$productID}&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")))),
     set::emptyTip(!$searchTask ? $lang->execution->noExecution : $lang->task->noTask),
     set::createTip($isStage ? $lang->programplan->create : $lang->execution->create),
     set::createLink($canCreateExecution && !$searchTask && !$hasFrozenExecutions ? $createLink : ''),

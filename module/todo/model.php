@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Lanzongjun <lanzongjun@easycorp.ltd>
  * @package     todo
@@ -386,12 +386,16 @@ class todoModel extends model
      * Activate a todo.
      *
      * @param  int    $todoID
+     * @param  object $oldTodo
      * @access public
      * @return bool
      */
-    public function activate(int $todoID): bool
+    public function activate(int $todoID, object $oldTodo): bool
     {
-        $this->dao->update(TABLE_TODO)->set('status')->eq('wait')->where('id')->eq($todoID)->exec();
+        $todoData = new stdclass();
+        $todoData->status = 'wait';
+        if($oldTodo->assignedTo == 'closed') $todoData->assignedTo = $oldTodo->finishedBy;
+        $this->dao->update(TABLE_TODO)->data($todoData)->where('id')->eq($todoID)->exec();
 
         $todo = $this->fetchByID($todoID);
         $this->loadModel('action')->create('todo', $todoID, 'activated', '', 'wait');
@@ -493,14 +497,29 @@ class todoModel extends model
      * 修改待办事项的时间。
      * Edit the date of todo.
      *
-     * @param  array  $todoIdList
-     * @param  string $date
+     * @param  array      $todoIdList
+     * @param  string     $date
      * @access public
-     * @return bool
+     * @return bool|array
      */
-    public function editDate(array $todoIdList, string $date): bool
+    public function editDate(array $todoIdList, string $date): bool|array
     {
-        return $this->todoTao->updateDate($todoIdList, $date);
+        $oldTodoList = $this->dao->select('id,date')->from(TABLE_TODO)->where('id')->in($todoIdList)->fetchAll('id');
+
+        $this->todoTao->updateDate($todoIdList, $date);
+        if(dao::isError()) return false;
+
+        $todo       = new stdClass();
+        $todo->date = $date;
+        $allChanges = array();
+        foreach($todoIdList as $todoID)
+        {
+            $oldTodo = $oldTodoList[$todoID];
+
+            $todo->id = $todoID;
+            $allChanges[$todoID] = common::createChanges($oldTodo, $todo);
+        }
+        return $allChanges;
     }
 
     /**

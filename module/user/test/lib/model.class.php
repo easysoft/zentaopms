@@ -1211,7 +1211,7 @@ class userModelTest extends baseTest
      */
     public function mergeAclsToUserViewTest(string $account, object $userView, array $acls, string $projects)
     {
-        $result = $this->invokeArgs(['mergeAclsToUserView', [$account, $userView, $acls, $projects]);
+        $result = $this->invokeArgs('mergeAclsToUserView', [$account, $userView, $acls, $projects]);
         if(dao::isError()) return dao::getError();
         return $result;
     }

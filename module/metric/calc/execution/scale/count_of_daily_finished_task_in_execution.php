@@ -11,7 +11,7 @@
  * 描述：按执行统计的日完成任务数是指每天完成的任务数量。该度量项反映了团队的日常工作效率和任务完成速度。
  * 定义：执行中任务个数求和;状态为已完成;实际完成日期为某日;过滤已删除的任务;过滤已删除的执行;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_finished_task_in_execution extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.status', 't1.finishedDate', 't1.execution');
+    public $fieldList = array('t1.status', 't1.`finishedDate`', 't1.execution');
 
     public $result = array();
 

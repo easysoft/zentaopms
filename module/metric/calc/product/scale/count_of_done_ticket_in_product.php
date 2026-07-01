@@ -11,7 +11,7 @@
  * 描述：按产品统计的已处理的工单数表示产品中状态为已处理的工单数量之和。该数值越大，说明产品团队完成的工单数量越多，可以一定程度反映团队处理客户问题的效率。
  * 计算规则：产品中所有工单个数求和，状态为已处理，过滤已删除的工单，过滤已删除的产品。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Tingting Dai <daitingting@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按产品统计的有效研发需求数是指在在产品中被确认为有效的研发需求数量。有效需求指的是符合产品策略和目标，可以实施并且对用户有价值的需求。较高的有效研发需求数通常表示产品的功能和特性满足了用户和市场的期望，有利于实现产品的成功交付和用户满意度。
  * 定义：复用：;按产品统计的研发需求总数;按产品统计的无效研发需求数;公式：;按产品统计的有效研发需求数=按产品统计的研发需求总数-按产品统计的无效研发需求数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_valid_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedReason');
+    public $fieldList = array('t1.product', 't1.`closedReason`');
 
     public $result = array();
 

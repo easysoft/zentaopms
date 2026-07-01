@@ -84,7 +84,13 @@ class formPanel extends panel
         if($moduleName == 'projectrelease') return data('release');
         if($moduleName == 'projectbuild')   return data('build');
         if($moduleName == 'cm')             return data('baseline');
-        if($moduleName == 'project' && ($methodName == 'create' or $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
+        if($moduleName == 'project' && ($methodName == 'create' || $methodName == 'createtemplate') && data('copyProject')) return data('copyProject');
+        if($moduleName == 'testtask' && $methodName == 'runcase') return data('run.case');
+        if($moduleName == 'story')
+        {
+            $story = data($moduleName);
+            if(data('storyFiles')) $story->files = data('storyFiles');
+        }
         return data($moduleName);
     }
 
@@ -106,6 +112,8 @@ class formPanel extends panel
                 $methodName = 'build';
             }
         }
+
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
 
         if($moduleName == 'project' && $methodName == 'createtemplate') $methodName = 'create';
         if($moduleName == 'project' && $methodName == 'edittemplate')   $methodName = 'edit';
@@ -316,8 +324,9 @@ class formPanel extends panel
         global $app;
 
         list($moduleName, $methodName) = $this->getModuleAndMethodForExtend();
-        $data   = $this->getData();
-        $fields = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
+        $data         = $this->getData();
+        $fields       = $app->control->appendExtendForm('info', $data, $moduleName, $methodName);
+        $dittoControl = array('input', 'picker', 'datePicker', 'datetimePicker');
 
         $formBatchItem = array();
         foreach($fields as $field)
@@ -331,6 +340,7 @@ class formPanel extends panel
                 set::required($field->required),
                 set::control($field->control),
                 set::items($field->items),
+                set::ditto(in_array(zget($field->control, 'control', 'input'), $dittoControl) ? $field->ditto : false),
                 set::width('200px'),
                 set::value($value),
                 set::placeholder($field->placeholder)

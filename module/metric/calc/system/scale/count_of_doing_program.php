@@ -11,7 +11,7 @@
  * 描述：按系统统计的所有层级进行中项目集数表示当前正在进行中的项目集数量。此度量项反映了组织当前正在进行中的项目集数量，可以用于评估组织的项目集管理进展和资源分配情况。
  * 定义：所有项目集的个数求和;状态为进行中;过滤已删除的项目集;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

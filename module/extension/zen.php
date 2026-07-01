@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of extension module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang<wangyuting@easycorp.ltd>
  * @package     extension
@@ -344,7 +344,7 @@ class extensionZen extends extension
         $backupTables = array();
         foreach($sqls as $sql)
         {
-            $sql = str_replace('zt_', $this->config->db->prefix, $sql);
+            $sql = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
             $sql = preg_replace('/IF EXISTS /i', '', trim($sql));
             if(preg_match('/TABLE +`?([^` ]*)`?/i', $sql, $out))
             {
@@ -403,15 +403,15 @@ class extensionZen extends extension
         if(!is_dir($this->extension->pkgRoot) && !mkdir($this->extension->pkgRoot))
         {
             $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $this->extension->pkgRoot) . '<br />';
-            $checkResult->mkdirCommands .= "sudo mkdir -p {$this->extension->pkgRoot}<br />";
-            $checkResult->chmodCommands .= "sudo chmod -R 777 {$this->pkgRoot}<br />";
+            $checkResult->mkdirCommands .= helper::buildMkdirCommand($this->extension->pkgRoot, 'sudo ') . '<br />';
+            $checkResult->chmodCommands .= helper::buildGrantPermissionCommand($this->pkgRoot, true, '777', 'sudo ') . '<br />';
         }
 
         /* 如果extension目录有pkg文件夹但是pkg文件夹不可写。 */
         if(is_dir($this->extension->pkgRoot) && !is_writable($this->extension->pkgRoot))
         {
             $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $this->extension->pkgRoot) . '<br />';
-            $checkResult->chmodCommands .= "sudo chmod -R 777 {$this->extension->pkgRoot}<br />";
+            $checkResult->chmodCommands .= helper::buildGrantPermissionCommand($this->extension->pkgRoot, true, '777', 'sudo ') . '<br />';
         }
 
         /* 检查插件目录对应的禅道目录权限。 */
@@ -421,7 +421,7 @@ class extensionZen extends extension
 
         $checkResult->mkdirCommands = empty($checkResult->mkdirCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $checkResult->mkdirCommands) . '</code>';
         $checkResult->errors       .= $this->lang->extension->executeCommands . $checkResult->mkdirCommands;
-        if(PHP_OS == 'Linux') $checkResult->errors .= empty($checkResult->chmodCommands) ? '' : '<code>' . $checkResult->chmodCommands . '</code>';
+        $checkResult->errors       .= empty($checkResult->chmodCommands) ? '' : '<code>' . str_replace('/', DIRECTORY_SEPARATOR, $checkResult->chmodCommands) . '</code>';
 
         return $checkResult;
     }
@@ -450,7 +450,7 @@ class extensionZen extends extension
                 if(!is_writable($path))
                 {
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->chmodCommands .= helper::buildGrantPermissionCommand($path, true, '777', 'sudo ') . '<br />';
                 }
             }
             else
@@ -461,15 +461,15 @@ class extensionZen extends extension
                 if(!is_writable($parentDir))
                 {
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotWritable, $path) . '<br />';
-                    $checkResult->chmodCommands .= "sudo chmod -R 777 $path<br />";
+                    $checkResult->chmodCommands .= helper::buildGrantPermissionCommand($path, true, '777', 'sudo ') . '<br />';
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
+                    $checkResult->mkdirCommands .= helper::buildMkdirCommand($path, 'sudo ') . '<br />';
                 }
                 elseif(!mkdir($path, 0777, true))
                 {
                     /* 如果目录不存在并且创建目录失败。 */
                     $checkResult->errors        .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $checkResult->mkdirCommands .= "sudo mkdir -p $path<br />";
+                    $checkResult->mkdirCommands .= helper::buildMkdirCommand($path, 'sudo ') . '<br />';
                 }
                 if(file_exists($path) && realpath($path) != $this->extension->pkgRoot) $checkResult->dirs2Created[] = $path;
             }

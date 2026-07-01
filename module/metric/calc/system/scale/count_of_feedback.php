@@ -11,7 +11,7 @@
  * 描述：按系统统计的反馈总数是指收集到的所有用户反馈的数量。这个度量项可以帮助团队了解用户对产品的关注点和问题，并作为改进产品质量和用户满意度的依据。较高的反馈总数可能暗示着用户的活跃度和关注度较高，需要团队及时响应和处理，同时暗示产品问题可能有很多。
  * 定义：所有的反馈个数求和;过滤已删除的反馈;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

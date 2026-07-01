@@ -30,7 +30,7 @@ cid=17325
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $programID  = array(1, 2);
 $deptID     = array(0, 1, 2);

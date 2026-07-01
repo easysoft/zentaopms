@@ -11,7 +11,7 @@
  * 描述：按系统统计的未关闭的产品研发需求数量反映了组织在特定时间段内尚未关闭的产品研发需求数量，用于评估组织评估研发进度、需求管理和资源规划，并提供对需求可行性和商业价值的评估。
  * 定义：复用：;按系统统计的研发需求总数;按系统统计的已关闭研发需求数;公式：按系统统计的未关闭研发需求数=按系统统计的研发需求总数-按系统统计的已关闭研发需求数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

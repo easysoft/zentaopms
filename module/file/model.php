@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of file module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
@@ -486,6 +486,7 @@ class fileModel extends model
             return false;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $condition = "`type`='export$module' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
         return $this->dao->lastInsertId();
@@ -1469,9 +1470,12 @@ class fileModel extends model
                 unset($file['id']);
                 $file['objectType'] = $objectType;
                 $file['objectID']   = $objectID;
-                $file['extra']      = $extra;
-                $fileIdList .= ',' . $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
+                $file['extra']      = $extra ?: zget($file, 'extra', '');
+
+                $fileID = $this->fileTao->saveFile($file, 'url,deleted,realPath,webPath,name,url');
+                if(is_numeric($file['extra'])) $fileIdList .= ',' . $fileID;
             }
+
             if($objectType == 'story') $this->dao->update(TABLE_STORYSPEC)->set("files = CONCAT(files, '{$fileIdList}')")->where('story')->eq($objectID)->exec();
         }
 

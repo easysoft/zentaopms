@@ -11,7 +11,7 @@
  * 描述：按产品统计的每日新增Bug数是指在每天的产品开发过程中新发现并记录的Bug数量。该度量项可以体现产品开发过程中Bug的发现速度和趋势，较高的新增Bug数可能意味着存在较多的问题需要解决，同时也可以帮助识别产品开发过程中的瓶颈和潜在的质量风险。
  * 定义：产品中Bug数求和;创建时间为某日;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_created_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.`openedDate`');
 
     public $result = array();
 

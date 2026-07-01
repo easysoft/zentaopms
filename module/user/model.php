@@ -2,7 +2,7 @@
 /**
  * The model file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -1927,7 +1927,7 @@ class userModel extends model
         $oldUserView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(!$force)
         {
-            $userviewUpdateTime      = $this->config->userview->updateTime ?? 0; // 当前用户访问权限的更新时间。
+            $userviewUpdateTime      = $this->config->userview->updateTime ?? ($this->loadModel('setting')->getItem("owner=$account&module=common&section=userview&key=updateTime") ?: 0); // 当前用户访问权限的更新时间。
             $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
             $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
         }
@@ -2171,8 +2171,11 @@ class userModel extends model
 
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . implode(',', $openedSprints);
 
-        $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetch('executions');
-        if($canViewSprints != 'all') $userView->sprints .= ',' . $canViewSprints;
+        $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchPairs();
+        foreach($canViewSprints as $canViewSprint)
+        {
+            if($canViewSprint != 'all') $userView->sprints .= ',' . $canViewSprint;
+        }
 
         return $userView;
     }
@@ -2875,6 +2878,7 @@ class userModel extends model
      */
     public function saveUserTemplate(object $template): bool
     {
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_USERTPL)->data($template)
             ->batchCheck('title, content', 'notempty')
             ->check('title', 'unique', "`type`='{$template->type}' AND account='{$template->account}'")

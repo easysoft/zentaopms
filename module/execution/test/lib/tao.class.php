@@ -8,6 +8,21 @@ class executionTaoTest extends baseTest
     protected $moduleName = 'execution';
     protected $className  = 'tao';
 
+    public $executionModel = null;
+    public $productModel   = null;
+    public $treeModel      = null;
+    public $objectTao      = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->executionModel = $this->instance;
+        $this->productModel   = $this->instance->loadModel('product');
+        $this->treeModel      = $this->instance->loadModel('tree');
+        $this->objectTao      = $this->instance;
+    }
+
     /**
      * Compute cfd of a execution.
      *
@@ -2666,7 +2681,7 @@ class executionTaoTest extends baseTest
         // 如果是数组参数，直接测试formatTasksForTree方法
         if(is_array($param))
         {
-            return $this->instance->formatTasksForTree($param);
+            return $this->invokeArgs('formatTasksForTree', array($param));
         }
 
         // 如果是executionID，获取任务数据
@@ -2683,7 +2698,7 @@ class executionTaoTest extends baseTest
         if(empty($tasks)) return array();
 
         // 调用tao层的formatTasksForTree方法
-        return $this->instance->formatTasksForTree($tasks);
+        return $this->invokeArgs('formatTasksForTree', array($tasks));
     }
 
     /**
@@ -2959,7 +2974,7 @@ class executionTaoTest extends baseTest
      */
     public function saveSessionTest(int $executionID): int
     {
-        $this->instance->saveSession($executionID);
+        $this->invokeArgs('saveSession', array($executionID));
         return $this->instance->session->execution;
     }
 
@@ -2982,7 +2997,7 @@ class executionTaoTest extends baseTest
         $laneGroup = array(array($columnCard));
         $count     = $cardIdList ? count(explode(',', $cardIdList)) : 0;
 
-        $this->instance->updateTodayCFDData($executionID, $type, $colName, $laneGroup);
+        $this->invokeArgs('updateTodayCFDData', array($executionID, $type, $colName, $laneGroup));
 
         return $this->instance->dao->select('*')->from(TABLE_CFD)
             ->where('execution')->eq($executionID)
@@ -3023,7 +3038,7 @@ class executionTaoTest extends baseTest
 
          $projectPairs = strpos($mode, 'withobject') !== false ? $this->instance->dao->select('id,name')->from(TABLE_PROJECT)->fetchPairs('id') : array();
 
-         return $this->instance->buildExecutionPairs($mode, $allExecutions, $executions, $parents, $projectPairs);
+         return $this->invokeArgs('buildExecutionPairs', array($mode, $allExecutions, $executions, $parents, $projectPairs));
     }
 
     /**
@@ -3082,7 +3097,7 @@ class executionTaoTest extends baseTest
         $storyGroups = array();
         foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
 
-        $taskGroups = $this->instance->getTaskGroups($executionID);
+        $taskGroups = $this->invokeArgs('getTaskGroups', array((int)$executionID));
 
         $node = (object)$fullTrees[0];
         if(!isset($node->id)) $node->id = 0;
@@ -3104,9 +3119,9 @@ class executionTaoTest extends baseTest
         $storyGroups = array();
         foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
 
-        $taskGroups = $this->instance->getTaskGroups($executionID);
+        $taskGroups = $this->invokeArgs('getTaskGroups', array((int)$executionID));
 
-        $result = $this->instance->processStoryNode($node, $storyGroups, $taskGroups, $executionID);
+        $result = $this->invokeArgs('processStoryNode', array($node, $storyGroups, $taskGroups, (int)$executionID));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3128,8 +3143,8 @@ class executionTaoTest extends baseTest
         $node = (object)$fullTrees[0];
         if(!isset($node->id)) $node->id = 0;
 
-        $taskGroups = $this->instance->getTaskGroups($executionID);
-        return $this->instance->processTaskNode($node, $taskGroups);
+        $taskGroups = $this->invokeArgs('getTaskGroups', array((int)$executionID));
+        return $this->invokeArgs('processTaskNode', array($node, $taskGroups));
     }
 
     /**
@@ -3236,7 +3251,7 @@ class executionTaoTest extends baseTest
      */
     public function createMainLibTest(int $executionID, string $type = 'sprint'): object|array
     {
-        $libID = $this->instance->createMainLib(1, $executionID, $type);
+        $libID = $this->invokeArgs('createMainLib', array(1, $executionID, $type));
 
         if(dao::isError())
         {
@@ -3261,7 +3276,7 @@ class executionTaoTest extends baseTest
      */
     public function addExecutionMembersTest(int $executionID, array $members): object|array
     {
-        $this->instance->addExecutionMembers($executionID, $members);
+        $this->invokeArgs('addExecutionMembers', array($executionID, $members));
 
         if(dao::isError())
         {
@@ -3513,7 +3528,7 @@ class executionTaoTest extends baseTest
      */
     public function buildStoryTreeTest(array $stories, array $taskGroups, int $executionID, object $node, int $parentID = 0)
     {
-        $result = $this->instance->buildStoryTree($stories, $taskGroups, $executionID, $node, $parentID);
+        $result = $this->invokeArgs('buildStoryTree', array($stories, $taskGroups, (int)$executionID, $node, (int)$parentID));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3582,8 +3597,8 @@ class executionTaoTest extends baseTest
             ->andWhere('type')->eq('execution')
             ->fetch('count');
 
-        // 调用updateTeam方法
-        $this->instance->updateTeam($executionID, $oldExecution, $execution);
+        // 调用 updateTeam protected 方法。
+        $this->invokeArgs('updateTeam', array($executionID, $oldExecution, $execution));
 
         // 获取更新后的团队成员数量
         $afterCount = $tester->dao->select('count(*) as count')->from(TABLE_TEAM)
@@ -3724,7 +3739,7 @@ class executionTaoTest extends baseTest
      */
     public function getTaskGroupsTest(int $executionID): array
     {
-        $result = $this->objectModel->getTaskGroups($executionID);
+        $result = $this->invokeArgs('getTaskGroups', array($executionID));
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3742,7 +3757,7 @@ class executionTaoTest extends baseTest
      */
     public function updateProjectHoursTest(int $newProjectID, int $oldProjectID, int $executionID): bool
     {
-        $result = $this->objectModel->updateProjectHours($newProjectID, $oldProjectID, $executionID);
+        $result = $this->instance->updateProjectHours($newProjectID, $oldProjectID, $executionID);
         if(dao::isError()) return dao::getError();
 
         return $result;

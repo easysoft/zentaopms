@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of testsuite module of ZenTaoPMS.
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license   ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package   testsuite
@@ -66,7 +66,7 @@ class testsuite extends control
      * Browse test suites.
      *
      * @param  int    $productID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -74,7 +74,7 @@ class testsuite extends control
      * @access public
      * @return void
      */
-    public function browse(int $productID = 0, string $type = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $productID = 0, string $browseType = 'all', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* 将当前URI存入SESSION。 */
         /* Save session. */
@@ -97,11 +97,11 @@ class testsuite extends control
         /* 根据产品名称获取套件，如果查询为空并且不在第一页，则初始化至当前页码到第一页。 */
         /* Get the package according to the product name, if the query is empty and not on the first page, initialize to the current page number to the first page. */
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $browseType);
         if(empty($suites) && $pageID > 1)
         {
             $pager  = pager::init(0, $recPerPage, 1);
-            $suites = $this->testsuite->getSuites($productID, $sort, $pager, $type);
+            $suites = $this->testsuite->getSuites($productID, $sort, $pager, $browseType);
         }
 
         /* 获取公共和私有的套件数量。 */
@@ -114,11 +114,11 @@ class testsuite extends control
         $this->view->title   = $productName . $this->lang->testsuite->common;
         $this->view->orderBy = $orderBy;
         $this->view->suites  = $suites;
-        $this->view->type    = $type;
-        $this->view->summary = $summary;
-        $this->view->pager   = $pager;
-        $this->view->product = $this->product->getByID($productID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->browseType = $browseType;
+        $this->view->summary    = $summary;
+        $this->view->pager      = $pager;
+        $this->view->product    = $this->product->getByID($productID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->display();
     }
 
@@ -326,7 +326,7 @@ class testsuite extends control
         $this->config->testcase->search['params']['story']['values']  = array('' => '') + $this->testsuite->getCaseLinkedStories($productID);
 
         $this->config->testcase->search['module']    = 'testsuite';
-        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&browseType=bySearch&param=myQueryID");
+        $this->config->testcase->search['actionURL'] = inlink('linkCase', "suiteID=$suiteID&browseType=bysearch&param=myQueryID");
 
         $scene = $this->testcase->getSceneMenu($productID);
         $this->config->testcase->search['params']['scene']['values'] = $scene;

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The createLib view file of api module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     api
@@ -12,10 +12,18 @@ namespace zin;
 jsVar('productLang', $lang->productCommon);
 jsVar('projectLang', $lang->projectCommon);
 jsVar('window.libType', $type);
+if($this->config->edition != 'open')
+{
+    jsVar('hasImportOpenAPIPriv', hasPriv('api', 'importOpenApi'));
+    jsVar('importBtnText', $lang->import);
+    jsVar('saveBtnText', $lang->save);
+}
 formPanel
 (
     set::className('createLibForm'),
-    set::title($lang->api->createLib),
+    set::title($title),
+    set::labelWidth('110px'),
+    formHidden('createMode', $createMode),
     formGroup
     (
         set::label($lang->api->libType),
@@ -69,6 +77,15 @@ formPanel
         set::name('baseUrl'),
         set::placeholder($lang->api->baseUrlDesc)
     ),
+    $createMode === 'import' && $this->config->edition != 'open' && hasPriv('api', 'importOpenApi')
+    ? formGroup
+    (
+        setID('importFileBox'),
+        set::label($lang->api->importFile),
+        set::required(true),
+        fileSelector(setID('files'), set::name('files'), set::accept('.json,.yaml'), set::maxFileCount(1), set::multiple(false), set::required(true)),
+        span(setClass('text-gray'), $lang->api->importFileTip)
+    ) : null,
     formRow
     (
         setID('aclBox'),

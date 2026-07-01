@@ -252,7 +252,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '问题优先级',       'issuePri',                  '1', 'rnd', 'admin', null, 'issuePri',                  '', '', ''),
 ('lang', '问题严重程度',     'issueSeverity',             '1', 'rnd', 'admin', null, 'issueSeverity',             '', '', ''),
 ('lang', '问题类型',         'issueType',                 '1', 'rnd', 'admin', null, 'issueType',                 '', '', ''),
-('lang', '4问题解决方式',    'issueResolution',           '1', 'rnd', 'admin', null, 'issueResolution',           '', '', ''),
+('lang', '问题解决方式',     'issueResolution',           '1', 'rnd', 'admin', null, 'issueResolution',           '', '', ''),
 ('lang', '问题状态',         'issueStatus',               '1', 'rnd', 'admin', null, 'issueStatus',               '', '', ''),
 ('lang', '机会来源',         'opportunitySource',         '1', 'rnd', 'admin', null, 'opportunitySource',         '', '', ''),
 ('lang', '机会类型',         'opportunityType',           '1', 'rnd', 'admin', null, 'opportunityType',           '', '', ''),

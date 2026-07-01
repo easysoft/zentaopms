@@ -29,7 +29,7 @@ cid=17322
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $productID = array();
 $productID[0] = 6;

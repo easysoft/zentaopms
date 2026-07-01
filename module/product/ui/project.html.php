@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
 * The UI file of product module of ZenTaoPMS.
 *
-* @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+* @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
 * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      chen.tao <chentao@easycorp.ltd>
 * @package     product
@@ -35,7 +35,8 @@ featureBar
 );
 
 /* Set right toolbar. */
-if($branchStatus != 'closed')
+$canBeChanged = common::canModify('product', $product);
+if($branchStatus != 'closed' && $canBeChanged)
 {
     toolbar
     (
@@ -131,7 +132,7 @@ dtable
     set::footPager(usePager()),
     set::emptyTip($lang->project->empty),
     set::createTip($lang->project->create),
-    set::createLink($branchStatus != 'closed' && hasPriv('project', 'create') ? createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true) : ''),
+    set::createLink($branchStatus != 'closed' && hasPriv('project', 'create') && $canBeChanged ? createLink('project', 'createGuide', "programID=$product->program&from=project&productID={$product->id}&branchID=$branchID", '', true) : ''),
     set::createAttr("data-toggle='modal'")
 );
 

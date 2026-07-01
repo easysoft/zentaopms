@@ -73,12 +73,12 @@ class form extends fixer
      * 获取表单数据。
      * Get the form data.
      *
-     * @param array|null $configObject
-     * @param int        $objectID
-     * @param int        $flowGroupID
+     * @param  array|null $configObject
+     * @param  int        $objectID
+     * @param  int        $flowGroupID
      * @return form
      */
-    public static function data(array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
+    public static function data(?array $configObject = null, int $objectID = 0, int $flowGroupID = 0): form
     {
         global $app, $config;
 
@@ -124,7 +124,7 @@ class form extends fixer
         if($config->edition == 'open' ||  !empty($app->installing)) return $configObject;
 
         $moduleName = $moduleName ? $moduleName : $app->rawModule;
-        $methodName = $methodName ? $moduleName : $app->rawMethod;
+        $methodName = $methodName ? $methodName : $app->rawMethod;
 
         /* 项目发布和项目版本用自己的工作流。 */
         if($moduleName == 'projectrelease') $moduleName = 'release';
@@ -138,6 +138,9 @@ class form extends fixer
         /* 用户需求和业务需求用自己的工作流。*/
         if($moduleName == 'story' && $app->rawModule == 'requirement') $moduleName = 'requirement';
         if($moduleName == 'story' && $app->rawModule == 'epic')        $moduleName = 'epic';
+
+        /* 测试单的执行用例动作用用例的执行动作。 */
+        if($moduleName == 'testtask' && strtolower($methodName) == 'runcase') $moduleName = 'testcase';
 
         /* 复制项目使用项目创建的工作流。 */
         if($moduleName == 'project' && $methodName == 'copyconfirm') $methodName = 'create';
@@ -218,18 +221,18 @@ class form extends fixer
                 $required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
                 if($field->control == 'multi-select' || $field->control == 'checkbox')
                 {
-                    $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join');
+                    $configObject[$field->field] = array('required' => $required, 'type' => 'array', 'default' => array(''), 'filter' => 'join', 'label' => $field->name);
                 }
                 elseif($field->control == 'date' || $field->control == 'datetime')
                 {
-                    $configObject[$field->field] = array('required' => $required, 'type' => $field->control, 'default' => null);
+                    $configObject[$field->field] = array('required' => $required, 'type' => $field->control, 'default' => null, 'label' => $field->name);
                 }
                 else
                 {
                     $type = 'string';
                     if($field->type == 'int')     $type = 'int';
                     if($field->type == 'decimal') $type = 'float';
-                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => $field->type == 'int' || $field->type == 'decimal' ? 0 : '');
+                    $configObject[$field->field] = array('required' => $required, 'type' => $type, 'default' => $field->type == 'int' || $field->type == 'decimal' ? 0 : '', 'label' => $field->name);
                     if($field->control == 'richtext') $configObject[$field->field]['control'] = 'editor';
                 }
             }
@@ -374,8 +377,18 @@ class form extends fixer
             foreach($fieldConfigs as $field => $config)
             {
                 $defaultValue = zget($config, 'default', '');
+                $rawValue     = isset($this->rawdata->$field) ? $this->rawdata->$field : null;
+                $isShared     = isset($this->rawdata->$field) && !is_array($rawValue) && !is_object($rawValue);
 
-                $rowData->$field = isset($this->rawdata->$field) ? zget($this->rawdata->$field, $rowIndex, $defaultValue) : $defaultValue;
+                if(isset($this->rawdata->$field))
+                {
+                    $rowData->$field = $isShared ? $rawValue : zget($rawValue, $rowIndex, $defaultValue);
+                }
+                else
+                {
+                    $rowData->$field = $defaultValue;
+                }
+
                 $rowData->$field = helper::convertType($rowData->$field, $config['type']);
                 if(isset($config['filter'])) $rowData->$field = $this->filter($rowData->$field, $config['filter'], zget($config, 'separator', ','));
 
@@ -384,8 +397,17 @@ class form extends fixer
                 {
                     if($app->moduleName == 'task' && $app->methodName == 'batchcreate' && $field == 'estimate' && $this->rawdata->isParent[$rowIndex] == '1') continue;
 
-                    $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
-                    $fieldName = isset($app->lang->{$app->rawModule}->$field) ? $app->lang->{$app->rawModule}->$field : $field;
+                    if($isShared)
+                    {
+                        $errorKey = $field;
+                    }
+                    else
+                    {
+                        $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+                    }
+
+                    $fieldName = $this->getFieldLabel($field, $config);
+                    if($isShared && isset($this->errors[$errorKey])) continue;
                     if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
                     $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
                 }
@@ -413,8 +435,19 @@ class form extends fixer
             {
                 if(empty($config['required']) || empty($config['skipRequired']) || !empty($rowData->$field)) continue;
 
+                $rawValue = isset($this->rawdata->$field) ? $this->rawdata->$field : null;
+                $isShared = isset($this->rawdata->$field) && !is_array($rawValue) && !is_object($rawValue);
                 $skip     = true;
-                $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+
+                if($isShared)
+                {
+                    $errorKey = $field;
+                }
+                else
+                {
+                    $errorKey = isset($config['type']) && $config['type'] == 'array' ? "{$field}[{$rowIndex}][]" : "{$field}[{$rowIndex}]";
+                }
+
                 foreach($config['skipRequired'] as $conditionField => $conditionValue)
                 {
                     if($rowData->$conditionField != $conditionValue)
@@ -476,21 +509,32 @@ class form extends fixer
 
         if(isset($config['required']) && $config['required'] && isset($this->rawdata->$field) && $emptyData)
         {
-            $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
             $errorKey  = isset($config['type']) && $config['type'] == 'array' ? "{$field}[]" : $field;
-            if(isset($config['label']))
-            {
-                $fieldName = $config['label'];
-            }
-            else
-            {
-                $fieldName = isset($app->lang->{$rawModule}->$field) ? $app->lang->{$rawModule}->$field : $field;
-            }
+            $fieldName = $this->getFieldLabel($field, $config);
             if(!isset($this->errors[$errorKey])) $this->errors[$errorKey] = array();
             $this->errors[$errorKey][] = sprintf($app->lang->error->notempty, $fieldName);
         }
 
         $this->data->$field = isset($data) ? $data : null;
+    }
+
+    /**
+     * 获取字段显示名称。
+     * Get field label.
+     *
+     * @param  string $field
+     * @param  array  $config
+     * @access private
+     * @return string
+     */
+    private function getFieldLabel(string $field, array $config = array()): string
+    {
+        global $app;
+
+        if(isset($config['label'])) return $config['label'];
+
+        $rawModule = $app->rawModule == 'feedback' && in_array($app->rawMethod, array('touserstory', 'toepic')) ? 'story' : $app->rawModule;
+        return isset($app->lang->{$rawModule}->$field) ? $app->lang->{$rawModule}->$field : $field;
     }
 
     /**

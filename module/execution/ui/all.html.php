@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The all view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     execution
@@ -50,9 +50,9 @@ $tableData  = initTableData($executions, $config->execution->dtable->fieldList, 
 /* zin: Define the feature bar on main menu. */
 featureBar
 (
-    set::current($status),
-    set::linkParams("status={key}"),
-    li(searchToggle(set::open($status == 'bySearch')))
+    set::current($browseType),
+    set::linkParams("browseType={key}"),
+    li(searchToggle(set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -63,7 +63,7 @@ toolbar
         'icon'        => 'export',
         'text'        => $lang->programplan->exporting,
         'class'       => "ghost export",
-        'url'         => createLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from"),
+        'url'         => createLink('execution', 'export', "status=$browseType&productID=$productID&orderBy=$orderBy&from=$from"),
         'data-toggle' => 'modal'
     ))) : null,
     hasPriv('execution', 'create') ? item(set(array
@@ -87,10 +87,10 @@ dtable
     set::footToolbar($footToolbar),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'all', "status={$status}&orderBy={name}_{sortType}&productID={$productID}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'all', "browseType={$browseType}&orderBy={name}_{sortType}&productID={$productID}&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&page={$pager->pageID}")),
     set::footPager(usePager(array
     (
-        'linkCreator' => helper::createLink('execution', 'all', "status={$status}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('execution', 'all', "browseType={$browseType}&orderBy={$orderBy}&productID={$productID}&param=$param&recTotal={recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::emptyTip($from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution),
     set::createTip($from == 'execution' ? $lang->execution->createExec : $lang->execution->create),

@@ -135,6 +135,29 @@ class pivotTaoTest extends baseTest
     }
 
     /**
+     * Test getGroupsByDimensionAndPath method.
+     *
+     * @param  int    $dimensionID
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getGroupsByDimensionAndPathTest(int $dimensionID, string $path): array
+    {
+        $method = new ReflectionMethod($this->instance, 'getGroupsByDimensionAndPath');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $dimensionID, $path);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function getGroupsByDimensionAndPath(int $dimensionID, string $path): array
+    {
+        return $this->getGroupsByDimensionAndPathTest($dimensionID, $path);
+    }
+
+    /**
      * Test getProjectAndExecutionNameQuery method.
      *
      * @access public

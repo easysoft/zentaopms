@@ -7,15 +7,15 @@ title=测试 executionModel::getFullNameList();
 timeout=0
 cid=16315
 
-- 执行executionTest模块的getFullNameListTest方法，参数是$emptyArray @0
+- 执行executionTest模块的getFullNameListTest方法，参数是$emptyArray  @0
 - 执行executionTest模块的getFullNameListTest方法，参数是array 属性11 @敏捷项目
-- 执行executionTest模块的getFullNameListTest方法，参数是array 属性101 @迭代项目/迭代1
-- 执行executionTest模块的getFullNameListTest方法，参数是$mixedExecutions
+- 执行executionTest模块的getFullNameListTest方法，参数是array 属性101 @迭代1
+- 执行executionTest模块的getFullNameListTest方法，参数是$mixedExecutions 
  - 属性11 @敏捷项目
- - 属性101 @迭代项目/迭代1
- - 属性201 @迭代项目/迭代1/子迭代1
-- 执行executionTest模块的getFullNameListTest方法，参数是$invalidPathExecution 属性999 @无效执行
-- 执行executionTest模块的getFullNameListTest方法，参数是$largeExecutionSet @8
+ - 属性101 @迭代1
+ - 属性201 @迭代1/子迭代4
+- 执行executionTest模块的getFullNameListTest方法，参数是$invalidPathExecution 属性999 @~~
+- 执行executionTest模块的getFullNameListTest方法，参数是$largeExecutionSet  @8
 
 */
 
@@ -65,7 +65,7 @@ for($i = 101; $i <= 108; $i++)
 
 r($executionTest->getFullNameListTest($emptyArray)) && p() && e('0');
 r($executionTest->getFullNameListTest(array('11' => $singleGrade1Execution))) && p('11') && e('敏捷项目');
-r($executionTest->getFullNameListTest(array('101' => $singleGrade2Execution))) && p('101') && e('迭代项目/迭代1');
-r($executionTest->getFullNameListTest($mixedExecutions)) && p('11,101,201') && e('敏捷项目,迭代项目/迭代1,迭代项目/迭代1/子迭代1');
-r($executionTest->getFullNameListTest($invalidPathExecution)) && p('999') && e('无效执行');
+r($executionTest->getFullNameListTest(array('101' => $singleGrade2Execution))) && p('101') && e('迭代1');
+r($executionTest->getFullNameListTest($mixedExecutions)) && p('11,101,201') && e('敏捷项目,迭代1,迭代1/子迭代4');
+r($executionTest->getFullNameListTest($invalidPathExecution)) && p('999') && e('~~');
 r(count($executionTest->getFullNameListTest($largeExecutionSet))) && p() && e('8');

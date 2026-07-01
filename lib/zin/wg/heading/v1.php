@@ -54,7 +54,11 @@ class heading extends wg
         }
 
         /* 项目模板appName点击后跳转到项目模板列表页面。 */
-        if($lang->$tab->common == $lang->project->template) $currentMethod = 'template';
+        if($lang->$tab->common == $lang->project->template)
+        {
+            $currentModule = 'project';
+            $currentMethod = 'template';
+        }
 
         if(empty($currentModule) || empty($currentMethod)) return null;
 

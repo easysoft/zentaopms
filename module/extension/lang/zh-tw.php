@@ -71,7 +71,7 @@ $lang->extension->obtainOfficial[1] = '官方';
 $lang->extension->byDownloads   = '最多下載';
 $lang->extension->byAddedTime   = '最新添加';
 $lang->extension->byUpdatedTime = '最近更新';
-$lang->extension->bySearch      = '搜索';
+$lang->extension->bysearch      = '搜索';
 $lang->extension->byCategory    = '分類瀏覽';
 
 $lang->extension->installFailed            = '%s失敗，錯誤原因如下:';

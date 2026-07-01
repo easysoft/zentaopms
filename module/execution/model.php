@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
@@ -159,6 +159,8 @@ class executionModel extends model
             unset($this->lang->execution->menu->build);
             unset($this->lang->execution->menu->release);
             unset($this->lang->execution->menu->effort);
+            unset($this->lang->execution->menu->deliverable);
+            unset($this->lang->execution->menu->review);
             unset($this->lang->execution->menu->more);
 
             if(!empty($this->lang->execution->menu->view['subMenu']->gantt))
@@ -911,25 +913,28 @@ class executionModel extends model
         /* Check the date which user input. */
         $begin = $postData->begin;
         $end   = $postData->end;
-        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $end, $begin); /* The begin date should larger than end. */
+        if(empty($begin)) dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->execution->begin); /* The begin date can't be empty. */
+        if($begin > $end) dao::$errors['end'] = sprintf($this->lang->execution->errorLesserPlan, $this->lang->execution->end, $begin); /* The begin date should larger than end. */
         if(dao::isError()) return false;
 
         /* Check the begin and end date if the execution has a parent, such as a child Stage, Sprint or Kanban. */
         if($oldExecution->parent != 0)
         {
-            $parent = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
+            $parent = $this->dao->select('begin,end,type')->from(TABLE_PROJECT)->where('id')->eq($oldExecution->parent)->fetch();
             if(!$parent) return false;
 
             $parentBegin = $parent->begin;
             $parentEnd   = $parent->end;
             if($begin < $parentBegin)
             {
-                dao::$errors['begin'] = sprintf($this->lang->execution->errorLesserParent, $parentBegin); /* The begin date of child execution should larger than parent. */
+                $message = $parent->type == 'project' ? $this->lang->execution->errorBegin : $this->lang->execution->errorLesserParent;
+                dao::$errors['begin'] = sprintf($message, $parentBegin); /* The begin date of child execution should larger than parent. */
             }
 
             if($end > $parentEnd)
             {
-                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterParent, $parentEnd); /* The end date of child execution should lesser than parent. */
+                $message = $parent->type == 'project' ? $this->lang->execution->errorEnd : $this->lang->execution->errorGreaterParent;
+                dao::$errors['end'] = sprintf($message, $parentEnd); /* The end date of child execution should lesser than parent. */
             }
         }
 
@@ -1339,7 +1344,7 @@ class executionModel extends model
                 ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
-                ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
+                ->andWhere('t2.`openedBy`', true)->eq($this->app->user->account)
                 ->orWhere('t3.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('order_desc')
@@ -1354,7 +1359,7 @@ class executionModel extends model
                 ->andWhere('t1.type')->in('sprint,stage,kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
                 ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-                ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+                ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
                 ->orWhere('t2.account')->eq($this->app->user->account)
                 ->markRight(1)
                 ->orderBy('t1.order_desc')
@@ -1401,11 +1406,14 @@ class executionModel extends model
             ->andWhere('t1.multiple')->eq('1')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bysearch')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->fetchAll('id');
 
@@ -1417,7 +1425,7 @@ class executionModel extends model
      * Get execution stat data.
      *
      * @param  int         $projectID
-     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bysearch|review
      * @param  int         $productID
      * @param  int         $branch
      * @param  bool        $withTasks
@@ -1520,7 +1528,7 @@ class executionModel extends model
      * Get execution list information.
      *
      * @param  int         $projectID
-     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bySearch|review
+     * @param  string      $browseType all|undone|wait|doing|suspended|closed|involved|bysearch|review
      * @param  int         $productID
      * @param  string      $orderBy
      * @param  int         $param
@@ -1532,7 +1540,7 @@ class executionModel extends model
     {
         if(strpos($orderBy, 'nameCol') !== false) $orderBy = str_replace('nameCol', 'name', $orderBy);
         /* Construct the query SQL at search executions. */
-        $executionQuery = $browseType == 'bySearch' ? $this->getExecutionQuery($param) : '';
+        $executionQuery = $browseType == 'bysearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
         return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
@@ -1547,12 +1555,15 @@ class executionModel extends model
             ->beginIF(!empty($executionQuery))->andWhere($executionQuery)->fi()
             ->beginIF($productID)->andWhere('t3.product')->eq($productID)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bySearch', 'delayed')))->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'involved', 'review', 'bysearch', 'delayed')))->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'delayed')->andWhere('t1.end')->gt('1970-1-1')->andWhere('t1.end')->lt(date(DT_DATE1))->andWhere('t1.status')->notin('done,closed,suspended')->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
             ->beginIF($browseType == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($browseType == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -2499,7 +2510,7 @@ class executionModel extends model
         $branches = str_replace(',', "','", $branches);
         return $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.status')->in('wait,doing,pause,cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.execution')->in(array_keys($executions))
@@ -3875,9 +3886,9 @@ class executionModel extends model
         {
             return strpos($value, '.') === false ? 't1.' . $value : $value;
         }, explode(',', $orderBy));
-        $orderBy = str_replace('t1.storyTitle', 't2.title', implode(',', $orderBy));
+        $orderBy = str_replace('t1.`storyTitle`', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
-        $orderBy = str_replace('t1.beginDate', 'beginDate', $orderBy);
+        $orderBy = str_replace('t1.`beginDate`', 'beginDate', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
@@ -3894,10 +3905,10 @@ class executionModel extends model
             t2.status AS storyStatus,
             t3.realname AS assignedToRealName,
             IF(t1.`pri` = 0, 999, t1.`pri`) as priOrder,
-            IF(t1.estStarted IS NULL, t4.`begin`, t1.estStarted) as beginDate')
+            IF(t1.`estStarted` IS NULL, t4.`begin`, t1.`estStarted`) as beginDate')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->leftJoin(TABLE_EXECUTION)->alias('t4')->on('t1.execution = t4.id')
             ->where('t1.deleted')->eq(0)
             ->andWhere($condition)
@@ -4336,10 +4347,10 @@ class executionModel extends model
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
+            ->leftJoin(TABLE_USER)->alias('t3')->on('t1.`assignedTo` = t3.account')
             ->where('t1.execution')->eq($executionID)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF(!$this->cookie->showParent)->andWhere('t1.isParent')->ne('1')->fi()
+            ->beginIF(!$this->cookie->showParent)->andWhere('t1.`isParent`')->ne('1')->fi()
             ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -5000,7 +5011,6 @@ class executionModel extends model
             $execution->isExecution = 1;
             $execution->id          = 'pid' . (string)$execution->id;
             $execution->projectID   = $execution->project;
-            $execution->project     = $execution->projectName;
             $execution->rawParent   = $execution->parent;
             $execution->parent      = (isset($executionList[$execution->parent]) && $execution->parent && $execution->grade > 1) ? 'pid' . (string)$execution->parent : '';
             $execution->hasChild    = !empty($execution->isParent);
@@ -5224,6 +5234,7 @@ class executionModel extends model
         $executionData->openedDate  = helper::now();
         $executionData->parent      = $projectID;
         $executionData->isTpl       = $project->isTpl;
+        $executionData->schedule    = $project->schedule;
         if($project->code) $executionData->code = $project->code;
 
         $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchAll();
@@ -5283,6 +5294,7 @@ class executionModel extends model
         $postData->products  = '';
         $postData->code      = empty($project->code) ? $project->name : $project->code;
         $postData->uid       = '';
+        $postData->schedule  = $project->schedule;
 
         /* Handle extend fields. */
         $extendFields = $this->loadModel('project')->getFlowExtendFields($projectID);
@@ -5531,7 +5543,7 @@ class executionModel extends model
         $deliverables = $this->dao->select('t1.id, t2.required')->from(TABLE_DELIVERABLE)->alias('t1')
             ->leftJoin(TABLE_DELIVERABLESTAGE)->alias('t2')->on('t1.id = t2.deliverable')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.workflowGroup')->eq((int)$project->workflowGroup)
+            ->andWhere('t1.`workflowGroup`')->eq((int)$project->workflowGroup)
             ->andWhere('t1.status')->eq('enabled')
             ->andWhere('t2.required')->ne('0')
             ->andWhere('t2.stage')->eq($stageType)

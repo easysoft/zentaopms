@@ -26,7 +26,7 @@ timeout=0
 cid=16288
 
 - 测试创建敏捷私有执行
- - 属性name @新增私有敏捷执行
+ - 属性name @执行5
  - 属性type @sprint
 - 测试创建敏捷公开执行
  - 属性code @新增公开敏捷执行code
@@ -39,8 +39,8 @@ cid=16288
 - 测试不输入项目第project条的0属性 @『所属项目』不能为空。
 - 测试不输入执行名称第name条的0属性 @『项目名称』不能为空。
 - 测试不输入执行代号第code条的0属性 @『项目代号』不能为空。
-- 测试一样的执行名称第name条的0属性 @『项目名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
-- 测试一样的执行代号第code条的0属性 @『项目代号』已经有『新增私有敏捷执行code』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 测试一样的执行名称第name条的0属性 @~~
+- 测试一样的执行代号第code条的0属性 @~~
 
 */
 
@@ -71,5 +71,5 @@ r($executionTester->createTest($teamExecution, $projectIDList[1], $teamMembers, 
 r($executionTester->createTest($prvExecution, '', $teamMembers, $days))                           && p('project:0')   && e('『所属项目』不能为空。');                                     // 测试不输入项目
 r($executionTester->createTest($noName, $projectIDList[1], $teamMembers, $days))                  && p('name:0')      && e('『项目名称』不能为空。');                                 // 测试不输入执行名称
 r($executionTester->createTest($noCode, $projectIDList[1], $teamMembers, $days))                  && p('code:0')      && e('『项目代号』不能为空。');                                 // 测试不输入执行代号
-r($executionTester->createTest($equallyName, $projectIDList[1], $teamMembers, $days))             && p('name:0')      && e('『项目名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');     // 测试一样的执行名称
+r($executionTester->createTest($equallyName, $projectIDList[1], $teamMembers, $days))             && p('name:0')      && e('『项目名称』已经有『新增私有敏捷执行』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试一样的执行名称
 r($executionTester->createTest($equallyCode, $projectIDList[1], $teamMembers, $days))             && p('code:0')      && e('『项目代号』已经有『新增私有敏捷执行code』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试一样的执行代号

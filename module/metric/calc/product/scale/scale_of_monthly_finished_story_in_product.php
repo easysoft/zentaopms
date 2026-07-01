@@ -11,7 +11,7 @@
  * 描述：按产品统计的月度完成研发需求规模数表示每月完成的研发需求的规模。该度量项反映了产品团队每月完成的研发需求规模，可以用于评估产品团队的研发需求完成情况和效率。
  * 定义：产品中关闭时间为某年某月且关闭原因为已完成的研发需求的规模数求和;过滤父需求;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_monthly_finished_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.product', 't1.`closedDate`', 't1.`closedReason`', 't1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

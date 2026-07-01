@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of extension module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
@@ -507,14 +507,14 @@ class extensionModel extends model
         $removeCommands = array();
         if(file_exists($packageFile) && !@unlink($packageFile))
         {
-            $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $packageFile" : "del $packageFile";
+            $removeCommands[] = helper::buildDeleteCommand($packageFile, false);
         }
 
         /* Remove the extracted files. */
         $extractedDir = $this->pkgRoot . $extension;
         if($extractedDir && $extractedDir != '/' && !$this->classFile->removeDir($extractedDir))
         {
-            $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $extractedDir" : "rmdir $extractedDir /s";
+            $removeCommands[] = helper::buildDeleteCommand($extractedDir, true);
         }
 
         return $removeCommands;
@@ -683,15 +683,15 @@ class extensionModel extends model
                 $parentDir = dirname($file);
                 if(!is_writable($file) || !is_writable($parentDir))
                 {
-                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
+                    $commandTips[] = helper::buildDeleteCommand($file, false, 'sudo ');
                 }
                 elseif(@md5_file($file) != $savedMD5)
                 {
-                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
+                    $commandTips[] = helper::buildDeleteCommand($file, false, 'sudo ');
                 }
                 elseif(!@unlink($file))
                 {
-                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $file" : "del $file";
+                    $commandTips[] = helper::buildDeleteCommand($file, false, 'sudo ');
                 }
             }
         }
@@ -724,11 +724,11 @@ class extensionModel extends model
                 $parentDir = dirname($path);
                 if(!is_writable($path) || !is_writable($parentDir))
                 {
-                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                    $commandTips[] = helper::buildDeleteCommand($appRoot . $dir, true, 'sudo ');
                 }
                 elseif(!$this->classFile->removeDir($path))
                 {
-                    $commandTips[] = PHP_OS == 'Linux' ? "sudo rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                    $commandTips[] = helper::buildDeleteCommand($appRoot . $dir, true, 'sudo ');
                 }
             }
         }

@@ -43,7 +43,7 @@ cid=15400
 */
 
 $accountIDList = array('admin', 'dev1');
-$typeList      = array('assignedTo', 'closedBy', 'all', 'bySearch');
+$typeList      = array('assignedTo', 'closedBy', 'all', 'bysearch');
 $limit         = array(0, 10);
 $execution     = array(0, 101);
 $queryID       = array(0, 1, 1001);

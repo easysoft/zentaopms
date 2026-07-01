@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The fixFirst view file of execution module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     execution
@@ -39,6 +39,9 @@ formPanel
             input
             (
                 set::name('estimate'),
+                set::type('number'),
+                set::step('0.01'),
+                set::min('0.01'),
                 set::value(!empty($firstBurn->estimate) ? $firstBurn->estimate : (!empty($firstBurn->left) ? $firstBurn->left : '')),
                 set::placeholder($lang->execution->placeholder->totalLeft)
             ),

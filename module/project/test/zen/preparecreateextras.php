@@ -1,9 +1,18 @@
 #!/usr/bin/env php
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/projectzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 su('admin');
-zenData('project')->gen(10);
+
+$projectTable = zenData('project');
+$projectTable->id->range('1-10');
+$projectTable->name->range('项目1,项目2,项目3,项目4,项目5,项目6,项目7,项目8,项目9,项目10');
+$projectTable->type->range('project{10}');
+$projectTable->model->range('waterfall{10}');
+$projectTable->status->range('wait{10}');
+$projectTable->hasProduct->range('0{10}');
+$projectTable->multiple->range('1{10}');
+$projectTable->gen(10);
 
 /**
 
@@ -29,6 +38,8 @@ $testData['end'] = '2025-07-01';
 r($project->prepareCreateExtrasTest($testData, 0)) && p('days') && e('可用工作日不能超过『-5』天');
 $testData['end'] = '2025-07-17';
 r($project->prepareCreateExtrasTest($testData, 0)) && p('end') && e('2025-07-17');
-r($project->prepareCreateExtrasTest($testData, 1)) && p('type') && e('project');
+$copyProjectData = array('name' => 'test0708', 'end' => '2025-07-17');
+$preparedProject = $project->prepareCreateExtrasTest($copyProjectData, 1);
+r($preparedProject->type) && p() && e('project');
 $testData['acl'] = 'private';
 r($project->prepareCreateExtrasTest($testData, 0)) && p('acl') && e('private');

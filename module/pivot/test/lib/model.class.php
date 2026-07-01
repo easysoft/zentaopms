@@ -23,6 +23,11 @@ class pivotModelTest extends baseTest
         return $result;
     }
 
+    public function getByID(int $id): object|bool
+    {
+        return $this->getByIDTest($id);
+    }
+
     /**
      * Test initSql method.
      *
@@ -74,6 +79,11 @@ class pivotModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    public function getSysOptions($type = '', $object = '', $field = '', $source = '', $saveAs = '', $driver = 'mysql')
+    {
+        return $this->getSysOptionsTest($type, $object, $field, $source, $saveAs, $driver);
     }
 
     /**
@@ -661,6 +671,11 @@ class pivotModelTest extends baseTest
         return $result;
     }
 
+    public function getFilterFormat(string $sql, array $filters): array
+    {
+        return $this->getFilterFormatTest($sql, $filters);
+    }
+
     /**
      * Test initVarFilter method.
      *
@@ -846,10 +861,21 @@ class pivotModelTest extends baseTest
     public function buildPivotTableTest($data, $configs = array())
     {
         ob_start();
-        $this->instance->buildPivotTable($data, $configs);
-        $result = ob_get_contents();
+        $result = $this->instance->buildPivotTable($data, $configs);
+        $output = ob_get_contents();
         ob_end_clean();
 
+        if(dao::isError()) return dao::getError();
+
+        return $result ?: $output;
+    }
+
+    public function genSheet(array $fields, $settings, string $sql, array|false $filters, array $langs = array(), string $driver = 'mysql'): array
+    {
+        if(is_string($settings)) $settings = json_decode($settings, true) ?? array();
+        if(is_object($settings)) $settings = json_decode(json_encode($settings), true);
+
+        $result = $this->instance->genSheet($fields, $settings, $sql, $filters, $langs, $driver);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -1382,6 +1408,11 @@ class pivotModelTest extends baseTest
         return $result;
     }
 
+    public function getDrillCols(string $object): array
+    {
+        return $this->getDrillColsTest($object);
+    }
+
     /**
      * Test getGroupsFromSettings method.
      *
@@ -1414,6 +1445,22 @@ class pivotModelTest extends baseTest
         return $result;
     }
 
+    public function getBugs(string $begin, string $end, int $product = 0, int $execution = 0): array
+    {
+        $result = $this->instance->getBugs($begin, $end, $product, $execution);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function getFilterFieldSQL(array $filter, string $field, string $driver)
+    {
+        $result = $this->instance->getFilterFieldSQL($filter, $field, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
     /**
      * Test getUserWorkLoad method.
      *
@@ -1429,6 +1476,11 @@ class pivotModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    public function getUserWorkload(array $projects, array $teamTasks, float $allHour): array
+    {
+        return $this->getUserWorkLoadTest($projects, $teamTasks, $allHour);
     }
 
     /**
@@ -1447,6 +1499,11 @@ class pivotModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    public function getWorkload(int $dept, string $assign, array $users, float $allHour): array
+    {
+        return $this->getWorkloadTest($dept, $assign, $users, $allHour);
     }
 
     /**
@@ -1512,6 +1569,19 @@ class pivotModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $execution;
+    }
+
+    public function setExecutionName(object $execution, bool $canViewExecution): object
+    {
+        return $this->setExecutionNameTest($execution, $canViewExecution);
+    }
+
+    public function trimSemicolon(string $sql): string
+    {
+        $result = $this->instance->trimSemicolon($sql);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**

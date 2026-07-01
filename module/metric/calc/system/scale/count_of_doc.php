@@ -11,7 +11,7 @@
  * 描述：按系统统计的文档总数是指系统或组织中存在的所有文档数量的统计值。反映了整体文档管理的规模和复杂度。文档总数越大，代表着组织的信息量越丰富，也可能意味着需要更多的资源来维护和管理这些文档。
  * 定义：所有文档个数求和;过滤已删除的文档;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

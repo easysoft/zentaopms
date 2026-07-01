@@ -11,7 +11,7 @@
  * 描述：按系统统计的流水线执行成功率是指在一定时间内的流水线执行成功数量/流水线执行数量，反映了自动化构建和部署过程的稳定性与可靠性。
  * 定义：系统的流水线执行成功数量/流水线执行数量   不统计已删除代码库 不统计已删除流水线
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    liyang <liyang@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class rate_of_success_pipeline extends baseCalc
 {
     public $dataset = 'getCompile';
 
-    public $fieldList = array('t1.status', 't1.createdDate');
+    public $fieldList = array('t1.status', 't1.`createdDate`');
 
     public $result = array();
 

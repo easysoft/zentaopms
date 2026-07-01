@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The testcase view file of execution module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     execution
@@ -13,8 +13,8 @@ namespace zin;
 /* zin: Define the set::module('testcase') feature bar on main menu. */
 featureBar
 (
-    set::current($type),
-    set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={key}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
+    set::current($browseType),
+    set::linkParams("executionID={$executionID}&productID={$productID}&branchID={$branchID}&browseType={key}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}"),
     hasPriv('testcase', 'zerocase') ? li
     (
         set::className('nav-item'),
@@ -26,7 +26,7 @@ featureBar
             $lang->testcase->zeroCase
         )
     ) : null,
-    li(searchToggle(set::module('executionCase'), set::open($type == 'bysearch')))
+    li(searchToggle(set::module('executionCase'), set::open($browseType == 'bysearch')))
 );
 
 /* zin: Define the toolbar on main menu. */
@@ -88,7 +88,7 @@ foreach($cases as $case)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('execution', 'testcase');
-$cols['id']['name'] = $cols['id']['type'] = 'id';
+$cols['id']['name'] = 'id';
 if(isset($cols['story'])) $cols['story']['hint']  = jsRaw('(info) => info.col.setting.map[info.row.data.story]');
 if(isset($cols['pri']))   $cols['pri']['priList'] = $lang->testcase->priList;
 
@@ -99,9 +99,9 @@ dtable
     set::data($cases),
     set::customCols(true),
     set::orderBy($orderBy),
-    set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&param=0&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&browseType={$browseType}&param=0&moduleID={$moduleID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(
-        usePager(array('linkCreator' => helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&type={$type}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
+        usePager(array('linkCreator' => helper::createLink('execution', 'testcase', "executionID={$executionID}&productID={$productID}&branchID={$branchID}&browseType={$browseType}&param=0&moduleID={$moduleID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&pageID={page}"))),
     ),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::modules($modulePairs),

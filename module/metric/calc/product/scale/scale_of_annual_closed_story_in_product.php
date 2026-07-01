@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度关闭研发需求规模数表示产品在某年度关闭的研发需求的规模总数。该度量项反映了产品团队每年因完成、不做或取消等原因关闭研发需求数的规模总数，可以用于评估产品的团队研发需求规模管理和调整情况。
  * 定义：产品中研发需求的规模数求和;关闭时间在某年;过滤父研发需求;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_annual_closed_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedDate', 't1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.product', 't1.`closedDate`', 't1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

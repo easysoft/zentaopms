@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增执行数是指在某年度新添加的执行数。该度量项反映了一个团队或组织在某年的工作量大小。较高的年度新增执行数可能表明团队面临更多的任务和挑战，需要更多的资源和努力来完成执行。同时，对于项目管理方面，该度量项也可以提供管理决策的依据。
  * 定义：所有的执行个数求和;创建时间为某年;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

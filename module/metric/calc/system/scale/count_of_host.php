@@ -11,7 +11,7 @@
  * 描述：按系统统计的主机总数是指在禅道中的全部主机总数
  * 定义：所有主机的个数求和
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    liyang <liyang@easycorp.ltd>
  * @package
  * @uses      func

@@ -11,7 +11,7 @@
  * 描述：按人员统计的待处理用户评审意见数表示每个人待处理的用户评审意见数量之和。反映了每个人员需要处理的用户评审意见数量的规模。该数值越大，说明需要投入越多的时间处理用户评审意见。
  * 定义：所有评审意见个数求和 指派给为某人 过滤已删除的评审意见 过滤已删除项目的评审意见
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_assigned_reviewissue_in_user extends baseCalc
 {
     public $dataset = 'getReviewissues';
 
-    public $fieldList = array('t1.status', 't1.assignedTo');
+    public $fieldList = array('t1.status', 't1.`assignedTo`');
 
     public $result = array();
 

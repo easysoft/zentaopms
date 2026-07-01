@@ -11,7 +11,7 @@
  * 描述：[描述度量项的含义]
  * 定义：[描述度量项如何定义，计算规则等]
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    XXX <XXX@easycorp.ltd>
  * @package
  * @uses      func
@@ -31,7 +31,7 @@ class xxx_of_xxx_in_xxx extends baseCalc
      * 如 public $dataset = "getProjectBugs";
      * 涉及的表有 zt_bug t1, zt_product t2, zt_project t3
      * 那么$fieldList可以使用 zt_bug表、zt_product表、zt_project表的所有字段；
-     * 例如 public $fieldList = array('t1.resolvedBy', 't1.resolvedDate', 't2.name as productName', 't3.name as projectName');
+     * 例如 public $fieldList = array('t1.`resolvedBy`', 't1.`resolvedDate`', 't2.name as productName', 't3.name as projectName');
      */
     public $fieldList = array();
 
@@ -61,7 +61,7 @@ class xxx_of_xxx_in_xxx extends baseCalc
          *       ->andWhere('t2.deleted')->eq(0)
          *       ->andWhere('t2.shadow')->eq(0)
          *       ->andWhere('t1.type')->eq('story')
-         *       ->andWhere('t1.closedReason')->notin('duplicate,willnotdo,bydesign,cancel');
+         *       ->andWhere('t1.`closedReason`')->notin('duplicate,willnotdo,bydesign,cancel');
          */
         return $this->dao->XXX->query();
     }

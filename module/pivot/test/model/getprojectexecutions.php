@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+declare(strict_types = 1);
 
 /**
 
@@ -7,11 +8,11 @@ title=测试 pivotModel::getProjectExecutions();
 timeout=0
 cid=17397
 
-- 测试步骤1：正常情况下获取项目执行列表 @array
-- 测试步骤2：multiple为1的执行项目格式化 @项目1/迭代1
-- 测试步骤3：multiple为0的执行项目格式化 @项目2
-- 测试步骤4：空数据库情况下的处理 @array
-- 测试步骤5：验证返回数据的键值结构正确 @1
+- 步骤1：验证返回数组类型 @1
+- 步骤2：验证多执行项目格式化 @项目1/迭代1
+- 步骤3：验证单执行项目格式化 @项目2
+- 步骤4：验证阶段也按多执行项目格式化 @项目1/阶段1
+- 步骤5：验证目标执行都存在于结果中 @3
 
 */
 
@@ -20,11 +21,23 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-$pivot = new pivotModelTest();
+global $tester;
+foreach(array(
+    (object)array('id' => 9001, 'name' => '项目1', 'type' => 'project', 'project' => 0,    'multiple' => 0, 'deleted' => 0),
+    (object)array('id' => 9002, 'name' => '项目2', 'type' => 'project', 'project' => 0,    'multiple' => 0, 'deleted' => 0),
+    (object)array('id' => 9101, 'name' => '迭代1', 'type' => 'sprint',  'project' => 9001, 'multiple' => 1, 'deleted' => 0),
+    (object)array('id' => 9102, 'name' => '迭代2', 'type' => 'sprint',  'project' => 9002, 'multiple' => 0, 'deleted' => 0),
+    (object)array('id' => 9103, 'name' => '阶段1', 'type' => 'stage',   'project' => 9001, 'multiple' => 1, 'deleted' => 0)
+) as $project)
+{
+    $tester->dao->insert(TABLE_PROJECT)->data($project)->exec();
+}
 
-// 测试不同场景的getProjectExecutions方法
-r($pivot->getProjectExecutionsTest('normal_case')) && p() && e('array');      // 测试步骤1：正常情况下获取项目执行列表
-r($pivot->getProjectExecutionsTest('multiple_format')) && p() && e('项目1/迭代1'); // 测试步骤2：multiple为1的执行项目格式化
-r($pivot->getProjectExecutionsTest('single_format')) && p() && e('项目2');     // 测试步骤3：multiple为0的执行项目格式化
-r($pivot->getProjectExecutionsTest('empty_data')) && p() && e('array');       // 测试步骤4：空数据库情况下的处理
-r($pivot->getProjectExecutionsTest('structure_test')) && p() && e('1');       // 测试步骤5：验证返回数据的键值结构正确
+$pivot  = new pivotModelTest();
+$result = $pivot->getProjectExecutions();
+
+r(is_array($result))                                                           && p()        && e('1');
+r($result)                                                                     && p('9101')  && e('项目1/迭代1');
+r($result)                                                                     && p('9102')  && e('项目2');
+r($result)                                                                     && p('9103')  && e('项目1/阶段1');
+r(count(array_intersect_key($result, array(9101 => true, 9102 => true, 9103 => true)))) && p() && e('3');

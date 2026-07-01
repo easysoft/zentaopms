@@ -11,7 +11,7 @@
  * 描述：按系统统计的有效的产品研发需求数量反映了组织在特定时间段内有效的产品研发需求数量，用于评估组织的评估需求质量、市场适应性、研发投资回报和竞争力。
  * 定义：复用：;按系统统计的无效研发需求数;按系统统计的研发需求总数;公式：;按系统统计的有效研发需求数=按系统统计的研发需求总数-按系统统计的无效研发需求数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_valid_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.id', 't1.closedReason');
+    public $fieldList = array('t1.id', 't1.`closedReason`');
 
     public $result = 0;
 

@@ -116,7 +116,7 @@ $fields->field('desc')
     ->width('full')
     ->control('editor');
 
-$budgetFuture   = data('project.budget') !== null && !data('project.budget');
+$budgetFuture   = data('project.budget') !== null && !(float)data('project.budget');
 $budgetItemList = array();
 $budgetUnitList = data('budgetUnitList') ? data('budgetUnitList') : array();
 foreach($budgetUnitList as $key => $value)
@@ -125,7 +125,7 @@ foreach($budgetUnitList as $key => $value)
 }
 
 $budgetHidden = isset($config->project->{$app->rawMethod}->requiredFields) && strpos($config->project->{$app->rawMethod}->requiredFields, 'budget') !== false;
-$budgetFuture = data('project.budget') !== null && !data('project.budget') && !$budgetHidden;
+$budgetFuture = data('project.budget') !== null && !(float)data('project.budget') && !$budgetHidden;
 $fields->field('budget')
     ->label($lang->project->budget)
     ->control('inputControl', array('control' => 'input', 'name' => 'budget', 'prefix' => array('control' => 'dropdown', 'name' => 'budgetUnit', 'items' => $budgetItemList, 'widget' => true, 'text' => zget($lang->project->currencySymbol, data('project.budgetUnit') ? data('project.budgetUnit') : $currency), 'className' => 'ghost'), 'prefixWidth' => 34, 'disabled' => $budgetFuture))

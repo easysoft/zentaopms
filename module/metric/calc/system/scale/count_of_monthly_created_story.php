@@ -11,7 +11,7 @@
  * 描述：按系统统计的月度新增的研发需求数量反映了组织每个月内新增的研发需求数量，用于评估组织的研发活动的监测、需求管理、项目规划、绩效评估和决策支持具有重要意义。它提供了一个动态的指标，为组织提供了实时的数据支持，以便更好地管理和优化研发活动。
  * 定义：所有的研发需求个数求和;创建时间为某年某月;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_monthly_created_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.openedDate');
+    public $fieldList = array('t1.`openedDate`');
 
     public $result = array();
 

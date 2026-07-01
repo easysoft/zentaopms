@@ -19,36 +19,7 @@ class mrModelTest extends baseTest
     {
         $_POST = $params;
         $result = $this->instance->apiCreate();
-
-        // 如果返回false，获取错误信息
-        if($result === false)
-        {
-            $errors = dao::getError();
-            if($errors)
-            {
-                // 如果是数组，取第一个错误并转换为字符串
-                if(is_array($errors))
-                {
-                    $firstError = current($errors);
-                    if(is_array($firstError)) return implode(', ', $firstError);
-                    return $firstError;
-                }
-                return $errors;
-            }
-            return 'Unknown error';
-        }
-
-        // 如果成功创建，返回MR ID
-        if($result > 0)
-        {
-            try {
-                $MR = $this->instance->fetchByID($result);
-                if($MR) $this->instance->apiDeleteMR($MR->hostID, $MR->sourceProject, $MR->mriid);
-            } catch (Exception $e) {
-                // 忽略删除异常，因为这只是清理操作
-            }
-            return $result;
-        }
+        if($result === false) return dao::getError();
 
         return $result;
     }
@@ -62,11 +33,13 @@ class mrModelTest extends baseTest
      */
     public function createTester(object $MR): array|string
     {
+        $maxMRID = (int)$this->instance->dao->select('MAX(id) AS maxID')->from(TABLE_MR)->fetch('maxID');
         $result = $this->instance->create($MR);
         if($result['result'] == 'fail') return $result['message'];
 
-        $rawMR = $this->instance->fetchByID(2);
-        $this->instance->apiDeleteMR($rawMR->hostID, $rawMR->sourceProject, $rawMR->mriid);
+        $rawMR = $this->instance->dao->select('*')->from(TABLE_MR)->where('id')->gt($maxMRID)->orderBy('id_desc')->fetch();
+        if($rawMR && !empty($rawMR->mriid)) $this->instance->apiDeleteMR((int)$rawMR->hostID, (string)$rawMR->sourceProject, (int)$rawMR->mriid);
+
         return $result;
     }
 
@@ -366,11 +339,7 @@ class mrModelTest extends baseTest
         $result = $this->instance->apiCloseMR($hostID, $project, $mrID);
         if(dao::isError()) return dao::getError();
 
-        // 如果结果为null，返回'0'表示无结果
         if($result === null) return '0';
-
-        // 如果是对象，统一返回'0'表示在测试环境下没有有效的远程API连接
-        if(is_object($result)) return '0';
 
         return $result;
     }
@@ -758,7 +727,7 @@ class mrModelTest extends baseTest
             // 模拟核心业务逻辑
             $config->product->search['queryID'] = $queryID;
             $config->product->search['style'] = 'simple';
-            $config->product->search['actionURL'] = "mr-linkStory-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->product->search['actionURL'] = "mr-linkStory-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
 
             // 模拟移除字段
             unset($config->product->search['fields']['plan']);
@@ -826,7 +795,7 @@ class mrModelTest extends baseTest
             // 模拟核心业务逻辑
             $config->bug->search['queryID'] = $queryID;
             $config->bug->search['style'] = 'simple';
-            $config->bug->search['actionURL'] = "mr-linkBug-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->bug->search['actionURL'] = "mr-linkBug-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
 
             // 模拟移除字段
             unset($config->bug->search['fields']['product']);
@@ -902,7 +871,7 @@ class mrModelTest extends baseTest
             $config->execution->search['params']['module'] = array();
 
             // 模拟核心业务逻辑
-            $config->execution->search['actionURL'] = "mr-linkTask-MRID={$MRID}&repoID={$repoID}&browseType=bySearch&param=myQueryID&orderBy={$orderBy}";
+            $config->execution->search['actionURL'] = "mr-linkTask-MRID={$MRID}&repoID={$repoID}&browseType=bysearch&param=myQueryID&orderBy={$orderBy}";
             $config->execution->search['queryID'] = $queryID;
             $config->execution->search['params']['execution']['values'] = array_filter($productExecutions);
 

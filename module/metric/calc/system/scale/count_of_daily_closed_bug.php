@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日关闭Bug数是指组织每日被确认并关闭的Bug的数量。该度量项可以帮助我们了解组织对已解决的Bug进行确认与关闭的速度和效率。
  * 定义：所有每日关闭的Bug数求和;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_closed_bug extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

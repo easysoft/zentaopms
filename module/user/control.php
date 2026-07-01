@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -89,7 +89,7 @@ class user extends control
      *
      * @param  int    $userID
      * @param  string $storyType
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -97,7 +97,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function story(int $userID, string $storyType = 'story', string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function story(int $userID, string $storyType = 'story', string $browseType = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save session. */
         $this->session->set('storyList', $this->app->getURI(true), 'product');
@@ -125,12 +125,12 @@ class user extends control
 
         /* Assign. */
         $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->story;
-        $this->view->stories    = $this->story->getUserStories($user->account, $type, $sort, $pager, $storyType, false, 'all');
+        $this->view->stories    = $this->story->getUserStories($user->account, $browseType, $sort, $pager, $storyType, false, 'all');
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->deptUsers  = $users;
         $this->view->user       = $user;
         $this->view->storyType  = $storyType;
-        $this->view->type       = $type;
+        $this->view->browseType = $browseType;
         $this->view->gradeGroup = $gradeGroup;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -143,7 +143,7 @@ class user extends control
      * View user's tasks.
      *
      * @param  int    $userID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -151,7 +151,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function task(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function task(int $userID, string $browseType = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('taskList', $this->app->getURI(true), 'execution');
@@ -170,13 +170,13 @@ class user extends control
         if(strpos($sort, 'Label') !== false) $sort = str_replace('Label', '', $sort);
 
         /* Assign. */
-        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->task;
-        $this->view->tasks     = $this->loadModel('task')->getUserTasks($user->account, $type, 0, $pager, $sort);
-        $this->view->deptUsers = $users;
-        $this->view->user      = $user;
-        $this->view->type      = $type;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->task;
+        $this->view->tasks      = $this->loadModel('task')->getUserTasks($user->account, $browseType, 0, $pager, $sort);
+        $this->view->deptUsers  = $users;
+        $this->view->user       = $user;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
         $this->display();
     }
 
@@ -185,7 +185,7 @@ class user extends control
      * View user's bugs.
      *
      * @param  int    $userID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -193,7 +193,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function bug(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function bug(int $userID, string $browseType = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         /* Save the session. */
         $this->session->set('bugList', $this->app->getURI(true), 'qa');
@@ -210,14 +210,14 @@ class user extends control
         /* Load the lang of bug module. */
         $this->app->loadLang('bug');
 
-        $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->bug;
-        $this->view->bugs      = $this->loadModel('bug')->getUserBugs($user->account, $type, $orderBy, 0, $pager);
-        $this->view->users     = $this->user->getPairs('noletter');
-        $this->view->deptUsers = $users;
-        $this->view->user      = $user;
-        $this->view->type      = $type;
-        $this->view->orderBy   = $orderBy;
-        $this->view->pager     = $pager;
+        $this->view->title      = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->bug;
+        $this->view->bugs       = $this->loadModel('bug')->getUserBugs($user->account, $browseType, $orderBy, 0, $pager);
+        $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->deptUsers  = $users;
+        $this->view->user       = $user;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->pager      = $pager;
 
         $this->display();
     }
@@ -268,7 +268,7 @@ class user extends control
      * View user's test cases.
      *
      * @param  int    $userID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -371,7 +371,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function issue(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function issue(int $userID, string $browseType = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('issueList', $this->app->getURI(true), 'project');
 
@@ -385,11 +385,11 @@ class user extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->issue;
-        $this->view->issues    = $this->loadModel('issue')->getUserIssues($type, 0, $user->account, $orderBy, $pager);
+        $this->view->issues    = $this->loadModel('issue')->getUserIssues($browseType, 0, $user->account, $orderBy, $pager);
         $this->view->users     = $this->loadModel('user')->getPairs('noletter');
         $this->view->deptUsers = $users;
         $this->view->user      = $user;
-        $this->view->type      = $type;
+        $this->view->browseType = $browseType;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
         $this->view->userList  = $this->user->setUserList($users, $userID);
@@ -402,7 +402,7 @@ class user extends control
      * View user's risks.
      *
      * @param  int    $userID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -410,7 +410,7 @@ class user extends control
      * @access public
      * @return void
      */
-    public function risk(int $userID, string $type = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function risk(int $userID, string $browseType = 'assignedTo', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->session->set('riskList', $this->app->getURI(true), 'project');
 
@@ -425,10 +425,10 @@ class user extends control
 
 
         $this->view->title     = $this->lang->user->common . $this->lang->hyphen . $this->lang->user->risk;
-        $this->view->risks     = $this->loadModel('risk')->getUserRisks($type, $user->account, $orderBy, $pager);
+        $this->view->risks     = $this->loadModel('risk')->getUserRisks($browseType, $user->account, $orderBy, $pager);
         $this->view->deptUsers = $users;
         $this->view->user      = $user;
-        $this->view->type      = $type;
+        $this->view->browseType = $browseType;
         $this->view->orderBy   = $orderBy;
         $this->view->pager     = $pager;
         $this->view->userList  = $this->user->setUserList($users, $userID);
@@ -1275,35 +1275,5 @@ class user extends control
         $rand = updateSessionRandom();
         if(!empty(ob_get_status(true))) ob_end_clean();
         echo (string)$rand;
-    }
-
-    /**
-     * Ajax print templates.
-     *
-     * @param  string $type
-     * @param  string $link
-     * @access public
-     * @return void
-     */
-    public function ajaxPrintTemplates(string $type, string $link = '')
-    {
-        $this->view->link      = $link;
-        $this->view->type      = $type;
-        $this->view->templates = $this->user->getUserTemplates($type);
-        $this->display();
-    }
-
-    /**
-     * Save current template.
-     *
-     * @param  string $type
-     * @access public
-     * @return string
-     */
-    public function ajaxSaveOldTemplate(string $type)
-    {
-        $this->user->saveOldUserTemplate($type);
-        if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
     }
 }

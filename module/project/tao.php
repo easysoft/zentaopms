@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of project module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      sunguangming <sunguangming@easycorp.ltd>
  * @link        https://www.zentao.net
@@ -810,7 +810,7 @@ class projectTao extends projectModel
 
         return $this->dao->select('DISTINCT t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.`objectID`')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('t1.type')->eq('project')
@@ -819,12 +819,15 @@ class projectTao extends projectModel
             ->beginIF($status == 'delayed')->andWhere('t1.status')->notIn('done,closed,suspend')->andWhere('t1.end')->lt(helper::today())->fi()
             ->beginIF($status == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($status == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->beginIF($this->cookie->involved || $involved)
             ->andWhere('t2.type')->eq('project')
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
+            ->orWhere('t1.`PM`')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
             ->orWhere('(t3.user')->eq($this->app->user->account)
             ->andWhere('t3.deleted')->eq(0)
@@ -910,7 +913,7 @@ class projectTao extends projectModel
 
         return $this->dao->select($selectFields)->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t1.isParent')->eq(0)
+            ->where('t1.`isParent`')->eq(0)
             ->andWhere('t2.project')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
@@ -994,27 +997,39 @@ class projectTao extends projectModel
      * Modify the execution status when changing the status of no execution project.
      *
      * @param  int             $projectID
-     * @param  string          $status
+     * @param  string          $action
      * @access protected
      * @return array|false|int
      */
-    protected function changeExecutionStatus(int $projectID, string $status): array|false|int
+    protected function changeExecutionStatus(int $projectID, string $action): array|false|int
     {
-        if(!in_array($status, array('start', 'suspend', 'activate', 'close'))) return false;
+        if(!in_array($action, array('start', 'suspend', 'activate', 'close'))) return false;
 
-        $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch();
-        if(!$execution) return false;
+        $executionID = $this->dao->select('id')->from(TABLE_EXECUTION)->where('project')->eq($projectID)->andWhere('multiple')->eq('0')->fetch('id');
+        if(!$executionID) return false;
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
         $postData = new stdclass();
-        $postData->status  = $status;
-        $postData->begin   = $execution->begin;
-        $postData->end     = $execution->end;
-        $postData->uid     = '';
-        $postData->comment = '';
-        if($status == 'close') $postData->realEnd = $project->realEnd;
-        return $this->loadModel('execution')->$status($execution->id, $postData);
+        $postData->uid            = '';
+        $postData->comment        = '';
+        $postData->status         = $project->status;
+        $postData->begin          = $project->begin;
+        $postData->end            = $project->end;
+        $postData->realEnd        = null;
+        $postData->closedBy       = '';
+        $postData->closedDate     = null;
+        $postData->lastEditedBy   = $project->lastEditedBy;
+        $postData->lastEditedDate = $project->lastEditedDate;
+        if($action == 'start')   $postData->realBegan     = $project->realBegan;
+        if($action == 'suspend') $postData->suspendedDate = $project->suspendedDate;
+        if($action == 'close')
+        {
+            $postData->realEnd    = $project->realEnd;
+            $postData->closedBy   = $project->closedBy;
+            $postData->closedDate = $project->closedDate;
+        }
+        return $this->loadModel('execution')->$action($executionID, $postData);
     }
 
     /**

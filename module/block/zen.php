@@ -282,7 +282,7 @@ class blockZen extends block
                 /* 处理研发需求或任务列表区块点击更多后的跳转连接。 */
                 if($moduleName == 'my' && $method == 'task' && $block->params->type != 'assignedTo' || $moduleName == 'my' && $method == 'story' && $block->params->type != 'assignedTo' && $block->params->type != 'reviewBy')
                 {
-                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&type={$block->params->type}");
+                    $block->moreLink = $this->createLink('my', 'contribute', "module={$method}&browseType={$block->params->type}");
                 }
                 else
                 {
@@ -487,8 +487,8 @@ class blockZen extends block
                 $count         = zget($assignedGroup, 'value', 0);
             }
             $assignToLink = '';
-            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&type=$type");
-            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&type=$type");
+            if(common::hasPriv('my', 'work')       && $this->config->vision != 'lite') $assignToLink = helper::createLink('my', 'work',       "mode=$field&browseType=$type");
+            if(common::hasPriv('my', 'contribute') && $this->config->vision == 'lite') $assignToLink = helper::createLink('my', 'contribute', "mode=$field&browseType=$type");
             $assignToMe[$field] = array('number' => $count, 'href' => $assignToLink);
         }
 
@@ -603,10 +603,10 @@ class blockZen extends block
         $cases = array();
         if($block->params->type == 'assigntome')
         {
-            $cases = $this->dao->select('t1.assignedTo AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+            $cases = $this->dao->select('t1.`assignedTo` AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-                ->Where('t1.assignedTo')->eq($this->app->user->account)
+                ->Where('t1.`assignedTo`')->eq($this->app->user->account)
                 ->andWhere('t1.status')->ne('done')
                 ->andWhere('t3.status')->ne('done')
                 ->andWhere('t3.deleted')->eq(0)
@@ -1374,7 +1374,7 @@ class blockZen extends block
         $progresses = $this->dao->select('t2.*')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCBLOCK)->alias('t2')->on('t1.id = t2.doc')
             ->where('t1.project')->eq($projectID)
-            ->andWhere('t1.reportModule')->eq('week')
+            ->andWhere('t1.`reportModule`')->eq('week')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('t2.type')->eq('project_progress_summary')
             ->fetchAll('id', false);
@@ -2187,10 +2187,10 @@ class blockZen extends block
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
                 ->beginIF(in_array($objectType, array('issue', 'risk', 'reviewissue')))->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
-                ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')->fi()
+                ->beginIF($objectType == 'ticket')->leftJoin(TABLE_USER)->alias('t2')->on('t1.`openedBy` = t2.account')->fi()
                 ->beginIF($objectType == 'demand')->leftJoin(TABLE_DEMANDPOOL)->alias('t2')->on('t1.pool = t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+                ->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType == 'requirement')->andWhere('t1.type')->eq('requirement')->andWhere('t2.deleted')->eq('0')->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")->fi()
                 ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
@@ -2597,8 +2597,8 @@ class blockZen extends block
             ->beginIF($this->config->vision == 'rnd')->andWhere('t1.model')->ne('kanban')->fi()
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->andWhere('t1.`openedBy`', true)->eq($this->app->user->account)
+            ->orWhere('t1.`PM`')->eq($this->app->user->account)
             ->orWhere('t2.account')->eq($this->app->user->account)
             ->markRight(1)
             ->orderBy('t1.order_asc,t1.id_desc')
@@ -2606,7 +2606,7 @@ class blockZen extends block
 
         $projectIdList = array_keys($projects);
 
-        $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.addedBy,t1.addedDate,t1.editedDate,t1.status,t1.acl,t1.groups,t1.readGroups,t1.users,t1.readUsers,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
+        $stmt = $this->dao->select('t1.id,t1.lib,t1.title,t1.type,t1.`addedBy`,t1.`addedDate`,t1.`editedDate`,t1.status,t1.acl,t1.groups,t1.`readGroups`,t1.users,t1.`readUsers`,t1.deleted,if(t1.project = 0, t2.project, t1.project) as project')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()
@@ -2616,7 +2616,7 @@ class blockZen extends block
             ->andWhere('t1.project', true)->in($projectIdList)
             ->orWhere('t2.project')->in($projectIdList)
             ->markRight(1)
-            ->orderBy('project,t1.status,t1.editedDate_desc')
+            ->orderBy('project,t1.status,t1.`editedDate`_desc')
             ->query();
         $docGroup = array();
         while($doc = $stmt->fetch())
@@ -3141,7 +3141,7 @@ class blockZen extends block
         if(!empty($bugFixedRate))      $bugFixedRate      = array_column($bugFixedRate,      null, 'product');
         if(!empty($effectiveBugGroup)) $effectiveBugGroup = array_column($effectiveBugGroup, null, 'product');
         if(!empty($fixedBugGroup))     $fixedBugGroup     = array_column($fixedBugGroup,     null, 'product');
-        if(!empty($fixedBugGroup))     $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
+        if(!empty($activatedBugGroup)) $activatedBugGroup = array_column($activatedBugGroup, null, 'product');
 
         /* 按照产品和日期分组获取产品每月新增和完成的需求数度量项。 */
         $years  = array();

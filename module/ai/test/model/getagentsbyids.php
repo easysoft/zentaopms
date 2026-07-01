@@ -15,7 +15,7 @@ cid=15044
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/ai.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $table = zenData('ai_agent');
 $table->id->range('1-10');
@@ -37,7 +37,7 @@ $table->gen(10);
 
 su('admin');
 
-$aiTest = new aiTest();
+$aiTest = new aiModelTest();
 
 r(count($aiTest->getAgentsByIDsTest(array(1, 2, 3)))) && p() && e('3'); // 步骤1：正常情况，获取多个智能体
 r(count($aiTest->getAgentsByIDsTest(array(1)))) && p() && e('1'); // 步骤2：正常情况，获取单个智能体

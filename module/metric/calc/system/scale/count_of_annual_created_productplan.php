@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增计划数反映了组织在某年度内新增计划数量，用于评估组织创新能力、市场竞争力和投资决策，并用于绩效评估和目标设定。
  * 定义：所有的计划个数求和;创建时间为某年;过滤已删除的计划;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.createdDate');
+    public $fieldList = array('t1.`createdDate`');
 
     public $result = array();
 

@@ -1414,7 +1414,7 @@ class testcaseZenTest
             $case->execution = $caseID;
 
             // 模拟buildLinkBugsSearchForm方法的核心逻辑
-            $actionURL = "/testcase-linkBugs-{$case->id}-bySearch-myQueryID.html";
+            $actionURL = "/testcase-linkBugs-{$case->id}-bysearch-myQueryID.html";
             $objectID = 0;
 
             // 根据tab设置objectID
@@ -3055,7 +3055,7 @@ class testcaseZenTest
             $tester->app->tab = $tab;
 
             // 构建actionURL
-            $actionURL = "/testcase-linkCases-{$case->id}-bySearch-myQueryID.html";
+            $actionURL = "/testcase-linkCases-{$case->id}-bysearch-myQueryID.html";
 
             // 设置objectID
             $objectID = 0;

@@ -107,7 +107,7 @@ class testcaseTaoTest extends baseTest
 
         foreach($param as $field => $value) $case->{$field} = $value;
 
-        $objects = $this->objectModel->create($case);
+        $objects = $this->instance->create($case);
 
         unset($_POST);
 
@@ -125,12 +125,12 @@ class testcaseTaoTest extends baseTest
      */
     public function createSceneTest(array $scene): bool|array
     {
-        $result = $this->objectModel->createScene((object)$scene);
+        $result = $this->instance->createScene((object)$scene);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $scene  = $this->objectModel->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->orderBy('id_desc')->limit(1)->fetch();
-        $action = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+        $scene  = $this->instance->dao->select('*')->from(TABLE_SCENE)->where('deleted')->eq('0')->orderBy('id_desc')->limit(1)->fetch();
+        $action = $this->instance->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
 
         return array('scene' => $scene, 'action' => $action);
     }
@@ -145,15 +145,15 @@ class testcaseTaoTest extends baseTest
      */
     public function updateSceneTest(array $scene): bool|array
     {
-        $oldScene = $this->objectModel->getSceneById($scene['id']);
+        $oldScene = $this->instance->getSceneById($scene['id']);
         if(!$oldScene) return false;
-        $result   = $this->objectModel->updateScene((object)$scene, $oldScene);
+        $result   = $this->instance->updateScene((object)$scene, $oldScene);
         if(dao::isError()) return dao::getError();
         if(!$result) return $result;
 
-        $scene   = $this->objectModel->getSceneById($scene['id']);
-        $action  = $this->objectModel->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
-        $history = $this->objectModel->dao->select('*,old,new')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
+        $scene   = $this->instance->getSceneById($scene['id']);
+        $action  = $this->instance->dao->select('*')->from(TABLE_ACTION)->orderBy('id_desc')->limit(1)->fetch();
+        $history = $this->instance->dao->select('*,old,new')->from(TABLE_HISTORY)->where('action')->eq($action->id)->fetchAll();
 
         return array('scene' => $scene, 'action' => $action, 'history' => $history);
     }
@@ -173,7 +173,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getModuleCasesTest(int $productID, int|string $branch = 0, int|array $moduleIdList = 0, string $browseType = '', string $auto = 'no', string $caseType = ''): string
     {
-        $objects = $this->objectModel->getModuleCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType);
+        $objects = $this->instance->getModuleCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType);
 
         if(dao::isError()) return dao::getError();
 
@@ -200,7 +200,7 @@ class testcaseTaoTest extends baseTest
     {
         $_SESSION['project'] = 1;
 
-        $objects = $this->objectModel->getModuleProjectCases($productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager);
+        $objects = $this->invokeArgs('getModuleProjectCases', [$productID, $branch, $moduleIdList, $browseType, $auto, $caseType, $orderBy, $pager]);
 
         if(dao::isError()) return dao::getError();
 
@@ -218,7 +218,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getExecutionCasesTest(string $browseType = '', int $executionID = 0): array|int
     {
-        $objects = $this->objectModel->getExecutionCases($browseType, $executionID);
+        $objects = $this->instance->getExecutionCases($browseType, $executionID);
 
         if(dao::isError()) return dao::getError();
 
@@ -261,7 +261,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getByIdTest($caseID, $version = 0)
     {
-        $object = $this->objectModel->getById($caseID, $version = 0);
+        $object = $this->instance->getById($caseID, $version = 0);
 
         if(dao::isError()) return dao::getError();
 
@@ -279,7 +279,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getByListTest(array $caseIdList, string $query = ''): array|string
     {
-        $cases = $this->objectModel->getByList($caseIdList, $query);
+        $cases = $this->instance->getByList($caseIdList, $query);
         if(dao::isError()) return dao::getError();
         return implode(',', array_keys($cases));
     }
@@ -300,7 +300,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getTestCasesTest(int $productID, int|string $branch, string $browseType, int $moduleID = 0, string $caseType = '', string $auto = 'no', string $orderBy = 'id_desc'): array|string
     {
-        $cases = $this->objectModel->getTestCases($productID, $branch, $browseType, 0, $moduleID, $caseType, $auto, $orderBy);
+        $cases = $this->instance->getTestCases($productID, $branch, $browseType, 0, $moduleID, $caseType, $auto, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
@@ -320,7 +320,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getByAssignedToTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): string|bool
     {
-        $objects = $this->objectModel->getByAssignedTo($account, $auto, $orderBy, $pager);
+        $objects = $this->instance->getByAssignedTo($account, $auto, $orderBy, $pager);
 
         if(dao::isError()) return false;
 
@@ -340,7 +340,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getByOpenedByTest(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        $objects = $this->objectModel->getByOpenedBy($account, $auto, $orderBy, $pager);
+        $objects = $this->instance->getByOpenedBy($account, $auto, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
 
@@ -364,7 +364,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getByStatusTest(int $productID = 0, int|string $branch = 0, string $type = 'all', string $status = 'all', int $moduleID = 0, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): int|bool
     {
-        $objects = $this->objectModel->getByStatus($productID, $branch, $type, $status, $moduleID, $auto, $orderBy, $pager);
+        $objects = $this->instance->getByStatus($productID, $branch, $type, $status, $moduleID, $auto, $orderBy, $pager);
 
         if(dao::isError()) return false;
 
@@ -392,7 +392,7 @@ class testcaseTaoTest extends baseTest
 
         $_SESSION['project'] = $projectID;
 
-        $objects = $this->objectModel->getBySearch($productID, $branch, $queryID, $auto, $orderBy, $pager);
+        $objects = $this->instance->getBySearch($productID, $branch, $queryID, $auto, $orderBy, $pager);
 
         if(dao::isError()) return false;
 
@@ -409,7 +409,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getStoryCasesTest(int $storyID): array|string
     {
-        $objects = $this->objectModel->getStoryCases($storyID);
+        $objects = $this->instance->getStoryCases($storyID);
 
         if(dao::isError()) return dao::getError();
 
@@ -429,7 +429,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getPairsByProductTest(int $productID = 0, int|array $branch = 0, string $search = '', int $limit = 0): array|string
     {
-        $objects = $this->objectModel->getPairsByProduct($productID, $branch, $search, $limit);
+        $objects = $this->instance->getPairsByProduct($productID, $branch, $search, $limit);
 
         if(dao::isError()) return dao::getError();
 
@@ -446,7 +446,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getStoryCaseCountsTest(array $stories): array
     {
-        $counts = $this->objectModel->getStoryCaseCounts($stories);
+        $counts = $this->instance->getStoryCaseCounts($stories);
 
         if(dao::isError()) return dao::getError();
 
@@ -471,7 +471,7 @@ class testcaseTaoTest extends baseTest
         $_SESSION['testcaseOnlyCondition']  = $testcaseOnlyCondition;
         $_SESSION['testcaseQueryCondition'] = $testcaseQueryCondition;
 
-        $objects = $this->objectModel->getCasesToExport($exportType, $taskID, $orderBy, $limit);
+        $objects = $this->instance->getCasesToExport($exportType, $taskID, $orderBy, $limit);
 
         if(dao::isError()) return dao::getError();
 
@@ -489,7 +489,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getCaseResultsForExportTest(array $caseIdList, int $taskID = 0): string|array
     {
-        $objects = $this->objectModel->getCaseResultsForExport($caseIdList, $taskID);
+        $objects = $this->instance->getCaseResultsForExport($caseIdList, $taskID);
 
         if(dao::isError()) return dao::getError();
 
@@ -506,7 +506,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getScenesByListTest($sceneIdList, $query = '')
     {
-        return $this->objectModel->getScenesByList($sceneIdList, $query);
+        return $this->instance->getScenesByList($sceneIdList, $query);
     }
 
     /**
@@ -520,7 +520,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getCases2LinkTest(int $caseID, string $browseType): array
     {
-        return $this->objectModel->getCases2Link($caseID, $browseType);
+        return $this->instance->getCases2Link($caseID, $browseType);
     }
 
     /**
@@ -534,7 +534,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getBugs2LinkTest(int $caseID, string $browseType): string|array
     {
-        $bugs = $this->objectModel->getBugs2Link($caseID, $browseType);
+        $bugs = $this->instance->getBugs2Link($caseID, $browseType);
 
         if(dao::isError()) return dao::getError();
 
@@ -561,7 +561,7 @@ class testcaseTaoTest extends baseTest
             $cases[] = $case;
         }
 
-        return $this->objectModel->getRelatedStories($cases);
+        return $this->invokeArgs('getRelatedStories', [$cases]);
     }
 
     /**
@@ -596,7 +596,7 @@ class testcaseTaoTest extends baseTest
      */
     public function updateTest(int $caseID, array $param = array()): bool|array
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        $oldCase = $this->instance->getByID($caseID);
 
         $case = new stdclass();
         $case->id             = $caseID;
@@ -623,7 +623,7 @@ class testcaseTaoTest extends baseTest
 
         foreach($param as $field => $value) $case->$field = $value;
 
-        $changes = $this->objectModel->update($case, $oldCase);
+        $changes = $this->instance->update($case, $oldCase);
         if($changes == array()) $changes = '没有数据更新';
 
         if(dao::isError()) return dao::getError();
@@ -642,12 +642,12 @@ class testcaseTaoTest extends baseTest
      */
     public function reviewTest(int $caseID, object $case)
     {
-        $oldCase = $this->objectModel->getByID($caseID);
-        $objects = $this->objectModel->review($case, $oldCase);
+        $oldCase = $this->instance->getByID($caseID);
+        $objects = $this->instance->review($case, $oldCase);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getByID($caseID);
+        return $this->instance->getByID($caseID);
     }
 
     /**
@@ -660,11 +660,11 @@ class testcaseTaoTest extends baseTest
      */
     public function batchReviewTest($caseIdList, $result)
     {
-        $objects = $this->objectModel->batchReview($caseIdList, $result);
+        $objects = $this->instance->batchReview($caseIdList, $result);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->getByList($caseIdList);
+        return $this->instance->getByList($caseIdList);
     }
 
     /**
@@ -678,7 +678,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchDeleteTest(array $caseIdList, array $sceneIdList): bool
     {
-        return $this->objectModel->batchDelete($caseIdList, $sceneIdList);
+        return $this->instance->batchDelete($caseIdList, $sceneIdList);
     }
 
     /**
@@ -692,7 +692,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeBranchTest($caseIdList, $sceneIdList, $branchID)
     {
-        return $this->objectModel->batchChangeBranch($caseIdList, $sceneIdList, $branchID);
+        return $this->instance->batchChangeBranch($caseIdList, $sceneIdList, $branchID);
     }
 
     /**
@@ -705,7 +705,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeCaseBranchTest(array $caseIdList, int $branchID): bool
     {
-        return $this->objectModel->batchChangeCaseBranch($caseIdList, $branchID);
+        return $this->instance->batchChangeCaseBranch($caseIdList, $branchID);
     }
 
     /**
@@ -718,7 +718,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeSceneBranchTest($sceneIdList, $branchID)
     {
-        return $this->objectModel->batchChangeSceneBranch($sceneIdList, $branchID);
+        return $this->instance->batchChangeSceneBranch($sceneIdList, $branchID);
     }
 
     /**
@@ -732,7 +732,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeModuleTest($caseIdList, $sceneIdList, $moduleID)
     {
-        return $this->objectModel->batchChangeModule($caseIdList, $sceneIdList, $moduleID);
+        return $this->instance->batchChangeModule($caseIdList, $sceneIdList, $moduleID);
     }
 
     /**
@@ -745,7 +745,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeCaseModuleTest($caseIdList, $moduleID)
     {
-        return $this->objectModel->batchChangeCaseModule($caseIdList, $moduleID);
+        return $this->instance->batchChangeCaseModule($caseIdList, $moduleID);
     }
 
     /**
@@ -758,7 +758,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeSceneModuleTest($sceneIdList, $moduleID)
     {
-        return $this->objectModel->batchChangeSceneModule($sceneIdList, $moduleID);
+        return $this->instance->batchChangeSceneModule($sceneIdList, $moduleID);
     }
 
     /**
@@ -771,7 +771,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeTypeTest($caseIdList, $type)
     {
-        return $this->objectModel->batchChangeType($caseIdList, $type);
+        return $this->instance->batchChangeType($caseIdList, $type);
     }
 
     /**
@@ -785,7 +785,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchChangeSceneTest(array $caseIdList, int $sceneID): bool
     {
-        return $this->objectModel->batchChangeScene($caseIdList, $sceneID);
+        return $this->instance->batchChangeScene($caseIdList, $sceneID);
     }
 
     /**
@@ -798,7 +798,7 @@ class testcaseTaoTest extends baseTest
      */
     public function batchConfirmStoryChangeTest(array $caseIdList): bool
     {
-        return $this->objectModel->batchConfirmStoryChange($caseIdList);
+        return $this->instance->batchConfirmStoryChange($caseIdList);
     }
 
     /**
@@ -814,7 +814,7 @@ class testcaseTaoTest extends baseTest
         global $tester;
         $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('id')->in($stepIDList)->fetchAll('', false);
 
-        $string = $this->objectModel->joinStep($steps);
+        $string = $this->instance->joinStep($steps);
 
         if(dao::isError()) return dao::getError();
 
@@ -831,7 +831,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getImportFieldsTest(int $productID = 0): array
     {
-        $fields = $this->objectModel->getImportFields($productID);
+        $fields = $this->instance->getImportFields($productID);
 
         if(dao::isError()) return dao::getError();
 
@@ -850,7 +850,7 @@ class testcaseTaoTest extends baseTest
      */
     public function appendDataTest(array $cases, string $type = 'case', array $caseIdList = array()): array
     {
-        $objects = $this->objectModel->appendData($cases, $type, $caseIdList);
+        $objects = $this->instance->appendData($cases, $type, $caseIdList);
 
         if(dao::isError()) return dao::getError();
 
@@ -874,7 +874,7 @@ class testcaseTaoTest extends baseTest
         $tester->config->testcase->forceReview    = $forceReview;
         $tester->config->testcase->forceNotReview = $forceNotReview;
 
-        $object = $this->objectModel->forceNotReview();
+        $object = $this->instance->forceNotReview();
 
         if(dao::isError()) return dao::getError();
 
@@ -891,8 +891,8 @@ class testcaseTaoTest extends baseTest
      */
     public function syncCase2ProjectTest(int $caseID): array|string
     {
-        $case = $this->objectModel->getByID($caseID);
-        $this->objectModel->syncCase2Project($case, $caseID);
+        $case = $this->instance->getByID($caseID);
+        $this->instance->syncCase2Project($case, $caseID);
 
         if(dao::isError()) return dao::getError();
 
@@ -914,7 +914,8 @@ class testcaseTaoTest extends baseTest
      */
     public function updateCase2ProjectTest(int $caseID, string $objectType, int $objectID): array
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        global $tester;
+        $oldCase = $tester->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
 
         $case = new stdclass();
         $case->title          = $oldCase->title;
@@ -934,7 +935,7 @@ class testcaseTaoTest extends baseTest
         $case->lastEditedBy   = $oldCase->lastEditedBy;
         $case->branch         = $oldCase->branch;
 
-        $this->objectModel->updateCase2Project($oldCase, $case);
+        $this->invokeArgs('updateCase2Project', [$oldCase, $case]);
 
         if(dao::isError()) return dao::getError();
 
@@ -953,7 +954,9 @@ class testcaseTaoTest extends baseTest
      */
     public function linkBugsTest(int $caseID, array $toLinkBugs): array
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        global $tester;
+        $oldCase    = $tester->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+        $linkedBugs = $tester->dao->select('id')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchPairs();
 
         $case = new stdclass();
         $case->linkBug      = $toLinkBugs;
@@ -961,11 +964,10 @@ class testcaseTaoTest extends baseTest
         $case->story        = 0;
         $case->storyVersion = 0;
 
-        $this->objectModel->linkBugs($caseID, array_keys($oldCase->toBugs), $case);
+        $this->invokeArgs('linkBugs', [$caseID, array_keys($linkedBugs), $case]);
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
         $bugs = $tester->dao->select('id,`case`')->from(TABLE_BUG)->where('`case`')->eq($caseID)->fetchAll();
         return $bugs;
     }
@@ -994,7 +996,7 @@ class testcaseTaoTest extends baseTest
         if(empty($testtasks)) return true;
 
 
-        $this->objectModel->unlinkCaseFromTesttask($caseID, $branch, $testtasks);
+        $this->invokeArgs('unlinkCaseFromTesttask', [$caseID, $branch, $testtasks]);
 
         if(dao::isError()) return false;
 
@@ -1012,7 +1014,7 @@ class testcaseTaoTest extends baseTest
      */
     public function appendStepsTest(array $steps, int $count = 0)
     {
-        $objects = $this->objectModel->appendSteps($steps, $count);
+        $objects = $this->instance->appendSteps($steps, $count);
 
         return count($objects);
     }
@@ -1030,7 +1032,7 @@ class testcaseTaoTest extends baseTest
      */
     public function insertStepsTest(int $caseID, array $steps, array $expects, array $stepTypes): string
     {
-        $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes);
+        $objects = $this->invokeArgs('insertSteps', [$caseID, $steps, $expects, $stepTypes]);
         if(dao::isError()) return dao::getError()[0];
 
         global $tester;
@@ -1053,7 +1055,7 @@ class testcaseTaoTest extends baseTest
      */
     public function insertStepsTestWithVersion(int $caseID, array $steps, array $expects, array $stepTypes, int $version): string
     {
-        $objects = $this->objectModel->insertSteps($caseID, $steps, $expects, $stepTypes, $version);
+        $objects = $this->invokeArgs('insertSteps', [$caseID, $steps, $expects, $stepTypes, $version]);
         if(dao::isError()) return dao::getError()[0];
 
         global $tester;
@@ -1073,9 +1075,11 @@ class testcaseTaoTest extends baseTest
      */
     public function updateStepTest(int $caseID, object $case): bool|array
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        global $tester;
+        $oldCase        = $tester->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
+        $oldCase->steps = $this->instance->getSteps($caseID, (int)$oldCase->version);
 
-        $this->objectModel->updateStep($case, $oldCase);
+        $this->invokeArgs('updateStep', [$case, $oldCase]);
         if(dao::isError()) return false;
 
         global $tester;
@@ -1093,7 +1097,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getStepsTest(int $caseID, int $version): string
     {
-        $steps = $this->objectModel->getSteps($caseID, $version);
+        $steps = $this->instance->getSteps($caseID, $version);
         if(dao::isError()) return dao::getError()[0];
         $return = '';
         foreach($steps as $step) $return .= "{$step->name} ";
@@ -1110,7 +1114,7 @@ class testcaseTaoTest extends baseTest
      */
     public function processStepsTest(array $steps): string
     {
-        $steps = $this->objectModel->processSteps($steps);
+        $steps = $this->instance->processSteps($steps);
         if(dao::isError()) return dao::getError()[0];
         $return = '';
         foreach($steps as $step) $return .= "{$step->name} ";
@@ -1127,7 +1131,7 @@ class testcaseTaoTest extends baseTest
      */
     public function fetchBaseInfoTest(int $caseID): object|bool
     {
-        return $this->objectModel->fetchBaseInfo($caseID);
+        return $this->invokeArgs('fetchBaseInfo', [$caseID]);
     }
 
     /**
@@ -1140,7 +1144,7 @@ class testcaseTaoTest extends baseTest
      */
     public function fetchStepsByListTest(array $caseIdList): string
     {
-        $caseSteps = $this->objectModel->fetchStepsByList($caseIdList);
+        $caseSteps = $this->invokeArgs('fetchStepsByList', [$caseIdList]);
         if(dao::isError()) return dao::getError()[0];
         $return = '';
         foreach($caseSteps as $caseID => $steps)
@@ -1166,7 +1170,7 @@ class testcaseTaoTest extends baseTest
         global $tester;
         $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($oldCaseID)->fetchAll('id');
 
-        $this->objectModel->importSteps($caseID, $steps);
+        $this->instance->importSteps($caseID, $steps);
 
         if(dao::isError()) return dao::getError()[0];
 
@@ -1189,7 +1193,7 @@ class testcaseTaoTest extends baseTest
         global $tester;
         $files = $tester->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->eq($oldCaseID)->andWhere('objectType')->eq('testcase')->fetchAll('id');
 
-        $this->objectModel->importFiles($caseID, $files);
+        $this->instance->importFiles($caseID, $files);
 
         if(dao::isError()) return dao::getError()[0];
 
@@ -1226,7 +1230,7 @@ class testcaseTaoTest extends baseTest
 
         foreach($param as $field => $value) $case->{$field} = $value;
 
-        $this->objectModel->doCreate($case);
+        $this->invokeArgs('doCreate', [$case]);
 
         unset($_POST);
 
@@ -1234,7 +1238,7 @@ class testcaseTaoTest extends baseTest
 
         global $tester;
         $caseID = $tester->dao->lastInsertID();
-        return $this->objectModel->fetchBaseInfo($caseID);
+        return $this->invokeArgs('fetchBaseInfo', [$caseID]);
     }
 
     /**
@@ -1248,7 +1252,8 @@ class testcaseTaoTest extends baseTest
      */
     public function doUpdateTest(int $caseID, array $param = array()): bool|array|object
     {
-        $oldCase = $this->objectModel->getByID($caseID);
+        global $tester;
+        $oldCase = $tester->dao->select('*')->from(TABLE_CASE)->where('id')->eq($caseID)->fetch();
 
         $case = new stdclass();
         $case->id             = $oldCase->id;
@@ -1272,11 +1277,11 @@ class testcaseTaoTest extends baseTest
 
         foreach($param as $field => $value) $case->$field = $value;
 
-        $this->objectModel->doUpdate($case);
+        $this->invokeArgs('doUpdate', [$case]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->objectModel->fetchBaseInfo($caseID);
+        return $this->invokeArgs('fetchBaseInfo', [$caseID]);
     }
 
     /**
@@ -1289,7 +1294,7 @@ class testcaseTaoTest extends baseTest
      */
     public function importToLibTest(array $caseIdList): string
     {
-        $cases = $this->objectModel->getByList($caseIdList);
+        $cases = $this->instance->getByList($caseIdList);
 
         global $tester;
         $files = $tester->dao->select('*')->from(TABLE_FILE)->where('`objectID`')->in($caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
@@ -1347,7 +1352,7 @@ class testcaseTaoTest extends baseTest
             $importCases[] = $libCase;
         }
 
-        $this->objectModel->importToLib($importCases, $steps, $files);
+        $this->instance->importToLib($importCases, $steps, $files);
 
         if(dao::isError()) return dao::getError()[0];
         $return = '';
@@ -1376,7 +1381,7 @@ class testcaseTaoTest extends baseTest
      */
     public function saveMindConfigTest(string $type, array $configList): string
     {
-        $this->objectModel->saveMindConfig($type, $configList);
+        $this->instance->saveMindConfig($type, $configList);
 
         if(dao::isError()) return dao::getError()[0];
 
@@ -1397,7 +1402,7 @@ class testcaseTaoTest extends baseTest
      */
     public function createStepsFromBugTest(string $steps): array|string
     {
-        $array = $this->objectModel->createStepsFromBug($steps);
+        $array = $this->instance->createStepsFromBug($steps);
 
         if(dao::isError()) return dao::getError();
 
@@ -1432,7 +1437,7 @@ class testcaseTaoTest extends baseTest
      */
     public function checkModuleImportedTest(int $libID, int $oldModuleID): array|int
     {
-        $moduleID = $this->objectModel->checkModuleImported($libID, $oldModuleID);
+        $moduleID = $this->instance->checkModuleImported($libID, $oldModuleID);
         if(dao::isError()) return dao::getError();
         return $moduleID;
     }
@@ -1448,7 +1453,7 @@ class testcaseTaoTest extends baseTest
      */
     public function importCaseRelatedModulesTest(int $libID, int $oldModuleID): array|int
     {
-        $moduleID = $this->objectModel->importCaseRelatedModules($libID, $oldModuleID);
+        $moduleID = $this->instance->importCaseRelatedModules($libID, $oldModuleID);
         if(dao::isError()) return dao::getError();
         return $moduleID;
     }
@@ -1464,8 +1469,8 @@ class testcaseTaoTest extends baseTest
     public function summaryTest(string $caseIdList): string
     {
         $caseIdList = explode(',', $caseIdList);
-        $cases      = $this->objectModel->getByList($caseIdList);
-        $summary    = $this->objectModel->summary($cases);
+        $cases      = $this->instance->getByList($caseIdList);
+        $summary    = $this->instance->summary($cases);
         if(dao::isError()) return dao::getError();
         return $summary;
     }
@@ -1484,7 +1489,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getScenesForMenuTest(int $productID, int $moduleID, int $startScene = 0, string $branch = 'all', int $currentScene = 0): string
     {
-        $scenes = $this->objectModel->getScenesForMenu($productID, $moduleID, $startScene, $branch, $currentScene);
+        $scenes = $this->instance->getScenesForMenu($productID, $moduleID, $startScene, $branch, $currentScene);
         if(dao::isError()) return dao::getError();
         $scenes = array_keys($scenes);
         sort($scenes);
@@ -1503,14 +1508,14 @@ class testcaseTaoTest extends baseTest
      */
     public function buildTreeArrayTest(array &$treeMenu, array $scenes, int $sceneID): string
     {
-        $scenes = $this->objectModel->getScenesByList($scenes);
-        $scene  = $this->objectModel->getSceneByID($sceneID);
+        $scenes = $this->instance->getScenesByList($scenes);
+        $scene  = $this->instance->getSceneByID($sceneID);
 
         global $tester;
         $branch     = $tester->dao->select('*')->from(TABLE_BRANCH)->where('id')->in($scene->branch)->fetch();
         $branchName = $branch ? "/{$branch->name}/" : '/';
 
-        $this->objectModel->buildTreeArray($treeMenu, $scenes, $scene, $branchName);
+        $this->instance->buildTreeArray($treeMenu, $scenes, $scene, $branchName);
 
         if(dao::isError()) return dao::getError();
 
@@ -1529,7 +1534,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getAllChildIdTest(int $sceneID): string
     {
-        $idList = $this->objectModel->getAllChildId($sceneID);
+        $idList = $this->instance->getAllChildId($sceneID);
         if(dao::isError()) return dao::getError();
         return implode(',', $idList);
     }
@@ -1545,7 +1550,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getScenesNameTest(array $sceneIdList, bool $fullPath = true): array
     {
-        $return = $this->objectModel->getScenesName($sceneIdList, $fullPath);
+        $return = $this->instance->getScenesName($sceneIdList, $fullPath);
         if(dao::isError()) return dao::getError();
         return $return;
     }
@@ -1576,7 +1581,7 @@ class testcaseTaoTest extends baseTest
             $tester->dao->insert(TABLE_CONFIG)->data($data)->exec();
         }
 
-        $return = $this->objectModel->getMindConfig($type);
+        $return = $this->instance->getMindConfig($type);
         if(dao::isError()) return dao::getError();
         return $return;
     }
@@ -1592,7 +1597,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getStepByProductAndModuleTest(int $productID, int $moduleID): array|string
     {
-        $array = $this->objectModel->getStepByProductAndModule($productID, $moduleID);
+        $array = $this->instance->getStepByProductAndModule($productID, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1612,7 +1617,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getSceneByProductAndModuleTest(int $productID, int $moduleID): array|string
     {
-        $array = $this->objectModel->getSceneByProductAndModule($productID, $moduleID);
+        $array = $this->instance->getSceneByProductAndModule($productID, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1642,7 +1647,7 @@ class testcaseTaoTest extends baseTest
         $case = new stdClass();
         $case->id = $caseID;
 
-        $object = $this->objectModel->appendCaseFails($case, $from, $taskID);
+        $object = $this->instance->appendCaseFails($case, $from, $taskID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1660,7 +1665,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getCaseListForXmindExportTest(int $productID, int $moduleID): array|string
     {
-        $cases = $this->objectModel->getCaseListForXmindExport($productID, $moduleID);
+        $cases = $this->instance->getCaseListForXmindExport($productID, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1679,7 +1684,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getSceneByIDTest($sceneID): object|array|false
     {
-        $object = $this->objectModel->getSceneByID($sceneID);
+        $object = $this->instance->getSceneByID($sceneID);
 
         if(dao::isError()) return dao::getError();
 
@@ -1705,7 +1710,7 @@ class testcaseTaoTest extends baseTest
         $tester->app->methodName = 'getSceneGroups';
         $pager = new pager(0, 50, 1);
 
-        $scenes = $this->objectModel->getSceneGroups($productID, $branch, $moduleID, $orderBy, $pager);
+        $scenes = $this->instance->getSceneGroups($productID, $branch, $moduleID, $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
         return implode(',', array_column($scenes, 'id'));
@@ -1727,7 +1732,7 @@ class testcaseTaoTest extends baseTest
     {
         global $tester;
         $modules = $moduleID ? $tester->loadModel('tree')->getAllChildId($moduleID) : array();
-        $caseGroup = $this->objectModel->getSceneGroupCases($productID, $branch, $modules, $caseType, $orderBy);
+        $caseGroup = $this->instance->getSceneGroupCases($productID, $branch, $modules, $caseType, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
@@ -1748,7 +1753,7 @@ class testcaseTaoTest extends baseTest
      */
     public function buildSceneBaseOnCaseTest(int $sceneID, array $fieldTypes, array $caseIdList): string
     {
-        $scene = $this->objectModel->getSceneByID($sceneID);
+        $scene = $this->instance->getSceneByID($sceneID);
         $cases = array();
         foreach($caseIdList as $caseID)
         {
@@ -1757,7 +1762,7 @@ class testcaseTaoTest extends baseTest
             $cases[] = $case;
         }
 
-        $caseGroup = $this->objectModel->buildSceneBaseOnCase($scene, $fieldTypes, $cases);
+        $caseGroup = $this->instance->buildSceneBaseOnCase($scene, $fieldTypes, $cases);
 
         if(dao::isError()) return dao::getError();
 
@@ -1782,7 +1787,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getSceneMenuTest(int $productID, int $moduleID, int $startScene = 0, int|string $branch = 0, int $currentScene = 0, bool $emptyMenu = false): array|string
     {
-        $scenes = $this->objectModel->getSceneMenu($productID, $moduleID, $branch, $startScene, $currentScene, $emptyMenu);
+        $scenes = $this->instance->getSceneMenu($productID, $moduleID, $branch, $startScene, $currentScene, $emptyMenu);
         if(dao::isError()) return dao::getError();
         return implode(',', $scenes);
     }
@@ -1797,7 +1802,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getStepGroupByIdListTest(string $caseIdList): array|string
     {
-        $caseSteps = $this->objectModel->getStepGroupByIdList(explode(',', $caseIdList));
+        $caseSteps = $this->instance->getStepGroupByIdList(explode(',', $caseIdList));
         if(dao::isError()) return dao::getError();
         $return = '';
         foreach($caseSteps as $caseID => $steps) $return .= $caseID . ':' . implode(',', array_keys($steps)) . '; ';
@@ -1814,7 +1819,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getDatatableModulesTest(int $productID): array|string
     {
-        $modules = $this->objectModel->getDatatableModules($productID);
+        $modules = $this->instance->getDatatableModules($productID);
         if(dao::isError()) return dao::getError();
         return implode(',', array_keys($modules));
     }
@@ -1836,10 +1841,10 @@ class testcaseTaoTest extends baseTest
         $tester->config->testcase->forceReview = false;
         foreach($configs as $key => $value) $tester->config->testcase->{$key} = $value;
 
-        $case = $this->objectModel->getByID(1);
+        $case = $this->instance->getByID(1);
         foreach($params as $key => $value) $case->{$key} = $value;
 
-        $isClickable = $this->objectModel->isClickable($case, $action);
+        $isClickable = $this->instance->isClickable($case, $action);
 
         if(dao::isError()) return dao::getError();
 
@@ -1856,7 +1861,7 @@ class testcaseTaoTest extends baseTest
      */
     public function fetchSceneNameTest($sceneID): string|array|false
     {
-        $title = $this->objectModel->fetchSceneName($sceneID);
+        $title = $this->invokeArgs('fetchSceneName', [$sceneID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1874,11 +1879,11 @@ class testcaseTaoTest extends baseTest
     public function fixScenePathTest($sceneID, $pSceneID): string|array
     {
         $pScene = array('id' => $pSceneID);
-        $this->objectModel->fixScenePath($sceneID, $pScene);
+        $this->invokeArgs('fixScenePath', [$sceneID, $pScene]);
 
         if(dao::isError()) return dao::getError();
 
-        $scene = $this->objectModel->getSceneByID($sceneID);
+        $scene = $this->instance->getSceneByID($sceneID);
         $return = "id:{$scene->id}, parent:{$scene->parent}, path:{$scene->path}, grade:{$scene->grade}";
         return $return;
     }
@@ -1892,7 +1897,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getReviewAmountTest(): int|array
     {
-        $count = $this->objectModel->getReviewAmount();
+        $count = $this->invokeArgs('getReviewAmount', []);
 
         if(dao::isError()) return dao::getError();
 
@@ -1914,7 +1919,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getNeedConfirmListTest(int $productID, int|string $branch = 0, int $moduleID = 0, string $auto = 'no', string $caseType = '', string $orderBy = 'id_desc'): array|string
     {
-        $objects = $this->objectModel->getNeedConfirmList($productID, $branch, $moduleID ? array($moduleID) : array(), $auto, $caseType, $orderBy);
+        $objects = $this->invokeArgs('getNeedConfirmList', [$productID, $branch, $moduleID ? array($moduleID) : array(), $auto, $caseType, $orderBy]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1934,7 +1939,7 @@ class testcaseTaoTest extends baseTest
      */
     public function getCanImportedModulesTest(int $productID, int $libID, int|string $branch, string $returnType): string|array
     {
-        $objects = $this->objectModel->getCanImportedModules($productID, $libID, $branch, $returnType);
+        $objects = $this->instance->getCanImportedModules($productID, $libID, $branch, $returnType);
 
         if(dao::isError()) return dao::getError();
 
@@ -1959,7 +1964,7 @@ class testcaseTaoTest extends baseTest
     public function getExecutionCasesBySearchTest(int $executionID, int $productID, int|string $branchID, int $paramID, string|bool $query, string $orderBy): string
     {
         $_SESSION['executionCaseQuery'] = $query;
-        $cases = $this->objectModel->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy);
+        $cases = $this->instance->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy);
         return is_array($cases) ? implode(';', array_keys($cases)) : '0';
     }
 
@@ -1978,7 +1983,7 @@ class testcaseTaoTest extends baseTest
         global $tester;
         $tester->dao->delete()->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($case->version)->exec();
 
-        $this->objectModel->doCreateSpec($caseID, $case, $files);
+        $this->invokeArgs('doCreateSpec', [$caseID, $case, $files]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1998,7 +2003,7 @@ class testcaseTaoTest extends baseTest
      */
     public function buildSearchFormTest(int $productID, int $projectID, int $moduleID, int|string $branchID): string
     {
-        $this->objectModel->buildSearchForm($productID, array(), 0, 'actionURL', $projectID, $moduleID, $branchID);
+        $this->instance->buildSearchForm($productID, array(), 0, 'actionURL', $projectID, $moduleID, $branchID);
 
         global $tester;
         return implode(',', array_keys($tester->config->testcase->search['fields']));
@@ -2015,7 +2020,7 @@ class testcaseTaoTest extends baseTest
      */
     public function buildSearchConfigTest(int $productID, string $branch = 'all'): array
     {
-        $result = $this->objectModel->buildSearchConfig($productID, $branch);
+        $result = $this->instance->buildSearchConfig($productID, $branch);
         return array('module' => $result['module'], 'storyValues' => $result['params']['story']['values'], 'typeValues' => $result['params']['type']['values']);
     }
 
@@ -2029,7 +2034,7 @@ class testcaseTaoTest extends baseTest
      */
     public function setMenuTest(int $productID, int|string $branch = 0): mixed
     {
-        $this->objectModel->setMenu($productID, $branch);
+        $this->instance->setMenu($productID, $branch);
         if(dao::isError()) return dao::getError();
 
         return true;
@@ -2044,7 +2049,7 @@ class testcaseTaoTest extends baseTest
      */
     public function processDatasTest($datas)
     {
-        $result = $this->objectModel->processDatas($datas);
+        $result = $this->instance->processDatas($datas);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2059,7 +2064,7 @@ class testcaseTaoTest extends baseTest
      */
     public function processStepsOrExpectsTest(string $steps): array
     {
-        $result = $this->objectModel->processStepsOrExpects($steps);
+        $result = $this->instance->processStepsOrExpects($steps);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2131,11 +2136,11 @@ class testcaseTaoTest extends baseTest
         }
 
         // 使用反射来调用保护方法
-        $reflection = new ReflectionClass($this->objectModel);
+        $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('processStepsChanged');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->objectModel, $case, $oldStep);
+        $result = $method->invoke($this->instance, $case, $oldStep);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2158,7 +2163,7 @@ class testcaseTaoTest extends baseTest
         libxml_clear_errors();
         if($xmlNode === false) return false;
 
-        $result = $this->objectModel->getXmindImport($fileName);
+        $result = $this->instance->getXmindImport($fileName);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2174,7 +2179,7 @@ class testcaseTaoTest extends baseTest
      */
     public function saveXmindImportTest(array $scenes, array $testcases): array
     {
-        $result = $this->objectModel->saveXmindImport($scenes, $testcases);
+        $result = $this->instance->saveXmindImport($scenes, $testcases);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2190,7 +2195,7 @@ class testcaseTaoTest extends baseTest
      */
     public function saveTestcaseTest(object $testcase, array $sceneIdList): array
     {
-        $result = $this->objectModel->saveTestcase($testcase, $sceneIdList);
+        $result = $this->instance->saveTestcase($testcase, $sceneIdList);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2207,11 +2212,11 @@ class testcaseTaoTest extends baseTest
     public function processCaseStepsTest(object $case, object $testcase): object
     {
         // 使用反射来调用保护方法
-        $reflection = new ReflectionClass($this->objectModel);
+        $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('processCaseSteps');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->objectModel, $case, $testcase);
+        $result = $method->invoke($this->instance, $case, $testcase);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -2232,11 +2237,11 @@ class testcaseTaoTest extends baseTest
         if($xml === false) return false;
 
         // 使用反射来调用私有方法
-        $reflection = new ReflectionClass($this->objectModel);
+        $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('xmlToArray');
         $method->setAccessible(true);
 
-        $result = $method->invoke($this->objectModel, $xml, $options);
+        $result = $method->invoke($this->instance, $xml, $options);
         if(dao::isError()) return dao::getError();
 
         // 返回数组的序列化字符串，便于测试验证
@@ -2263,7 +2268,7 @@ class testcaseTaoTest extends baseTest
         $xml = simplexml_load_string($xmlString);
         if($xml === false) return false;
 
-        $result = $this->objectModel->getXmlTagsArray($xml, $namespaces, $options);
+        $result = $this->instance->getXmlTagsArray($xml, $namespaces, $options);
         if(dao::isError()) return dao::getError();
 
         // 返回数组数量用于测试验证
@@ -2283,7 +2288,7 @@ class testcaseTaoTest extends baseTest
         // 确保id是整数类型
         if(isset($sceneData['id'])) $sceneData['id'] = (int)$sceneData['id'];
 
-        $result = $this->objectModel->saveScene($sceneData, $sceneList);
+        $result = $this->invokeArgs('saveScene', [$sceneData, $sceneList]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -3440,7 +3445,7 @@ class testcaseTaoTest extends baseTest
         if(empty($caseData)) return array('error' => 'noData');
 
         // 模拟获取分支和模块信息
-        $branches = $this->objectModel->loadModel('branch')->getPairs($productID, 'active');
+        $branches = $this->instance->loadModel('branch')->getPairs($productID, 'active');
         $modules = array();
         $stories = array();
 
@@ -3463,7 +3468,7 @@ class testcaseTaoTest extends baseTest
 
         // 计算输入变量限制
         $countInputVars  = count($caseData) * 12 + $stepVars;
-        $showSuhosinInfo = $this->objectModel->loadModel('common')->judgeSuhosinSetting($countInputVars);
+        $showSuhosinInfo = $this->instance->loadModel('common')->judgeSuhosinSetting($countInputVars);
 
         return array(
             'modules'    => $modules,
@@ -3820,7 +3825,7 @@ class testcaseTaoTest extends baseTest
         // 模拟getGroupCases方法的核心逻辑
         try {
             // 模拟获取用例数据
-            $cases = $this->objectModel->getModuleCases($productID, $branch, 0, $browseType, 'no', $caseType, $groupBy);
+            $cases = $this->instance->getModuleCases($productID, $branch, 0, $browseType, 'no', $caseType, $groupBy);
 
             // 模拟appendData和处理逻辑
             foreach($cases as $case) {
@@ -4049,7 +4054,7 @@ class testcaseTaoTest extends baseTest
         );
 
         /* Simulate buildLinkCasesSearchForm method logic */
-        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bySearch&queryID=myQueryID";
+        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bysearch&queryID=myQueryID";
         $objectID = 0;
 
         if($tester->app->tab == 'project') $objectID = $case->project ?? 0;
@@ -4059,7 +4064,7 @@ class testcaseTaoTest extends baseTest
         unset($tester->config->testcase->search['fields']['product']);
 
         /* Simulate buildSearchForm call by setting some search config */
-        $this->objectModel->buildSearchForm($case->product ?? 1, $products, $queryID, $actionURL, $objectID);
+        $this->instance->buildSearchForm($case->product ?? 1, $products, $queryID, $actionURL, $objectID);
 
         /* Return the result including config changes */
         $result = array();

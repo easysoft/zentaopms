@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The edit view of task of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      zenggang<zenggang@easycorp.ltd>
  * @package     task
@@ -86,6 +86,13 @@ if($this->config->edition == 'ipd')
 }
 
 if($taskStatus == 'wait') unset($statusOptions['pause']);
+
+$files = array();
+foreach($task->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
 
 if(!empty($task->team))
 {
@@ -219,7 +226,7 @@ detailBody
         (
             setID('files'),
             set::title($lang->files),
-            fileSelector($task->files ? set::defaultFiles(array_values($task->files)) : null)
+            fileSelector($files ? set::defaultFiles(array_values($files)) : null)
         ),
         formHidden('lastEditedDate', helper::isZeroDate($task->lastEditedDate) ? '' : $task->lastEditedDate)
     ),

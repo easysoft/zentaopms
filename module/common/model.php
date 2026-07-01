@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of common module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
@@ -450,14 +450,27 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(in_array("$module.$method", $this->config->logonMethods)) return true;
-
-            if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
             if($module == 'my'       and $method == 'guidechangetheme') return true;
             if($module == 'product'  and $method == 'showerrornone') return true;
             if($module == 'misc'     and in_array($method, array('downloadclient', 'changelog'))) return true;
             if($module == 'tutorial' and in_array($method, array('start', 'index', 'quit', 'wizard'))) return true;
+
+            if(stripos($method, 'ajax') !== false && !empty($this->config->ajaxDependencies["$module.$method"]))
+            {
+                $dependentMethods = $this->config->ajaxDependencies["$module.$method"];
+                if(is_string($dependentMethods)) $dependentMethods = [$dependentMethods];
+                if(is_array($dependentMethods))
+                {
+                    foreach($dependentMethods as $dependentMethod)
+                    {
+                        if(strpos($dependentMethod, '.') === false) continue;
+                        list($dependentModule, $dependentMethod) = explode('.', $dependentMethod);
+                        if($this->isOpenMethod($dependentModule, $dependentMethod) || self::hasPriv($dependentModule, $dependentMethod)) return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -701,6 +714,9 @@ class commonModel extends model
 
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
+
+            /* 6. 检查文档落地页权限。*/
+            if($currentModule == 'doc' && $currentMethod == 'lastViewedSpace' && !common::hasPriv('doc', 'mySpace')) $display = false;
 
             /* Check whether the homeMenu of this group have permissions. If yes, point to them. */
             if($display == false and isset($lang->$group->homeMenu))
@@ -1418,7 +1434,7 @@ eof;
         }
 
         /* Check the parent object is closed. */
-        if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+        if(!empty($method) and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;

@@ -1,20 +1,34 @@
-$(document).on('change', 'select[name^=branch]', function()
+let isReverting = false;
+window.branchChange = function()
 {
+    if(isReverting) return true;
+
     let newBranch = $('select[name^=branch]').val() ? $('select[name^=branch]').val().toString() : '';
-    $.get($.createLink('productplan', 'ajaxGetConflict', 'planID=' + planID + '&newBranch=' + newBranch), function(conflictStories)
+    if(newBranch == oldBranch[planID]) return true;
+
+    $.get($.createLink('productplan', 'ajaxGetConflict', `planID=${planID}&oldBranch=${oldBranch[planID]}&newBranch=${newBranch}`), function(conflictStories)
     {
         if(conflictStories != '')
         {
-            zui.Modal.confirm(conflictStories).then((res) => {
+            zui.Modal.confirm({message: conflictStories, icon:'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) =>
+            {
                 if(!res)
                 {
+                    isReverting = true;
                     const $branchPicker = $('select[name^=branch]').zui('picker');
-                    $branchPicker.$.setValue(oldBranch[planID].split(','));
+                    $branchPicker.$.setValue(oldBranch[planID]);
+                    isReverting = false;
+                }
+                else
+                {
+                    oldBranch[planID] = newBranch;
                 }
             });
+            return;
         }
+        oldBranch[planID] = newBranch;
     });
-});
+}
 
 $(document).on('change', 'input[name=begin],input[name=end]', function()
 {
