@@ -589,6 +589,7 @@ class dbh
         $sql = $this->formatFunction($sql);
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
+        $sql = $this->formatLimitOffset($sql);
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
@@ -672,6 +673,19 @@ class dbh
         $fields = $this->formatField($fields);
 
         return $fields . substr($sql, $setPos);
+    }
+
+    /**
+     * Format MySQL-style limit syntax to standard limit/offset syntax.
+     *
+     * @param  string $sql
+     * @access private
+     * @return string
+     */
+    private function formatLimitOffset($sql)
+    {
+        $limitPattern = '/\bLIMIT\s+(\d+)\s*,\s*(\d+)\b/i';
+        return preg_replace($limitPattern, 'LIMIT $2 OFFSET $1', $sql);
     }
 
     /**
