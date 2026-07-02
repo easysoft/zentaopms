@@ -39,7 +39,7 @@ su('admin');
 $root        = array(1, 2, 3, 41, 42, 43, 101, 102, 103);
 $type        = array('story', 'task');
 $startModule = array(1821, 1982);
-$branch      = 1;
+$branch      = '1';
 
 $tree = new treeModelTest();
 
