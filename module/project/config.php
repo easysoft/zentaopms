@@ -347,6 +347,7 @@ $config->project->budget = new stdclass();
 $config->project->budget->precision         = 2;
 $config->project->budget->tenThousand       = 10000;
 $config->project->budget->oneHundredMillion = 100000000;
+$config->project->budget->max               = 999999999999.99;
 
 $config->project->team = new stdclass();
 $config->project->team->actionList['unlink']['icon'] = 'unlink';
