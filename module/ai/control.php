@@ -554,7 +554,7 @@ class ai extends control
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
-        $this->view->skill          = $this->ai->getSkillByID($prompt->skill, false);
+        $this->view->skill          = $this->ai->getSkillByID((int)$prompt->skill, false);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
