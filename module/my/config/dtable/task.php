@@ -214,7 +214,7 @@ if($config->edition != 'open')
 $config->my->task->dtable->fieldList['story']['name']     = 'story';
 $config->my->task->dtable->fieldList['story']['title']    = $lang->task->storyAB;
 $config->my->task->dtable->fieldList['story']['type']     = 'desc';
-$config->my->task->dtable->fieldList['story']['group']     = 9;
+$config->my->task->dtable->fieldList['story']['group']    = 9;
 $config->my->task->dtable->fieldList['story']['sortType'] = true;
 $config->my->task->dtable->fieldList['story']['link']     = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={rawStory}'), 'className' => 'text-inherit');
 
