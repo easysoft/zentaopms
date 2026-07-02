@@ -43,7 +43,7 @@ $extendItems  = array();
 $extendFields = $this->printExtendFields($build, 'items', 'position=all', false);
 if(is_array($extendFields))
 {
-    foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html(nl2br($field['value'])));
+    foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
 }
 
 detailHeader
