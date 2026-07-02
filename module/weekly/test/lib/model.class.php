@@ -40,7 +40,7 @@ class weeklyModelTest extends baseTest
 
         // 解析HTML中的项目名称
         // HTML格式: <a href='###' class='btn'>周报-项目名称</a>
-        preg_match("/class='btn'>([^<]+)<\/a>/", $pageNav, $matches);
+        preg_match("/class='btn'[[:space:]]*>([^<]+)<\/a>/", $pageNav, $matches);
         if(isset($matches[1])) {
             return trim($matches[1]);
         }
