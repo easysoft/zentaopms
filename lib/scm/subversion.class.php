@@ -429,9 +429,9 @@ class subversionRepo
             if(strpos($lines[$i], "Index: ") === 0)
             {
                 $fileName = str_replace('Index: ', '', $lines[$i]);
-                /* gitfox 后端跑 svn diff 时"Index:"是 wc 绝对路径,形如
-                 * /.../svn/repos/<uid>-wc/trunk/src/foo.py
-                 * 此处剥"-wc/"前缀,只留仓库相对路径 trunk/src/foo.py。 */
+                /* gitfox 后端跑 svn diff 时"Index:"是 wc 绝对路径,形如 */
+                /* /.../svn/repos/<uid>-wc/trunk/src/foo.py */
+                /* 此处剥"-wc/"前缀,只留仓库相对路径 trunk/src/foo.py。 */
                 $wcPos = strpos($fileName, '-wc/');
                 if($wcPos !== false) $fileName = substr($fileName, $wcPos + 4);
                 $diffFile->fileName = $fileName;
