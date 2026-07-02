@@ -65,7 +65,7 @@ $lang->aiapp->langData->doc                = 'Document';
 $lang->aiapp->langData->design             = 'Conception';
 $lang->aiapp->langData->feedback           = 'Retour';
 $lang->aiapp->langData->currentDocContent  = 'Document actuel';
-$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->globalMemoryTitle  = 'All';
 $lang->aiapp->langData->zaiConfigNotValid  = 'La configuration ZAI n\'a pas encore été effectuée. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->unauthorizedError  = 'Échec d\'autorisation, clé API invalide. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->processDataPrefix  = "Les données à traiter sont les suivantes :\n{data}";

@@ -65,7 +65,7 @@ $lang->aiapp->langData->doc                 = '文档';
 $lang->aiapp->langData->design              = '设计';
 $lang->aiapp->langData->feedback            = '反馈';
 $lang->aiapp->langData->currentDocContent   = '当前文档';
-$lang->aiapp->langData->globalMemoryTitle   = '禅道';
+$lang->aiapp->langData->globalMemoryTitle   = '全部';
 $lang->aiapp->langData->zaiConfigNotValid   = '尚未进行ZAI配置，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->unauthorizedError   = '授权失败，无效的API密钥，请联系管理员进行<a href="{zaiConfigUrl}">ZAI配置</a>。<br>若已完成相关配置，请尝试重新加载页面。';
 $lang->aiapp->langData->processDataPrefix   = "要进行处理的数据如下：\n{data}";
