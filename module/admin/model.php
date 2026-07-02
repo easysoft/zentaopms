@@ -461,10 +461,7 @@ class adminModel extends model
      */
     public function genDateUsed($end = ''): object
     {
-        $firstUseDate = $this->dao->select('min(`date`) as `date`')->from(TABLE_ACTION)
-            ->where('`date`')->ge(FIRST_RELEASE_DATE)
-            ->andWhere('actor')->eq($this->app->user->account)
-            ->fetch('date');
+        $firstUseDate = $this->dao->select('`date`')->from(TABLE_ACTION)->where('actor')->eq($this->app->user->account)->orderBy('`date`')->limit(1)->fetch('date');
 
         if($firstUseDate) $firstUseDate = substr($firstUseDate, 0, 10);
         return helper::getDateInterval($firstUseDate, $end);
