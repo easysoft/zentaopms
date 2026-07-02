@@ -44,6 +44,8 @@ class biTaoTest extends baseTest
     public function updateSyncTimeTest($tables)
     {
         if(empty($tables)) return 0;
+        $dao = $this->instance->dao;
+        $currentTime = helper::now();
 
         $this->invokeArgs('updateSyncTime', [$tables]);
         if(dao::isError()) return dao::getError();

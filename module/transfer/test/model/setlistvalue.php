@@ -17,7 +17,7 @@ cid=19330
 - 测试导出bug类型字段的下拉值第typeList条的1属性 @代码错误(#codeerror)
 - 测试导出bug项目字段的下拉数量 @5
 - 测试导出bug时下拉字段的数量 @10
-- 测试导出用例时story字段的下拉数量 @10
+- 测试导出用例时story字段的下拉数量 @6
 - 测试导出用例时的级联字段第cascade条的story属性 @module
 
 */
@@ -31,5 +31,5 @@ r(count($result1['projectList'])) && p('') && e('5');  // 测试导出bug项目�
 r(count($result1['listStyle']))   && p('') && e('10'); // 测试导出bug时下拉字段的数量
 
 $result2 = $transfer->setListValueTest('testcase');
-r(count($result2['storyList']))  && p('') && e('10');     // 测试导出用例时story字段的下拉数量
+r(count($result2['storyList']))  && p('') && e('6');      // 测试导出用例时story字段的下拉数量
 r($result2)  && p('cascade:story')        && e('module'); // 测试导出用例时的级联字段

@@ -27,9 +27,9 @@ class tutorialModelTest extends baseTest
      *
      * @param  int       $modifyPassword
      * @access public
-     * @return int|array
+     * @return bool|array
      */
-    public function checkNoviceTest(int $modifyPassword): int|array
+    public function checkNoviceTest(int $modifyPassword): bool|array
     {
         if($this->instance->app->user->account != 'guest') $this->instance->app->user->modifyPassword = $modifyPassword;
         $result = $this->instance->checkNovice();
