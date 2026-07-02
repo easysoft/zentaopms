@@ -41,18 +41,18 @@ class subversionRepo
     /**
      * 调 gitfox 统一 SVN 执行接口,返回 svn 原生 stdout 字符串。
      *
-     * @param  string $func ls|log|blame|cat|info|diff
+     * @param  string $command ls|log|blame|cat|info|diff
      * @param  array  $args 对应 *XxxParams 字段(Revision/XML/Verbose/...)
      * @access public
      * @return string|false 失败返 false
      */
-    public function fetchContent($func, $args = array())
+    public function fetchContent($command, $args = array())
     {
         $header = static::buildAuthHeader($this->token, '', 'application/json', '*/*');
 
         $url     = $this->apiRoot . '/svn/exec';
         $payload = json_encode(array(
-            'func' => $func,
+            'command' => $command,
             'args' => empty($args) ? new stdclass() : $args
         ));
 
@@ -694,7 +694,9 @@ class subversionRepo
         $perPage = (int)$perPage;
         $page    = max(1, (int)$page);
 
-        $hasFilter = ($committer !== '' || $beginDate !== '' || $endDate !== '' || ($fromRevision !== '' && $fromRevision == $toRevision));
+        $hasFilter = false;
+        if($committer !== '' || $beginDate !== '' || $endDate !== '') $hasFilter = true;
+        if($fromRevision !== '' && $fromRevision == $toRevision)      $hasFilter = true;
         if($hasFilter || $perPage <= 0)
         {
             return $this->getCommitsByPathFiltered($path, $fromRevision, $toRevision, $perPage, $page, $beginDate, $endDate, $committer);
