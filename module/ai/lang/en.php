@@ -161,6 +161,7 @@ $lang->ai->prompts->returnJSONObject  = 'Please return a JSON object. The keys m
 $lang->ai->prompts->returnJSONArray   = 'Please return a JSON array. Each element must match one row in the table and be an object whose keys match the fillable field names above. Required fields must have values.';
 $lang->ai->prompts->processDataPrefix = "The data to process is as follows:\n%s";
 $lang->ai->prompts->useToolResult     = 'Please use tool `%s` to return the result.';
+$lang->ai->prompts->useZentaoAPITip   = 'If you need detailed information about related objects, please fetch them via the ZenTao API.';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm  = 'The current zenTao agent is not complete, continue designing?';
@@ -1111,7 +1112,6 @@ $lang->ai->execute->failReasons['noPrompt']     = 'unable to get zenTao agent';
 $lang->ai->execute->failReasons['noObjectData'] = 'unable to get object data';
 $lang->ai->execute->failReasons['noResponse']   = 'no response from external service';
 $lang->ai->execute->failReasons['noTargetForm'] = 'unable to get target form or its required fields';
-$lang->ai->execute->failReasons['noFormSchema'] = 'form structure data is missing';
 $lang->ai->execute->executeErrors = array();
 $lang->ai->execute->executeErrors['-1'] = 'unable to get zenTao agent';
 $lang->ai->execute->executeErrors['-2'] = 'unable to get object data';

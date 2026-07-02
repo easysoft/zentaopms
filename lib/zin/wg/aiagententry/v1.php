@@ -111,12 +111,18 @@ class aiAgentEntry extends wg
                     ? "executeWithFormContext({$singlePrompt->id})"
                     : "callZentaoAgent({$singlePrompt->id}, {$objectID})";
 
+                $promptFields  = $app->control->ai->getPromptFields((int)$singlePrompt->id);
+                $fieldsData    = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
+                $allowedFields = $config->ai->universalFormFields[$module][$method] ?? array();
+
                 $children[] = btn
                 (
                     setClass('btn ai-styled size-sm font-medium'),
                     set::icon('lightning'),
                     set('data-on', 'click'),
                     set('data-call', $clickHandler),
+                    set('data-prompt-fields', $fieldsData),
+                    set('data-allowed-fields', helper::jsonEncode($allowedFields)),
                     $singlePrompt->name,
                 );
             }
@@ -127,6 +133,8 @@ class aiAgentEntry extends wg
                     set::items($prompts),
                     set::isFormPage($type === 'form'),
                     set::objectID($objectID),
+                    set::module($module),
+                    set::method($method),
                 );
             }
         }

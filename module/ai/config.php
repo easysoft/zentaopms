@@ -200,65 +200,17 @@ $config->ai->targetFormVars['doc']['edit']           = (object)array('format' =>
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
-/* 参与上下文加载的字段列表（按 targetForm 配置，未配置时使用 _default） */
-$config->ai->formContextFields = array();
-$config->ai->formContextFields['_default']            = array('execution', 'story', 'bug');
-$config->ai->formContextFields['task']['create']      = array('execution', 'story');
-$config->ai->formContextFields['task']['batchcreate'] = array('execution', 'story');
-$config->ai->formContextFields['project']['create']   = array();
-
 /* getFormSchema 过滤的页面特定字段（按 targetForm 配置） */
 $config->ai->perPageSkipFields = array();
 $config->ai->perPageSkipFields['task']['create']      = array('storyEstimate', 'storyDesc', 'storyPri', 'taskName', 'taskEstimate', 'region', 'lane');
 $config->ai->perPageSkipFields['task']['batchcreate'] = array('storyEstimate', 'storyDesc', 'storyPri', 'region', 'lane');
 $config->ai->perPageSkipFields['project']['create']   = array('schedule', 'dateRangePicker');
 
-/* 对象类型中文标签 */
-$config->ai->contextLabels = array(
-    'execution' => '执行',
-    'project'   => '项目',
-    'story'     => '关联需求',
-    'product'   => '产品',
-    'bug'       => '关联Bug',
-);
-
-/* 字段中文标签 */
-$config->ai->contextFieldLabels = array(
-    'name'      => '名称',
-    'title'     => '名称',
-    'desc'      => '描述',
-    'model'     => '流程',
-    'attribute' => '类型',
-    'spec'      => '描述',
-    'verify'    => '验收标准',
-    'type'      => '类别',
-    'pri'       => '优先级',
-    'estimate'  => '预计工时',
-    'status'    => '状态',
-    'begin_end' => '日期',
-);
-
-/* 关联链配置 */
-$config->ai->contextRelations = array(
-    'execution' => array(
-        'project' => array('module' => 'project', 'field' => 'project'),
-    ),
-    'project' => array(
-        'product' => array('module' => 'product', 'via' => 'projectproduct'),
-    ),
-);
-
 /* URL 模块名到 AI 系统模块名的映射 */
 $config->ai->moduleNameMap = array(
     'testcase'       => 'case',
     'projectrelease' => 'release',
 );
-
-/* 页面级对象类型 */
-$config->ai->contextPageLevel = array('product', 'project', 'execution');
-
-/* 使用通用表单流程的页面列表 */
-$config->ai->universalFormPages = array('task.create', 'task.batchcreate', 'project.create');
 
 /* AI 可操作字段白名单 */
 $config->ai->universalFormFields = array();
