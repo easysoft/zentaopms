@@ -148,4 +148,22 @@ class providerModel extends model
             return '';
         }
     }
+
+    /**
+     * 根据ID获取代码库。
+     * Get repos by id.
+     *
+     * @param  int  $providerID
+     * @param  bool $showMirrors
+     * @access public
+     * @return array
+     */
+    public function getReposByProviderID(int $providerID, bool $showMirrors = false): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('providerID')->eq($providerID)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($showMirrors)->andWhere('mirror')->eq(1)->fi()
+            ->fetchAll('id');
+    }
 }
