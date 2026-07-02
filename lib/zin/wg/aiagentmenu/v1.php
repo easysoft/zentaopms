@@ -39,10 +39,7 @@ class aiAgentMenu extends wg
         global $config;
         $formModule = $this->prop('module');
         $formMethod = $this->prop('method');
-        if($isFormPage && $formModule && $formMethod)
-        {
-            $app->loadConfig('ai');
-        }
+        if($isFormPage && $formModule && $formMethod) $app->loadConfig('ai');
 
         $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass, $app, $config, $formModule, $formMethod)
         {

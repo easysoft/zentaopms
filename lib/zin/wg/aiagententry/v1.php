@@ -111,8 +111,8 @@ class aiAgentEntry extends wg
                     ? "executeWithFormContext({$singlePrompt->id})"
                     : "callZentaoAgent({$singlePrompt->id}, {$objectID})";
 
-                $promptFields = $app->control->ai->getPromptFields((int)$singlePrompt->id);
-                $fieldsData = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
+                $promptFields  = $app->control->ai->getPromptFields((int)$singlePrompt->id);
+                $fieldsData    = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
                 $allowedFields = $config->ai->universalFormFields[$module][$method] ?? array();
 
                 $children[] = btn
