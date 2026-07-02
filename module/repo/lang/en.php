@@ -2,6 +2,7 @@
 global $config;
 
 $lang->repo->common          = 'Repo';
+$lang->repo->repo            = 'Repo';
 $lang->repo->codeRepo        = 'Code Library';
 $lang->repo->browse          = 'View';
 $lang->repo->viewRevision    = 'View Revision';

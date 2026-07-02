@@ -2,6 +2,7 @@
 global $config;
 
 $lang->repo->common          = '代码库';
+$lang->repo->repo            = '代码库';
 $lang->repo->codeRepo        = '仓库名称';
 $lang->repo->browse          = '浏览';
 $lang->repo->viewRevision    = '查看修订';
