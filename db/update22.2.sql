@@ -39,3 +39,5 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "product=''", "product = '0'") WHERE `sql` LIKE "%product=''%";
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "project=''", "project = '0'") WHERE `sql` LIKE "%project=''%";
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "execution=''", "execution = '0'") WHERE `sql` LIKE "%execution=''%";
+
+UPDATE `zt_workflowaction` SET `type` = 'batch', `batchMode` = 'different' WHERE `action` = 'showimport';
