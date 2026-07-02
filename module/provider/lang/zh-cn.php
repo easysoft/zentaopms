@@ -33,3 +33,4 @@ $lang->provider->notice = new stdclass();
 $lang->provider->notice->confirmDelete = '你确定要删除该服务吗？';
 $lang->provider->notice->emptyProvider = '暂无服务。';
 $lang->provider->notice->svnPath       = '服务器地址或文件路径';
+$lang->provider->notice->hasRepos      = '该服务已经关联了仓库, 请先删除关联的仓库。';

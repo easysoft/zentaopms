@@ -142,6 +142,9 @@ class provider extends control
      */
     public function delete(int $id)
     {
+        $repos = $this->provider->getReposByProviderID($id, true);
+        if(!empty($repos)) return $this->sendError($this->lang->provider->notice->hasRepos);
+
         $this->provider->delete(TABLE_PROVIDER, $id);
         if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => true));

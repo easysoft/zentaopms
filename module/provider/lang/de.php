@@ -33,3 +33,4 @@ $lang->provider->notice = new stdclass();
 $lang->provider->notice->confirmDelete = 'Are you sure to delete this provider?';
 $lang->provider->notice->emptyProvider = 'No providers.';
 $lang->provider->notice->svnPath       = 'Server address or file path';
+$lang->provider->notice->hasRepos      = 'This provider has been linked to repositories, please delete them first.';
