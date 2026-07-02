@@ -389,7 +389,7 @@ detailBody
                                     div(html(sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'],  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%')))
                                 )
                             ),
-                            item(set::name($lang->testreport->legendComment), set::trClass('reportComment'), empty($report->report) ? $lang->testreport->none : html($report->report)),
+                            item(set::name($lang->testreport->legendComment), set::trClass('reportComment'), empty($report->report) ? $lang->testreport->none : html($report->report))
                         )
                     ),
                     $report->files ? section
