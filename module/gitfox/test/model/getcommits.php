@@ -19,9 +19,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /* ops_repohistory 表结构由 test/data/ops_repohistory.sql 建，数据由 zenData + loadYaml 灌入。 */
-global $tester, $app;
+global $dbh, $app;
 $schemaFile = $app->getAppRoot() . 'test' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ops_repohistory.sql';
-if(file_exists($schemaFile)) $tester->dbh->exec(file_get_contents($schemaFile));
+if(file_exists($schemaFile)) $dbh->exec(file_get_contents($schemaFile));
 
 zenData('ops_repohistory')->loadYaml('ops_repohistory')->gen(3);
 
