@@ -694,7 +694,9 @@ class subversionRepo
         $perPage = (int)$perPage;
         $page    = max(1, (int)$page);
 
-        $hasFilter = ($committer !== '' || $beginDate !== '' || $endDate !== '' || ($fromRevision !== '' && $fromRevision == $toRevision));
+        $hasFilter = false;
+        if($committer !== '' || $beginDate !== '' || $endDate !== '') $hasFilter = true;
+        if($fromRevision !== '' && $fromRevision == $toRevision)      $hasFilter = true;
         if($hasFilter || $perPage <= 0)
         {
             return $this->getCommitsByPathFiltered($path, $fromRevision, $toRevision, $perPage, $page, $beginDate, $endDate, $committer);
