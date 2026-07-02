@@ -2,6 +2,7 @@ ALTER TABLE `zt_ai_agent` ADD COLUMN `displayPosition` varchar(20) NOT NULL DEFA
 ALTER TABLE `zt_ai_agent` ADD COLUMN `actionPurpose` varchar(100) NOT NULL DEFAULT '' COMMENT '操作目的编码' AFTER `displayPosition`;
 
 UPDATE `zt_ai_agent` SET `displayPosition` = 'detail', `actionPurpose` = `targetForm` WHERE `displayPosition` = '';
+ALTER TABLE `zt_ai_agent` ADD COLUMN `skills` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的技能ID列表' AFTER `knowledgeLib`;
 
 CREATE TABLE `zt_ai_skill` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
