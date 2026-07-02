@@ -816,7 +816,22 @@ $(() =>
             tabs: !window.enableAITeammate ? undefined : [
                 {key: 'RECENTS', title: zaiLang.recentChats, chatTypes: ['chat']},
                 {key: 'TASKS', title: zaiLang.aiTeammateTasks, chatsFetcher: (store) => store.getTasks(), onCreate: false, searchBox: {placeholder: zaiLang.searchTasks}},
-            ]
+            ],
+            onSelectSkill: (chat, selectSkill) => {
+                const callbackID = `skillOnSelect${zui.nextGid()}`;
+                window[callbackID] = (skill) => {
+                    selectSkill(skill);
+                    delete window[callbackID];
+                };
+                zui.Modal.open({
+                    id: 'selectSkillModal',
+                    url: $.createLink('ai', 'selectSkill', `callback=${callbackID}`),
+                    size: 'sm',
+                    onHidden: () => {
+                        delete window[callbackID];
+                    }
+                });
+            }
         });
 
         $(document).on('updatepage.app openapp.apps openOldPage.apps', (e, args) =>
