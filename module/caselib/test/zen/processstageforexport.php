@@ -7,9 +7,9 @@ title=测试 caselibZen::processStageForExport();
 timeout=0
 cid=15557
 
-- 步骤1：单个阶段转换 @单元测试阶段
+- 步骤1：单个阶段转换 @单元测试环节
 - 步骤2：多个阶段转换行数 @3
-- 步骤3：包含无效阶段的第一个结果 @单元测试阶段
+- 步骤3：包含无效阶段的第一个结果 @单元测试环节
 - 步骤4：空stage处理 @1
 - 步骤5：单个阶段无换行符 @0
 
@@ -26,8 +26,8 @@ su('admin');
 $caselibTest = new caselibZenTest();
 
 // 4. 🔴 强制要求：必须包含至少5个测试步骤
-r($caselibTest->processStageForExportTest((object)array('stage' => 'unittest'), 'stage')) && p() && e('单元测试阶段'); // 步骤1：单个阶段转换
+r($caselibTest->processStageForExportTest((object)array('stage' => 'unittest'), 'stage')) && p() && e('单元测试环节'); // 步骤1：单个阶段转换
 r($caselibTest->processStageForExportTest((object)array('stage' => 'unittest,feature,system'), 'stage_lines')) && p() && e(3); // 步骤2：多个阶段转换行数
-r($caselibTest->processStageForExportTest((object)array('stage' => 'unittest,invalid,feature'), 'first_stage')) && p() && e('单元测试阶段'); // 步骤3：包含无效阶段的第一个结果
+r($caselibTest->processStageForExportTest((object)array('stage' => 'unittest,invalid,feature'), 'first_stage')) && p() && e('单元测试环节'); // 步骤3：包含无效阶段的第一个结果
 r($caselibTest->processStageForExportTest((object)array('stage' => ''), 'is_empty')) && p() && e(1); // 步骤4：空stage处理
 r($caselibTest->processStageForExportTest((object)array('stage' => 'feature'), 'has_newlines')) && p() && e(0); // 步骤5：单个阶段无换行符
