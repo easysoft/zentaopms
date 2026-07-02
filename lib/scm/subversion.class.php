@@ -52,7 +52,7 @@ class subversionRepo
 
         $url     = $this->apiRoot . '/svn/exec';
         $payload = json_encode(array(
-            'func' => $func,
+            'command' => $func,
             'args' => empty($args) ? new stdclass() : $args
         ));
 
