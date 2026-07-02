@@ -30,7 +30,7 @@ cid=19257
 
 */
 
-$todoIDList = array('1', '2', '3', '5', '100000');
+$todoIDList = array(1, 2, 3, 5, 100000);
 
 $todo = new todoModelTest();
 
