@@ -842,7 +842,32 @@ class dbh
         {
             $sql = str_replace('`', '"', $sql);
             $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
-            $sql = preg_replace('/(?<!\w)year\(/i', 'MYSQL_YEAR(', $sql);
+        }
+        if($this->dbConfig->driver == 'gauss') $sql = self::formatGaussFunctions($sql);
+
+        return $sql;
+    }
+
+    public static function formatGaussFunctions(string $sql): string
+    {
+        $gaussCompatibleFunctions = array(
+            'FIND_IN_SET',
+            'GROUP_CONCAT',
+            'ROUND',
+            'TIMESTAMPDIFF',
+            'IFNULL',
+            'DAY',
+            'MONTH',
+            'YEAR',
+            'DATEDIFF',
+            'DATE_FORMAT',
+            'INSTR',
+            'LEFT',
+        );
+
+        foreach($gaussCompatibleFunctions as $function)
+        {
+            $sql = preg_replace("/(?<![\\w\"'])(?<!\"){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;
