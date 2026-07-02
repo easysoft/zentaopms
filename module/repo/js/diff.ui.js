@@ -230,8 +230,11 @@ window.changeDiff = function()
     {
         $('#oldRevision').val(target);
         $('#newRevision').val(source);
-        $('#target').text(source);
-        $('#source').text(target);
+        /* SVN 类型 #source/#target 是 input,git 类型是 dropmenu span,用 val/text 分别兼容。 */
+        var $source = $('#source');
+        var $target = $('#target');
+        if($source.is('input')) $source.val(target); else $source.text(target);
+        if($target.is('input')) $target.val(source); else $target.text(source);
         window.goDiff();
     }
 }
@@ -282,6 +285,12 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
  */
 window.goDiff = function()
 {
+    /* SVN 类型 #source/#target 是 input,取当前用户输入同步到 hidden。 */
+    var $source = $('#source');
+    var $target = $('#target');
+    if($source.is('input')) $('#oldRevision').val($source.val());
+    if($target.is('input')) $('#newRevision').val($target.val());
+
     var oldRevision   = $('#oldRevision').val();
     var newRevision   = $('#newRevision').val();
     var isBranchOrTag = $('#isBranchOrTag').val();

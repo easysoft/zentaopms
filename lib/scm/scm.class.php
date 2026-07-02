@@ -12,10 +12,20 @@ class scm
      */
     public function setEngine($repo)
     {
-        $scm = empty($repo->SCM) ? 'gitfox' : strtolower($repo->SCM);
-        $className = $scm . 'Repo';
-        if($scm == 'git') $scm = 'gitrepo';
-        if(!class_exists($className)) require($scm . '.class.php');
+        /* ops_repo.scmType 是当前真值('svn'/'git'); 旧版字段 SCM 已无;
+         * scmType='svn' 走 subversionRepo, 其余 (含 git) 走 gitfoxRepo。 */
+        $scmType = isset($repo->scmType) ? strtolower($repo->scmType) : '';
+        if($scmType == 'svn')
+        {
+            $className = 'subversionRepo';
+            if(!class_exists($className)) require('subversion.class.php');
+        }
+        else
+        {
+            $className = 'gitfoxRepo';
+            if(!class_exists($className)) require('gitfox.class.php');
+        }
+
         $this->engine = new $className($repo->client, $repo->apiPath, '', $repo->password, '', $repo);
     }
 
@@ -48,6 +58,8 @@ class scm
     public function tags($path = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         if(!scm::checkRevision($revision)) return array();
+        /* gitfoxRepo::tags 签名与 svn/git 不同，需按 engine 分派。 */
+        if(get_class($this->engine) == 'gitfoxRepo') return $this->engine->tags($path, $orderBy, $limit, (int)$pageID);
         return $this->engine->tags($path, $revision, $onlyDir, $orderBy, $limit, $pageID);
     }
 
@@ -105,11 +117,10 @@ class scm
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
-     * @param  int    $count
      * @access public
      * @return array
      */
-    public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
+    public function log($path, $fromRevision = 0, $toRevision = 'HEAD')
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();

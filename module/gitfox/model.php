@@ -2154,9 +2154,21 @@ class gitfoxModel extends model
             if(!empty($query->end))   $end   = $query->end;
         }
         $comments = $scm->engine->getCommitsByPath($entry, $fromRevision, $toRevision, isset($pager->recPerPage) ? $pager->recPerPage : 10, isset($pager->pageID) ? $pager->pageID : 1, $begin, $end, $committer);
+
         if(!is_array($comments)) return array();
 
-        if(isset($pager->recTotal)) $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
+        /* SVN 类型由 subversionRepo 静态变量回填真实总数;git 类型仍走伪分页推算。 */
+        if(isset($pager->recTotal))
+        {
+            if(get_class($scm->engine) == 'subversionRepo')
+            {
+                $pager->recTotal = (int)subversionRepo::$lastCommitsTotal;
+            }
+            else
+            {
+                $pager->recTotal = count($comments) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
+            }
+        }
 
         $commitIds   = array();
         foreach($comments as $comment)
