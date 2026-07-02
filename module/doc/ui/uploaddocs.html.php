@@ -12,6 +12,12 @@ namespace zin;
 
 jsVar('docID',   $docID);
 jsVar('libType', $objectType);
+
+$parentValue = 0;
+if(!empty($doc->parent))        $parentValue = $doc->parent;
+elseif(!empty($defaultParent))  $parentValue = $defaultParent;
+elseif($moduleID)               $parentValue = "m_$moduleID";
+
 formPanel
 (
     set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadFile),
@@ -83,7 +89,7 @@ formPanel
         set::label($lang->doc->module),
         set::name('parent'),
         set::items(array('m_0' => '/') + $optionMenu),
-        set::value(!empty($doc->parent) ? $doc->parent : ($moduleID ? "m_$moduleID" : 0)),
+        set::value($parentValue),
         set::required(true)
     ),
     formGroup
