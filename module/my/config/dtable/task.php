@@ -93,6 +93,13 @@ $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['status']['sortType']  = true;
 $config->my->task->dtable->fieldList['status']['show']     = true;
 
+$config->my->task->dtable->fieldList['type']['name']     = 'type';
+$config->my->task->dtable->fieldList['type']['title']    = $lang->task->typeAB;
+$config->my->task->dtable->fieldList['type']['type']     = 'category';
+$config->my->task->dtable->fieldList['type']['map']      = $lang->task->typeList;
+$config->my->task->dtable->fieldList['type']['group']    = 'pri';
+$config->my->task->dtable->fieldList['type']['sortType'] = true;
+
 $config->my->task->dtable->fieldList['projectName']['name']     = 'projectName';
 $config->my->task->dtable->fieldList['projectName']['title']    = $lang->task->project;
 $config->my->task->dtable->fieldList['projectName']['type']     = 'text';
@@ -116,17 +123,47 @@ $config->my->task->dtable->fieldList['openedBy']['group']    = 'user';
 $config->my->task->dtable->fieldList['openedBy']['sortType'] = true;
 $config->my->task->dtable->fieldList['openedBy']['show']     = true;
 
+$config->my->task->dtable->fieldList['openedDate']['name']     = 'openedDate';
+$config->my->task->dtable->fieldList['openedDate']['title']    = $lang->task->openedDate;
+$config->my->task->dtable->fieldList['openedDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['openedDate']['group']    = 'user';
+$config->my->task->dtable->fieldList['openedDate']['sortType'] = true;
+
 $config->my->task->dtable->fieldList['assignedTo']['name']     = 'assignedTo';
 $config->my->task->dtable->fieldList['assignedTo']['title']    = $lang->task->assignedToAB;
 $config->my->task->dtable->fieldList['assignedTo']['type']     = 'user';
 $config->my->task->dtable->fieldList['assignedTo']['group']    = 'user';
 $config->my->task->dtable->fieldList['assignedTo']['sortType'] = true;
 
+$config->my->task->dtable->fieldList['assignedDate']['name']     = 'assignedDate';
+$config->my->task->dtable->fieldList['assignedDate']['title']    = $lang->task->assignedDate;
+$config->my->task->dtable->fieldList['assignedDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['assignedDate']['group']    = 'user';
+$config->my->task->dtable->fieldList['assignedDate']['sortType'] = true;
+
 $config->my->task->dtable->fieldList['finishedBy']['name']     = 'finishedBy';
 $config->my->task->dtable->fieldList['finishedBy']['title']    = $lang->task->finishedByAB;
 $config->my->task->dtable->fieldList['finishedBy']['type']     = 'user';
 $config->my->task->dtable->fieldList['finishedBy']['group']    = 'user';
 $config->my->task->dtable->fieldList['finishedBy']['sortType'] = true;
+
+$config->my->task->dtable->fieldList['estStarted']['name']     = 'estStarted';
+$config->my->task->dtable->fieldList['estStarted']['title']    = $lang->task->estStarted;
+$config->my->task->dtable->fieldList['estStarted']['type']     = 'date';
+$config->my->task->dtable->fieldList['estStarted']['group']    = 'user';
+$config->my->task->dtable->fieldList['estStarted']['sortType'] = true;
+
+$config->my->task->dtable->fieldList['realStarted']['name']     = 'realStarted';
+$config->my->task->dtable->fieldList['realStarted']['title']    = $lang->task->realStarted;
+$config->my->task->dtable->fieldList['realStarted']['type']     = 'date';
+$config->my->task->dtable->fieldList['realStarted']['group']    = 'user';
+$config->my->task->dtable->fieldList['realStarted']['sortType'] = true;
+
+$config->my->task->dtable->fieldList['finishedDate']['name']     = 'finishedDate';
+$config->my->task->dtable->fieldList['finishedDate']['title']    = $lang->task->finishedDateAB;
+$config->my->task->dtable->fieldList['finishedDate']['type']     = 'date';
+$config->my->task->dtable->fieldList['finishedDate']['group']    = 'user';
+$config->my->task->dtable->fieldList['finishedDate']['sortType'] = true;
 
 $config->my->task->dtable->fieldList['deadline']['name']     = 'deadline';
 $config->my->task->dtable->fieldList['deadline']['title']    = $lang->task->deadlineAB;
@@ -151,6 +188,48 @@ $config->my->task->dtable->fieldList['left']['title']    = $lang->task->leftAB;
 $config->my->task->dtable->fieldList['left']['type']     = 'number';
 $config->my->task->dtable->fieldList['left']['group']    = 'deadline';
 $config->my->task->dtable->fieldList['left']['sortType'] = true;
+
+$config->my->task->dtable->fieldList['progress']['name']     = 'progress';
+$config->my->task->dtable->fieldList['progress']['title']    = $lang->task->progressAB;
+$config->my->task->dtable->fieldList['progress']['type']     = 'progress';
+$config->my->task->dtable->fieldList['progress']['group']    = 'deadline';
+$config->my->task->dtable->fieldList['progress']['sortType'] = false;
+
+if($config->edition != 'open')
+{
+    $config->my->task->dtable->fieldList['relatedObject']['name']        = 'relatedObject';
+    $config->my->task->dtable->fieldList['relatedObject']['title']       = $lang->custom->relateObject;
+    $config->my->task->dtable->fieldList['relatedObject']['type']        = 'text';
+    $config->my->task->dtable->fieldList['relatedObject']['group']       = 'deadline';
+    $config->my->task->dtable->fieldList['relatedObject']['sortType']    = false;
+    $config->my->task->dtable->fieldList['relatedObject']['width']       = '70';
+    $config->my->task->dtable->fieldList['relatedObject']['link']        = common::hasPriv('custom', 'showRelationGraph') ? "RAWJS<function(info){ if(info.row.data.relatedObject == 0) return 0; else return '" . helper::createLink('custom', 'showRelationGraph', 'objectID={id}&objectType=task') . "'; }>RAWJS" : null;
+    $config->my->task->dtable->fieldList['relatedObject']['data-toggle'] = 'modal';
+    $config->my->task->dtable->fieldList['relatedObject']['data-size']   = 'lg';
+    $config->my->task->dtable->fieldList['relatedObject']['flex']        = false;
+    $config->my->task->dtable->fieldList['relatedObject']['align']       = 'center';
+    if($isEn) $config->my->task->dtable->fieldList['relatedObject']['width'] = '120';
+}
+
+$config->my->task->dtable->fieldList['story']['name']     = 'story';
+$config->my->task->dtable->fieldList['story']['title']    = $lang->task->storyAB;
+$config->my->task->dtable->fieldList['story']['type']     = 'desc';
+$config->my->task->dtable->fieldList['story']['group']     = 9;
+$config->my->task->dtable->fieldList['story']['sortType'] = true;
+$config->my->task->dtable->fieldList['story']['link']     = array('url' => array('module' => 'story', 'method' => 'view', 'params' => 'id={rawStory}'), 'className' => 'text-inherit');
+
+$config->my->task->dtable->fieldList['keywords']['name']     = 'keywords';
+$config->my->task->dtable->fieldList['keywords']['title']    = $lang->task->keywords;
+$config->my->task->dtable->fieldList['keywords']['type']     = 'text';
+$config->my->task->dtable->fieldList['keywords']['group']    = 9;
+$config->my->task->dtable->fieldList['keywords']['sortType'] = true;
+
+$config->my->task->dtable->fieldList['mailto']['name']      = 'mailto';
+$config->my->task->dtable->fieldList['mailto']['title']     = $lang->task->mailto;
+$config->my->task->dtable->fieldList['mailto']['type']      = 'text';
+$config->my->task->dtable->fieldList['mailto']['group']     = 9;
+$config->my->task->dtable->fieldList['mailto']['sortType']  = true;
+$config->my->task->dtable->fieldList['mailto']['delimiter'] = ',';
 
 $config->my->task->dtable->fieldList['closedBy']['title']    = $lang->task->closedBy;
 $config->my->task->dtable->fieldList['closedBy']['type']     = 'user';
