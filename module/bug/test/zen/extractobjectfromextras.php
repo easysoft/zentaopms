@@ -49,7 +49,9 @@ zenData('file')->gen(0);
 
 su('admin');
 
+global $tester;
 $bugTest = new bugZenTest();
+$todo3   = $tester->loadModel('todo')->getById(3);
 
 $baseBug = new stdClass();
 $baseBug->product    = 1;
@@ -73,4 +75,4 @@ r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('testtask' => 1)))
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 1))) && p('title,steps,pri') && e('自定义1的待办,这是一个待办的描述1,1');
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 2))) && p('title,steps,pri') && e('BUG1,这是一个待办的描述2,2');
 r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('bugID' => 2, 'testtask' => 2))) && p('title,buildID') && e('BUG2,12');
-r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 3))) && p('title,steps,pri') && e('任务3的待办,这是一个待办的描述3,3');
+r($bugTest->extractObjectFromExtrasTest(clone $baseBug, array('todoID' => 3))) && p('title,steps,pri') && e('开发任务12,这是一个待办的描述3,3');
