@@ -2,6 +2,7 @@
 global $config;
 
 $lang->repo->common          = 'Référentiel';
+$lang->repo->repo            = 'Référentiel';
 $lang->repo->codeRepo        = 'Référentiel';
 $lang->repo->browse          = 'Aff';
 $lang->repo->viewRevision    = 'Aff Modifs';
