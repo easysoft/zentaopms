@@ -25,7 +25,7 @@ class bugTaoTest extends baseTest
         $bug->deadline     = $deadline     ? date('Y-m-d', strtotime("{$deadline} day"))     : '0000-00-00';
         $bug->resolvedDate = $resolvedDate ? date('Y-m-d', strtotime("{$resolvedDate} day")) : '0000-00-00';
 
-        $object = $this->instance->appendDelayedDays($bug);
+        $object = $this->invokeArgs('appendDelayedDays', array($bug));
         if(dao::isError()) return dao::getError();
 
         if(!isset($object->delay)) $object->delay = 0;
@@ -43,8 +43,8 @@ class bugTaoTest extends baseTest
     public function batchAppendDelayedDaysTest($productID): array|string
     {
         $this->instance->app->tab = 'qa';
-        $bugs = $this->instance->getListByBrowseType('all', array($productID), 0, array(), 'all', array(), 0, 'id_asc', null);
-        $bugs = $this->instance->batchAppendDelayedDays($bugs);
+        $bugs = $this->invokeArgs('getListByBrowseType', array('all', array($productID), 0, array(), 'all', array(), 0, 'id_asc', null));
+        $bugs = $this->invokeArgs('batchAppendDelayedDays', array($bugs));
         if(dao::isError()) return dao::getError();
 
         $delay = '';
@@ -55,5 +55,29 @@ class bugTaoTest extends baseTest
         $delay = trim($delay, ',');
 
         return $delay;
+    }
+
+    /**
+     * 测试获取待确认的 bug 列表。
+     *
+     * @param  array       $productIdList
+     * @param  int         $projectID
+     * @param  array       $executionIdList
+     * @param  int|string  $branch
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getNeedConfirmListTest(array $productIdList, int $projectID, array $executionIdList, int|string $branch, array $moduleIdList, string $orderBy, ?object $pager = null): array
+    {
+        $this->instance->app->tab = 'project';
+        if(empty($executionIdList)) $executionIdList = array(0);
+
+        $bugs = $this->invokeArgs('getNeedConfirmList', array($productIdList, $projectID, $executionIdList, $branch, $moduleIdList, $orderBy, $pager));
+        if(dao::isError()) return dao::getError();
+
+        return $bugs;
     }
 }
