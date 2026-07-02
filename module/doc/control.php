@@ -822,6 +822,17 @@ class doc extends control
      */
     public function uploadDocs(int $docID, string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', $from = '')
     {
+        $chapterID = 0;
+        if(!empty($docID))
+        {
+            $targetDoc = $this->doc->getByID($docID);
+            if($targetDoc && $targetDoc->type === 'chapter')
+            {
+                $chapterID = (int)$docID;
+                $docID     = 0;
+            }
+        }
+
         if(!empty($_POST))
         {
             /* parent带‘m_’前缀为目录。*/
@@ -855,6 +866,12 @@ class doc extends control
             if(empty($docID))  $docData->addedBy  = $this->app->user->account;
             if(!empty($docID)) $docData->editedBy = $this->app->user->account;
 
+            if(empty($docID) && $docData->parent && !$docData->module)
+            {
+                $parentDoc = $this->doc->getByID($docData->parent);
+                $docData->module = $parentDoc->module;
+            }
+
             if(!empty($docID))
             {
                 $docResult   = $this->doc->update($docID, $docData);
@@ -880,6 +897,7 @@ class doc extends control
         }
 
         $this->docZen->assignVarsForUploadDocs($docID, $objectType, $objectID, $libID, $moduleID, $docType);
+        if($chapterID) $this->view->defaultParent = $chapterID;
         $this->display();
     }
 

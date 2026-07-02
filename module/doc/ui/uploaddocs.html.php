@@ -83,7 +83,7 @@ formPanel
         set::label($lang->doc->module),
         set::name('parent'),
         set::items(array('m_0' => '/') + $optionMenu),
-        set::value(!empty($doc->parent) ? $doc->parent : ($moduleID ? "m_$moduleID" : 0)),
+        set::value(!empty($doc->parent) ? $doc->parent : (!empty($defaultParent) ? $defaultParent : ($moduleID ? "m_$moduleID" : 0))),
         set::required(true)
     ),
     formGroup
