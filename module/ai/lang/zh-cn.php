@@ -644,6 +644,7 @@ $lang->ai->miniPrograms->field->fields              = '表单配置';
 $lang->ai->miniPrograms->field->prompt              = '提词';
 $lang->ai->miniPrograms->field->fieldConfig         = '字段配置';
 $lang->ai->miniPrograms->field->knowledgeLibs       = '知识库挂载';
+$lang->ai->miniPrograms->field->skills              = '技能挂载';
 $lang->ai->miniPrograms->field->option              = '选项';
 $lang->ai->miniPrograms->field->contentDebugging    = '内容调试';
 $lang->ai->miniPrograms->field->contentDebuggingTip = '请在此处输入字段内容进行调试。';

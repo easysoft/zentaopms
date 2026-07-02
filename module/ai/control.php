@@ -523,6 +523,7 @@ class ai extends control
             $prompt->elaboration  = '';
             $prompt->role         = isset($data->role) ? $data->role : '';
             $prompt->knowledgeLib = $data->knowledgeLib ?? '';
+            $prompt->skill        = !empty($data->skill) ? (int)$data->skill : 0;
 
             if(isset($data->fields))
             {
@@ -553,6 +554,7 @@ class ai extends control
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
+        $this->view->skill          = $this->ai->getSkillByID($prompt->skill, false);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
@@ -746,6 +748,7 @@ class ai extends control
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['model']        = $prompt->model;
+        $this->appendPromptSkillToResponse($response, $prompt);
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
@@ -922,6 +925,7 @@ class ai extends control
         $response['model']        = $prompt->model;
         $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
         $response['content']      = $showText;
+        $this->appendPromptSkillToResponse($response, $prompt);
 
         return $this->send(array('result' => 'success', 'data' => $response));
     }
@@ -1074,7 +1078,7 @@ class ai extends control
             $formConfig['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
         }
 
-        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array(array(
+        $callbackData = array(
             'role'           => $prompt->role . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''),
             'schema'         => $schema,
             'dataPrompt'     => $fullPrompt,
@@ -1092,7 +1096,33 @@ class ai extends control
             'knowledgeLib'   => $prompt->knowledgeLib ?? '',
             'fields'         => $extraFields,
             'formConfig'     => $formConfig,
-        ), false))));
+        );
+        $this->appendPromptSkillToResponse($callbackData, $prompt);
+
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($callbackData, false))));
+    }
+
+    /**
+     * Append mounted skill info for AI chat.
+     *
+     * @param  array  $response
+     * @param  object $prompt
+     * @access private
+     * @return void
+     */
+    private function appendPromptSkillToResponse(array &$response, object $prompt): void
+    {
+        $response['skill']     = $prompt->skill ?? 0;
+        $response['skillID']   = '';
+        $response['skillName'] = '';
+
+        if(empty($prompt->skill)) return;
+
+        $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
+        if(!$skill || empty($skill->skillID)) return;
+
+        $response['skillID']   = $skill->skillID;
+        $response['skillName'] = $skill->name;
     }
 
     /**

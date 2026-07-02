@@ -14880,7 +14880,7 @@ CREATE TABLE IF NOT EXISTS `zt_ai_agent` (
   `desc` text DEFAULT NULL,
   `model` varchar(255) NOT NULL DEFAULT '',
   `knowledgeLib` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的知识库ID列表',
-  `skills` varchar(255) NOT NULL DEFAULT '' COMMENT '关联的技能ID列表',
+  `skill` int unsigned NOT NULL DEFAULT 0 COMMENT '关联的技能ID',
   `module` varchar(30) NOT NULL DEFAULT '',
   `displayPosition` varchar(20) NOT NULL DEFAULT '' COMMENT '显示位置，目前包括：详情页（detail）、表单页（form）',
   `actionPurpose` varchar(100) NOT NULL DEFAULT '' COMMENT '操作目的编码',

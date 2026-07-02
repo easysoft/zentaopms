@@ -643,6 +643,7 @@ $lang->ai->miniPrograms->field->fields            = 'Form Configuration';
 $lang->ai->miniPrograms->field->prompt            = 'Prompt';
 $lang->ai->miniPrograms->field->fieldConfig       = 'Field configuration';
 $lang->ai->miniPrograms->field->knowledgeLibs     = 'Knowledge Libraries Mounting';
+$lang->ai->miniPrograms->field->skills              = 'Skills Mounting';
 $lang->ai->miniPrograms->field->option            = 'Options';
 $lang->ai->miniPrograms->field->contentDebugging  = 'Content debugging';
 $lang->ai->miniPrograms->field->contentDebuggingTip = 'Please enter the field here to debug.';
