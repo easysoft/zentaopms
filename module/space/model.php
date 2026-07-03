@@ -807,4 +807,31 @@ class spaceModel extends model
         }
         return !dao::isError();
     }
+
+    /**
+     * 迁移组权限。
+     * Migrate group privs.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migrateGroupPrivs(): bool
+    {
+        $spaceMethods = array('browse', 'view', 'create', 'edit', 'delete', 'members', 'manageMembers', 'removeMember', 'group', 'createGroup', 'editGroup', 'deleteGroup', 'managePriv', 'manageGroupMember', 'importGroup');
+        $groups       = $this->dao->select('DISTINCT `group`')->from(TABLE_GROUPPRIV)->where('module')->eq('repo')->andWhere('method')->in('createRepo,create,import,edit')->fetchPairs('group', 'group');
+
+        $migratePrivs = array();
+        foreach($groups as $groupID)
+        {
+            foreach($spaceMethods as $method) $migratePrivs[] = "('{$groupID}', 'space', '{$method}')";
+        }
+
+        if(!empty($migratePrivs))
+        {
+            $sql = 'REPLACE INTO ' . TABLE_GROUPPRIV . ' (`group`, `module`, `method`) VALUES ' . implode(',', $migratePrivs);
+            $this->dao->exec($sql);
+        }
+
+        return !dao::isError();
+    }
 }
