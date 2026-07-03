@@ -46,7 +46,7 @@ $tester->app->rawModule = 'my';
 $tester->app->rawMethod = 'index';
 
 $view = $blockTest->printAssignToMeBlockTest($block1);
-r($view) && p('users:admin') && e('admin'); // 步骤1:测试方法执行成功返回success为true
+r($view) && p('users:admin') && e('管理员'); // 步骤1:测试方法执行成功返回success为true
 r($view) && p('products:1') && e('正常产品1'); // 步骤2:测试返回对象包含的产品信息
 r($view) && p('products:2') && e('正常产品2'); // 步骤3:测试返回对象包含的产品信息
 r($view) && p('projects:1') && e('项目集1'); // 步骤4:测试返回对象包含的项目集信息
