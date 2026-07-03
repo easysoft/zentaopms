@@ -510,6 +510,61 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test http method.
+     *
+     * @param  string $requestType
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $header
+     * @access public
+     * @return mixed
+     */
+    public function httpTest(string $requestType = 'GET', string $url = '', array $data = array(), array $header = array())
+    {
+        global $tester;
+        $tester->app->loadLang('zai');
+
+        dao::$errors = array();
+
+        if(strpos($url, 'curl-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'Connection refused');
+            return '0';
+        }
+
+        if(strpos($url, 'http-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'HTTP 500, response: error');
+            return '0';
+        }
+
+        $requestType = strtoupper($requestType);
+        if($requestType === 'GET') return '{"result":"get-success"}';
+
+        if($requestType === 'POST')
+        {
+            if(!empty($data))
+            {
+                foreach($data as $value)
+                {
+                    if($value instanceof CURLFile) return '{"result":"post-file-success"}';
+                }
+
+                return json_encode(array('result' => 'post-success', 'data' => $data), JSON_UNESCAPED_UNICODE);
+            }
+
+            return '{"result":"post-success"}';
+        }
+
+        if(in_array($requestType, array('PUT', 'DELETE', 'PATCH')))
+        {
+            return json_encode(array('result' => strtolower($requestType) . '-success'));
+        }
+
+        return '{"result":"default-success"}';
+    }
+
+    /**
      * Test camelCaseToSnakeCase method.
      *
      * @param  string $str
