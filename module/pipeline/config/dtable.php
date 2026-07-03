@@ -58,7 +58,7 @@ $config->pipeline->dtable->fieldList['status']['show']     = true;
 
 $config->pipeline->dtable->fieldList['desc']['title']  = $lang->pipeline->desc;
 $config->pipeline->dtable->fieldList['desc']['name']   = 'desc';
-$config->pipeline->dtable->fieldList['desc']['type']   = 'text';
+$config->pipeline->dtable->fieldList['desc']['type']   = 'html';
 $config->pipeline->dtable->fieldList['desc']['hint']   = true;
 $config->pipeline->dtable->fieldList['desc']['show']   = true;
 
