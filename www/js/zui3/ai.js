@@ -800,7 +800,29 @@ $(() =>
                 return {src: teammate.avatar, size: 24, code: teammate.id};
             }
         };
-        const aiStore = zui.ZAIStore.createFromZentao($.extend({getAvatar: getAvatar}, zaiConfig));
+        const aiStore = zui.ZAIStore.createFromZentao($.extend({
+            getAvatar: getAvatar,
+            onSelectExternalSkill: (chat, selectSkill) => {
+                const callbackID = `skillOnSelect${zui.nextGid()}`;
+                window[callbackID] = (skill) => {
+                    selectSkill(skill);
+                    delete window[callbackID];
+                };
+                zui.Modal.open({
+                    id: 'selectSkillModal',
+                    url: $.createLink('ai', 'selectSkill', `callback=${callbackID}`),
+                    size: 'sm',
+                    onHidden: () => {
+                        delete window[callbackID];
+                    }
+                });
+            },
+            fetchMySkills: async () => {
+                const result = await zui.fetchData($.createLink('ai', 'ajaxGetMySkills'));
+                const skills = (result.skills || []).map(skill => ({id: skill.skillID, description: skill.desc, name: skill.name}));
+                return skills;
+            },
+        }, zaiConfig));
         if(!aiStore) return
 
         zui.AIPanel.init(
@@ -822,21 +844,6 @@ $(() =>
                 {key: 'RECENTS', title: zaiLang.recentChats, chatTypes: ['chat']},
                 {key: 'TASKS', title: zaiLang.aiTeammateTasks, chatsFetcher: (store) => store.getTasks(), onCreate: false, searchBox: {placeholder: zaiLang.searchTasks}},
             ],
-            onSelectSkill: (chat, selectSkill) => {
-                const callbackID = `skillOnSelect${zui.nextGid()}`;
-                window[callbackID] = (skill) => {
-                    selectSkill(skill);
-                    delete window[callbackID];
-                };
-                zui.Modal.open({
-                    id: 'selectSkillModal',
-                    url: $.createLink('ai', 'selectSkill', `callback=${callbackID}`),
-                    size: 'sm',
-                    onHidden: () => {
-                        delete window[callbackID];
-                    }
-                });
-            }
         });
 
         $(document).on('updatepage.app openapp.apps openOldPage.apps', (e, args) =>
