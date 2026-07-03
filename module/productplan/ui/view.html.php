@@ -75,8 +75,16 @@ $storyCols['actions']['minWidth']   = 60;
     $storyCols = $newCols;
 }
 
-foreach($config->productplan->defaultFields['bug'] as $field) $bugCols[$field] = zget($config->bug->dtable->fieldList, $field, array());
-$bugCols['assignedTo']['type']      = 'user';
+$bugCols = $this->loadModel('datatable')->getSetting('productplan', 'viewBug');
+if(isset($bugCols['module']))      $bugCols['module']['map']       = $bugModulePairs;
+if(isset($bugCols['project']))     $bugCols['project']['map']      = array('') + $projectPairs;
+if(isset($bugCols['execution']))   $bugCols['execution']['map']    = array('') + $executions;
+if(isset($bugCols['branch']))      $bugCols['branch']['map']       = $branchTagOption;
+if(isset($bugCols['openedBuild'])) $bugCols['openedBuild']['map']  = array('') + $buildPairs;
+if(isset($bugCols['story']))       $bugCols['story']['map']        = array('') + $bugStories;
+if(isset($bugCols['task']))        $bugCols['task']['map']         = array('') + $bugTasks;
+if(isset($bugCols['toTask']))      $bugCols['toTask']['map']       = array('') + $bugTasks;
+
 $bugCols['actions']['list']         = $config->productplan->actionList;
 $bugCols['actions']['menu']         = array('unlinkBug');
 $bugCols['actions']['minWidth']     = 60;
@@ -361,7 +369,9 @@ detailBody
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={$bugPager->recPerPage}&page={$bugPager->pageID}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
+                    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', 'module=productplan&method=viewBug'), 'resetUrl' => createLink('datatable', 'ajaxreset', 'module=productplan&method=viewBug'))),
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
+                    set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '" . sprintf($lang->productplan->bugSummary, count($planBugs)) . "');}")),
                     set::footPager
                     (
                         usePager('bugPager', '', array(
