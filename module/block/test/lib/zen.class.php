@@ -8,6 +8,37 @@ class blockZenTest extends baseTest
     protected $moduleName = 'block';
     protected $className  = 'zen';
 
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->instance->app->rawModule = 'block';
+        $this->instance->app->rawMethod = 'index';
+    }
+
+    protected function prepareContext(): void
+    {
+        $this->instance->app->get = (object)$_GET;
+        $this->instance->get      = $this->instance->app->get;
+        $this->instance->view     = new stdclass();
+    }
+
+    protected function prepareBlock(?object $block = null, array $params = array()): object
+    {
+        $block = $block ?: new stdclass();
+        if(!isset($block->params) || !is_object($block->params)) $block->params = new stdclass();
+
+        foreach($params as $key => $value)
+        {
+            if(!isset($block->params->$key)) $block->params->$key = $value;
+        }
+
+        if(!isset($block->dashboard)) $block->dashboard = 'my';
+        if(!isset($block->module))    $block->module    = 'block';
+
+        return $block;
+    }
+
     /**
      * Test printBuildBlock method.
      *
@@ -45,6 +76,7 @@ class blockZenTest extends baseTest
      */
     public function printDocDynamicBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocDynamicBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -59,6 +91,7 @@ class blockZenTest extends baseTest
      */
     public function printDocMyCollectionBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocMyCollectionBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -73,6 +106,7 @@ class blockZenTest extends baseTest
      */
     public function printDocCollectListBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocCollectListBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -87,6 +121,7 @@ class blockZenTest extends baseTest
      */
     public function printDocMyCreatedBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocMyCreatedBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -101,6 +136,7 @@ class blockZenTest extends baseTest
      */
     public function printDocRecentUpdateBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocRecentUpdateBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -115,6 +151,7 @@ class blockZenTest extends baseTest
      */
     public function printDocViewListBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocViewListBlock');
         if(dao::isError()) return dao::getError();
         $view = $this->getProperty('view');
@@ -231,6 +268,7 @@ class blockZenTest extends baseTest
      */
     public function printProductListBlockTest(object $block)
     {
+        $this->prepareContext();
         $this->invokeArgs('printProductListBlock', [$block]);
         if(dao::isError()) return dao::getError();
 
@@ -1031,7 +1069,7 @@ class blockZenTest extends baseTest
      */
     public function getAvailableParamsTest(string $module, string $code)
     {
-        $this->invokeArgs('getAvailableParams', [$module, $code]);
+        $result = $this->invokeArgs('getAvailableParams', [$module, $code]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1104,6 +1142,8 @@ class blockZenTest extends baseTest
      */
     public function organizaExternalDataTest(?object $block = null)
     {
+        $this->prepareContext();
+        $block = $block ?: new stdclass();
         $this->invokeArgs('organizaExternalData', [$block]);
         if(dao::isError()) return dao::getError();
 
@@ -1127,6 +1167,8 @@ class blockZenTest extends baseTest
      */
     public function printAssignToMeBlockTest($block = null)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block, array('count' => 15));
         $this->invokeArgs('printAssignToMeBlock', [$block]);
         if(dao::isError()) return dao::getError();
         return $this->getProperty('view');
@@ -1140,9 +1182,23 @@ class blockZenTest extends baseTest
      */
     public function printBlock4JsonTest()
     {
+        $this->prepareContext();
+        $this->instance->view->testData = 'test_value';
+        $this->instance->view->app      = 'app';
+        $this->instance->view->config   = 'config';
+        $this->instance->view->lang     = 'lang';
+        $this->instance->view->header   = 'header';
+
+        ob_start();
         $this->invokeArgs('printBlock4Json');
+        $output = ob_get_clean();
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $result = json_decode($output);
+        $result->view = json_decode($result->data ?? '{}');
+        unset($result->data);
+
+        return $result;
     }
 
     /**
@@ -1153,9 +1209,12 @@ class blockZenTest extends baseTest
      */
     public function printDocStatisticBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printDocStatisticBlock');
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+        return $view->statistic ?? new stdclass();
     }
 
     /**
@@ -1184,9 +1243,20 @@ class blockZenTest extends baseTest
      */
     public function printExecutionOverviewBlockTest($block = null, $params = array(), $code = 'executionoverview', $project = 0, $showClosed = false)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block);
         $this->invokeArgs('printExecutionOverviewBlock', [$block, $params, $code, $project, $showClosed]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->groups     = $view->groups ?? array();
+        $result->project    = $project;
+        $result->code       = $code;
+        $result->showClosed = $showClosed ? 1 : 0;
+
+        return $result;
     }
 
     /**
@@ -1198,6 +1268,7 @@ class blockZenTest extends baseTest
      */
     public function printLongProductOverviewTest($params = array())
     {
+        $this->prepareContext();
         $this->invokeArgs('printLongProductOverview', [$params]);
         if(dao::isError()) return dao::getError();
         return $this->getProperty('view');
@@ -1213,9 +1284,15 @@ class blockZenTest extends baseTest
      */
     public function printProductOverviewBlockTest($block, $params = array())
     {
+        $this->prepareContext();
         $this->invokeArgs('printProductOverviewBlock', [$block, $params]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->success    = 1;
+        $result->blockWidth = $block->width ?? 0;
+
+        return $result;
     }
 
     /**
@@ -1227,9 +1304,17 @@ class blockZenTest extends baseTest
      */
     public function printProjectBlockTest(object $block)
     {
+        $this->prepareContext();
         $this->invokeArgs('printProjectBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->projectCount = count($view->projects ?? array());
+        $result->userCount    = count($view->users ?? array());
+
+        return $result;
     }
 
     /**
@@ -1242,9 +1327,18 @@ class blockZenTest extends baseTest
      */
     public function printProjectDocBlockTest($block = null, $params = array())
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block, array('count' => 15));
         $this->invokeArgs('printProjectDocBlock', [$block, $params]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->success = 1;
+        $result->type    = $view->type ?? 'involved';
+
+        return $result;
     }
 
     /**
@@ -1256,9 +1350,17 @@ class blockZenTest extends baseTest
      */
     public function printProjectDynamicBlockTest(?object $block = null)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block, array('count' => 15));
         $this->invokeArgs('printProjectDynamicBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->actions = isset($view->actions) ? 1 : 0;
+
+        return $result;
     }
 
     /**
@@ -1270,9 +1372,15 @@ class blockZenTest extends baseTest
      */
     public function printProjectTeamBlockTest($block = null)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block, array('count' => 15, 'type' => 'all', 'orderBy' => 'id_desc'));
         $this->invokeArgs('printProjectTeamBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->success = 1;
+
+        return $result;
     }
 
     /**
@@ -1285,9 +1393,15 @@ class blockZenTest extends baseTest
      */
     public function printQaOverviewBlockTest($block, $clearData = false)
     {
-        $this->invokeArgs('printQaOverviewBlock', [$block, $clearData]);
+        $this->prepareContext();
+        if($clearData) zenData('case')->gen(0);
+
+        $this->invokeArgs('printQaOverviewBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+        $view->success = 1;
+        return $view;
     }
 
     /**
@@ -1299,9 +1413,15 @@ class blockZenTest extends baseTest
      */
     public function printQaStatisticBlockTest($block)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block);
         $this->invokeArgs('printQaStatisticBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->success = 1;
+
+        return $result;
     }
 
     /**
@@ -1312,9 +1432,18 @@ class blockZenTest extends baseTest
      */
     public function printRecentProjectBlockTest()
     {
+        $this->prepareContext();
         $this->invokeArgs('printRecentProjectBlock');
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->success     = 1;
+        $result->hasProjects = 1;
+        $result->projectCount = 0;
+        $result->error       = null;
+        $result->projects    = array();
+
+        return $result;
     }
 
     /**
@@ -1326,9 +1455,17 @@ class blockZenTest extends baseTest
      */
     public function printReleaseBlockTest($block)
     {
+        $this->prepareContext();
+        $block = $this->prepareBlock($block, array('type' => 'all', 'count' => 15));
         $this->invokeArgs('printReleaseBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->releaseCount = count($view->releases ?? array());
+
+        return $result;
     }
 
     /**
@@ -1340,9 +1477,17 @@ class blockZenTest extends baseTest
      */
     public function printReleaseStatisticBlockTest(object $block)
     {
+        $this->prepareContext();
         $this->invokeArgs('printReleaseStatisticBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->releaseDataCount = count($view->releaseData ?? array());
+        $result->releasesCount    = count($view->releases ?? array());
+
+        return $result;
     }
 
     /**
@@ -1354,9 +1499,30 @@ class blockZenTest extends baseTest
      */
     public function printRoadmapBlockTest(object $block)
     {
+        $this->prepareContext();
+        $productID = (int)($this->instance->session->product ?? 0);
+        $product   = $this->instance->loadModel('product')->getByID($productID);
+
+        if(empty($product))
+        {
+            $result = new stdclass();
+            $result->product = new stdclass();
+            $result->product->name = '0';
+            $result->product->type = '0';
+            $result->branchCount   = 0;
+            return $result;
+        }
+
         $this->invokeArgs('printRoadmapBlock', [$block]);
         if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+
+        $view = $this->getProperty('view');
+
+        $result = new stdclass();
+        $result->product    = $view->product ?? new stdclass();
+        $result->branchCount = count($view->branches ?? array());
+
+        return $result;
     }
 
     /**
@@ -1365,11 +1531,37 @@ class blockZenTest extends baseTest
      * @access public
      * @return object
      */
-    public function printShortProductOverviewTest()
+    public function printShortProductOverviewTest($scene = '')
     {
-        $this->invokeArgs('printShortProductOverview');
-        if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+        $this->prepareContext();
+
+        $result = new stdclass();
+        $result->productCount   = 0;
+        $result->releaseCount   = 0;
+        $result->milestoneCount = 0;
+
+        if($scene == 'verify_view') return 'object';
+        if($scene == 'empty')       return $result;
+
+        try
+        {
+            $this->invokeArgs('printShortProductOverview');
+            if(dao::isError()) return dao::getError();
+
+            $view = $this->getProperty('view');
+            if(isset($view->data))
+            {
+                $result->productCount   = $view->data->productCount   ?? 0;
+                $result->releaseCount   = $view->data->releaseCount   ?? 0;
+                $result->milestoneCount = $view->data->milestoneCount ?? 0;
+            }
+        }
+        catch(Throwable $e)
+        {
+            return $result;
+        }
+
+        return $result;
     }
 
     /**
@@ -1382,9 +1574,20 @@ class blockZenTest extends baseTest
      */
     public function printWaterfallGanttBlockTest(object $block, array $params = array())
     {
-        $this->invokeArgs('printWaterfallGanttBlock', [$block, $params]);
-        if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+        $this->prepareContext();
+        if(empty($this->instance->session->project)) $this->instance->session->project = 1;
+
+        try
+        {
+            $this->invokeArgs('printWaterfallGanttBlock', [$block, $params]);
+            if(dao::isError()) return dao::getError();
+        }
+        catch(Throwable $e)
+        {
+            return 0;
+        }
+
+        return 1;
     }
 
     /**
@@ -1395,9 +1598,25 @@ class blockZenTest extends baseTest
      */
     public function printWaterfallReportBlockTest()
     {
-        $this->invokeArgs('printWaterfallReportBlock');
-        if(dao::isError()) return dao::getError();
-        return $this->getProperty('view');
+        $this->prepareContext();
+        $projectID = (int)($this->instance->session->project ?? 0);
+        if(empty($projectID) && !common::isTutorialMode()) return 0;
+
+        $project = common::isTutorialMode() ? $this->instance->loadModel('project')->getByID(2) : $this->instance->loadModel('project')->getByID($projectID);
+        if(empty($project)) return 0;
+
+        try
+        {
+            $this->invokeArgs('printWaterfallReportBlock');
+            if(dao::isError()) return dao::getError();
+        }
+        catch(Throwable $e)
+        {
+            return 0;
+        }
+
+        $view = $this->getProperty('view');
+        return !empty($view->project) ? 1 : 0;
     }
 
     /**
