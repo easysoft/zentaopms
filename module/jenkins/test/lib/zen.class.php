@@ -7,6 +7,11 @@ class jenkinsZenTest extends baseTest
 {
     protected $moduleName = 'jenkins';
     protected $className  = 'zen';
+
+    public function __construct()
+    {
+    }
+
     /**
      * Create jenkinsZen instance.
      *
