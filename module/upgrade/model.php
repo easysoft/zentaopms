@@ -13493,4 +13493,29 @@ class upgradeModel extends model
 
         return true;
     }
+
+    /**
+     * 迁移DevOps数据。
+     * Migrate devops data.
+     *
+     * @access public
+     * @return void
+     */
+    function migrateDevopsData()
+    {
+        try
+        {
+            $this->app->throwError = true;
+            $this->dao->begin();
+
+            $this->loadModel('space')->createDefaultSpace();
+            $this->dao->commit();
+        }
+        catch(Exception $e)
+        {
+            static::$errors[] = $e->getMessage();
+            $this->dao->rollBack();
+            return false;
+        }
+    }
 }
