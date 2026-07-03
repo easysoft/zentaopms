@@ -419,14 +419,15 @@ class repo extends control
 
         $repo = $this->repo->getByID($repoID);
 
+        $branchID  = (string)$this->cookie->repoBranch;
         $dropMenus = array();
-        $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
+        $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $branchID);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
         $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
         $this->view->dropMenus = $dropMenus;
         $this->view->type      = 'view';
-        $this->view->branchID  = $this->cookie->repoBranch;
+        $this->view->branchID  = $branchID;
         $this->view->showBug   = $showBug;
         $this->view->encoding  = $encoding;
         $this->view->repoID    = $repoID;
@@ -1653,28 +1654,47 @@ class repo extends control
      */
     public function downloadCode(int $repoID, string $branch = '')
     {
-        $savePath = $this->app->getDataRoot() . 'repo';
-        if(!is_dir($savePath))
+        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/repo/';
+        if(!is_dir($tempDownloadDir) && !mkdir($tempDownloadDir, 0755, true) && !is_dir($tempDownloadDir))
         {
-            if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true);
-            mkdir($savePath, 0777, true);
+            return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
         }
+        if(!is_writable($tempDownloadDir)) return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
+
         $repo = $this->repo->getByID($repoID);
 
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
-        $url = $this->scm->getDownloadUrl($branch, $savePath);
+        $errorMessage   = '';
+        $downloadSource = $this->scm->getDownloadUrl($branch, $tempDownloadDir, 'zip', $errorMessage);
+        if($downloadSource === false || $downloadSource === '')
+        {
+            return $this->sendError($errorMessage !== '' ? $errorMessage : $this->lang->fail, true);
+        }
 
-        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/repo/';
-        if(!is_dir($tempDownloadDir)) mkdir($tempDownloadDir, 0755, true);
+        if(is_file($downloadSource))
+        {
+            $packageFile = $downloadSource;
+        }
+        else
+        {
+            $packageFile = tempnam($tempDownloadDir, 'repo_');
+            if($packageFile === false) return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
 
-        $packageFile = $tempDownloadDir . "{$repo->name}_{$branch}.zip";
-        file_put_contents($packageFile, file_get_contents($url));
+            $zipContent = file_get_contents($downloadSource);
+            if($zipContent === false || file_put_contents($packageFile, $zipContent) === false)
+            {
+                if(is_file($packageFile)) unlink($packageFile);
+                return $this->sendError($this->lang->fail, true);
+            }
+        }
 
         $zipContent = file_get_contents($packageFile);
         unlink($packageFile);
+        if($zipContent === false) return $this->sendError($this->lang->fail, true);
 
-        $this->loadModel('file')->sendDownHeader("{$branch}.zip", 'zip', $zipContent);
+        $downloadName = $branch === '' ? $repo->name : $branch;
+        $this->loadModel('file')->sendDownHeader("{$downloadName}.zip", 'zip', $zipContent);
     }
 
     /**
