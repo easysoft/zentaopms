@@ -655,7 +655,7 @@ class pipeline extends control
      */
     public function ajaxPostFlowInfo(int $pipelineID)
     {
-        $formData = form::data($this->config->pipeline->form->edit)->get();
+        $formData = form::data($this->config->pipeline->form->flowInfo)->get();
         $this->pipeline->update($pipelineID, $formData);
 
         if(dao::isError()) return $this->sendError(dao::getError());

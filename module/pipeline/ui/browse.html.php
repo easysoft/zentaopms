@@ -17,8 +17,8 @@ $app->loadLang('runner');
 jsVar('repoID', $repoID);
 jsVar('type', $type);
 
-/* 空间级别或镜像代码库的流水线需显示服务器列。 */
-$needServer = !$repoID || !empty($repo->mirror);
+/* 空间级别的代码库流水线或镜像代码库的流水线需显示服务器列。 */
+$needServer = (!$repoID && $type != 'space') || !empty($repo->mirror);
 
 if($repoID)
 {
