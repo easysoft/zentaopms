@@ -7,6 +7,13 @@ class docTaoTest extends baseTest
 {
     protected $moduleName = 'doc';
     protected $className  = 'tao';
+    protected $objectModel;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * 创建一个文档库。
@@ -705,7 +712,7 @@ class docTaoTest extends baseTest
      */
     public function getEditedDocIdListTest(): array
     {
-        $docIdList = $this->objectModel->getEditedDocIdList();
+        $docIdList = $this->invokeArgs('getEditedDocIdList');
 
         if(dao::isError()) return dao::getError();
         return $docIdList;
@@ -1016,7 +1023,7 @@ class docTaoTest extends baseTest
      */
     public function getOrderedExecutionsTest(int $append): array
     {
-        return $this->objectModel->getOrderedExecutions($append);
+        return $this->invokeArgs('getOrderedExecutions', [$append]);
     }
 
     /**
@@ -1058,7 +1065,7 @@ class docTaoTest extends baseTest
      */
     public function getLinkedProductDataTest(int $productID): array
     {
-        $data = $this->objectModel->getLinkedProductData($productID);
+        $data = $this->invokeArgs('getLinkedProductData', [$productID]);
 
         if(dao::isError()) return dao::getError();
         return $data;
@@ -1159,7 +1166,7 @@ class docTaoTest extends baseTest
      */
     public function getOpenedDocsTest(array $hasPrivDocIdList, string $sort): array
     {
-        $docs = $this->objectModel->getOpenedDocs($hasPrivDocIdList, $sort);
+        $docs = $this->invokeArgs('getOpenedDocs', [$hasPrivDocIdList, $sort]);
 
         if(dao::isError()) return dao::getError();
         return $docs;
@@ -1175,7 +1182,7 @@ class docTaoTest extends baseTest
      */
     public function getEditedDocsTest(string $sort): array
     {
-        $docs = $this->objectModel->getEditedDocs($sort);
+        $docs = $this->invokeArgs('getEditedDocs', [$sort]);
 
         if(dao::isError()) return dao::getError();
         return $docs;
@@ -1192,7 +1199,7 @@ class docTaoTest extends baseTest
      */
     public function getOrderedDocsByEditedDateTest(array $hasPrivDocIdList, array $allLibIDList): array
     {
-        $docs = $this->objectModel->getOrderedDocsByEditedDate($hasPrivDocIdList, $allLibIDList);
+        $docs = $this->invokeArgs('getOrderedDocsByEditedDate', [$hasPrivDocIdList, $allLibIDList]);
 
         if(dao::isError()) return dao::getError();
         return $docs;
@@ -1209,7 +1216,7 @@ class docTaoTest extends baseTest
      */
     public function getCollectedDocsTest(array $hasPrivDocIdList, string $sort): array
     {
-        $docs = $this->objectModel->getCollectedDocs($hasPrivDocIdList, $sort);
+        $docs = $this->invokeArgs('getCollectedDocs', [$hasPrivDocIdList, $sort]);
 
         if(dao::isError()) return dao::getError();
         return $docs;
