@@ -2130,7 +2130,11 @@ class doc extends control
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
 
         $libPairs = $this->doc->getLibPairs($type, 'withObject', $spaceID, '', $products, $projects, $executions);
-        if($type == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID, 'withObject', $executions);
+        if($type == 'project')
+        {
+            $project = $this->loadModel('project')->getByID($spaceID, '');
+            if($project && $project->multiple) $libPairs += $this->doc->getExecutionLibPairsByProject($spaceID, 'withObject', $executions);
+        }
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 
