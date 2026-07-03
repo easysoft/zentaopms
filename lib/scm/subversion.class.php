@@ -637,7 +637,7 @@ class subversionRepo
         $url     = $this->apiRoot . '/svn/export?' . http_build_query(array('revision' => $revision));
 
         /* 去掉 CURLOPT_FAILONERROR:允许 4xx/5xx 的 JSON body 写入临时文件,便于抽 message。 */
-        commonModel::http($url,null,array(CURLOPT_FILE => $file),$headers,'data','GET',300,false,false);  
+        commonModel::http($url,null,array(CURLOPT_FILE => $file),$headers,'data','GET',300,false,false);
         fclose($file);
 
         clearstatcache(true, $packageFile);
@@ -653,7 +653,7 @@ class subversionRepo
         if($signature !== 'PK')
         {
             /* 非 zip 响应:抽 JSON 里的 message 供上层弹窗展示。 */
-            $body = @file_get_contents($packageFile);
+            $body = file_get_contents($packageFile);
             if($body !== false && $body !== '')
             {
                 $decoded = json_decode($body, true);
