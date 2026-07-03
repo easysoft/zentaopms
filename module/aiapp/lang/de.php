@@ -65,7 +65,7 @@ $lang->aiapp->langData->doc                = 'Dokument';
 $lang->aiapp->langData->design             = 'Design';
 $lang->aiapp->langData->feedback           = 'Rückmeldung';
 $lang->aiapp->langData->currentDocContent  = 'Aktuelles Dokument';
-$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->globalMemoryTitle  = 'All';
 $lang->aiapp->langData->zaiConfigNotValid  = 'ZAI-Konfiguration wurde noch nicht eingerichtet. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->unauthorizedError  = 'Autorisierung fehlgeschlagen, ungültiger API-Schlüssel. Bitte wenden Sie sich an den Administrator, um <a href="{zaiConfigUrl}">ZAI zu konfigurieren</a>.<br>Falls die Konfiguration bereits abgeschlossen wurde, versuchen Sie bitte, die Seite neu zu laden.';
 $lang->aiapp->langData->processDataPrefix  = "Die zu verarbeitenden Daten lauten wie folgt:\n{data}";

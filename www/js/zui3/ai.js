@@ -496,41 +496,54 @@ function registerZentaoAIPlugin(lang)
     const zentaoVersion = window.config?.version || '';
     const [_, zentaoEdition] = zentaoVersion.match(/^([a-zA-Z]+)?(\d+\.\d+(\.\d+)?)$/) || [];
 
-    ['story', 'demand', 'bug', 'doc', 'design', 'feedback'].forEach(objectType => {
-        if(objectType === 'feedback' && !zentaoEdition) return;
-        if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
-        plugin.defineContextProvider({
-            code: `${objectType}Lib`,
-            title: lang[objectType],
-            icon:  objectIcons[objectType],
-            when:  ({store}) => !!store.globalMemory,
-            data:
-            {
-                memory: {collections: ['zentao:global'], content_filter: {attrs: {objectType}}},
-            },
-            generate: ({userPrompt}) => {
-                const objectName = lang[objectType] || objectType;
-                const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
-                if(matches.length)
+    plugin.defineContextProvider({
+        code: 'vectorizedData',
+        icon: 'db',
+        title: '向量化数据',
+        when:  ({store}) => !!store.globalMemory,
+        items: ['story', 'demand', 'bug', 'doc', 'design', 'feedback', 'all'].map(objectType => {
+            if(objectType === 'all') return {
+                code : 'globalMemory',
+                title: lang.globalMemoryTitle,
+                icon : 'book',
+                when : context => !!context.store.globalMemory,
+                data : {memory: {collections: ['zentao:global']}},
+            };
+            if(objectType === 'feedback' && !zentaoEdition) return;
+            if(objectType === 'demand' && zentaoEdition !== 'ipd') return;
+            return {
+                code: `${objectType}Lib`,
+                title: lang[objectType],
+                icon:  objectIcons[objectType],
+                when:  ({store}) => !!store.globalMemory,
+                data:
                 {
-                    return matches.map(match => {
-                        const objectID = match[2];
-                        return {
-                            code:      `${objectType}-${objectID}`,
-                            recommend: true,
-                            title:     `${objectName} #${objectID}`,
-                            data: () => ({
-                                memory:
-                                {
-                                    collections:    ['zentao:global'],
-                                    content_filter: {attrs: {objectKey: `${objectType}-${objectID}`}},
-                                },
-                            })
-                        };
-                    });
+                    memory: {collections: ['zentao:global'], content_filter: {attrs: {objectType}}},
+                },
+                generate: ({userPrompt}) => {
+                    const objectName = lang[objectType] || objectType;
+                    const matches    = [...userPrompt.matchAll(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})\\s?#?(\\d+)`, 'gi'))];
+                    if(matches.length)
+                    {
+                        return matches.map(match => {
+                            const objectID = match[2];
+                            return {
+                                code:      `${objectType}-${objectID}`,
+                                recommend: true,
+                                title:     `${objectName} #${objectID}`,
+                                data: () => ({
+                                    memory:
+                                    {
+                                        collections:    ['zentao:global'],
+                                        content_filter: {attrs: {objectKey: `${objectType}-${objectID}`}},
+                                    },
+                                })
+                            };
+                        });
+                    }
+                    if(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})`, 'i').test(userPrompt)) return {};
                 }
-                if(new RegExp(`@(${objectName}${objectType !== objectName ? `|${objectType}` : ''})`, 'i').test(userPrompt)) return {};
-            }
+            };
         })
     });
 
@@ -560,14 +573,6 @@ function registerZentaoAIPlugin(lang)
         generate: ({userPrompt}) => {
             if (new RegExp(`@(${lang.currentDocContent})`, 'i').test(userPrompt)) return {};
         }
-    });
-
-    plugin.defineContextProvider({
-        code : 'globalMemory',
-        title: lang.globalMemoryTitle,
-        icon : 'book',
-        when : context => !!context.store.globalMemory,
-        data : {memory: {collections: ['zentao:global']}},
     });
 
     if(lang.knowledgeLib)
@@ -795,7 +800,29 @@ $(() =>
                 return {src: teammate.avatar, size: 24, code: teammate.id};
             }
         };
-        const aiStore = zui.ZAIStore.createFromZentao($.extend({getAvatar: getAvatar}, zaiConfig));
+        const aiStore = zui.ZAIStore.createFromZentao($.extend({
+            getAvatar: getAvatar,
+            onSelectExternalSkill: (chat, selectSkill) => {
+                const callbackID = `skillOnSelect${zui.nextGid()}`;
+                window[callbackID] = (skill) => {
+                    selectSkill(skill);
+                    delete window[callbackID];
+                };
+                zui.Modal.open({
+                    id: 'selectSkillModal',
+                    url: $.createLink('ai', 'selectSkill', `callback=${callbackID}`),
+                    size: 'sm',
+                    onHidden: () => {
+                        delete window[callbackID];
+                    }
+                });
+            },
+            fetchMySkills: async () => {
+                const result = await zui.fetchData($.createLink('ai', 'ajaxGetMySkills'));
+                const skills = (result.skills || []).map(skill => ({id: skill.skillID, description: skill.desc, name: skill.name}));
+                return skills;
+            },
+        }, zaiConfig));
         if(!aiStore) return
 
         zui.AIPanel.init(
@@ -816,7 +843,7 @@ $(() =>
             tabs: !window.enableAITeammate ? undefined : [
                 {key: 'RECENTS', title: zaiLang.recentChats, chatTypes: ['chat']},
                 {key: 'TASKS', title: zaiLang.aiTeammateTasks, chatsFetcher: (store) => store.getTasks(), onCreate: false, searchBox: {placeholder: zaiLang.searchTasks}},
-            ]
+            ],
         });
 
         $(document).on('updatepage.app openapp.apps openOldPage.apps', (e, args) =>
