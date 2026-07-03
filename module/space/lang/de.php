@@ -32,6 +32,7 @@ $lang->space->account      = 'Name';
 $lang->space->team         = 'Team';
 $lang->space->auth         = 'Access Control';
 $lang->space->role         = 'Role';
+$lang->space->defaultSpace = 'Default Space';
 
 $lang->space->memberGroup    = 'Permission Group';
 $lang->space->accessRepo     = 'Access Repositories';

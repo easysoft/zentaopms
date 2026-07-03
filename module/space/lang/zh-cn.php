@@ -32,6 +32,7 @@ $lang->space->account      = '姓名';
 $lang->space->team         = '团队';
 $lang->space->auth         = '权限控制';
 $lang->space->role         = '角色';
+$lang->space->defaultSpace = '默认空间';
 
 $lang->space->memberGroup    = '分组';
 $lang->space->accessRepo     = '可访问的代码库';
