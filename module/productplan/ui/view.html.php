@@ -371,7 +371,6 @@ detailBody
                     set::extraHeight('+144'),
                     set::customCols(array('url' => createLink('datatable', 'ajaxcustom', 'module=productplan&method=viewBug'), 'resetUrl' => createLink('datatable', 'ajaxreset', 'module=productplan&method=viewBug'))),
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
-                    set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '" . sprintf($lang->productplan->bugSummary, count($planBugs)) . "');}")),
                     set::footPager
                     (
                         usePager('bugPager', '', array(
