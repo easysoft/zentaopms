@@ -15021,11 +15021,11 @@ CREATE TABLE IF NOT EXISTS `zt_ai_miniprogramfield` (
 ) ENGINE=InnoDB;
 
 -- DROP TABLE IF EXISTS `zt_ai_useragent`;
-CREATE TABLE zt_ai_useragent (
-    id int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
-    account varchar(30) NOT NULL COMMENT '禅道用户名',
-    agent varchar(255) NOT NULL COMMENT 'ZAI agent ID',
-    PRIMARY KEY (`id`)
+CREATE TABLE `zt_ai_useragent` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道用户名',
+  `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
 CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`);
 
