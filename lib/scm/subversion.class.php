@@ -604,6 +604,68 @@ class subversionRepo
         return $logs;
     }
 
+
+    /**
+     * Download an SVN revision archive from gitfox and return the local file path.
+     *
+     * @param  string $revision
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string|false
+     */
+    public function getDownloadUrl($revision = 'HEAD', $savePath = '', $ext = 'zip')
+    {
+        if($ext !== 'zip') return false;
+        if($revision === '') $revision = 'HEAD';
+        if(!scm::checkRevision($revision)) return false;
+        if(empty($savePath) || !is_dir($savePath) || !is_writable($savePath)) return false;
+
+        $packageFile = tempnam($savePath, 'svn_');
+        if($packageFile === false) return false;
+
+        $file = fopen($packageFile, 'wb');
+        if($file === false)
+        {
+            unlink($packageFile);
+            return false;
+        }
+
+        $headers = static::buildAuthHeader($this->token, '', '', 'application/zip');
+        $url     = $this->apiRoot . '/svn/export?' . http_build_query(array('revision' => $revision));
+        commonModel::http(
+            $url,
+            null,
+            array(CURLOPT_CUSTOMREQUEST => 'GET', CURLOPT_FILE => $file, CURLOPT_FAILONERROR => true),
+            $headers,
+            'data',
+            'GET',
+            300,
+            false,
+            false
+        );
+        fclose($file);
+
+        clearstatcache(true, $packageFile);
+        if(static::clearHttpErrors() || !is_file($packageFile) || filesize($packageFile) === 0)
+        {
+            if(is_file($packageFile)) unlink($packageFile);
+            return false;
+        }
+
+        $file      = fopen($packageFile, 'rb');
+        $signature = $file === false ? '' : fread($file, 2);
+        if($file !== false) fclose($file);
+        if($signature !== 'PK')
+        {
+            unlink($packageFile);
+            return false;
+        }
+
+        return $packageFile;
+    }
+
+
     /**
      * List all files.
      *
@@ -841,5 +903,4 @@ class subversionRepo
         commonModel::$requestErrors = array();
         return true;
     }
-    
 }
