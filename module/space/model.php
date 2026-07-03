@@ -776,4 +776,35 @@ class spaceModel extends model
 
         return true;
     }
+
+    /**
+     * 创建默认空间。
+     * Create default space.
+     *
+     * @access public
+     * @return bool
+     */
+    public function createDefaultSpace(): bool
+    {
+        $company = $this->loadModel('company')->getFirst();
+        $admins  = !empty($company->admins) ? explode(',', $company->admins) : array();
+        $admins  = array_filter($admins);
+
+        $space = new stdClass();
+        $space->name        = $this->lang->space->defaultSpace;
+        $space->acl         = 'open';
+        $space->auth        = 'extend';
+        $space->createdBy   = zget($admins, 0, 'system');
+        $space->createdDate = helper::now();
+
+        $this->dao->insert(TABLE_SPACE)->data($space)->exec();
+        if(dao::isError()) return false;
+
+        $space->id = $this->dao->lastInsertId();
+        foreach($admins as $admin)
+        {
+            $this->dao->insert(TABLE_DEVOPSSPACEUSER)->data(array('space' => $space->id, 'account' => $admin, 'role' => 'manager'))->exec();
+        }
+        return !dao::isError();
+    }
 }
