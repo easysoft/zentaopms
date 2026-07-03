@@ -938,7 +938,6 @@ $config->delete['20_1'][] = 'execution/max/common/ext/lang/zh-tw/report.php';
 $config->delete['20_1'][] = 'execution/max/story/ext/ui/view.effort.html.hook.php';
 $config->delete['20_1'][] = 'execution/max/testcase/ext/ui/view.effort.html.hook.php';
 $config->delete['20_1'][] = 'module/artifactrepo';
-$config->delete['20_1'][] = 'module/gitfox';
 
 $config->delete['20_1_1'][] = 'extension/ipd/design/ext/ui/browse.zentaomax.html.hook.php';
 $config->delete['20_1_1'][] = 'extension/ipd/doc/ext/ui/create.zentaomax.html.hook.php';
