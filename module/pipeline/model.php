@@ -939,6 +939,63 @@ class pipelineModel extends model
     }
 
     /**
+     * Save a trigger to ops_triggers table.
+     *
+     * @param  object $trigger
+     * @access public
+     * @return void
+     */
+    public function saveTrigger(object $trigger): void
+    {
+        $this->dao->insert(TABLE_PIPELINETRIGGER)->data($trigger)->exec();
+    }
+
+    /**
+     * Get triggers by pipeline ID.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return array
+     */
+    public function getTriggers(int $pipelineID): array
+    {
+        return $this->dao->select('*')->from(TABLE_PIPELINETRIGGER)
+            ->where('pipelineID')->eq($pipelineID)
+            ->fetchAll();
+    }
+
+    /**
+     * Update a single field of trigger.
+     *
+     * @param  int    $triggerID
+     * @param  string $field
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function updateTriggerField(int $triggerID, string $field, string $value): void
+    {
+        $this->dao->update(TABLE_PIPELINETRIGGER)
+            ->set($field)->eq($value)
+            ->set('editedBy')->eq($this->app->user->account)
+            ->set('editedDate')->eq(helper::now())
+            ->where('id')->eq($triggerID)
+            ->exec();
+    }
+
+    /**
+     * Delete a trigger.
+     *
+     * @param  int $triggerID
+     * @access public
+     * @return void
+     */
+    public function deleteTrigger(int $triggerID): void
+    {
+        $this->dao->delete()->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->exec();
+    }
+
+    /**
      * 获取执行详情。
      * Get execution info.
      *
