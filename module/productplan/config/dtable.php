@@ -458,3 +458,59 @@ $config->productplan->viewBug->dtable->fieldList['story']['title']    = $lang->b
 $config->productplan->viewBug->dtable->fieldList['story']['type']     = 'text';
 $config->productplan->viewBug->dtable->fieldList['story']['link']     = array('module' => 'story', 'method' => 'view', 'params' => 'storyID={story}');
 $config->productplan->viewBug->dtable->fieldList['story']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['task']['title']    = $lang->bug->task;
+$config->productplan->viewBug->dtable->fieldList['task']['type']     = 'text';
+$config->productplan->viewBug->dtable->fieldList['task']['link']     = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={task}');
+$config->productplan->viewBug->dtable->fieldList['task']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['mailto']['title']     = $lang->bug->mailto;
+$config->productplan->viewBug->dtable->fieldList['mailto']['type']      = 'text';
+$config->productplan->viewBug->dtable->fieldList['mailto']['sortType']  = true;
+$config->productplan->viewBug->dtable->fieldList['mailto']['delimiter'] = ',';
+
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    $config->productplan->viewBug->dtable->fieldList['injection']['title']   = $lang->bug->injection;
+    $config->productplan->viewBug->dtable->fieldList['injection']['control'] = 'picker';
+    $config->productplan->viewBug->dtable->fieldList['injection']['type']    = 'text';
+    $config->productplan->viewBug->dtable->fieldList['injection']['map']     = $lang->bug->injectionList;
+
+    $config->productplan->viewBug->dtable->fieldList['identify']['title']   = $lang->bug->identify;
+    $config->productplan->viewBug->dtable->fieldList['identify']['control'] = 'picker';
+    $config->productplan->viewBug->dtable->fieldList['identify']['type']    = 'text';
+    $config->productplan->viewBug->dtable->fieldList['identify']['map']     = $lang->bug->identifyList;
+}
+
+$config->productplan->viewBug->dtable->fieldList['keywords']['title']    = $lang->bug->keywords;
+$config->productplan->viewBug->dtable->fieldList['keywords']['type']     = 'text';
+$config->productplan->viewBug->dtable->fieldList['keywords']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['lastEditedBy']['title']    = $lang->bug->lastEditedBy;
+$config->productplan->viewBug->dtable->fieldList['lastEditedBy']['type']     = 'user';
+$config->productplan->viewBug->dtable->fieldList['lastEditedBy']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['lastEditedDate']['title']    = $lang->bug->abbr->lastEditedDate;
+$config->productplan->viewBug->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->productplan->viewBug->dtable->fieldList['lastEditedDate']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['closedBy']['title']    = $lang->bug->closedBy;
+$config->productplan->viewBug->dtable->fieldList['closedBy']['type']     = 'user';
+$config->productplan->viewBug->dtable->fieldList['closedBy']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['closedDate']['title']    = $lang->bug->closedDate;
+$config->productplan->viewBug->dtable->fieldList['closedDate']['type']     = 'date';
+$config->productplan->viewBug->dtable->fieldList['closedDate']['sortType'] = true;
+
+$config->productplan->viewBug->dtable->fieldList['steps']['title']   = 'steps';
+$config->productplan->viewBug->dtable->fieldList['steps']['control'] = 'textarea';
+$config->productplan->viewBug->dtable->fieldList['steps']['display'] = false;
+
+$config->productplan->viewBug->dtable->fieldList['case']['title']   = 'case';
+$config->productplan->viewBug->dtable->fieldList['case']['display'] = false;
+
+$config->productplan->viewBug->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->productplan->viewBug->dtable->fieldList['actions']['width']    = 'auto';
+$config->productplan->viewBug->dtable->fieldList['actions']['type']     = 'actions';
+$config->productplan->viewBug->dtable->fieldList['actions']['fixed']    = 'right';
+$config->productplan->viewBug->dtable->fieldList['actions']['sortType'] = false;
