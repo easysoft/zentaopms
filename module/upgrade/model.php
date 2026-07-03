@@ -13501,7 +13501,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    function migrateDevopsData()
+    public function migrateDevopsData()
     {
         try
         {
