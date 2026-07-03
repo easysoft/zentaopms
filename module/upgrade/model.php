@@ -9492,8 +9492,8 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
-                $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
+                $flow = $this->dao->select('id')->from(TABLE_WORKFLOW)->where('app')->eq($app)->andWhere('module')->eq($module)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->fetch();
+                if(empty($flow)) $this->dao->insert(TABLE_WORKFLOW)->data($data)->exec();
             }
         }
 
@@ -9543,8 +9543,8 @@ class upgradeModel extends model
 
                 if($vision != 'all' && $vision != $data->vision) continue;
 
-                $this->dao->delete()->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
-                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+                $flowAction = $this->dao->select('id')->from(TABLE_WORKFLOWACTION)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->fetch();
+                if(empty($flowAction)) $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
             }
         }
 
@@ -9587,8 +9587,8 @@ class upgradeModel extends model
 
                 if(is_object($data->options) or is_array($data->options)) $data->options = helper::jsonEncode($data->options);
 
-                $this->dao->delete()->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
-                $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
+                $flowField = $this->dao->select('id')->from(TABLE_WORKFLOWFIELD)->where('module')->eq($module)->andWhere('field')->eq($field)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->fetch();
+                if(empty($flowField)) $this->dao->insert(TABLE_WORKFLOWFIELD)->data($data)->exec();
             }
         }
 
@@ -9617,8 +9617,8 @@ class upgradeModel extends model
 
                     if($vision != 'all' && $vision != $data->vision) continue;
 
-                    $this->dao->delete()->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->exec();
-                    $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
+                    $flowLayout = $this->dao->select('id')->from(TABLE_WORKFLOWLAYOUT)->where('module')->eq($module)->andWhere('action')->eq($action)->andWhere('field')->eq($field)->andWhere('vision')->eq($data->vision)->beginIF($hasGroup)->andWhere('`group`')->eq(0)->fi()->fetch();
+                    if(empty($flowLayout)) $this->dao->insert(TABLE_WORKFLOWLAYOUT)->data($data)->exec();
                 }
             }
         }
