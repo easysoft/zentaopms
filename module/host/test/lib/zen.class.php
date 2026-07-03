@@ -7,6 +7,13 @@ class hostZenTest extends baseTest
 {
     protected $moduleName = 'host';
     protected $className  = 'zen';
+    protected $objectModel;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * Test getPairs method.
@@ -33,11 +40,7 @@ class hostZenTest extends baseTest
      */
     public function processTreemapTest($datas = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('processTreemap');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $datas);
+        $result = $this->invokeArgs('processTreemap', [$datas]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -53,11 +56,7 @@ class hostZenTest extends baseTest
      */
     public function getTreeModulesTest($rootID = 0, $hosts = array())
     {
-        $reflection = new ReflectionClass($this->objectModel);
-        $method = $reflection->getMethod('getTreeModules');
-        $method->setAccessible(true);
-
-        $result = $method->invoke($this->objectModel, $rootID, $hosts);
+        $result = $this->invokeArgs('getTreeModules', [$rootID, $hosts]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -72,11 +71,8 @@ class hostZenTest extends baseTest
      */
     public function checkFormDataTest($formData)
     {
-        $method = $this->hostZenTest->getMethod('checkFormData');
-        $method->setAccessible(true);
-
         dao::$errors = array();
-        $result = $method->invokeArgs($this->hostZenTest->newInstance(), array($formData));
+        $result = $this->invokeArgs('checkFormData', [$formData]);
 
         if(dao::isError())
         {
