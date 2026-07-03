@@ -2014,6 +2014,16 @@
         {
             const frameElement = window.frameElement;
             if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
+
+            $(document).on('mousemove', (e) =>
+            {
+                const frame = window.frameElement;
+                if(!frame || !parent.document) return;
+
+                const rect  = frame.getBoundingClientRect();
+                const event = new MouseEvent('mousemove', {bubbles: true, cancelable: true, view: parent.window, detail: e.detail, clientX: e.clientX + rect.left, clientY: e.clientY + rect.top, screenX: e.screenX, screenY: e.screenY, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey, button: e.button, buttons: e.buttons, relatedTarget: frame});
+                parent.document.dispatchEvent(event);
+            });
         }
 
         if(DEBUG)
