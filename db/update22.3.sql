@@ -1032,3 +1032,5 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('deploy', '部署', 0),
 ('artifact', '制品', 0),
 ('scm', '代码版本管理', 0);
+
+ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;
