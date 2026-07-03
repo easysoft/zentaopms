@@ -13509,6 +13509,7 @@ class upgradeModel extends model
             $this->dao->begin();
 
             $this->loadModel('space')->createDefaultSpace();
+            $this->space->migrateGroupPrivs();
             $this->dao->commit();
         }
         catch(Exception $e)
