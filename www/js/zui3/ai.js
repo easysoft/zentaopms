@@ -822,6 +822,12 @@ $(() =>
                 const skills = (result.skills || []).map(skill => ({id: skill.skillID, description: skill.desc, name: skill.name}));
                 return skills;
             },
+            chatAgent: zaiConfig.userAgent || (async () => {
+                if(zaiConfig.userAgent) return zaiConfig.userAgent;
+
+                const result = await zui.fetchData($.createLink('zai', 'ajaxGetUserAgent'));
+                return result.data;
+            })
         }, zaiConfig));
         if(!aiStore) return
 
@@ -873,7 +879,7 @@ $(() =>
             }
         );
 
-        aiStore.isOK().then(isOK => {window.isZaiOK = isOK;});
+        aiStore.waitInited().then(() => {window.isZaiOK = aiStore.ok;});
     }
 
     /* Bind AI commands in app when app is loaded. */
