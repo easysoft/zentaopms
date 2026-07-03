@@ -233,4 +233,19 @@ class zai extends control
 
         return $this->send(array('result' => 'success', 'data' => $results));
     }
+
+    /**
+     * Ajax: 获取当前用户的ZAI agent。
+     * Ajax: Get ZAI agent of current user.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetUserAgent()
+    {
+        $userAgent = $this->zai->getUserAgent();
+        if(!$userAgent) $userAgent = $this->zai->createUserAgent($this->app->user->account);
+
+        return $this->send(array('result' => 'success', 'data' => $userAgent));
+    }
 }

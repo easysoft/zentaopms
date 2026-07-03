@@ -114,6 +114,7 @@ class zaiModel extends model
         }
 
         if(!$includeAdmin) unset($setting->adminToken);
+        $setting->userAgent = $this->getUserAgent();
 
         return $setting;
     }
@@ -162,6 +163,65 @@ class zaiModel extends model
             $info->createdBy       = $this->app->user->account;
         }
         return $info;
+    }
+
+    /**
+     * 获取当前用户的ZAI agent。
+     * Get ZAI agent of current user.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        $agent = $this->dao->select('agent')->from(TABLE_AI_USERAGENT)->where('account')->eq($this->app->user->account)->fetch('agent');
+        return $agent ? $agent : '';
+    }
+
+    /**
+     * 创建当前用户的ZAI agent。
+     * Create ZAI agent of current user.
+     *
+     * @access public
+     * @param string $account
+     * @return string
+     */
+    public function createUserAgent(string $account): string
+    {
+        $setting = $this->loadModel('zai')->getSetting(true);
+        $token   = $this->generateToken($setting);
+        $baseUrl = $this->getZaiBaseUrl($setting);
+        $user    = $this->loadModel('user')->getByID($account);
+        $skills  = $this->loadModel('ai')->getSkills('private', 'active');
+        $header  = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        );
+
+        $skillIdList = '';
+        foreach($skills as $skill) $skillIdList .= $skill->skillID . ',';
+        $skillIdList = rtrim($skillIdList, ',');
+
+        $data = array(
+            'name' => $user->realname,
+            'type' => 'custom',
+            'is_default' => false,
+            'execution_runtime' => 'pi_coding_agent',
+            'opencode_mode' => 'serve',
+            $skills => $skillIdList // 创建agent的时候直接挂载技能
+        );
+
+        $url    = $baseUrl . '/v8/agents';
+        $result = $this->loadModel('ai')->http('POST', $url, $data, $header);
+
+        if(!$result) return '';
+
+        $result = json_decode($result, true);
+        if(empty($result['id'])) return '';
+
+        $this->dao->insert(TABLE_AI_USERAGENT)->data(array('account' => $account, 'agent' => $result['id']))->exec();
+
+        return $result['id'];
     }
 
     /**

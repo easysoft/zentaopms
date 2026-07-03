@@ -369,6 +369,7 @@ $config->logonMethods[] = 'screen.viewold';
 $config->logonMethods[] = 'system.backupview';
 $config->logonMethods[] = 'screen.staticdataold';
 $config->logonMethods[] = 'stage.updateorder';
+$config->logonMethods[] = 'zai.ajaxgetuseragent';
 
 $config->openModules = array();
 $config->openModules[] = 'install';
@@ -629,6 +630,7 @@ define('TABLE_INSTANCE',     '`' . $config->db->prefix . 'instance`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 define('TABLE_AI_AGENT',            '`' . $config->db->prefix . 'ai_agent`');
+define('TABLE_AI_USERAGENT',        '`' . $config->db->prefix . 'ai_useragent`');
 define('TABLE_AI_AGENTFIELD',       '`' . $config->db->prefix . 'ai_agentfield`');
 define('TABLE_AI_AGENTROLE',        '`' . $config->db->prefix . 'ai_agentrole`');
 define('TABLE_AI_MINIPROGRAM',      '`' . $config->db->prefix . 'ai_miniprogram`');
