@@ -35,6 +35,59 @@ class aiModel extends model
     public $errors = array();
 
     /**
+     * 获取 ZAI API 基础地址。
+     * Get ZAI API base URL.
+     *
+     * @param  object $setting
+     * @access public
+     * @return string
+     */
+    public function getZaiBaseUrl(object $setting): string
+    {
+        if(!empty($setting->url)) return rtrim($setting->url, '/');
+
+        $isHttps = !empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on';
+        if(!$isHttps) $isHttps = !empty($_SERVER['HTTP_X_FORWARDED_PROTO']) && $_SERVER['HTTP_X_FORWARDED_PROTO'] === 'https';
+        if(!$isHttps) $isHttps = !empty($_SERVER['SERVER_PORT']) && $_SERVER['SERVER_PORT'] == 443;
+
+        $protocol = $isHttps ? 'https://' : 'http://';
+        $port     = !empty($setting->port) ? ':' . $setting->port : '';
+
+        return $protocol . $setting->host . $port;
+    }
+
+    /**
+     * 生成ZAI token.
+     * Generate ZAI token.
+     *
+     * @param  object $setting
+     * @access public
+     * @return string
+     */
+    public function generateToken(object $setting): string
+    {
+        $isAdmin     = !empty($setting->adminToken);
+        $token       = $isAdmin ? $setting->adminToken : $setting->token;
+        $appID       = $setting->appID;
+        $userID      = $this->app->user->id;
+        $expiredTime = time() + 3600;
+        $message     = $token . $appID . $userID . $expiredTime;
+        $hash        = md5($message);
+
+        $payload = [
+            'hash'         => $hash,
+            'app_id'       => $appID,
+            'user_id'      => (string)$userID,
+            'expired_time' => $expiredTime
+        ];
+
+        $encoded = base64_encode(json_encode($payload, JSON_UNESCAPED_UNICODE));
+        $prefix  = $isAdmin ? 'ak-' : 'ek-';
+
+        return $prefix . $encoded;
+     }
+
+    /**
      * 获取数据源列表。
      * Get data source list.
      *
@@ -3549,6 +3602,80 @@ class aiModel extends model
         $this->loadModel('action')->create('aiAssistant', $assistantId, 'deleted');
 
         return true;
+    }
+
+    /**
+     * 发送 HTTP 请求。
+     * Send HTTP request.
+     *
+     * @param  string $requestType
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $header
+     * @access public
+     * @return string|false
+     */
+    public function http(string $requestType, string $url, array $data = array(), array $header = array()): string|false
+    {
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_ENCODING, '');
+        curl_setopt($curl, CURLOPT_MAXREDIRS, 10);
+        curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_1);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 120);
+
+        $requestType = strtoupper($requestType);
+        if($requestType === 'GET')
+        {
+            curl_setopt($curl, CURLOPT_HTTPGET, true);
+        }
+        elseif($requestType === 'POST')
+        {
+            curl_setopt($curl, CURLOPT_POST, true);
+        }
+        else
+        {
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $requestType);
+        }
+
+        $hasFile = false;
+        if(!empty($data))
+        {
+            foreach($data as $value)
+            {
+                if($value instanceof CURLFile)
+                {
+                    $hasFile = true;
+                    break;
+                }
+            }
+
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $hasFile ? $data : json_encode($data, JSON_UNESCAPED_UNICODE));
+        }
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $header);
+
+        $response = curl_exec($curl);
+        $httpCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
+        if(curl_errno($curl))
+        {
+            dao::$errors[] = sprintf($this->lang->zai->callZaiAPIFailed, $url, curl_error($curl));
+            curl_close($curl);
+            return false;
+        }
+        curl_close($curl);
+
+        if($httpCode < 200 || $httpCode >= 300)
+        {
+            dao::$errors[] = sprintf($this->lang->zai->callZaiAPIFailed, $url, "HTTP $httpCode, response: $response");
+            return false;
+        }
+
+        return $response;
     }
 }
 

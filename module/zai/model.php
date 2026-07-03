@@ -188,11 +188,11 @@ class zaiModel extends model
      */
     public function createUserAgent(string $account): string
     {
-        $setting = $this->loadModel('zai')->getSetting(true);
-        $token   = $this->generateToken($setting);
-        $baseUrl = $this->getZaiBaseUrl($setting);
+        $setting = $this->getSetting(true);
+        $token   = $this->loadModel('ai')->generateToken($setting);
+        $baseUrl = $this->ai->getZaiBaseUrl($setting);
         $user    = $this->loadModel('user')->getByID($account);
-        $skills  = $this->loadModel('ai')->getSkills('private', 'active');
+        $skills  = $this->config->edition == 'open' ? [] : $this->loadModel('ai')->getSkills('private', 'active');
         $header  = array(
             'Content-Type: application/json',
             'Authorization: Bearer ' . $token

@@ -450,6 +450,121 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getZaiBaseUrl method.
+     *
+     * @param  object|null $setting
+     * @param  array       $serverVars
+     * @access public
+     * @return mixed
+     */
+    public function getZaiBaseUrlTest($setting = null, $serverVars = array())
+    {
+        $serverKeys = array('HTTPS', 'HTTP_X_FORWARDED_PROTO', 'SERVER_PORT');
+        $backup     = array();
+        foreach($serverKeys as $key)
+        {
+            $backup[$key] = $_SERVER[$key] ?? null;
+            unset($_SERVER[$key]);
+        }
+
+        foreach($serverVars as $key => $value) $_SERVER[$key] = $value;
+
+        $result = $this->invokeArgs('getZaiBaseUrl', array($setting));
+
+        foreach($serverKeys as $key)
+        {
+            if($backup[$key] === null) unset($_SERVER[$key]);
+            else $_SERVER[$key] = $backup[$key];
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test generateToken method.
+     *
+     * @param  object|null $setting
+     * @access public
+     * @return mixed
+     */
+    public function generateTokenTest($setting = null)
+    {
+        $token = $this->invokeArgs('generateToken', array($setting));
+        if(dao::isError()) return dao::getError();
+
+        $prefix  = substr($token, 0, 3);
+        $payload = json_decode(base64_decode(substr($token, 3)), true);
+        $rawToken = !empty($setting->adminToken) ? $setting->adminToken : $setting->token;
+        $expectedHash = md5($rawToken . $setting->appID . $this->instance->app->user->id . $payload['expired_time']);
+
+        return (object)array(
+            'prefix'       => $prefix,
+            'app_id'       => $payload['app_id'],
+            'user_id'      => $payload['user_id'],
+            'hash'         => $payload['hash'],
+            'hash_valid'   => $payload['hash'] === $expectedHash ? '1' : '0',
+            'expired_time' => $payload['expired_time'],
+        );
+    }
+
+    /**
+     * Test http method.
+     *
+     * @param  string $requestType
+     * @param  string $url
+     * @param  array  $data
+     * @param  array  $header
+     * @access public
+     * @return mixed
+     */
+    public function httpTest(string $requestType = 'GET', string $url = '', array $data = array(), array $header = array())
+    {
+        global $tester;
+        $tester->app->loadLang('zai');
+
+        dao::$errors = array();
+
+        if(strpos($url, 'curl-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'Connection refused');
+            return '0';
+        }
+
+        if(strpos($url, 'http-error') !== false)
+        {
+            dao::$errors[] = sprintf($this->instance->lang->zai->callZaiAPIFailed, $url, 'HTTP 500, response: error');
+            return '0';
+        }
+
+        $requestType = strtoupper($requestType);
+        if($requestType === 'GET') return '{"result":"get-success"}';
+
+        if($requestType === 'POST')
+        {
+            if(!empty($data))
+            {
+                foreach($data as $value)
+                {
+                    if($value instanceof CURLFile) return '{"result":"post-file-success"}';
+                }
+
+                return json_encode(array('result' => 'post-success', 'data' => $data), JSON_UNESCAPED_UNICODE);
+            }
+
+            return '{"result":"post-success"}';
+        }
+
+        if(in_array($requestType, array('PUT', 'DELETE', 'PATCH')))
+        {
+            return json_encode(array('result' => strtolower($requestType) . '-success'));
+        }
+
+        return '{"result":"default-success"}';
+    }
+
+    /**
      * Test camelCaseToSnakeCase method.
      *
      * @param  string $str
