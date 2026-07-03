@@ -7,6 +7,13 @@ class projectreleaseTaoTest extends baseTest
 {
     protected $moduleName = 'projectrelease';
     protected $className  = 'tao';
+    protected $objectModel;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * 测试获取项目发布列表。
@@ -74,7 +81,7 @@ class projectreleaseTaoTest extends baseTest
         $release     = $tester->dao->findById($releaseID)->from(TABLE_RELEASE)->fetch();
         $branchGroup = $tester->loadModel('branch')->getByProducts(explode(',', (string)$release->product));
         $builds      = $tester->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll('id');
-        $this->objectModel->processRelease($release, $branchGroup, $builds);
+        $this->invokeArgs('processRelease', [$release, $branchGroup, $builds]);
 
         if(dao::isError()) return dao::getError();
 
