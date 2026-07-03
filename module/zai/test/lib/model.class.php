@@ -835,4 +835,18 @@ class zaiModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getUserAgent method.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserAgentTest(): string
+    {
+        $result = $this->instance->getUserAgent();
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
