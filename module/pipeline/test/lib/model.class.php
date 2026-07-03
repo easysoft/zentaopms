@@ -280,4 +280,95 @@ class pipelineModelTest extends baseTest
     {
         return $this->instance->importFromProvider($repo, $formData);
     }
+
+    /**
+     * Save a trigger to ops_triggers table.
+     *
+     * @param  object $trigger
+     * @access public
+     * @return object|false|array
+     */
+    public function saveTriggerTest(object $trigger): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
+
+    /**
+     * Get triggers by pipeline ID.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return array
+     */
+    public function getTriggersTest(int $pipelineID): array
+    {
+        $triggers = $this->instance->getTriggers($pipelineID);
+
+        if(dao::isError()) return dao::getError();
+        return $triggers;
+    }
+
+    /**
+     * Parse triggers from cron and events strings.
+     *
+     * @param  string $cron
+     * @param  string $events
+     * @access public
+     * @return array
+     */
+    public function parseTriggersTest(string $cron, string $events): array
+    {
+        return $this->instance->parseTriggers($cron, $events);
+    }
+
+    /**
+     * Update a single field of trigger.
+     *
+     * @param  object $trigger
+     * @param  string $field
+     * @param  string $value
+     * @access public
+     * @return object|false|array
+     */
+    public function updateTriggerFieldTest(object $trigger, string $field, string $value): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+
+        $this->instance->updateTriggerField($triggerID, $field, $value);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
+
+    /**
+     * Delete a trigger.
+     *
+     * @param  object $trigger
+     * @access public
+     * @return object|false|array
+     */
+    public function deleteTriggerTest(object $trigger): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+
+        $this->instance->deleteTrigger($triggerID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
 }
