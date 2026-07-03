@@ -269,7 +269,7 @@ class zaiModel extends model
         if($code == 404) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
         if($code == 401) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);
 
-        if($error || $code != 200)
+        if($error || $code < 200 || $code >= 300)
         {
             return array('result' => 'fail', 'data' => $data, 'code' => $code, 'postData' => $postData, 'message' => sprintf($this->lang->zai->callZaiAPIFailed, $url, ($this->app->config->debug ? $error : '') . "(code: $code, response: $response)"));
         }
