@@ -167,6 +167,73 @@ class pipeline extends control
      */
     public function edit(int $id)
     {
+        if($_POST)
+        {
+            $formData = form::data($this->config->pipeline->form->edit)
+                ->add('editedBy', $this->app->user->account)
+                ->add('editedDate', helper::now())
+                ->get();
+
+            /* 如果 defaultBranch 未提交，沿用数据库中已有的值。 */
+            if(!isset($formData->defaultBranch) || $formData->defaultBranch === '')
+            {
+                $existPipeline = $this->pipeline->getByID($id);
+                $formData->defaultBranch = $existPipeline ? $existPipeline->defaultBranch : '';
+            }
+
+            /* 从 POST 构建 customParam JSON。 */
+            $paramKeys   = $this->post->paramKey;
+            $paramValues = $this->post->paramValue;
+            $paramKeys   = !empty($paramKeys) ? (array)$paramKeys : array();
+            $paramValues = !empty($paramValues) ? (array)$paramValues : array();
+            $customParam = new stdClass();
+            foreach($paramKeys as $index => $key)
+            {
+                if(empty($key)) continue;
+                $value = isset($paramValues[$index]) ? $paramValues[$index] : '';
+                $customParam->$key = $value;
+            }
+            $formData->customParam = json_encode($customParam);
+
+            $this->pipeline->update($id, $formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $pipeline   = $this->pipeline->getByID($id);
+            $locateUrl  = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+            return $this->sendSuccess(array('locate' => $locateUrl));
+        }
+
+        $pipeline = $this->pipeline->getByID($id);
+        if(empty($pipeline)) return $this->locate($this->createLink('pipeline', 'browse'));
+
+        $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
+        $branchList = array();
+        if($repo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $branchList = $scm->branch();
+        }
+
+        $customParam = array();
+        if(!empty($pipeline->customParam))
+        {
+            $customParam = json_decode($pipeline->customParam, true);
+            if(!$customParam) $customParam = array();
+        }
+
+        $cancelUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+
+        $triggers = $this->pipeline->getTriggers($id);
+
+        $this->view->title       = $this->lang->pipeline->edit;
+        $this->view->pipeline    = $pipeline;
+        $this->view->repo        = $repo;
+        $this->view->branchList  = $branchList;
+        $this->view->customParam = $customParam;
+        $this->view->cancelUrl   = $cancelUrl;
+        $this->view->triggers    = $triggers;
+
         $this->display();
     }
 
@@ -787,6 +854,124 @@ class pipeline extends control
 
             return $this->sendSuccess(array('load' => true));
         }
+        return $this->sendSuccess(array('load' => true));
+    }
+
+    /**
+     * AJAX: 获取触发器配置表单。
+     * Get trigger configuration form.
+     *
+     * @param  int    $pipelineID
+     * @param  string $triggerType
+     * @access public
+     * @return void
+     */
+    public function ajaxTriggerForm(int $pipelineID, string $triggerType = '')
+    {
+        $pipeline = $this->pipeline->getByID($pipelineID);
+        if(empty($pipeline)) return $this->sendError('Pipeline not found');
+
+        $this->view->pipeline    = $pipeline;
+        $this->view->triggerType = $triggerType;
+
+        $this->display();
+    }
+
+    /**
+     * AJAX: 保存触发器配置。
+     * Save trigger configuration.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveTrigger(int $pipelineID)
+    {
+        $pipeline = $this->pipeline->getByID($pipelineID);
+        if(empty($pipeline)) return $this->sendError('Pipeline not found');
+
+        $formData = fixer::input('post')->get();
+        $type = $formData->type ?? '';
+
+        /* Determine field and value based on trigger type. */
+        $field = '';
+        $value = '';
+        if($type == 'event')
+        {
+            $field = 'event';
+            $event = $formData->event ?? '';
+            $value = is_array($event) ? implode(',', $event) : $event;
+        }
+        elseif($type == 'comment')
+        {
+            $field = 'comment';
+            $value = $formData->comment ?? '';
+        }
+        elseif($type == 'week')
+        {
+            $field = 'cron';
+            $weekDay = $formData->weekDay ?? '*';
+            $time    = $formData->time ?? '0:0';
+            list($hour, $minute) = explode(':', $time);
+            $value = "{$minute} {$hour} * * {$weekDay}";
+        }
+        elseif($type == 'month')
+        {
+            $field = 'cron';
+            $monthDay = $formData->monthDay ?? '*';
+            $time     = $formData->time ?? '0:0';
+            list($hour, $minute) = explode(':', $time);
+            $value = "{$minute} {$hour} {$monthDay} * *";
+        }
+
+        if(empty($field) || $value === '') return $this->sendError('Invalid trigger data');
+
+        /* Find existing trigger record or create a new one. */
+        $triggers = $this->pipeline->getTriggers($pipelineID);
+        if(!empty($triggers))
+        {
+            $trigger = current($triggers);
+            $this->pipeline->updateTriggerField($trigger->id, $field, $value);
+        }
+        else
+        {
+            $trigger = new stdClass();
+            $trigger->repoID      = (int)$pipeline->repoID;
+            $trigger->pipelineID  = $pipelineID;
+            $trigger->event       = '';
+            $trigger->comment     = '';
+            $trigger->cron        = '';
+            $trigger->createdBy   = $this->app->user->account;
+            $trigger->createdDate = helper::now();
+            $trigger->editedBy    = $this->app->user->account;
+            $trigger->editedDate  = helper::now();
+            $trigger->deleted     = 0;
+            $trigger->$field = $value;
+
+            $this->pipeline->saveTrigger($trigger);
+        }
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+
+        return $this->sendSuccess(array('closeModal' => true, 'callback' => array('name' => 'refreshTriggerGroup')));
+    }
+
+    /**
+     * AJAX: 删除触发器。
+     * Delete a trigger.
+     *
+     * @param  int $triggerID
+     * @access public
+     * @return void
+     */
+    public function ajaxDeleteTrigger(int $triggerID, string $field = '')
+    {
+        if($field && in_array($field, array('event', 'cron', 'comment')))
+        {
+            $this->pipeline->updateTriggerField($triggerID, $field, '');
+        }
+
+        if(dao::isError()) return $this->sendError(dao::getError());
         return $this->sendSuccess(array('load' => true));
     }
 

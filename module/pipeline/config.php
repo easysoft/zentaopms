@@ -5,7 +5,7 @@ $config->pipeline = new stdclass();
 $config->pipeline->create = new stdclass();
 $config->pipeline->edit   = new stdclass();
 $config->pipeline->create->requiredFields = 'name';
-$config->pipeline->edit->requiredFields   = 'name';
+$config->pipeline->edit->requiredFields   = 'name,defaultBranch';
 $config->pipeline->import = new stdclass();
 $config->pipeline->import->requiredFields = 'providerID,name';
 
