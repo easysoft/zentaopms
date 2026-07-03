@@ -16545,5 +16545,5 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('build', '构建', 0),
 ('test', '测试', 0),
 ('deploy', '部署', 0),
-('artifact', '制品', 0);
+('artifact', '制品', 0),
 ('scm', '代码版本管理', 0);
