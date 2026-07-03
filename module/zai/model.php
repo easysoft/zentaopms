@@ -198,9 +198,8 @@ class zaiModel extends model
             'Authorization: Bearer ' . $token
         );
 
-        $skillIdList = '';
-        foreach($skills as $skill) $skillIdList .= $skill->skillID . ',';
-        $skillIdList = rtrim($skillIdList, ',');
+        $skillIdList = [];
+        foreach($skills as $skill) $skillIdList[] = $skill->skillID;
 
         $data = array(
             'name' => $user->realname,
@@ -208,7 +207,7 @@ class zaiModel extends model
             'is_default' => false,
             'execution_runtime' => 'pi_coding_agent',
             'opencode_mode' => 'serve',
-            $skills => $skillIdList // 创建agent的时候直接挂载技能
+            'skills' => $skillIdList // 创建agent的时候直接挂载技能
         );
 
         $url    = $baseUrl . '/v8/agents';
