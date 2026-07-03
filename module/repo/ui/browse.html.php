@@ -219,25 +219,7 @@ $downloadWg = div
     )
 );
 
-/* zin: Build sync failure alert independently to avoid nested ternary in toolbar. */
-$syncFailureAlert = null;
-if(isset($repo->status) && $repo->status == 'syncFailed')
-{
-    $syncFailureAlert = div
-    (
-        setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
-        /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
-        setStyle(array('--alert-bg' => 'var(--color-danger-50)', 'gap' => '.25rem')),
-        h::span(setClass('icon icon-exclamation-sign')),
-        h::span($lang->repo->mirror->failedTitle),
-        h::a
-        (
-            set::href('javascript:;'),
-            setClass('alert-link sync-failure-detail ml-2'),
-            $lang->repo->mirror->detail
-        )
-    );
-}
+
 
 toolbar
 (
@@ -246,6 +228,20 @@ toolbar
     (
         setID('mirrorToolbar'),
         setClass('flex items-center'),
+        (isset($repo->status) && $repo->status == 'syncFailed') ? div
+        (
+            setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
+            /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
+            setStyle(array('--alert-bg' => 'var(--color-danger-50)', 'gap' => '.25rem')),
+            h::span(setClass('icon icon-exclamation-sign')),
+            h::span($lang->repo->mirror->failedTitle),
+            h::a
+            (
+                set::href('javascript:;'),
+                setClass('alert-link sync-failure-detail ml-2'),
+                $lang->repo->mirror->detail
+            )
+        ) : null,
         (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
         (
             setClass('flex items-center'),
