@@ -9,5 +9,13 @@ declare(strict_types=1);
  */
 namespace zin;
 
+dropmenu
+(
+    set::module('space'),
+    set::tab('space'),
+    set::objectID($spaceID),
+    set::url(createLink('space', 'ajaxGetDropMenu', "spaceID=$spaceID&module={$app->rawModule}&method={$app->rawMethod}"))
+);
+
 if($type == 'byGroup')   include 'privbygroup.html.php';
 if($type == 'byPackage') include 'privbypackage.html.php';
