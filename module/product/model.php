@@ -959,7 +959,7 @@ class productModel extends model
      */
     public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = '', array $unAllowedStage = array()): array
     {
-        if(empty($productID)) return $this->loadModel('execution')->getPairs();
+        if(empty($productID)) return $this->loadModel('execution')->getPairs($projectID);
 
         /* Determine executions order. */
         $projects         = $this->loadModel('project')->getByIdList(array($projectID));
