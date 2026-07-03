@@ -611,11 +611,13 @@ class subversionRepo
      * @param  string $revision
      * @param  string $savePath
      * @param  string $ext
+     * @param  string $errorMessage 引用出参:后端返回 JSON 错误时的 message 字段,供 sendError 弹窗展示。
      * @access public
      * @return string|false
      */
-    public function getDownloadUrl($revision = 'HEAD', $savePath = '', $ext = 'zip')
+    public function getDownloadUrl($revision = 'HEAD', $savePath = '', $ext = 'zip', &$errorMessage = '')
     {
+        $errorMessage = '';
         if($ext !== 'zip') return false;
         if($revision === '') $revision = 'HEAD';
         if(!scm::checkRevision($revision)) return false;
@@ -633,17 +635,9 @@ class subversionRepo
 
         $headers = static::buildAuthHeader($this->token, '', '', 'application/zip');
         $url     = $this->apiRoot . '/svn/export?' . http_build_query(array('revision' => $revision));
-        commonModel::http(
-            $url,
-            null,
-            array(CURLOPT_CUSTOMREQUEST => 'GET', CURLOPT_FILE => $file, CURLOPT_FAILONERROR => true),
-            $headers,
-            'data',
-            'GET',
-            300,
-            false,
-            false
-        );
+
+        /* 去掉 CURLOPT_FAILONERROR:允许 4xx/5xx 的 JSON body 写入临时文件,便于抽 message。 */
+        commonModel::http($url,null,array(CURLOPT_FILE => $file),$headers,'data','GET',300,false,false);  
         fclose($file);
 
         clearstatcache(true, $packageFile);
@@ -658,6 +652,23 @@ class subversionRepo
         if($file !== false) fclose($file);
         if($signature !== 'PK')
         {
+            /* 非 zip 响应:抽 JSON 里的 message 供上层弹窗展示。 */
+            $body = @file_get_contents($packageFile);
+            if($body !== false && $body !== '')
+            {
+                $decoded = json_decode($body, true);
+                if(is_array($decoded))
+                {
+                    foreach(array('message', 'msg', 'error', 'detail', 'key') as $field)
+                    {
+                        if(!empty($decoded[$field]) && is_string($decoded[$field]))
+                        {
+                            $errorMessage = $decoded[$field];
+                            break;
+                        }
+                    }
+                }
+            }
             unlink($packageFile);
             return false;
         }

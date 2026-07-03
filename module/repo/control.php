@@ -1665,8 +1665,12 @@ class repo extends control
 
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
-        $downloadSource = $this->scm->getDownloadUrl($branch, $tempDownloadDir);
-        if($downloadSource === false || $downloadSource === '') return $this->sendError($this->lang->fail, true);
+        $errorMessage   = '';
+        $downloadSource = $this->scm->getDownloadUrl($branch, $tempDownloadDir, 'zip', $errorMessage);
+        if($downloadSource === false || $downloadSource === '')
+        {
+            return $this->sendError($errorMessage !== '' ? $errorMessage : $this->lang->fail, true);
+        }
 
         if(is_file($downloadSource))
         {

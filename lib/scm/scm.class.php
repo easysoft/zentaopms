@@ -322,9 +322,9 @@ class scm
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip', &$errorMessage = '')
     {
-        return $this->engine->getDownloadUrl($branch, $savePath, $ext);
+        return $this->engine->getDownloadUrl($branch, $savePath, $ext, $errorMessage);
     }
 
     /**
