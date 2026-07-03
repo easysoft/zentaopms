@@ -450,6 +450,66 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getZaiBaseUrl method.
+     *
+     * @param  object|null $setting
+     * @param  array       $serverVars
+     * @access public
+     * @return mixed
+     */
+    public function getZaiBaseUrlTest($setting = null, $serverVars = array())
+    {
+        $serverKeys = array('HTTPS', 'HTTP_X_FORWARDED_PROTO', 'SERVER_PORT');
+        $backup     = array();
+        foreach($serverKeys as $key)
+        {
+            $backup[$key] = $_SERVER[$key] ?? null;
+            unset($_SERVER[$key]);
+        }
+
+        foreach($serverVars as $key => $value) $_SERVER[$key] = $value;
+
+        $result = $this->invokeArgs('getZaiBaseUrl', array($setting));
+
+        foreach($serverKeys as $key)
+        {
+            if($backup[$key] === null) unset($_SERVER[$key]);
+            else $_SERVER[$key] = $backup[$key];
+        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test generateToken method.
+     *
+     * @param  object|null $setting
+     * @access public
+     * @return mixed
+     */
+    public function generateTokenTest($setting = null)
+    {
+        $token = $this->invokeArgs('generateToken', array($setting));
+        if(dao::isError()) return dao::getError();
+
+        $prefix  = substr($token, 0, 3);
+        $payload = json_decode(base64_decode(substr($token, 3)), true);
+        $rawToken = !empty($setting->adminToken) ? $setting->adminToken : $setting->token;
+        $expectedHash = md5($rawToken . $setting->appID . $this->instance->app->user->id . $payload['expired_time']);
+
+        return (object)array(
+            'prefix'       => $prefix,
+            'app_id'       => $payload['app_id'],
+            'user_id'      => $payload['user_id'],
+            'hash'         => $payload['hash'],
+            'hash_valid'   => $payload['hash'] === $expectedHash ? '1' : '0',
+            'expired_time' => $payload['expired_time'],
+        );
+    }
+
+    /**
      * Test camelCaseToSnakeCase method.
      *
      * @param  string $str
