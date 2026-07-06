@@ -13495,6 +13495,79 @@ class upgradeModel extends model
     }
 
     /**
+     * 迁移 DevOps 分组权限。
+     * Migrate devops group privs.
+     *
+     * @access protected
+     * @return bool
+     */
+    protected function migrateDevopsGroupPrivs(): bool
+    {
+        $this->loadModel('group');
+        $privCodeMap = array();
+        foreach($this->config->group->package as $package)
+        {
+            if(empty($package->privs)) continue;
+            foreach($package->privs as $privCode => $priv) $privCodeMap[$privCode] = $privCode;
+        }
+        $rules = $this->config->upgrade->migrateDevOpsPrivs;
+
+        foreach($rules as $rule)
+        {
+            $targetPrivs = array();
+            foreach($rule['to'] as $privCode)
+            {
+                if(!isset($privCodeMap[$privCode])) continue;
+                $targetPrivs[$privCode] = $privCode;
+            }
+
+            foreach($rule['from'] as $privCode)
+            {
+                $codes = explode('-', $privCode, 2);
+                if(count($codes) != 2) continue;
+
+                list($module, $method) = $codes;
+                if(empty($module) || empty($method)) continue;
+
+                $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+                    ->where('module')->eq($module)
+                    ->andWhere('method')->eq($method)
+                    ->fetchPairs('group', 'group');
+
+                if(empty($groups)) continue;
+
+                $this->dao->delete()->from(TABLE_GROUPPRIV)
+                    ->where('module')->eq($module)
+                    ->andWhere('method')->eq($method)
+                    ->andWhere('`group`')->in($groups)
+                    ->exec();
+                if(dao::isError()) return false;
+
+                foreach($targetPrivs as $targetPriv)
+                {
+                    $targetCodes = explode('-', $targetPriv, 2);
+                    if(count($targetCodes) != 2) continue;
+
+                    list($targetModule, $targetMethod) = $targetCodes;
+                    if(empty($targetModule) || empty($targetMethod)) continue;
+
+                    foreach($groups as $groupID)
+                    {
+                        $data = new stdclass();
+                        $data->group  = $groupID;
+                        $data->module = $targetModule;
+                        $data->method = $targetMethod;
+                        $this->dao->replace(TABLE_GROUPPRIV)->data($data)->exec();
+                        if(dao::isError()) return false;
+                    }
+                }
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * 迁移DevOps数据。
      * Migrate devops data.
      *
@@ -13507,6 +13580,8 @@ class upgradeModel extends model
         {
             $this->app->throwError = true;
             $this->dao->begin();
+
+            $this->migrateDevopsGroupPrivs();
 
             $this->loadModel('space')->createDefaultSpace();
             $this->space->migrateGroupPrivs();

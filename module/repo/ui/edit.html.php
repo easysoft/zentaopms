@@ -32,6 +32,7 @@ formPanel
         set::label($lang->repo->space),
         set::required(true),
         set::value($repo->spaceID),
+        set::items($spaces),
         set::disabled(true)
     ),
     formGroup
