@@ -527,7 +527,7 @@ class pipeline extends control
             $providerID = $repo ? (int)$repo->providerID : 0;
         }
 
-        $this->view->title = $this->lang->pipeline->importBtn . $this->lang->hyphen . $this->lang->pipeline->importAction;
+        $this->view->title = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->importAction;
 
         $this->pipelineZen->buildImportForm($repoID, $providerID);
         $this->display();
