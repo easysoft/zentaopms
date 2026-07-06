@@ -82,7 +82,7 @@ foreach($config->ai->ernie->contentTypeMapping as $contentType => $apis)
 $config->ai->createprompt = new stdclass();
 $config->ai->testPrompt   = new stdclass();
 $config->ai->createprompt->requiredFields = 'name';
-$config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetForm';
+$config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,actionPurpose';
 
 $config->ai->moduleGroup = [];
 $config->ai->moduleGroup['program']     = array('program', 'project', 'product');

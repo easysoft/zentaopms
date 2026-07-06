@@ -433,20 +433,6 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
     return popup;
 };
 
-/**
- * 将数字员工任务结果存入 Session，然后导航到目标表单页面。
- */
-window.applyAITaskResultToForm = async function(taskID, formLocation, formData)
-{
-    const res = await $.ajax({
-        url: $.createLink('aitask', 'ajaxStorePendingFormData', 'taskID=' + taskID),
-        type: 'POST',
-        data: {formData: JSON.stringify(formData || {})},
-        dataType: 'json',
-    });
-    if(res && res.result === 'success' && formLocation) openUrl(formLocation);
-};
-
 window.openAITaskPopup = async function(taskID)
 {
     const zaiPanel = await checkZAIPanel(true);
