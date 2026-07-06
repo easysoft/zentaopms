@@ -51,6 +51,8 @@ cid=16337
 - 测试通过sql语句获取3个任务 id 正序 execution = '3' and story != '0' and parent >= 0第2条的name属性 @任务2
 - 测试通过sql语句获取5个任务 id 倒序 execution = '3' and story != '0' and parent >= 0第10条的name属性 @任务10
 - 测试通过sql语句获取5个任务 id 正序 execution = '3' and story != '0' and parent >= 0第2条的name属性 @任务2
+- 测试通过sql语句获取3个任务 beginDate 正序 execution = '3' and deleted = '0' and parent >= 0第1条的name属性 @任务1
+- 测试通过sql语句获取3个任务 beginDate 倒序 execution = '3' and deleted = '0' and parent >= 0第10条的name属性 @任务10
 - 测试通过sql语句获取3个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
 - 测试通过sql语句获取3个任务 id 正序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
 - 测试通过sql语句获取5个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0第6条的name属性 @任务6
@@ -70,6 +72,7 @@ $condition[] = "t1.module LIKE '%2%' AND t1.type = 'design' AND t1.parent >= 0";
 
 $recPerPage = array('3', '5');
 $orderBy = array('id_desc', 'id_asc');
+$beginDateOrderBy = array('beginDate_asc,id_asc', 'beginDate_desc,id_desc');
 
 $execution = new executionModelTest();
 r($execution->getSearchTasksTest($condition[0], $orderBy[0], $recPerPage[0])) && p('10:name') && e('任务10'); // 测试通过sql语句获取3个任务 id 倒序 execution = '3' and deleted = '0' and parent >= 0
@@ -84,6 +87,8 @@ r($execution->getSearchTasksTest($condition[2], $orderBy[0], $recPerPage[0])) &&
 r($execution->getSearchTasksTest($condition[2], $orderBy[1], $recPerPage[0])) && p('2:name')  && e('任务2');  // 测试通过sql语句获取3个任务 id 正序 execution = '3' and story != '0' and parent >= 0
 r($execution->getSearchTasksTest($condition[2], $orderBy[0], $recPerPage[1])) && p('10:name') && e('任务10'); // 测试通过sql语句获取5个任务 id 倒序 execution = '3' and story != '0' and parent >= 0
 r($execution->getSearchTasksTest($condition[2], $orderBy[1], $recPerPage[1])) && p('2:name')  && e('任务2');  // 测试通过sql语句获取5个任务 id 正序 execution = '3' and story != '0' and parent >= 0
+r($execution->getSearchTasksTest($condition[0], $beginDateOrderBy[0], $recPerPage[0])) && p('1:name')  && e('任务1');  // 测试通过sql语句获取3个任务 beginDate 正序 execution = '3' and deleted = '0' and parent >= 0
+r($execution->getSearchTasksTest($condition[0], $beginDateOrderBy[1], $recPerPage[0])) && p('10:name') && e('任务10'); // 测试通过sql语句获取3个任务 beginDate 倒序 execution = '3' and deleted = '0' and parent >= 0
 r($execution->getSearchTasksTest($condition[3], $orderBy[0], $recPerPage[0])) && p('6:name')  && e('任务6');  // 测试通过sql语句获取3个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0
 r($execution->getSearchTasksTest($condition[3], $orderBy[1], $recPerPage[0])) && p('6:name')  && e('任务6');  // 测试通过sql语句获取3个任务 id 正序 module like '%2%' and type = 'design' and parent >= 0
 r($execution->getSearchTasksTest($condition[3], $orderBy[0], $recPerPage[1])) && p('6:name')  && e('任务6');  // 测试通过sql语句获取5个任务 id 倒序 module like '%2%' and type = 'design' and parent >= 0
