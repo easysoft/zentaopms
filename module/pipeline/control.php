@@ -92,6 +92,8 @@ class pipeline extends control
         $pipelineList = $this->pipeline->getList($space, $repoID, $type, $pipelineQuery, $orderBy, $pager);
         foreach($pipelineList as $pipeline)
         {
+            $pipeline->desc = strip_tags($pipeline->desc);
+
             $vars     = json_decode($pipeline->variables);
             $showVars = false;
             if(empty($vars)) continue;
