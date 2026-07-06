@@ -241,13 +241,24 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
-        $this->view->prompt      = $prompt;
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
-        $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
-        $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
-        $this->view->fieldConfig = $this->ai->getPromptFields($id);
+        $knowledgeLibIDs = array();
+        if(!empty($prompt->knowledgeLib)) $knowledgeLibIDs = array_filter(explode(',', trim($prompt->knowledgeLib, ',')));
+
+        $knowledgeLibs = array();
+        if(!empty($knowledgeLibIDs) && method_exists($this->ai, 'getKnowledgeLibsByIDs')) $knowledgeLibs = $this->ai->getKnowledgeLibsByIDs($knowledgeLibIDs);
+
+        $skill = false;
+        if(!empty($prompt->skill) && method_exists($this->ai, 'getSkillByID')) $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
+
+        $this->view->prompt        = $prompt;
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
+        $this->view->actions       = $this->loadModel('action')->getList('prompt', $id);
+        $this->view->dataPreview   = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title         = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
+        $this->view->fieldConfig   = $this->ai->getPromptFields($id);
+        $this->view->knowledgeLibs = $knowledgeLibs;
+        $this->view->skill         = $skill;
 
         $this->display();
     }

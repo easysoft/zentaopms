@@ -30,16 +30,21 @@ detailHeader
             setClass('primary'),
             set::icon('plus'),
             set::url(createLink('ai', 'promptbasicinfo')),
-            $lang->ai->prompts->create,
+            $lang->ai->prompts->create
         ) : null
     )
 );
 
-$selectTargetForm = '';
+$actionObject = '';
 if(!empty($prompt->actionPurpose))
 {
-    $targetFormPath   = explode('.', $prompt->actionPurpose);
-    $selectTargetForm = $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]] ?? '';
+    $actionPurposePath = explode('.', $prompt->actionPurpose, 2);
+    if(count($actionPurposePath) == 2)
+    {
+        $actionObjectCommon = $lang->ai->targetForm[$actionPurposePath[0]]['common'] ?? '';
+        $actionObjectName   = $lang->ai->targetForm[$actionPurposePath[0]][$actionPurposePath[1]] ?? '';
+        if(!empty($actionObjectName)) $actionObject = $prompt->actionPurpose == 'empty.empty' || empty($actionObjectCommon) ? $actionObjectName : $actionObjectCommon . ' / ' . $actionObjectName;
+    }
 }
 
 $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
@@ -73,37 +78,37 @@ $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
 if($prompt->status != 'draft' || !$this->ai->isExecutable($prompt)) unset($config->ai->actions->promptview['mainActions'][1]);
 $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 
-$fnBuildFieldConfig = function() use ($lang, $fieldConfig)
-{
-    if(empty($fieldConfig)) return array();
+$promptContent = $prompt->purpose;
+if(!empty($prompt->elaboration)) $promptContent .= "\n\n" . $prompt->elaboration;
 
-    $fields = array();
-    foreach($fieldConfig as $field)
+$skillName = !empty($skill) && !empty($skill->name) ? $skill->name : '';
+
+$knowledgeLibNames = array();
+if(!empty($knowledgeLibs))
+{
+    foreach($knowledgeLibs as $knowledgeLib)
     {
-        $control  = $lang->ai->miniPrograms->field->typeList[$field->type];
-        $required = $lang->ai->requiredList[$field->required];
-        $options  = $field->options ?: '-';
-        $fields[] = div(setClass('mb-1'), $field->name . ' (' . $control . ', ' . $required . ') : ' . $options);
+        if(!empty($knowledgeLib->name)) $knowledgeLibNames[] = $knowledgeLib->name;
     }
-    return section(set::title($lang->ai->miniPrograms->field->fields), $fields);
-};
+}
+$knowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $knowledgeLibNames);
+$displayPosition  = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
 
 detailBody
 (
     sectionList
     (
-        section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
-        section(set::title($lang->ai->prompts->characterization), set::content($prompt->characterization)),
         section
         (
-            set::title($lang->ai->prompts->object),
+            set::title($lang->ai->prompts->processObject),
             set::content($prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : '')
         ),
-        section(set::title($lang->ai->prompts->field), set::content($dataPreview)),
-        $fnBuildFieldConfig(),
-        section(set::title($lang->ai->prompts->setPurpose), set::content($prompt->purpose)),
-        section(set::title($lang->ai->prompts->elaboration), set::content($prompt->elaboration)),
-        section(set::title($lang->ai->prompts->selectTargetForm), set::content($selectTargetForm))
+        section(set::title($lang->ai->prompts->actionObject), set::content($actionObject)),
+        section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
+        section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
+        section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
+        section(set::title($lang->ai->prompts->skill), set::content($skillName)),
+        section(set::title($lang->ai->prompts->knowledgeLib), set::content($knowledgeLibText))
     ),
     history
     (
