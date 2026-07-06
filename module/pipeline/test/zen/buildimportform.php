@@ -31,7 +31,7 @@ $repoTable->gen(2);
 
 $providerTable = zenData('ops_provider');
 $providerTable->id->range('1-2');
-$providerTable->type->range('Gitlab,Jenkins');
+$providerTable->type->range('GitLab,Jenkins');
 $providerTable->name->range('GitLab,Jenkins');
 $providerTable->url->range('http://gitlab.local,http://jenkins.local');
 $providerTable->token->range('YWRtaW46dGVzdHRva2Vu');

@@ -299,3 +299,35 @@ $lang->pipeline->flowApp->labels['thursday']  = 'Thursday';
 $lang->pipeline->flowApp->labels['friday']    = 'Friday';
 $lang->pipeline->flowApp->labels['saturday']  = 'Saturday';
 $lang->pipeline->flowApp->labels['sunday']    = 'Sunday';
+
+$lang->pipeline->triggerForm = new stdClass();
+$lang->pipeline->triggerForm->type           = 'Type de déclencheur';
+$lang->pipeline->triggerForm->event          = 'Événement déclencheur';
+$lang->pipeline->triggerForm->weekDay        = 'Hebdomadaire';
+$lang->pipeline->triggerForm->monthDay       = 'Mensuel';
+$lang->pipeline->triggerForm->time           = 'Heure';
+$lang->pipeline->triggerForm->comment        = 'Mot-clé';
+$lang->pipeline->triggerForm->submit         = 'OK';
+
+$lang->pipeline->triggerFormTypeList = array();
+$lang->pipeline->triggerFormTypeList['event']      = 'Événement';
+$lang->pipeline->triggerFormTypeList['week']       = 'Hebdomadaire';
+$lang->pipeline->triggerFormTypeList['month']      = 'Mensuel';
+$lang->pipeline->triggerFormTypeList['comment']    = 'Commentaire de commit contient un mot-clé';
+
+$lang->pipeline->triggerFormEventList = array();
+$lang->pipeline->triggerFormEventList['push']            = 'Push';
+$lang->pipeline->triggerFormEventList['tag_push']        = 'Tag Push';
+$lang->pipeline->triggerFormEventList['merge_requests']  = 'Merge Requests';
+
+$lang->pipeline->triggerFormWeekList = array();
+$lang->pipeline->triggerFormWeekList['1'] = 'Lundi';
+$lang->pipeline->triggerFormWeekList['2'] = 'Mardi';
+$lang->pipeline->triggerFormWeekList['3'] = 'Mercredi';
+$lang->pipeline->triggerFormWeekList['4'] = 'Jeudi';
+$lang->pipeline->triggerFormWeekList['5'] = 'Vendredi';
+$lang->pipeline->triggerFormWeekList['6'] = 'Samedi';
+$lang->pipeline->triggerFormWeekList['0'] = 'Dimanche';
+
+$lang->pipeline->triggerFormMonthList = array();
+for($i = 1; $i <= 31; $i++) $lang->pipeline->triggerFormMonthList[$i] = $i . 'e';

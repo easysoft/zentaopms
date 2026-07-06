@@ -315,9 +315,9 @@ $lang->pipeline->triggerFormTypeList['month']      = '按月';
 $lang->pipeline->triggerFormTypeList['comment']    = '提交注释包含关键字';
 
 $lang->pipeline->triggerFormEventList = array();
-$lang->pipeline->triggerFormEventList['branch_created'] = '创建分支';
-$lang->pipeline->triggerFormEventList['branch_updated'] = '分支更新';
-$lang->pipeline->triggerFormEventList['tag_created']    = '创建标签';
+$lang->pipeline->triggerFormEventList['push']            = 'Push';
+$lang->pipeline->triggerFormEventList['tag_push']        = 'Tag Push';
+$lang->pipeline->triggerFormEventList['merge_requests']  = '合并请求';
 
 $lang->pipeline->triggerFormWeekList = array();
 $lang->pipeline->triggerFormWeekList['1'] = '周一';

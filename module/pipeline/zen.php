@@ -195,7 +195,7 @@ class pipelineZen extends pipeline
         $gitlabProviders  = array();
         $jenkinsProviders = $this->loadModel('provider')->getPairs('Jenkins');
 
-        if($repoProvider && $repoProvider->type === 'Gitlab')
+        if($repoProvider && $repoProvider->type === 'GitLab')
         {
             $gitlabProviders[$repoProvider->id] = $repoProvider->name;
         }
@@ -203,7 +203,7 @@ class pipelineZen extends pipeline
 
         $selectedProviderID = $providerID ?: (int)key($providers);
         $selectedProvider   = $selectedProviderID ? $this->loadModel('provider')->getByID($selectedProviderID) : null;
-        $isJenkins          = $selectedProvider && $selectedProvider->type !== 'Gitlab';
+        $isJenkins          = $selectedProvider && $selectedProvider->type !== 'GitLab';
         $jenkinsPipelines   = array();
         $hidePipeline       = false;
         $defaultName        = $isJenkins ? '' : $repo->name;

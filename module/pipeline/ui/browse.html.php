@@ -43,8 +43,6 @@ else
 }
 if($type == 'space') unset($config->pipeline->dtable->fieldList['repo']);
 
-if($needServer) $config->pipeline->dtable->fieldList['server']['show'] = true;
-
 /* zin: Define the toolbar on main menu. */
 $isMirror      = $repoID && !empty($repo->mirror);
 $canCreate     = hasPriv('pipeline', 'create');
@@ -64,6 +62,11 @@ if($needServer)
 }
 
 $cols = $this->loadModel('datatable')->getSetting('pipeline');
+if($needServer)
+{
+    $cols['server'] = $config->pipeline->dtable->fieldList['server'];
+    unset($cols['server']['display']);
+}
 $tableData = initTableData($pipelineList, $cols, $this->pipeline);
 toolbar
 (
