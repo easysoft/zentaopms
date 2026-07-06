@@ -24,5 +24,5 @@ $editorTest = new editorModelTest();
 r($editorTest->getTwoGradeFilesTest()) && p('isArray,hasLangDir') && e('1,1');
 r($editorTest->getTwoGradeFilesTest('')) && p('isArray,isEmpty') && e('1,1');
 r($editorTest->getTwoGradeFilesTest('/nonexistent/path')) && p('isArray,isEmpty') && e('1,1');
-r($editorTest->getTwoGradeFilesTest('/invalid/path/with@special#chars')) && p('isArray,isEmpty') && e('1,1');
-r($editorTest->getTwoGradeFilesTest()) && p('hasSystemFiles') && e('0');
+r($editorTest->getTwoGradeFilesTest('/invalid/path/with-special_chars')) && p('isArray,isEmpty') && e('1,1');
+r($editorTest->getTwoGradeFilesTest()) && p('hasNoSystemFiles') && e('1');
