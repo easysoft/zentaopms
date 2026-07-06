@@ -103,7 +103,7 @@ class entryModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $object = $tester->dbh->query("SELECT * FROM " . TABLE_LOG  ." WHERE objectID = $entryID AND objectType = 'entry'")->fetch();
+        $object = $tester->dbh->query("SELECT * FROM " . TABLE_LOG . " WHERE objectID = $entryID AND objectType = 'entry' ORDER BY id DESC")->fetch();
         return $object;
     }
 
