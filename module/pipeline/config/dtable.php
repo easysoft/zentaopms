@@ -46,7 +46,7 @@ $config->pipeline->dtable->fieldList['server']['name']     = 'providerName';
 $config->pipeline->dtable->fieldList['server']['sortType'] = false;
 $config->pipeline->dtable->fieldList['server']['width']    = '120';
 $config->pipeline->dtable->fieldList['server']['hint']     = true;
-$config->pipeline->dtable->fieldList['server']['show']     = false;
+$config->pipeline->dtable->fieldList['server']['display']  = false;
 
 $config->pipeline->dtable->fieldList['status']['title']    = $lang->pipeline->status;
 $config->pipeline->dtable->fieldList['status']['name']     = 'status';
