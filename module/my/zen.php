@@ -79,11 +79,11 @@ class myZen extends my
             if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
             if($case->needconfirm)
             {
-                $case->status = $this->lang->story->changed;
+                $case->status = 'changed';
             }
             else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
             {
-                $case->status = $this->lang->testcase->changed;
+                $case->status = 'casechanged';
             }
             if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
         }
