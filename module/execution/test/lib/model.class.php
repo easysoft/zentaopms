@@ -2532,6 +2532,9 @@ class executionModelTest extends baseTest
      */
     public function updateUserViewTest(int $executionID, string $objectType = 'sprint', array $users = array()): string|array
     {
+        global $tester;
+        $account = count($users) > 0 ? $users[0] : $tester->app->user->account;
+
         $this->instance->updateUserView($executionID, $objectType, $users);
 
         if(dao::isError())
@@ -2541,10 +2544,9 @@ class executionModelTest extends baseTest
         }
         else
         {
-            if(count($users) > 0) su($users[0]);
-
-            global $tester;
-            return ",{$tester->app->user->view->sprints},";
+            $field = $objectType == 'sprint' ? 'sprints' : $objectType . 's';
+            $view  = $tester->dao->select($field)->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch($field);
+            return ",{$view},";
         }
     }
 
