@@ -36,12 +36,11 @@ class aiAgentMenu extends wg
 
         $app->control->loadModel('ai');
 
-        global $config;
         $formModule = $this->prop('module');
         $formMethod = $this->prop('method');
         if($isFormPage && $formModule && $formMethod) $app->loadConfig('ai');
 
-        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass, $app, $config, $formModule, $formMethod)
+        $menuItems = array_map(function($prompt) use ($isFormPage, $objectID, $itemClass, $app, $formModule, $formMethod)
         {
             $itemProps = array
             (
