@@ -762,6 +762,9 @@ class dbh
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
 
+                /* DM cannot allow TEXT type. */
+                $sql = str_replace('JSON', 'TEXT', $sql);
+
                 /* Remove comment. */
                 $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
                 $sql     = preg_replace($pattern, '', $sql);
