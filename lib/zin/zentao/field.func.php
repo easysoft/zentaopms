@@ -104,6 +104,7 @@ function loadFields(string $moduleName, string $methodName, string $viewDir = 'u
     $modulePath  = $app->getModulePath($appName, $moduleName);
     $viewPath    = $modulePath . $viewDir;
 
+    $app->control->loadModel($moduleName);
     $commonFieldFile = $viewPath . DS . 'common.field.php';
     $methodFieldFile = $viewPath . DS . $methodName . '.field.php';
     helper::import($commonFieldFile);
