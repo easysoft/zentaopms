@@ -101,13 +101,57 @@ window.executeZentaoPrompt = async function(info, testingMode)
             required: ['data', 'summary'],
         },
     };
+    const agentSchemaProps = info.schema && info.schema.properties ? info.schema.properties : null;
+    const agentLabelMap = {};
+    if(agentSchemaProps)
+    {
+        Object.keys(agentSchemaProps).forEach(function(key)
+        {
+            const desc = agentSchemaProps[key].title || agentSchemaProps[key].description;
+            if(desc && desc !== key) agentLabelMap[desc] = key;
+        });
+    }
     const tools = noTargetForm ? [] : [{
         ...agentTool,
         fn: (response) => {
-            const result     = response.data;
+            const rawData = response.data;
+            const result = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
+                ? Object.fromEntries(
+                    Object.entries(rawData)
+                        .map(function(entry)
+                        {
+                            const key       = entry[0], val = entry[1];
+                            const mappedKey = agentLabelMap[key] || key;
+                            if(mappedKey !== key && rawData[mappedKey] !== undefined) return null;
+                            return [mappedKey, val];
+                        })
+                        .filter(Boolean)
+                )
+                : rawData;
             const targetForm = info.targetForm;
             if(!targetForm) return {result: result};
 
+            let normalizedProps = info.dataPropNames;
+            const objType = info.objectType;
+            if(result && typeof result === 'object' && !Array.isArray(result) && normalizedProps)
+            {
+                const engNames = {};
+                Object.keys(result).forEach(function(k) { engNames[k] = k; });
+                const typeProps = normalizedProps[objType] || normalizedProps;
+                if(typeof typeProps === 'object')
+                {
+                    Object.keys(typeProps).forEach(function(k)
+                    {
+                        if(engNames[k] === undefined) engNames[k] = typeProps[k];
+                    });
+                }
+                if(normalizedProps[objType])
+                {
+                    normalizedProps = {};
+                    normalizedProps[objType] = engNames;
+                }
+                else normalizedProps = engNames;
+            }
             const taskResult =
             {
                 agentID       : info.promptID,
@@ -121,7 +165,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
                 objectID      : info.objectID,
                 objectType    : info.objectType,
                 objectData    : info.objectData || info.object,
-                objectProps   : info.dataPropNames,
+                objectProps   : normalizedProps,
                 actions: info.promptAudit ? [{
                     text         : langData.goTesting,
                     url          : $.createLink('ai', 'promptAudit', `promptId=${info.promptID}&objectId=${info.objectID || 0}`),
@@ -175,7 +219,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
  * @param {Array}  promptFields - 自定义输入字段列表
  * @param {Array}  allowedFields - 可操作字段白名单
  */
-window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields)
+window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields, agentRole, agentPurpose)
 {
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
@@ -195,9 +239,13 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
 
     const properties = {};
     const required = [];
+    const labelToName = {};
+    const seenNames = new Set();
     fields.forEach(field =>
     {
         const name = field.name;
+        if(seenNames.has(name)) return;
+        seenNames.add(name);
         const prop = {
             type: 'string',
             description: field.label || name,
@@ -212,6 +260,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
         }
         properties[name] = prop;
         if(field.required) required.push(name);
+        if(field.label && field.label !== name) labelToName[field.label] = name;
     });
 
     const schema = {
@@ -294,14 +343,32 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
         '',
         langData.formZentaoAPITip,
     ].filter(Boolean).join('\n');
-    const prompt = zui.formatString(langData.processDataPrefix, {data: dataPrompt});
+    const rolePrompt = agentRole || langData.formFillTitle;
+    const prompt = [rolePrompt, zui.formatString(langData.processDataPrefix, {data: dataPrompt})].filter(Boolean).join('\n\n');
 
     const tools = [
         {
             ...agentToolDef,
             fn: (response) =>
             {
-                const result = response.data;
+                const rawData = response.data;
+                const result = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
+                    ? Object.fromEntries(
+                        Object.entries(rawData)
+                            .map(([key, val]) =>
+                            {
+                                const mappedKey = labelToName[key] || key;
+                                if(mappedKey !== key && rawData[mappedKey] !== undefined) return null;
+                                return [mappedKey, val];
+                            })
+                            .filter(Boolean)
+                    )
+                    : rawData;
+                const formPropNames = {};
+                if(result && typeof result === 'object' && !Array.isArray(result))
+                {
+                    Object.keys(result).forEach(function(k) { formPropNames[k] = k; });
+                }
                 const taskResult = {
                     agentID: 'zentao-api',
                     id: `zentao-agent-result-${Date.now()}`,
@@ -314,7 +381,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                     objectID: 0,
                     objectType: 'form',
                     objectData: result,
-                    objectProps: {},
+                    objectProps: {form: formPropNames},
                     actions: [],
                 };
                 const message = {
@@ -345,7 +412,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
             content: [
                 {
                     role: 'user',
-                    content: langData.formFillUserMessage,
+                    content: agentPurpose || langData.formFillUserMessage,
                     custom_data: {
                         invisible: true,
                     },

@@ -3570,6 +3570,37 @@ class aiModel extends model
      *
 
     /**
+     * 获取表单页面的 AI 可填充字段
+     * Get allowed fields for a form page.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @access public
+     * @return array
+     */
+    public function getFormAllowedFields(string $module, string $method): array
+    {
+        $workflowaction = $this->loadModel('workflowaction');
+        if($workflowaction !== false)
+        {
+            $fields = $workflowaction->getPageFields($module, $method);
+            if(!empty($fields))
+            {
+                $allowedFields = array();
+                foreach($fields as $fieldName => $field)
+                {
+                    if(!empty($field->readonly)) continue;
+                    if(strpos($fieldName, 'sub_') === 0) continue;
+                    $allowedFields[] = $fieldName;
+                }
+                return $allowedFields;
+            }
+        }
+
+        return array();
+    }
+
+    /**
      * 过滤字段白名单
      * Filter fields to only allowed ones.
      *

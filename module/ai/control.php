@@ -955,10 +955,8 @@ class ai extends control
         $targetFormParts = explode('.', $targetForm, 2);
         if(count($targetFormParts) !== 2) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
 
-        $contextFields  = $this->config->ai->formContextFields[$targetFormParts[0]][$targetFormParts[1]] ?? $this->config->ai->formContextFields['_default'] ?? array();
-        $contextObjects = $this->ai->loadFormContextObjects($formSchema, $contextFields, $this->config->ai->contextRelations ?? array());
-        $contextDesc    = $this->ai->buildContextDescription($contextObjects);
-        $allowedFields  = $this->config->ai->universalFormFields[$targetFormParts[0]][$targetFormParts[1]] ?? array();
+        $contextDesc    = '';
+        $allowedFields  = $this->ai->getFormAllowedFields($targetFormParts[0], $targetFormParts[1]);
         $filteredFields = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
 
         $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;

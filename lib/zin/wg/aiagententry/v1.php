@@ -113,7 +113,9 @@ class aiAgentEntry extends wg
 
                 $promptFields  = $app->control->ai->getPromptFields((int)$singlePrompt->id);
                 $fieldsData    = $promptFields ? helper::jsonEncode(array_values($promptFields)) : '[]';
-                $allowedFields = $config->ai->universalFormFields[$module][$method] ?? array();
+                $allowedFields = $app->control->ai->getFormAllowedFields($module, $method);
+                $agentRole     = helper::jsonEncode(($singlePrompt->role ?? '') . (!empty($singlePrompt->characterization) ? "\n{$singlePrompt->characterization}" : ''));
+                $agentPurpose  = helper::jsonEncode($singlePrompt->purpose ?? '');
 
                 $children[] = btn
                 (
@@ -123,6 +125,8 @@ class aiAgentEntry extends wg
                     set('data-call', $clickHandler),
                     set('data-prompt-fields', $fieldsData),
                     set('data-allowed-fields', helper::jsonEncode($allowedFields)),
+                    set('data-agent-role', $agentRole),
+                    set('data-agent-purpose', $agentPurpose),
                     $singlePrompt->name,
                 );
             }
