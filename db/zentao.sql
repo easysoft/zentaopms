@@ -14012,9 +14012,9 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `begin` date NULL,
   `deadline` date NULL,
   `lastReviewedBy` varchar(255) NOT NULL DEFAULT '',
-  `lastReviewedDate` date NULL,
+  `lastReviewedDate` datetime NULL,
   `lastEditedBy` varchar(255) NOT NULL DEFAULT '',
-  `lastEditedDate` date NULL,
+  `lastEditedDate` datetime NULL,
   `result` char(30) NOT NULL DEFAULT '',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)

@@ -45,3 +45,6 @@ UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "project=''", "project = '0'") 
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "execution=''", "execution = '0'") WHERE `sql` LIKE "%execution=''%";
 
 UPDATE `zt_workflowaction` SET `type` = 'batch', `batchMode` = 'different' WHERE `action` = 'showimport';
+
+ALTER TABLE `zt_review` CHANGE `lastReviewedDate` `lastReviewedDate` datetime NULL AFTER `lastReviewedBy`;
+ALTER TABLE `zt_review` CHANGE `lastEditedDate` `lastEditedDate` datetime NULL AFTER `lastEditedBy`;
