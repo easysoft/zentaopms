@@ -492,6 +492,8 @@ $lang->ai->targetForm['cm']['common']             = 'Configuration Management';
 
 $lang->ai->targetForm['program']['create'] = 'Create Program';
 
+$lang->ai->targetForm['product']['create']           = 'Create Product';
+$lang->ai->targetForm['product']['edit']             = 'Edit Product';
 $lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
 $lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
 

@@ -495,6 +495,8 @@ $lang->ai->targetForm['cm']['common']             = '配置管理';
 
 $lang->ai->targetForm['program']['create'] = '创建项目集';
 
+$lang->ai->targetForm['product']['create']           = '创建产品';
+$lang->ai->targetForm['product']['edit']             = '编辑产品';
 $lang->ai->targetForm['product']['tree/managechild'] = '维护模块';
 $lang->ai->targetForm['product']['doc/create']       = '创建文档';
 
