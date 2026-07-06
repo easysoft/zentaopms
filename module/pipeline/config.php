@@ -9,6 +9,9 @@ $config->pipeline->edit->requiredFields   = 'name,defaultBranch';
 $config->pipeline->import = new stdclass();
 $config->pipeline->import->requiredFields = 'providerID,name';
 
+$config->pipeline->groupPrivs = array();
+$config->pipeline->groupPrivs['import'] = 'create';
+
 $config->pipeline->editor = new stdclass();
 $config->pipeline->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
 

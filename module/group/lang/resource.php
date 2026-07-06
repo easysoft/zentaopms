@@ -1548,16 +1548,18 @@ $lang->resource->pipeline = new stdclass();
 $lang->resource->pipeline->browse    = 'browse';
 $lang->resource->pipeline->execution = 'executionAction';
 $lang->resource->pipeline->create    = 'create';
+$lang->resource->pipeline->edit      = 'edit';
 $lang->resource->pipeline->delete    = 'delete';
 $lang->resource->pipeline->exec      = 'exec';
 $lang->resource->pipeline->execView  = 'execViewAction';
 
 $lang->pipeline->methodOrder[5]  = 'browse';
 $lang->pipeline->methodOrder[10] = 'execution';
-$lang->pipeline->methodOrder[20] = 'create';
-$lang->pipeline->methodOrder[30] = 'delete';
-$lang->pipeline->methodOrder[35] = 'exec';
-$lang->pipeline->methodOrder[40] = 'execView';
+$lang->pipeline->methodOrder[15] = 'create';
+$lang->pipeline->methodOrder[20] = 'edit';
+$lang->pipeline->methodOrder[25] = 'delete';
+$lang->pipeline->methodOrder[30] = 'exec';
+$lang->pipeline->methodOrder[35] = 'execView';
 
 $lang->resource->system = new stdclass();
 $lang->resource->system->dashboard    = 'dashboard';
