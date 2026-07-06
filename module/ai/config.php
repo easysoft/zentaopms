@@ -182,6 +182,7 @@ $config->ai->targetFormVars['story']['subdivide']           = (object)array('for
 $config->ai->targetFormVars['story']['change']              = (object)array('format' => 'storyID=%d', 'args' => array('story' => 1), 'app' => 'product');
 $config->ai->targetFormVars['story']['totask']              = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
 $config->ai->targetFormVars['story']['testcasecreate']      = (object)array('format' => 'productID=%d&branch=&moduleID=%d&from=&param=&storyID=%d', 'args' => array('product' => 1, 'module' => 0, 'story' => 0), 'app' => 'product');
+$config->ai->targetFormVars['product']['edit']              = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
 $config->ai->targetFormVars['productplan']['create']        = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product' => 1, 'branch' => 0, 'productplan' => 0), 'app' => 'product');
 $config->ai->targetFormVars['productplan']['edit']          = (object)array('format' => 'planID=%d', 'args' => array('productplan' => 1), 'app' => 'product');
 $config->ai->targetFormVars['task']['create']               = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
@@ -216,6 +217,8 @@ $config->ai->moduleNameMap = array(
 
 /* AI 可操作字段白名单 */
 $config->ai->universalFormFields = array();
+$config->ai->universalFormFields['product']['create']   = array('name', 'code', 'type', 'PO', 'reviewer', 'QD', 'RD', 'desc', 'acl');
+$config->ai->universalFormFields['product']['edit']     = array('name', 'code', 'type', 'status', 'PO', 'reviewer', 'QD', 'RD', 'desc', 'acl');
 $config->ai->universalFormFields['task']['create']      = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
 $config->ai->universalFormFields['task']['batchcreate'] = array('name', 'type', 'pri', 'estimate', 'estStarted', 'deadline', 'desc', 'assignedTo', 'module');
 $config->ai->universalFormFields['project']['create']   = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
@@ -260,11 +263,13 @@ $config->ai->injectAuditButton->locations['doc']['edit'] = array(
 $config->ai->injectAuditButton->locations['productplan']['create'] = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['productplan']['edit']   = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['programplan']['create'] = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['product']['edit']       = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['bug']['edit']           = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['story']['change']       = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testcase']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testreport']['create']  = $config->ai->injectAuditButton->locations['task']['edit'];
 
+$config->ai->injectAuditButton->locations['product']['create']    = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['create']      = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['task']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['testcase']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];
