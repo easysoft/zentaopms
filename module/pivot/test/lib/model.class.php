@@ -29,6 +29,33 @@ class pivotModelTest extends baseTest
     }
 
     /**
+     * Test checkAccess method.
+     *
+     * @param  int    $pivotID
+     * @param  string $method
+     * @access public
+     * @return mixed
+     */
+    public function checkAccessTest(int $pivotID, string $method = 'preview'): mixed
+    {
+        try
+        {
+            $result = $this->instance->checkAccess($pivotID, $method);
+            if(dao::isError()) return dao::getError();
+
+            return $result ?? 'access_granted';
+        }
+        catch(EndResponseException $e)
+        {
+            return 'access_denied';
+        }
+        catch(Throwable $e)
+        {
+            return 'access_denied';
+        }
+    }
+
+    /**
      * Test initSql method.
      *
      * @param  string $sql
@@ -192,6 +219,52 @@ class pivotModelTest extends baseTest
     }
 
     /**
+     * Test processPivot method.
+     *
+     * @param  object|array $pivots
+     * @param  bool         $isObject
+     * @access public
+     * @return object|array
+     */
+    public function processPivotTest(object|array $pivots, bool $isObject = true): object|array
+    {
+        $result = $this->instance->processPivot($pivots, $isObject);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test addDrills method.
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function addDrillsTest(object $pivot): object
+    {
+        $this->instance->addDrills($pivot);
+        if(dao::isError()) return dao::getError();
+
+        return $pivot;
+    }
+
+    /**
+     * Test processFieldSettings method.
+     *
+     * @param  object $pivot
+     * @access public
+     * @return object
+     */
+    public function processFieldSettingsTest(object $pivot): object
+    {
+        $this->instance->processFieldSettings($pivot);
+        if(dao::isError()) return dao::getError();
+
+        return $pivot;
+    }
+
+    /**
      * Test appendWhereFilterToSql method.
      *
      * @param  string      $sql
@@ -220,6 +293,21 @@ class pivotModelTest extends baseTest
     public function filterFieldsWithSettingsTest($fields, $groups, $columns)
     {
         $result = $this->instance->filterFieldsWithSettings($fields, $groups, $columns);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test filterInvisiblePivot method.
+     *
+     * @param  array $pivots
+     * @access public
+     * @return array
+     */
+    public function filterInvisiblePivotTest(array $pivots): array
+    {
+        $result = $this->instance->filterInvisiblePivot($pivots);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -817,6 +905,23 @@ class pivotModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return count($result);
+    }
+
+    /**
+     * Test mapRecordValueWithFieldOptions method.
+     *
+     * @param  array  $records
+     * @param  array  $fields
+     * @param  string $driver
+     * @access public
+     * @return array
+     */
+    public function mapRecordValueWithFieldOptionsTest(array $records, array $fields, string $driver = 'mysql'): array
+    {
+        $result = $this->instance->mapRecordValueWithFieldOptions($records, $fields, $driver);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -1612,6 +1717,53 @@ class pivotModelTest extends baseTest
         $method = new ReflectionMethod($this->objectTao, 'getGroupsByDimensionAndPath');
         $method->setAccessible(true);
         $result = $method->invoke($this->objectTao, $dimensionID, $path);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test addDrillFields method.
+     *
+     * @param  array $cell
+     * @param  array $drillFields
+     * @access public
+     * @return array
+     */
+    public function addDrillFieldsTest(array $cell, array $drillFields): array
+    {
+        $result = $this->instance->addDrillFields($cell, $drillFields);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test processKanbanDatas method.
+     *
+     * @param  string $object
+     * @param  array  $datas
+     * @access public
+     * @return array
+     */
+    public function processKanbanDatasTest(string $object, array $datas): array
+    {
+        $result = $this->instance->processKanbanDatas($object, $datas);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test filterSpecialChars method.
+     *
+     * @param  array $records
+     * @access public
+     * @return array
+     */
+    public function filterSpecialCharsTest(array $records): array
+    {
+        $result = $this->instance->filterSpecialChars($records);
         if(dao::isError()) return dao::getError();
 
         return $result;
