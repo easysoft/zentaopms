@@ -2812,6 +2812,57 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getFormAllowedFields method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $pageFields
+     * @param  bool   $loadSuccess
+     * @access public
+     * @return mixed
+     */
+    public function getFormAllowedFieldsTest(string $module, string $method, array $pageFields = array(), bool $loadSuccess = true)
+    {
+        $model = new class($pageFields, $loadSuccess) extends aiModel
+        {
+            protected array $mockPageFields = array();
+            protected bool $mockLoadSuccess = true;
+
+            public function __construct(array $pageFields, bool $loadSuccess)
+            {
+                $this->mockPageFields = $pageFields;
+                $this->mockLoadSuccess = $loadSuccess;
+                parent::__construct();
+            }
+
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName !== 'workflowaction') return parent::loadModel($moduleName, $appName);
+                if(!$this->mockLoadSuccess) return false;
+
+                return new class($this->mockPageFields)
+                {
+                    protected array $pageFields = array();
+
+                    public function __construct(array $pageFields)
+                    {
+                        $this->pageFields = $pageFields;
+                    }
+
+                    public function getPageFields(string $module, string $method): array
+                    {
+                        return $this->pageFields;
+                    }
+                };
+            }
+        };
+
+        $result = $model->getFormAllowedFields($module, $method);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test AIResponseException::__construct method.
      *
      * @param  string $type
