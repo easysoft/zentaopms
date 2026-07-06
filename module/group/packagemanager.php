@@ -2923,7 +2923,7 @@ $config->group->package->browsePipeline = new stdclass();
 $config->group->package->browsePipeline->order  = 5;
 $config->group->package->browsePipeline->subset = 'pipeline';
 $config->group->package->browsePipeline->privs  = array();
-$config->group->package->browsePipeline->privs['pipeline-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain', 'repo-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
+$config->group->package->browsePipeline->privs['pipeline-browse']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('repo-maintain', 'repo-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit', 'pipeline-arrange'));
 $config->group->package->browsePipeline->privs['pipeline-execution'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-exec', 'pipeline-execView'));
 $config->group->package->browsePipeline->privs['pipeline-execView']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-execution'), 'recommend' => array('pipeline-execution', 'pipeline-exec'));
 
@@ -2937,9 +2937,10 @@ $config->group->package->managePipeline = new stdclass();
 $config->group->package->managePipeline->order  = 15;
 $config->group->package->managePipeline->subset = 'pipeline';
 $config->group->package->managePipeline->privs  = array();
-$config->group->package->managePipeline->privs['pipeline-create']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-arrange'));
-$config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create'));
-$config->group->package->managePipeline->privs['pipeline-delete']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
+$config->group->package->managePipeline->privs['pipeline-create']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 5,  'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-edit', 'pipeline-arrange'));
+$config->group->package->managePipeline->privs['pipeline-edit']    = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 10, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-arrange'));
+$config->group->package->managePipeline->privs['pipeline-arrange'] = array('edition' => 'biz,max,ipd',      'vision' => 'rnd', 'order' => 15, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit'));
+$config->group->package->managePipeline->privs['pipeline-delete']  = array('edition' => 'open,biz,max,ipd', 'vision' => 'rnd', 'order' => 20, 'depend' => array('pipeline-browse'), 'recommend' => array('pipeline-create', 'pipeline-edit', 'pipeline-arrange'));
 
 $config->group->package->browseRunner = new stdclass();
 $config->group->package->browseRunner->order  = 20;
