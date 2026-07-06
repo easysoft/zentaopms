@@ -3893,7 +3893,7 @@ class executionModel extends model
         }, explode(',', $orderBy));
         $orderBy = str_replace('t1.`storyTitle`', 't2.title', implode(',', $orderBy));
         $orderBy = str_replace(array('t1.pri_', 't1.`pri'), array('priOrder_', '`priOrder_'), $orderBy);
-        $orderBy = str_replace('t1.`beginDate`', 'beginDate', $orderBy);
+        $orderBy = preg_replace('/t1\.`?beginDate`?/', 'beginDate', $orderBy);
 
         if(strpos($condition, 't1.') === false)
         {
