@@ -2015,11 +2015,11 @@ class aiModelTest extends baseTest
 
         // 模拟prompt数据
         $mockPrompts = array(
-            1 => (object)array('id' => 1, 'module' => 'story', 'source' => 'story.title', 'targetForm' => 'story.create', 'model' => 1, 'deleted' => 0),
-            2 => (object)array('id' => 2, 'module' => 'task', 'source' => 'task.name', 'targetForm' => 'task.edit', 'model' => 1, 'deleted' => 0),
-            3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'model' => 999, 'deleted' => 0), // 无效模型
-            4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'model' => 1, 'deleted' => 0),
-            5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'model' => 1, 'deleted' => 0), // 无效schema
+            1 => (object)array('id' => 1, 'module' => 'story', 'source' => 'story.title', 'targetForm' => 'story.create', 'actionPurpose' => 'story.create', 'model' => 1, 'deleted' => 0),
+            2 => (object)array('id' => 2, 'module' => 'task', 'source' => 'task.name', 'targetForm' => 'task.edit', 'actionPurpose' => 'task.edit', 'model' => 1, 'deleted' => 0),
+            3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'model' => 999, 'deleted' => 0),
+            4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'actionPurpose' => 'project.edit', 'model' => 1, 'deleted' => 0),
+            5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'actionPurpose' => 'invalid.form', 'model' => 1, 'deleted' => 0),
         );
 
         // 模拟object数据
@@ -2112,11 +2112,11 @@ class aiModelTest extends baseTest
 
         // 模拟prompt数据（从zendata配置推断）
         $mockPrompts = array(
-            1 => (object)array('id' => 1, 'module' => 'story', 'targetForm' => 'story.change', 'deleted' => 0),
-            2 => (object)array('id' => 2, 'module' => 'task', 'targetForm' => 'task.edit', 'deleted' => 0),
-            3 => (object)array('id' => 3, 'module' => 'bug', 'targetForm' => 'bug.edit', 'deleted' => 0),
-            4 => (object)array('id' => 4, 'module' => 'doc', 'targetForm' => 'doc.edit', 'deleted' => 0),
-            5 => (object)array('id' => 5, 'module' => 'story', 'targetForm' => '', 'deleted' => 0), // 空目标表单
+            1 => (object)array('id' => 1, 'module' => 'story', 'targetForm' => 'story.change', 'actionPurpose' => 'story.change', 'deleted' => 0),
+            2 => (object)array('id' => 2, 'module' => 'task', 'targetForm' => 'task.edit', 'actionPurpose' => 'task.edit', 'deleted' => 0),
+            3 => (object)array('id' => 3, 'module' => 'bug', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'deleted' => 0),
+            4 => (object)array('id' => 4, 'module' => 'doc', 'targetForm' => 'doc.edit', 'actionPurpose' => 'doc.edit', 'deleted' => 0),
+            5 => (object)array('id' => 5, 'module' => 'story', 'targetForm' => '', 'actionPurpose' => '', 'deleted' => 0), // 空目标表单
         );
 
         // 步骤1：处理prompt参数
@@ -2807,6 +2807,57 @@ class aiModelTest extends baseTest
     public function filterAllowedFieldsTest(array $fields, array $allowed = array())
     {
         $result = $this->instance->filterAllowedFields($fields, $allowed);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getFormAllowedFields method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  array  $pageFields
+     * @param  bool   $loadSuccess
+     * @access public
+     * @return mixed
+     */
+    public function getFormAllowedFieldsTest(string $module, string $method, array $pageFields = array(), bool $loadSuccess = true)
+    {
+        $model = new class($pageFields, $loadSuccess) extends aiModel
+        {
+            protected array $mockPageFields = array();
+            protected bool $mockLoadSuccess = true;
+
+            public function __construct(array $pageFields, bool $loadSuccess)
+            {
+                $this->mockPageFields = $pageFields;
+                $this->mockLoadSuccess = $loadSuccess;
+                parent::__construct();
+            }
+
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName !== 'workflowaction') return parent::loadModel($moduleName, $appName);
+                if(!$this->mockLoadSuccess) return false;
+
+                return new class($this->mockPageFields)
+                {
+                    protected array $pageFields = array();
+
+                    public function __construct(array $pageFields)
+                    {
+                        $this->pageFields = $pageFields;
+                    }
+
+                    public function getPageFields(string $module, string $method): array
+                    {
+                        return $this->pageFields;
+                    }
+                };
+            }
+        };
+
+        $result = $model->getFormAllowedFields($module, $method);
         if(dao::isError()) return dao::getError();
         return $result;
     }

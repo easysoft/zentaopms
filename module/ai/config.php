@@ -82,7 +82,7 @@ foreach($config->ai->ernie->contentTypeMapping as $contentType => $apis)
 $config->ai->createprompt = new stdclass();
 $config->ai->testPrompt   = new stdclass();
 $config->ai->createprompt->requiredFields = 'name';
-$config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,targetForm';
+$config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,actionPurpose';
 
 $config->ai->moduleGroup = [];
 $config->ai->moduleGroup['program']     = array('program', 'project', 'product');
@@ -203,25 +203,12 @@ $config->ai->targetFormVars['doc']['edit']           = (object)array('format' =>
 
 /* Menu printing configurations. */
 $config->ai->menuPrint = new stdclass();
-/* getFormSchema 过滤的页面特定字段（按 targetForm 配置） */
-$config->ai->perPageSkipFields = array();
-$config->ai->perPageSkipFields['task']['create']      = array('storyEstimate', 'storyDesc', 'storyPri', 'taskName', 'taskEstimate', 'region', 'lane');
-$config->ai->perPageSkipFields['task']['batchcreate'] = array('storyEstimate', 'storyDesc', 'storyPri', 'region', 'lane');
-$config->ai->perPageSkipFields['project']['create']   = array('schedule', 'dateRangePicker');
 
 /* URL 模块名到 AI 系统模块名的映射 */
 $config->ai->moduleNameMap = array(
     'testcase'       => 'case',
     'projectrelease' => 'release',
 );
-
-/* AI 可操作字段白名单 */
-$config->ai->universalFormFields = array();
-$config->ai->universalFormFields['product']['create']   = array('name', 'code', 'type', 'PO', 'reviewer', 'QD', 'RD', 'desc', 'acl');
-$config->ai->universalFormFields['product']['edit']     = array('name', 'code', 'type', 'status', 'PO', 'reviewer', 'QD', 'RD', 'desc', 'acl');
-$config->ai->universalFormFields['task']['create']      = array('name', 'desc', 'estStarted', 'deadline', 'pri', 'estimate');
-$config->ai->universalFormFields['task']['batchcreate'] = array('name', 'type', 'pri', 'estimate', 'estStarted', 'deadline', 'desc', 'assignedTo', 'module');
-$config->ai->universalFormFields['project']['create']   = array('name', 'code', 'begin', 'end', 'days', 'desc', 'PM', 'budget', 'acl', 'products');
 
 $config->ai->injectAuditButton = new stdclass();
 $config->ai->injectAuditButton->locations = array();

@@ -9,8 +9,6 @@ class aiFormInject extends wg
     protected static array $defineProps = array(
         'module:string',
         'method:string',
-        'enableSkipFields?:bool=true',
-        'enablePending?:bool=true',
         'enableInject?:bool=true',
         'enableAudit?:bool=true',
     );
@@ -46,30 +44,10 @@ class aiFormInject extends wg
         if(isset(static::$injectedPages[$page])) return null;
         static::$injectedPages[$page] = true;
 
-        if($this->prop('enableSkipFields')) $this->injectSkipFields($module, $method);
-        if($this->prop('enablePending'))    $this->injectPendingFormData($module, $method);
         if($this->prop('enableInject'))     $this->injectInputData($module, $method);
         if($this->prop('enableAudit'))      $this->injectAuditControls($module, $method);
 
         return null;
-    }
-
-    protected function injectSkipFields(string $module, string $method): void
-    {
-        global $config;
-        $skipFields = $config->ai->perPageSkipFields[$module][$method] ?? null;
-        if($skipFields) jsVar('window.zentaoSkipFields', $skipFields);
-    }
-
-    protected function injectPendingFormData(string $module, string $method): void
-    {
-        $pendingData = $_SESSION['aiPendingFormData'] ?? null;
-        if(empty($pendingData)) return;
-
-        unset($_SESSION['aiPendingFormData']);
-
-        jsVar('window.zentaoAIFormInjectPendingData', $pendingData);
-        pageJS('window.zentaoAIFormInject && window.zentaoAIFormInject.applyPendingFormData();');
     }
 
     protected function injectInputData(string $module, string $method): void
