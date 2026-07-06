@@ -22,6 +22,16 @@ cid=16003
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('lang')->gen(0);
+zenData('config')->gen(0);
+
+global $app, $lang, $config;
+$lang->productCommon = $config->productCommonList[$app->clientLang][PRODUCT_KEY];
+$lang->dev           = new stdClass();
+$lang->product       = new stdClass();
+baseRouter::$loadedLangs = array();
+$app->loadLang('dev');
+
 su('admin');
 
 $dev = new devModelTest();
