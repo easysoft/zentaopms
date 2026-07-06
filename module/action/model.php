@@ -1900,6 +1900,15 @@ class actionModel extends model
             if($systemActionID) $this->undelete($systemActionID);
         }
 
+        if($action->objectType == 'repo')
+        {
+            if(!empty($object) && $object->mirror)
+            {
+                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('provider')->andWhere('objectID')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                if($providerID) $this->undelete($providerID);
+            }
+        }
+
         /* 在action表中更新action记录。 */
         /* Update action record in action table. */
         $this->dao->update(TABLE_ACTION)->set('extra')->eq(actionModel::BE_UNDELETED)->where('id')->eq($actionID)->exec();
