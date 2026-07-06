@@ -30,7 +30,7 @@ detailHeader
             setClass('primary'),
             set::icon('plus'),
             set::url(createLink('ai', 'promptbasicinfo')),
-            $lang->ai->prompts->create,
+            $lang->ai->prompts->create
         ) : null
     )
 );
@@ -81,18 +81,18 @@ $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 $promptContent = $prompt->purpose;
 if(!empty($prompt->elaboration)) $promptContent .= "\n\n" . $prompt->elaboration;
 
-$mountedSkill = !empty($skill) && !empty($skill->name) ? $skill->name : '';
+$skillName = !empty($skill) && !empty($skill->name) ? $skill->name : '';
 
-$mountedKnowledgeLibs = array();
+$knowledgeLibNames = array();
 if(!empty($knowledgeLibs))
 {
     foreach($knowledgeLibs as $knowledgeLib)
     {
-        if(!empty($knowledgeLib->name)) $mountedKnowledgeLibs[] = $knowledgeLib->name;
+        if(!empty($knowledgeLib->name)) $knowledgeLibNames[] = $knowledgeLib->name;
     }
 }
-$mountedKnowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $mountedKnowledgeLibs);
-$displayPosition         = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
+$knowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $knowledgeLibNames);
+$displayPosition  = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
 
 detailBody
 (
@@ -107,8 +107,8 @@ detailBody
         section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
         section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
         section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
-        section(set::title($lang->ai->prompts->mountedSkill), set::content($mountedSkill)),
-        section(set::title($lang->ai->prompts->mountedKnowledgeLib), set::content($mountedKnowledgeLibText))
+        section(set::title($lang->ai->prompts->skill), set::content($skillName)),
+        section(set::title($lang->ai->prompts->knowledgeLib), set::content($knowledgeLibText))
     ),
     history
     (
