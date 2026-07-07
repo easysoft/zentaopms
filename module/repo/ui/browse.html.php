@@ -260,7 +260,6 @@ toolbar
         (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
         (
             setClass('flex items-center'),
-            $syncFailureAlert,
             btn
             (
                 setClass('primary sync-code-btn ajax-submit'),
