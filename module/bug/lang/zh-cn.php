@@ -90,6 +90,7 @@ $lang->bug->unlinkBranch     = '解除关联代码分支';
 $lang->bug->branchName       = '分支名称';
 $lang->bug->branchFrom       = '创建自';
 $lang->bug->codeRepo         = '仓库名称';
+$lang->bug->copyFiles        = '复制对象的附件';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = '模块';

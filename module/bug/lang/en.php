@@ -91,6 +91,7 @@ $lang->bug->unlinkBranch     = 'Unlink code branch';
 $lang->bug->branchName       = 'Branch Name';
 $lang->bug->branchFrom       = 'Create from';
 $lang->bug->codeRepo         = 'Code Repository';
+$lang->bug->copyFiles        = 'Copy Object Files';
 
 $lang->bug->abbr = new stdclass();
 $lang->bug->abbr->module         = 'Module';
