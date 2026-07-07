@@ -14,7 +14,6 @@ class todoTaoTest extends baseTest
         parent::__construct($moduleName, $className);
 
         $this->objectModel = $this->instance;
-        $this->instance->todoTao = $this->instance;
     }
 
     /**
