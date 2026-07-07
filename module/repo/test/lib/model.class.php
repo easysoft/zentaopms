@@ -2213,4 +2213,90 @@ class repoModelTest extends baseTest
         if(is_object($result)) return 'object';
         return 'other';
     }
+
+    /**
+     * Test migrateRepoData method.
+     *
+     * @access public
+     * @return string
+     */
+    public function migrateRepoDataTest()
+    {
+        $result = $this->instance->migrateRepoData();
+        if(dao::isError()) return dao::getError();
+        return $result ? 'success' : 'fail';
+    }
+
+    /**
+     * Test parseRepoAcl method.
+     *
+     * @param  string $aclJson
+     * @param  string $groupAccounts
+     * @access public
+     * @return array
+     */
+    public function parseRepoAclTest(string $aclJson = '{"acl":"private","users":["dev1","dev2"]}', string $groupAccounts = '')
+    {
+        $oldRepo = new stdclass();
+        $oldRepo->acl = $aclJson;
+        $oldRepo->groupAccounts = $groupAccounts;
+
+        $result = $this->invokeArgs('parseRepoAcl', array($oldRepo));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test buildNewRepo method.
+     *
+     * @param  array  $oldRepoData
+     * @param  string $repoAcl
+     * @param  string $admins
+     * @access public
+     * @return mixed
+     */
+    public function buildNewRepoTest(array $oldRepoData = array(), string $repoAcl = 'open', string $admins = 'system')
+    {
+        $oldRepo = new stdclass();
+        foreach($oldRepoData as $key => $value) $oldRepo->$key = $value;
+
+        $result = $this->invokeArgs('buildNewRepo', array($oldRepo, $repoAcl, $admins));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test extractPathSlug method.
+     *
+     * @param  string $path
+     * @access public
+     * @return mixed
+     */
+    public function extractPathSlugTest(string $path)
+    {
+        $result = $this->invokeArgs('extractPathSlug', array($path));
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test insertMembers method.
+     *
+     * @param  array $members
+     * @access public
+     * @return string
+     */
+    public function insertMembersTest(array $members = array('dev1', 'dev2'))
+    {
+        $repoID = $this->instance->dao->select('id')->from(TABLE_REPO)->where('deleted')->eq(0)->fetch('id');
+        if(!$repoID) return 'no_repo';
+
+        $result = $this->invokeArgs('insertMembers', array($repoID, $members));
+        if(dao::isError()) return dao::getError();
+
+        return $result ? 'success' : 'fail';
+    }
 }
