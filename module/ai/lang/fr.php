@@ -532,6 +532,8 @@ $lang->ai->targetForm['execution']['edit']   = 'Edit Execution';
 $lang->ai->targetForm['task']['create']      = 'Create Task';
 $lang->ai->targetForm['task']['edit']        = 'Edit Task';
 $lang->ai->targetForm['task']['batchcreate'] = 'Batch Create Task';
+$lang->ai->targetForm['task']['batchedit']   = 'Batch Edit Task';
+$lang->ai->targetForm['task']['subdivide']   = 'Subdivide Task';
 
 $lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
 $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';

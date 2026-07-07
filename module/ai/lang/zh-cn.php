@@ -534,7 +534,9 @@ $lang->ai->targetForm['execution']['edit']   = '编辑执行';
 
 $lang->ai->targetForm['task']['create']      = '创建任务';
 $lang->ai->targetForm['task']['edit']        = '编辑任务';
-$lang->ai->targetForm['task']['batchcreate'] = '批量创建子任务';
+$lang->ai->targetForm['task']['batchcreate'] = '批量创建';
+$lang->ai->targetForm['task']['batchedit']   = '批量编辑';
+$lang->ai->targetForm['task']['subdivide']   = '细分任务';
 
 $lang->ai->targetForm['testcase']['edit']         = '编辑用例';
 $lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';
