@@ -297,7 +297,14 @@ function mirrorBusy($btn, on)
     $btn.find('i.icon').toggleClass('spin', !!on);
 }
 
-function mirrorReload(){ setTimeout(function(){ window.location.reload(); }, 600); }
+function mirrorReload()
+{
+    setTimeout(function()
+    {
+        if(typeof loadPage === 'function') return loadPage({selector: '#main>*'});
+        window.location.reload();
+    }, 600);
+}
 
 function mirrorParse(res){ return typeof res === 'string' ? JSON.parse(res) : res; }
 

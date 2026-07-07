@@ -6,6 +6,7 @@ $lang->ppm->view              = "概况";
 $lang->ppm->viewAction        = "{$lang->ppm->common}详情";
 $lang->ppm->create            = "提交合并请求";
 $lang->ppm->mirrorRepoTip     = '当前代码库为镜像代码库，将代码库重新导入为"可读、可写、可管理"的模式即可使用代码评审功能。';
+$lang->ppm->hasMirrorRepoTip = '当前已关联代码库包含镜像代码库，镜像代码库无法使用代码评审功能，不支持创建合并请求';
 $lang->ppm->apiCreate         = "接口：创建{$lang->ppm->common}";
 $lang->ppm->browse            = "浏览{$lang->ppm->common}";
 $lang->ppm->browseAction      = "{$lang->ppm->common}列表";
