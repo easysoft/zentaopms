@@ -7,6 +7,16 @@ class repoTaoTest extends baseTest
 {
     protected $moduleName = 'repo';
     protected $className  = 'tao';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance;
+    }
 
     /**
      * Check priv test.
@@ -1445,9 +1455,9 @@ class repoTaoTest extends baseTest
         return $result;
     }
 
-    public function createGitlabRepoTest(object $repo, int $namespace)
+    public function createGitlabRepoTest(object $repo, string|int $namespace)
     {
-        $result = $this->objectModel->createGitlabRepo($repo, $namespace);
+        $result = $this->objectModel->createGitlabRepo($repo, (string)$namespace);
 
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1467,7 +1477,7 @@ class repoTaoTest extends baseTest
 
     public function deleteInfoByIDTest(int $repoID)
     {
-        $result = $this->objectModel->deleteInfoByID($repoID);
+        $this->invokeArgs('deleteInfoByID', array($repoID));
 
         $repoHistoryCount = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->count();
         $repoBranchCount  = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->count();
