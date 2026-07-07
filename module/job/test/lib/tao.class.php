@@ -395,8 +395,12 @@ class jobTaoTest extends baseTest
         $repo = $tester->loadModel('repo')->fetchByID($repoID);
         if(!$repo) $repo = new stdclass();
 
-        $job = $this->objectModel->getById($jobID);
-        return $this->objectModel->getServerAndPipeline($job, $repo);
+        $job = $this->instance->getById($jobID);
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('getServerAndPipeline');
+        $method->setAccessible(true);
+
+        return $method->invoke($this->instance, $job, $repo);
     }
 
     /**
