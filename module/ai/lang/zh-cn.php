@@ -478,6 +478,7 @@ $lang->ai->targetForm['charter']['common']        = '立项';
 $lang->ai->targetForm['product']['common']        = '产品';
 $lang->ai->targetForm['story']['common']          = '需求';
 $lang->ai->targetForm['productplan']['common']    = '计划';
+$lang->ai->targetForm['release']['common']        = '发布';
 $lang->ai->targetForm['projectrelease']['common'] = '发布';
 $lang->ai->targetForm['project']['common']        = '项目';
 $lang->ai->targetForm['build']['common']          = '版本';
@@ -520,6 +521,9 @@ $lang->ai->targetForm['productplan']['edit']        = '编辑计划';
 $lang->ai->targetForm['productplan']['createchild'] = '创建子计划';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
+
+$lang->ai->targetForm['release']['create'] = '创建发布';
+$lang->ai->targetForm['release']['edit']   = '编辑发布';
 
 $lang->ai->targetForm['project']['create']             = '创建项目';
 $lang->ai->targetForm['project']['edit']               = '编辑项目';
@@ -1139,6 +1143,38 @@ $lang->ai->formSchema['testreport']['create']->properties->report->type        =
 $lang->ai->formSchema['testreport']['create']->properties->report->description = '测试报告的内容';
 $lang->ai->formSchema['testreport']['create']->required = array('begin', 'end', 'title', 'report');
 $lang->ai->formSchema['execution']['testreport'] = $lang->ai->formSchema['testreport']['create'];
+
+$lang->ai->formSchema['release']['create'] = new stdclass();
+$lang->ai->formSchema['release']['create']->title = '发布';
+$lang->ai->formSchema['release']['create']->type  = 'object';
+$lang->ai->formSchema['release']['create']->properties = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->system       = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->name         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->build        = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->status       = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->date         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->releasedDate = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->desc         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->system->type              = 'string';
+$lang->ai->formSchema['release']['create']->properties->system->description       = '发布所属的系统';
+$lang->ai->formSchema['release']['create']->properties->name->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->name->description         = '发布名称或版本号';
+$lang->ai->formSchema['release']['create']->properties->build->type               = 'string';
+$lang->ai->formSchema['release']['create']->properties->build->description        = '发布包含的构建，多个构建用逗号分隔';
+$lang->ai->formSchema['release']['create']->properties->status->type              = 'string';
+$lang->ai->formSchema['release']['create']->properties->status->description       = '发布状态';
+$lang->ai->formSchema['release']['create']->properties->status->enum              = array('wait', 'normal');
+$lang->ai->formSchema['release']['create']->properties->date->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->date->format              = 'date';
+$lang->ai->formSchema['release']['create']->properties->date->description         = '计划发布日期';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->type        = 'string';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->format      = 'date';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->description = '实际发布日期';
+$lang->ai->formSchema['release']['create']->properties->desc->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->desc->format              = 'html';
+$lang->ai->formSchema['release']['create']->properties->desc->description         = '发布描述';
+$lang->ai->formSchema['release']['create']->required = array('system', 'name', 'status', 'date', 'releasedDate');
+$lang->ai->formSchema['release']['edit'] = $lang->ai->formSchema['release']['create'];
 
 $lang->ai->formSchema['doc']['edit'] = new stdclass();
 $lang->ai->formSchema['doc']['edit']->title = '文档';

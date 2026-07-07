@@ -477,6 +477,7 @@ $lang->ai->targetForm['charter']['common']        = 'Charter';
 $lang->ai->targetForm['product']['common']        = 'Product';
 $lang->ai->targetForm['story']['common']          = 'Story';
 $lang->ai->targetForm['productplan']['common']    = 'Plan';
+$lang->ai->targetForm['release']['common']        = 'Release';
 $lang->ai->targetForm['projectrelease']['common'] = 'Release';
 $lang->ai->targetForm['project']['common']        = 'Project';
 $lang->ai->targetForm['build']['common']          = 'Build';
@@ -519,6 +520,9 @@ $lang->ai->targetForm['productplan']['edit']        = 'Edit Plan';
 $lang->ai->targetForm['productplan']['createchild'] = 'Create Sub-Plan';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
+
+$lang->ai->targetForm['release']['create'] = 'Create Release';
+$lang->ai->targetForm['release']['edit']   = 'Edit Release';
 
 $lang->ai->targetForm['project']['create']             = 'Create Project';
 $lang->ai->targetForm['project']['edit']               = 'Edit Project';
@@ -1136,6 +1140,37 @@ $lang->ai->formSchema['testreport']['create']->properties->report->type        =
 $lang->ai->formSchema['testreport']['create']->properties->report->description = 'Report content';
 $lang->ai->formSchema['testreport']['create']->required = array('begin', 'end', 'title', 'report');
 $lang->ai->formSchema['execution']['testreport'] = $lang->ai->formSchema['testreport']['create'];
+
+$lang->ai->formSchema['release']['create'] = new stdclass();
+$lang->ai->formSchema['release']['create']->title = 'Release';
+$lang->ai->formSchema['release']['create']->type  = 'object';
+$lang->ai->formSchema['release']['create']->properties = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->system       = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->name         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->build        = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->status       = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->date         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->releasedDate = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->desc         = new stdclass();
+$lang->ai->formSchema['release']['create']->properties->system->type              = 'string';
+$lang->ai->formSchema['release']['create']->properties->system->description       = 'System of release';
+$lang->ai->formSchema['release']['create']->properties->name->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->name->description         = 'Name or version number of release';
+$lang->ai->formSchema['release']['create']->properties->build->type               = 'string';
+$lang->ai->formSchema['release']['create']->properties->build->description        = 'Builds included in release, separated by commas';
+$lang->ai->formSchema['release']['create']->properties->status->type              = 'string';
+$lang->ai->formSchema['release']['create']->properties->status->description       = 'Status of release';
+$lang->ai->formSchema['release']['create']->properties->status->enum              = array('wait', 'normal');
+$lang->ai->formSchema['release']['create']->properties->date->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->date->format              = 'date';
+$lang->ai->formSchema['release']['create']->properties->date->description         = 'Planned release date';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->type        = 'string';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->format      = 'date';
+$lang->ai->formSchema['release']['create']->properties->releasedDate->description = 'Actual release date';
+$lang->ai->formSchema['release']['create']->properties->desc->type                = 'string';
+$lang->ai->formSchema['release']['create']->properties->desc->description         = 'Description of release';
+$lang->ai->formSchema['release']['create']->required = array('system', 'name', 'status', 'date', 'releasedDate');
+$lang->ai->formSchema['release']['edit'] = $lang->ai->formSchema['release']['create'];
 
 $lang->ai->formSchema['doc']['edit'] = new stdclass();
 $lang->ai->formSchema['doc']['edit']->title = 'Document';
