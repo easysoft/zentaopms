@@ -66,7 +66,7 @@ if(common::hasPriv('release', 'create') && !common::isTutorialMode())
         ->itemEnd();
 }
 
-$fields->field('title')->className($isShadowProduct ? 'full:w-1/2' : 'full:w-full');
+$fields->field('title')->width($isShadowProduct ? '1/2' : 'full');
 
 $fields->field('steps')
     ->width('full')
@@ -98,6 +98,6 @@ $fields->field('module')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->class
 
 $fields->field('openedBuild')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
 
-$fields->field('fileList')->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
+$fields->field('fileList')->label($lang->bug->copyFiles)->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
 
 if($isShadowProduct && !$isOriginalProduct) $fields->moveAfter('module', 'product');
