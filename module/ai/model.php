@@ -2504,119 +2504,117 @@ class aiModel extends model
     {
         $module = $prompt->module;
 
-        if($module == 'my')
+        if($module == 'my') return helper::createLink('my', 'effort', "type=all");
+
+        return $this->getTestingLink($prompt, $this->getTestingObjectId($prompt));
+    }
+
+    /**
+     * Get object id for prompt testing.
+     *
+     * @param  object $prompt
+     * @access protected
+     * @return int|string|false
+     */
+    protected function getTestingObjectId($prompt)
+    {
+        $module = $prompt->module;
+
+        switch($module)
         {
-            return helper::createLink('my', 'effort', "type=all");
-        }
-        elseif($module == 'product')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
-                ->where('id')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'productplan')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'release')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'project')
-        {
-            /* programplan/create only exist in the waterfall model project. */
-            if(strpos($prompt->actionPurpose, 'programplan/create'))
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
-                    ->where('id')->in($this->app->user->view->projects)
-                    ->andWhere('model')->eq('waterfall')
+            case 'product':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
+                    ->where('id')->in($this->app->user->view->products)
                     ->fetch('maxId');
-            }
-            else
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+            case 'productplan':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'release':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'project':
+                /* programplan/create only exist in the waterfall model project. */
+                if(strpos($prompt->actionPurpose, 'programplan/create'))
+                {
+                    return $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                        ->where('id')->in($this->app->user->view->projects)
+                        ->andWhere('model')->eq('waterfall')
+                        ->fetch('maxId');
+                }
+
+                return $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
-            }
-        }
-        elseif($module == 'story')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'execution')
-        {
-            $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
-            $objectId  = max($executionIds);
-        }
-        elseif($module == 'task')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
-                ->where('project')->in($this->app->user->view->projects)
-                ->fetch('maxId');
-        }
-        elseif($module == 'case')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'bug')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'ticket')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TICKET)
-                ->where('product')->in($this->app->user->view->products)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'risk')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RISK)
-                ->where('project')->in($this->app->user->view->projects)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'issue')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_ISSUE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'doc')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-            if(empty($objectId))
-            {
+            case 'story':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'execution':
+                $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
+                return max($executionIds);
+            case 'task':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->fetch('maxId');
+            case 'case':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'bug':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'ticket':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_TICKET)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'risk':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_RISK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'issue':
+                return $this->dao->select('max(id) as maxId')->from(TABLE_ISSUE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'doc':
+                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+                if(!empty($objectId)) return $objectId;
+
                 $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
                     ->where('type')->eq('mine')
                     ->andWhere('addedBy')->eq($this->app->user->account)
                     ->fetchPairs();
-                if(!empty($userDocLibs))
-                {
-                    $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                        ->where('lib')->in($userDocLibs)
-                        ->fetch('maxId');
-                }
-            }
-        }
+                if(empty($userDocLibs)) return false;
 
+                return $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                    ->where('lib')->in($userDocLibs)
+                    ->fetch('maxId');
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Build testing link by object id.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access protected
+     * @return string|false
+     */
+    protected function getTestingLink($prompt, $objectId)
+    {
         if(!empty($objectId)) return helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId");
 
         return false;
