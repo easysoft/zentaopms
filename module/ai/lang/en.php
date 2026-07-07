@@ -507,6 +507,8 @@ $lang->ai->targetForm['charter']['create'] = 'Create Charter';
 
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
+$lang->ai->targetForm['story']['edit']           = 'Edit Story';
+$lang->ai->targetForm['story']['batchedit']      = 'Batch Edit Story';
 $lang->ai->targetForm['story']['change']         = 'Change Story';
 $lang->ai->targetForm['story']['totask']         = 'Story to Task';
 $lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
@@ -883,6 +885,7 @@ $lang->ai->formSchema['story']['create']->properties->spec->description   = 'Des
 $lang->ai->formSchema['story']['create']->properties->verify->type        = 'string';
 $lang->ai->formSchema['story']['create']->properties->verify->description = 'Acceptance criteria of story';
 $lang->ai->formSchema['story']['create']->required = array('title', 'spec', 'verify');
+$lang->ai->formSchema['story']['edit'] = $lang->ai->formSchema['story']['create'];
 $lang->ai->formSchema['story']['change'] = $lang->ai->formSchema['story']['create'];
 
 $lang->ai->formSchema['story']['batchcreate'] = new stdclass();
@@ -893,6 +896,14 @@ $lang->ai->formSchema['story']['batchcreate']->properties->stories  = new stdcla
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->type        = 'array';
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->description = 'Stories';
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->items       = $lang->ai->formSchema['story']['create'];
+$lang->ai->formSchema['story']['batchedit'] = new stdclass();
+$lang->ai->formSchema['story']['batchedit']->title = 'Stories';
+$lang->ai->formSchema['story']['batchedit']->type  = 'object';
+$lang->ai->formSchema['story']['batchedit']->properties = new stdclass();
+$lang->ai->formSchema['story']['batchedit']->properties->stories  = new stdclass();
+$lang->ai->formSchema['story']['batchedit']->properties->stories->type        = 'array';
+$lang->ai->formSchema['story']['batchedit']->properties->stories->description = 'Stories';
+$lang->ai->formSchema['story']['batchedit']->properties->stories->items       = $lang->ai->formSchema['story']['edit'];
 
 $lang->ai->formSchema['product']['create'] = new stdclass();
 $lang->ai->formSchema['product']['create']->title = 'Product';
