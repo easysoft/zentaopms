@@ -543,7 +543,10 @@ $lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
 $lang->ai->targetForm['testcase']['batchedit']    = 'Batch Edit Test Case';
 $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
 
+$lang->ai->targetForm['bug']['create']          = 'Create Bug';
+$lang->ai->targetForm['bug']['batchcreate']     = 'Batch Create Bug';
 $lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
+$lang->ai->targetForm['bug']['batchedit']       = 'Batch Edit Bug';
 $lang->ai->targetForm['bug']['story/create']    = 'Bug to Story';
 $lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 

@@ -544,7 +544,10 @@ $lang->ai->targetForm['testcase']['edit']         = '编辑用例';
 $lang->ai->targetForm['testcase']['batchedit']    = '批量编辑用例';
 $lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';
 
+$lang->ai->targetForm['bug']['create']          = '创建 Bug';
+$lang->ai->targetForm['bug']['batchcreate']     = '批量创建 Bug';
 $lang->ai->targetForm['bug']['edit']            = '编辑 Bug';
+$lang->ai->targetForm['bug']['batchedit']       = '批量编辑 Bug';
 $lang->ai->targetForm['bug']['story/create']    = 'Bug 转需求';
 $lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 
