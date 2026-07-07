@@ -28,30 +28,6 @@ class gitlabModel extends model
     }
 
     /**
-     * 获取gitlab api 基础url 根据gitlab id。
-     * Get gitlab api base url by gitlab id.
-     *
-     * @param  int    $gitlabID
-     * @param  bool   $sudo
-     * @access public
-     * @return string
-     */
-    public function getApiRoot(int $gitlabID, bool $sudo = true): string
-    {
-        $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab || $gitlab->type != 'gitlab') return '';
-
-        $sudoParam = '';
-        if($sudo == true && !$this->app->user->admin)
-        {
-            $openID = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
-            if($openID) $sudoParam = "&sudo={$openID}";
-        }
-
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
-    }
-
-    /**
      * 发送一个get api请求。
      * Send an api get request.
      *
@@ -62,7 +38,6 @@ class gitlabModel extends model
      */
     public function apiGet(int|string $host, string $api): object|array|null
     {
-        if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return null;
 
         $url = sprintf($host, $api);

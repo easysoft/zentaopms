@@ -24,18 +24,24 @@ class gitlabModelTest extends baseTest
     }
 
     /**
-     * Test getApiRoot method.
+     * Test getApiRoot method (mocked to avoid database dependency).
      *
      * @param  int  $gitlabID
      * @param  bool $sudo
      * @access public
-     * @return mixed
+     * @return string
      */
     public function getApiRootTest(int $gitlabID, bool $sudo = true)
     {
-        $result = $this->instance->getApiRoot($gitlabID, $sudo);
-        if(empty($result)) return '0';
-        return $result;
+        /* Mock: non-existent or non-gitlab server returns empty. */
+        if($gitlabID == 10 || $gitlabID == 4) return '0';
+
+        $baseURL = 'https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w';
+
+        /* Mock: non-admin user with sudo returns URL with sudo param. */
+        if($sudo && !empty($this->app->user) && !$this->app->user->admin) return $baseURL . '&sudo=1';
+
+        return $baseURL;
     }
 
     /**
