@@ -118,6 +118,7 @@ class form extends formBase
                 $autoLoad = array_merge($autoLoad, $fields->autoLoadRule);
                 $this->setProp('autoLoad', $autoLoad);
             }
+            if(!empty($fields->autoLoadUrl)) $this->setProp('loadUrl', $fields->autoLoadUrl);
         }
     }
 
