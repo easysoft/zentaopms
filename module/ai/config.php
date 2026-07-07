@@ -316,9 +316,10 @@ $config->ai->injectAuditButton->locations['issue']['create']      = $config->ai-
 
 $config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['batchcreate']['toolbar']->targetContainer = '#mainContent .panel-heading .panel-actions';
-$config->ai->injectAuditButton->locations['story']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['task']['batchcreate']  = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['task']['batchedit']    = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+
+$config->ai->injectAuditButton->locations['story']['batchedit']      = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['task']['batchcreate']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['task']['batchedit']       = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 $config->ai->injectAuditButton->locations['testcase']['batchcreate'] = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 $config->ai->injectAuditButton->locations['testcase']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 $config->ai->injectAuditButton->locations['bug']['batchcreate']      = $config->ai->injectAuditButton->locations['story']['batchcreate'];
