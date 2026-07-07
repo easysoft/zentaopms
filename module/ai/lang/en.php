@@ -514,8 +514,9 @@ $lang->ai->targetForm['story']['totask']         = 'Story to Task';
 $lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
 
-$lang->ai->targetForm['productplan']['edit']   = 'Edit Plan';
-$lang->ai->targetForm['productplan']['create'] = 'Create Sub-Plan';
+$lang->ai->targetForm['productplan']['create']      = 'Create Plan';
+$lang->ai->targetForm['productplan']['edit']        = 'Edit Plan';
+$lang->ai->targetForm['productplan']['createchild'] = 'Create Sub-Plan';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
 

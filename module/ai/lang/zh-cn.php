@@ -515,8 +515,9 @@ $lang->ai->targetForm['story']['totask']         = '需求建任务';
 $lang->ai->targetForm['story']['testcasecreate'] = '需求建用例';
 $lang->ai->targetForm['story']['subdivide']      = '需求细分';
 
-$lang->ai->targetForm['productplan']['edit']   = '编辑计划';
-$lang->ai->targetForm['productplan']['create'] = '创建子计划';
+$lang->ai->targetForm['productplan']['create']      = '创建计划';
+$lang->ai->targetForm['productplan']['edit']        = '编辑计划';
+$lang->ai->targetForm['productplan']['createchild'] = '创建子计划';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
 

@@ -127,6 +127,7 @@ $config->ai->targetForm['product']['edit']               = (object)array('m' => 
 $config->ai->targetForm['product']['tree/managechild']   = (object)array('m' => 'tree', 'f' => 'browse', 'for' => 'product');
 $config->ai->targetForm['productplan']['edit']           = (object)array('m' => 'productplan', 'f' => 'edit', 'for' => 'productplan');
 $config->ai->targetForm['productplan']['create']         = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
+$config->ai->targetForm['productplan']['createchild']    = (object)array('m' => 'productplan', 'f' => 'create', 'for' => 'productplan');
 $config->ai->targetForm['project']['programplan/create'] = (object)array('m' => 'programplan', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['project']['create']             = (object)array('m' => 'project', 'f' => 'create', 'for' => 'project');
 $config->ai->targetForm['project']['edit']               = (object)array('m' => 'project', 'f' => 'edit', 'for' => 'project');
@@ -179,7 +180,8 @@ $config->ai->targetFormVars['story']['change']              = (object)array('for
 $config->ai->targetFormVars['story']['totask']              = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
 $config->ai->targetFormVars['story']['testcasecreate']      = (object)array('format' => 'productID=%d&branch=&moduleID=%d&from=&param=&storyID=%d', 'args' => array('product' => 1, 'module' => 0, 'story' => 0), 'app' => 'product');
 $config->ai->targetFormVars['product']['edit']              = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
-$config->ai->targetFormVars['productplan']['create']        = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product' => 1, 'branch' => 0, 'productplan' => 0), 'app' => 'product');
+$config->ai->targetFormVars['productplan']['create']        = (object)array('format' => 'productID=%d&branch=%d&parent=0', 'args' => array('product' => 1, 'branch' => 0), 'app' => 'product');
+$config->ai->targetFormVars['productplan']['createchild']   = (object)array('format' => 'productID=%d&branch=%d&parent=%d', 'args' => array('product' => 1, 'branch' => 0, 'productplan' => 1), 'app' => 'product');
 $config->ai->targetFormVars['productplan']['edit']          = (object)array('format' => 'planID=%d', 'args' => array('productplan' => 1), 'app' => 'product');
 $config->ai->targetFormVars['task']['create']               = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
 $config->ai->targetFormVars['task']['batchcreate']          = (object)array('format' => 'executionID=%d&storyID=%d&moduleID=%d&taskID=%d', 'args' => array('execution' => 1, 'story' => 0, 'module' => 0, 'task' => 0), 'app' => 'execution');
