@@ -414,6 +414,7 @@ class repo extends control
             $lines   = $bugData[1];
         }
         $selectNode  = empty($entry) ? false : new stdclass();
+        $keyPath     = '';
         $currentPath = '';
         if($entry)
         {
@@ -429,7 +430,8 @@ class repo extends control
                     $currentPath .= '/' . $dir;
                     $currentPath = ltrim($currentPath, '/');
                     $pathKey = $this->repo->encodePath($currentPath);
-                    $selectNode->$pathKey = true;
+                    $keyPath = empty($keyPath) ? $pathKey : "{$keyPath}:{$pathKey}";
+                    $selectNode->$keyPath = true;
                 }
             }
         }
