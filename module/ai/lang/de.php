@@ -1012,7 +1012,6 @@ $lang->ai->formSchema['productplan']['create']->properties->end->description    
 $lang->ai->formSchema['productplan']['create']->properties->desc->type          = 'string';
 $lang->ai->formSchema['productplan']['create']->properties->desc->description   = 'Description of product plan';
 $lang->ai->formSchema['productplan']['create']->required = array('title', 'begin', 'end');
-$lang->ai->formSchema['productplan']['edit'] = $lang->ai->formSchema['productplan']['create'];
 
 $lang->ai->formSchema['task']['create'] = new stdclass();
 $lang->ai->formSchema['task']['create']->title = 'Task';
