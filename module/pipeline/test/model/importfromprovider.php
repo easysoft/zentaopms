@@ -30,8 +30,6 @@ $providerTable->token->range('YWRtaW46dGVzdHRva2Vu');
 $providerTable->deleted->range('0');
 $providerTable->gen(2);
 
-zenData('repo')->loadYaml('repo', false, 1)->gen(5);
-
 su('admin');
 
 $pipelineTest = new pipelineModelTest();
