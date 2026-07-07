@@ -413,6 +413,26 @@ class repo extends control
             $entry   = $bugData[0];
             $lines   = $bugData[1];
         }
+        $selectNode  = empty($entry) ? false : new stdclass();
+        $currentPath = '';
+        if($entry)
+        {
+            $path = dirname($entry);
+            $path = str_replace('\\', '/', $path);
+            $path = trim($path, '/');
+
+            $selectPathList = explode('/', $path);
+            if(!empty($selectPathList))
+            {
+                foreach($selectPathList as $dir)
+                {
+                    $currentPath .= '/' . $dir;
+                    $currentPath = ltrim($currentPath, '/');
+                    $pathKey = $this->repo->encodePath($currentPath);
+                    $selectNode->$pathKey = true;
+                }
+            }
+        }
 
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
@@ -424,21 +444,22 @@ class repo extends control
         $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $branchID);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
-        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
-        $this->view->dropMenus = $dropMenus;
-        $this->view->type      = 'view';
-        $this->view->branchID  = $branchID;
-        $this->view->showBug   = $showBug;
-        $this->view->encoding  = $encoding;
-        $this->view->repoID    = $repoID;
-        $this->view->objectID  = $objectID;
-        $this->view->repo      = $repo;
-        $this->view->revision  = $revision;
-        $this->view->file      = $file;
-        $this->view->lines     = $lines;
-        $this->view->entry     = $entry;
-        $this->view->pathInfo  = $pathInfo;
-        $this->view->tree      = $this->repoZen->getViewTree($repo, '', $revision);
+        $this->view->title      = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
+        $this->view->dropMenus  = $dropMenus;
+        $this->view->type       = 'view';
+        $this->view->branchID   = $branchID;
+        $this->view->showBug    = $showBug;
+        $this->view->encoding   = $encoding;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->revision   = $revision;
+        $this->view->file       = $file;
+        $this->view->lines      = $lines;
+        $this->view->entry      = $entry;
+        $this->view->pathInfo   = $pathInfo;
+        $this->view->selectNode = $selectNode;
+        $this->view->tree       = $this->repoZen->getViewTree($repo, '', $revision, $file);
 
         $this->display();
     }
@@ -1785,15 +1806,16 @@ class repo extends control
      * @param  int    $repoID
      * @param  string $branch
      * @param  string $path
+     * @param  string $selectFile
      * @access public
      * @return void
      */
-    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
+    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '', string $selectFile = '')
     {
         $repo = $this->repo->getByID($repoID);
         if($path) $path = helper::safe64Decode($path);
 
-        return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch)));
+        return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch, $selectFile)));
     }
 
     /**

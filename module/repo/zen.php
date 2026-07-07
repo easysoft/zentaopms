@@ -421,8 +421,8 @@ class repoZen extends repo
         foreach($infos as $info)
         {
             $info->originalComment = $info->comment;
-            $info->comment         = $this->repo->replaceCommentLink($info->comment);
-            $info->revision         = substr($info->revision, 0, 10);
+            $info->comment         = $this->repo->replaceCommentLink($info->comment ? $info->comment : '');
+            $info->revision        = substr($info->revision, 0, 10);
 
             $infoPath = trim(urldecode($path) . '/' . $info->name, '/');
             if($info->kind == 'dir')
@@ -1281,14 +1281,16 @@ class repoZen extends repo
      * @param  object    $repo
      * @param  string    $entry
      * @param  string    $revision
+     * @param  string    $selectFile
      * @access protected
      * @return array
      */
-    protected function getViewTree(object $repo, string $entry, string $revision): array
+    protected function getViewTree(object $repo, string $entry, string $revision, string $selectFile = ''): array
     {
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $tree = $scm->ls($entry, (string)$revision);
+
         foreach($tree as &$file)
         {
             $base64Name = $this->repo->encodePath($file->path);
@@ -1297,7 +1299,8 @@ class repoZen extends repo
             if(!isset($file->id))    $file->id    = $base64Name;
             if(!isset($file->key))   $file->key   = $base64Name;
             if(!isset($file->text))  $file->text  = trim($file->name, '/');
-            if($file->kind == 'dir') $file->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$revision}&path=" . helper::safe64Encode($file->path)));
+            if($selectFile == $file->id) $file->className = 'selected';
+            if($file->kind == 'dir') $file->items = array('url' => helper::createLink('repo', 'ajaxGetFiles', "repoID={$repo->id}&branch={$revision}&path=" . helper::safe64Encode($file->path) . "&selectFile={$selectFile}"));
         }
 
         return $tree;
