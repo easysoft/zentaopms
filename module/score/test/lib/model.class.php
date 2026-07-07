@@ -20,10 +20,20 @@ class scoreModelTest extends baseTest
      */
     public function getListByAccountTest(string $account, int $recPerPage, int $pageID): array
     {
+        $app = $this->instance->app;
+
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'score';
+        if(empty($app->rawMethod)) $app->rawMethod = 'browse';
+
         $this->instance->app->loadClass('pager', true);
         $pager = pager::init(0, $recPerPage, $pageID);
 
         $scores = $this->instance->getListByAccount($account, $pager);
+
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
 
         if(dao::isError()) return dao::getError();
         return $scores;
