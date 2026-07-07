@@ -161,7 +161,7 @@ class pipeline extends control
     }
 
     /**
-     * Edit a pipeline.
+     * Edit a external pipeline.
      *
      * @param  int $id
      * @access public
@@ -200,7 +200,25 @@ class pipeline extends control
             $this->pipeline->update($id, $formData);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $pipeline   = $this->pipeline->getByID($id);
+            $pipeline = $this->pipeline->getByID($id);
+
+            /* 如果流水线配置了事件触发器，则自动创建 webhook。 */
+            if( $pipeline->engine == 'gitlab' && !empty($pipeline->providerID) && !empty($pipeline->externalPipeline))
+            {
+                $triggers = $this->pipeline->getTriggers($id);
+                $trigger  = !empty($triggers) ? reset($triggers) : null;
+
+                if($trigger && !empty($trigger->event))
+                {
+                    $provider = $this->loadModel('provider')->getByID((int)$pipeline->providerID);
+                    if($provider && !empty($provider->url) && !empty($provider->token))
+                    {
+                        $entry = $this->loadModel('entry')->getByCode('gitfox');
+                        $this->loadModel('gitlab')->addPushWebhook((string)$id, $entry->key, $provider->url, $provider->token, $pipeline->externalPipeline);
+                    }
+                }
+            }
+
             $locateUrl  = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
             return $this->sendSuccess(array('locate' => $locateUrl));
         }
@@ -527,7 +545,7 @@ class pipeline extends control
             $providerID = $repo ? (int)$repo->providerID : 0;
         }
 
-        $this->view->title = $this->lang->pipeline->importBtn . $this->lang->hyphen . $this->lang->pipeline->importAction;
+        $this->view->title = $this->lang->pipeline->common . $this->lang->hyphen . $this->lang->pipeline->importAction;
 
         $this->pipelineZen->buildImportForm($repoID, $providerID);
         $this->display();
