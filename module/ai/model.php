@@ -2294,6 +2294,9 @@ class aiModel extends model
             case 'risk':
                 if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
                 break;
+            case 'issue':
+                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
+                break;
             case 'doc':
                 if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
                 break;
@@ -2557,6 +2560,13 @@ class aiModel extends model
         elseif($module == 'risk')
         {
             $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RISK)
+                ->where('project')->in($this->app->user->view->projects)
+                ->andWhere('deleted')->eq(0)
+                ->fetch('maxId');
+        }
+        elseif($module == 'issue')
+        {
+            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_ISSUE)
                 ->where('project')->in($this->app->user->view->projects)
                 ->andWhere('deleted')->eq(0)
                 ->fetch('maxId');
