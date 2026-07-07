@@ -1873,7 +1873,7 @@ class taskModelTest extends baseTest
         if($status == 'done')   $action = 'Finished';
         if($status == 'closed') $action = 'Closed';
 
-        $oldTask = $this->instance->getByID($taskID);
+        $oldTask = $this->instance->fetchByID($taskID);
         $changes = common::createChanges($oldTask, $task);
         $result  = $this->instance->afterChangeStatus($oldTask, $changes, $action, array());
         return $changes;
