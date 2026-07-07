@@ -2585,7 +2585,12 @@ class aiModel extends model
         if(empty($targetForm)) return array(false, true);
         if($targetForm === 'empty.empty') return array(false, false);
 
-        list($m, $f) = explode('.', $targetForm);
+        $targetFormPath = explode('.', $targetForm, 2);
+        if(count($targetFormPath) !== 2) return array(false, true);
+
+        list($m, $f) = $targetFormPath;
+        if(empty($this->config->ai->targetForm[$m][$f])) return array(false, true);
+
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
