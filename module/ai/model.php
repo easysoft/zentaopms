@@ -2247,63 +2247,8 @@ class aiModel extends model
             $sourceGroups[$objectName][] = $objectKey;
         }
 
-        $object     = new stdclass();
+        $object     = $this->getObjectByModuleAndSourceGroups($module, $sourceGroups, $objectId);
         $objectData = new stdclass();
-
-        /* Query necessary object data from zentao. */
-        switch ($module)
-        {
-            case 'story':
-                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
-                break;
-            case 'execution':
-                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
-                break;
-            case 'product':
-                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
-                break;
-            case 'project':
-                if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
-                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                if($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                break;
-            case 'release':
-                if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
-                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
-                break;
-            case 'productplan':
-                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
-                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
-                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
-                break;
-            case 'task':
-                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
-                break;
-            case 'case':
-                if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
-                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
-                break;
-            case 'bug':
-                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
-                break;
-            case 'ticket':
-                if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
-                break;
-            case 'risk':
-                if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
-                break;
-            case 'issue':
-                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
-                break;
-            case 'doc':
-                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
-                break;
-            case 'my':
-                /* TODO: add more later. */
-                break;
-        }
 
         $objectVars = get_object_vars($object);
         if(empty($objectVars)) return false;
@@ -2332,6 +2277,86 @@ class aiModel extends model
         }
 
         return array($objectData, $object);
+    }
+
+    /**
+     * Get object data by module and source groups.
+     *
+     * @param  string $module
+     * @param  array  $sourceGroups
+     * @param  int    $objectId
+     * @access protected
+     * @return object
+     */
+    protected function getObjectByModuleAndSourceGroups(string $module, array $sourceGroups, int $objectId): object
+    {
+        $object = new stdclass();
+
+        switch($module)
+        {
+            case 'story':
+                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+                return $object;
+            case 'execution':
+                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
+                return $object;
+            case 'product':
+                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
+                return $object;
+            case 'project':
+                if(!isset($sourceGroups['project'])) return $object;
+
+                $object->project = $this->loadModel('project')->getById($objectId);
+                if(empty($object->project)) return $object;
+
+                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if($object->project->model != 'waterfall' && isset($sourceGroups['executions']))   $object->executions   = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                return $object;
+            case 'release':
+                if(!isset($sourceGroups['release'])) return $object;
+
+                $object->release = $this->loadModel('release')->getById($objectId);
+                if(empty($object->release)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
+                return $object;
+            case 'productplan':
+                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
+                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
+                return $object;
+            case 'task':
+                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
+                return $object;
+            case 'case':
+                if(!isset($sourceGroups['case'])) return $object;
+
+                $object->case = $this->loadModel('testcase')->getById($objectId);
+                if(empty($object->case)) return $object;
+
+                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
+                return $object;
+            case 'bug':
+                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
+                return $object;
+            case 'ticket':
+                if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
+                return $object;
+            case 'risk':
+                if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
+                return $object;
+            case 'issue':
+                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
+                return $object;
+            case 'doc':
+                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+                return $object;
+            case 'my':
+            default:
+                return $object;
+        }
     }
 
     /**
