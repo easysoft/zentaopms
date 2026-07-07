@@ -12,6 +12,7 @@ cid=0
 - 流水线名称重复 @0
 - providerID不存在 @0
 - Jenkins流水线为空 @0
+- providerID为0 @0
 
 */
 
@@ -65,3 +66,8 @@ $formData->providerID = 1;
 $formData->name = '空流水线测试';
 $formData->pipeline = '';
 r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // Jenkins流水线为空
+
+$formData->providerID = 0;
+$formData->pipeline   = '/job/test-job/';
+$formData->name       = 'providerID为0测试';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID为0
