@@ -128,4 +128,34 @@ class providerModelTest extends baseTest
 
         return $apiRoot;
     }
+
+    /**
+     * Test getReposByProviderID method.
+     *
+     * @param  int   $providerID
+     * @param  bool  $showMirrors
+     * @access public
+     * @return array
+     */
+    public function getReposByProviderIDTest(int $providerID, bool $showMirrors = false): array
+    {
+        $repos = $this->invokeArgs('getReposByProviderID', array($providerID, $showMirrors));
+        if(dao::isError()) return dao::getError();
+
+        return $repos;
+    }
+
+    /**
+     * Test migratePipelineProviders method.
+     *
+     * @access public
+     * @return bool|array
+     */
+    public function migratePipelineProvidersTest(): bool|array
+    {
+        $result = $this->invokeArgs('migratePipelineProviders', array());
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
 }
