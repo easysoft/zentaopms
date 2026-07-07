@@ -2972,7 +2972,7 @@ class testcaseZen extends testcase
      */
     protected function processStepsAndExpectsForBatchEdit(array $cases): array
     {
-        $relatedSteps = $this->testcase->getRelatedSteps(array_column($cases, 'id'));
+        $relatedSteps = $this->app->rawMethod != 'showimport' ? $this->testcase->getRelatedSteps(array_column($cases, 'id')) : array();
         foreach($cases as $case)
         {
             $this->processStepForExport($case, array(), $relatedSteps);
