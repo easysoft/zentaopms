@@ -124,6 +124,8 @@ $inModal ? null : sidebar
             set::expandedIcon('folder-open text-warning'),
             set::normalIcon('file-text-alt'),
             set::selected($file),
+            set::preserve(false),
+            set::defaultNestedShow(empty($selectNode) ? false : $selectNode),
             set::onClickItem(jsRaw('window.treeClick'))
         )
     )
