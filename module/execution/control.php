@@ -2636,13 +2636,8 @@ class execution extends control
             $storyIdList = $this->post->storyIdList;
             $_POST       = array();
 
-            $this->loadModel('gitlab');
             foreach($storyIdList as $storyID)
             {
-                /* Delete related issue in gitlab. */
-                $relation = $this->gitlab->getRelationByObject('story', (int)$storyID);
-                if(!empty($relation)) $this->gitlab->deleteIssue('story', (int)$storyID, $relation->issueID);
-
                 $this->execution->unlinkStory($executionID, (int)$storyID);
             }
         }
