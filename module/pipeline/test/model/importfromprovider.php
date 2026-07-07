@@ -10,6 +10,8 @@ cid=0
 - Jenkins正常导入 >> 大于0
 - 流水线名称为空 @0
 - 流水线名称重复 @0
+- providerID不存在 @0
+- Jenkins流水线为空 @0
 
 */
 
@@ -54,3 +56,12 @@ r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 
 
 $formData->name = 'Jenkins导入测试';
 r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 名称重复
+
+$formData->providerID = 999;
+$formData->name = '不存在的服务器';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID不存在
+
+$formData->providerID = 1;
+$formData->name = '空流水线测试';
+$formData->pipeline = '';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // Jenkins流水线为空
