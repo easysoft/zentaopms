@@ -11635,7 +11635,7 @@ class upgradeModel extends model
         /* 升级完后把没用的字段删掉。 */
         $this->dao->exec("ALTER TABLE " . TABLE_DELIVERABLE . " CHANGE `module` `module` mediumint(8) unsigned NOT NULL DEFAULT '0';");
 
-        if($deliverableList) $this->upgradeProjectDeliverable($deliverableList);
+        $this->upgradeProjectDeliverable($deliverableList);
     }
 
     /**
