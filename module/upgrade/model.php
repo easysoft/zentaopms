@@ -13587,6 +13587,7 @@ class upgradeModel extends model
             $this->loadModel('space')->createDefaultSpace();
             $this->space->migrateGroupPrivs();
             $this->loadModel('provider')->migratePipelineProviders();
+            $this->loadModel('repo')->migrateRepoData();
             $this->dao->commit();
         }
         catch(Exception $e)

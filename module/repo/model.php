@@ -3533,4 +3533,202 @@ class repoModel extends model
 
         return $repo;
     }
+
+    /**
+     * 迁移代码库数据。
+     * Migrate repo data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migrateRepoData(): bool
+    {
+        $company      = $this->loadModel('company')->getFirst();
+        $admins       = !empty($company->admins) ? explode(',', $company->admins) : array();
+        $admins       = array_filter($admins);
+        $oldRepoTable = $this->config->db->prefix . 'repo';
+
+        $oldRepos = $this->dao->select("r.*, "
+                . "GROUP_CONCAT(DISTINCT TRIM(p.QD) SEPARATOR ',') AS productQD, "
+                . "GROUP_CONCAT(DISTINCT TRIM(p.QD) SEPARATOR ',') AS productQD, "
+                . "GROUP_CONCAT(DISTINCT TRIM(p.RD) SEPARATOR ',') AS productRD, "
+                . "GROUP_CONCAT(DISTINCT TRIM(p.whitelist) SEPARATOR ',') AS productWhitelist, "
+                . "GROUP_CONCAT(DISTINCT ug.account SEPARATOR ',') AS groupAccounts")
+            ->from($oldRepoTable)->alias('r')
+            ->leftJoin(TABLE_PRODUCT)->alias('p')->on('FIND_IN_SET(p.id, r.product)')
+            ->leftJoin(TABLE_USERGROUP)->alias('ug')->on("r.acl IS NOT NULL AND JSON_CONTAINs(r.acl, CONCAT('[\"', ug.`group`, '\"]'), '$.groups')")
+            ->where('r.SCM')->in(array('Subversion', 'Gitlab', 'Gitea', 'Gogs'))
+            ->groupBy('r.id')
+            ->fetchAllRaw();
+        if(empty($oldRepos)) return true;
+
+        foreach($oldRepos as $oldRepo)
+        {
+            $aclInfo = $this->parseRepoAcl($oldRepo);
+            $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], zget($admins, 0, 'system'));
+            $this->dao->insert(TABLE_REPO)->data($repo)->exec();
+            if(dao::isError()) return false;
+
+            if($aclInfo['acl'] === 'private')
+            {
+                $members = array();
+                foreach(array('productPO', 'productQD', 'productRD', 'productWhitelist') as $field)
+                {
+                    if(!empty($oldRepo->$field))
+                    {
+                        $members = array_merge($members, array_filter(array_map('trim', explode(',', $oldRepo->$field)), 'strlen'));
+                    }
+                }
+
+                if(!empty($aclInfo['groupAccounts'])) $members = array_merge($members, array_filter(array_map('trim', explode(',', $aclInfo['groupAccounts'])), 'strlen'));
+                if(!empty($aclInfo['users']))        $members = array_merge($members, array_filter(array_map('trim', explode(',', $aclInfo['users'])), 'strlen'));
+
+                $members = array_filter(array_unique($members), 'strlen');
+                if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * 解析旧代码库的访问控制信息。
+     * Parse the access control information of the old repo.
+     *
+     * @param  object $oldRepo
+     * @access private
+     * @return array
+     */
+    private function parseRepoAcl(object $oldRepo): array
+    {
+        $repoAcl           = 'open';
+        $repoUsers         = '';
+        $repoGroupAccounts = '';
+
+        $oldAcl = trim($oldRepo->acl);
+        if($oldAcl !== '')
+        {
+            $aclData = json_decode($oldAcl, true);
+            if(is_array($aclData) && isset($aclData['acl']))
+            {
+                $repoAcl           = $aclData['acl'];
+                $repoUsers         = isset($aclData['users']) ? implode(',', array_filter(array_map('trim', $aclData['users']), 'strlen')) : '';
+                $repoGroupAccounts = isset($oldRepo->groupAccounts) ? implode(',', array_filter(array_map('trim', explode(',', $oldRepo->groupAccounts)), 'strlen')) : '';
+            }
+        }
+
+        return array('acl' => $repoAcl, 'users' => $repoUsers, 'groupAccounts' => $repoGroupAccounts);
+    }
+
+    /**
+     * 构建新的代码库对象。
+     * Build a new repo object.
+     *
+     * @param  object $oldRepo
+     * @param  string $repoAcl
+     * @param  string $admins
+     * @access private
+     * @return object
+     */
+    private function buildNewRepo(object $oldRepo, string $repoAcl, string $admins): object
+    {
+        $repo = new stdClass();
+        $scm  = isset($oldRepo->SCM) ? $oldRepo->SCM : '';
+        $repo->scmType = '';
+        if($scm === 'Subversion')
+        {
+            $repo->scmType = 'svn';
+        }
+        elseif(in_array($scm, array('Gitlab', 'Gitea', 'Gogs'), true))
+        {
+            $repo->scmType = 'git';
+        }
+
+        $connector = new stdClass();
+        if($scm === 'Gitlab')
+        {
+            $path                 = isset($oldRepo->path) ? $oldRepo->path : '';
+            $connector->slug      = $this->extractPathSlug($path);
+            $connector->projectID = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
+        }
+        elseif($scm === 'Gitea' || $scm === 'Gogs')
+        {
+            $connector->slug      = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
+            $connector->projectID = '';
+        }
+        elseif($scm === 'Subversion')
+        {
+            $path                = isset($oldRepo->path) ? $oldRepo->path : '';
+            $connector->slug     = $this->extractPathSlug($path);
+            $connector->user     = isset($oldRepo->account) ? $oldRepo->account : '';
+            $connector->password = isset($oldRepo->password) ? $oldRepo->password : '';
+        }
+
+        $repo->id               = $oldRepo->id;
+        $repo->spaceID          = 1;
+        $repo->product          = $oldRepo->product;
+        $repo->name             = $oldRepo->name;
+        $repo->desc             = $oldRepo->desc;
+        $repo->gitUID           = 'empty_gituid_'.$oldRepo->id;
+        $repo->forkID           = 0;
+        $repo->mirror           = 1;
+        $repo->providerID       = $oldRepo->serviceHost;
+        $repo->connector        = json_encode($connector, JSON_UNESCAPED_SLASHES);
+        $repo->defaultBranch    = '';
+        $repo->acl              = $repoAcl;
+        $repo->status           = 'importing';
+        $repo->synced           = 0;
+        $repo->branchArchivable = 0;
+        $repo->createdBy        = $admins;
+        $repo->createdDate      = helper::now();
+        $repo->editedBy         = $admins;
+        $repo->editedDate       = helper::now();
+        $repo->deleted          = $oldRepo->deleted;
+
+        return $repo;
+    }
+
+    /**
+     * 提取路径中的仓库标识。
+     * Extract the repository identifier from the path.
+     *
+     * @param  string $path
+     * @access private
+     * @return string
+     */
+    private function extractPathSlug(string $path): string
+    {
+        $path = trim($path);
+        if($path === '') return '';
+
+        $parsed = parse_url($path);
+        if(!empty($parsed['path']))
+        {
+            return ltrim($parsed['path'], '/');
+        }
+        // 解析失败时仅去除开头斜杠返回原字符串
+        return ltrim($path, '/');
+    }
+
+    /**
+     * 插入代码库成员。
+     * Insert repo members.
+     *
+     * @param  int $repoID
+     * @param  array $members
+     * @access private
+     * @return bool
+     */
+    private function insertMembers(int $repoID, array $members): bool
+    {
+        $values = array();
+
+        foreach($members as $account) $values[] = "('{$repoID}', '{$account}')";
+
+        $sql = 'REPLACE INTO ' . TABLE_DEVOPSREPOUSER . ' (`repo`, `account`) VALUES ' . implode(', ', $values);
+        $this->dao->exec($sql);
+
+        return !dao::isError();
+    }
+
 }
