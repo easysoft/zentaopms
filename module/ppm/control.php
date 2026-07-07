@@ -268,7 +268,10 @@ class ppm extends control
         if(in_array($this->app->tab, array('execution', 'project')) && $objectID)
         {
             $repoList = $this->loadModel('repo')->getList($objectID);
-            foreach($repoList as $repoInfo) $repoPairs[$repoInfo->id] = $repoInfo->name;
+            foreach($repoList as $repoInfo)
+            {
+                if(empty($repoInfo->mirror)) $repoPairs[$repoInfo->id] = $repoInfo->name;
+            }
         }
 
         $this->view->title             = $this->lang->ppm->create;

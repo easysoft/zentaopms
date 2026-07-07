@@ -57,7 +57,7 @@ $mirrorRepoAlert = ($canCreate && $hasMirrorRepo) ? div
     /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
     setStyle(array('--alert-bg' => 'var(--color-warning-50)', 'gap' => '.25rem')),
     h::span(setClass('icon icon-exclamation-sign')),
-    h::span($lang->ppm->mirrorRepoTip)
+    h::span($lang->ppm->hasMirrorRepoTip)
 ) : null;
 
 if($canCreate) toolBar

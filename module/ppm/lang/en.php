@@ -6,6 +6,7 @@ $lang->ppm->view              = "Survey";
 $lang->ppm->viewAction        = "{$lang->ppm->common} Details";
 $lang->ppm->create            = "Submit Merge Request";
 $lang->ppm->mirrorRepoTip     = 'The current repository is a mirror repository. Re-import it in "readable, writable, manageable" mode to enable code review.';
+$lang->ppm->hasMirrorRepoTip = 'The current repository is a mirror repository, which does not support code review. Please do not create merge requests.';
 $lang->ppm->apiCreate         = "Interface: Create";
 $lang->ppm->browse            = "Browse";
 $lang->ppm->browseAction      = "{$lang->ppm->common} List";
