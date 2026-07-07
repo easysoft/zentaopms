@@ -562,6 +562,8 @@ $lang->ai->targetForm['ticket']['batchedit']     = 'Batch Edit Ticket';
 $lang->ai->targetForm['issue']['create']         = 'Create Issue';
 $lang->ai->targetForm['opportunity']['create']   = 'Create Opportunity';
 $lang->ai->targetForm['risk']['create']          = 'Create Risk';
+$lang->ai->targetForm['risk']['edit']            = 'Edit Risk';
+$lang->ai->targetForm['risk']['batchcreate']     = 'Batch Create Risk';
 $lang->ai->targetForm['projectchange']['create'] = 'Create Change';
 $lang->ai->targetForm['cm']['create']            = 'Create Baseline';
 

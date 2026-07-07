@@ -565,6 +565,8 @@ $lang->ai->targetForm['ticket']['batchedit']     = '批量编辑工单';
 $lang->ai->targetForm['issue']['create']         = '创建问题';
 $lang->ai->targetForm['opportunity']['create']   = '创建机会';
 $lang->ai->targetForm['risk']['create']          = '创建风险';
+$lang->ai->targetForm['risk']['edit']            = '编辑风险';
+$lang->ai->targetForm['risk']['batchcreate']     = '批量创建风险';
 $lang->ai->targetForm['projectchange']['create'] = '创建变更';
 $lang->ai->targetForm['cm']['create']            = '创建基线';
 
