@@ -64,7 +64,7 @@ class gitlabModel extends model
 
         $apiRoot     = rtrim($url, '/') . "/api/v4%s?private_token={$token}";
         $systemURL   = dirname(common::getSysURL() . $_SERVER['REQUEST_URI']);
-        $callbackURL = $systemURL . '/api.php/v1/gitlab/webhook?pipeline=' . $pipelineID;
+        $callbackURL = $systemURL . '/api.php/v1/gitlab/webhook?pipelineID=' . $pipelineID;
 
         /* Check if webhook already exists. */
         if($this->isWebhookExists($url, $token, $projectID, $callbackURL)) return true;
