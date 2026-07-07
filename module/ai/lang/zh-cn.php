@@ -529,11 +529,8 @@ $lang->ai->targetForm['project']['create']             = '创建项目';
 $lang->ai->targetForm['project']['edit']               = '编辑项目';
 $lang->ai->targetForm['project']['programplan/create'] = '设置阶段';
 
-$lang->ai->targetForm['execution']['batchcreatetask']  = '批量创建任务';
-$lang->ai->targetForm['execution']['createtestreport'] = '创建测试报告';
-$lang->ai->targetForm['execution']['createqa']         = '创建 QA';
-$lang->ai->targetForm['execution']['createrisk']       = '创建风险';
-$lang->ai->targetForm['execution']['createissue']      = '创建问题';
+$lang->ai->targetForm['execution']['create'] = '创建执行';
+$lang->ai->targetForm['execution']['edit']   = '编辑执行';
 
 $lang->ai->targetForm['task']['create']      = '创建任务';
 $lang->ai->targetForm['task']['edit']        = '编辑任务';
@@ -1142,7 +1139,6 @@ $lang->ai->formSchema['testreport']['create']->properties->title->description  =
 $lang->ai->formSchema['testreport']['create']->properties->report->type        = 'string';
 $lang->ai->formSchema['testreport']['create']->properties->report->description = '测试报告的内容';
 $lang->ai->formSchema['testreport']['create']->required = array('begin', 'end', 'title', 'report');
-$lang->ai->formSchema['execution']['testreport'] = $lang->ai->formSchema['testreport']['create'];
 
 $lang->ai->formSchema['release']['create'] = new stdclass();
 $lang->ai->formSchema['release']['create']->title = '发布';
