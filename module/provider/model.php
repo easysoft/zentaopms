@@ -128,15 +128,15 @@ class providerModel extends model
         {
             return rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
         }
-        elseIf($provider->type == 'Gitea')
+        elseif($provider->type == 'Gitea')
         {
             return rtrim($provider->url, '/') . '/api/v1%s' . "?token={$provider->token}";
         }
-        elseIf($provider->type == 'Gogs')
+        elseif($provider->type == 'Gogs')
         {
             return rtrim($provider->url, '/') . '/api/v1%s' . "?token={$provider->token}";
         }
-        elseIf($provider->type == 'GitHub')
+        elseif($provider->type == 'GitHub')
         {
             $apiRoot = new stdClass();
             $apiRoot->url    = rtrim($provider->url, '/') . '%s';
@@ -165,5 +165,64 @@ class providerModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($showMirrors)->andWhere('mirror')->eq(1)->fi()
             ->fetchAll('id');
+    }
+
+    /**
+     * 迁移服务信息，从 pipeline 到 ops_provider。
+     * Migrate service info from pipeline to ops_provider.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migratePipelineProviders(): bool
+    {
+        $typeMap = array(
+            'gitlab'     => 'GitLab',
+            'gitea'      => 'Gitea',
+            'gogs'       => 'Gogs',
+            'subversion' => 'Subversion',
+            'github'     => 'GitHub',
+            'jenkins'    => 'Jenkins'
+        );
+
+        $excludeTypes = array('gitfox', 'sonarqube');
+        $pipelines = $this->dao->select('type, name, url, account, password, token, createdBy, createdDate, editedBy, editedDate, deleted')
+            ->from('`' . $this->config->db->prefix . 'pipeline`')
+            ->where('deleted')->eq('0')
+            ->fetchAll();
+
+        foreach($pipelines as $pipeline)
+        {
+            // 过滤排除的类型
+            $typeKey = strtolower(trim((string)$pipeline->type));
+            if(in_array($typeKey, $excludeTypes, true)) continue;
+            if(!isset($typeMap[$typeKey])) continue;
+
+            $provider       = new stdclass();
+            $provider->type = $typeMap[$typeKey];
+            $provider->name = (string)$pipeline->name;
+            $provider->url  = (string)$pipeline->url;
+
+            // Jenkins 单独处理：token = base64(account:token)
+            if($provider->type == 'Jenkins')
+            {
+                $provider->token = base64_encode(((string)$pipeline->account) . ':' . ((string)$pipeline->token));
+            }
+            else
+            {
+                $provider->token = (string)$pipeline->token;
+            }
+
+            $provider->createdBy   = (string)$pipeline->createdBy;
+            $provider->createdDate = empty($pipeline->createdDate) ? helper::now() : $pipeline->createdDate;
+            $provider->editedBy    = (string)$pipeline->editedBy;
+            $provider->editedDate  = empty($pipeline->editedDate) ? null : $pipeline->editedDate;
+            $provider->deleted     = '0';
+
+            $this->dao->insert(TABLE_PROVIDER)->data($provider)->exec();
+            if(dao::isError()) return false;
+        }
+
+        return !dao::isError();
     }
 }
