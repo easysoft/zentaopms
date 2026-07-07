@@ -7,6 +7,14 @@ class todoTaoTest extends baseTest
 {
     protected $moduleName = 'todo';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * Test create a todo.
@@ -385,9 +393,14 @@ class todoTaoTest extends baseTest
      */
     public function closeTodoTest(int $todoID): object
     {
-        $oldTodo  = $this->objectModel->getById($todoID);
-        $isClosed = $this->objectModel->closeTodo($todoID);
-        $newTodo  = $this->objectModel->getById($todoID);
+        $oldTodo = $this->instance->getById($todoID);
+
+        $reflection = new ReflectionClass($this->instance);
+        $method = $reflection->getMethod('closeTodo');
+        $method->setAccessible(true);
+        $isClosed = $method->invoke($this->instance, $todoID);
+
+        $newTodo = $this->instance->getById($todoID);
 
         $testResult = new stdclass();
         $testResult->oldStatus = $oldTodo->status;
@@ -410,7 +423,7 @@ class todoTaoTest extends baseTest
     public function getValidsOfBatchCreateTest(array $todos, int $loop, string $assignedTo): int|object
     {
         $todos = json_decode(json_encode($todos));
-        $todo  = $this->objectModel->getValidsOfBatchCreate($todos, $loop, $assignedTo);
+        $todo  = $this->invokeArgs('getValidsOfBatchCreate', [$todos, $loop, $assignedTo]);
 
         if(dao::isError()) return 0;
 
@@ -455,7 +468,7 @@ class todoTaoTest extends baseTest
             $lastCycle->date = $lastCycleDate;
         }
 
-        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+        $date = $this->invokeArgs('getCycleTodoDate', [$todo, $lastCycle, $today]);
 
         // 对于按天类型，返回0表示false，1表示有日期
         if($configType == 'day')
@@ -487,10 +500,10 @@ class todoTaoTest extends baseTest
         if(!$todo->config) return '0';
 
         $today     = date('Y-m-d');
-        $cycleList = $this->objectModel->getCycleList($todoList);
+        $cycleList = $this->invokeArgs('getCycleList', [$todoList]);
         $lastCycle = zget($cycleList, $todo->id, '');
 
-        $date = $this->objectModel->getCycleTodoDate($todo, $lastCycle, $today);
+        $date = $this->invokeArgs('getCycleTodoDate', [$todo, $lastCycle, $today]);
 
         if($configType == 'day')   return $date === false ? '0' : '1';
         if($configType == 'week')  return $date == $today ? '1' : '0';
@@ -518,8 +531,8 @@ class todoTaoTest extends baseTest
                 $todo->config = new stdClass();
                 $todo->config->type = 'week';
                 $todo->config->week = '0,6'; // 只在周日和周六生效
-                $today = date('Y-m-d'); // 假设今天不是周日或周六
-                $date = $this->objectModel->getCycleTodoDate($todo, '', $today);
+                $today = '2026-07-07'; // 固定为周二，避免周末执行时误报
+                $date = $this->invokeArgs('getCycleTodoDate', [$todo, '', $today]);
                 return empty($date) ? '0' : '1';
 
             case 'invalid_type':
@@ -527,7 +540,7 @@ class todoTaoTest extends baseTest
                 $todo = new stdClass();
                 $todo->config = new stdClass();
                 $todo->config->type = 'invalid';
-                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                $date = $this->invokeArgs('getCycleTodoDate', [$todo, '', date('Y-m-d')]);
                 return empty($date) ? '0' : '1';
 
             case 'empty_lastcycle':
@@ -535,7 +548,7 @@ class todoTaoTest extends baseTest
                 $todoList = $tester->dao->select('*')->from(TABLE_TODO)->where('id')->eq(1)->fetchAll('id');
                 $todo = current($todoList);
                 $todo->config = json_decode($todo->config);
-                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                $date = $this->invokeArgs('getCycleTodoDate', [$todo, '', date('Y-m-d')]);
                 return $date === false ? '0' : '1';
 
             case 'past_config':
@@ -546,7 +559,7 @@ class todoTaoTest extends baseTest
                 $todo->config->day = '1';
                 $todo->config->begin = '2020-01-01';
                 $todo->config->end = '2020-12-31';
-                $date = $this->objectModel->getCycleTodoDate($todo, '', date('Y-m-d'));
+                $date = $this->invokeArgs('getCycleTodoDate', [$todo, '', date('Y-m-d')]);
                 return $date === false ? '0' : '1';
 
             default:
@@ -564,7 +577,7 @@ class todoTaoTest extends baseTest
      */
     public function insertTest(object $todo): array|int
     {
-        $result = $this->objectModel->insert($todo);
+        $result = $this->invokeArgs('insert', [$todo]);
         return dao::isError() ? dao::getError() : $result;
     }
 
