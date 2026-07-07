@@ -2293,6 +2293,23 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getTestingObjectId method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestingObjectIdTest($prompt = null)
+    {
+        if(empty($prompt) || empty($prompt->module)) return 0;
+
+        $result = $this->invokeArgs('getTestingObjectId', array($prompt));
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
      * Test tryGetRelatedObjects method.
      *
      * @param  mixed $prompt      prompt object or prompt id
