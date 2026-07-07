@@ -2276,6 +2276,23 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getTestingLink method.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access public
+     * @return mixed
+     */
+    public function getTestingLinkTest($prompt = null, $objectId = false)
+    {
+        $result = $this->invokeArgs('getTestingLink', array($prompt, $objectId));
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return 0;
+
+        return strpos($result, (string)$prompt->id) !== false && strpos($result, (string)$objectId) !== false ? 1 : 0;
+    }
+
+    /**
      * Test tryGetRelatedObjects method.
      *
      * @param  mixed $prompt      prompt object or prompt id
