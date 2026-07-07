@@ -140,7 +140,10 @@ $config->ai->targetForm['task']['edit']                  = (object)array('m' => 
 $config->ai->targetForm['task']['batchcreate']           = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
 $config->ai->targetForm['task']['batchedit']             = (object)array('m' => 'task', 'f' => 'batchedit', 'for' => 'task');
 $config->ai->targetForm['task']['subdivide']             = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'task');
+$config->ai->targetForm['testcase']['create']            = (object)array('m' => 'testcase', 'f' => 'create', 'for' => 'case');
+$config->ai->targetForm['testcase']['batchcreate']       = (object)array('m' => 'testcase', 'f' => 'batchcreate', 'for' => 'case');
 $config->ai->targetForm['testcase']['edit']              = (object)array('m' => 'testcase', 'f' => 'edit', 'for' => 'case');
+$config->ai->targetForm['testcase']['batchedit']         = (object)array('m' => 'testcase', 'f' => 'batchedit', 'for' => 'case');
 $config->ai->targetForm['bug']['edit']                   = (object)array('m' => 'bug', 'f' => 'edit', 'for' => 'bug');
 $config->ai->targetForm['bug']['story/create']           = (object)array('m' => 'story', 'f' => 'create', 'for' => 'bug');
 $config->ai->targetForm['bug']['testcase/create']        = (object)array('m' => 'testcase', 'f' => 'create', 'for' => 'bug');
@@ -148,7 +151,7 @@ $config->ai->targetForm['doc']['create']                 = (object)array('m' => 
 $config->ai->targetForm['doc']['edit']                   = (object)array('m' => 'doc', 'f' => 'edit', 'for' => 'doc');
 $config->ai->targetForm['build']['create']               = (object)array('m' => 'build', 'f' => 'create', 'for' => 'build');
 $config->ai->targetForm['testsuite']['create']           = (object)array('m' => 'testsuite', 'f' => 'create', 'for' => 'testsuite');
-$config->ai->targetForm['testcase']['create']            = (object)array('m' => 'testtask', 'f' => 'create', 'for' => 'testtask');
+$config->ai->targetForm['testtask']['create']            = (object)array('m' => 'testtask', 'f' => 'create', 'for' => 'testtask');
 $config->ai->targetForm['feedback']['create']            = (object)array('m' => 'feedback', 'f' => 'create', 'for' => 'feedback');
 $config->ai->targetForm['ticket']['create']              = (object)array('m' => 'ticket', 'f' => 'create', 'for' => 'ticket');
 $config->ai->targetForm['issue']['create']               = (object)array('m' => 'issue', 'f' => 'create', 'for' => 'issue');
@@ -200,7 +203,10 @@ $config->ai->targetFormVars['task']['subdivide']            = (object)array('for
 $config->ai->targetFormVars['bug']['create']                = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['bug']['edit']                  = (object)array('format' => 'bugID=%d', 'args' => array('bug' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testcase']['create']           = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testcase']['batchcreate']      = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testcase']['edit']             = (object)array('format' => 'caseID=%d', 'args' => array('case' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testcase']['batchedit']        = (object)array('format' => 'productID=%d&branch=0&type=case&from=aiCaseList_%d', 'args' => array('product' => 1, 'case' => 1), 'app' => 'qa');
+$config->ai->targetFormVars['testtask']['create']           = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testreport']['create']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['project']['create']            = (object)array('format' => 'model=%s&programID=%d', 'args' => array('model' => 0, 'program' => 0), 'app' => 'project');
 $config->ai->targetFormVars['project']['edit']              = (object)array('format' => 'projectID=%d', 'args' => array('project' => 1), 'app' => 'project');
@@ -275,12 +281,15 @@ $config->ai->injectAuditButton->locations['product']['create']    = $config->ai-
 $config->ai->injectAuditButton->locations['story']['create']      = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['task']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['testcase']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['testtask']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];
 
 $config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['batchcreate']['toolbar']->targetContainer = '#mainContent .panel-heading .panel-actions';
 $config->ai->injectAuditButton->locations['story']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 $config->ai->injectAuditButton->locations['task']['batchcreate']  = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 $config->ai->injectAuditButton->locations['task']['batchedit']    = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['testcase']['batchcreate'] = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['testcase']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 
 $config->ai->miniPrograms = new stdClass();
 $config->ai->miniPrograms->iconList = array();

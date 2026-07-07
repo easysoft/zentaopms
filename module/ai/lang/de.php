@@ -535,7 +535,10 @@ $lang->ai->targetForm['task']['batchcreate'] = 'Batch Create Task';
 $lang->ai->targetForm['task']['batchedit']   = 'Batch Edit Task';
 $lang->ai->targetForm['task']['subdivide']   = 'Subdivide Task';
 
+$lang->ai->targetForm['testcase']['create']       = 'Create Test Case';
+$lang->ai->targetForm['testcase']['batchcreate']  = 'Batch Create Test Case';
 $lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
+$lang->ai->targetForm['testcase']['batchedit']    = 'Batch Edit Test Case';
 $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
 
 $lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
@@ -547,7 +550,7 @@ $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
 $lang->ai->targetForm['build']['create']         = 'Create Build';
 $lang->ai->targetForm['testsuite']['create']     = 'Create Test Suite';
-$lang->ai->targetForm['testcase']['create']      = 'Create Test Task';
+$lang->ai->targetForm['testtask']['create']      = 'Create Test Task';
 $lang->ai->targetForm['feedback']['create']      = 'Create Feedback';
 $lang->ai->targetForm['ticket']['create']        = 'Create Ticket';
 $lang->ai->targetForm['issue']['create']         = 'Create Issue';

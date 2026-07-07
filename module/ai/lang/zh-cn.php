@@ -538,7 +538,10 @@ $lang->ai->targetForm['task']['batchcreate'] = '批量创建';
 $lang->ai->targetForm['task']['batchedit']   = '批量编辑';
 $lang->ai->targetForm['task']['subdivide']   = '细分任务';
 
+$lang->ai->targetForm['testcase']['create']       = '建用例';
+$lang->ai->targetForm['testcase']['batchcreate']  = '批量建用例';
 $lang->ai->targetForm['testcase']['edit']         = '编辑用例';
+$lang->ai->targetForm['testcase']['batchedit']    = '批量编辑用例';
 $lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';
 
 $lang->ai->targetForm['bug']['edit']            = '编辑 Bug';
@@ -550,7 +553,7 @@ $lang->ai->targetForm['doc']['edit']   = '编辑文档';
 
 $lang->ai->targetForm['build']['create']         = '创建版本';
 $lang->ai->targetForm['testsuite']['create']     = '创建套件';
-$lang->ai->targetForm['testcase']['create']      = '创建测试单';
+$lang->ai->targetForm['testtask']['create']      = '创建测试单';
 $lang->ai->targetForm['feedback']['create']      = '创建反馈';
 $lang->ai->targetForm['ticket']['create']        = '创建工单';
 $lang->ai->targetForm['issue']['create']         = '创建问题';
