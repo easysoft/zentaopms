@@ -3,11 +3,15 @@ namespace zin;
 
 global $lang, $app;
 
+$app->loadLang('build');
+$app->loadLang('release');
+
 $isShadowProduct   = data('product.shadow');
 $noMultipleProject = (string)data('project.multiple') === '0';
 $isOriginalProduct = (int)data('bug.productID') === (int)data('productID');
-$resultFiles       = data('resultFiles');
-$copyFiles         = data('bug.files');
+$resultFiles       = data('resultFiles') ?: array();
+$copyFiles         = data('bug.files') ?: array();
+$builds            = data('builds') ?: array();
 $files             = $copyFiles ? array_values($copyFiles) : array_values($resultFiles);
 
 if($files)
@@ -48,7 +52,7 @@ if(common::hasPriv('build', 'create'))
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'id' => 'createBuild', 'data-size' => 'lg'))
         ->text($lang->build->create)->hint($lang->build->create)
         ->url(createLink('build', 'create', 'executionID=' . data('executionID') . '&productID=' . data('bug.productID') . '&projectID=' . data('projectID')))
-        ->className(count(data('builds')) > 1 || !data('executionID') ? 'hidden' : '')
+        ->className(count($builds) > 1 || !data('executionID') ? 'hidden' : '')
         ->itemEnd();
 }
 
@@ -58,7 +62,7 @@ if(common::hasPriv('release', 'create') && !common::isTutorialMode())
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'data-size' => 'lg','id' => 'createRelease'))
         ->text($lang->release->create)->hint($lang->release->create)
         ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch') . '&status=normal'))
-        ->className(count(data('builds')) > 1 || data('executionID') ? 'hidden' : '')
+        ->className(count($builds) > 1 || data('executionID') ? 'hidden' : '')
         ->itemEnd();
 }
 
