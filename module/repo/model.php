@@ -3484,6 +3484,16 @@ class repoModel extends model
         $result = $this->loadModel('gitfox')->request('/repos/import', 'POST', $params);
         if(dao::isError()) return false;
 
+        $repoID = zget($result, 'id', 0);
+
+        if($repoID && !empty($params->acl) && $params->acl === 'private')
+        {
+            $members = array_filter(explode(',', $formData->members ?? ''));
+            if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
+            $this->updateMembers($repoID, $members);
+            if(dao::isError()) return false;
+        }
+
         return $result;
     }
 

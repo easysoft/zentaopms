@@ -534,8 +534,8 @@ $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';
 
 $lang->repo->accessList = array();
-$lang->repo->accessList['writable'] = 'Readable and writable';
-$lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
+$lang->repo->accessList['writable'] = 'Readable, Writable, Manageable';
+$lang->repo->accessList['readonly'] = 'Read-only (for image import, managed via third-party code repository, automatically synced regularly by DevOps)';
 
 $lang->repo->importProgress = new stdclass();
 $lang->repo->importProgress->title        = 'Importing repository...';
