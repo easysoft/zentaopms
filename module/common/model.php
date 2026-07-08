@@ -4010,14 +4010,14 @@ EOF;
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
         $params = $this->app->params;
-        
+
         if(empty($spaceID) && !empty($params['space']))   $spaceID = $params['space'];
         if(empty($spaceID) && !empty($params['spaceID'])) $spaceID = $params['spaceID'];
-        
+
         if(empty($spaceID) && !empty($params['repoID']))
         {
             $repoID  = $params['repoID'];
-            $repo    = $this->loadModel('repo')->fetch($repoID);
+            $repo    = $this->loadModel('repo')->fetchByID($repoID);
             $spaceID = $repo->spaceID;
         }
 
