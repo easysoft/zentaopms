@@ -13581,6 +13581,7 @@ class upgradeModel extends model
             $this->app->throwError = true;
             $this->dao->begin();
 
+            $this->addDevOpsDefaultGroup();
             $this->migrateDevopsGroupPrivs();
 
             $this->loadModel('space')->createDefaultSpace();
