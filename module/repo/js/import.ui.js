@@ -28,6 +28,12 @@ window.loadName = function()
 {
     const $repoPicker = $('[name=repo]').zui('picker');
     const $nameInput  = $('[name=name]');
+    if(typeof importName != 'undefined')
+    {
+        $nameInput.val(repoName);
+        return;
+    }
+
     const selections  = $repoPicker && $repoPicker.$ ? $repoPicker.$.state.selections : [];
     const repoName    = selections.length > 0 ? selections[0].text : '';
 

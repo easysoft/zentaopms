@@ -62,6 +62,7 @@ $config->repo->form->import['product']    = array('required' => true, 'type' => 
 $config->repo->form->import['desc']       = array('required' => false, 'type' => 'string', 'default' => '', 'filter' => 'trim');
 $config->repo->form->import['mirror']     = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
 $config->repo->form->import['acl']        = array('required' => true, 'type' => 'string', 'default' => '', 'filter' => 'trim');
+$config->repo->form->import['members']    = array('required' => false, 'type' => 'array', 'default' => array(), 'filter' => 'join');
 
 $config->repo->form->createWebhook = array();
 $config->repo->form->createWebhook['name']         = array('required' => true,  'type' => 'string', 'default' => '', 'filter' => 'trim');
