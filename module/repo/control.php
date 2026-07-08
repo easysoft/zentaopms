@@ -1448,38 +1448,6 @@ class repo extends control
     }
 
     /**
-     * 获取SVN目录。
-     * Ajax get svn dir.
-     *
-     * @param  int    $repoID
-     * @param  string $path
-     * @access public
-     * @return void
-     */
-    public function ajaxGetSVNDirs(int $repoID, string $path = '')
-    {
-        $repo = $this->repo->getByID($repoID);
-        if(!$this->repo->isSvn($repo)) return print(json_encode(array()));
-
-        $path = $this->repo->decodePath($path);
-        $dirs = array();
-        if(empty($path))
-        {
-            $dirs['/'] = '';
-            if(empty($repo->prefix)) $path = '/';
-        }
-
-        $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
-        if($tags)
-        {
-            $dirs['/'] = $this->repo->encodePath($path);
-            foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
-        }
-
-        echo json_encode($dirs);
-    }
-
-    /**
      * 获取1.5级导航数据。
      * Ajax get drop menu.
      *
@@ -1531,65 +1499,6 @@ class repo extends control
         $this->view->link      = $link;
 
         $this->display();
-    }
-
-    /**
-     * 根据产品ID获取项目列表。
-     * Get projects list by product id list by ajax.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxProjectsOfProducts()
-    {
-        $productIds = $this->post->products ? explode(',', $this->post->products) : array();
-        if(empty($productIds))
-        {
-            $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
-            $productIds = array_keys($products);
-        }
-        /* Get all projects that can be accessed. */
-        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
-
-        $options = array();
-        foreach($accessProjects as $projectID => $project)
-        {
-            $options[] = array('text' => $project, 'value' => $projectID);
-        }
-        return print(json_encode($options));
-    }
-
-
-    /**
-     * 获取各个服务器下的项目。
-     * Ajax get projects by server.
-     *
-     * @param  int    $serverID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProjects(int $serverID)
-    {
-        $repos = $this->repo->ajaxGetGitFoxProjects($serverID);
-        return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
-    }
-
-    /**
-     * 根据服务器ID获取分组。
-     * Ajax get groups by server.
-     *
-     * @param  int    $serverID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetGroups(int $serverID)
-    {
-        $options = $this->repo->getGroups($serverID);
-
-        $result = new stdclass();
-        $result->options = $options;
-
-        return print(json_encode($result));
     }
 
     /**

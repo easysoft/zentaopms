@@ -36,6 +36,9 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.refreshrandom';
 $config->openMethods[] = 'user.reset';
 $config->openMethods[] = 'user.resetpassword';
+$config->openMethods[] = 'gitfox.devopsintroduction';
+$config->openMethods[] = 'gitfox.installgitFox';
+$config->openMethods[] = 'gitfox.ajaxCheckgitFoxhealth';
 
 /* 登录用户可以访问的方法。The methods that can be accessed by the logged users. */
 $config->logonMethods   = [];
@@ -222,9 +225,17 @@ $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
 $config->logonMethods[] = 'repo.ajaxgeteditorcontent';
-$config->logonMethods[] = 'space.ajaxGetDropMenu';
-$config->logonMethods[] = 'space.ajaxGetGroupsBySpace';
-$config->logonMethods[] = 'space.ajaxGetGroupByID';
+$config->logonMethods[] = 'space.ajaxgetdropmenu';
+$config->logonMethods[] = 'space.ajaxgetgroupsbyspace';
+$config->logonMethods[] = 'space.ajaxgetgroupbyid';
+$config->logonMethods[] = 'gitfox.ajaxgetartifacts';
+$config->logonMethods[] = 'ppm.ajaxgetconflictfiles';
+$config->logonMethods[] = 'ppm.ajaxgetreviewers';
+$config->logonMethods[] = 'ppm.ajaxaddreviewers';
+$config->logonMethods[] = 'ppm.ajaxdeletereviewer';
+$config->logonMethods[] = 'ppm.ajaxcheckreviewflow';
+$config->logonMethods[] = 'provider.ajaxgetproviders';
+$config->logonMethods[] = 'repo.ajaxgetspacemembers';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
@@ -418,7 +429,6 @@ $config->ajaxDependencies['repo.ajaxgetcommitter']                            = 
 $config->ajaxDependencies['repo.ajaxgetfiles']                                = ['repo.browse', 'repo.view', 'repo.diff', 'repo.review'];
 $config->ajaxDependencies['repo.ajaxgetimportprogress']                       = 'repo.import';
 $config->ajaxDependencies['repo.ajaxgetrules']                                = ['repo.create', 'repo.edit'];
-$config->ajaxDependencies['repo.ajaxgetspacemembers']                         = ['repo.create', 'repo.edit'];
 $config->ajaxDependencies['repo.ajaxgetsvndirs']                              = ['repo.create', 'repo.edit', 'repo.import'];
 $config->ajaxDependencies['repo.ajaxmirrorsync']                              = 'repo.browse';
 $config->ajaxDependencies['repo.ajaxmirrorsyncprogress']                      = 'repo.browse';
@@ -509,3 +519,7 @@ $config->ajaxDependencies['zanode.ajaxgettaskstatus']                         = 
 $config->ajaxDependencies['zanode.ajaxgetztfscript']                          = 'testcase.automation';
 $config->ajaxDependencies['zanode.ajaxrunztfscript']                          = 'testtask.cases';
 $config->ajaxDependencies['zanode.ajaxupdateimage']                           = 'zanode.createimage';
+$config->ajaxDependencies['artifact.ajaxgetdirparentitems']                   = 'artifact.view';
+$config->ajaxDependencies['artifact.ajaxgetfolders']                          = 'artifact.view';
+$config->ajaxDependencies['artifact.ajaxbatchdeleteartifact']                 = 'artifact.deleteartifact';
+$config->ajaxDependencies['ppm.ajaxgetcreatechecklist']                       = 'ppm.create';

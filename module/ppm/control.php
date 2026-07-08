@@ -794,37 +794,6 @@ class ppm extends control
     }
 
     /**
-     * 获取构建列表。
-     * AJAX: Get job list.
-     *
-     * @param  int $repoID
-     * @return void
-     */
-    public function ajaxGetJobList(int $repoID)
-    {
-        $jobList = $this->loadModel('job')->getListByRepoID($repoID);
-        if(!$jobList) return $this->send(array('message' => array()));
-
-        $options = "<option value=''></option>";
-        foreach($jobList as $job) $options .= "<option value='{$job->id}' data-name='{$job->name}'>[{$job->id}] {$job->name}</option>";
-        $this->send($options);
-    }
-
-    /**
-     * 同步流水线的构建状态。
-     * AJAX sync compile status.
-     *
-     * @param  int    $compileID
-     * @access public
-     * @return void
-     */
-    public function ajaxSyncCompile(int $compileID)
-    {
-        $this->loadModel('ci')->checkCompileStatus($compileID);
-        return $this->sendSuccess(array('message' => $this->lang->ppm->refreshSuccess, 'load' => true));
-    }
-
-    /**
      * 获取创建合并请求的检查列表。
      * AJAX get create MR check list.
      *
