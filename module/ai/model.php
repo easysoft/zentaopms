@@ -2523,15 +2523,15 @@ class aiModel extends model
         switch($module)
         {
             case 'product':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCT)
                     ->where('id')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'productplan':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCTPLAN)
                     ->where('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'release':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RELEASE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
@@ -2539,53 +2539,53 @@ class aiModel extends model
                 /* programplan/create only exist in the waterfall model project. */
                 if(strpos($prompt->actionPurpose, 'programplan/create'))
                 {
-                    return $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                    return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
                         ->where('id')->in($this->app->user->view->projects)
                         ->andWhere('model')->eq('waterfall')
                         ->fetch('maxId');
                 }
 
-                return $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
             case 'story':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_STORY)
                     ->where('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'execution':
                 $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
                 return max($executionIds);
             case 'task':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TASK)
                     ->where('project')->in($this->app->user->view->projects)
                     ->fetch('maxId');
             case 'case':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_CASE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'bug':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_BUG)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
             case 'ticket':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_TICKET)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TICKET)
                     ->where('product')->in($this->app->user->view->products)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'risk':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_RISK)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RISK)
                     ->where('project')->in($this->app->user->view->projects)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'issue':
-                return $this->dao->select('max(id) as maxId')->from(TABLE_ISSUE)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_ISSUE)
                     ->where('project')->in($this->app->user->view->projects)
                     ->andWhere('deleted')->eq(0)
                     ->fetch('maxId');
             case 'doc':
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                $objectId = $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
                     ->where('project')->in($this->app->user->view->projects)
                     ->orWhere('product')->in($this->app->user->view->products)
                     ->fetch('maxId');
@@ -2597,7 +2597,7 @@ class aiModel extends model
                     ->fetchPairs();
                 if(empty($userDocLibs)) return false;
 
-                return $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
                     ->where('lib')->in($userDocLibs)
                     ->fetch('maxId');
             default:
