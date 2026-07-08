@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easysoft.ltd>
  * @package     task
@@ -111,6 +111,7 @@ class taskTao extends taskModel
         $lastEffort = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('objectID')->eq($task->id)
             ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
         $consumed = $task->consumed + $effort->consumed - $oldEffort->consumed;
@@ -534,26 +535,29 @@ class taskTao extends taskModel
             ->beginIF($productID)->leftJoin(TABLE_MODULE)->alias('t4')->on('t1.module = t4.id')->fi()
             ->beginIF($this->config->edition == 'max' or $this->config->edition == 'ipd')->leftJoin(TABLE_DESIGN)->alias('t5')->on('t1.design= t5.id')->fi()
             ->where('t1.execution')->in($executionID)
-            ->beginIF(is_numeric($executionID) && !empty($execution->isTpl))->andWhere('t1.isTpl')->eq('1')->fi()
+            ->beginIF(is_numeric($executionID) && !empty($execution->isTpl))->andWhere('t1.`isTpl`')->eq('1')->fi()
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t3.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
             ->fi()
             ->beginIF($productID)->andWhere("((t4.root=" . (int)$productID . " and t4.type='story') OR t2.product=" . (int)$productID . ")")->fi()
             ->beginIF($type == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
-            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.storyVersion')->andWhere("t2.status = 'active'")->fi()
-            ->beginIF($type == 'assignedtome')->andWhere("(t1.assignedTo = '{$this->app->user->account}' or (t1.mode = 'multi' and t3.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t3.status != 'done') )")->fi()
+            ->beginIF($type == 'needconfirm')->andWhere('t2.version > t1.`storyVersion`')->andWhere("t2.status = 'active'")->fi()
+            ->beginIF($type == 'assignedtome')->andWhere("(t1.`assignedTo` = '{$this->app->user->account}' or (t1.mode = 'multi' and t3.`account` = '{$this->app->user->account}' and t1.status != 'closed' and t3.status != 'done') )")->fi()
             ->beginIF($type == 'finishedbyme')
             ->andWhere('t1.finishedby', 1)->eq($this->app->user->account)
             ->orWhere('t3.status')->eq("done")
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,reviewedby,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($type == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
@@ -604,10 +608,10 @@ class taskTao extends taskModel
             ->fi()
             ->beginIF($type == 'assignedTo' && ($this->app->rawModule == 'my' || $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF(!in_array($type, array('all', 'finishedBy', 'assignedTo', 'myInvolved')))->andWhere("t1.`$type`")->eq($account)->fi()
-            ->beginIF($type == 'assignedTo')->andWhere("((t1.assignedTo = '{$account}') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
+            ->beginIF($type == 'assignedTo')->andWhere("((t1.`assignedTo` = '{$account}') or (t1.mode = 'multi' and t5.`account` = '{$account}' and t1.status != 'closed' and t5.status != 'done') )")->fi()
             ->beginIF($type == 'assignedTo' && $this->app->rawModule == 'my' && $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel')->fi()
             ->beginIF($type == 'myInvolved')
-            ->andWhere("((t5.`account` = '{$this->app->user->account}') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
+            ->andWhere("((t5.`account` = '{$account}') OR t1.`assignedTo` = '{$account}' OR t1.`finishedby` = '{$account}')")
             ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -666,7 +670,7 @@ class taskTao extends taskModel
      * @param  object $task
      * @return float
      */
-    protected function getLeftAfterDeleteWorkhour(object $effort, object $task): float
+    public function getLeftAfterDeleteWorkhour(object $effort, object $task): float
     {
         $left = $task->left;
         if($effort->isLast)
@@ -715,6 +719,12 @@ class taskTao extends taskModel
         if($task->mode == 'multi' && $currentTeam->status == 'done' && ($newTeamInfo->consumed == 0 && $left == 0))
         {
             $newTeamInfo->status = 'doing';
+            $newTeamInfo->left   = $currentTeam->estimate;
+        }
+
+        if(isset($newTeamInfo->consumed) && empty($newTeamInfo->consumed))
+        {
+            $newTeamInfo->status = 'wait';
             $newTeamInfo->left   = $currentTeam->estimate;
         }
         $this->dao->update(TABLE_TASKTEAM)->data($newTeamInfo)->where('id')->eq($currentTeam->id)->exec();
@@ -778,7 +788,7 @@ class taskTao extends taskModel
             if($change['field'] == 'status' && $change['new'] == 'done')
             {
                 $confirmURL = helper::createLink('bug', 'view', "id={$task->fromBug}");
-                return array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "').then((res) => {if(res) loadModal('{$confirmURL}')});", 'closeModal' => true);
+                return array('result' => 'success', 'load' => true, 'callback' => "zui.Modal.confirm('" . sprintf($this->lang->task->remindBug, $task->fromBug) . "').then((res) => {if(res) zui.Modal.open({url: '{$confirmURL}', size: 'lg'})});", 'closeModal' => true);
             }
         }
 

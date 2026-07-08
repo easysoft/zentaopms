@@ -11,7 +11,7 @@
  * 描述：按执行统计的执行验收通过率是指执行关闭时通过验收需求数量与执行所有需求的比率。该度量项反映了已完成的需求是否符合需求验收标准，可以帮助团队识别研发质量存在的潜在问题。
  * 定义：复用：按执行统计的执行关闭时验收通过的研发需求数、按执行统计的有效研发需求数；公式：按执行统计的执行关闭时验收通过的研发需求数/按执行统计的有效研发需求数
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Daitingting <daitingting@xirangit.com>
  * @package
  * @uses      func

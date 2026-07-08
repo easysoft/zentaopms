@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The uploadDocs view file of doc module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     doc
@@ -12,6 +12,12 @@ namespace zin;
 
 jsVar('docID',   $docID);
 jsVar('libType', $objectType);
+
+$parentValue = 0;
+if(!empty($doc->parent))        $parentValue = $doc->parent;
+elseif(!empty($defaultParent))  $parentValue = $defaultParent;
+elseif($moduleID)               $parentValue = "m_$moduleID";
+
 formPanel
 (
     set::title(!empty($docID) ? $lang->doc->edit : $lang->doc->uploadFile),
@@ -83,7 +89,7 @@ formPanel
         set::label($lang->doc->module),
         set::name('parent'),
         set::items(array('m_0' => '/') + $optionMenu),
-        set::value(!empty($doc->parent) ? $doc->parent : ($moduleID ? "m_$moduleID" : 0)),
+        set::value($parentValue),
         set::required(true)
     ),
     formGroup

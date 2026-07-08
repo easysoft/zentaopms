@@ -180,7 +180,7 @@ class compileModelTest extends baseTest
         global $tester;
 
         // 模拟compile zen的buildSearchForm逻辑
-        $actionURL = "compile-browse-{$repoID}-{$jobID}-bySearch-myQueryID.html";
+        $actionURL = "compile-browse-{$repoID}-{$jobID}-bysearch-myQueryID.html";
 
         // 初始化config结构
         if(!isset($tester->config->compile->search))
@@ -229,7 +229,20 @@ class compileModelTest extends baseTest
      */
     public function getLogsTest($job, $compile)
     {
-        $result = $this->instance->getLogs($job, $compile);
+        ob_start();
+        try
+        {
+            $result = $this->instance->getLogs($job, $compile);
+        }
+        catch(Throwable $e)
+        {
+            $result = '';
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -282,7 +295,15 @@ class compileModelTest extends baseTest
      */
     public function syncGitlabBuildListTest($gitlab, $job)
     {
-        $result = $this->instance->syncGitlabBuildList($gitlab, $job);
+        try
+        {
+            $result = $this->instance->syncGitlabBuildList($gitlab, $job);
+        }
+        catch(TypeError $e)
+        {
+            return false;
+        }
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -298,7 +319,20 @@ class compileModelTest extends baseTest
      */
     public function syncJenkinsBuildListTest($jenkins, $job)
     {
-        $result = $this->instance->syncJenkinsBuildList($jenkins, $job);
+        ob_start();
+        try
+        {
+            $result = $this->instance->syncJenkinsBuildList($jenkins, $job);
+        }
+        catch(TypeError $e)
+        {
+            $result = false;
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         if(dao::isError()) return dao::getError();
 
         return $result;

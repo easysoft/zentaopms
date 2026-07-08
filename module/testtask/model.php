@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of test task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
@@ -521,7 +521,7 @@ class testtaskModel extends model
         $query = str_replace('t1.`lastRunDate`', 't2.`lastRunDate`', $query);
         $query = str_replace('t1.`lastRunResult`', 't2.`lastRunResult`', $query);
 
-        return $this->dao->select('t1.*, t2.lastRunner, t2.lastRunDate, t2.lastRunResult')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.*, t2.`lastRunner`, t2.`lastRunDate`, t2.`lastRunResult`')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
             ->where('t2.task')->eq($testTask)
             ->andWhere('t1.status')->ne('wait')
@@ -560,17 +560,20 @@ class testtaskModel extends model
      * Get report data of a testtask by execution results.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerRunResult(int $taskID): array
+    public function getDataOfTestTaskPerRunResult(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
-        $datas = $this->dao->select("t1.lastRunResult AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
-            ->leftJoin(TABLE_CASE)->alias('t2')
-            ->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+        $datas = $this->dao->select("t1.`lastRunResult` AS name, COUNT('t1.*') AS value")->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2') ->on('t1.case = t2.id')
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
-            ->groupBy('t1.lastRunResult')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
+            ->groupBy('t1.`lastRunResult`')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -586,15 +589,19 @@ class testtaskModel extends model
      * Get report data of a testtask by case type.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerType(int $taskID): array
+    public function getDataOfTestTaskPerType(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select('t2.type AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t2.type')
             ->orderBy('value desc')
             ->fetchAll('name');
@@ -610,18 +617,23 @@ class testtaskModel extends model
      * Get report data of a testtask by case module.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerModule(int $taskID): array
+    public function getDataOfTestTaskPerModule(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
         $datas = $this->dao->select('t2.module AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
             ->groupBy('t2.module')
             ->orderBy('value desc')
             ->fetchAll('name');
+
         if(!$datas) return array();
 
         $modules = $this->loadModel('tree')->getModulesName(array_keys($datas));
@@ -635,16 +647,20 @@ class testtaskModel extends model
      * Get report data of a testtask by executor.
      *
      * @param  int    $taskID
+     * @param  string $caseQuery
+     * @param  int    $moduleID
      * @access public
      * @return array
      */
-    public function getDataOfTestTaskPerRunner($taskID)
+    public function getDataOfTestTaskPerRunner(int $taskID, string $caseQuery, int $moduleID = 0): array
     {
-        $datas = $this->dao->select('t1.lastRunner AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
+        $datas = $this->dao->select('t1.`lastRunner` AS name, COUNT(1) AS value')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
-            ->where('t1.task')->eq($taskID)
+            ->where($caseQuery)
+            ->andWhere('t1.task')->eq($taskID)
             ->andWhere('t2.deleted')->eq('0')
-            ->groupBy('t1.lastRunner')
+            ->beginIF($moduleID)->andWhere('t2.module')->eq($moduleID)->fi()
+            ->groupBy('t1.`lastRunner`')
             ->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
@@ -1010,7 +1026,7 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, t2.version AS caseVersion, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.`case` = t4.`case` AND t1.version = t4.version')
@@ -1021,6 +1037,8 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+        foreach($runs as $run) $run->title = htmlspecialchars_decode((string)$run->title, ENT_QUOTES);
+        return $runs;
     }
 
     /**
@@ -1039,7 +1057,7 @@ class testtaskModel extends model
         $orderBy = $this->addPrefixToOrderBy($orderBy);
         $cases   = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
 
-        return $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
@@ -1049,6 +1067,8 @@ class testtaskModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+        foreach($runs as $run) $run->title = htmlspecialchars_decode((string)$run->title, ENT_QUOTES);
+        return $runs;
     }
 
     /**
@@ -1089,17 +1109,19 @@ class testtaskModel extends model
     {
         $orderBy = $this->addPrefixToOrderBy($orderBy);
 
-        return $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+        $runs = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus,t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
             ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
             ->where('t1.task')->eq($taskID)
-            ->andWhere('t1.assignedTo')->eq($user)
+            ->andWhere('t1.`assignedTo`')->eq($user)
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+        foreach($runs as $run) $run->title = htmlspecialchars_decode((string)$run->title, ENT_QUOTES);
+        return $runs;
     }
 
     /**
@@ -1200,8 +1222,8 @@ class testtaskModel extends model
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`'), $caseQuery);
 
-            $orderBy   = $this->addPrefixToOrderBy($sort);
-            return $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
+            $orderBy = $this->addPrefixToOrderBy($sort);
+            $runs    = $this->dao->select("t2.*, t1.*, COALESCE(t3.title, '') AS storyTitle, t2.status AS caseStatus, t2.version AS caseVersion, IF(t4.title IS NULL, t2.title, t4.title) AS title")->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->leftJoin(TABLE_CASESPEC)->alias('t4')->on('t1.case = t4.case AND t1.version = t4.version')
@@ -1213,6 +1235,8 @@ class testtaskModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);
+            foreach($runs as $run) $run->title = htmlspecialchars_decode((string)$run->title, ENT_QUOTES);
+            return $runs;
         }
 
         return array();
@@ -1365,7 +1389,7 @@ class testtaskModel extends model
 
         /* 更新测试用例的执行结果。*/
         /* Update the execution results of the test case. */
-        $case = new stdclass();
+        $case = form::data()->get();
         $case->lastRunner    = $this->app->user->account;
         $case->lastRunDate   = $now;
         $case->lastRunResult = $caseResult;

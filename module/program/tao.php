@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chen.tao<chentao@easycorp.ltd>
  * @package     program
@@ -243,7 +243,7 @@ class programTao extends programModel
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
             ->where('t3.path')->like("%,$programID,%")
             ->andWhere('t3.type')->eq('project')
-            ->andWhere('t3.hasProduct')->eq('0')
+            ->andWhere('t3.`hasProduct`')->eq('0')
             ->andWhere('t1.shadow')->eq('1')
             ->fetchPairs();
         if($shadowProducts) $this->dao->update(TABLE_PRODUCT)->set('program')->eq($newTopProgram)->where('id')->in($shadowProducts)->exec();
@@ -278,7 +278,7 @@ class programTao extends programModel
         foreach($stats as $projectID => $project)
         {
             $totalRealNotDel = $project['totalConsumedNotDel'] + $project['totalLeftNotDel'];
-            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 1000) / 1000 * 100 : 0;
+            $progress        = $totalRealNotDel ? floor($project['totalConsumedNotDel'] / $totalRealNotDel * 10000) / 10000 * 100 : 0;
             $this->dao->update(TABLE_PROJECT)
                 ->set('progress')->eq($progress)
                 ->set('teamCount')->eq($project['teamCount'])
@@ -308,7 +308,7 @@ class programTao extends programModel
         $tasks = $this->dao->select('t1.id, execution, t1.estimate, t1.consumed, t1.`left`, t1.status')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.isParent')->eq('0') // Ignore parent task.
+            ->andWhere('t1.`isParent`')->eq('0') // Ignore parent task.
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!empty($projectIdList))->andWhere('t2.project')->in($projectIdList)->fi()
             ->fetchAll('id');

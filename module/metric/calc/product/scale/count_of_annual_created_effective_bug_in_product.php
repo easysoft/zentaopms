@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度新增有效Bug数是指产品在某年度新发现的真正具有影响和价值的Bug数量。有效Bug通常是指导致产品不正常运行或影响用户体验的Bug。统计有效Bug数可以帮助评估产品的稳定性和质量也可以评估测试人员之前的协作或对产品的了解程度。
  * 定义：产品中Bug个数求和;创建时间为某年;解决方案为已解决和延期处理或者状态为激活;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_effective_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.status', 't1.resolution', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.status', 't1.resolution', 't1.`openedDate`');
 
     public $result = array();
 

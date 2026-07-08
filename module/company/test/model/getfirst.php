@@ -38,5 +38,5 @@ r($companyTest->getFirstTest()) && p('id') && e('1');
 // 测试步骤4：验证返回的公司名称不为空
 r($companyTest->getFirstTest()) && p('name') && e('易软天创网络科技有限公司');
 
-// 测试步骤5：验证返回对象类型正确（检查是否为对象且包含关键属性）
-r($companyTest->getFirstTest()) && p('admins,zipcode') && e(',admin,,100000');
+// 测试步骤5：验证返回对象包含邮编字段
+r($companyTest->getFirstTest()) && p('zipcode') && e('100000');

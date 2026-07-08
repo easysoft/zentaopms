@@ -3,20 +3,13 @@ declare(strict_types=1);
 /**
  * The ajaxgetdropmenu view file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Hao Sun <sunhao@easycorp.ltd>
  * @package     product
  * @version     $Id
  * @link        https://www.zentao.net
  */
 namespace zin;
-
-/* 旧页面获取旧的1.5级导航。*/
-if(in_array("{$module}-{$method}", $config->index->oldPages))
-{
-    include '../view/ajaxgetdropmenu.html.php';
-    return;
-}
 
 /**
  * 获取产品所属分组。

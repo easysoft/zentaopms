@@ -24,6 +24,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 // 2. zendata数据准备
 zenData('pipeline')->gen(5);
 zenData('repo')->loadYaml('repo')->gen(5);
+zenData('repobranch')->loadYaml('repobranch_getbranches')->gen(4);
 
 // 3. 用户登录
 su('admin');

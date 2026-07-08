@@ -15,6 +15,7 @@ cid=17543
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+zenData('story')->loadYaml('story')->gen(20);
 zenData('case')->loadYaml('case')->gen(30);
 zenData('user')->gen(5);
 su('admin');

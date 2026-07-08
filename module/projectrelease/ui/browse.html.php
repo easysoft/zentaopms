@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browse view file of release module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     release
@@ -17,9 +17,9 @@ if($isFromDoc || $isFromAI)
     jsVar('blockID', $blockID);
 
     $this->app->loadLang('doc');
-    $projectChangeLink = createLink('projectRelease', 'browse', "projectID={projectID}&executionID=$executionID&type=$type&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+    $projectChangeLink = createLink('projectRelease', 'browse', "projectID={projectID}&executionID=$executionID&browseType=$browseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
 
-    jsVar('insertListLink', createLink('projectRelease', 'browse', "projectID={$project->id}&executionID=$executionID&type=$type&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
+    jsVar('insertListLink', createLink('projectRelease', 'browse', "projectID={$project->id}&executionID=$executionID&browseType=$browseType&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}"));
 
     formPanel
     (
@@ -65,8 +65,8 @@ if($isFromDoc || $isFromAI)
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("projectID={$projectID}&executionID={$executionID}&type={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
+    set::current($browseType),
+    set::linkParams("projectID={$projectID}&executionID={$executionID}&browseType={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from={$from}&blockID={$blockID}"),
     set::isModal($isFromDoc || $isFromAI),
     set::modalTarget('#projectReleases_table')
 );
@@ -165,7 +165,7 @@ dtable
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     ($isFromDoc || $isFromAI) ? null : set::customCols(true),
-    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('projectrelease', 'browse', "projectID={$project->id}&executionID={$executionID}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->release->create),
     ($isFromDoc || $isFromAI) ? null : set::createLink($createReleaseLink)
 );

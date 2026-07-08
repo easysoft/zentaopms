@@ -171,6 +171,21 @@ class searchModelTest extends baseTest
     }
 
     /**
+     * Test getListCount method.
+     *
+     * @param  array|string $type
+     * @access public
+     * @return array
+     */
+    public function getListCountTest(array|string $type = 'all'): array
+    {
+        $result = $this->instance->getListCount($type);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 测试根据 ID 获取查询。
      * Test get by ID.
      *
@@ -253,6 +268,22 @@ class searchModelTest extends baseTest
     }
 
     /**
+     * Test processSearchParams method.
+     *
+     * @param  string $module
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return array
+     */
+    public function processSearchParamsTest(string $module, bool $cacheSearchFunc = false): array
+    {
+        $result = $this->instance->processSearchParams($module, $cacheSearchFunc);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * 保存查询的测试。
      * Test save query.
      *
@@ -274,6 +305,37 @@ class searchModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $this->instance->getByID($queryID);
+    }
+
+    /**
+     * Test saveDict method.
+     *
+     * @param  array $dict
+     * @access public
+     * @return bool
+     */
+    public function saveDictTest(array $dict): bool
+    {
+        $result = $this->instance->saveDict($dict);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test saveIndex method.
+     *
+     * @param  string $objectType
+     * @param  object $object
+     * @access public
+     * @return bool
+     */
+    public function saveIndexTest(string $objectType, object $object): bool
+    {
+        $result = $this->instance->saveIndex($objectType, $object);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**

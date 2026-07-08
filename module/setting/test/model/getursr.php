@@ -29,6 +29,10 @@ $configTable->gen(5);
 
 su('admin');
 
+global $config;
+$originalURSR = isset($config->URSR) ? $config->URSR : null;
+$config->URSR = '12345';
+
 $settingTest = new settingModelTest();
 
 // 步骤1：测试从配置文件获取URSR（如果配置中存在URSR）
@@ -49,3 +53,12 @@ r($settingTest->getURSRTest(true)) && p() && e('0');
 // 步骤5：更新URSR配置为数字字符串
 $tester->dao->update(TABLE_CONFIG)->set('value')->eq('12345')->where('`key`')->eq('URSR')->exec();
 r($settingTest->getURSRTest(true)) && p() && e('12345');
+
+if($originalURSR !== null)
+{
+    $config->URSR = $originalURSR;
+}
+else
+{
+    unset($config->URSR);
+}

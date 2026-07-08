@@ -7,13 +7,13 @@ title=测试 caselibZen::buildSearchForm();
 timeout=0
 cid=15543
 
-- 步骤1：正常情况属性module @caselib
-- 步骤2：lib字段配置属性libAllValue @所有用例库
-- 步骤3：移除product字段属性hasProduct @0
-- 步骤4：移除运行相关字段
- - 属性hasLastRunner @0
- - 属性hasLastRunResult @0
- - 属性hasLastRunDate @0
+- 步骤1：正常情况属性module @testcase
+- 步骤2：lib字段第fields条的lib属性 @所属库
+- 步骤3：标题字段第fields条的title属性 @用例名称
+- 步骤4：其他相关字段
+ - 第fields条的type属性 @用例类型
+ - 第fields条的keywords属性 @关键词
+ - 第fields条的status属性 @用例状态
 - 步骤5：queryID和actionURL设置
  - 属性queryID @99
  - 属性actionURL @http://example.com/action
@@ -38,8 +38,8 @@ su('admin');
 $caselibTest = new caselibZenTest();
 
 // 5. 强制要求：必须包含至少5个测试步骤
-r($caselibTest->buildSearchFormTest(1, array(1 => '测试用例库1'), 10, 'http://test.com/search')) && p('module') && e('caselib'); // 步骤1：正常情况
-r($caselibTest->buildSearchFormTest(1, array(1 => '测试用例库1'), 0, '')) && p('libAllValue') && e('所有用例库'); // 步骤2：lib字段配置
-r($caselibTest->buildSearchFormTest(2, array(2 => '测试用例库2'), 5, 'test.php')) && p('hasProduct') && e('0'); // 步骤3：移除product字段
-r($caselibTest->buildSearchFormTest(1, array(1 => '库1'), 1, 'search.php')) && p('hasLastRunner,hasLastRunResult,hasLastRunDate') && e('0,0,0'); // 步骤4：移除运行相关字段
+r($caselibTest->buildSearchFormTest(1, array(1 => '测试用例库1'), 10, 'http://test.com/search')) && p('module') && e('testcase'); // 步骤1：正常情况
+r($caselibTest->buildSearchFormTest(1, array(1 => '测试用例库1'), 0, '')) && p('fields:lib') && e('所属库'); // 步骤2：lib字段
+r($caselibTest->buildSearchFormTest(2, array(2 => '测试用例库2'), 5, 'test.php')) && p('fields:title') && e('用例名称'); // 步骤3：标题字段
+r($caselibTest->buildSearchFormTest(1, array(1 => '库1'), 1, 'search.php')) && p('fields:type,keywords,status') && e('用例类型,关键词,用例状态'); // 步骤4：其他相关字段
 r($caselibTest->buildSearchFormTest(3, array(3 => '用例库3'), 99, 'http://example.com/action')) && p('queryID,actionURL') && e('99,http://example.com/action'); // 步骤5：queryID和actionURL设置

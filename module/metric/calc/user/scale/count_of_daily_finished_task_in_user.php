@@ -11,7 +11,7 @@
  * 描述：按人员统计的日完成任务数表示每个人每日完成的任务数量之和。反映了每个人每日完成的任务规模。该数值越大，可能说明工作效率越高，任务完成速度越快。
  * 定义：任务个数求和;由谁完成为某人;过滤已删除的任务;过滤已删除项目的任务;过滤已删除执行的任务;过滤挂起的执行和项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_finished_task_in_user extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.finishedDate', 't1.finishedBy', 't3.status as projectStatus', 't2.status as executionStatus');
+    public $fieldList = array('t1.`finishedDate`', 't1.`finishedBy`', 't3.status as projectStatus', 't2.status as executionStatus');
 
     public $result = array();
 

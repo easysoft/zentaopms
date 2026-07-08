@@ -2,91 +2,14 @@
 declare(strict_types=1);
 /**
  * The browsebycard view file of project module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     project
  * @link        https://www.zentao.net
  */
+
 namespace zin;
-
-jsVar('browseType', $browseType);
-jsVar('param', $param);
-jsVar('recTotal', $pager->recTotal);
-jsVar('recPerPage', $pager->recPerPage);
-jsVar('pageID', $pager->pageID);
-
-/* zin: Define the feature bar on main menu. */
-unset($programs[0]);
-featureBar
-(
-    helper::hasFeature('program') ? to::before
-    (
-        div
-        (
-            picker
-            (
-                set::name('programID'),
-                set::value($programID),
-                set::items($programs),
-                set::width('200px'),
-                set::placeholder($lang->project->selectProgram),
-                on::change('changeProgram')
-            )
-        )
-    ) : null,
-    set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    checkbox
-    (
-        set::rootClass('mx-2'),
-        set::name('involved'),
-        set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : ''),
-        on::change()->call('handleChangeInvolved', jsRaw('event'))
-    ),
-    li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
-);
-
-/* zin: Define the toolbar on main menu. */
-toolbar
-(
-    item(set(array
-    (
-        'type'  => 'btnGroup',
-        'items' => array(array
-        (
-            'icon'      => 'list',
-            'class'     => 'switchButton btn-icon',
-            'data-type' => 'bylist',
-            'hint'      => $lang->project->bylist
-        ), array
-        (
-            'icon'      => 'cards-view',
-            'class'     => 'btn-icon switchButton text-primary',
-            'data-type' => 'bycard',
-            'hint'      => $lang->project->bycard
-        ))
-    ))),
-    hasPriv('project', 'export') ? item(set(array
-    (
-        'icon'        => 'export',
-        'text'        => $lang->project->export,
-        'class'       => 'ghost export',
-        'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    hasPriv('project', 'create') ? item(set(array
-    (
-        'icon'          => 'plus',
-        'text'          => $lang->project->create,
-        'class'         => 'primary create-project-btn',
-        'url'           => createLink('project', 'createGuide', "programID={$programID}"),
-        'data-toggle'   => 'modal',
-        'data-position' => 'center'
-    ))) : null,
-    on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
-);
 
 $projectCards = null;
 if(!empty($projectStats))
@@ -325,15 +248,17 @@ div
             setClass('text-gray'),
             $lang->project->empty
         ),
-        hasPriv('project', 'create') ? btn(set(array
+        hasPriv('project', 'create') ? btn(set(array_merge(array
         (
             'icon'          => 'plus',
             'text'          => $lang->project->create,
-            'class'         => 'ml-2',
-            'url'           => createLink('project', 'createGuide'),
             'data-toggle'   => 'modal',
             'data-position' => 'center'
-        ))) : null
+        ), array
+        (
+            'class' => 'ml-2',
+            'url'   => createLink('project', 'createGuide')
+        )))) : null,
     ) : $projectCards,
     !empty($projectStats) ? div
     (

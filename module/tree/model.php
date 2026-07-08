@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -860,7 +860,7 @@ class treeModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('type')->eq('host')
             ->andWhere('deleted')->eq(0)
-            ->orderBy('grade_desc,id_asc')
+            ->orderBy('grade desc, `order` asc')
             ->query();
 
         while($module = $stmt->fetch())
@@ -2051,7 +2051,7 @@ class treeModel extends model
      */
     public function update(int $moduleID, string $type = ''): bool
     {
-        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->get();
+        $module  = fixer::input('post')->cleanInt('branch')->setDefault('parent', 0)->remove('moduleID,verifyPassword')->get();
         $self    = $this->getById($moduleID);
         $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
@@ -2528,7 +2528,7 @@ class treeModel extends model
      */
     public function getDocStructure(): array
     {
-        $stmt = $this->app->dbQuery($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('`grade`_desc, `order`')->get());
+        $stmt = $this->app->dbQuery($this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->andWhere('deleted')->eq(0)->orderBy('grade_desc, `order`')->get());
         $parent = array();
         while($module = $stmt->fetch())
         {

@@ -76,6 +76,19 @@ $lang->my->storyMenu->openedByMe   = '由我創建';
 $lang->my->storyMenu->reviewedByMe = '由我評審';
 $lang->my->storyMenu->closedByMe   = '由我關閉';
 
+$lang->my->auditField = new stdclass();
+$lang->my->auditField->title      = '評審標題';
+$lang->my->auditField->status     = '狀態';
+$lang->my->auditField->type       = '評審對象';
+$lang->my->auditField->project    = '所屬項目';
+$lang->my->auditField->product    = '所屬產品';
+$lang->my->auditField->reviewer   = '審批人';
+$lang->my->auditField->opinion    = '審批意見';
+$lang->my->auditField->result     = '評審結果';
+$lang->my->auditField->openedBy   = '提交人';
+$lang->my->auditField->time       = '提交時間';
+$lang->my->auditField->reviewTime = '評審時間';
+
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '進行中';
 $lang->my->projectMenu->wait       = '未開始';

@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * The model file of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
@@ -936,7 +936,7 @@ class programplanModel extends model
         }
         elseif(!empty($planIdList))
         {
-            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.estStarted IS NULL, t3.`begin`, t1.estStarted) as beginDate')->from(TABLE_TASK)->alias('t1')
+            $tasks = $this->dao->select('t1.*,t2.version AS latestStoryVersion, t2.status AS storyStatus, IF(t1.`estStarted` IS NULL, t3.`begin`, t1.`estStarted`) as beginDate')->from(TABLE_TASK)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
                 ->where('t1.deleted')->eq(0)
@@ -944,7 +944,7 @@ class programplanModel extends model
                 ->andWhere('t1.execution')->in($planIdList)
                 ->beginIF($browseType == 'nowait')->andWhere('t1.status')->ne('wait')->fi()
                 ->beginIF($browseType != 'nowait')->andWhere('t1.status')->ne('cancel')->fi()
-                ->beginIF($browseType != 'nowait')->andWhere('t1.closedReason')->ne('cancel')->fi()
+                ->beginIF($browseType != 'nowait')->andWhere('t1.`closedReason`')->ne('cancel')->fi()
                 ->filterTpl('skip')
                 ->orderBy("{$type}_asc,beginDate_asc,id_asc")
                 ->fetchAll('id', false);
@@ -1040,8 +1040,8 @@ class programplanModel extends model
         if($type == 'execution') return $ganttVersions;
         if($type == 'project' && $category != 'gantt') return $ganttVersions;
 
-        $disabledFeatures = $this->dao->select('t1.disabledFeatures')->from(TABLE_WORKFLOWGROUP)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.workflowGroup')
+        $disabledFeatures = $this->dao->select('t1.`disabledFeatures`')->from(TABLE_WORKFLOWGROUP)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.id = t2.`workflowGroup`')
             ->where('t2.id')->eq($projectID)
             ->fetch('disabledFeatures');
 

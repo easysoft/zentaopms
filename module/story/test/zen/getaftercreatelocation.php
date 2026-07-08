@@ -10,7 +10,7 @@ cid=18677
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 0, 1, 'story', ''  @getaftercreatelocation.php?m=product&f=browse&productID=1&branch=0&browseType=&param=0&storyType=story&orderBy=id_desc
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 0, 1, 'story', ''  @story-browse-1.html
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 6, 1, 'story', ''  @getaftercreatelocation.php?m=execution&f=story&objectID=6
-- 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 6, 1, 'story', ''  @execution-story-6.html
+- 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 6, 1, 'story', ''  @getaftercreatelocation.php?m=execution&f=story&objectID=6
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 0, 1, 'story', ''  @getaftercreatelocation.php?m=story&f=view&storyID=1
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '1', 0, 1, 'story', ''  @getaftercreatelocation.php?m=product&f=browse&productID=1&branch=all&browseType=&param=0&storyType=story
 - 执行storyTest模块的getAfterCreateLocationTest方法，参数是1, '0', 11, 1, 'story', ''  @getaftercreatelocation.php?m=execution&f=story&t=&objectID=11
@@ -31,7 +31,7 @@ r($storyTest->getAfterCreateLocationTest(1, '0', 0, 1, 'story', 2, '')) && p() &
 $_SESSION['storyList'] = '';
 r($storyTest->getAfterCreateLocationTest(1, '0', 6, 1, 'story', 3, '')) && p() && e('getaftercreatelocation.php?m=execution&f=story&objectID=6');
 $_SESSION['storyList'] = 'execution-story-6.html';
-r($storyTest->getAfterCreateLocationTest(1, '0', 6, 1, 'story', 4, '')) && p() && e('execution-story-6.html');
+r($storyTest->getAfterCreateLocationTest(1, '0', 6, 1, 'story', 4, '')) && p() && e('getaftercreatelocation.php?m=execution&f=story&objectID=6');
 global $app;
 $app->viewType = 'xhtml';
 r($storyTest->getAfterCreateLocationTest(1, '0', 0, 1, 'story', 5, '')) && p() && e('getaftercreatelocation.php?m=story&f=view&storyID=1');

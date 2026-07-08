@@ -22,6 +22,26 @@ class epic extends control
     }
 
     /**
+     * Copy a epic.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
+     * @param  int    $storyID
+     * @param  int    $objectID  projectID|executionID
+     * @param  int    $bugID
+     * @param  int    $planID
+     * @param  int    $todoID
+     * @param  string $extra for example feedbackID=0
+     * @access public
+     * @return void
+     */
+    public function copy(int $productID = 0, string $branch = '', int $moduleID = 0, int $storyID = 0, int $objectID = 0, int $bugID = 0, int $planID = 0, int $todoID = 0, string $extra = '')
+    {
+        echo $this->fetch('story', 'create', "productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=epic");
+    }
+
+    /**
      * Create a batch stories.
      *
      * @param  int    $productID
@@ -58,14 +78,14 @@ class epic extends control
     /**
      * Edit a epic.
      *
-     * @param  int    $storyID
+     * @param  int    $epicID
      * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit(int $storyID, string $kanbanGroup = 'default')
+    public function edit(int $epicID, string $kanbanGroup = 'default')
     {
-        echo $this->fetch('story', 'edit', "storyID=$storyID&kanbanGroup=$kanbanGroup&storyType=epic");
+        echo $this->fetch('story', 'edit', "storyID=$epicID&kanbanGroup=$kanbanGroup&storyType=epic");
     }
 
     /**
@@ -445,5 +465,26 @@ class epic extends control
     public function processStoryChange(int $storyID)
     {
         echo $this->fetch('story', 'processStoryChange', "storyID=$storyID");
+    }
+
+    /**
+     * 需求详情页关联需求。
+     * Link story in view.
+     *
+     * @param  int    $storyID
+     * @param  string $type          link|remove
+     * @param  int    $linkedStoryID
+     * @param  string $browseType    ''|bysearch
+     * @param  int    $queryID       0|
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  string $orderBy
+     * @access public
+     * @return void
+     */
+    public function linkStory(int $storyID, string $type = 'link', int $linkedStoryID = 0, string $browseType = '', int $queryID = 0, int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, string $orderBy = 'id_desc')
+    {
+        echo $this->fetch('story', 'linkStory', "storyID=$storyID&type=$type&linkedStoryID=$linkedStoryID&browseType=$browseType&queryID=$queryID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&orderBy=$orderBy&storyType=epic");
     }
 }

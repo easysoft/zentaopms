@@ -11,7 +11,7 @@
  * 描述：按项目统计的任务预计工时数是指在项目管理中，对所有任务的预计工时进行统计和汇总的度量。这个度量项用于评估项目的工作量和资源需求，并帮助规划和安排项目团队。任务预计工时数是通过对每个任务的工作量估算进行累加而得，可以作为项目计划和进度控制的依据。
  * 定义：项目中任务的预计工时数求和;过滤已删除的任务;过滤已取消的任务;过滤父任务;过滤已删除执行的任务;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class estimate_of_task_in_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.estimate', 't1.project', 't1.parent', 't1.status', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.project', 't1.parent', 't1.status', 't1.`isParent`');
 
     public $result = array();
 

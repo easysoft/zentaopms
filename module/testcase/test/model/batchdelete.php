@@ -100,18 +100,20 @@ $testcase    = new testcaseModelTest();
 $caseIdList  = array(array(1, 2, 3), array(4, 5, 6));
 $sceneIdList = array(array(1, 2, 3), array(4, 5, 6));
 
+global $tester;
+
 r($testcase->batchDeleteTest(array(), array()))                && p() && e('0'); // 用例和场景都为空返回 false。
 r($testcase->batchDeleteTest($caseIdList[0], array()))         && p() && e('1'); // 用例不为空，场景为空，返回 true。
 r($testcase->batchDeleteTest(array(), $sceneIdList[0]))        && p() && e('1'); // 用例为空，场景不为空，返回 true。
 r($testcase->batchDeleteTest($caseIdList[1], $sceneIdList[1])) && p() && e('1'); // 用例和场景都不为空返回 true。
 
-$cases = $testcase->objectModel->dao->select('*')->from(TABLE_CASE)->fetchAll('id');
+$cases = $tester->dao->select('*')->from(TABLE_CASE)->fetchAll('id');
 r($cases) && p('1:deleted;2:deleted;3:deleted;4:deleted;5:deleted;6:deleted') && e('1,1,1,1,1,1'); // 批量删除用例后 deleted 字段都为 1。
 
-$scenes = $testcase->objectModel->dao->select('*')->from(TABLE_SCENE)->fetchAll('id');
+$scenes = $tester->dao->select('*')->from(TABLE_SCENE)->fetchAll('id');
 r($scenes) && p('1:deleted;2:deleted;3:deleted;4:deleted;5:deleted;6:deleted') && e('1,1,1,1,1,1'); // 批量删除场景后 deleted 字段都为 1。
 
-$actions = $testcase->objectModel->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(12)->fetchAll();
+$actions = $tester->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)->orderBy('id_desc')->limit(12)->fetchAll();
 r($actions) && p('0:objectType,objectID,action,extra')  && e('scene,6,deleted,1'); // 批量删除编号为 6 的场景后记日志。
 r($actions) && p('1:objectType,objectID,action,extra')  && e('scene,5,deleted,1'); // 批量删除编号为 5 的场景后记日志。
 r($actions) && p('2:objectType,objectID,action,extra')  && e('scene,4,deleted,1'); // 批量删除编号为 4 的场景后记日志。

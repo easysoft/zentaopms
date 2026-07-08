@@ -11,7 +11,7 @@
  * 描述：按项目统计的人员总数是指参与项目的全部人员的数量。这个度量项用于了解项目团队的规模和组成，对项目资源的分配和管理起到重要作用。
  * 定义：项目中团队成员个数求和;过滤已移除的人员;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

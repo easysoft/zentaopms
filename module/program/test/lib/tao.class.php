@@ -7,6 +7,14 @@ class programTaoTest extends baseTest
 {
     protected $moduleName = 'program';
     protected $className  = 'tao';
+    public    $program;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->program = $this->instance;
+    }
 
     /**
      * Get list by search.
@@ -332,7 +340,7 @@ class programTaoTest extends baseTest
     public function fixLinkedProductTest(int $programID, int $parentID, int $oldParentID, string $oldPath): int
     {
         $newTopProgram = $this->program->getTopByID($programID);
-        $this->program->fixLinkedProduct($programID, $parentID, $oldParentID, $oldPath);
+        $this->invokeArgs('fixLinkedProduct', [$programID, $parentID, $oldParentID, $oldPath]);
         $newProduct = $this->program->dao->select('id')->from(TABLE_PRODUCT)->where('program')->eq($newTopProgram)->fetch('id');
 
         return empty($newProduct) ? 0 : $newProduct;
@@ -457,7 +465,7 @@ class programTaoTest extends baseTest
     public function buildProgramActionsMapTest(int $programID): array
     {
         $program = $this->program->getByID($programID);
-        return $this->program->buildProgramActionsMap($program);
+        return $this->invokeArgs('buildProgramActionsMap', [$program]);
     }
 
     /**
@@ -470,7 +478,7 @@ class programTaoTest extends baseTest
     public function getNormalActionsTest($programID)
     {
         $program = $this->program->getByID($programID);
-        return $this->program->getNormalActions($program);
+        return $this->invokeArgs('getNormalActions', [$program]);
     }
 
     /**
@@ -484,7 +492,7 @@ class programTaoTest extends baseTest
     public function buildProjectActionsMapTest(int $projectID): array
     {
         $project = $this->program->getByID($projectID);
-        return $this->program->buildProjectActionsMap($project);
+        return $this->invokeArgs('buildProjectActionsMap', [$project]);
     }
 
     /**
@@ -511,7 +519,7 @@ class programTaoTest extends baseTest
      */
     public function getTaskStatsTest(array $projectIdList): array
     {
-        $summary = $this->program->getTaskStats($projectIdList);
+        $summary = $this->invokeArgs('getTaskStats', [$projectIdList]);
         if(dao::isError()) return dao::getError();
 
         return $summary;
@@ -527,10 +535,10 @@ class programTaoTest extends baseTest
      */
     public function updateStatsTest(array $projectIdList): array
     {
-        $this->program->updateStats($projectIdList);
+        $this->invokeArgs('updateStats', [$projectIdList]);
         if(dao::isError()) return dao::getError();
 
-        return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()->fetchAll('id');
     }
 
     /**
@@ -542,7 +550,7 @@ class programTaoTest extends baseTest
      */
     public function updateProgressTest(): array
     {
-        $this->program->updateProgress();
+        $this->invokeArgs('updateProgress');
         if(dao::isError()) return dao::getError();
 
         return $this->program->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('program')->fetchAll('id');
@@ -822,7 +830,21 @@ class programTaoTest extends baseTest
      */
     public function setNoTaskExecutionTest(array $projectIdList): array
     {
-        $result = $this->program->setNoTaskExecution($projectIdList);
+        $result = $this->invokeArgs('setNoTaskExecution', [$projectIdList]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getRootProgramList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getRootProgramListTest(): array
+    {
+        $result = $this->invokeArgs('getRootProgramList');
         if(dao::isError()) return dao::getError();
 
         return $result;

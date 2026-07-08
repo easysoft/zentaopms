@@ -24,6 +24,16 @@ class gitlabWebhookEntry extends baseEntry
         $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
         if(empty($event)) return;
 
+        $pipelineID = $this->param('pipelineID');
+        if(!empty($pipelineID))
+        {
+            $pipeline = $this->loadModel('pipeline')->getByID($pipelineID);
+            if(empty($pipeline)) return;
+            if($pipeline->engine != 'gitlab') return;
+            // TODO: 调用 pipeline model 的 handleWebhook 方法处理 webhook 事件。
+            return;
+        }
+
         $repoID = $this->param('repoID');
         if(empty($repoID)) return;
 

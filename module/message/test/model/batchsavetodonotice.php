@@ -108,8 +108,8 @@ r($messageTest->batchSaveTodoNoticeTest('admin')) && p() && e('3'); // 测试步
 r($messageTest->batchSaveTodoNoticeTest('user2')) && p() && e('0'); // 测试步骤2：无待办需要提醒时返回空数组
 
 su('admin');
-$adminResult = $tester->message->batchSaveTodoNotice();
+$adminResult = $messageTest->instance->batchSaveTodoNotice();
 r(count($adminResult)) && p() && e('3'); // 测试步骤3：验证保存的通知消息数据结构正确性
 
 r($messageTest->batchSaveTodoNoticeTest('user1')) && p() && e('2'); // 测试步骤4：测试不同用户的待办通知保存
-r($tester->message->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count')) && p() && e('8'); // 测试步骤5：验证数据库中通知记录的完整性
+r($tester->dao->select('COUNT(*) as count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count')) && p() && e('8'); // 测试步骤5：验证数据库中通知记录的完整性

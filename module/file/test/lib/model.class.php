@@ -7,6 +7,97 @@ class fileModelTest extends baseTest
 {
     protected $moduleName = 'file';
     protected $className  = 'model';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->getInstance($this->moduleName, 'tao');
+    }
+
+    private function normalizeWebPath(string $webPath): string
+    {
+        foreach(array('/data/course/', '/data/upload/', 'data/course/', 'data/upload/') as $marker)
+        {
+            $position = strpos($webPath, $marker);
+            if($position === false) continue;
+
+            $path = substr($webPath, $position);
+            return $marker[0] === '/' ? $path : '/' . $path;
+        }
+
+        return $webPath;
+    }
+
+    private function createUploadTempFile(string $filename, string $tmpName, int $size): string
+    {
+        $extension = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+        $baseName  = empty($tmpName) ? uniqid('upload_', true) : basename($tmpName);
+        $tempFile  = sys_get_temp_dir() . DS . $baseName . '_' . uniqid();
+
+        if(in_array($extension, array('jpg', 'jpeg')))
+        {
+            file_put_contents($tempFile, base64_decode('/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBxAQEBUQEBAVFhUVFRUVFRUVFRUVFRUVFRUXFhUVFRUYHSggGBolHRUVITEhJSkrLi4uFx8zODMsNygtLisBCgoKDg0OGxAQGy0lHyUtLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLS0tLf/AABEIAAEAAQMBIgACEQEDEQH/xAAXAAEBAQEAAAAAAAAAAAAAAAAAAQID/8QAFhEBAQEAAAAAAAAAAAAAAAAAAQAC/9oADAMBAAIQAxAAAAH2pAAAAAAAAAAAAP/EABoQAAICAwAAAAAAAAAAAAAAAAABAhEhMUH/2gAIAQEAAT8AqW8s0M//xAAVEQEBAAAAAAAAAAAAAAAAAAAAEf/aAAgBAgEBPwCf/8QAFhEBAQEAAAAAAAAAAAAAAAAAABEh/9oACAEDAQE/AYf/2Q=='));
+            return $tempFile;
+        }
+
+        if($extension === 'png')
+        {
+            file_put_contents($tempFile, base64_decode('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+a7d0AAAAASUVORK5CYII='));
+            return $tempFile;
+        }
+
+        if($extension === 'gif')
+        {
+            file_put_contents($tempFile, base64_decode('R0lGODdhAQABAIAAAP///////ywAAAAAAQABAAACAkQBADs='));
+            return $tempFile;
+        }
+
+        file_put_contents($tempFile, str_repeat('test', max(1, (int)ceil($size / 4))));
+        return $tempFile;
+    }
+
+    private function prepareUploadFiles(array &$files): array
+    {
+        $createdFiles = array();
+
+        if(isset($files['name']) && is_array($files['name']))
+        {
+            foreach($files['name'] as $index => $filename)
+            {
+                $error = is_array($files['error']) ? ($files['error'][$index] ?? 0) : $files['error'];
+                if(empty($filename) || $error != 0) continue;
+
+                $tmpName  = $files['tmp_name'][$index] ?? '';
+                $size     = (int)($files['size'][$index] ?? 0);
+                $tempFile = $this->createUploadTempFile($filename, $tmpName, $size);
+                $files['tmp_name'][$index] = $tempFile;
+                $createdFiles[] = $tempFile;
+            }
+        }
+        else
+        {
+            if(!empty($files['name']) && (int)($files['error'] ?? 0) === 0)
+            {
+                $tempFile = $this->createUploadTempFile($files['name'], $files['tmp_name'] ?? '', (int)($files['size'] ?? 0));
+                $files['tmp_name'] = $tempFile;
+                $createdFiles[] = $tempFile;
+            }
+        }
+
+        return $createdFiles;
+    }
+
+    private function cleanupUploadFiles(array $createdFiles): void
+    {
+        foreach($createdFiles as $file)
+        {
+            if(file_exists($file)) unlink($file);
+        }
+    }
 
     /**
      * Test get files of an object.
@@ -22,7 +113,7 @@ class fileModelTest extends baseTest
         $objects = $this->instance->getByObject($objectType, $objectID, $extra = '');
         foreach($objects as $object)
         {
-            if(isset($object->webPath)) $object->webPath = substr($object->webPath, strpos($object->webPath, '/data/upload'));
+            if(isset($object->webPath)) $object->webPath = $this->normalizeWebPath($object->webPath);
         }
 
         if(dao::isError()) return dao::getError();
@@ -40,7 +131,7 @@ class fileModelTest extends baseTest
     public function getByIdTest($fileID)
     {
         $object = $this->instance->getById($fileID);
-        if(isset($object->webPath)) $object->webPath = substr($object->webPath, strpos($object->webPath, '/data/upload'));
+        if(isset($object->webPath)) $object->webPath = $this->normalizeWebPath($object->webPath);
 
         if(dao::isError()) return dao::getError();
 
@@ -72,6 +163,7 @@ class fileModelTest extends baseTest
      */
     public function getUploadTest(array $files, array $labels): array
     {
+        $createdFiles   = $this->prepareUploadFiles($files);
         $_FILES['files'] = $files;
         $_POST['labels'] = $labels;
 
@@ -79,6 +171,7 @@ class fileModelTest extends baseTest
 
         unset($_FILES['files']);
         unset($_POST['labels']);
+        $this->cleanupUploadFiles($createdFiles);
 
         if(dao::isError()) return dao::getError();
 
@@ -119,6 +212,7 @@ class fileModelTest extends baseTest
      */
     public function getCountTest(array $files, array $labels): int
     {
+        $createdFiles   = $this->prepareUploadFiles($files);
         $_FILES['files'] = $files;
         $_POST['labels'] = $labels;
 
@@ -126,6 +220,7 @@ class fileModelTest extends baseTest
 
         unset($_FILES['files']);
         unset($_POST['labels']);
+        $this->cleanupUploadFiles($createdFiles);
 
         return $count;
     }
@@ -371,7 +466,9 @@ class fileModelTest extends baseTest
         $this->instance->setSavePath();
 
         // 返回简化的路径用于测试
-        return substr($tester->file->savePath, strrpos($tester->file->savePath, '/data/'));
+        $savePath = $this->instance->savePath;
+        $position = strrpos($savePath, '/data/');
+        return $position === false ? $savePath : substr($savePath, $position);
     }
 
     /**
@@ -690,7 +787,7 @@ class fileModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         if(empty($result)) return false;
 
-        if(isset($result->webPath)) $result->webPath = substr($result->webPath, strpos($result->webPath, '/data/upload'));
+        if(isset($result->webPath)) $result->webPath = $this->normalizeWebPath($result->webPath);
 
         return $result;
     }
@@ -1240,7 +1337,9 @@ class fileModelTest extends baseTest
     {
         if($file === null) return false;
 
+        set_error_handler(static function() { return true; });
         $result = $this->instance->unlinkFile($file);
+        restore_error_handler();
         if(dao::isError()) return dao::getError();
 
         return $result;

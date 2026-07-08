@@ -16,9 +16,11 @@ class actionZen extends action
         $moreType            = array();
         $preferredTypeConfig = $this->config->action->preferredType->ALM;
         $preferredTypeConfig = $this->config->systemMode == 'light' ? $this->config->action->preferredType->light : $this->config->action->preferredType->ALM;
+        $hiddenTypeConfig    = explode(',', $this->config->action->hiddenTrashObjects);
         foreach($objectTypeList as $objectType)
         {
-            if(!isset($this->config->objectTables[$objectType])) continue;
+            if(!isset($this->config->objectTables[$objectType]) && !in_array($objectType, array('artifactasset', 'artifactdir'))) continue;
+            if(in_array($objectType, $hiddenTypeConfig)) continue;
             in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
         }
         if(count($preferredType) < $this->config->action->preferredTypeNum)
@@ -127,6 +129,11 @@ class actionZen extends action
                 $tab     = '';
                 $canView = common::hasPriv($module, $methodName);
                 if($trash->objectType == 'meeting') $tab = $trash->project ? "data-app='project'" : "data-app='my'";
+                if($trash->objectType == 'task')
+                {
+                    $execution = zget($executionList, $trash->execution, '');
+                    $tab       = $execution && empty($execution->multiple) ? " data-app='project'" : " data-app='execution'";
+                }
                 $trash->objectName = $canView ? html::a($this->createLink($module, $methodName, $params), $trash->objectName, '_self', "title='{$trash->objectName}' $tab") : "<span title='$trash->objectName'>$trash->objectName</span>";
             }
         }

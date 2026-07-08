@@ -11,7 +11,7 @@
  * 描述：按系统统计的无效的产品研发需求数量反映了组织在特定时间段内无效或被废弃的产品研发需求数量，用于评估组织的帮助组织评估需求管理效果、资源利用效率和需求准确性，提供学习和改进的机会。
  * 定义：所有的研发需求个数求和;关闭原因为重复、不做、设计如此和已取消;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_invalid_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.id', 't1.closedReason');
+    public $fieldList = array('t1.id', 't1.`closedReason`');
 
     public $result = 0;
 

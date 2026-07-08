@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 productplan->getList()
+title=测试productplanModel->getList();
 timeout=0
 cid=17636
 
@@ -34,15 +34,15 @@ zenData('productplan')->loadYaml('productplan')->gen(20);
 zenData('product')->loadYaml('product')->gen(20);
 zenData('story')->gen(20);
 zenData('bug')->gen(20);
-$productplan = new Productplan('admin');
+$productplan = new productplanModelTest('admin');
 
 $dataList = array();
 $dataList[0] = $productplan->getList();
-$dataList[1] = $productplan->getList(1, 0, 'all', null, 'begin_desc');
-$dataList[2] = $productplan->getList(1, 0, 'all', null, 'begin_desc', 'kipparent');
-$dataList[3] = $productplan->getList(1, 0, 'undone', null, 'begin_desc');
-$dataList[4] = $productplan->getList(1, 0, 'wait', null, 'begin_desc');
-$dataList[5] = $productplan->getList(1, 0, 'doing', null, 'begin_desc');
+$dataList[1] = $productplan->getList(1, '', 'all', null, 'begin_desc');
+$dataList[2] = $productplan->getList(1, '', 'all', null, 'begin_desc', 'skipparent');
+$dataList[3] = $productplan->getList(1, '', 'undone', null, 'begin_desc');
+$dataList[4] = $productplan->getList(1, '', 'wait', null, 'begin_desc');
+$dataList[5] = $productplan->getList(1, '', 'doing', null, 'begin_desc');
 
 r($dataList[0]) && p()                      && e('0');         // 获取空数据
 r($dataList[1]) && p('1:id,product,status') && e('1,1,wait');  // 获取product=1的所有的计划

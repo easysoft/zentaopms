@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The view file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang<wangyuting@easycorp.ltd>
  * @package     bug
@@ -35,7 +35,7 @@ $canModify    = !empty($project) ? common::canModify('project', $project) : true
 $isInModal    = isInModal();
 $canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
-$canViewMR    = hasPriv('mr', 'view');
+$canViewMR    = hasPriv('ppm', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 $operateList  = $this->loadModel('common')->buildOperateMenu($bug);
 
@@ -66,7 +66,7 @@ if(!$bug->deleted && $canModify)
     }
 
     $this->loadModel('repo');
-    $hasRepo = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
+    $hasRepo = $this->repo->getListByProduct($bug->product, 1);
     foreach($actions as $key => $action)
     {
         if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')
@@ -98,6 +98,13 @@ if(!$bug->deleted && $canModify)
     }
 }
 
+$files = array();
+foreach($bug->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
+
 /* 初始化主栏内容。Init sections in main column. */
 $sections = array();
 $sections[] = setting()
@@ -105,12 +112,12 @@ $sections[] = setting()
     ->control('html')
     ->content($bug->steps);
 
-if($bug->files)
+if($files)
 {
     $sections[] = array
     (
         'control'    => 'fileList',
-        'files'      => $bug->files,
+        'files'      => $files,
         'object'     => $bug,
         'padding'    => false
     );

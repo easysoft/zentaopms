@@ -46,5 +46,5 @@ global $tester;
 $executionModel = $tester->loadModel('execution');
 
 r(current($tester->execution->fetchBurnData(array())))        && p('0:execution,estimate') && e('0,0');  // 测试空数据
-r(current($tester->execution->fetchBurnData(array(2, 3, 4)))) && p('3:execution,estimate') && e('3,55'); // 测试获取燃尽图数据
-r(current($tester->execution->fetchBurnData(array(7, 8, 9)))) && p('0:execution,estimate') && e('0, 0'); // 测试获取不存在的执行的燃尽图数据
+r(current($tester->execution->fetchBurnData(array(2, 3, 4)))) && p('3:execution,estimate') && e('3,55.00'); // 测试获取燃尽图数据
+r(current($tester->execution->fetchBurnData(array(7, 8, 9)))) && p('0:execution,estimate') && e('0,0'); // 测试获取不存在的执行的燃尽图数据

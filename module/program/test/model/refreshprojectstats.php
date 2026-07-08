@@ -52,8 +52,8 @@ su('admin');
 $projectIdList = array(11, 60, 61, 100, 1111);
 $programTester = new programModelTest();
 
-r($programTester->refreshProjectStatsTest($projectIdList[0])) && p('progress,teamCount,estimate,consumed,left') && e('22.80,4,51,13,44'); // 更新项目 11 的统计信息，获取项目 11 的统计信息
-r($programTester->refreshProjectStatsTest($projectIdList[1])) && p('progress,teamCount,estimate,consumed,left') && e('28.00,0,21,7,18');  // 更新项目 60 的统计信息，获取项目 60 的统计信息
-r($programTester->refreshProjectStatsTest($projectIdList[2])) && p('progress,teamCount,estimate,consumed,left') && e('0.00,0,0,0,0');     // 更新项目 61 的统计信息，获取项目 61 的统计信息
-r($programTester->refreshProjectStatsTest($projectIdList[3])) && p('progress,teamCount,estimate,consumed,left') && e('0.00,0,0,0,0');     // 更新项目 100 的统计信息，获取项目 100 的统计信息
-r($programTester->refreshProjectStatsTest($projectIdList[4])) && p('progress,teamCount,estimate,consumed,left') && e('0,0,0,0,0');        // 更新不存在的项目 1111 的统计信息，获取不存在的项目 1111 的统计信息
+r($programTester->refreshProjectStatsTest($projectIdList[0])) && p('progress,teamCount,estimate,consumed,left') && e('22.80,4,51.00,13.00,44.00'); // 更新项目 11 的统计信息，获取项目 11 的统计信息
+r($programTester->refreshProjectStatsTest($projectIdList[1])) && p('progress,teamCount,estimate,consumed,left') && e('28.00,0,21.00,7.00,18.00');  // 更新项目 60 的统计信息，获取项目 60 的统计信息
+r($programTester->refreshProjectStatsTest($projectIdList[2])) && p('progress,teamCount,estimate,consumed,left') && e('0.00,0,0.00,0.00,0.00');     // 更新项目 61 的统计信息，获取项目 61 的统计信息
+r($programTester->refreshProjectStatsTest($projectIdList[3])) && p('progress,teamCount,estimate,consumed,left') && e('0.00,0,0.00,0.00,0.00');     // 更新项目 100 的统计信息，获取项目 100 的统计信息
+r($programTester->refreshProjectStatsTest($projectIdList[4])) && p() && e('0');                                                            // 更新不存在的项目 1111 的统计信息，获取不存在的项目 1111 的统计信息

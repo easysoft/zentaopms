@@ -16,7 +16,7 @@ class datalist extends wg
     {
         return <<<CSS
         .datalist-item {display: flex; gap: 8px; padding: 6px 0;}
-        .datalist-item-label {width: var(--datalist-label-width); color: var(--color-gray-500); flex: none; display: flex; align-items: center; justify-content: flex-end; white-space: nowrap; overflow: hidden; text-overflow: clip;}
+        .datalist-item-label {width: var(--datalist-label-width); color: var(--color-gray-500); flex: none; display: flex; align-items: center; justify-content: flex-end;}
         .datalist-item-content {flex: 1; display: flex; gap: 8px; align-items: center;}
         CSS;
     }
@@ -52,13 +52,13 @@ class datalist extends wg
             setClass('datalist-item', $class),
             div
             (
-                setClass('datalist-item-label', $labelClass),
+                setClass('datalist-item-label whitespace-pre-wrap', $labelClass),
                 set::title($label),
                 span(setClass('text'), $label)
             ),
             div
             (
-                setClass('datalist-item-content', $contentClass),
+                setClass('datalist-item-content whitespace-pre-wrap', $contentClass),
                 $content,
                 $children
             )

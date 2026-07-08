@@ -3,7 +3,7 @@ class avg_of_dev_efficiency extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 't1.estimate', 't1.stage');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`', 't1.`releasedDate`', 't1.estimate', 't1.stage');
 
     public $result = array();
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of kanban module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
@@ -1017,7 +1017,7 @@ class kanbanModel extends model
             ->beginIF($regionID)->andWhere('id')->eq($regionID)->fi()
             ->beginIF($from == 'execution')->andWhere('space')->eq(0)->fi()
             ->beginIF($from == 'kanban')->andWhere('space')->ne(0)->fi()
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchPairs();
     }
 
@@ -1069,7 +1069,7 @@ class kanbanModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
             ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchAll();
 
         $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
@@ -1453,7 +1453,7 @@ class kanbanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
             ->beginIF(!empty($execution->attribute) && !in_array($execution->attribute, array('mix', 'request', 'design')))->andWhere('type')->notIn('epic,requirement')->fi()
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchAll('id');
 
         if(empty($lanes)) return array();

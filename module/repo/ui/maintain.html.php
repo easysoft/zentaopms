@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The maintain view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
  * @package     repo
@@ -10,24 +10,15 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('deleteConfirm', $lang->repo->notice->deleteConfirm);
-jsVar('defaultServer', empty($defaultServer) ? 0 : $defaultServer->id);
+$createRepoURL = createLink('repo', 'createRepo', $inSpace ? "objectID=0&spaceID={$spaceID}" : '');
+$importURL     = createLink('repo', 'import', $inSpace ? "spaceID={$spaceID}" : '');
 
-$createItem      = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create'));
-$createRepoItem  = array('text' => $lang->repo->createRepoAction, 'url' => createLink('repo', 'createRepo'));
-$batchCreateItem = array('text' => $lang->repo->batchCreate, 'url' => createLink('repo', 'import'));
+$createRepoItem = array('text' => $lang->repo->createRepoAction, 'url' => $createRepoURL, 'class' => 'btn primary', 'icon' => 'plus');
+$importItem     = array('text' => $lang->repo->import, 'url' => $importURL, 'class' => 'primary', 'icon' => 'download');
 
 foreach($repoList as $repo)
 {
-    $jobID       = 0;
-    $repo->exec   = 'disabled';
-    $repo->report = 'disabled';
-    if(isset($sonarRepoList[$repo->id]))
-    {
-        $repo->exec = '';
-        $repo->job = $sonarRepoList[$repo->id]->id;
-        if(in_array($repo->job, $successJobs)) $repo->report = '';
-    }
+    $repo->spaceID  = $repo->spaceID ? $repo->spaceID : '';
 
     $productNames = array();
     $productList  = explode(',', str_replace(' ', '', $repo->product));
@@ -38,110 +29,103 @@ foreach($repoList as $repo)
     }
     $repo->productNames = implode('，', $productNames);
 
-    $projectNames = array();
-    $projectList  = explode(',', str_replace(' ', '', $repo->projects));
-    foreach($projectList as $projectID)
-    {
-        if(!isset($projects[$projectID])) continue;
-        $projectNames[] = zget($projects, $projectID, $projectID);
-    }
-    $repo->projectNames = implode('，', $projectNames);
-
-    if(is_object($repo->lastSubmitTime)) $repo->lastSubmitTime = $repo->lastSubmitTime->time;
 }
 
 $config->repo->dtable->fieldList['name']['link']                   = $this->createLink('repo', 'browse', "repoID={id}&branchID=&objectID={$objectID}");
-$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}");
+$config->repo->dtable->fieldList['actions']['list']['edit']['url'] = $this->createLink('repo', 'edit', "repoID={id}&objectID={$objectID}&spaceID={$spaceID}");
+$config->repo->dtable->fieldList['space']['map']                   = $spaces;
+if($inSpace) unset($config->repo->dtable->fieldList['space']);
 
 if(empty($config->repo->maintain->showRepoPath))
 {
     unset($config->repo->dtable->fieldList['path']);
     $config->repo->dtable->fieldList['product']['width']    = '0.2';
-    $config->repo->dtable->fieldList['scm']['width']        = '0.2';
-    $config->repo->dtable->fieldList['lastSubmit']['width'] = '0.2';
 }
 
 /* Set 'repo-visit' action as one open method, so any user can use it. */
 if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo.visit';
 
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
-$queryMenuLink = createLink('repo', 'maintain', "objectID=$objectID&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bySearch&param={queryID}");
+$queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$spaceID}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bysearch&param={queryID}");
 
 /* Process data which the function initTableData() not provided. */
 foreach($repos as $repo)
 {
-    if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') break;
-
-    /* Set the url and check status for visiting the repo. */
-    $repo->actions[0]['disabled'] = strpos($repo->path, 'http') === false;
-    $repo->actions[0]['url']      = $repo->path;
-    if(in_array($repo->SCM, array('Gogs', 'Gitea')))
+    /* 镜像代码库屏蔽"执行扫描/扫描问题"两个操作项。 */
+    if(!empty($repo->mirror) && !empty($repo->actions))
     {
-        $resp = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
-        if(!empty($resp->url))
+        $repo->actions = array_values(array_filter($repo->actions, function($action)
         {
-            $repo->actions[0]['disabled'] = false;
-            $repo->actions[0]['url']      = $resp->url . '/' . $repo->serviceProject;
-        }
+            return empty($action['name']) || !in_array($action['name'], array('scanExec', 'scanIssue'), true);
+        }));
     }
+
+    if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') continue;
 }
 
-\zin\featureBar
+$spaceItems = array();
+$spaceItems[] = array('text' => $lang->repo->allSpace, 'url' => createLink('repo', 'maintain', "inSpace=0&space=0&objectID={$objectID}"));
+foreach($spaces as $id => $spaceName)
+{
+    $spaceItems[] = array('text' => $spaceName, 'url' => createLink('repo', 'maintain', "inSpace=0&space={$id}&objectID={$objectID}"));
+}
+
+featureBar
 (
+    $inSpace ? null : to::before
+    (
+        dropdown
+        (
+            to('trigger', btn(zget($spaces, $spaceID, $lang->repo->allSpace), setID('spaceDropdown'), setClass('ghost text-ellipsis text-left'))),
+            set::items($spaceItems)
+        )
+    ),
     set::current('all'),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
-    li(searchToggle(set::module('repo'), set::open($type == 'bySearch')))
+    li(searchToggle(set::module('repo'), set::open($type == 'bysearch')))
 );
-if($config->inCompose && empty($repoServers))
-{
-    toolBar
-    (
-        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-    );
-}
-else
-{
-    toolBar
-    (
-        hasPriv('repo', 'createRepo') && $serverPairs ? item(set($createRepoItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        !hasPriv('repo', 'create') && hasPriv('repo', 'import') && $serverPairs ? item(set($batchCreateItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        ))) : null,
-        hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
-        (
-            btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
-            $serverPairs ? dropDown
-            (
-                btn(setClass('btn primary dropdown-toggle'),
-                setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
-                set::placement('bottom-end'),
-                set::items(array($createItem, $batchCreateItem))
-            ) : null
-        ) : null,
-    );
-}
+
+//toolBar
+//(
+//    hasPriv('repo', 'createRepo') ? item(set($createRepoItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    !hasPriv('repo', 'create') && hasPriv('repo', 'import') ? item(set($batchCreateItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    !hasPriv('repo', 'import') && hasPriv('repo', 'create') ? item(set($createItem + array
+//    (
+//        'icon'  => 'plus',
+//        'class' => 'btn primary'
+//    ))) : null,
+//    hasPriv('repo', 'import') && hasPriv('repo', 'create') ? btnGroup
+//    (
+//        btn(setClass('btn primary'), set::icon('plus'), set::url(createLink('repo', 'create')), $lang->repo->createAction),
+//        dropDown
+//        (
+//            btn(setClass('btn primary dropdown-toggle'),
+//            setStyle(array('padding' => '6px', 'border-radius' => '0 2px 2px 0'))),
+//            set::placement('bottom-end'),
+//            set::items(array($createItem, $batchCreateItem))
+//        )
+//    ) : null,
+//);
+
+toolbar
+(
+    hasPriv('repo', 'createRepo') ? item(set($createRepoItem)) : null,
+    hasPriv('repo', 'create') ? item(set($importItem)) : null
+);
 
 dtable
 (
     set::cols($config->repo->dtable->fieldList),
     set::data($repos),
-    set::sortLink(createLink('repo', 'maintain', "objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('repo', 'maintain', "inSpace={$inSpace}&space={$spaceID}&objectID=$objectID&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&pageID={$pager->pageID}")),
     set::orderBy($orderBy),
-    set::footPager(usePager()),
-    set::actionItemCreator(jsRaw('window.renderActions'))
+    set::footPager(usePager())
 );

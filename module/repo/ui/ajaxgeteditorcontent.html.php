@@ -3,21 +3,25 @@ declare(strict_types=1);
 /**
  * The ajaxgeteditorcontent view file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Ke Zhao<zhaoke@easycorp.ltd>
  * @package     repo
- * @link        https://www.zentao.net
+ * @link        http://www.zentao.net
  */
 
 namespace zin;
+
+include "header.review.html.php";
 
 $canLinkStory    = common::hasPriv('repo', 'linkStory');
 $canLinkBug      = common::hasPriv('repo', 'linkBug');
 $canLinkTask     = common::hasPriv('repo', 'linkTask');
 $canUnlinkObject = common::hasPriv('repo', 'unlink');
+$canAddBug       = common::hasPriv('repo', 'addBug');
 
 jsVar('unlinkTitle', $this->lang->repo->unlink);
+jsVar('addIssueTip', $lang->repo->addIssue);
 jsVar('canUnlinkObject', $canUnlinkObject);
 jsVar('fileExt', $this->config->repo->fileExt);
 jsVar('file', $pathInfo);
@@ -35,6 +39,10 @@ jsVar('revision', $revision);
 jsVar('sourceRevision', $oldRevision);
 jsVar('encodePath', $this->repo->encodePath($entry));
 if($showEditor) jsVar('codeContent', $content);
+jsVar('canAddBug', $canAddBug);
+jsVar('canReview', !empty($canReview));
+jsVar('createLang', $lang->repo->addIssue);
+jsVar('showLinkObject', $showLinkObject);
 
 $lang = 'php';
 foreach($this->config->repo->fileExt as $langName => $exts)
@@ -67,6 +75,7 @@ elseif($suffix == 'binary')
 else
 {
     $options = array(
+        'value'                => $content,
         'language'             => $lang,
         'readOnly'             => true,
         'autoIndent'           => true,
@@ -74,15 +83,26 @@ else
         'automaticLayout'      => true,
         'EditorMinimapOptions' => array('enabled' => false)
     );
-    if($type == 'diff') $options['EditorMinimapOptions'] = array('enabled' => false);
-    if($type != 'diff') $options['value'] = $content;
+    if($type == 'diff') $options = array(
+        'language'             => $lang,
+        'folding'              => true,
+        'showFoldingControls'  => 'never',
+        'readOnly'             => true,
+        'autoIndent'           => true,
+        'contextmenu'          => true,
+        'automaticLayout'      => true,
+        'renderSideBySide'     => false,
+        'EditorMinimapOptions' => array('enabled' => false)
+    );
     $wg = monaco
     (
         set::id('codeContainer'),
         set::options($options),
         set::action($type == 'diff' ? 'diff' : 'create'),
         $type == 'diff' ? set::diffContent(jsRaw('parent.getDiffs(filePath)')) : null,
-        set::onMouseDown('window.onMouseDown')
+        $showLinkObject ? set::onMouseDown('window.onMouseDown') : null,
+        set::onMouseMove('window.onMouseMove'),
+        set::selectedLines(empty($lines) ? '' : $lines)
     );
 }
 
@@ -91,21 +111,21 @@ if($canLinkStory) $dropMenus[] = array('id' => 'linkStory', 'text' => $this->lan
 if($canLinkBug)   $dropMenus[] = array('id' => 'linkBug',   'text' => $this->lang->repo->linkBug,   'icon' => 'bug');
 if($canLinkTask)  $dropMenus[] = array('id' => 'linkTask',  'text' => $this->lang->repo->linkTask,  'icon' => 'todo');
 
-$logWg = div
+$logWg = $showLinkObject ? div
 (
     set::id('log'),
     div(set::className('history')),
     div
     (
         set::className('action-btn pull-right'),
-        div(set::className('btn btn-close pull-right ghost text-black bg-gray-200 bg-opacity-50'), icon('close')),
+        div(set::className('btn btn-close pull-right ghost text-black bg-light bg-opacity-50'), icon('close')),
         !empty($dropMenus) ? dropdown
         (
             set::arrow(false),
             set::staticMenu(true),
             btn
             (
-                setClass('ghost text-black bg-gray-200 bg-opacity-50'),
+                setClass('ghost text-black bg-light bg-opacity-50'),
                 set::icon('ellipsis-v rotate-90')
             ),
             set::items
@@ -114,9 +134,8 @@ $logWg = div
             )
         ) : ''
     )
-);
-
-$relatedWg = div
+) : null;
+$relatedWg = $showLinkObject ? div
 (
     set::id('related'),
     div(set::className('btn btn-left pull-left'), icon('chevron-left')),
@@ -127,7 +146,6 @@ $relatedWg = div
         tabs
         (
             set::id('relationTabs'),
-            setClass('mt-1 ml-2'),
             tabPane
             (
                 set::key('tab1'),
@@ -137,15 +155,22 @@ $relatedWg = div
         )
     ),
     div(set::className('table-empty-tip'), p($this->lang->repo->notRelated))
-);
+) : null;
 
 div
 (
     set::id('monacoEditor'),
     set::className('repoCode'),
     $wg,
-    $logWg,
-    $relatedWg
+    $showLinkObject ? $logWg : null,
+    $showLinkObject ? $relatedWg : null
+);
+
+div
+(
+    set::id('reviewBugContainer'),
+    setStyle('display', 'none'),
+    div($this->lang->repo->viewBugs)
 );
 
 set::zui(true);

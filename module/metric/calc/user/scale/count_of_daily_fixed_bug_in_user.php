@@ -11,7 +11,7 @@
  * 描述：按人员统计的日解决Bug数表示每个人每日解决的Bug数量之和。反映了每个人每日解决Bug的规模。该数值越大，可能说明Bug的解决能力越强，工作效率越高。
  * 定义：所有Bug个数求和;bug状态为已解决和已关闭;解决者为某人;解决日期为某日;过滤已删除的bug;过滤已删除产品的bug;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_fixed_bug_in_user extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.resolvedBy', 't1.resolvedDate');
+    public $fieldList = array('t1.`resolvedBy`', 't1.`resolvedDate`');
 
     public $result = array();
 

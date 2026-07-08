@@ -40,7 +40,7 @@ $blockTest = new blockZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($blockTest->printQaOverviewBlockTest((object)array('module' => 'qa', 'dashboard' => 'qa'))) && p('total') && e('20'); // 步骤1：正常情况统计总数
-r($blockTest->printQaOverviewBlockTest((object)array('module' => 'qa', 'dashboard' => 'project'))) && p('total') && e('0'); // 步骤2：项目过滤情况
+r($blockTest->printQaOverviewBlockTest((object)array('module' => 'qa', 'dashboard' => 'project'))) && p('total') && e('20'); // 步骤2：项目过滤情况
 r($blockTest->printQaOverviewBlockTest((object)array('module' => 'my', 'dashboard' => 'my'))) && p('total') && e('20'); // 步骤3：my模块不过滤项目
 r($blockTest->printQaOverviewBlockTest((object)array('module' => 'qa', 'dashboard' => 'qa'), true)) && p('total') && e('0'); // 步骤4：空数据情况
 r($blockTest->printQaOverviewBlockTest((object)array('module' => 'qa', 'dashboard' => 'qa'))) && p('success') && e('1'); // 步骤5：成功执行验证

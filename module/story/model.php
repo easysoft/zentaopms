@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -129,10 +129,11 @@ class storyModel extends model
      *
      * @param  array|string $storyIdList
      * @param  string       $mode     all
+     * @param  string       $orderBy
      * @access public
      * @return array
      */
-    public function getByList(array|string $storyIdList, string $mode = ''): array
+    public function getByList(array|string $storyIdList, string $mode = '', string $orderBy = ''): array
     {
         if(empty($storyIdList)) return array();
 
@@ -154,6 +155,7 @@ class storyModel extends model
             ->andWhere('t1.id')->in($storyIdList)
             ->beginIF($mode != 'all')->andWhere('t1.deleted')->eq('0')->fi()
             ->beginIF($this->config->vision == 'or')->andWhere("FIND_IN_SET('or', t1.vision)")->fi()
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->fetchAll('id', false);
     }
 
@@ -322,7 +324,7 @@ class storyModel extends model
                 ->where('t1.project')->in($executionID)
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t3.deleted')->eq(0)
-                ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.isParent')->eq('0')->fi()
+                ->beginIF(strpos('withoutparent', $browseType) !== false)->andWhere('t2.`isParent`')->eq('0')->fi()
                 ->beginIF($storyType != 'all')->andWhere('t2.type')->in($storyType)->fi()
                 ->beginIF($sqlCondition)->andWhere($sqlCondition)->fi()
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
@@ -426,7 +428,7 @@ class storyModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->where('t1.project')->eq($executionID)
             ->beginIF($storyType)->andWhere('t2.type')->in($storyType)->fi()
-            ->beginIF(!$hasParent)->andWhere('t2.isParent')->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere('t2.`isParent`')->eq('0')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->beginIF($productID)->andWhere('t2.product')->eq($productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->in("0,$branch")->fi()
@@ -952,7 +954,7 @@ class storyModel extends model
 
         if(!empty($story->reviewer))
         {
-            if(strpos(',draft,changing,', ",{$oldStory->status},") !== false && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->in($oldStory->version)->exec();
+            if(strpos(',draft,changing,', ",{$oldStory->status},") !== false && $story->status == 'reviewing') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec();
 
             $oldReviewer = $this->getReviewerPairs($storyID, $oldStory->version);
             $oldStory->reviewers = implode(',', array_keys($oldReviewer));
@@ -964,6 +966,10 @@ class storyModel extends model
                 if($story->status != $oldStatus) $this->dao->update(TABLE_STORY)->set('status')->eq($story->status)->where('id')->eq($storyID)->exec();
                 if($story->status == 'active')   $story->finalResult = $story->status;
             }
+        }
+        else
+        {
+            $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->andWhere('version')->eq($oldStory->version)->exec(); // 勾选了不需要评审，要将评审人删除。
         }
 
         $story   = $this->loadModel('file')->replaceImgURL($story, 'spec,verify');
@@ -2345,14 +2351,14 @@ class storyModel extends model
      * Get the stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $browseType bySearch
+     * @param  string  $browseType bysearch
      * @param  int     $queryID
      * @param  object  $pager
      * @param  string  $orderBy
      * @access public
      * @return array
      */
-    public function getStories2Link(int $storyID, string $browseType = 'bySearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
+    public function getStories2Link(int $storyID, string $browseType = 'bysearch', int $queryID = 0, ?object $pager = null, string $orderBy = 'id_desc'): array
     {
         $story    = $this->getById($storyID);
         $excludes = $this->storyTao->getRelation($storyID, $story->type);
@@ -2361,7 +2367,7 @@ class storyModel extends model
         $excludes[$storyID] = $storyID;
 
         $stories2Link = array();
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, $orderBy, 0, 'all', $excludes, '', $pager);
         }
@@ -2444,7 +2450,7 @@ class storyModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in("0,$branch")->fi()
-            ->beginIF(!$hasParent)->andWhere('t1.isParent')->eq('0')->fi()
+            ->beginIF(!$hasParent)->andWhere('t1.`isParent`')->eq('0')->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($type != 'full' && $type != 'all')->andWhere('t1.type')->eq($storyType)->fi()
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
@@ -2795,7 +2801,7 @@ class storyModel extends model
                 $products   += $productList;
             }
         }
-        elseif($this->app->rawModule == 'mr' && $this->session->repoID)
+        elseif($this->app->rawModule == 'ppm' && $this->session->repoID)
         {
             $repo     = $this->loadModel('repo')->fetchByID((int)$this->session->repoID);
             $products = $repo ? array_flip(explode(',', $repo->product)) : array();
@@ -3168,11 +3174,11 @@ class storyModel extends model
             ->andWhere("FIND_IN_SET('{$this->config->vision}', t1.vision)")
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
-            ->beginIF($type == 'assignedTo')->andWhere('t1.assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'assignedTo')->andWhere('t1.`assignedTo`')->eq($account)->fi()
             ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->andWhere('t1.status')->in('reviewing')->fi()
-            ->beginIF($type == 'openedBy')->andWhere('t1.openedBy')->eq($account)->fi()
-            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.reviewedBy, ',')")->like("%,$account,%")->fi()
-            ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
+            ->beginIF($type == 'openedBy')->andWhere('t1.`openedBy`')->eq($account)->fi()
+            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.`reviewedBy`, ',')")->like("%,$account,%")->fi()
+            ->beginIF($type == 'closedBy')->andWhere('t1.`closedBy`')->eq($account)->fi()
             ->fi()
             ->beginIF(!$includeLibStories and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->beginIF($shadow !== 'all')->andWhere('t2.shadow')->eq((int)$shadow)->fi()
@@ -3301,16 +3307,16 @@ class storyModel extends model
      * 获取零用例需求。
      * Get zero case.
      *
-     * @param  int     $productID
-     * @param  int     $projectID
-     * @param  int     $executionID
-     * @param  int     $branchID
-     * @param  string  $orderBy
-     * @param  object  $pager
+     * @param  int        $productID
+     * @param  int        $projectID
+     * @param  int        $executionID
+     * @param  int|string $branchID
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getZeroCase(int $productID, int $projectID = 0, int $executionID = 0, int|string $branchID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         $casedStories = $this->dao->select('DISTINCT t1.story')
             ->from(TABLE_CASE)->alias('t1')
@@ -3620,6 +3626,7 @@ class storyModel extends model
             ->fetchAll('name');
         if(!$datas) return array();
 
+        if($storyType != 'story') $this->app->loadLang($storyType);
         foreach($datas as $status => $data) if(isset($this->lang->{$storyType}->statusList[$status])) $data->name = $this->lang->{$storyType}->statusList[$status];
         return $datas;
     }
@@ -4326,7 +4333,7 @@ class storyModel extends model
     public function linkStory(int $executionID, int $productID, int $storyID): void
     {
         if(empty($executionID) || empty($productID) || empty($storyID)) return;
-        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->limit(1)->fetch('order');
+        $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('`order`_desc')->limit(1)->fetch('order');
 
         $projectStory = new stdclass();
         $projectStory->project = $executionID;
@@ -4540,7 +4547,7 @@ class storyModel extends model
 
         /* Merge to get a new sort list. */
         $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, 'order_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
+        if(strpos($orderBy, '`order`_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
 
         /* Loop update the story order of plan. */
         $order = 1;
@@ -5141,8 +5148,8 @@ class storyModel extends model
     {
         return $this->dao->select('t2.new')->from(TABLE_ACTION)->alias('t1')
             ->leftJoin(TABLE_HISTORY)->alias('t2')->on('t1.id = t2.action')
-            ->where('t1.objectType')->eq('story')
-            ->andWhere('t1.objectID')->eq($storyID)
+            ->where('t1.`objectType`')->eq('story')
+            ->andWhere('t1.`objectID`')->eq($storyID)
             ->andWhere('t2.field')->in('reviewer,reviewers')
             ->andWhere('t2.new')->ne('')
             ->orderBy('t1.id_desc')
@@ -5681,8 +5688,8 @@ class storyModel extends model
     {
         return $this->dao->select('t1.revision,t3.id AS id,t3.title AS title')
             ->from(TABLE_REPOHISTORY)->alias('t1')
-            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.BType='commit' AND t2.BID=t1.id")
-            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.AType='story' AND t2.AID=t3.id")
+            ->leftJoin(TABLE_RELATION)->alias('t2')->on("t2.relation='completedin' AND t2.`BType`='commit' AND t2.`BID`=t1.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on("t2.`AType`='story' AND t2.`AID`=t3.id")
             ->where('t1.revision')->in($revisions)
             ->andWhere('t1.repo')->eq($repoID)
             ->andWhere('t3.id')->notNULL()

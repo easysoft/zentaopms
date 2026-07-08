@@ -22,7 +22,7 @@ zenData('product')->gen(20);
 
 $story = zenData('story');
 $story->product->range(1);
-$story->parent->range('0,`-1`,2,`-1`,0{10},`-1`,100,14,15,15,15');
+$story->parent->range('0{2},2,0{12},100,14,15,15,15');
 $story->type->range('story');
 $story->gen(20);
 

@@ -60,8 +60,8 @@ r($webhookTest->saveLogTest($webhook3, 103, '', '')) && p('objectID') && e('3');
 
 r($webhookTest->saveLogTest($webhook1, 104, 'different data', 'different result')) && p('objectID,action') && e('1,104');
 
-$saveResult = $webhookTest->objectModel->saveLog($webhook2, 105, 'test data', 'test result');
-r($saveResult) && p() && e('1');
+$saveResult = $webhookTest->saveLogTest($webhook2, 105, 'test data', 'test result');
+r($saveResult) && p('objectID,action') && e('2,105');
 
 r($webhookTest->saveLogTest($webhook2, 999, 'action test data', 'action test result')) && p('action,objectID') && e('999,2');
 

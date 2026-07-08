@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of program module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
@@ -28,12 +28,12 @@ class program extends control
     /**
      * Program list.
      *
-     * @param  string  $status
+     * @param  string  $browseType
      * @param  string  $orderBy
      * @access public
      * @return void
      */
-    public function browse(string $status = 'unclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $param = 0)
+    public function browse(string $browseType = 'unclosed', string $orderBy = 'order_asc', int $recTotal = 0, int $recPerPage = 100, int $pageID = 1, int $param = 0)
     {
         $uri = $this->app->getURI(true);
         $this->session->set('programList', $uri, 'program');
@@ -43,17 +43,17 @@ class program extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $programs = $this->programZen->getProgramsByType($status, $orderBy, (int)$param, $pager);
+        $programs = $this->programZen->getProgramsByType($browseType, $orderBy, (int)$param, $pager);
         $PMList   = $this->programZen->getPMListByPrograms($programs);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('program', 'browse', "status=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $actionURL = $this->createLink('program', 'browse', "browseType=bysearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
         $this->view->title       = $this->lang->program->browse;
         $this->view->programs    = $programs;
-        $this->view->status      = $status;
+        $this->view->browseType  = $browseType;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
@@ -756,7 +756,7 @@ class program extends control
             $programLines[$productLine->root][$productLine->id] = $productLine->name;
         }
 
-        $actionURL = $this->createLink('program', 'productview', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $actionURL = $this->createLink('program', 'productview', "browseType=bysearch&orderBy=order_asc&queryID=myQueryID");
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 

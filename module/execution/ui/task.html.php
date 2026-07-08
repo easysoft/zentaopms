@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The task view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao<caoyanyi@easycorp.ltd>
  * @package     execution
@@ -14,7 +14,7 @@ namespace zin;
 
 /* zin: Define the set::module('task') feature bar on main menu. */
 if(empty($features['story'])) unset($lang->execution->featureBar['task']['needconfirm']);
-$queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&status=bySearch&param={queryID}");
+$queryMenuLink = createLink('execution', 'task', "executionID={$execution->id}&browseType=bysearch&param={queryID}");
 $isFromDoc     = $from === 'doc';
 $isFromAI      = $from === 'ai';
 
@@ -23,8 +23,8 @@ if($isFromDoc || $isFromAI)
 {
     $this->app->loadLang('doc');
     $executions = $this->loadModel('execution')->getPairs();
-    $executionChangeLink = createLink($app->rawModule, $app->rawMethod, "executionID={executionID}&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
-    $insertListLink = createLink($app->rawModule, $app->rawMethod, "executionID=$executionID&status=$status&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
+    $executionChangeLink = createLink($app->rawModule, $app->rawMethod, "executionID={executionID}&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID");
+    $insertListLink = createLink($app->rawModule, $app->rawMethod, "executionID=$executionID&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID={blockID}");
 
     formPanel
     (
@@ -70,7 +70,7 @@ if($isFromDoc || $isFromAI)
 featureBar
 (
     set::current($browseType),
-    set::linkParams("executionID={$executionID}&status={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID"),
+    set::linkParams("executionID={$executionID}&browseType={key}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&from=$from&blockID=$blockID"),
     set::isModal($isFromDoc || $isFromAI),
     set::queryMenuLinkCallback(array(fn($key) => str_replace('{queryID}', (string)$key, $queryMenuLink))),
     li(searchToggle
@@ -240,7 +240,7 @@ if(!$isFromDoc && !$isFromAI)
         moduleMenu
         (
             set::modules($moduleTree),
-            set::activeKey($status == 'byProduct' ? "product-{$activeKey}" : $activeKey),
+            set::activeKey($browseType == 'byProduct' ? "product-{$activeKey}" : $activeKey),
             set::settingLink(createLink('tree', 'browsetask', "rootID=$execution->id&productID=0")),
             set::settingApp($execution->multiple ? 'execution' : 'project'),
             set::closeLink(createLink('execution', 'task', "executionID={$executionID}")),
@@ -336,14 +336,14 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
+        'linkCreator' => helper::createLink('execution', 'task', "executionID={$execution->id}&browseType={$browseType}&param={$param}&orderBy=$orderBy&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}&from={$from}&blockID={$blockID}") . "#app={$app->tab}"
     ))),
     !$isFromDoc ? null : set::afterRender(jsCallback()->call('toggleCheckRows', $idList)),
     (!$isFromDoc && !$isFromAI) ? null : set::onCheckChange(jsRaw('window.checkedChange')),
     (!$isFromDoc && !$isFromAI) ? null : set::noNestedCheck(true),
     (!$isFromDoc && !$isFromAI) ? null : set::height(400),
     ($isFromDoc || $isFromAI) ? null : set::customCols(true),
-    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&status={$status}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
+    ($isFromDoc || $isFromAI) ? null : set::sortLink(createLink('execution', 'task', "executionID={$execution->id}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
     ($isFromDoc || $isFromAI) ? null : set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     ($isFromDoc || $isFromAI) ? null : set::createTip($lang->task->create),
     ($isFromDoc || $isFromAI) ? null : set::createLink($createTaskLink),

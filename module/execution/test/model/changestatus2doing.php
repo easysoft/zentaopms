@@ -3,7 +3,10 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(5);
+$user = zenData('user');
+$user->id->range('51-55');
+$user->account->range('admin,user1,user2,user3,user4');
+$user->gen(5);
 su('admin');
 
 $execution = zenData('project');
@@ -43,5 +46,5 @@ r($executionTest->changeStatus2DoingObject(4)) && p('') && e('1');  // 测试已
 r($executionTest->changeStatus2DoingObject(5)) && p('') && e('1');  // 测试已暂停状态执行更改为进行中状态
 r($executionTest->changeStatus2DoingObject(6)) && p('') && e('1');  // 测试顶级阶段更改为进行中状态
 r($executionTest->changeStatus2DoingObject(7)) && p('') && e('1');  // 测试子阶段更改为进行中状态
-r($executionTest->changeStatus2DoingTest(0)) && p('') && e('');     // 测试无效执行ID的处理
+r($executionTest->changeStatus2DoingTest(0)) && p('') && e('0');     // 测试无效执行ID的处理
 r($executionTest->getExecutionStatusTest(2)) && p('status') && e('doing'); // 验证状态更新结果检查status字段

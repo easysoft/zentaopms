@@ -2,7 +2,7 @@
 /**
  * The bug module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
@@ -256,16 +256,17 @@ $lang->bug->browserList['360']     = '360 series';
 $lang->bug->browserList['qq']      = 'QQ series';
 $lang->bug->browserList['other']   = 'Autres';
 
-$lang->bug->typeList['']             = '';
-$lang->bug->typeList['codeerror']    = 'Code Erreur';
-$lang->bug->typeList['config']       = 'Configuration';
-$lang->bug->typeList['install']      = 'Installation';
-$lang->bug->typeList['security']     = 'Faille Sécurité';
-$lang->bug->typeList['performance']  = 'Performance';
-$lang->bug->typeList['standard']     = 'Convention de Code';
-$lang->bug->typeList['automation']   = 'Script automatisation';
-$lang->bug->typeList['designdefect'] = 'Erreur de Design';
-$lang->bug->typeList['others']       = 'Autres';
+$lang->bug->typeList['']                = '';
+$lang->bug->typeList['codeerror']       = 'Code Erreur';
+$lang->bug->typeList['config']          = 'Configuration';
+$lang->bug->typeList['install']         = 'Installation';
+$lang->bug->typeList['security']        = 'Faille Sécurité';
+$lang->bug->typeList['performance']     = 'Performance';
+$lang->bug->typeList['standard']        = 'Convention de Code';
+$lang->bug->typeList['automation']      = 'Script automatisation';
+$lang->bug->typeList['designdefect']    = 'Erreur de Design';
+$lang->bug->typeList['codeimprovement'] = 'Code Improvement';
+$lang->bug->typeList['others']          = 'Autres';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Actif';

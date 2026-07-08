@@ -64,7 +64,8 @@ $baseBug = (object)array(
     'status'         => 'active',
     'lastEditedDate' => '2023-05-04 14:00:00',
     'openedBy'       => 'admin',
-    'resolvedBy'     => ''
+    'resolvedBy'     => '',
+    'resolvedDate'   => ''
 );
 
 $zen = initReference('bug');

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of projectStory module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     projectStory
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -105,7 +105,7 @@ class projectStory extends control
             if($this->config->edition == 'ipd' && $storyType != 'story') $this->config->product->search['params']['roadmap']['values'] = $this->loadModel('roadmap')->getPairs($productID);
 
             /* Build search form. */
-            $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&productID=0&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}&from=doc&blockID=$blockID");
+            $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, "projectID={$project->id}&productID=0&branch=$branch&browseType=bysearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID={$project->id}&from=doc&blockID=$blockID");
             $this->config->product->search['module'] = 'projectstory';
             $queryID = ($browseType == 'bysearch') ? $param : 0;
             $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $storyType, $branch, $project->id);

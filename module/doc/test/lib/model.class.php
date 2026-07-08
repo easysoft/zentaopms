@@ -116,7 +116,7 @@ class docModelTest extends baseTest
      * 通过类型获取文档列表数据。
      * Get doc list data by browse type.
      *
-     * @param  string $browseType all|bySearch|openedbyme|editedbyme|byediteddate|collectedbyme
+     * @param  string $browseType all|bysearch|openedbyme|editedbyme|byediteddate|collectedbyme
      * @param  int    $queryID
      * @param  int    $moduleID
      * @param  string $sort
@@ -284,6 +284,22 @@ class docModelTest extends baseTest
     }
 
     /**
+     * 获取所有子空间。
+     * Get all sub spaces.
+     *
+     * @param  string $spaceType
+     * @access public
+     * @return array
+     */
+    public function getAllSubSpacesTest(string $spaceType = 'all'): array
+    {
+        $spaces = $this->instance->getAllSubSpaces($spaceType);
+
+        if(dao::isError()) return dao::getError();
+        return $spaces;
+    }
+
+    /**
      * 获取文档库的附件。
      * Get lib files.
      *
@@ -298,7 +314,7 @@ class docModelTest extends baseTest
         $browseType = '';
         if($searchTitle !== false)
         {
-            $browseType = 'bySearch';
+            $browseType = 'bysearch';
             $_SESSION["{$type}DocTypeQuery"] = "title LIKE '%{$searchTitle}%'";
         }
         $files = $this->instance->getLibFiles($type, $objectID, $browseType);
@@ -501,7 +517,16 @@ class docModelTest extends baseTest
      */
     public function setMenuByTypeTest(string $type, int $objectID, int $libID, int $appendLib = 0): array
     {
+        $app               = $this->instance->app;
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'doc';
+        if(empty($app->rawMethod)) $app->rawMethod = 'browse';
+
         $objects = $this->instance->setMenuByType($type, $objectID, $libID, $appendLib);
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
+
         if(dao::isError()) return dao::getError();
 
         return $objects;
@@ -1429,12 +1454,21 @@ class docModelTest extends baseTest
      */
     public function getDynamicTest(int $recPerPage, int $pageID): array|int
     {
+        $app               = $this->instance->app;
+        $originalRawModule = $app->rawModule ?? null;
+        $originalRawMethod = $app->rawMethod ?? null;
+        if(empty($app->rawModule)) $app->rawModule = 'doc';
+        if(empty($app->rawMethod)) $app->rawMethod = 'dynamic';
+
         $this->instance->app->loadClass('pager', true);
         $pager = new pager(0, $recPerPage, $pageID);
 
         $actions = $this->instance->getDynamic($pager);
         $idList  = array();
         foreach($actions as $action) $idList []= $action->id;
+
+        $app->rawModule = $originalRawModule;
+        $app->rawMethod = $originalRawMethod;
 
         if(dao::isError()) return dao::getError();
         return count($idList);
@@ -1723,7 +1757,7 @@ class docModelTest extends baseTest
      * @access public
      * @return int|bool
      */
-    public function updateDoclibOrderTest(int $id, int $order): int|bool
+    public function updateDoclibOrderTest(int $id, int $order): int|string|bool
     {
         $this->instance->updateDoclibOrder($id, $order);
 
@@ -3821,9 +3855,9 @@ class docModelTest extends baseTest
             $result->release = 0;
 
             // 模拟API列表数据
-            if($browseType == 'bySearch')
+            if($browseType == 'bysearch')
             {
-                $result->apiList = array('searchResult' => 'bySearch');
+                $result->apiList = array('searchResult' => 'bysearch');
             }
             else
             {
@@ -3833,7 +3867,7 @@ class docModelTest extends baseTest
         else
         {
             // 模拟文档数据
-            if($browseType == 'bySearch')
+            if($browseType == 'bysearch')
             {
                 $result->docs = array('searchResult' => 'docsBySearch');
             }

@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日执行用例次数表示组织每日执行的用例次数，这个度量项可以反映测试团队每日的工作效率和进展情况。
  * 定义：所有用例的执行次数求和;过滤已删除的用例;过滤已删除的产品;执行时间为某日;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

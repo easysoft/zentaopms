@@ -245,6 +245,17 @@ class docApp extends wg
         $langData->officeNotSupported = $lang->file->officeNotSupported;
         $langData->officeNotInstalled = $lang->file->officeNotInstalled;
 
+        if($config->edition != 'open')
+        {
+            $langData->exportOpenAPI      = $lang->api->exportOpenAPI;
+            $langData->exportScopeLabel   = $lang->api->exportScopeLabel;
+            $langData->exportVersionLabel = $lang->api->exportVersionLabel;
+            $langData->exportFormatLabel  = $lang->api->exportFormatLabel;
+            $langData->exportVersionList  = $lang->api->exportVersionList;
+            $langData->exportFormatList   = $lang->api->exportFormatList;
+            $langData->importOpenAPI      = $lang->api->importOpenAPI;
+        }
+
         /**
          * 通过语言项定义文档表格列显示名称。
          * Define the table columns for doc app.
@@ -311,29 +322,25 @@ class docApp extends wg
 
         $app->control->loadModel('file');
 
-        $fileListProps = array();
+        $fileListProps   = array();
+        $canPreviewFile  = common::hasPriv('file', 'preview');
         $canDownloadFile = common::hasPriv('file', 'download');
-        if($canDownloadFile)
-        {
-            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
-            jsVar('previewLang', $lang->file->preview);
-            jsVar('downloadLang', $lang->file->download);
-            jsVar('previewLink', $previewLink);
-            jsVar('downloadLink', $fileUrl);
-            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+        if(!$canDownloadFile) $fileUrl = '';
 
-            $fileListProps['fileUrl']          = $fileUrl;
-            $fileListProps['target']           = '_blank';
-            $fileListProps['hoverItemActions'] = true;
-            $fileListProps['itemProps']        = array('target' => '_blank');
-            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
-        }
-        else
-        {
-            $fileUrl = '';
-        }
+        jsVar('libreOfficeTurnon', !empty($config->file->libreOfficeTurnon));
+        jsVar('canPreviewFile', $canPreviewFile);
+        jsVar('canDownloadFile', $canDownloadFile);
+        jsVar('previewLang', $lang->file->preview);
+        jsVar('downloadLang', $lang->file->download);
+        jsVar('downloadLink', $fileUrl);
 
-        $canPreviewOffice  = common::hasPriv('file', 'preview') && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+        $fileListProps['fileUrl']          = $fileUrl;
+        $fileListProps['target']           = '_blank';
+        $fileListProps['hoverItemActions'] = true;
+        $fileListProps['itemProps']        = array('target' => '_blank');
+        $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
+
+        $canPreviewOffice  = common::hasPriv('file', 'preview') && !empty($config->file->libreOfficeTurnon);
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;
@@ -357,7 +364,7 @@ class docApp extends wg
 
         $privs = $this->prop('privs', []);
         if(!isset($privs['downloadFile'])) $privs['downloadFile'] = $canDownloadFile;
-        if(!isset($privs['previewFile']))  $privs['previewFile'] = $canPreviewOffice;
+        if(empty($privs['previewFile']))   $privs['previewFile']  = $canPreviewOffice;
 
         return zui::docApp
         (

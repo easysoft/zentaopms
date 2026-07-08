@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of convert module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
@@ -143,23 +143,27 @@ class convertModel extends model
      * @access public
      * @return array
      */
-    public function getJiraData(string $method, string $module, int $lastID = 0, int $limit = 0): array
+    public function getJiraData(string $method, string $module, int|string $lastID = '', int|string $limit = ''): array
     {
         if($method == 'db')
         {
             $originDBH = $this->dbh;
             $this->connectDB($this->session->jiraDB);
-            $result = $this->getJiraDataFromDB($module, $lastID, $limit);
+            $result = $this->getJiraDataFromDB($module, (int)$lastID, (int)$limit);
             $this->dao->dbh($originDBH);
             return $result;
         }
         elseif($method == 'file')
         {
-            return $this->getJiraDataFromFile($module, $lastID, $limit);
+            return $this->getJiraDataFromFile($module, (int)$lastID, (int)$limit);
+        }
+        elseif($method == 'api')
+        {
+            return $this->getJiraDataFromAPI($module, (int)$lastID, (int)$limit);
         }
         else
         {
-            return $this->getJiraDataFromAPI($module, $lastID, $limit);
+            return $this->getJiraDataFromJson($module, $lastID, $limit);
         }
     }
 
@@ -194,7 +198,8 @@ class convertModel extends model
             'status'            => 'getStatus',
             'customfield'       => 'getCustomFields',
             'customfieldoption' => 'getCustomFieldOption',
-            'workflow'          => 'getWorkflowActions'
+            'workflow'          => 'getWorkflowActions',
+            'role'              => 'getProjectRole'
         );
 
         if(isset($functionMap[$module]))
@@ -252,8 +257,8 @@ class convertModel extends model
             $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
                 ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
                 ->where('1 = 1')
-                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
-                ->orderBy('t1.ID asc')->limit($limit)
+                ->beginIF($lastID)->andWhere('t1.`ID`')->gt($lastID)->fi()
+                ->orderBy('t1.`ID` asc')->limit($limit)
                 ->fetchAll('id');
         }
         elseif($module == 'nodeassociation')
@@ -469,11 +474,12 @@ EOT;
      *
      * @param  string $type user|project|issue|build|issuelink|action|file
      * @param  int    $lastID
-     * @param  bool   $createTable
+     * @param  int    $createTable
+     * @param  int    $getApiData
      * @access public
      * @return array
      */
-    public function importJiraData(string $type = '', int $lastID = 0, bool $createTable = false): array
+    public function importJiraData(string $type = '', int $lastID = 0, int $createTable = 0, int $getApiData = 0): array
     {
         if($createTable) $this->createTmpTable4Jira();
 
@@ -492,7 +498,14 @@ EOT;
 
             while(true)
             {
-                $dataList = $this->getJiraData($this->session->jiraMethod, $module, $lastID, $limit);
+                if($this->session->jiraMethod == 'api')
+                {
+                    $dataList = $this->getJiraDataToJson($module, $lastID, $limit);
+                }
+                else
+                {
+                    $dataList = $this->getJiraData($this->session->jiraMethod, $module, $lastID, $limit);
+                }
 
                 if(empty($dataList))
                 {
@@ -500,15 +513,18 @@ EOT;
                     break;
                 }
 
-                if($module == 'user')       $this->convertTao->importJiraUser($dataList);
-                if($module == 'project')    $this->convertTao->importJiraProject($dataList);
-                if($module == 'issue')      $this->convertTao->importJiraIssue($dataList);
-                if($module == 'build')      $this->convertTao->importJiraBuild($dataList);
-                if($module == 'issuelink')  $this->convertTao->importJiraIssueLink($dataList);
-                if($module == 'worklog')    $this->convertTao->importJiraWorkLog($dataList);
-                if($module == 'action')     $this->convertTao->importJiraAction($dataList);
-                if($module == 'changeitem') $this->convertTao->importJiraChangeItem($dataList);
-                if($module == 'file')       $this->convertTao->importJiraFile($dataList);
+                if(!$getApiData)
+                {
+                    if($module == 'user')       $this->convertTao->importJiraUser($dataList);
+                    if($module == 'project')    $this->convertTao->importJiraProject($dataList);
+                    if($module == 'issue')      $this->convertTao->importJiraIssue($dataList);
+                    if($module == 'build')      $this->convertTao->importJiraBuild($dataList);
+                    if($module == 'issuelink')  $this->convertTao->importJiraIssueLink($dataList);
+                    if($module == 'worklog')    $this->convertTao->importJiraWorkLog($dataList);
+                    if($module == 'action')     $this->convertTao->importJiraAction($dataList);
+                    if($module == 'changeitem') $this->convertTao->importJiraChangeItem($dataList);
+                    if($module == 'file')       $this->convertTao->importJiraFile($dataList);
+                }
 
                 $offset = $lastID + $limit;
 
@@ -516,7 +532,10 @@ EOT;
             }
         }
 
+        if($getApiData) return array('finished' => true);
+
         if($this->session->jiraMethod == 'file') $this->deleteJiraFile();
+        if($this->session->jiraMethod == 'api')  $this->deleteJsonFile();
 
         /* 更新各项目的统计数据。 */
         $projectList = $this->dao->dbh($this->dbh)->select('BID')->from(JIRA_TMPRELATION)->where('BType')->in('zproject,zexecution')->fetchPairs();
@@ -545,6 +564,24 @@ EOT;
             $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
             if(file_exists($filePath)) @unlink($filePath);
         }
+    }
+
+    /**
+     * 删除JiraAPI导入产生的json文件。
+     * Delete json file.
+     *
+     * @access public
+     * @return bool
+     */
+    public function deleteJsonFile()
+    {
+        $path = $this->app->getTmpRoot() . 'jirafile/json/';
+        if(!is_dir($path)) return false;
+
+        $files = glob($path . '*.json');
+        foreach($files as $file) @unlink($file);
+
+        return true;
     }
 
     /**
@@ -647,7 +684,7 @@ EOT;
             foreach($jiraData['jiraObject'] as $objectID)
             {
                 if($jiraData['zentaoObject'][$objectID] == 'add_custom') continue;
-                if($objectID) $objectSteps[$objectID] = zget($issueTypeList[$objectID], 'pname', '') . $this->lang->convert->jira->steps['objectData'];
+                if($objectID && !empty($issueTypeList[$objectID])) $objectSteps[$objectID] = zget($issueTypeList[$objectID], 'pname', '') . $this->lang->convert->jira->steps['objectData'];
             }
         }
 
@@ -734,41 +771,46 @@ EOT;
      * Get jira status list.
      *
      * @param  string $step
+     * @param  string $getDataMethod
      * @access public
      * @return array
      */
-    public function getJiraStatusList($step = ''): array
+    public function getJiraStatusList($step = '', $getDataMethod = ''): array
     {
+        if(empty($getDataMethod)) $getDataMethod = $this->session->jiraMethod;
         if($this->session->jiraMethod == 'api')
         {
-            $jql = 'created<=' . date('Y-m-d', strtotime('+1 day'));
+            $jql  = 'created<=' . date('Y-m-d', strtotime('+1 day'));
             if($step) $jql .= " AND issuetype = {$step}";
-            $issues = $this->callJiraAPI('/rest/api/3/search/jql?jql=' . urlencode($jql) . '&fields=status,issuetype&maxResults=5000');
+            $issues = $getDataMethod == 'json' ? $this->getJiraData($getDataMethod, 'issue', 0, 1000, true) : $this->callJiraAPI('/rest/api/3/search/jql?jql=' . urlencode($jql) . '&fields=status,issuetype&maxResults=5000');
 
             foreach($issues as $issue)
             {
-                if(!empty($issue->fields))
+                $issue = json_decode(json_encode($issue), true);
+                if(!empty($issue['fields']))
                 {
-                    foreach($issue->fields as $field => $value) $issue->$field = $value;
+                    foreach($issue['fields'] as $field => $value) $issue[$field] = $value;
                 }
-                if(!empty($issue->status->id))    $issue->issuestatus = $issue->status->id;
-                if(!empty($issue->issuetype->id)) $issue->issuetype   = $issue->issuetype->id;
+                if(!empty($issue['status']['id']))    $issue['issuestatus'] = $issue['status']['id'];
+                if(!empty($issue['issuetype']['id'])) $issue['issuetype']   = $issue['issuetype']['id'];
             }
         }
         else
         {
-            $issues = $this->getJiraData($this->session->jiraMethod, 'issue');
+            $issues = $this->getJiraData($getDataMethod, 'issue');
         }
-        $statusList = $this->getJiraData($this->session->jiraMethod, 'status');
+
+        $statusList = $this->getJiraData($getDataMethod, 'status');
 
         $jiraStatusList = array();
         foreach($issues as $issue)
         {
-            if(empty($issue->issuestatus)) continue;
-            if(empty($statusList[$issue->issuestatus])) continue;
+            $issue = json_decode(json_encode($issue), true);
+            if(empty($issue['issuestatus'])) continue;
+            if(empty($statusList[$issue['issuestatus']])) continue;
 
-            $status = $statusList[$issue->issuestatus];
-            $jiraStatusList[$issue->issuetype][$issue->issuestatus] = $status->pname;
+            $status = (array)$statusList[$issue['issuestatus']];
+            $jiraStatusList[$issue['issuetype']][$issue['issuestatus']] = $status['pname'];
         }
         return $step ? zget($jiraStatusList, $step, array()) : $jiraStatusList;
     }
@@ -777,33 +819,40 @@ EOT;
      * 获取Jira自定义字段列表。
      * Get jira custom fields.
      *
+     * @param  string $getDataMethod
      * @access public
      * @return array
      */
-    public function getJiraCustomField(): array
+    public function getJiraCustomField($getDataMethod = ''): array
     {
         if($this->config->edition == 'open') return array();
+        if(empty($getDataMethod)) $getDataMethod = $this->session->jiraMethod;
 
         $jiraFields = array();
-        $fields     = $this->getJiraData($this->session->jiraMethod, 'customfield');
+        $fields     = $this->getJiraData($getDataMethod, 'customfield');
         if($this->session->jiraMethod == 'api')
         {
             foreach($fields as $issueType => $fieldList)
             {
-                foreach($fieldList as $fieldID => $field) $fields[$issueType][$fieldID] = $field->cfname;
+                foreach($fieldList as $fieldID => $field)
+                {
+                    $field = (object)$field;
+                    $fields[$issueType][$fieldID] = $field->cfname;
+                }
             }
             return $fields;
         }
 
-        $issues     = $this->getJiraData($this->session->jiraMethod, 'issue');
-        $fieldValue = $this->getJiraData($this->session->jiraMethod, 'customfieldvalue');
+        $issues     = $this->getJiraData($getDataMethod, 'issue', 0, 1000, true);
+        $fieldValue = $this->getJiraData($getDataMethod, 'customfieldvalue');
 
         foreach($fieldValue as $value)
         {
+            $value = (object)$value;
             if(empty($issues[$value->issue]) || empty($fields[$value->customfield])) continue;
 
-            $issue = $issues[$value->issue];
-            $field = $fields[$value->customfield];
+            $issue = (object)$issues[$value->issue];
+            $field = (object)$fields[$value->customfield];
 
             if(in_array($field->customfieldtypekey, array('com.pyxis.greenhopper.jira:gh-sprint', 'com.pyxis.greenhopper.jira:gh-epic-label', 'com.pyxis.greenhopper.jira:gh-epic-status', 'com.pyxis.greenhopper.jira:gh-epic-color'))) continue;
             $jiraFields[$issue->issuetype][$value->customfield] = $field->cfname;
@@ -824,13 +873,15 @@ EOT;
         $fieldList  = $this->dao->dbh($this->dbh)->select('AID, extra, BID AS field')->from(JIRA_TMPRELATION)->where('AType')->eq('jcustomfield')->andWhere('BType')->eq('zworkflowfield')->fetchGroup('AID', 'extra');
         if($this->session->jiraMethod == 'api')
         {
-            $projectList = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields&maxResults=1000');
+            $projectList = $this->getJiraDataFromJson('projectissuefield');
             $jiraFields  = array();
             foreach($projectList as $project)
             {
+                $project = (object)$project;
                 if(empty($project->issuetypes)) continue;
                 foreach($project->issuetypes as $issueType)
                 {
+                    $issueType = (object)$issueType;
                     if(empty($issueType->fields)) continue;
 
                     $zentaoObject = $relations['zentaoObject'][$issueType->id];
@@ -855,6 +906,7 @@ EOT;
         $jiraFields = array();
         foreach($fieldValue as $value)
         {
+            $value = (object)$value;
             if(empty($issues[$value->issue])) continue;
 
             $issue        = $issues[$value->issue];
@@ -874,37 +926,41 @@ EOT;
      * 获取Jira工作流里的动作列表。
      * Get jira workflow actions.
      *
+     * @param  string $getDataMethod
      * @access public
      * @return array
      */
-    public function getJiraWorkflowActions(): array
+    public function getJiraWorkflowActions($getDataMethod = ''): array
     {
         if($this->config->edition == 'open') return array();
+        if(empty($getDataMethod)) $getDataMethod = $this->session->jiraMethod;
 
         if($this->session->jiraMethod == 'api')
         {
-            $schemeList   = $this->callJiraAPI('/rest/api/3/issuetypescheme?expand=projects,issuetypes&maxResults=1000');
-            $workflowList = $this->callJiraAPI('/rest/api/3/workflow/search?expand=transitions,projects&maxResults=1000');
+            $schemeList   = $getDataMethod == 'json' ? $this->getJiraData($getDataMethod, 'scheme')   : $this->callJiraAPI('/rest/api/3/issuetypescheme?expand=projects,issuetypes&maxResults=1000');
+            $workflowList = $getDataMethod == 'json' ? $this->getJiraData($getDataMethod, 'workflow') : $this->callJiraAPI('/rest/api/3/workflow/search?expand=transitions,projects&maxResults=1000');
             $projectGroup = array();
             foreach($schemeList as $scheme)
             {
-                if(empty($scheme->issueTypes->values) || empty($scheme->projects->values)) continue;
-                foreach($scheme->issueTypes->values as $issueType)
+                $scheme = json_decode(json_encode($scheme), true);
+                if(empty($scheme['issueTypes']['values']) || empty($scheme['projects']['values'])) continue;
+                foreach($scheme['issueTypes']['values'] as $issueType)
                 {
-                    foreach($scheme->projects->values as $project) $projectGroup[$issueType->id][$project->id] = $project->id;
+                    foreach($scheme['projects']['values'] as $project) $projectGroup[$issueType['id']][$project['id']] = $project['id'];
                 }
             }
 
             $workflowActions = array();
             foreach($workflowList as $workflow)
             {
-                if(empty($workflow->transitions) || empty($workflow->projects)) continue;
-                foreach($workflow->projects as $project)
+                $workflow = json_decode(json_encode($workflow), true);
+                if(empty($workflow['transitions']) || empty($workflow['projects'])) continue;
+                foreach($workflow['projects'] as $project)
                 {
                     foreach($projectGroup as $issueType => $projects)
                     {
-                        if(!in_array($project->id, $projects)) continue;
-                        foreach($workflow->transitions as $action) $workflowActions[$issueType]['actions'][$action->id] = (array)$action;
+                        if(!in_array($project['id'], $projects)) continue;
+                        foreach($workflow['transitions'] as $action) $workflowActions[$issueType]['actions'][$action['id']] = (array)$action;
                     }
                 }
             }
@@ -918,6 +974,7 @@ EOT;
         $actionNameList  = array();
         foreach($workflows as $workflowID => $workflow)
         {
+            $workflow   = (object)$workflow;
             $descriptor = simplexml_load_string($workflow->descriptor);
             $descriptor = $this->object2Array($descriptor);
 
@@ -1211,12 +1268,14 @@ EOT;
         {
             foreach($projectList as $projectID)
             {
-                $boardList = $this->callJiraAPI("/rest/agile/1.0/board?projectKeyOrId={$projectID}&maxResults=1000");
+                $boardList = $this->session->jiraMethod == 'file' ? $this->callJiraAPI("/rest/agile/1.0/board?projectKeyOrId={$projectID}&maxResults=1000") : $this->getJiraDataFromJson('board', $projectID);
                 foreach($boardList as $board)
                 {
-                    $sprintList = $this->callJiraAPI("/rest/agile/1.0/board/$board->id/sprint?maxResults=1000");
+                    $board = (object)$board;
+                    $sprintList = $this->session->jiraMethod == 'file' ? $this->callJiraAPI("/rest/agile/1.0/board/$board->id/sprint?maxResults=1000") : $this->getJiraDataFromJson('sprint', "{$projectID}_{$board->id}");
                     foreach($sprintList as $sprint)
                     {
+                        $sprint = (object)$sprint;
                         $sprintGroup[$projectID][$sprint->id] = $sprint;
                     }
                 }
@@ -1250,13 +1309,18 @@ EOT;
         {
             foreach($sprintRelation as $sprintID => $executionID)
             {
-                $issueList = $this->callJiraAPI("/rest/agile/1.0/sprint/{$sprintID}/issue?maxResults=1000");
+                $issueList = $this->session->jiraMethod == 'api' ? $this->getJiraDataFromJson('sprintIssue', $sprintID) : $this->callJiraAPI("/rest/agile/1.0/sprint/{$sprintID}/issue?maxResults=1000");
                 foreach($issueList as $issue)
                 {
+                    $issue = (object)$issue;
                     $issueGroup[$issue->id] = $executionID;
                     if(!empty($issue->fields->subtasks))
                     {
-                        foreach($issue->fields->subtasks as $subtask) $issueGroup[$subtask->id] = $executionID;
+                        foreach($issue->fields->subtasks as $subtask)
+                        {
+                            $subtask = (object)$subtask;
+                            $issueGroup[$subtask->id] = $executionID;
+                        }
                     }
                 }
             }
@@ -1283,6 +1347,7 @@ EOT;
         {
             foreach($auditLog as $log)
             {
+                $log = (object)$log;
                 if($log->summary == 'Project archived' && $log->object_type == 'project') $archivedProject[$log->object_id] = $log->object_id;
             }
         }
@@ -1302,6 +1367,7 @@ EOT;
             {
                 foreach($result as $project)
                 {
+                    $project = (object)$project;
                     if(!empty($project->id) && empty($project->archived)) $projectList[$project->id] = $project->id; // 没有被归档的项目。
                 }
             }
@@ -1309,6 +1375,7 @@ EOT;
             /* 过滤掉没被归档的项目，剩下的都是被归档的项目。 */
             foreach($dataList as $project)
             {
+                $project = (object)$project;
                 if(empty($projectList[$project->id])) $archivedProject[$project->id] = $project->id;
             }
         }
@@ -1344,15 +1411,16 @@ EOT;
             $projectMember = array();
             foreach($projectList as $project)
             {
-                $projectRoles = $this->callJiraAPI("/rest/api/2/project/{$project->id}/role?maxResults=1000", 0, true);
-                foreach($projectRoles as $role)
+                $project = (object)$project;
+                $projectRoles = $this->getJiraDataFromJson('projectRole', $project->id);
+                foreach($projectRoles as $key => $role)
                 {
                     if(!is_string($role)) continue;
 
-                    $users = $this->callJiraAPI($role . '?maxResults=1000', 0 , true);
+                    $users = $this->getJiraDataFromJson('projectRoleMember', "{$project->id}_{$key}");
                     if(empty($users->actors)) continue;
 
-                    foreach($users->actors as $user) $projectMember[$project->id][$user->actorUser->accountId] = $user->actorUser->accountId;
+                    foreach($users['actors'] as $user) $projectMember[$project->id][$user['actorUser']['accountId']] = $user['actorUser']['accountId'];
                 }
             }
             return $projectMember;
@@ -1363,6 +1431,7 @@ EOT;
         $projectMember = array();
         foreach($projectRoleActor as $role)
         {
+            $role = (object)$role;
             if(empty($role->pid)) continue;
             if($role->roletype == 'atlassian-user-role-actor')
             {
@@ -1372,6 +1441,7 @@ EOT;
             {
                 foreach($memberShip as $member)
                 {
+                    $member = (object)$member;
                     if($member->parent_name == $role->roletypeparameter) $projectMember[$role->pid]["JIRAUSER{$member->child_id}"] = 'JIRAUSER' . $member->child_id;
                 }
             }
@@ -1391,13 +1461,15 @@ EOT;
     {
         if($this->session->jiraMethod == 'api')
         {
-            $projectList  = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes&maxResults=1000');
+            $projectList  = $this->getJiraDataFromJson('projectissuetype');
             $projectGroup = array();
             foreach($projectList as $project)
             {
+                $project = (object)$project;
                 if(empty($project->issuetypes)) continue;
                 foreach($project->issuetypes as $issueType)
                 {
+                    $issueType = (object)$issueType;
                     $projectGroup[$project->id][] = $relations['zentaoObject'][$issueType->id];
                 }
             }
@@ -1410,10 +1482,12 @@ EOT;
         $projectIssueTypeList = array();
         foreach($schemeproject as $projectRelation)
         {
+            $projectRelation = (object)$projectRelation;
             if(!empty($projectRelation->project) && $projectRelation->customfield == 'issuetype')
             {
                 foreach($schemeissuetype as $issueTypeRelation)
                 {
+                    $issueTypeRelation = (object)$issueTypeRelation;
                     if($issueTypeRelation->fieldconfig == $projectRelation->fieldconfigscheme && $issueTypeRelation->fieldid == 'issuetype' && !empty($issueTypeRelation->optionid))
                     {
                         if(!empty($relations['zentaoObject'][$issueTypeRelation->optionid])) $projectIssueTypeList[$projectRelation->project][] = $relations['zentaoObject'][$issueTypeRelation->optionid];
@@ -1553,7 +1627,7 @@ EOT;
      */
     public function formatDate(string $date): string
     {
-        if($this->session->jiraMethod == 'api') return $date;
+        if($this->session->jiraMethod == 'api' || $this->session->jiraMethod == 'db') return $date;
 
         $dateUTC = new DateTime($date, new DateTimeZone('UTC'));
         $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
@@ -1570,10 +1644,141 @@ EOT;
      */
     public function formatDatetime(string $datetime): string
     {
-        if($this->session->jiraMethod == 'api') return $datetime;
+        if($this->session->jiraMethod == 'api' || $this->session->jiraMethod == 'db') return $datetime;
 
         $dateUTC = new DateTime($datetime, new DateTimeZone('UTC'));
         $dateUTC->setTimezone(new DateTimeZone($this->config->timezone));
         return $dateUTC->format('Y-m-d H:i:s');
+    }
+
+    /**
+     * 获取JiraAPI数据并存储到json文件.
+     * Get jira API data to json file.
+     *
+     * @param  string $module
+     * @param  int    $lastID
+     * @param  int    $limit
+     * @access public
+     * @return array
+     */
+    public function getJiraDataToJson(string $module, int $lastID = 0, int $limit = 0): array
+    {
+        $filePath = $this->app->getTmpRoot() . 'jirafile/json/';
+        if(!is_dir($filePath)) @mkdir($filePath, 0755, true);
+
+        $result = array();
+        if(!file_exists($filePath . "{$module}_{$lastID}_{$limit}" . '.json'))
+        {
+            $result = $this->getJiraData('api', $module, $lastID, $limit);
+            file_put_contents($filePath . "{$module}_{$lastID}_{$limit}" . '.json', json_encode($result, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+            if($module == 'project')
+            {
+                foreach($result as $project)
+                {
+                    $projectRoles = $this->callJiraAPI("/rest/api/2/project/{$project->id}/role?maxResults=1000", 0, true);
+                    file_put_contents($filePath . "projectRole_{$project->id}" . '.json', json_encode($projectRoles, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                    foreach($projectRoles as $key => $role)
+                    {
+                        if(!is_string($role)) continue;
+
+                        $users = $this->callJiraAPI($role . '?maxResults=1000', 0 , true);
+                        if(empty($users->actors)) continue;
+
+                        file_put_contents($filePath . "projectRoleMember_{$project->id}_{$key}" . '.json', json_encode($users, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                    }
+
+                    $boardList = $this->callJiraAPI("/rest/agile/1.0/board?projectKeyOrId={$project->id}&maxResults=1000");
+                    file_put_contents($filePath . "board_{$project->id}" . '.json', json_encode($boardList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                    foreach($boardList as $board)
+                    {
+                        $sprintList = $this->callJiraAPI("/rest/agile/1.0/board/{$board->id}/sprint?maxResults=1000");
+                        file_put_contents($filePath . "sprint_{$project->id}_{$board->id}" . '.json', json_encode($sprintList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                        foreach($sprintList as $sprint)
+                        {
+                            $issueList = $this->callJiraAPI("/rest/agile/1.0/sprint/{$sprint->id}/issue?maxResults=1000");
+                            file_put_contents($filePath . "sprintIssue_{$sprint->id}" . '.json', json_encode($issueList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+                        }
+                    }
+                }
+            }
+
+            if($module == 'issue')
+            {
+                $schemeList = $this->callJiraAPI('/rest/api/3/issuetypescheme?expand=projects,issuetypes&maxResults=1000');
+                file_put_contents($filePath . 'scheme.json', json_encode($schemeList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $workflowList = $this->callJiraAPI('/rest/api/3/workflow/search?expand=transitions,projects&maxResults=1000');
+                file_put_contents($filePath . 'workflow.json', json_encode($workflowList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $projectIsueeTypes = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes&maxResults=1000');
+                file_put_contents($filePath . 'projectissuetype.json', json_encode($projectIsueeTypes, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $projectIssueFields = $this->callJiraAPI('/rest/api/3/issue/createmeta?expand=projects.issuetypes.fields&maxResults=1000');
+                file_put_contents($filePath . 'projectissuefield.json', json_encode($projectIssueFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $statusList = $this->getJiraData('api', 'status');
+                file_put_contents($filePath . 'status.json', json_encode($statusList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $customFields = $this->getJiraData('api', 'customfield');
+                file_put_contents($filePath . 'customfield.json', json_encode($customFields, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $fieldValues = $this->getJiraData('api', 'customfieldvalue');
+                file_put_contents($filePath . 'customfieldvalue.json', json_encode($fieldValues, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $fieldOptions = $this->getJiraData('api', 'customfieldoption');
+                file_put_contents($filePath . 'customfieldoption.json', json_encode($fieldOptions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $jiraResolutions = $this->getJiraData('api', 'resolution');
+                file_put_contents($filePath . 'resolution.json', json_encode($jiraResolutions, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $jiraPriList = $this->getJiraData('api', 'priority');
+                file_put_contents($filePath . 'priority.json', json_encode($jiraPriList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $issueTypeList = $this->getJiraData('api', 'issuetype');
+                file_put_contents($filePath . 'issuetype.json', json_encode($issueTypeList, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+
+                $issueLinkType = $this->getJiraData('api', 'issuelinktype');
+                file_put_contents($filePath . 'issuelinktype.json', json_encode($issueLinkType, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
+            }
+        }
+        else
+        {
+            $result = $this->getJiraDataFromJson($module, $lastID, $limit);
+        }
+
+        return $result;
+    }
+
+    /**
+     * 通过Json文件获取jira导入数据。
+     * Get jira data from json file.
+     *
+     * @param  string     $module
+     * @param  int|string $lastID
+     * @param  int|string $limit
+     * @param  bool       $getAll
+     * @access public
+     * @return array
+     */
+    public function getJiraDataFromJson(string $module, int|string $lastID = '', int|string $limit = '', bool $getAll = false)
+    {
+        $filePath = $this->app->getTmpRoot() . 'jirafile/json/';
+
+        $code = $module;
+        if($lastID !== '') $code = "{$code}_{$lastID}";
+        if($limit  !== '') $code = "{$code}_{$limit}";
+
+        if(!file_exists($filePath . $code . '.json')) return array();
+
+        $result = file_get_contents($filePath . $code . '.json');
+        $result = !empty($result) ? json_decode($result, true) : array();
+
+        if($getAll) $result = arrayUnion($result, $this->getJiraDataFromJson($module, $lastID + $limit, $limit, $getAll));
+
+        return $result;
     }
 }

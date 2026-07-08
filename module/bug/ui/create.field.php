@@ -4,11 +4,19 @@ namespace zin;
 global $lang, $app;
 
 $isShadowProduct   = data('product.shadow');
-$noMultipleProject = data('project.multiple') === '0';
+$noMultipleProject = (string)data('project.multiple') === '0';
 $isOriginalProduct = (int)data('bug.productID') === (int)data('productID');
 $resultFiles       = data('resultFiles');
 $copyFiles         = data('bug.files');
 $files             = $copyFiles ? array_values($copyFiles) : array_values($resultFiles);
+
+if($files)
+{
+    foreach($files as $key => $fileInfo)
+    {
+        if($fileInfo->extra != '') unset($files[$key]);
+    }
+}
 
 $fields = defineFieldList('bug.create', 'bug');
 
@@ -62,7 +70,7 @@ $fields->field('steps')
 
 $fields->field('files')
     ->width('full')
-    ->control('fileSelector', array('defaultFiles' => $files));
+    ->control(array('control' => 'fileSelector', 'defaultFiles' => array_values($files)));
 
 $fields->field('case')->foldable();
 

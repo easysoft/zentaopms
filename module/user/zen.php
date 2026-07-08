@@ -139,7 +139,17 @@ class userZen extends user
         if(common::hasPriv($moduleName, 'dynamic')) $featureBarMenus['dynamic'] = array('active' => false, 'url' => $this->createLink($moduleName, 'dynamic', "$params&type=today"), 'text' => $this->lang->user->dynamic);
         if(common::hasPriv($moduleName, 'profile')) $featureBarMenus['profile'] = array('active' => false, 'url' => $this->createLink($moduleName, 'profile', $params), 'text' => $this->lang->user->profile);
 
-        if($methodName != 'story') $featureBarMenus[$methodName]['active'] = true;
+        if($methodName != 'story')
+        {
+            if($moduleName == 'user' && in_array($methodName, array('todocalendar', 'effortcalendar', 'effort')))
+            {
+                $featureBarMenus['todo']['active'] = true;
+            }
+            else
+            {
+                $featureBarMenus[$methodName]['active'] = true;
+            }
+        }
         if($methodName == 'story' && $storyType == 'story')       $featureBarMenus['story']['active']       = true;
         if($methodName == 'story' && $storyType == 'requirement') $featureBarMenus['requirement']['active'] = true;
 
@@ -267,7 +277,12 @@ class userZen extends user
     {
         $groupList = array();
         $roleGroup = array();
-        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->where('vision')->eq($this->config->vision)->andWhere('project')->eq('0')->fetchAll();
+        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->andWhere('project')->eq('0')
+            ->andWhere('devopsSpace')->eq('0')
+            ->fetchAll();
+
         foreach($groups as $group)
         {
             $groupList[$group->id] = $group->name;

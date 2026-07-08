@@ -41,13 +41,13 @@ function initData()
 initData();
 
 $bugIdList   = array(1,2);
-$bySearch    = array(false, true);
+$bysearch    = array(false, true);
 $excludeBugs = array('', '9', '10');
 
 global $tester;
 $bug = $tester->loadModel('bug');
-r(array_values($bug->getBugs2Link($bugIdList[0], $bySearch[0], $excludeBugs[0]))) && p('0:title') && e('BUG9');  //获取和 bug1 相同产品下的 bug 列表，第一个 bug 的标题是 BUG9
-r(array_values($bug->getBugs2Link($bugIdList[0], $bySearch[0], $excludeBugs[0]))) && p('1:title') && e('BUG7');  //获取和 bug1 相同产品下的 bug 列表，第二个 bug 的标题是 BUG7
-r(array_values($bug->getBugs2Link($bugIdList[0], $bySearch[0], $excludeBugs[1]))) && p('0:title') && e('BUG7');  //获取和 bug1 相同产品下并且不包含 bug9 的 bug 列表，第一个 bug 的标题是 BUG7
-r(array_values($bug->getBugs2Link($bugIdList[1], $bySearch[1], $excludeBugs[0]))) && p('0:title') && e('BUG10'); //搜索和 bug2 相同产品下的 bug 列表，第一个 bug 的标题是 BUG10
-r(array_values($bug->getBugs2Link($bugIdList[1], $bySearch[1], $excludeBugs[2]))) && p('0:title') && e('BUG8');  //搜索和 bug2 相同产品下并且不包含 bug4 的 bug 列表，第一个 bug 的标题是 BUG8
+r(array_values($bug->getBugs2Link($bugIdList[0], $bysearch[0], $excludeBugs[0]))) && p('0:title') && e('BUG9');  //获取和 bug1 相同产品下的 bug 列表，第一个 bug 的标题是 BUG9
+r(array_values($bug->getBugs2Link($bugIdList[0], $bysearch[0], $excludeBugs[0]))) && p('1:title') && e('BUG7');  //获取和 bug1 相同产品下的 bug 列表，第二个 bug 的标题是 BUG7
+r(array_values($bug->getBugs2Link($bugIdList[0], $bysearch[0], $excludeBugs[1]))) && p('0:title') && e('BUG7');  //获取和 bug1 相同产品下并且不包含 bug9 的 bug 列表，第一个 bug 的标题是 BUG7
+r(array_values($bug->getBugs2Link($bugIdList[1], $bysearch[1], $excludeBugs[0]))) && p('0:title') && e('BUG10'); //搜索和 bug2 相同产品下的 bug 列表，第一个 bug 的标题是 BUG10
+r(array_values($bug->getBugs2Link($bugIdList[1], $bysearch[1], $excludeBugs[2]))) && p('0:title') && e('BUG8');  //搜索和 bug2 相同产品下并且不包含 bug4 的 bug 列表，第一个 bug 的标题是 BUG8

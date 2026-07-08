@@ -109,7 +109,16 @@ class model extends baseModel
         if(empty($id)) return false;
 
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
+
+        $table = trim($table, '`');
+        if(strpos($table, 'ops_') === 0)
+        {
+            $objectType = str_replace('ops_', '', $table);
+        }
+        else
+        {
+            $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', $table);
+        }
         $this->loadModel('action')->create($objectType, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         return true;
@@ -423,6 +432,14 @@ class model extends baseModel
 
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
+
+        /* 测试单的执行用例动作用用例的执行动作。 */
+        if($moduleName == 'testtask' && $methodName == 'runcase') $moduleName = 'testcase';
+
+        /* 如果是项目下的计划、构建、发布，需要用产品下计划、发布以及执行下构建的工作流。 */
+        if($moduleName == 'projectplan')    $moduleName = 'productplan';
+        if($moduleName == 'projectrelease') $moduleName = 'release';
+        if($moduleName == 'projectbuild')   $moduleName = 'build';
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($moduleName, $objectID);
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName, $groupID);

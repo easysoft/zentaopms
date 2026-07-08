@@ -1,3 +1,25 @@
+/**
+ * 状态列渲染，对changed/casechanged 状态的标红处理。
+ * Render status cell with red styling for changed/casechanged status.
+ *
+ * @param  object result
+ * @param  object info
+ * @access public
+ * @return object
+ */
+window.onRenderCell = function(result, {row, col})
+{
+    if(result && col.name == 'status')
+    {
+        if(row.data.status == 'casechanged' || row.data.status == 'changed')
+        {
+            var changedText = row.data.status == 'casechanged' ? caseChanged : storyChanged;
+            result[0] = {html: '<span style="color:#ff6f42">' + changedText + '</span>'};
+        }
+    }
+    return result;
+}
+
 $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 {
     const dtable = zui.DTable.query($(this).target);

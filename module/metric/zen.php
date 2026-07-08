@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of metric module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      zhouxin <zhouxin@easysoft.ltd>
  * @package     metric
@@ -233,19 +233,16 @@ class metricZen extends metric
         /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
         $productList = $this->dao->select('id,closedDate')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->ne('closed')
             ->andWhere('shadow')->eq(0)
             ->fetchPairs('id', 'closedDate');
 
         $projectList = $this->dao->select('id,closedDate')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->notIN('closed,done')
             ->andWhere('type')->eq('project')
             ->fetchPairs('id', 'closedDate');
 
         $executionList = $this->dao->select('id,closedDate')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->notIN('closed,done')
             ->andWhere('type')->in('sprint,stage,kanban')
             ->fetchPairs('id', 'closedDate');
 
@@ -647,8 +644,8 @@ class metricZen extends metric
             else
             {
                 $extractField = explode('.', $field);
-                $pureField    = end($extractField);
-                $aliasField   = str_replace('.', '_', $field);
+                $pureField    = str_replace('`', '', end($extractField));
+                $aliasField   = str_replace(array('.', '`'), array('_', ''), $field);
             }
 
             $pureRow->$pureField = $row->$aliasField;

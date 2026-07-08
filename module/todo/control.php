@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Lanzongjun <lanzongjun@easycorp.ltd>
  * @package     todo
@@ -72,7 +72,7 @@ class todo extends control
             if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
             if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'type=all&userID=&status=all&orderBy=id_desc')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->createLink('my', 'todo', 'browseType=all&userID=&status=all&orderBy=id_desc')));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -108,7 +108,7 @@ class todo extends control
 
             if(isInModal() || isonlybody()) return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIdList));
-            return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "type={$date}")));
+            return $this->sendSuccess(array('closeModal' => true, 'load' => $this->createLink('my', 'todo', "browseType={$date}")));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -217,7 +217,7 @@ class todo extends control
         }
 
         if(in_array($todo->type, array('bug', 'task', 'story'))) return $this->todoZen->printStartConfirm($todo);
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
@@ -235,11 +235,11 @@ class todo extends control
 
         if($todo->status == 'done' || $todo->status == 'closed')
         {
-            $this->todo->activate($todoID);
+            $this->todo->activate($todoID, $todo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
@@ -267,7 +267,7 @@ class todo extends control
             $this->send(array('status' => 'success'));
         }
 
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
@@ -411,7 +411,7 @@ class todo extends control
         {
             return $this->send(array('status' => 'success'));
         }
-        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+        if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         return $this->sendSuccess(array('load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo'), 'closeModal' => true));
     }
 
@@ -477,7 +477,16 @@ class todo extends control
         $date       = !empty($formData->data->date) ? $formData->data->date : date::today();
         if(!$todoIdList) $this->locate((string)$this->session->todoList);
 
-        $this->todo->editDate((array)$todoIdList, (string)$date);
+        $allChanges = $this->todo->editDate((array)$todoIdList, (string)$date);
+        if(!empty($allChanges))
+        {
+            $this->loadModel('action');
+            foreach($allChanges as $todoID => $changes)
+            {
+                $actionID = $this->action->create('todo', $todoID, 'edited');
+                if($actionID) $this->action->logHistory($actionID, $changes);
+            }
+        }
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 

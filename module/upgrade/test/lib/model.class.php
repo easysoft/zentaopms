@@ -84,20 +84,6 @@ class upgradeModelTest extends baseTest
     }
 
     /**
-     * 测试删除临时 model 文件。
-     * Test delete tmp model files.
-     *
-     * @access public
-     * @return int
-     */
-    public function deleteTmpModelTest(): int
-    {
-        $this->instance->deleteTmpModel();
-        global $tester;
-        return count(glob($tester->app->getTmpRoot() . 'model/*.php'));
-    }
-
-    /**
      * 测试处理devOps上线步骤的历史记录。
      * Test process deploy step action.
      *

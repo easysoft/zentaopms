@@ -7,6 +7,13 @@ class zahostTaoTest extends baseTest
 {
     protected $moduleName = 'zahost';
     protected $className  = 'tao';
+    protected $objectModel;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * 魔术方法，调用zahost模型中的方法。
@@ -19,7 +26,7 @@ class zahostTaoTest extends baseTest
      */
     public function __call($name, $arguments)
     {
-        return $this->objectModel->$name(...$arguments);
+        return $this->invokeArgs($name, $arguments);
     }
 
     /**
@@ -286,11 +293,11 @@ class zahostTaoTest extends baseTest
      */
     public function insertImageListTest(array $imageList, int $hostID, array $downloadedImageList): array
     {
-        // 调用tao层的insertImageList方法
-        $result = $this->objectModel->insertImageList($imageList, $hostID, $downloadedImageList);
+        $result = $this->invokeArgs('insertImageList', [$imageList, $hostID, $downloadedImageList]);
         if(dao::isError()) return dao::getError();
 
-        // 返回插入的镜像数据
+        if(!$result) return array();
+
         global $tester;
         return $tester->dao->select('*')->from(TABLE_IMAGE)->where('host')->eq($hostID)->fetchAll();
     }

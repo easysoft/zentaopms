@@ -47,6 +47,6 @@ $zanodeTest = new zanodeTaoTest();
 // 5. 强制要求：必须包含至少5个测试步骤
 r($zanodeTest->getZaNodeListByQueryTest('', 'id_asc')) && p('count') && e('15'); // 步骤1：查询所有节点
 r($zanodeTest->getZaNodeListByQueryTest("t1.status='running'", 'id_asc')) && p('count') && e('10'); // 步骤2：按状态查询
-r($zanodeTest->getZaNodeListByQueryTest("t1.hostType='vm'", 'id_asc')) && p('count') && e('8'); // 步骤3：按主机类型查询
-r($zanodeTest->getZaNodeListByQueryTest("t1.status='running' AND t1.hostType='vm'", 'id_asc')) && p('count') && e('8'); // 步骤4：多条件查询
+r($zanodeTest->getZaNodeListByQueryTest("t1.`hostType`='vm'", 'id_asc')) && p('count') && e('8'); // 步骤3：按主机类型查询
+r($zanodeTest->getZaNodeListByQueryTest("t1.status='running' AND t1.`hostType`='vm'", 'id_asc')) && p('count') && e('8'); // 步骤4：多条件查询
 r($zanodeTest->getZaNodeListByQueryTest("t1.status='nonexistent'", 'id_asc')) && p('count') && e('0'); // 步骤5：查询不存在条件

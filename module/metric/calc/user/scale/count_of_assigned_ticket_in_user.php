@@ -11,7 +11,7 @@
  * 描述：按人员统计的待处理工单数表示每个人待处理的工单数量之和。反映了每个人员需要处理的工单数量的规模。该数值越大，说明需要处理的反馈任务越多。
  * 定义：所有工单个数求和 指派给为某人 过滤已删除的工单 过滤已删除产品的工单
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_assigned_ticket_in_user extends baseCalc
 {
     public $dataset = 'getAllTickets';
 
-    public $fieldList = array('t1.assignedTo');
+    public $fieldList = array('t1.`assignedTo`');
 
     public $result = array();
 

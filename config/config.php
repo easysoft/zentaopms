@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '22.2';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '22.3';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.2';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -35,7 +35,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,or,';           // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,lite,or,';     // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();
@@ -66,18 +66,22 @@ $config->default->method = 'index';       //默认方法。 Default method.
 
 /* 数据库设置。Database settings. */
 $config->db = new stdclass();
-$config->slaveDB = new stdclass();
-$config->db->persistent      = false;     // 是否为持续连接。       Pconnect or not.
-$config->db->driver          = 'mysql';   // 目前只支持MySQL数据库。Must be MySQL. Don't support other database server yet.
-$config->db->encoding        = 'UTF8';    // 数据库编码。           Encoding of database.
-$config->db->strictMode      = true;      // 默认开启MySQL的严格模式。  Turn on the strict mode of MySQL.
-$config->db->prefix          = 'zt_';     // 数据库表名前缀。       The prefix of the table name.
-$config->db->enableSqlite    = false;     // 是否启用SQLite         Enable SQLite or not.
-$config->slaveDBList         = array();   // 支持多个从库。         Support multiple slave dbs.
+$config->db->persistent    = false;        // 是否为持续连接。                                   Whether use persistent connection or not.
+$config->db->driver        = 'mysql';      // 默认使用的数据库驱动。                             The default database driver.
+$config->db->encoding      = 'UTF8';       // 数据库编码。                                       The database encoding.
+$config->db->strictMode    = true;         // 是否开启MySQL的严格模式。                          Whether enable MySQL strict mode or not.
+$config->db->defaultName   = 'zentao';     // 默认数据库名称，安装时的推荐值。                   The default database name, recommended when install.
+$config->db->fileName      = 'zentao.sql'; // 默认数据库文件名称。                               The default database file name.
+$config->db->defaultPrefix = 'zt_';        // 默认数据库表名前缀，安装时的推荐值。               The default prefix of the table name, recommended when install.
+$config->db->prefix        = 'zt_';        // 实际数据库表名前缀，安装完成后以my.php中的值为准。 The actual prefix of the table name, the value in my.php will override it after installation.
+$config->db->enableSqlite  = false;        // 是否启用SQLite                                     Whether enable SQLite or not.
 
+$config->slaveDB      = new stdclass();
+$config->slaveDBList  = array();   // 支持多个从库。         Support multiple slave dbs.
 $config->enableDuckdb = false;
+
 $config->metricDB = new stdclass();
-$config->metricDB->type      = 'mysql';   // 度量计算数据库类型。   The type of metric database.
+$config->metricDB->type = 'mysql';   // 度量计算数据库类型。   The type of metric database.
 
 /* 可用域名后缀列表。Domain postfix lists. */
 $config->domainPostfix  = "|com|com.cn|com.hk|com.tw|com.vc|edu.cn|es|";
@@ -155,9 +159,10 @@ $config->features->checkClient    = true;
 
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();
-$config->file->dangers     = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
-$config->file->allowed     = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
-$config->file->storageType = 'fs';         // fs or s3
+$config->file->dangers        = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
+$config->file->allowed        = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
+$config->file->storageType    = 'fs';       // fs or s3
+$config->file->allowedModules = 'artifact'; // 设置上传文件时不需要过滤文件类型的模块。
 
 /* 文档多人协同配置。 Document Hocus Pocus. */
 $config->docHocuspocus = new stdclass();
@@ -234,6 +239,10 @@ if($config->inContainer || $config->inQuickon)
     $config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 }
 
+$config->devops = new stdclass();
+$config->devops->gitfoxURL  = 'http://localhost';
+$config->devops->gitfoxPort = 3000;
+
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);
 $myConfig = $myConfigRoot . DIRECTORY_SEPARATOR . 'my.php';
@@ -242,6 +251,10 @@ if(file_exists($myConfig)) include $myConfig;
 /* 禅道配置文件。zentaopms settings. */
 $zentaopmsConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'zentaopms.php';
 if(file_exists($zentaopmsConfig)) include $zentaopmsConfig;
+
+/* 权限配置文件。privilege settings. */
+$privilegeConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'privilege.php';
+if(file_exists($privilegeConfig)) include $privilegeConfig;
 
 /* 禅道userview配置文件。zentaopms userview settings. */
 $userViewConfig = dirname(__FILE__) . DIRECTORY_SEPARATOR . 'userview.php';

@@ -10,7 +10,7 @@ class productplanModelTest extends baseTest
     public function __construct($user = 'admin')
     {
         global $tester, $app;
-        su($user);
+        if(!isset($app->user) || !isset($app->user->account) || $app->user->account != $user) su($user);
         $app->rawModule  = 'productplan';
         $app->rawMethod  = 'browse';
         $app->moduleName = 'productplan';
@@ -45,7 +45,7 @@ class productplanModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
+    public function getList($product = 0, $branch = '', $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
     {
         $productplans = $this->productplan->getList($product, $branch, $browseType, $pager, $orderBy, $param);
         if(dao::isError()) return dao::getError();
@@ -198,13 +198,13 @@ class productplanModelTest extends baseTest
      */
     public function batchChangeStatus($status, $hasReson = false)
     {
-        $planIdList = array(3, 5);
+        $planIdList = array(1, 3);
         if($hasReson)
         {
-            $planIdList = array(7, 8);
+            $planIdList = array(6, 7);
             $_POST['closedReason'] = array(
-                7 => 'reason1',
-                8 => 'reason2',
+                6 => 'reason1',
+                7 => 'reason2',
             );
         }
         $this->productplan->batchChangeStatus($planIdList, $status);

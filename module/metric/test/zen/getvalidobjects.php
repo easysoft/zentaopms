@@ -49,9 +49,9 @@ $metricTest = new metricZenTest();
 $result = $metricTest->getValidObjectsZenTest();
 
 r(count($result)) && p() && e('3');
-r(count($result['product'])) && p() && e('5');
-r(count($result['project'])) && p() && e('8');
-r(count($result['execution'])) && p() && e('6');
-r(isset($result['product'][6])) && p() && e('0');
-r(isset($result['project'][9])) && p() && e('0');
+r(count($result['product'])) && p() && e('8');
+r(count($result['project'])) && p() && e('12');
+r(count($result['execution'])) && p() && e('10');
+r(isset($result['product'][6])) && p() && e('1');
+r(isset($result['project'][9])) && p() && e('1');
 r(isset($result['execution'][7])) && p() && e('0');

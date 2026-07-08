@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The create view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
  * @package     repo
@@ -20,44 +20,26 @@ if($this->app->tab != 'devops')
     );
 }
 
-jsVar('pathGitTip', $lang->repo->example->path->git);
-jsVar('pathSvnTip', $lang->repo->example->path->svn);
-jsVar('clientGitTip', $lang->repo->example->client->git);
-jsVar('clientSvnTip', $lang->repo->example->client->svn);
-
 formPanel
 (
-    on::change('#serviceHost')->call('onHostChange'),
+    on::change('#space')->call('loadMembers'),
     set::title($lang->repo->createRepoAction),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("serviceHost"),
-            set::label($lang->repo->serviceHost),
-            set::required(true),
-            set::value(""),
-            set::control("picker"),
-            set::items($serviceHosts)
-        )
-    ),
-    formGroup
-    (
-        set::width('1/2'),
-        set::name("namespace"),
-        set::label($lang->repo->namespace),
-        set::required(true),
-        set::items($repoGroups),
-        set::control("picker")
-    ),
     formGroup
     (
         set::width('1/2'),
         set::name("name"),
-        set::label($lang->user->name),
+        set::label($lang->repo->name),
         set::required(true),
+    ),
+    formGroup
+    (
+        setID('space'),
+        set::width('1/2'),
+        set::name("space"),
+        set::label($lang->repo->space),
+        set::required(true),
+        set::items($spaces),
+        !empty($spaceID) ? set::value($spaceID) : null
     ),
     formRow
     (
@@ -81,57 +63,26 @@ formPanel
         set::control("input"),
         set::placeholder($lang->repo->descPlaceholder)
     ),
-    formRow
+    formGroup
     (
         set::id('aclList'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('acl[acl]'),
-            set::label($lang->repo->acl),
-            set::control('radioList'),
-            set::items($lang->repo->aclList),
-            set::value('open'),
-            on::change('onAclChange')
-        )
+        set::width('1/2'),
+        set::name('acl'),
+        set::label($lang->repo->acl),
+        set::control('radioList'),
+        set::items($lang->repo->aclList),
+        set::value('open'),
+        on::change('onAclChange')
     ),
-    formRow
+    formGroup
     (
-        set::id('whitelist'),
+        setID('members'),
         setClass('hidden'),
-        formGroup
-        (
-            set::label($lang->product->whitelist),
-            inputGroup
-            (
-                $lang->repo->group,
-                width('full'),
-                control(set(array
-                (
-                    'name' => "acl[groups][]",
-                    'id' => "aclgroups",
-                    'value' => NULL,
-                    'type' => "picker",
-                    'items' => $groups,
-                    'multiple' => true
-                )))
-            ),
-            inputGroup
-            (
-                $lang->repo->user,
-                control(set(array
-                (
-                    'name' => "acl[users][]",
-                    'id' => "aclusers",
-                    'value' => NULL,
-                    'type' => "picker",
-                    'items' => $users,
-                    'multiple' => true
-                ))),
-                setClass('mt-2')
-            )
-        )
+        set::width('1/2'),
+        set::name('members'),
+        set::label($lang->repo->members),
+        set::required(true),
+        set::items($users),
+        set::multiple(true)
     )
 );
-
-render();

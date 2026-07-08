@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增文档个数是指在某年度系统或组织中新建的文档数量。反映了组织中信息产生的速度和增长的趋势。年度新增文档个数越大，说明组织的信息需求和创造力较强，也可能需要投入更多的资源来管理和维护这些新增文档。该度量项还可以用于评估组织的创新能力和知识管理水平。
  * 定义：所有文档个数求和;创建时间为某年;过滤已删除的文档;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_doc extends baseCalc
 {
     public $dataset = 'getDocs';
 
-    public $fieldList = array('t1.addedDate');
+    public $fieldList = array('t1.`addedDate`');
 
     public $result = array();
 

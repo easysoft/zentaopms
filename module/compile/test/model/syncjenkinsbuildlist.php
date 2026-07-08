@@ -47,6 +47,7 @@ $validJenkins->id = 1;
 $validJenkins->type = 'jenkins';
 $validJenkins->url = 'http://jenkins.test';
 $validJenkins->account = 'admin';
+$validJenkins->token = 'token';
 $validJenkins->password = 'password';
 
 $emptyJenkins = new stdClass();
@@ -54,12 +55,13 @@ $emptyJenkins->id = 2;
 $emptyJenkins->type = 'jenkins';
 $emptyJenkins->url = 'http://empty.test';
 $emptyJenkins->account = '';
+$emptyJenkins->token = '';
 $emptyJenkins->password = '';
 
-r($compileTest->syncJenkinsBuildListTest(null, $job)) && p() && e(false);
-r($compileTest->syncJenkinsBuildListTest($emptyJenkins, $job)) && p() && e(false);
-r($compileTest->syncJenkinsBuildListTest($validJenkins, $job)) && p() && e(false);
+r($compileTest->syncJenkinsBuildListTest(null, $job) ? 1 : 0) && p() && e('0');
+r($compileTest->syncJenkinsBuildListTest($emptyJenkins, $job) ? 1 : 0) && p() && e('0');
+r($compileTest->syncJenkinsBuildListTest($validJenkins, $job) ? 1 : 0) && p() && e('0');
 $beforeCount = count($compileTest->getListByJobIDTest($job->id));
 $afterCount = count($compileTest->getListByJobIDTest($job->id));
-r($afterCount >= $beforeCount) && p() && e(true);
-r($compileTest->syncJenkinsBuildListTest($validJenkins, $job)) && p() && e(false);
+r($afterCount >= $beforeCount ? 1 : 0) && p() && e('1');
+r($compileTest->syncJenkinsBuildListTest($validJenkins, $job) ? 1 : 0) && p() && e('0');

@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增产品发布数量反映了组织在特定年度内新增发布的产品数量，用于评估组织的出汗品的创新能力、市场竞争力，以及业务增长和收益潜力。
  * 定义：所有的发布个数求和;发布时间为某年;过滤已删除的发布;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

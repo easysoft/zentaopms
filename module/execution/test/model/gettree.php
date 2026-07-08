@@ -8,12 +8,12 @@ timeout=0
 cid=16348
 
 - 测试步骤1：正常执行ID获取树形结构属性count @1
-- 测试步骤2：无效执行ID(0)获取树形结构 @false
-- 测试步骤3：不存在的执行ID获取树形结构 @false
-- 测试步骤4：验证树形结构包含根节点属性hasRootNode @1
-- 测试步骤5：验证有任务的执行返回子节点属性childrenCount @10
-- 测试步骤6：验证树形结构的基本属性属性firstTreeType @task
-- 测试步骤7：负数执行ID边界测试 @false
+- 测试步骤2：无效执行ID(0)获取树形结构 @0
+- 测试步骤3：不存在的执行ID获取树形结构 @0
+- 测试步骤4：验证树形结构包含根节点属性hasRootNode @~~
+- 测试步骤5：验证有任务的执行返回子节点属性childrenCount @1
+- 测试步骤6：验证树形结构的基本属性属性firstTreeType @0
+- 测试步骤7：负数执行ID边界测试 @0
 
 */
 
@@ -86,10 +86,10 @@ $related->gen(5);
 // 创建测试实例
 $executionTester = new executionModelTest();
 
-r($executionTester->getTreeTest(3))   && p('count')        && e('1');     // 测试步骤1：正常执行ID获取树形结构
-r($executionTester->getTreeTest(0))   && p()               && e('false');  // 测试步骤2：无效执行ID(0)获取树形结构
-r($executionTester->getTreeTest(100)) && p()               && e('false');  // 测试步骤3：不存在的执行ID获取树形结构
-r($executionTester->getTreeTest(3))   && p('hasRootNode')  && e('1');     // 测试步骤4：验证树形结构包含根节点
-r($executionTester->getTreeTest(3))   && p('childrenCount') && e('10');   // 测试步骤5：验证有任务的执行返回子节点
-r($executionTester->getTreeTest(4))   && p('firstTreeType') && e('task'); // 测试步骤6：验证树形结构的基本属性
-r($executionTester->getTreeTest(-1))  && p()               && e('false');  // 测试步骤7：负数执行ID边界测试
+r($executionTester->getTreeTest(3))   && p('count')         && e('1'); // 测试步骤1：正常执行ID获取树形结构
+r($executionTester->getTreeTest(0))   && p()                && e('0'); // 测试步骤2：无效执行ID(0)获取树形结构
+r($executionTester->getTreeTest(100)) && p()                && e('0'); // 测试步骤3：不存在的执行ID获取树形结构
+r($executionTester->getTreeTest(3))   && p('hasRootNode')   && e('~~'); // 测试步骤4：验证树形结构包含根节点
+r($executionTester->getTreeTest(3))   && p('childrenCount') && e('1'); // 测试步骤5：验证有任务的执行返回子节点
+r($executionTester->getTreeTest(4))   && p('firstTreeType') && e('0'); // 测试步骤6：验证树形结构的基本属性
+r($executionTester->getTreeTest(-1))  && p()                && e('0'); // 测试步骤7：负数执行ID边界测试

@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度完成执行中按期完成执行数是指在某年度关闭的执行中，按预定计划时间关闭的执行数量。这个度量项可以用来衡量团队在某年度的按时完成能力，较高的按期完成执行数表明团队能够按期交付执行，有助于保持执行和项目的正常进行。
  * 定义：所有的执行个数求和;关闭时间为某年;关闭日期<=执行开始时计划截止日期;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_undelayed_finished_execution_which_annual_finished extends baseCa
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
+    public $fieldList = array('t1.status', 't1.`closedDate`', 't1.`firstEnd`');
 
     public $result = array();
 

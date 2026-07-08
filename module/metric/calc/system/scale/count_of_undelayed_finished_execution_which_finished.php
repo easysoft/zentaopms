@@ -11,7 +11,7 @@
  * 描述：按系统统计的已完成执行中按时完成执行数表示在整个系统中按期完成执行的数量，可以用来评估团队的执行能力和效率。
  * 定义：所有的执行个数求和;状态为已关闭;关闭日期<=执行开始时计划截止日期;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_undelayed_finished_execution_which_finished extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.status', 't1.closedDate', 't1.firstEnd');
+    public $fieldList = array('t1.status', 't1.`closedDate`', 't1.`firstEnd`');
 
     public $result = 0;
 

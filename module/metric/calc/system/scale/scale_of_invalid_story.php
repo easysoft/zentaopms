@@ -11,7 +11,7 @@
  * 描述：按系统统计的无效的研发需求规模数反映了组织中无效的研发需求的规模总数，用于评估组织对于资源管理、需求管理、质量控制、风险评估和持续改进具有重要意义。
  * 定义：所有的研发需求规模数求和;关闭原因为重复、不做、设计如此和已取消;过滤父研发需求;过滤已删除的研发需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_invalid_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.estimate', 't1.closedReason', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.`closedReason`', 't1.parent', 't1.`isParent`');
 
     public $result = 0;
 

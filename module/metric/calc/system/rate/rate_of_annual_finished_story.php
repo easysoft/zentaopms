@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度研发需求完成率反映了组织在年度研发过程中完成需求的能力和表现，反映了组织对于评估项目目标达成、资源规划和优化、业务决策和战略执行、绩效评估和激励机制，以及持续改进和效率提升具有重要意义。
  * 定义：复用：;按系统统计的年度完成研发需求数;按系统统计的年度有效研发需求数;公式：;按系统统计的年度研发需求完成率=按系统统计的年度完成研发需求数/按系统统计的年度有效研发需求数*100%;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class rate_of_annual_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`');
 
     public $result = array();
 

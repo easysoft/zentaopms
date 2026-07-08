@@ -24,7 +24,7 @@ pid=1
 
 */
 
-$execution = new executionTest('admin');
+$execution = new executionTaoTest();
 $members   = array('admin', 'user1', 'user2');
 
 r(count($execution->addExecutionMembersTest(0, array())))   && p() && e('0'); //空的执行ID，空的团队

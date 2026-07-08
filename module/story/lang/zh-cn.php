@@ -2,7 +2,7 @@
 /**
  * The story module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
@@ -205,7 +205,7 @@ $lang->story->keywords         = '关键词';
 $lang->story->newStory         = "继续添加{$lang->SRCommon}";
 $lang->story->colorTag         = '颜色标签';
 $lang->story->files            = '附件';
-$lang->story->copy             = "复制需求";
+$lang->story->copy             = "复制";
 $lang->story->total            = "总{$lang->SRCommon}";
 $lang->story->draft            = '草稿';
 $lang->story->unclosed         = '未关闭';

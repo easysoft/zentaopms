@@ -11,7 +11,7 @@
  * 描述：按执行统计的执行关闭时验收通过的研发需求数表示执行关闭时需求阶段为已验收、已发布或状态为已关闭且关闭原因为已完成的研发需求的数量。该度量项反映了执行关闭时能够验收通过的研发需求的数量，可以用于评估执行团队的研发效率和研发质量。
  * 定义：执行关闭时，满足以下条件的执行中研发需求个数求和，条件是：所处阶段为已验收、已发布或关闭原因为已完成的研发需求，过滤已删除的研发需求，过滤已删除的执行，过滤已删除的项目，过滤已删除的产品。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Dai Tingting <daitingting@xirangit.com>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_verified_story_in_execution_when_closing extends baseCalc
 {
     public $dataset = 'getDevStoriesWithExecution';
 
-    public $fieldList = array('t3.project', 't1.stage', 't1.closedReason', 't1.verifiedDate', 't1.releasedDate', 't1.closedDate AS storyClosedDate', "if(t4.multiple = '1', t4.closedDate, t5.closedDate) as executionClosed");
+    public $fieldList = array('t3.project', 't1.stage', 't1.`closedReason`', 't1.`verifiedDate`', 't1.`releasedDate`', 't1.`closedDate` AS storyClosedDate', "if(t4.multiple = '1', t4.`closedDate`, t5.`closedDate`) as executionClosed");
 
     public $result = array();
 

@@ -26,30 +26,30 @@ su('admin');
 $programTest = new programTest();
 
 $testData1 = array();
-r($programTest->getPMListByProgramsTest($testData1)) && p() && e('0');
+r(count($programTest->getPMListByProgramsTest($testData1))) && p() && e('0');
 
 $testData2 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => 'user1')
 );
-r($programTest->getPMListByProgramsTest($testData2)) && p() && e('2');
+r(count($programTest->getPMListByProgramsTest($testData2))) && p() && e('2');
 
 $testData3 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => ''),
     (object)array('id' => 3, 'type' => 'program', 'PM' => 'user2')
 );
-r($programTest->getPMListByProgramsTest($testData3)) && p() && e('2');
+r(count($programTest->getPMListByProgramsTest($testData3))) && p() && e('2');
 
 $testData4 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 3, 'type' => 'program', 'PM' => 'user1')
 );
-r($programTest->getPMListByProgramsTest($testData4)) && p() && e('2');
+r(count($programTest->getPMListByProgramsTest($testData4))) && p() && e('2');
 
 $testData5 = array(
     (object)array('id' => 1, 'type' => 'program', 'PM' => 'admin'),
     (object)array('id' => 2, 'type' => 'project', 'PM' => 'user1')
 );
-r($programTest->getPMListByProgramsTest($testData5)) && p() && e('2');
+r(count($programTest->getPMListByProgramsTest($testData5))) && p() && e('2');

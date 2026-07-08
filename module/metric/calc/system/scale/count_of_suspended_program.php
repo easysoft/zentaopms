@@ -11,7 +11,7 @@
  * 描述：按系统统计的所有层级已挂起项目集数反映了系统内因为某种原因暂时中止或搁置的项目集数量，用于评估组织项目集层面的风险和不确定性。
  * 定义：所有项目集的个数求和;状态为已挂起;过滤已删除的项目集;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

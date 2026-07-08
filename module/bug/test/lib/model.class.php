@@ -9,6 +9,23 @@ class bugModelTest extends baseTest
     protected $className  = 'model';
 
     /**
+     * Normalize dao errors for repeated assertions in one test file.
+     *
+     * @access private
+     * @return string
+     */
+    private function getDaoErrorMessage(): string
+    {
+        $error = dao::getError(true);
+        dao::$errors = array();
+
+        if(is_string($error)) return str_replace(array("\r", "\n"), '', $error);
+
+        while(is_array($error)) $error = reset($error);
+        return is_string($error) ? str_replace(array("\r", "\n"), '', $error) : '';
+    }
+
+    /**
      * Test create a bug.
      *
      * @param  array  $param
@@ -278,6 +295,7 @@ class bugModelTest extends baseTest
     public function resolveTest(int $bugID, array $param = array(), array $output = array()): object|string
     {
         $_SERVER['HTTP_HOST'] = '';
+        dao::$errors          = array();
 
         $bug = new stdclass();
         $bug->id             = $bugID;
@@ -301,7 +319,7 @@ class bugModelTest extends baseTest
         foreach($param as $key => $value) $bug->{$key} = $value;
 
         $this->instance->resolve($bug, $output);
-        if(dao::isError()) return str_replace('\n', '', dao::getError(true));
+        if(dao::isError()) return $this->getDaoErrorMessage();
 
         return $this->instance->dao->findByID($bug->id)->from(TABLE_BUG)->fetch();
     }
@@ -416,7 +434,7 @@ class bugModelTest extends baseTest
      */
     public function getUserBugsTest(string $account, string $type = 'assignedTo', int $limit = 0, int $executionID = 0, int $queryID = 0, string $rawMethod = 'work', string|bool $query = false): array|int
     {
-        if($type == 'bySearch')
+        if($type == 'bysearch')
         {
             $moduleName = $rawMethod == 'work' ? 'workBug' : 'contributeBug';
             $queryName  = $moduleName . 'Query';
@@ -1000,10 +1018,11 @@ class bugModelTest extends baseTest
      */
     public function createBuildTest(object $bug, int $bugID)
     {
+        dao::$errors = array();
         $oldBug = $this->instance->dao->findByID($bugID)->from(TABLE_BUG)->fetch();
 
         $this->instance->createBuild($bug, $oldBug);
-        if(dao::isError()) return dao::getError(true);
+        if(dao::isError()) return $this->getDaoErrorMessage();
 
         return $this->instance->dao->findByID($bug->resolvedBuild)->from(TABLE_BUILD)->fetch();
     }
@@ -1149,9 +1168,16 @@ class bugModelTest extends baseTest
         // 如果是教程模式，直接返回简单结果
         if(defined('TUTORIAL') && TUTORIAL) return array('actionURL' => $actionURL, 'queryID' => $queryID, 'hasProductParams' => 1);
 
+        dao::$errors = array();
         $this->instance->buildSearchForm($productID, $products, $queryID, $actionURL, $branch);
-        if(dao::isError()) return dao::getError();
-        return $this->instance->config->bug->search;
+        if(dao::isError()) return $this->getDaoErrorMessage();
+
+        $search                     = $this->instance->config->bug->search;
+        $search['hasProductParams'] = !empty($search['params']['product']['values']) ? 1 : 0;
+        $search['hasModuleParams']  = isset($search['params']['module']['values']) ? 1 : 0;
+        $search['hasProjectParams'] = isset($search['params']['project']['values']) ? 1 : 0;
+
+        return $search;
     }
 
     /**

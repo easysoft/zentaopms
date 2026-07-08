@@ -11,7 +11,7 @@
  * 描述：按系统统计的月度完成的研发需求规模数反映了组织在每个月完成的研发需求的规模总数，用于评估组织对于进度监控、绩效评估、资源规划、风险评估、持续改进和敏捷性具有重要意义。
  * 定义：所有的研发需求规模数求和;关闭时间为某年某月;关闭原因为已完成;过滤父研发需求;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_monthly_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.estimate', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`', 't1.estimate', 't1.parent', 't1.`isParent`');
 
     public $result = array();
 

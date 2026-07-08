@@ -54,7 +54,7 @@ $emptyTitleFile = $fileTest->setFileWebAndRealPathsTest(7);
 r(isset($emptyTitleFile->name)) && p() && e('1');
 
 // 测试步骤6：验证文件下载链接的正确生成
-r(strpos($normalFile->url, 'file-download-1') !== false) && p() && e('1');
+r(strpos($normalFile->url, 'download') !== false && (strpos($normalFile->url, 'fileID=1') !== false || strpos($normalFile->url, 'file-download-1') !== false)) && p() && e('1');
 
 // 测试步骤7：空pathname的边界情况测试（测试ID=7有空pathname）
 r(isset($emptyTitleFile->realPath)) && p() && e('1');

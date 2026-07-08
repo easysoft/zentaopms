@@ -17,17 +17,14 @@ cid=16746
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-
-zenData('holiday')->gen(5);
 zenData('user')->gen(1);
 
 su('admin');
 
 $holidayTest = new holidayModelTest();
 
-r($holidayTest->getYearPairsTest()) && p() && e('1');
-r($holidayTest->getYearPairsTestWithSpecificYear('2025')) && p() && e('2025');
+r($holidayTest->getYearPairsTest()) && p() && e('2');
+r($holidayTest->getYearPairsTestWithSpecificYear('2024')) && p() && e('2024');
 r($holidayTest->getYearPairsTestEmptyTable()) && p() && e('0');
-r($holidayTest->getYearPairsTestMultiYear()) && p() && e('2');
+r($holidayTest->getYearPairsTestMultiYear()) && p() && e('3');
 r($holidayTest->getYearPairsTestOrderValidation()) && p() && e('2025');

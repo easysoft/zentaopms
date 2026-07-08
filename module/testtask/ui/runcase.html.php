@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The runCase view file of testtask module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     testtask
@@ -240,10 +240,15 @@ if($confirm != 'yes')
     )
 ) : '';
 
-form
+$actions = array();
+if($preLink)  $actions[] = array('text' => $lang->testtask->pre, 'data-load' => 'modal', 'url' => $preLink, 'id' => 'pre');
+if($run->case->status != 'wait' && $confirm != 'yes') $actions[] = 'submit';
+if($nextLink) $actions[] = array('text' => $lang->testtask->next, 'data-load' => 'modal', 'url' => $nextLink, 'id' => 'next');
+
+formPanel
 (
     set::id('caseStepForm'),
-    set::actions(array()),
+    set::actions($actions),
     set::grid(false),
     h::table
     (
@@ -287,28 +292,7 @@ form
                     div
                     (
                         setClass('text-center'),
-                        $preLink ? a
-                        (
-                            setClass('btn btn-wide w-24 m-3'),
-                            set::id('pre'),
-                            set::href($preLink),
-                            set('data-load', 'modal'),
-                            $lang->testtask->pre
-                        ) : '',
-                        $run->case->status != 'wait' && $confirm != 'yes' ? btn
-                        (
-                            setClass('primary btn-wide w-24 m-3'),
-                            set::btnType('submit'),
-                            $lang->save
-                        ) : '',
-                        $nextLink ? a
-                        (
-                            setClass('btn btn-wide w-24 m-3'),
-                            set::id('next'),
-                            set::href($nextLink),
-                            set('data-load', 'modal'),
-                            $lang->testtask->next
-                        ) : '',
+
                         input
                         (
                             setClass('hidden'),

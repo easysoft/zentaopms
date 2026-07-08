@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增人员数是指在一年内新增加到项目或系统中的人员数量。反映了系统或平台在一年内新增用户数量的指标，用于评估团队扩充和人员流动情况。年度新增人员数的增加可能意味着团队的增加或项目的扩大。
  * 定义：系统所有用户个数求和;添加时间为某年;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

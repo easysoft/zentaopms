@@ -553,6 +553,7 @@ class baseRouter
         if($this->config->framework->multiSite)     $this->setSiteCode() && $this->loadExtraConfig();
         if($this->config->framework->multiLanguage) $this->setClientLang();
         $this->setVision();
+        $this->setDevOpsSpace();
 
         $needDetectDevice   = zget($this->config->framework->detectDevice, $this->clientLang, false);
         $this->clientDevice = $needDetectDevice ? $this->setClientDevice() : 'desktop';
@@ -818,7 +819,6 @@ class baseRouter
             if(!$apiMode && (empty($httpHost) or !str_starts_with((string) $this->server->http_referer, "$httpType://$httpHost"))) $_FILES = $_POST = array();
         }
 
-        $_FILES  = validater::filterFiles();
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
@@ -957,13 +957,36 @@ class baseRouter
         }
 
         [$defaultVision] = explode(',', trim((string) $this->config->visions, ','));
-        if($defaultVision != 'lite' && $defaultVision != 'or') $defaultVision = 'rnd';
+        if($defaultVision != 'lite' && $defaultVision != 'or' && $defaultVision != 'devops') $defaultVision = 'rnd';
         if($vision and !str_contains((string) $this->config->visions, ",{$vision},")) $vision = $defaultVision;
 
         $vision = $vision ?: $defaultVision;
         if(empty($_COOKIE['vision'])) setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         $this->config->vision = $vision;
+    }
+
+    /**
+     * 设置DevOps空间。
+     * Set DevOps space.
+     *
+     * @access public
+     * @return void
+     */
+    public function setDevOpsSpace()
+    {
+        $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
+        if(empty($account) && isset($_POST['account'])) $account = $_POST['account'];
+        if(empty($account) && isset($_GET['account']))  $account = $_GET['account'];
+        if(empty($account) && isset($_COOKIE['za']))    $account = $_COOKIE['za'];
+
+        $devopsSpace = '';
+        if($this->config->installed && validater::checkAccount($account) && !$this->upgrading)
+        {
+            $devopsSpace = $this->dao->select("value")->from(TABLE_CONFIG)->where('owner')->eq($account)->andWhere('`key`')->eq('devopsSpace')->limit(1)->fetch('value');
+        }
+
+        $this->config->devopsSpace = $devopsSpace;
     }
 
     /**
@@ -1212,7 +1235,11 @@ class baseRouter
             $savePath = $this->getTmpRoot() . ($apiMode ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
-            if(is_writable($savePath))
+            /*
+             * API token auth must read from the dedicated apisession directory even when the
+             * current process cannot write there. Read access is enough to restore the user.
+             */
+            if(is_writable($savePath) || ($apiMode && is_readable($savePath)))
             {
                 session_save_path($savePath);
 
@@ -1454,6 +1481,16 @@ class baseRouter
         else
         {
             $this->triggerError("The request type {$this->config->requestType} not supported", __FILE__, __LINE__, true);
+        }
+
+        $allowedModules = explode(',', $this->config->file->allowedModules);
+        if(in_array($this->moduleName, $allowedModules))
+        {
+            $this->config->file->dangers = '';
+        }
+        else
+        {
+            $_FILES = validater::filterFiles();
         }
     }
 
@@ -3525,6 +3562,27 @@ class baseRouter
         if(!empty($this->cache)) $this->cache->clear();
 
         return true;
+    }
+
+    /**
+     * 清理临时目录。
+     * Clean the tmp dirs.
+     *
+     * @access public
+     * @return void
+     */
+    public function cleanTmpDirs()
+    {
+        $zfile   = $this->loadClass('zfile');
+        $tmpRoot = $this->getTmpRoot();
+        foreach(['model', 'zen', 'tao'] as $dir)
+        {
+            foreach(glob($tmpRoot . DS . $dir . DS . '*') as $file)
+            {
+                if(is_file($file)) $zfile->removeFile($file);
+                if(is_dir($file))  $zfile->removeDir($file);
+            }
+        }
     }
 }
 

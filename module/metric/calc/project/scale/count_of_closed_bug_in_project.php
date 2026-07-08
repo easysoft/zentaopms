@@ -11,7 +11,7 @@
  * 描述：按项目统计的已关闭Bug总数是指已经被关闭的Bug数量。这个度量项反映了项目中已经关闭的缺陷数量。已关闭Bug总数的增加说明项目进行了持续的改进和修复工作。
  * 定义：项目中Bug个数求和;状态为已关闭;过滤已删除的Bug;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

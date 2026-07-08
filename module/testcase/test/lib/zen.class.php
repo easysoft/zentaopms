@@ -4049,7 +4049,7 @@ class testcaseZenTest extends baseTest
         );
 
         /* Simulate buildLinkCasesSearchForm method logic */
-        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bySearch&queryID=myQueryID";
+        $actionURL = "/testcase-linkCases-caseID={$case->id}&browseType=bysearch&queryID=myQueryID";
         $objectID = 0;
 
         if($tester->app->tab == 'project') $objectID = $case->project ?? 0;
@@ -4137,5 +4137,20 @@ class testcaseZenTest extends baseTest
         $this->invokeArgs('processCaseForExport', [$case]);
         if(dao::isError()) return dao::getError();
         return $case;
+    }
+
+    /**
+     * 处理批量编辑用例的步骤和预期。
+     * Process steps and expects for batch edit.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function processStepsAndExpectsForBatchEditTest(array $cases): array
+    {
+        $cases = $this->invokeArgs('processStepsAndExpectsForBatchEdit', [$cases]);
+        if(dao::isError()) return dao::getError();
+        return $cases;
     }
 }

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     productplan
@@ -30,9 +30,9 @@ class productplanTao extends productplanModel
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->beginIF(!empty($branch) && $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(!in_array($browseType, array('all', 'undone', 'bySearch', 'review')))->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(!in_array($browseType, array('all', 'undone', 'bysearch', 'review')))->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
-            ->beginIF($browseType == 'bySearch')->andWhere($this->session->productplanQuery)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($this->session->productplanQuery)->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)

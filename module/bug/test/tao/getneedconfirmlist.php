@@ -70,20 +70,19 @@ $executionIdList = array(array(), array(3), array(1000001));
 $branch          = array('all', 1, 1000001);
 $moduleID        = array(array(), array(1), array(1000001));
 
-global $tester;
-$bug = $tester->loadModel('bug');
-$result1  = $bug->getNeedConfirmList($productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
-$result2  = $bug->getNeedConfirmList($productIdList[0], $projectID[1], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
-$result3  = $bug->getNeedConfirmList($productIdList[0], $projectID[0], $executionIdList[1], $branch[0], $moduleID[0], 'id_desc');
-$result4  = $bug->getNeedConfirmList($productIdList[0], $projectID[0], $executionIdList[0], $branch[1], $moduleID[0], 'id_desc');
-$result5  = $bug->getNeedConfirmList($productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1], 'id_desc');
-$result6  = $bug->getNeedConfirmList($productIdList[0], $projectID[1], $executionIdList[1], $branch[1], $moduleID[1], 'id_desc');
-$result7  = $bug->getNeedConfirmList($productIdList[1], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
-$result8  = $bug->getNeedConfirmList($productIdList[1], $projectID[1], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
-$result9  = $bug->getNeedConfirmList($productIdList[1], $projectID[0], $executionIdList[1], $branch[0], $moduleID[0], 'id_desc');
-$result10 = $bug->getNeedConfirmList($productIdList[1], $projectID[0], $executionIdList[0], $branch[1], $moduleID[0], 'id_desc');
-$result11 = $bug->getNeedConfirmList($productIdList[1], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1], 'id_desc');
-$result12 = $bug->getNeedConfirmList($productIdList[1], $projectID[1], $executionIdList[1], $branch[1], $moduleID[1], 'id_desc');
+$bug = new bugTaoTest();
+$result1  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
+$result2  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[1], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
+$result3  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[0], $executionIdList[1], $branch[0], $moduleID[0], 'id_desc');
+$result4  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[0], $executionIdList[0], $branch[1], $moduleID[0], 'id_desc');
+$result5  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1], 'id_desc');
+$result6  = $bug->getNeedConfirmListTest($productIdList[0], $projectID[1], $executionIdList[1], $branch[1], $moduleID[1], 'id_desc');
+$result7  = $bug->getNeedConfirmListTest($productIdList[1], $projectID[0], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
+$result8  = $bug->getNeedConfirmListTest($productIdList[1], $projectID[1], $executionIdList[0], $branch[0], $moduleID[0], 'id_desc');
+$result9  = $bug->getNeedConfirmListTest($productIdList[1], $projectID[0], $executionIdList[1], $branch[0], $moduleID[0], 'id_desc');
+$result10 = $bug->getNeedConfirmListTest($productIdList[1], $projectID[0], $executionIdList[0], $branch[1], $moduleID[0], 'id_desc');
+$result11 = $bug->getNeedConfirmListTest($productIdList[1], $projectID[0], $executionIdList[0], $branch[0], $moduleID[1], 'id_desc');
+$result12 = $bug->getNeedConfirmListTest($productIdList[1], $projectID[1], $executionIdList[1], $branch[1], $moduleID[1], 'id_desc');
 
 r(count($result1))  && p() && e('4'); // 获取产品 1 项目 0 执行 空 分支 all 模块 空 的待确认bug
 r(count($result2))  && p() && e('0'); // 获取产品 1 项目 2 执行 空 分支 all 模块 空 的待确认bug

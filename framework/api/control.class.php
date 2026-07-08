@@ -871,6 +871,7 @@ class control extends baseControl
 
         $this->loadModel('flow');
         $this->loadModel('workflowfield');
+        $workflowLayout = $this->loadModel('workflowlayout');
 
         $groupID = $this->loadModel('workflowgroup')->getGroupIDByData($moduleName, $object);
         $flow    = $this->loadModel('workflow')->getByModule($moduleName, false, $groupID);
@@ -879,10 +880,10 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $groupID);
         if(!$action || $action->extensionType != 'extend') return array();
 
-        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
+        $uiID = is_object($object) ? $workflowLayout->getUIByData($flow->module, $action->action, $object) : 0;
 
         $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $flow->group);
-        $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $flow->group);
+        $layouts      = $workflowLayout->getFields($moduleName, $methodName, $uiID, $flow->group);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
 
         if($layouts)

@@ -65,6 +65,8 @@ cid=18960
 $testcase    = new testcaseModelTest();
 $sceneIdList = array(array(), array(1, 2), array(3, 4));
 
+global $tester;
+
 r($testcase->batchChangeSceneModuleTest($sceneIdList[0], 1))        && p() && e('0'); // 场景参数为空返回 false。
 r($testcase->batchChangeSceneModuleTest($sceneIdList[1], -1))       && p() && e('0'); // 场景参数不为空、所属模块参数小于 mediumint unsigned 类型最小值返回 false。
 r($testcase->batchChangeSceneModuleTest($sceneIdList[1], 16777216)) && p() && e('0'); // 场景参数不为空、所属模块参数大于 mediumint unsigned 类型最大值返回 false。
@@ -77,11 +79,11 @@ r($testcase->getScenesByListTest($sceneIdList[1])) && p('1:module;2:module') && 
 r($testcase->batchChangeSceneModuleTest($sceneIdList[1], 3)) && p() && e('1');            // 批量修改场景所属模块为 3 成功，返回 true。
 r($testcase->getScenesByListTest($sceneIdList[1])) && p('1:module;2:module') && e('3,3'); // 批量修改场景所属模块后模块为 3。
 
-$actions = $testcase->objectModel->dao->select('objectType,objectID,action')->from(TABLE_ACTION)->orderBy('id_desc')->limit(4)->fetchAll();
+$actions = $tester->dao->select('objectType,objectID,action')->from(TABLE_ACTION)->orderBy('id_desc')->limit(4)->fetchAll();
 r($actions) && p('0:objectType,objectID,action;1:objectType,objectID,action') && e('scene,2,edited,scene,1,edited'); // 批量修改场景所属模块后记录日志。
 r($actions) && p('2:objectType,objectID,action;3:objectType,objectID,action') && e('scene,2,edited,scene,1,edited'); // 批量修改场景所属模块后记录日志。
 
-$histories = $testcase->objectModel->dao->select('field,old,new')->from(TABLE_HISTORY)->orderBy('id_desc')->limit(4)->fetchAll();
+$histories = $tester->dao->select('field,old,new')->from(TABLE_HISTORY)->orderBy('id_desc')->limit(4)->fetchAll();
 r($histories) && p('0:field,old,new;1:field,old,new') && e('module,2,3,module,2,3'); // 批量修改场景所属模块后记录日志详情，module 字段从 2 变成 3。
 r($histories) && p('2:field,old,new;3:field,old,new') && e('module,1,2,module,1,2'); // 批量修改场景所属模块后记录日志详情，module 字段从 1 变成 2。
 

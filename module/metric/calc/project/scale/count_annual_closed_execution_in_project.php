@@ -11,7 +11,7 @@
  * 描述：按项目统计的年度关闭执行数是指在项目中某年度已经关闭的执行数。该度量项反映了项目团队在某年度的工作效率和完成能力。较高的年度关闭执行数表示项目在完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。
  * 定义：项目的执行个数求和;关闭时间为某年;过滤已删除的执行;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_annual_closed_execution_in_project extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.project', 't1.closedDate');
+    public $fieldList = array('t1.project', 't1.`closedDate`');
 
     public $result = array();
 

@@ -11,7 +11,7 @@
  * 描述：按系统统计的未关闭项目数是指在系统目前未开始或仍然在进行中的项目数量。这个度量项可以衡量项目管理和执行的效率。
  * 定义：复用：;按系统统计的已关闭项目数;按系统统计的项目总数;公式：;按系统统计的未关闭项目数=按系统统计的项目总数-按系统统计的已关闭项目数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

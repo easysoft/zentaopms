@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of group module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -266,7 +266,7 @@ class group extends control
         list($programs, $projects, $products, $executions) = $this->group->getObjectForAdminGroup();
 
         $group      = $this->group->getById($groupID);
-        $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+        $groupUsers = $this->dao->select('t2.account, t1.realname')->from(TABLE_USER)->alias('t1')->leftJoin(TABLE_PROJECTADMIN)->alias('t2')->on('t1.account = t2.account')->andWhere('t1.deleted')->eq('0')->fetchPairs();
 
         $this->view->title         = $this->lang->company->common . $this->lang->hyphen . $group->name . $this->lang->hyphen . $this->lang->group->manageMember;
         $this->view->allUsers      = $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
@@ -304,9 +304,13 @@ class group extends control
         }
         else
         {
+            $loadURl = inLink('browse');
+            if($this->app->tab == 'project') $loadURl = $this->createLink('project', 'group', "projectID={$group->project}");
+            if($this->app->tab == 'devops')  $loadURl = $this->createLink('space', 'group', "spaceID={$group->devopsSpace}");
+
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']    = $this->app->tab == 'project' ? $this->createLink('project', 'group', "projectID={$group->project}"): inLink('browse');
+            $response['load']    = $loadURl;
         }
         return $this->send($response);
     }

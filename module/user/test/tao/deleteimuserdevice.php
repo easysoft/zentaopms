@@ -1,7 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userTao->deleteImUserDevice();
+timeout=0
 cid=0
 
 - 执行$oldTokens @2
@@ -18,6 +21,16 @@ cid=0
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
+global $tester;
+$tester->dao->exec("CREATE TABLE IF NOT EXISTS " . TABLE_IM_USERDEVICE . " (
+    `id` mediumint unsigned NOT NULL AUTO_INCREMENT,
+    `user` mediumint unsigned NOT NULL DEFAULT '0',
+    `device` varchar(30) NOT NULL DEFAULT '',
+    `token` varchar(255) NOT NULL DEFAULT '',
+    PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
+$tester->dao->delete()->from(TABLE_IM_USERDEVICE)->exec();
+
 zenData('user')->gen(3);
 $userdevice = zenData('im_userdevice');
 $userdevice->user->range('1-3{2}');
@@ -27,7 +40,7 @@ $userdevice->gen(4);
 
 su('admin');
 
-global $tester, $app;
+global $app;
 $userModel = $tester->loadModel('user');
 
 $oldTokens = $userModel->dao->select('*')->from(TABLE_IM_USERDEVICE)->where('user')->eq($app->user->id)->orderBy('id')->fetchAll('id');

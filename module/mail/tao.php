@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of mail module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@easycorp.ltd>
  * @package     mail
@@ -257,7 +257,6 @@ class mailTao extends mailModel
     protected function getMailContent(string $objectType, object $object, object $action): string
     {
         if(empty($objectType) || empty($object) || empty($action)) return '';
-        if($objectType == 'mr') return '';
 
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
@@ -288,32 +287,6 @@ class mailTao extends mailModel
         chdir($oldcwd);
 
         return $mailContent;
-    }
-
-    /**
-     * Get MR mail content.
-     *
-     * @param  object     $object
-     * @param  string     $action
-     * @param  string     $role     to|cc
-     * @access protected
-     * @return string
-     */
-    protected function getMRMailContent(object $object, string $action, string $role = 'to'): string
-    {
-        $this->app->loadLang('mr');
-        $title  = $this->getObjectTitle($object, 'mr');
-        $domain = zget($this->config->mail, 'domain', common::getSysURL());
-        $domain = rtrim($domain, '/');
-        $MRLink = $domain . helper::createLink('mr', 'view', "id={$object->id}");
-        if($action == 'compilefail') return sprintf($this->lang->mr->failMessage, $MRLink, $title);
-        if($action == 'compilepass')
-        {
-            $message = $this->lang->mr->toCreatedMessage;
-            if($role == 'cc') $message = $this->lang->mr->toReviewerMessage;
-            return sprintf($message, $MRLink, $title);
-        }
-        return '';
     }
 
     /**

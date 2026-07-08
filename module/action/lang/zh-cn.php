@@ -2,7 +2,7 @@
 /**
  * The action module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -58,6 +58,8 @@ $lang->action->refusescene  = '还原场景之前，请先还原该场景的父�
 $lang->action->refusemodule = '还原模块之前，请先还原该模块的父模块';
 $lang->action->refusekanban = '还原看板之前，请先还原该看板所属空间';
 
+$lang->action->repoDeleted  = '代码库已删除, 无法恢复。';
+
 $lang->action->trashTips           = '提示：为了保证系统的完整性，禅道系统的删除都是标记删除。';
 $lang->action->textDiff            = '文本格式';
 $lang->action->original            = '原始格式';
@@ -76,6 +78,7 @@ $lang->action->undeleteModuleTip   = '子目录恢复后，会同步恢复他的
 $lang->action->undeleteTaskTip     = '该任务所属执行已删除，还原后不能看到该任务，是否继续还原任务？';
 $lang->action->undeleteBoardTip    = '还原白板之前，请先还原该白板的所属空间。';
 $lang->action->undeleteTemplateTip = '该文档模板的分类（和范围）已被删除，确认要同步还原吗？';
+$lang->action->taskHasParentStage  = '该任务所属阶段是父阶段，无法恢复。';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "当前阶段的父级现在只允许创建{$lang->executionCommon}/看板类型的子级,故无法恢复当前阶段。";
@@ -147,13 +150,8 @@ $lang->action->objectTypes['entry']            = '应用';
 $lang->action->objectTypes['webhook']          = 'Webhook';
 $lang->action->objectTypes['team']             = '团队';
 $lang->action->objectTypes['whitelist']        = '白名单';
-$lang->action->objectTypes['pipeline']         = 'GitLab服务器';
-$lang->action->objectTypes['gitlab']           = 'GitLab服务器';
-$lang->action->objectTypes['gitea']            = 'Gitea服务器';
-$lang->action->objectTypes['gogs']             = 'Gogs服务器';
-$lang->action->objectTypes['jenkins']          = 'Jenkins服务器';
-$lang->action->objectTypes['nexus']            = 'Nexus服务器';
-$lang->action->objectTypes['mr']               = '合并请求';
+$lang->action->objectTypes['pipeline']         = '流水线';
+$lang->action->objectTypes['ppm']              = '评审请求';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab项目';
 $lang->action->objectTypes['gitlabuser']       = 'GitLab用户';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab群组';
@@ -193,11 +191,33 @@ $lang->action->objectTypes['board']            = '白板';
 $lang->action->objectTypes['boardspace']       = '白板空间';
 $lang->action->objectTypes['productline']      = '产品线';
 $lang->action->objectTypes['system']           = $lang->product->system;
+$lang->action->objectTypes['space']            = '空间';
+$lang->action->objectTypes['review_flow']      = '评审流程';
+$lang->action->objectTypes['repobranchtype']   = '分支类型';
 $lang->action->objectTypes['deliverable']      = '交付物类型';
 $lang->action->objectTypes['cm']               = '基线';
 $lang->action->objectTypes['baseline']         = '基线';
 $lang->action->objectTypes['ganttversion']     = '甘特图版本';
 $lang->action->objectTypes['projectchange']    = '项目变更';
+$lang->action->objectTypes['artifact']         = '制品库';
+$lang->action->objectTypes['artifactasset']    = '制品';
+$lang->action->objectTypes['artifactdir']      = '制品库目录';
+$lang->action->objectTypes['gitfox']           = 'GitFox服务器';
+$lang->action->objectTypes['gitfoxuser']       = 'GitFox用户';
+$lang->action->objectTypes['repotag']          = '代码标签';
+$lang->action->objectTypes['repobranch']       = '代码分支';
+$lang->action->objectTypes['pullreq']          = '推送请求';
+$lang->action->objectTypes['runner']           = 'Runner';
+$lang->action->objectTypes['codescanrule']     = '代码扫描规则';
+$lang->action->objectTypes['codescanruleset']  = '代码扫描规则集';
+$lang->action->objectTypes['codescansolution'] = '代码扫描方案';
+$lang->action->objectTypes['codescanplan']     = '代码扫描计划';
+$lang->action->objectTypes['codescantrigger']  = '代码扫描触发器';
+$lang->action->objectTypes['codescanissue']    = '代码扫描问题';
+$lang->action->objectTypes['codescantask']     = '代码扫描任务';
+$lang->action->objectTypes['compile']          = '流水线执行记录';
+$lang->action->objectTypes['gitfoxbranch']     = '代码分支';
+$lang->action->objectTypes['provider']         = '服务';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -223,6 +243,8 @@ $lang->action->desc->commented            = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->activated            = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->blocked              = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
 $lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动。' . "\n";
+$lang->action->desc->downloaded           = '$date, 由 <strong>$actor</strong> 下载。' . "\n";
+$lang->action->desc->uploaded             = '$date, 由 <strong>$actor</strong> 上传。' . "\n";
 $lang->action->desc->copied               = '$date, 由 <strong>$actor</strong> 从 $extra 复制而来。' . "\n";
 $lang->action->desc->confirmed            = '$date, 由 <strong>$actor</strong> 确认' . $lang->SRCommon . '变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
@@ -296,6 +318,7 @@ $lang->action->desc->offline              = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->linkhost             = '$date, 由 <strong>$actor</strong> 关联主机。' . "\n";
 $lang->action->desc->createrepobranch     = '$date, 由 <strong>$actor</strong> 创建了代码分支 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkrepobranch     = '$date, 由 <strong>$actor</strong> 取消关联了代码分支 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->createbranchtype     = '$date, 由 <strong>$actor</strong> 创建了分支类型 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->changedprogram       = '$date, 由 <strong>$actor</strong> 调整了所属项目集。' . "\n";
 $lang->action->desc->managedteam          = '$date, 由 <strong>$actor</strong> 维护团队。' . "\n";
 $lang->action->desc->syncexecutionteam    = '$date, 同步更新执行增加的团队成员。' . "\n";
@@ -325,10 +348,11 @@ $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关
 $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
 
 /* 用来描述计划关联和移除需求、bug时的历史操作记录。*/
-$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkstory         = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkbug           = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkstory       = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->autounlinkstory   = '$date, 由 <strong>$actor</strong> 关联需求到 <strong>$extra</strong>计划中,自动移除需求。' . "\n";
+$lang->action->desc->unlinkbug         = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
 /* 用来描述文档保存为草稿或发布时的历史操作记录。*/
 $lang->action->desc->saveddraft  = '$date, 由 <strong>$actor</strong> 存为草稿 <strong>$extra</strong>。' . "\n";
@@ -380,6 +404,10 @@ $lang->action->desc->savebackupsettings  = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->deleteexpiredbackup = '$date, 由 <strong>$actor</strong> 删除过期备份。' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, 由 <strong>$actor</strong> 手动删除备份。' . "\n";
 
+$lang->action->desc->editedasset  = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset   = '$date, 由 <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->deletedasset = '$date, 由 <strong>$actor</strong> 删除' . "\n";
+
 /* 用来显示动态信息。*/
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = '安装了';
@@ -420,7 +448,9 @@ $lang->action->label->resolved                = '解决了';
 $lang->action->label->reviewed                = '评审了';
 $lang->action->label->recalled                = '撤销了评审';
 $lang->action->label->recalledchange          = '撤销了变更';
+$lang->action->label->uploaded                = '上传了';
 $lang->action->label->moved                   = '移动了';
+$lang->action->label->downloaded              = '下载了';
 $lang->action->label->copied                  = '复制了';
 $lang->action->label->confirmed               = "确认了{$lang->SRCommon}";
 $lang->action->label->bugconfirmed            = '确认了';
@@ -508,6 +538,9 @@ $lang->action->label->syncexecution           = '开始了';
 $lang->action->label->syncexecutionbychild    = '开始了';
 $lang->action->label->syncmultipleproject     = '开始了';
 $lang->action->label->startProgram            = "（因{$lang->projectCommon}开始而启动项目集）";
+$lang->action->label->createppm               = '关联了';
+$lang->action->label->deleteppm               = '取消了';
+$lang->action->label->mergedppm               = '合并了';
 $lang->action->label->createmr                = '关联了';
 $lang->action->label->deletemr                = '取消了';
 $lang->action->label->mergedmr                = '合并了';
@@ -572,6 +605,9 @@ $lang->action->label->linkhost                = '主机关联到';
 $lang->action->label->delist                  = '下架了';
 $lang->action->label->createrepobranch        = '创建了分支从';
 $lang->action->label->unlinkrepobranch        = '取消关联了分支从';
+$lang->action->label->createbranchtype        = '创建了分支类型从';
+$lang->action->label->editbranchtype          = '编辑了分支类型';
+$lang->action->label->deletebranchtype        = '删除了分支类型';
 $lang->action->label->communicate             = '沟通了';
 $lang->action->label->changedprogram          = '调整了项目集';
 $lang->action->label->published               = '发布了';
@@ -596,6 +632,48 @@ $lang->action->label->syncexecutionteam       = '同步了';
 $lang->action->label->syncprojectteam         = '同步了';
 $lang->action->label->syncbycase              = '开始了';
 $lang->action->label->converttonewdoc         = '转换了';
+$lang->action->label->createrepotag           = '创建了标签从';
+$lang->action->label->createruleset           = '创建了规则集';
+$lang->action->label->editruleset             = '编辑了规则集';
+$lang->action->label->deleteruleset           = '删除了规则集';
+$lang->action->label->enableruleset           = '启用了规则集';
+$lang->action->label->disableruleset          = '关闭了规则集';
+$lang->action->label->createpullreq           = '关联了';
+$lang->action->label->deletepullreq           = '取消了';
+$lang->action->label->mergedpullreq           = '推送了';
+$lang->action->label->enablescanrule          = '启用了';
+$lang->action->label->disablescanrule         = '禁用了';
+$lang->action->label->enablescanruleset       = '启用了';
+$lang->action->label->disablescanruleset      = '禁用了';
+$lang->action->label->createruleset           = '添加了';
+$lang->action->label->editruleset             = '编辑了';
+$lang->action->label->deleteruleset           = '删除了';
+$lang->action->label->enablescansolution      = '启用了';
+$lang->action->label->disablescansolution     = '禁用了';
+$lang->action->label->createsolution          = '添加了';
+$lang->action->label->editsolution            = '编辑了';
+$lang->action->label->deletesolution          = '删除了';
+$lang->action->label->unlinkrule              = '解除关联了规则';
+$lang->action->label->linkrule                = '关联了规则';
+$lang->action->label->unlinkruleset           = '解除关联了规则集';
+$lang->action->label->linkruleset             = '关联了规则集';
+$lang->action->label->createplan              = '添加了';
+$lang->action->label->editplan                = '编辑了';
+$lang->action->label->deleteplan              = '删除了';
+$lang->action->label->unlinksolution          = '解除关联了解决方案';
+$lang->action->label->exec                    = '执行了';
+$lang->action->label->resend                  = '重试了';
+$lang->action->label->resendCompile           = '回放了';
+$lang->action->label->enabledrunner           = '启用了';
+$lang->action->label->disabledrunner          = '停用了';
+$lang->action->label->createrule              = '创建了规则';
+$lang->action->label->editrule                = '编辑了规则';
+$lang->action->label->deleterule              = '删除了规则';
+$lang->action->label->enablerule              = '启用了规则';
+$lang->action->label->disablerule             = '关闭了规则';
+$lang->action->label->editedasset             = '编辑了';
+$lang->action->label->movedasset              = '移动了';
+$lang->action->label->deletedasset            = '删除了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -937,7 +1015,11 @@ $lang->action->label->user         = '用户|user|view|account=%s';
 $lang->action->label->testreport   = '报告|testreport|view|report=%s';
 $lang->action->label->entry        = '应用|entry|browse|';
 $lang->action->label->webhook      = 'Webhook|webhook|browse|';
-$lang->action->label->space        = ' ';
+$lang->action->label->deletewebhook  = '删除了Webhook';
+$lang->action->label->createwebhook  = '创建了Webhook';
+$lang->action->label->editwebhook    = '编辑了Webhook';
+$lang->action->label->enablewebhook  = '启用了Webhook';
+$lang->action->label->disablewebhook = '关闭了Webhook';
 $lang->action->label->risk         = '风险|risk|view|riskID=%s';
 $lang->action->label->issue        = '问题|issue|view|issueID=%s';
 $lang->action->label->design       = '设计|design|view|designID=%s';
@@ -959,7 +1041,11 @@ $lang->action->label->instance     = '服务|instance|view|id=%s';
 $lang->action->label->prompt       = '禅道智能体|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = '通用智能体|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = '节假日|holiday|browse|';
+$lang->action->label->space        = '空间|space|view|id=%s';
 $lang->action->label->deliverable  = '交付物类型|deliverable|view|id=%s';
+
+$lang->action->label->enablereviewflow  = '启用';
+$lang->action->label->disablereviewflow = '禁用';
 
 /* Object type. */
 $lang->action->search = new stdclass();
@@ -1007,6 +1093,7 @@ $lang->action->search->label['blocked']               = $lang->action->label->bl
 $lang->action->search->label['resolved']              = $lang->action->label->resolved;
 $lang->action->search->label['reviewed']              = $lang->action->label->reviewed;
 $lang->action->search->label['moved']                 = $lang->action->label->moved;
+$lang->action->search->label['downloaded']            = $lang->action->label->downloaded;
 $lang->action->search->label['confirmed']             = $lang->action->label->confirmed;
 $lang->action->search->label['bugconfirmed']          = $lang->action->label->bugconfirmed;
 $lang->action->search->label['tostory']               = $lang->action->label->tostory;
@@ -1098,6 +1185,7 @@ $lang->action->apiTitle->blocked               = '阻塞';
 $lang->action->apiTitle->reviewed              = '评审';
 $lang->action->apiTitle->recalled              = '撤销评审';
 $lang->action->apiTitle->moved                 = '移动';
+$lang->action->apiTitle->downloaded            = '下载';
 $lang->action->apiTitle->fromlib               = '从用例库导入';
 $lang->action->apiTitle->totask                = '转任务';
 $lang->action->apiTitle->linked2plan           = "关联计划";
@@ -1141,6 +1229,9 @@ $lang->action->desc->repocreated                  = '$date, 由 <strong>$actor</
 $lang->action->label->repocreated                 = "创建评审";
 $lang->action->dynamicAction->task['gitcommited'] = 'git提交';
 $lang->action->dynamicAction->bug['repocreated']  = '创建代码评审';
+$lang->action->desc->createppm                    = '$extra';
+$lang->action->desc->deleteppm                    = '$date, 由 <strong>$actor</strong> 取消关联了 <a href="$extra">合并请求</a>。';
+$lang->action->desc->mergedppm                    = '$date, 由 <strong>$actor</strong> 合并了代码';
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</strong> 取消关联了 <a href="$extra">合并请求</a>。';
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了代码';
@@ -1150,6 +1241,33 @@ $lang->action->desc->approve                      = '$date, 由 <strong>$actor</
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
 $lang->action->desc->linkedrepo                   = '$date, 由 <strong>$actor</strong> 关联代码库 $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, 由 <strong>$actor</strong> 取消了' . $lang->projectCommon . '与代码库 $extra 的关联';
+$lang->action->desc->createrepotag                = '$date, 由 <strong>$actor</strong> 创建了代码标签 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->createpullreq                = '$extra';
+$lang->action->desc->deletepullreq                = '$date, 由 <strong>$actor</strong> 取消关联了 <a href="$extra">推送请求</a>。';
+$lang->action->desc->mergedpullreq                = '$date, 由 <strong>$actor</strong> 推送了代码';
+$lang->action->desc->enablescanrule               = '$date, 由 <strong>$actor</strong> 启用。';
+$lang->action->desc->disablescanrule              = '$date, 由 <strong>$actor</strong> 禁用。';
+$lang->action->desc->enablescanruleset            = '$date, 由 <strong>$actor</strong> 启用。';
+$lang->action->desc->disablescanruleset           = '$date, 由 <strong>$actor</strong> 禁用。';
+$lang->action->desc->createruleset                = '$date, 由 <strong>$actor</strong> 添加。';
+$lang->action->desc->editruleset                  = '$date, 由 <strong>$actor</strong> 编辑。';
+$lang->action->desc->deleteruleset                = '$date, 由 <strong>$actor</strong> 删除。';
+$lang->action->desc->enablescansolution           = '$date, 由 <strong>$actor</strong> 启用。';
+$lang->action->desc->disablescansolution          = '$date, 由 <strong>$actor</strong> 禁用。';
+$lang->action->desc->createsolution               = '$date, 由 <strong>$actor</strong> 添加。';
+$lang->action->desc->editsolution                 = '$date, 由 <strong>$actor</strong> 编辑。';
+$lang->action->desc->deletesolution               = '$date, 由 <strong>$actor</strong> 删除。';
+$lang->action->desc->unlinkrule                   = '$date, 由 <strong>$actor</strong> 解除关联了规则。';
+$lang->action->desc->linkrule                     = '$date, 由 <strong>$actor</strong> 关联了规则。';
+$lang->action->desc->unlinkruleset                = '$date, 由 <strong>$actor</strong> 解除关联了规则集。';
+$lang->action->desc->linkruleset                  = '$date, 由 <strong>$actor</strong> 关联了规则集。';
+$lang->action->desc->createplan                   = '$date, 由 <strong>$actor</strong> 添加。';
+$lang->action->desc->editplan                     = '$date, 由 <strong>$actor</strong> 编辑。';
+$lang->action->desc->deleteplan                   = '$date, 由 <strong>$actor</strong> 删除。';
+$lang->action->desc->unlinksolution               = '$date, 由 <strong>$actor</strong> 解除关联了解决方案。';
+$lang->action->desc->exec                         = '$date, 由 <strong>$actor</strong> 执行代码扫描任务。';
+$lang->action->desc->resend                       = '$date, 由 <strong>$actor</strong> 发起重试。';
+$lang->action->desc->resendCompile                = '$date, 由 <strong>$actor</strong> 发起回放。';
 
 $lang->action->reviewStatusList['wait']      = '待审批';
 $lang->action->reviewStatusList['doing']     = '审批中';
@@ -1159,3 +1277,8 @@ $lang->action->reviewStatusList['reverting'] = '回退中';
 
 $lang->action->reviewResultList['pass']   = '通过';
 $lang->action->reviewResultList['reject'] = '不通过';
+
+$lang->action->label->addreviewer    = '添加了评审人';
+$lang->action->label->deletereviewer = '删除了评审人';
+$lang->action->desc->addreviewer     = '$date, <strong>$actor</strong> 添加了评审人<strong>$extra</strong>。';
+$lang->action->desc->deletereviewer  = '$date, <strong>$actor</strong> 删除了评审人<strong>$extra</strong>。';

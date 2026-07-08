@@ -98,7 +98,8 @@ class bugBasicInfo extends wg
             (
                 'control'  => 'link',
                 'url'      => $planLink,
-                'text'     => $bug->planName
+                'text'     => $bug->planName,
+                'data-app' => $product->shadow ? 'project' : null
             ) : $bug->planName;
         }
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of message module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     message
@@ -25,11 +25,11 @@ class messageModel extends model
     {
         $now = helper::now();
         return $this->dao->select('t1.*')->from(TABLE_NOTIFY)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.objectType = 'message' AND t1.action = t2.id")
-            ->where('t1.objectType')->eq('message')
-            ->andWhere('t1.toList')->eq(",{$this->app->user->account},")
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.`objectType` = 'message' AND t1.action = t2.id")
+            ->where('t1.`objectType`')->eq('message')
+            ->andWhere('t1.`toList`')->eq(",{$this->app->user->account},")
             ->beginIF(!empty($status) && $status != 'all')->andWhere('t1.status')->eq($status)->fi()
-            ->andWhere("(t1.sendTime IS NULL OR t1.sendTime <= '{$now}')")
+            ->andWhere("(t1.`sendTime` IS NULL OR t1.`sendTime` <= '{$now}')")
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }
@@ -211,22 +211,13 @@ class messageModel extends model
         $toList = $this->getToList($object, $objectType, $actionID);
         if(empty($toList) || $toList == $actor) return false;
 
+        if(in_array($objectType, array('issue', 'risk', 'opportunity')) && !empty($object->lib)) return false; // 资产库中的数据不发送通知
+
         $this->app->loadConfig('mail');
         $sysURL = zget($this->config->mail, 'domain', common::getSysURL());
 
         $isonlybody = isInModal();
         if($isonlybody) unset($_GET['onlybody']);
-
-        $methodNmae = 'view';
-        $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-        if($objectType == 'kanbancard') $moduleName = 'kanban';
-        if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
-        if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
-        $space      = common::checkNotCN() ? ' ' : '';
-        $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
-        $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-        $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}") . "#app={$this->app->tab}";
-        $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
 
         if($objectType == 'aitask' && in_array($actionType, array('finished', 'failed')))
         {
@@ -240,11 +231,14 @@ class messageModel extends model
             $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
             if($objectType == 'kanbancard') $moduleName = 'kanban';
             if($objectType == 'feedback' && $this->config->vision == 'rnd') $methodNmae = 'adminView';
-            $space      = common::checkNotCN() ? ' ' : '';
-            $data       = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
-            $dataID     = $objectType == 'kanbancard' ? $object->kanban : $objectID;
-            $url        = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
-            $data      .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
+            if($objectType == 'auditplan') $object->title = $this->lang->auditplan->common . ' #' . $object->id;
+
+            $space  = common::checkNotCN() ? ' ' : '';
+            $data   = ($actor == 'guest' ? 'guest' : $user->realname) . $space . $this->lang->action->label->{$actionType} . $space . $this->lang->action->objectTypes[$objectType];
+            $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+            $url    = helper::createLink($moduleName, $methodNmae, "id={$dataID}");
+            if(in_array($objectType, array('story', 'task')) && $this->app->tab == 'project') $url .= '#app=project'; // 无迭代项目要跳转到项目下
+            $data   .= ' ' . html::a((strpos($url, $sysURL) === 0 ? '' : $sysURL) . $url, "[#{$objectID}::{$object->$field}]");
         }
 
         $sendTime = null;
@@ -304,7 +298,7 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
-        if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) && $objectType == 'ppm')         $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution')))
         {
@@ -331,7 +325,11 @@ class messageModel extends model
 
         if($objectType == 'testtask')
         {
-            $toList = array_merge(explode(',', $toList), explode(',', $object->members));
+            $toAndCcList = $this->loadModel('testtask')->getToAndCcList($object);
+            if(empty($toAndCcList)) return '';
+
+            list($toList, $ccList) = $toAndCcList;
+            $toList = array_merge(explode(',', $toList), explode(',', $ccList));
             $toList = array_filter(array_unique($toList));
             $toList = implode(',', $toList);
         }
@@ -448,6 +446,10 @@ class messageModel extends model
         $days       = (int)$this->config->message->browser->maxDays;
         $account    = $this->app->user->account;
         $expiryDate = date('Y-m-d 00:00:00', time() - 86400 * ($days + 1));
-        $this->dao->delete()->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->exec();
+
+        $expiredIdList = $this->dao->select('id')->from(TABLE_NOTIFY)->where('toList')->eq(",{$account},")->andWhere('objectType')->eq('message')->andWhere('createdDate')->lt($expiryDate)->fetchPairs('id', 'id');
+        if(empty($expiredIdList)) return;
+
+        $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($expiredIdList)->exec();
     }
 }

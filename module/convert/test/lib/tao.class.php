@@ -683,14 +683,19 @@ class convertTaoTest extends baseTest
      * Test createDefaultExecution method.
      *
      * @param  int   $jiraProjectID
-     * @param  int   $projectID
+     * @param  mixed $project
      * @param  array $projectRoleActor
      * @access public
      * @return mixed
      */
-    public function createDefaultExecutionTest($jiraProjectID = 1001, $projectID = 1, $projectRoleActor = array())
+    public function createDefaultExecutionTest($jiraProjectID = 1001, $project = 1, $projectRoleActor = array())
     {
-        $result = $this->invokeArgs('createDefaultExecution', [$jiraProjectID, $projectID, $projectRoleActor]);
+        $this->instance->app->loadLang('doc');
+
+        if(!is_object($project)) $project = $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq((int)$project)->fetch();
+        if(empty($project)) return 0;
+
+        $result = $this->invokeArgs('createDefaultExecution', [$jiraProjectID, $project, $projectRoleActor]);
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1273,6 +1278,8 @@ class convertTaoTest extends baseTest
      */
     public function importJiraBuildTest($dataList = array())
     {
+        if(empty($this->instance->session->jiraMethod)) $this->instance->session->set('jiraMethod', 'json');
+
         $result = $this->invokeArgs('importJiraBuild', [$dataList]);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1423,10 +1430,11 @@ class convertTaoTest extends baseTest
      * @param  object $object
      * @param  array  $relations
      * @param  bool   $buildinFlow
+     * @param  array  $jiraUsers
      * @access public
      * @return mixed
      */
-    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false)
+    public function processBuildinFieldDataTest($module = null, $data = null, $object = null, $relations = array(), $buildinFlow = false, $jiraUsers = array())
     {
         if($module === null || $data === null || $object === null) return false;
 
@@ -1447,6 +1455,12 @@ class convertTaoTest extends baseTest
             $this->instance->dbh->exec($sql);
             $this->instance->dbh->exec('TRUNCATE TABLE jiratmprelation');
         } catch (Exception $e) {}
+
+        foreach($jiraUsers as $jiraUser => $zentaoUser)
+        {
+            $this->instance->dbh->exec("INSERT INTO jiratmprelation (`AType`, `AID`, `BType`, `BID`, `extra`) VALUES ('juser', '{$jiraUser}', 'zuser', '{$zentaoUser}', '')");
+        }
+
         $result = $this->invokeArgs('processBuildinFieldData', [$module, $data, $object, $relations, array(), $buildinFlow]);
         if(dao::isError()) return dao::getError();
         return $result;

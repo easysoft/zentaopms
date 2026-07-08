@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The view view file of productplan module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong <yidong@easycorp.ltd>
  * @package     productplan
@@ -23,49 +23,66 @@ $confirmLang['delete']   = $lang->productplan->confirmDelete;
 $decodeParam = helper::safe64Decode($param);
 $isInModal   = isInModal();
 
-jsVar('initLink',        $link);
-jsVar('type',            $type);
-jsVar('linkParams',      $decodeParam);
-jsVar('orderBy',         $orderBy);
-jsVar('planID',          $plan->id);
-jsVar('confirmLang',     $confirmLang);
-jsVar('unlinkURL',       $unlinkURL);
-jsVar('childrenAB',      $lang->story->childrenAB);
-jsVar('cases',           $storyCases);
-jsVar('summary',         $summary);
-jsVar('checkedSummary',  $lang->product->checkedSRSummary);
-jsVar('storyPageID',     $storyPager->pageID);
-jsVar('storyRecPerPage', $storyPager->recPerPage);
-jsVar('gradeGroup',      $gradeGroup);
+jsVar('initLink',           $link);
+jsVar('type',               $type);
+jsVar('linkParams',         $decodeParam);
+jsVar('orderBy',            $orderBy);
+jsVar('planID',             $plan->id);
+jsVar('confirmLang',        $confirmLang);
+jsVar('unlinkURL',          $unlinkURL);
+jsVar('childrenAB',         $lang->story->childrenAB);
+jsVar('cases',              $storyCases);
+jsVar('summary',            $summary);
+jsVar('checkedSummary',     $lang->product->checkedSRSummary);
+jsVar('storyPageID',        $storyPager->pageID);
+jsVar('storyRecPerPage',    $storyPager->recPerPage);
+jsVar('gradeGroup',         $gradeGroup);
+jsVar('storyPriList',       $lang->story->priList);
+jsVar('requirementPriList', $lang->requirement->priList);
+jsVar('epicPriList',        $lang->epic->priList);
 
 $bugCols   = array();
-$storyCols = array();
-foreach($config->productplan->defaultFields['story'] as $field)
-{
-    if($field == 'branch' && $product->type == 'normal') continue;
-    $storyCols[$field] = zget($config->story->dtable->fieldList, $field, array());
-    if($field == 'id' && common::hasPriv('execution', 'storySort'))
-    {
-        $storyCols['sort']['title'] = $lang->productplan->updateOrder;
-        $storyCols['sort']['fixed'] = 'left';
-        $storyCols['sort']['align'] = 'center';
-        $storyCols['sort']['group'] = 1;
-        $storyCols['sort']['width'] = 60;
-    }
-}
-if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
-foreach($config->productplan->defaultFields['bug'] as $field)   $bugCols[$field]   = zget($config->bug->dtable->fieldList, $field, array());
 
+/* Get story column setting from datatable. */
+$storyCols = $this->loadModel('datatable')->getSetting('productplan', 'view');
+
+/* Hide branch field for normal products. */
+if(isset($storyCols['branch']) && $product->type == 'normal') unset($storyCols['branch']);
+
+/* Customize columns for plan context. */
 $storyCols['title']['link']         = $this->createLink('story', 'storyView', "storyID={id}");
 $storyCols['title']['title']        = $lang->productplan->storyTitle;
 $storyCols['assignedTo']['type']    = 'user';
 $storyCols['module']['type']        = 'text';
 $storyCols['module']['map']         = $modulePairs;
 $storyCols['module']['sortType']    = true;
+if(isset($storyCols['branch'])) $storyCols['branch']['map'] = $branchOption;
 $storyCols['actions']['list']       = $config->productplan->actionList;
 $storyCols['actions']['menu']       = array('unlinkStory');
 $storyCols['actions']['minWidth']   = 60;
-$bugCols['assignedTo']['type']      = 'user';
+
+/* Sort column for drag-and-drop sorting. */ if(common::hasPriv('execution', 'storySort'))
+{
+    $sortCol = array('title' => $lang->productplan->updateOrder, 'fixed' => 'left', 'align' => 'center', 'group' => 1, 'width' => 60);
+    $newCols = array();
+    foreach($storyCols as $key => $col)
+    {
+        $newCols[$key] = $col;
+        if($key == 'id') $newCols['sort'] = $sortCol;
+    }
+    $storyCols = $newCols;
+}
+
+$bugCols = $this->loadModel('datatable')->getSetting('productplan', 'viewBug');
+if(isset($bugCols['module']))      $bugCols['module']['map']       = $bugModulePairs;
+if(isset($bugCols['project']))     $bugCols['project']['map']      = array('') + $projectPairs;
+if(isset($bugCols['execution']))   $bugCols['execution']['map']    = array('') + $executions;
+if(isset($bugCols['branch']))      $bugCols['branch']['map']       = $branchTagOption;
+if(isset($bugCols['openedBuild'])) $bugCols['openedBuild']['map']  = array('') + $buildPairs;
+if(isset($bugCols['story']))       $bugCols['story']['map']        = array('') + $bugStories;
+if(isset($bugCols['task']))        $bugCols['task']['map']         = array('') + $bugTasks;
+if(isset($bugCols['toTask']))      $bugCols['toTask']['map']       = array('') + $bugTasks;
+
 $bugCols['actions']['list']         = $config->productplan->actionList;
 $bugCols['actions']['menu']         = array('unlinkBug');
 $bugCols['actions']['minWidth']     = 60;
@@ -154,7 +171,22 @@ if($canBatchActionBug)
 
 $planStories = initTableData($planStories, $storyCols, $this->productplan);
 $planBugs    = initTableData($planBugs,    $bugCols,   $this->productplan);
-foreach($planStories as $story) $story->estimate = helper::formatHours($story->estimate) . $config->hourUnit;
+foreach($planStories as $story)
+{
+    $storyType = $story->type;
+    $story->estimate     = helper::formatHours($story->estimate) . $config->hourUnit;
+    $story->category     = zget($lang->$storyType->categoryList, $story->category, $story->category);
+    $story->source       = zget($lang->$storyType->sourceList, $story->source, $story->source);
+    $story->closedReason = zget($lang->$storyType->reasonList, $story->closedReason, $story->closedReason);
+
+    $reviewer = array_filter(explode(',', (string)$story->reviewedBy));
+    foreach($reviewer as $i => $account) $reviewer[$i] = zget($users, $account, $account);
+    $story->reviewedBy = implode(' ', $reviewer);
+
+    $mailto = array_filter(explode(',', (string)$story->mailto));
+    foreach($mailto as $i => $account) $mailto[$i] = zget($users, $account, $account);
+    $story->mailto = implode(' ', $mailto);
+}
 
 $createStoryLink            = common::hasPriv('story', 'create') ? $this->createLink('story', 'create', "productID=$plan->product&branch=$plan->branch&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=$plan->id") : null;
 $batchCreateStoryLink       = common::hasPriv('story', 'batchCreate') ? $this->createLink('story', 'batchCreate', "productID=$plan->product&branch=$plan->branch&moduleID=0&story=0&project=$projectID&plan={$plan->id}") : null;
@@ -170,12 +202,12 @@ if($product->type != 'normal')
     $branchNames = trim($branchNames, ',');
 }
 
-$fnGetChildrenPlans = function($childrenPlans)
+$fnGetChildrenPlans = function($childrenPlans) use($product)
 {
     $childrenPlanItems = array();
     foreach($childrenPlans as $childrenPlan)
     {
-        $childrenPlanItems[] = a(set::href(inlink('view', "planID={$childrenPlan->id}")), "#{$childrenPlan->id} {$childrenPlan->title}");
+        $childrenPlanItems[] = a(set::href(inlink('view', "planID={$childrenPlan->id}")), !empty($product->shadow) ? setData('app', 'project') : null, "#{$childrenPlan->id} {$childrenPlan->title}");
         $childrenPlanItems[] = h::br();
     }
 
@@ -209,6 +241,9 @@ if(!$isInModal && !$plan->deleted)
         $actions ? btnGroup(set::items($actions['suffixActions'])) : null
     );
 }
+$extendItems  = array();
+$extendFields = $this->printExtendFields($plan, 'items', 'position=all', false);
+foreach($extendFields as $field) $extendItems[] = item(set::name($field['text']), html($field['value']));
 
 detailHeader
 (
@@ -293,6 +328,7 @@ detailBody
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
                     set::checkInfo(jsRaw("function(checkedIDList){return window.setStatistics(this, checkedIDList, '{$summary}');}")),
+                    set::customCols(true),
                     set::footPager
                     (
                         usePager('storyPager', '', array(
@@ -336,6 +372,7 @@ detailBody
                     set::sortLink(createLink('productplan', 'view', "planID={$plan->id}&type=bug&orderBy={name}_{sortType}&link=false&param={$param}&recTotal={$bugPager->recTotal}&recPerPage={$bugPager->recPerPage}&page={$bugPager->pageID}")),
                     set::orderBy($orderBy),
                     set::extraHeight('+144'),
+                    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', 'module=productplan&method=viewBug'), 'resetUrl' => createLink('datatable', 'ajaxreset', 'module=productplan&method=viewBug'))),
                     set::footer(array('checkbox', 'toolbar', array('html' => sprintf($lang->productplan->bugSummary, count($planBugs)), 'className' => "text-dark"), 'flex', 'pager')),
                     set::footPager
                     (
@@ -358,15 +395,15 @@ detailBody
                 (
                     set::title($lang->productplan->basicInfo),
                     item(set::name($lang->productplan->title), $plan->title),
-                    $plan->parent > 0 ? item(set::name($lang->productplan->parent), a(set::href(inlink('view', "planID={$parentPlan->id}")), "#{$parentPlan->id} {$parentPlan->title}")) : null,
+                    $plan->parent > 0 ? item(set::name($lang->productplan->parent), a(set::href(inlink('view', "planID={$parentPlan->id}")), !empty($product->shadow) ? setData('app', 'project') : null, "#{$parentPlan->id} {$parentPlan->title}")) : null,
                     $product->type != 'normal' ? item(set::name($lang->product->branch), $branchNames) : null,
                     item(set::name($lang->productplan->begin), $plan->begin == FUTURE_TIME ? $lang->productplan->future : $plan->begin),
                     item(set::name($lang->productplan->end), $plan->end == FUTURE_TIME ? $lang->productplan->future : $plan->end),
                     $plan->parent == '-1' ? item(set::name($lang->productplan->children), $fnGetChildrenPlans($childrenPlans)) : null,
                     item(set::name($lang->productplan->status), $lang->productplan->statusList[$plan->status]),
-                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc)))
+                    item(set::name($lang->productplan->desc), empty($plan->desc) ? $lang->noData : html(($plan->desc))),
+                    $extendItems
                 ),
-                html($this->printExtendFields($plan, 'html', 'position=all', false)),
                 h::hr(setClass('mt-4')),
                 history(set::objectID($plan->id), set::commentBtn(false), set::objectType('productplan'))
             )

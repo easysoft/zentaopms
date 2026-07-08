@@ -12,7 +12,7 @@
       "gitVersion": "feature/zai"
     },
     "zentaoipd": {
-      "gitVersion": "release/5.3"
+      "gitVersion": "release/zai"
     },
     "devops": {
       "gitRepo": "zentao/devops"
@@ -24,7 +24,10 @@
       "gitRepo": "ci/zentaoext-downgrade"
     },
     "blocksuite": {
-        "version": "0.19.5"
+      "version": "0.19.5"
+    },
+    "whiteboard": {
+      "version": "0.18.1"
     }
   },
   "image": {
@@ -61,8 +64,8 @@
     }
   },
   "notice": {
-    "users": "qishiyao,zhujinyong,caoyanyi",
-    "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",
-    "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
+    "users": "caiyan,zhaixiaojian",
+    "groups": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4",
+    "groups2": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
 }

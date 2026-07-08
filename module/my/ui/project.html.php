@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The project view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     my
@@ -15,8 +15,8 @@ jsVar('confirmDeleteTip', $lang->project->confirmDelete);
 
 featurebar
 (
-    set::current($status),
-    set::linkParams("status={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
+    set::current($browseType),
+    set::linkParams("browseType={key}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")
 );
 
 $this->loadModel('project');
@@ -38,7 +38,7 @@ $suspendedCount = 0;
 $closedCount    = 0;
 foreach($projects as $project)
 {
-    $this->project->formatDataForList($project, array());
+    $this->project->formatDataForList($project, $PMList);
 
     if($project->status == 'wait')      $waitCount ++;
     if($project->status == 'doing')     $doingCount ++;
@@ -48,7 +48,7 @@ foreach($projects as $project)
     if(!empty($project->PM))
     {
         $project->PMAccount = $project->PM;
-        $project->PMAvatar  = $usersAvatar[$project->PM];
+        $project->PMAvatar  = \zget($usersAvatar, $project->PM, '');
         $project->PM        = \zget($users, $project->PM);
     }
 
@@ -71,7 +71,7 @@ foreach($projects as $project)
 $projects = array_values($projects);
 
 $footerHtml = sprintf($lang->project->summary, count($projects));
-if($status == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount);
+if($browseType == 'openedbyme') $footerHtml = sprintf($lang->project->allSummary, count($projects), $waitCount, $doingCount, $suspendedCount, $closedCount);
 
 dtable
 (
@@ -80,7 +80,7 @@ dtable
     set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderProjectNameCell')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'project', "status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', 'project', "browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footer(array(array('html' => $footerHtml), 'flex', 'pager')),
     set::footPager(usePager()),
     set::emptyTip($lang->project->empty)

@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=productpanModel->checkDataForUpdate();
+title=productplanModel->checkDataForUpdate();
 timeout=0
 cid=17624
 
@@ -44,9 +45,8 @@ $errorBranch->branch = 1;
 $emptyTitle = clone $postData;
 $emptyTitle->title = '';
 
-$planTester = new productPlan('admin');
-r($planTester->checkDataForUpdateTest($planIdList[0], $postData))    && p()           && e('1');                                    // 测试正常数据
-r($planTester->checkDataForUpdateTest($planIdList[0], $emptyBranch)) && p()           && e('1');                                    // 测试不填写分支
-r($planTester->checkDataForUpdateTest($planIdList[1], $postData))    && p()           && e('1');                                    // 测试正常数据
-r($planTester->checkDataForUpdateTest($planIdList[1], $emptyBranch)) && p('branch[]') && e('『所属分支』不能为空。');               // 测试不填写分支
-r($planTester->checkDataForUpdateTest($planIdList[1], $errorBranch)) && p('branch[]') && e('分支『主干』被子计划关联，无法修改。'); // 测试填写错误分支
+r((new productplanModelTest('admin'))->checkDataForUpdateTest($planIdList[0], $postData))    && p()           && e('1');                                    // 测试正常数据
+r((new productplanModelTest('admin'))->checkDataForUpdateTest($planIdList[0], $emptyBranch)) && p()           && e('1');                                    // 测试不填写分支
+r((new productplanModelTest('admin'))->checkDataForUpdateTest($planIdList[1], $postData))    && p()           && e('1');                                    // 测试正常数据
+r((new productplanModelTest('admin'))->checkDataForUpdateTest($planIdList[1], $emptyBranch)) && p('branch[]') && e('『所属分支』不能为空。');               // 测试不填写分支
+r((new productplanModelTest('admin'))->checkDataForUpdateTest($planIdList[1], $errorBranch)) && p('branch[]') && e('分支『主干』被子计划关联，无法修改。'); // 测试填写错误分支

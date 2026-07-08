@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -328,8 +328,8 @@ class productplan extends control
         if($product->type == 'normal') unset($this->config->productplan->dtable->fieldList['branchName']);
 
         /* Build the search form. */
-        $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
+        $queryID   = $browseType == 'bysearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink($this->app->rawModule, 'browse', "productID=$productID&branch=$branch&browseType=bysearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&from=$from&blockID=$blockID");
         $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
         if($viewType == 'kanban') $this->productplanZen->assignKanbanData($product, $branchID, $orderBy);
@@ -410,21 +410,44 @@ class productplan extends control
             if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);
         }
 
+        $bugModulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, 'all');
+        $projectPairs   = $this->product->getProjectPairsByProduct($plan->product, (string)$plan->branch);
+        $executions     = $this->loadModel('execution')->fetchPairs(0, 'all', false);
+        $buildPairs     = $this->loadModel('build')->getBuildPairs(array($plan->product), 'all', 'releasetag');
+        $planBugs       = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
+
+        $bugStoryIdList = array();
+        $bugTaskIdList  = array();
+        foreach($planBugs as $bug)
+        {
+            if($bug->story)  $bugStoryIdList[] = $bug->story;
+            if($bug->task)   $bugTaskIdList[]  = $bug->task;
+            if($bug->toTask) $bugTaskIdList[]  = $bug->toTask;
+        }
+        $bugStories = $bugStoryIdList ? $this->loadModel('story')->getPairsByList($bugStoryIdList) : array();
+        $bugTasks   = $bugTaskIdList  ? $this->loadModel('task')->getPairsByIdList($bugTaskIdList) : array();
+
         $this->executeHooks($planID);
         $this->productplanZen->setSessionForViewPage($planID, $type, $orderBy, $pageID, $recTotal);
         $this->productplanZen->assignViewData($plan);
 
-        $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
-        $this->view->modulePairs  = $modulePairs;
-        $this->view->planStories  = $planStories;
-        $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->summary      = $this->productplanZen->buildViewSummary($planStories);
-        $this->view->type         = $type;
-        $this->view->orderBy      = $orderBy;
-        $this->view->link         = $link;
-        $this->view->param        = $param;
-        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
-        $this->view->tabUrl       = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $this->view->title          = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
+        $this->view->modulePairs    = $modulePairs;
+        $this->view->bugModulePairs = $bugModulePairs;
+        $this->view->projectPairs   = $projectPairs;
+        $this->view->executions     = $executions;
+        $this->view->buildPairs     = $buildPairs;
+        $this->view->bugStories     = $bugStories;
+        $this->view->bugTasks       = $bugTasks;
+        $this->view->planStories    = $planStories;
+        $this->view->planBugs       = $planBugs;
+        $this->view->summary        = $this->productplanZen->buildViewSummary($planStories);
+        $this->view->type           = $type;
+        $this->view->orderBy        = $orderBy;
+        $this->view->link           = $link;
+        $this->view->param          = $param;
+        $this->view->storyCases     = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
+        $this->view->tabUrl         = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         if($this->viewType != 'json')
         {
@@ -447,7 +470,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'doing', 'started');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -463,7 +487,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'done', 'finished');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -481,13 +506,13 @@ class productplan extends control
             $this->productplan->updateStatus($planID, 'closed', 'closed');
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            return $this->send(array('result' => 'success', 'load' => true, 'closeModal' => true));
+            $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+            return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }
 
-        $this->view->productplan = $this->productplan->getById($planID);
-        $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
-        $this->view->users       = $this->loadModel('user')->getPairs();
-
+        $this->view->plan    = $this->productplan->getById($planID);
+        $this->view->actions = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users   = $this->loadModel('user')->getPairs();
         $this->display();
     }
 
@@ -505,7 +530,8 @@ class productplan extends control
         $this->productplan->updateStatus($planID, 'doing', 'activated');
         if(dao::isError()) return $this->sendError(dao::getError());
 
-        return $this->sendSuccess(array('load' => true, 'closeModal' => true));
+        $message = $this->executeHooks($planID) ?: $this->lang->saveSuccess;
+        return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
     }
 
     /**
@@ -603,10 +629,10 @@ class productplan extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->productplanZen->buildLinkStorySearchForm($plan, $browseType == 'bySearch' ? (int)$param : 0, $orderBy);
+        $this->productplanZen->buildLinkStorySearchForm($plan, $browseType == 'bysearch' ? (int)$param : 0, $orderBy);
 
         $planStories = $this->loadModel('story')->getPlanStories($planID);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allStories = $this->story->getBySearch($plan->product, "0,{$plan->branch}", (int)$param, $orderBy, 0, $this->config->enableER ? 'all' : 'story,requirement', array_keys($planStories), '', $pager);
         }
@@ -711,7 +737,7 @@ class productplan extends control
 
         $this->productplanZen->buildBugSearchForm($plan, $queryID, $orderBy);
         $planBugs = $this->loadModel('bug')->getPlanBugs($planID);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allBugs = $this->bug->getBySearch('bug', array($productID), $plan->branch, 0, 0, $queryID, implode(',', array_keys($planBugs)), 'id_desc', $pager);
         }
@@ -774,14 +800,14 @@ class productplan extends control
      * AJAX: Get conflict story and bug.
      *
      * @param  int    $planID
-     * @param  int    $newBranch
+     * @param  string $oldBranch
+     * @param  string $newBranch
      * @access public
      * @return void
      */
-    public function ajaxGetConflict(int $planID, int $newBranch)
+    public function ajaxGetConflict(int $planID, string $oldBranch, string $newBranch)
     {
         $plan        = $this->productplan->getByID($planID);
-        $oldBranch   = $plan->branch;
         $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
         $planBugs    = $this->loadModel('bug')->getPlanBugs($planID, 'all');
         $branchPairs = $this->loadModel('branch')->getPairs($plan->product);
@@ -791,6 +817,7 @@ class productplan extends control
         {
             if($oldBranchID and strpos(",$newBranch,", ",$oldBranchID,") === false) $removeBranches .= "{$branchPairs[$oldBranchID]},";
         }
+        if(empty($removeBranches)) return true;
 
         $conflictStoryCounts = 0;
         $conflictBugCounts   = 0;
@@ -807,18 +834,10 @@ class productplan extends control
             }
         }
 
-        if($conflictStoryCounts and $conflictBugCounts)
-        {
-            printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
-        }
-        elseif($conflictStoryCounts)
-        {
-            printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
-        }
-        elseif($conflictBugCounts)
-        {
-            printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
-        }
+        if($conflictStoryCounts && $conflictBugCounts) return printf($this->lang->productplan->confirmChangePlan, trim($removeBranches, ','), $conflictStoryCounts, $conflictBugCounts);
+        if($conflictStoryCounts)                       return printf($this->lang->productplan->confirmRemoveStory, trim($removeBranches, ','), $conflictStoryCounts);
+        if($conflictBugCounts)                         return printf($this->lang->productplan->confirmRemoveBug, trim($removeBranches, ','), $conflictBugCounts);
+        return true;
     }
 
     /**

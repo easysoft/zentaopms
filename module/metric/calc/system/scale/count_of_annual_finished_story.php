@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度完成的研发需求数量反映了组织在每年完成的研发需求数量，用于评估组织的研发活动的产出、项目管理能力、产品质量和市场竞争力具有重要意义。有助于优化资源规划、提高研发效率，并推动持续改进和创新。
  * 定义：所有的研发需求个数求和;关闭时间为某年;关闭原因为已完成;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`');
 
     public $result = array();
 

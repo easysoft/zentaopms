@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     release
@@ -261,7 +261,7 @@ class releaseZen extends release
         unset($this->config->product->search['params']['project']);
         unset($this->config->product->search['params']['grade']);
 
-        $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->product->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type=story&link=true&param=" . helper::safe64Encode('&browseType=bysearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($release->product, $release->branch, 'withMainPlan', true);
@@ -304,7 +304,7 @@ class releaseZen extends release
         unset($this->config->bug->search['params']['product']);
         unset($this->config->bug->search['params']['project']);
 
-        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type={$type}&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=0'));
+        $this->config->bug->search['actionURL'] = $this->createLink($this->app->rawModule, 'view', "releaseID={$release->id}&type={$type}&link=true&param=" . helper::safe64Encode('&browseType=bysearch&queryID=0'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
 

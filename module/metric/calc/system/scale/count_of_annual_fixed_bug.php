@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度修复Bug数是指在一年内解决并关闭的Bug数量。反映了一个系统或软件在一年内修复的Bug数量，用于评估系统质量改进、用户满意度、故障管理、变更管理和资源规划等方面。通过跟踪和分析年度修复Bug数，可以及时发现和解决问题，改善系统的质量和可靠性。同时，通过Bug修复数的评估，可以提高用户满意度、优化故障管理流程、控制变更质量，合理安排资源，从而提升整体的研发效果和项目交付质量。
  * 定义：所有Bug个数求和;状态为已关闭;解决方案为已解决;关闭时间为某年;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_fixed_bug extends baseCalc
 {
     public $dataset = 'getAllBugs';
 
-    public $fieldList = array('t1.closedDate', 't1.status', 't1.resolution');
+    public $fieldList = array('t1.`closedDate`', 't1.status', 't1.resolution');
 
     public $result = array();
 

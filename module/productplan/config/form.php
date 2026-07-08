@@ -26,3 +26,5 @@ $config->productplan->form->edit['end']     = array('type' => 'date',   'require
 $config->productplan->form->edit['desc']    = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 $config->productplan->form->edit['product'] = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->productplan->form->edit['status']  = array('type' => 'string', 'required' => false, 'default' => '');
+
+$config->productplan->form->close = array();

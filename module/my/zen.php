@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of my module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     my
@@ -39,6 +39,7 @@ class myZen extends my
             $task->canBeChanged  = common::canBeChanged('task', $task);
             $task->isChild       = false;
             $task->parentName    = '';
+            $task->executionName = !empty($task->executionMultiple) ? $task->executionName : '';
 
             if($task->status == 'changed') $task->rawStatus = 'changed';
             if($task->parent > 0)
@@ -78,11 +79,11 @@ class myZen extends my
             if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
             if($case->needconfirm)
             {
-                $case->status = $this->lang->story->changed;
+                $case->status = 'changed';
             }
             else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
             {
-                $case->status = $this->lang->testcase->changed;
+                $case->status = 'casechanged';
             }
             if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
         }
@@ -226,6 +227,7 @@ class myZen extends my
 
         /* Get the number of testtasks assigned to me. */
         $pager->recTotal = 0;
+
         $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $count['testtask'] = $pager->recTotal;
 
@@ -268,6 +270,9 @@ class myZen extends my
             $this->session->set('ticketBrowseType', 'assignedtome', 'feedback');
             $this->loadModel('ticket')->getList('assignedtome', 'id_desc', $pager);
             $count['ticket'] = $pager->recTotal;
+
+            $flows = $this->loadModel('my')->getFlowPairs();
+            foreach($flows as $module => $name) $count[$module] = $this->my->getAssignedFlowCount($module);
         }
 
         if($isMax || $isIPD)
@@ -327,5 +332,31 @@ class myZen extends my
         $this->view->isIPD = $isIPD;
 
         return $count;
+    }
+
+    /**
+     * 检查ssh公钥和名称格式是否正确
+     * Check ssh public key and name format.
+     *
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function checkSSH(object $formData): bool
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        if(!preg_match('/^[a-zA-Z0-9\-_.$]+$/', $formData->name))
+        {
+            dao::$errors['name'][] = $this->lang->my->nameFormat;
+        }
+
+        $checkPrefix = false;
+        foreach($this->config->my->publicKeyPrefix as $prefix)
+        {
+            if(strpos($formData->publicKey, $prefix) === 0) $checkPrefix = true;
+        }
+        if(!$checkPrefix) dao::$errors['publicKey'][] = $this->lang->my->sshKeyTip;
+
+        return !dao::isError();
     }
 }

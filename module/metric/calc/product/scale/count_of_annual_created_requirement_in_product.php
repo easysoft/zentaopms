@@ -11,7 +11,7 @@
  * 描述：按产品统计的年度新增用户需求数反映了产品在某年度内新产生的用户对产品的需求数量。越高的用户需求数可能表示产品在该年度获得了更多的用户关注和认可，有更多的用户愿意尝试和使用该产品。
  * 定义：产品中用户需求的个数求和;创建时间为某年;过滤已删除的用户需求;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_requirement_in_product extends baseCalc
 {
     public $dataset = 'getStories';
 
-    public $fieldList = array('t1.product', 't1.type', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.type', 't1.`openedDate`');
 
     public $result = array();
 

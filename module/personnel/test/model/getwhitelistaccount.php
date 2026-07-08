@@ -37,7 +37,7 @@ cid=17336
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $objectIdList   = array(1, 2, 3, 4);
 $objectTypeList = array('program', 'project', 'product', 'sprint');

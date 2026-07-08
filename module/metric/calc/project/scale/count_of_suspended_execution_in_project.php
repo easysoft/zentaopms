@@ -11,7 +11,7 @@
  * 描述：按项目统计的已挂起执行数表示在项目中已挂起的执行项的数量，可以用来了解暂停的任务数量，可能是由于需求不明确或其他原因导致。
  * 定义：项目的执行个数求和;状态为已挂起;过滤已删除的执行;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

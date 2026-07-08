@@ -176,6 +176,18 @@ class dbh
     }
 
     /**
+     * 获取默认连接的数据库名。
+     * Get the default database name.
+     *
+     * @access private
+     * @return string
+     */
+    private function getDefaultDatabase(): string
+    {
+        return zget($this->config->db->defaultDatabaseMap, $this->dbConfig->driver, $this->dbConfig->driver);
+    }
+
+    /**
      * 初始化PDO对象。
      * Init pdo.
      *
@@ -194,7 +206,7 @@ class dbh
         }
         elseif(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
-            $dsn .= ";dbname={$this->dbConfig->driver}"; // default database
+            $dsn .= ";dbname={$this->getDefaultDatabase()}";
         }
 
         $password = helper::decryptPassword($this->dbConfig->password);
@@ -577,6 +589,7 @@ class dbh
         $sql = $this->formatFunction($sql);
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
+        $sql = $this->formatLimitOffset($sql);
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
@@ -599,6 +612,9 @@ class dbh
                 if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
                 if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
+            case 'DELETE':
+            case 'TRUNCATE':
+                if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
                 break;
             case 'CREATE':
                 if(stripos($sql, 'CREATE VIEW') === 0) $sql = str_replace('CREATE VIEW', 'CREATE OR REPLACE VIEW', $sql);
@@ -657,6 +673,19 @@ class dbh
         $fields = $this->formatField($fields);
 
         return $fields . substr($sql, $setPos);
+    }
+
+    /**
+     * Format MySQL-style limit syntax to standard limit/offset syntax.
+     *
+     * @param  string $sql
+     * @access private
+     * @return string
+     */
+    private function formatLimitOffset($sql)
+    {
+        $limitPattern = '/\bLIMIT\s+(\d+)\s*,\s*(\d+)\b/i';
+        return preg_replace($limitPattern, 'LIMIT $2 OFFSET $1', $sql);
     }
 
     /**
@@ -733,6 +762,9 @@ class dbh
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
 
+                /* DM cannot allow TEXT type. */
+                $sql = str_replace('JSON', 'TEXT', $sql);
+
                 /* Remove comment. */
                 $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
                 $sql     = preg_replace($pattern, '', $sql);
@@ -784,7 +816,7 @@ class dbh
     public function processDmTableIndex($sql)
     {
         if(strpos($sql, 'DROP INDEX') === FALSE) return $sql;
-        return preg_replace('/DROP INDEX `(\w+)` ON `zt_(\w+)`/', 'DROP INDEX IF EXISTS `$2_$1`', $sql);
+        return preg_replace("/DROP INDEX `(\w+)` ON `{$this->dbConfig->prefix}(\w+)`/", 'DROP INDEX IF EXISTS `$2_$1`', $sql);
     }
 
     /**
@@ -813,6 +845,32 @@ class dbh
         {
             $sql = str_replace('`', '"', $sql);
             $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
+        }
+        if($this->dbConfig->driver == 'gauss') $sql = self::formatGaussFunctions($sql);
+
+        return $sql;
+    }
+
+    public static function formatGaussFunctions(string $sql): string
+    {
+        $gaussCompatibleFunctions = array(
+            'FIND_IN_SET',
+            'GROUP_CONCAT',
+            'ROUND',
+            'TIMESTAMPDIFF',
+            'IFNULL',
+            'DAY',
+            'MONTH',
+            'YEAR',
+            'DATEDIFF',
+            'DATE_FORMAT',
+            'INSTR',
+            'LEFT',
+        );
+
+        foreach($gaussCompatibleFunctions as $function)
+        {
+            $sql = preg_replace("/(?<![\\w\"'])(?<!\"){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;

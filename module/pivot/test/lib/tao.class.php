@@ -135,6 +135,63 @@ class pivotTaoTest extends baseTest
     }
 
     /**
+     * Test getPivotID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return int
+     */
+    public function getPivotIDTest(int $groupID): int
+    {
+        $method = new ReflectionMethod($this->instance, 'getPivotID');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $groupID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAllPivotByGroupID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return array
+     */
+    public function getAllPivotByGroupIDTest(int $groupID): array
+    {
+        $method = new ReflectionMethod($this->instance, 'getAllPivotByGroupID');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $groupID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getGroupsByDimensionAndPath method.
+     *
+     * @param  int    $dimensionID
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getGroupsByDimensionAndPathTest(int $dimensionID, string $path): array
+    {
+        $method = new ReflectionMethod($this->instance, 'getGroupsByDimensionAndPath');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $dimensionID, $path);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    public function getGroupsByDimensionAndPath(int $dimensionID, string $path): array
+    {
+        return $this->getGroupsByDimensionAndPathTest($dimensionID, $path);
+    }
+
+    /**
      * Test getProjectAndExecutionNameQuery method.
      *
      * @access public

@@ -7,11 +7,11 @@ title=测试 gitlabModel::isWebhookExists();
 timeout=0
 cid=16662
 
-- 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, 'http://api.php/v1/gitlab/webhook?repoID=1'  @1
-- 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, 'http://api.php/v1/gitlab/webhook?repoID=999'  @0
-- 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, ''  @0
-- 执行gitlabTest模块的isWebhookExistsTest方法，参数是999, 'http://api.php/v1/gitlab/webhook?repoID=1'  @0
-- 执行gitlabTest模块的isWebhookExistsTest方法，参数是1, 'http://api.php/v1/gitlab/webhook?repoID=1&param=test%20value'  @0
+- projectID=42, callbackURL匹配存在的webhook @1
+- projectID=42, callbackURL不匹配任何webhook @0
+- projectID=42, callbackURL为空 @0
+- projectID=999, callbackURL匹配（但项目不存在webhook） @0
+- projectID=42, callbackURL不匹配（带额外参数） @0
 
 */
 
@@ -22,8 +22,11 @@ su('admin');
 
 $gitlabTest = new gitlabModelTest();
 
-r($gitlabTest->isWebhookExistsTest(1, 'http://api.php/v1/gitlab/webhook?repoID=1')) && p() && e('1');
-r($gitlabTest->isWebhookExistsTest(1, 'http://api.php/v1/gitlab/webhook?repoID=999')) && p() && e('0');
-r($gitlabTest->isWebhookExistsTest(1, '')) && p() && e('0');
-r($gitlabTest->isWebhookExistsTest(999, 'http://api.php/v1/gitlab/webhook?repoID=1')) && p() && e('0');
-r($gitlabTest->isWebhookExistsTest(1, 'http://api.php/v1/gitlab/webhook?repoID=1&param=test%20value')) && p() && e('0');
+$url   = 'https://gitlab.example.com';
+$token = 'test-token';
+
+r($gitlabTest->isWebhookExistsTest($url, $token, '42', 'http://api.php/v1/gitlab/webhook?repoID=1')) && p() && e('1');
+r($gitlabTest->isWebhookExistsTest($url, $token, '42', 'http://api.php/v1/gitlab/webhook?repoID=999')) && p() && e('0');
+r($gitlabTest->isWebhookExistsTest($url, $token, '42', '')) && p() && e('0');
+r($gitlabTest->isWebhookExistsTest($url, $token, '999', 'http://api.php/v1/gitlab/webhook?repoID=1')) && p() && e('0');
+r($gitlabTest->isWebhookExistsTest($url, $token, '42', 'http://api.php/v1/gitlab/webhook?repoID=1&param=test%20value')) && p() && e('0');

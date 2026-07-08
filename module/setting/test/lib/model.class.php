@@ -478,13 +478,14 @@ class settingModelTest extends baseTest
         $sn = $this->instance->setSN();
 
         // 检查配置是否正确保存
-        $params = array(
-            'owner' => 'system',
-            'module' => 'common',
-            'section' => 'global',
-            'key' => 'sn'
-        );
-        $savedConfig = $this->instance->createDAO($params)->fetch();
+        $savedConfig = $this->instance->dao->select('*')->from(TABLE_CONFIG)
+            ->where('owner')->eq('system')
+            ->andWhere('vision')->eq('')
+            ->andWhere('module')->eq('common')
+            ->andWhere('section')->eq('global')
+            ->andWhere('`key`')->eq('sn')
+            ->orderBy('id_desc')
+            ->fetch();
 
         // 恢复原始状态
         if($originalInstalled !== null) $this->instance->config->installed = $originalInstalled;

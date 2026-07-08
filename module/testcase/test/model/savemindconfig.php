@@ -43,7 +43,7 @@ $configList3 = array($case, $pri);
 $configList4 = array($pri, $group);
 $configList5 = array($group, $module);
 
-$testcase = new testCaseTest();
+$testcase = new testcaseModelTest();
 r($testcase->saveMindConfigTest($type[0], $configList1)) && p() && e('module:M,scene:S'); // 测试存储 xmind 导出的配置 module scene
 r($testcase->saveMindConfigTest($type[0], $configList2)) && p() && e('scene:S,case:C');   // 测试存储 xmind 导出的配置 scene case
 r($testcase->saveMindConfigTest($type[0], $configList3)) && p() && e('case:C,pri:P');     // 测试存储 xmind 导出的配置 case pri

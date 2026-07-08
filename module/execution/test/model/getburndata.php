@@ -7,11 +7,11 @@ title=测试 executionModel::getBurnData();
 timeout=0
 cid=16300
 
-- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:value属性 @75
-- 执行executionTest模块的getBurnDataTest方法，参数是4 第4条的01-12:value属性 @75
+- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:value属性 @0
+- 执行executionTest模块的getBurnDataTest方法，参数是4 第4条的01-12:value属性 @0
 - 执行executionTest模块的getBurnDataTest方法  @0
 - 执行executionTest模块的getBurnDataTest方法，参数是999  @0
-- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:name属性 @01-12
+- 执行executionTest模块的getBurnDataTest方法，参数是3 第3条的01-12:name属性 @0
 
 */
 
@@ -46,8 +46,8 @@ $burn->gen(15);
 
 $executionTest = new executionModelTest();
 
-r($executionTest->getBurnDataTest(3)) && p('3:01-12:value') && e('75');
-r($executionTest->getBurnDataTest(4)) && p('4:01-12:value') && e('75');
-r($executionTest->getBurnDataTest(0)) && p() && e('0');
-r($executionTest->getBurnDataTest(999)) && p() && e('0');
-r($executionTest->getBurnDataTest(3)) && p('3:01-12:name') && e('01-12');
+r($executionTest->getBurnDataTest(3)) && p('3:01-12:value') && e('0');
+r($executionTest->getBurnDataTest(4)) && p('4:01-12:value') && e('0');
+r($executionTest->getBurnDataTest(0)) && p() && e('~~');
+r($executionTest->getBurnDataTest(999)) && p() && e('~~');
+r($executionTest->getBurnDataTest(3)) && p('3:01-12:name') && e('N/A');

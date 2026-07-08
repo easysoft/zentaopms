@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of projectBuild module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     projectBuild
  * @version     $Id: control.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -16,18 +16,18 @@ class projectBuild extends control
      * Browse builds of a project.
      *
      * @param  int    $projectID
-     * @param  string $type      all|product|bysearch
-     * @param  int    $param
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string $browseType all|product|bysearch
+     * @param  int|string $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, string $type = 'all', int $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browse(int $projectID = 0, string $browseType = 'all', int|string $param = 0, string $orderBy = 't1.date_desc,t1.id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('project', 'build', "projectID={$projectID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        echo $this->fetch('project', 'build', "projectID={$projectID}&browseType={$browseType}&param={$param}&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
     }
 
     /**

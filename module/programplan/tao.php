@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of programplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      lanzongjun <lanzongjun@easycorp.ltd>
  * @link        https://www.zentao.net
@@ -487,7 +487,7 @@ class programplanTao extends programplanModel
         if($this->config->edition != 'ipd') return $datas;
 
         $this->loadModel('review');
-        $reviewPoints = $this->dao->select('t1.*, t2.status, t2.lastReviewedDate,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
+        $reviewPoints = $this->dao->select('t1.*, t2.status, t2.`lastReviewedDate`,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
             ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.project')->eq($projectID)

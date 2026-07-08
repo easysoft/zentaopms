@@ -8,6 +8,7 @@ $execution->id->range('1-5');
 $execution->name->range('项目1,项目2,迭代1,迭代2,迭代3');
 $execution->type->range('project{2},sprint{3}');
 $execution->status->range('doing{3},closed,doing');
+$execution->acl->range('open,private,private,open,private');
 $execution->parent->range('0,0,1,1,2');
 $execution->project->range('0,0,1,1,2');
 $execution->grade->range('2{2},1{3}');
@@ -41,8 +42,8 @@ cid=16379
 */
 
 $execution = new executionModelTest();
-r($execution->updateUserViewTest(5)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
-r($execution->updateUserViewTest(4)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
-r($execution->updateUserViewTest(3)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
-r($execution->updateUserViewTest(2)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
-r($execution->updateUserViewTest(1)) && p() && e('`,5,4,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(5, 'sprint', array('admin'))) && p() && e('`,5,`');     // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(4, 'sprint', array('admin'))) && p() && e('`,5,`');     // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(3, 'sprint', array('admin'))) && p() && e('`,3,5,`');   // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(2, 'sprint', array('admin'))) && p() && e('`,3,5,2,`'); // 默认情况下的用户是否有执行的可视权限
+r($execution->updateUserViewTest(1, 'sprint', array('admin'))) && p() && e('`,3,5,2,`'); // 默认情况下的用户是否有执行的可视权限

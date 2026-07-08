@@ -24,9 +24,18 @@ class contactUs extends wg
         $content = [];
         foreach($config->contactUs as $key => $value)
         {
-            $content[] = $lang->contactUs->$key . $lang->colon . ($key == 'email' ? "<a class='not-open-url' href='mailto:$value'>$value</a>" : $value);
+            $content[] = span
+                (
+                    $lang->contactUs->$key . $lang->colon,
+                    $key == 'email' ? a
+                    (
+                        setClass('not-open-url'),
+                        set::href("mailto:$value"),
+                        $value
+                    ) : $value
+                );
         }
-        return html(implode($lang->comma, $content));
+        return $content;
     }
 
     protected function build()
@@ -35,8 +44,8 @@ class contactUs extends wg
 
         return div
         (
-            setClass('font-bold text-center mt-2'),
-            $this->prop('text', $lang->contactUs->common),
+            setClass('flex justify-center gap-4 font-bold mt-2'),
+            span($lang->contactUs->common),
             $this->buildContent()
         );
     }

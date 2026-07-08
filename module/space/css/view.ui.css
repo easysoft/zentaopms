@@ -1,0 +1,10 @@
+.actions-menu {bottom: 12px;}
+.maxh-72{max-height:18rem;}
+.actions-menu.no-divider .divider{display: none;}
+
+.member-list > .center-y {width: 12.5%}
+.left-cell .panel-heading{background-color: var(--color-gray-100); color: var(--color-gray-900)}
+#mainContainer{margin-bottom: 60px;}
+
+#mainContent .desc-box {max-height: 6rem;}
+.max-w-150 {max-width: 150px;}
