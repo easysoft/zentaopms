@@ -9,7 +9,7 @@ $config->group->edit->requiredFields   = 'name';
 $config->group->maxToolBarCount        = $app->getClientLang() == 'en' ? 10 : 13;
 
 $config->group->setComposeDevOpsPriv = array();
-$config->group->setComposeDevOpsPriv['repo']         = array('priv' => 'repo-create,repo-import', 'exclude' => 'gitea,gogs,gitlab');
+$config->group->setComposeDevOpsPriv['repo']         = array('priv' => 'repo-create', 'exclude' => 'gitea,gogs,gitlab');
 $config->group->setComposeDevOpsPriv['pipeline']     = array('priv' => 'job-create', 'exclude' => 'jenkins,gitlab');
 $config->group->setComposeDevOpsPriv['app']          = array('priv' => 'instance-manage');
 $config->group->setComposeDevOpsPriv['artifactrepo'] = array('priv' => 'artifactrepo-create', 'exclude' => 'nexus');

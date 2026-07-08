@@ -226,6 +226,13 @@ class pipeline extends control
         $pipeline = $this->pipeline->getByID($id);
         if(empty($pipeline)) return $this->locate($this->createLink('pipeline', 'browse'));
 
+        $this->commonAction((int)$pipeline->spaceID);
+
+        if($pipeline->repoID)
+        {
+            $this->loadModel('ci')->setMenu($pipeline->repoID);
+        }
+
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
         $branchList = array();
         if($repo)
@@ -522,11 +529,8 @@ class pipeline extends control
     {
         if($_POST)
         {
-            $formData = fixer::input('post')
+            $formData = form::data($this->config->pipeline->form->import)
                 ->setDefault('providerID', $providerID)
-                ->setDefault('pipeline', '')
-                ->setDefault('name', '')
-                ->setDefault('desc', '')
                 ->get();
             $repo = $this->loadModel('repo')->getByID($repoID);
             if(!$repo) return $this->sendError($this->lang->pipeline->importFailed);
@@ -538,6 +542,11 @@ class pipeline extends control
         }
 
         $this->commonAction();
+
+        if($repoID)
+        {
+            $this->loadModel('ci')->setMenu($repoID);
+        }
 
         if(!$providerID)
         {

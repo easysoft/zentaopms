@@ -46,6 +46,7 @@ $lang->pipeline->jkJob           = 'Jenkins任务';
 $lang->pipeline->buildSpec       = '构建对象'; // 'pipeline@server'
 $lang->pipeline->engine          = '引擎';
 $lang->pipeline->server          = '服务器';
+$lang->pipeline->providerID      = '服务器';
 $lang->pipeline->pipeline        = '流水线';
 $lang->pipeline->buildType       = '构建类型';
 $lang->pipeline->frame           = '工具/框架';

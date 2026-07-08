@@ -9,6 +9,25 @@ class gitlabModelTest extends baseTest
     protected $className  = 'model';
 
     /**
+     * 构造器：跳过加载真实 gitlabModel 实例，避免并发执行时 zt_config 死锁。
+     * 因为本类所有测试方法均为纯 mock，不需要真实 model 实例。
+     * 仅加载类文件供代码覆盖率反射使用，不触发 model 初始化链。
+     * Skip loading real model instance to avoid deadlock on zt_config under concurrency.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        global $app;
+        $app->setModuleName($this->moduleName);
+        $this->app = $app;
+
+        /* 仅加载类文件供 coverage 反射，不实例化避免触发 DB 操作。 */
+        helper::import($app->getModulePath('', $this->moduleName) . 'model.php');
+    }
+
+    /**
      * Test getByID method.
      *
      * @param  int|string $id

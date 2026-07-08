@@ -23,6 +23,14 @@ class gitlabWebhookEntry extends baseEntry
         $headers = getallheaders(); /* Fetch all HTTP request headers. */
         $event   = isset($headers['X-Gitlab-Event']) ? $headers['X-Gitlab-Event'] : '';
         if(empty($event)) return;
+        
+        $pipelineID = $this->param('pipelineID');
+        if(!empty($pipelineID))
+        {
+            $pipeline = $this->loadModel('pipeline')->getByID($pipelineID);
+            if(empty($pipeline)) return;
+            if($pipeline->engine != 'gitlab') return;
+        }
 
         $repoID = $this->param('repoID');
         if(empty($repoID)) return;

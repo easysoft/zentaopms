@@ -220,6 +220,7 @@ class pipelineZen extends pipeline
             }
         }
 
+        $this->view->pipeline           = null;
         $this->view->repo               = $repo;
         $this->view->repoID             = $repoID;
         $this->view->providers          = $providers;

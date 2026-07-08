@@ -118,7 +118,7 @@ featureBar
 toolbar
 (
     hasPriv('repo', 'createRepo') ? item(set($createRepoItem)) : null,
-    hasPriv('repo', 'import') ? item(set($importItem)) : null
+    hasPriv('repo', 'create') ? item(set($importItem)) : null
 );
 
 dtable

@@ -10,6 +10,9 @@ cid=0
 - Jenkins正常导入 >> 大于0
 - 流水线名称为空 @0
 - 流水线名称重复 @0
+- providerID不存在 @0
+- Jenkins流水线为空 @0
+- providerID为0 @0
 
 */
 
@@ -26,8 +29,6 @@ $providerTable->url->range('http://jenkins.test.com,http://gitlab.test.com');
 $providerTable->token->range('YWRtaW46dGVzdHRva2Vu');
 $providerTable->deleted->range('0');
 $providerTable->gen(2);
-
-zenData('repo')->loadYaml('repo', false, 1)->gen(5);
 
 su('admin');
 
@@ -54,3 +55,17 @@ r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 
 
 $formData->name = 'Jenkins导入测试';
 r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 名称重复
+
+$formData->providerID = 999;
+$formData->name = '不存在的服务器';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID不存在
+
+$formData->providerID = 1;
+$formData->name = '空流水线测试';
+$formData->pipeline = '';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // Jenkins流水线为空
+
+$formData->providerID = 0;
+$formData->pipeline   = '/job/test-job/';
+$formData->name       = 'providerID为0测试';
+r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID为0

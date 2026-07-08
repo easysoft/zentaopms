@@ -46,6 +46,7 @@ $lang->pipeline->jkJob           = 'T鈉he Jenkins';
 $lang->pipeline->buildSpec       = 'Build Target'; // 'pipeline@server'
 $lang->pipeline->engine          = 'Engine';
 $lang->pipeline->server          = 'Serveur';
+$lang->pipeline->providerID      = 'Serveur';
 $lang->pipeline->pipeline        = 'Pipeline';
 $lang->pipeline->buildType       = 'Type Build';
 $lang->pipeline->frame           = 'Cadre';

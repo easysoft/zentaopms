@@ -46,6 +46,7 @@ $lang->pipeline->jkJob           = 'Jenkins Task';
 $lang->pipeline->buildSpec       = 'Build Target'; // 'pipeline@server'
 $lang->pipeline->engine          = 'Engine';
 $lang->pipeline->server          = 'Server';
+$lang->pipeline->providerID      = 'Server';
 $lang->pipeline->pipeline        = 'Pipeline';
 $lang->pipeline->buildType       = 'Build Type';
 $lang->pipeline->frame           = 'Frame';
