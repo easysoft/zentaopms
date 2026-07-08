@@ -2247,63 +2247,8 @@ class aiModel extends model
             $sourceGroups[$objectName][] = $objectKey;
         }
 
-        $object     = new stdclass();
+        $object     = $this->getObjectByModuleAndSourceGroups($module, $sourceGroups, $objectId);
         $objectData = new stdclass();
-
-        /* Query necessary object data from zentao. */
-        switch ($module)
-        {
-            case 'story':
-                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
-                break;
-            case 'execution':
-                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
-                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
-                break;
-            case 'product':
-                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
-                break;
-            case 'project':
-                if(isset($sourceGroups['project'])) $object->project = $this->loadModel('project')->getById($objectId);
-                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                if($object->project->model != 'waterfall' && isset($sourceGroups['executions'])) $object->executions = array_values($this->loadModel('execution')->getByProject($object->project->id));
-                break;
-            case 'release':
-                if(isset($sourceGroups['release'])) $object->release = $this->loadModel('release')->getById($objectId);
-                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
-                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
-                break;
-            case 'productplan':
-                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
-                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
-                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
-                break;
-            case 'task':
-                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
-                break;
-            case 'case':
-                if(isset($sourceGroups['case']))  $object->case  = $this->loadModel('testcase')->getById($objectId);
-                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
-                break;
-            case 'bug':
-                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
-                break;
-            case 'ticket':
-                if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
-                break;
-            case 'risk':
-                if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
-                break;
-            case 'issue':
-                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
-                break;
-            case 'doc':
-                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
-                break;
-            case 'my':
-                /* TODO: add more later. */
-                break;
-        }
 
         $objectVars = get_object_vars($object);
         if(empty($objectVars)) return false;
@@ -2332,6 +2277,86 @@ class aiModel extends model
         }
 
         return array($objectData, $object);
+    }
+
+    /**
+     * Get object data by module and source groups.
+     *
+     * @param  string $module
+     * @param  array  $sourceGroups
+     * @param  int    $objectId
+     * @access protected
+     * @return object
+     */
+    protected function getObjectByModuleAndSourceGroups(string $module, array $sourceGroups, int $objectId): object
+    {
+        $object = new stdclass();
+
+        switch($module)
+        {
+            case 'story':
+                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+                return $object;
+            case 'execution':
+                if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
+                if(isset($sourceGroups['tasks']))     $object->tasks     = array_values($this->loadModel('task')->getExecutionTasks($objectId));
+                return $object;
+            case 'product':
+                if(isset($sourceGroups['product'])) $object->product = $this->loadModel('product')->getById($objectId);
+                return $object;
+            case 'project':
+                if(!isset($sourceGroups['project'])) return $object;
+
+                $object->project = $this->loadModel('project')->getById($objectId);
+                if(empty($object->project)) return $object;
+
+                if($object->project->model == 'waterfall' && isset($sourceGroups['programplans'])) $object->programplans = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                if($object->project->model != 'waterfall' && isset($sourceGroups['executions']))   $object->executions   = array_values($this->loadModel('execution')->getByProject($object->project->id));
+                return $object;
+            case 'release':
+                if(!isset($sourceGroups['release'])) return $object;
+
+                $object->release = $this->loadModel('release')->getById($objectId);
+                if(empty($object->release)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
+                return $object;
+            case 'productplan':
+                if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
+                if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
+                if(isset($sourceGroups['bugs']))        $object->bugs        = array_values($this->dao->select('*')->from(TABLE_BUG)->where('plan')->eq($objectId)->andWhere('deleted')->eq(0)->fetchAll('id', false));
+                return $object;
+            case 'task':
+                if(isset($sourceGroups['task'])) $object->task = $this->loadModel('task')->getById($objectId);
+                return $object;
+            case 'case':
+                if(!isset($sourceGroups['case'])) return $object;
+
+                $object->case = $this->loadModel('testcase')->getById($objectId);
+                if(empty($object->case)) return $object;
+
+                if(isset($sourceGroups['steps'])) $object->steps = array_values($object->case->steps);
+                return $object;
+            case 'bug':
+                if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
+                return $object;
+            case 'ticket':
+                if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
+                return $object;
+            case 'risk':
+                if(isset($sourceGroups['risk'])) $object->risk = $this->loadModel('risk')->getByID($objectId);
+                return $object;
+            case 'issue':
+                if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
+                return $object;
+            case 'doc':
+                if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
+                return $object;
+            case 'my':
+            default:
+                return $object;
+        }
     }
 
     /**
@@ -2479,119 +2504,117 @@ class aiModel extends model
     {
         $module = $prompt->module;
 
-        if($module == 'my')
+        if($module == 'my') return helper::createLink('my', 'effort', "type=all");
+
+        return $this->getTestingLink($prompt, $this->getTestingObjectId($prompt));
+    }
+
+    /**
+     * Get object id for prompt testing.
+     *
+     * @param  object $prompt
+     * @access protected
+     * @return int|string|false
+     */
+    protected function getTestingObjectId($prompt)
+    {
+        $module = $prompt->module;
+
+        switch($module)
         {
-            return helper::createLink('my', 'effort', "type=all");
-        }
-        elseif($module == 'product')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCT)
-                ->where('id')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'productplan')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PRODUCTPLAN)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'release')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RELEASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'project')
-        {
-            /* programplan/create only exist in the waterfall model project. */
-            if(strpos($prompt->actionPurpose, 'programplan/create'))
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
-                    ->where('id')->in($this->app->user->view->projects)
-                    ->andWhere('model')->eq('waterfall')
+            case 'product':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCT)
+                    ->where('id')->in($this->app->user->view->products)
                     ->fetch('maxId');
-            }
-            else
-            {
-                $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_PROJECT)
+            case 'productplan':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'release':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RELEASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'project':
+                /* programplan/create only exist in the waterfall model project. */
+                if(strpos($prompt->actionPurpose, 'programplan/create'))
+                {
+                    return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
+                        ->where('id')->in($this->app->user->view->projects)
+                        ->andWhere('model')->eq('waterfall')
+                        ->fetch('maxId');
+                }
+
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
-            }
-        }
-        elseif($module == 'story')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_STORY)
-                ->where('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'execution')
-        {
-            $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
-            $objectId  = max($executionIds);
-        }
-        elseif($module == 'task')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TASK)
-                ->where('project')->in($this->app->user->view->projects)
-                ->fetch('maxId');
-        }
-        elseif($module == 'case')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_CASE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'bug')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_BUG)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-        }
-        elseif($module == 'ticket')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_TICKET)
-                ->where('product')->in($this->app->user->view->products)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'risk')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_RISK)
-                ->where('project')->in($this->app->user->view->projects)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'issue')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_ISSUE)
-                ->where('project')->in($this->app->user->view->projects)
-                ->andWhere('deleted')->eq(0)
-                ->fetch('maxId');
-        }
-        elseif($module == 'doc')
-        {
-            $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                ->where('project')->in($this->app->user->view->projects)
-                ->orWhere('product')->in($this->app->user->view->products)
-                ->fetch('maxId');
-            if(empty($objectId))
-            {
+            case 'story':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_STORY)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'execution':
+                $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
+                return max($executionIds);
+            case 'task':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TASK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->fetch('maxId');
+            case 'case':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_CASE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'bug':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_BUG)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+            case 'ticket':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_TICKET)
+                    ->where('product')->in($this->app->user->view->products)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'risk':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_RISK)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'issue':
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_ISSUE)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetch('maxId');
+            case 'doc':
+                $objectId = $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                    ->where('project')->in($this->app->user->view->projects)
+                    ->orWhere('product')->in($this->app->user->view->products)
+                    ->fetch('maxId');
+                if(!empty($objectId)) return $objectId;
+
                 $userDocLibs = $this->dao->select('id')->from(TABLE_DOCLIB)
                     ->where('type')->eq('mine')
                     ->andWhere('addedBy')->eq($this->app->user->account)
                     ->fetchPairs();
-                if(!empty($userDocLibs))
-                {
-                    $objectId = $this->dao->select('max(id) as maxId')->from(TABLE_DOC)
-                        ->where('lib')->in($userDocLibs)
-                        ->fetch('maxId');
-                }
-            }
-        }
+                if(empty($userDocLibs)) return false;
 
+                return $this->dao->select('MAX(id) AS maxId')->from(TABLE_DOC)
+                    ->where('lib')->in($userDocLibs)
+                    ->fetch('maxId');
+            default:
+                return false;
+        }
+    }
+
+    /**
+     * Build testing link by object id.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access protected
+     * @return string|false
+     */
+    protected function getTestingLink($prompt, $objectId)
+    {
         if(!empty($objectId)) return helper::createLink('ai', 'promptexecute', "promptId=$prompt->id&objectId=$objectId");
 
         return false;

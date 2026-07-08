@@ -2276,6 +2276,78 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test getTestingLink method.
+     *
+     * @param  object           $prompt
+     * @param  int|string|false $objectId
+     * @access public
+     * @return mixed
+     */
+    public function getTestingLinkTest($prompt = null, $objectId = false)
+    {
+        $result = $this->invokeArgs('getTestingLink', array($prompt, $objectId));
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return 0;
+
+        return strpos($result, (string)$prompt->id) !== false && strpos($result, (string)$objectId) !== false ? 1 : 0;
+    }
+
+    /**
+     * Test getTestingObjectId method.
+     *
+     * @param  object $prompt
+     * @access public
+     * @return mixed
+     */
+    public function getTestingObjectIdTest($prompt = null)
+    {
+        if(empty($prompt) || empty($prompt->module)) return 0;
+
+        $result = $this->invokeArgs('getTestingObjectId', array($prompt));
+        if(dao::isError()) return dao::getError();
+
+        return empty($result) ? 0 : $result;
+    }
+
+    /**
+     * Test getObjectByModuleAndSourceGroups method.
+     *
+     * @param  string $module
+     * @param  array  $sourceGroups
+     * @param  int    $objectId
+     * @access public
+     * @return string
+     */
+    public function getObjectByModuleAndSourceGroupsTest($module = '', $sourceGroups = array(), $objectId = 0)
+    {
+        $object = $this->invokeArgs('getObjectByModuleAndSourceGroups', array($module, $sourceGroups, (int)$objectId));
+        if(dao::isError()) return dao::getError();
+        if(empty($object) || !is_object($object)) return '';
+
+        $vars = get_object_vars($object);
+        if(empty($vars)) return 'empty';
+
+        $result = array();
+        foreach($vars as $name => $value)
+        {
+            if(is_object($value) && isset($value->id))
+            {
+                $result[] = $name . ':' . $value->id;
+            }
+            elseif(is_array($value))
+            {
+                $result[] = $name . ':' . count($value);
+            }
+            else
+            {
+                $result[] = $name . ':' . (empty($value) ? 0 : 1);
+            }
+        }
+
+        return implode(',', $result);
+    }
+
+    /**
      * Test tryGetRelatedObjects method.
      *
      * @param  mixed $prompt      prompt object or prompt id
