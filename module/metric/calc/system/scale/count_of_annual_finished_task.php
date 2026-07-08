@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度完成任务数是指某年内已经完成的任务总量。该度量项可以用来评估团队或组织在某年内的工作效率和完成能力。较高的年度完成任务数表示团队或组织在项目执行方面表现出较好的效率。
  * 定义：所有的任务个数求和;完成时间为某年;过滤已删除的任务;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_finished_task extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.status', 't1.finishedDate');
+    public $fieldList = array('t1.status', 't1.`finishedDate`');
 
     public $result = array();
 

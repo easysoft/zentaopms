@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of system module of ZenTaoPMS.
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license   ZPL (http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author    Jianhua Wang <wangjianhua@easycorp.ltd>
  * @package   system
@@ -612,5 +612,18 @@ class systemModel extends model
         if(!dao::isError()) $this->dao->delete()->from(TABLE_CRON)->where('command')->eq('moduleName=system&methodName=initSystem')->exec();
 
         return dao::isError();
+    }
+
+    /**
+     * 根据ID获取应用信息。
+     * Get app info by id.
+     *
+     * @param  int $systemID
+     * @access public
+     * @return object
+     */
+    public function getByID(int $systemID): object
+    {
+        return $this->fetchByID($systemID);
     }
 }

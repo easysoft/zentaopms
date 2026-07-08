@@ -150,7 +150,7 @@ if($config->vision != 'lite')
 $config->task->actionList['create']['icon']     = 'copy';
 $config->task->actionList['create']['hint']     = $lang->task->copy;
 $config->task->actionList['create']['text']     = $lang->task->copy;
-$config->task->actionList['create']['url']      = array('module' => 'task', 'method' => 'create', 'params' => 'execution={execution}&storyID=0&moduleID=0&taskID={id}');
+$config->task->actionList['create']['url']      = array('module' => 'task', 'method' => 'copy', 'params' => 'execution={execution}&storyID=0&moduleID=0&taskID={id}');
 $config->task->actionList['create']['data-app'] = $app->tab;
 
 $config->task->actionList['delete']['icon']         = 'trash';

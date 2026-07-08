@@ -7,6 +7,46 @@ class projectTaoTest extends baseTest
 {
     protected $moduleName = 'project';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->instance->projectTao = $this->instance;
+
+        $this->objectModel = new class($this, $this->instance)
+        {
+            private $test;
+            private $instance;
+
+            public function __construct(projectTaoTest $test, object $instance)
+            {
+                $this->test     = $test;
+                $this->instance = $instance;
+            }
+
+            public function __call(string $method, array $args)
+            {
+                return $this->test->callObjectMethod($method, $args);
+            }
+
+            public function __get(string $name)
+            {
+                return $this->instance->$name;
+            }
+
+            public function __set(string $name, $value): void
+            {
+                $this->instance->$name = $value;
+            }
+        };
+    }
+
+    public function callObjectMethod(string $method, array $args = [])
+    {
+        return $this->invokeArgs($method, $args);
+    }
 
     public function setMockUser($user)
     {
@@ -934,7 +974,7 @@ class projectTaoTest extends baseTest
      */
     public function getListTest($status, $involved = false)
     {
-        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+        return $this->invokeArgs('fetchProjectList', [$status, 'id_desc', $involved, null]);
     }
 
     /**
@@ -1156,15 +1196,20 @@ class projectTaoTest extends baseTest
      */
     public function doCreateTest(object $project)
     {
-        $this->objectModel->doCreate($project);
-        if(dao::isError())
+        try
         {
-            return dao::getError();
+            $this->objectModel->doCreate($project);
         }
-        else
+        catch(Throwable $exception)
         {
-            return $project;
+            if(dao::isError()) return dao::getError();
+            return array('exception' => array($exception->getMessage()));
         }
+
+        if(dao::isError()) return dao::getError();
+
+        $projectID = (int)$this->objectModel->dao->lastInsertID();
+        return $this->objectModel->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
     }
 
     /**
@@ -1305,6 +1350,6 @@ class projectTaoTest extends baseTest
      */
     public function fetchProjectListTest($status, $involved = false)
     {
-        return $this->objectModel->fetchProjectList($status, 'id_desc', $involved, null);
+        return $this->invokeArgs('fetchProjectList', [$status, 'id_desc', $involved, null]);
     }
 }

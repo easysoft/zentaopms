@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chen.tao<chentao@easycorp.ltd>
  * @package     product
@@ -1200,7 +1200,7 @@ class productZen extends product
 
         /* Build search form. */
         $params    = $isProjectStory ? "projectID=$projectID&productID=0" : "productID=$productID";
-        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from&blockID=$blockID");
+        $actionURL = $this->createLink($this->app->rawModule, $this->app->rawMethod, $params . "&branch=$branch&browseType=bysearch&queryID=myQueryID&storyType=$storyType&orderBy=&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID&from=$from&blockID=$blockID");
 
         $this->config->product->search['onMenuBar'] = 'yes';
         $this->config->product->search['module']    = $storyType;
@@ -1231,8 +1231,8 @@ class productZen extends product
         }
 
         /* Build search form. */
-        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bySearch&param=myQueryID&storyType=$storyType");
-        if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bySearch&param=myQueryID&storyType=$storyType");
+        $actionURL = $this->createLink('product', 'track', "productID={$productID}&branch={$branch}&projectID={$projectID}&browseType=bysearch&param=myQueryID&storyType=$storyType");
+        if($this->app->rawModule == 'projectstory') $actionURL = $this->createLink('projectstory', 'track', "projectID={$projectID}&productID={$productID}&branch={$branch}&browseType=bysearch&param=myQueryID&storyType=$storyType");
 
         $this->config->product->search['module'] = $this->app->rawModule . 'Track';
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;

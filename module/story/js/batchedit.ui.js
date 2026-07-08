@@ -33,14 +33,12 @@ window.renderRowData = function($row, index, story)
             let productStories = typeof(productStoryList[story.product]) == 'undefined' ? [] : productStoryList[story.product];
             productStories     = typeof(productStories[branchID]) == 'undefined' ? [] : productStories[branchID];
 
-            let appendStoryHtml = "<span id='duplicateStoryBox" + story.id + "' " + (story.closedReason != 'duplicate' ? "class='hidden'" : '') + ">";
-            appendStoryHtml    += "<div class='form-control picker-box' data-name='duplicateStory' style='padding:0'></div></span>";
-
+            let appendStoryHtml = "<div id='duplicateStoryBox" + story.id + "' class='form-group-wrapper picker-box" + (story.closedReason != 'duplicate' ? ' hidden' : '') + "' data-name='duplicateStory' style='padding:0'></div>";
             $closedReasonTD.find('.input-group').append(appendStoryHtml);
 
             items = [];
             for(let storyID in productStories) items.push({text: productStories[storyID], value: storyID});
-            $closedReasonTD.find('.picker-box[data-name=duplicateStory]').picker({items: items, name: 'duplicateStory[' + story.id + ']'});
+            $closedReasonTD.find('.picker-box[data-name=duplicateStory]').picker({items: items, name: 'duplicateStory[' + story.id + ']', defaultValue: story.duplicateStory});
         }
     });
 

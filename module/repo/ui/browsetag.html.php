@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browsetag view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     repo
@@ -46,8 +46,24 @@ featureBar
     )
 );
 
+toolBar
+(
+    /* 镜像代码库（$repo->mirror == 1）不允许创建标签，隐藏入口。 */
+    (empty($repo->mirror) && hasPriv('repo', 'createTag')) ? item(set(array
+    (
+        'text'  => $lang->repo->createTagAction,
+        'icon'  => 'plus',
+        'class' => 'btn primary',
+        'url'   => createLink('repo', 'createTag', 'objectID=' . data('objectID') . '&repoID=' . data('repoID')),
+        'data-toggle'=>'modal'
+    ))) : null
+);
+
 $config->repo->dtable->tag->fieldList['committer']['map'] = $users;
 if(!hasPriv('repo', 'revision')) unset($config->repo->dtable->tag->fieldList['commitID']['link']);
+
+/* 镜像代码库（$repo->mirror == 1）隐藏标签操作列。 */
+if(!empty($repo->mirror)) unset($config->repo->dtable->tag->fieldList['actions']);
 $tagList = initTableData($tagList, $config->repo->dtable->tag->fieldList);
 $urlParams = array(
     'repoID'     => $repo->id,
@@ -62,6 +78,7 @@ dtable
 (
     set::cols($config->repo->dtable->tag->fieldList),
     set::data($tagList),
+    set::userMap($users),
     set::orderBy($orderBy),
     set::sortLink(createLink('repo', 'browsetag', $urlParams)),
     set::footPager(usePager('pager', 'noTotalCount'))

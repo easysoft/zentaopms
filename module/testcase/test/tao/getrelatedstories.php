@@ -9,7 +9,12 @@ function initData()
     $casedata = zenData('case');
     $casedata->id->range('1-10');
     $casedata->story->range('1-10');
+    $casedata->gen(10);
+
+    zenData('story')->gen(10);
 }
+
+initData();
 
 /**
 

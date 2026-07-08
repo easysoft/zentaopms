@@ -137,6 +137,7 @@ class detail extends wg
         .ai-task-status .status-doing {color: #FAAE1A;}
         .ai-task-status .status-done {color: #3883FA;}
         .ai-task-status .status-cancel, .ai-task-status .status-closed {color: #9EA3B0;}
+        .detail-actions > div {margin-inline: auto; }
 CSS;
     }
 
@@ -551,8 +552,9 @@ CSS;
                     set::iconClass('text-sm text-gray'),
                     on::click()
                         ->do(<<<'JS'
-                            $('.detail-side').toggleClass('important-w-0');
-                            $('.tabs').toggleClass('no-width');
+                            const $detailView = $element.closest('.detail-view');
+                            $detailView.find('.detail-side').toggleClass('important-w-0');
+                            $detailView.find('.tabs').toggleClass('no-width');
                             $element.find('.icon')
                                 .toggleClass('icon-chevron-right')
                                 .toggleClass('icon-chevron-left');

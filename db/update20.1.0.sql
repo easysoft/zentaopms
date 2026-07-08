@@ -14,9 +14,10 @@ UPDATE `zt_grouppriv` SET module='researchtask', `method`='recordWorkhour' WHERE
 UPDATE `zt_grouppriv` SET module='marketresearch', `method`='task'   WHERE module='marketresearch' AND `method`='stage';
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`) VALUES
-('lang', '工单类型',           'ticketType',     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketType', '', '', ''),
-('lang', '工单优先级',         'ticketPri',      '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
-('lang', '工单状态',           'ticketStatus',   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
+('lang', '工单类型',     'ticketType',     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketType', '', '', ''),
+('lang', '工单优先级',   'ticketPri',      '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketPri', '', '', ''),
+('lang', '工单状态',     'ticketStatus',   '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketStatus', '', '', ''),
+('sql',  '反馈',         'feedbacks',      '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_feedback WHERE `deleted`=\'0\'', 'view_datasource_55', 'id', 'title'),
 ('lang', '需求优先级',   'demandPri',      '1', 'or', 'admin', '1970-01-01 00:00:01', 'demandPri', '', '', ''),
 ('lang', '需求来源',     'demandSource',   '1', 'or', 'admin', '1970-01-01 00:00:01', 'demandSource', '', '', ''),
 ('lang', '需求类别',     'demandCategory', '1', 'or', 'admin', '1970-01-01 00:00:01', 'demandCategory', '', '', ''),
@@ -24,10 +25,15 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '需求管理周期', 'demandDuration', '1', 'or', 'admin', '1970-01-01 00:00:01', 'demandDuration', '', '', ''),
 ('lang', '需求BSA',      'demandBSA',      '1', 'or', 'admin', '1970-01-01 00:00:01', 'demandBSA', '', '', '');
 
+DROP VIEW IF EXISTS `view_datasource_55`;
+CREATE VIEW `view_datasource_55`  AS SELECT `id`,`title` FROM `zt_feedback` WHERE `deleted` = '0';
+
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'tasks' LIMIT 1), `control` = 'select' WHERE `module` = 'task' AND `field` = 'parent';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketStatus' LIMIT 1), `control` = 'select' WHERE `module` = 'ticket' AND `field` = 'status';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketType' LIMIT 1) WHERE `module` = 'ticket' AND `field` = 'type';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketPri' LIMIT 1)  WHERE `module` = 'ticket' AND `field` = 'pri';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketType' LIMIT 1)     WHERE `module` = 'ticket' AND `field` = 'type';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketPri' LIMIT 1)      WHERE `module` = 'ticket' AND `field` = 'pri';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbacks' LIMIT 1)      WHERE `module` = 'ticket' AND `field` = 'feedback';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbacks' LIMIT 1)      WHERE `module` = 'story'  AND `field` = 'feedback';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandPri' LIMIT 1)      WHERE `module` = 'demand' AND `field` = 'pri';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandSource' LIMIT 1)   WHERE `module` = 'demand' AND `field` = 'source';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandCategory' LIMIT 1) WHERE `module` = 'demand' AND `field` = 'category';

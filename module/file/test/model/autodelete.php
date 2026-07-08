@@ -26,7 +26,6 @@ $fileTable->title->range('测试图片1,测试图片2,测试图片3,测试文档
 $fileTable->extension->range('jpg,png,gif,doc,pdf');
 $fileTable->size->range('1024-102400');
 $fileTable->addedBy->range('admin,user1,user2');
-$fileTable->addedDate->range('`2023-01-01 00:00:00`-`2023-12-31 23:59:59`');
 $fileTable->gen(10);
 
 su('admin');

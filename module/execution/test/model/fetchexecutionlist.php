@@ -61,7 +61,7 @@ cid=16291
 */
 
 $projectIdList  = array(0, 11);
-$browseTypeList = array('all', 'undone', 'wait', 'doing', 'suspended', 'closed', 'involved', 'bySearch');
+$browseTypeList = array('all', 'undone', 'wait', 'doing', 'suspended', 'closed', 'involved', 'bysearch');
 $productIdList  = array(0, 5);
 $paramList      = array(0, 1);
 $orderByList    = array('id_asc', 'begin_desc');

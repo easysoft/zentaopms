@@ -1,5 +1,4 @@
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'echarts/timeline.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>

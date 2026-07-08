@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度关闭计划数反映了组织在某年度内关闭的计划数量，用于评估组织的计划管理效能、资源优化和成本控制，并提供学习机会和产品组合优化的参考。
  * 定义：所有的计划个数求和;关闭时间为某年;过滤已删除的计划;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_closed_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

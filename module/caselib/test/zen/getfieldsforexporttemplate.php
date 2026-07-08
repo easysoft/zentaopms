@@ -11,7 +11,7 @@ cid=15547
 - 步骤2：验证返回的字段包含module字段属性module @所属模块
 - 步骤3：验证返回的字段包含title字段属性title @用例名称
 - 步骤4：验证返回的字段包含特殊字段typeValue属性typeValue @类型可选值列表
-- 步骤5：验证返回的字段包含特殊字段stageValue属性stageValue @阶段可选值列表
+- 步骤5：验证返回的字段包含特殊字段stageValue属性stageValue @环节可选值列表
 
 */
 
@@ -26,4 +26,4 @@ r($caselibTest->getFieldsForExportTemplateTest('count')) && p() && e('12'); // �
 r($caselibTest->getFieldsForExportTemplateTest()) && p('module') && e('所属模块'); // 步骤2：验证返回的字段包含module字段
 r($caselibTest->getFieldsForExportTemplateTest()) && p('title') && e('用例名称'); // 步骤3：验证返回的字段包含title字段
 r($caselibTest->getFieldsForExportTemplateTest()) && p('typeValue') && e('类型可选值列表'); // 步骤4：验证返回的字段包含特殊字段typeValue
-r($caselibTest->getFieldsForExportTemplateTest()) && p('stageValue') && e('阶段可选值列表'); // 步骤5：验证返回的字段包含特殊字段stageValue
+r($caselibTest->getFieldsForExportTemplateTest()) && p('stageValue') && e('环节可选值列表'); // 步骤5：验证返回的字段包含特殊字段stageValue

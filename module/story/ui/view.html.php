@@ -2,13 +2,24 @@
 declare(strict_types=1);
 /**
  * The view view file of story module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong <yidong@easycorp.ltd>
  * @package     story
  * @link        https://www.zentao.net
  */
 namespace zin;
+if($app->tab == 'devops')
+{
+    query('#heading')->append(
+        dropmenu
+        (
+            set::module('repo'),
+            set::tab('repo'),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "objectID=0&module=repo&method=review"))
+        )
+    );
+}
 
 use function zin\utils\flat;
 
@@ -62,6 +73,7 @@ if(empty($story->frozen) && !$isInModal && hasPriv($story->type, 'create') && $c
 $sections = array();
 $sections[] = setting()
     ->title($lang->story->legendSpec)
+    ->className('legendSpec')
     ->control('html')
     ->content(empty($story->spec) ? $lang->noDesc : $story->spec);
 if($this->config->vision != 'lite')
@@ -190,7 +202,7 @@ if($isInModal) $config->{$story->type}->actionList['recall']['url']['params'] = 
 if($story->status == 'changing') $config->{$story->type}->actionList['recall']['text'] = $lang->story->recallChange;
 
 $this->loadModel('repo');
-$hasRepo    = $this->repo->getListByProduct($story->product, implode(',', $config->repo->gitServiceTypeList), 1);
+$hasRepo    = $this->repo->getListByProduct($story->product, 1);
 $actions    = $story->deleted || !$canModify ? array() : $this->loadModel('common')->buildOperateMenu($story, $story->type);
 $hasDivider = !empty($actions['mainActions']) && !empty($actions['suffixActions']);
 if(!empty($actions)) $actions = array_merge($actions['mainActions'], $hasDivider ? array(array('type' => 'divider')) : array(), $actions['suffixActions']);

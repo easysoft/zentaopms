@@ -28,7 +28,7 @@ $pivotTest = new pivotZenTest();
 
 // 测试步骤1: 筛选器 from=query 的情况,验证 URL
 $filter1 = array('field' => 'status', 'from' => 'query', 'typeOption' => 'bug', 'default' => 'active');
-r($pivotTest->getFilterOptionUrlTest($filter1)) && p('url') && e('getfilteroption.php?m=pivot&f=ajaxGetSysOptions&search={search}');
+r($pivotTest->getFilterOptionUrlTest($filter1)) && p('url') && e('getfilteroption.php?m=pivot&f=ajaxGetSysOptions&search={search:base64}');
 
 // 测试步骤2: 筛选器 from=query 的情况,验证 method
 $filter2 = array('field' => 'status', 'from' => 'query', 'typeOption' => 'bug', 'default' => 'active');

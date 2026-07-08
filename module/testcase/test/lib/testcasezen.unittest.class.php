@@ -1414,7 +1414,7 @@ class testcaseZenTest
             $case->execution = $caseID;
 
             // 模拟buildLinkBugsSearchForm方法的核心逻辑
-            $actionURL = "/testcase-linkBugs-{$case->id}-bySearch-myQueryID.html";
+            $actionURL = "/testcase-linkBugs-{$case->id}-bysearch-myQueryID.html";
             $objectID = 0;
 
             // 根据tab设置objectID
@@ -2145,47 +2145,6 @@ class testcaseZenTest
             $errorCase = clone $case;
             $errorCase->error = $e->getMessage();
             return $errorCase;
-        }
-    }
-
-    /**
-     * Test processStepsAndExpectsForBatchEdit method.
-     *
-     * @param  array $cases
-     * @access public
-     * @return array
-     */
-    public function processStepsAndExpectsForBatchEditTest(array $cases): array
-    {
-        global $tester;
-
-        try {
-            // 获取testcase的zen对象实例
-            $zenClass = initReference('testcase');
-            $zenInstance = $zenClass->newInstance();
-
-            // 使用反射调用protected方法
-            $reflection = new ReflectionClass($zenInstance);
-            $method = $reflection->getMethod('processStepsAndExpectsForBatchEdit');
-            $method->setAccessible(true);
-
-            // 克隆cases数组避免原对象被修改
-            $casesClone = array();
-            foreach($cases as $key => $case)
-            {
-                $casesClone[$key] = clone $case;
-            }
-
-            // 调用方法
-            $result = $method->invoke($zenInstance, $casesClone);
-
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        } catch (Exception $e) {
-            return array('error' => $e->getMessage());
-        } catch (Error $e) {
-            return array('error' => $e->getMessage());
         }
     }
 
@@ -3055,7 +3014,7 @@ class testcaseZenTest
             $tester->app->tab = $tab;
 
             // 构建actionURL
-            $actionURL = "/testcase-linkCases-{$case->id}-bySearch-myQueryID.html";
+            $actionURL = "/testcase-linkCases-{$case->id}-bysearch-myQueryID.html";
 
             // 设置objectID
             $objectID = 0;

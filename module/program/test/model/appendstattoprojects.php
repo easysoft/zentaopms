@@ -30,5 +30,5 @@ $teams    = $tester->program->dao->select('t1.root,t1.account')->from(TABLE_TEAM
 
 $stats[] = $tester->program->appendStatToProjects($projects);
 $stats[] = $tester->program->appendStatToProjects($projects, $teams);
-r($stats[0]) && p('11:estimate,left,consumed,teamCount,progress') && e('0,0,0,4,0.00'); // 测试不传入团队数据
-r($stats[1]) && p('11:estimate,left,consumed,teamCount,progress') && e('0,0,0,4,0.00'); // 测试传入团队数据
+r($stats[0]) && p('11:estimate,left,consumed,teamCount,progress') && e('0.00,0.00,0.00,4,0.00'); // 测试不传入团队数据
+r($stats[1]) && p('11:estimate,left,consumed,teamCount,progress') && e('0.00,0.00,0.00,4,0.00'); // 测试传入团队数据

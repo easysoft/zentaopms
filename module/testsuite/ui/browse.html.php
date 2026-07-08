@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The browse view file of testsuite module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     testsuite
@@ -25,7 +25,7 @@ featureBar
     set::module('testsuite'),
     set::method('browse'),
     set::current('all'),
-    set::linkParams("productID={$product->id}&type=all")
+    set::linkParams("productID={$product->id}&browseType=all")
 );
 
 toolbar
@@ -48,7 +48,7 @@ dtable
     set::data($data),
     set::orderBy($orderBy),
     set::customCols(true),
-    set::sortLink(createLink('testsuite', 'browse', "productID={$product->id}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('testsuite', 'browse', "productID={$product->id}&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::footer(jsRaw("function(){return [{html: '{$summary}', className: 'text-dark'}, 'flex', 'pager'];}")),
     set::footPager(usePager()),
@@ -58,4 +58,3 @@ dtable
 );
 
 render();
-

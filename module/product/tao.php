@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      chen.tao<chentao@easycorp.ltd>
  * @package     product
@@ -115,15 +115,15 @@ class productTao extends productModel
         return $this->dao->select('DISTINCT t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->leftJoin(TABLE_TEAM)->alias('t3')->on('t2.id=t3.root')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.objectID')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t4')->on('t2.id=t4.`objectID`')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t3.type')->eq('project')
             ->beginIF($browseType == 'undone')->andWhere('t2.status')->in('wait,doing')->fi()
             ->beginIF(strpos(",all,undone,", ",$browseType,") === false)->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->andWhere('t2.openedBy', true)->eq($this->app->user->account)
-            ->orWhere('t2.PM')->eq($this->app->user->account)
+            ->andWhere('t2.`openedBy`', true)->eq($this->app->user->account)
+            ->orWhere('t2.`PM`')->eq($this->app->user->account)
             ->orWhere('t3.account')->eq($this->app->user->account)
             ->orWhere('(t4.user')->eq($this->app->user->account)
             ->andWhere('t4.deleted')->eq(0)
@@ -758,7 +758,7 @@ class productTao extends productModel
         $projectIdList = array_column($executions, 'project');
 
         /* 现在只有阶段有子阶段，所以只查询阶段类型的执行。 */
-        $stages      = $this->dao->select('id,name,attribute,parent,path')->from(TABLE_EXECUTION)->where('type')->eq('stage')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $stages      = $this->dao->select('id,name,attribute,parent,path')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage,kanban')->andWhere('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
         $stageFilter = str_contains($mode, 'stagefilter');
         foreach($stages as $exec) $parents[$exec->parent] = true;
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
@@ -116,6 +116,26 @@ class task extends control
 
         /* Shows the variables needed to create the task page. */
         $this->taskZen->assignCreateVars($execution, $storyID, $moduleID, $taskID, $todoID, $bugID, $output, $cardPosition);
+        $this->display();
+    }
+
+    /**
+     * 复制任务。
+     * Copy task.
+     *
+     * @param  int    $executionID
+     * @param  int    $storyID
+     * @param  int    $moduleID
+     * @param  int    $taskID
+     * @param  int    $todoID
+     * @param  string $cardPosition
+     * @param  int    $bugID
+     * @access public
+     * @return void
+     */
+    public function copy(int $executionID = 0, int $storyID = 0, int $moduleID = 0, int $taskID = 0, int $todoID = 0, string $cardPosition = '', int $bugID = 0)
+    {
+        echo $this->fetch('task', 'create', "executionID=$executionID&storyID=$storyID&moduleID=$moduleID&taskID=$taskID&todoID=$todoID&cardPosition=$cardPosition&bugID=$bugID");
     }
 
     /**
@@ -405,7 +425,7 @@ class task extends control
         $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
         $this->view->product      = $this->tree->getProduct($task->module);
         $this->view->modulePath   = $this->tree->getParents($task->module);
-        $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
+        $this->view->linkMRTitles = $this->loadModel('ppm')->getLinkedMRPairs($taskID, 'task');
         $this->view->linkCommits  = $this->loadModel('repo')->getCommitsByObject($taskID, 'task');
         $this->view->linkedBugs   = $this->loadModel('bug')->getLinkedBugsByTaskID($taskID);
         $this->view->hasGitRepo   = $this->taskZen->checkGitRepo($execution->id);

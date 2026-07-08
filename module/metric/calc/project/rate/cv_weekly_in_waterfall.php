@@ -11,7 +11,7 @@
  * 描述：按瀑布项目统计的截止本周的成本偏差率用于衡量项目的实际成本与计划成本之间的差异。它通过计算已花费的成本与预计花费的成本之间的差异来评估项目的成本绩效。
  * 定义：复用： 按瀑布项目统计的截止本周已完成任务工作的预计工时、按瀑布项目统计的截止本周的实际花费工时(AC) 公式： 按瀑布项目统计的截止本周的成本偏差率=(EV-AC)/AC*100%
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

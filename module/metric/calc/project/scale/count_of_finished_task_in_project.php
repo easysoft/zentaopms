@@ -11,7 +11,7 @@
  * 描述：按项目统计的已完成任务数是指项目已经完成的任务总量。该度量项可以衡量任务完成的进度和效率，以及项目的工作质量和产出。较高的已完成任务总数可能表明项目在交付工作方面表现出较好的能力。
  * 定义：项目中任务个数求和，要求是状态为已完成或者状态为已关闭且关闭原因为已完成的任务，过滤已删除的任务，过滤已删除执行的任务，过滤已删除的项目
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_finished_task_in_project extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.status', 't1.closedReason', 't1.project');
+    public $fieldList = array('t1.status', 't1.`closedReason`', 't1.project');
 
     public $result = array();
 

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The audit view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     my
@@ -29,13 +29,13 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
     }
 }
 $reviewPrivs['review']  = hasPriv('review', 'access');
-$reviewPrivs['mr']      = hasPriv('mr', 'view');
-$reviewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$reviewPrivs['ppm']     = hasPriv('ppm', 'view');
+$reviewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 $viewPrivs['review']  = hasPriv('review', 'view');
 $viewPrivs['task']    = hasPriv('task', 'view');
-$viewPrivs['mr']      = hasPriv('mr', 'view');
-$viewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$viewPrivs['ppm']     = hasPriv('ppm', 'view');
+$viewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));
@@ -74,7 +74,7 @@ foreach($reviewList as $review)
     $review->typeKey = $review->type;
 
     if(isset($lang->{$review->type}->common)) $typeName = $lang->{$review->type}->common;
-    if($review->type == 'projectreview')      $typeName = $lang->project->common;
+    if($review->type == 'projectreview')      $typeName = $lang->my->projectReview;
     if(isset($flows[$review->type]))          $typeName = $flows[$review->type];
     if($type == 'story')
     {
@@ -102,19 +102,20 @@ foreach($reviewList as $review)
         $statusList = $lang->charter->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'mr', 'pullreq')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'ppm', 'pullreq')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
         if(isset($flows[$review->type]) && $rawMethod != 'audit') $statusList = $lang->approval->statusList;
     }
 
-    if(in_array($type, array('mr', 'pullreq')))
+    if(in_array($type, array('ppm', 'pullreq')))
     {
-        $this->app->loadLang('mr');
+        $this->app->loadLang('ppm');
+        $review->module = 'ppm';
 
         if(empty($review->status)) $review->status = 'notReviewed';
-        $statusList = $lang->mr->approvalStatusList;
+        $statusList = $lang->ppm->approvalStatusList;
     }
 
     $review->type   = $typeName;
@@ -150,15 +151,16 @@ foreach($reviewList as $review)
 }
 
 $reviewList = initTableData($reviewList, $config->my->audit->dtable->fieldList, $this->my);
+$cols       = $this->loadModel('datatable')->getSetting('my', 'audit');
 $sortLink   = $app->rawMethod == 'audit' ? createLink('my', 'audit', "browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}") : createLink('my', $app->rawMethod, "mode={$mode}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
-
-$cols = array_values($config->my->audit->dtable->fieldList);
-$data = array_values($reviewList);
+$data       = array_values($reviewList);
 
 dtable
 (
     set::cols($cols),
     set::data($data),
+    set::userMap($users),
+    set::customCols(true),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::orderBy($orderBy),
     set::sortLink($sortLink),

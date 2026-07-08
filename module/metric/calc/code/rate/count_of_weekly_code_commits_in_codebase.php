@@ -11,7 +11,7 @@
  * 描述：按代码库统计的每周代码提交次数是指代码库在单周的代码提交数量。这个度量项可以反映代码库的周开发活动频率和代码更新情况。
  * 定义：代码库中代码提交次数求和，提交时间为某周。
  *
- * @copyright Copyright 2009-2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2024 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func
@@ -24,7 +24,7 @@ class count_of_weekly_code_commits_in_codebase extends baseCalc
 
     public $dataset = 'getRepoCommits';
 
-    public $fieldList = array('t1.id', 't1.name', 't1.serviceHost', 't1.serviceProject', 't1.SCM', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
+    public $fieldList = array('t1.id', 't1.name', 't1.`serviceHost`', 't1.`serviceProject`', 't1.`SCM`', 't2.time', 't1.client', 't1.path', 't1.account', 't1.password', 't1.encoding', 't3.url', 't3.token');
 
     public $result = array();
 

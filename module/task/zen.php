@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of task module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easysoft.ltd>
  * @package     task
@@ -77,11 +77,9 @@ class taskZen extends task
         $this->view->from              = $storyID || $todoID || $bugID  ? 'other' : 'task';
         $this->view->taskID            = $taskID;
         $this->view->parents           = $parents;
-        $this->view->loadUrl           = $this->createLink('task', 'create', "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
+        $this->view->loadUrl           = $this->createLink('task', $this->app->rawMethod, "executionID={execution}&storyID={$storyID}&moduleID={$moduleID}&task={$taskID}&todoID={$todoID}&cardPosition={$cardPosition}&bugID={$bugID}");
         $this->view->assignedToOptions = $this->getAssignedToOptions($manageLink);
         $this->view->manageLink        = $manageLink;
-
-        $this->display();
     }
 
     /**
@@ -565,6 +563,7 @@ class taskZen extends task
         if($task->estimate < 0 or $task->left < 0 or $task->consumed < 0) dao::$errors[] = $this->lang->task->error->recordMinus;
         if(!empty($this->config->limitTaskDate)) $this->task->checkEstStartedAndDeadline($oldTask->execution, (string)$task->estStarted, (string)$task->deadline);
         if(!empty($_POST['lastEditedDate']) && $oldTask->lastEditedDate != $this->post->lastEditedDate) dao::$errors[] = $this->lang->error->editedByOther;
+        if(!helper::isZeroDate($task->finishedDate) && $task->realStarted > $task->finishedDate) dao::$errors['finishedDate'][] = $this->lang->task->error->finishedDateSmall;
         if(dao::isError()) return false;
 
         $now  = helper::now();
@@ -2102,7 +2101,7 @@ class taskZen extends task
     protected function checkGitRepo(int $executionID): bool
     {
         $this->loadModel('repo');
-        $repoList   = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repoList   = $this->repo->getListByPriv('haspriv');
         $productIds = $this->loadModel('product')->getProductIDByProject($executionID, false);
         foreach($repoList as $repo)
         {

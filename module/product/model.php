@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of product module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
@@ -86,7 +86,7 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->beginIF($this->config->vision != 'or')->andWhere("FIND_IN_SET('{$this->config->vision}', vision)")->fi()
             ->filterTpl('skip')
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchAll('id', false);
     }
 
@@ -564,7 +564,7 @@ class productModel extends model
         if(empty($sortedIdList)) return;
 
         /* Get the list of products before sorting. */
-        $products = $this->dao->select('`order`, id')->from(TABLE_PRODUCT)->where('id')->in($sortedIdList)->orderBy('order_asc')->fetchPairs('order', 'id');
+        $products = $this->dao->select('`order`, id')->from(TABLE_PRODUCT)->where('id')->in($sortedIdList)->orderBy('`order`_asc')->fetchPairs('order', 'id');
 
         /* Update order by sorted id list. */
         foreach($products as $order => $id)
@@ -737,7 +737,7 @@ class productModel extends model
             $productID = key($products);
             $showAll   = true;
         }
-        $product = ($this->app->tab == 'project' && empty($productID)) || !empty($showAll) ? $products : array();
+        $product = $this->app->tab == 'project' || !empty($showAll) ? $products : array();
         if(empty($product) && isset($products[$productID])) $product = array($productID => $products[$productID]);
         $searchConfig['params']['product']['values'] = array('' => '') + $product + array('all' => $this->lang->product->allProduct);
 
@@ -854,7 +854,7 @@ class productModel extends model
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t2.deleted')->eq('0')
-            ->orderBy('t1.product,order_asc')
+            ->orderBy('t1.product,`order`_asc')
             ->fetchPairs('id', 'name');
     }
 
@@ -873,7 +873,7 @@ class productModel extends model
     public function getProjectPairsByProduct(int $productID, string $branch = '0', string|array $appendProject = '', string $status = '', string $param = ''): array
     {
         $product = $this->getByID($productID);
-        if(empty($product)) return array();
+        if(empty($product)) return $this->loadModel('project')->getPairs();
 
         $appendProject = $this->productTao->formatAppendParam($appendProject);
         return $this->dao->select('t2.id, t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -888,7 +888,7 @@ class productModel extends model
             ->beginIF($product->type != 'normal' and $branch !== '' and $branch != 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->markRight(1)
             ->beginIF($appendProject)->orWhere('t2.id')->in($appendProject)->fi()
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchPairs('id', 'name');
     }
 
@@ -905,7 +905,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', ?object $pager = null): array
+    public function getProjectListByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = '`order`_desc', ?object $pager = null): array
     {
         $branch = $branch ? $branch : '0';
         if(!$involved) $projectList = $this->productTao->fetchAllProductProjects($productID, $browseType, $branch, $orderBy, $pager);
@@ -915,6 +915,8 @@ class productModel extends model
         $programList = $this->loadModel('program')->getParentPairs('', 'all');
         foreach($projectList as $id => $project)
         {
+            $project->name = htmlspecialchars_decode((string)$project->name, ENT_QUOTES);
+
             $programName = $project->parent ? zget($programList, $project->parent, '') : '';
             $projectList[$id]->programName = preg_replace('/\//', '', $programName, 1);
         }
@@ -935,7 +937,7 @@ class productModel extends model
      * @access public
      * @return int[]
      */
-    public function getProjectStatsByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = 'order_desc', ?object $pager = null): array
+    public function getProjectStatsByProduct(int $productID, string $browseType = 'all', string $branch = '0', bool $involved = false, string $orderBy = '`order`_desc', ?object $pager = null): array
     {
         $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy, $pager);
         if(empty($projects)) return array();
@@ -957,7 +959,7 @@ class productModel extends model
      */
     public function getExecutionPairsByProduct(int $productID, string $branch = '', int $projectID = 0, string $mode = '', array $unAllowedStage = array()): array
     {
-        if(empty($productID)) return array();
+        if(empty($productID)) return $this->loadModel('execution')->getPairs($projectID);
 
         /* Determine executions order. */
         $projects         = $this->loadModel('project')->getByIdList(array($projectID));
@@ -1103,7 +1105,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats(array $productIdList, string $orderBy = 'order_asc', ?object $pager = null, string $storyType = 'story', int $programID = 0): array
+    public function getStats(array $productIdList, string $orderBy = '`order`_asc', ?object $pager = null, string $storyType = 'story', int $programID = 0): array
     {
         /* Call the getProductStats method of the tutorial module if you are in tutorial mode.*/
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getProductStats();
@@ -1208,7 +1210,7 @@ class productModel extends model
             ->where('type')->eq('line')
             ->beginIF(helper::hasFeature('program') && ($programIdList || $filterRoot))->andWhere('root')->in($programIdList)->fi()
             ->andWhere('deleted')->eq(0)
-            ->orderBy('order_asc')
+            ->orderBy('`order`_asc')
             ->fetchPairs('id', 'name');
     }
 
@@ -1500,12 +1502,13 @@ class productModel extends model
      */
     public function formatDataForList(object $product, array $users): object
     {
-        $product->type        = 'product';
-        $product->productLine = $product->lineName;
-        $product->PO          = !empty($product->PO)        ? zget($users, $product->PO)  : '';
-        $product->PMT         = !empty($product->PMT)       ? zget($users, $product->PMT) : '';
-        $product->createdBy   = !empty($product->createdBy) ? zget($users, $product->createdBy)  : '';
-        $product->createdDate = substr($product->createdDate, 0, 10);
+        $product->type          = 'product';
+        $product->productLine   = $product->lineName;
+        $product->workflowGroup = !empty($product->workflowGroup) ? $product->workflowGroup : 0;
+        $product->PO            = !empty($product->PO)        ? zget($users, $product->PO)  : '';
+        $product->PMT           = !empty($product->PMT)       ? zget($users, $product->PMT) : '';
+        $product->createdBy     = !empty($product->createdBy) ? zget($users, $product->createdBy)  : '';
+        $product->createdDate   = substr($product->createdDate, 0, 10);
 
         if($this->config->vision == 'or') return $product;
 
@@ -1597,7 +1600,7 @@ class productModel extends model
         $fields       = explode(',', $fields);
         $fields       = trim(implode(',t1.', $fields), ',');
         $programField = $programID ? '' : 't2.order,';
-        $programOrder = $programID ? '' : 't2.order_asc,';
+        $programOrder = $programID ? '' : 't2.`order`_asc,';
 
         return $this->dao->select("DISTINCT t1.{$fields},{$programField}t1.line,t1.order")->from(TABLE_PRODUCT)->alias('t1')
             ->beginIF(!$programID)->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')->fi()    // 如果指定了项目集，则不需要关联项目集表。
@@ -1613,19 +1616,22 @@ class productModel extends model
             ->beginIF(strpos($status, 'nowait') !== false)->andWhere('t1.status')->ne('wait')->fi()
             ->beginIF(strpos($status, '|') === false && !in_array($status, array('all', 'noclosed', 'involved', 'review'), true))->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
-            ->andWhere('t1.PO', true)->eq($this->app->user->account)
-            ->orWhere('t1.QD')->eq($this->app->user->account)
-            ->orWhere('t1.RD')->eq($this->app->user->account)
-            ->orWhere('t1.createdBy')->eq($this->app->user->account)
+            ->andWhere('t1.`PO`', true)->eq($this->app->user->account)
+            ->orWhere('t1.`QD`')->eq($this->app->user->account)
+            ->orWhere('t1.`RD`')->eq($this->app->user->account)
+            ->orWhere('t1.`createdBy`')->eq($this->app->user->account)
             ->orWhere('t4.account')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
             ->beginIF($status == 'review')
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($status == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->filterTpl('skip')
-            ->orderBy("{$programOrder}t1.line_desc, t1.order_asc")
+            ->orderBy("{$programOrder}t1.line_desc, t1.`order`_asc")
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
     }

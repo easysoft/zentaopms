@@ -18,7 +18,7 @@ class compileTaoTest extends baseTest
     public function getByIDTest($buildID = null)
     {
         try {
-            $result = $this->objectModel->getByID($buildID);
+            $result = $this->invokeArgs('getByID', [$buildID]);
             if(dao::isError()) return dao::getError();
 
             return $result;
@@ -39,7 +39,7 @@ class compileTaoTest extends baseTest
      */
     public function getListTest($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($repoID, $jobID, '', 0, $orderBy = 'id_desc', $pager = null);
+        $objects = $this->invokeArgs('getList', [$repoID, $jobID, '', 0, $orderBy, $pager]);
 
         if(dao::isError()) return dao::getError();
 
@@ -62,7 +62,7 @@ class compileTaoTest extends baseTest
             return array();
         }
 
-        $objects = $this->objectModel->getListByJobID($jobID);
+        $objects = $this->invokeArgs('getListByJobID', [$jobID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -85,7 +85,7 @@ class compileTaoTest extends baseTest
             }
 
             $jobID = (int)$jobID;
-            $result = $this->objectModel->getLastResult($jobID);
+            $result = $this->invokeArgs('getLastResult', [$jobID]);
 
             if(dao::isError()) return dao::getError();
 
@@ -104,7 +104,7 @@ class compileTaoTest extends baseTest
      */
     public function getSuccessJobsTest($jobIDList)
     {
-        $objects = $this->objectModel->getSuccessJobs($jobIDList);
+        $objects = $this->invokeArgs('getSuccessJobs', [$jobIDList]);
 
         if(dao::isError()) return dao::getError();
 
@@ -120,7 +120,7 @@ class compileTaoTest extends baseTest
      */
     public function getBuildUrlTest($jenkins)
     {
-        $objects = $this->objectModel->getBuildUrl($jenkins);
+        $objects = $this->invokeArgs('getBuildUrl', [$jenkins]);
 
         if(dao::isError()) return dao::getError();
 
@@ -139,7 +139,7 @@ class compileTaoTest extends baseTest
     public function createByJobTest($jobID, $data = '', $type = 'tag')
     {
         global $tester;
-        $id = $this->objectModel->createByJob($jobID, $data, $type);
+        $id = $this->invokeArgs('createByJob', [$jobID, $data, $type]);
 
         if(dao::isError()) return dao::getError();
         if($id === false) return false;
@@ -159,7 +159,7 @@ class compileTaoTest extends baseTest
      */
     public function execTest($compile)
     {
-        $objects = $this->objectModel->exec($compile);
+        $objects = $this->invokeArgs('exec', [$compile]);
 
         if(dao::isError()) return dao::getError();
 
@@ -180,7 +180,7 @@ class compileTaoTest extends baseTest
         global $tester;
 
         // 模拟compile zen的buildSearchForm逻辑
-        $actionURL = "compile-browse-{$repoID}-{$jobID}-bySearch-myQueryID.html";
+        $actionURL = "compile-browse-{$repoID}-{$jobID}-bysearch-myQueryID.html";
 
         // 初始化config结构
         if(!isset($tester->config->compile->search))
@@ -229,7 +229,7 @@ class compileTaoTest extends baseTest
      */
     public function getLogsTest($job, $compile)
     {
-        $result = $this->objectModel->getLogs($job, $compile);
+        $result = $this->invokeArgs('getLogs', [$job, $compile]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -243,7 +243,7 @@ class compileTaoTest extends baseTest
      */
     public function getUnexecutedListTest()
     {
-        $result = $this->objectModel->getUnexecutedList();
+        $result = $this->invokeArgs('getUnexecutedList');
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -282,7 +282,7 @@ class compileTaoTest extends baseTest
      */
     public function syncGitlabBuildListTest($gitlab, $job)
     {
-        $result = $this->objectModel->syncGitlabBuildList($gitlab, $job);
+        $result = $this->invokeArgs('syncGitlabBuildList', [$gitlab, $job]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -298,7 +298,7 @@ class compileTaoTest extends baseTest
      */
     public function syncJenkinsBuildListTest($jenkins, $job)
     {
-        $result = $this->objectModel->syncJenkinsBuildList($jenkins, $job);
+        $result = $this->invokeArgs('syncJenkinsBuildList', [$jenkins, $job]);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -320,7 +320,7 @@ class compileTaoTest extends baseTest
         $job = $tester->dao->select('id')->from(TABLE_JOB)->where('id')->eq($jobID)->fetch();
         if(!$job) return false;
 
-        $this->objectModel->updateJobLastSyncDate($jobID, $date);
+        $this->invokeArgs('updateJobLastSyncDate', [$jobID, $date]);
 
         if(dao::isError()) return dao::getError();
 
@@ -330,8 +330,8 @@ class compileTaoTest extends baseTest
     }
 
     /**
-     * 魔术方法，调用objectModel一些比较简单的方法。
-     * Magic method, call some simple methods of objectModel.
+     * 魔术方法，调用 instance 上的方法。
+     * Magic method, call methods on the tested instance.
      *
      * @param  string $method
      * @param  array  $args
@@ -340,6 +340,6 @@ class compileTaoTest extends baseTest
      */
     public function __call(string $method, array $args): mixed
     {
-        return $this->objectModel->$method(...$args);
+        return $this->invokeArgs($method, $args);
     }
 }

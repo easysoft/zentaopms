@@ -11,7 +11,7 @@
  * 描述：按系统统计的月度完成执行数是指在某月度已经关闭的执行数。该度量项反映了团队或组织在某月内的工作效率和完成能力。较高的月度完成执行数表示团队或组织在快速完成任务方面表现出较高的效率，反之则可能需要审查工作流程和资源分配情况，以提高执行效率。
  * 定义：所有的执行个数求和;关闭时间为某年某月;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_monthly_closed_execution extends baseCalc
 {
     public $dataset = 'getExecutions';
 
-    public $fieldList = array('t1.closedDate');
+    public $fieldList = array('t1.`closedDate`');
 
     public $result = array();
 

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The create branch view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     repo
@@ -14,7 +14,7 @@ jsVar('module', $objectType);
 jsVar('linkParams', "objectID={$objectID}&repoID=%s");
 jsVar('branchLang', $lang->repo->branch);
 jsVar('tagLang', $lang->repo->tag);
-modalHeader
+$objectType == 'project' ? null : modalHeader
 (
     set::title($lang->repo->codeBranch),
     set::titleClass('panel-title text-lg')
@@ -142,7 +142,7 @@ $canCreate ? formPanel
         set::label($lang->repo->branchName),
         set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '9em'),
         set::required(true),
-        set::value("{$objectType}-{$objectID}")
+        set::value($objectType == 'project' ? '' : "{$objectType}-{$objectID}")
     ),
     set::actions(array('submit'))
 ) : null;

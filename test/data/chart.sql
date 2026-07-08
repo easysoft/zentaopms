@@ -1092,7 +1092,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   budget DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1139,7 +1139,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   consumed DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1162,7 +1162,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1188,7 +1188,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1211,7 +1211,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   bug DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1235,7 +1235,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1262,7 +1262,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   story DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1287,7 +1287,7 @@ WHERE
 GROUP BY
   `year`,
   id,
-  program
+  t1.name
 ORDER BY
   `year`,
   bug DESC', 'published', 0, '', 'system', null, '', null, 0);
@@ -1418,25 +1418,25 @@ INSERT INTO zt_chart (id, name, dimension, type, `group`, `desc`, settings, filt
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = \'0\'
 WHERE t1.deleted = \'0\' AND t1.shadow = \'0\' AND t1.vision = \'rnd\' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, id, t1.name
 ORDER BY `year`, story DESC', 'published', 0, '', 'system', null, '', null, 0);
 INSERT INTO zt_chart (id, name, dimension, type, `group`, `desc`, settings, filters, step, fields, langs, `sql`, stage, builtin, objects, createdBy, createdDate, editedBy, editedDate, deleted) VALUES (1102, '年度排行-产品-完成需求规模榜', 1, 'cluBarY', '36', '', '[{"type":"cluBarY","xaxis":[{"field":"product","name":"product","group":""}],"yaxis":[{"field":"story","name":"\\u7814\\u53d1\\u9700\\u6c42","valOrAgg":"sum"}]}]', '[{"field":"year","type":"select","name":"\\u5e74\\u4efd"}]', 0, '{"year":{"name":"year","object":"story","field":"year","type":"number"},"id":{"name":"id","object":"zt_product","field":"id","type":"number"},"product":{"name":"product","object":"zt_product","field":"product","type":"string"},"story":{"name":"\\u7814\\u53d1\\u9700\\u6c42","object":"story","field":"story","type":"number"}}', '{"year":{"zh-cn":"\\u5e74\\u4efd","zh-tw":"","en":"year","de":"","fr":""},"id":{"zh-cn":"\\u4ea7\\u54c1\\u7f16\\u53f7","zh-tw":"","en":"id","de":"","fr":""},"product":{"zh-cn":"\\u4ea7\\u54c1","zh-tw":"","en":"product","de":"","fr":""},"story":{"zh-cn":"\\u7814\\u53d1\\u9700\\u6c42\\u9884\\u8ba1\\u5de5\\u65f6\\u6c42\\u548c","zh-tw":"","en":"story","de":"","fr":""}}', 'SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, ROUND(SUM(t2.estimate), 1) AS story
 FROM zt_product AS t1
 LEFT JOIN zt_story AS t2 ON t1.id = t2.product AND t2.deleted = \'0\' AND t2.closedReason = \'done\'
 WHERE t1.deleted = \'0\' AND t1.shadow = \'0\' AND t1.vision = \'rnd\' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, id, t1.name
 ORDER BY `year`, story DESC', 'published', 0, '', 'system', null, '', null, 0);
 INSERT INTO zt_chart (id, name, dimension, type, `group`, `desc`, settings, filters, step, fields, langs, `sql`, stage, builtin, objects, createdBy, createdDate, editedBy, editedDate, deleted) VALUES (1103, '年度排行-产品-新增Bug条目榜', 1, 'cluBarY', '44', '', '[{"type":"cluBarY","xaxis":[{"field":"product","name":"product","group":""}],"yaxis":[{"field":"bug","name":"bug","valOrAgg":"sum"}]}]', '[{"field":"year","type":"select","name":"\\u5e74\\u4efd"}]', 0, '{"year":{"name":"year","object":"bug","field":"year","type":"number"},"id":{"name":"id","object":"zt_product","field":"id","type":"number"},"product":{"name":"product","object":"zt_product","field":"product","type":"string"},"bug":{"name":"bug","object":"bug","field":"bug","type":"string"}}', '{"year":{"zh-cn":"\\u5e74\\u4efd","zh-tw":"","en":"year","de":"","fr":""},"id":{"zh-cn":"\\u4ea7\\u54c1\\u7f16\\u53f7","zh-tw":"","en":"id","de":"","fr":""},"product":{"zh-cn":"\\u4ea7\\u54c1","zh-tw":"","en":"product","de":"","fr":""},"bug":{"zh-cn":"Bug\\u8ba1\\u6570","zh-tw":"","en":"bug","de":"","fr":""}}', 'SELECT YEAR(t2.openedDate) AS `year`, t1.id,  t1.name AS product, COUNT(1) AS bug
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = \'0\'
 WHERE t1.deleted = \'0\' AND t1.shadow = \'0\' AND t1.vision = \'rnd\' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, id, t1.name
 ORDER BY `year`, bug DESC', 'published', 0, '', 'system', null, '', null, 0);
 INSERT INTO zt_chart (id, name, dimension, type, `group`, `desc`, settings, filters, step, fields, langs, `sql`, stage, builtin, objects, createdBy, createdDate, editedBy, editedDate, deleted) VALUES (1104, '年度排行-产品-修复Bug条目榜', 1, 'cluBarY', '44', '', '[{"type":"cluBarY","xaxis":[{"field":"product","name":"product","group":""}],"yaxis":[{"field":"bug","name":"bug","valOrAgg":"sum"}]}]', '[{"field":"year","type":"select","name":"\\u5e74\\u4efd"}]', 0, '{"year":{"name":"year","object":"bug","field":"year","type":"number"},"id":{"name":"id","object":"zt_product","field":"id","type":"number"},"product":{"name":"product","object":"zt_product","field":"product","type":"string"},"bug":{"name":"bug","object":"bug","field":"bug","type":"string"}}', '{"year":{"zh-cn":"\\u5e74\\u4efd","zh-tw":"","en":"year","de":"","fr":""},"id":{"zh-cn":"\\u4ea7\\u54c1\\u7f16\\u53f7","zh-tw":"","en":"id","de":"","fr":""},"product":{"zh-cn":"\\u4ea7\\u54c1","zh-tw":"","en":"product","de":"","fr":""},"bug":{"zh-cn":"Bug\\u8ba1\\u6570","zh-tw":"","en":"bug","de":"","fr":""}}', 'SELECT YEAR(t2.closedDate) AS `year`, t1.id, t1.name AS product, COUNT(1) AS bug
 FROM zt_product AS t1
 LEFT JOIN zt_bug AS t2 ON t1.id = t2.product AND t2.deleted = \'0\' AND t2.resolution = \'fixed\' AND t2.status = \'closed\'
 WHERE t1.deleted = \'0\' AND t1.shadow = \'0\' AND t1.vision = \'rnd\' AND t2.id IS NOT NULL
-GROUP BY `year`, id, product
+GROUP BY `year`, id, t1.name
 ORDER BY `year`, bug DESC', 'published', 0, '', 'system', null, '', null, 0);
 INSERT INTO zt_chart (id, name, dimension, type, `group`, `desc`, settings, filters, step, fields, langs, `sql`, stage, builtin, objects, createdBy, createdDate, editedBy, editedDate, deleted) VALUES (1105, '年度排行-个人-创建需求条目榜', 1, 'cluBarY', '56', '', '[{"type":"cluBarY","xaxis":[{"field":"realname","name":"realname","group":""}],"yaxis":[{"field":"count","name":"count","valOrAgg":"sum"}]}]', '[{"field":"year","type":"select","name":"\\u5e74\\u4efd"}]', 0, '{"year":{"name":"year","object":"story","field":"year","type":"number"},"realname":{"name":"realname","object":"zt_user","field":"realname","type":"string"},"count":{"name":"count","object":"story","field":"count","type":"string"}}', '{"year":{"zh-cn":"\\u5e74\\u4efd","zh-tw":"","en":"year","de":"","fr":""},"realname":{"zh-cn":"\\u59d3\\u540d","zh-tw":"","en":"realname","de":"","fr":""},"count":{"zh-cn":"\\u8ba1\\u6570","zh-tw":"","en":"count","de":"","fr":""}}', 'SELECT
 YEAR(t3.openedDate) AS `year`,t2.realname,count(1) AS count

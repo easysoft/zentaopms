@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The tips view file of project module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu
  * @package     project
@@ -29,7 +29,7 @@ $showBackToTaskList      = !$isKanbanProject && !$multiple;
 $showBackToKanban        = $isKanbanProject && !$multiple;
 $showBackToExecutionList = $multiple;
 
-$backUrl = createLink('project', 'execution', "status=undone&projectID={$projectID}");
+$backUrl = createLink('project', 'execution', "browseType=undone&projectID={$projectID}");
 if(!$isKanbanProject && !$multiple) $backUrl = createLink('execution', 'task', "executionID={$executionID}");
 if($isKanbanProject) $backUrl = $multiple ? createLink('project', 'index', "projectID={$projectID}") : createLink('execution', 'kanban', "executionID={$executionID}");
 
@@ -116,7 +116,7 @@ panel
             set::className('mr-2 tipBtn'),
             sprintf($lang->project->backToExecutionList, $executionLang),
             set::target('_blank'),
-            set::url(createLink('project', 'execution', "status=undone&projectID={$projectID}"))
+            set::url(createLink('project', 'execution', "browseType=undone&projectID={$projectID}"))
         ) : null,
         btn
         (

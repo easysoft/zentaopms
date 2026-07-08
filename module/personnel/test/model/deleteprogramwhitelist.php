@@ -19,7 +19,7 @@ pid=1
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $programID = array(0, 1, 2, 1111);
 $account   = array('admin', 'user1', 'test26');

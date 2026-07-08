@@ -1,8 +1,9 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=prodeutplanModel->linkProject();
+title=productplanModel->linkProject();
 timeout=0
 cid=17643
 
@@ -32,7 +33,7 @@ zenData('kanbancell')->gen(0);
 $projectIdList = array(11, 60, 100);
 $plans         = array(array(2), array(3));
 
-$planTester = new productPlan('admin');
+$planTester = new productplanModelTest('admin');
 r($planTester->linkProjectTest($projectIdList[0], $plans[0])) && p() && e('0'); // 测试敏捷项目关联子计划
 r($planTester->linkProjectTest($projectIdList[1], $plans[0])) && p() && e('0'); // 测试瀑布项目关联子计划
 r($planTester->linkProjectTest($projectIdList[2], $plans[0])) && p() && e('0'); // 测试看板项目关联子计划

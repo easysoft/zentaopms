@@ -40,7 +40,7 @@ class pivotTao extends pivotModel
         if($isObject) $pivots = array($pivots);
         $pivotIDList = array_column($pivots, 'id');
 
-        $pivotSpecs = $this->dao->select('t2.pivot,t2.version,t2.driver,t2.mode,t2.name,t2.desc,t2.sql,t2.fields,t2.langs,t2.vars,t2.objects,t2.settings,t2.filters,t2.createdDate')->from(TABLE_PIVOT)->alias('t1')
+        $pivotSpecs = $this->dao->select('t2.pivot,t2.version,t2.driver,t2.mode,t2.name,t2.desc,t2.sql,t2.fields,t2.langs,t2.vars,t2.objects,t2.settings,t2.filters,t2.`createdDate`')->from(TABLE_PIVOT)->alias('t1')
             ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
             ->where('t1.id')->in($pivotIDList)
             ->fetchAll('pivot', false);
@@ -72,7 +72,7 @@ class pivotTao extends pivotModel
         $productStatus = isset($filters['productStatus']) ? $filters['productStatus'] : '';
         $productType   = isset($filters['productType'])   ? $filters['productType']   : '';
 
-        return $this->dao->select('t1.id, t1.code, t1.name, t1.PO')->from(TABLE_PRODUCT)->alias('t1')
+        return $this->dao->select('t1.id, t1.code, t1.name, t1.`PO`')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.shadow')->eq('0')
@@ -239,8 +239,8 @@ class pivotTao extends pivotModel
             ->andWhere('t1.parent')->lt(1)
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.status')->eq('closed')
-            ->beginIF($begin)->andWhere('t2.realBegan')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('t2.realEnd')->le($end)->fi()
+            ->beginIF($begin)->andWhere('t2.`realBegan`')->ge($begin)->fi()
+            ->beginIF($end)->andWhere('t2.`realEnd`')->le($end)->fi()
             ->beginIF(!empty($executionIDList))->andWhere('t2.id')->in($executionIDList)->fi()
             ->groupBy('t1.project, t1.execution, t2.multiple, t2.end, t2.name, t3.multiple, t3.name')
             ->orderBy('t2.end_desc')
@@ -279,10 +279,10 @@ class pivotTao extends pivotModel
      */
     protected function getNoAssignExecution(array $deptUsers): array
     {
-        $assignedToList = $this->dao->select("DISTINCT IF(tt1.mode = '', tt1.assignedTo, tt2.account) AS assignedTo")->from(TABLE_TASK)->alias('tt1')
+        $assignedToList = $this->dao->select("DISTINCT IF(tt1.mode = '', tt1.`assignedTo`, tt2.account) AS assignedTo")->from(TABLE_TASK)->alias('tt1')
             ->leftJoin(TABLE_TASKTEAM)->alias('tt2')->on("tt1.id=tt2.task AND tt1.mode IN ('multi', 'linear')")
             ->where('tt1.status')->notIn('cancel,closed,done,pause')
-            ->andWhere("IF(tt1.mode = '', tt1.assignedTo, tt2.account)")->ne('')
+            ->andWhere("IF(tt1.mode = '', tt1.`assignedTo`, tt2.account)")->ne('')
             ->andWhere('tt1.execution = t1.`root`')
             ->get();
 
@@ -309,8 +309,8 @@ class pivotTao extends pivotModel
     {
         return $this->dao->select(<<<EOT
 t1.id,
-t1.isParent,
-CASE WHEN t1.mode = '' THEN t1.assignedTo ELSE t4.account END AS user,
+t1.`isParent`,
+CASE WHEN t1.mode = '' THEN t1.`assignedTo` ELSE t4.account END AS user,
 CASE WHEN t1.mode = '' THEN ROUND(t1.`left`, 2) ELSE ROUND(t4.`left`, 2) END AS `left`,
 t2.multiple,
 t2.id AS executionID,
@@ -324,8 +324,8 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.parent')->ge(0)
             ->andWhere('t1.status')->in('wait,pause,doing')
-            ->andWhere("if(t1.mode = '', t1.assignedTo, t4.account)")->ne('')
-            ->beginIF($deptUsers)->andWhere("if(t1.mode = '', t1.assignedTo, t4.account)")->in($deptUsers)->fi()
+            ->andWhere("if(t1.mode = '', t1.`assignedTo`, t4.account)")->ne('')
+            ->beginIF($deptUsers)->andWhere("if(t1.mode = '', t1.`assignedTo`, t4.account)")->in($deptUsers)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.vision')->like('rnd')
             ->andWhere('t2.status')->in('wait,suspended,doing')
@@ -378,7 +378,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
         return $this->dao->select('t2.product, t2.project')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
             ->where('t1.type')->eq('project')
-            ->andWhere('t1.hasProduct')->eq(0)
+            ->andWhere('t1.`hasProduct`')->eq(0)
             ->fetchPairs();
     }
 

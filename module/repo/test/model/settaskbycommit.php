@@ -80,14 +80,14 @@ $app->control = new repo();
 $repo = new repoModelTest();
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(1);
-r($result) && p('status,consumed,left') && e('doing,4,3'); //开始任务
+r($result) && p('status,consumed,left') && e('doing,4.00,3.00'); //开始任务
 
 $log->msg = $log->comment = 'Effort Task #8 Cost:1h Left:3h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,11,3'); //工时计算
+r($result) && p('status,consumed,left') && e('doing,11.00,3.00'); //工时计算
 
 $log->msg = $log->comment = 'Finish Task #2 Cost:10h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(2);
-r($result) && p('status,consumed,left') && e('done,14,0'); //完成任务
+r($result) && p('status,consumed,left') && e('done,14.00,0.00'); //完成任务

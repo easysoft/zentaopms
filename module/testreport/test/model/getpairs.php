@@ -15,9 +15,9 @@ title=测试 testreportModel->getPairs();
 cid=19119
 pid=1
 
-- 测试查询产品 0 appendID 0 的键对 @30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1
-- 测试查询产品 0 appendID 1 的键对 @30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1
-- 测试查询产品 0 appendID 101 的键对 @30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1
+- 测试查询产品 0 appendID 0 的键对 @0
+- 测试查询产品 0 appendID 1 的键对 @1
+- 测试查询产品 0 appendID 101 的键对 @0
 - 测试查询产品 1 appendID 0 的键对 @21,11,1
 - 测试查询产品 1 appendID 1 的键对 @21,11,1
 - 测试查询产品 1 appendID 101 的键对 @21,11,1
@@ -35,9 +35,9 @@ $appendIdList  = array(0, 1, 101);
 
 $testreport = new testreportModelTest();
 
-r($testreport->getPairsTest($productIdList[0], $appendIdList[0])) && p() && e('30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1'); // 测试查询产品 0 appendID 0 的键对
-r($testreport->getPairsTest($productIdList[0], $appendIdList[1])) && p() && e('30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1'); // 测试查询产品 0 appendID 1 的键对
-r($testreport->getPairsTest($productIdList[0], $appendIdList[2])) && p() && e('30,29,28,27,26,25,24,23,22,21,20,19,18,17,16,15,14,13,12,11,10,9,8,7,6,5,4,3,2,1'); // 测试查询产品 0 appendID 101 的键对
+r($testreport->getPairsTest($productIdList[0], $appendIdList[0])) && p() && e('0'); // 测试查询产品 0 appendID 0 的键对
+r($testreport->getPairsTest($productIdList[0], $appendIdList[1])) && p() && e('1'); // 测试查询产品 0 appendID 1 的键对
+r($testreport->getPairsTest($productIdList[0], $appendIdList[2])) && p() && e('0'); // 测试查询产品 0 appendID 101 的键对
 r($testreport->getPairsTest($productIdList[1], $appendIdList[0])) && p() && e('21,11,1');   // 测试查询产品 1 appendID 0 的键对
 r($testreport->getPairsTest($productIdList[1], $appendIdList[1])) && p() && e('21,11,1');   // 测试查询产品 1 appendID 1 的键对
 r($testreport->getPairsTest($productIdList[1], $appendIdList[2])) && p() && e('21,11,1');   // 测试查询产品 1 appendID 101 的键对

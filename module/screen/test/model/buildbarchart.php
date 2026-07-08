@@ -36,10 +36,10 @@ $component->option = new stdClass();
 $result = $screenTest->buildBarChartTest($component, $chartWithoutSettings);
 
 r($result) && p('key') && e('BarCrossrange');
-r($result) && p('chartConfig->chartKey') && e('VBarCrossrange');
-r($result) && p('option->xAxis->type') && e('category');
-r($result) && p('request->requestHttpType') && e('get');
-r($result) && p('option->yAxis->type') && e('value');
+r($result->chartConfig) && p('chartKey') && e('VBarCrossrange');
+r($result->option) && p('xAxis:type') && e('category');
+r($result->request) && p('requestHttpType') && e('get');
+r($result->option) && p('yAxis:type') && e('value');
 
 // 测试步骤6：有SQL但无设置的图表
 $chartWithSqlNoSettings = new stdClass();
@@ -50,4 +50,4 @@ $result2 = $screenTest->buildBarChartTest($component, $chartWithSqlNoSettings);
 r($result2) && p('key') && e('BarCrossrange');
 
 // 测试步骤7：检查背景色设置
-r($result) && p('option->backgroundColor') && e('rgba(0,0,0,0)');
+r($result->option) && p('backgroundColor', '|') && e('rgba(0,0,0,0)');

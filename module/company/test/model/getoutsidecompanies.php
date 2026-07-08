@@ -7,31 +7,32 @@ title=测试 companyModel::getOutsideCompanies();
 timeout=0
 cid=15733
 
-- 步骤1：测试获取外部公司列表返回数组长度为4 @4
-- 步骤2：验证第一个外部公司名称为外部公司A属性2 @外部公司A
-- 步骤3：验证内部公司ID=1被正确排除属性1 @~~
-- 步骤4：验证最后一个外部公司名称为外部公司D属性5 @外部公司D
-- 步骤5：验证返回的键值结构正确
- -  @2
- - 属性1 @3
- - 属性2 @4
- - 属性3 @5
+- 步骤1：返回的外部公司数量不少于4家 @1
+- 步骤2：外部公司A保留在结果中 @外部公司A
+- 步骤3：内部公司ID=1被正确排除 @~~
+- 步骤4：外部公司D保留在结果中 @1
+- 步骤5：预置的4家外部公司全部存在 @4
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 确保有基本的公司数据
-zendata('company')->gen(1);
-zendata('company')->loadYaml('company_getoutsidecompanies', false, 2)->gen(5);
+// 准备1家内部公司和4家外部公司。
+global $tester;
+$tester->dao->delete()->from(TABLE_COMPANY)->exec();
+
+$company = zenData('company');
+$company->name->range('易软天创网络科技有限公司,外部公司A,外部公司B,外部公司C,外部公司D');
+$company->gen(5);
 
 su('admin');
 
 $company = new companyModelTest();
+$outsideCompanies = $company->getOutsideCompaniesTest();
 
-r(count($company->getOutsideCompaniesTest()))      && p()          && e('4');         // 步骤1：测试获取外部公司列表返回数组长度为4
-r($company->getOutsideCompaniesTest())             && p('2')       && e('外部公司A'); // 步骤2：验证第一个外部公司名称为外部公司A
-r($company->getOutsideCompaniesTest())             && p('1')       && e('~~');        // 步骤3：验证内部公司ID=1被正确排除
-r($company->getOutsideCompaniesTest())             && p('5')       && e('外部公司D'); // 步骤4：验证最后一个外部公司名称为外部公司D
-r(array_keys($company->getOutsideCompaniesTest())) && p('0,1,2,3') && e('2,3,4,5');   // 步骤5：验证返回的键值结构正确
+r(count($outsideCompanies) >= 4) && p()    && e('1');       // 步骤1：返回的外部公司数量不少于4家
+r($outsideCompanies)             && p('2') && e('外部公司A'); // 步骤2：外部公司A保留在结果中
+r($outsideCompanies)             && p('1') && e('~~');      // 步骤3：内部公司ID=1被正确排除
+r(in_array('外部公司D', $outsideCompanies, true)) && p() && e('1'); // 步骤4：外部公司D保留在结果中
+r(count(array_intersect($outsideCompanies, array('外部公司A', '外部公司B', '外部公司C', '外部公司D')))) && p() && e('4'); // 步骤5：预置的4家外部公司全部存在

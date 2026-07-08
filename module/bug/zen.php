@@ -966,19 +966,19 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreplace', 0, '');
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,noreleased,nowaitreleased,nofail', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nowaitreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1512,7 +1512,7 @@ class bugZen extends bug
             }
         }
 
-        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bySearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('bug', 'linkBugs', "bugID={$bug->id}&bysearch=true&excludeBugs={$excludeBugs}&queryID=myQueryID", '', true);
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
     }
 
@@ -2232,8 +2232,8 @@ class bugZen extends bug
             if(!$task->deleted)
             {
                 $confirmedURL = $this->createLink('task', 'view', "taskID={$bug->toTask}");
-                $canceledURL  = $this->createLink('bug', 'view', "bugID={$bug->id}");
-                return $this->send(array('result' => 'success', 'load' => array('confirm' => sprintf($this->lang->bug->notice->remindTask, $bug->toTask), 'confirmed' => $confirmedURL, 'canceled' => $canceledURL)));
+                $confirmTips  = sprintf($this->lang->bug->notice->remindTask, $bug->toTask);
+                return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$confirmTips}'}).then((res) => {if(res) zui.Modal.open({url:'{$confirmedURL}', size: 'lg'})});", 'load' => true));
             }
         }
 
@@ -2466,7 +2466,7 @@ class bugZen extends bug
             if($this->config->edition != 'open')
             {
                 $fields       = array();
-                $extendFields = $this->loadModel('flow')->getExtendFields('bug', 'create');
+                $extendFields = $this->loadModel('flow')->getExtendFields('bug', $this->app->rawMethod);
                 foreach($extendFields as $field) $fields[$field->field] = $bugInfo->{$field->field};
                 $bug = $this->updateBug($bug, $fields);
             }

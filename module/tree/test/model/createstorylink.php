@@ -28,8 +28,8 @@ $extra5 = array('branchID' => 0);
 
 $tree = new treeModelTest();
 
-r($tree->createStoryLinkTest(1, 0, $extra1)) && p('url') && e("projectstory-story-1-0--byModule-1-story.html");      // 测试获取module 1 project 1 的 story link
-r($tree->createStoryLinkTest(1, 0, $extra2)) && p('url') && e("projectstory-story-1-1--byModule-1-story.html");      // 测试获取module 1 project 1 product 1 的 story link
-r($tree->createStoryLinkTest(1, 0, $extra3)) && p('url') && e("product-browse-1-0-byModule-1-story.html");           // 测试获取module 1 product 1 的 story link
-r($tree->createStoryLinkTest(1, 0, $extra4)) && p('url') && e("execution-story-1-story-order_desc-byModule-1.html"); // 测试获取module 1 exectution 1 的 story link
-r($tree->createStoryLinkTest(1, 0, $extra5)) && p('url') && e("product-browse-1-0-byModule-1-story.html");           // 测试获取module 1 的 story link
+r($tree->createStoryLinkTest(1, 0, $extra1)) && p('url') && e("createstorylink.php?m=projectstory&f=story&projectID=1&productID=0&branch=&browseType=byModule&param=1&storyType=story");      // 测试获取module 1 project 1 的 story link
+r($tree->createStoryLinkTest(1, 0, $extra2)) && p('url') && e("createstorylink.php?m=projectstory&f=story&projectID=1&productID=1&branch=&browseType=byModule&param=1&storyType=story");      // 测试获取module 1 project 1 product 1 的 story link
+r($tree->createStoryLinkTest(1, 0, $extra3)) && p('url') && e("createstorylink.php?m=product&f=browse&root=1&branch=0&type=byModule&param=1&storyType=story");           // 测试获取module 1 product 1 的 story link
+r($tree->createStoryLinkTest(1, 0, $extra4)) && p('url') && e("createstorylink.php?m=execution&f=story&executionID=1&storyType=story&orderBy=order_desc&type=byModule&param=1"); // 测试获取module 1 exectution 1 的 story link
+r($tree->createStoryLinkTest(1, 0, $extra5)) && p('url') && e("createstorylink.php?m=product&f=browse&root=1&branch=0&type=byModule&param=1&storyType=story");           // 测试获取module 1 的 story link

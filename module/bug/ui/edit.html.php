@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The edit file of bug module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang<wangyuting@easycorp.ltd>
  * @package     bug
@@ -22,6 +22,13 @@ jsVar('projectExecutionPairs', $projectExecutionPairs);
 jsVar('edition',               $config->edition);
 jsVar('isShadowProduct',       !empty($product->shadow));
 jsVar('duplicateBugID',        !empty($bug->duplicateBug) ? $bug->duplicateBug : 0);
+
+$files = array();
+foreach($bug->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
+}
 
 $isEn = $app->getClientLang() == 'en';
 
@@ -98,7 +105,7 @@ detailBody
         section
         (
             set::title($lang->files),
-            fileSelector($bug->files ? set::defaultFiles(array_values($bug->files)) : null)
+            fileSelector($files ? set::defaultFiles($files) : null)
         ),
         section
         (

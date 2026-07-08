@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
-su('user1');
 
 /**
 
@@ -51,7 +50,10 @@ $effort->work->prefix('工作内容')->range('1-10');
 $effort->gen(10);
 
 $user = zenData('user');
+$user->account->prefix('user')->range('1-20');
+$user->realname->prefix('用户')->range('1-20');
 $user->gen(20);
+su('user1');
 
 $finishTaskEffort = new stdclass();
 $finishTaskEffort->consumed = 5;

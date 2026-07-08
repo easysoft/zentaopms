@@ -11,7 +11,7 @@ cid=15683
 - 步骤2：登录后方法权限验证 @1
 - 步骤3：非公开方法权限验证 @0
 - 步骤4：特殊模块方法权限验证 @1
-- 步骤5：Ajax方法权限验证 @1
+- 步骤5：Ajax依赖公开方法时返回true @1
 - 步骤6：block模块特殊方法权限验证 @1
 - 步骤7：不存在方法权限验证 @0
 
@@ -32,6 +32,6 @@ r($commonTest->isOpenMethodTest('misc', 'changelog')) && p() && e('1');        /
 r($commonTest->isOpenMethodTest('tutorial', 'quit')) && p() && e('1');         // 步骤2：登录后方法权限验证
 r($commonTest->isOpenMethodTest('my', 'task')) && p() && e('0');               // 步骤3：非公开方法权限验证
 r($commonTest->isOpenMethodTest('product', 'showerrornone')) && p() && e('1'); // 步骤4：特殊模块方法权限验证
-r($commonTest->isOpenMethodTest('user', 'ajaxGetList')) && p() && e('1');      // 步骤5：Ajax方法权限验证
+r($commonTest->isOpenMethodTest('misc', 'ajaxgetclientpackage')) && p() && e('1'); // 步骤5：Ajax依赖公开方法时返回true
 r($commonTest->isOpenMethodTest('block', 'dashboard')) && p() && e('1');       // 步骤6：block模块特殊方法权限验证
 r($commonTest->isOpenMethodTest('unknown', 'invalidmethod')) && p() && e('0'); // 步骤7：不存在方法权限验证

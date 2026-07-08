@@ -237,7 +237,11 @@ class dtable extends wg
      */
     public function initFormCol(array $config): array
     {
-        if(!empty($config['control']) && is_string($config['control'])) $config['control'] = array('type' => $config['control']);
+        if(!empty($config['control']) && is_string($config['control']))
+        {
+            if(strpos($config['control'], 'RAWJS<') === 0) return $config; // 自定义回调函数
+            $config['control'] = array('type' => $config['control']);
+        }
 
         if(isset($config['controlItems']))
         {
@@ -298,6 +302,8 @@ class dtable extends wg
      */
     public function initFooterBar()
     {
+        global $app, $config;
+
         $footToolbar = $this->prop('footToolbar');
         if(!empty($footToolbar))
         {
@@ -313,6 +319,42 @@ class dtable extends wg
                 }
                 $footToolbar['items'] = $footToolbarItems;
             }
+
+        }
+
+        if($config->edition != 'open')
+        {
+            $moduleName = $this->prop('moduleName') ? $this->prop('moduleName') : $app->moduleName;
+            $methodName = $this->prop('methodName') ? $this->prop('methodName') : $app->methodName;
+
+            $module = '';
+            if($methodName == 'browse') $module = $moduleName;
+            if(($moduleName == 'project' || $moduleName == 'execution') && $methodName == 'bug')      $module = 'bug';
+            if(($moduleName == 'project' || $moduleName == 'execution') && $methodName == 'testcase') $module = 'testcase';
+            if(($moduleName == 'project' || $moduleName == 'execution') && $methodName == 'task')     $module = 'task';
+            if(($moduleName == 'project' || $moduleName == 'execution') && $methodName == 'story')    $module = 'story';
+            if($moduleName == 'project'   && $methodName == 'execution') $module = 'execution';
+            if($moduleName == 'execution' && $methodName == 'all')       $module = 'execution';
+            if($moduleName == 'product'   && $methodName == 'all')       $module = 'product';
+            if($moduleName == 'program'   && $methodName == 'browse')    $module = '';
+
+            if($module)
+            {
+                $groupID = $app->control->loadModel('workflowgroup')->getGroupIDByData($module, current($this->prop('data')));
+                $flowFooterBar = $app->control->loadModel('flow')->buildDtableFootToolbar($module, $groupID);
+                if($flowFooterBar)
+                {
+                    $this->setProp('footer', array('checkbox', 'toolbar', 'checkedInfo', 'flex', 'pager'));
+                    $footToolbar['items'][] = current($flowFooterBar);
+                }
+            }
+        }
+
+        if(!empty($footToolbar))
+        {
+            $footToolbar['btnProps'] = array('className' => 'secondary', 'size' => 'sm');
+
+            $this->setProp('checkable', true);
             $this->setProp('footToolbar', $footToolbar);
         }
     }

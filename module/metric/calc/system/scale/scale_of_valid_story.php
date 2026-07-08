@@ -11,7 +11,7 @@
  * 描述：按系统统计的有效的研发需求规模数反映了组织中有效的研发需求的规模总数，用于评估组织对于项目成果评估、资源规划、目标达成度评估、绩效评估和持续改进具有重要意义。
  * 定义：复用：;按系统统计的无效研发需求规模数;按系统统计的研发需求规模数;公式：;按系统统计的有效研发需求数=按系统统计的研发需求规模数-按系统统计的无效研发需求规模数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class scale_of_valid_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.estimate', 't1.closedReason', 't1.parent', 't1.isParent');
+    public $fieldList = array('t1.estimate', 't1.`closedReason`', 't1.parent', 't1.`isParent`');
 
     public $result = 0;
 

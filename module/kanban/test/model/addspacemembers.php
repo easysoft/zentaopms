@@ -33,10 +33,10 @@ su('admin');
 
 $kanbanTest = new kanbanModelTest();
 
-r($kanbanTest->addSpaceMembersTest(1, 'whitelist', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue') && e('user3,admin,po1,dev1,qa1');
-r($kanbanTest->addSpaceMembersTest(2, 'team', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue') && e('po15,admin,po1,dev1,qa1');
-r($kanbanTest->addSpaceMembersTest(1, 'whitelist', array('admin', 'user3'))) && p('fieldValue') && e('user3,admin,po1,dev1,qa1');
-r($kanbanTest->addSpaceMembersTest(3, 'team', array())) && p('fieldValue') && e('user4');
-r($kanbanTest->addSpaceMembersTest(999, 'whitelist', array('test1', 'test2'))) && p('fieldValue') && e('~~');
-r($kanbanTest->addSpaceMembersTest(1, 'team', array('specialuser', '', 'normaluser'))) && p('fieldValue') && e('user3,specialuser,,normaluser');
-r($kanbanTest->addSpaceMembersTest(3, 'whitelist', array('newuser1', 'newuser2', 'newuser3'))) && p('fieldValue') && e('user4,newuser1,newuser2,newuser3');
+r($kanbanTest->addSpaceMembersTest(1, 'whitelist', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue', '|') && e('user3,admin,po1,dev1,qa1');
+r($kanbanTest->addSpaceMembersTest(2, 'team', array('admin', 'po1', 'dev1', 'qa1'))) && p('fieldValue', '|') && e('po15,admin,po1,dev1,qa1');
+r($kanbanTest->addSpaceMembersTest(1, 'whitelist', array('admin', 'user3'))) && p('fieldValue', '|') && e('user3,admin,po1,dev1,qa1');
+r($kanbanTest->addSpaceMembersTest(3, 'team', array())) && p('fieldValue', '|') && e('user4');
+r($kanbanTest->addSpaceMembersTest(999, 'whitelist', array('test1', 'test2'))) && p('fieldValue', '|') && e('~~');
+r($kanbanTest->addSpaceMembersTest(1, 'team', array('specialuser', '', 'normaluser'))) && p('fieldValue', '|') && e('user3,specialuser,,normaluser');
+r($kanbanTest->addSpaceMembersTest(3, 'whitelist', array('newuser1', 'newuser2', 'newuser3'))) && p('fieldValue', '|') && e('user4,newuser1,newuser2,newuser3');

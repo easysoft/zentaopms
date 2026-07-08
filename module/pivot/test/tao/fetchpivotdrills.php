@@ -1,23 +1,6 @@
 #!/usr/bin/env php
 <?php
-declare(strict_types=1);
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tao.class.php';
-
-// 准备测试数据
-$pivotdrill = zenData('pivotdrill');
-$pivotdrill->pivot->range('1,1,2,2,3');
-$pivotdrill->version->range('1,1,2,2,3');
-$pivotdrill->field->range('name,status,status,category,priority');
-$pivotdrill->object->range('bug,bug,story,story,task');
-$pivotdrill->whereSql->range('status = "active",deleted = "0",type = "story",,priority > 1');
-$pivotdrill->condition->range('{"field":"status","operator":"=","value":"active"},{"field":"deleted","operator":"=","value":"0"},{"field":"type","operator":"=","value":"story"},{},"{"field":"priority","operator":">","value":"1"}');
-$pivotdrill->status->range('published,published,published,design,published');
-$pivotdrill->account->range('admin,admin,user1,user1,admin');
-$pivotdrill->type->range('manual,manual,auto,auto,manual');
-$pivotdrill->gen(5);
-
-su('admin');
+declare(strict_types = 1);
 
 /**
 
@@ -26,10 +9,10 @@ timeout=0
 cid=17438
 
 - 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', 'status' 第status条的field属性 @status
-- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', array  @2
-- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是999, '1', 'status'  @0
-- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '999', 'status'  @0
-- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', 'notexistfield'  @0
+- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', array @2
+- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是999, '1', 'status' @0
+- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '999', 'status' @0
+- 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', 'notexistfield' @0
 - 执行pivotTest模块的fetchPivotDrillsTest方法，参数是2, '1', 'status' 第status条的pivot属性 @2
 - 执行pivotTest模块的fetchPivotDrillsTest方法，参数是1, '1', 'status' 第status条的object属性 @bug
 

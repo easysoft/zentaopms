@@ -99,24 +99,9 @@ class taskZenTest extends baseTest
      */
     public function processExportGroupTest(int $executionID, array $tasks, string $orderBy): array
     {
-        try {
-            // 使用 initReference 来获取 zen 类反射
-            $taskZenRef = initReference('task');
-            $method = $taskZenRef->getMethod('processExportGroup');
-            $method->setAccessible(true);
+        $result = $this->invokeArgs('processExportGroup', [$executionID, $tasks, $orderBy]);
+        if(dao::isError()) return dao::getError();
 
-            // 创建 zen 实例
-            $taskZenInstance = $taskZenRef->newInstance();
-
-            $result = $method->invokeArgs($taskZenInstance, [$executionID, $tasks, $orderBy]);
-
-            if(dao::isError()) return dao::getError();
-
-            return $result;
-        } catch (Exception $e) {
-            return array('error' => $e->getMessage());
-        } catch (Throwable $e) {
-            return array('error' => $e->getMessage());
-        }
+        return $result;
     }
 }

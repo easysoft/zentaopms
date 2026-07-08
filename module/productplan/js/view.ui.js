@@ -17,6 +17,14 @@ window.renderStoryCell = function(result, info)
         if(html) result.unshift({html});
     }
 
+    if(info.col.name == 'pri' && result)
+    {
+        priList = storyPriList;
+        if(story.type == 'requirement') priList = requirementPriList;
+        if(story.type == 'epic')        priList = epicPriList;
+        result[0]['props']['text'] = priList[story.pri];
+    }
+
     if(info.col.name == 'sort')
     {
         result[0] = {html: "<i class='icon-move'></i>", className: 'text-gray cursor-move move-plan'};
@@ -75,7 +83,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         if(checkedIdList.includes(row.id))
         {
             const story = element.getRowInfo(row.id);
-            if(story.data.type == 'story')
+            if(story.data.type === 'story' || story.data.type === 'requirement' || story.data.type === 'epic')
             {
                 total += 1;
                 if(story.data.isParent == '0') checkedEstimate += parseFloat(story.data.estimate);

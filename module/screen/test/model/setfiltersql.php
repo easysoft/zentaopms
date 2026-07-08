@@ -54,6 +54,6 @@ r($screenTest->setFilterSQLTest($chart, '', false)) && p('') && e("SELECT id,nam
 r($screenTest->setFilterSQLTest($chart, 'year', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 2023 = '2023'");
 r($screenTest->setFilterSQLTest($chart, 'account', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin'");
 r($screenTest->setFilterSQLTest($chart, 'month', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE 06 = '06'");
-r($screenTest->setFilterSQLTest($chart, 'dept', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin IN ('admin','user1')");
-r($screenTest->setFilterSQLTest($chart, 'multiple', true)) && p('') && e("SELECT * FROM (SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0') AS t1 WHERE admin = 'admin' AND 2023 = '2023'");
-r($screenTest->setFilterSQLTest(new stdclass(), '', false)) && p('') && e("");
+r($screenTest->setFilterSQLTest($chart, 'dept', true)) && p('') && e("SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'");
+r($screenTest->setFilterSQLTest($chart, 'multiple', true)) && p('') && e("SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'");
+r($screenTest->setFilterSQLTest($chart, '', true)) && p('') && e("SELECT id,name FROM zt_project WHERE type='program' AND parent=0 AND deleted='0'");

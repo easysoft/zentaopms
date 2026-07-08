@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Wang Yidong<yidong@easycorp.ltd>
  * @package     story
@@ -63,12 +63,10 @@ class storyZen extends story
         }
         if($this->app->tab == 'project')
         {
-            $projectID = $objectID;
-            if(!$this->session->multiple)
-            {
-                $projectID = $this->session->project;
-                $objectID  = $this->execution->getNoMultipleID($projectID);
-            }
+            $projectID = $objectID ? $objectID : $this->session->project;
+            $project   = $this->project->fetchByID($projectID);
+            if(in_array($project->type, array('sprint', 'stage', 'kanban'))) $projectID = $project->project;
+            if(empty($project->multiple) && $project->type == 'project') $objectID = $this->execution->getNoMultipleID($projectID);
 
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->checkAccess($projectID, $projects);
@@ -380,7 +378,7 @@ class storyZen extends story
 
         if($this->config->edition != 'open')
         {
-            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, 'create');
+            $extendFields = $this->loadModel('flow')->getExtendFields($story->type, $this->app->rawMethod);
             foreach($extendFields as $field) $initStory->{$field->field} = $story->{$field->field};
         }
 
@@ -452,7 +450,7 @@ class storyZen extends story
         $products  = array();
         $branches  = array();
 
-        if($objectID != 0)
+        if(!empty($objectID))
         {
             $onlyNoClosed = empty($this->config->CRProduct) ? 'noclosed' : '';
             $products     = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
@@ -1289,7 +1287,7 @@ class storyZen extends story
 
         if(dao::isError()) return false;
 
-        $hasProduct = $this->dao->select('t2.hasProduct')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $hasProduct = $this->dao->select('t2.`hasProduct`')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($oldStory->product)
             ->andWhere('t2.deleted')->eq(0)
@@ -1610,9 +1608,9 @@ class storyZen extends story
             if($story->closedBy     || $story->closedReason)    $story->status   = 'closed';
             if($story->closedReason && empty($story->closedBy)) $story->closedBy = $account;
 
-            if($story->closedBy && empty($story->closedReason)) dao::$errors['closedReason'] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
-            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors['stage'] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
-            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors['duplicateStory'] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
+            if($story->closedBy && empty($story->closedReason)) dao::$errors["closedReason[$storyID]"] = sprintf($this->lang->error->notempty, $this->lang->story->closedReason);
+            if($story->closedReason == 'done' && empty($story->stage)) dao::$errors["stage[$storyID]"] = sprintf($this->lang->error->notempty, $this->lang->story->stage);
+            if($story->closedReason == 'duplicate' && empty($story->duplicateStory)) dao::$errors["duplicateStory[{$storyID}]"] = sprintf($this->lang->error->notempty, $this->lang->story->duplicateStory);
             if($this->config->vision == 'or' && $this->config->edition == 'ipd')
             {
                 if($story->stage == 'wait' && !empty($story->roadmap) && isset($roadmaps[$story->roadmap])) $story->stage = $roadmaps[$story->roadmap]->status == 'launched' ? 'incharter' : 'inroadmap';
@@ -1739,8 +1737,7 @@ class storyZen extends story
         {
             helper::setcookie('storyModuleParam', '0', 0);
             $object = $this->loadModel('project')->fetchByID($objectID);
-            if(empty($_SESSION['storyList'])) return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
-            return $this->session->storyList;
+            return $this->createLink($this->app->tab == 'project' && $object->type == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
         }
 
         if($this->app->tab == 'product')
@@ -1992,7 +1989,7 @@ class storyZen extends story
         $this->view->bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->fromBug       = $story->fromBug ? $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch() : '';
         $this->view->cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($story->id, 'story');
+        $this->view->linkedMRs     = $this->loadModel('ppm')->getLinkedMRPairs($story->id, 'story');
         $this->view->linkedCommits = $this->loadModel('repo')->getCommitsByObject($story->id, 'story');
         $this->view->modulePath    = $this->tree->getParents($story->module);
         $this->view->storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The license view file of upgrade module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     upgrade
@@ -15,7 +15,7 @@ set::zui(true);
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
 
-$cmd  = strtoupper(substr(PHP_OS, 0, 3)) === 'WIN' ? $lang->upgrade->createWinFile : $lang->upgrade->createLinuxFile;
+$cmd  = helper::isWindows() ? $lang->upgrade->createWinFile : $lang->upgrade->createLinuxFile;
 $isEn = $app->getClientLang() == 'en';
 
 div

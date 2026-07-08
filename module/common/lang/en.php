@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -29,6 +29,7 @@ $lang->slash     = '/';
 $lang->and       = 'and';
 $lang->to        = 'To';
 $lang->minus     = ' - ';
+$lang->in        = 'In';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -103,6 +104,7 @@ $lang->childrenAB         = 'Child';
 $lang->branchName         = 'Branch/Platform';
 $lang->recommend          = 'Recommend';
 $lang->schedule           = 'Calendar';
+$lang->basicInfo          = 'Basic Info';
 
 $lang->actions         = 'Actions';
 $lang->restore         = 'Restore defaults';
@@ -304,7 +306,7 @@ $lang->zanode->common       = 'ZAnode';
 $lang->zanode->instruction  = 'Instructions';
 $lang->dimension->common    = 'Dimension';
 $lang->contact->common      = 'Contacts';
-$lang->space->common        = 'Service Management';
+$lang->space->common        = 'Space';
 $lang->store->common        = 'App Store';
 $lang->instance->common     = 'Instance';
 $lang->ai->common           = 'AI';
@@ -376,6 +378,16 @@ $lang->systemcompany->common    = 'Company';
 $lang->pipeline->common         = 'Pipelines';
 $lang->devopssetting->common    = 'Settings';
 $lang->deployment->common       = 'Host';
+$lang->repoSettings->common     = 'Settings';
+$lang->devops->branchType       = 'Branch Type';
+$lang->devops->reviewFlow       = 'Review Flow';
+$lang->devops->reporeviewflow   = 'Review Flow';
+$lang->devops->execution        = 'Execution';
+$lang->artifact->common         = 'Artifact Repository';
+$lang->ssh->common              = 'SSH Key';
+$lang->codeReview->common       = 'Code Review';
+$lang->runner->common           = 'Runner';
+$lang->repobranchrule->common   = 'Branch Rule';
 
 $lang->dashboard       = 'Overview';
 $lang->contribute      = 'Contribution';
@@ -449,7 +461,7 @@ $lang->testcase->testsuite = 'Test Suite';
 $lang->testcase->caselib   = 'Case Library';
 
 $lang->devops->compile      = 'Pipelines';
-$lang->devops->mr           = 'Merge Requests';
+$lang->devops->ppm          = 'Code Review';
 $lang->devops->repo         = 'Repositories';
 $lang->devops->rules        = 'Rules';
 $lang->devops->settings     = 'Merge Request Settings';
@@ -469,6 +481,28 @@ $lang->devops->os           = 'OS Version';
 $lang->devops->service      = 'Services';
 $lang->devops->platform     = 'Platforms';
 $lang->devops->components   = 'Components';
+$lang->devops->spaceSetting = 'Setting';
+$lang->devops->member       = 'Member';
+$lang->devops->group        = 'Privilege';
+$lang->devops->overview     = 'Overview';
+$lang->devops->codescan     = 'Code Scan';
+$lang->devops->scanRule     = 'Rule';
+$lang->devops->scanSolution = 'Scan Solution';
+$lang->devops->scanPlan     = 'Scan Plan';
+$lang->devops->scanTask     = 'Scan Task';
+$lang->devops->reviewIssue  = 'Review Issue';
+$lang->devops->scanIssue    = 'Scan Issue';
+$lang->devops->ruleSet      = 'Rule Set';
+$lang->devops->system       = 'Applications';
+$lang->systemManage->common = 'Applications';
+$lang->codeScan->common     = 'Scan Rules';
+$lang->ruleset->common      = 'Ruleset';
+$lang->scansolution->common = 'Scan Solution';
+$lang->scanplan->common     = 'Scan Plan';
+$lang->scantask->common     = 'Scan Task';
+$lang->scanissue->common    = 'Scan Issue';
+$lang->scanOverview->common = 'Scan Overview';
+$lang->provider->common     = 'Service';
 
 $lang->admin->module      = 'Feature Settings';
 $lang->admin->system      = 'System';
@@ -523,8 +557,9 @@ $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = 'Full Feature Interface';
-$lang->visionList['lite'] = 'Operations Interface';
+$lang->visionList['rnd']    = 'Full Feature Interface';
+$lang->visionList['lite']   = 'Operations Interface';
+//$lang->visionList['devops'] = 'DevOps Interface';
 
 $lang->createObjects['todo']        = 'To-Do';
 $lang->createObjects['effort']      = 'Effort';

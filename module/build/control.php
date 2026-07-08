@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
@@ -443,12 +443,12 @@ class build extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Build search form. */
-        $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bySearch' ? (int)$param : 0, isset($product->type) ? $product->type : 'normal');
+        $this->buildZen->buildLinkStorySearchForm($build, $browseType == 'bysearch' ? (int)$param : 0, isset($product->type) ? $product->type : 'normal');
 
         $this->loadModel('story');
         $executionID = $build->execution ? (int)$build->execution : (int)$build->project;
         $excludeStoryIdList = $this->buildZen->getExcludeStoryIdList($build);
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allStories = $this->story->getBySearch($build->product, $build->branch, (int)$param, $orderBy, $executionID, 'story', $excludeStoryIdList, '', $pager);
         }
@@ -637,7 +637,7 @@ class build extends control
         if($build->execution) $this->loadModel('execution')->setMenu($build->execution);
 
         /* Build the search form. */
-        $queryID = $browseType == 'bySearch' ? $param : 0;
+        $queryID = $browseType == 'bysearch' ? $param : 0;
         $this->buildZen->buildLinkBugSearchForm($build, $queryID, isset($product->type) ? $product->type : 'normal');
 
         /* Load pager. */
@@ -646,7 +646,7 @@ class build extends control
 
         $this->loadModel('bug');
         $executionID = $build->execution ? $build->execution : $build->project;
-        if($browseType == 'bySearch')
+        if($browseType == 'bysearch')
         {
             $allBugs = $this->bug->getBySearch('bug', $build->product, $build->branch, $build->project, $build->execution, $queryID, $build->allBugs, 'id_desc', $pager);
         }

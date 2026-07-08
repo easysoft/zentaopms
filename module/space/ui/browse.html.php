@@ -2,77 +2,52 @@
 declare(strict_types=1);
 /**
  * The browse view file of space module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
- * @author      Zeng Gang<zenggang@easycorp.ltd>
+ * @author      Yang Li <liyang@chandao.com>
  * @package     space
  * @link        https://www.zentao.net
  */
 namespace zin;
 
-$statusMap  = array();
-$canInstall = hasPriv('instance', 'manage') && !$config->inCompose;
-if(!hasPriv('instance', 'manage')) $config->space->dtable->fieldList['actions']['menu'] = array('visit');
+jsVar('spaceRepoMap', $this->session->spaceRepoMap ? json_decode($this->session->spaceRepoMap, true) : array());
 
-foreach($instances as $instance) if('store' === $instance->type) $statusMap[$instance->id] = $instance->status;
-jsVar('statusMap', $statusMap);
-jsVar('idList',    array_keys($statusMap));
-jsVar('inQuickon', $config->inQuickon);
+$canCreate  = hasPriv('space', 'create');
+$createLink = $this->createLink('space', 'create');
+$createItem = array('text' => $lang->space->create, 'url' => $createLink, 'class' => 'primary', 'icon' => 'plus');
+$isJumpRepo = !empty($config->spaceLink) && $config->spaceLink == 'repo-browse';
 
-$this->loadModel('instance');
-$instances = initTableData($instances, $config->space->dtable->fieldList, $this->instance);
-
-featureBar
+featureBar();
+toolbar
 (
-    set::current($browseType),
-    set::linkParams("spaceID=&browseType={key}")
+    $canCreate ? item(set($createItem)) : null,
 );
 
-$app->loadLang('solution');
-toolBar
-(
-    $canInstall ? item(set(array
+if(empty($spaces))
+{
+    div
     (
-        'text'  => $lang->space->install,
-        'icon'  => 'plus',
-        'class' => 'btn primary',
-        'url'   => createLink('space', 'createApplication')
-    ))) : null
-);
+        setClass('w-full dtable-empty-tip text-center bg-white'),
+        div
+        (
+            setClass('text-gray'),
+            $lang->space->notice->noSpaces,
+            hasPriv('space', 'create') ?
+            btn
+            (
+                set(array('text' => $lang->space->create, 'url' => inLink('create'), 'class' => 'ml-2 primary-pale border-primary', 'icon'  => 'plus'))
+            ) : null
+        ),
+    );
+    return;
+}
 
-$langConfirmUninstal          = $lang->instance->notices['confirmUninstall'];
-$langConfirmUninstallStoreApp = $lang->instance->notices['confirmUninstallStoreApp'];
+$tableData = initTableData($spaces, $config->space->dtable->fieldList, $this->space);
 dtable
 (
-    set::actionItemCreator(jsRaw(<<<JS
-        (item, info) => {
-            if(item.url)
-            {
-                if(typeof item.url == 'string') item.url = zui.formatString(item.url, info.row.data);
-                else item.url.params = zui.formatString(item.url.params, info.row.data);
-            }
-            if(info.row.data.type != 'store' && item.icon == 'trash')
-            {
-                item['data-confirm']['message'] = '$langConfirmUninstal';
-                Object.assign(item, item);
-                return item;
-            }
-            if(info.row.data.type == 'store' && item.icon == 'trash')
-            {
-                item['data-confirm']['message'] = '$langConfirmUninstallStoreApp';
-                Object.assign(item, item);
-                return item;
-            }
-            return item;
-        }
-    JS)),
-    set::userMap($users),
+    $isJumpRepo ? set::onRenderCell(jsRaw('window.renderCell')) : null,
     set::cols($config->space->dtable->fieldList),
-    set::data($instances),
-    set::onRenderCell(jsRaw('window.renderInstanceList')),
-    set::sortLink(createLink('space', 'browse', "spaceID=&browseType={$browseType}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}")),
-    set::orderBys($orderBy),
+    set::data($tableData),
+    set::userMap($users),
     set::footPager(usePager())
 );
-
-a(setStyle('display', 'none'), setID('editLinkContainer'), setData('toggle', 'modal'));

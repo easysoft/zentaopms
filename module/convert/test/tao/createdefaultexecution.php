@@ -63,8 +63,8 @@ su('admin');
 
 $convertTest = new convertTaoTest();
 
-r($convertTest->createDefaultExecutionTest(1001, 1, array())) && p() && e('1'); // 步骤1:正常情况,无团队成员
-r($convertTest->createDefaultExecutionTest(1002, 2, array())) && p() && e('1'); // 步骤2:不同项目无团队成员
-r($convertTest->createDefaultExecutionTest(1003, 3, array())) && p() && e('1'); // 步骤3:第三个项目无团队成员
-r($convertTest->createDefaultExecutionTest(1004, 4, array())) && p() && e('1'); // 步骤4:第四个项目无团队成员
-r($convertTest->createDefaultExecutionTest(1005, 5, array())) && p() && e('1'); // 步骤5:第五个项目无团队成员
+r($convertTest->createDefaultExecutionTest(1001, 1, array()) > 0) && p() && e('1'); // 步骤1:正常情况,无团队成员
+r($convertTest->createDefaultExecutionTest(1002, 2, array()) > 0) && p() && e('1'); // 步骤2:不同项目无团队成员
+r($convertTest->createDefaultExecutionTest(1003, 3, array()) > 0) && p() && e('1'); // 步骤3:第三个项目无团队成员
+r($convertTest->createDefaultExecutionTest(1004, 4, array()) > 0) && p() && e('1'); // 步骤4:第四个项目无团队成员
+r($convertTest->createDefaultExecutionTest(1005, 5, array()) > 0) && p() && e('1'); // 步骤5:第五个项目无团队成员

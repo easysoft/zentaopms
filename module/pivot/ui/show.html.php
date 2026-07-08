@@ -2,7 +2,7 @@
 declare(strict_types = 1);
 /**
  * The show view file of pivot module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@easycorp.ltd>
  * @package     pivot
@@ -178,13 +178,13 @@ $generateData = function() use ($lang, $groupID, $pivotName, $pivot, $data, $con
                         let values  = result.shift();
                         let isDrill = row.data.isDrill[col.name];
                         let isTotal = row.data.isTotal;
-                        if(col.setting.colspan && typeof(values.type) != 'undefined' && values.type == 'a')
+                        if(col.setting.colspan && Array.isArray(values?.props?.children))
                         {
                             values = values.props['children'];
                             result.push({className: 'gap-0 p-0.5'});
                             values.forEach((value, index) =>
                               result.push({
-                                html: value + '' || !Number.isNaN(value) ? (isDrill && index == 0 ? "<a href='#'>" + `\${value}` + '</a>' : `\${value}`) : '&nbsp;',
+                                html: value === null || typeof(value) == 'undefined' || value === '' ? '&nbsp;' : (isDrill && index == 0 ? "<a href='#'>" + `\${value}` + '</a>' : `\${value}`),
                                 className: 'flex justify-center items-center h-full w-1/2' + (index == 0 ? ' border-r': ''),
                                 style: 'border-color: var(--dtable-border-color)' + (isTotal ? '; background-color: var(--color-surface-light);' : '')
                               })

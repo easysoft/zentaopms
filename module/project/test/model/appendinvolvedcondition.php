@@ -60,10 +60,10 @@ $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
 $stmt = $projectTest->objectModel->leftJoinInvolvedTable($stmt);
 $result = $projectTest->appendInvolvedConditionTest($stmt);
 $sql = $result->get();
-r(strpos($sql, "t1.openedBy") !== false) && p() && e('1'); // 测试步骤4：测试当前用户为项目创建者的条件
+r(strpos($sql, "t1.`openedBy`") !== false) && p() && e('1'); // 测试步骤4：测试当前用户为项目创建者的条件
 
 $stmt = $tester->dao->select('*')->from(TABLE_PROJECT)->alias('t1');
 $stmt = $projectTest->objectModel->leftJoinInvolvedTable($stmt);
 $result = $projectTest->appendInvolvedConditionTest($stmt);
 $sql = $result->get();
-r(strpos($sql, "t1.PM") !== false) && p() && e('1'); // 测试步骤5：测试当前用户为项目经理的条件
+r(strpos($sql, "t1.`PM`") !== false) && p() && e('1'); // 测试步骤5：测试当前用户为项目经理的条件

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The api index file of api module of ZenTaoPMS.
- * @copyright   Copyright 2024 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2024 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Hao<sunhao@easycorp.ltd>
  * @package     api
@@ -11,26 +11,28 @@ declare(strict_types=1);
 namespace zin;
 
 $privs = array();
-$privs['collect']      = 'no';
-$privs['createApi']    = hasPriv('api', 'create');
-$privs['exportApi']    = $this->config->edition != 'open' && hasPriv('api', 'export');
-$privs['edit']         = hasPriv('api', 'edit');
-$privs['editApi']      = hasPriv('api', 'edit');
-$privs['view']         = hasPriv('api', 'view');
-$privs['delete']       = hasPriv('api', 'delete');
-$privs['createLib']    = hasPriv('api', 'createLib');
-$privs['editLib']      = hasPriv('api', 'editLib');
-$privs['moveLib']      = hasPriv('api', 'moveLib');
-$privs['sortDoclib']   = hasPriv('doc', 'sortDoclib');
-$privs['deleteLib']    = hasPriv('api', 'deleteLib');
-$privs['createStruct'] = hasPriv('api', 'createStruct');
-$privs['createRelease']= hasPriv('api', 'createRelease');
-$privs['addModule']    = hasPriv('doc', 'addCatalog');
-$privs['deleteModule'] = hasPriv('doc', 'deleteCatalog');
-$privs['editModule']   = hasPriv('doc', 'editCatalog');
-$privs['sortModule']   = hasPriv('doc', 'sortCatalog');
-$privs['releases']     = hasPriv('api', 'releases');
-$privs['struct']       = hasPriv('api', 'struct');
+$privs['collect']       = 'no';
+$privs['createApi']     = hasPriv('api', 'create');
+$privs['exportApi']     = $this->config->edition != 'open' && hasPriv('api', 'export');
+$privs['exportOpenApi'] = $this->config->edition != 'open' && hasPriv('api', 'exportOpenApi');
+$privs['importOpenApi'] = $this->config->edition != 'open' && hasPriv('api', 'importOpenApi');
+$privs['edit']          = hasPriv('api', 'edit');
+$privs['editApi']       = hasPriv('api', 'edit');
+$privs['view']          = hasPriv('api', 'view');
+$privs['delete']        = hasPriv('api', 'delete');
+$privs['createLib']     = hasPriv('api', 'createLib');
+$privs['editLib']       = hasPriv('api', 'editLib');
+$privs['moveLib']       = hasPriv('api', 'moveLib');
+$privs['sortDoclib']    = hasPriv('doc', 'sortDoclib');
+$privs['deleteLib']     = hasPriv('api', 'deleteLib');
+$privs['createStruct']  = hasPriv('api', 'createStruct');
+$privs['createRelease'] = hasPriv('api', 'createRelease');
+$privs['addModule']     = hasPriv('doc', 'addCatalog');
+$privs['deleteModule']  = hasPriv('doc', 'deleteCatalog');
+$privs['editModule']    = hasPriv('doc', 'editCatalog');
+$privs['sortModule']    = hasPriv('doc', 'sortCatalog');
+$privs['releases']      = hasPriv('api', 'releases');
+$privs['struct']        = hasPriv('api', 'struct');
 
 docApp
 (

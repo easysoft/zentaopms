@@ -12,11 +12,21 @@ class scm
      */
     public function setEngine($repo)
     {
-        $scm = strtolower($repo->SCM);
-        $className = $scm . 'Repo';
-        if($scm == 'git') $scm = 'gitrepo';
-        if(!class_exists($className)) require($scm . '.class.php');
-        $this->engine = new $className($repo->client, in_array($scm, array('gitlab', 'gitfox')) ? $repo->apiPath : $repo->path, $repo->account, $repo->password, $repo->encoding, $repo);
+        /* ops_repo.scmType 是当前真值('svn'/'git'); 旧版字段 SCM 已无;
+         * scmType='svn' 走 subversionRepo, 其余 (含 git) 走 gitfoxRepo。 */
+        $scmType = isset($repo->scmType) ? strtolower($repo->scmType) : '';
+        if($scmType == 'svn')
+        {
+            $className = 'subversionRepo';
+            if(!class_exists($className)) require('subversion.class.php');
+        }
+        else
+        {
+            $className = 'gitfoxRepo';
+            if(!class_exists($className)) require('gitfox.class.php');
+        }
+
+        $this->engine = new $className($repo->client, $repo->apiPath, '', $repo->password, '', $repo);
     }
 
     /**
@@ -48,6 +58,8 @@ class scm
     public function tags($path = '', $revision = 'HEAD', $onlyDir = true, string $orderBy = '', int $limit = 0, int $pageID = 1)
     {
         if(!scm::checkRevision($revision)) return array();
+        /* gitfoxRepo::tags 签名与 svn/git 不同，需按 engine 分派。 */
+        if(get_class($this->engine) == 'gitfoxRepo') return $this->engine->tags($path, $orderBy, $limit, (int)$pageID);
         return $this->engine->tags($path, $revision, $onlyDir, $orderBy, $limit, $pageID);
     }
 
@@ -60,10 +72,10 @@ class scm
      * @param  int    $limit
      * @param  int    $pageID
      * @param  string $label
-     * @param  int    $showArchived
+     * @param  string $showArchived
      * @return array
      */
-    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', int $showArchived = 0)
+    public function branch(string $showDetail = '', string $orderBy = '', int $limit = 0, int $pageID = 1, string $label = '', string $showArchived = 'active')
     {
         return $this->engine->branch($showDetail, $orderBy, $limit, $pageID, $label, $showArchived);
     }
@@ -92,11 +104,11 @@ class scm
      * @param  string $comment An optional comment for the tag.
      * @return array|false  Returns false if the engine is Subversion, otherwise returns the result of the createTag method of the engine object.
      */
-    public function createTag($tagName, $ref, $comment = '')
+    public function createTag($repoID, $tagName, $ref, $comment = '')
     {
         if(!in_array(get_class($this->engine), array('gitlabRepo', 'gitfoxRepo'))) return false;
 
-        return $this->engine->createTag($tagName, $ref, $comment);
+        return $this->engine->createTag($repoID, $tagName, $ref, $comment);
     }
 
     /**
@@ -105,11 +117,10 @@ class scm
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
-     * @param  int    $count
      * @access public
      * @return array
      */
-    public function log($path, $fromRevision = 0, $toRevision = 'HEAD', $count = 0)
+    public function log($path, $fromRevision = 0, $toRevision = 'HEAD')
     {
         if(!scm::checkRevision($fromRevision)) return array();
         if(!scm::checkRevision($toRevision))   return array();
@@ -152,10 +163,12 @@ class scm
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $parse
+     * @param  string $extra
+     * @param  bool   $isMr
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '')
+    public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '', $isMr = true)
     {
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
@@ -164,7 +177,7 @@ class scm
         if($extra)
         {
             if(get_class($this->engine) == 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, '', $extra);
-            if(get_class($this->engine) != 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra);
+            if(get_class($this->engine) != 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra, $isMr);
         }
 
         if($parse  != 'yes') return implode("\n", $diffs);
@@ -309,9 +322,9 @@ class scm
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip', &$errorMessage = '')
     {
-        return $this->engine->getDownloadUrl($branch, $savePath, $ext);
+        return $this->engine->getDownloadUrl($branch, $savePath, $ext, $errorMessage);
     }
 
     /**

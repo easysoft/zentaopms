@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度新增产品数反映了组织每年新增加的产品数量，用于评估组织的产品创新能力和市场拓展情况。
  * 定义：所有的产品个数求和;创建时间为某年;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_created_product extends baseCalc
 {
     public $dataset = 'getProducts';
 
-    public $fieldList = array('t1.createdDate');
+    public $fieldList = array('t1.`createdDate`');
 
     public $result = array();
 

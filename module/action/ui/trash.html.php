@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The trash view file of action module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     action
@@ -61,10 +61,27 @@ if(strpos(',story,requirement,', ",$currentObjectType,") === false) unset($confi
 
 if($type == 'all') $config->action->dtable->fieldList['actions']['menu'][] = 'hideone';
 
-$trashes = initTableData($trashes, $config->action->dtable->fieldList, $this->action);
+$objectActions = array();
+$actionsMap    = $config->action->dtable->fieldList['actions']['list'];
+$minWidth      = count($config->action->dtable->fieldList['actions']['menu']) * 24 + 24;
+foreach($config->action->dtable->fieldList['actions']['menu'] as $actionKey)
+{
+    if(!isset($config->action->actionList[$actionKey])) continue;
 
+    $actionUrl  = $actionsMap[$actionKey]['url'];
+    $moduleName = $actionsMap[$actionKey]['url']['module'];
+    $methodName = $actionsMap[$actionKey]['url']['method'];
+
+    if(common::hasPriv($moduleName, $methodName)) $objectActions[] = array('name' => $actionKey, 'disabled' => false);
+    $actionsMap[$actionKey]['text'] = '';
+    $actionsMap[$actionKey]['url']  = createLink($moduleName, $methodName, $actionUrl['params']);
+}
+
+$config->action->dtable->fieldList['actions']['minWidth']   = $minWidth < 48 ? 48 : $minWidth;
+$config->action->dtable->fieldList['actions']['actionsMap'] = $actionsMap;
 foreach($trashes as $trash)
 {
+    $trash->actions = $objectActions;
     if(strpos(',story,requirement,', ",$trash->objectType,") !== false) $trash->product = isset($productList[$trash->objectID]) ? $productList[$trash->objectID]->productTitle : '';
 }
 

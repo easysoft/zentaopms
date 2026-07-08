@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of common module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     common
@@ -450,14 +450,27 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(in_array("$module.$method", $this->config->logonMethods)) return true;
-
-            if(stripos($method, 'ajax') !== false) return true;
             if($module == 'block' && stripos(',dashboard,printblock,create,edit,delete,close,reset,layout,', ",{$method},") !== false) return true;
             if($module == 'index'    and $method == 'app') return true;
             if($module == 'my'       and $method == 'guidechangetheme') return true;
             if($module == 'product'  and $method == 'showerrornone') return true;
             if($module == 'misc'     and in_array($method, array('downloadclient', 'changelog'))) return true;
             if($module == 'tutorial' and in_array($method, array('start', 'index', 'quit', 'wizard'))) return true;
+
+            if(stripos($method, 'ajax') !== false && !empty($this->config->ajaxDependencies["$module.$method"]))
+            {
+                $dependentMethods = $this->config->ajaxDependencies["$module.$method"];
+                if(is_string($dependentMethods)) $dependentMethods = [$dependentMethods];
+                if(is_array($dependentMethods))
+                {
+                    foreach($dependentMethods as $dependentMethod)
+                    {
+                        if(strpos($dependentMethod, '.') === false) continue;
+                        list($dependentModule, $dependentMethod) = explode('.', $dependentMethod);
+                        if($this->isOpenMethod($dependentModule, $dependentMethod) || static::hasPriv($dependentModule, $dependentMethod)) return true;
+                    }
+                }
+            }
         }
         return false;
     }
@@ -701,6 +714,9 @@ class commonModel extends model
 
             /* 5. 如果以上权限都没有，则最后查看是否有该应用下任意一个顶部一级导航的权限。 */
             if(!$display and isset($lang->$group->menu)) list($display, $currentModule, $currentMethod) = commonTao::setMenuByGroup($group, $display, $currentModule, $currentMethod);
+
+            /* 6. 检查文档落地页权限。*/
+            if($currentModule == 'doc' && $currentMethod == 'lastViewedSpace' && !common::hasPriv('doc', 'mySpace')) $display = false;
 
             /* Check whether the homeMenu of this group have permissions. If yes, point to them. */
             if($display == false and isset($lang->$group->homeMenu))
@@ -1232,6 +1248,13 @@ eof;
                     if(commonModel::hasPriv($module, $method)) return true;
                 }
 
+                if($this->app->tab == 'devops')
+                {
+                    static::$userPrivs = array();
+                    $this->resetDevOpsPriv(); // 项目有继承和重新定义两种权限，在此处需要重置权限。
+                    if(commonModel::hasPriv($module, $method)) return true;
+                }
+
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method))
                 {
@@ -1411,7 +1434,7 @@ eof;
         }
 
         /* Check the parent object is closed. */
-        if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
+        if(!empty($method) and !commonModel::canBeChanged($module, $object)) return false;
 
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) or strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
@@ -1486,6 +1509,7 @@ eof;
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
             ->where('t1.project')->eq($program->id)
+            ->andWhere('t1.devopsSpace')->eq(0)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
 
@@ -3971,6 +3995,84 @@ EOF;
         }
 
         return $dotStyle;
+    }
+
+    /**
+     * DevOps空间有继承和重新定义两种权限，在此处需要重置权限。
+     * Reset DevOps space priv.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function resetDevOpsPriv(int $spaceID = 0)
+    {
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        $params = $this->app->params;
+
+        if(empty($spaceID) && !empty($params['space']))   $spaceID = $params['space'];
+        if(empty($spaceID) && !empty($params['spaceID'])) $spaceID = $params['spaceID'];
+
+        if(empty($spaceID) && !empty($params['repoID']))
+        {
+            $repoID  = $params['repoID'];
+            $repo    = $this->loadModel('repo')->fetchByID($repoID);
+            $spaceID = $repo->spaceID;
+        }
+
+        if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
+        if(empty($spaceID)) return;
+
+        $space = $this->loadModel('space')->getByID((int)$spaceID);
+        if(empty($space)) return;
+
+        $spaceRights = $this->dao->select('t1.name, t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
+            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
+            ->where('t1.project')->eq(0)
+            ->andWhere('t1.devopsSpace')->eq($spaceID)
+            ->andWhere('t2.account')->eq($this->app->user->account)
+            ->fetchAll();
+
+        /* Group priv by module the same as rights. */
+        $spaceRightGroup = array();
+        foreach($spaceRights as $spaceRight) $spaceRightGroup[strtolower($spaceRight->module)][strtolower($spaceRight->method)] = 1;
+
+        /* Reset priv by space privway. */
+        $this->app->user = clone $_SESSION['user'];
+        $rights = $this->app->user->rights['rights'];
+
+        if($space->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($spaceRightGroup, $rights);
+        if($space->auth == 'reset')
+        {
+            $spacePrivs = $this->space->getPrivs();
+            foreach($spacePrivs as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    if(isset($rights[$module][$method])) unset($rights[$module][$method]);
+                }
+            }
+
+            foreach($spaceRightGroup as $module => $methods)
+            {
+                foreach($methods as $method => $label)
+                {
+                    $module = strtolower($module);
+                    $method = strtolower($method);
+                    $rights[$module][$method] = $label;
+                }
+            }
+
+            /* Set base priv for devopsspace. */
+            $devopsSpaceRights = zget($this->app->user->rights['rights'], 'space', array());
+            if(isset($devopsSpaceRights['browse']) and !isset($rights['space']['browse'])) $rights['project']['browse'] = 1;
+
+            $this->app->user->rights['rights'] = $rights;
+        }
     }
 
     /**

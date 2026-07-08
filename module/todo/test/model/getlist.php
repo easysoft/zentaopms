@@ -32,7 +32,13 @@ $todo = new todoModelTest();
 
 $thisYearDay = date('L') ? 366 : 365;
 $lastYearDay = date('L', strtotime("-1 years")) ? 366 : 365;
-zenData('todo')->loadYaml('getlist')->gen($thisYearDay + $lastYearDay);
+$todoData = zenData('todo')->loadYaml('getlist');
+$todoData->account->range('admin');
+$todoData->date->range('(-1Y)-(+1Y):24h')->type('timestamp')->format('YYYY-MM-DD');
+$todoData->assignedTo->range('admin');
+$todoData->assignedBy->range('admin');
+$todoData->private->range('0');
+$todoData->gen($thisYearDay + $lastYearDay, true, false);
 
 global $tester;
 $tester->loadModel('todo');
@@ -45,10 +51,7 @@ $start      = date("Y-$startMonth-1");
 $end        = date("Y-m-d", strtotime("+3 months", strtotime($start)));
 $thisSseasonDay = (strtotime($end) - strtotime($start)) / (60 * 60 * 24);
 
-$lastYearToday = strtotime('last year');
-$thisYearToday = strtotime('this year');
-
-$beforeDay = (time() - strtotime('-1 years')) / (60 * 60 * 24) + 1;
+$beforeDay = (strtotime(date('Y-m-d')) - strtotime(date('Y-m-d', strtotime('-1 years')))) / (60 * 60 * 24);
 
 r($todo->getListTest($typeList[0]))                    && p() && e('1'); // 获取当前用户今天的待办数量
 r($todo->getListTest($typeList[1]))                    && p() && e('1'); // 获取当前用户昨天的待办数量

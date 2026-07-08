@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The activate view file of task module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     task
@@ -42,6 +42,13 @@ if($this->config->edition == 'ipd')
 
     if(!empty($task->confirmeActionType)) $config->task->actions->view['mainActions']   = array('confirmDemandRetract', 'confirmDemandUnlin');
     if(!empty($task->confirmeActionType)) $config->task->actions->view['suffixActions'] = array();
+}
+
+$files = array();
+foreach($task->files as $file)
+{
+    if($file->extra != '') continue;
+    $files[] = $file;
 }
 
 $task->executionInfo = $execution;
@@ -92,6 +99,7 @@ foreach($actions as $key => $action)
 $sections = array();
 $sections[] = setting()
     ->title($lang->task->legendDesc)
+    ->className('legendDesc')
     ->control('html')
     ->content(empty($task->desc) ? $lang->noDesc : $task->desc);
 if($task->fromBug)
@@ -183,12 +191,12 @@ if($task->children)
         ->data($children)
         ->checkable(false);
 }
-if($task->files)
+if($files)
 {
     $sections[] = array
     (
         'control'    => 'fileList',
-        'files'      => $task->files,
+        'files'      => $files,
         'object'     => $task,
         'padding'    => false,
         'showEdit'   => false,

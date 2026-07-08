@@ -21,7 +21,7 @@ class branchTaoTest extends baseTest
     public function afterMergeTest(int $productID, string $mergedBranches, object $data): array|int
     {
         $targetBranch = $data->targetBranch;
-        $objectID     = $this->instance->afterMerge($productID, $targetBranch, $mergedBranches, $data);
+        $this->invokeArgs('afterMerge', [$productID, $targetBranch, $mergedBranches, $data]);
 
         if(dao::isError()) return dao::getError();
 

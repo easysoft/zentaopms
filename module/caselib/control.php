@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of caselib module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
@@ -171,7 +171,7 @@ class caselib extends control
         $queryID  = ($browseType == 'bysearch') ? $param : 0;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bySearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&from={$from}&blockID={$blockID}");
+        $actionURL = $this->createLink('caselib', 'browse', "libID={$libID}&browseType=bysearch&queryID=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&from={$from}&blockID={$blockID}");
         $this->caselibZen->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
         /* Load pager. */

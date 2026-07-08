@@ -334,7 +334,7 @@ class actionTao extends actionModel
 
         return $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
-            ->where("objectType IN('project', 'testtask', 'build')")
+            ->where("`objectType` IN('project', 'testtask', 'build')")
             ->andWhere('project')->in($objectID)
             ->fi()
             ->beginIF($objectType == 'story')
@@ -411,8 +411,13 @@ class actionTao extends actionModel
         }
         elseif($type == 'plan' || $type == 'productplan')
         {
-            $plan = $this->fetchObjectInfoByID($table, (int)$action->extra, 'title');
-            if($plan && $plan->title) $action->extra = common::hasPriv('productplan', 'view') && $this->config->vision != 'or' ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title) : $plan->title;
+            $plan = $this->fetchObjectInfoByID($table, (int)$action->extra, 'title,product');
+            if($plan && $plan->title)
+            {
+                $isShadowProduct = $this->dao->select('shadow')->from(TABLE_PRODUCT)->where('id')->eq($plan->product)->fetch('shadow');
+                $planAttr        = $isShadowProduct ? 'data-app="project"' : '';
+                $action->extra = common::hasPriv('productplan', 'view') && $this->config->vision != 'or' ? html::a(helper::createLink('productplan', $method, "planID={$action->extra}"), $plan->title, '', $planAttr) : $plan->title;
+            }
         }
         elseif(in_array($type, array('build', 'bug', 'release', 'testtask', 'roadmap')))
         {
@@ -810,7 +815,7 @@ class actionTao extends actionModel
             $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
             $action->objectName = implode(',', $modules);
         }
-        elseif($action->objectType == 'mr' && $action->action == 'deleted')
+        elseif($action->objectType == 'ppm' && $action->action == 'deleted')
         {
             $action->objectName = $action->extra;
         }
@@ -828,7 +833,26 @@ class actionTao extends actionModel
         {
             $action->objectName = $this->dao->select('name')->from(TABLE_AI_ASSISTANT)->where('id')->eq($action->objectID)->fetch('name');
         }
-        if (empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|mr)/', $objectType)) $action->objectName = $action->extra;
+        if(empty($action->objectName) && preg_match('/^(gitlab|gitea|gogs|ppm)/', $objectType)) $action->objectName = $action->extra;
+        if(empty($action->objectName) && substr($objectType, 0, 6) == 'gitfox') $action->objectName = $action->extra;
+        if(in_array($action->objectType, array('repotag', 'repobranch')) && $action->action == 'deleted') $action->objectName = $action->extra;
+        if(empty($action->objectName) && substr($objectType, 0, 8) == 'codescan')
+        {
+            if(strpos($action->extra, '|') !== false)
+            {
+                list($objectName, $params) = explode('|', $action->extra);
+            }
+            else
+            {
+                $objectName = $action->extra;
+            }
+            $action->objectName = $objectName;
+        }
+        if(in_array($objectType, array('artifactasset', 'artifactdir')))
+        {
+            $extra = $action->action == 'deleted' ? $action->comment : $action->extra;
+            $action->objectName = empty(explode('|', $extra)[1]) ? $action->extra : explode('|', $extra)[1];
+        }
     }
 
     /**
@@ -966,7 +990,7 @@ class actionTao extends actionModel
         }
 
         if($action->objectType == 'docTemplate' && !common::hasPriv('docTempalte', 'view')) return false;
-        if($action->objectType == 'mr' && (empty($action->objectName) || $action->action == 'deleted')) return false;
+        if($action->objectType == 'ppm' && (empty($action->objectName) || $action->action == 'deleted')) return false;
         if($action->objectType == 'stakeholder' && $action->project == 0) return false;
         if($action->objectType == 'chartgroup') return false;
         if($action->objectType == 'branch' && $action->action == 'mergedbranch') return false;

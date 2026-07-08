@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The preference view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Tingting Dai <daitingting@easycorp.ltd>
  * @package     my
@@ -54,9 +54,24 @@ foreach(array('program', 'product', 'project', 'execution') as $objectType)
     }
 }
 
+$devopsspaceLinkList = array();
+foreach($lang->my->devopsspaceLinkList as $key => $value)
+{
+    list($module, $method) = explode('-', $key);
+    if(common::hasPriv($module, $method)) $devopsspaceLinkList[$key] = $value;
+}
+
+$devopsLinkList = array();
+foreach($lang->my->devopsLinkList as $key => $value)
+{
+    list($module, $method) = explode('-', $key);
+    if(common::hasPriv($module, $method)) $devopsLinkList[$key] = $value;
+}
+
 formPanel
 (
     set::labelWidth('140px'),
+    setID('preferenceForm'),
     formGroup
     (
         set::label($lang->my->storyConcept),
@@ -129,6 +144,28 @@ formPanel
                 'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
             )),
             set::value($docLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsLink'),
+            set::required(true),
+            set::items($devopsLinkList),
+            set::value($devopsLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsspaceLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsspaceLink'),
+            set::required(true),
+            set::items($devopsspaceLinkList),
+            set::value($devopsspaceLink)
         )
     ),
     set::submitBtnText($lang->save)

@@ -11,7 +11,7 @@
  * 描述：按产品统计的严重程度为1、2级的Bug数是指在产品开发过程中发现的严重程度为1级和2级的Bug数量的总和。统计这些Bug的数量可以评估产品的质量和稳定性，同时也关注影响用户体验和功能完整性的问题。
  * 定义：复用：;按产品统计的严重程度为1级的Bug数;按产品统计的严重程度为2级的Bug数;公式：;按产品统计的严重程度为1、2级的Bug数=按产品统计的严重程度为1级的Bug数+按产品统计的严重程度为2级的Bug数;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

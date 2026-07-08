@@ -11,7 +11,7 @@
  * 描述：按人员统计的待处理任务数表示每个人待处理的任务数量之和。反映了每个人在需要处理的任务数量上的规模。该数值越大，说明需要投入越多的时间处理任务。
  * 定义：所有任务个数求和;指派给为某人;过滤已关闭的任务;过滤已取消的任务;过滤已删除的任务;过滤已删除项目的任务;过滤已删除执行的任务;过滤多人任务中某人任务状态为已完成的任务;过滤任务关联的执行和项目都为挂起状态时的任务
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_assigned_task_in_user extends baseCalc
 {
     public $dataset = 'getTasksWithTeam';
 
-    public $fieldList = array('t1.id', "CASE WHEN t1.mode != '' AND t4.status != 'done' THEN t4.account ELSE t1.assignedTo END AS assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status AS projectStatus', 't2.status AS executionStatus', 't4.status AS teamStatus');
+    public $fieldList = array('t1.id', "CASE WHEN t1.mode != '' AND t4.status != 'done' THEN t4.account ELSE t1.`assignedTo` END AS assignedTo", 't1.status', 't1.mode', 't4.account', 't3.status AS projectStatus', 't2.status AS executionStatus', 't4.status AS teamStatus');
 
     public $result = array();
 

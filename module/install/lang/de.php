@@ -2,7 +2,7 @@
 /**
  * The install module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -279,6 +279,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
 $lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
 $lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS DEVELOPER';
+
 $lang->install->cronList[''] = 'Cron Anzeigen';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Täglicher Aufgaben reminder';
@@ -292,7 +296,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Erste
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring jenkins';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
 $lang->install->dbProgress = "Installing Database Table";
 $lang->install->dbFinish   = "Table install finished";

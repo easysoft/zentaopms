@@ -11,7 +11,7 @@
  * 描述：按产品统计的已修复Bug数是指解决方案为已解决并且状态为已关闭的Bug数量。这个度量项反映了产品解决的问题数量。已修复Bug数的可以评估开发团队在Bug解决方面的工作效率。
  * 定义：产品中Bug的个数求和;解决方案为已解决;状态为已关闭;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

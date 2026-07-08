@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of repo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang, Jinyong Zhu
  * @package     repo
@@ -34,7 +34,6 @@ class repo extends control
         $this->projectID = $this->session->project ? $this->session->project : 0;
 
         /* Unlock session for wait to get data of repo. */
-        session_write_close();
     }
 
     /**
@@ -42,11 +41,15 @@ class repo extends control
      *
      * @param  int    $repoID
      * @param  int    $objectID     projectID|executionID
+     * @param  int    $spaceID
      * @access public
      * @return void
      */
-    public function commonAction(int $repoID = 0, int $objectID = 0)
+    public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
+        $serverHeath = $this->loadModel('gitfox')->checkHealth();
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
         $this->repos = $this->repo->getRepoPairs($tab, $objectID);
@@ -79,13 +82,12 @@ class repo extends control
         }
         elseif($tab != 'admin' && !$fromModal)
         {
-            $this->repo->setMenu($this->repos, $repoID);
+            $this->repo->setMenu($this->repos, $repoID, $spaceID);
         }
 
-        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'setrules', 'createrepo', 'import', 'maintain')))
+        if(empty($this->repos) && !in_array(strtolower($this->methodName), array('create', 'edit', 'setrules', 'createrepo', 'import', 'maintain')))
         {
-            $method = $this->app->tab == 'devops' ? 'maintain' : 'create';
-            if($this->config->inCompose && $method == 'create') $method = 'createRepo';
+            $method = $this->app->tab == 'devops' ? 'maintain' : 'createRepo';
             return $this->locate(inLink($method, "objectID=$objectID"));
         }
         $this->view->fromModal = $fromModal;
@@ -95,7 +97,9 @@ class repo extends control
      * 版本库列表。
      * List all repo.
      *
+     * @param  int    $inSpace
      * @param  int    $objectID
+     * @param  int    $space
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -104,12 +108,15 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function maintain(int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
+    public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
-        $repoID = $this->repo->saveState(0, $objectID);
-        if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
+        $serverHeath = $this->loadModel('gitfox')->checkHealth();
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
 
-        $repoList = $this->repo->getList(0, '', $orderBy, null, false, true, $type, $param);
+        $repoID = $this->repo->saveState(0, $objectID);
+        if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
+
+        $repoList = $this->repo->getList(0, $space, $orderBy, null, false, true, $type, $param);
         /* Pager. */
         $this->app->loadClass('pager', true);
         $recTotal = count($repoList);
@@ -119,27 +126,20 @@ class repo extends control
         if($repoList && !isset($repoList[$pageID - 1])) $pageID = 1;
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
 
-        /* Get success jobs of sonarqube.*/
-        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(helper::arrayColumn($repoList, 'id'));
-        $successJobs   = $this->loadModel('compile')->getSuccessJobs(helper::arrayColumn($sonarRepoList, 'id'));
-
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
-        $projects = $this->loadModel('project')->getPairs();
 
-        $this->repoZen->buildRepoSearchForm($products, $projects, $objectID, $orderBy, $recPerPage, $pageID, $param);
+        $this->repoZen->buildRepoSearchForm($inSpace, $space, $products, $objectID, $orderBy, $recPerPage, $pageID, $param);
 
-        $this->view->title         = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
-        $this->view->serverPairs   = $this->loadModel('pipeline')->getPairs('gitlab');
-        $this->view->type          = $type;
-        $this->view->orderBy       = $orderBy;
-        $this->view->objectID      = $objectID;
-        $this->view->pager         = $pager;
-        $this->view->repoList      = $repoList;
-        $this->view->products      = $products;
-        $this->view->projects      = $projects;
-        $this->view->sonarRepoList = $sonarRepoList;
-        $this->view->successJobs   = $successJobs;
-        $this->view->repoServers   = $this->pipeline->getPairs($this->config->pipeline->checkRepoServers);
+        $this->view->title    = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->browse;
+        $this->view->type     = $type;
+        $this->view->orderBy  = $orderBy;
+        $this->view->objectID = $objectID;
+        $this->view->pager    = $pager;
+        $this->view->repoList = $repoList;
+        $this->view->products = $products;
+        $this->view->spaceID  = $space;
+        $this->view->spaces   = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->inSpace  = $inSpace;
 
         $this->display();
     }
@@ -158,7 +158,7 @@ class repo extends control
         {
             /* Prepare data. */
             $formData         = form::data($this->config->repo->form->create);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
+            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList);
             $repo             = $this->repoZen->prepareCreate($formData, $isPipelineServer);
 
             /* Create a repo. */
@@ -182,6 +182,8 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateForm($objectID);
+
+        $this->display();
     }
 
     /**
@@ -192,25 +194,21 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function createRepo(int $objectID = 0)
+    public function createRepo(int $objectID = 0, int $spaceID = 0)
     {
         if($_POST)
         {
+            if($objectID && (!$this->post->product || empty(array_filter($this->post->product)))) $this->sendError($this->lang->repo->hasNoProduct);
             /* Prepare data. */
             $formData = form::data($this->config->repo->form->createRepo)->get();
-            $repo     = $this->repoZen->prepareCreateRepo($formData);
+            if($formData->acl == 'private' && empty($formData->members))
+            {
+                $this->sendError(array('members' => sprintf($this->lang->error->notempty, $this->lang->repo->members)));
+            }
 
             /* Create a repo. */
-            if($repo) $repoID = $this->repo->createRepo($repo);
+            $repoID = $this->repo->createRepo($formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(in_array($formData->SCM, $this->config->repo->notSyncSCM))
-            {
-                /* Add webhook. */
-                $repo = $this->repo->getByID($repoID);
-                $this->loadModel($formData->SCM)->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
-                $this->repo->updateCommitDate($repoID);
-            }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
 
@@ -220,6 +218,10 @@ class repo extends control
 
         $this->commonAction(0, $objectID);
         $this->repoZen->buildCreateRepoForm($objectID);
+        $this->view->inSpace = !empty($spaceID);
+        $this->view->spaceID = $spaceID;
+
+        $this->display();
     }
 
     /**
@@ -234,11 +236,13 @@ class repo extends control
     public function createBranch(int $objectID, int $repoID = 0)
     {
         $objectType = $this->app->rawModule;
+        if($objectType == 'repo') return $this->createRepoBranch($objectID, $repoID);
+
         $object     = $this->loadModel($objectType)->fetchByID($objectID);
         $productIds = array(zget($object, 'product', 0));
         if($objectType == 'task') $productIds = $this->loadModel('product')->getProductIDByProject($object->execution, false);
 
-        $repoList  = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repoList  = $this->repo->getListByPriv('haspriv');
         $repoPairs = array();
         foreach($repoList as $repo)
         {
@@ -257,8 +261,8 @@ class repo extends control
         if(!empty($_POST))
         {
             $branch = form::data($this->config->repo->form->createBranch)->get();
-            $result = $this->scm->createBranch($branch->branchName, $branch->branchFrom);
-            if($result['result'] == 'fail') return $this->sendError($this->lang->repo->error->createdFail . ': ' . $this->repoZen->parseErrorContent($result['message']));
+            $this->scm->createBranch($branch->branchName, $branch->branchFrom);
+            if(dao::isError()) return $this->sendError(dao::getError());
 
             $this->repo->saveRelation($repoID, $branch->branchName, $objectID, $objectType);
             $this->loadModel('action')->create($objectType, $objectID, 'createRepoBranch', '', $branch->branchName);
@@ -306,21 +310,42 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function edit(int $repoID, int $objectID = 0)
+    public function edit(int $repoID, int $objectID = 0, int $spaceID = 0)
     {
         $this->commonAction($repoID, $objectID);
+        $repo = $this->repo->getByID($repoID);
+
+        $this->scm->setEngine($repo);
+        $branchList    = $this->scm->branch();
+        $defaultBranch = empty($branchList) ? '' : key($branchList);
+        $this->view->defaultBranch = $repo->defaultBranch ? $repo->defaultBranch : $defaultBranch;
+        $this->view->branchList    = $branchList;
 
         if($_POST)
         {
-            $repo = $this->repo->getByID($repoID);
-
             /* Prepare data. */
-            $formData         = form::data($this->config->repo->form->edit);
-            $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-            $editData         = $this->repoZen->prepareEdit($formData, $repo, $isPipelineServer);
+            $formData = form::data($this->config->repo->form->edit)
+                ->skipSpecial('desc')
+                ->get();
+            $check = $this->repo->checkName($formData->name);
+            if(!$check) return $this->sendError(array('name' => $this->lang->repo->error->repoNameInvalid));
 
-            if($editData) $noNeedSync = $this->repo->update($editData, $repo, $isPipelineServer);
+            $res = $this->loadModel('gitfox')->addPushWebhook($repo);
+            if(!$res) return $this->sendError(array('webhook' => isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook));
+
+            if($formData->acl == 'private' && empty($formData->members))
+            {
+                $this->sendError(array('members' => sprintf($this->lang->error->notempty, $this->lang->repo->members)));
+            }
+
+            if($formData) $response = $this->loadModel('gitfox')->apiUpdateRepo($repoID, $formData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $members = $formData->acl == 'private' ? explode(',', $formData->members) : array();
+            $this->repo->updateMembers($repoID, $members);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $noNeedSync = !empty($response) && !empty($response->id);
 
             $newRepo  = $this->repo->getByID($repoID);
             $actionID = $this->loadModel('action')->create('repo', $repoID, 'edited');
@@ -332,10 +357,15 @@ class repo extends control
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('maintain')));
+            $link = !empty($spaceID) ? inLink('maintain', "inSpace=1&spaceID=$spaceID") : inLink('maintain');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
         $this->repoZen->buildEditForm($repoID, $objectID);
+        $this->view->inSpace = !empty($spaceID);
+        $this->view->spaceID = $spaceID;
+
+        $this->display();
     }
 
     /**
@@ -351,7 +381,7 @@ class repo extends control
         $error = $this->repoZen->checkDeleteError($repoID);
         if($error) return $this->send(array('result' => 'fail', 'callback' => 'zui.Modal.alert({content: {html: "' . $error . '"}})'));
 
-        $this->repo->deleteRepo($repoID);
+        $this->repo->delete(TABLE_REPO, $repoID);
         if(dao::isError()) return $this->sendError(dao::getError());
 
         return $this->send(array('result' => 'success', 'load' => true));
@@ -383,32 +413,55 @@ class repo extends control
             $entry   = $bugData[0];
             $lines   = $bugData[1];
         }
+        $selectNode  = empty($entry) ? false : new stdclass();
+        $keyPath     = '';
+        $currentPath = '';
+        if($entry)
+        {
+            $path = dirname($entry);
+            $path = str_replace('\\', '/', $path);
+            $path = trim($path, '/');
+
+            $selectPathList = explode('/', $path);
+            if(!empty($selectPathList))
+            {
+                foreach($selectPathList as $dir)
+                {
+                    $currentPath .= '/' . $dir;
+                    $currentPath = ltrim($currentPath, '/');
+                    $pathKey = $this->repo->encodePath($currentPath);
+                    $keyPath = empty($keyPath) ? $pathKey : "{$keyPath}:{$pathKey}";
+                    $selectNode->$keyPath = true;
+                }
+            }
+        }
 
         $entry    = urldecode($entry);
         $pathInfo = helper::mbPathinfo($entry);
 
         $repo = $this->repo->getByID($repoID);
-        if($repo->SCM == 'Gitlab') $repo = $this->repo->processGitService($repo, true);
 
+        $branchID  = (string)$this->cookie->repoBranch;
         $dropMenus = array();
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList)) $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $this->cookie->repoBranch);
+        $dropMenus = $this->repoZen->getBranchAndTagItems($repo, $branchID);
 
         if($this->app->tab == 'execution') $this->view->executionID = $objectID;
-        $this->view->title     = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
-        $this->view->dropMenus = $dropMenus;
-        $this->view->type      = 'view';
-        $this->view->branchID  = $this->cookie->repoBranch;
-        $this->view->showBug   = $showBug;
-        $this->view->encoding  = $encoding;
-        $this->view->repoID    = $repoID;
-        $this->view->objectID  = $objectID;
-        $this->view->repo      = $repo;
-        $this->view->revision  = $revision;
-        $this->view->file      = $file;
-        $this->view->lines     = $lines;
-        $this->view->entry     = $entry;
-        $this->view->pathInfo  = $pathInfo;
-        $this->view->tree      = $this->repoZen->getViewTree($repo, '', $revision);
+        $this->view->title      = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->view;
+        $this->view->dropMenus  = $dropMenus;
+        $this->view->type       = 'view';
+        $this->view->branchID   = $branchID;
+        $this->view->showBug    = $showBug;
+        $this->view->encoding   = $encoding;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->revision   = $revision;
+        $this->view->file       = $file;
+        $this->view->lines      = $lines;
+        $this->view->entry      = $entry;
+        $this->view->pathInfo   = $pathInfo;
+        $this->view->selectNode = $selectNode;
+        $this->view->tree       = $this->repoZen->getViewTree($repo, '', $revision, $file);
 
         $this->display();
     }
@@ -464,6 +517,11 @@ class repo extends control
      */
     public function browse(int $repoID = 0, string $branchID = '', int $objectID = 0, string $path = '', string $revision = 'HEAD', int $refresh = 0, string $branchOrTag = 'branch', string $type = 'dir', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $serverHeath = $this->loadModel('gitfox')->checkHealth();
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+
+        $hasDevOpsLink = !empty($this->config->devopsLink) && $this->config->devopsLink == 'repo-browse';
+        if(!$repoID && !empty($this->config->devopsLink) && $hasDevOpsLink) $repoID = (int)$this->config->lastRepo;
         $repoID = $this->repo->saveState($repoID, $objectID);
 
         /* Get path. */
@@ -479,19 +537,19 @@ class repo extends control
         }
 
         /* Set menu and session. */
-        $this->commonAction($repoID, $objectID);
-        $this->repoZen->setBrowseSession();
+        $repo = $this->repo->getByID($repoID);
+        $this->commonAction($repoID, $objectID, $repo->spaceID);
+        $this->repoZen->setBrowseSession($repo);
 
         /* Get repo and synchronous commit. */
-        $repo = $this->repo->getByID($repoID);
-        if($repo->SCM == 'Git' && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
-        if($this->repoZen->checkRepoInternet($repo)) return $this->sendError($this->lang->repo->error->connect, true);
         if(!$repo->synced) return $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch or tag for git. */
-        $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
+        $branchID = helper::safe64Decode(base64_decode($branchID));
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && !$this->repo->isSvn($repo) && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
@@ -499,7 +557,6 @@ class repo extends control
         {
             helper::setcookie('repoRefresh', 0);
             $this->repo->updateCommit($repoID, $objectID, $branchID);
-            if($repo->SCM == 'Gitlab') $this->repo->checkDeletedBranches($repoID, $branches);
         }
 
         /* Get revisions. */
@@ -508,14 +565,14 @@ class repo extends control
         $revisions    = $this->repoZen->getCommits($repo, $path, $revision, $type, $pager, $objectID);
         $lastRevision = empty($revisions) ? new stdclass() : current($revisions);
 
-        if($path == '') $this->repoZen->updateLastCommit($repo, $lastRevision);
-
         /* Get files info. */
         $base64BranchID = helper::safe64Encode(base64_encode($branchID));
         $infos          = $this->repoZen->getFilesInfo($repo, $path, $branchID, $base64BranchID, $objectID);
 
         /* Synchronous commit only in root path. */
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) && $repo->SCM != 'Gitlab' && empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
+        if(empty($path) && $infos && empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
+        if($branchOrTag == 'tag' && !in_array($branchID, $tags) && in_array($branchID, $branches)) $branchOrTag = 'branch';
+        if($branchOrTag == 'branch' && in_array($branchID, $tags) && !in_array($branchID, $branches)) $branchOrTag = 'tag';
 
         $this->view->title          = $this->lang->repo->common;
         $this->view->repo           = $repo;
@@ -535,6 +592,8 @@ class repo extends control
         $this->view->cloneUrl       = $this->repo->getCloneUrl($repo);
         $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branchOrTag    = $branchOrTag;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+
         $this->display();
     }
 
@@ -582,17 +641,17 @@ class repo extends control
         /* Set branch or tag for git. */
         $branchID = $branchID ? base64_decode(helper::safe64Decode($branchID)) : '';
         list($branchID, $branches, $tags) = $this->repoZen->setBranchTag($repo, $branchID);
-        if($this->app->tab == 'devops' && $repo->SCM != 'Subversion' && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
+        if($this->app->tab == 'devops' && !$this->repo->isSvn($repo) && empty($branches)) return $this->sendError($this->lang->repo->error->empty, true);
 
         /* Build the search form. */
         $browseType = strtolower($browseType);
         $queryID    = $browseType == 'bysearch' ? $param : 0;
         $branchID   = helper::safe64Encode(base64_encode($branchID));
-        $actionURL  = $this->createLink('repo', 'log', "repoID={$repoID}&branchID={$branchID}&objectID={$objectID}&entry=&source={$source}&browseType=bySearch&param=myQueryID");
+        $actionURL  = $this->createLink('repo', 'log', "repoID={$repoID}&branchID={$branchID}&objectID={$objectID}&entry=&source={$source}&browseType=bysearch&param=myQueryID");
         $this->repoZen->buildSearchForm($queryID, $actionURL);
 
         $this->commonAction($repoID, $objectID);
-        $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, !in_array($repo->SCM, $this->config->repo->notSyncSCM)) : null;
+        $query = $browseType == 'bysearch' ? $this->repoZen->getSearchForm($queryID, false) : null;
         $logs  = $this->repo->getCommits($repo, $entry, $branchID, 'dir', $pager, '', '', $query);
         if(count($logs) == 0 && $pageID != 1) $this->locate(inLink('log', "repoID=$repoID&branchID=$branchID&objectID=$objectID&entry=$entry&source=$source&browseType=$browseType&param=$param&recTotal=0&recPerPage=$recPerPage&pageID=1"));
 
@@ -631,6 +690,7 @@ class repo extends control
         $this->view->pager      = $pager;
         $this->view->repoPairs  = $this->repo->getRepoPairs($this->app->tab, $objectID);
         $this->view->branches   = $branches;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->tags       = $tags;
         $this->view->source     = $source;
         $this->view->browseType = $browseType;
@@ -652,32 +712,26 @@ class repo extends control
     {
         if($repoID == 0) $repoID = $this->session->repoID;
         $repo = $this->repo->getByID($repoID);
-
         $this->scm->setEngine($repo);
+
         $log      = $this->scm->log('', $revision, $revision);
         $revision = !empty($log[0]) ? $this->repo->getHistoryRevision($repoID, (string)$log[0]->revision) : '';
-        if($revision)
+
+        /* SVN 用数字前驱 revision 作 oldRevision;首个 commit(revision=1) 与自身比,无差异。
+         * git 用 sha^ 语法取父级。 */
+        if($this->repo->isSvn($repo))
         {
-            if(in_array($repo->SCM, $this->config->repo->gitTypeList))
-            {
-                $thisAndPrevRevisions = $this->scm->exec("rev-list -n 2 {$revision} --");
-
-                array_shift($thisAndPrevRevisions);
-                if($thisAndPrevRevisions) $oldRevision = array_shift($thisAndPrevRevisions);
-            }
-            else
-            {
-                $oldRevision = $this->repo->getHistoryRevision($repoID, $revision, false, 'lt');
-            }
+            $newRevision = (int)$log[0]->revision;
+            $oldRevision = $newRevision > 1 ? $newRevision - 1 : $newRevision;
         }
-
-        if(empty($oldRevision))
+        else
         {
             $oldRevision = '^';
-            if($revision && in_array($repo->SCM, $this->config->repo->gitTypeList)) $oldRevision = "{$revision}^";
+            if($revision) $oldRevision = "{$revision}^";
+            $newRevision = $log[0]->revision;
         }
 
-        $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$log[0]->revision}"));
+        $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&oldrevision=$oldRevision&newRevision={$newRevision}"));
     }
 
     /**
@@ -704,7 +758,7 @@ class repo extends control
         $entry = $this->repo->decodePath($entry);
 
         $this->scm->setEngine($repo);
-        $encoding  = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding  = empty($encoding) ? 'utf-8' : $encoding;
         $encoding  = strtolower(str_replace('_', '-', $encoding));
         $blames    = $this->scm->blame($entry, $revision);
         $revisions = array();
@@ -714,7 +768,7 @@ class repo extends control
             if($encoding != 'utf-8') $blames[$i]['content'] = helper::convertEncoding($blame['content'], $encoding);
         }
 
-        $log = in_array($repo->SCM, $this->config->repo->gitTypeList) ? $this->repo->getHistoryRevision($repo->id, $revision, true) : '';
+        $log = $this->repo->getHistoryRevision($repo->id, $revision, true);
 
         $this->view->title        = $this->lang->repo->common;
         $this->view->repoID       = $repoID;
@@ -725,7 +779,7 @@ class repo extends control
         $this->view->entry        = $entry;
         $this->view->file         = $file;
         $this->view->encoding     = str_replace('-', '_', $encoding);
-        $this->view->revisionName = ($log && in_array($repo->SCM, $this->config->repo->gitTypeList)) ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
+        $this->view->revisionName = $log ? $this->repo->getGitRevisionName($log->revision, $log->commit) : $revision;
         $this->view->blames       = $blames;
         $this->display();
     }
@@ -741,12 +795,13 @@ class repo extends control
      * @param  string $newRevision
      * @param  int    $showBug
      * @param  string $encoding
-     * @param  bool   $isBranchOrTag
+     * @param  int   $isBranchOrTag
      * @access public
      * @return void
      */
     public function diff(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $isBranchOrTag = 0)
     {
+        $this->repoZen->setBackSession('diff', true);
         $newRevision = strtr($newRevision, '*', '-');
         $oldRevision = strtr($oldRevision, '*', '-');
         $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
@@ -770,14 +825,11 @@ class repo extends control
             $lines   = $bugData[1];
         }
 
-        $this->config->repo->notSyncSCM[] = 'Subversion';
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM) && !is_dir($repo->path)) return $this->sendError(sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path), $this->repo->createLink('maintain'));
-
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
         if($this->server->request_method == 'POST') return $this->repoZen->locateDiffPage($repoID, $objectID, $arrange, $isBranchOrTag, $file);
 
         $diffs    = array();
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         if($oldRevision !== '')
         {
@@ -824,11 +876,8 @@ class repo extends control
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getByID($repoID);
 
-        if($isBranchOrTag)
-        {
-            $fromRevision = urldecode(helper::safe64Decode($fromRevision));
-            $toRevision   = urldecode(helper::safe64Decode($toRevision));
-        }
+        $fromRevision = urldecode(helper::safe64Decode($fromRevision));
+        $toRevision   = urldecode(helper::safe64Decode($toRevision));
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
@@ -859,6 +908,7 @@ class repo extends control
      */
     public function setRules()
     {
+        $this->loadModel('space')->setMenu();
         if($_POST)
         {
             $this->loadModel('setting')->setItem('system.repo.rules', json_encode($this->post->rules));
@@ -929,7 +979,7 @@ class repo extends control
         $productIds = explode(',', $repo->product);
         $products   = $this->loadModel('product')->getByIdList($productIds);
         $modules    = $this->repoZen->getLinkModules($products, 'story');
-        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
+        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1074,43 +1124,47 @@ class repo extends control
      * 导入版本库。
      * Import repos.
      *
-     * @param  int    $serverID
+     * @param  int    $spaceID
+     * @param  string $type
+     * @param  int    $providerID
+     * @param  string $groupID
+     * @param  int    $isTryAgain
      * @access public
      * @return void
      */
-    public function import(int $serverID = 0)
+    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', int $isTryAgain = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
-
-        $serverList = $this->loadModel('pipeline')->getPairs(implode(',', $this->config->repo->notSyncSCM), true);
-        if(!$serverID) $serverID = key($serverList);
-
         if($_POST)
         {
-            if($this->post->product)
-            {
-                $repos = form::batchData($this->config->repo->form->import)->get();
+            $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID);
+            $formData = form::data($this->config->repo->form->import)->get();
+            $this->session->set('importRepo', json_encode($formData));
 
-                if($repos) $this->repo->batchCreate($repos, $serverID, (string)$this->post->serverType);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->repo->createLink('maintain')));
+            $result   = $this->repo->import($formData);
+            if(dao::isError()) $this->sendError(dao::getError());
+            return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
         }
 
-        $server      = $this->pipeline->getByID($serverID);
-        $hiddenRepos = $this->loadModel('setting')->getItem('owner=system&module=repo&section=hiddenRepo&key=' . $serverID);
+        if($isTryAgain && $this->session->importRepo)
+        {
+            $importRepo = json_decode($this->session->importRepo);
+            $type       = zget($importRepo, 'origin', 'GitLab');
+            $providerID = zget($importRepo, 'providerID', 0);
+            $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
+            $groupID    = urlencode($groupID);
+            $type       = zget($importRepo, 'origin', 'GitLab');
+        }
+        $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
-        $linkUser = $server ? $this->pipeline->getOpenIdByAccount($server->id, $server->type, $this->app->user->account) : array();
-        $repoList = $server && ($linkUser || $this->app->user->admin) ? $this->repoZen->getNotExistRepos($server) : array();
-        $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
-
-        $this->view->title       = $this->lang->repo->common . $this->lang->hyphen . $this->lang->repo->importAction;
-        $this->view->servers     = $serverList;
-        $this->view->products    = $products;
-        $this->view->server      = $server;
-        $this->view->repoList    = array_values($repoList);
-        $this->view->hiddenRepos = explode(',', $hiddenRepos);
+        $this->view->title      = $this->lang->repo->import;
+        $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
+        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->type       = $type;
+        $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
+        $this->view->tryAgain   = $isTryAgain;
+        $this->view->spaceID    = $spaceID;
+        $this->view->inSpace    = !empty($spaceID);
         $this->display();
     }
 
@@ -1125,22 +1179,25 @@ class repo extends control
      * @param  string $newRevision
      * @param  int    $showBug     // Used for biz.
      * @param  string $encoding
+     * @param  int    $showLinkObject
      * @access public
      * @return void
      */
-    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '')
+    public function ajaxGetDiffEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $oldRevision = '', string $newRevision = '', int $showBug = 0, string $encoding = '', int $showLinkObject = 1)
     {
+        $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
-        $revision  = str_replace('*', '-', $oldRevision);
-        $nRevision = str_replace('*', '-', $newRevision);
+        /* 前端 diff.ui.js 把 revision 走 btoa(encodeURIComponent(...)) 加密;此处走已有的 decodeEditorRevision 复原。 */
+        $revision  = $this->decodeEditorRevision(str_replace('*', '-', $oldRevision));
+        $nRevision = $this->decodeEditorRevision(str_replace('*', '-', $newRevision));
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         $lines    = '';
         if(strpos($entry, '#'))
@@ -1170,6 +1227,10 @@ class repo extends control
         $this->view->suffix      = 'c';
         $this->view->blames      = array();
         $this->view->showEditor  = true;
+        $this->view->canReview   = true;
+        $this->view->showBug     = $showBug;
+
+        $this->view->showLinkObject = $showLinkObject;
         $this->display('repo', 'ajaxgeteditorcontent');
     }
 
@@ -1183,11 +1244,13 @@ class repo extends control
      * @param  string $revision
      * @param  int    $showBug
      * @param  string $encoding
+     * @param  int    $showLinkObject
      * @access public
      * @return void
      */
-    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '')
+    public function ajaxGetEditorContent(int $repoID, int $objectID = 0, string $entry = '', string $revision = 'HEAD', int $showBug = 0, string $encoding = '', int $showLinkObject = 1)
     {
+        $this->app->loadConfig('misc');
         if(!$entry) $entry = (string) $this->cookie->repoCodePath;
 
         $file     = $entry;
@@ -1211,7 +1274,7 @@ class repo extends control
         $content  = $this->scm->cat($entry, $revision);
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
+        $encoding = empty($encoding) ? 'utf-8' : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
 
         $suffix   = '';
@@ -1232,7 +1295,7 @@ class repo extends control
         $this->view->showBug     = $showBug;
         $this->view->repoID      = $repoID;
         $this->view->repo        = $repo;
-        $this->view->revision    = $revision;
+        $this->view->revision    = base64_encode($revision);
         $this->view->oldRevision = '';
         $this->view->file        = $file;
         $this->view->lines       = $lines;
@@ -1242,6 +1305,9 @@ class repo extends control
         $this->view->pathInfo    = $pathInfo;
         $this->view->objectID    = $objectID;
         $this->view->showEditor  = (strpos($this->config->repo->images, "|$suffix|") === false and $suffix != 'binary') ? true : false;
+        $this->view->canReview   = true;
+
+        $this->view->showLinkObject = $showLinkObject;
         $this->display();
     }
 
@@ -1261,17 +1327,11 @@ class repo extends control
         if(empty($repo)) return print($this->config->repo->repoSyncLog->finish);
         if($repo->synced) return print($this->config->repo->repoSyncLog->finish);
 
-        if(in_array($repo->SCM, array('Gitea', 'Gogs')))
-        {
-            $syncLog = $this->repoZen->syncLocalCommit($repo);
-            if($syncLog) return print(trim($syncLog));
-        }
-
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
-        $branchID = $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->syncBranch;
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) && !$this->cookie->syncBranch)
+        $branchID = (string)$this->cookie->syncBranch;
+        if(!$this->cookie->syncBranch && !$this->repo->isSvn($repo))
         {
             $branches = $this->scm->branch();
             if(empty($branches)) return print($this->lang->repo->error->empty);
@@ -1279,26 +1339,10 @@ class repo extends control
             $branchID = current($branches);
         }
 
-        $branches = $this->repoZen->getSyncBranches($repo, $branchID);
+        $branches = $this->repoZen->getSyncBranches($branchID);
 
         $logs    = array();
         $version = 1;
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM))
-        {
-            $latestInDB = $this->repo->getLatestCommit($repoID, false);
-
-            $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-            if(in_array($repo->SCM, array('Git', 'Gitea', 'Gogs')))
-            {
-                $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
-            }
-            else
-            {
-                $revision = $version == 1 ? '0' : $latestInDB->revision;
-            }
-            $batchNum = $type == 'batch' ? $this->config->repo->batchNum : 0;
-            $logs     = $this->scm->getCommits($revision, $batchNum, $branchID);
-        }
 
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
         echo $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount, $type);
@@ -1313,12 +1357,62 @@ class repo extends control
      * @access public
      * @return void
      */
+    /**
+     * 触发镜像仓库同步。
+     * Ajax trigger mirror sync for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSync(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        $response = $this->loadModel('gitfox')->apiMirrorSync((int)$repo->id);
+        if(empty($response) || !is_object($response)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->mirror->syncRequestFailed));
+
+        $code    = isset($response->code)    ? (string)$response->code    : '';
+        $message = isset($response->message) ? (string)$response->message : '';
+        if($code !== 'success') return $this->send(array('result' => 'fail', 'message' => $message ? $message : $this->lang->repo->mirror->syncFailed));
+
+        return $this->send(array(
+            'result'   => 'success',
+            'message'  => $message ? $message : $this->lang->repo->mirror->syncTriggered,
+            'callback' => 'mirrorSyncDelayedReload'
+        ));
+    }
+
+    /**
+     * 查询镜像仓库同步进度。
+     * Ajax get mirror sync progress for a mirror repo.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxMirrorSyncProgress(int $repoID = 0)
+    {
+        $repo = $this->repo->getByID($repoID);
+        if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
+
+        $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+        $status   = (!empty($progress) && is_object($progress) && !empty($progress->status))  ? (string)$progress->status  : '';
+        $failure  = (!empty($progress) && is_object($progress) && !empty($progress->failure)) ? (string)$progress->failure : '';
+
+        return $this->send(array(
+            'result'  => 'success',
+            'status'  => $status,
+            'failure' => $failure
+        ));
+    }
+
     public function ajaxSyncBranchCommit(int $repoID = 0, string $branch = '')
     {
         set_time_limit(0);
         $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return;
-        if(!in_array($repo->SCM, $this->config->repo->gitTypeList)) return print('finish');
         if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $this->scm->setEngine($repo);
@@ -1329,7 +1423,7 @@ class repo extends control
         $latestInDB = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF(in_array($repo->SCM, $this->config->repo->gitTypeList) and $this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
+            ->beginIF($this->cookie->repoBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
             ->orderBy('t1.time')
             ->limit(1)
             ->fetch();
@@ -1337,7 +1431,6 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
-        if($repo->SCM == 'Gitlab' and $version > 1) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
@@ -1366,7 +1459,7 @@ class repo extends control
     public function ajaxGetSVNDirs(int $repoID, string $path = '')
     {
         $repo = $this->repo->getByID($repoID);
-        if($repo->SCM != 'Subversion') return print(json_encode(array()));
+        if(!$this->repo->isSvn($repo)) return print(json_encode(array()));
 
         $path = $this->repo->decodePath($path);
         $dirs = array();
@@ -1399,14 +1492,25 @@ class repo extends control
      */
     public function ajaxGetDropMenu(int $repoID, string $module = 'repo', string $method = 'browse', int $projectID = 0)
     {
-        if($module == 'repo' and !in_array($method, array('review', 'diff', 'browsetag', 'browsebranch', 'log'))) $method = 'browse';
-        if($module == 'mr' && $method != 'create')  $method = 'browse';
-        if($module == 'job') $method = 'browse';
+        if($module == 'reporeviewflow' && $method == 'edit') $method = 'browse';
+        if($module == 'repo' && !in_array($method, array('review', 'diff', 'browsetag', 'browsebranch', 'log'))) $method = 'browse';
+        if($module == 'ppm' && $method != 'create')  $method = 'browse';
+        if($module == 'pipeline') $method = 'browse';
         if($module == 'compile' and $method == 'logs') $method = 'browse';
         if($module == 'bug' and $method == 'view')
         {
             $module = 'repo';
             $method = 'review';
+        }
+        if($module == 'repobranchrule' and $method == 'setbranchrule')
+        {
+            $module = 'repo';
+            $method = 'browse';
+        }
+        if($module == 'artifact' and $method == 'view')
+        {
+            $module = 'artifact';
+            $method = 'browse';
         }
 
         $params = '';
@@ -1418,10 +1522,13 @@ class repo extends control
 
         /* Get repo group by type. */
         $repoGroup = $this->repo->getRepoGroup('project', $projectID);
+        $link      = $this->createLink($module, $method, "repoID=%s" . $params);
+        if($module == 'pipeline') $link = $this->createLink($module, $method, "space=0&repoID=%s&type=repo" . $params);
+        if($module == 'artifact') $link = $this->createLink($module, $method, "space=0&repoID=%s&type=repo");
 
         $this->view->repoID    = $repoID;
         $this->view->repoGroup = $repoGroup;
-        $this->view->link      = $this->createLink($module, $method, "repoID=%s" . $params);
+        $this->view->link      = $link;
 
         $this->display();
     }
@@ -1452,25 +1559,6 @@ class repo extends control
         return print(json_encode($options));
     }
 
-    /**
-     * 获取服务器下拉列表数据。
-     * Ajax get hosts.
-     *
-     * @param  string    $scm
-     * @access public
-     * @return void
-     */
-    public function ajaxGetHosts(string $scm)
-    {
-        $hosts = $this->loadModel('pipeline')->getPairs($scm, true);
-
-        $options = array();
-        foreach($hosts as $hostID => $host)
-        {
-            $options[] = array('text' => $host, 'value' => $hostID);
-        }
-        return print(json_encode($options));
-    }
 
     /**
      * 获取各个服务器下的项目。
@@ -1482,87 +1570,8 @@ class repo extends control
      */
     public function ajaxGetProjects(int $serverID)
     {
-        $server         = $this->loadModel('pipeline')->getByID($serverID);
-        $getProjectFunc = 'ajaxGet' . $server->type . 'Projects';
-
-        $repos = $this->$getProjectFunc($serverID);
+        $repos = $this->repo->ajaxGetGitFoxProjects($serverID);
         return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
-    }
-
-    /**
-     * 获取Gitea项目。
-     * Ajax get gitea projects.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGiteaProjects(int $giteaID): array
-    {
-        $projects = $this->loadModel('gitea')->apiGetProjects($giteaID);
-
-        $importedProjects = $this->repo->getImportedProjects($giteaID);
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(in_array($project->full_name, $importedProjects)) continue;
-            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
-        }
-        return $options;
-    }
-
-    /**
-     * 获取Gogs项目。
-     * Ajax get gogs projects.
-     *
-     * @param  int    $gogsID
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGogsProjects(int $gogsID): array
-    {
-        $projects = $this->loadModel('gogs')->apiGetProjects($gogsID);
-
-        $importedProjects = $this->repo->getImportedProjects($gogsID);
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(in_array($project->full_name, $importedProjects)) continue;
-            $options[] = array('text' => $project->full_name, 'value' => $project->full_name);
-        }
-        return $options;
-    }
-
-    /**
-     * 获取Gitlab项目。
-     * Ajax get gitlab projects.
-     *
-     * @param  int    $gitlabID
-     * @param  string $projectIdList
-     * @param  string $filter
-     * @access public
-     * @return array
-     */
-    public function ajaxGetGitlabProjects(int $gitlabID, string $projectIdList = '', string $filter = ''): array
-    {
-        $projects = $this->repo->getGitlabProjects($gitlabID, $filter);
-
-        if(!$projects) return array();
-        $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
-
-        $options = array();
-        $options[] = array('text' => '', 'value' => '');;
-        foreach($projects as $project)
-        {
-            if(!empty($projectIdList) and $project and !in_array($project->id, $projectIdList)) continue;
-            $options[] = array('text' => $project->name_with_namespace, 'value' => $project->id);
-        }
-
-        return $options;
     }
 
     /**
@@ -1576,11 +1585,9 @@ class repo extends control
     public function ajaxGetGroups(int $serverID)
     {
         $options = $this->repo->getGroups($serverID);
-        $server  = $this->loadModel('pipeline')->getByID($serverID);
 
         $result = new stdclass();
         $result->options = $options;
-        $result->server  = $server;
 
         return print(json_encode($result));
     }
@@ -1670,19 +1677,47 @@ class repo extends control
      */
     public function downloadCode(int $repoID, string $branch = '')
     {
-        $savePath = $this->app->getDataRoot() . 'repo';
-        if(!is_dir($savePath))
+        $tempDownloadDir = $this->app->getTmpRoot() . 'cache/repo/';
+        if(!is_dir($tempDownloadDir) && !mkdir($tempDownloadDir, 0755, true) && !is_dir($tempDownloadDir))
         {
-            if(!is_writable($this->app->getDataRoot())) return $this->sendError(sprintf($this->lang->repo->error->noWritable, dirname($savePath)), true);
-            mkdir($savePath, 0777, true);
+            return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
         }
+        if(!is_writable($tempDownloadDir)) return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
 
         $repo = $this->repo->getByID($repoID);
+
         $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
-        $url = $this->scm->getDownloadUrl($branch, $savePath);
+        $errorMessage   = '';
+        $downloadSource = $this->scm->getDownloadUrl($branch, $tempDownloadDir, 'zip', $errorMessage);
+        if($downloadSource === false || $downloadSource === '')
+        {
+            return $this->sendError($errorMessage !== '' ? $errorMessage : $this->lang->fail, true);
+        }
 
-        return $this->send(array('result' => 'success', 'callback' => "window.open('{$url}')"));
+        if(is_file($downloadSource))
+        {
+            $packageFile = $downloadSource;
+        }
+        else
+        {
+            $packageFile = tempnam($tempDownloadDir, 'repo_');
+            if($packageFile === false) return $this->sendError(sprintf($this->lang->repo->error->noWritable, $tempDownloadDir), true);
+
+            $zipContent = file_get_contents($downloadSource);
+            if($zipContent === false || file_put_contents($packageFile, $zipContent) === false)
+            {
+                if(is_file($packageFile)) unlink($packageFile);
+                return $this->sendError($this->lang->fail, true);
+            }
+        }
+
+        $zipContent = file_get_contents($packageFile);
+        unlink($packageFile);
+        if($zipContent === false) return $this->sendError($this->lang->fail, true);
+
+        $downloadName = $branch === '' ? $repo->name : $branch;
+        $this->loadModel('file')->sendDownHeader("{$downloadName}.zip", 'zip', $zipContent);
     }
 
     /**
@@ -1732,8 +1767,8 @@ class repo extends control
         $repo  = $this->repo->getByID((int)$this->post->repoID);
         $entry = $this->repo->decodePath($this->post->entry);
 
-        $revision       = helper::safe64Decode(urldecode($this->post->revision));
-        $sourceRevision = helper::safe64Decode(urldecode($this->post->sourceRevision));
+        $revision       = $this->post->revision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->revision);
+        $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->sourceRevision);
 
         $this->scm->setEngine($repo);
         $blames = $this->scm->blame($entry, $revision);
@@ -1743,22 +1778,46 @@ class repo extends control
     }
 
     /**
+     * Decode revision values posted by editor pages.
+     *
+     * Some editor entry points post raw branch names, while others post
+     * base64/safe64 encoded values. Only decode when the input can round-trip
+     * as a valid encoded revision; otherwise keep the raw value.
+     *
+     * @param  string $revision
+     * @access protected
+     * @return string
+     */
+    protected function decodeEditorRevision(string $revision): string
+    {
+        $revision = urldecode($revision);
+        if($revision === '') return $revision;
+
+        $decoded = helper::safe64Decode($revision);
+        if($decoded === false || $decoded === '') return $revision;
+
+        if(helper::safe64Encode($decoded) === $revision || base64_encode($decoded) === $revision) return urldecode($decoded);
+
+        return $revision;
+    }
+
+    /**
      * 获取Gitlab的文件信息。
      * Get gitlab files.
      *
      * @param  int    $repoID
      * @param  string $branch
      * @param  string $path
+     * @param  string $selectFile
      * @access public
      * @return void
      */
-    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '')
+    public function ajaxGetFiles(int $repoID, string $branch = '', string $path = '', string $selectFile = '')
     {
         $repo = $this->repo->getByID($repoID);
         if($path) $path = helper::safe64Decode($path);
 
-        if($repo->SCM == 'Gitlab') return print(json_encode($this->repo->getGitlabFilesByPath($repo, $path, $branch)));
-        return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch)));
+        return print(json_encode($this->repoZen->getViewTree($repo, $path, $branch, $selectFile)));
     }
 
     /**
@@ -1867,7 +1926,6 @@ class repo extends control
         $keyword = htmlspecialchars(base64_decode($keyword));
 
         $repo = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $this->scm->setEngine($repo);
         $tagList = $this->scm->tags($keyword ? $keyword : 'all', 'HEAD', true, $orderBy, $recPerPage, $pageID);
@@ -1894,11 +1952,9 @@ class repo extends control
             if(isset($tag->commit->author->identity->name)) $tag->committer = $tag->commit->author->identity->name;
             $tag->committer = zget($committers, $tag->committer);
 
-            $tag->createdBy = isset($tag->tagger->identity->name) ? zget($committers, $tag->tagger->identity->name) : '';
-
-            $tag->createdDate = isset($tag->tagger->when) ? date('Y-m-d H:i:s', strtotime($tag->tagger->when)) : '';
-            if(isset($tag->created_at)) $tag->createdDate = date('Y-m-d H:i:s', strtotime($tag->created_at));
+            $tag->createdDate = isset($tag->createdBy->when) ? date('Y-m-d H:i:s', strtotime($tag->createdBy->when)) : '';
             if($tag->createdDate) $showCreatedDate = true;
+            $tag->createdBy = isset($tag->createdBy->identity->name) ? $tag->createdBy->identity->name : '';
 
             $tag->date = isset($tag->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($tag->commit->committed_date)) : '';
             if(isset($tag->commit->committer->when)) $tag->date = date('Y-m-d H:i:s', strtotime($tag->commit->committer->when));
@@ -1919,13 +1975,268 @@ class repo extends control
     }
 
     /**
+     * 浏览 webhook 列表。
+     * Browse webhook list.
+     *
+     * @param  int    $repoID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseWebhooks(int $repoID, string $orderBy = 'createdDate_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo     = $this->repo->getByID($repoID);
+        $webhooks = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id);
+        if(!$webhooks) $webhooks = array();
+
+        foreach($webhooks as &$webhook)
+        {
+            $webhook->repoID = $repoID;
+            $webhook->name   = zget($webhook, 'displayName', '');
+            $webhook->status = !empty($webhook->enabled) ? 'enabled' : 'disabled';
+
+            if(isset($webhook->latestExecutionResult))
+            {
+                $webhook->latestStatus = $webhook->latestExecutionResult == 'success' ? 'success' : 'fail';
+            }
+            else
+            {
+                $webhook->latestStatus = 'pending';
+            }
+        }
+
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($webhooks as $orderWebhook)
+        {
+            if(!isset($orderWebhook->$order)) continue;
+            $orderList[] = $orderWebhook->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $webhooks);
+
+        $this->app->loadClass('pager', true);
+        $webhookTotal = count($webhooks);
+        $pager        = new pager($webhookTotal, $recPerPage, $pageID);
+        $webhooks     = array_chunk($webhooks, (int)$pager->recPerPage);
+        if($webhooks && !isset($webhooks[$pageID - 1])) $pageID = 1;
+
+        $this->view->title    = $this->lang->repo->browseWebhooks;
+        $this->view->repoID   = $repoID;
+        $this->view->repo     = $repo;
+        $this->view->pager    = $pager;
+        $this->view->webhooks = empty($webhooks) ? array() : $webhooks[$pageID - 1];
+        $this->view->orderBy  = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * 创建 webhook。
+     * Create a webhook.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createWebhook(int $repoID)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        if($_POST)
+        {
+            $repo = $this->repo->getByID($repoID);
+
+            $formData = form::data($this->config->repo->form->createWebhook)->get();
+            $webhook  = $this->repoZen->buildWebhook($formData, $repo);
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $result = $this->loadModel('gitfox')->apiCreateHook((int)$repo->id, $webhook);
+            if(empty($result) || empty($result->id)) $this->sendError($this->lang->fail);
+
+            $this->loadModel('action')->create('repo', $repoID, 'createwebhook');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+        }
+
+        $this->view->title  = $this->lang->repo->createWebhook;
+        $this->view->repoID = $repoID;
+        $this->display();
+    }
+
+    /**
+     * 编辑 webhook。
+     * Edit a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @access public
+     * @return void
+     */
+    public function editWebhook(int $repoID, int $webhookID)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo    = $this->repo->getByID($repoID);
+        $webhook = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id, $webhookID);
+
+        if($_POST)
+        {
+            $formData = form::data($this->config->repo->form->editWebhook)->get();
+
+            $newWebhook = $this->repoZen->buildWebhook($formData, $repo, $webhook);
+            if(empty(get_object_vars($newWebhook))) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+            if(dao::isError()) $this->sendError(dao::getError());
+
+            $result = $this->loadModel('gitfox')->apiUpdateWebhook((int)$repo->id, $webhookID, $newWebhook);
+            if(!$result) $this->sendError($this->lang->fail);
+
+            $this->loadModel('action')->create('repo', $repoID, 'editwebhook');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $this->createLink('repo', 'browseWebhooks', "repoID=$repoID")));
+        }
+
+        $this->view->title   = $this->lang->repo->editWebhook;
+        $this->view->repoID  = $repoID;
+        $this->view->webhook = $webhook;
+        $this->display();
+    }
+
+    /**
+     * 浏览 webhook 日志列表。
+     * Browse webhook execution logs.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function logWebhook(int $repoID, int $webhookID, string $orderBy = 'created_desc', int $recPerPage = 20, int $pageID = 1)
+    {
+        $repoID = $this->repoZen->processRepoID($repoID, 0);
+        $this->commonAction($repoID, 0);
+
+        $repo = $this->repo->getByID($repoID);
+        $logs = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID);
+        if(!$logs) $logs = array();
+
+        foreach($logs as &$log)
+        {
+            $log->createdDate = zget($log, 'createdDate', '');
+            $log->triggerType = zget($log, 'triggerType', '');
+            $log->url         = zget($log, 'reqUrl', '');
+            $log->result      = zget($log, 'result', '') == 'fatal_error' ? 'fail' : zget($log, 'result', '');
+            $log->repoID      = $repoID;
+            $log->webhookID   = $webhookID;
+        }
+
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($logs as $orderLog)
+        {
+            if(!isset($orderLog->$order)) continue;
+            $orderList[] = $orderLog->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $logs);
+
+        $this->app->loadClass('pager', true);
+        $logTotal = count($logs);
+        $pager    = new pager($logTotal, $recPerPage, $pageID);
+        $logs     = array_chunk($logs, (int)$pager->recPerPage);
+        if($logs && !isset($logs[$pageID - 1])) $pageID = 1;
+
+        $this->view->title     = $this->lang->repo->logWebhook;
+        $this->view->repoID    = $repoID;
+        $this->view->repo      = $repo;
+        $this->view->webhookID = $webhookID;
+        $this->view->pager     = $pager;
+        $this->view->logs      = empty($logs) ? array() : $logs[$pageID - 1];
+        $this->view->orderBy   = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * 启用或关闭 webhook。
+     * Enable or disable a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  int    $isEnable
+     * @access public
+     * @return void
+     */
+    public function enableWebhook(int $repoID, int $webhookID, int $isEnable)
+    {
+        $repo = $this->repo->getByID($repoID);
+
+        $webhook          = new stdClass();
+        $webhook->enabled = $isEnable == 1;
+        $result = $this->loadModel('gitfox')->apiUpdateWebhook((int)$repo->id, $webhookID, $webhook);
+        if(!$result) $this->sendError($isEnable == 1 ? $this->lang->repo->webhook->enabledFail : $this->lang->repo->webhook->disabledFail);
+
+        $this->loadModel('action')->create('repo', $repoID, $isEnable == 1 ? 'enablewebhook' : 'disablewebhook');
+        return $this->send(array('result' => 'success', 'message' => $isEnable == 1 ? $this->lang->repo->webhook->enabledSuccess : $this->lang->repo->webhook->disabledSuccess, 'load' => true));
+    }
+
+    /**
+     * 删除 webhook。
+     * Delete a webhook.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @access public
+     * @return void
+     */
+    public function deleteWebhook(int $repoID, int $webhookID)
+    {
+        $repo = $this->repo->getByID($repoID);
+        $logs = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID);
+        if(!empty($logs)) $this->sendError($this->lang->repo->webhook->deleteFail);
+
+        $this->gitfox->apiDeleteWebhook((int)$repo->id, $webhookID);
+
+        $this->loadModel('action')->create('repo', $repoID, 'deletewebhook');
+        return $this->send(array('result' => 'success', 'message' => $this->lang->repo->webhook->deleteSuccess, 'load' => true));
+    }
+
+    /**
+     * 查看 webhook 请求数据。
+     * View webhook request data.
+     *
+     * @param  int    $repoID
+     * @param  int    $webhookID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function viewWebhookRequest(int $repoID, int $webhookID, int $executionID)
+    {
+        $repo    = $this->repo->getByID($repoID);
+        $execLog = $this->loadModel('gitfox')->apiGetWebhookExecution((int)$repo->id, $webhookID, $executionID);
+        if(!$execLog) $execLog = array();
+
+        $this->view->title     = $this->lang->repo->logWebhook;
+        $this->view->repoID    = $repoID;
+        $this->view->repo      = $repo;
+        $this->view->webhookID = $webhookID;
+        $this->view->execLog   = $execLog;
+        $this->display();
+    }
+
+    /**
      * 浏览分支列表。
      * Browse branch list.
      *
      * @param  int    $repoID
      * @param  int    $objectID
      * @param  string $label
-     * @param  int    $showArchived
+     * @param  string $showArchived
      * @param  string $keyword
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -1934,13 +2245,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function browseBranch(int $repoID, int $objectID = 0, string $label = 'all', int $showArchived = 0, string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function browseBranch(int $repoID, int $objectID = 0, string $label = 'all', string $showArchived = 'active', string $keyword = '', string $orderBy = 'date_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $repoID = $this->repoZen->processRepoID($repoID, $objectID);
         $this->commonAction($repoID, $objectID);
 
         $repo = $this->repo->getByID($repoID);
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) $this->locate(inLink('browse', "repoID=$repoID&objectID=$objectID"));
 
         $keyword = str_replace(' ', '+', urldecode($keyword));
         $keyword = htmlspecialchars(base64_decode($keyword));
@@ -1954,7 +2264,10 @@ class repo extends control
         $pager->recPerPage = $recPerPage;
         $pager->recTotal = count($branchList) < $pager->recPerPage ? $pager->recPerPage * $pager->pageID : $pager->recPerPage * ($pager->pageID + 1);
 
-        $committers = $this->loadModel('user')->getCommiters('account');
+        $committers  = $this->loadModel('user')->getCommiters('account');
+        $types       = $this->loadModel('repobranchtype')->getBranchTypeList($repoID);
+        $rules       = $this->loadModel('repobranchrule')->getBranchRulePairs($repoID, 'branchName', 'repo');
+        $currentUser = $this->app->user->account;
         foreach($branchList as &$branch)
         {
             $branch->repoID     = $repoID;
@@ -1972,8 +2285,66 @@ class repo extends control
             $branch->commitDate = isset($branch->commit->committed_date) ? date('Y-m-d H:i:s', strtotime($branch->commit->committed_date)) : '';
             if(isset($branch->commit->author->when)) $branch->commitDate = date('Y-m-d H:i:s', strtotime($branch->commit->author->when));
 
-            $branch->ahead  = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
-            $branch->behind = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $separators = array('/', '-', '_', '.');
+            $minPos     = false;
+            foreach($separators as $separator)
+            {
+                $pos = strpos($branch->name, $separator);
+                if($pos !== false && ($minPos === false || $pos < $minPos)) $minPos = $pos;
+            }
+            $prefix = ($minPos !== false) ? substr($branch->name, 0, $minPos + 1) : $branch->name;
+            $branch->type = '';
+            foreach($types as $type)
+            {
+                if(in_array($prefix, $type->prefixes))
+                {
+                    $branch->type = $type->name;
+                    break;
+                }
+            }
+
+            if(isset($rules[$branch->name]))
+            {
+                $branch->rule = $this->lang->repo->branchRuleMode['redefinition'];
+            }
+            elseif($branch->type)
+            {
+                $branch->rule = $this->lang->repo->branchRuleMode['inheritance'];
+            }
+            else
+            {
+                $branch->rule = '';
+            }
+            $branch->ahead     = isset($branch->divergence->ahead) ? $branch->divergence->ahead : 0;
+            $branch->behind    = isset($branch->divergence->behind) ? $branch->divergence->behind : 0;
+            $branch->deletable = !($branch->isDefault || !$this->loadModel('repobranchrule')->checkPrivToDeleteBranch($repoID, $branch->name, $currentUser));
+        }
+        $branchTypes = $this->loadModel('repobranchtype')->getBranchTypeByRepoID($repo->id, 'id_asc');
+        if(!empty($branchTypes))
+        {
+            $this->lang->repo->featureBar['browsebranch']['all'] = $this->lang->all;
+            $branchTypeCount = 0;
+            foreach($branchTypes as $branchType)
+            {
+                $branchTypeCount = $branchTypeCount + 1;
+                if($branchTypeCount < 5)
+                {
+                    $this->lang->repo->featureBar['browsebranch'][$branchType->id] = $branchType->name;
+                }
+                else
+                {
+
+                    if($branchTypeCount == 5 && count($branchTypes) == 5)
+                    {
+                        $this->lang->repo->featureBar['browsebranch'][$branchType->id] = $branchType->name;
+                    }
+                    else
+                    {
+                        if(!isset($this->lang->featureBar['browsebranch']['more'])) $this->lang->repo->featureBar['browsebranch']['more'] = $this->lang->more;
+                        $this->lang->repo->moreSelects['browsebranch']['more'][$branchType->id] = $branchType->name;
+                    }
+                }
+            }
         }
 
         $this->view->title        = $this->lang->repo->browseBranch;
@@ -2010,5 +2381,748 @@ class repo extends control
             return print(json_encode($options[0]['items']));
         }
         return print(json_encode(array()));
+    }
+
+    /**
+     * 通过ajax获取空间的成员列表。
+     * Ajax: Get space members.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetSpaceMembers(int $spaceID)
+    {
+        $users     = $this->loadModel('user')->getPairs('noletter');
+        $spaceUser = $this->loadModel('space')->getSpaceUsers($spaceID);
+
+        $userList = array();
+        foreach($spaceUser as $user) $userList[] = array('text' => $users[$user], 'value' => $user);
+
+        return print(json_encode($userList));
+    }
+
+    /**
+     * addBug
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function addBug(int $repoID)
+    {
+        $this->loadModel('common')->checkPriv();
+
+        if(!empty($_POST))
+        {
+            global $config;
+            $file  = $this->post->file;
+            $v1    = $this->post->fromReversion;
+            $v2    = $this->post->revision;
+            $begin = $this->post->begin;
+            $end   = $this->post->end;
+            $v1    = strpos($v1, '^') !== false ? substr($v1, 0, -1) : $v1;
+            $v2    = strpos($v2, '^') !== false ? substr($v2, 0, -1) : $v2;
+            $bug   = form::data($config->repo->form->addBug)
+                ->setIF(!$this->post->entry, 'entry', $file)
+                ->add('openedBy', $this->app->user->account)
+                ->add('repo', $repoID)
+                ->add('lines', $begin . ',' . $end)
+                ->add('v1', $v1)
+                ->add('v2', $v2)
+                ->remove('begin,end,uid,fromReversion,revision,file')
+                ->get();
+            $bug->type = $bug->repoType;
+            $bug = $this->loadModel('file')->processImgURL($bug, 'steps',(string)$this->post->uid);
+
+            $result = $this->repo->saveBug($repoID, $bug);
+            if($result['result'] === 'fail')
+            {
+                return $this->send($result);
+            }
+
+            $bugID      = $result['id'];
+            $repo       = $this->repo->getById($repoID);
+            $file       = $this->repo->decodePath($file);
+            $entry      = $repo->name . '/' . $file;
+            $location   = sprintf($this->lang->repo->reviewLocation, $entry, substr($v2, 0, 10), $begin, $end);
+            $changeFile = $this->repo->encodePath("{$file}#{$begin},{$end}");
+            if(empty($v1))
+            {
+                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$changeFile}&revision=$v2&showBug=1", '', true) . "#L{$begin}";
+            }
+            else
+            {
+                $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$changeFile}&oldRevision=$v1&newRevision=$v2&showBug=1", '', true) . "#L{$begin}";
+            }
+
+            /* search commit. */
+            $commitID = empty($v2) ? $v1 : $v2;
+            $this->app->loadClass('pager', true);
+            $pager = new pager(0, 1, 1);
+            $pager->recPerPage = 1;
+
+            $query = new stdclass();
+            $query->commit = $commitID;
+
+            $commits = $this->repo->getCommits($repo, '', '', 'dir', $pager, '', '', $query);
+            if(!empty($commits[0]))
+            {
+                $commit = $commits[0];
+                $historyLog = new stdclass();
+                if(!empty($commit->author->identity->name))
+                {
+                    $historyLog->committer = $commit->author->identity->name;
+                }elseif(!empty($commit->committer_name))
+                {
+                    $historyLog->committer = $commit->committer_name;
+                }else
+                {
+                    $historyLog->committer = '';
+                }
+                /* Record code commit relationship. */
+                $historyLog->revision = $commit->revision;
+                $historyLog->comment  = $commit->message;
+                $historyLog->time     = date("Y-m-d H:i:s", strtotime($commit->time));
+                $this->repo->saveCommit($repo->id, array('commits' => [$historyLog]), 0);
+                $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)
+                    ->where('revision')->in($commit->revision)
+                    ->andWhere('repo')->eq($repoID)
+                    ->fetchPairs('id');
+                $this->loadModel('bug')->updateLinkedCommits((int)$bugID, $repoID, $revisions);
+            }
+            $actionID = $this->loadModel('action')->create('bug', $bugID, 'repoCreated', '', html::a($link, $location, '', "class='iframe'"));
+            $this->loadModel('mail')->sendmail($bugID, $actionID);
+
+            return $this->send($result);
+        }
+    }
+
+    /**
+     * 添加评论。
+     * Add comment.
+     *
+     * @access public
+     * @return void
+     */
+    public function addComment()
+    {
+        if(!empty($_POST))
+        {
+            $now  = helper::now();
+            $bug  = $this->loadModel('bug')->getByID($this->post->objectID);
+            $data = fixer::input('post')
+                ->add('objectType', 'bug')
+                ->add('product', ',' . $bug->product . ',')
+                ->add('project', $bug->project)
+                ->add('actor', $this->app->user->account)
+                ->add('action', 'commented')
+                ->add('date', $now)
+                ->remove('loadPage')
+                ->get();
+            if(empty($data->comment)) return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+
+            $this->dao->insert(TABLE_ACTION)->data($data)->exec();
+            return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+        }
+    }
+
+    /**
+     * Show review.
+     *
+     * @param  int    $repoID
+     * @param  string $bugList
+     * @param  int    $currentBug
+     * @access public
+     * @return void
+     */
+    public function ajaxGetBugs($repoID, $bugList, $currentBug = 0)
+    {
+        $this->loadModel('bug');
+        $this->loadModel('file');
+        $bugIDList = explode(',', $bugList);
+        if(!$currentBug && $bugIDList) $currentBug = $bugIDList[count($bugIDList) - 1];
+
+        $modules  = $this->loadModel('tree')->getAllModulePairs('bug');
+        $bugs     = $this->repo->getBugsByRepo($repoID, 'all', 0, $bugIDList);
+        $comments = $this->repo->getComments($bugIDList);
+        $accounts = array();
+
+        foreach($bugs as $bug)
+        {
+            $bug->files      = array();
+            $bug->actions    = array();
+            $bug->toCases    = array();
+            $bug->moduleName = zget($modules, $bug->module, '');
+            $bug = $this->file->replaceImgURL($bug, 'steps');
+
+            $accounts[] = $bug->openedBy;
+        }
+
+        $this->view->repoID     = $repoID;
+        $this->view->bugs       = $bugs;
+        $this->view->bugIDList  = $bugIDList;
+        $this->view->comments   = $comments;
+        $this->view->currentBug = $currentBug;
+        $this->view->users      = $this->loadModel('user')->getListByAccounts($accounts, 'account');
+        $this->view->commentUrl = $this->repo->createLink('addComment');
+        $this->display();
+    }
+
+    /**
+     * Ajax get committer.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  int    $revision
+     * @param  int    $line
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCommitter($repoID, $entry, $revision, $line)
+    {
+        if($this->get->repoPath) $entry = $this->get->repoPath;
+        $repo  = $this->repo->getRepoByID($repoID);
+        $entry = $this->repo->decodePath($entry);
+
+        $this->scm->setEngine($repo);
+        $blames   = $this->scm->blame($entry, $revision);
+        $committer = '';
+        while($line > 0)
+        {
+            if(isset($blames[$line]['committer']))
+            {
+                $committer = $blames[$line]['committer'];
+                break;
+            }
+            $line--;
+        }
+        echo $committer;
+    }
+
+    /**
+     * Delete bug.
+     *
+     * @param  int    $bugID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteBug($bugID, $confirm = 'no')
+    {
+        if($confirm == 'yes')
+        {
+            $this->loadModel('bug')->delete(TABLE_BUG, $bugID);
+            echo 'deleted';
+        }
+        return false;
+    }
+
+    /**
+     * Delete comment.
+     *
+     * @param  int    $commentID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteComment($commentID, $confirm = 'no')
+    {
+        if($confirm == 'yes')
+        {
+            $result = $this->repo->deleteComment($commentID);
+            if($result) echo 'deleted';
+        }
+        return false;
+    }
+
+    /**
+     * 编辑评论。
+     * Edit comment.
+     *
+     * @param  int    $commentID
+     * @access public
+     * @return void
+     */
+    public function editComment($commentID)
+    {
+        if(!empty($_POST))
+        {
+            $comment = $this->loadModel('file')->pasteImage($this->post->commentText);
+            $this->repo->updateComment($commentID, $comment);
+            return $this->sendSuccess(array('message' => '', 'load' => $this->post->loadPage ? $this->post->loadPage : true));
+        }
+    }
+
+    /**
+     * Show review.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function review(int $repoID, string $browseType = '', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    {
+        /* Save the original $repoID to this variable to check if $repoID is 0. */
+        $isAllRepo = !$repoID;
+
+        if($repoID == 0) $repoID = $this->repo->saveState($repoID);
+        $this->commonAction($repoID, (int)$objectID);
+
+        $firstOpen  = empty($browseType);
+        $browseType = strtolower($browseType ? $browseType : 'assigntome');
+        $this->app->loadLang('bug');
+        $this->repoZen->setBackSession('list', true);
+
+        /* Load pager. */
+        $this->app->loadClass('pager', true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $bugs = $this->repo->getBugsByRepo($objectID && $isAllRepo ? 0 : $repoID, $browseType, $objectID, array(), $orderBy, $pager);
+        if($firstOpen && empty($bugs)) return $this->locate(inLink('review', "repoID={$repoID}&browseType=all"));
+
+        $repo = $this->repo->getById($repoID);
+        $revisions = array();
+        foreach($bugs as $bug)
+        {
+            $revisions[] = $bug->v2;
+            if(!empty($bug->v1)) $revisions[] = $bug->v1;
+        }
+        $this->view->historys = $this->dao->select('revision,commit')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('revision', 'commit');
+
+        if($this->app->tab == 'execution') $this->view->executionID = $objectID;
+
+        $repoList  = $this->loadModel('repo')->getList($objectID);
+        $repoPairs = array();
+        foreach($repoList as $repo)
+        {
+            $repoPairs[$repo->id] = $repo->name;
+        }
+
+        foreach($bugs as $bug) $bug->type = $bug->repoType ? $bug->repoType : $bug->type;
+
+        $this->view->allRepo    = $isAllRepo;
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->repos      = $this->repo->getList($objectID);
+        $this->view->repoGroup  = $this->repo->getRepoGroup($this->app->tab);
+        $this->view->orderBy    = $orderBy;
+        $this->view->repoID     = $repoID;
+        $this->view->objectID   = $objectID;
+        $this->view->repo       = $repo;
+        $this->view->bugs       = $bugs;
+        $this->view->pager      = $pager;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title      = $this->lang->repo->review;
+        $this->view->browseType = $browseType;
+        $this->display();
+    }
+
+    /**
+     * 浏览分支列表。
+     * Browse branch list.
+     *
+     * @param  int    $space
+     * @param  string $type
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @param  string $keyword
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseSystem(int $space = 0, string $type = 'all',string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1, int $param = 0)
+    {
+        $this->app->loadClass('pager', true);
+        $this->loadModel('space')->setMenu($space);
+
+        $queryID   = $type == 'bySearch' ? $param : 0;
+        $actionURL = $this->createLink('repo', 'browseSystem', "space={$space}&type=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $this->repo->buildSystemSearchForm($queryID, $actionURL);
+
+        $systemQuery = $type == 'bySearch' ? $this->repoZen->getSystemSearchQuery($queryID) : '';
+        $systems = $this->repo->getSystemList($systemQuery, $space);
+        foreach($systems as &$system)
+        {
+            $system->latestRelease = $system->latestRelease ? $system->latestRelease : '';
+        }
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($systems as $orderSystem)
+        {
+            $orderList[] = $orderSystem->$order;
+        }
+        if($orderList) array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $systems);
+
+        /* Pager. */
+        $this->app->loadClass('pager', true);
+        $systemTotal = count($systems);
+        $pager       = new pager($systemTotal, $recPerPage, $pageID);
+        $systems     = array_chunk($systems, (int)$pager->recPerPage);
+        if($systems && !isset($systems[$pageID - 1])) $pageID = 1;
+
+        $this->view->title    = $this->lang->repo->browseSystem;
+        $this->view->appList  = empty($systems) ? $systems: $systems[$pageID - 1];
+        $this->view->releases = $this->loadModel('release')->getPairs();
+        $this->view->products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
+        $this->view->orderBy  = $orderBy;
+        $this->view->pager    = $pager;
+        $this->view->param    = $param;
+        $this->view->type     = $type;
+        $this->view->inSpace  = !empty($space);
+        $this->view->spaceID  = $space;
+        $this->display();
+    }
+
+    /**
+     * 创建代码库分支。
+     * Create code repo branch.
+     *
+     * @param  int $objectID
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function createRepoBranch(int $objectID, int $repoID)
+    {
+        $repoPairs = array();
+        if($objectID != 0)
+        {
+            $repoGroup = $this->repo->getRepoGroup('project', $objectID,  $this->config->repo->notSyncSCM);
+            if($repoGroup)
+            {
+                foreach($repoGroup as $groups)
+                {
+                    if(empty($groups['items'])) continue;
+                    foreach ($groups['items'] as $groupItem) $repoPairs[$groupItem['id']] = $groupItem['text'];
+                }
+            }
+        }
+        else
+        {
+            $repoInfo = $this->repo->fetchByID($repoID);
+            $repoPairs[$repoID] = $repoInfo->name;
+        }
+
+        $repoList  = $this->repo->getListByPriv('haspriv');
+        $this->scm->setEngine($repoList[$repoID]);
+        if(!empty($_POST))
+        {
+            $branch = form::data($this->config->repo->form->createBranch)->get();
+            if(mb_strlen($branch->branchName, 'UTF-8') > 30)
+            {
+                return $this->sendError(array('branchName' => $this->lang->repo->error->branchNameTooLong));
+            }
+            $repoID = $branch->codeRepo ? $branch->codeRepo : $repoID;
+
+            if(!$this->loadModel('repobranchrule')->checkPrivToCreateBranch($repoID, $branch->branchName, $this->app->user->account))
+            {
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->notice->noPermissionToCreateBranch));
+            }
+
+            $this->scm->setEngine($repoList[$repoID]);
+
+            $this->scm->createBranch($branch->branchName, $branch->branchFrom);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->repo->saveRelation($repoID, $branch->branchName, $repoID, 'repo');
+            $this->loadModel('action')->create('repo', $repoID, 'createRepoBranch', '', $branch->branchName);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = $this->repo->createLink('browsebranch', "repoID={$repoID}&objectID={$objectID}", '', false);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
+        }
+
+        $this->view->repoID         = $repoID;
+        $this->view->objectID       = $objectID;
+        $this->view->objectType     = 'project';
+        $this->view->repoPairs      = $repoPairs;
+        $this->view->canCreate      = true;
+        $this->view->fromList       = $this->getBranchAndTagOptions($this->scm);
+        $this->view->linkedBranches = array();
+        $this->display();
+    }
+
+    /**
+     * 创建标签。
+     * Create a tag.
+     *
+     * @param  int    $objectID
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function createTag(int $objectID, int $repoID = 0)
+    {
+        $repoGroup = $this->repo->getRepoGroup('project', $objectID);
+        $repoPairs = [];
+        if($repoGroup)
+        {
+            foreach($repoGroup as $groups)
+            {
+                if(empty($groups['items'])) continue;
+                foreach ($groups['items'] as $groupItem) $repoPairs[$groupItem['id']] = $groupItem['text'];
+            }
+        }
+        $repoList  = $this->repo->getListByPriv('haspriv');
+        $this->scm->setEngine($repoList[$repoID]);
+        if(!empty($_POST))
+        {
+            $tag    = form::data($this->config->repo->form->createTag)->get();
+            $repoID = $tag->codeRepo ? $tag->codeRepo : $repoID;
+            $this->scm->setEngine($repoList[$repoID]);
+
+            $result = $this->scm->createTag($repoList[$repoID]->id, $tag->tagName, $tag->tagFrom, $tag->comment);
+
+            if(dao::isError()) return $this->sendError($this->lang->repo->error->createdFail . ': ' .  $this->parseErrorContent(dao::getError()['apiMessage']));
+            if(empty($result)) return $this->sendError($this->lang->repo->error->createdFail);
+
+            $this->repo->saveRelation($repoID, $tag->tagName, $repoID, 'repo', 'linkrepotag');
+            $this->loadModel('action')->create('repo', $repoID, 'createRepoTag', '', $tag->tagName);
+
+            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
+            $link = $this->repo->createLink('browsetag', "repoID={$repoID}&objectID={$objectID}", '', false);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+        }
+
+        list($branchID, $branches, $tags) = $this->setBranchTag($repoList[$repoID], '');
+        unset($branches, $tags);
+
+        $branchID = helper::safe64Encode(base64_encode($branchID));
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, 1, 1);
+
+        $pager->recPerPage      = 1;
+        $this->view->repoID     = $repoID;
+        $this->view->objectType = 'project';
+        $this->view->repoPairs  = $repoPairs;
+        $this->view->canCreate  = common::hasPriv('repo', 'createTag');
+        $this->view->branchID   = $branchID;
+        $this->view->objectID   = $objectID;
+
+        $tagFrom = $this->getBranchAndTagOptions($this->scm);
+        if(isset($tagFrom[1])) unset($tagFrom[1]); /* Remove the tags. */
+        $this->view->fromList = $tagFrom;
+
+        $commits = $this->repo->getCommits($repoList[$repoID], '', $branchID, 'dir', $pager, '', '', null);
+        $commit  = new stdClass();
+        if(!empty($commits))
+        {
+            $commits = current($commits);
+            $commit->commitID = $commits->revision;
+            $commit->shortID  = substr($commits->revision, 0, 10);
+            $commit->message  = $commits->message;
+        }
+        $this->view->commit = $commit;
+        $this->display();
+    }
+
+    /**
+     * 删除指定分支。
+     * Delete specified branch.
+     *
+     * @param  int $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function deleteBranch(int $repoID, string $branch)
+    {
+        $branch = helper::safe64Decode($branch);
+
+        $this->loadModel('repobranchrule');
+        if(!$this->repobranchrule->checkPrivToDeleteBranch($repoID, $branch, $this->app->user->account))
+        {
+            return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->notice->noPermissionToDeleteBranch));
+        }
+
+        $this->loadModel('gitfox')->apiDeleteBranch($repoID, $branch);
+        if(dao::isError()) return $this->sendError($this->parseErrorContent(dao::getError()));
+        $this->repo->unlinkObjectBranch(0, '', $repoID, $branch);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        $this->loadModel('action')->create('repobranch', $repoID, 'deleted', '', $branch);
+
+        $branchRule = $this->repobranchrule->getBranchRule(0, $repoID, $branch);
+        if(!empty($branchRule))
+        {
+             $this->repobranchrule->deleteBranchRule($branchRule->id);
+        }
+
+        return $this->sendSuccess(array('load' => true, 'message' => $this->lang->deleteSuccess));
+    }
+
+    /**
+     * 删除指定tag。
+     * Delete specified tag.
+     *
+     * @param  int    $repoID
+     * @param  string $tag
+     * @access public
+     * @return void
+     */
+    public function deleteTag(int $repoID, string $tag)
+    {
+        $tag  = helper::safe64Decode($tag);
+        $this->loadModel('gitfox')->apiDeleteTag($repoID, $tag);
+        $this->loadModel('action')->create('repotag', $repoID, 'deleted', '', $tag);
+
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('load' => true, 'message' => $this->lang->deleteSuccess));
+    }
+
+    /**
+     * 获取分支下提交记录。
+     * Commit records of branch.
+     *
+     * @param  int    $repoID
+     * @param  string $branchID
+     * @param  string $search
+     * @access public
+     * @return object
+     */
+    public function ajaxGetBranchCommits(int $repoID, string $branchID, string $search = '')
+    {
+        $repo = $this->repo->getByID($repoID);
+        list($branchID) = $this->repoZen->setBranchTag($repo, $branchID);
+        $branchID = helper::safe64Encode(base64_encode($branchID));
+        $pageSize = 10;
+
+        /* set pager */
+        $this->app->loadClass('pager', true);
+        $pager = new pager(0, $pageSize, 1);
+        $pager->recPerPage = $pageSize;
+
+        /* set query */
+        $query = new stdClass();
+        $query->begin = '';
+        $query->end = '';
+        $query->committer = '';
+        $query->commit = !empty($search) ? $search : '';
+        $commits    = $this->repo->getCommits($repo, '', $branchID, 'dir', $pager, '', '', $query);
+
+        /* packaging commits */
+        $retCommits = array();
+        if(!empty($commits))
+        {
+            foreach ($commits as $item)
+            {
+                $shortID      = substr($item->revision, 0, 10);
+                $commitDate   = isset($item->committed_date) ? date('Y-m-d H:i:s', strtotime($item->committed_date)) : '';
+                $commitDetail = sprintf($this->lang->repo->commitDetail, "{$shortID} {$item->message}", $commitDate, $item->committer);
+                array_push($retCommits, [
+                    'text'  => array('html' => "<div class='tagCommit font-mono' title='{$commitDetail}'><div class='commit'>" . $shortID . "</div><div class='message'>" . $item->message . "</div></div>"),
+                    'value' => $item->revision,
+                    'key'   => $shortID,
+                ] );
+            }
+        }
+        echo json_encode($retCommits);
+    }
+
+    /**
+     * 显示导入进度。
+     * Ajax show import progress.
+     *
+     * @param  int $repoID
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxShowImportProgress(int $repoID, int $spaceID = 0)
+    {
+        $this->view->title   = $this->lang->repo->showImportProgress;
+        $this->view->repoID  = $repoID;
+        $this->view->spaceID = $spaceID;
+        $this->display();
+    }
+
+    /**
+     * 获取导入进度。
+     * Ajax get import progress.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetImportProgress(int $repoID)
+    {
+        $result = $this->loadModel('gitfox')->request("/repos/import-progress", 'GET', array('repoID' => $repoID));
+        if(!dao::isError() && !empty($result->status) && $result->status == 'finished')
+        {
+            $repo = $this->repo->getByID($repoID);
+            if(empty($repo) || $repo->synced) return print(json_encode(array('result' => 'success', 'data' => $result)));
+
+            if($this->repo->isSvn($repo))
+            {
+                $this->repo->markSynced($repo->id);
+                return print(json_encode(array('result' => 'success', 'data' => $result)));
+            }
+
+            $this->commonAction($repoID);
+            $this->scm->setEngine($repo);
+
+            $branchID = (string)$this->cookie->syncBranch;
+            if(!$this->cookie->syncBranch && !$this->repo->isSvn($repo))
+            {
+                $branches = $this->scm->branch();
+                if(empty($branches)) return print($this->lang->repo->error->empty);
+
+                $branchID = current($branches);
+            }
+
+            $branches = $this->repoZen->getSyncBranches($branchID);
+
+            $logs    = array();
+            $version = 1;
+
+            $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branchID);
+            $this->repoZen->checkSyncResult($repo, $branches, $branchID, $commitCount, 'batch');
+        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        echo json_encode(array('result' => 'success', 'data' => $result));
+    }
+
+    /**
+     * 显示导入结果。
+     * Ajax show import result.
+     *
+     * @param  int $repoID
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function ajaxShowImportResult(int $repoID, int $spaceID = 0)
+    {
+        $result = $this->loadModel('gitfox')->request("/repos/import-progress", 'GET', array('repoID' => $repoID));
+
+        $message = '';
+        if(dao::isError() || empty($result->status) || $result->status != 'finished')
+        {
+            if(empty($result)) $message = $this->lang->repo->importProgress->importFailed;
+            if(dao::isError())
+            {
+                $error   = dao::getError();
+                $message = isset($error['apiMessage']) ? sprintf($this->lang->repo->importProgress->failMessage, $error['apiMessage']) : $error;
+            }
+            if(!empty($result->failure)) $message = sprintf($this->lang->repo->importProgress->failMessage, $result->failure);
+        }
+        else
+        {
+            $this->loadModel('action')->create('repo', $repoID, 'imported');
+        }
+
+        $this->view->title   = $this->lang->repo->showImportResult;
+        $this->view->message = $message;
+        $this->view->repoID  = $repoID;
+        $this->view->spaceID = $spaceID;
+        $this->display();
     }
 }

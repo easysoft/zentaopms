@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of productplan module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
@@ -234,6 +234,7 @@ class productplanModel extends model
             ->beginIF(!empty($branchQuery))->andWhere($branchQuery)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(date('Y-m-d'))->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
@@ -302,6 +303,7 @@ class productplanModel extends model
             ->beginIF($productIdList)->andWhere('t1.product')->in($productIdList)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge(helper::today())->fi()
             ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(strpos($param, 'undone') !== false)->andWhere('t1.status')->in('wait,doing')->fi()
             ->orderBy('t1.' . $orderBy)
             ->fetchAll('id');
         $plans = $this->relationBranch($plans);
@@ -610,7 +612,8 @@ class productplanModel extends model
         $oldPlan = $this->getByID($planID);
         if(!$oldPlan) return false;
 
-        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason);
+        $plan = form::data($this->config->productplan->form->close)->get();
+        $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason, $plan);
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 
@@ -898,6 +901,14 @@ class productplanModel extends model
 
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
+
+            /* If the story was linked to another plan of type 'story', record the unlink action on the old plan. */
+            if($oldPlanID !== '' && (int)$oldPlanID !== $planID)
+            {
+                $targetPlan = $this->getByID($planID);
+                $planTitle  = $targetPlan ? $targetPlan->title : '#' . $planID;
+                $this->action->create('productplan', (int)$oldPlanID, 'autounlinkstory', '', $planTitle);
+            }
         }
 
         $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $storyIdList));
@@ -1233,12 +1244,12 @@ class productplanModel extends model
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch && str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
+                    if($story->branch && !str_contains(",$newBranch,", ",$story->branch,")) $this->unlinkStory($storyID, $planID);
                 }
 
                 foreach($planBugs as $bugID => $bug)
                 {
-                    if($bug->branch && str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
+                    if($bug->branch && !str_contains(",$newBranch,", ",$bug->branch,")) $this->unlinkBug($bugID, $planID);
                 }
             }
         }

@@ -11,7 +11,7 @@
  * 描述：按产品统计的每周新增工单数表示产品中每周新创建的工单数量之和。较高的每周新增工单数可能暗示着产品近期发布的功能存在较多问题，需要及时处理。 定义：所有的发布个数求和;发布时间为某周;过滤已删除的发布;过滤已删除的产品;
  * 计算规则：产品中所有工单个数求和，创建时间为某周，过滤已删除的工单，过滤已删除的产品。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Tingting Dai <daitingting@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_weekly_created_ticket_in_product extends baseCalc
 {
     public $dataset = 'getTickets';
 
-    public $fieldList = array('t1.product', 't1.openedDate');
+    public $fieldList = array('t1.product', 't1.`openedDate`');
 
     public $result = array();
 

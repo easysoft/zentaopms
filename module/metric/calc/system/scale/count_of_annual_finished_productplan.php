@@ -11,7 +11,7 @@
  * 描述：按系统统计的年度完成计划数反映了组织在某年度内实际完成的计划数量，用于评估绩效、生产效率和客户满意度，并用于规划和资源优化。
  * 定义：所有的计划个数求和;完成时间为某年;过滤已删除的计划;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_annual_finished_productplan extends baseCalc
 {
     public $dataset = 'getAllPlans';
 
-    public $fieldList = array('t1.finishedDate');
+    public $fieldList = array('t1.`finishedDate`');
 
     public $result = array();
 

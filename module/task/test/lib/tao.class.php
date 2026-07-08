@@ -7,6 +7,34 @@ class taskTaoTest extends baseTest
 {
     protected $moduleName = 'task';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $_SESSION['project'] = $_SESSION['project'] ?? 0;
+
+        $this->objectModel = $this->instance;
+        $this->instance->taskTao = $this->instance;
+    }
+
+    protected function setTaskProjectSession(object $task): void
+    {
+        $projectID = (int)zget($task, 'project', 0);
+
+        if(!$projectID && !empty($task->execution))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
+        }
+
+        if(!$projectID && !empty($task->id))
+        {
+            $projectID = (int)$this->instance->dao->select('project')->from(TABLE_TASK)->where('id')->eq($task->id)->fetch('project');
+        }
+
+        $_SESSION['project'] = $projectID;
+    }
 
     /**
      * Test formatDatetime method.
@@ -36,7 +64,7 @@ class taskTaoTest extends baseTest
     {
         $now = time();
 
-        $this->instance->autoUpdateTaskByStatus($parentTask, $childTask, $status);
+        $this->invokeArgs('autoUpdateTaskByStatus', [$parentTask, $childTask, $status]);
 
         $task = $this->instance->getByID(intval($parentTask->id));
 
@@ -69,7 +97,13 @@ class taskTaoTest extends baseTest
     public function buildTaskForEffortTest(object $record, int $taskID, string $lastDate, bool $isFinishTask): array
     {
         $task = $this->instance->getByID($taskID);
-        return $this->instance->buildTaskForEffort($record, $task, $lastDate, $isFinishTask);
+
+        $installing = $this->instance->app->installing;
+        $this->instance->app->installing = true;
+        $result = $this->invokeArgs('buildTaskForEffort', [$record, $task, $lastDate, $isFinishTask]);
+        $this->instance->app->installing = $installing;
+
+        return $result;
     }
 
     /**
@@ -90,7 +124,7 @@ class taskTaoTest extends baseTest
         $effort = clone $oldEffort;
         foreach($param as $key => $value) $effort->{$key} = $value;
 
-        return $this->instance->buildTaskForUpdateEffort($task, $oldEffort, $effort);
+        return $this->invokeArgs('buildTaskForUpdateEffort', [$task, $oldEffort, $effort]);
     }
 
     /**
@@ -114,7 +148,7 @@ class taskTaoTest extends baseTest
         }
         $parentTasks = $this->instance->getByIdList($parentIdList);
 
-        return $this->instance->buildTaskTree($tasks, $parentTasks);
+        return $this->invokeArgs('buildTaskTree', [$tasks, $parentTasks]);
     }
 
     /**
@@ -130,7 +164,7 @@ class taskTaoTest extends baseTest
         $effort = $this->instance->getEffortByID($effortID);
 
         foreach($param as $key => $value) $effort->{$key} = $value;
-        $result = $this->instance->checkEffort($effort);
+        $result = $this->invokeArgs('checkEffort', [$effort]);
 
         if(dao::isError())
         {
@@ -157,7 +191,7 @@ class taskTaoTest extends baseTest
      */
     public function computeTaskStatusTest(object $currentTask, object $oldTask, object $task, bool $autoStatus, bool $hasEfforts, array $members): object|array
     {
-        $task = $this->instance->computeTaskStatus($currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members);
+        $task = $this->invokeArgs('computeTaskStatus', [$currentTask, $oldTask, $task, $autoStatus, $hasEfforts, $members]);
 
         if(dao::isError()) return dao::getError();
         return $task;
@@ -199,7 +233,10 @@ class taskTaoTest extends baseTest
      */
     public function createAutoUpdateTaskActionTest(object $oldParentTask)
     {
-        $this->instance->createAutoUpdateTaskAction($oldParentTask);
+        $installing = $this->instance->app->installing;
+        $this->instance->app->installing = true;
+        $this->invokeArgs('createAutoUpdateTaskAction', [$oldParentTask]);
+        $this->instance->app->installing = $installing;
 
         return $this->instance->dao->select('action')->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->eq($oldParentTask->id)->orderBy('`id` desc')->fetch();;
     }
@@ -263,6 +300,7 @@ class taskTaoTest extends baseTest
     {
         $oldTask = $this->instance->fetchByID($taskID);
         $task    = clone $oldTask;
+        $this->setTaskProjectSession($oldTask);
 
         foreach($task as $field => $value)
         {
@@ -270,7 +308,7 @@ class taskTaoTest extends baseTest
             if(strpos($field, 'Date') && !$task->$field) $task->$field = null;
         }
 
-        $this->instance->doUpdate($task, $oldTask, $this->instance->config->task->edit->requiredFields);
+        $this->invokeArgs('doUpdate', [$task, $oldTask, $this->instance->config->task->edit->requiredFields]);
 
         if(dao::isError())
         {
@@ -297,7 +335,7 @@ class taskTaoTest extends baseTest
      */
     public function fetchExecutionTasksTest(int $executionID, int $productID = 0, array|string $type = 'all', array $modules = array(), string $orderBy = 'status_asc, id_desc', int $count = 0): array|int|bool
     {
-        $tasks = $this->instance->fetchExecutionTasks($executionID, $productID, $type, $modules, $orderBy);
+        $tasks = $this->invokeArgs('fetchExecutionTasks', [$executionID, $productID, $type, $modules, $orderBy]);
         if(dao::isError())
         {
             return dao::getError();
@@ -327,7 +365,7 @@ class taskTaoTest extends baseTest
      */
     public function fetchUserTasksByTypeTest(string $account, string $type = 'assignedTo', string $orderBy = 'id_desc', int $projectID = 0, int $limit = 0, ?object $pager = null): array
     {
-        $object = $this->instance->fetchUserTasksByType($account, $type, $orderBy, $projectID, $limit, $pager);
+        $object = $this->invokeArgs('fetchUserTasksByType', [$account, $type, $orderBy, $projectID, $limit, $pager]);
 
         if(dao::isError()) return dao::getError();
         return $object;
@@ -343,7 +381,7 @@ class taskTaoTest extends baseTest
     public function getLeftAfterDeleteWorkhourTest(int $effortID): object
     {
         $effort = $this->instance->getEffortByID($effortID);
-        $task   = $this->instance->getById($effort->objectID);
+        $task   = $this->instance->fetchByID($effort->objectID);
 
         $result = new stdclass();
         $result->taskEstimate   = $task->estimate;
@@ -391,7 +429,7 @@ class taskTaoTest extends baseTest
         $effort = $this->instance->getEffortByID($effortID);
         $task   = $this->instance->getById($effort->objectID);
 
-        return $this->instance->getTaskAfterDeleteWorkhour($effort, $task);
+        return $this->invokeArgs('getTaskAfterDeleteWorkhour', [$effort, $task]);
     }
 
     /**
@@ -451,7 +489,7 @@ class taskTaoTest extends baseTest
      */
     public function resetEffortLeftTest(int $taskID, string $account): object|bool
     {
-        $this->instance->resetEffortLeft($taskID, array($account));
+        $this->invokeArgs('resetEffortLeft', [$taskID, array($account)]);
         if(dao::isError())
         {
             return !dao::getError();
@@ -481,7 +519,7 @@ class taskTaoTest extends baseTest
     {
         $memberInfo = new stdclass();
         foreach($member as $field => $value) $memberInfo->{$field} = $value;
-        $this->instance->setTeamMember($memberInfo, $mode, $inTeam);
+        $this->invokeArgs('setTeamMember', [$memberInfo, $mode, $inTeam]);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->dao->select('*')->from(TABLE_TASKTEAM)->where('task')->eq($memberInfo->task)->andWhere('account')->eq($memberInfo->account)->fetch();
@@ -498,7 +536,7 @@ class taskTaoTest extends baseTest
      */
     public function updateRelationTest(int $childID, int $parentID = 0)
     {
-        $this->instance->updateRelation($childID, $parentID);
+        $this->invokeArgs('updateRelation', [$childID, $parentID]);
         $relation = $this->instance->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($childID)->andWhere('relation')->eq('subdividefrom')->andWhere('AType')->eq('task')->andWhere('BType')->eq('task')->fetch();
 
         if(empty($relation)) return 'null';
@@ -523,7 +561,7 @@ class taskTaoTest extends baseTest
         $postData->endDate   = $end;
         $postData->type      = 'task';
 
-        $this->instance->updateTaskEsDateByGantt($postData);
+        $this->invokeArgs('updateTaskEsDateByGantt', [$postData]);
 
         if(dao::isError()) return dao::getError();
         return true;
@@ -542,7 +580,7 @@ class taskTaoTest extends baseTest
     {
         $task        = $this->instance->getByID($taskID);
         $currentTeam = $this->instance->getTeamByAccount($task->team);
-        $this->instance->updateTeamByEffort($effortID, $record, $currentTeam, $task, $lastDate);
+        $this->invokeArgs('updateTeamByEffort', [$effortID, $record, $currentTeam, $task, $lastDate]);
         if(dao::isError())
         {
             return dao::getError();

@@ -254,7 +254,6 @@ cid=19208
 */
 
 $testtask  = new testtaskModelTest();
-$taskModel = $testtask->objectModel;
 
 $case1  = (object)array('case' => 1, 'version' => 1);
 $case2  = (object)array('case' => 2, 'version' => 1);

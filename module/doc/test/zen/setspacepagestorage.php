@@ -36,7 +36,7 @@ cid=16226
  - 属性cookieLibID @0
  - 属性cookieModuleID @0
 - 测试不同浏览类型
- - 属性cookieBrowseType @bySearch
+ - 属性cookieBrowseType @bysearch
  - 属性cookieParam @100
 - 测试不同参数值
  - 属性cookieModuleID @20
@@ -57,5 +57,5 @@ r($docTest->setSpacePageStorageTest('project', 'all', 3, 30, 10, 0)) && p('space
 r($docTest->setSpacePageStorageTest('execution', 'draft', 4, 40, 12, 0)) && p('spaceType,cookieType,cookieBrowseType') && e('execution,execution,draft'); // 测试执行空间类型
 r($docTest->setSpacePageStorageTest('mine', 'all', 0, 50, 0, 0)) && p('spaceType,cookieType,cookieLibID') && e('mine,mine,50'); // 测试我的空间类型
 r($docTest->setSpacePageStorageTest('custom', 'all', 0, 0, 0, 0)) && p('spaceType,cookieObjectID,cookieLibID,cookieModuleID') && e('custom,0,0,0'); // 测试空对象ID和库ID
-r($docTest->setSpacePageStorageTest('product', 'bySearch', 5, 60, 15, 100)) && p('cookieBrowseType,cookieParam') && e('bySearch,100'); // 测试不同浏览类型
+r($docTest->setSpacePageStorageTest('product', 'bysearch', 5, 60, 15, 100)) && p('cookieBrowseType,cookieParam') && e('bysearch,100'); // 测试不同浏览类型
 r($docTest->setSpacePageStorageTest('project', 'bysearch', 6, 70, 20, 200)) && p('cookieModuleID,cookieParam') && e('20,200'); // 测试不同参数值

@@ -11,7 +11,7 @@
  * 描述：按执行统计的Bug转任务总数是指整个执行当前存在的Bug转任务总量。
  * 定义：执行中所有的Bug转任务个数求和;过滤已删除的任务;过滤已删除的执行;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func

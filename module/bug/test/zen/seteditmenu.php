@@ -20,10 +20,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-zendata('bug')->loadYaml('bug_seteditmenu', false, 2)->gen(10);
-zendata('product')->loadYaml('product_seteditmenu', false, 2)->gen(3);
-zendata('project')->loadYaml('project_seteditmenu', false, 2)->gen(15);
-zendata('repo')->loadYaml('repo_seteditmenu', false, 2)->gen(3);
+zenData('bug')->gen(10);
+zenData('product')->gen(3);
+zenData('repo')->gen(3);
 
 // 3. 用户登录（选择合适角色）
 su('admin');

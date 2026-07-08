@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The log view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
  * @package     repo
@@ -126,7 +126,7 @@ $tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), arra
         ) : null,
 
         /* Switch branches and labels. */
-        ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
+        ($branches || $tags) ? dropmenu
         (
             setID('logRepoBranchDropMenu'),
             set::objectID($selected),
@@ -137,7 +137,7 @@ $tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), arra
     $breadcrumbItems,
     div
     (
-        $repo->SCM != 'Subversion' ? setClass('ml-4') : null,
+        setClass('ml-4'),
         searchToggle
         (
             set::module('repoCommits'),
@@ -154,6 +154,7 @@ dtable
     set::onCheckChange(jsRaw('window.checkedChange')),
     set::canRowCheckable(jsRaw('function(rowID){return canRowCheckable(rowID);}')),
     set::footToolbar($footToolbar),
+    set::userMap($users),
     set::footer(array('toolbar', 'flex', 'pager')),
     set::footPager(usePager('pager', 'noTotalCount')),
     set::showToolbarOnChecked(false)

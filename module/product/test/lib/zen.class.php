@@ -8,6 +8,13 @@ class productZenTest extends baseTest
     protected $moduleName = 'product';
     protected $className  = 'zen';
 
+    public function __construct(string $account = '')
+    {
+        if($account) su($account);
+
+        parent::__construct();
+    }
+
     /**
      * Test assignBrowseData method.
      *

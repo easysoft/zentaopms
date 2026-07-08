@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of tree module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
@@ -74,6 +74,8 @@ class tree extends control
             $this->view->syncConfig = isset($syncConfig[$viewType]) ? $syncConfig[$viewType] : array();
             $this->view->productID  = $rootID;
         }
+
+        if($viewType == 'host') $this->loadModel('space')->setMenu(0);
 
         /* 获取产品的分支。 Get branches of product. */
         $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
@@ -565,11 +567,12 @@ class tree extends control
      */
     public function ajaxCreateModule()
     {
-        if(!helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => ''));;
+        $isAPIRequest = $this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api');
+        if(!helper::isAjaxRequest() && !$isAPIRequest) return $this->send(array('result' => 'fail', 'message' => ''));
 
         $module = $this->tree->createModule();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => implode('\n', dao::getError())));
 
-        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'module' => $module));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'id' => $module->id, 'module' => $module));
     }
 }

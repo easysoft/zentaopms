@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of release module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
@@ -37,7 +37,7 @@ class projectrelease extends control
      *
      * @param  int    $projectID
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $browseType
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -47,7 +47,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function browse(int $projectID = 0, int $executionID = 0, string $type = 'all', string $orderBy = 't1.date_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1, string $from = 'project', int $blockID = 0)
+    public function browse(int $projectID = 0, int $executionID = 0, string $browseType = 'all', string $orderBy = 't1.date_desc', int $recTotal = 0, int $recPerPage = 15, int $pageID = 1, string $from = 'project', int $blockID = 0)
     {
         /* 设置发布列表和版本列表 session。*/
         /* Set releaseList and buildList session. */
@@ -76,7 +76,7 @@ class projectrelease extends control
         $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $releases = $this->projectrelease->getList($projectID, $type, $orderBy, $pager);
+        $releases = $this->projectrelease->getList($projectID, $browseType, $orderBy, $pager);
         $children = implode(',', array_column($releases, 'releases'));
 
         /* 判断是否展示分支。*/
@@ -93,10 +93,10 @@ class projectrelease extends control
 
         $this->view->title         = (isset($project->name) ? $project->name : $execution->name) . $this->lang->hyphen . $this->lang->release->browse;
         $this->view->products      = $this->product->getPairs('all', 0, '', 'all');
-        $this->view->pageSummary   = $this->release->getPageSummary($releases, $type);
+        $this->view->pageSummary   = $this->release->getPageSummary($releases, $browseType);
         $this->view->projectID     = $projectID;
         $this->view->executionID   = $executionID;
-        $this->view->type          = $type;
+        $this->view->browseType    = $browseType;
         $this->view->from          = $this->app->tab;
         $this->view->project       = $project;
         $this->view->execution     = $execution;

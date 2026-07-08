@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The tao file of build module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     build
@@ -32,7 +32,7 @@ class buildTao extends buildModel
         return $this->dao->select($fieldList)->from(TABLE_BUILD)->alias('t1')
             ->beginIF($objectType === 'execution')->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')->fi()
             ->beginIF($objectType === 'project')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->fi()
-            ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.objectID AND t5.objectType='build'")
+            ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.`objectID` AND t5.`objectType`='build'")
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t5.release=t3.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t1.product = t4.id')
             ->where('1=1')

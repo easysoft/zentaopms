@@ -11,7 +11,7 @@
  * 描述：按瀑布项目统计的截止本周已完成任务工作的预计工时指的是在瀑布项目管理方法中，已经完成的任务的预计工时。这个度量项用来评估项目进展与实际完成情况的一致性。EV的值越高，代表项目团队在按计划完成任务的工作量方面表现得越好。
  * 定义：复用： 按项目统计的任务进度、按项目统计的任务预计工时数，公式： 按项目统计的已完成任务工作的预计工时(EV)=按项目统计的任务预计工时数*按项目统计的任务进度；要求项目为瀑布项目，过滤父任务，过滤消耗工时为0的任务，过滤已删除的任务，过滤已取消的任务，过滤已删除执行下的任务，过滤已删除的项目。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class ev_of_weekly_finished_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.project', 't1.estimate', 't1.consumed', 't1.left', 't1.status', 't1.closedReason');
+    public $fieldList = array('t1.project', 't1.estimate', 't1.consumed', 't1.left', 't1.status', 't1.`closedReason`');
 
     public $result = array();
 

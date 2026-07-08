@@ -11,7 +11,7 @@
  * 描述：按瀑布项目统计的每周的任务的计划完成工时指的是在瀑布项目管理方法中，按计划需要完成的任务的总预计工时。这个度量项用于评估每周的任务的预期工作量，可用作与实际花费工时和已完成任务的预计工时进行比较。
  * 定义：任务截至日期小于等于本周结束日期，累加预计工时;任务预计开始日期小于或等于本周结束日期，预计截至日期大于本周结束日期，累加预计工时=(任务的预计工时÷任务工期天数)x 任务预计开始到本周结束日期的天数;条件：过滤父任务，过滤已删除的任务，过滤已取消的任务，过滤已删除的执行的任务，过滤已删除的项目；任务未填写预计开始日期时默认取任务所属阶段的计划开始日期；任务未填写预计截至日期，预计截至日期默认取任务所属阶段的计划完成日期，时间只计算后台维护的工作日。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class pv_of_weekly_task_in_waterfall extends baseCalc
 {
     public $dataset = 'getWaterfallTasks';
 
-    public $fieldList = array('t1.id', 't1.estStarted', 't1.deadline', 't1.estimate', 't1.status', 't1.closedReason', 't2.begin as executionBegin', 't2.end as executionEnd', 't3.id as project');
+    public $fieldList = array('t1.id', 't1.`estStarted`', 't1.deadline', 't1.estimate', 't1.status', 't1.`closedReason`', 't2.begin as executionBegin', 't2.end as executionEnd', 't3.id as project');
 
     public $result = array();
 

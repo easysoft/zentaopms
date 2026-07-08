@@ -2,7 +2,7 @@
 /**
  * The common simplified chinese file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
@@ -29,6 +29,7 @@ $lang->slash     = '/';
 $lang->and       = '和';
 $lang->to        = '至';
 $lang->minus     = ' - ';
+$lang->in        = '在';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -103,6 +104,7 @@ $lang->childrenAB         = '子';
 $lang->branchName         = '分支/平台';
 $lang->recommend          = '推荐';
 $lang->schedule           = '日历';
+$lang->basicInfo          = '基本信息';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -302,7 +304,7 @@ $lang->zanode->common       = '执行节点';
 $lang->zanode->instruction  = '说明';
 $lang->dimension->common    = '维度';
 $lang->contact->common      = '联系人';
-$lang->space->common        = '服务管理';
+$lang->space->common        = '空间';
 $lang->store->common        = '应用市场';
 $lang->instance->common     = '服务';
 $lang->ai->common           = 'AI';
@@ -374,6 +376,16 @@ $lang->systemcompany->common    = '组织公司';
 $lang->pipeline->common         = '流水线';
 $lang->devopssetting->common    = '设置';
 $lang->deployment->common       = '主机';
+$lang->repoSettings->common     = '设置';
+$lang->devops->branchType       = '分支类型';
+$lang->devops->reviewFlow       = '评审流程';
+$lang->devops->reporeviewflow   = '评审流程';
+$lang->devops->execution        = '执行历史';
+$lang->artifact->common         = '制品库';
+$lang->ssh->common              = 'SSH密钥';
+$lang->codeReview->common       = '代码评审';
+$lang->runner->common           = '执行节点';
+$lang->repobranchrule->common   = '分支规则';
 
 $lang->dashboard       = '仪表盘';
 $lang->contribute      = '贡献';
@@ -447,7 +459,7 @@ $lang->testcase->testsuite = '套件';
 $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile      = '流水线';
-$lang->devops->mr           = '合并请求';
+$lang->devops->ppm          = '代码评审';
 $lang->devops->repo         = '代码库';
 $lang->devops->rules        = '指令';
 $lang->devops->settings     = '合并请求设置';
@@ -467,6 +479,28 @@ $lang->devops->os           = '系统版本';
 $lang->devops->service      = '服务';
 $lang->devops->platform     = '平台';
 $lang->devops->components   = '组件';
+$lang->devops->spaceSetting = '设置';
+$lang->devops->member       = '成员';
+$lang->devops->group        = '权限';
+$lang->devops->overview     = '概览';
+$lang->devops->codescan     = '扫描';
+$lang->devops->scanRule     = '规则';
+$lang->devops->scanSolution = '扫描方案';
+$lang->devops->scanPlan     = '扫描计划';
+$lang->devops->scanTask     = '扫描任务';
+$lang->devops->reviewIssue  = '人工审查问题';
+$lang->devops->scanIssue    = '静态扫描问题';
+$lang->devops->ruleSet      = '规则设置';
+$lang->devops->system       = '应用';
+$lang->systemManage->common = '应用';
+$lang->codeScan->common     = '代码扫描';
+$lang->ruleset->common      = '规则集';
+$lang->scansolution->common = '扫描方案';
+$lang->scanplan->common     = '扫描计划';
+$lang->scantask->common     = '扫描任务';
+$lang->scanissue->common    = '扫描问题';
+$lang->scanOverview->common = '扫描概况';
+$lang->provider->common     = '服务';
 
 $lang->admin->module      = '功能配置';
 $lang->admin->system      = '系统';
@@ -522,8 +556,9 @@ $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = '研发综合界面';
-$lang->visionList['lite'] = '运营管理界面';
+$lang->visionList['rnd']    = '研发综合界面';
+$lang->visionList['lite']   = '运营管理界面';
+//$lang->visionList['devops'] = 'DevOps界面';
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';

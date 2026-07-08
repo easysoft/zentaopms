@@ -11,7 +11,7 @@
  * 描述：按产品统计的研发需求交付率表示按产品统计的已交付的研发需求数相对于按产品统计的有效研发需求数。这个度量项衡量了产品团队按时交付需求的能力。交付率越高，代表产品团队能够将更多的需求交付给用户。
  * 定义：复用：;按产品统计的已交付研发需求数;按产品统计的无效研发需求数;按产品统计的研发需求总数;公式：;按产品统计的研发需求完成率=按产品统计的已交付研发需求数/（按产品统计的研发需求总数-按产品统计的无效研发需求数）*100%;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class rate_of_delivery_story_in_product extends baseCalc
 {
     public $dataset = 'getDevStories';
 
-    public $fieldList = array('t1.product', 't1.closedReason', 't1.stage');
+    public $fieldList = array('t1.product', 't1.`closedReason`', 't1.stage');
 
     public $result = array();
 

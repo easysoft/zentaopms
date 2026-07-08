@@ -2,7 +2,7 @@
 /**
  * The model file of report module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
@@ -144,9 +144,9 @@ class reportModel extends model
         return $this->dao->select('t1.id, t1.title, t2.account as user, t1.deadline')
             ->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.assignedTo = t2.account')
-            ->where('t1.assignedTo')->ne('')
-            ->andWhere('t1.assignedTo')->ne('closed')
+            ->on('t1.`assignedTo` = t2.account')
+            ->where('t1.`assignedTo`')->ne('')
+            ->andWhere('t1.`assignedTo`')->ne('closed')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.deadline', true)->isNull()
@@ -165,10 +165,10 @@ class reportModel extends model
     public function getUserTasks(): array
     {
         return $this->dao->select('t1.id, t1.name, t2.account as user, t1.deadline')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.assignedTo = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.`assignedTo` = t2.account')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
-            ->where('t1.assignedTo')->ne('')
+            ->where('t1.`assignedTo`')->ne('')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
@@ -238,10 +238,10 @@ class reportModel extends model
     public function getUserKanbanCards(): array
     {
         $expireDays = isset($this->config->kanban->reminder->expireDays) ? $this->config->kanban->reminder->expireDays : 1;
-        $cards = $this->dao->select('t1.id, t1.name, t1.assignedTo, t1.end as deadline, t1.kanban')
+        $cards = $this->dao->select('t1.id, t1.name, t1.`assignedTo`, t1.end as deadline, t1.kanban')
             ->from(TABLE_KANBANCARD)->alias('t1')
             ->leftJoin(TABLE_KANBAN)->alias('t2')->on('t1.kanban = t2.id')
-            ->where('t1.assignedTo')->ne('')
+            ->where('t1.`assignedTo`')->ne('')
             ->andWhere('t2.status')->eq('active')
             ->andWhere('t1.progress')->lt(100)
             ->andWhere('t1.archived')->eq(0)
@@ -412,7 +412,7 @@ class reportModel extends model
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
             ->andWhere('t2.deleted')->eq('0')
-            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+            ->beginIF($accounts)->andWhere('t1.`lastRunner`')->in($accounts)->fi()
             ->fetch('count');
 
         return $contributions;
@@ -559,9 +559,9 @@ class reportModel extends model
         $objectTypeList = $objectType == 'story' ? array('story', 'requirement', 'epic') : array($objectType);
         $months = $this->getYearMonths($year);
         $stmt   = $this->dao->select('t1.*, t2.status, t2.deleted')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+            ->leftJoin($table)->alias('t2')->on('t1.`objectID`=t2.id')
             ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t1.objectType')->in($objectTypeList)
+            ->andWhere('t1.`objectType`')->in($objectTypeList)
             ->andWhere('t1.action')->in($this->config->report->annualData['monthAction'][$objectType])
             ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
             ->query();

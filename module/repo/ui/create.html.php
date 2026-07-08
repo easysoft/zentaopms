@@ -2,7 +2,7 @@
 declare(strict_types=1);
 /**
  * The create view file of repo module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zeng Gang<zenggang@easycorp.ltd>
  * @package     repo
@@ -151,6 +151,14 @@ formPanel
                 )))
             )
         )
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("space"),
+        set::label($lang->repo->space),
+        set::required(true),
+        set::items($spaces)
     ),
     formRow
     (

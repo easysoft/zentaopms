@@ -185,6 +185,10 @@ cid=19161
 
 */
 
+global $app;
+$app->moduleName = 'testtask';
+$app->methodName = 'runcase';
+
 $testtask = new testtaskModelTest();
 
 $stepResults1 = array(1 => (object)array('result' => 'pass', 'real' => ''), 2 => (object)array('result' => 'n/a',     'real' => '')); // 测试用例 1 有测试步骤，测试结果为忽略。

@@ -16,6 +16,10 @@ $config->api->create->requiredFields = 'title,path';
 $config->api->edit = new stdclass();
 $config->api->edit->requiredFields = 'lib,title,path';
 
+$config->api->groupPrivs = array();
+$config->api->groupPrivs['exportopenapi'] = 'export';
+$config->api->groupPrivs['importopenapi'] = 'create';
+
 $config->api->createrelease = new stdclass();
 $config->api->createrelease->requiredFields = 'version';
 
@@ -29,7 +33,8 @@ $config->api->editor->createRelease = array('id' => 'desc', 'tools' => 'simpleTo
 $config->api->editor->createstruct  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->api->editor->editstruct    = array('id' => 'desc', 'tools' => 'simpleTools');
 
-global $lang;
+global $lang, $app;
+$app->loadLang('api');
 $config->api->search['module']               = 'api';
 $config->api->search['fields']['title']      = $lang->api->title;
 $config->api->search['fields']['id']         = $lang->api->id;

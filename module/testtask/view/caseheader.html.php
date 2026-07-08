@@ -42,7 +42,7 @@
         ?>
       </ul>
     </div>
-    <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i> {$lang->testcase->bySearch}</a>";?>
+    <?php echo "<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i> {$lang->testcase->bysearch}</a>";?>
     <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>

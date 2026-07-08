@@ -3,7 +3,7 @@ class avg_of_release_story_delivery_time extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.closedDate', 't1.closedReason', 't1.releasedDate', 't1.openedDate', 't1.stage');
+    public $fieldList = array('t1.`closedDate`', 't1.`closedReason`', 't1.`releasedDate`', 't1.`openedDate`', 't1.stage');
 
     public $result = array();
 

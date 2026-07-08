@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of api of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
@@ -579,15 +579,26 @@ class api extends control
      * 创建一个接口文档库。
      * Create a api doc library.
      *
-     * @param  string $type     project|product
+     * @param  string $type       project|product
      * @param  int    $objectID
+     * @param  string $createMode create|import
      * @access public
      * @return void
      */
-    public function createLib(string $type = 'product', int $objectID = 0)
+    public function createLib(string $type = 'product', int $objectID = 0, string $createMode = 'create')
     {
         if(!empty($_POST))
         {
+            if($this->post->createMode === 'import')
+            {
+                if($this->config->edition == 'open') return $this->send(array('result' => 'fail', 'message' => $this->lang->api->importError->editionLimited));
+
+                if(!common::hasPriv('api', 'importOpenApi')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
+                $openApiImport = $this->api->loadExtension('openapiimport');
+                return $this->send($openApiImport->importOpenApiAndCreateLib());
+            }
+
             /* 组装formData。 */
             $fields  = $this->config->api->form->createLib;
             $libType = $this->post->libType;
@@ -617,10 +628,12 @@ class api extends control
         $defaultAclLang = in_array($type, array('product', 'product')) ? $this->lang->{$type}->common : $this->lang->product->common;
         $this->lang->api->aclList['default'] = sprintf($this->lang->api->aclList['default'], $defaultAclLang);
 
-        $this->view->type     = $type;
-        $this->view->objectID = $objectID;
-        $this->view->groups   = $this->loadModel('group')->getPairs();
-        $this->view->users    = $this->user->getPairs('nocode|noclosed');
+        $this->view->type       = $type;
+        $this->view->objectID   = $objectID;
+        $this->view->createMode = $createMode;
+        $this->view->title      = $createMode === 'import' ? $this->lang->api->importOpenAPI : $this->lang->api->createLib;
+        $this->view->groups     = $this->loadModel('group')->getPairs();
+        $this->view->users      = $this->user->getPairs('nocode|noclosed');
         $this->display();
     }
 

@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of story module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      wangyidong<wangyidong@cnezsoft.com>
  * @package     story
@@ -176,10 +176,10 @@ class storyTao extends storyModel
         /* 获取关联需求的设计、关联版本库提交。 */
         $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
         $track->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
-            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
-            ->where('t1.AType')->eq('design')
-            ->andWhere('t1.BType')->eq('commit')
-            ->andWhere('t1.AID')->in(array_keys($track->designs))
+            ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.`BID` = t2.id')
+            ->where('t1.`AType`')->eq('design')
+            ->andWhere('t1.`BType`')->eq('commit')
+            ->andWhere('t1.`AID`')->in(array_keys($track->designs))
             ->fetchPairs();
 
         return $track;
@@ -1546,7 +1546,7 @@ class storyTao extends storyModel
      */
     protected function getDefaultStages(string $planIdList, array $linkedBranches): array
     {
-        if(empty($planIdList) && empty($linkedBranches)) return array();
+        if(empty($planIdList) && empty($linkedBranches)) return array('wait');
 
         $stages = array();
         if($planIdList)

@@ -46,7 +46,10 @@ class testtaskTao extends testtaskModel
             ->beginIF(strtolower($status) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
             ->beginIF(strtolower($status) == 'review') // 工作流开启审批的时候才会使用，才会新增字段。
             ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
-            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->andWhere('t1.`reviewStatus`')->eq('doing')
+            ->fi()
+            ->beginIF($status == 'reviewedby')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewedBy`)")
             ->fi()
             ->beginIF(!in_array(strtolower($status), array('totalstatus', 'review', 'myinvolved'), true) && $status)->andWhere('t1.status')->eq($status)->fi()
             ->beginIF($unit != 'unit')

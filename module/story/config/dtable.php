@@ -400,11 +400,12 @@ $config->story->taskTable->fieldList['id']['type']     = 'checkID';
 $config->story->taskTable->fieldList['id']['sortType'] = false;
 $config->story->taskTable->fieldList['id']['group']    = 1;
 
-$config->story->taskTable->fieldList['name']['name']     = 'name';
-$config->story->taskTable->fieldList['name']['title']    = $lang->task->name;
-$config->story->taskTable->fieldList['name']['type']     = 'text';
-$config->story->taskTable->fieldList['name']['sortType'] = false;
-$config->story->taskTable->fieldList['name']['group']    = 2;
+$config->story->taskTable->fieldList['name']['name']         = 'name';
+$config->story->taskTable->fieldList['name']['title']        = $lang->task->name;
+$config->story->taskTable->fieldList['name']['type']         = 'nestedTitle';
+$config->story->taskTable->fieldList['name']['nestedToggle'] = true;
+$config->story->taskTable->fieldList['name']['sortType']     = false;
+$config->story->taskTable->fieldList['name']['group']        = 2;
 
 $config->story->taskTable->fieldList['pri']['name']     = 'pri';
 $config->story->taskTable->fieldList['pri']['title']    = $lang->priAB;

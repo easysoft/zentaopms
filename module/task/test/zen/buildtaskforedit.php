@@ -95,6 +95,8 @@ $task1->estStarted = '2024-01-01';
 $task1->deadline = '2024-12-31';
 $task1->story = false;
 $task1->mode = '';
+$task1->realStarted = '';
+$task1->finishedDate = '';
 $task1->lastEditedDate = '2024-01-01 10:00:00';
 r($taskZenTest->buildTaskForEditTest($task1)) && p('id,name,estimate') && e('1,修改后的任务名称,10'); // 步骤1:正常编辑任务
 
@@ -112,6 +114,7 @@ $task2->deadline = '2024-12-31';
 $task2->story = false;
 $task2->mode = '';
 $task2->finishedBy = '';
+$task2->realStarted = '';
 $task2->finishedDate = '';
 $task2->lastEditedDate = '2024-01-01 10:00:00';
 r($taskZenTest->buildTaskForEditTest($task2)) && p('status,left,finishedBy') && e('done,0,admin'); // 步骤2:状态变更为done
@@ -131,6 +134,8 @@ $task3->story = false;
 $task3->mode = '';
 $task3->canceledBy = '';
 $task3->canceledDate = '';
+$task3->realStarted = '';
+$task3->finishedDate = '';
 $task3->lastEditedDate = '2024-01-01 10:00:00';
 r($taskZenTest->buildTaskForEditTest($task3)) && p('status,canceledBy,assignedTo') && e('cancel,admin,user1'); // 步骤3:状态变更为cancel
 
@@ -147,6 +152,8 @@ $task4->estStarted = '2024-01-01';
 $task4->deadline = '2024-12-31';
 $task4->story = false;
 $task4->mode = '';
+$task4->realStarted = '';
+$task4->finishedDate = '';
 $task4->lastEditedDate = '2024-01-01 10:00:00';
 r($taskZenTest->buildTaskForEditTest($task4)) && p('0') && e('%s不能为负数'); // 步骤4:负数验证失败
 
@@ -163,5 +170,7 @@ $task5->estStarted = '2024-01-01';
 $task5->deadline = '2024-12-31';
 $task5->story = false;
 $task5->mode = '';
+$task5->realStarted = '';
+$task5->finishedDate = '';
 $task5->lastEditedDate = '2024-01-01 09:00:00';
 r($taskZenTest->buildTaskForEditTest($task5)) && p('0') && e('该记录可能已经被改动。请刷新页面重新编辑！'); // 步骤5:并发编辑检查

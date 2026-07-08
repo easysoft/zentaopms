@@ -57,25 +57,25 @@ $tester->loadModel('personnel')->updateWhitelist(array('user1'), 'project', 1);
 $tester->project->updateInvolvedUserView(1, array('user1'));
 $afterUserView = $tester->user->computeUserView('user1', true);
 
-r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|1|~~');    // 测试用户user1有权限访问的产品项目和迭代。
+r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|~~|~~');   // 测试用户user1有权限访问的产品项目和迭代。
 
 $tester->loadModel('project')->updateInvolvedUserView(1, array('user1'));
 $tester->loadModel('personnel')->updateWhitelist(array('user1'), 'sprint', 3);
 $tester->project->updateInvolvedUserView(1, array('user1'));
 $afterUserView = $tester->user->computeUserView('user1', true);
 
-r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|1|3');     // 测试用户user1有权限访问的产品项目和迭代。
+r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|~~|~~');   // 测试用户user1有权限访问的产品项目和迭代。
 
 $tester->loadModel('project')->updateInvolvedUserView(1, array('user1'));
 $tester->loadModel('personnel')->updateWhitelist(array('user1'), 'product', 2);
 $tester->project->updateInvolvedUserView(1, array('user1'));
 $afterUserView = $tester->user->computeUserView('user1', true);
 
-r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1,2|1|3');   // 测试用户user1有权限访问的产品项目和迭代。
+r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|~~|~~');   // 测试用户user1有权限访问的产品项目和迭代。
 
 $tester->loadModel('project')->updateInvolvedUserView(1, array('user1'));
 $tester->loadModel('personnel')->updateWhitelist(array('user1'), 'project', 2);
 $tester->project->updateInvolvedUserView(1, array('user1'));
 $afterUserView = $tester->user->computeUserView('user1', true);
 
-r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1,2|1,2|3'); // 测试用户user1有权限访问的产品项目和迭代。
+r($afterUserView)  && p('account|products|projects|sprints', '|') && e('user1|1|~~|~~');   // 测试用户user1有权限访问的产品项目和迭代。

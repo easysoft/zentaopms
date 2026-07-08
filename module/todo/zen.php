@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      lanzongjun <lanzongjun@easycorp.ltd>
  * @link        https://www.zentao.net
@@ -234,7 +234,7 @@ class todoZen extends todo
      */
     protected function beforeBatchCreate(form $form): array|false
     {
-        $todos = $form->cleanInt('pri, begin, end')->get();
+        $todos = $form->cleanInt('pri')->get();
         foreach($todos as $rawID => $todo)
         {
             if($todo->end < $todo->begin)
@@ -294,7 +294,7 @@ class todoZen extends todo
 
         /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
-            ->cleanInt('pri, begin, end')
+            ->cleanInt('pri')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)
             ->setIF(empty($postData->date) || $this->post->switchDate || $this->post->cycle, 'date', FUTURE_TIME)

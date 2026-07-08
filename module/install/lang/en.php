@@ -2,7 +2,7 @@
 /**
  * The install module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
@@ -30,7 +30,7 @@ ZenTao Project Management Software (ZenTao PMS) is an open-source software relea
 Built with PHP and MySQL on the proprietary ZenTao PHP framework, it offers high extensibility, allowing third-party developers and organizations to easily develop extensions or customize ZenTao accordingly.
 EOT;
 $lang->install->links = <<<EOT
-ZenTao PMS is developed by <strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>ZenTao Software (Qingdao) Co., Ltd. </a></strong>.
+ZenTao PMS is developed by <strong><a href='https://easycorp.cn' target='_blank' class='text-danger'>ZenTao Software (Qingdao) Group Co., Ltd </a></strong>.
 Official Website: <a href='https://www.zentao.net' target='_blank'>https://www.zentao.net</a>
 Technical Support: <a href='https://www.zentao.net/ask/' target='_blank'>https://www.zentao.net/ask/</a>
 Follow us on LinkedIn: <a href='https://www.linkedin.com/company/1156596/' target='_blank'>ZenTao Software</a>
@@ -68,13 +68,7 @@ $lang->install->introductionContent = <<<EOT
 <a href='j a v a s c r i p t :showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video Introduction</a>
 </div>
 </div>
-EOT
-
-
-
-
-
-;
+EOT;
 
 $lang->install->newReleased = "<strong class='text-danger'>Notice</strong>: The latest version <strong class='text-danger'>%s</strong> is available on the official website, released on %s.";
 $lang->install->or          = 'Or';
@@ -283,6 +277,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = 'Story Analyst';
 $lang->install->groupList['IPDPMT']['name']         = 'PMT Members';
 $lang->install->groupList['IPDADMIN']['name']       = 'Admins';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS DEVELOPER';
+
 $lang->install->cronList[''] = 'Monitor Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Daily Task Reminder';
@@ -296,7 +294,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Creat
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Create recurring tasks';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchronize Jenkins Status';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Execute Jenkins';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
 $lang->install->dbProgress      = "Installing Database Tables";
 $lang->install->dbProgressLabel = 'Progress';
@@ -343,19 +340,6 @@ $lang->install->zdoo->desc = <<<EOD
 <li>Forums, Blogs & Activity Feeds</li>
 </ul>
 EOD;
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 $lang->install->ydisk = new stdclass();
 $lang->install->ydisk->name = 'YDisk';

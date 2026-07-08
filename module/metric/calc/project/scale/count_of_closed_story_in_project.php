@@ -11,7 +11,7 @@
  * 描述：按项目统计的已关闭研发需求数是指项目中已经关闭的研发需求的数量反映了项目中已经关闭的研发需求的数量，提供了关于需求管理、项目进度、质量控制、用户满意度和绩效评估的有用信息。
  * 定义：项目中研发需求个数求和;过滤已删除的研发需求;状态为已关闭;过滤已删除的项目;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

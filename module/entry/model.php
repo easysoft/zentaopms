@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of entry module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     entry
@@ -63,7 +63,7 @@ class entryModel extends model
     public function getList(string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(strpos($orderBy, 'desc_') !== false) $orderBy = str_replace('desc_', '`desc`_', $orderBy);
-        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->orderBy($orderBy)->page($pager)->fetchAll('id');
+        return $this->dao->select('*')->from(TABLE_ENTRY)->where('deleted')->eq('0')->andWhere('code')->ne('gitfox')->orderBy($orderBy)->page($pager)->fetchAll('id');
     }
 
     /**

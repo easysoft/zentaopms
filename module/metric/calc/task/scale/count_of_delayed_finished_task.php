@@ -11,7 +11,7 @@
  * 描述：按系统统计的每日完成任务数。
  * 定义：已完成的任务个数求和;过滤已删除的任务;
  *
- * @copyright Copyright 2009-2025 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2025 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Yanyi Cao <caoyanyi@chandao.com>
  * @package
  * @uses      func

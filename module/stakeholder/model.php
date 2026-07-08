@@ -247,9 +247,9 @@ class stakeholderModel extends model
         return $this->dao->select('t1.*, t2.role, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.objectID=t4.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.`objectID`=t4.id')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($projectID)
+            ->andWhere('t1.`objectID`')->eq($projectID)
             ->beginIF($browseType == 'inside')->andWhere('t1.type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('t1.type')->eq('outside')->fi()
             ->beginIF($browseType == 'key')->andWhere('t1.key')->ne('0')->fi()
@@ -271,7 +271,7 @@ class stakeholderModel extends model
         return $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($objectID)
+            ->andWhere('t1.`objectID`')->eq($objectID)
             ->orderBy('t1.id_desc')
             ->fetchPairs();
     }
@@ -345,7 +345,7 @@ class stakeholderModel extends model
         return $this->dao->select('t2.realname as name, t2.account, t1.type, t2.role')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.objectID')->eq($this->session->project)
+            ->andWhere('t1.`objectID`')->eq($this->session->project)
             ->fetchGroup('type');
     }
 
@@ -489,7 +489,7 @@ class stakeholderModel extends model
         }
 
         return $this->dao->select('t1.*,t2.key,t3.realname')->from(TABLE_EXPECT)->alias('t1')
-            ->leftJoin(TABLE_STAKEHOLDER)->alias('t2')->on('t1.userID=t2.id')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t2')->on('t1.`userID`=t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t2.user=t3.account')
             ->where('t1.project')->eq($this->session->project)
             ->beginIF($browseType == 'bysearch')
@@ -528,7 +528,7 @@ class stakeholderModel extends model
         return $this->dao->select("t1.{$field}, CONCAT_WS('/', t3.name,t2.realname) as realname")->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
-            ->where('t1.objectID')->eq($this->session->project)
+            ->where('t1.`objectID`')->eq($this->session->project)
             ->andWhere('t1.deleted')->eq('0')
             ->fetchPairs($field, 'realname');
     }

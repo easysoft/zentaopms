@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The create ui file of todo module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Zemei Wang<wangzemei@easycorp.ltd>
  * @package     todo
@@ -418,6 +418,7 @@ formPanel
         set::label($lang->todo->status),
         set::name('status'),
         set::items($lang->todo->statusList),
+        set::value('wait'),
         set::required(true)
     ),
     formRow

@@ -7,13 +7,13 @@ title=测试 adminModel::checkPrivMenu();
 timeout=0
 cid=14976
 
-- 测试步骤1:基本菜单权限检查功能
- - 属性success @1
- - 属性hasMenuList @1
-- 测试步骤2:验证所有菜单项都有order属性属性hasOrderAttribute @1
-- 测试步骤3:验证所有菜单项都有disabled属性属性hasDisabledAttribute @1
-- 测试步骤4:验证菜单按order排序属性isSorted @1
-- 测试步骤5:验证菜单列表为对象类型属性success @1
+- 步骤1：检查菜单列表已生成 @1
+- 步骤2：检查菜单总数 @3
+- 步骤3：检查可用菜单数量 @2
+- 步骤4：检查禁用菜单数量 @1
+- 步骤5：检查菜单都包含 order 属性 @1
+- 步骤6：检查菜单都包含 disabled 属性 @1
+- 步骤7：检查菜单按 order 排序 @1
 
 */
 
@@ -24,9 +24,10 @@ su('admin');
 
 $adminTest = new adminModelTest();
 
-// 4. 强制要求：必须包含至少5个测试步骤
-r($adminTest->checkPrivMenuTest()) && p('hasMenuList') && e('1'); // 步骤1：检查是否有菜单列表
-r($adminTest->checkPrivMenuTest()) && p('menuCount') && e('11'); // 步骤2：检查菜单数量
-r($adminTest->checkPrivMenuTest()) && p('hasLinkedMenu') && e('1'); // 步骤3：检查是否有已链接菜单
-r($adminTest->checkPrivMenuTest()) && p('hasDisabledMenu') && e('1'); // 步骤4：检查是否有已禁用菜单
-r($adminTest->checkPrivMenuTest()) && p('hasMenuList,menuCount') && e('1,11'); // 步骤5：验证菜单列表结构
+r($adminTest->checkPrivMenuTest()) && p('hasMenuList') && e('1');
+r($adminTest->checkPrivMenuTest()) && p('menuCount') && e('3');
+r($adminTest->checkPrivMenuTest()) && p('enabledMenuCount') && e('2');
+r($adminTest->checkPrivMenuTest()) && p('disabledMenuCount') && e('1');
+r($adminTest->checkPrivMenuTest()) && p('hasOrderAttribute') && e('1');
+r($adminTest->checkPrivMenuTest()) && p('hasDisabledAttribute') && e('1');
+r($adminTest->checkPrivMenuTest()) && p('isSorted') && e('1');

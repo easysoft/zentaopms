@@ -153,7 +153,7 @@ $config->story->actionList['edit']['data-app']  = $app->tab;
 $config->story->actionList['copy']['icon']      = 'copy';
 $config->story->actionList['copy']['text']      = $lang->story->copy;
 $config->story->actionList['copy']['hint']      = $lang->story->copy;
-$config->story->actionList['copy']['url']       = array('module' => 'story', 'method' => 'create', 'params' => 'product={product}&branch={branch}&moduleID={module}&storyID={id}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType={type}');
+$config->story->actionList['copy']['url']       = array('module' => 'story', 'method' => 'copy', 'params' => 'product={product}&branch={branch}&moduleID={module}&storyID={id}&executionID=0&bugID=0&planID=0&todoID=0&extra=&storyType={type}');
 $config->story->actionList['copy']['data-app']  = $app->tab;
 $config->story->actionList['copy']['notInModal'] = true;
 

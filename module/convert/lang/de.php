@@ -2,7 +2,7 @@
 /**
  * The convert module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     convert
@@ -106,7 +106,7 @@ $lang->convert->errorGroupExists   = 'Group %s existed.';
 $lang->convert->errorBuildExists   = 'Build %s existed.';
 $lang->convert->errorReleaseExists = 'Release %s existed.';
 $lang->convert->errorCopyFailed    = 'File %s copy failed.';
-$lang->convert->importFailed       = 'Import failed';
+$lang->convert->importFailed       = 'Import failed. Please refresh the page and try again.';
 
 $lang->convert->setParam = 'Set parameters.';
 
@@ -194,11 +194,14 @@ $lang->convert->jira->passwordDifferent  = 'Password do not match!';
 $lang->convert->jira->passwordEmpty      = 'Password can not be empty!';
 $lang->convert->jira->passwordLess       = 'Password must not be less than six characters!';
 $lang->convert->jira->importSuccessfully = 'Done!';
+$lang->convert->jira->getDataResult      = "Get <strong class='text-danger'>%s</strong> Data. <strong class='%scount'>%s</strong> pieces of data processed；";
+$lang->convert->jira->getDataSuccess     = 'Get Jira Data processed. jira Data import in progress.';
 $lang->convert->jira->importResult       = "Import <strong class='text-danger'>%s</strong> data, <strong class='%scount'>%s</strong> pieces of data processed；";
 $lang->convert->jira->importing          = 'Data is being imported, please do not switch to other pages.';
 $lang->convert->jira->importingAB        = 'Data Import';
 $lang->convert->jira->imported           = 'Data Import Complete';
 $lang->convert->jira->restore            = 'The last import of information was not completed. Do you want to continue filling in from the last process?';
+$lang->convert->jira->noCustomeFields    = 'This object has no fields that require configuration. Please click Next.';
 
 $lang->convert->jira->zentaoObjectList['']            = '';
 $lang->convert->jira->zentaoObjectList['epic']        = 'Epic';

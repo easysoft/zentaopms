@@ -8,6 +8,16 @@ class kanbanModelTest extends baseTest
     protected $moduleName = 'kanban';
     protected $className  = 'model';
 
+    protected $projectModel;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        global $tester;
+        $this->projectModel = $tester->loadModel('project');
+    }
+
     /**
      * Test create a kanban group.
      *
@@ -18,7 +28,7 @@ class kanbanModelTest extends baseTest
      */
     public function createGroupTest($kanbanID, $regionID)
     {
-        $objectID = $this->instance->createGroup($kanbanID, $regionID);
+        $objectID = $this->invokeArgs('createGroup', [$kanbanID, $regionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -38,7 +48,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getRegionByID($objectID);
+        $object = $this->invokeArgs('getRegionByID', [$objectID]);
         return $object;
     }
 
@@ -64,7 +74,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getRegionByID($objectID);
+        $object = $this->invokeArgs('getRegionByID', [$objectID]);
         return $object;
     }
 
@@ -104,7 +114,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getRegionByID($regionID);
+        $object = $this->invokeArgs('getRegionByID', [$regionID]);
         return $object;
     }
 
@@ -136,11 +146,11 @@ class kanbanModelTest extends baseTest
      */
     public function createDefaultLaneTest($regionID, $groupID)
     {
-        $objectID = $this->instance->createDefaultLane($regionID, $groupID);
+        $objectID = $this->invokeArgs('createDefaultLane', [$regionID, $groupID]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getLaneByID($objectID);
+        return $this->invokeArgs('getLaneById', [$objectID]);
     }
 
     /**
@@ -153,7 +163,7 @@ class kanbanModelTest extends baseTest
      */
     public function createDefaultColumnsTest($regionID, $groupID)
     {
-        $this->instance->createDefaultColumns($regionID, $groupID);
+        $this->invokeArgs('createDefaultColumns', [$regionID, $groupID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -175,7 +185,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getColumnByID($objectID);
+        return $this->invokeArgs('getColumnByID', [$objectID]);
     }
 
     /**
@@ -211,7 +221,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($objectID);
+        return $this->invokeArgs('getCardByID', [$objectID]);
     }
 
     /**
@@ -231,7 +241,7 @@ class kanbanModelTest extends baseTest
         $_POST['cards']      = $cards;
         $_POST['targetLane'] = $targetLane;
 
-        $this->instance->importCard($kanbanID, $regionID, $groupID, $columnID);
+        $this->invokeArgs('importCard', [$kanbanID, $regionID, $groupID, $columnID]);
 
         unset($_POST);
         if(dao::isError()) return dao::getError();
@@ -292,7 +302,7 @@ class kanbanModelTest extends baseTest
      */
     public function getByIDTest($kanbanID)
     {
-        $object = $this->instance->getByID($kanbanID);
+        $object = $this->invokeArgs('getByID', [$kanbanID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -341,12 +351,12 @@ class kanbanModelTest extends baseTest
         global $tester, $app;
         $app->rawModule = 'kanban';
 
-        $product = $tester->loadModel('product')->getByID($productID);
+        $product = $tester->loadModel('product')->getByID((int)$productID);
 
         $tester->loadModel('productplan');
         $planGroup = $product->type == 'normal' ? $tester->productplan->getList($product->id, '0', 'all', null, 'begin_desc', 'skipparent') : $tester->productplan->getGroupByProduct((array)$product->id, 'skipParent', '', 'begin_desc');
 
-        $objects = $this->instance->getPlanKanban($product, $branchID, $planGroup);
+        $objects = $this->invokeArgs('getPlanKanban', [$product, (string)$branchID, $planGroup]);
 
         if(dao::isError()) return dao::getError();
 
@@ -380,7 +390,7 @@ class kanbanModelTest extends baseTest
      */
     public function getRegionByIDTest($regionID)
     {
-        $object = $this->instance->getRegionByID($regionID);
+        $object = $this->invokeArgs('getRegionByID', [$regionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -398,7 +408,7 @@ class kanbanModelTest extends baseTest
      */
     public function getRegionPairsTest($kanbanID, $regionID = 0, $from = 'kanban')
     {
-        $objects = $this->instance->getRegionPairs($kanbanID, $regionID, $from);
+        $objects = $this->invokeArgs('getRegionPairs', [$kanbanID, $regionID, $from]);
 
         if(dao::isError()) return dao::getError();
 
@@ -414,7 +424,7 @@ class kanbanModelTest extends baseTest
      */
     public function getKanbanIDByRegionTest($regionID)
     {
-        $object = $this->instance->getKanbanIDByRegion($regionID);
+        $object = $this->invokeArgs('getKanbanIDByRegion', [$regionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -461,7 +471,7 @@ class kanbanModelTest extends baseTest
      */
     public function getLanePairsByGroupTest($groupID, $orderBy = '`order`_asc')
     {
-        $objects = $this->instance->getLanePairsByGroup($groupID, $orderBy = '`order`_asc');
+        $objects = $this->invokeArgs('getLanePairsByGroup', [$groupID, $orderBy]);
 
         if(dao::isError()) return dao::getError();
 
@@ -489,7 +499,7 @@ class kanbanModelTest extends baseTest
      */
     public function getCardGroupByKanbanTest($kanbanID)
     {
-        $objects = $this->instance->getCardGroupByKanban($kanbanID);
+        $objects = $this->invokeArgs('getCardGroupByKanban', [$kanbanID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -517,7 +527,7 @@ class kanbanModelTest extends baseTest
             ->beginIF($regionID)->andWhere('region')->eq($regionID)->fi()
             ->fetchAll('id');
 
-        $objects = $this->instance->getImportedCards($kanbanID, $cards, $fromType, $archived, $regionID);
+        $objects = $this->invokeArgs('getImportedCards', [$kanbanID, $cards, $fromType, $archived, $regionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -579,16 +589,19 @@ class kanbanModelTest extends baseTest
      */
     public function getExecutionKanbanTest($executionID, $browseType = 'all', $groupBy = 'default')
     {
-        $objects = $this->instance->getExecutionKanban($executionID, $browseType, $groupBy);
+        $result = $this->invokeArgs('getExecutionKanban', [$executionID, $browseType, $groupBy]);
 
-        if(empty($objects))
+        if(empty($result))
         {
-            $execution = $this->projectModel->fetchById($executionID);
-            $this->instance->createExecutionLane($execution, $browseType);
-            list($objects, $links) = $this->instance->getExecutionKanban($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->getByID((int)$executionID);
+            $this->invokeArgs('createExecutionLane', [$execution, $browseType]);
+            $result = $this->invokeArgs('getExecutionKanban', [$executionID, $browseType, $groupBy]);
         }
 
         if(dao::isError()) return dao::getError();
+        if(empty($result)) return 'columns:0, lanes:0, cards:0';
+
+        list($objects, $links) = $result;
 
         $columnCount = 0;
         $laneCount   = 0;
@@ -597,7 +610,12 @@ class kanbanModelTest extends baseTest
         {
             if(isset($object['data']['lanes'])) $laneCount += count($object['data']['lanes']);
             if(isset($object['data']['cols']))  $columnCount += count($object['data']['cols']);
-            if(isset($object['data']['items'])) $cardCount += count($object['data']['items'], true);
+            if(empty($object['data']['items'])) continue;
+
+            foreach($object['data']['items'] as $laneItems)
+            {
+                foreach($laneItems as $cards) $cardCount += count($cards);
+            }
         }
         return 'columns:' . $columnCount . ', lanes:' . $laneCount . ', cards:' . $cardCount;
     }
@@ -613,13 +631,13 @@ class kanbanModelTest extends baseTest
      */
     public function getKanban4GroupTest($executionID, $browseType, $groupBy)
     {
-        $objects = $this->instance->getKanban4Group($executionID, $browseType, $groupBy);
+        $objects = $this->invokeArgs('getKanban4Group', [$executionID, $browseType, $groupBy]);
 
         if(empty($objects))
         {
-            $execution = $this->projectModel->fetchById($executionID);
-            $this->instance->createExecutionLane($execution, $browseType);
-            $objects = $this->instance->getKanban4Group($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->getByID((int)$executionID);
+            $this->invokeArgs('createExecutionLane', [$execution, $browseType]);
+            $objects = $this->invokeArgs('getKanban4Group', [$executionID, $browseType, $groupBy]);
         }
 
         if(dao::isError()) return dao::getError();
@@ -640,16 +658,16 @@ class kanbanModelTest extends baseTest
     {
         global $tester;
         /* Get group objects. */
-        if($browseType == 'story') $cardList = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($browseType == 'bug')   $cardList = $tester->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
-        $objects = $this->instance->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
+        if($browseType == 'story') $cardList = $tester->loadModel('story')->getExecutionStories((int)$executionID, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'bug')   $cardList = $tester->loadModel('bug')->getExecutionBugs((int)$executionID);
+        if($browseType == 'task')  $cardList = $tester->loadModel('execution')->getKanbanTasks((int)$executionID, "id");
+        $objects = $this->invokeArgs('getLanes4Group', [$executionID, $browseType, $groupBy, $cardList]);
 
         if(empty($objects))
         {
-            $execution = $this->projectModel->fetchById($executionID);
-            $this->instance->createExecutionLane($execution, $browseType);
-            $objects = $this->instance->getLanes4Group($executionID, $browseType, $groupBy);
+            $execution = $this->projectModel->getByID((int)$executionID);
+            $this->invokeArgs('createExecutionLane', [$execution, $browseType]);
+            $objects = $this->invokeArgs('getLanes4Group', [$executionID, $browseType, $groupBy, $cardList]);
         }
 
         if(dao::isError()) return dao::getError();
@@ -759,7 +777,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getSpaceByID($objectID);
+        $object = $this->invokeArgs('getSpaceById', [$objectID]);
         return $object;
     }
 
@@ -774,11 +792,11 @@ class kanbanModelTest extends baseTest
      */
     public function updateSpaceTest($spaceID, $param)
     {
-        $this->instance->updateSpace($param, $spaceID);
+        $this->invokeArgs('updateSpace', [$param, $spaceID]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getSpaceByID($spaceID);
+        return $this->invokeArgs('getSpaceById', [$spaceID]);
     }
 
     /**
@@ -791,7 +809,7 @@ class kanbanModelTest extends baseTest
      */
     public function getLanePairsByRegionTest($regionID, $type = 'all')
     {
-        $objects = $this->instance->getLanePairsByRegion($regionID, $type);
+        $objects = $this->invokeArgs('getLanePairsByRegion', [$regionID, $type]);
 
         if(dao::isError()) return dao::getError();
 
@@ -809,7 +827,7 @@ class kanbanModelTest extends baseTest
      */
     public function getLaneGroupByRegionTest($regionID, $type = 'all')
     {
-        $objects = $this->instance->getLaneGroupByRegion($regionID, $type);
+        $objects = $this->invokeArgs('getLaneGroupByRegion', [$regionID, $type]);
 
         if(dao::isError()) return dao::getError();
 
@@ -832,7 +850,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getLaneByID($objectID);
+        $object = $this->invokeArgs('getLaneById', [$objectID]);
         return $object;
     }
 
@@ -850,7 +868,7 @@ class kanbanModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         $objectID = $this->instance->dao->lastInsertID();
-        return $this->instance->getByID($objectID);
+        return $this->invokeArgs('getByID', [$objectID]);
     }
 
     /**
@@ -866,7 +884,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getByID($objectID);
+        $object = $this->invokeArgs('getByID', [$objectID]);
         return $object;
     }
 
@@ -885,7 +903,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getByID($kanbanID);
+        return $this->invokeArgs('getByID', [$kanbanID]);
     }
 
     /**
@@ -898,8 +916,8 @@ class kanbanModelTest extends baseTest
      */
     public function createExecutionLaneTest($executionID, $type = 'all')
     {
-        $execution = $this->projectModel->fetchById($executionID);
-        $this->instance->createExecutionLane($execution, $type);
+        $execution = $this->projectModel->getByID((int)$executionID);
+        $this->invokeArgs('createExecutionLane', [$execution, $type]);
 
         if(dao::isError()) return dao::getError();
 
@@ -922,7 +940,7 @@ class kanbanModelTest extends baseTest
      */
     public function createExecutionColumnsTest($laneID, $type, $executionID)
     {
-        $this->instance->createExecutionColumns($laneID, $type, $executionID);
+        $this->invokeArgs('createExecutionColumns', [$laneID, $type, $executionID]);
 
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)
@@ -949,7 +967,7 @@ class kanbanModelTest extends baseTest
      */
     public function addKanbanCellTest($kanbanID, $laneID, $colID, $type, $cardID = 0)
     {
-        $this->instance->addKanbanCell($kanbanID, $laneID, $colID, $type, $cardID);
+        $this->invokeArgs('addKanbanCell', [$kanbanID, $laneID, $colID, $type, $cardID]);
 
 
         if(dao::isError()) return dao::getError();
@@ -1017,7 +1035,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        $object = $this->instance->getRegionByID($objectID);
+        $object = $this->invokeArgs('getRegionByID', [$objectID]);
         return $object;
     }
 
@@ -1032,7 +1050,7 @@ class kanbanModelTest extends baseTest
      */
     public function createRDLaneTest($executionID, $regionID)
     {
-        $this->instance->createRDLane($executionID, $regionID);
+        $this->invokeArgs('createRDLane', [$executionID, $regionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1054,7 +1072,7 @@ class kanbanModelTest extends baseTest
      */
     public function createRDColumnTest($regionID, $groupID, $laneID, $laneType, $executionID)
     {
-        $this->instance->createRDColumn($regionID, $groupID, $laneID, $laneType, $executionID);
+        $this->invokeArgs('createRDColumn', [$regionID, $groupID, $laneID, $laneType, $executionID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1080,7 +1098,7 @@ class kanbanModelTest extends baseTest
 
         unset($_POST);
 
-        return $this->instance->getRegionByID($regionID);
+        return $this->invokeArgs('getRegionByID', [$regionID]);
     }
 
     /**
@@ -1098,11 +1116,11 @@ class kanbanModelTest extends baseTest
         $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('type')->ne('common')->andWhere('execution')->eq($executionID)->fetch();
         if(empty($objects))
         {
-            $execution = $this->projectModel->fetchById($executionID);
-            $this->instance->createExecutionLane($execution, 'all');
+            $execution = $this->projectModel->getByID((int)$executionID);
+            $this->invokeArgs('createExecutionLane', [$execution, 'all']);
         }
 
-        $this->instance->updateLane($executionID, $laneType, $cardID);
+        $this->invokeArgs('updateLane', [$executionID, $laneType, $cardID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1122,7 +1140,7 @@ class kanbanModelTest extends baseTest
      */
     public function refreshCardsTest($laneID)
     {
-        $lane = $this->instance->getLaneByID($laneID);
+        $lane = $this->invokeArgs('getLaneById', [$laneID]);
         $this->instance->refreshCards((array)$lane);
 
         if(dao::isError()) return dao::getError();
@@ -1153,7 +1171,7 @@ class kanbanModelTest extends baseTest
         $column->name  = $name;
         $column->color = $color;
 
-        $changes = $this->instance->updateColumn($columnID, $column);
+        $changes = $this->invokeArgs('updateColumn', [$columnID, $column]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1174,7 +1192,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getByID($kanbanID);
+        return $this->invokeArgs('getByID', [$kanbanID]);
     }
 
     /**
@@ -1188,13 +1206,13 @@ class kanbanModelTest extends baseTest
     public function activateCardTest($cardID, $progress)
     {
         $_POST['progress'] = $progress;
-        $this->instance->activateCard($cardID);
+        $this->invokeArgs('activateCard', [$cardID]);
 
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($cardID);
+        return $this->invokeArgs('getCardByID', [$cardID]);
     }
 
     /**
@@ -1212,7 +1230,7 @@ class kanbanModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($cardID);
+        return $this->invokeArgs('getCardByID', [$cardID]);
     }
 
     /**
@@ -1230,13 +1248,13 @@ class kanbanModelTest extends baseTest
         $WIP->limit   = $limit;
         $WIP->noLimit = $noLimit;
 
-        $this->instance->setWIP($columnID, $WIP);
+        $this->invokeArgs('setWIP', [$columnID, $WIP]);
 
         unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getColumnByID($columnID);
+        return $this->invokeArgs('getColumnByID', [$columnID]);
     }
 
     /**
@@ -1254,11 +1272,11 @@ class kanbanModelTest extends baseTest
         $lane->name  = $name;
         $lane->color = $color;
 
-        $this->instance->setLane($laneID, $lane);
+        $this->invokeArgs('setLane', [$laneID, $lane]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getLaneByID($laneID);
+        return $this->invokeArgs('getLaneById', [$laneID]);
     }
 
     /**
@@ -1276,7 +1294,7 @@ class kanbanModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $objects = $tester->dao->select('*')->from(TABLE_KANBANGROUP)->where('region')->eq($region)->orderBy('order_asc')->fetchAll('id');
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANGROUP)->where('region')->eq($region)->orderBy('`order`_asc')->fetchAll('id');
         return implode(array_keys($objects), ',');
     }
 
@@ -1294,7 +1312,7 @@ class kanbanModelTest extends baseTest
      */
     public function moveCardTest($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
-        $this->instance->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
+        $this->invokeArgs('moveCard', [$cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1311,11 +1329,11 @@ class kanbanModelTest extends baseTest
      */
     public function updateCardColorTest($cardID, $color)
     {
-        $this->instance->updateCardColor($cardID, $color);
+        $this->invokeArgs('updateCardColor', [$cardID, $color]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($cardID);
+        return $this->invokeArgs('getCardByID', [$cardID]);
     }
 
     /**
@@ -1327,9 +1345,9 @@ class kanbanModelTest extends baseTest
      */
     public function archiveColumnTest($columnID)
     {
-        $this->instance->archiveColumn($columnID);
+        $this->invokeArgs('archiveColumn', [$columnID]);
 
-        $object = $this->instance->getColumnByID($columnID);
+        $object = $this->invokeArgs('getColumnByID', [$columnID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1345,7 +1363,7 @@ class kanbanModelTest extends baseTest
      */
     public function restoreColumnTest($columnID)
     {
-        $this->instance->restoreColumn($columnID);
+        $this->invokeArgs('restoreColumn', [$columnID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1361,11 +1379,11 @@ class kanbanModelTest extends baseTest
      */
     public function archiveCardTest($cardID)
     {
-        $this->instance->archiveCard($cardID);
+        $this->invokeArgs('archiveCard', [$cardID]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($cardID);
+        return $this->invokeArgs('getCardByID', [$cardID]);
     }
 
     /**
@@ -1377,16 +1395,16 @@ class kanbanModelTest extends baseTest
      */
     public function restoreCardTest($cardID)
     {
-        $this->instance->restoreCard($cardID);
+        $this->invokeArgs('restoreCard', [$cardID]);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->getCardByID($cardID);
+        return $this->invokeArgs('getCardByID', [$cardID]);
     }
 
     public function processCardsTest($columnID)
     {
-        $column  = $this->instance->getColumnByID($columnID);
+        $column  = $this->invokeArgs('getColumnByID', [$columnID]);
         $this->instance->processCards($column);
 
         if(dao::isError()) return dao::getError();
@@ -1408,7 +1426,7 @@ class kanbanModelTest extends baseTest
      */
     public function getSpaceByIdTest($spaceID)
     {
-        $object = $this->instance->getSpaceById($spaceID);
+        $object = $this->invokeArgs('getSpaceById', [$spaceID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1482,7 +1500,7 @@ class kanbanModelTest extends baseTest
      */
     public function getColumnByIDTest($columnID)
     {
-        $object = $this->instance->getColumnByID($columnID);
+        $object = $this->invokeArgs('getColumnByID', [$columnID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1501,7 +1519,7 @@ class kanbanModelTest extends baseTest
      */
     public function getColumnsByFieldTest($field = '', $fieldID = 0, $archived = 0, $deleted = '0')
     {
-        $objects = $this->instance->getColumnsByField($field, $fieldID, $archived, $deleted);
+        $objects = $this->invokeArgs('getColumnsByField', [$field, $fieldID, $archived, $deleted]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1518,7 +1536,7 @@ class kanbanModelTest extends baseTest
      */
     public function getColumnIDByLaneIDTest($laneID, $columnType)
     {
-        $object = $this->instance->getColumnIDByLaneID($laneID, $columnType);
+        $object = $this->invokeArgs('getColumnIDByLaneID', [$laneID, $columnType]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1534,7 +1552,7 @@ class kanbanModelTest extends baseTest
      */
     public function getLaneByIdTest($laneID)
     {
-        $object = $this->instance->getLaneById($laneID);
+        $object = $this->invokeArgs('getLaneById', [$laneID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1550,7 +1568,7 @@ class kanbanModelTest extends baseTest
      */
     public function getCardByIDTest($cardID)
     {
-        $object = $this->instance->getCardByID($cardID);
+        $object = $this->invokeArgs('getCardByID', [$cardID]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1607,7 +1625,7 @@ class kanbanModelTest extends baseTest
      */
     public function getCards2ImportTest($kanbanID = 0, $excludedID = 0, $pager = null)
     {
-        $objects = $this->instance->getCards2Import($kanbanID, $excludedID, $pager);
+        $objects = $this->invokeArgs('getCards2Import', [$kanbanID, $excludedID, $pager]);
 
         if(dao::isError()) return dao::getError();
 
@@ -1626,15 +1644,15 @@ class kanbanModelTest extends baseTest
     {
         global $tester;
         /* Get group objects. */
-        if($objectType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
-        if($objectType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs($executionID);
-        if($objectType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($objectType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories((int)$executionID, 0, 't1.`order`_desc', 'allStory');
+        if($objectType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs((int)$executionID);
+        if($objectType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks((int)$executionID, "id");
 
         $objects = array();
         /* Get objects cards menus. */
-        if($objectType == 'story') $objects = $this->instance->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
-        if($objectType == 'bug')   $objects = $this->instance->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
-        if($objectType == 'task')  $objects = $this->instance->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+        if($objectType == 'story') $objects = $this->invokeArgs('getKanbanCardMenu', [$executionID, $objectGroup['story'], 'story']);
+        if($objectType == 'bug')   $objects = $this->invokeArgs('getKanbanCardMenu', [$executionID, $objectGroup['bug'], 'bug']);
+        if($objectType == 'task')  $objects = $this->invokeArgs('getKanbanCardMenu', [$executionID, $objectGroup['task'], 'task']);
 
         if(dao::isError()) return dao::getError();
 
@@ -1671,7 +1689,7 @@ class kanbanModelTest extends baseTest
     public function isClickableTest($objectType, $objectID, $action)
     {
         $functionName = 'get' . $objectType . 'ById';
-        $object       = $this->instance->$functionName($objectID);
+        $object       = $this->invokeArgs($functionName, [$objectID]);
 
         $result = $this->instance->isClickable($object, $action);
 
@@ -1696,7 +1714,7 @@ class kanbanModelTest extends baseTest
         }
         else
         {
-            $card = $this->instance->getCardByID($cardID);
+            $card = $this->invokeArgs('getCardByID', [$cardID]);
         }
 
         $col       = $this->instance->getColumnById($colID);
@@ -1718,8 +1736,8 @@ class kanbanModelTest extends baseTest
      */
     public function buildExecutionCardsTest(int $executionID, int $laneID, string $colID, array $cardIdList): array
     {
-        $lane = $this->instance->getLaneById($laneID);
-        $col  = $this->instance->getColumnById($colID);
+        $lane = $this->invokeArgs('getLaneById', [$laneID]);
+        $col  = $this->invokeArgs('getColumnById', [$colID]);
         $col->lane = $laneID;
 
         $objectGroup['story'] = $this->instance->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
@@ -1744,7 +1762,7 @@ class kanbanModelTest extends baseTest
      */
     public function buildExecutionGroupTest(int $executionID, int $laneID): array
     {
-        $lane = $this->instance->getLaneById($laneID);
+        $lane = $this->invokeArgs('getLaneById', [$laneID]);
 
         $objectGroup['story'] = $this->instance->loadModel('story')->getExecutionStories($executionID, 0, 't1.`order`_desc', 'allStory');
         $objectGroup['bug']   = $this->instance->loadModel('bug')->getExecutionBugs($executionID);
@@ -2592,7 +2610,7 @@ class kanbanModelTest extends baseTest
         $importObjects = array_keys($tester->lang->kanban->importObjectList);
         if($copyKanbanID)
         {
-            $copyKanban    = $this->instance->getByID($copyKanbanID);
+            $copyKanban    = $this->invokeArgs('getByID', [$copyKanbanID]);
             $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
             $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
             $spaceID       = $copyKanban->space;
@@ -2600,7 +2618,7 @@ class kanbanModelTest extends baseTest
 
         unset($tester->lang->kanban->featureBar['space']['involved']);
 
-        $space      = $this->instance->getSpaceById($spaceID);
+        $space      = $this->invokeArgs('getSpaceById', [$spaceID]);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner ?? '') . ',' . trim($space->team ?? '');
         $spacePairs = $this->instance->getSpacePairs($type);
         $users      = $tester->loadModel('user')->getPairs('noclosed|nodeleted');
@@ -2669,7 +2687,7 @@ class kanbanModelTest extends baseTest
         global $tester;
 
         // 获取卡片信息
-        $card = $this->instance->getCardByID($cardID);
+        $card = $this->invokeArgs('getCardByID', [$cardID]);
         if(!$card) return array('error' => 'Card not found');
 
         // 获取看板区域信息用于移动
@@ -2699,7 +2717,7 @@ class kanbanModelTest extends baseTest
         global $tester;
 
         // 获取操作前的空间信息
-        $spaceBefore = $this->instance->getSpaceById($spaceID);
+        $spaceBefore = $this->invokeArgs('getSpaceById', [$spaceID]);
 
         // 执行添加成员操作
         $this->instance->addSpaceMembers($spaceID, $type, $kanbanMembers);
@@ -2707,7 +2725,7 @@ class kanbanModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         // 获取操作后的空间信息
-        $spaceAfter = $this->instance->getSpaceById($spaceID);
+        $spaceAfter = $this->invokeArgs('getSpaceById', [$spaceID]);
 
         // 返回结果以便验证
         return array(

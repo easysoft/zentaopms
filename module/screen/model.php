@@ -2,7 +2,7 @@
 /**
  * The model file of screen module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@cnezsoft.com>
  * @package     task
@@ -3114,8 +3114,8 @@ class screenModel extends model
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('year(t2.openedDate)')->eq($year)
-                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('year(t2.`openedDate`)')->eq($year)
+                ->andWhere('month(t2.`openedDate`)')->eq($month)
                 ->andWhere('t1.id')->eq($productID)
                 ->fetch();
 
@@ -3125,8 +3125,8 @@ class screenModel extends model
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.deleted')->eq('0')
-                ->andWhere('year(t2.openedDate)')->eq($year)
-                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('year(t2.`openedDate`)')->eq($year)
+                ->andWhere('month(t2.`openedDate`)')->eq($month)
                 ->andWhere('t1.id')->eq($productID)
                 ->fetch();
 
@@ -3134,19 +3134,19 @@ class screenModel extends model
                 ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('year(t2.openedDate)')->eq($year)
-                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('year(t2.`openedDate`)')->eq($year)
+                ->andWhere('month(t2.`openedDate`)')->eq($month)
                 ->andWhere('t1.id')->eq($productID)
                 ->fetch();
 
-            $fixedBugList = $this->dao->select('t2.id,datediff(t2.closedDate, t2.openedDate) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
+            $fixedBugList = $this->dao->select('t2.id,datediff(t2.`closedDate`, t2.`openedDate`) as fixedCycle')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.id=t2.product')
                 ->where('t1.deleted')->eq('0')
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t2.status')->eq('closed')
                 ->andWhere('t2.resolution')->eq('fixed')
-                ->andWhere('year(t2.closedDate)')->eq($year)
-                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->andWhere('year(t2.`closedDate`)')->eq($year)
+                ->andWhere('month(t2.`closedDate`)')->eq($month)
                 ->andWhere('t1.id')->eq($productID)
                 ->fetchPairs();
 
@@ -3235,13 +3235,13 @@ class screenModel extends model
     {
         $releasedStories = $this->dao->select('t2.id, t1.id as product')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.id=t2.product')
-            ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.objectID')
+            ->leftJoin(TABLE_ACTION)->alias('t3')->on('t2.id=t3.`objectID`')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.type')->eq('story')
             ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
             ->andWhere('t2.stage')->eq('released')
-            ->andWhere('t3.objectType')->eq('story')
+            ->andWhere('t3.`objectType`')->eq('story')
             ->andWhere('t3.action')->eq('linked2release')
             ->andWhere('year(t3.date)')->eq($year)
             ->andWhere('month(t3.date)')->eq($month)
@@ -3264,8 +3264,8 @@ class screenModel extends model
                 ->andWhere('t2.type')->eq('story')
                 ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
-                ->andWhere('year(t2.openedDate)')->eq($year)
-                ->andWhere('month(t2.openedDate)')->eq($month)
+                ->andWhere('year(t2.`openedDate`)')->eq($year)
+                ->andWhere('month(t2.`openedDate`)')->eq($month)
                 ->fetch();
 
             $finishedStoryList = $this->dao->select('t2.id')->from(TABLE_PRODUCT)->alias('t1')
@@ -3275,9 +3275,9 @@ class screenModel extends model
                 ->andWhere('t2.type')->eq('story')
                 ->andWhere("NOT FIND_IN_SET('or', t2.vision)")
                 ->andWhere('t1.id')->eq($productID)
-                ->andWhere('t2.closedReason')->eq('done')
-                ->andWhere('year(t2.closedDate)')->eq($year)
-                ->andWhere('month(t2.closedDate)')->eq($month)
+                ->andWhere('t2.`closedReason`')->eq('done')
+                ->andWhere('year(t2.`closedDate`)')->eq($year)
+                ->andWhere('month(t2.`closedDate`)')->eq($month)
                 ->fetchPairs();
 
             $releasedStoryList = isset($releasedStoryGroups[$productID]) ? $releasedStoryGroups[$productID] : array();
@@ -3311,7 +3311,7 @@ class screenModel extends model
         $releasedStories = $this->dao->select('t3.id,t1.id as projectID')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story=t3.id')
-            ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.objectID')
+            ->leftJoin(TABLE_ACTION)->alias('t4')->on('t3.id=t4.`objectID`')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.type')->eq('project')
             ->andWhere('t3.deleted')->eq('0')
@@ -3319,7 +3319,7 @@ class screenModel extends model
             ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
             ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
             ->andWhere('t3.stage')->eq('released')
-            ->andWhere('t4.objectType')->eq('story')
+            ->andWhere('t4.`objectType`')->eq('story')
             ->andWhere('t4.action')->eq('linked2release')
             ->andWhere('year(t4.date)')->eq($year)
             ->andWhere('month(t4.date)')->eq($month)
@@ -3347,8 +3347,8 @@ class screenModel extends model
                 ->andWhere('t1.type')->eq('project')
                 ->andWhere('t3.type')->eq('story')
                 ->andWhere('t1.id')->eq($projectID)
-                ->andWhere('year(t3.openedDate)')->eq($year)
-                ->andWhere('month(t3.openedDate)')->eq($month)
+                ->andWhere('year(t3.`openedDate`)')->eq($year)
+                ->andWhere('month(t3.`openedDate`)')->eq($month)
                 ->fetch();
 
             $finishedStoryList = $this->dao->select('t3.id')->from(TABLE_PROJECT)->alias('t1')
@@ -3361,9 +3361,9 @@ class screenModel extends model
                 ->andWhere("NOT FIND_IN_SET('or', t1.vision)")
                 ->andWhere("NOT FIND_IN_SET('or', t3.vision)")
                 ->andWhere('t1.id')->eq($projectID)
-                ->andWhere('t3.closedReason')->eq('done')
-                ->andWhere('year(t3.closedDate)')->eq($year)
-                ->andWhere('month(t3.closedDate)')->eq($month)
+                ->andWhere('t3.`closedReason`')->eq('done')
+                ->andWhere('year(t3.`closedDate`)')->eq($year)
+                ->andWhere('month(t3.`closedDate`)')->eq($month)
                 ->fetchPairs();
 
             $releasedStoryList = isset($releasedStoryGroups[$projectID]) ? $releasedStoryGroups[$projectID] : array();

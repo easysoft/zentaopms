@@ -11,7 +11,7 @@
  * 描述：按产品统计的每日关闭Bug数是指每天在产品中每日关闭的Bug的数量。该度量项可以帮助我们了解开发团队对已解决的Bug进行确认与关闭的速度和效率，通过对比不同时间段的关闭Bug数，可以评估开发团队的协作和问题处理能力。
  * 定义：产品中Bug数求和;关闭时间为某日;过滤已删除的Bug;过滤已删除的产品;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_daily_closed_bug_in_product extends baseCalc
 {
     public $dataset = 'getBugs';
 
-    public $fieldList = array('t1.product', 't1.status', 't1.closedDate');
+    public $fieldList = array('t1.product', 't1.status', 't1.`closedDate`');
 
     public $result = array();
 

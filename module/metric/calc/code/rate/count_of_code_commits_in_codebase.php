@@ -11,7 +11,7 @@
  * 描述：按代码库统计的代码提交次数是指代码库中的全部代码提交（Commit）操作的数量。代码提交次数反映了代码库的开发活动频率和代码更新情况，可以评估开发团队的工作量和迭代速度。
  * 定义：代码库中代码提交次数相加。;不包含已删除。;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

@@ -1588,20 +1588,11 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        if(isset($config->db->prefix))
-        {
-            $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
-        }
-        elseif(strpos($this->table, '_') !== false)
-        {
-            $table = strtolower(substr($this->table, strpos($this->table, '_') + 1));
-            $table = str_replace('`', '', $table);
-        }
-        else
-        {
-            $table = strtolower($this->table);
-        }
-        $fieldLabel = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
+        $module = ltrim(trim($this->table, '`'), $config->db->prefix);
+        $module = strrpos($module, '_') ? substr($module, strrpos($module, '_') + 1) : $module;
+        $module = strtolower($module);
+
+        $fieldLabel = isset($lang->$module->$fieldName)      ? $lang->$module->$fieldName      : $fieldName;
         $value      = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
 
         /*
@@ -2470,6 +2461,23 @@ class baseSQL
     }
 
     /**
+     * 创建INNER JOIN部分。
+     * Create the inner join part.
+     *
+     * @param  string $table
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function innerJoin($table)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql         .= " INNER JOIN $table";
+        $this->currentTable = $table;
+
+        return $this;
+    }
+
+    /**
      * 创建ON部分。
      * Create the on part.
      *
@@ -2995,13 +3003,8 @@ class baseSQL
         /* Add "`" in order string. */
         /* When order has limit string. */
         $pos    = stripos($order, 'limit');
-        $orders = $pos ? substr($order, 0, $pos) : $order;
-        $limit  = $pos ? substr($order, $pos) : '';
-        if(!empty($limit))
-        {
-            $trimmedLimit = trim(str_replace('limit', '', $limit));
-            if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $trimmedLimit)) helper::end("Limit is bad query, The limit is " . htmlspecialchars($limit));
-        }
+        $orders = $pos !== false ? substr($order, 0, $pos) : $order;
+        $limit  = $pos !== false ? $this->normalizeLimit(substr($order, $pos)) : '';
 
         $orders = trim($orders);
         if(empty($orders)) return $this;
@@ -3027,10 +3030,45 @@ class baseSQL
             $orders[$i] = implode(' ', $orderParse);
             if(empty($orders[$i])) unset($orders[$i]);
         }
-        $order = implode(',', $orders) . ' ' . $limit;
+        $order = implode(',', $orders);
+        if($limit !== '') $order .= ' ' . DAO::LIMIT . " $limit";
 
         $this->sql .= ' ' . DAO::ORDERBY . " $order";
         return $this;
+    }
+
+    /**
+     * Normalize the limit clause to LIMIT n OFFSET m.
+     *
+     * @param  mixed       $limit
+     * @param  mixed|null  $rows
+     * @access protected
+     * @return string
+     */
+    protected function normalizeLimit($limit, $rows = null)
+    {
+        $rawLimit = $rows === null ? (string)$limit : (string)$limit . ', ' . (string)$rows;
+
+        if($rows !== null)
+        {
+            $offset = trim((string)$limit);
+            $rows   = trim((string)$rows);
+            if(!preg_match('/^\d+$/', $offset) || !preg_match('/^\d+$/', $rows))
+            {
+                helper::end("Limit is bad query, The limit is " . htmlspecialchars($rawLimit));
+            }
+
+            return (int)$rows . ' OFFSET ' . (int)$offset;
+        }
+
+        $limit = trim(preg_replace('/^\s*limit\s+/i', '', (string)$limit));
+        if($limit === '') return '';
+
+        if(preg_match('/^\d+$/', $limit)) return (string)(int)$limit;
+        if(preg_match('/^(\d+)\s*,\s*(\d+)$/', $limit, $matches)) return (int)$matches[2] . ' OFFSET ' . (int)$matches[1];
+        if(preg_match('/^(\d+)\s+offset\s+(\d+)$/i', $limit, $matches)) return (int)$matches[1] . ' OFFSET ' . (int)$matches[2];
+
+        helper::end("Limit is bad query, The limit is " . htmlspecialchars($rawLimit));
     }
 
     /**
@@ -3044,15 +3082,10 @@ class baseSQL
     public function limit($limit)
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
-        if(empty($limit)) return $this;
 
-        /* filter limit. */
-        $limit = trim(str_ireplace('limit', '', $limit));
-        if(!preg_match('/^[0-9]+ *(, *[0-9]+)?$/', $limit))
-        {
-            $limit = htmlspecialchars($limit);
-            helper::end("Limit is bad query, The limit is $limit");
-        }
+        $args  = func_get_args();
+        if(count($args) === 1 && empty($limit)) return $this;
+        $limit = $this->normalizeLimit($limit, $args[1] ?? null);
         $this->sql .= ' ' . DAO::LIMIT . " $limit ";
         return $this;
     }

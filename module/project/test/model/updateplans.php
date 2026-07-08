@@ -44,7 +44,7 @@ $app->moduleName = 'project';
 $plan = array();
 $plan[3] = array(1, 4, 7);
 r(count($project->updatePlansTest(13, $plan))) && p('') && e('4'); // 将计划1，4，7下的需求关联到项目13，查看关联后的需求数
-r($project->updatePlansTest(13, $plan)) && p('3:story,product') && e('98,25'); // 将计划1，4，7下的需求关联到项目13，查看关联后的需求ID/产品ID
+r($project->updatePlansTest(13, $plan)) && p('3:story,product') && e('10,3');  // 将计划1，4，7下的需求关联到项目13，查看关联后的需求ID/产品ID
 
 $plan = array();
 $plan[1] = array(2, 5, 10, 13);

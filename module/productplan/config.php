@@ -34,7 +34,7 @@ $config->productplan->actionList['finish']['hint']         = $lang->productplan-
 $config->productplan->actionList['finish']['text']         = $lang->productplan->finish;
 $config->productplan->actionList['finish']['url']          = helper::createLink('productplan', 'finish', 'planID={id}');
 $config->productplan->actionList['finish']['data-confirm'] = $lang->productplan->confirmFinish;
-$config->productplan->actionList['finish']['innerClass']   = 'ajax-submit';
+$config->productplan->actionList['finish']['className']   = 'ajax-submit';
 
 $config->productplan->actionList['close']['icon']        = 'off';
 $config->productplan->actionList['close']['hint']        = $lang->productplan->close;
@@ -47,7 +47,7 @@ $config->productplan->actionList['activate']['hint']         = $lang->productpla
 $config->productplan->actionList['activate']['text']         = $lang->productplan->activate;
 $config->productplan->actionList['activate']['url']          = helper::createLink('productplan', 'activate', 'planID={id}');
 $config->productplan->actionList['activate']['data-confirm'] = $lang->productplan->confirmActivate;
-$config->productplan->actionList['activate']['innerClass']   = 'ajax-submit';
+$config->productplan->actionList['activate']['className']   = 'ajax-submit';
 
 $config->productplan->actionList['createExecution']['icon']         = 'plus';
 $config->productplan->actionList['createExecution']['hint']         = $lang->productplan->createExecution;

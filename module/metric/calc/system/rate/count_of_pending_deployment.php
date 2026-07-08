@@ -11,7 +11,7 @@
  * 描述：按系统统计的待处理的上线计划总数是指所有尚未完成的计划数量。该度量反映了团队在软件交付和发布管理方面的任务积压和工作进展情况。
  * 定义：所有的未完成的上线计划个数求和;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func

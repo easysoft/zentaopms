@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The link story view file of execution module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Sun Guangming<sunguangming@easycorp.ltd>
  * @package     execution
@@ -52,7 +52,7 @@ if(!isInModal())
 {
     $footToolbar['items'][] = array(
         'text'      => $lang->goback,
-        'className' => 'btn btn-info size-sm text-gray',
+        'className' => 'btn btn-info size-sm',
         'url'       => $browseLink,
         'btnType'   => 'info',
         'data-app'  => $app->tab

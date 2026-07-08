@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The zen file of testcase module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     testcase
@@ -210,7 +210,7 @@ class testcaseZen extends testcase
         if(empty($branches)) $canImportModules[0] = $this->testcase->getCanImportedModules($productID, $libID, 0, 'items', $cases);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('testcase', 'importFromLib', "productID={$productID}&branch={$branch}&libID={$libID}&orderBy={$orderBy}&browseType=bysearch&queryID=myQueryID");
 
         $this->config->testcase->search['module']    = 'testsuite';
         $this->config->testcase->search['onMenuBar'] = 'no';
@@ -825,7 +825,7 @@ class testcaseZen extends testcase
 
         if(!isset($branchTagOption[$case->branch]))
         {
-            $caseBranch = $this->branch->getByID($case->branch, $case->product, '');
+            $caseBranch = $this->branch->getByID((string)$case->branch, $case->product, '');
             $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
@@ -1616,13 +1616,14 @@ class testcaseZen extends testcase
             $case->product         = $productID;
             $case->fromCaseID      = $case->id;
             $case->fromCaseVersion = $case->version;
-            if(isset($modules[$case->id])) $case->module = $modules[$case->id];
+            if(isset($modules[$case->id]))  $case->module = $modules[$case->id];
             if(isset($branches[$case->id])) $case->branch = $branches[$case->id];
             unset($case->id);
-            if(!$case->scriptedDate)   unset($case->scriptedDate);
-            if(!$case->reviewedDate)   unset($case->reviewedDate);
-            if(!$case->lastEditedDate) unset($case->lastEditedDate);
-            if(!$case->lastRunDate)    unset($case->lastRunDate);
+
+            foreach($case as $key => $value)
+            {
+                if($value === '') unset($case->{$key});
+            }
 
             $caseBranch = zget($case, 'branch', $branch);
             if(empty($caseModules[$caseBranch][$case->fromCaseID][$case->module]))
@@ -1979,7 +1980,7 @@ class testcaseZen extends testcase
 
             if($this->config->edition != 'open')
             {
-                $extendFields = $this->loadModel('flow')->getExtendFields('testcase', 'create');
+                $extendFields = $this->loadModel('flow')->getExtendFields('testcase', $this->app->rawMethod);
                 foreach($extendFields as $field) $case->{$field->field} = $testcase->{$field->field};
             }
         }
@@ -2018,38 +2019,48 @@ class testcaseZen extends testcase
      */
     protected function initLibCase(object $case, int $libID, int $maxOrder, int $maxModuleOrder, array $libCases): object
     {
-        $libCase = new stdclass();
-        $libCase->lib             = $libID;
-        $libCase->title           = $case->title;
-        $libCase->precondition    = $case->precondition;
-        $libCase->keywords        = $case->keywords;
-        $libCase->pri             = $case->pri;
-        $libCase->type            = $case->type;
-        $libCase->stage           = $case->stage;
-        $libCase->status          = $case->status;
-        $libCase->fromCaseID      = $case->id;
-        $libCase->fromCaseVersion = $case->version;
-        $libCase->color           = $case->color;
-        $libCase->order           = $maxOrder;
-        $libCase->module          = empty($case->module) ? 0 : $this->testcase->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
+        $case->project         = 0;
+        $case->product         = 0;
+        $case->execution       = 0;
+        $case->branch          = 0;
+        $case->path            = 0;
+        $case->story           = 0;
+        $case->lib             = $libID;
+        $case->fromCaseID      = $case->id;
+        $case->fromCaseVersion = $case->version;
+        $case->order           = $maxOrder;
+        $case->module          = empty($case->module) ? 0 : $this->testcase->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
 
         if(!isset($libCases[$case->id]))
         {
-            $libCase->openedBy   = $this->app->user->account;
-            $libCase->openedDate = helper::now();
+            $case->openedBy   = $this->app->user->account;
+            $case->openedDate = helper::now();
+            unset($case->id);
+            unset($case->version);
+            unset($case->lastEditedBy);
+            unset($case->lastEditedDate);
         }
         else
         {
             $libCaseList = array_keys($libCases[$case->id]);
             $libCaseID   = $libCaseList[0];
 
-            $libCase->id             = $libCaseID;
-            $libCase->lastEditedBy   = $this->app->user->account;
-            $libCase->lastEditedDate = helper::now();
-            $libCase->version        = (int)$libCases[$case->id][$libCaseID]->version + 1;
+            $case->lastEditedBy   = $this->app->user->account;
+            $case->lastEditedDate = helper::now();
+            $case->version        = (int)$libCases[$case->id][$libCaseID]->version + 1;
+            $case->id             = $libCaseID;
         }
 
-        return $libCase;
+        unset($case->scriptedDate);
+        unset($case->reviewedDate);
+        unset($case->lastRunDate);
+
+        foreach($case as $key => $value)
+        {
+            if($value === '') unset($case->{$key});
+        }
+
+        return $case;
     }
 
     /**
@@ -2341,6 +2352,7 @@ class testcaseZen extends testcase
      * Respond after creating testcase.
      *
      * @param  int       $caseID
+     * @param  int       $moduleID
      * @access protected
      * @return array|int
      */
@@ -2467,7 +2479,7 @@ class testcaseZen extends testcase
      */
     protected function buildLinkCasesSearchForm(object $case, int $queryID): void
     {
-        $actionURL = $this->createLink('testcase', 'linkCases', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('testcase', 'linkCases', "caseID={$case->id}&browseType=bysearch&queryID=myQueryID", '', true);
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
@@ -2487,7 +2499,7 @@ class testcaseZen extends testcase
      */
     protected function buildLinkBugsSearchForm(object $case, int $queryID): void
     {
-        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType=bySearch&queryID=myQueryID", '', true);
+        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID={$case->id}&browseType=bysearch&queryID=myQueryID", '', true);
         $objectID  = 0;
         if($this->app->tab == 'project')   $objectID = $case->project;
         if($this->app->tab == 'execution') $objectID = $case->execution;
@@ -2960,7 +2972,7 @@ class testcaseZen extends testcase
      */
     protected function processStepsAndExpectsForBatchEdit(array $cases): array
     {
-        $relatedSteps = $this->testcase->getRelatedSteps(array_column($cases, 'id'));
+        $relatedSteps = $this->app->rawMethod != 'showimport' ? $this->testcase->getRelatedSteps(array_column($cases, 'id')) : array();
         foreach($cases as $case)
         {
             $this->processStepForExport($case, array(), $relatedSteps);

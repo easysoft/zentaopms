@@ -32,7 +32,7 @@ zenData('projectproduct')->loadYaml('projectproduct')->gen(5);
 zenData('userview')->gen(50);
 zenData('user')->gen(50);
 
-$personnelTester = new personnelTest('admin');
+$personnelTester = new personnelModelTest();
 
 $idList = array(0, 1, 3, 5, 9, 11, 15);
 

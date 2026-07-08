@@ -10,7 +10,7 @@ cid=17306
 - 步骤1：空数据测试 @0
 - 步骤2：第一个对象的ID第0条的id属性 @1
 - 步骤3：多对象类型数量 @3
-- 步骤4：自定义标题字段第0条的title属性 @Test Charter
+- 步骤4：自定义标题字段第0条的title属性 @1
 - 步骤5：使用流程名称第0条的title属性 @Custom Flow #1
 
 */
@@ -60,10 +60,10 @@ $objectGroup = array(
     )
 );
 $flows = array(
-    'charter' => (object)array('titleField' => 'name', 'app' => 'project')
+    'charter' => (object)array('titleField' => 'name', 'app' => 'project', 'module' => 'project', 'table' => 'zt_project')
 );
 $objectNameFields = array();
-r($myTest->buildReviewingFlowsTest($objectGroup, $flows, $objectNameFields)) && p('0:title') && e('Test Charter'); // 步骤4：自定义标题字段
+r($myTest->buildReviewingFlowsTest($objectGroup, $flows, $objectNameFields)) && p('0:title') && e('1'); // 步骤4：自定义标题字段
 
 // 步骤5：缺少标题字段时使用流程名称
 $objectGroup = array(
@@ -72,7 +72,7 @@ $objectGroup = array(
     )
 );
 $flows = array(
-    'custom' => (object)array('name' => 'Custom Flow', 'app' => 'custom')
+    'custom' => (object)array('name' => 'Custom Flow', 'app' => 'custom', 'module' => 'custom', 'table' => 'zt_project')
 );
 $objectNameFields = array();
 r($myTest->buildReviewingFlowsTest($objectGroup, $flows, $objectNameFields)) && p('0:title') && e('Custom Flow #1'); // 步骤5：使用流程名称

@@ -1,5 +1,34 @@
 #!/usr/bin/env php
 <?php
+/**
+
+title=taskTao->getLeftAfterDeleteWorkhour();
+timeout=0
+cid=18879
+
+- 删除ID为1的工时
+ - 属性taskEstimate @2.00
+ - 属性taskConsumed @1.00
+ - 属性taskLeft @1.00
+ - 属性effortConsumed @1.00
+ - 属性effortLeft @1.00
+ - 属性left @1
+- 删除ID为2的工时
+ - 属性taskEstimate @2.00
+ - 属性taskConsumed @2.00
+ - 属性taskLeft @0.00
+ - 属性effortConsumed @1.00
+ - 属性effortLeft @1.00
+ - 属性left @0
+- 删除ID为3的工时
+ - 属性taskEstimate @2.00
+ - 属性taskConsumed @2.00
+ - 属性taskLeft @0.00
+ - 属性effortConsumed @1.00
+ - 属性effortLeft @0.00
+ - 属性left @1
+
+*/
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/tao.class.php';
 su('admin');
@@ -20,37 +49,7 @@ $effort->left->range('1,1,0');
 $effort->deleted->range('0');
 $effort->gen(3);
 
-/**
-
-title=获取删除工时后的剩余工时
-timeout=0
-cid=18879
-
-- 删除ID为1的工时
- - 属性taskEstimate @2
- - 属性taskConsumed @1
- - 属性taskLeft @1
- - 属性effortConsumed @1
- - 属性effortLeft @1
- - 属性left @1
-- 删除ID为2的工时
- - 属性taskEstimate @2
- - 属性taskConsumed @2
- - 属性taskLeft @0
- - 属性effortConsumed @1
- - 属性effortLeft @1
- - 属性left @0
-- 删除ID为3的工时
- - 属性taskEstimate @2
- - 属性taskConsumed @2
- - 属性taskLeft @0
- - 属性effortConsumed @1
- - 属性effortLeft @0
- - 属性left @1
-
-*/
-
 $task = new taskTaoTest();
-r($task->getLeftAfterDeleteWorkhourTest(1)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,1,1,1,1,1'); // 删除ID为1的工时
-r($task->getLeftAfterDeleteWorkhourTest(2)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,1,0'); // 删除ID为2的工时
-r($task->getLeftAfterDeleteWorkhourTest(3)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2,2,0,1,0,1'); // 删除ID为3的工时
+r($task->getLeftAfterDeleteWorkhourTest(1)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2.00,1.00,1.00,1.00,1.00,1'); // 删除ID为1的工时
+r($task->getLeftAfterDeleteWorkhourTest(2)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2.00,2.00,0.00,1.00,1.00,0'); // 删除ID为2的工时
+r($task->getLeftAfterDeleteWorkhourTest(3)) && p('taskEstimate,taskConsumed,taskLeft,effortConsumed,effortLeft,left') && e('2.00,2.00,0.00,1.00,0.00,1'); // 删除ID为3的工时

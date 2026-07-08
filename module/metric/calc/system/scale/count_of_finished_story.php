@@ -11,7 +11,7 @@
  * 描述：按系统统计的已完成研发需求数反映了组织在特定时间段内已经完成的产品研发需求数量，用于评估评组织的估研发成果、产品创新和竞争力，并提供绩效评估。
  * 定义：所有的研发需求个数求和;关闭原因为已完成;过滤已删除的研发需求;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    qixinzhi <qixinzhi@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.stage', 't1.status', 't1.closedReason');
+    public $fieldList = array('t1.stage', 't1.status', 't1.`closedReason`');
 
     public $result = 0;
 

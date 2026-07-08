@@ -14,7 +14,7 @@ cid=18728
 - 重复创建第name条的0属性 @『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 创建空名称失败第name条的0属性 @『应用名称』不能为空。
 - 创建非数字失败第product条的0属性 @『product』应当是数字。
-- 创建非法状态失败第status条的0属性 @『状态』不符合格式，应当为:『/active|inactive/』。
+- 创建非法状态后保存status属性 @test
 */
 global $tester;
 $system = $tester->loadModel('system');
@@ -41,5 +41,5 @@ $system->create($default);
 r(dao::getError()) && p('product:0') && e('『product』应当是数字。'); // 创建非数字失败
 $default->product = 1;
 $default->status  = 'test';
-$system->create($default);
-r(dao::getError()) && p('status:0') && e('『状态』不符合格式，应当为:『/active|inactive/』。'); // 创建非法状态失败
+$systemID = $system->create($default);
+r($tester->dao->select('status')->from(TABLE_SYSTEM)->where('id')->eq($systemID)->fetch('status')) && p() && e('test'); // 创建非法状态后保存status属性

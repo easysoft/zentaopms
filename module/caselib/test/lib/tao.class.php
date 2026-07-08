@@ -7,6 +7,16 @@ class caselibTaoTest extends baseTest
 {
     protected $moduleName = 'caselib';
     protected $className  = 'tao';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance;
+    }
 
     /**
      * 测试通过 id 获取用例库信息。
@@ -180,7 +190,7 @@ class caselibTaoTest extends baseTest
      */
     public function initImportedCaseTest(object $data): bool|array
     {
-        $cases = $this->objectModel->initImportedCase($data);
+        $cases = $this->invokeArgs('initImportedCase', array($data));
 
         if(dao::isError()) return dao::getError();
 
@@ -220,7 +230,7 @@ class caselibTaoTest extends baseTest
      */
     public function updateImportedCaseTest(int $key, object $caseData, object $data, bool $forceNotReview): array|object|false
     {
-        $caseID = $data->id[$key];
+        $caseID = (int)$data->id[$key];
 
         global $tester;
         $oldCase  = $tester->loadModel('testcase')->getById($caseID);
@@ -233,7 +243,7 @@ class caselibTaoTest extends baseTest
             $caseData->stepType = array(1 => 'step');
         }
 
-        $this->objectModel->updateImportedCase($key, $caseData, $data, $forceNotReview, $oldCase);
+        $this->invokeArgs('updateImportedCase', array($key, $caseData, $data, $forceNotReview, $oldCase));
         if(dao::isError()) return dao::getError();
 
         return $tester->testcase->getByID($caseID);

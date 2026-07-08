@@ -21,7 +21,7 @@ cid=18091
 
 */
 
-$repo = new repotest();
+$repo = new repoModelTest();
 
 $finishTaskComment  = 'Finish task#8.';
 $finishTaskComment2 = 'Finish task#1,8,12.';

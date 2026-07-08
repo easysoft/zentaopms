@@ -1114,6 +1114,11 @@ class baseFixer
             /* The name attribute is allowed. */
             $purifierConfig->set('HTML.Attr.Name.UseCDATA', true);
 
+            /* Keep default URI schemes and append data for inline images. */
+            $allowedSchemes = HTMLPurifier_Config::createDefault()->get('URI.AllowedSchemes');
+            $allowedSchemes['data'] = true;
+            $purifierConfig->set('URI.AllowedSchemes', $allowedSchemes);
+
             $purifier = new HTMLPurifier($purifierConfig);
             $htmlDef  = $purifierConfig->getHTMLDefinition(true);
 

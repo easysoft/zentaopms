@@ -2,7 +2,7 @@
 /**
  * The model file of user module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
@@ -1148,6 +1148,7 @@ class userModel extends model
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0)
+                ->andWhere('t1.devopsSpace')->eq(0)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->query();
         }
@@ -1273,6 +1274,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
+            ->andWhere('devopsSpace')->eq(0)
             ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
@@ -1925,7 +1927,7 @@ class userModel extends model
         $oldUserView = $this->dao->select('*')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch();
         if(!$force)
         {
-            $userviewUpdateTime      = $this->config->userview->updateTime ?? 0; // 当前用户访问权限的更新时间。
+            $userviewUpdateTime      = $this->config->userview->updateTime ?? ($this->loadModel('setting')->getItem("owner=$account&module=common&section=userview&key=updateTime") ?: 0); // 当前用户访问权限的更新时间。
             $relatedTablesUpdateTime = $this->config->userview->relatedTablesUpdateTime ?? 0; // 访问权限相关表的更新时间。
             $force                   = empty($userviewUpdateTime) || empty($relatedTablesUpdateTime) || $userviewUpdateTime <= $relatedTablesUpdateTime;
         }
@@ -2169,8 +2171,11 @@ class userModel extends model
 
         $userView->sprints = rtrim($userView->sprints, ',')  . ',' . implode(',', $openedSprints);
 
-        $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetch('executions');
-        if($canViewSprints != 'all') $userView->sprints .= ',' . $canViewSprints;
+        $canViewSprints = $this->dao->select('executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchPairs();
+        foreach($canViewSprints as $canViewSprint)
+        {
+            if($canViewSprint != 'all') $userView->sprints .= ',' . $canViewSprint;
+        }
 
         return $userView;
     }
@@ -2873,6 +2878,7 @@ class userModel extends model
      */
     public function saveUserTemplate(object $template): bool
     {
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->insert(TABLE_USERTPL)->data($template)
             ->batchCheck('title, content', 'notempty')
             ->check('title', 'unique', "`type`='{$template->type}' AND account='{$template->account}'")
@@ -3010,5 +3016,43 @@ class userModel extends model
         if(!$users || !$account || !isset($users[$account])) return $users;
 
         return array($account => $users[$account]) + $users;
+    }
+
+    /**
+     * 检查指定用户是否有 repo 模块的某个方法的权限。
+     * Check if a specific user has permission of one method of repo module.
+     *
+     * @param  string $account 用户账号
+     * @param  string $method  方法名
+     * @access public
+     * @return bool
+     */
+    public function hasRepoPrivByAccount(string $account, string $method): bool
+    {
+        global $app;
+
+        if(empty($account)) return false;
+
+        /* 获取指定用户信息 */
+        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
+        if(!$user) return false;
+
+        /* 获取指定用户的权限信息 */
+        $userRights = $this->authorize($account);
+        $rights     = $userRights['rights'];
+        $isAdmin    = strpos($app->company->admins, ",{$account},") !== false;
+        $method     = strtolower($method);
+
+        /* 检查是否是管理员 */
+        if($isAdmin) return true;
+
+        /* 检查是否是开放方法 */
+        if(in_array("repo.$method", $app->config->openMethods)) return true;
+        if(in_array("repo.$method", $app->config->logonMethods)) return true;
+
+        /* 检查权限数组中是否有对应的权限 */
+        if(!isset($rights['repo'][$method]) && !isset($rights['artifact'][$method])) return false;
+
+        return true;
     }
 }

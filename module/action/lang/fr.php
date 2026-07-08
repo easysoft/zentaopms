@@ -2,7 +2,7 @@
 /**
  * The action module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
@@ -58,6 +58,8 @@ $lang->action->refusescene  = 'Before restoring the scene, please restore the pa
 $lang->action->refusemodule = 'Before restoring the module, please restore the parent module of this module ';
 $lang->action->refusekanban = 'Before restoring the Kanban board, make sure to restore the space it belongs to';
 
+$lang->action->repoDeleted = 'Repository has been deleted.';
+
 $lang->action->trashTips           = 'Note: Les suppressions dans ZenTao sont purement logiques.';
 $lang->action->textDiff            = 'Text Format';
 $lang->action->original            = 'Original Format';
@@ -76,6 +78,7 @@ $lang->action->undeleteModuleTip   = 'Once the subdirectory has been restored, i
 $lang->action->undeleteTaskTip     = 'The execution associated with this task has been removed. If you choose to restore it, the task will no longer be visible. Would you like to proceed with restoring the task?';
 $lang->action->undeleteBoardTip    = 'Before restoring the board, please restore its affiliated space first.';
 $lang->action->undeleteTemplateTip = 'The category (and scope) of this template has been deleted. Are you sure you want to synchronize and restore them?';
+$lang->action->taskHasParentStage  = 'This task belongs to the parent stage, cannot be restored.';
 
 $lang->action->hasOtherType = array();
 $lang->action->hasOtherType['stage']  = "Only subtypes of {$lang->executionCommon} / Kanban types can be created at this parent stage, so the current stage cannot be restored.";
@@ -147,13 +150,8 @@ $lang->action->objectTypes['entry']            = 'Entrée';
 $lang->action->objectTypes['webhook']          = 'Webhook';
 $lang->action->objectTypes['team']             = 'Team';
 $lang->action->objectTypes['whitelist']        = 'Whitelist';
-$lang->action->objectTypes['pipeline']         = 'GitLib';
-$lang->action->objectTypes['gitlab']           = 'GitLab Server';
-$lang->action->objectTypes['gitea']            = 'Gitea Server';
-$lang->action->objectTypes['gogs']             = 'Gogs Server';
-$lang->action->objectTypes['jenkins']          = 'Jenkins';
-$lang->action->objectTypes['nexus']            = 'Nexus';
-$lang->action->objectTypes['mr']               = 'Merge Requests';
+$lang->action->objectTypes['pipeline']         = 'Pipeline';
+$lang->action->objectTypes['ppm']              = 'Review Requests';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
 $lang->action->objectTypes['gitlabuser']       = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab Group';
@@ -193,11 +191,33 @@ $lang->action->objectTypes['board']            = 'Board';
 $lang->action->objectTypes['boardspace']       = 'Board Space';
 $lang->action->objectTypes['productline']      = 'Product Line';
 $lang->action->objectTypes['system']           = $lang->product->system;
+$lang->action->objectTypes['space']            = 'Space';
+$lang->action->objectTypes['review_flow']      = 'Review Flow';
+$lang->action->objectTypes['repobranchtype']   = 'Branch Type';
 $lang->action->objectTypes['deliverable']      = 'Deliverable Category';
 $lang->action->objectTypes['cm']               = 'Baseline';
 $lang->action->objectTypes['baseline']         = 'Baseline';
 $lang->action->objectTypes['ganttversion']     = 'Gantt Version';
 $lang->action->objectTypes['projectchange']    = 'Project Change';
+$lang->action->objectTypes['artifact']         = 'Artifact';
+$lang->action->objectTypes['artifactasset']    = 'Artifact Asset';
+$lang->action->objectTypes['artifactdir']      = 'Artifact Dir';
+$lang->action->objectTypes['gitfox']           = 'GitFox Server';
+$lang->action->objectTypes['gitfoxuser']       = 'GitFox User';
+$lang->action->objectTypes['repotag']          = 'Repo Tag';
+$lang->action->objectTypes['repobranch']       = 'Repo Branch';
+$lang->action->objectTypes['pullreq']          = 'Push Request';
+$lang->action->objectTypes['runner']           = 'Runner';
+$lang->action->objectTypes['codescanrule']     = 'Code Scan Rule';
+$lang->action->objectTypes['codescanruleset']  = 'Code Scan Rule Set';
+$lang->action->objectTypes['codescansolution'] = 'Code Scan Solution';
+$lang->action->objectTypes['codescanplan']     = 'Code Scan Plan';
+$lang->action->objectTypes['codescantrigger']  = 'Code Scan Trigger';
+$lang->action->objectTypes['codescanissue']    = 'Code Scan Issue';
+$lang->action->objectTypes['codescantask']     = 'Code Scan Task';
+$lang->action->objectTypes['compile']          = 'Pipeline Execution Record';
+$lang->action->objectTypes['gitfoxbranch']     = 'Repo Branch';
+$lang->action->objectTypes['provider']         = 'Provider';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -223,6 +243,7 @@ $lang->action->desc->commented            = '$date, ajouté par <strong>$actor</
 $lang->action->desc->activated            = '$date, activé par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->blocked              = '$date, bloqué par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->moved                = '$date, déplacé par <strong>$actor</strong> , qui était "$extra".' . "\n";
+$lang->action->desc->downloaded           = '$date, téléchargé par <strong>$actor</strong> .' . "\n";
 $lang->action->desc->confirmed            = '$date, <strong>$actor</strong> a confirmé la modification de la story. Le dernier build est <strong>#$extra</strong>.' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, <strong>$actor</strong> a confirmé la modification du CasTest. Le dernier build est <strong>#$extra</strong>' . "\n";
 $lang->action->desc->bugconfirmed         = '$date, <strong>$actor</strong> a confirmé le Bug.' . "\n";
@@ -295,6 +316,7 @@ $lang->action->desc->offline              = '$date, set offline by <strong>$acto
 $lang->action->desc->linkhost             = '$date, the host is linked by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->createrepobranch     = '$date, <strong>$actor</strong> created code branch <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrepobranch     = '$date, <strong>$actor</strong> unlinked code branch <strong>$extra</strong>.' . "\n";
+$lang->action->desc->createbranchtype     = '$date, <strong>$actor</strong> created branch type <strong>$extra</strong>.' . "\n";
 $lang->action->desc->changedprogram       = '$date, <strong>$actor</strong> adjust the program <strong>$extra</strong>.' . "\n";
 $lang->action->desc->managedteam          = '$date, by <strong>$actor</strong> managed team.' . "\n";
 $lang->action->desc->syncexecutionteam    = '$date, synchronise members when execution adds members.' . "\n";
@@ -324,10 +346,11 @@ $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> a fait 
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> a délié le CasTest <strong>$extra</strong>.' . "\n";
 
 /* Used to describe the history of operations link story and bug to productplan. */
-$lang->action->desc->linkstory   = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
-$lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
-$lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
-$lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->linkstory         = '$date, <strong>$actor</strong> link stories <strong>$extra</strong>.' . "\n";
+$lang->action->desc->linkbug           = '$date, <strong>$actor</strong> link bugs <strong>$extra</strong>.' . "\n";
+$lang->action->desc->unlinkstory       = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
+$lang->action->desc->autounlinkstory   = '$date, <strong>$actor</strong> linked a story to <strong>$extra</strong> plan, automatically unlinked from this plan.' . "\n";
+$lang->action->desc->unlinkbug         = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
 /* Describes the history of operations when a document is saved as a draft or released. */
 $lang->action->desc->saveddraft  = '$date, <strong>$actor</strong> save draft <strong>$extra</strong>.' . "\n";
@@ -379,6 +402,10 @@ $lang->action->desc->savebackupsettings  = '$date, Save backup settings backups 
 $lang->action->desc->deleteexpiredbackup = '$date, Clean up expired backups by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->manualdeletebackup  = '$date, Manually clean up backup by <strong>$actor</strong>.' . "\n";
 
+$lang->action->desc->editedasset = '$date, <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->movedasset  = '$date, <strong>$actor</strong> $extra' . "\n";
+$lang->action->desc->deletedasset = '$date, <strong>$actor</strong> deleted' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label = new stdclass();
 $lang->action->label->install                 = 'install ';
@@ -419,7 +446,9 @@ $lang->action->label->resolved                = 'a résolu ';
 $lang->action->label->reviewed                = 'a revu ';
 $lang->action->label->recalled                = 'recalled';
 $lang->action->label->recalledchange          = 'undo changes';
+$lang->action->label->uploaded                = 'a envoyé ';
 $lang->action->label->moved                   = 'a déplacé ';
+$lang->action->label->downloaded              = 'a téléchargé ';
 $lang->action->label->confirmed               = 'a confirmé Story ';
 $lang->action->label->bugconfirmed            = 'a confirmé le Bug ';
 $lang->action->label->tostory                 = 'a converti en Story ';
@@ -506,6 +535,9 @@ $lang->action->label->syncexecution           = 'start';
 $lang->action->label->syncexecutionbychild    = 'start';
 $lang->action->label->syncmultipleproject     = 'start';
 $lang->action->label->startProgram            = '(The start of the project sets the status of the program as Ongoing)';
+$lang->action->label->createppm               = 'Linked';
+$lang->action->label->deleteppm               = 'Unlinked';
+$lang->action->label->mergedppm               = 'Merged';
 $lang->action->label->createmr                = 'Linked';
 $lang->action->label->deletemr                = 'Unlinked';
 $lang->action->label->mergedmr                = 'Merged';
@@ -570,6 +602,7 @@ $lang->action->label->linkhost                = 'link hosts to';
 $lang->action->label->delist                  = 'delist';
 $lang->action->label->createrepobranch        = 'Created branch from';
 $lang->action->label->unlinkrepobranch        = 'Unlinked branch from';
+$lang->action->label->createbranchtype        = 'Created branch type from';
 $lang->action->label->communicate             = 'Communicate';
 $lang->action->label->changedprogram          = 'Changed program';
 $lang->action->label->published               = 'publié';
@@ -594,6 +627,48 @@ $lang->action->label->syncexecutionteam       = 'synchronized';
 $lang->action->label->syncprojectteam         = 'synchronized';
 $lang->action->label->syncbycase              = 'start';
 $lang->action->label->converttonewdoc         = 'converted';
+$lang->action->label->createrepotag           = 'Create Repo Tag from';
+$lang->action->label->createrule              = 'Create Rule';
+$lang->action->label->editrule                = 'Edit Rule';
+$lang->action->label->deleterule              = 'Delete Rule';
+$lang->action->label->enablerule              = 'Enable Rule';
+$lang->action->label->disablerule             = 'Disable Rule';
+$lang->action->label->createruleset           = 'Create Rule Set';
+$lang->action->label->editruleset             = 'Edit Rule Set';
+$lang->action->label->deleteruleset           = 'Delete Rule Set';
+$lang->action->label->enableruleset           = 'Enable Rule Set';
+$lang->action->label->disableruleset          = 'Disable Rule Set';
+$lang->action->label->createpullreq           = 'Linked';
+$lang->action->label->deletepullreq           = 'Unlinked';
+$lang->action->label->mergedpullreq           = 'Pushed';
+$lang->action->label->enablescanrule          = 'Enable';
+$lang->action->label->disablescanrule         = 'Disable';
+$lang->action->label->enablescanruleset       = 'Enable';
+$lang->action->label->disablescanruleset      = 'Disable';
+$lang->action->label->createruleset           = 'Created';
+$lang->action->label->editruleset             = 'Edited';
+$lang->action->label->deleteruleset           = 'Deleted';
+$lang->action->label->enablescansolution      = 'Enable';
+$lang->action->label->disablescansolution     = 'Disable';
+$lang->action->label->createsolution          = 'Created';
+$lang->action->label->editsolution            = 'Edited';
+$lang->action->label->deletesolution          = 'Deleted';
+$lang->action->label->unlinkrule              = 'Unlink Rule';
+$lang->action->label->linkrule                = 'Link Rule';
+$lang->action->label->unlinkruleset           = 'Unlink Rule Set';
+$lang->action->label->linkruleset             = 'Link Rule Set';
+$lang->action->label->createplan              = 'Created';
+$lang->action->label->editplan                = 'Edited';
+$lang->action->label->deleteplan              = 'Deleted';
+$lang->action->label->unlinksolution          = 'Unlink Solution';
+$lang->action->label->exec                    = 'Executed';
+$lang->action->label->resend                  = 'Resend';
+$lang->action->label->resendCompile           = 'Replay';
+$lang->action->label->enabledrunner           = 'Enabled';
+$lang->action->label->disabledrunner          = 'Suspended';
+$lang->action->label->editedasset             = 'Edited';
+$lang->action->label->movedasset              = 'Moved';
+$lang->action->label->deletedasset            = 'Deleted';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -935,7 +1010,11 @@ $lang->action->label->user         = 'Utilisateur|user|view|account=%s';
 $lang->action->label->testreport   = 'Rapport|testreport|view|report=%s';
 $lang->action->label->entry        = 'Application|entry|browse|';
 $lang->action->label->webhook      = 'Webhook|webhook|browse|';
-$lang->action->label->space        = ' ';
+$lang->action->label->deletewebhook  = 'Delete Webhook';
+$lang->action->label->createwebhook  = 'Create Webhook';
+$lang->action->label->editwebhook    = 'Edit Webhook';
+$lang->action->label->enablewebhook  = 'Enable Webhook';
+$lang->action->label->disablewebhook = 'Disable Webhook';
 $lang->action->label->risk         = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design       = 'Design|design|view|designID=%s';
@@ -957,7 +1036,11 @@ $lang->action->label->instance     = 'Application|instance|view|id=%s';
 $lang->action->label->prompt       = 'ZenTao Agent|ai|promptview|id=%s';
 $lang->action->label->miniprogram  = 'General Agent|aiapp|browseminiprogram|id=%s';
 $lang->action->label->holiday      = 'Holiday|holiday|browse|';
+$lang->action->label->space        = 'Space|space|view|id=%s';
 $lang->action->label->deliverable  = 'Deliverable Category|deliverable|view|id=%s';
+
+$lang->action->label->enablereviewflow  = 'Enable';
+$lang->action->label->disablereviewflow = 'Disable';
 
 /* Object type. */
 $lang->action->search = new stdclass();
@@ -1005,6 +1088,7 @@ $lang->action->search->label['blocked']               = $lang->action->label->bl
 $lang->action->search->label['resolved']              = $lang->action->label->resolved;
 $lang->action->search->label['reviewed']              = $lang->action->label->reviewed;
 $lang->action->search->label['moved']                 = $lang->action->label->moved;
+$lang->action->search->label['downloaded']            = $lang->action->label->downloaded;
 $lang->action->search->label['confirmed']             = $lang->action->label->confirmed;
 $lang->action->search->label['bugconfirmed']          = $lang->action->label->bugconfirmed;
 $lang->action->search->label['tostory']               = $lang->action->label->tostory;
@@ -1096,6 +1180,7 @@ $lang->action->apiTitle->blocked               = 'Blocked';
 $lang->action->apiTitle->reviewed              = 'Reviewed';
 $lang->action->apiTitle->recalled              = 'Recalled';
 $lang->action->apiTitle->moved                 = 'Moved';
+$lang->action->apiTitle->downloaded            = 'Downloaded';
 $lang->action->apiTitle->fromlib               = 'Import from lib';
 $lang->action->apiTitle->totask                = 'To task';
 $lang->action->apiTitle->linked2plan           = "Link to plan";
@@ -1139,6 +1224,9 @@ $lang->action->desc->repocreated                  = '$date, created and reviewed
 $lang->action->label->repocreated                 = "Create and Review";
 $lang->action->dynamicAction->task['gitcommited'] = 'Committer GIT';
 $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
+$lang->action->desc->createppm                    = '$extra';
+$lang->action->desc->deleteppm                    = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
+$lang->action->desc->mergedppm                    = '$date, <strong>$actor</strong> merged code.';
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->deletemr                     = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged code.';
@@ -1148,6 +1236,33 @@ $lang->action->desc->approve                      = '$date, <strong>$actor</stro
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
 $lang->action->desc->linkedrepo                   = '$date, <strong>$actor</strong> linked repo $extra';
 $lang->action->desc->unlinkedrepo                 = '$date, <strong>$actor</strong> unlinked repo $extra';
+$lang->action->desc->createrepotag                = '$date, created repo tag <strong>$extra</strong>.' . "\n";
+$lang->action->desc->createpullreq                = '$extra';
+$lang->action->desc->deletepullreq                = '$date, <strong>$actor</strong> unlink <a href="$extra">push request</a>.';
+$lang->action->desc->mergedpullreq                = '$date, <strong>$actor</strong> pushed code.';
+$lang->action->desc->enablescanrule               = '$date, <strong>$actor</strong> enable scan rule.';
+$lang->action->desc->disablescanrule              = '$date, <strong>$actor</strong> disable scan rule.';
+$lang->action->desc->enablescanruleset            = '$date, <strong>$actor</strong> enable scan rule.';
+$lang->action->desc->disablescanruleset           = '$date, <strong>$actor</strong> disable scan rule.';
+$lang->action->desc->createruleset                = '$date, <strong>$actor</strong> created.';
+$lang->action->desc->editruleset                  = '$date, <strong>$actor</strong> edited.';
+$lang->action->desc->deleteruleset                = '$date, <strong>$actor</strong> deleted.';
+$lang->action->desc->enablescansolution           = '$date, <strong>$actor</strong> enable scan rule.';
+$lang->action->desc->disablescansolution          = '$date, <strong>$actor</strong> disable scan rule.';
+$lang->action->desc->createsolution               = '$date, <strong>$actor</strong> created.';
+$lang->action->desc->editsolution                 = '$date, <strong>$actor</strong> edited.';
+$lang->action->desc->deletesolution               = '$date, <strong>$actor</strong> deleted.';
+$lang->action->desc->unlinkrule                   = '$date, <strong>$actor</strong> unlink rule.';
+$lang->action->desc->linkrule                     = '$date, <strong>$actor</strong> link rule.';
+$lang->action->desc->unlinkruleset                = '$date, <strong>$actor</strong> unlink rule set.';
+$lang->action->desc->linkruleset                  = '$date, <strong>$actor</strong> link rule set.';
+$lang->action->desc->createplan                   = '$date, <strong>$actor</strong> created.';
+$lang->action->desc->editplan                     = '$date, <strong>$actor</strong> edited.';
+$lang->action->desc->deleteplan                   = '$date, <strong>$actor</strong> deleted.';
+$lang->action->desc->unlinksolution               = '$date, <strong>$actor</strong> unlink solution.';
+$lang->action->desc->exec                         = '$date, <strong>$actor</strong> executed code scan task.';
+$lang->action->desc->resend                       = '$date, Resend by <strong>$actor</strong>.';
+$lang->action->desc->resendCompile                = '$date, Replay by <strong>$actor</strong>.';
 
 $lang->action->reviewStatusList['wait']      = 'Pending approval';
 $lang->action->reviewStatusList['doing']     = 'Reviewing';
@@ -1157,3 +1272,8 @@ $lang->action->reviewStatusList['reverting'] = 'Reverting';
 
 $lang->action->reviewResultList['pass']   = 'Pass';
 $lang->action->reviewResultList['reject'] = 'Reject';
+
+$lang->action->label->addreviewer    = 'Added reviewer';
+$lang->action->label->deletereviewer = 'Deleted reviewer';
+$lang->action->desc->addreviewer     = '$date, <strong>$actor</strong> Added reviewer <strong>$extra</strong>。';
+$lang->action->desc->deletereviewer  = '$date, <strong>$actor</strong> Deleted reviewer <strong>$extra</strong>。';

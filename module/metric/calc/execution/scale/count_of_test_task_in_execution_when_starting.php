@@ -11,7 +11,7 @@
  * 描述：按执行统计的截止执行开始当天的测试任务数表示执行开始时已创建的测试任务的数量。该度量项反映了本期执行计划完成的测试任务数量，可以用于评估执行团队测试人员的工作负载。
  * 定义：截止执行开始当天23:59分的任务个数求和，任务类型为测试，过滤已删除的任务，过滤已取消的任务数，过滤已删除的执行，过滤已删除的项目。
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Tingting Dai <daitingting@xirangit.com>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class count_of_test_task_in_execution_when_starting extends baseCalc
 {
     public $dataset = 'getTasks';
 
-    public $fieldList = array('t1.type', 't1.status', 't1.openedDate', 't1.execution', 't2.realBegan');
+    public $fieldList = array('t1.type', 't1.status', 't1.`openedDate`', 't1.execution', 't2.`realBegan`');
 
     public $result = array();
 

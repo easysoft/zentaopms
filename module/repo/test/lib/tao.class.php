@@ -7,6 +7,16 @@ class repoTaoTest extends baseTest
 {
     protected $moduleName = 'repo';
     protected $className  = 'tao';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance;
+    }
 
     /**
      * Check priv test.
@@ -79,9 +89,9 @@ class repoTaoTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null)
+    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', int $space = 0, string $orderBy = 'id_desc', ?object $pager = null)
     {
-        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $space, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -119,9 +129,9 @@ class repoTaoTest extends baseTest
         return $objects;
     }
 
-    public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest($projectID = 0, $space = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($projectID , $SCM, $orderBy , $pager );
+        $objects = $this->objectModel->getList($projectID, $space, $SCM, $orderBy , $pager );
 
         if(dao::isError()) return dao::getError();
 
@@ -1445,9 +1455,9 @@ class repoTaoTest extends baseTest
         return $result;
     }
 
-    public function createGitlabRepoTest(object $repo, int $namespace)
+    public function createGitlabRepoTest(object $repo, string|int $namespace)
     {
-        $result = $this->objectModel->createGitlabRepo($repo, $namespace);
+        $result = $this->objectModel->createGitlabRepo($repo, (string)$namespace);
 
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1467,7 +1477,7 @@ class repoTaoTest extends baseTest
 
     public function deleteInfoByIDTest(int $repoID)
     {
-        $result = $this->objectModel->deleteInfoByID($repoID);
+        $this->invokeArgs('deleteInfoByID', array($repoID));
 
         $repoHistoryCount = $this->objectModel->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->count();
         $repoBranchCount  = $this->objectModel->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->count();
@@ -2073,6 +2083,27 @@ class repoTaoTest extends baseTest
         $method = new ReflectionMethod($this->instance, 'processSearchQuery');
         $method->setAccessible(true);
         $result = $method->invoke($this->instance, $queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * updateMembersTest
+     *
+     * @param  int $repoID
+     * @param  array $members
+     * @access public
+     * @return void
+     */
+    public function updateMembersTest(int $repoID, array $members = array())
+    {
+        $method = new ReflectionMethod($this->objectModel, 'updateMembers');
+        $method->setAccessible(true);
+        $method->invoke($this->objectModel, $repoID, $members);
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->getRepoUsers($repoID);
         if(dao::isError()) return dao::getError();
 
         return $result;

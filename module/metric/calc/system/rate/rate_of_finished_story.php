@@ -11,7 +11,7 @@
  * 描述：按系统统计的研发需求完成率反映了组织按系统统计的已完成研发需求数和按系统统计的有效研发需求数之间的比率，用于评估组织对于进度控制、绩效评估、风险评估、资源规划和利用，以及持续改进和效率提升具有重要意义。
  * 定义：复用：;按系统统计的完成研发需求数;按系统统计的有效研发需求数;公式：;按系统统计的研发需求完成率=按系统统计的已完成研发需求数/按系统统计的有效研发需求数*100%;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@easycorp.ltd>
  * @package
  * @uses      func
@@ -22,7 +22,7 @@ class rate_of_finished_story extends baseCalc
 {
     public $dataset = 'getAllDevStories';
 
-    public $fieldList = array('t1.status', 't1.closedReason');
+    public $fieldList = array('t1.status', 't1.`closedReason`');
 
     public $result = array('finished' => 0, 'valid' => 0);
 

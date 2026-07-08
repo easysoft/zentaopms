@@ -2,7 +2,7 @@
 /**
  * The group module English file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
@@ -352,7 +352,10 @@ $lang->group->package->domain                = 'Domain';
 $lang->group->package->service               = 'Service';
 $lang->group->package->deployPlan            = 'Deployment Request';
 $lang->group->package->deployScope           = 'Deployment Scope';
-$lang->group->package->deployStep            = 'Deployment Steps';
+$lang->group->package->addDeployPlan         = 'Add Deploy Plan';
+$lang->group->package->reviewDeployPlan      = 'Review Deploy Plan';
+$lang->group->package->completeDeployStep    = 'Complete Deploy Step';
+$lang->group->package->completedDeploy       = 'Completed Deploy';
 $lang->group->package->deployCase            = 'Deployment Test Cases';
 $lang->group->package->qaIndex               = 'Test Overview';
 $lang->group->package->browseBug             = 'View Bug';
@@ -457,7 +460,6 @@ $lang->group->package->dev                   = 'Custom Development';
 $lang->group->package->browseCodeIssue       = 'View Code Issues';
 $lang->group->package->editor                = 'Editor';
 $lang->group->package->serverLink            = 'Link ZenTao';
-$lang->group->package->browseMR              = 'View Merge Requests';
 $lang->group->package->managePriv            = 'Manage Permissions';
 $lang->group->package->dept                  = 'Dept';
 $lang->group->package->group                 = 'Permission Group';
@@ -472,9 +474,8 @@ $lang->group->package->gogs                  = 'Gogs';
 $lang->group->package->gitea                 = 'Gitea';
 $lang->group->package->sonarqube             = 'Sonarqube';
 $lang->group->package->repoRules             = 'Commands';
-$lang->group->package->browseJob             = 'View Pipelines';
-$lang->group->package->manageJob             = 'Manage PipeLine';
-$lang->group->package->manageMR              = 'Manage Merge Requests';
+$lang->group->package->browsePipeline        = 'PipeLine List';
+$lang->group->package->managePipeline        = 'Manage PipeLine';
 $lang->group->package->backup                = 'System Backup';
 $lang->group->package->trash                 = 'Trash';
 $lang->group->package->security              = 'Security';
@@ -633,14 +634,8 @@ $lang->group->package->manageCPU             = 'CPU';
 $lang->group->package->manageOS              = 'OS Version';
 $lang->group->package->browseRepo            = 'Repositories';
 $lang->group->package->manageRepo            = 'Manage Repository';
-$lang->group->package->deleteRepo            = 'Delete Repository';
 $lang->group->package->browseCode            = 'View Source Code';
-$lang->group->package->manageCode            = 'Manage Source Code';
 $lang->group->package->CodeIssule            = 'Code Issues';
-$lang->group->package->manageCodeIssue       = 'Manage Code Issues';
-$lang->group->package->deleteCodeIssue       = 'Delete Code Issue';
-$lang->group->package->deleteMR              = 'Delete Merge Request';
-$lang->group->package->deleteJob             = 'Delete PipeLine';
 $lang->group->package->browseApplication     = 'View Services';
 $lang->group->package->mangeApplication      = 'Manage Service';
 $lang->group->package->trainPracticeLib      = 'Practice Library';
@@ -656,8 +651,47 @@ $lang->group->package->projectTemplate       = 'Project Template';
 $lang->group->package->browseReportTemplate  = 'View Report Templates';
 $lang->group->package->manageReportTemplate  = 'Manage Report Templates';
 $lang->group->package->deleteReportTemplate  = 'Delete Report Template';
+$lang->group->package->space                 = 'Browse Space';
+$lang->group->package->manageSpace           = 'Manage Space';
+$lang->group->package->manageSpacePrivs      = 'Manage Space Privs';
 $lang->group->package->productSetting        = 'Product Setting';
 $lang->group->package->executionSetting      = 'Execution Setting';
 $lang->group->package->featureSwitch         = 'Feature Switch';
+$lang->group->package->browseBranchSettings  = 'Browse Branch Settings';
+$lang->group->package->browseWebhooks        = 'Browse Webhooks';
+$lang->group->package->setBranchType         = 'Set Branch Type';
+$lang->group->package->setBranchRule         = 'Set Review Flow';
+$lang->group->package->setReviewFlow         = 'Manage Review Flow';
+$lang->group->package->setCommitFlow         = 'Set Commit Flow';
+$lang->group->package->manageWebhooks        = 'Manage Webhooks';
+$lang->group->package->linkZentaoObject      = 'Link ZenTao Object';
+$lang->group->package->downloadCode          = 'Download Code';
+$lang->group->package->createBranchAndTag    = 'Create Branch and Tag';
+$lang->group->package->archiveBranch         = 'Archive Branch';
+$lang->group->package->deleteBranchAndTag    = 'Delete Branch and Tag';
+$lang->group->package->browseReviewRequest   = 'Browse Review Request';
+$lang->group->package->submitReviewRequest   = 'Submit Review Request';
+$lang->group->package->codeReview            = 'Code Review';
+$lang->group->package->execPipeline          = 'Execution Pipeline';
+$lang->group->package->browseRunner          = 'Browse runners';
+$lang->group->package->manageRunner          = 'Manage runners';
+$lang->group->package->browseScanInfo        = 'Browse Scan Info';
+$lang->group->package->processScanIssues     = 'Process Scan Issues';
+$lang->group->package->execScan              = 'Execution Scan';
+$lang->group->package->codeScanMaintain      = 'Code Scan Maintain';
+$lang->group->package->codeScanDelete        = 'Code Scan Delete';
+$lang->group->package->reviewCodeIssue       = 'Review Code Issue';
+$lang->group->package->browseSystem          = 'Browse App';
+$lang->group->package->browseDeploy          = 'Browse Deploy ENV';
+$lang->group->package->artifactrepo          = 'Artifact Repo';
+$lang->group->package->browseArtifactrepo    = 'Artifact Repo List';
+$lang->group->package->manageArtifactrepo    = 'Manage Artifact Repo';
+$lang->group->package->deleteArtifactrepo    = 'Delete Artifact Repo';
+$lang->group->package->manageArtifactDir     = 'Manage Artifact Directory';
+$lang->group->package->deleteArtifactDir     = 'Delete Artifact Directory';
+$lang->group->package->uploadArtifact        = 'Upload Artifact';
+$lang->group->package->deleteArtifact        = 'Delete Artifact';
+$lang->group->package->manageArtifact        = 'Manage Artifact';
+$lang->group->package->provider              = 'Service';
 
 include (dirname(__FILE__) . '/resource.php');

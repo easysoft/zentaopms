@@ -11,7 +11,7 @@
  * 描述：按执行统计的执行开发效率是指执行交付研发需求规模数与执行所有任务消耗工时的比率。该度量项反映了执行的开发速度，可以帮助团队识别潜在问题并采取改进措施提高研发效率。
  * 定义：复用： 按执行统计的任务消耗工时数、按执行统计的执行关闭时已交付的研发需求规模数；公式：按执行统计的执行关闭时已交付的研发需求规模数/按执行统计的任务消耗工时数
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    zhouxin <zhouxin@chandao.com>
  * @package
  * @uses      func

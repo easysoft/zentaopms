@@ -2,73 +2,17 @@
 declare(strict_types=1);
 /**
  * The browsebylist view file of project module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian<tianshujie@easycorp.ltd>
  * @package     project
  * @link        https://www.zentao.net
  */
+
 namespace zin;
 
 jsVar('langManDay',   $lang->program->manDay);
 jsVar('delayWarning', $lang->task->delayWarning);
-
-/* zin: Define the feature bar on main menu. */
-featureBar
-(
-    set::current($browseType),
-    set::linkParams("programID={$programID}&status={key}&param=&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"),
-    checkbox
-    (
-        set::rootClass('ml-2 mr-4'),
-        set::name('involved'),
-        set::text($lang->project->mine),
-        set::checked($this->cookie->involved ? 'checked' : ''),
-        on::change()->call('handleChangeInvolved', jsRaw('event'))
-    ),
-    li(searchToggle(set::module('project'), set::open($browseType == 'bysearch')))
-);
-
-/* zin: Define the toolbar on main menu. */
-toolbar
-(
-    item(set(array
-    (
-        'type'  => 'btnGroup',
-        'items' => array(array
-        (
-            'icon'      => 'list',
-            'class'     => 'btn-icon switchButton text-primary',
-            'data-type' => 'bylist',
-            'hint'      => $lang->project->bylist
-        ), array
-        (
-            'icon'      => 'cards-view',
-            'class'     => 'switchButton btn-icon',
-            'data-type' => 'bycard',
-            'hint'      => $lang->project->bycard
-        ))
-    ))),
-    hasPriv('project', 'export') ? item(set(array
-    (
-        'icon'        => 'export',
-        'text'        => $lang->project->export,
-        'class'       => 'ghost export',
-        'url'         => createLink('project', 'export', "status={$browseType}&orderBy={$orderBy}"),
-        'data-toggle' => 'modal'
-    ))) : null,
-    hasPriv('project', 'create') ? item(set(array
-    (
-        'icon'          => 'plus',
-        'text'          => $lang->project->create,
-        'class'         => 'primary create-project-btn',
-        'url'           => createLink('project', 'createGuide', "programID={$programID}"),
-        'data-toggle'   => 'modal',
-        'data-position' => 'center'
-    ))) : null,
-    on::click('.export')->call('handleClickExportBtn', jsRaw('event')),
-    on::click('.switchButton')->call('handleClickSwitchButton', jsRaw('event'))
-);
 
 /* zin: Define the sidebar in main content. */
 $settingLink = hasPriv('project', 'programTitle') ? createLink('project', 'programTitle') : '';

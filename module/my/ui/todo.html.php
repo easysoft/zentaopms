@@ -2,20 +2,19 @@
 declare(strict_types=1);
 /**
  * The todo view file of my module of ZenTaoPMS.
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @license     ZPL(https://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuting Wang <wangyuting@easycorp.ltd>
  * @package     my
  * @link        https://www.zentao.net
  */
 namespace zin;
-jsVar('changeDateLabel', $lang->todo->changeDate);
 
 featureBar
 (
-    set::current($type),
-    set::linkParams("type={key}&userID={$user->id}&status=all&orderBy={$orderBy}"),
-    set::itemLink(array('undone' => createLink($app->rawModule, $app->rawMethod, "type=undone&userID={$user->id}&status=undone&orderBy={$orderBy}"))),
+    set::current($browseType),
+    set::linkParams("browseType={key}&userID={$user->id}&status=all&orderBy={$orderBy}"),
+    set::itemLink(array('undone' => createLink($app->rawModule, $app->rawMethod, "browseType=undone&userID={$user->id}&status=undone&orderBy={$orderBy}"))),
     datePicker
     (
         set::_class('w-32'),
@@ -42,7 +41,7 @@ toolbar
             'icon'  => 'list',
             'class' => 'btn-icon text-primary',
             'hint'  => $lang->todo->list,
-            'url'   => createLink('my', 'todo', "type=all")
+            'url'   => createLink('my', 'todo', "browseType=all")
         ))
     ))) : null,
     hasPriv('todo', 'export') ? item
@@ -92,16 +91,17 @@ $batchFinish = hasPriv('todo', 'batchFinish');
 $batchClose  = hasPriv('todo', 'batchClose');
 $footToolbar = array('items' => array
 (
-    $batchEdit   ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$type&userID={$user->id}&status=$status")) : null,
+    $batchEdit   ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('todo', 'batchEdit', "from=myTodo&type=$browseType&userID={$user->id}&status=$status")) : null,
     $batchFinish ? array('text' => $lang->todo->finish, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchFinish')) : null,
     $batchClose  ? array('text' => $lang->todo->close, 'className' => 'batch-btn ajax-btn', 'data-url' => helper::createLink('todo', 'batchClose')) : null
 ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 
-if($type == 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedBy']);
-if($type != 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedTo']);
+if($browseType == 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedBy']);
+if($browseType != 'assignedToOther') unset($config->my->todo->dtable->fieldList['assignedTo']);
 
-$todos          = initTableData($todos, $config->my->todo->dtable->fieldList, $this->todo);
-$cols           = array_values($config->my->todo->dtable->fieldList);
+$cols = $this->loadModel('datatable')->getSetting('my', 'todo');
+
+$todos          = initTableData($todos, $cols, $this->todo);
 $data           = array_values($todos);
 $defaultSummary = sprintf($lang->todo->summary, count($todos), $waitCount, $doingCount);
 dtable
@@ -110,20 +110,20 @@ dtable
     set::data($data),
     set::userMap($users),
     set::priList($lang->todo->priList),
-    set::fixedLeftWidth('44%'),
     set::checkable(true),
+    set::customCols(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->todo->checkedSummary),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::orderBy($orderBy),
-    set::sortLink(createLink('my', 'todo', "type={$type}&userID={$user->id}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('my', 'todo', "browseType={$browseType}&userID={$user->id}&status={$status}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::emptyTip($lang->my->noTodo),
     set::createTip($lang->todo->create),
     set::createLink($canCreate ? createLink('todo', 'create') : ''),
     set::createAttr('data-toggle="modal"'),
     set::footToolbar($footToolbar),
     set::footPager(usePager()),
-    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $type != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager'))
+    set::footer(array('checkbox', 'toolbar', hasPriv('todo', 'import2Today') && $browseType != 'today' ? jsRaw('window.generateHtml') : '', 'checkedInfo', 'flex', 'pager')),
+    set::changeDateLabel($lang->todo->changeDate),
+    set::dateHoder($lang->todo->dateHoder)
 );
-
-render();

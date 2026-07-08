@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The model file of case module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
@@ -109,7 +109,7 @@ class testcaseModel extends model
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'needconfirm')
-            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t2.version > t1.`storyVersion`')
             ->andWhere('t2.status')->eq('active')
             ->fi()
             ->beginIF($auto == 'auto' || $auto == 'unit')->andWhere('t1.auto')->eq($auto)->fi()
@@ -146,13 +146,13 @@ class testcaseModel extends model
 
         if($browseType == 'needconfirm')
         {
-            return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+            $cases = $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->leftJoin(TABLE_MODULE)->alias('t4')->on('t2.module = t4.id')
                 ->where('t1.project')->eq($executionID)
                 ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t3.version > t2.storyVersion')
+                ->andWhere('t3.version > t2.`storyVersion`')
                 ->andWhere("t3.status")->eq('active')
                 ->beginIF($productID)->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($productID && $branchID !== 'all')->andWhere('t2.branch')->eq($branchID)->fi()
@@ -160,10 +160,12 @@ class testcaseModel extends model
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id', false);
+            foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+            return $cases;
         }
         if($browseType == 'bysearch') return $this->testcaseTao->getExecutionCasesBySearch($executionID, $productID, $branchID, $paramID, $orderBy, $pager);
 
-        return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
+        $cases = $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
             ->where('t1.project')->eq($executionID)
@@ -175,6 +177,8 @@ class testcaseModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+        foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+        return $cases;
     }
 
     /**
@@ -389,10 +393,10 @@ class testcaseModel extends model
      */
     public function getByAssignedTo(string $account, string $auto = 'no', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.assignedTo, t1.lastRunner, t1.lastRunDate, t1.lastRunResult, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.openedBy, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.storyVersion, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
+        $cases = $this->dao->select('t1.id AS run, t1.task, t1.case, t1.version, t1.`assignedTo`, t1.`lastRunner`, t1.`lastRunDate`, t1.`lastRunResult`, t1.status AS lastRunStatus, t2.id AS id, t2.project, t2.pri, t2.title, t2.type, t2.`openedBy`, t2.color, t2.product, t2.lib, t2.branch, t2.module, t2.status, t2.auto, t2.story, t2.`storyVersion`, t3.name AS taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
-            ->where('t1.assignedTo')->eq($account)
+            ->where('t1.`assignedTo`')->eq($account)
             ->andWhere('t3.deleted')->eq('0')
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t3.status')->ne('done')
@@ -401,6 +405,8 @@ class testcaseModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll(strpos($auto, 'run') !== false ? 'run' : 'id');
+        foreach($cases as $case) $case->title = htmlspecialchars_decode((string)$case->title, ENT_QUOTES);
+        return $cases;
     }
 
     /**
@@ -454,7 +460,7 @@ class testcaseModel extends model
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'needconfirm')
             ->andWhere('t2.status')->eq('active')
-            ->andWhere('t2.version > t1.storyVersion')
+            ->andWhere('t2.version > t1.`storyVersion`')
             ->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->eq($status)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
@@ -739,9 +745,9 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCases2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0): array
+    public function getCases2Link(int $caseID, string $browseType = 'bysearch', int $queryID = 0): array
     {
-        if($browseType != 'bySearch') return array();
+        if($browseType != 'bysearch') return array();
 
         $case       = $this->getByID($caseID);
         $cases2Link = $this->getBySearch($case->product, $case->branch, (int)$queryID, $auto = 'no', $orderBy = 'id');
@@ -764,9 +770,9 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link(int $caseID, string $browseType = 'bySearch', int $queryID = 0, string $orderBy = 'id_asc'): array
+    public function getBugs2Link(int $caseID, string $browseType = 'bysearch', int $queryID = 0, string $orderBy = 'id_asc'): array
     {
-        if($browseType != 'bySearch') return array();
+        if($browseType != 'bysearch') return array();
 
         $case      = $this->getByID($caseID);
         $bugs2Link = $this->loadModel('bug')->getBySearch('bug', $case->product, (string)$case->branch, 0, 0, (int)$queryID, '', $orderBy);
@@ -2778,11 +2784,11 @@ class testcaseModel extends model
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id and t1.product = t2.root')
             ->where('t1.product')->eq($productID)
             ->andWhere('t1.lib')->eq($libID)
-            ->andWhere('t1.fromCaseID')->ne('0')
+            ->andWhere('t1.`fromCaseID`')->ne('0')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('((t2.type')->in('story,case')->andWhere('t2.deleted')->eq('0')->markRight(1)
             ->orWhere('t1.module')->eq('0')->markRight(1)
-            ->groupBy('t1.fromCaseID')
+            ->groupBy('t1.`fromCaseID`')
             ->fetchPairs();
         $branchModuleCount = $this->dao->select('branch,count(id) + 1 as moduleCount')
             ->from(TABLE_MODULE)
@@ -3007,19 +3013,5 @@ class testcaseModel extends model
         $searchConfig['params'] = $this->search->setDefaultParams('testcase', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
-    }
-
-    /**
-     * 过滤自动测试用例的ID列表。
-     * Ignore auto testcase id list.
-     *
-     * @param  array  $caseIdList
-     * @access public
-     * @return array
-     */
-    public function ignoreAutoCaseIdList(array $caseIdList): array
-    {
-        if(empty($caseIdList)) return array();
-        return $this->dao->select('id')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('auto')->ne('auto')->fetchPairs('id', 'id');
     }
 }

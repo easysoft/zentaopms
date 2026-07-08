@@ -19,6 +19,8 @@ cid=17676
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(5);
+
 $program = zenData('project');
 $program->id->range('1-5');
 $program->name->range('项目集1,项目集2,项目集3,项目集4,项目集5');

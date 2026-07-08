@@ -1,0 +1,15 @@
+---
+title: ops_provider
+author: mazhiyuan
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: type
+    range: gitlab
+  - field: name
+    range: GitLab
+  - field: url
+    range: '[https://gitlabdev.qc.oop.cc]'
+  - field: deleted
+    range: 0

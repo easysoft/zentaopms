@@ -2,7 +2,7 @@
 /**
  * The todo module zh-cn file of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
@@ -83,6 +83,7 @@ $lang->todo->advance      = '提前';
 $lang->todo->cycleType    = '周期类型';
 $lang->todo->monthly      = '每月';
 $lang->todo->weekly       = '每周';
+$lang->todo->dateHoder    = '选择日期';
 
 $lang->todo->cycleDaysLabel  = '间隔天数';
 $lang->todo->beforeDaysLabel = '提前天数';

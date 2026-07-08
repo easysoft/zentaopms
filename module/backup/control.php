@@ -3,7 +3,7 @@ declare(strict_types=1);
 /**
  * The control file of backup of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
+ * @copyright   Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.cnezsoft.com)
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     backup
@@ -48,46 +48,12 @@ class backup extends control
      * @access public
      * @return void
      */
-    public function index(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function index()
     {
         $this->loadModel('action');
 
         $backups = array();
-        if($this->config->inQuickon)
-        {
-            $this->loadModel('instance');
-            $instance = $this->config->instance->zentaopaas;
-
-            $backupResult = $this->loadModel('system')->getBackupList($instance);
-            if($backupResult['result'] == 'success')
-            {
-                $operating = false;
-                $backups   = !empty($backupResult['data']) ? $backupResult['data'] : array();
-                foreach($backups as $backup)
-                {
-                    $backup->time    = isset($backup->create_time) ? $backup->create_time : '';
-                    $backup->creator = isset($backup->creator) ? $backup->creator : '';
-                    $backup->type    = isset($backup->mode) ? $backup->mode : 'manual';
-                    $backup->id      = str_replace('-', '_', $backup->name);
-                    if(in_array(strtolower($backup->status), array('pending', 'inprogress', 'processing'))) $operating = true;
-                }
-
-                function cmp($left, $right){return $left->create_time < $right->create_time ? 1 : -1;}
-                usort($backups, 'cmp');
-
-                if(empty($operating)) $this->system->unsetMaintenance();
-
-                $this->view->operating = $operating;
-            }
-
-            $this->app->loadClass('pager', true);
-            $pager = pager::init($recTotal, $recPerPage, $pageID);
-            $this->view->pager = $pager;
-        }
-        else
-        {
-            if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
-        }
+        if(empty($this->view->error)) $backups = $this->backupZen->getBackupList();
 
         $this->view->title   = $this->lang->backup->common;
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
@@ -96,44 +62,8 @@ class backup extends control
         $this->view->users['SYSTEM'] = $this->lang->admin->system;
         $this->view->users['system'] = $this->lang->admin->system;
 
-        if(trim($this->config->visions, ',') == 'lite')
-        {
-            $version     = $this->config->liteVersion;
-            $versionName = $this->lang->liteName . $this->config->liteVersion;
-        }
-        else
-        {
-            $version = $this->config->version;
-            if($this->config->edition == 'open') $versionName = $this->lang->pmsName . $this->config->version;
-            if($this->config->edition != 'open') $versionName = $this->lang->{$this->config->edition . 'Name'} . str_replace($this->config->edition, '', $this->config->version);
-        }
-
-        $latestVersionList = array();
-        if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList, true);
-        $latestVersion = $latestVersionList && version_compare(array_reverse(array_keys($latestVersionList))[0], $version, 'gt') ? array_reverse(array_keys($latestVersionList))[0] : $version;
-
         $this->app->loadLang('install');
-        $this->app->loadLang('instance');
         $this->app->loadLang('system');
-
-        $systemInfo = new stdclass();
-        $systemInfo->name           = $versionName;
-        $systemInfo->status         = $this->lang->instance->statusList['running'];
-        $systemInfo->currentVersion = $version;
-        $systemInfo->versionHint    = $version;
-        $systemInfo->latestVersion  = $latestVersion;
-        $systemInfo->upgradeable    = $version != $latestVersion || $this->loadModel('system')->isUpgradeable();
-        $systemInfo->upgradeHint    = $systemInfo->upgradeable ? $this->lang->system->backup->versionInfo: null;
-        $systemInfo->latestURL      = !empty($latestVersionList[$version]->link) ? $latestVersionList[$version]->link : $this->lang->install->officeDomain;
-
-        if($this->config->inQuickon)
-        {
-            $latestRelease = $this->loadModel('system')->getLatestRelease();
-            $systemInfo->currentVersionTitle = getenv('CHART_VERSION') ?: '';
-            $systemInfo->latestVersionTitle  = !empty($latestRelease->version) ? $latestRelease->version : '';
-        }
-
-        $this->view->systemInfo = $systemInfo;
 
         if(!is_writable($this->backupPath))        $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->backupPath);
         if(!is_writable($this->app->getTmpRoot())) $this->view->backupError = sprintf($this->lang->backup->error->plainNoWritable, $this->app->getTmpRoot());

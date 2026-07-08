@@ -19,7 +19,7 @@ pid=1
 
 */
 
-$personnel = new personnelTest('admin');
+$personnel = new personnelModelTest();
 
 $projectID = array(array(11, 12), array(1000));
 

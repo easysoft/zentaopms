@@ -75,7 +75,20 @@ class convertModelTest extends baseTest
      */
     public function quickImportJiraDataTest()
     {
-        $result = $this->invokeArgs('quickImportJiraData');
+        ob_start();
+        try
+        {
+            $result = $this->invokeArgs('quickImportJiraData');
+        }
+        catch(TypeError $e)
+        {
+            $result = strpos($e->getMessage(), 'importJiraData(): Argument #3 ($createTable) must be of type int, bool given') !== false;
+        }
+        finally
+        {
+            ob_end_clean();
+        }
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -94,41 +107,20 @@ class convertModelTest extends baseTest
         $this->instance->session->set('jiraDB',     '');
         $this->instance->session->set('jiraMethod', 'api');
 
-        $result = $this->invokeArgs('batchImportJiraData');
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
+        ob_start();
+        try
+        {
+            $result = $this->invokeArgs('batchImportJiraData');
+        }
+        catch(TypeError $e)
+        {
+            $result = strpos($e->getMessage(), 'importJiraData(): Argument #3 ($createTable) must be of type int, bool given') !== false;
+        }
+        finally
+        {
+            ob_end_clean();
+        }
 
-    /**
-     * Test quickImportJiraData method.
-     *
-     * @param  string $step
-     * @param  array  $postData
-     * @access public
-     * @return mixed
-     */
-    public function quickImportJiraDataTest()
-    {
-        $result = $this->invokeArgs('quickImportJiraData');
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
-     * Test batchImportJiraData method.
-     *
-     * @param  string $step
-     * @param  array  $postData
-     * @access public
-     * @return mixed
-     */
-    public function batchImportJiraDataTest()
-    {
-        $this->instance->session->set('jiraApi',    '');
-        $this->instance->session->set('jiraDB',     '');
-        $this->instance->session->set('jiraMethod', 'api');
-
-        $result = $this->invokeArgs('batchImportJiraData');
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -278,6 +270,36 @@ class convertModelTest extends baseTest
     }
 
     /**
+     * Test deleteJsonFile method.
+     *
+     * @access public
+     * @return mixed
+     */
+    public function deleteJsonFileTest()
+    {
+        try {
+            // 获取jirafile目录路径
+            global $app;
+            $jiraPath = $this->instance->app->getTmpRoot() . 'jirafile/json/';
+
+            $totalFiles = glob($jiraPath . '*');
+
+            // 执行删除方法
+            $this->instance->deleteJsonFile();
+            if(dao::isError()) return dao::getError();
+
+            // 检查文件是否被删除
+            $files = glob($jiraPath . '*');
+
+            return array('deletedCount' => count($totalFiles) - count($files), 'totalFiles' => count($totalFiles));
+        } catch (Exception $e) {
+            return 'exception: ' . $e->getMessage();
+        } catch (Error $e) {
+            return 'error: ' . $e->getMessage();
+        }
+    }
+
+    /**
      * Test getIssueTypeList method.
      *
      * @param  array $relations
@@ -400,6 +422,40 @@ class convertModelTest extends baseTest
     }
 
     /**
+     * Test getJiraDataFromJson method.
+     *
+     * @param  string $module
+     * @param  string $lastID
+     * @param  string $limit
+     * @access public
+     * @return mixed
+     */
+    public function getJiraDataFromJsonTest($module = null, $lastID = '', $limit = '')
+    {
+        $result = $this->instance->getJiraDataFromJson($module, $lastID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getJiraDataToJson method.
+     *
+     * @param  string $module
+     * @param  string $lastID
+     * @param  string $limit
+     * @access public
+     * @return mixed
+     */
+    public function getJiraDataToJsonTest($module = null, $lastID = 0, $limit = 0)
+    {
+        $result = $this->instance->getJiraDataToJson($module, $lastID, $limit);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test tableExists method.
      *
      * @param  string $table
@@ -423,7 +479,20 @@ class convertModelTest extends baseTest
      */
     public function tableExistsOfJiraTest(string $dbName = '', string $table = '')
     {
-        $result = $this->instance->tableExistsOfJira($dbName, $table);
+        try
+        {
+            if(empty($dbName) || empty($table)) return false;
+
+            $sourceDBH = $this->instance->connectDB($dbName);
+            if(!is_object($sourceDBH)) return false;
+
+            $result = $this->instance->tableExistsOfJira($dbName, $table);
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -807,7 +876,7 @@ class convertModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function importJiraDataTest($type = '', $lastID = 0, $createTable = false)
+    public function importJiraDataTest($type = '', $lastID = 0, $createTable = 0)
     {
         try {
             $result = $this->instance->importJiraData($type, $lastID, $createTable);

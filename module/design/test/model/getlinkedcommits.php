@@ -18,44 +18,18 @@ cid=15991
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('repohistory')->gen(0);
-zenData('relation')->gen(0);
-zenData('design')->gen(0);
+/* Use the stable module-level yaml data and override only the fields required by this case. */
+$repohistory = zenData('repohistory')->loadYaml('repohistory');
+$repohistory->repo->range('1{5}');
+$repohistory->revision->range('abc123,def456,ghi789,jkl012,mno345');
+$repohistory->gen(5);
 
-$table = zenData('repohistory');
-$table->id->range('1-5');
-$table->repo->range('1{5}');
-$table->revision->range('abc123,def456,ghi789,jkl012,mno345');
-$table->commit->range('1-5');
-$table->comment->range('Initial commit,Bug fix,Feature update,Code refactor,Test update');
-$table->committer->range('admin,user1,user2,dev1,dev2');
-$table->gen(5);
+$relation = zenData('relation')->loadYaml('relation');
+$relation->AID->range('1,2,3,4,5');
+$relation->BID->range('1,2,3,4,5');
+$relation->gen(5);
 
-$table = zenData('relation');
-$table->id->range('1-5');
-$table->project->range('0{5}');
-$table->product->range('0{5}');
-$table->execution->range('0{5}');
-$table->AType->range('design{5}');
-$table->AID->range('1,2,3,4,5');
-$table->AVersion->range('{5}');
-$table->relation->range('completedin{5}');
-$table->BType->range('commit{5}');
-$table->BID->range('1,2,3,4,5');
-$table->BVersion->range('{5}');
-$table->extra->range('{5}');
-$table->gen(5);
-
-$table = zenData('design');
-$table->id->range('1-5');
-$table->project->range('11{5}');
-$table->product->range('1{5}');
-$table->name->range('Design1,Design2,Design3,Design4,Design5');
-$table->status->range('active{5}');
-$table->createdBy->range('admin{5}');
-$table->deleted->range('0{5}');
-$table->story->range('0{5}');
-$table->gen(5);
+zenData('design')->loadYaml('design')->gen(5);
 
 su('admin');
 

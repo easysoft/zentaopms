@@ -32,7 +32,7 @@ cid=17757
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('project')->loadYaml('project')->gen(10);
+zenData('project')->loadYaml('project')->gen(10)->fixPath();
 
 su('admin');
 
@@ -46,5 +46,6 @@ r($programplanTest->setTreePathTest(1)) && p('path|grade', '|') && e(',1,|1');
 r($programplanTest->setTreePathTest(6)) && p('path|grade', '|') && e(',4,5,6,|3');
 
 global $tester;
+$tester->loadModel('programplan');
 $result = $tester->programplan->setTreePath(9);
 r($result) && p() && e(1);

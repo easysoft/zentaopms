@@ -59,6 +59,7 @@ cid=17035
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $testtask = zenData('testtask');
@@ -83,18 +84,17 @@ $project->id->range('101-105');
 $project->name->range('1-5')->prefix('迭代');
 $project->gen(2);
 
-global $tester;
-$mailModel = $tester->loadModel('mail');
+$mailModel = new mailModelTest();
 
-r($mailModel->getObjectForMail('', 0))                  && p()                                             && e('0');                                                                            //不传入任何参数
-r($mailModel->getObjectForMail('testtask', 0))          && p()                                             && e('0');                                                                            //只传入objectType参数
-r($mailModel->getObjectForMail('', 1))                  && p()                                             && e('0');                                                                            //只传入objectID参数
-r($mailModel->getObjectForMail('testtask', 10))         && p()                                             && e('0');                                                                            //传入不存在的objectID
-r($mailModel->getObjectForMail('test', 1))              && p()                                             && e('0');                                                                            //传入不存在的objectType
-r((array)$mailModel->getObjectForMail('testtask', 1))   && p('id,product,build,name')                      && e('1,1,11,测试单1');                                                               //获取测试单ID=1的数据
-r((array)$mailModel->getObjectForMail('doc', 2))        && p('id,lib,type,title,content')                  && e('2,2,markdown,文档标题2,<p>文档正文2</p>');                                      //获取文档ID=2的数据
-r((array)$mailModel->getObjectForMail('story', 1))      && p('id,product,type,title,spec,verify')          && e('1,1,requirement,用户需求版本一1,这是一个软件需求描述1,这是一个需求验收1');      //获取需求ID=1的数据
-r((array)$mailModel->getObjectForMail('task', 1))       && p('id,project,execution,name,desc,type,status') && e('1,11,101,开发任务11,这里是任务描述1,design,wait');                              //获取任务ID=1的数据
-r((array)$mailModel->getObjectForMail('bug', 1))        && p('id,product,title,steps,status')              && e('1,1,BUG1,<p>【步骤】</p><br/><p>【结果】</p><br/><p>【期望】</p><br/>,active'); //获取Bug ID=1的数据
-r((array)$mailModel->getObjectForMail('kanbancard', 1)) && p('id,kanban,name,status,assignedTo')           && e('1,1,卡片1,doing,admin');                                                        //获取看板卡片ID=1的数据
-r((array)$mailModel->getObjectForMail('release', 1))    && p('id,product,build,name,status')               && e('1,1,1,产品正常的正常的发布1,normal');                                           //获取发布ID=1的数据
+r($mailModel->getObjectForMailTest('', 0))                  && p()                                             && e('0');                                                                            //不传入任何参数
+r($mailModel->getObjectForMailTest('testtask', 0))          && p()                                             && e('0');                                                                            //只传入objectType参数
+r($mailModel->getObjectForMailTest('', 1))                  && p()                                             && e('0');                                                                            //只传入objectID参数
+r($mailModel->getObjectForMailTest('testtask', 10))         && p()                                             && e('0');                                                                            //传入不存在的objectID
+r($mailModel->getObjectForMailTest('invalidtype', 1))       && p()                                             && e('0');                                                                            //传入不存在的objectType
+r((array)$mailModel->getObjectForMailTest('testtask', 1))   && p('id,product,build,name')                      && e('1,1,11,测试单1');                                                               //获取测试单ID=1的数据
+r((array)$mailModel->getObjectForMailTest('doc', 2))        && p('id,lib,type,title,content')                  && e('2,2,markdown,文档标题2,<p>文档正文2</p>');                                      //获取文档ID=2的数据
+r((array)$mailModel->getObjectForMailTest('story', 1))      && p('id,product,type,title,spec,verify')          && e('1,1,requirement,用户需求版本一1,这是一个软件需求描述1,这是一个需求验收1');      //获取需求ID=1的数据
+r((array)$mailModel->getObjectForMailTest('task', 1))       && p('id,project,execution,name,desc,type,status') && e('1,11,101,开发任务11,这里是任务描述1,design,wait');                              //获取任务ID=1的数据
+r((array)$mailModel->getObjectForMailTest('bug', 1))        && p('id,product,title,steps,status')              && e('1,1,BUG1,<p>【步骤】</p><br/><p>【结果】</p><br/><p>【期望】</p><br/>,active'); //获取Bug ID=1的数据
+r((array)$mailModel->getObjectForMailTest('kanbancard', 1)) && p('id,kanban,name,status,assignedTo')           && e('1,1,卡片1,doing,admin');                                                        //获取看板卡片ID=1的数据
+r((array)$mailModel->getObjectForMailTest('release', 1))    && p('id,product,build,name,status')               && e('1,1,1,产品正常的正常的发布1,normal');                                           //获取发布ID=1的数据

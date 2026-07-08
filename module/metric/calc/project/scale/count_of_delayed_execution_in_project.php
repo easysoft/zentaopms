@@ -11,7 +11,7 @@
  * 描述：按项目统计的延期的执行数表示在项目中正在延期的执行项的数量，可以用来了解当前正在进行的任务数量，反映项目团队的工作进展。
  * 定义：所有的执行个数求和;计划完成日期早于当前日期;过滤已删除的执行;
  *
- * @copyright Copyright 2009-2023 禅道软件（青岛）有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
+ * @copyright Copyright 2009-2023 禅道软件（青岛）集团有限公司(ZenTao Software (Qingdao) Co., Ltd. www.zentao.net)
  * @author    Zemei Wang <wangzemei@easycorp.ltd>
  * @package
  * @uses      func
