@@ -19,6 +19,7 @@ $lang->space->removeMember      = 'Unbind Member';
 $lang->space->manageGroupMember = 'Manage Permission Group Member';
 
 $lang->space->name         = 'Name';
+$lang->space->code         = 'Code';
 $lang->space->manager      = 'Manager';
 $lang->space->createdDate  = 'Created Date';
 $lang->space->desc         = 'Description';
