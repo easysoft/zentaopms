@@ -14,7 +14,7 @@ namespace zin;
 
 jsVar('repoID', $repoID);
 
-$fields = defineFieldList('pipeline', $pipeline);
+$fields = defineFieldList('pipeline');
 
 $fields->field('providerID')
     ->label($lang->pipeline->server)
