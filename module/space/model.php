@@ -795,6 +795,7 @@ class spaceModel extends model
 
         $space = new stdClass();
         $space->name        = $this->lang->space->defaultSpace;
+        $space->code        = 'default';
         $space->acl         = 'open';
         $space->auth        = 'extend';
         $space->createdBy   = zget($admins, 0, 'system');

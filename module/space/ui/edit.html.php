@@ -28,6 +28,15 @@ formPanel
     ),
     formGroup
     (
+        set::name('code'),
+        set::width($width),
+        set::label($lang->space->code),
+        set::required(true),
+        set::disabled(true),
+        set::value($space->code)
+    ),
+    formGroup
+    (
         set::name('manager'),
         set::width($width),
         set::label($lang->space->manager),

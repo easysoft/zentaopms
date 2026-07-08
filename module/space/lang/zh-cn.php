@@ -19,6 +19,7 @@ $lang->space->removeMember      = '解绑成员';
 $lang->space->manageGroupMember = '管理分组成员';
 
 $lang->space->name         = '名称';
+$lang->space->code         = '唯一标识';
 $lang->space->manager      = '管理员';
 $lang->space->createdDate  = '创建时间';
 $lang->space->desc         = '描述';
