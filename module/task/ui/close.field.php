@@ -1,6 +1,6 @@
 <?php
 namespace zin;
-global $lang,$config;
+global $lang;
 
 $fields = defineFieldList('task.close');
 
