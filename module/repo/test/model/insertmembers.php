@@ -12,6 +12,9 @@ cid=18125
 
 - 测试 insertMembers 返回成功 @success
 - 测试 insertMembers 传入重复成员返回成功 @success
+- 测试 insertMembers 传入单成员返回成功 @success
+- 测试 insertMembers 传入三成员返回成功 @success
+- 测试 insertMembers 传入另一组成员返回成功 @success
 */
 
 zenData('repo')->loadYaml('repo')->gen(1);
@@ -20,6 +23,12 @@ $repo = new repoModelTest();
 
 $members = array('dev1', 'dev2');
 $duplicateMembers = array('dev1', 'dev1', 'dev2');
+$singleMember = array('dev3');
+$multiMembers = array('dev4', 'dev5', 'dev6');
+$otherMembers = array('qa1', 'qa2');
 
 r($repo->insertMembersTest($members)) && p() && e('success');
 r($repo->insertMembersTest($duplicateMembers)) && p() && e('success');
+r($repo->insertMembersTest($singleMember)) && p() && e('success');
+r($repo->insertMembersTest($multiMembers)) && p() && e('success');
+r($repo->insertMembersTest($otherMembers)) && p() && e('success');
