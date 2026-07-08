@@ -28,14 +28,23 @@ CREATE VIEW `view_datasource_demand`      AS SELECT `id`,`title` FROM `zt_demand
 CREATE VIEW `view_datasource_roadmap`     AS SELECT `id`,`name`  FROM `zt_roadmap`     WHERE `deleted` = '0';
 CREATE VIEW `view_datasource_demandstory` AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0';
 
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandPool')  WHERE `module` = 'demand' AND `field` = 'pool';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'products')    WHERE `module` = 'demand' AND `field` = 'product';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')      WHERE `module` = 'demand' AND `field` = 'parent';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandStory') WHERE `module` = 'demand' AND `field` = 'story';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'roadmap')     WHERE `module` = 'demand' AND `field` = 'roadmap';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')      WHERE `module` = 'demand' AND `field` = 'duplicateDemand';
-UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')      WHERE `module` = 'demand' AND `field` = 'childDemands';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandPool')     WHERE `module` = 'demand' AND `field` = 'pool';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'products')       WHERE `module` = 'demand' AND `field` = 'product';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')         WHERE `module` = 'demand' AND `field` = 'parent';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandStory')    WHERE `module` = 'demand' AND `field` = 'story';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'roadmap')        WHERE `module` = 'demand' AND `field` = 'roadmap';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')         WHERE `module` = 'demand' AND `field` = 'duplicateDemand';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')         WHERE `module` = 'demand' AND `field` = 'childDemands';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')         WHERE `module` = 'demand' AND `field` = 'duplicateDemand';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demand')         WHERE `module` = 'demand' AND `field` = 'childDemands';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandSource')   WHERE `module` = 'demand' AND `field` = 'source';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'demandCategory') WHERE `module` = 'demand' AND `field` = 'category';
 
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "product=''", "product = '0'") WHERE `sql` LIKE "%product=''%";
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "project=''", "project = '0'") WHERE `sql` LIKE "%project=''%";
 UPDATE `zt_pivotspec` SET `sql` = REPLACE(`sql`, "execution=''", "execution = '0'") WHERE `sql` LIKE "%execution=''%";
+
+UPDATE `zt_workflowaction` SET `type` = 'batch', `batchMode` = 'different' WHERE `action` = 'showimport';
+
+ALTER TABLE `zt_review` CHANGE `lastReviewedDate` `lastReviewedDate` datetime NULL AFTER `lastReviewedBy`;
+ALTER TABLE `zt_review` CHANGE `lastEditedDate` `lastEditedDate` datetime NULL AFTER `lastEditedBy`;

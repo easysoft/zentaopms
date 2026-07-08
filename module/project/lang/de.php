@@ -290,6 +290,7 @@ $lang->project->error = new stdclass();
 $lang->project->error->existProductName = "{$lang->productCommon} name already exists.";
 $lang->project->error->budgetGe0        = '『Budget』must be greater than or equal to 0.';
 $lang->project->error->budgetNumber     = '『Budget』must be numbers.';
+$lang->project->error->budgetTooLarge   = '『Budget』must not exceed %s.';
 $lang->project->error->productNotEmpty  = "Please link {$lang->productCommon}s or create {$lang->productCommon}s.";
 $lang->project->error->emptyBranch      = 'Branch can not be empty!';
 $lang->project->error->endLessBegin     = 'The end date must be greater than the start date.';

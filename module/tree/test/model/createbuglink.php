@@ -27,9 +27,9 @@ $extra1 = array('type' => 'closed');
 $extra2 = array('branchID' => 2);
 $extra3 = array('orderBy' => 'title_desc');
 
-r($tree->createBugLinkTest(4))  && p('url') && e("bug-browse-1--byModule-4.html");   // 测试创建module 4  的buglink
-r($tree->createBugLinkTest(20)) && p('url') && e("bug-browse-41--byModule-20.html"); // 测试创建module 20 的buglink
+r($tree->createBugLinkTest(4))  && p('url') && e("createbuglink.php?m=bug&f=browse&root=1&branch=&type=byModule&param=4");   // 测试创建module 4  的buglink
+r($tree->createBugLinkTest(20)) && p('url') && e("createbuglink.php?m=bug&f=browse&root=41&branch=&type=byModule&param=20"); // 测试创建module 20 的buglink
 
-r($tree->createBugLinkTest(4, 'project',   $extra1)) && p('url') && e("project-bug-0-1-0--0-closed-4.html");          // 测试创建module 4, tab=project, type=closed 的buglink
-r($tree->createBugLinkTest(4, 'project',   $extra2)) && p('url') && e("project-bug-0-1-2--0-all-4.html");             // 测试创建module 4, tab=project, branchID=2 的buglink
-r($tree->createBugLinkTest(4, 'execution', $extra3)) && p('url') && e("execution-bug-0-1-0-title_desc-0-all-4.html"); // 测试创建module 4, tab=execution, orderBy=title_desc的buglink
+r($tree->createBugLinkTest(4, 'project',   $extra1)) && p('url') && e("createbuglink.php?m=project&f=bug&projectID=0&productID=1&branch=0&orderBy=&build=0&type=closed&param=4");          // 测试创建module 4, tab=project, type=closed 的buglink
+r($tree->createBugLinkTest(4, 'project',   $extra2)) && p('url') && e("createbuglink.php?m=project&f=bug&projectID=0&productID=1&branch=2&orderBy=&build=0&type=all&param=4");             // 测试创建module 4, tab=project, branchID=2 的buglink
+r($tree->createBugLinkTest(4, 'execution', $extra3)) && p('url') && e("createbuglink.php?m=execution&f=bug&executionID=0&productID=1&branch=0&orderBy=title_desc&build=0&type=all&param=4"); // 测试创建module 4, tab=execution, orderBy=title_desc的buglink

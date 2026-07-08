@@ -360,7 +360,7 @@ pipeline {
                         string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
                       ]) {
                             container('coscmd') {
-                              sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                              sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
                             }
                          }
                     }
@@ -449,6 +449,8 @@ pipeline {
                         script {
                           buildZboxWin.copyToPreUploadDir()
                         }
+                        sh 'ls -l ${OUTPUT_PKG_PATH} || true'
+                        sh 'ls -l ./_output/upload/ || true'
                         withCredentials([
                             string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
                             string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
@@ -456,7 +458,8 @@ pipeline {
                             string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
                         ]) {
                               container('coscmd') {
-                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
+                                sh 'coscli sync --init-skip "./_output/upload/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
                               }
                         }
                       }
@@ -503,6 +506,8 @@ pipeline {
                         script {
                           buildZboxLinux.copyToPreUploadDir()
                         }
+                        sh 'ls -l ${OUTPUT_PKG_PATH} || true'
+                        sh 'ls -l ./_output/upload/ || true'
                         withCredentials([
                             string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
                             string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
@@ -510,7 +515,8 @@ pipeline {
                             string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
                         ]) {
                             container('coscmd') {
-                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                                sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
+                                sh 'coscli sync --init-skip "./_output/upload/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
                             }
                         }
                       }
@@ -535,6 +541,7 @@ pipeline {
                     script {
                       buildPkg.doConvertTarXz()
                     }
+                    sh 'ls -l ${OUTPUT_PKG_PATH} || true'
                     withCredentials([
                         string(credentialsId: 'COS_SECRET_ID', variable: 'COS_SECRET_ID'),
                         string(credentialsId: 'COS_SECRET_KEY', variable: 'COS_SECRET_KEY'),
@@ -542,7 +549,7 @@ pipeline {
                         string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
                     ]) {
                           container('coscmd') {
-                            sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                            sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
                           }
                     }
                   }
@@ -722,7 +729,8 @@ pipeline {
                 string(credentialsId: 'COS_ENTRYPOINT', variable: 'COS_ENTRYPOINT'),
               ]) {
                     container('coscmd') {
-                        sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive'
+                        sh 'coscli sync --init-skip "${OUTPUT_PKG_PATH}/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
+                        sh 'coscli sync --init-skip "./_output/" cos://$COS_BUCKET/zentao/ -e $COS_ENTRYPOINT --secret-id $COS_SECRET_ID --secret-key $COS_SECRET_KEY --recursive || true'
                     }
                  }
             }

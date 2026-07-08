@@ -49,6 +49,7 @@ $config->kanban->form->edit['space']          = array('type' => 'int',      'req
 $config->kanban->form->edit['owner']          = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->edit['team']           = array('type' => 'array',    'required' => false, 'default' => '', 'filter'  => 'join');
 $config->kanban->form->edit['desc']           = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
+$config->kanban->form->edit['whitelist']      = array('type' => 'array',    'required' => false, 'default' => '', 'filter'  => 'join');
 $config->kanban->form->edit['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->edit['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 

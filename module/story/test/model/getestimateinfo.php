@@ -28,7 +28,7 @@ su('admin');
 $storyTest = new storyModelTest();
 
 r($storyTest->getEstimateInfoTest(1, 1)) && p() && e('0');
-r($storyTest->getEstimateInfoTest(2, 0)) && p('story,round,average') && e('2,1,1.5');
+r($storyTest->getEstimateInfoTest(2, 0)) && p('story,round,average') && e('2,1,1.50');
 r($storyTest->getEstimateInfoTest(999, 1)) && p() && e('0');
 r($storyTest->getEstimateInfoTest(1, 99)) && p() && e('0');
 r($storyTest->getEstimateInfoTest(3, 2)) && p() && e('0');

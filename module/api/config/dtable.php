@@ -1,5 +1,6 @@
 <?php
-global $lang;
+global $lang, $app;
+$app->loadLang('api');
 $config->api->dtable = new stdclass();
 $config->api->dtable->struct = new stdclass();
 

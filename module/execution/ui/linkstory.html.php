@@ -52,7 +52,7 @@ if(!isInModal())
 {
     $footToolbar['items'][] = array(
         'text'      => $lang->goback,
-        'className' => 'btn btn-info size-sm text-gray',
+        'className' => 'btn btn-info size-sm',
         'url'       => $browseLink,
         'btnType'   => 'info',
         'data-app'  => $app->tab

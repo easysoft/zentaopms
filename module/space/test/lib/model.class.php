@@ -86,10 +86,27 @@ class spaceModelTest extends baseTest
      */
     public function getSpaceInstancesTest(int $spaceID, string $status = 'all', string $searchName = '', int $recPerPage = 20, int $pageID = 1): array
     {
-        $this->instance->app->loadClass('pager', true);
+        $app = $this->instance->app;
+
+        $originalModuleName = $app->moduleName ?? null;
+        $originalMethodName = $app->methodName ?? null;
+        $originalRawModule  = $app->rawModule ?? null;
+        $originalRawMethod  = $app->rawMethod ?? null;
+
+        if(empty($app->moduleName)) $app->moduleName = 'space';
+        if(empty($app->methodName)) $app->methodName = 'browse';
+        if(empty($app->rawModule))  $app->rawModule  = 'space';
+        if(empty($app->rawMethod))  $app->rawMethod  = 'browse';
+
+        $app->loadClass('pager', true);
 
         $pager     = new pager(0, $recPerPage, $pageID);
-        $instances = $this->instance->getSpaceInstances($spaceID, $status, $searchName);
+        $instances = $this->instance->getSpaceInstances($spaceID, $status, $searchName, $pager);
+
+        $app->moduleName = $originalModuleName;
+        $app->methodName = $originalMethodName;
+        $app->rawModule  = $originalRawModule;
+        $app->rawMethod  = $originalRawMethod;
 
         if(dao::isError()) return dao::getError();
         return $instances;

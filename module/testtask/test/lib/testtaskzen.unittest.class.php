@@ -870,11 +870,11 @@ class testtaskZenTest
      * Test processRowspanForGroupCase method.
      *
      * @param  array  $cases
-     * @param  string $build
+     * @param  int    $build
      * @access public
      * @return array
      */
-    public function processRowspanForGroupCaseTest($cases = array(), $build = '')
+    public function processRowspanForGroupCaseTest(array $cases = array(), int $build = 0)
     {
         $method = $this->testtaskZenTest->getMethod('processRowspanForGroupCase');
         $method->setAccessible(true);

@@ -1895,7 +1895,11 @@ class docZen extends doc
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'multiple,leaf');
 
         $libPairs = $this->doc->getLibPairs($spaceType, 'withObject', (int)$space, '', $products, $projects, $executions);
-        if($spaceType == 'project') $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
+        if($spaceType == 'project')
+        {
+            $project = $this->loadModel('project')->getByID((int)$space, '');
+            if($project && $project->multiple) $libPairs += $this->doc->getExecutionLibPairsByProject((int)$space, 'withObject', $executions);
+        }
 
         if(!isset($libPairs[$libID])) $libID = (int)key($libPairs);
 

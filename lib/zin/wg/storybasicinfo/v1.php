@@ -55,7 +55,7 @@ class storyBasicInfo extends wg
         {
             foreach($story->stages as $stage)
             {
-                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) > $minStagePos)
+                if(strpos($stageList, $stage) !== false and strpos($stageList, $stage) < $minStagePos)
                 {
                     $minStage    = $stage;
                     $minStagePos = strpos($stageList, $stage);
@@ -190,12 +190,14 @@ class storyBasicInfo extends wg
             {
                 foreach($story->planTitle as $planID => $planTitle)
                 {
+                    $planUrl = !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null;
+                    $dataApp = $product->shadow ? 'project' : null;
                     $planTitleItems[] = hasPriv('productplan', 'view') ? array
                     (
                         'control' => 'link',
-                        'url'     => !in_array($config->vision, array('lite', 'or')) ? createLink('productplan', 'view', "planID=$planID") : null,
+                        'url'     => $planUrl,
                         'text'    => $planTitle . ' ',
-                        'data-app' => $product->shadow ? 'project' : null
+                        'data-app' => $dataApp
                     ) : $planTitle;
                 }
             }
@@ -224,12 +226,36 @@ class storyBasicInfo extends wg
             'status'  => $story->URChanged ? 'changed' : $story->status,
             'text'    => $statusText
         );
+        $stageList = $lang->{$story->type}->stageList;
         $items[$lang->story->stage] = array
         (
             'control' => 'text',
             'class'   => 'stage-line',
-            'text'    => zget($lang->{$story->type}->stageList, $this->getMinStage($story, $branches), '')
+            'text'    => zget($stageList, $this->getMinStage($story, $branches), '')
         );
+        if(count($story->stages) > 1 and $branches)
+        {
+            /* 如果多分支产品的主干需求，会分别计算每个分支的阶段，但显示最小阶段，下拉列出不同分支的阶段。 */
+            /* If it is the main branch of a multi-branch product, the stage of each branch will be calculated separately, but the minimum stage will be displayed. */
+            $items[$lang->story->stage] = array('children' => dropdown
+            (
+                set::trigger('hover'),
+                to('trigger', div(setClass('flex items-center'), $items[$lang->story->stage]['text'], span(setClass('caret ml-1')))),
+                to('menu', menu
+                (
+                    setClass('dropdown-menu custom'),
+                    ul
+                    (
+                        setClass('list-unstyled'),
+                        array_values(array_filter(array_map(function($branchID, $stage) use($branches, $stageList)
+                        {
+                            if(!isset($branches[$branchID])) return;
+                            return li(setClass('p-0.5'), span(setClass('mr-2 font-bold'), $branches[$branchID]), zget($stageList, $stage));
+                        }, array_keys($story->stages), array_values($story->stages))))
+                    )
+                ))
+            ));
+        }
         $items[$lang->story->category] = zget($lang->{$story->type}->categoryList, $story->category);
         $items[$lang->story->pri] = array
         (

@@ -394,6 +394,7 @@ class reportModelTest extends baseTest
         $types = array();
         foreach($objects as $type => $status)
         {
+            ksort($status);
             $types[$type] = '';
             foreach($status as $statusType => $statusCount) $types[$type] .= "{$statusType}:{$statusCount};";
         }

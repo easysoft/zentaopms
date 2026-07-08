@@ -12,7 +12,7 @@ cid=18422
 - 测试获取有stage数据的waterfallplus类型总百分比 @60
 - 测试获取不存在的项目类型总百分比 @0
 - 测试获取scrum类型的总百分比 @0
-- 测试已删除stage的百分比不被计算 @0
+- 测试已删除stage的百分比不被计算 @60
 
 */
 
@@ -37,13 +37,13 @@ r($stageTester->getTotalPercentTest(0)) && p() && e('0'); // 测试获取不存�
 // 步骤5：测试scrum类型（应该没有数据）
 r($stageTester->getTotalPercentTest(2)) && p() && e('0'); // 测试获取scrum类型的总百分比
 
-// 步骤7：测试已删除的stage不被计算（需要准备包含已删除数据的测试数据）
+// 步骤6：测试已删除的stage不被计算（向同一流程组增加已删除数据）
 $table = zenData('stage');
 $table->id->range('101-102');
 $table->name->range('已删除阶段1,已删除阶段2');
-$table->projectType->range('waterfall{2}');
+$table->workflowGroup->range('4{2}');
 $table->type->range('request,design');
 $table->percent->range('15,25');
 $table->deleted->range('1{2}');
 $table->gen(2);
-r($stageTester->getTotalPercentTest(2)) && p() && e('0'); // 测试已删除stage的百分比不被计算
+r($stageTester->getTotalPercentTest(4)) && p() && e('60'); // 测试已删除stage的百分比不被计算

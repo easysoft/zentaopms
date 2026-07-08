@@ -3,6 +3,12 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+$testtask = zenData('testtask');
+$testtask->product->range('1,0,2,1,1');
+$testtask->build->range('0,1,3,2,2');
+$testtask->gen(5);
+
+zenData('case')->loadYaml('case')->gen(20);
 zenData('case')->loadYaml('case')->gen(20);
 zenData('testrun')->loadYaml('testrun')->gen(20);
 zenData('suitecase')->loadYaml('suitecase')->gen(20);
@@ -58,14 +64,14 @@ $pager = new pager(0, 5, 1);
 
 $testtask = $tester->loadModel('testtask');
 
-$task1 = (object)array('id' => 2, 'build' => 0, 'branch' => 0); // 测试单 1 版本 0 分支 0 没有用例。
+$task1 = (object)array('id' => 1, 'build' => 0, 'branch' => 0); // 测试单 1 版本 0 分支 0 没有用例。
 $task2 = (object)array('id' => 2, 'build' => 1, 'branch' => 0); // 测试单 2 版本 1 分支 0 没有用例。
-$task3 = (object)array('id' => 2, 'build' => 3, 'branch' => 0); // 测试单 3 版本 3 分支 0 没有用例。
-$task4 = (object)array('id' => 2, 'build' => 2, 'branch' => 0); // 测试单 4 版本 2 分支 0 有用例。
-$task5 = (object)array('id' => 2, 'build' => 2, 'branch' => 1); // 测试单 5 版本 2 分支 1 有用例。
+$task3 = (object)array('id' => 3, 'build' => 3, 'branch' => 0); // 测试单 3 版本 3 分支 0 没有用例。
+$task4 = (object)array('id' => 4, 'build' => 2, 'branch' => 0); // 测试单 4 版本 2 分支 0 有用例。
+$task5 = (object)array('id' => 5, 'build' => 2, 'branch' => 1); // 测试单 5 版本 2 分支 1 有用例。
 
-r($testtask->getLinkableCases(0, $task4))               && p() && e(0); // 产品 0 测试单 4 可关联的用例数为 0。
-r($testtask->getLinkableCases(2, $task4))               && p() && e(0); // 产品 2 测试单 4 可关联的用例数为 0。
+r($testtask->getLinkableCases(0, $task2))               && p() && e(0); // 产品 0 测试单 4 可关联的用例数为 0。
+r($testtask->getLinkableCases(2, $task3))               && p() && e(0); // 产品 2 测试单 4 可关联的用例数为 0。
 r($testtask->getLinkableCases(1, $task1, 'bystory'))    && p() && e(0); // 产品 1 测试单 1 按需求关联可关联的用例数为 0。
 r($testtask->getLinkableCases(1, $task1, 'bybug'))      && p() && e(0); // 产品 1 测试单 1 按缺陷关联可关联的用例数为 0。
 r($testtask->getLinkableCases(1, $task1, 'bysuite'))    && p() && e(0); // 产品 1 测试单 1 按套件关联可关联的用例数为 0。

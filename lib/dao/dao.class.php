@@ -256,7 +256,7 @@ class dao extends baseDAO
 
             if(!empty($projectID) && is_numeric($projectID))
             {
-                $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $_SESSION['project'] . "'")->fetch(PDO::FETCH_OBJ);
+                $result  = $this->dbh->query('SELECT `workflowGroup` FROM ' . TABLE_PROJECT . " WHERE `id` = '" . $projectID . "'")->fetch(PDO::FETCH_OBJ);
                 $groupID = !empty($result->workflowGroup) ? $result->workflowGroup : 0;
             }
         }

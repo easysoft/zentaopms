@@ -25,7 +25,7 @@ r($task->resetEffortLeftTest($taskIdList[0], $members[2])) && p() && e('0');  //
 
 r($task->resetEffortLeftTest($taskIdList[1], $members[0])) && p()          && e('0');    // 测试任务ID正确，用户名为空的情况
 r($task->resetEffortLeftTest($taskIdList[1], $members[1])) && p()          && e('0');    // 测试任务ID正确，用户名不存在的情况
-r($task->resetEffortLeftTest($taskIdList[1], $members[2])) && p('id,left') && e('1,0');  // 测试任务ID正确，用户名正确的情况
+r($task->resetEffortLeftTest($taskIdList[1], $members[2])) && p('id,left') && e('1,0.00'); // 测试任务ID正确，用户名正确的情况
 
 r($task->resetEffortLeftTest($taskIdList[2], $members[0])) && p() && e('0');  // 测试任务ID错误，用户名为空的情况
 r($task->resetEffortLeftTest($taskIdList[2], $members[1])) && p() && e('0');  // 测试任务ID错误，用户名不存在的情况

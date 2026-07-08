@@ -38,24 +38,24 @@ $convertTest = new convertTaoTest();
 
 // 测试步骤1：基本字段映射功能
 $data1 = new stdclass();
-$data1->issuetype = 'Story';
-$data1->customfield_10001 = 'test_value';
-$data1->customfield_10002 = 'another_value';
+$data1->issuetype = 'story';
+$data1->customfield_10001 = 'Mapped Story';
+$data1->customfield_10002 = '3';
 
 $object1 = new stdclass();
 
 $relations1 = array(
-    'zentaoFieldStory' => array(
-        'customfield_10001' => 'custom_field_1',
-        'customfield_10002' => 'custom_field_2'
+    'zentaoFieldstory' => array(
+        'customfield_10001' => 'title',
+        'customfield_10002' => 'pri'
     )
 );
 
-r($convertTest->processBuildinFieldDataTest('story', $data1, $object1, $relations1)) && p('custom_field_1,custom_field_2') && e('test_value,another_value');
+r($convertTest->processBuildinFieldDataTest('story', $data1, $object1, $relations1)) && p('title,pri') && e('Mapped Story,3');
 
 // 测试步骤2：空关系数组处理
 $data2 = new stdclass();
-$data2->issuetype = 'Story';
+$data2->issuetype = 'story';
 $data2->some_field = 'some_value';
 
 $object2 = new stdclass();
@@ -67,14 +67,14 @@ r($convertTest->processBuildinFieldDataTest('story', $data2, $object2, $relation
 
 // 测试步骤3：无匹配字段处理
 $data3 = new stdclass();
-$data3->issuetype = 'Bug';
+$data3->issuetype = 'bug';
 $data3->unknown_field = 'unknown_value';
 
 $object3 = new stdclass();
 $object3->existing_field = 'existing_value';
 
 $relations3 = array(
-    'zentaoFieldBug' => array(
+    'zentaoFieldbug' => array(
         'different_field' => 'mapped_field'
     )
 );
@@ -83,75 +83,56 @@ r($convertTest->processBuildinFieldDataTest('bug', $data3, $object3, $relations3
 
 // 测试步骤4：多字段同时映射
 $data4 = new stdclass();
-$data4->issuetype = 'Task';
-$data4->customfield_001 = 'value1';
-$data4->customfield_002 = 'value2';
-$data4->customfield_003 = 'value3';
+$data4->issuetype = 'task';
+$data4->customfield_001 = 'Task Name';
+$data4->customfield_002 = '2';
+$data4->customfield_003 = 'Task Desc';
 
 $object4 = new stdclass();
 
 $relations4 = array(
-    'zentaoFieldTask' => array(
-        'customfield_001' => 'field1',
-        'customfield_002' => 'field2',
-        'customfield_003' => 'field3'
+    'zentaoFieldtask' => array(
+        'customfield_001' => 'name',
+        'customfield_002' => 'pri',
+        'customfield_003' => 'desc'
     )
 );
 
-r($convertTest->processBuildinFieldDataTest('task', $data4, $object4, $relations4)) && p('field1,field2,field3') && e('value1,value2,value3');
+r($convertTest->processBuildinFieldDataTest('task', $data4, $object4, $relations4)) && p('name,pri,desc') && e('Task Name,2,Task Desc');
 
-// 测试步骤5：空字段值处理
+// 测试步骤5：复杂映射场景
 $data5 = new stdclass();
-$data5->issuetype = 'Epic';
-$data5->customfield_empty = '';
-$data5->customfield_filled = 'filled_value';
+$data5->issuetype = 'story';
+$data5->valid_field = 'valid_data';
+$data5->empty_field = '';
+$data5->another_valid = 'another_data';
 
 $object5 = new stdclass();
-$object5->existing_field = 'keep_this';
+$object5->pre_existing = 'original_value';
 
 $relations5 = array(
-    'zentaoFieldEpic' => array(
-        'customfield_empty' => 'empty_field',
-        'customfield_filled' => 'filled_field'
+    'zentaoFieldstory' => array(
+        'valid_field' => 'title',
+        'empty_field' => 'category',
+        'another_valid' => 'keywords'
     )
 );
 
-r($convertTest->processBuildinFieldDataTest('epic', $data5, $object5, $relations5)) && p('filled_field,existing_field') && e('filled_value,keep_this');
+r($convertTest->processBuildinFieldDataTest('story', $data5, $object5, $relations5)) && p('title,keywords,pre_existing') && e('valid_data,another_data,original_value');
 
-// 测试步骤6：复杂映射场景
+// 测试步骤6：testcase模块映射真实字段
 $data6 = new stdclass();
-$data6->issuetype = 'Story';
-$data6->valid_field = 'valid_data';
-$data6->empty_field = '';
-$data6->another_valid = 'another_data';
+$data6->issuetype = 'testcase';
+$data6->test_field_1 = 'Case Title';
+$data6->test_field_2 = 'system';
 
 $object6 = new stdclass();
-$object6->pre_existing = 'original_value';
 
 $relations6 = array(
-    'zentaoFieldStory' => array(
-        'valid_field' => 'mapped_valid',
-        'empty_field' => 'mapped_empty',
-        'another_valid' => 'mapped_another',
-        'non_existing' => 'mapped_none'
+    'zentaoFieldtestcase' => array(
+        'test_field_1' => 'title',
+        'test_field_2' => 'stage'
     )
 );
 
-r($convertTest->processBuildinFieldDataTest('story', $data6, $object6, $relations6)) && p('mapped_valid,mapped_another,pre_existing') && e('valid_data,another_data,original_value');
-
-// 测试步骤7：不同模块的字段映射
-$data7 = new stdclass();
-$data7->issuetype = 'TestCase';
-$data7->test_field_1 = 'test_value_1';
-$data7->test_field_2 = 'test_value_2';
-
-$object7 = new stdclass();
-
-$relations7 = array(
-    'zentaoFieldTestCase' => array(
-        'test_field_1' => 'zentao_field_1',
-        'test_field_2' => 'zentao_field_2'
-    )
-);
-
-r($convertTest->processBuildinFieldDataTest('testcase', $data7, $object7, $relations7)) && p('zentao_field_1,zentao_field_2') && e('test_value_1,test_value_2');
+r($convertTest->processBuildinFieldDataTest('testcase', $data6, $object6, $relations6)) && p('title,stage') && e('Case Title,system');

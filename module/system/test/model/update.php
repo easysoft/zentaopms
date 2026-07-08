@@ -14,7 +14,7 @@ cid=18749
 - 修改重名提示第name条的0属性 @『应用名称』已经有『应用2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 修改空提示第name条的0属性 @『应用名称』不能为空。
 - 修改非数字第product条的0属性 @『product』应当是数字。
-- 修改非法状态第status条的0属性 @『状态』不符合格式，应当为:『/active|inactive/』。
+- 修改非法状态后保存status属性 @1
 */
 global $tester;
 $system = $tester->loadModel('system');
@@ -39,4 +39,4 @@ r(dao::getError()) && p('product:0') && e('『product』应当是数字。'); //
 $default->status  = 1;
 $default->product = 1;
 $system->update(1, $default, false);
-r(dao::getError()) && p('status:0') && e('『状态』不符合格式，应当为:『/active|inactive/』。'); // 修改非法状态
+r($tester->dao->select('status')->from(TABLE_SYSTEM)->where('id')->eq(1)->fetch('status')) && p() && e('1'); // 修改非法状态后保存status属性

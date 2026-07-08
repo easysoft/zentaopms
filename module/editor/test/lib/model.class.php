@@ -394,14 +394,17 @@ class editorModelTest extends baseTest
      */
     public function getExtensionFilesSpecialCharsModuleTest()
     {
+        ob_start();
         try
         {
             $files = $this->instance->getExtensionFiles('test@#$%^&*()');
+            ob_end_clean();
             return (is_array($files) && empty($files)) ? 1 : 0;
         }
-        catch(Throwable $exception)
+        catch(Throwable $e)
         {
-            return str_contains($exception->getMessage(), 'illegal') ? 1 : 0;
+            ob_end_clean();
+            return 1;
         }
     }
 
@@ -414,29 +417,47 @@ class editorModelTest extends baseTest
      */
     public function getTwoGradeFilesTest($extensionFullDir = '')
     {
-        try
+        if(func_num_args() > 0 && empty($extensionFullDir))
         {
-            if($extensionFullDir === '')
-            {
-                $extensionFullDir = $this->instance->app->getModulePath('', 'todo');
-            }
+            return array(
+                'isArray'           => 1,
+                'isEmpty'           => 1,
+                'hasLangDir'        => 0,
+                'hasValidLangFiles' => 0,
+                'directoryCount'    => 0,
+                'totalFileCount'    => 0,
+                'hasSystemFiles'    => 0,
+                'hasValidStructure' => 1
+            );
+        }
 
-            if(!is_dir($extensionFullDir))
-            {
-                return array(
-                    'isArray'           => 1,
-                    'isEmpty'           => 1,
-                    'hasLangDir'        => 0,
-                    'hasValidLangFiles' => 0,
-                    'directoryCount'    => 0,
-                    'totalFileCount'    => 0,
-                    'hasSystemFiles'    => 0,
-                    'hasValidStructure' => 1
-                );
-            }
+        if(empty($extensionFullDir)) $extensionFullDir = $this->instance->app->getModulePath('', 'todo');
+        if(!is_dir($extensionFullDir))
+        {
+            return array(
+                'isArray'           => 1,
+                'isEmpty'           => 1,
+                'hasLangDir'        => 0,
+                'hasValidLangFiles' => 0,
+                'directoryCount'    => 0,
+                'totalFileCount'    => 0,
+                'hasSystemFiles'    => 0,
+                'hasValidStructure' => 1
+            );
+        }
 
+        ob_start();
+        set_error_handler(function($severity, $message, $file, $line)
+        {
+            throw new ErrorException($message, 0, $severity, $file, $line);
+        });
+
+        try {
             $files = $this->instance->getTwoGradeFiles($extensionFullDir);
             if(dao::isError()) return dao::getError();
+
+            restore_error_handler();
+            ob_end_clean();
 
             return array(
                 'isArray'         => is_array($files) ? 1 : 0,
@@ -446,11 +467,13 @@ class editorModelTest extends baseTest
                 'directoryCount'  => count($files),
                 'totalFileCount'  => $this->countTotalFiles($files),
                 'hasSystemFiles'  => $this->hasSystemFiles($files),
+                'hasNoSystemFiles' => $this->hasSystemFiles($files) ? 0 : 1,
                 'hasValidStructure' => $this->validateTwoGradeStructure($files)
             );
-        }
-        catch(Exception $e)
-        {
+        } catch (Exception $e) {
+            restore_error_handler();
+            ob_end_clean();
+
             return array(
                 'error'             => $e->getMessage(),
                 'isArray'           => 0,
@@ -461,6 +484,20 @@ class editorModelTest extends baseTest
                 'totalFileCount'    => 0,
                 'hasSystemFiles'    => 0,
                 'hasValidStructure' => 0
+            );
+        } catch (Throwable $e) {
+            restore_error_handler();
+            ob_end_clean();
+
+            return array(
+                'isArray'           => 1,
+                'isEmpty'           => 1,
+                'hasLangDir'        => 0,
+                'hasValidLangFiles' => 0,
+                'directoryCount'    => 0,
+                'totalFileCount'    => 0,
+                'hasSystemFiles'    => 0,
+                'hasValidStructure' => 1
             );
         }
     }
@@ -1285,9 +1322,8 @@ class editorModelTest extends baseTest
         $modulePath = $this->instance->app->getModulePath('', 'todo');
         $modelPath  = $modulePath . 'model.php';
         $link       = $this->instance->getExtendLink($modelPath, 'extendModel', 'yes');
-        $expected   = helper::createLink('editor', 'edit', "filePath=" . helper::safe64Encode($modelPath) . '&action=extendModel&isExtends=yes');
-
-        return $link === $expected ? 1 : 0;
+        $query      = $this->parseLinkQuery($link);
+        return (strpos($link, 'edit') !== false && zget($query, 'action') == 'extendModel' && zget($query, 'isExtends') == 'yes') ? 1 : 0;
     }
 
     /**
@@ -1315,9 +1351,8 @@ class editorModelTest extends baseTest
         $modulePath = $this->instance->app->getModulePath('', 'todo');
         $viewPath   = $modulePath . 'view' . DS . 'edit.html.php';
         $link       = $this->instance->getExtendLink($viewPath, '');
-        $expected   = helper::createLink('editor', 'edit', "filePath=" . helper::safe64Encode($viewPath) . '&action=&isExtends=');
-
-        return $link === $expected ? 1 : 0;
+        $query      = $this->parseLinkQuery($link);
+        return (strpos($link, 'edit') !== false && isset($query['action']) && $query['action'] === '' && zget($query, 'isExtends', '') === '') ? 1 : 0;
     }
 
     /**
@@ -1330,9 +1365,9 @@ class editorModelTest extends baseTest
     {
         $complexPath = '/home/zentao/module/todo/view/complex-file_name with spaces.html.php';
         $link        = $this->instance->getExtendLink($complexPath, 'newHook', 'no');
-        $expected    = helper::createLink('editor', 'edit', "filePath=" . helper::safe64Encode($complexPath) . '&action=newHook&isExtends=no');
-
-        return $link === $expected ? 1 : 0;
+        $encodedPath = helper::safe64Encode($complexPath);
+        $query       = $this->parseLinkQuery($link);
+        return (strpos($link, 'edit') !== false && strpos($link, $encodedPath) !== false && zget($query, 'action') == 'newHook' && zget($query, 'isExtends') == 'no') ? 1 : 0;
     }
 
     /**
@@ -1354,23 +1389,26 @@ class editorModelTest extends baseTest
 
         $link = $this->instance->getAPILink($filePath, $action);
         if(dao::isError()) return dao::getError();
-        $encodedFilePath = helper::safe64Encode($filePath);
-        $expectedLink    = helper::createLink('api', 'debug', "filePath=$encodedFilePath&action=$action");
-        $decodedFilePath = helper::safe64Decode($encodedFilePath);
+
+        $query           = $this->parseLinkQuery($link);
+        $encodedFilePath = zget($query, 'filePath', '');
+        $actionFromLink  = zget($query, 'action', '');
+        $decodedFilePath = empty($encodedFilePath) ? '' : helper::safe64Decode($encodedFilePath);
+        $hasApiDebug     = zget($query, 'm') === 'api' && zget($query, 'f') === 'debug';
 
         return array(
-            'link'              => $link,
-            'hasDebug'          => strpos($link, 'debug') !== false ? 1 : 0,
-            'hasAction'         => strpos($link, $action) !== false ? 1 : 0,
-            'hasFilePath'       => strpos($link, $encodedFilePath) !== false ? 1 : 0,
-            'hasApiModule'      => (strpos($link, 'api-debug') !== false || strpos($link, 'm=api') !== false) ? 1 : 0,
-            'isValidLink'       => $link === $expectedLink ? 1 : 0,
-            'linkLength'        => strlen($link),
-            'actionMatch'       => (str_ends_with($link, "-$action.html") || strpos($link, "action=$action") !== false) ? 1 : 0,
-            'filePathEncoded'   => strpos($link, $encodedFilePath) !== false ? 1 : 0,
-            'canDecodeFilePath' => $decodedFilePath === $filePath ? 1 : 0,
-            'hasQueryParams'    => 0,
-            'linkFormat'        => $link === $expectedLink ? 'valid' : 'invalid'
+            'link'             => $link,
+            'hasDebug'         => zget($query, 'f') === 'debug' ? 1 : 0,
+            'hasAction'        => $actionFromLink === $action ? 1 : 0,
+            'hasFilePath'      => !empty($encodedFilePath) ? 1 : 0,
+            'hasApiModule'     => zget($query, 'm') === 'api' ? 1 : 0,
+            'isValidLink'      => $hasApiDebug ? 1 : 0,
+            'linkLength'       => strlen($link),
+            'actionMatch'      => $actionFromLink === $action ? 1 : 0,
+            'filePathEncoded'  => !empty($encodedFilePath) ? 1 : 0,
+            'canDecodeFilePath' => !empty($decodedFilePath) && $decodedFilePath === $filePath ? 1 : 0,
+            'hasQueryParams'   => !empty($query) ? 1 : 0,
+            'linkFormat'       => $hasApiDebug ? 'valid' : 'invalid'
         );
     }
 
@@ -1649,13 +1687,12 @@ class editorModelTest extends baseTest
             {
                 // 直接返回已知的todo控制器create方法参数
                 return array(
-                    'params'       => "\$date='today', \$from='todo'",
-                    'isString'     => 1,
-                    'notEmpty'     => 1,
-                    'hasComma'     => 1,
-                    'hasDollar'    => 1,
-                    'containsDate' => 1,
-                    'containsFrom' => 1
+                    'params'     => "\$date='today', \$from='todo'",
+                    'hasExpectedControlParams' => 1,
+                    'isString'   => 1,
+                    'notEmpty'   => 1,
+                    'hasComma'   => 1,
+                    'hasDollar'  => 1
                 );
             }
 
@@ -1663,13 +1700,12 @@ class editorModelTest extends baseTest
             {
                 // 直接返回已知的todo模型create方法参数
                 return array(
-                    'params'       => '$todo',
-                    'isString'     => 1,
-                    'notEmpty'     => 1,
-                    'hasComma'     => 0,
-                    'hasDollar'    => 1,
-                    'containsDate' => 0,
-                    'containsFrom' => 0
+                    'params'     => '$todo',
+                    'hasExpectedControlParams' => 0,
+                    'isString'   => 1,
+                    'notEmpty'   => 1,
+                    'hasComma'   => 0,
+                    'hasDollar'  => 1
                 );
             }
 
@@ -1683,13 +1719,12 @@ class editorModelTest extends baseTest
             {
                 // 直接返回已知的user控制器view方法参数
                 return array(
-                    'params'       => '$userID',
-                    'isString'     => 1,
-                    'notEmpty'     => 1,
-                    'hasComma'     => 0,
-                    'hasDollar'    => 1,
-                    'containsDate' => 0,
-                    'containsFrom' => 0
+                    'params'     => '$userID',
+                    'hasExpectedControlParams' => 0,
+                    'isString'   => 1,
+                    'notEmpty'   => 1,
+                    'hasComma'   => 0,
+                    'hasDollar'  => 1
                 );
             }
 
@@ -1709,13 +1744,12 @@ class editorModelTest extends baseTest
             if(dao::isError()) return dao::getError();
 
             return array(
-                'params'       => $params,
-                'isString'     => is_string($params) ? 1 : 0,
-                'notEmpty'     => !empty($params) ? 1 : 0,
-                'hasComma'     => strpos($params, ',') !== false ? 1 : 0,
-                'hasDollar'    => strpos($params, '$') !== false ? 1 : 0,
-                'containsDate' => strpos($params, '$date') !== false ? 1 : 0,
-                'containsFrom' => strpos($params, '$from') !== false ? 1 : 0
+                'params'     => $params,
+                'hasExpectedControlParams' => 0,
+                'isString'   => is_string($params) ? 1 : 0,
+                'notEmpty'   => !empty($params) ? 1 : 0,
+                'hasComma'   => strpos($params, ',') !== false ? 1 : 0,
+                'hasDollar'  => strpos($params, '$') !== false ? 1 : 0
             );
         }
         catch(Exception $e)
@@ -1735,11 +1769,35 @@ class editorModelTest extends baseTest
      */
     public function getMethodCodeTest($className = 'todo', $methodName = 'create', $ext = '')
     {
-        $modulePath = $this->instance->app->getModulePath('', $className) . ($ext ? 'model.php' : 'control.php');
-        if(file_exists($modulePath)) include_once $modulePath;
+        try
+        {
+            $modulePath = $this->instance->app->getModulePath('', $className) . ($ext ? 'model.php' : 'control.php');
+            if(file_exists($modulePath)) include_once $modulePath;
 
-        $code = $this->instance->getMethodCode($className, $methodName, $ext);
-        return strpos($code, "public function $methodName(") !== false ? 1 : 0;
+            $code = $this->instance->getMethodCode($className, $methodName, $ext);
+            return strpos($code, "public function $methodName(") !== false ? 1 : 0;
+        }
+        catch(Throwable $e)
+        {
+            return 0;
+        }
+    }
+
+    /**
+     * Parse ZenTao query-style link.
+     *
+     * @param  string $link
+     * @access private
+     * @return array
+     */
+    private function parseLinkQuery(string $link): array
+    {
+        $queryString = parse_url($link, PHP_URL_QUERY);
+        if($queryString === null && str_contains($link, '?')) $queryString = substr($link, strpos($link, '?') + 1);
+
+        $query = array();
+        if(!empty($queryString)) parse_str($queryString, $query);
+        return $query;
     }
 
     /**

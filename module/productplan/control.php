@@ -410,21 +410,44 @@ class productplan extends control
             if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName((array)$story->module);
         }
 
+        $bugModulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, 'all');
+        $projectPairs   = $this->product->getProjectPairsByProduct($plan->product, (string)$plan->branch);
+        $executions     = $this->loadModel('execution')->fetchPairs(0, 'all', false);
+        $buildPairs     = $this->loadModel('build')->getBuildPairs(array($plan->product), 'all', 'releasetag');
+        $planBugs       = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
+
+        $bugStoryIdList = array();
+        $bugTaskIdList  = array();
+        foreach($planBugs as $bug)
+        {
+            if($bug->story)  $bugStoryIdList[] = $bug->story;
+            if($bug->task)   $bugTaskIdList[]  = $bug->task;
+            if($bug->toTask) $bugTaskIdList[]  = $bug->toTask;
+        }
+        $bugStories = $bugStoryIdList ? $this->loadModel('story')->getPairsByList($bugStoryIdList) : array();
+        $bugTasks   = $bugTaskIdList  ? $this->loadModel('task')->getPairsByIdList($bugTaskIdList) : array();
+
         $this->executeHooks($planID);
         $this->productplanZen->setSessionForViewPage($planID, $type, $orderBy, $pageID, $recTotal);
         $this->productplanZen->assignViewData($plan);
 
-        $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
-        $this->view->modulePairs  = $modulePairs;
-        $this->view->planStories  = $planStories;
-        $this->view->planBugs     = $this->loadModel('bug')->getPlanBugs($planID, 'all', $type == 'bug' ? $sort : 'id_desc', $bugPager);
-        $this->view->summary      = $this->productplanZen->buildViewSummary($planStories);
-        $this->view->type         = $type;
-        $this->view->orderBy      = $orderBy;
-        $this->view->link         = $link;
-        $this->view->param        = $param;
-        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
-        $this->view->tabUrl       = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $this->view->title          = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
+        $this->view->modulePairs    = $modulePairs;
+        $this->view->bugModulePairs = $bugModulePairs;
+        $this->view->projectPairs   = $projectPairs;
+        $this->view->executions     = $executions;
+        $this->view->buildPairs     = $buildPairs;
+        $this->view->bugStories     = $bugStories;
+        $this->view->bugTasks       = $bugTasks;
+        $this->view->planStories    = $planStories;
+        $this->view->planBugs       = $planBugs;
+        $this->view->summary        = $this->productplanZen->buildViewSummary($planStories);
+        $this->view->type           = $type;
+        $this->view->orderBy        = $orderBy;
+        $this->view->link           = $link;
+        $this->view->param          = $param;
+        $this->view->storyCases     = $this->loadModel('testcase')->getStoryCaseCounts($planStories ? array_keys($planStories) : array());
+        $this->view->tabUrl         = $this->createLink('productplan', 'view', "planID=$planID&type=%s&orderBy=$orderBy&link=$link&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         if($this->viewType != 'json')
         {

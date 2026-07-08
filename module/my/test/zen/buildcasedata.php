@@ -13,7 +13,7 @@ cid=17313
 - 测试用例needconfirm标记处理第0条的status属性 @normal
 - 测试用例lastRunResult为空时的默认值第0条的lastRunResult属性 @未执行
 - 测试用例lastRunResult为fail时增加失败计数第0条的lastRunResult属性 @fail
-- 测试用例fromCaseVersion大于version时状态变更第0条的status属性 @原用例更新
+- 测试用例fromCaseVersion大于version时状态变更第0条的status属性 @casechanged
 
 */
 
@@ -108,4 +108,4 @@ r($myTest->buildCaseDataTest($normalCases, 'openedbyme')) && p('0:title') && e('
 r($myTest->buildCaseDataTest($caseNeedConfirm, 'assigntome')) && p('0:status') && e('normal'); // 测试用例needconfirm标记处理
 r($myTest->buildCaseDataTest($caseWithEmptyResult, 'assigntome')) && p('0:lastRunResult') && e('未执行'); // 测试用例lastRunResult为空时的默认值
 r($myTest->buildCaseDataTest($caseWithFail, 'assigntome')) && p('0:lastRunResult') && e('fail'); // 测试用例lastRunResult为fail时增加失败计数
-r($myTest->buildCaseDataTest($caseVersionChanged, 'assigntome')) && p('0:status') && e('原用例更新'); // 测试用例fromCaseVersion大于version时状态变更
+r($myTest->buildCaseDataTest($caseVersionChanged, 'assigntome')) && p('0:status') && e('casechanged'); // 测试用例fromCaseVersion大于version时状态变更

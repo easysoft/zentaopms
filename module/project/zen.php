@@ -90,6 +90,13 @@ class projectZen extends project
      */
     protected function prepareProject(object $postData, int $hasProduct): object|false
     {
+        /* Check budget is not too large before processing. */
+        if(!$this->post->future && $this->post->budget != 0 && $this->post->budget > $this->config->project->budget->max)
+        {
+            dao::$errors['budget'] = sprintf($this->lang->project->error->budgetTooLarge, $this->config->project->budget->max);
+            return false;
+        }
+
         $project = $postData->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -203,6 +210,11 @@ class projectZen extends project
             elseif(is_numeric($project->budget) && ($project->budget < 0))
             {
                 dao::$errors['budget'] = sprintf($this->lang->project->error->budgetGe0);
+                return false;
+            }
+            elseif($project->budget > $this->config->project->budget->max)
+            {
+                dao::$errors['budget'] = sprintf($this->lang->project->error->budgetTooLarge, $this->config->project->budget->max);
                 return false;
             }
             else

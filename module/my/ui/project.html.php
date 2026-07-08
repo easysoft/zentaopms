@@ -48,7 +48,7 @@ foreach($projects as $project)
     if(!empty($project->PM))
     {
         $project->PMAccount = $project->PM;
-        $project->PMAvatar  = $usersAvatar[$project->PM];
+        $project->PMAvatar  = \zget($usersAvatar, $project->PM, '');
         $project->PM        = \zget($users, $project->PM);
     }
 
