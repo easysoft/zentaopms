@@ -3179,7 +3179,13 @@ class taskModel extends model
     {
         if(!empty($_SESSION['taskQueryCondition']))
         {
-            if(!$this->session->taskOnlyCondition) return 'id in (' . preg_replace('/SELECT .* FROM/', 'SELECT t1.id FROM', (string)$this->session->taskQueryCondition) . ')';
+            if(!$this->session->taskOnlyCondition)
+            {
+                $queryCondition = (string)$this->session->taskQueryCondition;
+                $fromPosition   = strpos($queryCondition, ' FROM ');
+                if($fromPosition !== false) return 'id in (SELECT t1.id FROM ' . substr($queryCondition, $fromPosition + 6) . ')';
+                return 'id in (' . $queryCondition . ')';
+            }
             return $this->session->taskQueryCondition;
         }
         return '1=1';
