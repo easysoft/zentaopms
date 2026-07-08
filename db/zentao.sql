@@ -15521,7 +15521,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_assets` (
   `packageID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属制品包ID',
   `versionID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属版本ID，0表示无版本关联',
   `blobID` int unsigned NOT NULL DEFAULT 0 COMMENT '关联文件对象ID',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `basename` varchar(255) NOT NULL DEFAULT '' COMMENT '制品名称',
   `contentType` varchar(100) NOT NULL DEFAULT '' COMMENT '内容类型',
   `rank` varchar(50) NOT NULL DEFAULT '' COMMENT '制品等级 main/sub',
@@ -15566,7 +15566,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_groups` (
   `artifactLibID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属制品库ID',
   `parentID` int unsigned NOT NULL DEFAULT 0 COMMENT '父级分组ID，0表示根分组',
   `name` varchar(255) NOT NULL DEFAULT '' COMMENT '分组名称',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
@@ -15586,7 +15586,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
   `repoID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属代码库ID，0表示非代码库级',
   `name` varchar(100) NOT NULL DEFAULT '' COMMENT '制品库名称',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '制品库描述',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `scope` varchar(30) NOT NULL DEFAULT '' COMMENT '制品库类型:global/space/repo',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -15604,7 +15604,7 @@ CREATE INDEX `idx_spaceID_repoID_deleted` ON `ops_artifact_libs` (`spaceID`, `re
 CREATE TABLE IF NOT EXISTS `ops_artifact_meta_assets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `artifactLibID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属制品库ID',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `path` varchar(255) NOT NULL DEFAULT '' COMMENT '元数据路径',
   `contentType` varchar(100) NOT NULL DEFAULT '' COMMENT '内容类型',
   `rank` varchar(50) NOT NULL DEFAULT '' COMMENT '制品等级 main/sub',
@@ -15629,7 +15629,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_packages` (
   `groupID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属分组ID',
   `namespace` varchar(255) NOT NULL DEFAULT '' COMMENT '命名空间',
   `name` varchar(100) NOT NULL DEFAULT '' COMMENT '制品包名称',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
@@ -15652,7 +15652,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_tree_nodes` (
   `nodePath` varchar(255) NOT NULL DEFAULT '' COMMENT '节点路径',
   `linkTable` varchar(20) NOT NULL DEFAULT '' COMMENT '关联表',
   `linkRecord` int unsigned NOT NULL DEFAULT 0 COMMENT '关联表ID',
-  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/docker/raw/helm/pypi/npm/maven/composer',
+  `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
   `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁编辑',
@@ -16380,6 +16380,7 @@ CREATE INDEX `idx_groupID` ON `ops_schedule_jobs` (`groupID`);
 CREATE TABLE IF NOT EXISTS `ops_space` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `name` varchar(200) NOT NULL DEFAULT '' COMMENT '名称',
+  `code` varchar(50) NOT NULL DEFAULT '' COMMENT '空间唯一标识',
   `acl` varchar(30) NOT NULL DEFAULT 'open' COMMENT '权限:private,open',
   `auth` varchar(30) NOT NULL DEFAULT 'extend' COMMENT '空间人员权限定义：extend继承，reset重定义',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '描述',
@@ -16390,7 +16391,7 @@ CREATE TABLE IF NOT EXISTS `ops_space` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='空间表';
-CREATE UNIQUE INDEX `uk_name` ON `ops_space` (`name`);
+CREATE UNIQUE INDEX `uk_code` ON `ops_space` (`code`);
 
 -- DROP TABLE IF EXISTS `ops_spaceuser`;
 CREATE TABLE IF NOT EXISTS `ops_spaceuser` (

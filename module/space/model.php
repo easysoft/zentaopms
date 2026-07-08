@@ -786,6 +786,9 @@ class spaceModel extends model
      */
     public function createDefaultSpace(): bool
     {
+        $hasSpace = $this->dao->select('*')->from(TABLE_SPACE)->orderBy('id')->limit(1)->fetch();
+        if($hasSpace) return true;
+
         $company = $this->loadModel('company')->getFirst();
         $admins  = !empty($company->admins) ? explode(',', $company->admins) : array();
         $admins  = array_filter($admins);
