@@ -120,12 +120,12 @@ class mrZenTest extends baseTest
     {
         $this->invokeArgs('buildLinkTaskSearchForm', [$MRID, $repoID, $orderBy, $queryID, $productExecutions]);
 
-        global $config;
+        $searchParams = $_SESSION['mrTasksearchParams'] ?? array();
         $result = array();
-        $result['actionURL']  = $config->execution->search['actionURL'] ?? '';
-        $result['queryID']    = $config->execution->search['queryID'] ?? 0;
-        $result['hasModule']  = isset($config->execution->search['fields']['module']) ? 1 : 0;
-        $result['executionValues'] = $config->execution->search['params']['execution']['values'] ?? array();
+        $result['module']     = $searchParams['module'] ?? '';
+        $result['actionURL']  = $searchParams['actionURL'] ?? '';
+        $result['queryID']    = $searchParams['queryID'] ?? 0;
+        $result['fields']     = $searchParams['fields'] ?? array();
 
         return $result;
     }

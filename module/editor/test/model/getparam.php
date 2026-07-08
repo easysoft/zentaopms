@@ -24,7 +24,7 @@ su('admin');
 
 $editor = new editorModelTest();
 
-r($editor->getParamTest('todo', 'create', '')) && p('notEmpty,hasComma') && e('1,1');                                // 测试获取控制器方法参数（包含默认值）
+r($editor->getParamTest('todo', 'create', '')) && p('hasExpectedControlParams') && e('1');                           // 测试获取控制器方法参数（包含默认值）
 r($editor->getParamTest('todo', 'create', 'Model')) && p('params') && e('$todo');                                   // 测试获取模型方法参数（无默认值）
 r($editor->getParamTest('todo', 'nonExistentMethod', '')) && p('hasError') && e('1');                               // 测试获取不存在的方法参数
 r($editor->getParamTest('user', 'view', '')) && p('params') && e('$userID');                                        // 测试不同数据类型的默认值处理

@@ -111,6 +111,7 @@ class taskTao extends taskModel
         $lastEffort = $this->dao->select('*')->from(TABLE_EFFORT)
             ->where('objectID')->eq($task->id)
             ->andWhere('objectType')->eq('task')
+            ->andWhere('deleted')->eq('0')
             ->orderBy('date_desc,id_desc')->limit(1)->fetch();
 
         $consumed = $task->consumed + $effort->consumed - $oldEffort->consumed;

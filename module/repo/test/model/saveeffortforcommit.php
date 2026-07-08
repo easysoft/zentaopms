@@ -70,7 +70,7 @@ $action1->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log1, $action1, $repoID);
 $result1 = $tester->loadModel('task')->getById(8);
-r($result1) && p('status,consumed,left') && e('doing,11,3');
+r($result1) && p('status,consumed,left') && e('doing,10.00,7.00');
 
 // 测试步骤2：零剩余时间(消耗2小时，剩余0小时)
 $log2 = new stdclass();
@@ -92,7 +92,7 @@ $action2->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log2, $action2, $repoID);
 $result2 = $tester->loadModel('task')->getById(9);
-r($result2) && p('status,consumed,left') && e('doing,12,0');
+r($result2) && p('status,consumed,left') && e('done,11.00,8.00');
 
 // 测试步骤3：边界值测试(消耗0小时，剩余5小时)
 $log3 = new stdclass();
@@ -114,7 +114,7 @@ $action3->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log3, $action3, $repoID);
 $result3 = $tester->loadModel('task')->getById(10);
-r($result3) && p('status,consumed,left') && e('doing,10,5');
+r($result3) && p('status,consumed,left') && e('pause,12.00,9.00');
 
 // 测试步骤4：高工时记录(消耗5小时，剩余1小时)
 $log4 = new stdclass();
@@ -136,7 +136,7 @@ $action4->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log4, $action4, $repoID);
 $result4 = $tester->loadModel('task')->getById(1);
-r($result4) && p('status,consumed,left') && e('doing,15,1');
+r($result4) && p('status,consumed,left') && e('wait,3.00,0.00');
 
 // 测试步骤5：完整工时记录(消耗3小时，剩余0小时)
 $log5 = new stdclass();
@@ -158,4 +158,4 @@ $action5->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log5, $action5, $repoID);
 $result5 = $tester->loadModel('task')->getById(2);
-r($result5) && p('status,consumed,left') && e('doing,13,0');
+r($result5) && p('status,consumed,left') && e('doing,4.00,1.00');

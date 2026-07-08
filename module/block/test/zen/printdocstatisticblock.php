@@ -38,7 +38,7 @@ $doc->gen(10);
 $action = zenData('action');
 $action->id->range('1-15');
 $action->objectType->range('doc');
-$action->objectID->range('1-10:R');
+$action->objectID->range('1,2,3,4,5,1,2,3,4,5,1,2,3,4,5');
 $action->action->range('edited{10},created{5}');
 $action->actor->range('admin{8},user1{4},user2{3}');
 $action->date->range('20250913100000{8},20250913110000{4},20250913120000{3}');
@@ -52,9 +52,9 @@ su('admin');
 $blockTest = new blockZenTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($blockTest->printDocStatisticBlockTest()) && p('totalDocs') && e('0'); // 步骤1：正常文档统计区块测试，实际返回0
+r($blockTest->printDocStatisticBlockTest()) && p('totalDocs') && e('5'); // 步骤1：正常文档统计区块测试
 r($blockTest->printDocStatisticBlockTest()) && p('todayEditedDocs') && e('0'); // 步骤2：今日编辑文档数测试，实际返回0
-r($blockTest->printDocStatisticBlockTest()) && p('myEditedDocs') && e('0'); // 步骤3：我编辑的文档数测试，实际返回0
+r($blockTest->printDocStatisticBlockTest()) && p('myEditedDocs') && e('5'); // 步骤3：我编辑的文档数测试
 su('user1');
-r($blockTest->printDocStatisticBlockTest()) && p('totalDocs') && e('0'); // 步骤4：用户切换后的文档统计区块，实际返回0
+r($blockTest->printDocStatisticBlockTest()) && p('totalDocs') && e('5'); // 步骤4：用户切换后的文档统计区块
 r($blockTest->printDocStatisticBlockTest()) && p('todayEditedDocs') && e('0'); // 步骤5：user1权限下的今日编辑文档统计，实际返回0

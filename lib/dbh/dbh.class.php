@@ -589,6 +589,7 @@ class dbh
         $sql = $this->formatFunction($sql);
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
+        $sql = $this->formatLimitOffset($sql);
 
         $actionPos = strpos($sql, ' ');
         $action    = strtoupper(substr($sql, 0, $actionPos));
@@ -612,6 +613,7 @@ class dbh
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
                 if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
             case 'DELETE':
+            case 'TRUNCATE':
                 if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
                 break;
             case 'CREATE':
@@ -671,6 +673,19 @@ class dbh
         $fields = $this->formatField($fields);
 
         return $fields . substr($sql, $setPos);
+    }
+
+    /**
+     * Format MySQL-style limit syntax to standard limit/offset syntax.
+     *
+     * @param  string $sql
+     * @access private
+     * @return string
+     */
+    private function formatLimitOffset($sql)
+    {
+        $limitPattern = '/\bLIMIT\s+(\d+)\s*,\s*(\d+)\b/i';
+        return preg_replace($limitPattern, 'LIMIT $2 OFFSET $1', $sql);
     }
 
     /**
@@ -746,6 +761,9 @@ class dbh
                     $tableName = isset($matches[2]) ? str_replace($this->dbConfig->prefix, '', $matches[2]) : '';
                     $sql       = preg_replace('/INDEX\ +\`/', 'INDEX `' . strtolower($tableName) . '_', $sql);
                 }
+
+                /* DM cannot allow TEXT type. */
+                $sql = str_replace('JSON', 'TEXT', $sql);
 
                 /* Remove comment. */
                 $pattern = '/\s+COMMENT\s+[\'"].*?[\'"]\s*/i';
@@ -827,7 +845,32 @@ class dbh
         {
             $sql = str_replace('`', '"', $sql);
             $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
-            $sql = preg_replace('/(?<!\w)year\(/i', 'MYSQL_YEAR(', $sql);
+        }
+        if($this->dbConfig->driver == 'gauss') $sql = self::formatGaussFunctions($sql);
+
+        return $sql;
+    }
+
+    public static function formatGaussFunctions(string $sql): string
+    {
+        $gaussCompatibleFunctions = array(
+            'FIND_IN_SET',
+            'GROUP_CONCAT',
+            'ROUND',
+            'TIMESTAMPDIFF',
+            'IFNULL',
+            'DAY',
+            'MONTH',
+            'YEAR',
+            'DATEDIFF',
+            'DATE_FORMAT',
+            'INSTR',
+            'LEFT',
+        );
+
+        foreach($gaussCompatibleFunctions as $function)
+        {
+            $sql = preg_replace("/(?<![\\w\"'])(?<!\"){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;

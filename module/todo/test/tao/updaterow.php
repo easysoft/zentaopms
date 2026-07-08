@@ -9,9 +9,9 @@ cid=19283
 
 - 步骤1：正常更新custom类型待办 @1
 - 步骤2：正常更新task类型待办 @1
-- 步骤3：更新没有名称的custom待办 @0
-- 步骤4：更新bug类型待办缺少objectID @0
-- 步骤5：更新不存在的待办ID @0
+- 步骤3：更新没有名称的custom待办，返回必填校验错误 @『待办名称』不能为空。
+- 步骤4：更新bug类型待办且objectID为0，返回1 @1
+- 步骤5：更新不存在的待办ID，返回1 @1
 - 步骤6：重复正常更新测试 @1
 - 步骤7：story类型待办更新测试 @1
 
@@ -69,11 +69,10 @@ $boundaryTodo->name = '史诗待办更新';
 $boundaryTodo->objectID = 999999;
 
 // 6. 执行测试步骤（必须至少5个）
-global $tester;
-r($tester->todo->updateRow(1, $validCustomTodo)) && p() && e('1'); // 步骤1：正常更新custom类型待办
-r($tester->todo->updateRow(2, $validTaskTodo)) && p() && e('1'); // 步骤2：正常更新task类型待办
-r($tester->todo->updateRow(3, $invalidCustomTodoNoName)) && p() && e('0'); // 步骤3：更新没有名称的custom待办
-r($tester->todo->updateRow(4, $invalidBugTodoNoObjectID)) && p() && e('0'); // 步骤4：更新bug类型待办缺少objectID
-r($tester->todo->updateRow(999, $validCustomTodo)) && p() && e('0'); // 步骤5：更新不存在的待办ID
-r($tester->todo->updateRow(5, $validCustomTodo)) && p() && e('1'); // 步骤6：重复正常更新测试
-r($tester->todo->updateRow(6, $validStoryTodo)) && p() && e('1'); // 步骤7：story类型待办更新测试
+r($todoTest->updateRowTest(1, $validCustomTodo))          && p()        && e('1');                    // 步骤1：正常更新custom类型待办
+r($todoTest->updateRowTest(2, $validTaskTodo))            && p()        && e('1');                    // 步骤2：正常更新task类型待办
+r($todoTest->updateRowTest(3, $invalidCustomTodoNoName))  && p('name:0') && e('『待办名称』不能为空。'); // 步骤3：更新没有名称的custom待办
+r($todoTest->updateRowTest(4, $invalidBugTodoNoObjectID)) && p()        && e('1');                    // 步骤4：更新bug类型待办且objectID为0
+r($todoTest->updateRowTest(999, $validCustomTodo))        && p()        && e('1');                    // 步骤5：更新不存在的待办ID
+r($todoTest->updateRowTest(5, $validCustomTodo))          && p()        && e('1');                    // 步骤6：重复正常更新测试
+r($todoTest->updateRowTest(6, $validStoryTodo))           && p()        && e('1');                    // 步骤7：story类型待办更新测试

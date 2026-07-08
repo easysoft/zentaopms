@@ -48,4 +48,4 @@ r(count($storyTest->getByListTest(array()))) && p() && e('0'); // 测试步骤3�
 r(count($storyTest->getByListTest('1,2,3'))) && p() && e('3'); // 测试步骤4：传入字符串类型ID列表，验证类型处理
 r(count($storyTest->getByListTest(array(999, 1000, 1001)))) && p() && e('0'); // 测试步骤5：传入不存在的ID列表，验证边界情况
 r($storyTest->getByListTest(array(1))) && p('1:productTitle,spec') && e('正常产品1,需求描述1'); // 测试步骤6：验证返回数据的完整性和字段正确性
-r(count($storyTest->getByListTest(1))) && p() && e('1'); // 测试步骤7：测试单个ID情况，验证基本功能
+r(count($storyTest->getByListTest(array(1)))) && p() && e('1'); // 测试步骤7：测试单个ID情况，验证基本功能

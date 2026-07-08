@@ -16,11 +16,7 @@ class indexZenTest extends baseTest
      */
     public function checkShowFeaturesTest()
     {
-        $method = $this->indexZenTest->getMethod('checkShowFeatures');
-        $method->setAccessible(true);
-        $indexInstance = $this->indexZenTest->newInstance();
-
-        $result = $method->invoke($indexInstance);
+        $result = $this->invokeArgs('checkShowFeatures');
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -36,12 +32,7 @@ class indexZenTest extends baseTest
      */
     public function getViewMethodForAssetLibTest(int $objectID, string $objectType)
     {
-        $reflection = new ReflectionClass('indexZen');
-        $method = $reflection->getMethod('getViewMethodForAssetLib');
-        $method->setAccessible(true);
-
-        $indexZen = new indexZen();
-        $result = $method->invoke($indexZen, $objectID, $objectType);
+        $result = $this->invokeArgs('getViewMethodForAssetLib', [$objectID, $objectType]);
         if(dao::isError()) return dao::getError();
 
         return $result;

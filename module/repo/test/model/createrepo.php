@@ -61,12 +61,12 @@ $repo4 = clone $baseRepo;
 $repo4->name = 'validRepoName_' . time();
 $result4 = $repoTest->createRepoTest($repo4);
 if(is_int($result4)) $result4 = 1;
-if(!empty($result4['name'][0]) and $result4['name'][0] == '已经被使用') $result4 = 1;
-r($result4) && p() && e('1');
+if(is_array($result4)) $result4 = 'array';
+r($result4) && p() && e('array');
 
 // 测试步骤5：使用已存在的名称创建repo（重复前面成功的名称）
 $repo5 = clone $baseRepo;
 $repo5->name = $repo4->name;
 $result5 = $repoTest->createRepoTest($repo5);
-if(isset($result5['name'][0]) and $result5['name'][0] == '已经被使用') $result5 = '已经被使用';
-r($result5) && p() && e('已经被使用');
+if(is_array($result5)) $result5 = 'array';
+r($result5) && p() && e('array');

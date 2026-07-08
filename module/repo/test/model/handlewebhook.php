@@ -23,6 +23,7 @@ cid=18083
 */
 
 zenData('task')->gen(10);
+zenData('pipeline')->gen(5);
 $bug = zenData('bug');
 $bug->execution->range('0');
 $bug->gen(10);
@@ -149,10 +150,10 @@ $app->rawMethod = 'browse';
 $repo = new repoModelTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);
 $result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,11,3'); //处理push事件的webhook
+r($result) && p('status,consumed,left') && e('doing,11.00,3.00'); //处理push事件的webhook
 
 $repo->handleWebhookTest($event2, json_decode($data), $repoID);
 $result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,12,3'); //处理merge request事件的webhook
+r($result) && p('status,consumed,left') && e('doing,12.00,3.00'); //处理merge request事件的webhook
 
 r($repo->handleWebhookTest($event3, json_decode($data), $repoID)) && p() && e('0'); //处理不支持的事件webhook

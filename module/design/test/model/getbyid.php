@@ -27,6 +27,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('design')->loadYaml('design')->gen(3);
+zenData('designspec')->gen(0);
 zenData('file')->gen(0);
 zenData('story')->gen(1);
 zenData('product')->loadYaml('product')->gen(1);

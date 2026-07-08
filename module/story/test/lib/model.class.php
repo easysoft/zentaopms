@@ -7,6 +7,13 @@ class storyModelTest extends baseTest
 {
     protected $moduleName = 'story';
     protected $className  = 'model';
+    public $objectModel   = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * Test getReviewerPairs method.
@@ -553,7 +560,7 @@ class storyModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        return $tester->dao->select('*')->from(TABLE_PLANSTORY)->where('plan')->in($planIDList)->fetchAll();
+        return $tester->dao->select('*')->from(TABLE_PLANSTORY)->where('plan')->in($planIDList)->fetchAll('story');
     }
 
     /**
@@ -2719,10 +2726,13 @@ class storyModelTest extends baseTest
      */
     public function batchGetStoryStageTest(array $storyIdList): array
     {
-        $result = $this->instance->batchGetStoryStage($storyIdList);
+        $objects = $this->instance->batchGetStoryStage($storyIdList);
         if(dao::isError()) return dao::getError();
 
-        return $result;
+        $stages = array();
+        foreach($objects as $storyID => $object) $stages[$storyID] = $object[0]->stage;
+
+        return $stages;
     }
 
     /**

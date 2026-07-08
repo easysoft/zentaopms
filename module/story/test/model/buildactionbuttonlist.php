@@ -48,8 +48,10 @@ cid=18478
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 su('admin');
 
+zenData('product')->gen(1);
 zenData('story')->gen(10);
 zenData('project')->gen(20);
+zenData('storygrade')->gen(10);
 
 global $tester;
 $tester->loadModel('story');
@@ -69,13 +71,14 @@ $tester->story->app->control     = new story();
 $requirement = $tester->story->fetchById(1);
 $story       = $tester->story->fetchById(2);
 $execution   = $tester->story->loadModel('project')->fetchById(11);
+$maxGradeGroup = $tester->story->getMaxGradeGroup();
 
-$requirementOperateMenu1 = $tester->story->buildactionbuttonlist($requirement, 'browse', null, 'requirement');
-$storyOperateMenu1       = $tester->story->buildactionbuttonlist($story, 'browse', null, 'story');
+$requirementOperateMenu1 = $tester->story->buildActionButtonList($requirement, 'browse', null, 'requirement', $maxGradeGroup);
+$storyOperateMenu1       = $tester->story->buildActionButtonList($story, 'browse', null, 'story', $maxGradeGroup);
 
 $execution->multiple = 0;
 $tester->story->app->tab = 'execution';
-$storyOperateMenu2 = $tester->story->buildactionbuttonlist($story, 'browse', $execution, 'story');
+$storyOperateMenu2 = $tester->story->buildActionButtonList($story, 'browse', $execution, 'story', $maxGradeGroup);
 
 r($requirementOperateMenu1) && p('0:name,hint,disabled')   && e('change,只有激活状态的需求，才能进行变更,1');                 //查看用户需求列表操作菜单第一个链接
 r($requirementOperateMenu1) && p('1:name,data-toggle,url') && e('submitreview,modal,/requirement-submitReview-1.html'); //查看用户需求列表操作菜单第二个链接

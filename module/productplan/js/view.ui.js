@@ -83,7 +83,7 @@ window.setStatistics = function(element, checkedIdList, pageSummary)
         if(checkedIdList.includes(row.id))
         {
             const story = element.getRowInfo(row.id);
-            if(story.data.type == 'story')
+            if(story.data.type === 'story' || story.data.type === 'requirement' || story.data.type === 'epic')
             {
                 total += 1;
                 if(story.data.isParent == '0') checkedEstimate += parseFloat(story.data.estimate);

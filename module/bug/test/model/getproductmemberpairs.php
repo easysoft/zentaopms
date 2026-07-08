@@ -4,7 +4,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(100);
-zenData('product')->gen(10);
+zenData('product')->gen(11);
 zenData('project')->gen(50);
 
 $projectProduct = zenData('projectproduct');
@@ -39,11 +39,11 @@ cid=15391
 - 测试获取productID为6的bug的团队成员 @U:用户7,U:用户17,U:用户27,U:用户37
 
 
-- 测试获取不存在的product的bug的团队成员 @0
+- 测试获取存在但未关联项目的product的bug团队成员 @0
 
 */
 
-$productIDList = array(1, 2, 3, 4, 5, 6, 1000001);
+$productIDList = array(1, 2, 3, 4, 5, 6, 11);
 
 $bug=new bugModelTest();
 r($bug->getProductMemberPairsTest($productIDList[0])) && p() && e('A:admin,U:用户12,U:用户22,U:用户32'); // 测试获取productID为1的bug的团队成员
@@ -52,4 +52,4 @@ r($bug->getProductMemberPairsTest($productIDList[2])) && p() && e('U:用户4,U:�
 r($bug->getProductMemberPairsTest($productIDList[3])) && p() && e('U:用户5,U:用户15,U:用户25,U:用户35'); // 测试获取productID为4的bug的团队成员
 r($bug->getProductMemberPairsTest($productIDList[4])) && p() && e('U:用户6,U:用户16,U:用户26,U:用户36'); // 测试获取productID为5的bug的团队成员
 r($bug->getProductMemberPairsTest($productIDList[5])) && p() && e('U:用户7,U:用户17,U:用户27,U:用户37'); // 测试获取productID为6的bug的团队成员
-r($bug->getProductMemberPairsTest($productIDList[6])) && p() && e('0');                                  // 测试获取不存在的product的bug的团队成员
+r($bug->getProductMemberPairsTest($productIDList[6])) && p() && e('0');                                  // 测试获取存在但未关联项目的product的bug团队成员

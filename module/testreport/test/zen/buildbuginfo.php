@@ -7,11 +7,11 @@ title=测试 testreportZen::buildBugInfo();
 timeout=0
 cid=19132
 
-- 步骤1：正常情况返回数组 @Array
-- 步骤2：指定参数测试 @Array
-- 步骤3：部分参数为空 @Array
-- 步骤4：类型参数测试 @Array
-- 步骤5：空数组参数测试 @Array
+- 步骤1：正常情况返回默认阶段数据 @2
+- 步骤2：指定参数测试 @2
+- 步骤3：部分参数为空 @5
+- 步骤4：类型参数测试 @1
+- 步骤5：空数组参数测试 @3
 
 */
 
@@ -49,12 +49,8 @@ su('admin');
 $testreportTest = new testreportTest();
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
-r($testreportTest->buildBugInfoTest()) && p() && e('Array'); // 步骤1：正常情况返回数组
-
-r($testreportTest->buildBugInfoTest(['1' => ['generated' => 2]])) && p() && e('Array'); // 步骤2：指定参数测试
-
-r($testreportTest->buildBugInfoTest([], [], ['2' => 5])) && p() && e('Array'); // 步骤3：部分参数为空
-
-r($testreportTest->buildBugInfoTest([], [], [], ['config' => 1])) && p() && e('Array'); // 步骤4：类型参数测试
-
-r($testreportTest->buildBugInfoTest([], [], [], [], [], [], [], [], [], [])) && p() && e('Array'); // 步骤5：空数组参数测试
+r($testreportTest->buildBugInfoTest()['bugStageGroups']['1']['generated']) && p() && e('2'); // 步骤1：正常情况返回默认阶段数据
+r($testreportTest->buildBugInfoTest(['1' => ['generated' => 2]])['bugStageGroups']['1']['generated']) && p() && e('2'); // 步骤2：指定参数测试
+r($testreportTest->buildBugInfoTest([], [], ['2' => 5])['bugSeverityGroups']['2']->value) && p() && e('5'); // 步骤3：部分参数为空
+r($testreportTest->buildBugInfoTest([], [], [], ['config' => 1])['bugTypeGroups']['config']->value) && p() && e('1'); // 步骤4：类型参数测试
+r($testreportTest->buildBugInfoTest([], [], [], [], [], [], [], [], [], [])['bugResolutionGroups']['fixed']->value) && p() && e('3'); // 步骤5：空数组参数测试

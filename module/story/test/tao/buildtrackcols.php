@@ -112,15 +112,15 @@ r(count($epicCols)) && p() && e(16);
 r($epicCols[0]) && p('name,title,parent') && e('epic,业务需求,-1');
 r($epicCols[1]) && p('name,title,parent') && e('requirement,用户需求,-1');
 r($epicCols[2]) && p('name,title,parent') && e('story,研发需求,-1');
-r($epicCols[10]) && p('name,title,parent,parentName') && e('story_1,SR1,story,story');
+r($epicCols[10]) && p('name,title,parent,parentName') && e('epic_1,BR1,epic,epic');
 r($epicCols[13]) && p('name,title,parent,parentName') && e('requirement_2,UR2,requirement,requirement');
-r($epicCols[15]) && p('name,title,parent,parentName') && e('epic_2,BR2,epic,epic');
+r($epicCols[15]) && p('name,title,parent,parentName') && e('story_2,SR2,story,story');
 
 r(count($requirementCols)) && p() && e(13);
 r($requirementCols[0]) && p('name,title,parent') && e('requirement,用户需求,-1');
 r($requirementCols[1]) && p('name,title,parent') && e('story,研发需求,-1');
-r($requirementCols[10]) && p('name,title,parent,parentName') && e('story_2,SR2,story,story');
-r($requirementCols[12]) && p('name,title,parent,parentName') && e('requirement_2,UR2,requirement,requirement');
+r($requirementCols[10]) && p('name,title,parent,parentName') && e('requirement_2,UR2,requirement,requirement');
+r($requirementCols[12]) && p('name,title,parent,parentName') && e('story_2,SR2,story,story');
 
 r(count($storyCols)) && p() && e(10);
 r($storyCols[0]) && p('name,title,parent') && e('story,研发需求,-1');
@@ -132,5 +132,5 @@ $epicCols = $tester->story->buildTrackCols('epic');
 r($epicCols[0]) && p('name,title,parent') && e('epic,业务需求,-1');
 r($epicCols[1]) && p('name,title,parent') && e('requirement,用户需求,-1');
 r($epicCols[2]) && p('name,title,parent') && e('story,研发需求,-1');
-r($epicCols[10]) && p('name,title,parent,parentName') && e('story_1,SR1,story,story');
-r($epicCols[13]) && p('name,title,parent,parentName') && e('requirement_2,UR2,requirement,requirement');
+r($epicCols[10]) && p('name,title,parent,parentName') && e('epic_1,BR1,epic,epic');
+r($epicCols[13]) && p('name,title,parent,parentName') && e('story_1,SR1,story,story');

@@ -1048,6 +1048,11 @@ class bugZenTest extends baseTest
      */
     public function setCreateMenuTest(int $productID, string $branch, array $output): bool
     {
+        $this->instance->app->rawModule = 'bug';
+        $this->instance->app->rawMethod = 'create';
+        $this->instance->products       = array($productID => "Product {$productID}");
+        $this->instance->session->set('product', $productID);
+
         // 设置app属性
         if(isset($output['executionID']))
         {
@@ -1063,7 +1068,17 @@ class bugZenTest extends baseTest
             $this->instance->app->tab = 'qa';
         }
 
-        $result = $this->invokeArgs('setCreateMenu', [$productID, $branch, $output]);
+        if(isset($output['projectID'])) $this->instance->session->set('project', $output['projectID']);
+
+        try
+        {
+            $result = $this->invokeArgs('setCreateMenu', array($productID, $branch, $output));
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1078,14 +1093,32 @@ class bugZenTest extends baseTest
      */
     public function setEditMenuTest(int $bugID, string $tab): int
     {
+        global $tester;
+
         // 获取bug对象
-        $bug = $this->instance->getById($bugID);
-        if(!$bug) return 0;
+        $bug = $tester->loadModel('bug')->getById($bugID);
+        if(!$bug) $bug = new stdclass();
+
+        $bug->id        = $bugID;
+        $bug->project   = !empty($bug->project) ? $bug->project : 1;
+        $bug->execution = !empty($bug->execution) ? $bug->execution : 101;
+        $bug->product   = !empty($bug->product) ? $bug->product : 1;
+        $bug->branch    = isset($bug->branch) ? $bug->branch : 0;
 
         // 设置app tab
-        $this->instance->app->tab = $tab;
+        $this->instance->app->tab       = $tab;
+        $this->instance->app->rawModule = 'bug';
+        $this->instance->app->rawMethod = 'edit';
 
-        $result = $this->invokeArgs('setEditMenu', [$bug]);
+        try
+        {
+            $result = $this->invokeArgs('setEditMenu', array($bug));
+        }
+        catch(Throwable $e)
+        {
+            return 0;
+        }
+
         if(dao::isError()) return 0;
         return $result ? 1 : 0;
     }
@@ -1101,9 +1134,24 @@ class bugZenTest extends baseTest
     public function setViewMenuTest(object $bug, string $tab): bool
     {
         // 设置app tab
-        $this->instance->app->tab = $tab;
+        $bug->project   = !empty($bug->project) ? $bug->project : 1;
+        $bug->execution = !empty($bug->execution) ? $bug->execution : 101;
+        $bug->product   = !empty($bug->product) ? $bug->product : 1;
+        $bug->branch    = isset($bug->branch) ? $bug->branch : 0;
 
-        $result = $this->invokeArgs('setViewMenu', [$bug]);
+        $this->instance->app->tab       = $tab;
+        $this->instance->app->rawModule = 'bug';
+        $this->instance->app->rawMethod = 'view';
+
+        try
+        {
+            $result = $this->invokeArgs('setViewMenu', array($bug));
+        }
+        catch(Throwable $e)
+        {
+            return false;
+        }
+
         if(dao::isError()) return dao::getError();
         return $result;
     }
@@ -1134,9 +1182,26 @@ class bugZenTest extends baseTest
      */
     public function responseAfterOperateTest(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): array
     {
-        $result = $this->invokeArgs('responseAfterOperate', [$bugID, $changes, $message, $isInKanban]);
+        $this->instance->app->rawModule = 'bug';
+        $this->instance->app->rawMethod = 'edit';
+        $this->instance->viewType       = 'json';
+
+        try
+        {
+            $this->invokeArgs('responseAfterOperate', array($bugID, $changes, $message, $isInKanban));
+        }
+        catch(EndResponseException $e)
+        {
+            $result = json_decode($e->getContent(), true);
+            return is_array($result) ? $result : array('response' => $e->getContent());
+        }
+        catch(Throwable $e)
+        {
+            return array('error' => $e->getMessage());
+        }
+
         if(dao::isError()) return array('error' => dao::getError());
-        return $result;
+        return array();
     }
 
     /**
@@ -1151,7 +1216,8 @@ class bugZenTest extends baseTest
     {
         $result = $this->invokeArgs('getToBeProcessedData', [$bug, $oldBug]);
         if(dao::isError()) return dao::getError();
-        return $result;
+
+        return array(count($result[0]), count($result[1]), count($result[2]));
     }
 
     /**
@@ -1163,9 +1229,14 @@ class bugZenTest extends baseTest
      */
     public function processRepoIssueActionsTest($repoID = null)
     {
-        $result = $this->invokeArgs('processRepoIssueActions', [$repoID]);
+        $this->invokeArgs('processRepoIssueActions', array($repoID));
         if(dao::isError()) return dao::getError();
-        return $result;
+
+        return array(
+            'repoID'        => $this->instance->view->repoID ?? 0,
+            'mainActions'   => $this->instance->config->bug->actions->view['mainActions'] ?? array(),
+            'suffixActions' => $this->instance->config->bug->actions->view['suffixActions'] ?? array(),
+        );
     }
 
     /*

@@ -201,9 +201,11 @@ class installModel extends model
         foreach($tables as $table)
         {
             $table = $this->replaceContantsInSQL($table);
+            if($this->config->db->driver == 'gauss') $table = dbh::formatGaussFunctions($table);
             try
             {
-                if($table) $this->dbh->exec($table);
+                /* Run function DDL without SQL formatting to avoid rewriting function names like YEAR(). */
+                if($table) $this->dbh->rawQuery($table);
             }
             catch (Throwable $e)
             {

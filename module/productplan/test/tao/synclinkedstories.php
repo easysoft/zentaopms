@@ -37,7 +37,7 @@ zenData('productplan')->gen(3);
 zenData('story')->gen(20);
 zenData('planstory')->gen(8);
 
-$productplan = new productPlan('admin');
+$productplan = new productplanTaoTest('admin');
 
 $planID      = array(1, 4);
 $storyIdList = array(array(1, 3), array(1, 9), array(10, 11), array(2, 5, 12), array(6, 13), array(14));

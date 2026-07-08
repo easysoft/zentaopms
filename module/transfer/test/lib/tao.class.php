@@ -7,6 +7,15 @@ class transferTaoTest extends baseTest
 {
     protected $moduleName = 'transfer';
     protected $className  = 'tao';
+    public    $objectModel = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->instance->transferTao = $this->instance;
+    }
 
     /**
      * 生成导出配置
@@ -59,7 +68,7 @@ class transferTaoTest extends baseTest
         if(empty($module))     return 'Module is empty';
         if(empty($callModule)) return 'Call module is empty';
         if(empty($method))     return 'Method is empty';
-        return $this->objectModel->getSourceByModuleMethod($module, $callModule, $method, $params, $pairs);
+        return $this->invokeArgs('getSourceByModuleMethod', [$module, $callModule, $method, $params, $pairs]);
     }
 
     /**
@@ -120,29 +129,16 @@ class transferTaoTest extends baseTest
      * @access public
      * @return array
      */
-    public function getCascadeListTest(string $module = '')
+    public function getCascadeListTest(string $module = '', array $lists = array()): array
     {
-        global $tester, $app;
-        $app->methodName = 'ajaxgettbody';
-
-        $_SESSION['testcaseTransferParams']['productID'] = '0';
-        $_SESSION['testcaseTransferParams']['branch']    = '0';
-        $_SESSION['bugTransferParams']['productIdList']  = 0;
-
-        $object = $tester->loadModel($module);
-        $fields = isset($object->config->$module->exportFields) ? $object->config->$module->exportFields : '';
-
-        $object->config->bug->listFields   = "module,project,execution,story,severity,pri,type,os,browser,openedBuild";
+        global $app;
         if($module == 'testcase')
         {
             $app->config->testcase->cascade    = array('story' => 'module');
             $app->config->testcase->listFields = 'module,type,stage,pri,story,status,branch,results';
         }
 
-        $fields    = explode(',', $fields);
-        $fieldList = $this->objectModel->initFieldList($module, $fields);
-
-        return $this->objectModel->setListValue($module, $fieldList);
+        return $this->invokeArgs('getCascadeList', [$module, $lists]);
     }
 
     /**
@@ -224,7 +220,7 @@ class transferTaoTest extends baseTest
     {
         $this->initConfig();
 
-        $fields = $this->objectModel->getImportFields($module);
+        $fields = $this->invokeArgs('getImportFields', [$module]);
         return $this->objectModel->parseExcelDropdownValues($module, $rows, '', $fields);
     }
 
@@ -242,7 +238,7 @@ class transferTaoTest extends baseTest
         /* parseExcelDropdownValues里调用了extractElements 这里直接调用arseExcelDropdownValues 。*/
         $this->initConfig();
 
-        $fields = $this->objectModel->getImportFields($module);
+        $fields = $this->invokeArgs('getImportFields', [$module]);
         return $this->objectModel->parseExcelDropdownValues($module, $rows, '', $fields);
     }
 
@@ -259,7 +255,7 @@ class transferTaoTest extends baseTest
     {
         $this->initConfig($module);
 
-        $fields = $this->objectModel->getImportFields($module);
+        $fields = $this->invokeArgs('getImportFields', [$module]);
         return $this->objectModel->initFieldList($module, array_keys($fields), $withKey);
     }
 
@@ -290,7 +286,7 @@ class transferTaoTest extends baseTest
     public function getImportFieldsTest(string $module)
     {
         $this->initConfig($module);
-        return $this->objectModel->getImportFields($module);
+        return $this->invokeArgs('getImportFields', [$module]);
     }
 
     /**

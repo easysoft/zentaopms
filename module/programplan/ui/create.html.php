@@ -340,5 +340,5 @@ formBatchPanel
     on::change('[name^="enabled"]', 'changeEnabled(e.target)'),
     on::change('[name^="attribute"]', 'changeAttribute(e.target)'),
     on::change('[name^="type"]', 'changeType(e.target)'),
-    ($project->model == 'ipd' && !$planID) ? set::maxRows(count($fnGenerateDefaultData())) : null,
+    ($project->model == 'ipd' && !$planID) ? set::rowsCount(count($fnGenerateDefaultData())) : null
 );

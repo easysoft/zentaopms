@@ -4822,7 +4822,7 @@ class docModel extends model
         foreach($docs as $doc)
         {
             if(!$doc) continue;
-            $children[$doc->parent][] = $doc;
+            $children[$doc->parent ?? 0][] = $doc;
         }
 
         /* 找到所有根节点，如果没有parent为0的文档，尝试找到父节点不在docs中的文档。*/
@@ -4831,7 +4831,7 @@ class docModel extends model
         {
             foreach($docs as $doc)
             {
-                if(!isset($docs[$doc->parent])) $rootDocs[$doc->id] = $doc;
+                if(!isset($docs[$doc->parent ?? 0])) $rootDocs[$doc->id] = $doc;
             }
         }
 

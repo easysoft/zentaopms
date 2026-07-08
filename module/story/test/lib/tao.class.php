@@ -7,6 +7,22 @@ class storyTaoTest extends baseTest
 {
     protected $moduleName = 'story';
     protected $className  = 'tao';
+    public $objectModel   = null;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+        $this->objectModel = $this->instance;
+
+        /* baseTest preloads story/model.php with require_once for tao tests, so register it for helper::import too. */
+        $modelFile = realpath(dirname(__FILE__, 3) . '/model.php');
+        if($modelFile) helper::$includedFiles[$modelFile] = true;
+    }
+
+    protected function invokeTaoMethod(string $methodName, array $args = array())
+    {
+        return $this->invokeArgs($methodName, $args, $this->moduleName, $this->className, $this->instance);
+    }
 
     /**
      * Test doSaveUploadImage method.
@@ -197,7 +213,7 @@ class storyTaoTest extends baseTest
      */
     public function closeBugWhenToStoryTest(int $bugID, int $storyID): array
     {
-        $this->instance->closeBugWhenToStory($bugID, $storyID);
+        $this->invokeTaoMethod('closeBugWhenToStory', [$bugID, $storyID]);
 
         if(empty($bugID) or empty($storyID)) return array();
         $bug = (array)$this->instance->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
@@ -235,7 +251,7 @@ class storyTaoTest extends baseTest
      */
     public function doChangeParentTest(int $storyID, object $story, object $oldStory)
     {
-        $this->instance->doChangeParent($storyID, $story, $oldStory);
+        $this->invokeTaoMethod('doChangeParent', [$storyID, $story, $oldStory]);
         return $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->in("$storyID,$story->parent,$oldStory->parent")->orWhere('parent')->in("$storyID,$story->parent,$oldStory->parent")->fetchAll('id');
     }
 
@@ -251,7 +267,7 @@ class storyTaoTest extends baseTest
     public function doCreateReviewerTest(int $storyID, array $reviewer): array
     {
         $this->instance->dao->delete()->from(TABLE_STORYREVIEW)->exec();
-        $this->instance->doCreateReviewer($storyID, $reviewer);
+        $this->invokeTaoMethod('doCreateReviewer', [$storyID, $reviewer]);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->dao->select('*')->from(TABLE_STORYREVIEW)->fetchAll();
@@ -270,7 +286,7 @@ class storyTaoTest extends baseTest
     public function doCreateSpecTest(int $storyID, object $story, array $files = array()): array
     {
         $this->instance->dao->delete()->from(TABLE_STORYSPEC)->exec();
-        $this->instance->doCreateSpec($storyID, $story, $files);
+        $this->invokeTaoMethod('doCreateSpec', [$storyID, $story, $files]);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->dao->select('*')->from(TABLE_STORYSPEC)->fetchAll('', false);
@@ -287,10 +303,27 @@ class storyTaoTest extends baseTest
     public function doCreateStoryTest(object $story): object|array
     {
         $this->instance->dao->delete()->from(TABLE_STORY)->exec();
-        $storyID = $this->instance->doCreateStory($story);
+        $storyID = $this->invokeTaoMethod('doCreateStory', [$story]);
 
         if(dao::isError()) return dao::getError();
         return $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
+    }
+
+    /**
+     * Test doUpdateSpec method.
+     *
+     * @param  int    $storyID
+     * @param  object $story
+     * @param  object $oldStory
+     * @access public
+     * @return object|array
+     */
+    public function doUpdateSpecTest(int $storyID, object $story, object $oldStory): object|array
+    {
+        $this->invokeTaoMethod('doUpdateSpec', [$storyID, $story, $oldStory]);
+
+        if(dao::isError()) return dao::getError();
+        return $this->instance->dao->select('*,files')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->fetch();
     }
 
     /**
@@ -303,7 +336,10 @@ class storyTaoTest extends baseTest
      */
     public function fetchBaseInfoTest(int $storyID): object|false
     {
-        return $this->instance->fetchBaseInfo($storyID);
+        $result = $this->invokeTaoMethod('fetchBaseInfo', [$storyID]);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
     }
 
     /**
@@ -329,7 +365,7 @@ class storyTaoTest extends baseTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->instance->fetchExecutionStories($storyDAO, $productID, 'byBranch', '', 't2.id_desc', $pager);
+        return $this->invokeTaoMethod('fetchExecutionStories', [$storyDAO, $productID, 'byBranch', '', 'id_desc', $pager]);
     }
 
     /**
@@ -359,7 +395,7 @@ class storyTaoTest extends baseTest
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0);
 
-        return $this->instance->fetchProjectStories($storyDAO, $productID, $type, $branch, $storyIdList, 't2.id_desc', $pager, empty($project) ? null : $project);
+        return $this->invokeTaoMethod('fetchProjectStories', [$storyDAO, $productID, $type, $branch, $storyIdList, 'id_desc', $pager, empty($project) ? null : $project]);
     }
 
     /**
@@ -373,7 +409,7 @@ class storyTaoTest extends baseTest
      */
     public function finishTodoWhenToStoryTest(int $todoID, int $storyID): string
     {
-        $this->instance->finishTodoWhenToStory($todoID, $storyID);
+        $this->invokeTaoMethod('finishTodoWhenToStory', [$todoID, $storyID]);
 
         if(empty($todoID) or empty($storyID)) return '';
         return $this->instance->dao->select('id,status')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch('status');
@@ -389,10 +425,9 @@ class storyTaoTest extends baseTest
      */
     public function getAffectedBugsTest(int $storyID): object
     {
-        global $tester;
         $users['admin'] = '管理员';
-        $story = $this->instance->loadModel('story')->getById($storyID);
-        return $this->instance->getAffectedBugs($story, $users);
+        $story = $this->objectModel->getById($storyID);
+        return $this->invokeTaoMethod('getAffectedBugs', [$story, $users]);
     }
 
     /**
@@ -405,10 +440,9 @@ class storyTaoTest extends baseTest
      */
     public function getAffectedCasesTest(int $storyID): object
     {
-        global $tester;
         $users['admin'] = '管理员';
-        $story = $this->instance->loadModel('story')->getById($storyID);
-        return $this->instance->getAffectedCases($story, $users);
+        $story = $this->objectModel->getById($storyID);
+        return $this->invokeTaoMethod('getAffectedCases', [$story, $users]);
     }
 
     /**
@@ -443,10 +477,9 @@ class storyTaoTest extends baseTest
      */
     public function getAffectedProjectsTest(int $storyID): object
     {
-        global $tester;
         $users['admin'] = '管理员';
-        $story = $this->instance->loadModel('story')->getById($storyID);
-        return $this->instance->getAffectedProjects($story, $users);
+        $story = $this->objectModel->getById($storyID);
+        return $this->invokeTaoMethod('getAffectedProjects', [$story, $users]);
     }
 
     /**
@@ -459,10 +492,9 @@ class storyTaoTest extends baseTest
      */
     public function getAffectedTwinsTest(int $storyID): object
     {
-        global $tester;
         $users['admin'] = '管理员';
-        $story = $this->instance->loadModel('story')->getById($storyID);
-        return $this->instance->getAffectedTwins($story, $users);
+        $story = $this->objectModel->getById($storyID);
+        return $this->invokeTaoMethod('getAffectedTwins', [$story, $users]);
     }
 
     /**
@@ -498,7 +530,7 @@ class storyTaoTest extends baseTest
      */
     public function getExecutionStoriesBySearchTest(int $executionID, int $queryID, int $productID, array $excludeStories = array(), object|null $pager = null): int
     {
-        $stories = $this->instance->getExecutionStoriesBySearch($executionID, $queryID, $productID, 't2.id_desc', 'story', '', $excludeStories, $pager);
+        $stories = $this->invokeTaoMethod('getExecutionStoriesBySearch', [$executionID, $queryID, $productID, 'id_desc', 'story', '', $excludeStories, $pager]);
         return count($stories);
     }
 
@@ -610,7 +642,7 @@ class storyTaoTest extends baseTest
      */
     public function setStageToClosedTest(int $storyID, array $linkedBranches = array(), array $linkedProjects = array()): object|array
     {
-        $this->instance->setStageToClosed($storyID, $linkedBranches, $linkedProjects);
+        $this->invokeTaoMethod('setStageToClosed', [$storyID, $linkedBranches, $linkedProjects]);
         if(dao::isError()) return dao::getError();
 
         $story = $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
@@ -630,7 +662,7 @@ class storyTaoTest extends baseTest
      */
     public function setStageToPlannedTest(int $storyID, array $stages = array(), array $oldStages = array()): object|array
     {
-        $this->instance->setStageToPlanned($storyID, $stages, $oldStages);
+        $this->invokeTaoMethod('setStageToPlanned', [$storyID, $stages, $oldStages]);
         if(dao::isError()) return dao::getError();
 
         $story = $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
@@ -672,7 +704,7 @@ class storyTaoTest extends baseTest
      */
     public function updateStageTest(int $storyID, array $stages, array $oldStages = array(), array $linkedProjects = array()): object|array
     {
-        $this->instance->updateStage($storyID, $stages, $oldStages, $linkedProjects);
+        $this->invokeTaoMethod('updateStage', [$storyID, $stages, $oldStages, $linkedProjects]);
         if(dao::isError()) return dao::getError();
 
         $story = $this->instance->dao->select('*')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
@@ -691,7 +723,7 @@ class storyTaoTest extends baseTest
      */
     public function updateTwinsTest(array $storyIdList, int $mainStoryID): array
     {
-        $this->instance->updateTwins($storyIdList, $mainStoryID);
+        $this->invokeTaoMethod('updateTwins', [$storyIdList, $mainStoryID]);
 
         if(empty($storyIdList)) return array();
         if($storyIdList)

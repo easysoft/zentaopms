@@ -344,9 +344,10 @@ class biModel extends model
     {
         $dbh = $this->app->loadDriver($driver);
 
-        $isDM = $this->config->db->driver == 'dm';
+        $isDM    = $this->config->db->driver == 'dm';
+        $isPgSQL = in_array($this->config->db->driver, zget($this->config, 'pgsqlDriverList', array()));
         $prefixSQL = $driver == 'mysql' ? 'EXPLAIN' : 'PRAGMA enable_profiling=json; EXPLAIN ANALYZE';
-        if($isDM) $sql = $dbh->formatSQL($sql);
+        if(($isDM || $isPgSQL) && method_exists($dbh, 'formatSQL')) $sql = $dbh->formatSQL($sql);
         try
         {
             $isDM ? $dbh->exec("$prefixSQL $sql") : $dbh->query("$prefixSQL $sql")->fetchAll(); // [dmdb] EXPLAIN cannot fetch data.
@@ -1677,7 +1678,7 @@ class biModel extends model
         }
         else
         {
-            $countSql = "SELECT COUNT(1) AS count FROM ($sql)";
+            $countSql = "SELECT COUNT(1) AS count FROM ($sql) AS t1";
         }
 
         return array($limitSql, $countSql);
