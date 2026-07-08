@@ -222,6 +222,9 @@ $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
 $config->logonMethods[] = 'repo.ajaxgeteditorcontent';
+$config->logonMethods[] = 'space.ajaxGetDropMenu';
+$config->logonMethods[] = 'space.ajaxGetGroupsBySpace';
+$config->logonMethods[] = 'space.ajaxGetGroupByID';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
@@ -438,6 +441,7 @@ $config->ajaxDependencies['repo.ajaxloadproducts']                            = 
 $config->ajaxDependencies['repo.ajaxshowrepo']                                = 'repo.import';
 $config->ajaxDependencies['repo.ajaxsyncbranchcommit']                        = ['repo.showsynccommit', 'repo.browse'];
 $config->ajaxDependencies['repo.ajaxsynccommit']                              = 'repo.showsynccommit';
+$config->ajaxDependencies['space.ajaxtips']                                   = 'space.create';
 $config->ajaxDependencies['requirement.ajaxgetuserstories']                   = ['todo.create', 'todo.edit', 'todo.batchcreate'];
 $config->ajaxDependencies['screen.ajaxgetchart']                              = ['screen.viewold', 'screen.design'];
 $config->ajaxDependencies['screen.ajaxgetfilteroptions']                      = ['screen.viewold', 'screen.design'];
