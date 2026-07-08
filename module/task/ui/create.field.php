@@ -218,23 +218,28 @@ if(!empty(data('features.story')) && empty(data('storyID'))) $fields->field('typ
 
 /* Set hidden control. */
 $fields->field('storyEstimate')
+    ->label($lang->story->estimate)
     ->hidden()
     ->control('input');
 
 $fields->field('storyDesc')
+    ->label($lang->story->spec)
     ->hidden()
     ->control('input');
 
 $fields->field('storyPri')
+    ->label($lang->story->pri)
     ->hidden()
     ->control('input')
     ->value('0');
 
 $fields->field('taskName')
+    ->label($lang->task->name)
     ->hidden()
     ->control('input');
 
 $fields->field('taskEstimate')
+    ->label($lang->task->estimate)
     ->hidden()
     ->control('input');
 
