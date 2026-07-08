@@ -26,11 +26,14 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
-        if(!isset($group->vision)) $group->vision = $this->config->vision;
+        if(!isset($group->vision))      $group->vision      = $this->config->vision;
+        if(!isset($group->devopsSpace)) $group->devopsSpace = 0;
 
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project='{$group->project}'")
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique', "`vision` = '{$this->config->vision}' AND `project`='{$group->project}' AND `devopsSpace`='{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
@@ -56,9 +59,13 @@ class groupModel extends model
      */
     public function update(int $groupID, object $group): bool
     {
+        $oldGroup = $this->getByID($groupID);
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->update(TABLE_GROUP)->data($group)
             ->where('id')->eq($groupID)
+            ->batchCheck($this->config->group->edit->requiredFields, 'notempty')
+            ->check('name', 'unique', " `id` != '{$groupID}' AND `vision` = '{$this->config->vision}' AND `project` = '{$oldGroup->project}' AND `devopsSpace` = '{$oldGroup->devopsSpace}'")
+            ->autoCheck()
             ->exec();
 
         return !dao::isError();
@@ -78,7 +85,9 @@ class groupModel extends model
     {
         $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)
-            ->check('name', 'unique', "vision = '{$this->config->vision}' and project = '{$group->project}'")
+            ->batchCheck($this->config->group->create->requiredFields, 'notempty')
+            ->check('name', 'unique', "`vision` = '{$this->config->vision}' AND `project` = '{$group->project}' AND `devopsSpace` = '{$group->devopsSpace}'")
+            ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
 
@@ -137,10 +146,11 @@ class groupModel extends model
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0)
+    public function getList(int $projectID = 0, int $devopsSpaceID = 0)
     {
         return $this->dao->select('*')->from(TABLE_GROUP)
             ->where('project')->eq($projectID)
+            ->andWhere('devopsSpace')->eq($devopsSpaceID)
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->orderBy('id')
             ->fetchAll();
@@ -196,6 +206,7 @@ class groupModel extends model
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t2.project')->eq(0)
+            ->andWhere('t2.devopsSpace')->eq(0)
             ->beginIF(!$allVision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->fetchAll('id');
     }

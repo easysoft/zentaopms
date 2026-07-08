@@ -10,130 +10,30 @@ declare(strict_types=1);
  */
 namespace zin;
 
-jsVar('pathGitTip', $lang->repo->example->path->git);
-jsVar('pathSvnTip', $lang->repo->example->path->svn);
-jsVar('clientGitTip', $lang->repo->example->client->git);
-jsVar('clientSvnTip', $lang->repo->example->client->svn);
 jsVar('scmList', $lang->repo->scmList);
-jsVar('repoSCM', $repo->SCM);
-jsVar('client', $repo->client);
+$members = $repo->acl == 'private' ? array_keys(zget($repo, 'members', array())) : array();
 
 formPanel
 (
     set::title($lang->repo->edit),
     set::back('repo-maintain'),
-    formRow
-    (
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->product->typeAB),
-            set::control("static"),
-            set::value(zget($lang->repo->scmList, $repo->SCM, ''))
-        ),
-        formHidden('SCM', $repo->SCM),
-        $repo->SCM == 'Git' ? h::span
-        (
-            setClass('tips-git leading-8 ml-2'),
-            html($lang->repo->syncTips)
-        ) : null
-    ),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->repo->serviceHost),
-            set::value(zget($serviceHosts, $repo->serviceHost, '')),
-            set::control("static")
-        ),
-        formHidden('serviceHost', $repo->serviceHost)
-    ),
-    formRow
-    (
-        setClass('service hide'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->repo->serviceProject),
-            set::control("static"),
-            set::value(!empty($project) ? $project->name_with_namespace : '')
-        ),
-        formHidden('serviceProject', $repo->serviceProject)
-    ),
     formGroup
     (
         set::width('1/2'),
         set::name("name"),
-        set::label($lang->user->name),
+        set::label($lang->repo->name),
+        set::value($repo->name),
+        set::disabled(true)
+    ),
+    formGroup
+    (
+        set::width('1/2'),
+        set::name("space"),
+        set::label($lang->repo->space),
         set::required(true),
-        set::value($repo->name)
-    ),
-    formRow
-    (
-        setClass('hide-service hide-git'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("path"),
-            set::label($lang->repo->path),
-            set::required(true),
-            set::placeholder($lang->repo->example->path->git),
-            set::value($repo->path)
-        )
-    ),
-    formRow
-    (
-        ($config->inContainer || $config->inQuickon || $this->config->inCompose) ? setClass('hidden') : setClass('hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("client"),
-            set::label($lang->repo->client),
-            set::required(true),
-            set::value($repo->client)
-        )
-    ),
-    formRow
-    (
-        setClass('account-fields hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name("account"),
-            set::label($lang->user->account),
-            set::required(true),
-            set::value($repo->account)
-        )
-    ),
-    formRow
-    (
-        setClass('account-fields hide-service'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->user->password),
-            set::required(true),
-            inputGroup
-            (
-                control(set(array
-                (
-                    'name' => "password",
-                    'id' => "password",
-                    'value' => $repo->password,
-                    'type' => "password"
-                ))),
-                control(set(array
-                (
-                    'name' => "encrypt",
-                    'id' => "encrypt",
-                    'value' => $repo->encrypt,
-                    'type' => "picker",
-                    'items' => $lang->repo->encryptList
-                )))
-            )
-        )
+        set::value($repo->spaceID),
+        set::items($spaces),
+        set::disabled(true)
     ),
     formGroup
     (
@@ -141,8 +41,8 @@ formPanel
         set::name("product[]"),
         set::label($lang->story->product),
         set::required(true),
-        set::control(array("control" => "picker","multiple" => true)),
         set::items($products),
+        set::multiple(true),
         set::value($repo->product)
     ),
     formGroup
@@ -154,55 +54,36 @@ formPanel
         set::placeholder($lang->repo->descPlaceholder),
         set::value(strip_tags($repo->desc))
     ),
-    formRow
+    $repo->scmType == 'svn' ? null : formGroup
+    (
+        set::width('1/2'),
+        set::name("defaultBranch"),
+        set::label($lang->repo->defaultBranch),
+        set::required(true),
+        set::items($branchList),
+        set::value($defaultBranch)
+    ),
+    formGroup
     (
         set::id('aclList'),
-        formGroup
-        (
-            set::width('1/2'),
-            set::name('acl[acl]'),
-            set::label($lang->repo->acl),
-            set::control('radioList'),
-            set::items($lang->repo->aclList),
-            set::value($repo->acl->acl),
-            on::change('onAclChange')
-        )
+        set::width('1/2'),
+        set::name('acl'),
+        set::label($lang->repo->acl),
+        set::control('radioList'),
+        set::items($lang->repo->aclList),
+        set::value($repo->acl),
+        on::change('onAclChange')
     ),
-    formRow
+    formGroup
     (
-        set::id('whitelist'),
-        $repo->acl->acl == 'open' ? setClass('hidden') : null,
-        formGroup
-        (
-            set::label($lang->product->whitelist),
-            inputGroup
-            (
-                $lang->repo->group,
-                width('full'),
-                control(set(array
-                (
-                    'name' => "acl[groups][]",
-                    'id' => "aclgroups",
-                    'value' => empty($repo->acl->groups) ? '' : implode(',', $repo->acl->groups),
-                    'type' => "picker",
-                    'items' => $groups,
-                    'multiple' => true
-                )))
-            ),
-            inputGroup
-            (
-                $lang->repo->user,
-                control(set(array
-                (
-                    'name' => "acl[users][]",
-                    'id' => "aclusers",
-                    'value' => empty($repo->acl->users) ? '' : implode(',', $repo->acl->users),
-                    'type' => "picker",
-                    'items' => $users,
-                    'multiple' => true
-                ))),
-                setClass('mt-2')
-            )
-        )
+        setID('members'),
+        setClass('hidden'),
+        set::width('1/2'),
+        set::name('members'),
+        set::label($lang->repo->members),
+        set::required(true),
+        set::items($users),
+        set::multiple(true),
+        set::value($members)
     )
 );

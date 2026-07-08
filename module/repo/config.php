@@ -1,8 +1,10 @@
 <?php
 global $lang, $app;
 $app->loadLang('repo');
+$app->loadLang('deploy');
+$app->loadLang('system');
 
-$config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import');
+$config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import', 'group');
 
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
@@ -33,7 +35,7 @@ $config->repo->svnBatchNum = 10;
 $config->repo->images      = '|png|gif|jpg|ico|jpeg|bmp|';
 $config->repo->binary      = '|pdf|';
 $config->repo->synced      = '';
-$config->repo->notSyncSCM  = array('Gitlab');
+$config->repo->notSyncSCM  = array('Gitlab', 'GitFox');
 
 $config->repo->repoSyncLog = new stdclass();
 $config->repo->repoSyncLog->one            = '1';
@@ -49,22 +51,24 @@ $config->repo->repoSyncLog->logFilePrefix  = '/log/clone.progress.';
 $config->repo->repoSyncLog->finishCompress = array('Compressing objects: 100%');
 
 $config->repo->editor = new stdclass();
-$config->repo->editor->create = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleTools');
-$config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->create                   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->edit                     = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->repo->editor->view                     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->diff                     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->ajaxgeteditorcontent     = array('id' => 'commentText', 'tools' => 'simpleTools');
+$config->repo->editor->ajaxgetdiffeditorcontent = array('id' => 'commentText', 'tools' => 'simpleTools');
 
-$config->repo->switcherModuleList = array('repo', 'job', 'compile', 'mr');
+$config->repo->switcherModuleList = array('repo', 'job', 'compile', 'ppm');
 $config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'log', 'revision', 'blame');
 
 $config->repo->create = new stdclass();
-$config->repo->create->requiredFields = 'product,SCM,name,encoding';
+$config->repo->create->requiredFields = 'space,product,SCM,name,encoding';
 
 $config->repo->createRepo = new stdclass();
-$config->repo->createRepo->requiredFields = 'product,name';
+$config->repo->createRepo->requiredFields = 'space,product,name';
 
 $config->repo->edit = new stdclass();
-$config->repo->edit->requiredFields = 'product,SCM,name,encoding';
+$config->repo->edit->requiredFields = 'space,product,name';
 
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';
@@ -76,9 +80,12 @@ $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs');
-$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs');
-$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git');
+$config->repo->gitfox = new stdclass;
+$config->repo->gitfox->apiPath = "%s/api/v2/repos/%s/";
+
+$config->repo->gitServiceList     = array('gitlab', 'gitea', 'gogs', 'gitfox');
+$config->repo->gitServiceTypeList = array('Gitlab', 'Gitea', 'Gogs', 'GitFox');
+$config->repo->gitTypeList        = array('Gitlab', 'Gitea', 'Gogs', 'Git', 'GitFox');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';
@@ -164,13 +171,11 @@ $config->repo->fileExt["xml"]              = array('.xml', '.dtd', '.ascx', '.cs
 $config->repo->fileExt["yaml"]             = array('.yaml', '.yml');
 
 $config->repo->search['module'] = 'repo';
-$config->repo->search['fields']['name']     = $lang->repo->name;
-$config->repo->search['fields']['product']  = $lang->repo->product;
-$config->repo->search['fields']['SCM']      = $lang->repo->SCM;
+$config->repo->search['fields']['name']    = $lang->repo->name;
+$config->repo->search['fields']['product'] = $lang->repo->product;
 
-$config->repo->search['params']['name']     = array('operator' => 'include', 'control' => 'input', 'values' => '');
-$config->repo->search['params']['product']  = array('operator' => 'include', 'control' => 'select', 'values' => '');
-$config->repo->search['params']['SCM']      = array('operator' => '=', 'control' => 'select', 'values' => $lang->repo->scmList);
+$config->repo->search['params']['name']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->search['params']['product'] = array('operator' => 'include', 'control' => 'select', 'values' => '');
 
 $config->repo->searchCommits['module'] = 'repoCommits';
 $config->repo->searchCommits['fields']['commit']    = $lang->repo->revisionA;
@@ -179,4 +184,17 @@ $config->repo->searchCommits['fields']['committer'] = $lang->repo->committer;
 
 $config->repo->searchCommits['params']['commit']    = array('operator' => 'include', 'control' => 'input', 'values' => '');
 $config->repo->searchCommits['params']['date']      = array('operator' => '=',       'control' => 'date',  'values' => '');
-$config->repo->searchCommits['params']['committer'] = array('operator' => 'include', 'control' => 'input', 'values' => '');
+$config->repo->searchCommits['params']['committer'] = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
+
+/* Search config. */
+$config->repo->system = new stdClass();
+$config->repo->system->search['module']                 = 'systemSearch';
+$config->repo->system->search['fields']['id']           = $lang->idAB;
+$config->repo->system->search['fields']['name']         = $lang->repo->system->name;
+$config->repo->system->search['fields']['product']      = $lang->repo->system->product;
+$config->repo->system->search['fields']['status']       = $lang->repo->system->status;
+
+$config->repo->system->search['params']['id']            = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->repo->system->search['params']['name']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->repo->system->search['params']['product']       = array('operator' => '=',       'control' => 'select', 'values' => array());
+$config->repo->system->search['params']['status']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->system->statusList);

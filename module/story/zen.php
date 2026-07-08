@@ -1989,7 +1989,7 @@ class storyZen extends story
         $this->view->bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
         $this->view->fromBug       = $story->fromBug ? $this->dao->select('id,title')->from(TABLE_BUG)->where('id')->eq($story->fromBug)->fetch() : '';
         $this->view->cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($story->id)->andWhere('deleted')->eq(0)->fetchAll();
-        $this->view->linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($story->id, 'story');
+        $this->view->linkedMRs     = $this->loadModel('ppm')->getLinkedMRPairs($story->id, 'story');
         $this->view->linkedCommits = $this->loadModel('repo')->getCommitsByObject($story->id, 'story');
         $this->view->modulePath    = $this->tree->getParents($story->module);
         $this->view->storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);

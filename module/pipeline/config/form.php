@@ -1,0 +1,25 @@
+<?php
+$config->pipeline->form = new stdclass();
+
+$config->pipeline->form->create = array();
+$config->pipeline->form->create['name']        = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
+$config->pipeline->form->create['desc']        = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->pipeline->form->create['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->pipeline->form->edit = $config->pipeline->form->create;
+$config->pipeline->form->edit['editedDate']    = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->pipeline->form->edit['defaultBranch'] = array('type' => 'string', 'required' => true, 'default' => '');
+$config->pipeline->form->edit['customParam']   = array('type' => 'string', 'required' => false, 'default' => '{}');
+unset($config->pipeline->form->edit['createdDate']);
+
+$config->pipeline->form->flowInfo = array();
+$config->pipeline->form->flowInfo['name']        = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+$config->pipeline->form->flowInfo['desc']        = array('type' => 'html', 'required' => false, 'default' => '', 'control' => 'editor');
+$config->pipeline->form->flowInfo['createdDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
+$config->pipeline->form->flowInfo['editedDate']  = array('type' => 'string', 'required' => false, 'default' => helper::now());
+
+$config->pipeline->form->import = array();
+$config->pipeline->form->import['providerID'] = array('type' => 'int',    'required' => true,  'default' => 0);
+$config->pipeline->form->import['pipeline']   = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');
+$config->pipeline->form->import['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'filter' => 'trim');
+$config->pipeline->form->import['desc']       = array('type' => 'string', 'required' => false, 'default' => '', 'filter' => 'trim');

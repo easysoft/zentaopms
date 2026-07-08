@@ -76,7 +76,7 @@ $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'editor';
 $lang->moduleOrder[220] = 'message';
 $lang->moduleOrder[225] = 'gitlab';
-$lang->moduleOrder[230] = 'mr';
+$lang->moduleOrder[230] = 'ppm';
 $lang->moduleOrder[235] = 'app';
 $lang->moduleOrder[240] = 'gogs';
 $lang->moduleOrder[245] = 'gitea';
@@ -1333,23 +1333,6 @@ $lang->caselib->methodOrder[60] = 'exportTemplate';
 $lang->caselib->methodOrder[65] = 'import';
 $lang->caselib->methodOrder[70] = 'showImport';
 
-$lang->resource->host = new stdclass();
-$lang->resource->host->browse       = 'browse';
-$lang->resource->host->create       = 'create';
-$lang->resource->host->edit         = 'editAction';
-$lang->resource->host->delete       = 'deleteAction';
-$lang->resource->host->view         = 'view';
-$lang->resource->host->changeStatus = 'changeStatus';
-$lang->resource->host->treemap      = 'treemap';
-
-$lang->host->methodOrder[0]  = 'browse';
-$lang->host->methodOrder[5]  = 'create';
-$lang->host->methodOrder[10] = 'edit';
-$lang->host->methodOrder[15] = 'delete';
-$lang->host->methodOrder[20] = 'view';
-$lang->host->methodOrder[25] = 'changeStatus';
-$lang->host->methodOrder[30] = 'treemap';
-
 $lang->resource->zahost = new stdclass();
 $lang->resource->zahost->browse         = 'browse';
 $lang->resource->zahost->create         = 'create';
@@ -1408,31 +1391,93 @@ $lang->zanode->methodOrder[75] = 'restoreSnapshot';
 $lang->zanode->methodOrder[80] = 'deleteSnapshot';
 $lang->zanode->methodOrder[85] = 'instruction';
 
+$lang->resource->space = new stdclass();
+$lang->resource->space->browse = 'browse';
+$lang->resource->space->view   = 'view';
+$lang->resource->space->create = 'create';
+$lang->resource->space->edit   = 'edit';
+$lang->resource->space->delete = 'delete';
+
+$lang->resource->space->members           = 'memberList';
+$lang->resource->space->manageMembers     = 'manageMembers';
+$lang->resource->space->removeMember      = 'removeMember';
+$lang->resource->space->group             = 'groupList';
+$lang->resource->space->createGroup       = 'createGroup';
+$lang->resource->space->editGroup         = 'editGroup';
+$lang->resource->space->deleteGroup       = 'deleteGroup';
+$lang->resource->space->managePriv        = 'managePriv';
+$lang->resource->space->manageGroupMember = 'manageGroupMember';
+$lang->resource->space->importGroup       = 'importGroup';
+
+$lang->space->methodOrder[0]  = 'browse';
+$lang->space->methodOrder[5]  = 'view';
+$lang->space->methodOrder[10] = 'create';
+$lang->space->methodOrder[15] = 'edit';
+$lang->space->methodOrder[20] = 'delete';
+$lang->space->methodOrder[25] = 'members';
+$lang->space->methodOrder[30] = 'manageMembers';
+$lang->space->methodOrder[35] = 'removeMember';
+$lang->space->methodOrder[40] = 'group';
+$lang->space->methodOrder[45] = 'createGroup';
+$lang->space->methodOrder[50] = 'editGroup';
+$lang->space->methodOrder[52] = 'deleteGroup';
+$lang->space->methodOrder[55] = 'managePriv';
+$lang->space->methodOrder[60] = 'manageGroupMember';
+
 $lang->resource->repo = new stdclass();
-$lang->resource->repo->browse          = 'browseAction';
-$lang->resource->repo->visit           = 'visit';
-$lang->resource->repo->view            = 'view';
-$lang->resource->repo->log             = 'log';
-$lang->resource->repo->revision        = 'revisionAction';
-$lang->resource->repo->blame           = 'blameAction';
-$lang->resource->repo->create          = 'createAction';
-$lang->resource->repo->edit            = 'editAction';
-$lang->resource->repo->delete          = 'delete';
-$lang->resource->repo->showSyncCommit  = 'showSyncCommit';
-$lang->resource->repo->diff            = 'diffAction';
-$lang->resource->repo->download        = 'downloadAction';
-$lang->resource->repo->maintain        = 'maintain';
-$lang->resource->repo->setRules        = 'setRules';
-$lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
-$lang->resource->repo->downloadCode    = 'downloadCode';
-$lang->resource->repo->linkStory       = 'linkStory';
-$lang->resource->repo->linkBug         = 'linkBug';
-$lang->resource->repo->linkTask        = 'linkTask';
-$lang->resource->repo->unlink          = 'unlink';
-$lang->resource->repo->import          = 'importAction';
-$lang->resource->repo->createRepo      = 'createRepoAction';
-$lang->resource->repo->browseTag       = 'browseTag';
-$lang->resource->repo->browseBranch    = 'browseBranch';
+$lang->resource->repo->browse       = 'browseAction';
+$lang->resource->repo->view         = 'view';
+$lang->resource->repo->log          = 'commitList';
+$lang->resource->repo->revision     = 'revisionAction';
+$lang->resource->repo->blame        = 'blameAction';
+$lang->resource->repo->create       = 'createAction';
+$lang->resource->repo->edit         = 'editAction';
+$lang->resource->repo->delete       = 'delete';
+$lang->resource->repo->diff         = 'diffAction';
+$lang->resource->repo->download     = 'downloadAction';
+$lang->resource->repo->maintain     = 'maintain';
+$lang->resource->repo->setRules     = 'setRules';
+$lang->resource->repo->downloadCode = 'downloadCode';
+$lang->resource->repo->linkStory    = 'linkStory';
+$lang->resource->repo->linkBug      = 'linkBug';
+$lang->resource->repo->linkTask     = 'linkTask';
+$lang->resource->repo->unlink       = 'unlink';
+$lang->resource->repo->import       = 'importAction';
+$lang->resource->repo->createRepo   = 'createRepoAction';
+$lang->resource->repo->browseTag    = 'browseTag';
+$lang->resource->repo->browseBranch = 'browseBranch';
+$lang->resource->repo->browseSystem = 'browseSystem';
+$lang->resource->repo->createBranch = 'createBranch';
+$lang->resource->repo->deleteBranch = 'deleteBranch';
+$lang->resource->repo->createTag    = 'createTag';
+$lang->resource->repo->deleteTag    = 'deleteTag';
+$lang->resource->repo->browseWebhooks = 'browseWebhooks';
+$lang->resource->repo->createWebhook  = 'createWebhook';
+$lang->resource->repo->editWebhook    = 'editWebhook';
+$lang->resource->repo->deleteWebhook  = 'deleteWebhook';
+$lang->resource->repo->logWebhook     = 'logWebhook';
+$lang->resource->repo->enableWebhook  = 'enableWebhook';
+
+$lang->resource->repo->review        = 'reviewAction';
+$lang->resource->repo->addBug        = 'addBug';
+$lang->resource->repo->addComment    = 'addComment';
+$lang->resource->repo->editComment   = 'editComment';
+$lang->resource->repo->deleteComment = 'deleteComment';
+
+$lang->resource->artifact = new stdclass();
+$lang->resource->artifact->browse         = 'browse';
+$lang->resource->artifact->create         = 'create';
+$lang->resource->artifact->edit           = 'edit';
+$lang->resource->artifact->delete         = 'delete';
+$lang->resource->artifact->createDir      = 'createDir';
+$lang->resource->artifact->editDir        = 'editDir';
+$lang->resource->artifact->deleteDir      = 'deleteDir';
+$lang->resource->artifact->uploadArtifact = 'uploadArtifact';
+$lang->resource->artifact->editArtifact   = 'editArtifact';
+$lang->resource->artifact->deleteArtifact = 'deleteArtifact';
+
+$lang->resource->repobranchrule = new stdclass();
+$lang->resource->repobranchrule->setBranchRule = 'setBranchRule';
 
 $lang->repo->methodOrder[5]   = 'create';
 $lang->repo->methodOrder[10]  = 'edit';
@@ -1456,60 +1501,65 @@ $lang->repo->methodOrder[100] = 'import';
 $lang->repo->methodOrder[105] = 'createRepo';
 $lang->repo->methodOrder[110] = 'browseTag';
 $lang->repo->methodOrder[115] = 'browseBranch';
+$lang->repo->methodOrder[120] = 'browseSystem';
+$lang->repo->methodOrder[125] = 'createBranch';
+$lang->repo->methodOrder[130] = 'deleteBranch';
+$lang->repo->methodOrder[135] = 'createTag';
+$lang->repo->methodOrder[140] = 'deleteTag';
+$lang->repo->methodOrder[145] = 'browseWebhooks';
+$lang->repo->methodOrder[150] = 'createWebhook';
+$lang->repo->methodOrder[155] = 'editWebhook';
+$lang->repo->methodOrder[160] = 'deleteWebhook';
+$lang->repo->methodOrder[165] = 'logWebhook';
+$lang->repo->methodOrder[170] = 'enableWebhook';
+$lang->repo->methodOrder[175] = 'review';
+$lang->repo->methodOrder[180] = 'addBug';
+$lang->repo->methodOrder[185] = 'addComment';
+$lang->repo->methodOrder[190] = 'editComment';
+$lang->repo->methodOrder[195] = 'deleteComment';
 
-$lang->resource->ci = new stdclass();
-$lang->resource->ci->commitResult       = 'commitResult';
-$lang->resource->ci->checkCompileStatus = 'checkCompileStatus';
+$lang->resource->reporeviewflow = new stdclass();
+$lang->resource->reporeviewflow->browse       = 'browse';
+$lang->resource->reporeviewflow->create       = 'create';
+$lang->resource->reporeviewflow->edit         = 'edit';
+$lang->resource->reporeviewflow->delete       = 'delete';
+$lang->resource->reporeviewflow->changeStatus = 'changeStatus';
 
-$lang->ci->methodOrder[5]  = 'commitResult';
-$lang->ci->methodOrder[10] = 'checkCompileStatus';
+$lang->reporeviewflow->methodOrder[5]  = 'browse';
+$lang->reporeviewflow->methodOrder[10] = 'create';
+$lang->reporeviewflow->methodOrder[15] = 'edit';
+$lang->reporeviewflow->methodOrder[20] = 'delete';
+$lang->reporeviewflow->methodOrder[25] = 'changeStatus';
 
-$lang->resource->compile = new stdclass();
-$lang->resource->compile->browse = 'browse';
-$lang->resource->compile->logs   = 'logs';
+$lang->resource->repobranchtype = new stdclass();
+$lang->resource->repobranchtype->browse = 'browse';
+$lang->resource->repobranchtype->create = 'create';
+$lang->resource->repobranchtype->edit   = 'edit';
+$lang->resource->repobranchtype->delete = 'delete';
+$lang->resource->repobranchtype->import = 'import';
 
-$lang->compile->methodOrder[5]  = 'browse';
-$lang->compile->methodOrder[10] = 'logs';
+$lang->repobranchtype->methodOrder[5]  = 'browse';
+$lang->repobranchtype->methodOrder[10] = 'create';
+$lang->repobranchtype->methodOrder[15] = 'edit';
+$lang->repobranchtype->methodOrder[20] = 'delete';
+$lang->repobranchtype->methodOrder[25] = 'import';
 
-$lang->resource->job = new stdclass();
-$lang->resource->job->browse  = 'browseAction';
-$lang->resource->job->create  = 'create';
-$lang->resource->job->edit    = 'edit';
-$lang->resource->job->delete  = 'delete';
-$lang->resource->job->exec    = 'exec';
-$lang->resource->job->view    = 'view';
-$lang->resource->job->trigger = 'trigger';
+$lang->resource->pipeline = new stdclass();
+$lang->resource->pipeline->browse    = 'browse';
+$lang->resource->pipeline->execution = 'executionAction';
+$lang->resource->pipeline->create    = 'create';
+$lang->resource->pipeline->edit      = 'edit';
+$lang->resource->pipeline->delete    = 'delete';
+$lang->resource->pipeline->exec      = 'exec';
+$lang->resource->pipeline->execView  = 'execViewAction';
 
-$lang->job->methodOrder[5]  = 'browse';
-$lang->job->methodOrder[10] = 'create';
-$lang->job->methodOrder[15] = 'edit';
-$lang->job->methodOrder[20] = 'delete';
-$lang->job->methodOrder[25] = 'exec';
-$lang->job->methodOrder[30] = 'view';
-$lang->job->methodOrder[35] = 'trigger';
-
-$lang->resource->serverroom = new stdclass();
-$lang->resource->serverroom->browse = 'browse';
-$lang->resource->serverroom->create = 'create';
-$lang->resource->serverroom->edit   = 'editAction';
-$lang->resource->serverroom->delete = 'delete';
-$lang->resource->serverroom->view   = 'view';
-
-$lang->serverroom->methodOrder[0]  = 'browse';
-$lang->serverroom->methodOrder[5]  = 'create';
-$lang->serverroom->methodOrder[10] = 'edit';
-$lang->serverroom->methodOrder[15] = 'delete';
-$lang->serverroom->methodOrder[20] = 'view';
-
-$lang->resource->instance = new stdclass();
-$lang->resource->instance->manage = 'manage';
-
-$lang->resource->space = new stdclass();
-$lang->resource->space->browse = 'browse';
-
-$lang->resource->store = new stdclass();
-$lang->resource->store->browse  = 'browse';
-$lang->resource->store->appview = 'appView';
+$lang->pipeline->methodOrder[5]  = 'browse';
+$lang->pipeline->methodOrder[10] = 'execution';
+$lang->pipeline->methodOrder[15] = 'create';
+$lang->pipeline->methodOrder[20] = 'edit';
+$lang->pipeline->methodOrder[25] = 'delete';
+$lang->pipeline->methodOrder[30] = 'exec';
+$lang->pipeline->methodOrder[35] = 'execView';
 
 $lang->resource->system = new stdclass();
 $lang->resource->system->dashboard    = 'dashboard';
@@ -1523,6 +1573,53 @@ $lang->resource->system->delete       = 'delete';
 $lang->resource->system->active       = 'active';
 $lang->resource->system->inactive     = 'inactive';
 
+$lang->resource->system->view = 'view';
+
+$lang->resource->codescan = new stdclass();
+$lang->resource->codescan->browse      = 'browse';
+$lang->resource->codescan->view        = 'view';
+$lang->resource->codescan->changeState = 'changeRuleState';
+
+$lang->resource->codescan->ruleset            = 'ruleset';
+$lang->resource->codescan->createruleset      = 'createRuleset';
+$lang->resource->codescan->editruleset        = 'editRuleset';
+$lang->resource->codescan->deleteruleset      = 'deleteRuleset';
+$lang->resource->codescan->rulesetview        = 'viewRuleset';
+$lang->resource->codescan->changerulesetstate = 'changeRulesetState';
+$lang->resource->codescan->unlinkrule         = 'unlinkRule';
+$lang->resource->codescan->batchunlinkrule    = 'batchUnlinkRule';
+$lang->resource->codescan->linkrule           = 'linkRule';
+
+$lang->resource->codescan->linkset             = 'linkSet';
+$lang->resource->codescan->unlinkset           = 'unlinkSet';
+$lang->resource->codescan->solution            = 'solution';
+$lang->resource->codescan->solutionview        = 'viewSolution';
+$lang->resource->codescan->createsolution      = 'createSolution';
+$lang->resource->codescan->editsolution        = 'editSolution';
+$lang->resource->codescan->deletesolution      = 'deleteSolution';
+$lang->resource->codescan->changesolutionstate = 'changeSolutionState';
+
+$lang->resource->codescan->plan           = 'plan';
+$lang->resource->codescan->planView       = 'planView';
+$lang->resource->codescan->createPlan     = 'createPlan';
+$lang->resource->codescan->editPlan       = 'editPlan';
+$lang->resource->codescan->deletePlan     = 'deletePlan';
+$lang->resource->codescan->unlinkSolution = 'unlinkSolution';
+$lang->resource->codescan->task           = 'task';
+$lang->resource->codescan->exec           = 'exec';
+$lang->resource->codescan->createTrigger  = 'createTrigger';
+$lang->resource->codescan->editTrigger    = 'editTrigger';
+$lang->resource->codescan->deleteTrigger  = 'deleteTrigger';
+$lang->resource->codescan->taskView       = 'taskView';
+$lang->resource->codescan->taskLog        = 'taskLog';
+$lang->resource->codescan->resend         = 'resend';
+
+$lang->resource->codescan->overview     = 'overview';
+$lang->resource->codescan->issue        = 'issue';
+$lang->resource->codescan->issueView    = 'issueView';
+$lang->resource->codescan->ignoreIssue  = 'ignoreIssue';
+$lang->resource->codescan->confirmIssue = 'confirmIssue';
+$lang->resource->codescan->activeIssue  = 'activeIssue';
 /* Doc. */
 $lang->resource->doc = new stdclass();
 $lang->resource->doc->index                = 'index';
@@ -1659,59 +1756,31 @@ $lang->custom->methodOrder[100] = 'hours';
 $lang->custom->methodOrder[105] = 'percent';
 $lang->custom->methodOrder[110] = 'limitTaskDate';
 
-/* Subversion. */
-$lang->resource->svn = new stdclass();
-$lang->resource->svn->diff    = 'diff';
-$lang->resource->svn->cat     = 'cat';
-$lang->resource->svn->apiSync = 'apiSync';
-
-$lang->svn->methodOrder[5]  = 'diff';
-$lang->svn->methodOrder[10] = 'cat';
-$lang->svn->methodOrder[15] = 'apiSync';
-
 /* merge request. */
-$lang->resource->mr = new stdclass();
-$lang->resource->mr->create     = 'create';
-$lang->resource->mr->browse     = 'browseAction';
-$lang->resource->mr->edit       = 'edit';
-$lang->resource->mr->delete     = 'delete';
-$lang->resource->mr->view       = 'viewAction';
-$lang->resource->mr->accept     = 'accept';
-$lang->resource->mr->linkStory  = 'linkStory';
-$lang->resource->mr->linkBug    = 'linkBug';
-$lang->resource->mr->linkTask   = 'linkTask';
-$lang->resource->mr->unlink     = 'unlink';
-$lang->resource->mr->approval   = 'approval';
-$lang->resource->mr->close      = 'close';
-$lang->resource->mr->reopen     = 'reopen';
+$lang->resource->ppm = new stdclass();
+$lang->resource->ppm->create     = 'create';
+$lang->resource->ppm->browse     = 'browseAction';
+$lang->resource->ppm->edit       = 'edit';
+$lang->resource->ppm->delete     = 'delete';
+$lang->resource->ppm->view       = 'viewAction';
+$lang->resource->ppm->merge      = 'merge';
+$lang->resource->ppm->review     = 'review';
+$lang->resource->ppm->close      = 'close';
+$lang->resource->ppm->reopen     = 'reopen';
 
-$lang->mr->methodOrder[10]  = 'create';
-$lang->mr->methodOrder[15]  = 'browse';
-$lang->mr->methodOrder[20]  = 'edit';
-$lang->mr->methodOrder[25]  = 'delete';
-$lang->mr->methodOrder[35]  = 'view';
-$lang->mr->methodOrder[45]  = 'accept';
-$lang->mr->methodOrder[60]  = 'linkStory';
-$lang->mr->methodOrder[65]  = 'linkBug';
-$lang->mr->methodOrder[70]  = 'linkTask';
-$lang->mr->methodOrder[75]  = 'unlink';
-$lang->mr->methodOrder[80]  = 'approval';
-$lang->mr->methodOrder[85]  = 'close';
-$lang->mr->methodOrder[90]  = 'reopen';
-$lang->mr->methodOrder[95]  = 'addReview';
+$lang->ppm->methodOrder[10]  = 'create';
+$lang->ppm->methodOrder[15]  = 'browse';
+$lang->ppm->methodOrder[20]  = 'edit';
+$lang->ppm->methodOrder[25]  = 'delete';
+$lang->ppm->methodOrder[35]  = 'view';
+$lang->ppm->methodOrder[45]  = 'merge';
+$lang->ppm->methodOrder[80]  = 'review';
+$lang->ppm->methodOrder[85]  = 'close';
+$lang->ppm->methodOrder[90]  = 'reopen';
+$lang->ppm->methodOrder[95]  = 'addReview';
 
 /* App. */
 $lang->resource->app = new stdclass();
-
-/* Git. */
-$lang->resource->git = new stdclass();
-$lang->resource->git->diff    = 'diff';
-$lang->resource->git->cat     = 'cat';
-$lang->resource->git->apiSync = 'apiSync';
-
-$lang->git->methodOrder[5]  = 'diff';
-$lang->git->methodOrder[10] = 'cat';
-$lang->git->methodOrder[15] = 'apiSync';
 
 /* Company. */
 $lang->resource->company = new stdclass();
@@ -2165,6 +2234,17 @@ $lang->editor->methodOrder[20] = 'newPage';
 $lang->editor->methodOrder[25] = 'save';
 $lang->editor->methodOrder[30] = 'delete';
 
+$lang->resource->provider = new stdclass();
+$lang->resource->provider->browse = 'browseAction';
+$lang->resource->provider->create = 'createAction';
+$lang->resource->provider->edit   = 'editAction';
+$lang->resource->provider->delete = 'deleteAction';
+
+$lang->provider->methodOrder[5]  = 'browse';
+$lang->provider->methodOrder[10] = 'create';
+$lang->provider->methodOrder[15] = 'edit';
+$lang->provider->methodOrder[20] = 'delete';
+
 $lang->resource->contact            = new stdclass();
 $lang->resource->programstakeholder = new stdclass();
 $lang->resource->researchplan       = new stdclass();
@@ -2177,7 +2257,6 @@ $lang->resource->systemschedule     = new stdclass();
 $lang->resource->systemeffort       = new stdclass();
 $lang->resource->systemdynamic      = new stdclass();
 $lang->resource->systemcompany      = new stdclass();
-$lang->resource->pipeline           = new stdclass();
 $lang->resource->devopssetting      = new stdclass();
 $lang->resource->featureswitch      = new stdclass();
 $lang->resource->importdata         = new stdclass();
@@ -2248,12 +2327,13 @@ if(!$inUpgrade)
         unset($lang->resource->ci);
         unset($lang->resource->compile);
         unset($lang->resource->jenkins);
-        unset($lang->resource->job);
+        unset($lang->resource->pipeline);
         unset($lang->resource->gitlab);
         unset($lang->resource->gogs);
         unset($lang->resource->gitea);
         unset($lang->resource->sonarqube);
-        unset($lang->resource->mr);
+        unset($lang->resource->ppm);
+        unset($lang->resource->space);
         unset($lang->resource->instance, $lang->resource->space, $lang->resource->store);
         unset($lang->resource->zanode,   $lang->resource->ci, $lang->resource->zahost);
         unset($lang->resource->testcase->showScript, $lang->resource->testcase->automation);

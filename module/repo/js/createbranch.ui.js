@@ -48,3 +48,27 @@ $(document).on('click', '.modal-actions > button', function()
 {
     loadCurrentPage();
 })
+
+const onHostChange = window.onHostChange
+
+window.onHostChange = function()
+{
+    onHostChange();
+
+    const host = $('[name=serviceHost]').val();
+    $.get($.createLink('repo', 'ajaxGetServiceInfo', "serviceID=" + host), function(resp)
+    {
+        if(resp)
+        {
+            $('#committer').removeClass('hidden');
+            $('[name=namespace]').closest('.form-group').addClass('hidden');
+            $('[name=namespace]').zui('picker').$.clear();
+        }
+        else
+        {
+            $('#committer').addClass('hidden');
+            $('[name^=committer]').zui('picker').$.clear();
+            $('[name=namespace]').closest('.form-group').removeClass('hidden');
+        }
+    });
+}

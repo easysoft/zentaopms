@@ -1,0 +1,23 @@
+#planMenu menu.nav {border-bottom: 1px solid #ddd}
+#planMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
+
+#taskMenu menu.nav {border-bottom: 1px solid #ddd}
+#taskMenu .nav-item>a.active {border-bottom-color: var(--color-primary-500) !important; border-bottom-width: 2px; margin-bottom: -1px;}
+
+#minuteTip, #hourTip, #dayTip, #monthTip, #weekTip {white-space: nowrap;}
+
+#searchForm.active{--skin-text: var(--color-primary-500); --skin-ring: var(--color-primary-500);}
+
+#table-codescan-issue .dropdown-menu.menu {overflow-y: auto;}
+
+.issue-view-list {height: 88vh;}
+.issue-view-list .issue-file-title {width: 340px;}
+
+.m-codescan-issueview #mainContentCell {height: 88vh; overflow: hidden;}
+#issueViewTabs #issueReason {height: calc(88vh - 15rem); overflow: scroll; overflow-x: hidden; padding-bottom: 6rem;}
+#issueViewTabs #taskInfo {height: calc(88vh - 15rem); overflow: scroll; overflow-x: hidden; padding-bottom: 6rem;}
+#issueViewTabs #history {height: calc(88vh - 15rem); overflow: scroll; overflow-x: hidden; padding-bottom: 6rem;}
+#basicInfo {padding-bottom: 5px;}
+.issueFile {padding-top: 5px;}
+
+#issueStatistics .block-statistic-nav {height: 300px; overflow-y: visible;}

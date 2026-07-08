@@ -52,7 +52,7 @@ $lang->jenkins     = new stdclass();
 $lang->gitlab      = new stdclass();
 $lang->gitea       = new stdclass();
 $lang->gogs        = new stdclass();
-$lang->mr          = new stdclass();
+$lang->ppm         = new stdclass();
 $lang->compile     = new stdclass();
 $lang->job         = new stdclass();
 $lang->svn         = new stdclass();
@@ -164,6 +164,24 @@ $lang->configure          = new stdclass();
 $lang->projectbuild   = new stdclass();
 $lang->projectrelease = new stdclass();
 $lang->projectstory   = new stdclass();
+
+$lang->repoSettings   = new stdclass();
+$lang->reporeviewflow = new stdclass();
+$lang->repobranchtype = new stdclass();
+$lang->repobranchrule = new stdclass();
+$lang->artifact       = new stdclass();
+$lang->ssh            = new stdclass();
+$lang->codeReview     = new stdclass();
+$lang->runner         = new stdclass();
+$lang->systemManage   = new stdclass();
+$lang->codeScan       = new stdclass();
+$lang->ruleset        = new stdclass();
+$lang->scansolution   = new stdclass();
+$lang->scanplan       = new stdclass();
+$lang->scantask       = new stdclass();
+$lang->scanissue      = new stdclass();
+$lang->scanOverview   = new stdclass();
+$lang->provider       = new stdclass();
 
 /* Common action icons. */
 $lang->icons['todo']      = 'check';

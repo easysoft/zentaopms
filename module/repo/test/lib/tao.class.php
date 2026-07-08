@@ -89,9 +89,9 @@ class repoTaoTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null)
+    public function getListByConditionTest(string $repoQuery = '', string $SCM = '', int $space = 0, string $orderBy = 'id_desc', ?object $pager = null)
     {
-        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $result = $this->objectModel->getListByCondition($repoQuery, $SCM, $space, $orderBy, $pager);
         if(dao::isError()) return dao::getError();
 
         return $result;
@@ -129,9 +129,9 @@ class repoTaoTest extends baseTest
         return $objects;
     }
 
-    public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest($projectID = 0, $space = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
-        $objects = $this->objectModel->getList($projectID , $SCM, $orderBy , $pager );
+        $objects = $this->objectModel->getList($projectID, $space, $SCM, $orderBy , $pager );
 
         if(dao::isError()) return dao::getError();
 
@@ -2083,6 +2083,27 @@ class repoTaoTest extends baseTest
         $method = new ReflectionMethod($this->instance, 'processSearchQuery');
         $method->setAccessible(true);
         $result = $method->invoke($this->instance, $queryID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * updateMembersTest
+     *
+     * @param  int $repoID
+     * @param  array $members
+     * @access public
+     * @return void
+     */
+    public function updateMembersTest(int $repoID, array $members = array())
+    {
+        $method = new ReflectionMethod($this->objectModel, 'updateMembers');
+        $method->setAccessible(true);
+        $method->invoke($this->objectModel, $repoID, $members);
+        if(dao::isError()) return dao::getError();
+
+        $result = $this->objectModel->getRepoUsers($repoID);
         if(dao::isError()) return dao::getError();
 
         return $result;

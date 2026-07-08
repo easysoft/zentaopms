@@ -1590,7 +1590,7 @@ class my extends control
 
         if($_POST)
         {
-            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink');
+            $keyList = array('URSR', 'programLink', 'productLink', 'projectLink', 'executionLink', 'docLink', 'devopsspaceLink', 'devopsLink');
             foreach($_POST as $key => $value)
             {
                 if(!in_array($key, $keyList)) continue;
@@ -1609,11 +1609,13 @@ class my extends control
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = $this->setting->getURSR();
-        $this->view->programLink      = isset($this->config->programLink)   ? $this->config->programLink   : 'program-browse';
-        $this->view->productLink      = isset($this->config->productLink)   ? $this->config->productLink   : 'product-all';
-        $this->view->projectLink      = isset($this->config->projectLink)   ? $this->config->projectLink   : 'project-browse';
-        $this->view->executionLink    = isset($this->config->executionLink) ? $this->config->executionLink : 'execution-task';
-        $this->view->docLink          = isset($this->config->docLink)       ? $this->config->docLink       : 'doc-lastViewedSpace';
+        $this->view->programLink      = isset($this->config->programLink)      ? $this->config->programLink      : 'program-browse';
+        $this->view->productLink      = isset($this->config->productLink)      ? $this->config->productLink      : 'product-all';
+        $this->view->projectLink      = isset($this->config->projectLink)      ? $this->config->projectLink      : 'project-browse';
+        $this->view->executionLink    = isset($this->config->executionLink)    ? $this->config->executionLink    : 'execution-task';
+        $this->view->docLink          = isset($this->config->docLink)          ? $this->config->docLink          : 'doc-lastViewedSpace';
+        $this->view->devopsspaceLink  = isset($this->config->devopsspaceLink)  ? $this->config->devopsspaceLink  : 'repo-maintain';
+        $this->view->devopsLink       = isset($this->config->devopsLink)       ? $this->config->devopsLink       : 'repo-maintain';
         $this->view->preferenceSetted = isset($this->config->preferenceSetted) ? true : false;
 
         $this->display();
@@ -1693,19 +1695,22 @@ class my extends control
      * Switch vision by ajax.
      *
      * @param  string $vision
+     * @param  string $devopsSpace
      * @access public
      * @return void
      */
-    public function ajaxSwitchVision(string $vision)
+    public function ajaxSwitchVision(string $vision, string $devopsSpace = '')
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
         if(empty($this->config->hideVisionTips)) $this->setting->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
+        $this->setting->setItem("{$this->app->user->account}.common.global.devopsSpace", $devopsSpace);
         $this->config->vision = $vision;
 
         $_SESSION['user']->rights = $this->user->authorize($this->app->user->account);
 
         setcookie('vision', $vision, $this->config->cookieLife, $this->config->webRoot, '', false, false);
+        setcookie('devopsSpace', $devopsSpace, $this->config->cookieLife, $this->config->webRoot, '', false, false);
 
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
     }
@@ -1722,5 +1727,143 @@ class my extends control
     {
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.hideVisionTips", 1);
         return $this->send(array('result' => 'success', 'load' => helper::createLink('index', 'index')));
+    }
+
+    /**
+     * 查看ssh密钥列表
+     * Get ssh list.
+     *
+     * @access public
+     * @return void
+     */
+    public function ssh(int $repoID = 0, int $objectID = 0)
+    {
+        $tab = $this->app->tab;
+        if($tab != 'my')
+        {
+            $this->loadModel('repo');
+            $this->repos = $this->repo->getRepoPairs($tab, $objectID);
+
+            if($tab == 'project')
+            {
+                if(empty($this->repos)) return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
+                $project = $this->loadModel('project')->getByID($objectID);
+                if($project && $project->model === 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$objectID"));
+
+                $this->loadModel('project')->setMenu($objectID);
+                $this->view->projectID = $objectID;
+            }
+            elseif($tab == 'execution')
+            {
+                if(empty($this->repos)) return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
+                $execution = $this->loadModel('execution')->getByID($objectID);
+                if($execution && $execution->type === 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$objectID"));
+
+                if($execution)
+                {
+                    $features = $this->execution->getExecutionFeatures($execution);
+                    if(!$features['devops']) return print($this->locate($this->createLink('execution', 'task', "executionID=$objectID")));
+                }
+
+                $this->loadModel('execution')->setMenu($objectID);
+                $this->view->executionID = $objectID;
+            }
+            else
+            {
+                $this->repo->setMenu($this->repos, $repoID);
+            }
+        }
+
+        $this->view->title   = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->ssh;
+        $this->view->sshList = $this->my->getSSH();
+        $this->display();
+    }
+
+    /**
+     * 创建ssh密钥.
+     * Create ssh.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSSH()
+    {
+        if($_POST)
+        {
+            $formData = form::data($this->config->my->form->createSSH)->get();
+            $this->myZen->checkSSH($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->my->createSSH($formData);
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                if(isset($error['key']))
+                {
+                    $error['publicKey'] = $error['key'];
+                    unset($error['key']);
+                }
+                return $this->sendError($error);
+            }
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title = $this->lang->my->createSSH;
+        $this->display();
+    }
+
+    /**
+     * 编辑ssh密钥.
+     * Edit ssh.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return void
+     */
+    public function editSSH(int $sshID)
+    {
+        $ssh = $this->my->getSSHbyID($sshID);
+        if($_POST)
+        {
+            $formData = form::data($this->config->my->form->createSSH)->get();
+            $this->myZen->checkSSH($formData);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
+            $this->my->editSSH($sshID, $formData);
+            if(dao::isError())
+            {
+                $error = dao::getError();
+                if(isset($error['key']))
+                {
+                    $error['publicKey'] = $error['key'];
+                    unset($error['key']);
+                }
+                return $this->sendError($error);
+            }
+
+            return $this->sendSuccess(array('load' => true));
+        }
+
+        $this->view->title = $this->lang->my->editSSH;
+        $this->view->ssh   = $ssh ? $ssh : array();
+        $this->display();
+    }
+
+    /**
+     * 删除ssh密钥.
+     * Delete ssh.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return void
+     */
+    public function deleteSSH(int $sshID)
+    {
+        $this->my->deleteSSH($sshID);
+        if(dao::isError()) return $this->sendError(dao::getError());
+        return $this->sendSuccess(array('message' => $this->lang->deleteSuccess, 'load' => true));
     }
 }

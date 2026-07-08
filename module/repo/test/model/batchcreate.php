@@ -26,7 +26,7 @@ cid=18029
 */
 
 zenData('pipeline')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(0);
+zenData('repo')->loadYaml('repo')->gen(5);
 
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
 

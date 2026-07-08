@@ -44,11 +44,12 @@ jsVar('currentLink', $this->createLink('repo', 'view', "repoID=$repoID&objectID=
 \zin\featureBar();
 
 $monacoDropMenus = array();
+$fromRevision    = helper::safe64Encode($revision);
 if(!$inModal && common::hasPriv('repo', 'blame'))    $monacoDropMenus[] = array('text' => $this->lang->repo->blame,    'icon' => 'blame',    'data-link' => $this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry={path}&revision=$revision&encoding=$encoding"), 'class' => 'repoDropDownMenu');
-if(!$inModal && common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$revision"), 'class' => 'repoDropDownMenu');
+if(!$inModal && common::hasPriv('repo', 'download')) $monacoDropMenus[] = array('text' => $this->lang->repo->download, 'icon' => 'download', 'data-link' => $this->repo->createLink('download', "repoID=$repoID&path={path}&fromRevision=$fromRevision"), 'class' => 'repoDropDownMenu');
 
-$tabs = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
-$menuData = $repo->SCM == 'Subversion' ? array() : array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
+$tabs     = array(array('name' => 'branch', 'text' => $lang->repo->branch), array('name' => 'tag', 'text' => $lang->repo->tag));
+$menuData = array('branch' => $dropMenus['branchMenus'], 'tag' => $dropMenus['tagMenus']);
 
 div(
     set::id('fileTabs'),
@@ -99,10 +100,11 @@ $inModal ? null : sidebar
 (
     set::side('left'),
     setClass('repo-sidebar canvas'),
-    $repo->SCM == 'Subversion' ? null : div
+    div
     (
         setClass('surface'),
-        dropmenu
+        /* SVN 无原生分支/标签概念,不渲染分支下拉。 */
+        $this->repo->isSvn($repo) ? null : dropmenu
         (
             setID('repoBranchDropMenu'),
             setClass('px-2'),
@@ -122,6 +124,8 @@ $inModal ? null : sidebar
             set::expandedIcon('folder-open text-warning'),
             set::normalIcon('file-text-alt'),
             set::selected($file),
+            set::preserve(false),
+            set::defaultNestedShow(empty($selectNode) ? false : $selectNode),
             set::onClickItem(jsRaw('window.treeClick'))
         )
     )

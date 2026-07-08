@@ -32,6 +32,7 @@ pipeline {
     string description: '指定喧喧分支', name: 'xuanxuan_version', trim: true
     string description: '指定开源版全量降级 revision', name: 'fulldown_pms_version', trim: true
     string description: '指定收费版全量降级 revision', name: 'fulldown_ext_version', trim: true
+    string description: '指定 gitfox 版本', name: 'gitfox_version', trim: true
 
     separator(name: "other", sectionHeader: "其它")
     booleanParam defaultValue: true, description: '制作英文版', name: 'publish_en'
@@ -416,7 +417,7 @@ pipeline {
                   stages() {
                     stage("Prepare") {
                       steps {
-                        checkout scmGit(branches: [[name: "main"]],
+                        checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
@@ -432,6 +433,7 @@ pipeline {
                           }
                         }
                         script {
+                          env.GITFOX_VERSION = params.gitfox_version
                           buildZboxWin.doBuild()
                           buildZboxWin.doUploadInternal()
                         }
@@ -476,7 +478,7 @@ pipeline {
                   stages() {
                     stage("Prepare") {
                       steps {
-                        checkout scmGit(branches: [[name: "main"]],
+                        checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
@@ -487,6 +489,7 @@ pipeline {
                     stage("Build") {
                       steps {
                         script {
+                          env.GITFOX_VERSION = params.gitfox_version
                           buildZboxLinux.doBuild()
                           // buildZboxLinux.test()
                           buildZboxLinux.doUploadInternal()
@@ -557,7 +560,7 @@ pipeline {
 
             stage("Notice zbox") {
               steps {
-                checkout scmGit(branches: [[name: "main"]],
+                checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                   userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                 )
@@ -595,7 +598,7 @@ pipeline {
           }
 
           steps {
-            checkout scmGit(branches: [[name: "main"]],
+            checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                   userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/app/zentao.git"]]
                 )

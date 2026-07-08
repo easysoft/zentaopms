@@ -1,0 +1,40 @@
+---
+title: ops_repo 表数据配置 - setMenu 方法测试
+desc: 为测试 ciModel::setMenu() 方法提供 repo1-repo5 五条稳定仓库数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键 ID
+  range: 1-5
+- field: spaceID
+  note: 所属空间
+  range: '0{5}'
+- field: product
+  note: 关联产品
+  range: '1{5}'
+- field: name
+  note: 仓库名
+  range: repo1,repo2,repo3,repo4,repo5
+- field: gitUID
+  note: git 侧唯一标识
+  range: uid1,uid2,uid3,uid4,uid5
+- field: mirror
+  note: 是否镜像库
+  range: '0{5}'
+- field: defaultBranch
+  note: 默认分支
+  range: 'main{5}'
+- field: acl
+  note: 访问控制
+  range: 'private{5}'
+- field: status
+  note: 状态
+  range: 'active{5}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{5}'
+- field: deleted
+  note: 删除标记
+  range: '0{5}'

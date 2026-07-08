@@ -109,7 +109,16 @@ class model extends baseModel
         if(empty($id)) return false;
 
         $this->dao->update($table)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
-        $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', trim($table, '`'));
+
+        $table = trim($table, '`');
+        if(strpos($table, 'ops_') === 0)
+        {
+            $objectType = str_replace('ops_', '', $table);
+        }
+        else
+        {
+            $objectType = preg_replace('/^' . preg_quote((string) $this->config->db->prefix) . '/', '', $table);
+        }
         $this->loadModel('action')->create($objectType, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
         return true;

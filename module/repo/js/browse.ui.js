@@ -109,6 +109,12 @@ window.downloadZip = function()
     $.ajaxSubmit({url: link});
 }
 
+window.loadSSHmanager = function()
+{
+    var link = $.createLink('my', 'ssh', 'repoID=' + repoID + '&objectID=' + objectID) + '#app=' + appTab;
+    openUrl(link);
+}
+
 /* Refresh page when repo changed. */
 $('#repo-select').on('change', function()
 {
@@ -282,4 +288,102 @@ window.copyLink = function(dom)
 $(function()
 {
     if(base64BranchID) $.get($.createLink('repo', 'ajaxSyncBranchCommit', 'repoID=' + repo.id + '&branch=' + base64BranchID));
+});
+
+
+function mirrorBusy($btn, on)
+{
+    $btn.prop('disabled', !!on).toggleClass('disabled', !!on);
+    $btn.find('i.icon').toggleClass('spin', !!on);
+}
+
+function mirrorReload()
+{
+    setTimeout(function()
+    {
+        if(typeof loadPage === 'function') return loadPage({selector: '#main>*'});
+        window.location.reload();
+    }, 600);
+}
+
+function mirrorParse(res){ return typeof res === 'string' ? JSON.parse(res) : res; }
+
+/* 同步触发→刷新延时（ms）。GitFox 异步处理，立即拉进度可能拿不到最新 status；留 1500ms 缓冲，最常见场景下一次 fetch 就能拿到 syncing 或 finished。 */
+window.MIRROR_SYNC_RELOAD_DELAY = 1500;
+
+/**
+ * ajax-submit 成功回调：延时后局部刷新 #main>*。
+ * #main 内涵盖工具栏（含 mirrorToolbar）、代码列表 dtable、commit 列表 sidebar；
+ * #main 外的一级导航 #navbar 与二级导航 #pageToolbar 保持不变，避免无意义重渲。
+ */
+window.mirrorSyncDelayedReload = function()
+{
+    setTimeout(function()
+    {
+        if(typeof loadPage === 'function') return loadPage({selector: '#main>*'});
+        window.location.reload();
+    }, window.MIRROR_SYNC_RELOAD_DELAY);
+};
+
+/* 刷新同步状态：GET 进度，running → toast 仍在同步；其他状态 → reload 让首屏重渲。 */
+$(document).on('click', '.refresh-sync-btn', function()
+{
+    var $btn = $(this);
+    if($btn.prop('disabled')) return;
+    mirrorBusy($btn, true);
+
+    $.get(mirrorSyncProgressLink).done(function(res)
+    {
+        var data = mirrorParse(res);
+        if(!data || data.result !== 'success')
+        {
+            zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
+            return mirrorBusy($btn, false);
+        }
+        if(data.status && data.status !== 'running')
+        {
+            zui.Messager.show({type: 'success', content: mirrorLang.statusUpdated, time: 1200});
+            return mirrorReload();
+        }
+        zui.Messager.show({type: 'info', content: mirrorLang.stillRunning, time: 1500});
+        mirrorBusy($btn, false);
+    }).fail(function(_, textStatus, errorThrown)
+    {
+        zui.Messager.show({type: 'danger', content: mirrorLang.queryRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
+        mirrorBusy($btn, false);
+    });
+});
+
+/* 查看详情：先拉最新进度，failed 才弹原因，其他状态按状态码 toast + reload 与首屏对齐。 */
+$(document).on('click', '.sync-failure-detail', function(e)
+{
+    e.preventDefault();
+    var $self  = $(this);
+    var $alert = $self.closest('.sync-failure-alert');
+    if($self.prop('disabled')) return;
+    $self.prop('disabled', true);
+
+    $.get(mirrorSyncProgressLink).done(function(res)
+    {
+        var data = mirrorParse(res);
+        if(!data || data.result !== 'success')
+        {
+            zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
+            return $self.prop('disabled', false);
+        }
+        if(data.status === 'failed')
+        {
+            zui.Modal.alert({title: mirrorLang.failureTitle, message: data.failure || $alert.attr('data-failure') || mirrorLang.noDetail});
+            return $self.prop('disabled', false);
+        }
+
+        var tipMap  = {running: mirrorLang.syncing, scheduled: mirrorLang.done, finished: mirrorLang.done};
+        var typeMap = {running: 'info', scheduled: 'success', finished: 'success'};
+        zui.Messager.show({type: typeMap[data.status] || 'info', content: tipMap[data.status] || mirrorLang.statusUpdated, time: 1200});
+        mirrorReload();
+    }).fail(function(_, textStatus, errorThrown)
+    {
+        zui.Messager.show({type: 'danger', content: mirrorLang.queryRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
+        $self.prop('disabled', false);
+    });
 });

@@ -36,8 +36,9 @@ $oldRequestType = zget($config, 'requestType', '');
 $common = $app->loadCommon();
 
 /* Set default params. */
-$config->requestType = 'GET';
-$config->default->view = 'json';
+$config->originRequestType = $config->requestType;
+$config->requestType       = 'GET';
+$config->default->view     = 'json';
 
 /* Only has the api version then use apisession. Fix for passwordless login. */
 if($app->apiVersion) define('RUN_MODE', 'api');

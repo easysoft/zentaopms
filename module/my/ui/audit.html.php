@@ -29,13 +29,13 @@ foreach(array_keys($lang->my->featureBar['audit']) as $type)
     }
 }
 $reviewPrivs['review']  = hasPriv('review', 'access');
-$reviewPrivs['mr']      = hasPriv('mr', 'view');
-$reviewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$reviewPrivs['ppm']     = hasPriv('ppm', 'view');
+$reviewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 $viewPrivs['review']  = hasPriv('review', 'view');
 $viewPrivs['task']    = hasPriv('task', 'view');
-$viewPrivs['mr']      = hasPriv('mr', 'view');
-$viewPrivs['pullreq'] = hasPriv('pullreq', 'view');
+$viewPrivs['ppm']     = hasPriv('ppm', 'view');
+$viewPrivs['pullreq'] = hasPriv('ppm', 'view');
 
 jsVar('reviewLink', createLink('{module}', 'review', 'id={id}'));
 jsVar('flowReviewLink', createLink('{module}', 'approvalreview', 'id={id}'));
@@ -102,19 +102,20 @@ foreach($reviewList as $review)
         $statusList = $lang->charter->reviewStatusList;
     }
 
-    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'mr', 'pullreq')) && !$isOAObject)
+    if(!in_array($type, array('demand', 'story', 'testcase', 'feedback', 'review', 'charter', 'ppm', 'pullreq')) && !$isOAObject)
     {
         if($rawMethod == 'audit') $statusList = $lang->approval->nodeList;
 
         if(isset($flows[$review->type]) && $rawMethod != 'audit') $statusList = $lang->approval->statusList;
     }
 
-    if(in_array($type, array('mr', 'pullreq')))
+    if(in_array($type, array('ppm', 'pullreq')))
     {
-        $this->app->loadLang('mr');
+        $this->app->loadLang('ppm');
+        $review->module = 'ppm';
 
         if(empty($review->status)) $review->status = 'notReviewed';
-        $statusList = $lang->mr->approvalStatusList;
+        $statusList = $lang->ppm->approvalStatusList;
     }
 
     $review->type   = $typeName;

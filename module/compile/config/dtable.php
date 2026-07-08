@@ -40,9 +40,9 @@ $config->compile->dtable->fieldList['buildType']['type']     = 'text';
 $config->compile->dtable->fieldList['buildType']['sortType'] = false;
 $config->compile->dtable->fieldList['buildType']['hint']     = true;
 $config->compile->dtable->fieldList['buildType']['width']    = '60';
-$config->compile->dtable->fieldList['buildType']['map']      = $lang->job->engineList;
+$config->compile->dtable->fieldList['buildType']['map']      = $lang->pipeline->engineList;
 
-$config->compile->dtable->fieldList['triggerType']['title']    = $lang->job->triggerType;
+$config->compile->dtable->fieldList['triggerType']['title']    = $lang->pipeline->triggerType;
 $config->compile->dtable->fieldList['triggerType']['name']     = 'triggerType';
 $config->compile->dtable->fieldList['triggerType']['type']     = 'text';
 $config->compile->dtable->fieldList['triggerType']['sortType'] = false;

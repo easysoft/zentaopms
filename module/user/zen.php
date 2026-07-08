@@ -277,7 +277,12 @@ class userZen extends user
     {
         $groupList = array();
         $roleGroup = array();
-        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)->where('vision')->eq($this->config->vision)->andWhere('project')->eq('0')->fetchAll();
+        $groups    = $this->dao->select('id, name, role, vision')->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->andWhere('project')->eq('0')
+            ->andWhere('devopsSpace')->eq('0')
+            ->fetchAll();
+
         foreach($groups as $group)
         {
             $groupList[$group->id] = $group->name;

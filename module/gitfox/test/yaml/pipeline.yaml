@@ -1,0 +1,21 @@
+---
+title: zt_pipeline 表数据 - GitFox 服务器配置
+desc: 为 gitfox 模型 API 测试提供 GitFox 类型的服务器记录
+author: Codex
+version: "1.0"
+
+fields:
+- field: id
+  range: 1
+- field: type
+  range: gitfox
+- field: name
+  range: GitFox服务器
+- field: url
+  range: '[http://10.0.4.2]'
+- field: account
+  range: admin
+- field: token
+  range: testtoken
+- field: deleted
+  range: "0"

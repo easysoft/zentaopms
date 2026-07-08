@@ -298,7 +298,7 @@ class messageModel extends model
         if(empty($toList) && $objectType == 'todo')        $toList = $object->account;
         if(empty($toList) && $objectType == 'testtask')    $toList = $object->owner;
         if(empty($toList) && $objectType == 'meeting')     $toList = $object->host . $object->participant;
-        if(empty($toList) && $objectType == 'mr')          $toList = $object->createdBy . ',' . $object->assignee;
+        if(empty($toList) && $objectType == 'ppm')         $toList = $object->createdBy . ',' . $object->assignee;
         if(empty($toList) and $objectType == 'demandpool') $toList = trim($object->owner, ',') . ',' . trim($object->reviewer, ',');
         if(empty($toList) && in_array($objectType, array('release', 'doc', 'execution')))
         {

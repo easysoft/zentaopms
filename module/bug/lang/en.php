@@ -257,16 +257,17 @@ $lang->bug->browserList['360']     = '360 series';
 $lang->bug->browserList['qq']      = 'QQ series';
 $lang->bug->browserList['other']   = 'Others';
 
-$lang->bug->typeList['']             = '';
-$lang->bug->typeList['codeerror']    = 'Code Error';
-$lang->bug->typeList['config']       = 'Configuration';
-$lang->bug->typeList['install']      = 'Installation';
-$lang->bug->typeList['security']     = 'Security';
-$lang->bug->typeList['performance']  = 'Performance';
-$lang->bug->typeList['standard']     = 'Standard Specification';
-$lang->bug->typeList['automation']   = 'Test Script';
-$lang->bug->typeList['designdefect'] = 'Design Defect';
-$lang->bug->typeList['others']       = 'Others';
+$lang->bug->typeList['']                = '';
+$lang->bug->typeList['codeerror']       = 'Code Error';
+$lang->bug->typeList['config']          = 'Configuration';
+$lang->bug->typeList['install']         = 'Installation';
+$lang->bug->typeList['security']        = 'Security';
+$lang->bug->typeList['performance']     = 'Performance';
+$lang->bug->typeList['standard']        = 'Standard Specification';
+$lang->bug->typeList['automation']      = 'Test Script';
+$lang->bug->typeList['designdefect']    = 'Design Defect';
+$lang->bug->typeList['codeimprovement'] = 'Code Improvement';
+$lang->bug->typeList['others']          = 'Others';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Activated';

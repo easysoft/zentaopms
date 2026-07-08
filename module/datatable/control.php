@@ -235,6 +235,7 @@ class datatable extends control
         }
 
         if($extra == 'unsetStory' && isset($cols['story'])) unset($cols['story']);
+        if($module == 'pipeline') unset($cols['repo']);
 
         if($this->config->edition == 'ipd' && $module == 'product' && $method == 'browse' && $extra == 'story') unset($cols['roadmap']);
         if($this->app->tab == 'project' && !$this->session->multiple && $module == 'meeting' && $method == 'browse') unset($cols['execution']);

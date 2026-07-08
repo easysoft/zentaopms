@@ -5,4 +5,9 @@ version: "1.0"
 fields:
 - field: id
   range: 1-1000
+- field: space
+  range: 1-1000
+- field: name
+  range: 1-1000
+  prefix: "artifact"
 ...

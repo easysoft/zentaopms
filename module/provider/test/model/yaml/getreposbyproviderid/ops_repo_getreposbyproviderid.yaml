@@ -1,0 +1,34 @@
+---
+title: ops_repo 表数据配置 - providerModel::getReposByProviderID 方法测试
+desc: providerID=1 归 3 条普通库 + 1 条镜像库 + 1 条已删除库；providerID=2 归 1 条
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键
+  range: 1-6
+
+- field: name
+  note: 仓库名
+  range: repoA,repoB,repoC,repoD,mirrorA,repoDeleted
+
+- field: providerID
+  note: 服务 ID；1 归 5 条，2 归 1 条
+  range: 1{3},2,1{2}
+
+- field: gitUID
+  note: gitUID 唯一标识
+  range: uidA,uidB,uidC,uidD,uidM,uidX
+
+- field: mirror
+  note: 是否镜像；仅 id=5 为镜像
+  range: 0{4},1,0
+
+- field: deleted
+  note: 删除标记；仅 id=6 已删除
+  range: 0{5},1
+
+- field: createdBy
+  note: 创建者
+  range: admin{6}

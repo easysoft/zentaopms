@@ -14,6 +14,9 @@ cid=18052
 - 步骤5：测试文件类型筛选提交记录 @1
 - 步骤6：测试另一个代码库的提交记录 @1
 - 步骤7：测试指定版本的提交记录 @1
+- 步骤8：SVN 类型代码库获取提交记录 @1
+- 步骤9：SVN 类型代码库按路径过滤提交 @1
+- 步骤10：SVN 类型代码库单 revision 精准查询 @1
 
 */
 
@@ -58,3 +61,15 @@ r(is_array($result6)) && p() && e('1'); // 步骤6：测试另一个代码库的
 
 $result7 = $repoTest->getCommitsTest((object)array('id' => 1, 'SCM' => 'Git'), '', 'commit1');
 r(is_array($result7)) && p() && e('1'); // 步骤7：测试指定版本的提交记录
+
+$svnRepo = (object)array('id' => 1, 'SCM' => 'Subversion', 'scmType' => 'svn');
+$result8 = $repoTest->getCommitsTest($svnRepo, '');
+r(is_array($result8)) && p() && e('1'); // 步骤8：SVN 类型代码库获取提交记录
+
+$result9 = $repoTest->getCommitsTest($svnRepo, '/trunk');
+r(is_array($result9)) && p() && e('1'); // 步骤9：SVN 类型代码库按路径过滤提交
+
+$singleQuery = new stdclass();
+$singleQuery->commit = '1';
+$result10 = $repoTest->getCommitsTest($svnRepo, '', '1', 'dir', null, '', '', $singleQuery);
+r(is_array($result10)) && p() && e('1'); // 步骤10：SVN 类型代码库单 revision 精准查询

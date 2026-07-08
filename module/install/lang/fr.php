@@ -279,6 +279,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = 'DEMAND ANALYSIS';
 $lang->install->groupList['IPDPMT']['name']         = 'IPDPMT';
 $lang->install->groupList['IPDADMIN']['name']       = 'IPDADMIN';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DEVOPS ADMIN';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DEVOPS INSPECTOR';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DEVOPS DEVELOPER';
+
 $lang->install->cronList[''] = 'Moniteur Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Mise à jour Graphe Burndown';
 $lang->install->cronList['moduleName=report&methodName=remind']         = 'Rappel Tâches quotidiennes';
@@ -292,7 +296,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = 'Crée
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = 'Créer des Jenkins récurrents';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = 'Synchroniser le statut Jenkins';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = 'Executer Jenkins';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = 'Synchronize GitLab merge request';
 
 $lang->install->dbProgress = "Installing Database Table";
 $lang->install->dbFinish   = "Table install finished";

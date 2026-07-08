@@ -230,6 +230,11 @@ window.changeDiff = function()
     {
         $('#oldRevision').val(target);
         $('#newRevision').val(source);
+        /* SVN 类型 #source/#target 是 input,git 类型是 dropmenu span,用 val/text 分别兼容。 */
+        var $source = $('#source');
+        var $target = $('#target');
+        if($source.is('input')) $source.val(target); else $source.text(target);
+        if($target.is('input')) $target.val(source); else $target.text(source);
         window.goDiff();
     }
 }
@@ -280,23 +285,19 @@ $('body').off('click', '.dropmenu-tree .dropmenu-item').on('click', '.dropmenu-t
  */
 window.goDiff = function()
 {
+    /* SVN 类型 #source/#target 是 input,取当前用户输入同步到 hidden。 */
+    var $source = $('#source');
+    var $target = $('#target');
+    if($source.is('input')) $('#oldRevision').val($source.val());
+    if($target.is('input')) $('#newRevision').val($target.val());
+
     var oldRevision   = $('#oldRevision').val();
     var newRevision   = $('#newRevision').val();
     var isBranchOrTag = $('#isBranchOrTag').val();
     if(!oldRevision || !newRevision)
     {
-        (repo.SCM != 'Subversion') ? zui.Modal.alert(repoLang.error.needTwoVersion) : zui.Modal.alert(repoLang.error.emptyVersion);
+        zui.Modal.alert(repoLang.error.needTwoVersion);
         return false;
-    }
-
-    if(repo.SCM == 'Subversion')
-    {
-        var intRe = /^\d+$/;
-        if((intRe.test(oldRevision) == false && oldRevision != '^') || (intRe.test(newRevision) == false && newRevision != '^'))
-        {
-            zui.Modal.alert(repoLang.error.versionError);
-            return false;
-        }
     }
 
     if(oldRevision == newRevision)
@@ -312,5 +313,5 @@ window.goDiff = function()
     }
 
     var url = $.createLink('repo', 'diff', 'repoID=' + repo.id + '&objectID=' + objectID + '&entry=&oldRevision=' + oldRevision + '&newRevision=' +newRevision + '&showBug=0&encoding=&isBranchOrTag=' + isBranchOrTag);
-    loadPage(url);
+    openPage(url);
 }

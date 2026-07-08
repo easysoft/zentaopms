@@ -35,6 +35,8 @@ $filter->default->cookie['maxImport']   = 'reg::any';
 $filter->default->cookie['za']          = 'reg::any';
 $filter->default->cookie['zp']          = 'reg::any';
 $filter->default->cookie['vision']      = 'reg::word';
+$filter->default->cookie['space']       = 'reg::word';
+$filter->default->cookie['mergeType']   = 'reg::word';
 $filter->default->cookie['workspace']   = 'reg::word';
 
 $filter->index        = new stdclass();
@@ -73,7 +75,7 @@ $filter->git          = new stdclass();
 $filter->svn          = new stdclass();
 $filter->search       = new stdclass();
 $filter->gitlab       = new stdclass();
-$filter->mr           = new stdclass();
+$filter->ppm          = new stdclass();
 $filter->ci           = new stdclass();
 $filter->tree         = new stdclass();
 $filter->productplan  = new stdclass();
@@ -209,8 +211,8 @@ $filter->repo->apigetrepobyurl          = new stdclass();
 $filter->search->index                  = new stdclass();
 $filter->gitlab->webhook                = new stdclass();
 $filter->gitlab->importissue            = new stdclass();
-$filter->mr->diff                       = new stdclass();
-$filter->mr->browse                     = new stdclass();
+$filter->ppm->diff                      = new stdclass();
+$filter->ppm->browse                    = new stdclass();
 $filter->ci->checkCompileStatus         = new stdclass();
 $filter->execution->export              = new stdclass();
 $filter->tree->browse                   = new stdclass();
@@ -561,10 +563,10 @@ $filter->gitlab->importissue->get['product'] = 'string';
 $filter->gitlab->importissue->get['project'] = 'int';
 $filter->gitlab->importissue->get['repo']    = 'int';
 
-$filter->mr->diff->cookie['arrange'] = 'reg::word';
+$filter->ppm->diff->cookie['arrange']   = 'reg::word';
 
-$filter->mr->browse->get['mode']  = 'string';
-$filter->mr->browse->get['param'] = 'string';
+$filter->ppm->browse->get['mode']  = 'string';
+$filter->ppm->browse->get['param'] = 'string';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
 
@@ -592,3 +594,14 @@ $filter->admin->register->cookie['zentaosid']    = 'reg::any';
 $filter->admin->getcaptcha->cookie['zentaosid']  = 'reg::any';
 $filter->admin->sendcode->cookie['zentaosid']    = 'reg::any';
 $filter->admin->giftpackage->cookie['zentaosid'] = 'reg::any';
+
+$filter->codescan = new stdclass();
+$filter->codescan->issue       = new stdclass();
+$filter->codescan->ignoreissue = new stdclass();
+$filter->codescan->issue->cookie['issueFile']         = 'string';
+$filter->codescan->ignoreissue->cookie['issueIdList'] = 'reg::any';
+
+$filter->bug->batchcreate->cookie['issueIdList']      = 'reg::any';
+
+$filter->codescan->taskview = new stdclass();
+$filter->codescan->taskview->cookie['scanIssueUrlParams'] = 'string';

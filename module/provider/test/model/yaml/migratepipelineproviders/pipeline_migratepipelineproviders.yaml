@@ -1,0 +1,30 @@
+---
+title: pipeline 表数据配置 - providerModel::migratePipelineProviders 方法测试
+desc: 覆盖 typeMap 命中（gitlab/GITEA/jenkins/subversion/github）、excludeTypes（gitfox/sonarqube）、无映射（bitbucket）三类分支
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键
+  range: 1-8
+
+- field: type
+  note: 服务类型；覆盖大小写、排除类型与无映射类型
+  range: gitlab,GITEA,jenkins,subversion,github,gitfox,sonarqube,bitbucket
+
+- field: name
+  note: 服务名称
+  range: GitLab-A,Gitea-Upper,Jenkins-B,SVN-C,GitHub-D,GitFox-Skip,Sonar-Skip,BitB-Unknown
+
+- field: account
+  note: 账号；仅 Jenkins 用于 base64 编码
+  range: '[],[],ci-user,[],[],[],[],[]'
+
+- field: token
+  note: 令牌
+  range: gitlab-token,gitea-token,jenkins-token,svn-token,github-token,gitfox-token,sonar-token,bb-token
+
+- field: deleted
+  note: 删除标记
+  range: '0'

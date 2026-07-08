@@ -189,6 +189,15 @@ class dropmenu extends wg
         if(empty($module))   $module   = $app->rawModule;
         if(empty($method))   $method   = $app->rawMethod;
 
+        if($tab == 'devops' && empty($text))
+        {
+            if(!data('inSpace')) return array();
+
+            $tab      = 'space';
+            $objectID = data('spaceID');
+            $url      = createLink('space', 'ajaxGetDropMenu', "objectID={$objectID}&module={$module}&method={$method}");
+        }
+
         /* 打印工作流1.5级导航. */
         if($config->edition != 'open')
         {
