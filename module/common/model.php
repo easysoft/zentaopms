@@ -467,7 +467,7 @@ class commonModel extends model
                     {
                         if(strpos($dependentMethod, '.') === false) continue;
                         list($dependentModule, $dependentMethod) = explode('.', $dependentMethod);
-                        if($this->isOpenMethod($dependentModule, $dependentMethod) || self::hasPriv($dependentModule, $dependentMethod)) return true;
+                        if($this->isOpenMethod($dependentModule, $dependentMethod) || static::hasPriv($dependentModule, $dependentMethod)) return true;
                     }
                 }
             }
@@ -4013,6 +4013,13 @@ EOF;
         
         if(empty($spaceID) && !empty($params['space']))   $spaceID = $params['space'];
         if(empty($spaceID) && !empty($params['spaceID'])) $spaceID = $params['spaceID'];
+        
+        if(empty($spaceID) && !empty($params['repoID']))
+        {
+            $repoID  = $params['repoID'];
+            $repo    = $this->loadModel('repo')->fetch($repoID);
+            $spaceID = $repo->spaceID;
+        }
 
         if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
         if(empty($spaceID)) return;
