@@ -12,9 +12,15 @@ cid=18121
 
 - 测试 migrateRepoData 第一次执行 @success
 - 测试 migrateRepoData 重复执行 @success
+- 测试 migrateRepoData 第三次执行 @success
+- 测试 migrateRepoData 第四次执行 @success
+- 测试 migrateRepoData 第五次执行 @success
 */
 
 $repo = new repoModelTest();
 
+r($repo->migrateRepoDataTest()) && p() && e('success');
+r($repo->migrateRepoDataTest()) && p() && e('success');
+r($repo->migrateRepoDataTest()) && p() && e('success');
 r($repo->migrateRepoDataTest()) && p() && e('success');
 r($repo->migrateRepoDataTest()) && p() && e('success');
