@@ -23,7 +23,7 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object|false
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`, t3.`comment`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
@@ -1069,5 +1069,92 @@ class pipelineModel extends model
         $s      = $remain % $minute;
 
         return "{$h}h{$m}m{$s}s";
+    }
+
+    /**
+     * 处理 webhook 请求(事件触发)。
+     * Handle received GitLab webhook.
+     *
+     * @param  string $event
+     * @param  object $data
+     * @param  object $pipeline
+     * @access public
+     * @return bool
+     */
+    public function handleWebhook(string $event, object $data, object $pipeline): bool
+    {
+        $eventMap = array(
+            'Push Hook'          => 'push',
+            'Tag Push Hook'      => 'tag_push',
+            'Merge Request Hook' => 'merge_requests',
+        );
+        if(!isset($eventMap[$event])) return false;
+
+        $eventType = $eventMap[$event];
+        $eventList = explode(',', $pipeline->event);
+        if(!in_array($eventType, $eventList)) return false;
+
+        if($eventType == 'push') 
+        {
+            if(empty($data->commits)) return false;
+            
+            $matched = false;
+            foreach($data->commits as $commit)
+            {
+                if(strpos($commit->message, $pipeline->comment) !== false)
+                {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if(empty($pipeline->comment)) $matched = true;
+            if(!$matched) return false;
+        }
+
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
+        $params = new stdclass(); 
+        $params->ref = $data->ref ?? $pipeline->defaultBranch;
+        $params->variables = array();
+        if(!empty($pipeline->customParam))
+        {
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
+            {
+                foreach($customParams as $key => $value)
+                {
+                    $params->variables[] = array(
+                        "key" => $key,
+                        "value" => $value,
+                        "variable_type" => "env_var"
+                    );
+                }
+            }
+        }
+
+        $result    = $this->loadModel('gitlab')->apiCreatePipeline($provider->url, $provider->token, $pipeline->externalPipeline, (object)$params);
+        $execution = new stdclass();
+        if(empty($result->id))
+        {
+            $this->gitlab->apiErrorHandling($result);
+            $execution->status = 'create_fail';
+        }
+        else
+        {
+            $execution->queue  = $result->id;
+            $execution->status = zget($result, 'status', 'create_fail');
+        }
+
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = $eventType;
+        $execution->commit       = $data->after ?? $data->checkout_sha ?? '';
+        $execution->ref          = $data->ref ?? '';
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = 'admin';
+        $execution->createdDate  = helper::now();
+
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
     }
 }
