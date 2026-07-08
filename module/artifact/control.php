@@ -449,9 +449,9 @@ class artifact extends control
         if(empty($asset)) return $this->sendError($this->lang->notFound);
 
         $fileName = '';
-        if(!empty($asset->metadata) && !empty($asset->metadata->name)) $fileName = $asset->metadata->name;
+        if(!empty($asset->path)) $fileName = basename($asset->path);
+        if(!$fileName && !empty($asset->metadata) && !empty($asset->metadata->name)) $fileName = $asset->metadata->name;
         if(!$fileName && !empty($asset->name)) $fileName = $asset->name;
-        if(!$fileName && !empty($asset->path)) $fileName = basename($asset->path);
         if(!$fileName) $fileName = 'artifact-' . $assetID;
 
         $extension = pathinfo($fileName, PATHINFO_EXTENSION);
