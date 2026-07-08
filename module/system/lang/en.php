@@ -313,3 +313,8 @@ $lang->system->runningStatus['error']  = 'Error';
 
 $lang->system->serviceNotice = 'Only services installed from the Marketplace are included in the statistics. Manually configured services are excluded.';
 $lang->system->nodeNotice    = 'Node (%s) Error Reason: %s';
+
+$lang->system->view    = 'view';
+$lang->system->product = 'product';
+$lang->system->release = 'release';
+$lang->system->appdesc = 'app desc';

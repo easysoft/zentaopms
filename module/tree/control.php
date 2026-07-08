@@ -75,6 +75,8 @@ class tree extends control
             $this->view->productID  = $rootID;
         }
 
+        if($viewType == 'host') $this->loadModel('space')->setMenu(0);
+
         /* 获取产品的分支。 Get branches of product. */
         $branches = ($root->rootType == 'product' && $root->type != 'normal') ? $this->loadModel('branch')->getPairs($root->id, 'withClosed') : array();
 

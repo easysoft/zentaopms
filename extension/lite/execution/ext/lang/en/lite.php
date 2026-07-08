@@ -27,3 +27,7 @@ $lang->execution->icons['grouptask'] = 'sitemap';
 $lang->execution->aclList['private'] = "Private (Accessible to team members and {$lang->projectCommon} leaders)";
 
 $lang->execution->common = "{$lang->projectCommon} Execution";
+
+$lang->execution->gantt->browseType['module'] = 'Group by Category';
+
+$lang->execution->ganttCustom['story'] = 'Goal';

@@ -29,3 +29,5 @@ $config->my->openedDateField['testsuite']     = 'addedDate';
 $config->my->openedDateField['caselib']       = 'addedDate';
 $config->my->openedDateField['baseline']      = 'createdDate';
 $config->my->openedDateField['projectchange'] = 'createdDate';
+
+$config->my->publicKeyPrefix = array('ssh-rsa', 'ecdsa-sha2-nistp256', 'ecdsa-sha2-nistp384', 'ecdsa-sha2-nistp521', 'ssh-ed25519', 'sk-ecdsa-sha2-nistp256@openssh.com', 'sk-ssh-ed25519@openssh.com');

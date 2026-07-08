@@ -35,3 +35,4 @@ include __DIR__ . '/dtable/execution.php';
 include __DIR__ . '/dtable/doc.php';
 include __DIR__ . '/dtable/team.php';
 include __DIR__ . '/dtable/project.php';
+include __DIR__ . '/dtable/ssh.php';

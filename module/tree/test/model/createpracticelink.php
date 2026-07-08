@@ -26,7 +26,7 @@ $treeTest = new treeModelTest();
 $module1 = new stdclass();
 $module1->id = 1;
 $module1->name = '培训模块1';
-r($treeTest->createPracticeLinkTest('practice', $module1)) && p() && e("<a href='traincourse-practicebrowse-1.html' id='module1' title='培训模块1' >培训模块1</a>");
+r($treeTest->createPracticeLinkTest('practice', $module1)) && p() && e("<a href='createpracticelink.php?m=traincourse&f=practicebrowse&moduleID=1' id='module1' title='培训模块1' >培训模块1</a>");
 
 // 测试步骤2：空ID模块的链接创建
 $module2 = new stdclass();
@@ -38,7 +38,7 @@ r($treeTest->createPracticeLinkTest('practice', $module2)) && p() && e('~~');
 $module3 = new stdclass();
 $module3->id = 3;
 $module3->name = 'Test&Quote';
-r($treeTest->createPracticeLinkTest('practice', $module3)) && p() && e("<a href='traincourse-practicebrowse-0.html' id='module0' title='Empty Module' >Empty Module</a>");
+r($treeTest->createPracticeLinkTest('practice', $module3)) && p() && e("<a href='createpracticelink.php?m=traincourse&f=practicebrowse&moduleID=0' id='module0' title='Empty Module' >Empty Module</a>");
 
 // 测试步骤4：长名称模块链接创建
 $module4 = new stdclass();
@@ -50,4 +50,4 @@ r($treeTest->createPracticeLinkTest('practice', $module4)) && p() && e('~~');
 $module5 = new stdclass();
 $module5->id = 5;
 $module5->name = '中文培训模块';
-r($treeTest->createPracticeLinkTest('practice', $module5)) && p() && e("<a href='traincourse-practicebrowse-3.html' id='module3' title='Test&Quote' >Test&Quote</a>");
+r($treeTest->createPracticeLinkTest('practice', $module5)) && p() && e("<a href='createpracticelink.php?m=traincourse&f=practicebrowse&moduleID=3' id='module3' title='Test&Quote' >Test&Quote</a>");

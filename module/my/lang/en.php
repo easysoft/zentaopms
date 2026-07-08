@@ -112,11 +112,13 @@ $lang->my->form->lblBasic   = 'Basic Info';
 $lang->my->form->lblContact = 'Contact Info';
 $lang->my->form->lblAccount = 'Account Info';
 
-$lang->my->programLink   = 'Program Default Page';
-$lang->my->productLink   = $lang->productCommon . ' Default Page';
-$lang->my->projectLink   = $lang->projectCommon . ' Default Page';
-$lang->my->executionLink = 'Execution Default Page';
-$lang->my->docLink       = 'Document Default Page';
+$lang->my->programLink     = 'Program Default Page';
+$lang->my->productLink     = $lang->productCommon . ' Default Page';
+$lang->my->projectLink     = $lang->projectCommon . ' Default Page';
+$lang->my->executionLink   = 'Execution Default Page';
+$lang->my->docLink         = 'Document Default Page';
+$lang->my->devopsLink      = 'DevOps View Default Page';
+$lang->my->devopsspaceLink = 'DevOps Space Default Page';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = 'Program List / View all programs.';
@@ -146,6 +148,15 @@ $lang->my->docLinkList['doc-lastViewedSpaceHome'] = 'The most recently viewed sp
 $lang->my->docLinkList['doc-lastViewedSpace']     = 'The most recently viewed space';
 $lang->my->docLinkList['doc-lastViewedLib']       = 'The most recently viewed library';
 
+$lang->my->devopsspaceLinkList = array();
+$lang->my->devopsspaceLinkList['repo-maintain'] = 'Code library list in space';
+$lang->my->devopsspaceLinkList['repo-browse']   = 'The most recently visited code library';
+
+$lang->my->devopsLinkList = array();
+$lang->my->devopsLinkList['space-browse']  = 'Space list';
+$lang->my->devopsLinkList['repo-maintain'] = 'Code library list';
+$lang->my->devopsLinkList['repo-browse']   = 'The most recently visited code library';
+
 $lang->my->confirmReview['pass'] = 'Are you sure you want to pass it?';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'><span style='color: #0c60e1'>Young Blue</span>theme is available now!</p>
@@ -173,7 +184,7 @@ $lang->my->featureBar['audit']['story']       = $lang->SRCommon;
 $lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
 $lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
 $lang->my->featureBar['audit']['testcase']    = 'Test case';
-$lang->my->featureBar['audit']['mr']          = 'Merge request';
+$lang->my->featureBar['audit']['ppm']         = 'Review request';
 if(in_array($config->edition, array('max', 'ipd')) and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = 'Feedback';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = 'OA';
@@ -248,3 +259,14 @@ $lang->my->featureBar['score']['all'] = 'My Points';
 
 $lang->my->reviewResultList['pass'] = 'Pass';
 $lang->my->reviewResultList['fail'] = 'Reject';
+
+$lang->my->ssh              = 'Browse SSH Keys';
+$lang->my->createSSH        = 'Create SSH Key';
+$lang->my->editSSH          = 'Edit SSH Key';
+$lang->my->deleteSSH        = 'Delete SSH Key';
+$lang->my->publicKey        = 'Public Key';
+$lang->my->createdDate      = 'Created Date';
+$lang->my->lastUsed         = 'Last Used';
+$lang->my->confirmDeleteSSH = 'Are you sure to delete this SSH key?';
+$lang->my->sshKeyTip        = 'The public key must start with "ssh-rsa", "ecdsa-sha2-nistp256", "ecdsa-sha2-nistp384", "ecdsa-sha2-nistp521", "ssh-ed25519", "sk-ecdsa-sha2-nistp256@openssh.com" or "sk-ssh-ed25519@openssh.com"';
+$lang->my->nameFormat       = 'The name can only contain letters, numbers, dashes (-), underscores (_), dots (.), and dollar signs ($)';

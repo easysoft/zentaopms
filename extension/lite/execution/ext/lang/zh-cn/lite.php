@@ -27,3 +27,7 @@ $lang->execution->icons['grouptask'] = 'sitemap';
 $lang->execution->aclList['private'] = "私有（团队成员和{$lang->projectCommon}负责人可访问）";
 
 $lang->execution->common = "{$lang->projectCommon}看板";
+
+$lang->execution->gantt->browseType['module'] = '按目录分组';
+
+$lang->execution->ganttCustom['story'] = '目标';

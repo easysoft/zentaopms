@@ -7,6 +7,13 @@ class screenTaoTest extends baseTest
 {
     protected $moduleName = 'screen';
     protected $className  = 'tao';
+    public $objectModel   = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * 创建模拟的screen模型对象
@@ -646,7 +653,7 @@ class screenTaoTest extends baseTest
      */
     public function setChartDefaultTest(string $type, object $component): void
     {
-        $this->objectModel->setChartDefault($type, $component);
+        $this->invokeArgs('setChartDefault', array($type, $component));
     }
 
     /**
@@ -2789,7 +2796,7 @@ class screenTaoTest extends baseTest
      */
     public function buildWaterPoloTest($component, $chart)
     {
-        $result = $this->buildWaterPolo($component, $chart);
+        $result = $this->objectModel->buildWaterPolo($component, $chart);
         if(dao::isError()) return dao::getError();
 
         return $result;

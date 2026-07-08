@@ -1,0 +1,36 @@
+#pipelineLogBlock {width: 600px; position: fixed; top: 50px; right: -600px; bottom: 2px; transition: right 0.3s ease-in-out; box-shadow: -2px 0 5px rgba(0,0,0,0.1);}
+#pipelineLogBlock > .log-header {position: sticky; top: 0; left: 0; z-index: 1;}
+#pipelineLogBlock.open {right: 0;}
+#pipelineLogBlock.open.default {position: unset; width: auto; box-shadow: none;}
+#main {overflow: hidden;}
+
+@media (min-width: 1400px) {#pipelineLogBlock {width: 1300px; right: -1300px;}}
+
+.hljs {display: block; overflow-x: auto; padding: 0.5em 0.5em 40px; background: #1e1e1e !important; color: #d4d4d4 !important; border-radius: 4px; border: 1px solid #2d2d2d; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);}
+.hljs-comment {color: #6a9955; font-style: italic;}
+.hljs-keyword, .hljs-selector-tag, .hljs-tag {color: #569cd6;}
+.hljs-string, .hljs-regexp {color: #ce9178;}
+.hljs-number, .hljs-literal {color: #b5cea8;}
+.hljs-title, .hljs-class, .hljs-function {color: #dcdcaa;}
+.hljs-params {color: #9cdcfe;}
+.hljs-property, .hljs-type {color: #4ec9b0;}
+.hljs-meta {color: #c586c0;}
+.hljs-attr {color: #d4d4d4;}
+.hljs-subst {color: #d4d4d4;}
+.hljs-built_in, .hljs-builtin-name {color: #4ec9b0;}
+.hljs-attr_selector {color: #9cdcfe;}
+.hljs-punctuation {color: #d4d4d4;}
+.hljs-deletion {color: #ce9178;}
+.hljs-addition {color: #4ec9b0;}
+
+#pipelineLog .job-title {font-weight: bolder; font-size: 1rem;}
+#pipelineLog .step-title {font-weight: bolder; font-size: 0.8rem;}
+#pipelineLog strong .hljs-number {font-weight: bolder;}
+
+#pipelineLog .status-success {color: #0dbb7d;}
+#pipelineLog .status-error,
+#pipelineLog .status-failure,
+#pipelineLog .status-failed,
+#pipelineLog .status-canceled,
+#pipelineLog .status-timeout,
+#pipelineLog .status-create_fail {color: #fb2b2b;}

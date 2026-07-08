@@ -1,0 +1,40 @@
+---
+title: ops_repo 表数据配置 - repoModel::setMenu 方法测试
+desc: 为测试 repoModel::setMenu() 提供 id=2..5 的仓库数据；其中 id=4 归属 product=1000（无权），id=5 mirror=1（镜像库）
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键 ID
+  range: 2-5
+- field: spaceID
+  note: 所属空间
+  range: '0{4}'
+- field: product
+  note: 关联产品；id=4 归属无权限的 product=1000
+  range: 1,1,1000,1
+- field: name
+  note: 仓库名
+  range: repo2,repo3,repo4,repo5
+- field: gitUID
+  note: git 侧唯一标识
+  range: uid2,uid3,uid4,uid5
+- field: mirror
+  note: 是否镜像库；id=5 为镜像库
+  range: '0{3},1'
+- field: defaultBranch
+  note: 默认分支
+  range: 'main{4}'
+- field: acl
+  note: 访问控制
+  range: 'private{4}'
+- field: status
+  note: 状态
+  range: 'active{4}'
+- field: createdBy
+  note: 创建者
+  range: 'admin{4}'
+- field: deleted
+  note: 删除标记
+  range: '0{4}'

@@ -2,18 +2,16 @@
 <?php
 
 /**
-
 title=测试 groupModel->update();
 timeout=0
 cid=16723
 
 - 测试更新分组为2的分组属性name @更新分组
 - 测试更新分组为2的分组属性desc @更新描述
+- 测试更新分组已存在第name条的0属性 @『分组名称』已经有『这是一个新的用户分组5』这条记录了，请调整后再试。
 - 测试更新分组为3的分组
  - 属性id @3
- - 属性name @这是一个新的用户分组5
-- 分组名称已存在属性name @我是一个分组
-
+ - 属性name @我是一个分组
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -29,5 +27,6 @@ $group = new groupModelTest();
 
 r($group->updateTest(1, $updateName)) && p('name')    && e('更新分组');                // 测试更新分组为2的分组
 r($group->updateTest(2, $updateDesc)) && p('desc')    && e('更新描述');                // 测试更新分组为2的分组
-r($group->updateTest(3, $repeatName)) && p('id,name') && e('3,这是一个新的用户分组5'); // 测试更新分组为3的分组
-r($group->updateTest(3, $updateDesc)) && p('name')    && e('我是一个分组');            // 分组名称已存在
+r($group->updateTest(3, $repeatName)) && p('name:0')  && e('『分组名称』已经有『这是一个新的用户分组5』这条记录了，请调整后再试。'); // 测试更新分组已存在
+zenData('group')->gen(5);
+r($group->updateTest(3, $updateDesc)) && p('id,name') && e('3,我是一个分组');            // 测试更新分组为3的分组

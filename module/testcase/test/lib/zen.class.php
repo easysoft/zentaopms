@@ -4138,4 +4138,19 @@ class testcaseZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $case;
     }
+
+    /**
+     * 处理批量编辑用例的步骤和预期。
+     * Process steps and expects for batch edit.
+     *
+     * @param  array  $cases
+     * @access public
+     * @return array
+     */
+    public function processStepsAndExpectsForBatchEditTest(array $cases): array
+    {
+        $cases = $this->invokeArgs('processStepsAndExpectsForBatchEdit', [$cases]);
+        if(dao::isError()) return dao::getError();
+        return $cases;
+    }
 }

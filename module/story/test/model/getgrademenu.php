@@ -22,7 +22,7 @@ cid=18535
  - 第0条的value属性 @story
 
 */
-
+$_SESSION['user'] = (object)array('account' => 'admin');
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 

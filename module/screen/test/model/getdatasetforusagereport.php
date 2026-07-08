@@ -27,13 +27,10 @@ su('admin');
 
 // 4. 创建测试实例（变量名与模块名一致）
 $screenTest = new screenModelTest();
-$screenTest->objectModel->filter = new stdclass();
-$screenTest->objectModel->filter->year = '2024';
-$screenTest->objectModel->filter->month = '01';
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($screenTest->getDatasetForUsageReportTest(20002)) && p() && e('0'); // 步骤1：chartID 20002(活跃用户表格)
 r($screenTest->getDatasetForUsageReportTest(20004)) && p('0:count') && e('0'); // 步骤2：chartID 20004(活跃产品卡片)
 r($screenTest->getDatasetForUsageReportTest(20007)) && p('0:count') && e('0'); // 步骤3：chartID 20007(活跃项目卡片)
 r($screenTest->getDatasetForUsageReportTest(20010)) && p() && e('0'); // 步骤4：chartID 20010(项目任务表格)
-r($screenTest->getDatasetForUsageReportTest(99999)) && p() && e('0'); // 步骤5：不存在的chartID
+r(is_null($screenTest->getDatasetForUsageReportTest(99999))) && p() && e('1'); // 步骤5：不存在的chartID

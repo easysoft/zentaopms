@@ -1,5 +1,4 @@
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
-<?php include $app->getModuleRoot() . 'common/view/chart.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js');?>
 <?php js::import($jsRoot . 'echarts/timeline.min.js');?>
 <?php js::set('executions', $executions);?>

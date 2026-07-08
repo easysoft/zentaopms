@@ -1,0 +1,17 @@
+---
+title: ops_provider
+author: mazhiyuan
+version: "1.0"
+fields:
+  - field: id
+    range: 1-2
+  - field: type
+    range: Jenkins,Gitlab
+  - field: name
+    range: Jenkins测试服务器,GitLab测试服务器
+  - field: url
+    range: http://jenkins.test.com,http://gitlab.test.com
+  - field: token
+    range: YWRtaW46dGVzdHRva2Vu
+  - field: deleted
+    range: 0

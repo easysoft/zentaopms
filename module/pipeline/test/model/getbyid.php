@@ -3,28 +3,48 @@
 
 /**
 
-title=测试 pipelineModel->getByID();
+title=测试 jobModel::getByID();
 timeout=0
-cid=17344
+cid=16841
 
-- 获取id为0的流水线信息 @0
-- 获取id为1流水线信息
- - 属性type @gitlab
- - 属性name @gitLab
- - 属性url @https://gitlabdev.qc.oop.cc/
- - 属性account @root
- - 属性private @08bcc98f75d7d40053dc80722bdc117b
-- 获取id不存在的流水线信息 @0
+- 测试步骤1：查询有效jenkins类型job的基本信息
+ - 属性id @1
+ - 属性engine @jenkins
+ - 属性name @Jenkins Job
+ - 属性pipeline @test-pipeline
+- 测试步骤2：查询有效gitlab类型job基本信息
+ - 属性id @2
+ - 属性engine @gitlab
+ - 属性name @Gitlab Job
+- 测试步骤3：查询不存在的job ID返回空对象属性id @~~
+- 测试步骤4：测试边界值：ID为0的情况属性id @~~
+- 测试步骤5：验证jenkins引擎正常pipeline
+ - 属性id @6
+ - 属性engine @jenkins
+ - 属性pipeline @simple
+- 测试步骤6：测试负数ID的边界情况属性id @~~
+- 测试步骤7：验证jenkins引擎基本信息
+ - 属性id @5
+ - 属性engine @jenkins
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(5);
-zenData('pipeline')->loadYaml('pipeline')->gen(1);
+// 准备测试数据
+$table = zenData('job');
+$table->id->range('1-7');
+$table->name->range('Jenkins Job,Gitlab Job,Jenkins Normal,Jenkins Pipeline,Empty Job,Normal Job,Test Job');
+$table->engine->range('jenkins,gitlab,jenkins,jenkins,jenkins,jenkins,jenkins');
+$table->pipeline->range('/job/test-pipeline,{"project":123,"reference":"master"},normal-pipeline,/job/complex/pipeline/path,,simple,test');
+$table->frame->range('phpunit,sonarqube,phpunit,sonarqube,phpunit,phpunit,phpunit');
+$table->repo->range('1-7');
+$table->deleted->range('0');
+$table->gen(7);
 
-$idList = array(0, 1, 2);
+// 用户登录
+su('admin');
 
 $pipelineTester = new pipelineModelTest();
 r($pipelineTester->getByIDTest($idList[0])) && p()                                && e('0');                                                                                // 获取id为0的流水线信息

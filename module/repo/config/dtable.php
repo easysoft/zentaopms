@@ -4,26 +4,38 @@ $app->loadLang('sonarqube');
 $app->loadLang('bug');
 
 $config->repo->dtable = new stdclass();
+$config->repo->dtable->fieldList['id']['title'] = $lang->idAB;
+$config->repo->dtable->fieldList['id']['type']  = 'id';
 
 $config->repo->dtable->fieldList['name']['name']  = 'name';
 $config->repo->dtable->fieldList['name']['title'] = $lang->repo->name;
 $config->repo->dtable->fieldList['name']['type']  = 'title';
-$config->repo->dtable->fieldList['name']['width'] = '0.2';
 $config->repo->dtable->fieldList['name']['hint']  = '{desc}';
+
+$config->repo->dtable->fieldList['space']['name']     = 'spaceID';
+$config->repo->dtable->fieldList['space']['title']    = $lang->repo->space;
+$config->repo->dtable->fieldList['space']['sortType'] = false;
+$config->repo->dtable->fieldList['space']['width']    = '136';
+$config->repo->dtable->fieldList['space']['hint']     = true;
 
 $config->repo->dtable->fieldList['product']['name']     = 'productNames';
 $config->repo->dtable->fieldList['product']['title']    = $lang->repo->product;
 $config->repo->dtable->fieldList['product']['type']     = 'text';
 $config->repo->dtable->fieldList['product']['sortType'] = false;
-$config->repo->dtable->fieldList['product']['width']    = '136';
 $config->repo->dtable->fieldList['product']['hint']     = true;
 
-$config->repo->dtable->fieldList['scm']['name']     = 'SCM';
-$config->repo->dtable->fieldList['scm']['title']    = $lang->repo->type;
-$config->repo->dtable->fieldList['scm']['type']     = 'scm';
-$config->repo->dtable->fieldList['scm']['sortType'] = true;
-$config->repo->dtable->fieldList['scm']['map']      = $lang->repo->scmList;
-$config->repo->dtable->fieldList['scm']['group']    = 1;
+$config->repo->dtable->fieldList['origin']['name']     = 'origin';
+$config->repo->dtable->fieldList['origin']['title']    = $lang->repo->origin;
+$config->repo->dtable->fieldList['origin']['type']     = 'text';
+$config->repo->dtable->fieldList['origin']['sortType'] = false;
+$config->repo->dtable->fieldList['origin']['hint']     = true;
+
+$config->repo->dtable->fieldList['acl']['name']     = 'acl';
+$config->repo->dtable->fieldList['acl']['title']    = $lang->repo->acl;
+$config->repo->dtable->fieldList['acl']['sortType'] = false;
+$config->repo->dtable->fieldList['acl']['width']    = '136';
+$config->repo->dtable->fieldList['acl']['hint']     = true;
+$config->repo->dtable->fieldList['acl']['map']      = $lang->repo->showAclList;
 
 $config->repo->dtable->fieldList['path']['name']  = 'codePath';
 $config->repo->dtable->fieldList['path']['title'] = $lang->repo->path;
@@ -32,13 +44,6 @@ $config->repo->dtable->fieldList['path']['hint']  = true;
 $config->repo->dtable->fieldList['path']['width'] = '260';
 $config->repo->dtable->fieldList['path']['group'] = 1;
 
-$config->repo->dtable->fieldList['lastSubmit']['name']       = 'lastSubmitTime';
-$config->repo->dtable->fieldList['lastSubmit']['title']      = $lang->repo->lastSubmitTime;
-$config->repo->dtable->fieldList['lastSubmit']['type']       = 'datetime';
-$config->repo->dtable->fieldList['lastSubmit']['formatDate'] = 'YYYY-MM-dd hh:mm';
-$config->repo->dtable->fieldList['lastSubmit']['sortType']   = false;
-$config->repo->dtable->fieldList['lastSubmit']['width']      = '100';
-
 $config->repo->dtable->fieldList['job']['name']  = 'job';
 $config->repo->dtable->fieldList['job']['hidden'] = true;
 
@@ -46,24 +51,24 @@ $config->repo->dtable->fieldList['actions']['name']  = 'actions';
 $config->repo->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->repo->dtable->fieldList['actions']['type']  = 'actions';
 $config->repo->dtable->fieldList['actions']['width'] = '132';
-$config->repo->dtable->fieldList['actions']['menu']  = array('visit', 'execJob', 'reportView', 'edit', 'delete');
+$config->repo->dtable->fieldList['actions']['menu']  = array('scanExec', 'scanIssue', 'edit', 'delete');
 
-$config->repo->dtable->fieldList['actions']['list']['visit']['icon']   = 'menu-my';
-$config->repo->dtable->fieldList['actions']['list']['visit']['hint']   = $lang->repo->visit;
-$config->repo->dtable->fieldList['actions']['list']['visit']['target'] = '_blank';
+$app->loadLang('codescan');
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['icon']         = 'start';
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['hint']         = $lang->codescan->exec;
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['url']          = array('module' => 'codescan', 'method' => 'exec', 'params' => 'planID=0&repoID={id}');
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['showText']     = true;
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['notLoadModel'] = true;
+$config->repo->dtable->fieldList['actions']['list']['scanExec']['data-toggle']  = 'modal';
+
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['icon']         = 'bug';
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['hint']         = $lang->codescan->issue;
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['url']          = array('module' => 'codescan', 'method' => 'issue', 'params' => 'repoID={id}');
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['showText']     = true;
+$config->repo->dtable->fieldList['actions']['list']['scanIssue']['notLoadModel'] = true;
 
 $config->repo->dtable->fieldList['actions']['list']['edit']['icon'] = 'edit';
 $config->repo->dtable->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
-
-$config->repo->dtable->fieldList['actions']['list']['execJob']['icon']       = 'sonarqube';
-$config->repo->dtable->fieldList['actions']['list']['execJob']['hint']       = $lang->sonarqube->execJob;
-$config->repo->dtable->fieldList['actions']['list']['execJob']['url']        = array('module' => 'sonarqube', 'method' => 'execJob', 'params' => "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['execJob']['className']  = 'ajax-submit';
-
-$config->repo->dtable->fieldList['actions']['list']['reportView']['icon']        = 'audit';
-$config->repo->dtable->fieldList['actions']['list']['reportView']['hint']        = $lang->sonarqube->reportView;
-$config->repo->dtable->fieldList['actions']['list']['reportView']['url']         = array('module' => 'sonarqube', 'method' => 'reportView', 'params' => "jobID={job}");
-$config->repo->dtable->fieldList['actions']['list']['reportView']['data-toggle'] = 'modal';
 
 $config->repo->dtable->fieldList['actions']['list']['delete']['icon']         = 'trash';
 $config->repo->dtable->fieldList['actions']['list']['delete']['hint']         = $lang->repo->delete;
@@ -99,6 +104,7 @@ $config->repo->repoDtable->fieldList['committer']['title']    = $lang->repo->com
 $config->repo->repoDtable->fieldList['committer']['sortType'] = false;
 $config->repo->repoDtable->fieldList['committer']['width']    = '90';
 $config->repo->repoDtable->fieldList['committer']['hint']     = true;
+$config->repo->repoDtable->fieldList['committer']['type']     = 'user';
 
 $config->repo->repoDtable->fieldList['comment']['name']     = 'originalComment';
 $config->repo->repoDtable->fieldList['comment']['title']    = $lang->repo->comment;
@@ -155,8 +161,10 @@ $config->repo->logDtable->fieldList['date']['type']     = 'datetime';
 $config->repo->logDtable->fieldList['date']['sortType'] = false;
 $config->repo->logDtable->fieldList['date']['width']    = '160';
 
-$config->repo->logDtable->fieldList['committer']['name']  = 'committer';
-$config->repo->logDtable->fieldList['committer']['width'] = '160';
+$config->repo->logDtable->fieldList['committer']['name']     = 'committer';
+$config->repo->logDtable->fieldList['committer']['type']     = 'user';
+$config->repo->logDtable->fieldList['committer']['width']    = '160';
+$config->repo->logDtable->fieldList['committer']['sortType'] = false;
 
 $config->repo->logDtable->fieldList['relations']['name']  = 'relations';
 $config->repo->logDtable->fieldList['relations']['type']  = 'html';
@@ -165,6 +173,7 @@ $config->repo->logDtable->fieldList['relations']['title'] =  $lang->repo->relati
 
 $config->repo->logDtable->fieldList['comment']['type']  = 'html';
 $config->repo->logDtable->fieldList['comment']['width'] = '400';
+$config->repo->logDtable->fieldList['comment']['hint']  = true;
 
 $config->repo->blameDtable = new stdclass();
 
@@ -260,6 +269,99 @@ $config->repo->reviewDtable->fieldList['revisionA']['width'] = '100';
 $config->repo->reviewDtable->fieldList['revisionA']['hint']  = true;
 $config->repo->reviewDtable->fieldList['revisionA']['link']  = array('module' => 'repo', 'method' => 'revision', 'params' => 'repoID={repo}&objectID=0&revision={v2}');
 
+$config->repo->dtable->webhook = new stdclass();
+$config->repo->dtable->webhook->fieldList['name']['title'] = $lang->repo->name;
+$config->repo->dtable->webhook->fieldList['name']['type']  = 'title';
+$config->repo->dtable->webhook->fieldList['name']['width'] = 300;
+
+$config->repo->dtable->webhook->fieldList['status']['title']     = $lang->repo->status;
+$config->repo->dtable->webhook->fieldList['status']['type']      = 'status';
+$config->repo->dtable->webhook->fieldList['status']['name']      = 'status';
+$config->repo->dtable->webhook->fieldList['status']['statusMap'] = $lang->repo->webhook->statusList;
+$config->repo->dtable->webhook->fieldList['status']['sortType']  = true;
+$config->repo->dtable->webhook->fieldList['status']['order']     = 20;
+
+$config->repo->dtable->webhook->fieldList['url']['title'] = $lang->repo->targetURL;
+$config->repo->dtable->webhook->fieldList['url']['type']  = 'text';
+$config->repo->dtable->webhook->fieldList['url']['order'] = 30;
+
+$config->repo->dtable->webhook->fieldList['desc']['title'] = $lang->repo->desc;
+$config->repo->dtable->webhook->fieldList['desc']['type']  = 'desc';
+$config->repo->dtable->webhook->fieldList['desc']['name']  = 'description';
+$config->repo->dtable->webhook->fieldList['desc']['order'] = 40;
+
+$config->repo->dtable->webhook->fieldList['latestStatus']['title']     = $lang->repo->latestStatus;
+$config->repo->dtable->webhook->fieldList['latestStatus']['type']      = 'status';
+$config->repo->dtable->webhook->fieldList['latestStatus']['statusMap'] = $lang->repo->webhook->latestStatusList;
+$config->repo->dtable->webhook->fieldList['latestStatus']['flex']      = 0;
+$config->repo->dtable->webhook->fieldList['latestStatus']['sortType']  = true;
+$config->repo->dtable->webhook->fieldList['latestStatus']['order']     = 50;
+$config->repo->dtable->webhook->fieldList['latestStatus']['width']     = 150;
+
+$config->repo->dtable->webhook->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->webhook->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->webhook->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->webhook->fieldList['actions']['width'] = 60;
+$config->repo->dtable->webhook->fieldList['actions']['menu']  = array('edit', 'enable|disable', 'log', 'delete');
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['icon'] = 'edit';
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['hint'] = $lang->repo->edit;
+$config->repo->dtable->webhook->fieldList['actions']['list']['edit']['url']  = array('module' => 'repo', 'method' => 'editWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['icon']      = 'start';
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['hint']      = $lang->repo->enable;
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['url']       = array('module' => 'repo', 'method' => 'enableWebhook', 'params' => 'repoID={repoID}&webhookID={id}&isEnable=1');
+$config->repo->dtable->webhook->fieldList['actions']['list']['enable']['className'] = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['icon']      = 'off';
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['hint']      = $lang->repo->disable;
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['url']       = array('module' => 'repo', 'method' => 'enableWebhook', 'params' => 'repoID={repoID}&webhookID={id}&isEnable=0');
+$config->repo->dtable->webhook->fieldList['actions']['list']['disable']['className'] = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['icon']         = 'trash';
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['hint']         = $lang->repo->deleteWebhook;
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['url']          = array('module' => 'repo', 'method' => 'deleteWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['data-confirm'] = array('message' => $lang->repo->webhook->confirmWebhookDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->webhook->fieldList['actions']['list']['delete']['className']    = 'ajax-submit';
+
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['icon'] = 'history';
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['hint'] = $lang->repo->log;
+$config->repo->dtable->webhook->fieldList['actions']['list']['log']['url']  = array('module' => 'repo', 'method' => 'logWebhook', 'params' => 'repoID={repoID}&webhookID={id}');
+
+$config->repo->dtable->logWebhook = new stdclass();
+$config->repo->dtable->logWebhook->fieldList['createdDate']['title']      = $lang->repo->webhook->requestDate;
+$config->repo->dtable->logWebhook->fieldList['createdDate']['type']       = 'datetime';
+$config->repo->dtable->logWebhook->fieldList['createdDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
+
+$config->repo->dtable->logWebhook->fieldList['status']['title']     = $lang->repo->status;
+$config->repo->dtable->logWebhook->fieldList['status']['type']      = 'status';
+$config->repo->dtable->logWebhook->fieldList['status']['name']      = 'result';
+$config->repo->dtable->logWebhook->fieldList['status']['statusMap'] = $lang->repo->webhook->logStatusList;
+$config->repo->dtable->logWebhook->fieldList['status']['sortType']  = true;
+$config->repo->dtable->logWebhook->fieldList['status']['order']     = 20;
+
+$config->repo->dtable->logWebhook->fieldList['triggerType']['title'] = $lang->repo->webhook->triggerType;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['type']  = 'type';
+$config->repo->dtable->logWebhook->fieldList['triggerType']['map']   = $lang->repo->webhook->customEventList;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['width'] = 150;
+$config->repo->dtable->logWebhook->fieldList['triggerType']['order'] = 30;
+
+$config->repo->dtable->logWebhook->fieldList['url']['title'] = $lang->repo->webhook->requestURL;
+$config->repo->dtable->logWebhook->fieldList['url']['type']  = 'text';
+$config->repo->dtable->logWebhook->fieldList['url']['order'] = 40;
+
+$config->repo->dtable->logWebhook->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->logWebhook->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->logWebhook->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->logWebhook->fieldList['actions']['width'] = 60;
+$config->repo->dtable->logWebhook->fieldList['actions']['menu']  = array('requestData');
+
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['icon']        = 'audit';
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['hint']        = $lang->repo->webhook->requestData;
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['url']         = array('module' => 'repo', 'method' => 'viewWebhookRequest', 'params' => 'repoID={repoID}&webhookID={webhookID}&executionID={id}');
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['data-toggle'] = 'modal';
+$config->repo->dtable->logWebhook->fieldList['actions']['list']['requestData']['data-size']   = 'lg';
+
 $app->loadLang('bug');
 $config->repo->reviewDtable->fieldList['type']['title'] = $lang->repo->type;
 $config->repo->reviewDtable->fieldList['type']['name']  = 'type';
@@ -321,11 +423,35 @@ $config->repo->dtable->tag->fieldList['message']['type']  = 'text';
 $config->repo->dtable->tag->fieldList['message']['order'] = 40;
 $config->repo->dtable->tag->fieldList['message']['group'] = 1;
 
+$config->repo->dtable->tag->fieldList['createdBy']['title']    = $lang->repo->createdBy;
+$config->repo->dtable->tag->fieldList['createdBy']['type']     = 'user';
+$config->repo->dtable->tag->fieldList['createdBy']['sortType'] = false;
+$config->repo->dtable->tag->fieldList['createdBy']['group']    = 1;
+$config->repo->dtable->tag->fieldList['createdBy']['order']    = 20;
+$config->repo->dtable->tag->fieldList['createdBy']['width']    = 100;
+
+$config->repo->dtable->tag->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->tag->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->tag->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->tag->fieldList['actions']['width'] = 60;
+$config->repo->dtable->tag->fieldList['actions']['menu']  = array('deleteTag');
+
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['icon']         = 'trash';
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['hint']         = $lang->repo->deleteTag;
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['url']          = helper::createLink('repo', 'deleteTag', 'repoID={repoID}&tagName={tagName}');
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['data-confirm'] = array('message' => $lang->repo->confirmTagDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->tag->fieldList['actions']['list']['deleteTag']['className']    = 'ajax-submit';
+
 $config->repo->dtable->branch = new stdclass();
 $config->repo->dtable->branch->fieldList['name']['title']    = $lang->repo->branch;
 $config->repo->dtable->branch->fieldList['name']['type']     = 'title';
 $config->repo->dtable->branch->fieldList['name']['name']     = 'name';
 $config->repo->dtable->branch->fieldList['name']['sortType'] = false;
+$config->repo->dtable->branch->fieldList['name']['width']    = 200;
+
+$config->repo->dtable->branch->fieldList['type']['title'] = $lang->repo->branchType;
+$config->repo->dtable->branch->fieldList['type']['type']  = 'text';
+$config->repo->dtable->branch->fieldList['type']['order'] = 10;
 
 $config->repo->dtable->branch->fieldList['commitID']['title']    = $lang->repo->commit;
 $config->repo->dtable->branch->fieldList['commitID']['type']     = 'desc';
@@ -350,3 +476,51 @@ $config->repo->dtable->branch->fieldList['commitDate']['type']       = 'datetime
 $config->repo->dtable->branch->fieldList['commitDate']['formatDate'] = 'YYYY-MM-dd hh:mm';
 $config->repo->dtable->branch->fieldList['commitDate']['sortType']   = false;
 $config->repo->dtable->branch->fieldList['commitDate']['order']      = 50;
+
+$config->repo->dtable->branch->fieldList['actions']['name']  = 'actions';
+$config->repo->dtable->branch->fieldList['actions']['title'] = $lang->actions;
+$config->repo->dtable->branch->fieldList['actions']['type']  = 'actions';
+$config->repo->dtable->branch->fieldList['actions']['width'] = 60;
+$config->repo->dtable->branch->fieldList['actions']['align'] = 'center';
+$config->repo->dtable->branch->fieldList['actions']['menu']  = array('deleteBranch');
+
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['icon']         = 'trash';
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['hint']         = $lang->repo->deleteBranch;
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['url']          = helper::createLink('repo', 'deleteBranch', 'repoID={repoID}&branchName={branchName}');
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['data-confirm'] = array('message' => $lang->repo->confirmBranchDelete, 'icon' => 'icon-exclamation-sign', 'iconClass' => 'warning-pale rounded-full icon-2x');
+$config->repo->dtable->branch->fieldList['actions']['list']['deleteBranch']['className']    = 'ajax-submit';
+
+$config->repo->dtable->system = new stdclass();
+$config->repo->dtable->system->fieldList['id']['title']    = $lang->idAB;
+$config->repo->dtable->system->fieldList['id']['name']     = 'id';
+$config->repo->dtable->system->fieldList['id']['type']     = 'id';
+$config->repo->dtable->system->fieldList['id']['sortType'] = true;
+$config->repo->dtable->system->fieldList['id']['order']    = 5;
+
+$config->repo->dtable->system->fieldList['product']['title']    = $lang->repo->system->product;
+$config->repo->dtable->system->fieldList['product']['type']     = 'text';
+$config->repo->dtable->system->fieldList['product']['sortType'] = true;
+$config->repo->dtable->system->fieldList['product']['order']    = 10;
+$config->repo->dtable->system->fieldList['product']['width']    = 0.15;
+
+$config->repo->dtable->system->fieldList['name']['title'] = $lang->repo->system->name;
+$config->repo->dtable->system->fieldList['name']['type']  = 'text';
+$config->repo->dtable->system->fieldList['name']['hint']  = true;
+$config->repo->dtable->system->fieldList['name']['sortType'] = true;
+$config->repo->dtable->system->fieldList['name']['order'] = 15;
+$config->repo->dtable->system->fieldList['name']['width'] = 0.15;
+
+$config->repo->dtable->system->fieldList['status']['title']     = $lang->repo->system->status;
+$config->repo->dtable->system->fieldList['status']['type']      = 'status';
+$config->repo->dtable->system->fieldList['status']['name']      = 'status';
+$config->repo->dtable->system->fieldList['status']['statusMap'] = $lang->system->statusList;
+$config->repo->dtable->system->fieldList['status']['sortType']  = true;
+$config->repo->dtable->system->fieldList['status']['align']     = 'left';
+$config->repo->dtable->system->fieldList['status']['order']     = 20;
+$config->repo->dtable->system->fieldList['status']['width']     = 0.15;
+
+$config->repo->dtable->system->fieldList['latestRelease']['title'] = $lang->repo->system->latestRelease;
+$config->repo->dtable->system->fieldList['latestRelease']['name']  = 'latestRelease';
+$config->repo->dtable->system->fieldList['latestRelease']['type']  = 'text';
+$config->repo->dtable->system->fieldList['latestRelease']['order'] = 25;
+$config->repo->dtable->system->fieldList['latestRelease']['width'] = 0.15;

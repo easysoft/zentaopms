@@ -7,6 +7,13 @@ class screenModelTest extends baseTest
 {
     protected $moduleName = 'screen';
     protected $className  = 'model';
+    public $objectModel   = null;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->objectModel = $this->instance;
+    }
 
     /**
      * 创建模拟的screen模型对象
@@ -2789,7 +2796,7 @@ class screenModelTest extends baseTest
      */
     public function buildWaterPoloTest($component, $chart)
     {
-        $result = $this->buildWaterPolo($component, $chart);
+        $result = $this->instance->buildWaterPolo($component, $chart);
         if(dao::isError()) return dao::getError();
 
         return $result;

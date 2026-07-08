@@ -1,0 +1,28 @@
+---
+title: ops_repohistory 表数据配置 - getCommits 方法测试
+desc: 为测试 gitfoxModel::getCommits() 方法提供 revision 与 commit 计数数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键 ID
+  range: 1-3
+- field: repo
+  note: 代码库 ID
+  range: '1{3}'
+- field: revision
+  note: 提交 sha，与 stub 响应中 sha 保持一致
+  range: sha-a,sha-b,sha-c
+- field: commit
+  note: 提交计数
+  range: '1{3}'
+- field: comment
+  note: 注释
+  range: '[fix bug],[feat init],[chore]'
+- field: committer
+  note: 作者
+  range: 'admin{3}'
+- field: time
+  note: 提交时间
+  range: '`2024-01-01 00:00:00`,`2024-01-02 00:00:00`,`2024-01-03 00:00:00`'

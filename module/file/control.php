@@ -686,7 +686,7 @@ class file extends control
         switch($mode)
         {
             case 'preview':
-                if($isOffice && $officeOn) $this->locate(helper::createLink('file', 'download', "fileID={$file->id}&mouse=left"));
+                if($isOffice && $officeOn) $this->locate(helper::createLink('file', 'preview', "fileID={$file->id}&mouse=left"));
                 return $this->preview($file->id, 'left');
             case 'download':
                 return $this->download($file->id);

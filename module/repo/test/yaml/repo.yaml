@@ -5,6 +5,8 @@ version: "1.0"
 fields:
 - field: id
   range: 1-5
+- field: space
+  range: 1-5
 - field: product
   range: 1-4
 - field: projects
@@ -14,7 +16,7 @@ fields:
 - field: path
   range: "[http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml],[],[/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea],[https://svn.qc.oop.cc/svn/unittest/]"
 - field: SCM
-  range: Gitlab{2},Gitea,Subversion
+  range: Subversion
 - field: client
   range: "git{3},svn{1}"
 - field: serviceHost
@@ -37,5 +39,7 @@ fields:
   range: 0
 - field: job
   range: 0
+- field: acl
+  range: 'open'
 - field: deleted
   range: 0

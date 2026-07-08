@@ -1,0 +1,19 @@
+---
+title: ops_pipeline_content
+author: mazhiyuan
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: pipelineID
+    range: 1-5
+  - field: version
+    range: 1{5}
+  - field: data
+    range: 1-5
+    format: ""
+  - field: variables
+    range: 1-5
+    format: "{}"
+  - field: createdBy
+    range: admin{5}

@@ -127,7 +127,7 @@ class bugRelatedList extends relatedList
                     $statusClass = $mr->status;
                     if($mr->status == 'opened') $statusClass = 'draft';
                     if($mr->status == 'merged') $statusClass = 'done';
-                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->ppm->statusList, $mr->status) . '</span>');
                     return $item;
                 }
             );
@@ -146,7 +146,7 @@ class bugRelatedList extends relatedList
                         $statusClass = $mr->status;
                         if($mr->status == 'opened') $statusClass = 'draft';
                         if($mr->status == 'merged') $statusClass = 'done';
-                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->ppm->statusList, $mr->status) . '</span>');
                         return $item;
                     }
                 );

@@ -1,0 +1,22 @@
+title: zt_ops_review_flow
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: repo
+    range: 1-10
+  - field: branchType
+    range: 0, 1-9
+  - field: name
+    range: 1-10
+    prefix: 'review_flow'
+  - field: desc
+    range: 1-10
+    prefix: 'desc'
+  - field: definition
+    range: '{"ai":{"enable": true, "approvals": { "score": 5 } }, "reviewFlow": { "approvals": { "defaultReviewers": [ "admin" ], "specifiedReviewers": [ "admin" ], "minReviewers": 2, "approvalID": 111 }, "issues": { "addressOption": "", "mandatoryType": [ "security" ], }, "newCommits": { "addressOption": "" }, "merge": { "options": [ "merge", "squash" ], "autoArchive": true }}}'
+  - field: status
+    range: "enable,disable"
+  - field: deleted
+    range: 0

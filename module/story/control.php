@@ -2010,8 +2010,6 @@ class story extends control
             $this->config->story->dtable->fieldList['reviewedBy']['control']    = 'multiple';
             $this->config->story->dtable->fieldList['reviewedBy']['dataSource'] = array('module' => 'story', 'method' => 'getProductReviewers', 'params' => array('productID' => (int)$productID));
 
-            if($executionID) $this->lang->story->title = $this->lang->story->name;
-
             /* Create field lists. */
             if(!$productID or $browseType == 'bysearch')
             {

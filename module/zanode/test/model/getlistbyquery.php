@@ -73,6 +73,10 @@ cid=19834
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+global $app;
+$app->moduleName = $app->rawModule = 'zanode';
+$app->methodName = $app->rawMethod = 'browse';
+
 zenData('host')->loadYaml('host')->gen(10);
 zenData('image')->loadYaml('image')->gen(10);
 zenData('userquery')->loadYaml('userquery')->gen(1);
@@ -93,9 +97,6 @@ r($zanode->getListByQuery($browseTypeList[0], $paramList[0], $orderByList[0])) &
 r($zanode->getListByQuery($browseTypeList[1], $paramList[1])) && p('0:id,status;1:id,status') && e('10,shutoff;9,wait');                                                //测试当browseType为bysearch时，param为1，并且排序为默认值，返回搜索后的节点,并且检查节点的状态是否正确。
 r($zanode->getListByQuery($browseTypeList[1], $paramList[1], $orderByList[0])) && p('0:id,status;1:id,status') && e('9,wait;10,shutoff');                               //测试当browseType为bysearch时，param为1，并且排序为按照id正序，返回搜索后的节点,并且检查节点的状态是否正确。
 
-global $app;
-$app->setModuleName('zanode');
-$app->setMethodName('browse');
 $app->loadClass('pager', true);
 $pager = pager::init($recTotal, $recPerPage, $pageID);
 

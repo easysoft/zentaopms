@@ -16,7 +16,7 @@ cid=19106
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/testcasezen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 zenData('case')->loadYaml('case', false, 2)->gen(10);
 zenData('casestep')->loadYaml('casestep', false, 2)->gen(20);

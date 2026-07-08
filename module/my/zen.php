@@ -79,11 +79,11 @@ class myZen extends my
             if($case->lastRunResult && $case->lastRunResult != 'pass') $failCount ++;
             if($case->needconfirm)
             {
-                $case->status = $this->lang->story->changed;
+                $case->status = 'changed';
             }
             else if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
             {
-                $case->status = $this->lang->testcase->changed;
+                $case->status = 'casechanged';
             }
             if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
         }
@@ -332,5 +332,31 @@ class myZen extends my
         $this->view->isIPD = $isIPD;
 
         return $count;
+    }
+
+    /**
+     * 检查ssh公钥和名称格式是否正确
+     * Check ssh public key and name format.
+     *
+     * @param  object $formData
+     * @access public
+     * @return bool
+     */
+    public function checkSSH(object $formData): bool
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        if(!preg_match('/^[a-zA-Z0-9\-_.$]+$/', $formData->name))
+        {
+            dao::$errors['name'][] = $this->lang->my->nameFormat;
+        }
+
+        $checkPrefix = false;
+        foreach($this->config->my->publicKeyPrefix as $prefix)
+        {
+            if(strpos($formData->publicKey, $prefix) === 0) $checkPrefix = true;
+        }
+        if(!$checkPrefix) dao::$errors['publicKey'][] = $this->lang->my->sshKeyTip;
+
+        return !dao::isError();
     }
 }

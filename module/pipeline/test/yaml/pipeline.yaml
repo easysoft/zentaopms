@@ -1,20 +1,26 @@
 title: zt_pipeline
-author: Shujie Tian
+author: Claude
 version: "1.0"
 fields:
   - field: id
-    range: 1-100
+    range: 1-10
   - field: name
-    range: 'gitLab,SonarQube,gitea,Gogs,Jenkins'
-  - field: type
-    range: 'gitlab,sonarqube,gitea,gogs,jenkins'
-  - field: url
-    range: 'https://gitlabdev.qc.oop.cc/,https://sonardev.qc.oop.cc/,https://giteadev.qc.oop.cc/,https://gogsdev.qc.oop.cc/,https://jenkinsdev.qc.oop.cc/'
-  - field: account
-    range: 'root,sonar,gitea,gogs-admin,jenkins'
-  - field: password
-    range: 'lacu7BIH0LIccmmnvQAK,kkGAzE1p9pOoqJA9bLIh,PcUoWaHQ5iJze9yEOVbi,EH03prX2VQeg8dakQgsh,1rY7RVDA2BVkjO50OjMJ'
+    range: 流水线1,流水线2,流水线3,流水线4,流水线5,流水线6,流水线7,流水线8,流水线9,流水线10
+  - field: engine
+    range: gitfox,gitlab,jenkins,gitfox,gitlab,jenkins,gitfox,gitlab,jenkins,gitfox
+  - field: providerID
+    range: 0{10}
+  - field: scope
+    range: repo,repo,space,space,repo,space,repo,space,repo,space
+  - field: spaceID
+    range: 1{5},2{5}
+  - field: repoID
+    range: 1,2,0,0,3,0,4,0,5,0
+  - field: status
+    range: active{10}
   - field: createdBy
-    range: system
+    range: admin
+  - field: createdDate
+    range: "[(M)-(w)]"
   - field: deleted
     range: 0

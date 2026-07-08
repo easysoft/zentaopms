@@ -33,13 +33,19 @@ zenData('project')->gen(5);
 zenData('story')->gen(10);
 zenData('bug')->gen(10);
 zenData('task')->gen(10);
+zenData('doclib')->gen(10);
 zenData('doc')->gen(10);
 zenData('feedback')->gen(10);
 
 su('admin');
 
-global $tester;
+global $tester, $app;
 $zai = new zaiModelTest();
+
+$app->user->view = new stdClass();
+$app->user->view->products = '1,2,3';
+$app->user->view->projects = '1,2,3';
+$app->user->admin = false;
 
 /* 测试过滤空数组 */
 $result1 = $zai->filterKnowledgesByPrivTest(array());

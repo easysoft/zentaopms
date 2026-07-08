@@ -1,0 +1,16 @@
+---
+title: ops_repouser 表数据配置 - setMenu 方法测试
+desc: 为测试 ciModel::setMenu() 方法提供 admin 对 repo1-repo5 的成员映射
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: 主键 ID
+  range: 1-5
+- field: repo
+  note: 关联仓库 ID
+  range: 1-5
+- field: account
+  note: 成员账号
+  range: 'admin{5}'

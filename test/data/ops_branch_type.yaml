@@ -1,0 +1,23 @@
+title: zt_ops_branch_type
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: repo
+    range: 1-10
+  - field: key
+    range: 1-10
+    prefix: 'branch_type'
+  - field: name
+    range: 1-10
+    prefix: 'branch_type'
+  - field: prefix
+    range: dev/,test/,release/
+  - field: desc
+    range: 1-10
+    prefix: 'desc'
+  - field: createdBy
+    range: admin
+  - field: deleted
+    range: 0

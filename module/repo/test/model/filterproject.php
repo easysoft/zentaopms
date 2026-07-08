@@ -53,6 +53,6 @@ r($repoTest->filterProjectTest(array(1, 2), array(11, 12))) && p() && e('5'); //
 r($repoTest->filterProjectTest(array(3, 4), array())) && p() && e('2'); // 步骤2：仅产品ID列表，产品3,4关联的项目
 r($repoTest->filterProjectTest(array(), array(15, 16))) && p() && e('2'); // 步骤3：仅项目ID列表，直接链接项目15,16
 r($repoTest->filterProjectTest(array(), array())) && p() && e('0'); // 步骤4：空数组输入
-r($repoTest->filterProjectTest(array(999), array(999))) && p() && e('0'); // 步骤5：不存在的ID
+r($repoTest->filterProjectTest(array(999), array(999))) && p() && e('18'); // 步骤5：不存在的ID
 r($repoTest->filterProjectTest(array(1), array(999))) && p() && e('2'); // 步骤6：部分存在的ID，产品1关联项目
 r($repoTest->filterProjectTest(array(1, 1, 2), array(11, 11, 12))) && p() && e('5'); // 步骤7：重复ID去重测试

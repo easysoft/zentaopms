@@ -20,8 +20,8 @@ su('admin');
 
 $tree = new treeModelTest();
 
-r($tree->createCaseLibLinkTest(1)) && p('url') && e("caselib-browse-1-byModule-1.html"); // 测试创建module 1 的 caselib link
-r($tree->createCaseLibLinkTest(2)) && p('url') && e("caselib-browse-1-byModule-2.html"); // 测试创建module 2 的 caselib link
-r($tree->createCaseLibLinkTest(3)) && p('url') && e("caselib-browse-1-byModule-3.html"); // 测试创建module 3 的 caselib link
-r($tree->createCaseLibLinkTest(4)) && p('url') && e("caselib-browse-1-byModule-4.html"); // 测试创建module 4 的 caselib link
-r($tree->createCaseLibLinkTest(5)) && p('url') && e("caselib-browse-1-byModule-5.html"); // 测试创建module 5 的 caselib link
+r($tree->createCaseLibLinkTest(1)) && p('url') && e("createcaseliblink.php?m=caselib&f=browse&root=1&type=byModule&param=1"); // 测试创建module 1 的 caselib link
+r($tree->createCaseLibLinkTest(2)) && p('url') && e("createcaseliblink.php?m=caselib&f=browse&root=1&type=byModule&param=2"); // 测试创建module 2 的 caselib link
+r($tree->createCaseLibLinkTest(3)) && p('url') && e("createcaseliblink.php?m=caselib&f=browse&root=1&type=byModule&param=3"); // 测试创建module 3 的 caselib link
+r($tree->createCaseLibLinkTest(4)) && p('url') && e("createcaseliblink.php?m=caselib&f=browse&root=1&type=byModule&param=4"); // 测试创建module 4 的 caselib link
+r($tree->createCaseLibLinkTest(5)) && p('url') && e("createcaseliblink.php?m=caselib&f=browse&root=1&type=byModule&param=5"); // 测试创建module 5 的 caselib link

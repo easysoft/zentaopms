@@ -73,7 +73,8 @@ $root  = array(0, 1, 2, 3, 4);
 $extra = 'allModule';
 
 $tree = new treeModelTest();
-$tree->objectModel->app->user->admin = true;
+global $app;
+$app->user->admin = true;
 
 r($tree->getTaskOptionMenuTest($root[0]))             && p('', '|') && e(',/');                                                                      // 测试获取 root 0 task目录
 r($tree->getTaskOptionMenuTest($root[1]))             && p('', '|') && e(',/,/正常产品1/这是一个模块1,/正常产品16/这是一个模块16,/这是一个模块31');  // 测试获取 root 1 task目录

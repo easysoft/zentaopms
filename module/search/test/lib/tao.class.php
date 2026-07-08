@@ -224,6 +224,34 @@ class searchTaoTest extends baseTest
     }
 
     /**
+     * Test decode method.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function decodeTest(string $string): string
+    {
+        $result = $this->invokeArgs('decode', [$string]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getAllowedObjects method.
+     *
+     * @param  array|string $type
+     * @access public
+     * @return array
+     */
+    public function getAllowedObjectsTest(array|string $type): array
+    {
+        $result = $this->invokeArgs('getAllowedObjects', [$type]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test processDocRecord method.
      *
      * @param  object $record
@@ -502,6 +530,37 @@ class searchTaoTest extends baseTest
         $_POST = $fieldParams;
 
         return $this->instance->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
+    }
+
+    /**
+     * Test processBuildinFields method.
+     *
+     * @param  string $module
+     * @param  array  $searchConfig
+     * @access public
+     * @return array
+     */
+    public function processBuildinFieldsTest(string $module, array $searchConfig): array
+    {
+        $result = $this->invokeArgs('processBuildinFields', [$module, $searchConfig]);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test processDataList method.
+     *
+     * @param  string $module
+     * @param  object $field
+     * @param  array  $dataList
+     * @access public
+     * @return array
+     */
+    public function processDataListTest(string $module, object $field, array $dataList): array
+    {
+        $result = $this->invokeArgs('processDataList', [$module, $field, $dataList]);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     /**

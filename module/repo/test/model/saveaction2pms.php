@@ -81,9 +81,9 @@ $log->change    = array('/README.md' => array('action' => 'M', 'kind' => 'file',
 $repo = new repoModelTest();
 $repo->saveAction2PMSTest($log, $repoID);
 $result = $tester->loadModel('task')->getByIdList(array(1,2,8));
-r($result) && p('1:status,consumed,left') && e('doing,4,3'); //开始任务
-r($result) && p('2:status,consumed,left') && e('done,14,0'); //完成任务
-r($result) && p('8:status,consumed,left') && e('doing,11,3'); //工时计算
+r($result) && p('1:status,consumed,left') && e('doing,4.00,3.00'); //开始任务
+r($result) && p('2:status,consumed,left') && e('done,14.00,0.00'); //完成任务
+r($result) && p('8:status,consumed,left') && e('doing,11.00,3.00'); //工时计算
 
 $log->msg = $log->comment = 'Fix bug#1,2';
 $repo->saveAction2PMSTest($log, $repoID);

@@ -112,11 +112,13 @@ $lang->my->form->lblBasic   = '基本信息';
 $lang->my->form->lblContact = '联系信息';
 $lang->my->form->lblAccount = '帐号信息';
 
-$lang->my->programLink   = '项目集默认着陆页';
-$lang->my->productLink   = $lang->productCommon .'默认着陆页';
-$lang->my->projectLink   = $lang->projectCommon . '默认着陆页';
-$lang->my->executionLink = '执行默认着陆页';
-$lang->my->docLink       = '文档默认着陆页';
+$lang->my->programLink     = '项目集默认着陆页';
+$lang->my->productLink     = $lang->productCommon .'默认着陆页';
+$lang->my->projectLink     = $lang->projectCommon . '默认着陆页';
+$lang->my->executionLink   = '执行默认着陆页';
+$lang->my->docLink         = '文档默认着陆页';
+$lang->my->devopsLink      = 'DevOps视图着陆页';
+$lang->my->devopsspaceLink = 'DevOps空间着陆页';
 
 $lang->my->programLinkList = array();
 $lang->my->programLinkList['program-browse']  = '项目集列表/可以查看所有的项目集';
@@ -146,6 +148,15 @@ $lang->my->docLinkList['doc-lastViewedSpaceHome'] = '最近一个浏览的空间
 $lang->my->docLinkList['doc-lastViewedSpace']     = '最近一个浏览的空间';
 $lang->my->docLinkList['doc-lastViewedLib']       = '最近一个浏览的库';
 
+$lang->my->devopsspaceLinkList = array();
+$lang->my->devopsspaceLinkList['repo-maintain'] = '空间下的代码库列表';
+$lang->my->devopsspaceLinkList['repo-browse']   = '最近一个浏览的代码库';
+
+$lang->my->devopsLinkList = array();
+$lang->my->devopsLinkList['space-browse']  = '空间列表';
+$lang->my->devopsLinkList['repo-maintain'] = '代码库列表';
+$lang->my->devopsLinkList['repo-browse']   = '最近一个浏览的代码库';
+
 $lang->my->confirmReview['pass'] = '您确定要执行通过操作吗？';
 $lang->my->guideChangeTheme = <<<EOT
 <p class='theme-title'>全新<span style='color: #0c60e1'>“青春蓝”</span>主题上线了！</p>
@@ -173,7 +184,7 @@ $lang->my->featureBar['audit']['story']       = $lang->SRCommon;
 $lang->my->featureBar['audit']['requirement'] = $lang->URCommon;
 $lang->my->featureBar['audit']['epic']        = $lang->ERCommon;
 $lang->my->featureBar['audit']['testcase']    = '用例';
-$lang->my->featureBar['audit']['mr']          = '合并请求';
+$lang->my->featureBar['audit']['ppm']         = '评审请求';
 if(in_array($config->edition, array('max', 'ipd')) and (helper::hasFeature('waterfall') or helper::hasFeature('waterfallplus'))) $lang->my->featureBar['audit']['project'] = $lang->projectCommon;
 if($config->edition != 'open') $lang->my->featureBar['audit']['feedback'] = '反馈';
 if($config->edition != 'open' and helper::hasFeature('OA')) $lang->my->featureBar['audit']['oa'] = '办公';
@@ -248,3 +259,14 @@ $lang->my->featureBar['score']['all'] = '我的积分';
 
 $lang->my->reviewResultList['pass'] = '通过';
 $lang->my->reviewResultList['fail'] = '不通过';
+
+$lang->my->ssh              = '浏览SSH密钥';
+$lang->my->createSSH        = '新增SSH密钥';
+$lang->my->editSSH          = '编辑SSH密钥';
+$lang->my->deleteSSH        = '删除SSH密钥';
+$lang->my->publicKey        = '公钥';
+$lang->my->createdDate      = '创建时间';
+$lang->my->lastUsed         = '最后使用';
+$lang->my->confirmDeleteSSH = '确定要删除该SSH密钥吗?';
+$lang->my->sshKeyTip        = "公钥必须以'ssh-rsa'、'ecdsa-sha2-nistp256'、'ecdsa-sha2-nistp384'、'ecdsa-sha2-nistp521'、'ssh-ed25519'、'sk-ecdsa-sha2-nistp256@openssh.com' 或 'sk-ssh-ed25519@openssh.com'开头。";
+$lang->my->nameFormat       = "请输入有效的名称，只能包含字母、数字、'-'、'_'、'.' 和 '$'。";

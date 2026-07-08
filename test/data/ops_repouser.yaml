@@ -1,0 +1,10 @@
+title: zt_ops_spaceuser
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: repo
+    range: 1-10
+  - field: account
+    range: admin,test1,test2,test3,test4

@@ -1634,11 +1634,11 @@ class executionZen extends execution
         }
         elseif($module == 'repo')
         {
-            $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s");
+            $link = helper::createLink('repo', 'browse', "repoID=0&branchID=&executionID=%s") . '#app=execution';
         }
-        elseif($module == 'mr')
+        elseif($module == 'ppm')
         {
-            $link = helper::createLink('mr', 'browse', "repoID=0&mode=status&param=opened&objectID=%s") . '#app=execution';
+            $link = helper::createLink('ppm', 'browse', "repoID=0&mode=status&param=opened&objectID=%s") . '#app=execution';
         }
         elseif($module == 'doc')
         {

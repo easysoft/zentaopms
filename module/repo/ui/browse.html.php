@@ -15,6 +15,10 @@ namespace zin;
 jsVar('path', $path);
 jsVar('copied', $lang->repo->copied);
 jsVar('base64BranchID', $base64BranchID);
+jsVar('repoID', $repoID);
+jsVar('objectID', $objectID);
+jsVar('mirrorSyncProgressLink', $this->createLink('repo', 'ajaxMirrorSyncProgress', "repoID={$repoID}"));
+jsVar('mirrorLang',             $lang->repo->mirror);
 
 $module = $app->tab == 'devops' ? 'repo' : $app->tab;
 dropmenu
@@ -74,9 +78,8 @@ foreach($paths as $index => $pathName)
 }
 if($fileName) $breadcrumbItems[] = h::span($fileName);
 
-
 /* zin: Define the set::module('repo') feature bar on main menu. */
-\zin\featureBar(
+featureBar(
     formGroup
     (
         set::className('repo-select'),
@@ -88,20 +91,21 @@ if($fileName) $breadcrumbItems[] = h::span($fileName);
             set::objectID($repo->id),
             set::url(createLink('repo', 'ajaxGetDropMenu', "repoID={$repo->id}&module=repo&method=browse&projectID={$objectID}"))
         ) : null,
-        ($repo->SCM != 'Subversion' && ($branches || $tags)) ? dropmenu
+        /* SVN 无原生分支/标签概念,不渲染分支下拉。 */
+        ($this->repo->isSvn($repo) || (!$branches && !$tags)) ? null : dropmenu
         (
             setID('repoBranchDropMenu'),
             set::objectID($selected),
             set::text($selected),
             set::data(array('data' => $menuData, 'tabs' => $tabs))
-        ) : null
+        )
     ),
     ...$breadcrumbItems
 );
 
 /* zin: Define the toolbar on main menu. */
-$refreshLink   = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
-$refreshItem   = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
+$refreshLink = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1");
+$refreshItem = array('text' => $lang->refresh, 'url' => $refreshLink, 'class' => 'primary', 'icon' => 'refresh', 'data-app' => $app->tab);
 
 $createItem = array('text' => $lang->repo->createAction, 'url' => createLink('repo', 'create', "objectID={$objectID}"), 'data-app' => $app->tab);
 
@@ -202,25 +206,70 @@ $downloadWg = div
     ) : null,
     div
     (
+        setID('download-btn-group'),
         setStyle(array('margin-top' => '20px')),
-        btn
+        common::hasPriv('repo', 'downloadCode') ? btn
         (
             on::click()->call('downloadZip'),
             set::icon('down-circle'),
             set::className('downloadZip-btn'),
             set::text($lang->repo->downloadZip)
-        )
+        ) : null,
+        empty($repo->mirror) ? btn(on::click()->call('loadSSHmanager'), setClass('ml-2'), set::icon('cog'), $lang->repo->sshManager) : null
     )
 );
 
+
+
 toolbar
 (
-    a(
-        set::className('last-sync-time'),
-        empty($lastRevision->link) ? null : set::href($lastRevision->link),
-        $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
+    /* 镜像仓库状态工具栏区块。包裹在 #mirrorToolbar 内，便于 ajax-submit 后局部 reload（load: {selector: '#mirrorToolbar>*'}），无需整页刷新。 */
+    div
+    (
+        setID('mirrorToolbar'),
+        setClass('flex items-center'),
+        (isset($repo->status) && $repo->status == 'syncFailed') ? div
+        (
+            setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
+            /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
+            setStyle(array('--alert-bg' => 'var(--color-danger-50)', 'gap' => '.25rem')),
+            h::span(setClass('icon icon-exclamation-sign')),
+            h::span($lang->repo->mirror->failedTitle),
+            h::a
+            (
+                set::href('javascript:;'),
+                setClass('alert-link sync-failure-detail ml-2'),
+                $lang->repo->mirror->detail
+            )
+        ) : null,
+        (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
+        (
+            setClass('flex items-center'),
+            span
+            (
+                setClass('text-primary sync-progress-msg mr-3'),
+                $lang->repo->mirror->syncing
+            ),
+            btn
+            (
+                setClass('primary refresh-sync-btn'),
+                set::icon('refresh'),
+                $lang->repo->mirror->refreshSync
+            )
+        ) : null,
+        (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
+        (
+            setClass('flex items-center'),
+            btn
+            (
+                setClass('primary sync-code-btn ajax-submit'),
+                set::url($this->createLink('repo', 'ajaxMirrorSync', "repoID={$repoID}")),
+                setData(array('method' => 'post')),
+                set::icon('refresh'),
+                $lang->repo->mirror->syncCode
+            )
+        ) : null
     ),
-    !in_array($repo->SCM, $config->repo->notSyncSCM) ? item(set($refreshItem)) : null,
     dropdown
     (
         set::staticMenu(true),
@@ -235,15 +284,15 @@ toolbar
             array($downloadWg)
         )
     ),
-    hasPriv('repo', 'create') && $app->tab == 'project' ? item
-    (
-        set($createItem + array
-        (
-            'icon'  => 'plus',
-            'class' => 'btn primary'
-        )),
-        set('data-app', $this->app->tab)
-    ) : null
+    //hasPriv('repo', 'create') && $app->tab == 'project' ? item
+    //(
+    //    set($createItem + array
+    //    (
+    //        'icon'  => 'plus',
+    //        'class' => 'btn primary'
+    //    )),
+    //    set('data-app', $this->app->tab)
+    //) : null
 );
 
 jsVar('tableData', $tableData);
@@ -254,6 +303,7 @@ dtable
     set::afterRender(jsRaw('window.afterRender')),
     set::onRenderCell(jsRaw('window.renderCell')),
     set::canRowCheckable(jsRaw('function(rowID){return false;}')),
+    set::userMap($users),
     set::footPager(false)
 );
 
@@ -270,7 +320,7 @@ jsVar('sortLink', helper::createLink('repo', 'browse', "repoID={$repoID}&recTota
 /* Disbale check all checkbox of table header */
 $config->repo->commentDtable->fieldList['id']['checkbox'] = jsRaw('(rowID) => rowID !== \'HEADER\'');
 
-if(in_array($repo->SCM, $config->repo->notSyncSCM)) unset($config->repo->commentDtable->fieldList['commit']);
+unset($config->repo->commentDtable->fieldList['commit']);
 $commentsTableData = initTableData($revisions, $config->repo->commentDtable->fieldList, $this->repo);
 
 $readAllLink = $this->repo->createLink('log', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&entry=" . $encodePath . "&source=browse");
@@ -288,6 +338,7 @@ sidebar
         set::id('repo-comments-table'),
         set::cols($config->repo->commentDtable->fieldList),
         set::data($commentsTableData),
+        set::userMap($users),
         set::onRenderCell(jsRaw('window.renderCommentCell')),
         set::onCheckChange(jsRaw('window.checkedChange')),
         set::canRowCheckable(jsRaw('window.canRowCheckable')),

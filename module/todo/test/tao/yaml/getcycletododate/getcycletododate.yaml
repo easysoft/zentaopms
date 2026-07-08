@@ -16,9 +16,9 @@ fields:
   - field: cycle
     range: 1
   - field: begin
-    range: 0800-1100
+    range: 0800{1},0900{1},1000{1}
   - field: end
-    range: 1800-2000
+    range: 1800{1},1900{1},2000{1}
   - field: assignedTo
     range: 'admin'
   - field: desc

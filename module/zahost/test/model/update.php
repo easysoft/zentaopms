@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 zahostModel->getList();
+title=测试 zahostModel->update();
 timeout=0
 cid=19756
 
@@ -42,14 +42,14 @@ $hostInfo->memory   = '';
 $hostInfo->diskSize = '';
 
 $zahost = new zahostModelTest();
-r($zahost->updateTest($hostInfo)) && p('name:0')     && e('『名称』不能为空。');                   //测试名称不能为空
-r($zahost->updateTest($hostInfo)) && p('cpuCores:0') && e('『单CPU核心数』不能为空。');            //测试单CPU核心数不能为空
-r($zahost->updateTest($hostInfo)) && p('cpuCores:1') && e('『单CPU核心数』应当大于『0』。');       //测试单CPU核心数应当大于0
-r($zahost->updateTest($hostInfo)) && p('memory:0')   && e('『内存大小』不能为空。');               //测试内存大小不能为空
-r($zahost->updateTest($hostInfo)) && p('memory:1')   && e('『内存大小』应当是数字，可以是小数。'); //测试内存大小应当是数字，可以是小数
-r($zahost->updateTest($hostInfo)) && p('diskSize:0') && e('『硬盘容量』不能为空。');               //测试硬盘容量不能为空
-r($zahost->updateTest($hostInfo)) && p('diskSize:1') && e('『硬盘容量』应当大于『0』。');          //测试硬盘容量应当大于0
-r($zahost->updateTest($hostInfo)) && p('diskSize:2') && e('『硬盘容量』应当是数字，可以是小数。'); //测试硬盘容量应当是数字，可以是小数
+r($zahost->updateTest($hostInfo)) && p('name:0')     && e('『name』不能为空。');                   //测试名称不能为空
+r($zahost->updateTest($hostInfo)) && p('cpuCores:0') && e('『cpuCores』不能为空。');              //测试单CPU核心数不能为空
+r($zahost->updateTest($hostInfo)) && p('cpuCores:1') && e('『cpuCores』应当大于『0』。');         //测试单CPU核心数应当大于0
+r($zahost->updateTest($hostInfo)) && p('memory:0')   && e('『memory』不能为空。');                 //测试内存大小不能为空
+r($zahost->updateTest($hostInfo)) && p('memory:1')   && e('『memory』应当是数字，可以是小数。');   //测试内存大小应当是数字，可以是小数
+r($zahost->updateTest($hostInfo)) && p('diskSize:0') && e('『diskSize』不能为空。');               //测试硬盘容量不能为空
+r($zahost->updateTest($hostInfo)) && p('diskSize:1') && e('『diskSize』应当大于『0』。');          //测试硬盘容量应当大于0
+r($zahost->updateTest($hostInfo)) && p('diskSize:2') && e('『diskSize』应当是数字，可以是小数。'); //测试硬盘容量应当是数字，可以是小数
 
 $hostInfo->name     = '宿主机1';
 $hostInfo->cpuCores = '1';

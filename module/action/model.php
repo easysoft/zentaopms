@@ -251,6 +251,7 @@ class actionModel extends model
             if($actionName == 'createdsnapshot' && in_array($action->objectType, array('vm', 'zanode')) && $action->extra == 'defaultSnap') $action->actor = $this->lang->action->system;
             if($actionName == 'syncgrade') $this->actionTao->processStoryGradeActionExtra($action);
             if(in_array($actionName, array('createdsubtabledata', 'editedsubtabledata', 'deletedsubtabledata'))) $action->extra = !empty($flowList[$action->objectType]->name) ? $flowList[$action->objectType]->name . $action->objectID : '';
+            if(strpos($action->objectType, 'artifact') == 0 && !empty($action->extra) && strpos($action->extra, '|') != false) $action->extra = explode('|', $action->extra)[1];
 
             $action->history = zget($histories, $actionID, array());
             foreach($action->history as $history)
@@ -494,12 +495,7 @@ class actionModel extends model
             $table        = $this->config->objectTables[$objectType];
             $field        = $this->config->action->objectNameFields[$objectType];
             $objectIdList = array_unique($objectIdList);
-            if($objectType == 'pipeline')
-            {
-                $objectNames['jenkins'] = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
-                $objectNames['gitlab']  = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
-            }
-            elseif($objectType == 'pivot')
+            if($objectType == 'pivot')
             {
                 $objectNames[$objectType] = $this->dao->select("t1.id, t2.{$field} AS name")->from($table)->alias('t1')
                     ->leftJoin(TABLE_PIVOTSPEC)->alias('t2')->on('t1.id = t2.pivot and t1.version = t2.version')
@@ -519,18 +515,26 @@ class actionModel extends model
             }
         }
 
+        if(!empty($typeTrashes['space']))
+        {
+            $spaceList = $this->loadModel('space')->getByIdList($typeTrashes['space']);
+            foreach($spaceList as $space) $objectNames['space'][$space->id] = $space->name;
+        }
+
         /* 将对象名称字段添加到回收站数据中。 */
         /* Add name field to the trashes. */
         foreach($trashes as $key => $trash)
         {
-            if($trash->objectType == 'pipeline' && isset($objectNames['gitlab'][$trash->objectID]))  $trash->objectType = 'gitlab';
-            if($trash->objectType == 'pipeline' && isset($objectNames['jenkins'][$trash->objectID])) $trash->objectType = 'jenkins';
-
             if($trash->objectType == 'auditplan')
             {
                 $realObjectID      = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectID   : 0;
                 $realObjectType    = isset($auditplanList[$trash->objectID]) ? $auditplanList[$trash->objectID]->objectType : '';
                 $trash->objectName = isset($objectNames[$realObjectType][$realObjectID]) ? $objectNames[$realObjectType][$realObjectID] : '';
+            }
+            elseif(in_array($trash->objectType, array('artifactasset', 'artifactdir')))
+            {
+                if(empty($trash->comment)) continue;
+                $trash->objectName = $trash->objectType == 'artifactasset' ? $trash->comment : explode('|', $trash->comment)[1];
             }
             else
             {
@@ -579,7 +583,7 @@ class actionModel extends model
         $trashQuery = $this->session->trashQuery;
         $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
-        $queryFields = $objectType != 'pipeline' ? "t1.*, {$nameField} AS objectName" : 't1.*, t1.`objectType` AS type, t2.name AS objectName, t2.type AS objectType';
+        $queryFields = "t1.*, {$nameField} AS objectName";
 
         $trashes = $this->dao->select($queryFields)->from(TABLE_ACTION)->alias('t1')
             ->leftJoin($table)->alias('t2')->on('t1.`objectID`=t2.id')
@@ -588,14 +592,7 @@ class actionModel extends model
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
-            ->beginIF($objectType != 'pipeline' && $objectType != 'all')->andWhere('t1.`objectType`')->eq($objectType)->fi()
-
-            ->beginIF($objectType == 'pipeline')
-            ->andWhere('(t2.type')->eq('gitlab')
-            ->orWhere('t2.type')->eq('jenkins')
-            ->markRight(1)
-            ->fi()
-
+            ->beginIF($objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('objectID');
@@ -709,17 +706,18 @@ class actionModel extends model
             {
                 $desc = $this->lang->{$objectType}->action->{$action->action};
             }
-            elseif(strpos('createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
+            elseif(strpos('createppm,editppm,removeppm,createmr,editmr,removemr', $action->action) !== false && strpos($action->extra, '::') !== false)
             {
-                $mrAction = str_replace('mr', '', $action->action) . 'Action';
-                list($mrDate, $mrActor, $mrLink) = explode('::', $action->extra);
-                if(!$mrActor) $mrActor = $action->actor;
-                if(is_numeric($mrLink)) $mrLink = helper::createLink('mr', 'view', "mrID={$mrLink}");
+                $ppmAction = str_replace(array('ppm', 'mr'), '', $action->action) . 'Action';
+                list($ppmDate, $ppmActor, $ppmLink) = explode('::', $action->extra);
+                if(!$ppmActor) $ppmActor = $action->actor;
+                if(is_numeric($ppmLink)) $ppmLink = helper::createLink('ppm', 'view', "id={$ppmLink}");
+                $ppmLink = str_replace('mr', 'ppm', $ppmLink);
 
-                if(isInModal()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                if(isInModal()) $ppmLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
 
-                $this->app->loadLang('mr');
-                $desc = sprintf($this->lang->mr->{$mrAction}, $mrDate, $mrActor, $mrLink);
+                $this->app->loadLang('ppm');
+                $desc = sprintf($this->lang->ppm->{$ppmAction}, $ppmDate, $ppmActor, $ppmLink);
             }
             elseif(in_array($this->config->edition, array('max', 'ipd')) && strpos($this->config->action->assetType, ",{$action->objectType},") !== false && $action->action == 'approved')
             {
@@ -1366,7 +1364,6 @@ class actionModel extends model
             $objectType = strtolower($action->objectType);
             $projectID  = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
-            $this->loadModel($action->objectType);
             $action->originalDate = $action->date;
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->{$objectType}->{$actionType}) ? $this->lang->{$objectType}->{$actionType} : $action->action;
@@ -1392,6 +1389,15 @@ class actionModel extends model
             {
                 $action->objectLink  = helper::createLink('execution', 'view', "executionID={$action->objectID}"); // 交付物链接
             }
+
+            if(in_array($action->objectType, array('artifactasset', 'artifactdir')) && !empty($action->extra) && strpos($action->extra, '|') !== false)
+            {
+                list($artifactID, $objectName) = explode('|', $action->extra);
+                if(empty($artifactID) || !isset($objectNames[$action->objectType][$artifactID])) continue;
+
+                $action->actionLabel = $this->lang->in . $this->lang->artifact->common . $objectNames[$action->objectType][$artifactID] . ' ' . $action->actionLabel;
+                $action->objectLink  = '';
+            }
         }
         return $actions;
     }
@@ -1408,7 +1414,20 @@ class actionModel extends model
     {
         /* Init object type array. */
         $objectTypes = array();
-        foreach($actions as $object) $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
+        foreach($actions as $object)
+        {
+            if(in_array($object->objectType, array('artifactasset', 'artifactdir')))
+            {
+                if(empty($object->extra)) continue;
+
+                $artifactID = explode('|', $object->extra)[0];
+                if(empty($artifactID)) continue;
+
+                $objectTypes[$object->objectType][$artifactID] = $artifactID;
+                continue;
+            }
+            $objectTypes[$object->objectType][$object->objectID] = $object->objectID;
+        }
 
         if(isset($objectTypes['todo']))   $this->app->loadLang('todo');
         if(isset($objectTypes['branch'])) $this->app->loadLang('branch');
@@ -1417,11 +1436,12 @@ class actionModel extends model
         $objectNames = $relatedProjects = $requirements = $epics = array();
         foreach($objectTypes as $objectType => $objectIdList)
         {
-            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
+            if(!isset($this->config->objectTables[$objectType]) && strpos(',makeup,pivot,artifactasset,artifactdir,', ",{$objectType},") === false) continue;    // If no defination for this type, omit it.
 
             if(isset($this->config->objectTables[$objectType])) $table = $this->config->objectTables[$objectType];
             if($objectType == 'makeup') $table = TABLE_OVERTIME;
             if($objectType == 'pivot')  $table = TABLE_PIVOTSPEC;
+            if(in_array($objectType, array('artifactasset', 'artifactdir'))) $table = TABLE_ARTIFACT;
             if($objectType == 'auditplan') continue;
             $field = zget($this->config->action->objectNameFields, $objectType, '');
             if(empty($field)) continue;
@@ -1432,6 +1452,12 @@ class actionModel extends model
 
             $objectNames[$objectType]     = $objectName;
             $relatedProjects[$objectType] = $relatedProject;
+        }
+
+        if(!empty($objectTypes['space']))
+        {
+            $spaceList = $this->loadModel('space')->getByIdList($objectTypes['space']);
+            foreach($spaceList as $space) $objectNames['space'][$space->id] = $space->name;
         }
 
         $objectNames['user'][0] = 'guest';    // Add guest account.
@@ -1806,6 +1832,8 @@ class actionModel extends model
 
         $action = $this->getById($actionID);
         if(!$action || $action->action != 'deleted') return false;
+        if($action->objectType == 'space') return $this->loadModel('space')->restore($action->objectID, $actionID);
+        if(in_array($action->objectType, array('artifactasset', 'artifactdir'))) return $this->loadModel('artifact')->restoreEntity($action);
 
         list($table, $orderby, $field, $queryKey) = $this->actionTao->getUndeleteParamsByObjectType($action->objectType);
         if(empty($queryKey)) $queryKey = 'id';
@@ -1870,6 +1898,15 @@ class actionModel extends model
         {
             $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
             if($systemActionID) $this->undelete($systemActionID);
+        }
+
+        if($action->objectType == 'repo')
+        {
+            if(!empty($object) && $object->mirror)
+            {
+                $providerID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('provider')->andWhere('objectID')->eq($object->providerID)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
+                if($providerID) $this->undelete($providerID);
+            }
         }
 
         /* 在action表中更新action记录。 */
@@ -2479,11 +2516,6 @@ class actionModel extends model
             $projectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
         }
-        elseif($action->objectType == 'repo' && in_array($object->SCM, array('Gitlab', 'Gitea', 'Gogs')))
-        {
-            $server = $this->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($object->serviceHost)->andWhere('deleted')->eq('0')->fetch();
-            if(empty($server)) return $this->lang->action->repoNoServer;
-        }
         elseif($action->objectType == 'module')
         {
             $repeatName = $this->loadModel('tree')->checkUnique($object);
@@ -2518,6 +2550,11 @@ class actionModel extends model
         {
             $kanbanSpace = $this->dao->select('*')->from(TABLE_KANBANSPACE)->where('id')->eq($object->space)->fetch();
             if($kanbanSpace->deleted) return $this->lang->action->refusekanban;
+        }
+        elseif($action->objectType == 'artifact' && !empty($object->repoID))
+        {
+            $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($object->repoID)->fetch();
+            if(empty($repo) || $repo->deleted) return $this->lang->action->repoDeleted;
         }
 
         return true;

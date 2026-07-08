@@ -1,0 +1,17 @@
+title: zt_ops_request_reviewers
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: requestID
+    range: 1-10
+  - field: repoID
+    range: 1-10
+  - field: decision
+    range: pending,approve,reject
+  - field: account
+    range: admin
+  - field: opinion
+    range: 1-10
+    prefix: "opinion"

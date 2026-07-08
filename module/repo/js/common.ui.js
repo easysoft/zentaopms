@@ -1,7 +1,6 @@
 $(function()
 {
     $('#log').on('click', '.btn-close', closeRelation);
-    window.onScmChange();
 
     setTimeout(function()
     {
@@ -58,6 +57,18 @@ window.switchBranch = function(branchID)
     $.cookie.set('repoBranch', branchID, {expires:config.cookieLife, path:config.webRoot});
     $.cookie.set('repoRefresh', 1, {expires:config.cookieLife, path:config.webRoot});
     location.href=location.href;
+}
+
+window.onChangeTriggerEvent = function()
+{
+    const allEvent    = $('#triggerEvent0').is(':checked');
+    const customEvent = $('#triggerEvent1').is(':checked');
+
+    setTimeout(function()
+    {
+        if(allEvent)    $('#customEvent').addClass('hidden');
+        if(customEvent) $('#customEvent').removeClass('hidden');
+    }, 100);
 }
 
 var distance = 0;
@@ -272,75 +283,6 @@ window.onProjectChange = function()
 }
 
 /**
- * Changed SCM.
- *
- * @param  string $scm
- * @access public
- * @return void
- */
-window.onScmChange = function()
-{
-    if(typeof scmList == 'undefined' || !scmList) return;
-
-    var scm = $('[name=SCM]').val();
-    if(!scm)
-    {
-        for(i in scmList)
-        {
-            scm = i;
-            break;
-        }
-    }
-
-    (scm == 'Git') ? $('.tips-git').removeClass('hidden') : $('.tips-git').addClass('hidden');
-
-    if(scm != 'Subversion')
-    {
-        $('.account-fields').addClass('hidden');
-        $('#path').attr('placeholder', pathGitTip);
-        $('#client').attr('placeholder', clientGitTip);
-        if(!client) $('#client').val('/usr/bin/git');
-    }
-    else
-    {
-        $('.account-fields').removeClass('hidden');
-        $('#path').attr('placeholder', pathSvnTip);
-        $('#client').attr('placeholder', clientSvnTip);
-        if(!client) $('#client').val('/usr/bin/svn');
-    }
-
-    if(scm == 'Git' || scm == 'Subversion')
-    {
-        $('.service').toggle(false);
-        $('.hide-service').toggle(true);
-    }
-    else
-    {
-        $('.service').toggle(true);
-        if(scm == 'Gitea' || scm == 'Gogs')
-        {
-            $('.hide-service').each(function()
-            {
-                if(!$(this).hasClass('hide-git')) $(this).toggle(true);
-            });
-            $('.hide-git').toggle(false);
-        }
-        else
-        {
-            $('.hide-service').toggle(false);
-        }
-
-        var url = $.createLink('repo', 'ajaxGetHosts', "scm=" + scm);
-        $.getJSON(url, function(data)
-        {
-            const $hostPicker = $('#serviceHost').zui('picker');
-            $hostPicker.render({items: data});
-            $hostPicker.$.clear();
-        });
-    }
-}
-
-/**
  * On acl change event.
  *
  * @param  event $event
@@ -349,16 +291,26 @@ window.onScmChange = function()
  */
 window.onAclChange = function(event)
 {
-    const acl = $(event.target).val();
-    if(acl == 'private' || acl == 'custom')
+    let acl = '';
+    if(typeof event == 'undefined')
     {
-        $('#whitelist').removeClass('hidden');
+        acl = $('[name^=acl]:checked').val();
     }
     else
     {
-        $('#whitelist').addClass('hidden');
+        acl = $(event.target).val();
+    }
+
+    if(acl == 'private')
+    {
+        $('#members').removeClass('hidden');
+    }
+    else
+    {
+        $('#members').addClass('hidden');
     }
 }
+window.waitDom('[name^=acl]', onAclChange);
 
 /**
  * 点击左侧菜单打开详情tab。
@@ -387,3 +339,45 @@ window.searchList = function()
         loadPage(searchUrl.replace('%s', encodeURIComponent(Base64.encode(keyword))));
     });
 }
+
+function showBugsBlock(bugs)
+{
+    if(!bugs.length) return;
+
+    $('#reviewBugContainer').show();
+    $('#monacoEditor').css('width', '75%');
+    $('.view-bugs').css('left', getViewBugIconLeft() + 'px');
+    const link = $.createLink('repo', 'ajaxGetBugs', 'repoID=' + repoID + '&bugList=' + bugs.join(','));
+    $('#reviewBugContainer').html("<iframe class='bug-iframe' src='" + link + "' width='100%' height='100%'></iframe>");
+}
+
+window.removeReviewBug = function()
+{
+    $('#reviewBugContainer').hide();
+    $('#reviewBugContainer').html('');
+    $('#monacoEditor').css('width', '100%');
+    setTimeout(() => {
+        $('.view-bugs').css('left', getViewBugIconLeft() + 'px');
+    }, 100);
+};
+
+function getViewBugIconLeft()
+{
+    var monacoWidth       = $('#codeContainer').width();
+    var minimapWidth      = $('.minimap-decorations-layer').width();
+    var overlaysWidth     = $('.margin-view-overlays').width();
+    var bugContainerWitdh = $('#reviewBugContainer').width()
+    var oldBugLeft        = parseInt($('.view-bugs').css('left'));
+    var viewBugsLeft      =  monacoWidth - minimapWidth - overlaysWidth - 65;
+    if(bugContainerWitdh > 50 && oldBugLeft - viewBugsLeft < 50) return oldBugLeft;
+
+    if(typeof pageType !== 'undefined' && pageType === 'diff') viewBugsLeft = viewBugsLeft - 70;
+    return viewBugsLeft;
+}
+
+window.addEventListener('resize', function()
+{
+    setTimeout(() => {
+        $('.view-bugs').css('left', getViewBugIconLeft() + 'px');
+    }, 100);
+});

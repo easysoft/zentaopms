@@ -721,7 +721,7 @@ class taskModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, mix $task = null, string $lastDate): array
+    public function updateTeamByEffortTest(int $effortID, object $record, int $taskID, mixed $task = null, string $lastDate): array
     {
         $task        = $this->instance->getByID($taskID);
         $currentTeam = $this->instance->getTeamByAccount($task->team);
@@ -1873,7 +1873,7 @@ class taskModelTest extends baseTest
         if($status == 'done')   $action = 'Finished';
         if($status == 'closed') $action = 'Closed';
 
-        $oldTask = $this->instance->getByID($taskID);
+        $oldTask = $this->instance->fetchByID($taskID);
         $changes = common::createChanges($oldTask, $task);
         $result  = $this->instance->afterChangeStatus($oldTask, $changes, $action, array());
         return $changes;

@@ -114,6 +114,8 @@ zenData('bug')->gen(1);
 zenData('task')->loadYaml('task')->gen(10);
 zenData('project')->loadYaml('project')->gen(5);
 
+su('admin');
+
 $modules = array('user', 'story', 'task', 'bug', 'testTask', 'execution', 'search', 'ajax');
 $methods = array('login', 'changePassword', 'close', 'finish', 'createFormCase', 'saveTplModal', 'confirm', 'resolve', 'runCase', 'saveQueryAdvanced', 'selectTheme');
 $params  = array(0, 1, 2, 6, 101, 110);

@@ -35,7 +35,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
-$config->visions     = ',rnd,lite,or,';           // 支持的界面类型。                       Supported vision formats.
+$config->visions     = ',rnd,lite,or,';     // 支持的界面类型。                       Supported vision formats.
 
 /* ZIN 设置。 ZIN settings. */
 $config->zin         = new stdclass();
@@ -159,9 +159,10 @@ $config->features->checkClient    = true;
 
 /* 文件上传设置。 Upload settings. */
 $config->file = new stdclass();
-$config->file->dangers     = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
-$config->file->allowed     = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
-$config->file->storageType = 'fs';         // fs or s3
+$config->file->dangers        = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
+$config->file->allowed        = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
+$config->file->storageType    = 'fs';       // fs or s3
+$config->file->allowedModules = 'artifact'; // 设置上传文件时不需要过滤文件类型的模块。
 
 /* 文档多人协同配置。 Document Hocus Pocus. */
 $config->docHocuspocus = new stdclass();
@@ -237,6 +238,10 @@ if($config->inContainer || $config->inQuickon)
     $config->webRoot       = $webRoot ? "/{$webRoot}/" : '/';
     $config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 }
+
+$config->devops = new stdclass();
+$config->devops->gitfoxURL  = 'http://localhost';
+$config->devops->gitfoxPort = 3000;
 
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);

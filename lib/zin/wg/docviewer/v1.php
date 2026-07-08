@@ -102,29 +102,25 @@ class docViewer extends wg
 
         $app->control->loadModel('file');
 
-        $canDownload   = common::hasPriv('file', 'download');
-        $fileListProps = array();
-        if($canDownload)
-        {
-            $previewLink = helper::createLink('file', 'download', "fileID={id}&mouse=left");
-            jsVar('previewLang', $lang->file->preview);
-            jsVar('downloadLang', $lang->file->download);
-            jsVar('previewLink', $previewLink);
-            jsVar('downloadLink', $fileUrl);
-            jsVar('libreOfficeTurnon', isset($config->file->libreOfficeTurnon) && $config->file->libreOfficeTurnon == 1);
+        $fileListProps   = array();
+        $canPreviewFile  = common::hasPriv('file', 'preview');
+        $canDownloadFile = common::hasPriv('file', 'download');
+        if(!$canDownloadFile) $fileUrl = '';
 
-            $fileListProps['fileUrl']          = $fileUrl;
-            $fileListProps['target']           = '_blank';
-            $fileListProps['hoverItemActions'] = true;
-            $fileListProps['itemProps']        = array('target' => '_blank');
-            $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
-        }
-        else
-        {
-            $fileUrl = '';
-        }
+        jsVar('libreOfficeTurnon', !empty($config->file->libreOfficeTurnon));
+        jsVar('canPreviewFile', $canPreviewFile);
+        jsVar('canDownloadFile', $canDownloadFile);
+        jsVar('previewLang', $lang->file->preview);
+        jsVar('downloadLang', $lang->file->download);
+        jsVar('downloadLink', $fileUrl);
 
-        $canPreviewOffice  = $canDownload && isset($config->file->libreOfficeTurnon) and $config->file->libreOfficeTurnon == 1;
+        $fileListProps['fileUrl']          = $fileUrl;
+        $fileListProps['target']           = '_blank';
+        $fileListProps['hoverItemActions'] = true;
+        $fileListProps['itemProps']        = array('target' => '_blank');
+        $fileListProps['fileActions']      = jsCallback('file')->do('return getFileActions(file)');
+
+        $canPreviewOffice  = $canDownload && !empty($config->file->libreOfficeTurnon);
         $historyPanelProps = $this->prop('historyPanel');
         if(empty($historyPanelProps)) $historyPanelProps = array();
         if(is_array($historyPanelProps)) $historyPanelProps['fileListProps'] = $fileListProps;

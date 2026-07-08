@@ -313,3 +313,8 @@ $lang->system->runningStatus['error']  = '异常';
 
 $lang->system->serviceNotice = '仅统计应用市场安装的服务，手工配置的服务不在统计范围内。';
 $lang->system->nodeNotice    = '节点(%s) 异常原因：%s';
+
+$lang->system->view    = '应用详情';
+$lang->system->product = '所属产品';
+$lang->system->release = '上线版本';
+$lang->system->appDesc = '应用描述';

@@ -1,1 +1,4 @@
 .btn-active-text {font-weight: 700; color: #1e6aeb; background: #e6eaf1; --tw-ring-color: var(--color-transparent);}
+
+#spaceDropdown {justify-content: left; max-width: 10%;}
+#spaceDropdown > span {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 80%;}

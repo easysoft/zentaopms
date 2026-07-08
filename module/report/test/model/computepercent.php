@@ -43,7 +43,7 @@ ksort($bugsPerPri);
 ksort($bugsPerType);
 
 r($report->computePercentTest($bugsPerModule))     && p() && e('0:0.91;1821:0.01;1822:0.01;1823:0.01;1825:0.01;1826:0.01;1827:0.01;1831:0.01;1832:0.01;1833:0.01;');                                   // 测试 bug按照 模块 分组 的百分比
-r($report->computePercentTest($bugsPerBuild))      && p() && e('0:0.3333;1:0.6667;');                                                                                                                  // 测试 bug按照 版本 分组 的百分比
+r($report->computePercentTest($bugsPerBuild))      && p() && e('trunk:0.97;0:0.01;1:0.02;');                                                                                                            // 测试 bug按照 版本 分组 的百分比
 r($report->computePercentTest($bugsPerSeverity))   && p() && e('1:0.25;2:0.25;3:0.25;4:0.25;');                                                                                                        // 测试 bug按照 严重程度 分组 的百分比
 r($report->computePercentTest($bugsPerResolution)) && p() && e('bydesign:0.12;duplicate:0.2;external:0.12;fixed:0.3;notrepro:0.06;postponed:0.08;willnotfix:0.12;');                                   // 测试 bug按照 解决方案 分组 的百分比
 r($report->computePercentTest($bugsPerPri))        && p() && e('1:0.25;2:0.25;3:0.25;4:0.25;');                                                                                                        // 测试 bug按照 优先级 分组 的百分比

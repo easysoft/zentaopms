@@ -28,19 +28,19 @@ su('admin');
 
 $report = new reportModelTest();
 
-r($report->getAllTimeStatusStatTest()) && p('story') && e('changing:15;active:15;');                                 // 测试步骤1：正常情况下获取story状态统计
-r($report->getAllTimeStatusStatTest()) && p('task')  && e('wait:10;doing:10;done:10;pause:10;cancel:10;closed:10;'); // 测试步骤2：正常情况下获取task状态统计
+r($report->getAllTimeStatusStatTest()) && p('story') && e('active:15;changing:15;');                                 // 测试步骤1：正常情况下获取story状态统计
+r($report->getAllTimeStatusStatTest()) && p('task')  && e('cancel:10;closed:10;doing:10;done:10;pause:10;wait:10;'); // 测试步骤2：正常情况下获取task状态统计
 r($report->getAllTimeStatusStatTest()) && p('bug')   && e('active:40;resolved:10;');                                 // 测试步骤3：正常情况下获取bug状态统计
 
 // 修改部分story的type为requirement，测试type过滤
 global $tester;
 $tester->dao->update(TABLE_STORY)->set('type')->eq('requirement')->where('id')->le(30)->exec();
 
-r($report->getAllTimeStatusStatTest()) && p('story') && e('changing:8;active:7;');                                  // 测试步骤4：测试type='story'过滤功能
+r($report->getAllTimeStatusStatTest()) && p('story') && e('active:7;changing:8;');                                  // 测试步骤4：测试type='story'过滤功能
 
 // 将部分数据设为已删除状态
 $tester->dao->update(TABLE_STORY)->set('deleted')->eq('1')->where('id')->le(15)->exec();
 $tester->dao->update(TABLE_TASK)->set('deleted')->eq('1')->where('id')->le(20)->exec();
 $tester->dao->update(TABLE_BUG)->set('deleted')->eq('1')->where('id')->le(20)->exec();
 
-r($report->getAllTimeStatusStatTest()) && p('story') && e('changing:8;active:7;');                                  // 测试步骤5：测试已删除数据过滤功能
+r($report->getAllTimeStatusStatTest()) && p('story') && e('active:7;changing:8;');                                  // 测试步骤5：测试已删除数据过滤功能

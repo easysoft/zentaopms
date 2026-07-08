@@ -277,6 +277,10 @@ $lang->install->groupList['IPDDEMAND']['name']      = '需求分析人员';
 $lang->install->groupList['IPDPMT']['name']         = 'PMT团队人员';
 $lang->install->groupList['IPDADMIN']['name']       = '管理人员';
 
+$lang->install->groupList['DEVOPSADMIN']['name']     = 'DevOps管理员';
+$lang->install->groupList['DEVOPSINSPECTOR']['name'] = 'DevOps巡视员';
+$lang->install->groupList['DEVOPSUSER']['name']      = 'DevOps开发者';
+
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
 $lang->install->cronList['moduleName=report&methodName=remind']         = '每日任务提醒';
@@ -290,7 +294,6 @@ $lang->install->cronList['moduleName=todo&methodName=createCycle']      = '生�
 $lang->install->cronList['moduleName=ci&methodName=initQueue']          = '创建周期性任务';
 $lang->install->cronList['moduleName=ci&methodName=checkCompileStatus'] = '同步Jenkins任务状态';
 $lang->install->cronList['moduleName=ci&methodName=exec']               = '执行Jenkins任务';
-$lang->install->cronList['moduleName=mr&methodName=syncMR']             = '定时同步GitLabMR信息';
 
 $lang->install->dbProgress      = "正在安装数据库表";
 $lang->install->dbProgressLabel = '进度';

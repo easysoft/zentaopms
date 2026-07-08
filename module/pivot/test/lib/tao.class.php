@@ -135,6 +135,40 @@ class pivotTaoTest extends baseTest
     }
 
     /**
+     * Test getPivotID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return int
+     */
+    public function getPivotIDTest(int $groupID): int
+    {
+        $method = new ReflectionMethod($this->instance, 'getPivotID');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $groupID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getAllPivotByGroupID method.
+     *
+     * @param  int $groupID
+     * @access public
+     * @return array
+     */
+    public function getAllPivotByGroupIDTest(int $groupID): array
+    {
+        $method = new ReflectionMethod($this->instance, 'getAllPivotByGroupID');
+        $method->setAccessible(true);
+        $result = $method->invoke($this->instance, $groupID);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
      * Test getGroupsByDimensionAndPath method.
      *
      * @param  int    $dimensionID

@@ -37,7 +37,7 @@ $module->root = 1;
 
 // 5. 🔴 强制要求：必须包含至少5个测试步骤
 r($treeTest->createEpicLinkTest('story', $module)) && p('id,parent,name') && e('1,0,测试模块'); // 步骤1：正常情况
-r($treeTest->createEpicLinkTest('story', $module, '0', array('projectID' => 10, 'productID' => 5))) && p('url') && e('projectstory-story-10-5--byModule-1-epic.html'); // 步骤2：项目史诗链接
-r($treeTest->createEpicLinkTest('story', $module, '0', array('executionID' => 20))) && p('url') && e('execution-story-20-epic-order_desc-byModule-1.html'); // 步骤3：执行史诗链接
-r($treeTest->createEpicLinkTest('story', $module, '0', array('branchID' => 'all'))) && p('url') && e('product-browse-1-all-byModule-1-epic.html'); // 步骤4：产品史诗链接
+r($treeTest->createEpicLinkTest('story', $module, '0', array('projectID' => 10, 'productID' => 5))) && p('url') && e('createepiclink.php?m=projectstory&f=story&projectID=10&productID=5&branch=&browseType=byModule&param=1&storyType=epic'); // 步骤2：项目史诗链接
+r($treeTest->createEpicLinkTest('story', $module, '0', array('executionID' => 20))) && p('url') && e('createepiclink.php?m=execution&f=story&executionID=20&storyType=epic&orderBy=order_desc&type=byModule&param=1'); // 步骤3：执行史诗链接
+r($treeTest->createEpicLinkTest('story', $module, '0', array('branchID' => 'all'))) && p('url') && e('createepiclink.php?m=product&f=browse&root=1&branch=all&type=byModule&param=1&storyType=epic'); // 步骤4：产品史诗链接
 r($treeTest->createEpicLinkTest('story', $module, '5')) && p('parent') && e('5'); // 步骤5：子级链接

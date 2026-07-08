@@ -31,9 +31,9 @@ class formRowGroup extends formRow
             (
                 $this->block('prefix'),
                 setClass('row-group-title font-black px-3 py-1'),
-                $this->prop('title'),
-                $this->block('suffix')
+                $this->prop('title')
             ),
+            $this->block('suffix'),
             set($this->getRestProps()),
             $this->prop('items')
         );

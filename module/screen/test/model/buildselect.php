@@ -39,6 +39,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 $screen = new screenModelTest();
+$currentYear = date('Y');
 
 $component1 = new stdclass();
 $component1->option = new stdclass();
@@ -71,13 +72,13 @@ function addFilterCharts($component)
 addFilterCharts($component1);
 $filter = $screen->buildSelectTest($component1, $yearList[0]);
 r($filter->charts) && p('testChart:year') && e('testField');                //判断生成的年份过滤条件是否正确
-r($component1->option->dataset) && p('0:label,value') && e('2025,2025');    //判断不传入年份的情况下，是否生成了默认值。
+r($component1->option->dataset[0]['label'] == $currentYear && $component1->option->dataset[0]['value'] == $currentYear) && p('') && e(1);    //判断不传入年份的情况下，是否生成了默认值。
 
 zenData('action')->loadYaml('action')->gen(1);
 
 addFilterCharts($component1_);
 $filter = $screen->buildSelectTest($component1_, $yearList[1]);
-$year = date('Y');
+$year = $currentYear;
 $labelList = $component1_->option->dataset;
 $firstYear = current($labelList);
 $endYear   = end($labelList);

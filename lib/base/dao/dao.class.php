@@ -1588,20 +1588,11 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        if(isset($config->db->prefix))
-        {
-            $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
-        }
-        elseif(strpos($this->table, '_') !== false)
-        {
-            $table = strtolower(substr($this->table, strpos($this->table, '_') + 1));
-            $table = str_replace('`', '', $table);
-        }
-        else
-        {
-            $table = strtolower($this->table);
-        }
-        $fieldLabel = isset($lang->$table->$fieldName)       ? $lang->$table->$fieldName       : $fieldName;
+        $module = ltrim(trim($this->table, '`'), $config->db->prefix);
+        $module = strrpos($module, '_') ? substr($module, strrpos($module, '_') + 1) : $module;
+        $module = strtolower($module);
+
+        $fieldLabel = isset($lang->$module->$fieldName)      ? $lang->$module->$fieldName      : $fieldName;
         $value      = isset($this->sqlobj->data->$fieldName) ? $this->sqlobj->data->$fieldName : null;
 
         /*
@@ -2464,6 +2455,23 @@ class baseSQL
     {
         if($this->inCondition and !$this->conditionIsTrue) return $this;
         $this->sql         .= " LEFT JOIN $table";
+        $this->currentTable = $table;
+
+        return $this;
+    }
+
+    /**
+     * 创建INNER JOIN部分。
+     * Create the inner join part.
+     *
+     * @param  string $table
+     * @access public
+     * @return static|sql the sql object.
+     */
+    public function innerJoin($table)
+    {
+        if($this->inCondition and !$this->conditionIsTrue) return $this;
+        $this->sql         .= " INNER JOIN $table";
         $this->currentTable = $table;
 
         return $this;

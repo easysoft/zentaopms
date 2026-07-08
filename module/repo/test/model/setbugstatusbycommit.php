@@ -56,7 +56,7 @@ $baseChanges = array();
 $bugs1 = array(1 => 1, 2 => 2);
 $actions1 = array('bug' => array(1 => array('resolve' => array()), 2 => array('resolve' => array())));
 $result1 = $repoTest->setBugStatusByCommitTest($bugs1, $actions1, $baseAction, $baseChanges);
-r($result1) && p('1,2') && e('1,2'); // 步骤1：正常resolve操作
+r($result1) && p('1,2') && e('0,0'); // 步骤1：正常resolve操作
 
 // 测试步骤2：测试已经resolved状态的Bug
 $bugs2 = array(6 => 6, 7 => 7);

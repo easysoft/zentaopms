@@ -3,10 +3,23 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+/**
+ * @property repoModel $instance
+ */
 class repoModelTest extends baseTest
 {
     protected $moduleName = 'repo';
     protected $className  = 'model';
+    public    $objectModel;
+    public    $objectTao;
+
+    public function __construct($moduleName = '', $className = '')
+    {
+        parent::__construct($moduleName, $className);
+
+        $this->objectModel = $this->instance;
+        $this->objectTao   = $this->instance->repoTao;
+    }
 
     /**
      * Check priv test.
@@ -22,6 +35,20 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    /**
+     * Test isSvn method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return string
+     */
+    public function isSvnTest($repo)
+    {
+        $result = $this->instance->isSvn($repo);
+        if(dao::isError()) return dao::getError();
+        return $result ? '1' : '0';
     }
 
     /**
@@ -67,6 +94,33 @@ class repoModelTest extends baseTest
 
         if($result) return $result;
         return $this->instance->session->repoID;
+    }
+
+    /**
+     * Test setMenu method's mirror branch by observing lang side-effects.
+     * Returns "repoCodeScan:{0|1}|review:{0|1}" where 1 = menu still present, 0 = unset.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return string
+     */
+    public function setMenuMirrorCheckTest(int $repoID)
+    {
+        /* 调用前重置菜单结构，确保上一轮 unset 不污染本次断言。 */
+        if(!isset($this->instance->lang->devops)) $this->instance->lang->devops             = new stdclass();
+        if(!isset($this->instance->lang->devops->menu)) $this->instance->lang->devops->menu = new stdclass();
+
+        $this->instance->lang->devops->menu->repoCodeScan = array('link' => 'codescan');
+        $this->instance->lang->devops->menu->review       = array('link' => 'review');
+
+        $repos = $this->instance->dao->select('id')->from(TABLE_REPO)->fetchPairs('id');
+        ob_start();
+        $this->instance->setMenu($repos, $repoID);
+        ob_end_clean();
+
+        $codeScan = isset($this->instance->lang->devops->menu->repoCodeScan) ? 1 : 0;
+        $review   = isset($this->instance->lang->devops->menu->review)       ? 1 : 0;
+        return "repoCodeScan:{$codeScan}|review:{$review}";
     }
 
     /**
@@ -119,9 +173,9 @@ class repoModelTest extends baseTest
         return $objects;
     }
 
-    public function getListTest($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
+    public function getListTest(int $projectID = 0, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0)
     {
-        $objects = $this->instance->getList($projectID , $SCM, $orderBy , $pager );
+        $objects = $this->instance->getList($projectID, $space, $orderBy, $pager, $getCodePath, $lastSubmitTime, $type, $param);
 
         if(dao::isError()) return dao::getError();
 
@@ -998,17 +1052,8 @@ class repoModelTest extends baseTest
         $repo    = $this->instance->getByID($repoID);
         $objects = $this->instance->parseComment($log->msg);
 
-        if(!$repo)
-        {
-            // 如果repo不存在，创建默认值避免错误
-            $repoRoot = '';
-            $encoding = 'utf-8';
-        }
-        else
-        {
-            $repoRoot = $repo->path ?? '';
-            $encoding = $repo->encoding ?? 'utf-8';
-        }
+        $repoRoot = $repo ? ($repo->path ?? '') : '';
+        $encoding = $repo->encoding ?? 'utf-8';
 
         $result = $this->instance->saveAction2PMS($objects, $log, $repoRoot, $encoding, $scm, $gitlabAccountPairs);
 
@@ -1021,6 +1066,7 @@ class repoModelTest extends baseTest
         $action->comment = $this->instance->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->instance->iconvComment($log->msg, 'utf-8'));
 
         $repo    = $this->instance->getByID($repoID);
+        if(!$repo) return false;
         $objects = $this->instance->parseComment($log->msg);
         $changes = $this->instance->createActionChanges($log, $repo->path, $scm);
 
@@ -1048,36 +1094,24 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function saveEffortForCommitTest(int $taskID, array $params, object $action, array $changes)
+    public function saveEffortForCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
     {
-        // 简化的测试逻辑，主要验证方法调用和基本逻辑
-        if($taskID <= 0) return '0';
-        if(empty($params) || !isset($params['consumed']) || !isset($params['left'])) return '0';
-        if(empty($action) || !is_object($action)) return '0';
-        if(!is_array($changes)) return '0';
+        $action->comment = $this->instance->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->instance->iconvComment($log->msg, 'utf-8'));
 
-        // 验证参数值的合理性
-        if($params['consumed'] < 0 || $params['left'] < 0) return '0';
+        $repo    = $this->instance->getByID($repoID);
+        if(!$repo) return false;
+        $objects = $this->instance->parseComment($log->msg);
+        $changes = $this->instance->createActionChanges($log, $repo->path, $scm);
 
-        // 模拟检查任务是否存在
-        if($taskID > 10) return '0'; // 假设只有1-10的任务存在
-
-        // 设置必要的action属性
-        if(!isset($action->extra)) $action->extra = 'test';
-
-        try {
-            // 捕获输出以避免HTML错误信息影响测试结果
-            ob_start();
-            $result = $this->instance->saveEffortForCommit($taskID, $params, $action, $changes);
-            $output = ob_get_clean();
-
-            if(dao::isError()) return '0';
-            return $result ? '1' : '0';
-        } catch (Exception $e) {
-            // 清理缓冲区并返回
-            if(ob_get_level()) ob_end_clean();
-            return '0';
+        $tasks = zget($objects, 'task', array());
+        foreach($tasks as $taskID => $params)
+        {
+            $result = $this->instance->saveEffortForCommit((int)$taskID, $params, $action, $changes);
+            if(dao::isError()) return dao::getError();
+            return $result;
         }
+
+        return false;
     }
 
     public function setBugStatusByCommitTest($bugs, $actions, $action, $changes)
@@ -1445,9 +1479,9 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function createGitlabRepoTest(object $repo, int $namespace)
+    public function createGitlabRepoTest(object $repo, string|int $namespace)
     {
-        $result = $this->instance->createGitlabRepo($repo, $namespace);
+        $result = $this->instance->createGitlabRepo($repo, (string)$namespace);
 
         if(dao::isError()) return dao::getError();
         return $result;
@@ -1467,7 +1501,7 @@ class repoModelTest extends baseTest
 
     public function deleteInfoByIDTest(int $repoID)
     {
-        $result = $this->instance->deleteInfoByID($repoID);
+        $this->invokeArgs('deleteInfoByID', array($repoID), 'repo', 'tao');
 
         $repoHistoryCount = $this->instance->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->count();
         $repoBranchCount  = $this->instance->dao->select('*')->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->count();
@@ -2076,5 +2110,107 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    /**
+     * Test isRecordedWebhookCommit method.
+     *
+     * @param  object $commit
+     * @access public
+     * @return bool|array<string, mixed>
+     */
+    public function isRecordedWebhookCommitTest(object $commit): bool|array
+    {
+        $method = new ReflectionMethod($this->instance, 'isRecordedWebhookCommit');
+        $method->setAccessible(true);
+        $result = (bool)$method->invoke($this->instance, $commit);
+
+        /* @phpstan-ignore-next-line */
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test getLinkedObjects method.
+     *
+     * @param  string $comment
+     * @access public
+     * @return mixed
+     */
+    public function getLinkedObjectsTest(string $comment)
+    {
+        $result = $this->instance->getLinkedObjects($comment);
+        if(dao::isError()) return dao::getError();
+
+        $result['stories'] = implode('|', $result['stories']);
+        $result['tasks']   = implode('|', $result['tasks']);
+        $result['bugs']    = implode('|', $result['bugs']);
+        return $result;
+    }
+
+    /**
+     * Test saveBug method.
+     *
+     * @param  int    $repoID
+     * @param  array  $bugData
+     * @access public
+     * @return mixed
+     */
+    public function saveBugTest(int $repoID, array $bugData)
+    {
+        $bug = new stdclass();
+        foreach($bugData as $key => $value) $bug->$key = $value;
+        if(!isset($bug->execution)) $bug->execution = 0;
+        if(!isset($bug->openedDate)) $bug->openedDate = '2026-06-26 10:00:00';
+        if(!isset($bug->openedBy))   $bug->openedBy   = 'admin';
+        if(!isset($bug->lines))      $bug->lines      = '';
+        if(!isset($bug->entry))      $bug->entry      = '';
+        if(!isset($bug->v1))         $bug->v1         = '';
+        if(!isset($bug->v2))         $bug->v2         = '';
+        if(!isset($bug->steps))      $bug->steps      = '';
+
+        $_POST['uid']   = 'unittest';
+        $_POST['begin'] = isset($bugData['begin']) ? $bugData['begin'] : '0';
+
+        ob_start();
+        $result = $this->instance->saveBug($repoID, $bug);
+        ob_end_clean();
+
+        if(isset($result['result']) && $result['result'] == 'fail') return 'fail';
+        if(isset($result['result']) && $result['result'] == 'success')
+        {
+            $saved = $this->instance->dao->select('id,product,execution,title,openedBy')->from(TABLE_BUG)->where('id')->eq((int)$result['id'])->fetch();
+            return $saved ? $saved : 'not_saved';
+        }
+        return 'unknown';
+    }
+
+    /**
+     * Test import method.
+     *
+     * @param  array $formDataArr
+     * @access public
+     * @return mixed
+     */
+    public function importTest(array $formDataArr)
+    {
+        $formData = new stdclass();
+        foreach($formDataArr as $key => $value) $formData->$key = $value;
+
+        ob_start();
+        try
+        {
+            $result = $this->instance->import($formData);
+        }
+        catch(\Throwable $e)
+        {
+            $result = false;
+        }
+        ob_end_clean();
+
+        if($result === false) return 'false';
+        if(is_object($result)) return 'object';
+        return 'other';
     }
 }

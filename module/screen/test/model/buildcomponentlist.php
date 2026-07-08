@@ -50,7 +50,7 @@ class screenTest
     }
 }
 
-$screen = new screenModelTest();
+$screen = new screenTest();
 
 // 准备测试数据
 $validComponent1 = new stdclass();

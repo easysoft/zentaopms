@@ -14,7 +14,6 @@ class storyRelatedList extends relatedList
         'releases'      => '?array',           // 关联的发布列表。
         'storyProducts' => '?array',           // 需求产品信息。
         'linkedMRs'     => '?array',           // 需求 MR 信息。
-        'linkedPRs'     => '?array',           // 需求 PR 信息。
         'linkedCommits' => '?linkedCommits',   // 需求提交信息。
         'story'         => '?object'           // 当前需求。
     );
@@ -93,11 +92,11 @@ class storyRelatedList extends relatedList
 
         if($isStoryType && helper::hasFeature('devops'))
         {
-            $data['mr'] = array
+            $data['ppm'] = array
             (
                 'title' => $lang->story->linkMR,
                 'items' => $linkedMRs,
-                'url'   => hasPriv('mr', 'view') ? createLink('mr', 'view', 'MRID={id}') : false,
+                'url'   => hasPriv('ppm', 'view') ? createLink('ppm', 'view', 'MRID={id}') : false,
                 'props' => array('data-app' => 'devops'),
                 'onRender' => function($item, $mr) use($lang)
                 {
@@ -105,30 +104,10 @@ class storyRelatedList extends relatedList
                     $statusClass = $mr->status;
                     if($mr->status == 'opened') $statusClass = 'draft';
                     if($mr->status == 'merged') $statusClass = 'done';
-                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
+                    $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->ppm->statusList, $mr->status) . '</span>');
                     return $item;
                 }
             );
-
-            if($linkedPRs)
-            {
-                $data['pr'] = array
-                (
-                    'title' => $lang->story->linkPR,
-                    'items' => $linkedPRs,
-                    'url'   => hasPriv('pullreq', 'view') ? createLink('pullreq', 'view', 'MRID={id}') : false,
-                    'props' => array('data-app' => 'devops'),
-                    'onRender' => function($item, $mr) use($lang)
-                    {
-                        $item['titleClass'] = 'w-0 flex-1';
-                        $statusClass = $mr->status;
-                        if($mr->status == 'opened') $statusClass = 'draft';
-                        if($mr->status == 'merged') $statusClass = 'done';
-                        $item['content'] = array('html' => "<span class='status-{$statusClass}'>" . zget($lang->mr->statusList, $mr->status) . '</span>');
-                        return $item;
-                    }
-                );
-            }
 
             $data['commit'] = array
             (

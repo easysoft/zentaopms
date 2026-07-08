@@ -1,0 +1,27 @@
+---
+title: ops_pipeline
+author: mazhiyuan
+version: "1.0"
+fields:
+  - field: id
+    range: 1-5
+  - field: name
+    range: 流水线1,流水线2,流水线3,流水线4,流水线5
+  - field: engine
+    range: gitfox,gitlab,jenkins,gitfox,gitlab
+  - field: providerID
+    range: 1,1,0,0,1
+  - field: scope
+    range: repo,repo,space,space,repo
+  - field: spaceID
+    range: 1,1,1,1,2
+  - field: repoID
+    range: 1,2,0,0,3
+  - field: status
+    range: active{5}
+  - field: defaultBranch
+    range: main{5}
+  - field: createdBy
+    range: admin{5}
+  - field: deleted
+    range: 0

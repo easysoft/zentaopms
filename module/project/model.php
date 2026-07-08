@@ -2367,9 +2367,9 @@ class projectModel extends model
      *
      * @param  int    $projectID
      * @access public
-     * @return int|false
+     * @return int|bool
      */
-    public function setMenu(int $projectID): int|false
+    public function setMenu(int $projectID): int|bool
     {
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
@@ -2399,7 +2399,7 @@ class projectModel extends model
 
         if($project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
-        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr') $this->loadModel('repo')->setHideMenu($projectID);
+        if($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'ppm') $this->loadModel('repo')->setHideMenu($projectID);
 
         if(!empty($project->isTpl)) dao::$filterTpl = 'never';
         return $projectID;

@@ -1076,7 +1076,7 @@ class myModel extends model
         if($this->config->vision != 'or' && $this->getReviewingCases('id_desc', true))     $typeList[] = 'testcase';
         if($this->config->vision != 'or' && $this->getReviewingApprovals('id_desc', true)) $typeList[] = 'project';
         if($this->getReviewingFeedbacks('id_desc', true)) $typeList[] = 'feedback';
-        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'mr';
+        if($this->config->vision != 'or' && $this->getReviewingMRs('id_desc')) $typeList[] = 'ppm';
         $typeList = array_merge($typeList, $this->getReviewingFlows('all', 'id_desc', true));
 
         $flows = $this->config->edition == 'open' ? array() : $this->dao->select('module,name')->from(TABLE_WORKFLOW)->where('module')->in($typeList)->andWhere('buildin')->eq(0)->fetchPairs('module', 'name');
@@ -1103,15 +1103,16 @@ class myModel extends model
      */
     public function getReviewingList(string $browseType, string $orderBy = 'time_desc', ?object $pager = null): array
     {
-        $vision     = $this->config->vision;
-        $reviewList = array();
+        $vision       = $this->config->vision;
+        $gitfoxServer = $this->loadModel('gitfox')->getServer();
+        $reviewList   = array();
         if($browseType == 'all' || $browseType == 'demand')                                                                 $reviewList = array_merge($reviewList, $this->getReviewingDemands());
         if($browseType == 'all' || $browseType == 'story')                                                                  $reviewList = array_merge($reviewList, $this->getReviewingStories());
         if($browseType == 'all' || $browseType == 'epic')                                                                   $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'epic'));
         if($browseType == 'all' || $browseType == 'requirement')                                                            $reviewList = array_merge($reviewList, $this->getReviewingStories('id_desc', false, 'requirement'));
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'testcase') && common::hasPriv('testcase', 'review')) $reviewList = array_merge($reviewList, $this->getReviewingCases());
         if($vision != 'or' && ($browseType == 'all' || $browseType == 'project'))                                           $reviewList = array_merge($reviewList, $this->getReviewingApprovals());
-        if($vision != 'or' && ($browseType == 'all' || $browseType == 'mr'))                                                $reviewList = array_merge($reviewList, $this->getReviewingMRs());
+        if($vision != 'or' && ($browseType == 'all' || $browseType == 'ppm') && $gitfoxServer)                              $reviewList = array_merge($reviewList, $this->getReviewingMRs());
         if($browseType == 'all' || !in_array($browseType, $this->config->my->noFlowAuditModules))                           $reviewList = array_merge($reviewList, $this->getReviewingFlows($browseType));
         if(($browseType == 'all' || $browseType == 'feedback') && common::hasPriv('feedback', 'review'))                    $reviewList = array_merge($reviewList, $this->getReviewingFeedbacks());
         if(empty($reviewList)) return array();
@@ -1328,7 +1329,7 @@ class myModel extends model
 
     /**
      * 获取待评审的MR。
-     * Get reviewing mrs.
+     * Get reviewing ppms.
      *
      * @param  string $orderBy
      * @access public
@@ -1336,13 +1337,34 @@ class myModel extends model
      */
     public function getReviewingMRs(string $orderBy = 'id_desc'): array
     {
-        return $this->dao->select("`id`, `title`, IF(`isFlow`='1', 'pullreq', 'mr') AS type, `createdDate` AS time, `approvalStatus` AS status, 0 AS product, 0 AS project")->from(TABLE_MR)
-            ->where('deleted')->eq('0')
-            ->andWhere('approvalStatus')->notIn(array('approved', 'rejected'))
-            ->andWhere('status')->ne('closed')
-            ->andWhere('assignee')->eq($this->app->user->account)
+        $server = $this->loadModel('gitfox')->getServer();
+        if(!$server) return array();
+
+        $ppms = $this->dao->select("t1.`id`, t1.`title`, IF(t1.`flow`='1', 'pullreq', 'ppm') AS type, t1.`createdDate` AS time, 0 AS product, 0 AS project, t3.definition, t1.`reviewStatus`")->from(TABLE_PPM)->alias('t1')
+            ->leftJoin(TABLE_PPMREVIEWERS)->alias('t2')->on('t1.id = t2.requestID')
+            ->leftJoin(TABLE_REVIEWFLOW)->alias('t3')->on('t3.repo = t1.repoID')
+            ->where('t1.status')->ne('closed')
+            ->andWhere('((t2.account')->eq($this->app->user->account)
+            ->andWhere('t2.decision')->eq('pending')->markRight(1)
+            ->orWhere("FIND_IN_SET('{$this->app->user->account}', t1.`reviewers`)")->markRight(1)
             ->orderBy($orderBy)
             ->fetchAll('id');
+
+        $this->loadModel('ppm');
+        foreach($ppms as $ppmID => $ppm)
+        {
+            if($ppm->reviewStatus)
+            {
+                if($ppm->reviewStatus == 'pass')
+                {
+                    unset($ppms[$ppmID]);
+                    continue;
+                }
+                $ppm->status = $ppm->reviewStatus;
+            }
+            if(empty($ppm->status)) $ppm->status = 'pending';
+        }
+        return $ppms;
     }
 
     /**
@@ -1713,5 +1735,106 @@ class myModel extends model
         $data->unclosedCount = $unclosedCount;
         $data->products      = array_values($products);
         return $data;
+    }
+
+    /**
+     * 获取SSH密钥列表。
+     * Get SSH key list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getSSH(): array
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return array();
+
+        $url      = sprintf($apiRoot->url, '/user/keys');
+        $result   = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
+        $response = $this->gitfox->getResponse($result);
+        return isset($response->data) ? $response->data : $response;
+    }
+
+    /**
+     * 创建SSH密钥。
+     * Create SSH key.
+     *
+     * @param  object    $formData
+     * @access public
+     * @return bool|object
+     */
+    public function createSSH(object $formData): bool|object
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $data = new stdClass();
+        $data->identifier = $formData->name;
+        $data->content    = $formData->publicKey;
+
+        $url    = sprintf($apiRoot->url, '/user/keys');
+        $result = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json'));
+        return $this->gitfox->getResponse($result, true);
+    }
+
+    /**
+     * 根据ID获取SSH密钥。
+     * Get SSH key by ID.
+     *
+     * @param  int    $sshID
+     * @access public
+     * @return object|bool
+     */
+    public function getSSHbyID(int $sshID): object|bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url    = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $result = json_decode(common::http($url, null, array(), $apiRoot->header, 'json'));
+        return $this->gitfox->getResponse($result, true);
+    }
+
+    /**
+     * 根据ID修改SSH密钥。
+     * Edit SSH key.
+     *
+     * @param  int       $sshID
+     * @param  object    $formData
+     * @access public
+     * @return bool|object
+     */
+    public function editSSH(int $sshID, object $formData): bool|object
+    {
+        if(empty($formData->name) || empty($formData->publicKey)) return false;
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $data = new stdClass();
+        $data->identifier = $formData->name;
+        $data->content    = $formData->publicKey;
+
+        $url      = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $response = json_decode(common::http($url, $data, array(), $apiRoot->header, 'json', 'PUT'));
+        return $this->gitfox->getResponse($response, true);
+    }
+
+    /**
+     * 根据ID删除SSH密钥。
+     * Delete SSH key.
+     *
+     * @param  int $sshID
+     * @access public
+     * @return bool|object
+     */
+    public function deleteSSH(int $sshID): bool|object
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url      = sprintf($apiRoot->url, '/user/keys/' . $sshID);
+        $response = json_decode(common::http($url, array(),  array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header, 'json', 'DELETE'));
+        return $this->gitfox->getResponse($response);
     }
 }

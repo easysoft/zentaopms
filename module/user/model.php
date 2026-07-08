@@ -1148,6 +1148,7 @@ class userModel extends model
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0)
+                ->andWhere('t1.devopsSpace')->eq(0)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->query();
         }
@@ -1273,6 +1274,7 @@ class userModel extends model
 
         $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
             ->where('project')->eq(0)
+            ->andWhere('devopsSpace')->eq(0)
             ->andWhere('role')->ne('projectAdmin')
             ->andWhere('vision')->in($visions)
             ->fetchAll('id');
@@ -3014,5 +3016,43 @@ class userModel extends model
         if(!$users || !$account || !isset($users[$account])) return $users;
 
         return array($account => $users[$account]) + $users;
+    }
+
+    /**
+     * 检查指定用户是否有 repo 模块的某个方法的权限。
+     * Check if a specific user has permission of one method of repo module.
+     *
+     * @param  string $account 用户账号
+     * @param  string $method  方法名
+     * @access public
+     * @return bool
+     */
+    public function hasRepoPrivByAccount(string $account, string $method): bool
+    {
+        global $app;
+
+        if(empty($account)) return false;
+
+        /* 获取指定用户信息 */
+        $user = $this->dao->findByAccount($account)->from(TABLE_USER)->andWhere('deleted')->eq(0)->fetch();
+        if(!$user) return false;
+
+        /* 获取指定用户的权限信息 */
+        $userRights = $this->authorize($account);
+        $rights     = $userRights['rights'];
+        $isAdmin    = strpos($app->company->admins, ",{$account},") !== false;
+        $method     = strtolower($method);
+
+        /* 检查是否是管理员 */
+        if($isAdmin) return true;
+
+        /* 检查是否是开放方法 */
+        if(in_array("repo.$method", $app->config->openMethods)) return true;
+        if(in_array("repo.$method", $app->config->logonMethods)) return true;
+
+        /* 检查权限数组中是否有对应的权限 */
+        if(!isset($rights['repo'][$method]) && !isset($rights['artifact'][$method])) return false;
+
+        return true;
     }
 }

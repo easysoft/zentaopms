@@ -332,7 +332,7 @@ class treeModelTest extends baseTest
         $type   = '';
         $module = $this->instance->getByID($moduleID);
 
-        $link = $this->instance->createStoryLink($type, $module, $parent, $extra);
+        $link = $this->instance->createStoryLink($type, $module, (string)$parent, $extra);
 
         if(dao::isError()) return dao::getError();
 
@@ -372,7 +372,7 @@ class treeModelTest extends baseTest
         $type   = '';
         $module = $this->instance->getByID($moduleID);
 
-        $link = $this->instance->createRequirementLink($type, $module, $parent, $extra);
+        $link = $this->instance->createRequirementLink($type, $module, (string)$parent, $extra);
 
         if(dao::isError()) return dao::getError();
 
@@ -438,6 +438,7 @@ class treeModelTest extends baseTest
     {
         $type   = '';
         $module = $this->instance->getByID($moduleID);
+        if(!is_array($extra)) $extra = (string)$extra;
 
         $link = $this->instance->createTestTaskLink($type, $module, '0', $extra);
 
@@ -499,7 +500,7 @@ class treeModelTest extends baseTest
      */
     public function getSonsTest($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        $objects = $this->instance->getSons($rootID, $moduleID, $type, $branch);
+        $objects = $this->instance->getSons($rootID, $moduleID, $type, (string)$branch);
 
         if(dao::isError()) return dao::getError();
 

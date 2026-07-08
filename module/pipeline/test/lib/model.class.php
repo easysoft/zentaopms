@@ -26,27 +26,53 @@ class pipelineModelTest extends baseTest
     }
 
     /**
-     * 获取服务器列表。
+     * 获取流水线列表。
      * Get pipeline list.
      *
-     * @param  string $type       jenkins|gitlab
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type        repo|space
      * @param  string $orderBy
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return array
      */
-    public function getListTest(string $type = 'jenkins', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
+    public function getListTest(int $spaceID = 0, int $repoID = 0, string $type = '', string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
     {
         $this->instance->app->loadClass('pager', true);
         $this->instance->app->moduleName = $this->instance->app->rawModule = 'pipeline';
         $this->instance->app->methodName = $this->instance->app->rawMethod = 'browse';
 
         $pager        = new pager(0, $recPerPage, $pageID);
-        $pipelineList = $this->instance->getList($type, $orderBy, $pager);
+        $pipelineList = $this->instance->getList($spaceID, $repoID, $type, '', $orderBy, $pager);
 
         if(dao::isError()) return dao::getError();
         return $pipelineList;
+    }
+
+    /**
+     * Get pipeline execution list.
+     *
+     * @param  int    $spaceID
+     * @param  int    $repoID
+     * @param  string $type
+     * @param  int    $pipelineID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return array
+     */
+    public function getExecutionListTest(int $spaceID = 0, int $repoID = 0, string $type = '', int $pipelineID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1): array
+    {
+        $this->instance->app->loadClass('pager', true);
+
+        $pager         = new pager(0, $recPerPage, $pageID);
+        $executionList = $this->instance->getExecutionList($spaceID, $repoID, $type, $pipelineID, '', $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+        return $executionList;
     }
 
     /**
@@ -239,5 +265,110 @@ class pipelineModelTest extends baseTest
 
         if(dao::isError()) return dao::getError();
         return $pairs;
+    }
+
+    /**
+     * 从provider导入流水线。
+     * Import pipeline from a selected provider.
+     *
+     * @param  object       $repo
+     * @param  object       $formData
+     * @access public
+     * @return int|false|array
+     */
+    public function importFromProviderTest(object $repo, object $formData): int|false
+    {
+        return $this->instance->importFromProvider($repo, $formData);
+    }
+
+    /**
+     * Save a trigger to ops_triggers table.
+     *
+     * @param  object $trigger
+     * @access public
+     * @return object|false|array
+     */
+    public function saveTriggerTest(object $trigger): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
+
+    /**
+     * Get triggers by pipeline ID.
+     *
+     * @param  int $pipelineID
+     * @access public
+     * @return array
+     */
+    public function getTriggersTest(int $pipelineID): array
+    {
+        $triggers = $this->instance->getTriggers($pipelineID);
+
+        if(dao::isError()) return dao::getError();
+        return $triggers;
+    }
+
+    /**
+     * Parse triggers from cron and events strings.
+     *
+     * @param  string $cron
+     * @param  string $events
+     * @access public
+     * @return array
+     */
+    public function parseTriggersTest(string $cron, string $events): array
+    {
+        return $this->instance->parseTriggers($cron, $events);
+    }
+
+    /**
+     * Update a single field of trigger.
+     *
+     * @param  object $trigger
+     * @param  string $field
+     * @param  string $value
+     * @access public
+     * @return object|false|array
+     */
+    public function updateTriggerFieldTest(object $trigger, string $field, string $value): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+
+        $this->instance->updateTriggerField($triggerID, $field, $value);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
+
+    /**
+     * Delete a trigger.
+     *
+     * @param  object $trigger
+     * @access public
+     * @return object|false|array
+     */
+    public function deleteTriggerTest(object $trigger): object|false|array
+    {
+        $this->instance->saveTrigger($trigger);
+
+        if(dao::isError()) return dao::getError();
+
+        $triggerID = $this->instance->dao->lastInsertID();
+
+        $this->instance->deleteTrigger($triggerID);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
     }
 }

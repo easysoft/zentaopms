@@ -17,7 +17,10 @@ cid=18244
 
 */
 
+su('admin');
+
 $screen = new screenModelTest();
+$screen->initScreen();
 
 $dimension = array(0, 1, 2, 3, 10000);
 r(count($screen->getListTest($dimension[0]))) && p('') && e(0); //测试获取dimension=0的数据

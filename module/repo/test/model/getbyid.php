@@ -36,10 +36,10 @@ su('admin');
 // 创建测试实例
 $repoTest = new repoModelTest();
 
-r($repoTest->getByIDTest(1)) && p('id,name,SCM') && e('1,testHtml,Gitlab'); // 测试步骤1：正常获取存在的repo对象
+r($repoTest->getByIDTest(1)) && p('id,name,SCM') && e('1,testHtml,Subversion'); // 测试步骤1：正常获取存在的repo对象
 r($repoTest->getByIDTest(2)) && p('serviceProject') && e('1'); // 测试步骤2：验证repo对象的基本属性
 r($repoTest->getByIDTest(999)) && p() && e('0'); // 测试步骤3：测试不存在的repoID
 r($repoTest->getByIDTest(0)) && p() && e('0'); // 测试步骤4：测试无效的repoID(0)
 r($repoTest->getByIDTest(-1)) && p() && e('0'); // 测试步骤5：测试负数repoID
-r($repoTest->getByIDTest(3)) && p('name,SCM') && e('unittest,Gitea'); // 测试步骤6：验证Gitea仓库信息
+r($repoTest->getByIDTest(3)) && p('name,SCM') && e('unittest,Subversion'); // 测试步骤6：验证Gitea仓库信息
 r($repoTest->getByIDTest(4)) && p('account,encrypt') && e('admin,base64'); // 测试步骤7：验证SVN仓库加密信息

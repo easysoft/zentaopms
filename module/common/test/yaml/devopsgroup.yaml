@@ -1,0 +1,29 @@
+title: table zt_group
+desc: "DevOps空间分组"
+author: claude
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "分组名称"
+    range: "1-10"
+    prefix: "devopsSpaceGroup"
+  - field: project
+    note: "所属项目（DevOps空间分组为0）"
+    range: "0"
+  - field: devopsSpace
+    note: "所属DevOps空间"
+    range: "11-20"
+  - field: desc
+    note: "分组描述"
+    range: "1-10000"
+    prefix: "DevOps空间分组描述"
+    postfix: ""
+    loop: 0
+    format: ""

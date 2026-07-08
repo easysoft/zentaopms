@@ -1,0 +1,25 @@
+---
+title: ops_provider 表数据配置 - import 方法测试
+desc: 为测试 repoModel::import() 方法提供 provider 数据
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: Provider ID
+  range: 1-3
+- field: type
+  note: Provider 类型
+  range: Subversion,Subversion,Subversion
+- field: name
+  note: Provider 名称
+  range: svn-bad-url-1,svn-bad-url-2,svn-bad-url-3
+- field: url
+  note: Provider URL（故意不可解析，避免外部 http）
+  range: '[://],[abc],[://]'
+- field: deleted
+  note: 删除标记
+  range: '0'
+- field: createdBy
+  note: 创建人
+  range: admin{3}

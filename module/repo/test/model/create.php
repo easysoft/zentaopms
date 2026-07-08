@@ -9,8 +9,6 @@ title=测试 repoModel->create();
 timeout=0
 cid=18035
 
-- 正常创建gitlab版本库属性id @1
-- 当已有版本库时提示已有记录第name条的0属性 @『名称』已经有『zzxx』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
 - 客户端为空创建gitea版本库第client条的0属性 @『客户端』不能为空。
 - 正常创建gitea版本库属性SCM @Gitea
 - 客户端为空创建git版本库第client条的0属性 @『客户端』不能为空。
@@ -23,18 +21,6 @@ cid=18035
 zenData('pipeline')->gen(5);
 zenData('repo')->gen(0);
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
-
-$gitlab = array(
-    'product'        => '1',
-    'SCM'            => 'Gitlab',
-    'serviceHost'    => '1',
-    'serviceProject' => '2',
-    'name'           => 'zzxx',
-    'encoding'       => 'utf-8',
-    'encrypt'        => 'base64',
-    'desc'           => '',
-    'uid'            => '6321819c78be5'
-);
 
 $gitea = array(
     'SCM'            => 'Gitea',

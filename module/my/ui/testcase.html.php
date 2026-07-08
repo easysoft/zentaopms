@@ -13,6 +13,8 @@ namespace zin;
 include 'header.html.php';
 
 jsVar('unexecuted', $lang->testcase->unexecuted);
+jsVar('caseChanged', $lang->testcase->changed);
+jsVar('storyChanged', $lang->story->changed);
 
 featureBar
 (
@@ -47,6 +49,11 @@ $products = $this->loadModel('product')->getPairs('', 0, '', 'all');
 $config->my->testcase->dtable->fieldList['product']['map'] = $products;
 
 $cols  = $this->loadModel('datatable')->getSetting('my', 'testcase');
+if(isset($cols['status']))
+{
+    $cols['status']['statusMap']['changed']     = $lang->story->changed;
+    $cols['status']['statusMap']['casechanged'] = $lang->testcase->changed;
+}
 $cases = initTableData($cases, $cols, $this->testcase);
 $data  = array_values($cases);
 
@@ -55,6 +62,7 @@ dtable
 (
     set::data($data),
     set::cols($cols),
+    set::onRenderCell(jsRaw('window.onRenderCell')),
     set::customCols(true),
     set::userMap($users),
     set::checkable(true),

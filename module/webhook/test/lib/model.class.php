@@ -285,7 +285,7 @@ class webhookModelTest extends baseTest
      */
     public function getBearychatDataTest($text, $mobile, $email, $objectType, $objectID)
     {
-        $objects = $this->instance->getBearychatData($text, $mobile, $email, $objectType, $objectID);
+        $objects = $this->instance->getBearychatData($text, $mobile, $email, $objectType, (int)$objectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -354,21 +354,11 @@ class webhookModelTest extends baseTest
      * @param  string $data
      * @param  string $actor
      * @access public
-     * @return void
+     * @return bool
      */
-    public function saveDataTest($objectType, $objectID, $actionType, $webhookID, $actionID, $actor = '')
+    public function saveDataTest($webhookID, $actionID, $data, $actor = '')
     {
-        $this->instance->loadModel('action');
-
-        static $webhooks = array();
-        if(!$webhooks) $webhooks = $this->getListTest();
-        if(!$webhooks) return true;
-
-        foreach($webhooks as $id => $webhook)
-        {
-            $postData = $this->instance->buildData($objectType, $objectID, $actionType, $actionID, $webhook);
-            $objects  = $this->instance->saveData($webhookID, $actionID, $postData, $actor);
-        }
+        $objects = $this->instance->saveData((int)$webhookID, (int)$actionID, (string)$data, $actor);
         if(dao::isError()) return dao::getError();
 
         return $objects;

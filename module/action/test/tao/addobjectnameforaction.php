@@ -22,7 +22,7 @@ include dirname(__FILE__, 2) . '/lib/tao.class.php';
 // 2. zendata数据准备（根据需要配置）
 $actionTable = zenData('action');
 $actionTable->id->range('1-10');
-$actionTable->objectType->range('bug,task,story,program,branch,user,kanbancard,module,mr,pivot,aiassistant');
+$actionTable->objectType->range('bug,task,story,program,branch,user,kanbancard,module,ppm,pivot,aiassistant');
 $actionTable->objectID->range('1-5');
 $actionTable->action->range('opened,syncexecution,mergedbranch,login,importedtask,deleted');
 $actionTable->extra->range('test branch,module1,module2');

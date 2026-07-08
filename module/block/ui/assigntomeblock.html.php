@@ -133,15 +133,15 @@ foreach($hasViewPriv as $type => $bool)
                 $this->app->loadLang('charter');
                 $statusList = array_merge($statusList, $lang->charter->reviewStatusList);
             }
-            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review', 'mr', 'pullreq')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
+            if(!in_array($reviewType, array('story', 'testcase', 'feedback', 'review', 'ppm', 'pullreq')) and strpos(",{$config->my->oaObjectType},", ",$reviewType,") === false) $statusList = array_merge($statusList, $lang->approval->nodeList);
 
-            if(in_array($reviewType, array('mr', 'pullreq')))
+            if(in_array($reviewType, array('ppm', 'pullreq')))
             {
-                $typeName = $lang->devops->mr;
+                $typeName = $lang->ppm->common;
                 if(empty($review->status)) $review->status = 'notReviewed';
 
-                $this->app->loadLang('mr');
-                $statusList = array_merge($statusList, $lang->mr->approvalStatusList);
+                $this->app->loadLang('ppm');
+                $statusList = array_merge($statusList, $lang->ppm->approvalStatusList);
             }
 
             $review->type = $typeName;

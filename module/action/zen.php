@@ -16,9 +16,11 @@ class actionZen extends action
         $moreType            = array();
         $preferredTypeConfig = $this->config->action->preferredType->ALM;
         $preferredTypeConfig = $this->config->systemMode == 'light' ? $this->config->action->preferredType->light : $this->config->action->preferredType->ALM;
+        $hiddenTypeConfig    = explode(',', $this->config->action->hiddenTrashObjects);
         foreach($objectTypeList as $objectType)
         {
-            if(!isset($this->config->objectTables[$objectType])) continue;
+            if(!isset($this->config->objectTables[$objectType]) && !in_array($objectType, array('artifactasset', 'artifactdir'))) continue;
+            if(in_array($objectType, $hiddenTypeConfig)) continue;
             in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
         }
         if(count($preferredType) < $this->config->action->preferredTypeNum)

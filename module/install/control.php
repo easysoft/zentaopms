@@ -436,17 +436,13 @@ class install extends control
         global $oldRequestType;
         if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
 
-        $sendEventLink     = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-        $adminRegisterLink = helper::createLink('index');
-        if($this->app->cookie->lang == 'zh-cn')
-        {
-            $adminRegisterLink  = helper::createLink('admin', 'register');
-            $adminRegisterLink .= $oldRequestType != 'PATH_INFO' ? '&_single=1' : '?_single=1';
-        }
+        $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
+        $devopsLink    = helper::createLink('gitfox', 'devopsIntroduction', 'isInstall=1');
+        $devopsLink    .= $oldRequestType != 'PATH_INFO' ? '&_single=1' : '?_single=1';
         if($oldRequestType != 'PATH_INFO')
         {
-            $sendEventLink     = str_replace('install.php', 'index.php', $sendEventLink);
-            $adminRegisterLink = str_replace('install.php', 'index.php', $adminRegisterLink);
+            $sendEventLink = str_replace('install.php', 'index.php', $sendEventLink);
+            $devopsLink    = str_replace('install.php', 'index.php', $devopsLink);
         }
 
         $this->config->requestType = 'GET';
@@ -455,7 +451,7 @@ class install extends control
         $this->view->installFileDeleted = $installFileDeleted;
         $this->view->title              = $this->lang->install->success;
         $this->view->sendEventLink      = $sendEventLink;
-        $this->view->adminRegisterLink  = $adminRegisterLink;
+        $this->view->devopsLink         = $devopsLink;
         $this->display();
     }
 }

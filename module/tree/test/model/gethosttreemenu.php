@@ -31,5 +31,5 @@ $module->gen(2);
 
 $tree = new treeModelTest();
 
-r($tree->getHostTreeMenuTest())  && p('0:id,name,url') && e('1,这是一个模块1,host-browse-bymodule-1.html');  // 测试获取Host模块
-r($tree->getHostTreeMenuTest())  && p('1:id,name,url') && e('2,这是一个模块2,host-browse-bymodule-2.html');  // 测试获取Host模块
+r($tree->getHostTreeMenuTest())  && p('0:id,name,url') && e('1,这是一个模块1,gethosttreemenu.php?m=host&f=browse&browseType=bymodule&param=1');  // 测试获取Host模块
+r($tree->getHostTreeMenuTest())  && p('1:id,name,url') && e('2,这是一个模块2,gethosttreemenu.php?m=host&f=browse&browseType=bymodule&param=2');  // 测试获取Host模块
