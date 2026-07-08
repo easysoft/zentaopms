@@ -31,6 +31,8 @@ class fieldList
 
     public ?array $ordersForFull = null;
 
+    public ?string $autoLoadUrl = null;
+
     public function __construct(?string $name = null, ?array $fields = null)
     {
         if(is_null($name))
@@ -265,6 +267,12 @@ class fieldList
     {
         if(is_string($targets)) $targets = array($targets => $loadNames);
         $this->autoLoadRule = is_null($this->autoLoadRule) ? $targets : array_merge($this->autoLoadRule, $targets);
+        return $this;
+    }
+
+    public function loadUrl(string $loadUrl): fieldList
+    {
+        $this->autoLoadUrl = $loadUrl;
         return $this;
     }
 
