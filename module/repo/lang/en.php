@@ -91,7 +91,7 @@ $lang->repo->cloneUrl           = 'Clone URL';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlinkedTasks      = 'Unlinked Tasks';
 $lang->repo->importAction       = 'Import Repo';
-$lang->repo->import             = 'Import';
+$lang->repo->import             = 'Import Repo';
 $lang->repo->importName         = 'Name after import';
 $lang->repo->importServer       = 'Please select a server';
 $lang->repo->hide               = 'hide';
@@ -531,8 +531,8 @@ $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';
 
 $lang->repo->accessList = array();
-$lang->repo->accessList['writable'] = 'Readable and writable';
-$lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
+$lang->repo->accessList['writable'] = 'Readable, Writable, Manageable';
+$lang->repo->accessList['readonly'] = 'Read-only (for image import, managed via third-party code repository, automatically synced regularly by DevOps)';
 
 $lang->repo->importProgress = new stdclass();
 $lang->repo->importProgress->title        = 'Importing repository...';
