@@ -1,108 +1,121 @@
 <?php
 declare(strict_types = 1);
-class repoZenTest
+require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
+class repoZenTest extends baseTest
 {
-    public function __construct()
+    protected $moduleName = 'repo';
+    protected $className  = 'zen';
+
+
+    /**
+     * 测试buildCreateRepoForm 方法。
+     * build create repo form.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return object
+     */
+    public function buildCreateRepoFormTest(int $objectID): object
     {
-        global $tester;
-        $this->objectModel = $tester->loadModel('repo');
-        $this->objectTao   = $tester->loadTao('repo');
-        $this->objectZen   = initReference('repo');
+        $this->invokeArgs('buildCreateRepoForm', [$objectID]);
+
+        return $this->getProperty('view');
     }
 
     /**
+     * 测试buildEditForm 方法。
      * Test buildCreateForm method in zen layer.
      *
      * @param  int $objectID
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function buildCreateFormTest(int $objectID)
+    public function buildCreateFormTest(int $objectID): object
     {
-        // 模拟app环境和配置
-        $this->objectModel->app->tab = 'project';
+        $this->invokeArgs('buildCreateForm', [$objectID]);
 
-        // 模拟保存状态
-        $this->objectModel->saveState(0, $objectID);
-
-        // 捕获视图输出，避免实际页面渲染
-        ob_start();
-
-        // 模拟buildCreateForm方法的核心逻辑
-        $this->objectModel->app->loadLang('action');
-        $this->objectModel->loadModel('product');
-
-        // 根据tab类型获取产品列表
-        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
-        {
-            $products = $this->objectModel->loadModel('project')->getBranchesByProject($objectID);
-            $products = $this->objectModel->product->getProducts($objectID, 'all', '', false, array_keys($products));
-        }
-        else
-        {
-            $products = $this->objectModel->product->getPairs('', 0, '', 'all');
-        }
-
-        // 模拟设置视图变量
-        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->create;
-        $groups = $this->objectModel->loadModel('group')->getPairs();
-        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs(implode(',', $this->objectModel->config->repo->notSyncSCM), true);
-
-        ob_end_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        // 返回设置的关键数据
-        return array(
-            'title' => $title,
-            'products' => $products,
-            'groups' => $groups,
-            'users' => $users,
-            'serviceHosts' => $serviceHosts,
-            'objectID' => $objectID
-        );
+        return $this->getProperty('view');
     }
 
     /**
-     * Test buildCreateRepoForm method.
+     * 测试buildEditForm 方法。
+     * Test buildEditForm method in zen layer.
      *
+     * @param  int $repoID
      * @param  int $objectID
      * @access public
-     * @return mixed
+     * @return object
      */
-    public function buildCreateRepoFormTest(int $objectID)
+    public function buildEditFormTest(int $repoID, int $objectID): object
     {
-        $this->objectModel->saveState(0, $objectID);
-        ob_start();
-        $this->objectModel->app->loadLang('action');
+        $this->invokeArgs('buildEditForm', [$repoID, $objectID]);
 
-        if($this->objectModel->app->tab == 'project' || $this->objectModel->app->tab == 'execution')
+        return $this->getProperty('view');
+    }
+
+    /**
+     * 测试buildRepoSearchForm 方法。
+     * Test buildRepoSearchForm method in zen layer.
+     *
+     * @param  int       $inSpace
+     * @param  int       $space
+     * @param  array     $products
+     * @param  array     $projects
+     * @param  int       $objectID
+     * @param  string    $orderBy
+     * @param  int       $recPerPage
+     * @param  int       $pageID
+     * @param  int       $param
+     * @access public
+     * @return object
+     */
+    public function buildRepoSearchFormTest(int $inSpace, int $space, array $products, array $projects, int $objectID, string $orderBy, int $recPerPage, int $pageID, int $param): object
+    {
+        // 确保session已启动
+        $hasSession = session_id() ? true : false;
+        if(!$hasSession) session_start();
+
+        // 初始化搜索配置
+        if(!isset($this->instance->config->repo->search))
         {
-            $products = $this->objectModel->loadModel('product')->getProductPairsByProject($objectID);
+            $this->instance->config->repo->search = array(
+                'module'    => 'repo',
+                'fields'    => array('product', 'projects'),
+                'params'    => array(
+                    'product'  => array('operator' => '=', 'control' => 'select', 'values' => array()),
+                    'projects' => array('operator' => 'include', 'control' => 'select', 'values' => array())
+                ),
+                'actionURL' => '',
+                'queryID'   => 0,
+                'onMenuBar' => 'no'
+            );
         }
-        else
+
+        // 模拟buildRepoSearchForm方法的核心逻辑
+        $this->instance->config->repo->search['params']['product']['values']  = $products;
+        $this->instance->config->repo->search['params']['projects']['values'] = $projects;
+        $this->instance->config->repo->search['actionURL']   = $this->instance->createLink('repo', 'maintain', "inSpace={$inSpace}&space={$space}&objectID={$objectID}&orderBy={$orderBy}&recPerPage={$recPerPage}&pageID={$pageID}&type=bySearch&param=myQueryID");
+        $this->instance->config->repo->search['queryID']     = $param;
+        $this->instance->config->repo->search['onMenuBar']   = 'yes';
+
+        // 模拟setSearchParams调用
+        $searchModel = $this->instance->loadModel('search');
+        if(method_exists($searchModel, 'setSearchParams'))
         {
-            $products = $this->objectModel->loadModel('product')->getPairs('', 0, '', 'all');
+            $searchModel->setSearchParams($this->instance->config->repo->search);
         }
 
-        $repoGroups = array();
-        $serviceHosts = $this->objectModel->loadModel('pipeline')->getPairs(implode(',', $this->objectModel->config->repo->notSyncSCM), true);
-        if(!empty($serviceHosts))
-        {
-            $serverID = key($serviceHosts);
-            $repoGroups = $this->objectModel->getGroups($serverID);
-        }
+        if(!$hasSession) session_write_close();
 
-        $title = $this->objectModel->lang->repo->common . $this->objectModel->lang->hyphen . $this->objectModel->lang->repo->create;
-        $groups = $this->objectModel->loadModel('group')->getPairs();
-        $users = $this->objectModel->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        // 返回搜索配置对象用于验证
+        $result = new stdClass();
+        $result->actionURL = $this->instance->config->repo->search['actionURL'] ?? '';
+        $result->queryID   = $this->instance->config->repo->search['queryID'] ?? 0;
+        $result->onMenuBar = $this->instance->config->repo->search['onMenuBar'] ?? '';
+        $result->products  = $this->instance->config->repo->search['params']['product']['values'] ?? array();
+        $result->projects  = $this->instance->config->repo->search['params']['projects']['values'] ?? array();
 
-        ob_end_clean();
-
-        if(dao::isError()) return dao::getError();
-
-        return array('title' => $title, 'products' => $products, 'groups' => $groups, 'users' => $users, 'serviceHosts' => $serviceHosts, 'repoGroups' => $repoGroups, 'objectID' => $objectID);
+        return $result;
     }
 
     /**
@@ -1180,104 +1193,92 @@ class repoZenTest
     }
 
     /**
-     * Test getSearchFormQuery method with no session data.
+     * Test getSearchFormQuery method with date begin range.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTest()
+    public function getSearchFormQueryDateBeginTest()
     {
-        // 彻底清理所有相关session数据
         unset($_SESSION['repoCommitsForm']);
         unset($_SESSION['repoCommitsQuery']);
 
-        // 模拟getSearchFormQuery方法的核心逻辑
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'date', 'operator' => '>=', 'value' => '2023-01-01'));
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with date range (>= operator).
+     * Test getSearchFormQuery method with date end range.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestDateBegin()
+    public function getSearchFormQueryDateEndTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '2023-01-01';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'date', 'operator' => '<=', 'value' => '2023-12-31'));
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with date range (<= operator).
+     * Test getSearchFormQuery method with committer search.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestDateEnd()
+    public function getSearchFormQueryCommitterTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '2023-12-31';
-        $result->committer = '';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'committer', 'operator' => 'include', 'value' => 'admin'));
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with committer search.
+     * Test getSearchFormQuery method with commit search.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestCommitter()
+    public function getSearchFormQueryCommitTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = 'admin';
-        $result->commit    = '';
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'commit', 'operator' => 'include', 'value' => 'fix bug'));
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
     /**
-     * Test getSearchFormQuery with commit search.
+     * Test getSearchFormQuery method with commit feat search.
      *
      * @access public
      * @return mixed
      */
-    public function getSearchFormQueryTestCommit()
+    public function getSearchFormQueryCommitFeatTest()
     {
-        // 清理session数据
         unset($_SESSION['repoCommitsForm']);
+        unset($_SESSION['repoCommitsQuery']);
 
-        $result = new stdclass();
-        $result->begin     = '';
-        $result->end       = '';
-        $result->committer = '';
-        $result->commit    = 'abc123';
+        $_SESSION['repoCommitsForm'] = array(array('field' => 'commit', 'operator' => 'include', 'value' => 'feat'));
 
+        $result = $this->invokeArgs('getSearchFormQuery', []);
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 

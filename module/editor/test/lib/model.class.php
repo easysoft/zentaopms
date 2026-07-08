@@ -475,14 +475,14 @@ class editorModelTest extends baseTest
             ob_end_clean();
 
             return array(
-                'error' => $e->getMessage(),
-                'isArray' => 0,
-                'isEmpty' => 1,
-                'hasLangDir' => 0,
+                'error'             => $e->getMessage(),
+                'isArray'           => 0,
+                'isEmpty'           => 1,
+                'hasLangDir'        => 0,
                 'hasValidLangFiles' => 0,
-                'directoryCount' => 0,
-                'totalFileCount' => 0,
-                'hasSystemFiles' => 0,
+                'directoryCount'    => 0,
+                'totalFileCount'    => 0,
+                'hasSystemFiles'    => 0,
                 'hasValidStructure' => 0
             );
         } catch (Throwable $e) {
@@ -1680,7 +1680,8 @@ class editorModelTest extends baseTest
      */
     public function getParamTest($className = 'todo', $methodName = 'create', $ext = '')
     {
-        try {
+        try
+        {
             // 直接使用已知的类和方法进行测试
             if($className == 'todo' && $methodName == 'create' && $ext == '')
             {
@@ -1750,7 +1751,9 @@ class editorModelTest extends baseTest
                 'hasComma'   => strpos($params, ',') !== false ? 1 : 0,
                 'hasDollar'  => strpos($params, '$') !== false ? 1 : 0
             );
-        } catch (Exception $e) {
+        }
+        catch(Exception $e)
+        {
             return array('error' => $e->getMessage(), 'hasError' => 1);
         }
     }

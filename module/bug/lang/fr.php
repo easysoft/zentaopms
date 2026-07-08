@@ -256,16 +256,17 @@ $lang->bug->browserList['360']     = '360 series';
 $lang->bug->browserList['qq']      = 'QQ series';
 $lang->bug->browserList['other']   = 'Autres';
 
-$lang->bug->typeList['']             = '';
-$lang->bug->typeList['codeerror']    = 'Code Erreur';
-$lang->bug->typeList['config']       = 'Configuration';
-$lang->bug->typeList['install']      = 'Installation';
-$lang->bug->typeList['security']     = 'Faille Sécurité';
-$lang->bug->typeList['performance']  = 'Performance';
-$lang->bug->typeList['standard']     = 'Convention de Code';
-$lang->bug->typeList['automation']   = 'Script automatisation';
-$lang->bug->typeList['designdefect'] = 'Erreur de Design';
-$lang->bug->typeList['others']       = 'Autres';
+$lang->bug->typeList['']                = '';
+$lang->bug->typeList['codeerror']       = 'Code Erreur';
+$lang->bug->typeList['config']          = 'Configuration';
+$lang->bug->typeList['install']         = 'Installation';
+$lang->bug->typeList['security']        = 'Faille Sécurité';
+$lang->bug->typeList['performance']     = 'Performance';
+$lang->bug->typeList['standard']        = 'Convention de Code';
+$lang->bug->typeList['automation']      = 'Script automatisation';
+$lang->bug->typeList['designdefect']    = 'Erreur de Design';
+$lang->bug->typeList['codeimprovement'] = 'Code Improvement';
+$lang->bug->typeList['others']          = 'Autres';
 
 $lang->bug->statusList['']         = '';
 $lang->bug->statusList['active']   = 'Actif';

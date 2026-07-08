@@ -3,134 +3,61 @@
 
 /**
 
-title=测试 pipelineModel->getList();
+title=测试 pipelineModel::getList();
 timeout=0
-cid=17347
+cid=0
 
-- 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照name正序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照id倒序排序，每页10条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照id倒序排序，每页5条，第2页的流水线列表
- - 第11条的type属性 @gitlab
- - 第11条的name属性 @gitLab
- - 第11条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第11条的account属性 @root
-- 获取类型为空按照id倒序排序，每页20条，第1页的流水线列表
- - 第16条的type属性 @gitlab
- - 第16条的name属性 @gitLab
- - 第16条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第16条的account属性 @root
-- 获取类型为空按照id倒序排序，每页20条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照name正序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为空按照name正序排序，每页10条，第2页的流水线列表
- - 第17条的type属性 @sonarqube
- - 第17条的name属性 @SonarQube
- - 第17条的url属性 @https://sonardev.qc.oop.cc/
- - 第17条的account属性 @sonar
-- 获取类型为gitlab按照id倒序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页5条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页5条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页20条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照id倒序排序，每页20条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页10条，第1页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为gitlab按照name正序排序，每页10条，第2页的流水线列表
- - 第1条的type属性 @gitlab
- - 第1条的name属性 @gitLab
- - 第1条的url属性 @https://gitlabdev.qc.oop.cc/
- - 第1条的account属性 @root
-- 获取类型为test按照id倒序排序，每页5条，第1页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页5条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页10条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页5条，第2页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页20条，第1页的流水线列表 @0
-- 获取类型为test按照id倒序排序，每页20条，第2页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页10条，第1页的流水线列表 @0
-- 获取类型为test按照name正序排序，每页10条，第2页的流水线列表 @0
+- 测试获取所有流水线列表 @流水线1;流水线5
+- 测试获取代码库级流水线列表 @流水线1;流水线5
+- 测试获取空间级流水线列表 @流水线3;流水线4
+- 测试按id正序获取第1条name属性 @流水线1
+- 测试按id倒序获取第1条name属性 @流水线5
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(5);
-zenData('pipeline')->loadYaml('pipeline')->gen(20);
+global $app;
+$app->rawModule = 'pipeline';
+$app->rawMethod = 'browse';
 
-$types       = array('', 'gitlab', 'test');
-$sorts       = array('id_desc', 'name_asc');
-$recPerPages = array(5, 10, 20);
-$pageIdList  = array(1, 2);
+/* 使用 zendata 准备测试数据 */
+$pipeline = zenData('ops_pipeline');
+$pipeline->id->range('1-5');
+$pipeline->name->range('流水线1,流水线2,流水线3,流水线4,流水线5');
+$pipeline->engine->range('gitfox,gitlab,jenkins,gitfox,gitlab');
+$pipeline->providerID->range('1,1,0,0,1');
+$pipeline->scope->range('repo,repo,space,space,repo');
+$pipeline->spaceID->range('1,1,1,1,2');
+$pipeline->repoID->range('1,2,0,0,3');
+$pipeline->status->range('active{5}');
+$pipeline->defaultBranch->range('main{5}');
+$pipeline->createdBy->range('admin{5}');
+$pipeline->deleted->range('0');
+$pipeline->gen(5);
 
-$pipelineTester = new pipelineModelTest();
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[0], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[1], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[0], $pageIdList[1])) && p('11:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[2], $pageIdList[0])) && p('16:type,name,url,account') && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[0], $recPerPages[2], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为空按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[0], $sorts[1], $recPerPages[1], $pageIdList[1])) && p('17:type,name,url,account') && e('sonarqube,SonarQube,https://sonardev.qc.oop.cc/,sonar'); // 获取类型为空按照name正序排序，每页10条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[0], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[0], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[2], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[0], $recPerPages[2], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[1], $pageIdList[0])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[1], $sorts[1], $recPerPages[1], $pageIdList[1])) && p('1:type,name,url,account')  && e('gitlab,gitLab,https://gitlabdev.qc.oop.cc/,root');       // 获取类型为gitlab按照name正序排序，每页10条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[0], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[0], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页5条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[1], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[0], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页5条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[2], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页20条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[0], $recPerPages[2], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照id倒序排序，每页20条，第2页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[1], $pageIdList[0])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页10条，第1页的流水线列表
-r($pipelineTester->getListTest($types[2], $sorts[1], $recPerPages[1], $pageIdList[1])) && p()                           && e('0');                                                     // 获取类型为test按照name正序排序，每页10条，第2页的流水线列表
+$pipelineContent = zenData('ops_pipeline_content');
+$pipelineContent->id->range('1-5');
+$pipelineContent->pipelineID->range('1-5');
+$pipelineContent->version->range('1{5}');
+$pipelineContent->createdBy->range('admin{5}');
+$pipelineContent->gen(5);
+
+$provider = zenData('ops_provider');
+$provider->id->range('1');
+$provider->type->range('gitlab');
+$provider->name->range('GitLab');
+$provider->url->range('[https://gitlabdev.qc.oop.cc]');
+$provider->deleted->range('0');
+$provider->gen(1);
+
+su('admin');
+
+$tester = new pipelineModelTest();
+
+r($tester->getListTest()) && p('1:name;5:name') && e('流水线1;流水线5');            // 全列表含id=1和id=5
+r($tester->getListTest(0, 0, 'repo')) && p('1:name;5:name') && e('流水线1;流水线5'); // repo级含id=1和id=5
+r($tester->getListTest(0, 0, 'space')) && p('3:name;4:name') && e('流水线3;流水线4');// space级含id=3和id=4
+r($tester->getListTest(0, 0, '', 'id_asc')) && p('1:name') && e('流水线1');         // id正序首条
+r($tester->getListTest(0, 0, '', 'id_desc')) && p('5:name') && e('流水线5');        // id倒序首条

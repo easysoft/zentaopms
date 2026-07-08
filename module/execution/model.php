@@ -134,7 +134,7 @@ class executionModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($executionID, (string)$this->app->rawModule, (string)$this->app->rawMethod);
         common::setMenuVars('execution', $executionID);
 
-        if($execution->type != 'kanban' && ($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'mr')) $this->loadModel('repo')->setHideMenu($executionID);
+        if($execution->type != 'kanban' && ($this->app->getModuleName() == 'repo' || $this->app->getModuleName() == 'ppm')) $this->loadModel('repo')->setHideMenu($executionID);
 
         /* Set stroy navigation for no-product project. */
         $this->loadModel('project')->setNoMultipleMenu($executionID);
@@ -234,11 +234,6 @@ class executionModel extends model
         if(!$features['burn'])   unset($this->lang->execution->menu->burn);
         if(!$features['other'])  unset($this->lang->execution->menu->other);
         if(!$features['story'] && $this->config->edition == 'open') unset($this->lang->execution->menu->view);
-        if($this->config->inCompose)
-        {
-            $repoServers = $this->loadModel('pipeline')->getPairs($this->config->pipeline->checkRepoServers);
-            if(empty($repoServers)) unset($this->lang->execution->menu->devops);
-        }
 
         return true;
     }

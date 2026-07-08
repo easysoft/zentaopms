@@ -313,3 +313,8 @@ $lang->system->runningStatus['error']  = 'Error';
 
 $lang->system->serviceNotice = 'Only the store app are supported.';
 $lang->system->nodeNotice    = 'Node(%s) exception reason: %s';
+
+$lang->system->view    = 'view';
+$lang->system->product = 'product';
+$lang->system->release = 'release';
+$lang->system->appdesc = 'app desc';

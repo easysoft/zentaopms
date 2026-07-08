@@ -1,0 +1,34 @@
+---
+title: Provider test data
+desc: Test data for provider model methods
+author: Codex
+version: 1.0
+
+fields:
+- field: id
+  note: Provider ID
+  range: 1-5
+
+- field: type
+  note: Provider type
+  range: GitLab,GitHub,Gitea,Gogs,Jenkins
+
+- field: name
+  note: Provider name
+  range: Alpha,Bravo,Charlie,Delta,Echo
+
+- field: url
+  note: Provider URL
+  range: https://alpha.example.com,https://bravo.example.com,https://charlie.example.com,https://delta.example.com,https://echo.example.com
+
+- field: token
+  note: Provider token
+  range: alpha-token,bravo-token,charlie-token,delta-token,amVua2lucy1hZG1pbjpqZW5raW5zLXRva2Vu
+
+- field: deleted
+  note: Deleted flag
+  range: 0{3},1,0
+
+- field: createdBy
+  note: Creator
+  range: admin{5}

@@ -304,9 +304,13 @@ class group extends control
         }
         else
         {
+            $loadURl = inLink('browse');
+            if($this->app->tab == 'project') $loadURl = $this->createLink('project', 'group', "projectID={$group->project}");
+            if($this->app->tab == 'devops')  $loadURl = $this->createLink('space', 'group', "spaceID={$group->devopsSpace}");
+
             $response['result']  = 'success';
             $response['message'] = '';
-            $response['load']    = $this->app->tab == 'project' ? $this->createLink('project', 'group', "projectID={$group->project}"): inLink('browse');
+            $response['load']    = $loadURl;
         }
         return $this->send($response);
     }

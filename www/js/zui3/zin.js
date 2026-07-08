@@ -8,7 +8,7 @@
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
     const moduleMethod  = `${currentModule}-${currentMethod}`;
 
-    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|instance-terminal|ai-chat|instance-logs'.split('|'));
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|instance-terminal|ai-chat|instance-logs|gitfox-devopsintroduction'.split('|'));
     const iframeList = new Set(['cron-index', 'zanode-create']);
     const isAllowSelfOpen = !iframeList.has(moduleMethod) &&
         (isIndexPage
@@ -1389,6 +1389,7 @@
                         }
                     });
                 }
+                $(`#${id}`).trigger('formloaded', [info, options]);
                 return true;
             }
         })
@@ -1705,9 +1706,10 @@
      * Select vision.
      * @param {string} vision
      */
-    function selectVision(vision)
+    function selectVision(vision, devopsSpace)
     {
-        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision), function(result)
+        if(typeof(devopsSpace) === 'undefined' || !devopsSpace) devopsSpace = 0;
+        $.get($.createLink('my', 'ajaxSwitchVision', 'vision=' + vision + '&devopsSpace=' + devopsSpace), function(result)
         {
             const response = JSON.parse(result);
             if(response.result == 'fail')

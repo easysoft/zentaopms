@@ -39,6 +39,11 @@ class heading extends wg
             {
                 list($title, $currentModule, $currentMethod, $vars) = explode('|', $nav);
                 if($tab == 'execution') $currentMethod = 'all';
+                if($tab == 'devops')
+                {
+                    $currentModule = 'repo';
+                    $currentMethod = 'maintain';
+                }
             }
         }
         else

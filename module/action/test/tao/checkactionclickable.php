@@ -52,8 +52,8 @@ $action->action     = 'login';
 
 r($actionTest->checkActionClickableTest($action, $deptUsers, $moduleName, $methodName)) && p() && e('0'); //测试用户的登录操作，不需要打印链接，返回false
 
-$moduleName = 'mr';
-$action->objectType = 'mr';
+$moduleName = 'ppm';
+$action->objectType = 'ppm';
 $action->action     = 'deleted';
 
 r($actionTest->checkActionClickableTest($action, $deptUsers, $moduleName, $methodName)) && p() && e('0'); //测试合并请求的删除操作，不需要打印链接，返回false

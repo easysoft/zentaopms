@@ -191,27 +191,23 @@ class designModel extends model
      */
     public function linkCommit(int $designID = 0, int $repoID = 0, array $revisions = array()): bool
     {
-        $repo = $this->loadModel('repo')->getByID($repoID);
-        if(!isset($repo->SCM)) return true;
+        $this->loadModel('repo');
 
         /* If the repo type is Gitlab, first store the commit log in the repohistory table and get the commit ID. */
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
+        $logs = array();
+        foreach($this->session->designRevisions as $commit)
         {
-            $logs = array();
-            foreach($this->session->designRevisions as $commit)
+            if(in_array($commit->revision, $revisions))
             {
-                if(in_array($commit->revision, $revisions))
-                {
-                    $log = new stdclass();
-                    $log->committer = $commit->committer;
-                    $log->revision  = $commit->revision;
-                    $log->comment   = isset($commit->comment) ? $commit->comment : '';
-                    $log->time      = date('Y-m-d H:i:s', strtotime($commit->time));
-                    $logs[] = $log;
-                }
+                $log = new stdclass();
+                $log->committer = $commit->committer;
+                $log->revision  = $commit->revision;
+                $log->comment   = isset($commit->comment) ? $commit->comment : '';
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->time));
+                $logs[] = $log;
             }
-            $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
         }
+        $this->repo->saveCommit($repoID, array('commits' => $logs), 0);
         $revisions = $this->dao->select('id')->from(TABLE_REPOHISTORY)->where('revision')->in($revisions)->andWhere('repo')->eq($repoID)->fetchPairs('id');
 
         $this->designTao->updateLinkedCommits($designID, $repoID, $revisions);

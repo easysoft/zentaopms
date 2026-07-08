@@ -93,6 +93,7 @@ class featureBar extends wg
                     $url = ($callback instanceof \Closure) ? $callback($key, $text) : str_replace('{key}', (string)$key, $link);
                     $subItem = array();
                     $subItem['text']   = $text;
+                    $subItem['hint']   = $text;
                     $subItem['active'] = $rawItem->name == 'QUERY' ? $key == $param : $key == $current;
                     $subItem['attrs']  = ['data-id' => $key, 'data-load' => $load, 'data-target' => $loadID, 'data-app' => $tab, 'data-success' => jsRaw("() => zui.updateSearchForm('$searchModule')")];
                     $subItem['url']    = $isModal ? '#featureBar' : $url;

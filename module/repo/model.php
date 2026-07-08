@@ -7,11 +7,26 @@ declare(strict_types=1);
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@cnezsoft.com>
  * @package     repo
+ * @property    dao     $dao
+ * @property    object  $lang
  * @property    repoTao $repoTao
  * @link        https://www.zentao.net
  */
 class repoModel extends model
 {
+    /**
+     * 判断是否为 SVN 类型代码库。
+     * Check if repo is subversion type.
+     *
+     * @param  object $repo
+     * @access public
+     * @return bool
+     */
+    public function isSvn(object $repo): bool
+    {
+        return isset($repo->scmType) && strtolower($repo->scmType) == 'svn';
+    }
+
     /**
      * 检查代码库的权限。
      * Check repo priv.
@@ -23,29 +38,15 @@ class repoModel extends model
     public function checkPriv(object $repo): bool
     {
         $account = $this->app->user->account;
-        $acl     = !empty($repo->acl->acl) ? $repo->acl->acl : 'custom';
-        if(empty($repo->acl))         $repo->acl = new stdclass();
-        if(empty($repo->acl->users))  $repo->acl->users  = array();
-        if(empty($repo->acl->groups)) $repo->acl->groups = array();
+        $acl     = $repo->acl;
 
         if(strpos(",{$this->app->company->admins},", ",$account,") !== false || $acl == 'open') return true;
-        if($acl == 'custom' && empty(array_filter($repo->acl->groups)) && empty(array_filter($repo->acl->users))) return true;
 
         if($acl == 'private')
         {
-            $userProducts = explode(',', $this->app->user->view->products);
-            $repoProducts = explode(',', $repo->product);
-            if(array_intersect($userProducts, $repoProducts)) return true;
+            $repoUsers = $this->getRepoUsers($repo->id);
+            return in_array($account, $repoUsers);
         }
-
-        if(!empty($repo->acl->groups))
-        {
-            foreach($this->app->user->groups as $group)
-            {
-                if(in_array($group, $repo->acl->groups)) return true;
-            }
-        }
-        if(!empty($repo->acl->users) and in_array($account, $repo->acl->users)) return true;
         return false;
     }
 
@@ -55,10 +56,11 @@ class repoModel extends model
      *
      * @param  array  $repos
      * @param  int    $repoID
+     * @param  int   $spaceID
      * @access public
      * @return void
      */
-    public function setMenu(array $repos, int $repoID = 0)
+    public function setMenu(array $repos, int $repoID = 0, int $spaceID = 0)
     {
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
@@ -70,18 +72,32 @@ class repoModel extends model
         {
             $repo = $this->getByID($repoID);
             if(!$repo || !$this->checkPriv($repo)) $repoID = 0;
-            if(!$repo || !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-            if(!$repo || !in_array($repo->SCM, $this->config->repo->notSyncSCM))
-            {
-                unset($this->lang->devops->menu->tag);
-                unset($this->lang->devops->menu->branch);
-            }
+        }
+        $this->loadModel('space')->setMenu($spaceID);
+
+        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars($this->config->vision == 'devops' ? 'repo' : 'devops', $repoID);
+        $this->session->set('repoID', $repoID);
+        $repo = $this->fetchByID($repoID);
+        $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
+
+        /* 镜像代码库屏蔽"扫描(repoCodeScan)"与"代码问题(review)"两个一级菜单。 */
+        if($repo && !empty($repo->mirror))
+        {
+            unset($this->lang->devops->menu->repoCodeScan);
+            unset($this->lang->devops->menu->review);
         }
 
-        if(!in_array($this->app->methodName, $this->config->repo->notSetMenuVars)) common::setMenuVars('devops', $repoID);
-        if(!session_id()) session_start();
-        $this->session->set('repoID', $repoID);
-        session_write_close();
+        /* SVN 代码库屏蔽分支、标签、代码评审、制品库、设置 5 个一级菜单。SVN 无原生分支/MR/制品库等概念。 */
+        if($repo && $this->isSvn($repo))
+        {
+            unset($this->lang->devops->menu->branch);
+            unset($this->lang->devops->menu->tag);
+            unset($this->lang->devops->menu->ppm);
+            unset($this->lang->devops->menu->artifact);
+            unset($this->lang->devops->menu->settings);
+        }
+
+        if(in_array($this->app->methodName, array('setarchive', 'browsewebhooks', 'createwebhook', 'editwebhook', 'logwebhook'))) $this->lang->devops->menu->settings['subModule'] .= ',repo';
     }
 
     /**
@@ -89,24 +105,23 @@ class repoModel extends model
      * Get repo list.
      *
      * @param  int    $projectID
-     * @param  string $SCM  Subversion|Git|Gitlab
+     * @param  int    $space
      * @param  string $orderBy
      * @param  object $pager
      * @param  bool   $getCodePath
      * @access public
      * @return array
      */
-    public function getList(int $projectID = 0, string $SCM = '', string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
+    public function getList(int $projectID = 0, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null, bool $getCodePath = false, bool $lastSubmitTime = false, string $type = '', int $param = 0): array
     {
         $repoQuery = $type == 'bysearch' ? $this->repoTao->processSearchQuery($param) : '';
-        $repos     = $this->getListByCondition($repoQuery, $SCM, $orderBy, $pager);
+        $repos     = $this->getListByCondition($repoQuery, $space, $orderBy, $pager);
 
         /* Get products. */
         $productIdList = $this->loadModel('product')->getProductIDByProject($projectID, false);
+        $providerParis = $this->loadModel('provider')->getList();
         foreach($repos as $i => $repo)
         {
-            $repo->acl      = json_decode($repo->acl);
-            $repo->codePath = $repo->path;
             if(!$this->checkPriv($repo))
             {
                 unset($repos[$i]);
@@ -122,37 +137,38 @@ class repoModel extends model
                 if(!$hasPriv) unset($repos[$i]);
             }
 
-            if($lastSubmitTime) $repo->lastSubmitTime = $repo->lastCommit ? $repo->lastCommit : $this->repoTao->getLastRevision($repo->id);
-
-            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo, $getCodePath);
+            if(!empty($repo->mirror))
+            {
+                $repo->origin = isset($providerParis[$repo->providerID]) ? $providerParis[$repo->providerID]->type : '';
+            }
+            else
+            {
+                $repo->origin = 'GitFox';
+            }
         }
 
         return $repos;
     }
 
     /**
-     * 根据SCM和权限获取代码库列表。
-     * Get list by SCM.
+     * 根据权限获取代码库列表。
+     * Get list by priv.
      *
-     * @param  string $scm
      * @param  string $type  all|haspriv
      * @access public
      * @return array
      */
-    public function getListBySCM(string $scm, string $type = 'all')
+    public function getListByPriv(string $type = 'all')
     {
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->in($scm)
+            ->andWhere('status')->ne('importing')
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
 
         foreach($repos as $i => $repo)
         {
-            if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-            $repo->acl      = json_decode($repo->acl);
-            $repo->codePath = $repo->path;
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
-            if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
+            $repo = $this->processGitService($repo);
         }
 
         return $repos;
@@ -169,34 +185,31 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken')
+        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken,members,serviceHost')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF(!in_array($repo->SCM, $this->config->repo->notSyncSCM), 'path,client', 'notempty')
-            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
             ->autoCheck()
             ->exec();
 
         if(dao::isError()) return false;
         $repoID = $this->dao->lastInsertID();
 
-        $repo = $this->getByID($repoID);
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
+        if($repoID && !empty($repo->acl) && $repo->acl === 'private')
         {
-            $token = uniqid();
-            $res   = $this->loadModel($repo->SCM)->addPushWebhook($repo, $token);
-            if($res !== true)
-            {
-                $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
-                return false;
-            }
-            else
-            {
-                $this->dao->update(TABLE_REPO)->set('password')->eq($token)->where('id')->eq($repoID)->exec();
-            }
+            $members = array_filter(explode(',', $repo->members ?? ''));
+            if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
+            $this->updateMembers($repoID, $members);
+        }
+
+        $repo = $this->getByID($repoID);
+        $res  = $this->loadModel('gitfox')->addPushWebhook($repo);
+        if(!$res)
+        {
+            dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
+            return false;
         }
         $this->rmClientVersionFile();
 
@@ -219,28 +232,33 @@ class repoModel extends model
             dao::$errors['name'] = $this->lang->repo->error->repoNameInvalid;
             return false;
         }
+        $entry = $this->loadModel('entry')->getByCode('gitfox');
+        if(empty($entry)) return false;
 
-        $response = $this->createGitlabRepo($repo, $repo->namespace);
+        $response = $this->loadModel('gitfox')->apiCreateRepo($repo);
+        if(empty($response->id)) return false;
 
-        $this->loadModel('gitlab');
-        if(!empty($response->id))
+        $repoID = $response->id;
+
+        if($repoID && !empty($repo->acl) && $repo->acl === 'private')
         {
-            $repo->path           = $response->path;
-            $repo->serviceProject = $response->serviceProject;
-            $repo->extra          = $response->extra;
-            $repo->SCM            = 'Gitlab';
-
-            unset($repo->namespace);
-            $repoID = $this->create($repo, false);
-            if(dao::isError())
-            {
-                $this->gitlab->apiDeleteProject($repo->serviceHost, $response->id);
-                return false;
-            }
-            return $repoID;
+            $members = array_filter(explode(',', $repo->members ?? ''));
+            if(!in_array($this->app->user->account, $members)) $members[] = $this->app->user->account;
+            $this->updateMembers($repoID, $members);
         }
 
-        return $this->gitlab->apiErrorHandling($response);
+        if($repoID)
+        {
+            $repo->id = $repoID;
+            $res = $this->loadModel('gitfox')->addPushWebhook($repo);
+            if(!$res)
+            {
+                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
+                return false;
+            }
+        }
+
+        return $repoID;
     }
 
     /**
@@ -289,7 +307,7 @@ class repoModel extends model
         $this->loadModel('instance');
         foreach($repos as $index => $repo)
         {
-            if(empty($repo->product)) continue;
+            if(empty($repo->product) || empty($repo->space)) continue;
             if(empty($repo->name))
             {
                 dao::$errors["name[$index]"] = sprintf($this->lang->error->notempty, $this->lang->repo->name);
@@ -320,7 +338,7 @@ class repoModel extends model
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
-            if(method_exists($this->instance, 'saveWaitSyncData')) $this->instance->saveWaitSyncData('repo', $repoID, 'add', false);
+            if(method_exists($this->instance, 'saveWaitSyncData')) $this->instance->saveWaitSyncData('repo', (string)$repoID, 'add', false);
         }
 
         return true;
@@ -332,62 +350,26 @@ class repoModel extends model
      *
      * @param  object $data
      * @param  object $repo
-     * @param  bool   $isPipelineServer
      * @access public
      * @return bool
      */
-    public function update(object $data, object $repo, bool $isPipelineServer): bool
+    public function update(object $data, object $repo): bool
     {
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject) && $data->SCM == 'Gitlab')
-        {
-            $repo->gitService = $data->serviceHost;
-            $repo->project    = $data->serviceProject;
-
-            $token = uniqid();
-            $res   = $this->loadModel('gitlab')->addPushWebhook($repo, $token);
-            if($res !== true)
-            {
-                dao::$errors['webhook'][] = isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook;
-                return false;
-            }
-            else
-            {
-                $data->password = $token;
-            }
-        }
-
-        if($data->SCM == 'Subversion' && $data->path != $repo->path)
-        {
-            $data->synced     = 0;
-            $data->lastSync   = null;
-            $data->lastCommit = null;
-        }
-
-        if($data->encrypt == 'base64') $data->password = base64_encode((string)$data->password);
-        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken')
+        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken,members')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
-            ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
-            ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `id` != $repo->id")
-            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($data->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($data->serviceHost) . " and `id` != $repo->id")
             ->autoCheck()
-            ->where('id')->eq($repo->id)->exec();
+            ->where('id')->eq($repo->id)
+            ->exec();
 
-        $this->rmClientVersionFile();
-
-        if(in_array($data->SCM, $this->config->repo->notSyncSCM))
+        if($data->acl == 'private')
         {
-            $this->loadModel($data->SCM)->updateCodePath($data->serviceHost, (int)$data->serviceProject, $repo->id);
-            $data->path = $this->getByID($repo->id)->path;
-            $this->updateCommitDate($repo->id);
+            $this->updateMembers($repo->id, explode(',', $data->members));
         }
-
-        if(($repo->serviceHost != $data->serviceHost || $repo->serviceProject != $data->serviceProject || $repo->SCM == 'Subversion') && $repo->path != $data->path)
+        else
         {
-            $this->repoTao->deleteInfoByID($repo->id);
-            return false;
+            $this->dao->delete()->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repo->id)->exec();
         }
+        if(dao::isError()) return false;
 
         return true;
     }
@@ -414,17 +396,10 @@ class repoModel extends model
         if(empty($revisionInfo))
         {
             $repo = $this->getByID($repoID);
-            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
-            {
-                $scm = $this->app->loadClass('scm');
-                $scm->setEngine($repo);
-                $logs = $scm->getCommits($revision, 1);
-                $this->saveCommit($repoID, $logs, 0);
-            }
-            else
-            {
-                $this->updateCommit($repoID);
-            }
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $logs = $scm->getCommits($revision, 1);
+            $this->saveCommit($repoID, $logs, 0);
         }
 
         $revisionInfo = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->andWhere('revision')->eq($revision)->fetch();
@@ -525,9 +500,6 @@ class repoModel extends model
      */
     public function saveState(int $repoID = 0, int $objectID = 0): int
     {
-        if(session_id()) session_write_close();
-
-        if(!defined('RUN_MODE') || RUN_MODE != 'test') session_start();
         if($repoID > 0) $this->session->set('repoID', (int)$repoID);
 
         $repos = $this->getRepoPairs($this->app->tab, $objectID);
@@ -536,7 +508,6 @@ class repoModel extends model
         if(!isset($repos[$this->session->repoID])) $this->session->set('repoID', key($repos));
 
         $repoID = (int)$this->session->repoID;
-        session_write_close();
 
         return $repoID;
     }
@@ -551,12 +522,15 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getRepoPairs(string $type, int $projectID = 0, bool $showScm = true): array
+    public function getRepoPairs(string $type = '', int $projectID = 0, bool $showScm = false): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepoPairs();
 
+        $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
+            ->andWhere('spaceID')->in(array_keys($userSpaces))
             ->fetchAll('id', false);
 
         /* Get products. */
@@ -565,9 +539,8 @@ class repoModel extends model
         $repoPairs = array();
         foreach($repos as $repo)
         {
-            $repo->acl = json_decode($repo->acl);
             $scm = '';
-            if($showScm) $scm = $repo->SCM == 'Subversion' ? '[svn] ' : '[' . strtolower($repo->SCM) . '] ';
+            if($showScm) $scm = '[GitFox] ';
             if($this->checkPriv($repo))
             {
                 if(($type == 'project' or $type == 'execution') and $projectID)
@@ -593,13 +566,12 @@ class repoModel extends model
      *
      * @param  string $type
      * @param  int    $projectID
-     * @param  array  $scmList
      * @access public
      * @return array
      */
-    public function getRepoGroup(string $type, int $projectID = 0, array $scmList = array()): array
+    public function getRepoGroup(string $type, int $projectID = 0): array
     {
-        $repos      = $this->getList(0, implode(',', $scmList));
+        $repos      = $this->getList();
         $productIds = $productItems = array();
         if($projectID)
         {
@@ -629,7 +601,6 @@ class repoModel extends model
         $repoPairs = array();
         foreach($repos as $repo)
         {
-            $repo->acl = is_string($repo->acl) ? json_decode($repo->acl) : $repo->acl;
             if($this->checkPriv($repo))
             {
                 $repoItem = array();
@@ -641,6 +612,7 @@ class repoModel extends model
                 $repoProducts = explode(',', $repo->product);
                 foreach($repoProducts as $productID)
                 {
+                    if(!$productID) continue;
                     if(in_array($type, array('project', 'execution')) && $projectID && !in_array($productID, $projectProductIds)) continue;
 
                     if(strpos(",$repo->product,", ",$productID,") !== false)
@@ -668,31 +640,45 @@ class repoModel extends model
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getRepo();
 
         if(empty($repoID)) return false;
-        $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        $repo = $this->fetchByID($repoID);
         if(!$repo) return false;
 
-        /* Update repo table for old version. */
-        if(empty($repo->serviceHost) && in_array($repo->SCM, $this->config->repo->gitServiceTypeList))
+        if($repo->acl == 'private')
         {
-            $repo->serviceHost    = $repo->client;
-            $repo->serviceProject = $repo->extra;
-            $this->dao->update(TABLE_REPO)->data(array('serviceHost' => $repo->serviceHost, 'serviceProject' => $repo->serviceProject))->where('id')->eq($repoID)->exec();
-
-            /* Add webhook. */
-            if($repo->SCM == 'Gitlab') $this->loadModel('gitlab')->updateCodePath((int)$repo->serviceHost, (int)$repo->serviceProject, $repo->id);
+            $repo->members = $this->getRepoUsers($repo->id);
+        }
+        else
+        {
+            $space = $this->loadModel('space')->getByID($repo->spaceID);
+            $repo->members = $space->acl == 'private' ? zget($space, 'members', array()) : $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         }
 
-        if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-        $repo->codePath = $repo->path;
-        if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) $repo = $this->processGitService($repo);
-        $repo->acl = json_decode($repo->acl);
-        if(empty($repo->acl)) $repo->acl = new stdclass();
-        if(empty($repo->acl->acl)) $repo->acl->acl = 'custom';
-
-        $repo->serviceHost    = (int)$repo->serviceHost;
-        $repo->gitService     = $repo->serviceHost;
-        $repo->serviceProject = $repo->SCM == 'Gitlab' ? (int)$repo->serviceProject : $repo->serviceProject;
+        $repo = $this->processGitService($repo);
         return $repo;
+    }
+
+    /**
+     * 处理代码库路径。
+     * Parse repo path.
+     *
+     * @param  string $serverUrl
+     * @param  string $path
+     * @access public
+     * @return string
+     */
+    public function parseRepoPath(string $path): string
+    {
+        $serverURL = $this->config->devops->gitfoxURL;
+        if(!empty($this->config->devops->gitfoxPort) && $this->config->devops->gitfoxPort != 80) $serverURL .= ':' . $this->config->devops->gitfoxPort;
+
+        $serverUrl = trim($serverURL, '/');
+        $parseUrl  = parse_url($path);
+
+        $replaceStr = $parseUrl['scheme'] . '://' . $parseUrl['host'];
+        if(isset($parseUrl['port'])) $replaceStr .= ':' . $parseUrl['port'];
+        $path = str_replace($replaceStr, $serverUrl,  $path);
+
+        return $path;
     }
 
     /**
@@ -713,7 +699,7 @@ class repoModel extends model
         $conditions = array();
         foreach($matches as $matched) $conditions[] = "(`serviceHost`='{$matched['gitlab']}' and `serviceProject`='{$matched['project']}')";
 
-        $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')', 'Gitlab');
+        $matchedRepos = $this->getListByCondition('(' . implode(' OR ', $conditions). ')');
         if(empty($matchedRepos)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
 
         $matchedRepo = new stdclass();
@@ -726,12 +712,7 @@ class repoModel extends model
             }
         }
         if(empty($matchedRepo)) return array('result' => 'fail', 'message' => 'Matched gitlab is not open pre merge.');
-        if(empty($matchedRepo->job)) return array('result' => 'fail', 'message' => 'No linked job.');
 
-        $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($matchedRepo->job)->andWhere('deleted')->eq(0)->fetch();
-        if(empty($job)) return array('result' => 'fail', 'message' => 'Linked job is not exists.');
-
-        $matchedRepo->job = $job;
         return array('result' => 'success', 'data' => $matchedRepo);
     }
 
@@ -773,11 +754,13 @@ class repoModel extends model
      */
     public function getByIdList(array $idList): array
     {
-        $repos = $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('id')->in($idList)->fetchAll('id', false);
+        $repos = $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')
+            ->andWhere('id')->in($idList)->fetchAll('id', false);
         foreach($repos as $repo)
         {
             if($repo->encrypt == 'base64') $repo->password = base64_decode($repo->password);
-            $repo->acl = json_decode($repo->acl);
         }
 
         return $repos;
@@ -849,58 +832,7 @@ class repoModel extends model
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getCommits();
 
         if(!isset($repo->id)) return array();
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('gitlab')->getCommits($repo, $entry, $pager, $begin, $end, $query);
-
-        $entry         = ltrim($entry, '/');
-        $entry         = empty($entry) ? '' : '/' . $entry;
-        $revisionTime  = $this->repoTao->getLatestCommitTime($repo->id, $revision, $repo->SCM == 'Subversion' ? '' : (string)$this->cookie->repoBranch);
-        $hasBranch     = $repo->SCM != 'Subversion' && $this->cookie->repoBranch;
-        $historyIdList = array();
-        if($entry != '/' && !empty($entry))
-        {
-            $historyIdList = $this->dao->select('DISTINCT t2.id,t2.`time`')->from(TABLE_REPOFILES)->alias('t1')
-                ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                ->beginIF($hasBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
-                ->where('t1.repo')->eq($repo->id)
-                ->beginIF($begin)->andWhere('t2.`time`')->ge($begin)->fi()
-                ->beginIF($end)->andWhere('t2.`time`')->le($end)->fi()
-                ->beginIF($revisionTime)->andWhere('t2.`time`')->le($revisionTime)->fi()
-                ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-                ->beginIF($hasBranch)->andWhere('t3.branch')->eq($this->cookie->repoBranch)->fi()
-                ->beginIF($type == 'dir')
-                ->andWhere('t1.parent', true)->like(rtrim($entry, '/') . "/%")
-                ->orWhere('t1.parent')->eq(rtrim($entry, '/'))
-                ->markRight(1)
-                ->fi()
-                ->beginIF($type == 'file')->andWhere('t1.path')->eq("$entry")->fi()
-                ->orderBy('t2.`time` desc')
-                ->page($pager, 't2.id')
-                ->fetchPairs('id', 'id');
-        }
-
-        $comments = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
-            ->beginIF($hasBranch)->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')->fi()
-            ->where('t1.repo')->eq($repo->id)
-            ->andWhere('left(t1.`comment`, 12)')->ne('Merge branch')
-            ->beginIF($revisionTime)->andWhere('t1.`time`')->le($revisionTime)->fi()
-            ->beginIF($begin)->andWhere('t1.`time`')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('t1.`time`')->le($end)->fi()
-            ->beginIF($query)->andWhere($query)->fi()
-            ->beginIF($hasBranch)->andWhere('t2.branch')->eq($this->cookie->repoBranch)->fi()
-            ->beginIF($entry != '/' && !empty($entry))->andWhere('t1.id')->in($historyIdList)->fi()
-            ->beginIF($begin)->andWhere('t1.time')->ge($begin)->fi()
-            ->beginIF($end)->andWhere('t1.time')->le($end)->fi()
-            ->orderBy('time desc');
-        if($entry == '/' || empty($entry)) $comments->page($pager, 't1.id');
-        $comments = $comments->fetchAll('revision');
-
-        foreach($comments as $repoComment)
-        {
-            $repoComment->originalComment = $repoComment->comment;
-            $repoComment->comment         = $this->replaceCommentLink($repoComment->comment);
-        }
-
-        return $comments;
+        return $this->loadModel('gitfox')->getCommits($repo, $entry, $pager, $begin, $end, $query);
     }
 
     /**
@@ -919,8 +851,7 @@ class repoModel extends model
         $lastComment = $this->dao->select('t1.*')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
-            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.time')->ne('1970-01-01 08:00:00')->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->orderBy('t1.`time` desc')
             ->fetch();
         if(empty($lastComment)) return false;
@@ -931,7 +862,7 @@ class repoModel extends model
         $count = $this->dao->select('count(DISTINCT t1.id) as count')->from(TABLE_REPOHISTORY)->alias('t1')
             ->leftJoin(TABLE_REPOBRANCH)->alias('t2')->on('t1.id=t2.revision')
             ->where('t1.repo')->eq($repoID)
-            ->beginIF($repo->SCM != 'Subversion' && $branchID)->andWhere('t2.branch')->eq($branchID)->fi()
+            ->beginIF($branchID)->andWhere('t2.branch')->eq($branchID)->fi()
             ->fetch('count');
 
         if($repo->SCM == 'Git' && $lastComment->commit != $count)
@@ -1283,8 +1214,9 @@ class repoModel extends model
      * @access public
      * @return string
      */
-    public function createLink(string $method, string $params = '', string $viewType = '')
+    public function createLink(string $method, string $params = '', string $viewType = 'html')
     {
+        if(defined('RUN_MODE') && RUN_MODE == 'api' && isset($this->config->originRequestType)) $this->config->requestType = $this->config->originRequestType;
         if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType);
 
         $parsedParams = array();
@@ -1392,9 +1324,7 @@ class repoModel extends model
         $clientVersionFile = $this->session->clientVersionFile;
         if($clientVersionFile)
         {
-            if(!session_id()) session_start();
             $this->session->set('clientVersionFile', '');
-            session_write_close();
 
             if(file_exists($clientVersionFile)) @unlink($clientVersionFile);
         }
@@ -1725,8 +1655,12 @@ class repoModel extends model
         {
             foreach($actionFiles as $file)
             {
-                $catLink  = trim(html::a($this->buildURL('cat',  $repoRoot . $file, (string) $log->revision, $scm), 'view', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
-                $diffLink = trim(html::a($this->buildURL('diff', $repoRoot . $file, (string) $log->revision, $scm), 'diff', '', "data-toggle='modal' data-size='{\"width\": 800, \"height\": 500}'"));
+                $path = $this->encodePath($file);
+                $viewURL = $this->createLink('view', "repoID={$log->repo->id}&objectID=0&entry={$path}&revision={$log->revision}");
+                $diffURL = $this->createLink('diff', "repoID={$log->repo->id}&objectID=0&entry={$path}&oldRevision={$log->revision}&revision={$log->revision}");
+
+                $catLink  = trim(html::a($viewURL, 'view', 'modal', "data-toggle='modal' data-size='lg'"));
+                $diffLink = trim(html::a($diffURL, 'diff', 'modal', "data-toggle='modal' data-size='lg'"));
 
                 $catLink  = str_replace('+', '%2B', $catLink);
                 $diffLink = str_replace('+', '%2B', $diffLink);
@@ -1781,7 +1715,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getBugProductsAndExecutions($bugs)
+    public function getBugProductsAndExecutions(array $bugs): array
     {
         $records = $this->dao->select('id, execution, product')->from(TABLE_BUG)->where('id')->in($bugs)->fetchAll('id');
         foreach($records as $record) $record->product = ",{$record->product},";
@@ -1812,49 +1746,58 @@ class repoModel extends model
      * Process git service, add code path and api path.
      *
      * @param  object $repo
-     * @param  bool   $getCodePath
      * @access public
      * @return object
      */
-    public function processGitService(object $repo, bool $getCodePath = false): object
+    public function processGitService(object $repo): object
     {
-        $service = $this->loadModel('pipeline')->getByID((int)$repo->serviceHost);
-        if(!$service) return $repo;
+        $server = $this->loadModel('gitfox')->getServer();
 
-        if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
-        {
-            if($getCodePath)
-            {
-                if($repo->SCM == 'Gitlab') $repo->serviceProject = (int)$repo->serviceProject;
-                $project = $this->loadModel($repo->SCM)->apiGetSingleProject((int)$repo->serviceHost, $repo->serviceProject);
-                if(isset($project->web_url) && $repo->path != $project->web_url)
-                {
-                    $repo->path = $project->web_url;
-                    $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
-                }
-            }
+        $singleRepo = $this->gitfox->apiGetSingleRepo((int)$repo->id);
+        $repo->path = $singleRepo->gitURL;
 
-            $repo->path     = (!$repo->path && $service) ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : $repo->path;
-            $repo->apiPath  = sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject);
-            $repo->client   = $service ? $service->url : '';
-            $repo->password = $service ? $service->token : '';
-            $repo->codePath = isset($project->web_url) ? $project->web_url : $repo->path;
-        }
-        else
-        {
-            if(!is_dir($repo->path) && !is_writable(dirname($repo->path)))
-            {
-                $path = $this->app->getAppRoot() . "www/data/repo/{$repo->name}_{$repo->SCM}";
-                $repo->path = $path;
-
-                $this->dao->update(TABLE_REPO)->set('path')->eq($repo->path)->where('id')->eq($repo->id)->exec();
-            }
-
-            $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
-        }
-
-        $repo->gitService = (int)$repo->serviceHost;
+        $repo->apiPath   = $server ? sprintf($this->config->repo->gitfox->apiPath, $server->url, $repo->id) : $repo->path;
+        $repo->client    = $server ? $server->url : '';
+        $repo->password  = $server ? $server->token : '';
+        $repo->codePath  = isset($singleRepo->gitURL) ? $singleRepo->gitURL : $repo->path;
+        $repo->importing = isset($singleRepo->importing) ? $singleRepo->importing : false;
         return $repo;
+    }
+
+    /**
+     * 检查webhook提交的工时是否已被记录。
+     * Check whether the webhook commit effort has been recorded.
+     *
+     * @param  object $commit
+     * @access protected
+     * @return bool
+     */
+    protected function isRecordedWebhookCommit(object $commit): bool
+    {
+        $revision = '';
+        if(isset($commit->id)  && is_scalar($commit->id))  $revision = (string)$commit->id;
+        if($revision === '' && isset($commit->sha) && is_scalar($commit->sha)) $revision = (string)$commit->sha;
+
+        $message = '';
+        if(isset($commit->message) && is_string($commit->message)) $message = $commit->message;
+        if($message === '' && isset($commit->Message) && is_string($commit->Message)) $message = $commit->Message;
+        if($revision === '' || $message === '') return false;
+
+        $shortRevision = substr($revision, 0, 10);
+        $workSuffix    = '#' . $shortRevision . "\n" . htmlspecialchars($this->iconvComment($message, 'utf-8'), ENT_QUOTES, 'UTF-8');
+
+        /* @phpstan-ignore-next-line */
+        $efforts = $this->dao->select('id,work')->from(TABLE_EFFORT)
+            ->where('deleted')->eq('0')
+            ->andWhere('work')->like("%#{$shortRevision}%")
+            ->fetchAll();
+
+        foreach($efforts as $effort)
+        {
+            if(isset($effort->work) && is_string($effort->work) && str_ends_with($effort->work, $workSuffix)) return true;
+        }
+
+        return false;
     }
 
     /**
@@ -1872,22 +1815,15 @@ class repoModel extends model
         if(!in_array($event, array('Push Hook', 'Merge Request Hook', 'branch_updated'))) return false;
         if(empty($data->commits)) return false;
 
-        /* Update code commit history. */
-        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repo->id));
-        if(!in_array($repo->SCM, $this->config->repo->notSyncSCM)) return $this->loadModel('git')->updateCommit($repo, $commentGroup, false);
-
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $jobs = zget($commentGroup, $repo->id, array());
-
-        $accountPairs  = array();
-        $userList      = $this->loadModel($repo->SCM)->apiGetUsers($repo->gitService);
-        $accountIDPairs = $this->loadModel('pipeline')->getUserBindedPairs($repo->gitService, strtolower($repo->SCM), 'openID,account');
-        foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($accountIDPairs, $gitlabUser->id, '');
+        $accountPairs = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
 
         foreach($data->commits as $commit)
         {
+            if($this->isRecordedWebhookCommit($commit)) continue;
+
             $time = zget($commit, 'timestamp', '');
             if(isset($commit->author->when)) $time = $commit->author->when;
 
@@ -1915,19 +1851,8 @@ class repoModel extends model
             }
 
             $objects = $this->parseComment($log->msg);
-            $this->saveAction2PMS($objects, $log, $repo->path, $repo->encoding, 'git', $accountPairs);
+            $this->saveAction2PMS($objects, $log, '', 'utf-8', 'git', $accountPairs);
 
-            foreach($jobs as $job)
-            {
-                foreach(explode(',', $job->comment) as $comment)
-                {
-                    if(strpos($log->msg, $comment) !== false)
-                    {
-                        $this->loadModel('job')->exec($job->id, array(), 'commit');
-                        continue 2;
-                    }
-                }
-            }
             if(!empty($objects['stories']) || !empty($objects['tasks']) || !empty($objects['bugs']))
             {
                 $historyLog = new stdclass();
@@ -1995,43 +1920,9 @@ class repoModel extends model
         if(empty($repo->id)) return new stdclass();
 
         $url = new stdClass();
-        if($repo->SCM == 'Subversion')
-        {
-            $url->svn = $repo->path;
-        }
-        elseif($repo->SCM == 'Gitlab')
-        {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitService, (int)$repo->serviceProject);
-            if(isset($project->id))
-            {
-                $url->http = $project->http_url_to_repo ?? '';
-                $url->ssh  = $project->ssh_url_to_repo ?? '';
-            }
-        }
-        elseif($repo->SCM == 'Gitea')
-        {
-            $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
-            if(isset($project->id))
-            {
-                $url->http = $project->clone_url;
-                $url->ssh  = $project->ssh_url;
-            }
-        }
-        elseif($repo->SCM == 'Gogs')
-        {
-            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, (string)$repo->serviceProject);
-            if(isset($project->id))
-            {
-                $url->http = $project->clone_url;
-                $url->ssh  = $project->ssh_url;
-            }
-        }
-        else
-        {
-            $this->scm = $this->app->loadClass('scm');
-            $this->scm->setEngine($repo);
-            $url = $this->scm->getCloneUrl();
-        }
+        $this->scm = $this->app->loadClass('scm');
+        $this->scm->setEngine($repo);
+        $url = $this->scm->getCloneUrl();
 
         return $url;
     }
@@ -2049,7 +1940,7 @@ class repoModel extends model
     public function getFileCommits(object $repo, string $branch, string $parent = ''): array
     {
         /* Get file commits by repo. */
-        if($repo->SCM != 'Subversion' && empty($branch)) $branch = $this->cookie->repoBranch;
+        if(empty($branch)) $branch = $this->cookie->repoBranch;
 
         $parent = '/' . ltrim($parent, '/');
         if($repo->prefix) $parent = rtrim($repo->prefix . $parent, '/');
@@ -2059,9 +1950,8 @@ class repoModel extends model
             ->beginIF($repo->SCM != 'Subversion' && $branch)->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')->fi()
             ->where('t1.repo')->eq($repo->id)
             ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-            ->beginIF($repo->SCM != 'Subversion' && $branch)->andWhere('t3.branch')->eq($branch)->fi()
-            ->beginIF($repo->SCM == 'Subversion')->andWhere('t1.parent')->eq("$parent")->fi()
-            ->beginIF($repo->SCM != 'Subversion')->andWhere('t1.parent')->like("$parent%")->fi()
+            ->beginIF($branch)->andWhere('t3.branch')->eq($branch)->fi()
+            ->andWhere('t1.parent')->like("$parent%")
             ->orderBy('t2.`time` asc')
             ->fetchAll('path');
 
@@ -2126,39 +2016,19 @@ class repoModel extends model
         $allFiles = array();
         if(is_null($diffs))
         {
-            if($repo->SCM != 'Subversion' && empty($branch)) $branch = $this->cookie->repoBranch;
+            if(empty($branch)) $branch = $this->cookie->repoBranch;
             $files = $this->dao->select('t1.path,t2.time,t1.action')->from(TABLE_REPOFILES)->alias('t1')
                 ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
                 ->leftJoin(TABLE_REPOBRANCH)->alias('t3')->on('t2.id=t3.revision')
                 ->where('t1.repo')->eq($repo->id)
                 ->andWhere('t1.type')->eq('file')
                 ->andWhere('left(t2.`comment`, 12)')->ne('Merge branch')
-                ->beginIF($repo->SCM != 'Subversion' && $branch)->andWhere('t3.branch')->eq($branch)->fi()
+                ->beginIF($branch)->andWhere('t3.branch')->eq($branch)->fi()
                 ->orderBy('t2.`time` asc')
                 ->fetchAll('path');
 
-            $removeDirs = array();
-            if($repo->SCM == 'Subversion')
-            {
-                $removeDirs = $this->dao->select('t2.time,t1.path')->from(TABLE_REPOFILES)->alias('t1')
-                    ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.revision=t2.id')
-                    ->where('t1.repo')->eq($repo->id)
-                    ->andWhere('t1.type')->eq('dir')
-                    ->andWhere('t1.action')->eq('D')
-                    ->fetchPairs();
-            }
-
             foreach($files as $file)
             {
-                foreach($removeDirs as $removeTime => $dir)
-                {
-                    if(strpos($file->path, $dir . '/') === 0 and $file->time <= $removeTime)
-                    {
-                        $file->action = 'D';
-                        break;
-                    }
-                }
-
                 if($file->action != 'D') $allFiles[] = $file->path;
             }
         }
@@ -2352,114 +2222,40 @@ class repoModel extends model
     {
         $action = strtolower($action);
 
-        if($action == 'execjob')    return common::hasPriv('sonarqube', $action) && !$repo->exec;
-        if($action == 'reportview') return common::hasPriv('sonarqube', $action) && !$repo->report;
-        if(!commonModel::hasPriv('repo', $action)) return false;
+        if($action == 'execjob')      return common::hasPriv('sonarqube', $action) && !$repo->exec;
+        if($action == 'reportview')   return common::hasPriv('sonarqube', $action) && !$repo->report;
+        if($action == 'deletebranch') return $repo->deletable;
 
         return true;
     }
 
     /**
-     * 获取gitlab项目列表。
-     * Get gitlab projects.
+     * 获取代码库列表。
+     * Get provider repo list.
      *
-     * @param  int    $gitlabID
-     * @param  string $projectFilter
+     * @param  object $provider
+     * @param  string $groupID
+     * @param  bool   $showPairs
      * @access public
      * @return array
      */
-    public function getGitlabProjects(int $gitlabID, string $projectFilter = ''): array
+    public function getProviderRepos(object $provider, bool $showPairs = false): array
     {
-        if($this->app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create')))
+        if(empty($provider->type)) return array();
+        $apiRoot = $this->loadModel('provider')->getApiRoot($provider);
+        if(empty($apiRoot)) return array();
+
+        $getRepoFunc = 'get' . $provider->type . 'Repos';
+        $repos       = $this->$getRepoFunc($apiRoot);
+
+        if(!$showPairs) return $repos;
+
+        $pairs = array();
+        foreach($repos as $repo)
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, 'true', 0, 0, false);
+            $pairs[$repo->id] = $repo->name;
         }
-        else
-        {
-            $gitlabUser = $this->loadModel('pipeline')->getOpenIdByAccount($gitlabID, 'gitlab', $this->app->user->account);
-            if(!$gitlabUser) return array();
-
-            $projects    = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $projectFilter ? 'false' : 'true');
-            $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
-            foreach($groups as $group) $groupIDList[] = $group->id;
-            if($projectFilter == 'IS_DEVELOPER')
-            {
-                foreach($projects as $key => $project)
-                {
-                    if(!$this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer')) unset($projects[$key]);
-                }
-            }
-        }
-
-        $importedProjects = $this->getImportedProjects($gitlabID);
-        $projects         =  array_filter($projects, function($project) use ($importedProjects) { return !in_array($project->id, $importedProjects); });
-
-        return $projects;
-    }
-
-    /**
-     * Get repo groups.
-     *
-     * @param  int    $serverID
-     * @param  int    $groupID
-     * @access public
-     * @return string|array|false
-     */
-    public function getGroups(int $serverID, int|string $groupID = 0): string|array|false
-    {
-        $server = $this->loadModel('pipeline')->getByID($serverID);
-        if(empty($server->type)) return false;
-
-        $getGroupFunc = 'get' . $server->type . 'Groups';
-        $groups       = $this->$getGroupFunc($serverID);
-
-        if($groupID !== 0)
-        {
-            foreach($groups as $group)
-            {
-                if($group['value'] == $groupID) return $group['text'];
-            }
-            return false;
-        }
-
-        return $groups;
-    }
-
-    /**
-     * Get gitlab groups.
-     *
-     * @param  int    $gitlabID
-     * @access public
-     * @return void
-     */
-    public function getGitlabGroups(int $gitlabID): array
-    {
-        $groups = $this->loadModel('gitlab')->apiGetGroups($gitlabID, 'name_asc');
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-        return $options;
-    }
-
-    /**
-     * Get gitea groups.
-     *
-     * @param  int $giteaID
-     * @access public
-     * @return array
-     */
-    public function getGiteaGroups(int $giteaID): array
-    {
-        $groups = $this->loadModel('gitea')->apiGetGroups($giteaID);
-        $options = array();
-        foreach($groups as $group)
-        {
-            $options[] = array('text' => $group->username, 'value' => $group->id);
-        }
-        return $options;
+        return $pairs;
     }
 
     /**
@@ -2489,44 +2285,6 @@ class repoModel extends model
                 $this->dao->update(TABLE_REPO)->set('lastCommit')->eq($lastCommitDate)->where('id')->eq($repoID)->exec();
             }
         }
-    }
-
-    /**
-     * 检查gitea连接。
-     * Check gitea connection.
-     *
-     * @param  string      $scm
-     * @param  string      $name
-     * @param  int|string  $serviceHost
-     * @param  int|string  $serviceProject
-     * @access public
-     * @return string|false
-     */
-    public function checkGiteaConnection(string $scm, string $name, int|string $serviceHost, int|string $serviceProject): string|false
-    {
-        if($name != '' and $serviceProject != '')
-        {
-            $module  = strtolower($scm);
-            $project = $this->loadModel($module)->apiGetSingleProject($serviceHost, $serviceProject);
-            if(isset($project->tokenCloneUrl))
-            {
-                $path = $this->app->getAppRoot() . 'www/data/repo/' . $name . '_' . $module;
-                if(!realpath($path))
-                {
-                    $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$name}.log\" 2>&1 &";
-                    if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
-                    exec($cmd);
-                }
-                return $path;
-            }
-            else
-            {
-                dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
-                return false;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -2977,18 +2735,23 @@ class repoModel extends model
      * Get repo list by condition.
      *
      * @param  string    $repoQuery
-     * @param  string    $SCM
+     * @param  int       $space
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getListByCondition(string $repoQuery, string $SCM, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getListByCondition(string $repoQuery, int $space = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
+        $userSpaces = $this->loadModel('space')->getPairs($this->app->user->account);
+        if(empty($userSpaces)) return array();
+
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
+            ->beginIF($space)->andWhere('spaceID')->eq($space)->fi()
             ->beginIF(!empty($repoQuery))->andWhere($repoQuery)->fi()
-            ->beginIF($SCM)->andWhere('SCM')->in($SCM)->fi()
+            ->beginIF(!empty($userSpaces) && !$space)->andWhere('spaceID')->in(array_keys($userSpaces))->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -3053,31 +2816,31 @@ class repoModel extends model
     public function unlinkObjectBranch(int $objectID, string $objectType, int $repoID, string $branch): bool
     {
         $this->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('relation')->eq('linkrepobranch')
-            ->andWhere('AID')->eq($objectID)
+            ->where('relation')->eq('linkrepobranch')
+            ->beginIF($objectType)->andWhere('AType')->eq($objectType)->fi()
+            ->beginIF($objectID)->andWhere('AID')->eq($objectID)->fi()
             ->andWhere('BID')->eq($repoID)
             ->andWhere('BType')->eq($branch)
             ->exec();
         return !dao::isError();
     }
 
+
     /**
      * 通过产品ID和代码库类型获取代码库列表。
      * Get repo list by product id.
      *
      * @param  int    $productID
-     * @param  string $scm
      * @param  int    $limit
      * @access public
      * @return array
      */
-    public function getListByProduct(int $productID, string $scm = '', int $limit = 0): array
+    public function getListByProduct(int $productID, int $limit = 0): array
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->andWhere("FIND_IN_SET({$productID}, `product`)")
-            ->beginIF($scm)->andWhere('SCM')->in($scm)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
     }
@@ -3094,6 +2857,7 @@ class repoModel extends model
         $importedProjects = $this->dao->select('serviceProject')->from(TABLE_REPO)
             ->where('serviceHost')->eq($hostID)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('status')->ne('importing')
             ->fetchAll('serviceProject');
 
         if(dao::isError()) return array();
@@ -3114,34 +2878,16 @@ class repoModel extends model
         $menuGroup = $this->app->tab == 'project' ? array('project', 'waterfall') : array('execution');
         $repoPairs = $this->loadModel('repo')->getRepoPairs($this->app->tab, $objectID);
 
-        $showMR     = false;
-        $showTag    = false;
-        $showBranch = false;
-        $showCommit = false;
-        $hasTagSCM  = array_map('strtolower', $this->config->repo->notSyncSCM);
-        foreach($repoPairs as $repoID => $repoName)
-        {
-            preg_match('/^\[(\w+)\]/', $repoName, $matches);
-
-            $result = isset($matches[1]) ? $matches[1] : '';
-            if($repoID == $this->session->repoID && in_array($result, $hasTagSCM))
-            {
-                $showTag    = true;
-                $showBranch = true;
-            }
-            if(in_array($result, $this->config->repo->gitServiceList)) $showMR = true;
-        }
-
-        $showMR     = $showMR     && common::hasPriv('mr', 'browse');
-        $showTag    = $showTag    && common::hasPriv('repo', 'browsetag');
-        $showBranch = $showBranch && common::hasPriv('repo', 'browsebranch');
-        $showReview = $repoPairs  && common::hasPriv('repo', 'review');
-        $showCommit = $repoPairs  && common::hasPriv('repo', 'log');
+        $showMR     = $repoPairs && common::hasPriv('ppm', 'browse');
+        $showTag    = $repoPairs && common::hasPriv('repo', 'browsetag');
+        $showBranch = $repoPairs && common::hasPriv('repo', 'browsebranch');
+        $showReview = $repoPairs && common::hasPriv('repo', 'review');
+        $showCommit = $repoPairs && common::hasPriv('repo', 'log');
         foreach($menuGroup as $module)
         {
             if(!isset($this->lang->{$module}->menu->devops['subMenu'])) continue;
 
-            if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->mr);
+            if(!$showMR)     unset($this->lang->{$module}->menu->devops['subMenu']->ppm);
             if(!$showTag)    unset($this->lang->{$module}->menu->devops['subMenu']->tag);
             if(!$showBranch) unset($this->lang->{$module}->menu->devops['subMenu']->branch);
             if(!$showReview) unset($this->lang->{$module}->menu->devops['subMenu']->review);
@@ -3162,5 +2908,604 @@ class repoModel extends model
     {
         $pattern = "/^[a-z_]{1}[a-z0-9_\-\.]*$/i";
         return preg_match($pattern, $name);
+    }
+
+    /**
+     * 获取指定代码库的所有成员。
+     * Get all members.
+     *
+     * @param  int $repoID
+     * @access public
+     * @return array
+     */
+    public function getRepoUsers(int $repoID): array
+    {
+        return $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)
+            ->where('repo')->eq($repoID)
+            ->fetchPairs('account', 'account');
+    }
+
+    /**
+     * 获取指定代码库的所有成员.
+     * Get all members.
+     *
+     * @param  object $repo
+     * @access public
+     * @return array
+     */
+    public function getRepoMembers(object $repo): array
+    {
+        if(empty($repo->members)) return array();
+
+        $repoMembers = !empty($repo->members) ? $this->loadModel('user')->getListByAccounts(array_keys($repo->members)) : array();
+
+        return !empty($repoMembers) ? array_column($repoMembers, 'realname', 'account') : array();
+    }
+
+    /**
+     * 更新用户。
+     * Update users.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return bool
+     */
+    public function updateMembers(int $repoID, array $members): bool
+    {
+        $groupUsers = $this->dao->select('account')->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->fetchPairs('account');
+        $newUsers   = array_diff($members, $groupUsers);
+        $delUsers   = array_diff($groupUsers, $members);
+
+        if(!empty($delUsers)) $this->dao->delete()->from(TABLE_DEVOPSREPOUSER)->where('`repo`')->eq($repoID)->andWhere('account')->in($delUsers)->exec();
+        if(empty($newUsers)) return !dao::isError();
+
+        $data = new stdclass();
+        $data->repo = $repoID;
+        foreach($newUsers as $account)
+        {
+            $data->account = $account;
+            $this->dao->insert(TABLE_DEVOPSREPOUSER)->data($data)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * 获取指定空间下的所有代码库。
+     * Get all repos by spaces.
+     *
+     * @param  array $spaceIdList
+     * @access public
+     * @return array
+     */
+    public function getListBySpaces(array $spaceIdList): array
+    {
+        return $this->dao->select('t1.*')->from(TABLE_REPO)->alias('t1')
+            ->leftJoin(TABLE_SPACE)->alias('t2')->on('t1.spaceID = t2.id')
+            ->where('t1.spaceID')->in($spaceIdList)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.status')->ne('importing')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get review.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return array
+     */
+    public function getReview($repoID, $entry, $revision)
+    {
+        $reviews = array();
+        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')
+            ->on('t1.openedBy = t2.account')
+            ->where('t1.repo')->eq($repoID)
+            ->beginIF($entry)->andWhere('t1.entry')->eq($entry)->fi()
+            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
+            ->andWhere('t1.mr')->eq(0)
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id', false);
+
+        $comments = $this->getComments(array_keys($bugs));
+        foreach($bugs as $bug)
+        {
+            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
+            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
+            $lines = explode(',', trim($bug->lines, ','));
+            $line  = $lines[0];
+            $reviews[$line]['bugs'][$bug->id] = $bug;
+
+            if(isset($comments[$bug->id])) $reviews[$line]['comments'] = $comments;
+        }
+
+        return $reviews;
+    }
+
+    /**
+     * Get review comments.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function getComments($bugIDList)
+    {
+        $users    = $this->dao->select('account,realname,nickname,avatar')->from(TABLE_USER)->fetchAll('account');
+        $comments = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('bug')
+            ->andWhere('objectID')->in($bugIDList)
+            ->andWhere('action')->eq('commented')
+            ->fetchGroup('objectID', 'id');
+
+        foreach($bugIDList as $bugID)
+        {
+            if(!isset($comments[$bugID])) continue;
+
+            foreach($comments[$bugID] as $comment)
+            {
+                $comment->user = zget($users, $comment->actor);
+                $comment->realname = zget($users, $comment->actor, $comment->actor, $users[$comment->actor]->realname);
+                $comment->edit = $comment->actor == $this->app->user->account ? true : false;
+            }
+        }
+        return $comments;
+    }
+
+    /**
+     * Get bugs by repo.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  int    $executionID
+     * @param  array  $bugs
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugsByRepo($repoID = 0, $browseType = '', $executionID = 0, $bugs = array(), $orderBy = 'id_desc', $pager = null)
+    {
+        if($this->app->tab == 'project' && $executionID)
+        {
+            $executionIDList = $this->loadModel('execution')->fetchExecutionList($executionID, 'all');
+            if(!empty($executionIDList)) $executionID = array_keys($executionIDList);
+        }
+
+        dao::$filterTpl = 'never';
+        return $this->dao->select('t1.*, t2.name AS executionName, t3.name as productName')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id and t2.isTpl = '0'")
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.issueKey')->eq('')
+            ->beginIF($repoID)->andWhere('t1.repo')->eq($repoID)->fi()
+            ->beginIF($executionID)
+            ->andWhere('t1.execution')->in($executionID)
+            ->andWhere('t1.repo')->gt('0')
+            ->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.product')->in($this->app->user->view->products)->fi()
+            ->beginIF($browseType == 'assigntome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'openedbyme')->andWhere('t1.openedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'resolvedbyme')->andWhere('t1.resolvedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'assigntonull')->andWhere('t1.assignedTo')->eq('')->fi()
+            ->beginIF($browseType == 'unresolved')->andWhere('t1.resolvedBy')->eq('')->fi()
+            ->beginIF($browseType == 'unclosed')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF(!empty($bugs))->andWhere('t1.id')->in($bugs)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id', false);
+    }
+
+    /**
+     * Save bug.
+     *
+     * @param  int    $repoID
+     * @param  object $bug
+     * @access public
+     * @return array
+     */
+    public function saveBug($repoID, $bug)
+    {
+        if($bug->execution)
+        {
+            $execution    = $this->loadModel('execution')->getByID($bug->execution);
+            $bug->project = $execution->project;
+        }
+
+        $this->lang->bug->title = $this->lang->repo->title;
+        $this->dao->insert(TABLE_BUG)->data($bug)
+            ->batchCheck('title,product', 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $bugID = $this->dao->lastInsertID();
+        $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
+        helper::setCookie("repoPairs[$repoID]", $bug->product);
+
+        return array(
+            'result'     => 'success',
+            'id'         => $bugID,
+            'realname'   => $this->app->user->realname,
+            'openedDate' => substr($bug->openedDate, 5, 11),
+            'edit'       => true,
+            'delete'     => true,
+            'lines'      => $bug->lines,
+            'line'       => $this->post->begin,
+            'steps'      => $bug->steps,
+            'title'      => $bug->title,
+            'file'       => $bug->entry,
+            'revision'   => $bug->v2,
+        );
+    }
+
+    /**
+     * Update bug.
+     *
+     * @param  int    $bugID
+     * @param  string $title
+     * @access public
+     * @return string
+     */
+    public function updateBug($bugID, $title)
+    {
+        $this->dao->update(TABLE_BUG)->set('title')->eq($title)->where('id')->eq($bugID)->exec();
+        return $title;
+    }
+
+    /**
+     * Update comment.
+     *
+     * @param  int    $commentID
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function updateComment($commentID, $comment)
+    {
+        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
+        return $comment;
+    }
+
+    /**
+     * Delete comment.
+     *
+     * @param  int    $commentID
+     * @access public
+     * @return void
+     */
+    public function deleteComment($commentID)
+    {
+        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
+    }
+
+    /**
+     * Get last review info.
+     *
+     * @param  string $entry
+     * @access public
+     * @return object
+     */
+    public function getLastReviewInfo($entry)
+    {
+        return $this->dao->select('*')->from(TABLE_BUG)->where('entry')->eq($entry)->orderby('id_desc')->fetch();
+    }
+
+    /**
+     * Get linked object ids by comment.
+     *
+     * @param  int    $comment
+     * @access public
+     * @return array
+     */
+    public function getLinkedObjects($comment)
+    {
+        $rules   = $this->processRules();
+        $stories = array();
+        $tasks   = array();
+        $bugs    = array();
+
+        $storyReg = '/' . $rules['storyReg'] . '/i';
+        $taskReg  = '/' . $rules['taskReg'] . '/i';
+        $bugReg   = '/' . $rules['bugReg'] . '/i';
+
+        if(preg_match_all($taskReg, $comment, $matches))
+        {
+            foreach($matches[3] as $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+            }
+            $tasks = $idMatches[0];
+        }
+        if(preg_match_all($bugReg, $comment, $matches))
+        {
+            foreach($matches[3] as $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+            }
+            $bugs = $idMatches[0];
+        }
+        if(preg_match_all($storyReg, $comment, $matches))
+        {
+            foreach($matches[3] as $idList)
+            {
+                preg_match_all('/\d+/', $idList, $idMatches);
+            }
+            $stories = $idMatches[0];
+        }
+        return array('stories' => $stories, 'tasks' => $tasks, 'bugs' => $bugs);
+    }
+
+    /**
+     * Get diff file tree.
+     *
+     * @param  object $diffs
+     * @access public
+     * @return void
+     */
+    public function getDiffFileTree($diffs = null)
+    {
+        $files = array();
+        foreach($diffs as $diff) $files[] = $diff->fileName;
+
+        return $this->buildFileTree($files);
+    }
+
+    /**
+     * 获取应用列表。
+     * Get app list.
+     *
+     * @param  string $systemQuery
+     * @param  int    $space
+     * @access public
+     * @return array
+     */
+    public function getSystemList(string $systemQuery = '', int $space = 0): array
+    {
+        $spaceProducts = $this->loadModel('space')->getProductsBySpace($space);
+        return $this->dao->select('t1.`id` as id, t1.`name` as name, t1.`latestRelease` as latestRelease, t1.`product` as product, t1.`status` as status, t3.`status` as deployStatus, t3.`createdDate` as deployCreatedDate')->from(TABLE_SYSTEM)->alias('t1')
+            ->leftJoin(TABLE_DEPLOYPRODUCT)->alias('t2')->on('t1.`latestRelease` = t2.`release`')
+            ->leftJoin(TABLE_DEPLOY)->alias('t3')->on('t2.`deploy` = t3.`id` and t2.`release` > 0')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t3.deleted', true)->eq('0')
+            ->orWhere('t3.id')->isNULL()
+            ->markRight(true)
+            ->beginIF(!empty($spaceProducts))->andWhere('t1.product')->in($spaceProducts)->fi()
+            ->beginIF(!empty($systemQuery))->andWhere($systemQuery)->fi()
+            ->orderBy('deployCreatedDate_asc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 获取GitFox代码库列表。
+     * Get gitfox repo list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGitFoxRepos(): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->where('status')->ne('importing')
+            ->fetchAll('id');
+    }
+
+    /**
+     * 构建应用搜索表单字段。
+     * Build system search form field.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return void
+     */
+    public function buildSystemSearchForm(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig = $this->config->repo->system->search;
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('systemSearch', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['params']['product']['values'] = $this->loadModel('product')->getPairs('', 0, '', 'all');
+
+        $searchConfig['queryID']   = (int)$queryID;
+        $searchConfig['actionURL'] = $actionURL;
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
+
+    /**
+     * 获取代码库键值对。
+     * Get repo pairs.
+     *
+     * @access public
+     * @return void
+     * @return array
+     */
+    public function getPairs(): array
+    {
+        return $this->dao->select('*')->from(TABLE_REPO)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('importing')->fetchPairs('id', 'name');
+    }
+
+    /**
+     * 获取gitlab项目列表。
+     * Get gitlab projects.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGitLabRepos(string $apiRoot): array
+    {
+        if(!$apiRoot) return array();
+
+        $url = sprintf($apiRoot, "/projects");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&simple=true&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 获取Gitea项目列表。
+     * Get Gitea projects.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGiteaRepos(string $apiRoot): array
+    {
+        if(empty($apiRoot)) return array();
+
+        $url = sprintf($apiRoot, "/repos/search");
+
+        $page       = 1;
+        $allResults = array();
+        while(true)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(empty($results->data) || !is_array($results->data)) break;
+
+            $allResults = array_merge($allResults, $results->data);
+            if(count($results->data) < 50) break;
+
+            $page ++;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 获取Gogs代码库列表。
+     * Get gogs repo list.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGogsRepos(string $apiRoot): array
+    {
+        if(empty($apiRoot)) return array();
+
+        $url = sprintf($apiRoot, "/user/repos");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 50) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * 导入代码库。
+     * Import repo.
+     *
+     * @param  object $formData
+     * @access public
+     * @return object|false
+     */
+    public function import(object $formData): object|false
+    {
+        if(empty($formData->providerID)) return false;
+
+        $provider = $this->loadModel('provider')->fetchByID((int)$formData->providerID);
+        if(empty($provider)) return false;
+
+         /* 提取嵌套三元：仅在非 Subversion 时按 provider 类型拼仓库标识并调用接口取仓库，与原三元短路语义一致。 */
+        $repo = array();
+        if($provider->type != 'Subversion')
+        {
+            $repoIdentifier = $provider->type == 'GitLab' ? $formData->repo : $formData->organize . '/' . $formData->repo;
+            $repo = $this->getProviderRepo($provider, $repoIdentifier);
+        }
+        $params = new stdClass();
+        $params->acl      = $formData->acl;
+        $params->name     = $formData->name;
+        $params->desc     = $formData->desc;
+        $params->product  = $formData->product;
+        $params->spaceID  = (int)$formData->space;
+        $params->mirror   = $formData->mirror != 'writable';
+        $params->provider = $provider;
+        $params->provider->host = $provider->url;
+        if($provider->type == 'Subversion')
+        {
+            if(strpos($provider->url, 'file://') === 0)
+            {
+                $path = explode('///', $provider->url);
+                $params->provider->host = 'file://';
+                $params->provider->slug = isset($path[1]) ? $path[1] : '';
+            }
+            elseif(strpos($provider->url, 'svn://') === 0)
+            {
+                $path = explode('//', $provider->url);
+                $params->provider->host     = 'svn:/';
+                $params->provider->slug     = isset($path[1]) ? $path[1] : '';
+                $params->provider->password = $formData->password;
+                $params->provider->username = $formData->account;
+            }
+            else
+            {
+                $path = parse_url($provider->url);
+                if(empty($path)) return false;
+                $params->provider->host     = $path['scheme'] . '://' . $path['host'];
+                $params->provider->password = $formData->password;
+                $params->provider->username = $formData->account;
+                $params->provider->slug     = $path['path'];
+            }
+        }
+        else
+        {
+            $params->provider->projectID = (string)zget($repo, 'id', 0);
+            $params->provider->slug      = $provider->type == 'GitLab' ? zget($repo, 'path_with_namespace', '') : zget($repo, 'full_name', '');
+        }
+
+        $result = $this->loadModel('gitfox')->request('/repos/import', 'POST', $params);
+        if(dao::isError()) return false;
+
+        return $result;
+    }
+
+    /**
+     * 获取代码库详情。
+     * Get repo detail.
+     *
+     * @param  object $provider
+     * @param  string $repoID
+     * @access public
+     * @return object|false
+     */
+    public function getProviderRepo(object $provider, string $repoID): object|false
+    {
+        if(empty($provider->type)) return false;
+        $apiRoot = $this->loadModel('provider')->getApiRoot($provider);
+        if(empty($apiRoot)) return false;
+
+        $url  = $provider->type == 'GitLab' ? sprintf($apiRoot, "/projects/{$repoID}") : sprintf($apiRoot, "/repos/{$repoID}");
+        $repo = json_decode(commonModel::http($url));
+        if(empty($repo) || isset($repo->message)) return false;
+
+        return $repo;
     }
 }

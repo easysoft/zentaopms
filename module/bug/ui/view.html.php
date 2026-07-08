@@ -13,6 +13,17 @@ namespace zin;
 global $app;
 
 include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+if($app->tab == 'devops')
+{
+    query('#heading')->append(
+        dropmenu
+        (
+            set::module('repo'),
+            set::tab('repo'),
+            set::url(createLink('repo', 'ajaxGetDropMenu', "objectID=0&module=repo&method=review"))
+        )
+    );
+}
 
 /* 检查是否需要确认撤销/移除。*/
 /* Build confirmeObject. */
@@ -37,7 +48,7 @@ $canModify    = !empty($project) ? common::canModify('project', $project) : true
 $isInModal    = isInModal();
 $canCreateBug = $canModify && $this->app->tab != 'devops' && hasPriv('bug', 'create');
 $canViewRepo  = hasPriv('repo', 'revision');
-$canViewMR    = hasPriv('mr', 'view');
+$canViewMR    = hasPriv('ppm', 'view');
 $canViewBug   = hasPriv('bug', 'view');
 $operateList  = $this->loadModel('common')->buildOperateMenu($bug);
 
@@ -68,7 +79,7 @@ if(!$bug->deleted && $canModify)
     }
 
     $this->loadModel('repo');
-    $hasRepo = $this->repo->getListByProduct($bug->product, implode(',', $config->repo->gitServiceTypeList), 1);
+    $hasRepo = $this->repo->getListByProduct($bug->product, 1);
     foreach($actions as $key => $action)
     {
         if(!$hasRepo && isset($action['icon']) && $action['icon'] == 'treemap')

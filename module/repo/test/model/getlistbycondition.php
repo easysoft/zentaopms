@@ -42,6 +42,6 @@ r(count($repoTest->getListByConditionTest("name='testHtml'", ''))) && p() && e('
 r(count($repoTest->getListByConditionTest('', 'Gitlab'))) && p() && e('5');
 $results = $repoTest->getListByConditionTest('', '', 'id_asc');
 r(array_values($results)) && p('0:id') && e('1');
-r(count($repoTest->getListByConditionTest('', '', 'id_desc', $pager))) && p() && e('2');
+r(count($repoTest->getListByConditionTest('', '', 0, 'id_desc', $pager))) && p() && e('2');
 r(count($repoTest->getListByConditionTest("name like '%test%'", ''))) && p() && e('5');
 r(count($repoTest->getListByConditionTest("name = 'nonexistent'", ''))) && p() && e('0');

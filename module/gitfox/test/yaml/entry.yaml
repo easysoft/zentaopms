@@ -1,0 +1,33 @@
+---
+title: zt_entry 表数据 - GitFox 服务器入口
+desc: 为 gitfox::getServer() 提供 code=gitfox 的入口记录
+author: Codex
+version: "1.0"
+
+fields:
+- field: id
+  range: 1
+- field: name
+  range: GitFox入口
+- field: account
+  range: admin
+- field: code
+  range: gitfox
+- field: key
+  range: testkey1234567890testkey1234567
+- field: freePasswd
+  range: "0"
+- field: ip
+  range: '*'
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: '[2026-01-01 00:00:00]'
+- field: calledTime
+  range: "0"
+- field: editedBy
+  range: admin
+- field: editedDate
+  range: '[2026-01-01 00:00:00]'
+- field: deleted
+  range: "0"

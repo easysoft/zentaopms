@@ -2101,7 +2101,7 @@ class taskZen extends task
     protected function checkGitRepo(int $executionID): bool
     {
         $this->loadModel('repo');
-        $repoList   = $this->repo->getListBySCM(implode(',', $this->config->repo->gitServiceTypeList), 'haspriv');
+        $repoList   = $this->repo->getListByPriv('haspriv');
         $productIds = $this->loadModel('product')->getProductIDByProject($executionID, false);
         foreach($repoList as $repo)
         {

@@ -271,7 +271,7 @@ class yaml
      */
     public function buildYamlFile($tableName)
     {
-        $yamlData['title']              = 'table zt_' . $tableName;
+        $yamlData['title']              = 'table ' . $this->getDBTableName($tableName);
         $yamlData['author']             = 'automated export';
         $yamlData['version']            = '1.0';
         $yamlData['fields'][0]['field'] = 'id';
@@ -400,6 +400,21 @@ class yaml
     }
 
     /**
+     * Get the real database table name.
+     *
+     * @param  string $tableName
+     * @access private
+     * @return string
+     */
+    private function getDBTableName($tableName)
+    {
+        if(strpos($tableName, 'ops_') === 0) return $tableName;
+        if(strpos($tableName, $this->config->db->prefix) === 0) return $tableName;
+
+        return $this->config->db->prefix . $tableName;
+    }
+
+    /**
      * Build yaml file and insert table.
      *
      * @param  int     $rows
@@ -425,7 +440,7 @@ class yaml
             $runtimeRoot = dirname(dirname(__FILE__)) . '/runtime/';
             $zdPath      = $runtimeRoot . 'zd';
             $configYaml  = $runtimeRoot . 'tmp/config.yaml';
-            $tableName   = $this->config->db->prefix . $this->tableName;
+            $tableName   = $this->getDBTableName($this->tableName);
 
             $yamlFile = $this->mergeYaml($runFileDir, $runFileName);
 
@@ -497,7 +512,7 @@ class yaml
      */
     function insertDB($sqlPath, $tableName, $isClear = true, $rows = null)
     {
-        $tableName = $this->config->db->prefix . $tableName;
+        $tableName = $this->getDBTableName($tableName);
         $dbName    = $this->config->db->name;
         $dbHost    = $this->config->db->host;
         $dbPort    = $this->config->db->port;
@@ -512,7 +527,7 @@ class yaml
         {
             /* Truncate table to reset auto increment number. */
             system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
-            if($tableName == $this->config->db->prefix . 'action') system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->config->db->prefix . 'actionrecent'));
+            if($tableName == $this->getDBTableName('action')) system(sprintf("mysql -u%s -p%s -h%s -P%s %s -e 'truncate %s' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->getDBTableName('actionrecent')));
             if($rows === 0) return;
         }
 
@@ -536,7 +551,7 @@ class yaml
     function insertDM($sqlPath, $tableName, $isClear = true, $rows = null)
     {
         global $app;
-        $tableName = $this->config->db->prefix . $tableName;
+        $tableName = $this->getDBTableName($tableName);
         $dbName    = $this->config->db->name;
         $dbHost    = $this->config->db->host;
         $dbPort    = $this->config->db->port;
@@ -552,7 +567,7 @@ class yaml
         {
             /* Truncate table to reset auto increment number. */
             shell_exec(sprintf("$disql %s/%s@%s:%s -E 'TRUNCATE TABLE %s.%s;' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $tableName));
-            if($tableName == $this->config->db->prefix . 'action') shell_exec(sprintf("$disql %s/%s@%s:%s -E 'TRUNCATE TABLE %s.%s;' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->config->db->prefix . 'actionrecent'));
+            if($tableName == $this->getDBTableName('action')) shell_exec(sprintf("$disql %s/%s@%s:%s -E 'TRUNCATE TABLE %s.%s;' 2>/dev/null", $dbUser, $dbPWD, $dbHost, $dbPort, $dbName, $this->getDBTableName('actionrecent')));
             if($rows === 0) return;
         }
 
@@ -641,7 +656,7 @@ class yaml
             return exit(1);
         }
         $fieldPairs  = array();
-        $table       = $this->config->db->prefix . $this->tableName;
+        $table       = $this->getDBTableName($this->tableName);
         $tableFields = $this->dao->query("DESC {$table}")->fetchAll();
         foreach($tableFields as $field) $fieldPairs[] = $field->Field;
 

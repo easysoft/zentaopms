@@ -1491,15 +1491,17 @@ class taskModel extends model
      * Get the task information from the task ID list.
      *
      * @param  array    $taskIdList
+     * @param  string   $orderBy
      * @access public
      * @return object[]
      */
-    public function getByIdList(array $taskIdList = array()): array
+    public function getByIdList(array $taskIdList = array(), string $orderBy = ''): array
     {
         if(empty($taskIdList)) return array();
         return $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($taskIdList)
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
             ->fetchAll('id', false);
     }
 

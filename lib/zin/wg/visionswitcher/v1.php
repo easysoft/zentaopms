@@ -24,7 +24,8 @@ class visionSwitcher extends wg
         'rnd'     => 'remote',
         'or'      => 'or',
         'manager' => 'manager',
-        'ipd'     => 'ipd'
+        'ipd'     => 'ipd',
+        //'devops'  => 'devops'
     );
 
     protected function getVisionIcon(string $vision): string
@@ -74,6 +75,7 @@ class visionSwitcher extends wg
         if(!isset($user->visions)) $user->visions = trim($config->visions, ',');
 
         $currentVision = $app->config->vision;
+        $currentSpace  = $app->config->devopsSpace;
         $userVisions   = array_filter(explode(',', $user->visions));
         $configVisions = array_filter(explode(',', trim($config->visions, ',')));
 
@@ -109,16 +111,36 @@ class visionSwitcher extends wg
             'titleClass' => 'font-normal',
             'text' => $lang->switchTo
         );
+
+        $devopsItems = array();
+        $spaces = array();
+        $gitfoxServer = $app->control->loadModel('gitfox')->getServer();
+        if($gitfoxServer) $spaces = $app->control->loadModel('space')->getListByAccount($user->account);
+        if(!empty($spaces))
+        {
+            foreach($spaces as $space)
+            {
+                $devopsItems[] = array
+                (
+                    'selected'     => $currentSpace == $space->id,
+                    'trailingIcon' => $currentSpace == $space->id ? 'check' : '',
+                    'url'          => "javascript:selectVision('devops', '$space->id')",
+                    'data-type'    => 'ajax',
+                    'text'         => $space->name,
+                );
+            }
+        }
         foreach($userVisions as $vision)
         {
             $items[] = array
             (
-                'selected'  => $currentVision == $vision,
-                'trailingIcon'  => $currentVision == $vision ? 'check' : '',
-                'url'       => "javascript:selectVision('$vision')",
-                'icon'      => $this->getVisionIcon($vision),
-                'data-type' => 'ajax',
-                'text'      => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
+                'selected'     => $currentVision == $vision,
+                'trailingIcon' => $currentVision == $vision && $vision != 'devops' ? 'check' : '',
+                'url'          => $vision == 'devops' ? null : "javascript:selectVision('$vision')",
+                'icon'         => $this->getVisionIcon($vision),
+                'data-type'    => 'ajax',
+                'text'         => isset($lang->visionList[$vision]) ? $lang->visionList[$vision] : $vision,
+                'items'        => $vision == 'devops' && !empty($devopsItems) ? $devopsItems : null,
             );
         }
 

@@ -860,7 +860,7 @@ class treeModel extends model
         $stmt = $this->dao->select('*')->from(TABLE_MODULE)
             ->where('type')->eq('host')
             ->andWhere('deleted')->eq(0)
-            ->orderBy('grade_desc,id_asc')
+            ->orderBy('grade desc, `order` asc')
             ->query();
 
         while($module = $stmt->fetch())

@@ -54,9 +54,24 @@ foreach(array('program', 'product', 'project', 'execution') as $objectType)
     }
 }
 
+$devopsspaceLinkList = array();
+foreach($lang->my->devopsspaceLinkList as $key => $value)
+{
+    list($module, $method) = explode('-', $key);
+    if(common::hasPriv($module, $method)) $devopsspaceLinkList[$key] = $value;
+}
+
+$devopsLinkList = array();
+foreach($lang->my->devopsLinkList as $key => $value)
+{
+    list($module, $method) = explode('-', $key);
+    if(common::hasPriv($module, $method)) $devopsLinkList[$key] = $value;
+}
+
 formPanel
 (
     set::labelWidth('140px'),
+    setID('preferenceForm'),
     formGroup
     (
         set::label($lang->my->storyConcept),
@@ -129,6 +144,28 @@ formPanel
                 'doc-lastViewedLib'       => $lang->my->docLinkList['doc-lastViewedLib']
             )),
             set::value($docLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsLink'),
+            set::required(true),
+            set::items($devopsLinkList),
+            set::value($devopsLink)
+        )
+    ),
+    formGroup
+    (
+        set::label($lang->my->devopsspaceLink),
+        picker(
+            set('menu', array('class' => 'normal')),
+            set::name('devopsspaceLink'),
+            set::required(true),
+            set::items($devopsspaceLinkList),
+            set::value($devopsspaceLink)
         )
     ),
     set::submitBtnText($lang->save)

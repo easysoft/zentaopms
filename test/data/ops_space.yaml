@@ -1,0 +1,14 @@
+title: zt_ops_space
+author: Yang Li
+version: "1.0"
+fields:
+  - field: id
+    range: 1-10
+  - field: name
+    range: 1-10
+    prefix: "space"
+  - field: owner
+    range: 1-10
+    prefix: "test"
+  - field: acl
+    range: open,private
