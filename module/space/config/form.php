@@ -2,6 +2,7 @@
 $config->space->form = new stdclass();
 
 $config->space->form->create['name']        = array('type' => 'string', 'required' => true, 'filter' => 'trim');
+$config->space->form->create['code']        = array('type' => 'string', 'required' => true, 'filter' => 'trim');
 $config->space->form->create['manager']     = array('type' => 'array', 'required' => false, 'default' => array(), 'filter' => 'join');
 $config->space->form->create['desc']        = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 $config->space->form->create['acl']         = array('type' => 'string', 'required' => true, 'default' => 'open', 'filter' => 'trim');
