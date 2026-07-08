@@ -1,6 +1,7 @@
 <?php
 namespace zin;
-global $lang,$config;
+global $lang, $config, $app;
+$app->loadLang('kanban');
 
 $fields = defineFieldList('task.create', 'task');
 
@@ -26,7 +27,7 @@ if($files)
 }
 
 $fields->field('files')->control('fileSelector', array('defaultFiles' => array_values($files)));
-$fields->field('fileList')->control('hidden')->value(data('task.files'));
+$fields->field('fileList')->label($lang->task->files)->control('hidden')->value(data('task.files'));
 
 /* Set foldable attribute. */
 $fields->field('module')->foldable();
@@ -115,14 +116,14 @@ if(!empty(data('features.story')) && (data('execution.type') == 'kanban' || empt
 /* Set region and lane fieldList. */
 $fields->field('region')
     ->hidden(data('execution.type') != 'kanban')
-    ->label(data('lang.kanbancard.region'))
+    ->label($lang->kanbancard->region)
     ->control('picker', array('required' => true))
     ->items(data('regionPairs') ? data('regionPairs') : array())
     ->value(data('regionID'));
 
 $fields->field('lane')
     ->hidden(data('execution.type') != 'kanban')
-    ->label(data('lang.kanbancard.lane'))
+    ->label($lang->kanbancard->lane)
     ->control('picker', array('required' => true))
     ->items(data('lanePairs') ? data('lanePairs') : array())
     ->value(data('laneID'));
