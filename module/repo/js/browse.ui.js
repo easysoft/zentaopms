@@ -325,7 +325,7 @@ window.mirrorSyncDelayedReload = function()
     }, window.MIRROR_SYNC_RELOAD_DELAY);
 };
 
-/* 刷新同步状态：GET 进度，running → toast 仍在同步；其他状态 → reload 让首屏重渲。 */
+/* 刷新同步状态：syncing 时查询进度，结束后刷新页面。 */
 $(document).on('click', '.refresh-sync-btn', function()
 {
     var $btn = $(this);
@@ -340,11 +340,13 @@ $(document).on('click', '.refresh-sync-btn', function()
             zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
             return mirrorBusy($btn, false);
         }
+
         if(data.status && data.status !== 'running')
         {
             zui.Messager.show({type: 'success', content: mirrorLang.statusUpdated, time: 1200});
             return mirrorReload();
         }
+
         zui.Messager.show({type: 'info', content: mirrorLang.stillRunning, time: 1500});
         mirrorBusy($btn, false);
     }).fail(function(_, textStatus, errorThrown)
@@ -354,36 +356,11 @@ $(document).on('click', '.refresh-sync-btn', function()
     });
 });
 
-/* 查看详情：先拉最新进度，failed 才弹原因，其他状态按状态码 toast + reload 与首屏对齐。 */
+/* 查看详情：failure 已随首屏回填到 .sync-failure-alert[data-failure]，直接弹窗，不再发请求。 */
 $(document).on('click', '.sync-failure-detail', function(e)
 {
     e.preventDefault();
-    var $self  = $(this);
-    var $alert = $self.closest('.sync-failure-alert');
-    if($self.prop('disabled')) return;
-    $self.prop('disabled', true);
-
-    $.get(mirrorSyncProgressLink).done(function(res)
-    {
-        var data = mirrorParse(res);
-        if(!data || data.result !== 'success')
-        {
-            zui.Messager.show({type: 'danger', content: (data && data.message) || mirrorLang.queryFailed, time: 2000});
-            return $self.prop('disabled', false);
-        }
-        if(data.status === 'failed')
-        {
-            zui.Modal.alert({title: mirrorLang.failureTitle, message: data.failure || $alert.attr('data-failure') || mirrorLang.noDetail});
-            return $self.prop('disabled', false);
-        }
-
-        var tipMap  = {running: mirrorLang.syncing, scheduled: mirrorLang.done, finished: mirrorLang.done};
-        var typeMap = {running: 'info', scheduled: 'success', finished: 'success'};
-        zui.Messager.show({type: typeMap[data.status] || 'info', content: tipMap[data.status] || mirrorLang.statusUpdated, time: 1200});
-        mirrorReload();
-    }).fail(function(_, textStatus, errorThrown)
-    {
-        zui.Messager.show({type: 'danger', content: mirrorLang.queryRequestFailed + ': ' + textStatus + (errorThrown ? ' / ' + errorThrown : ''), time: 3000});
-        $self.prop('disabled', false);
-    });
+    var $alert  = $(this).closest('.sync-failure-alert');
+    var failure = $alert.attr('data-failure') || mirrorLang.noDetail;
+    zui.Modal.alert({title: mirrorLang.failureTitle, message: failure});
 });
