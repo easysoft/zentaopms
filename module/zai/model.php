@@ -115,6 +115,7 @@ class zaiModel extends model
 
         if(!$includeAdmin) unset($setting->adminToken);
         $setting->userAgent = $this->getUserAgent();
+        $setting->canAddSkill = common::hasPriv('ai', 'addSkill');
 
         return $setting;
     }
@@ -707,6 +708,27 @@ class zaiModel extends model
             $project = isset($attrs['project']) ? $attrs['project'] : 0;
             if(!$project) $project = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('project');
             $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
+        }
+        elseif($objectType === 'execution' || $objectType === 'project') $canView = strpos(',' . $this->app->user->view->projects . ',', ",$objectID,") !== false;
+        elseif($objectType === 'product') $canView = strpos(',' . $this->app->user->view->products . ',', ",$objectID,") !== false;
+        elseif($objectType === 'build')
+        {
+            $build = $this->dao->select('product,project,execution')->from(TABLE_BUILD)->where('id')->eq($objectID)->fetch();
+            if($build)
+            {
+                if(!empty($build->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$build->product},") !== false;
+                if(!$canView && !empty($build->project))   $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$build->project},") !== false;
+                if(!$canView && !empty($build->execution)) $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$build->execution},") !== false;
+            }
+        }
+        elseif($objectType === 'testtask')
+        {
+            $testtask = $this->dao->select('product,execution')->from(TABLE_TESTTASK)->where('id')->eq($objectID)->fetch();
+            if($testtask)
+            {
+                if(!empty($testtask->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$testtask->product},") !== false;
+                if(!$canView && !empty($testtask->execution)) $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$testtask->execution},") !== false;
+            }
         }
         elseif($objectType === 'feedback')
         {

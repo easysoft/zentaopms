@@ -9,10 +9,10 @@
       "gitVersion": "feature/zai"
     },
     "zentaomax": {
-      "gitVersion": "feature/zai"
+      "gitVersion": "release/8.4"
     },
     "zentaoipd": {
-      "gitVersion": "release/zai"
+      "gitVersion": "feature/zai"
     },
     "devops": {
       "gitRepo": "zentao/devops"

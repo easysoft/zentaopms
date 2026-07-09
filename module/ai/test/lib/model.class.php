@@ -2935,6 +2935,103 @@ class aiModelTest extends baseTest
     }
 
     /**
+     * Test loadContextFromFormSchema method.
+     *
+     * @param  array $formSchema
+     * @param  array $objectMap
+     * @access public
+     * @return mixed
+     */
+    public function loadContextFromFormSchemaTest(array $formSchema, array $objectMap)
+    {
+        $model = new class($objectMap) extends aiModel
+        {
+            protected array $objectMap = array();
+
+            public function __construct(array $objectMap)
+            {
+                $this->objectMap = $objectMap;
+                parent::__construct();
+
+                $this->config->ai->formContextObjectTypes = array('execution', 'project', 'product', 'story');
+                $this->config->ai->formContextRelationChain = array(
+                    'execution' => array(array('module' => 'project', 'field' => 'project')),
+                    'project'   => array(array('module' => 'product', 'via' => 'projectproduct')),
+                );
+                $this->config->ai->formContextPageLevelTypes = array('product', 'project', 'execution');
+
+                $this->lang->ai->moduleList['execution'] = '执行';
+                $this->lang->ai->moduleList['project']   = '项目';
+                $this->lang->ai->moduleList['product']   = '产品';
+                $this->lang->ai->moduleList['story']     = '需求';
+            }
+
+            public function loadModel($moduleName, $appName = ''): object|bool
+            {
+                if($moduleName === 'zai')
+                {
+                    return new class
+                    {
+                        public function canViewObject(string $objectType, int $objectID, ?array $attrs = null): bool
+                        {
+                            return true;
+                        }
+                    };
+                }
+
+                if($moduleName === 'product')
+                {
+                    return new class($this->objectMap)
+                    {
+                        protected array $objectMap = array();
+
+                        public function __construct(array $objectMap)
+                        {
+                            $this->objectMap = $objectMap;
+                        }
+
+                        public function getProductIDByProject(int $projectID, bool $includeClosed = true): int
+                        {
+                            return $projectID === 3 ? 1 : 0;
+                        }
+
+                        public function getByID(int $productID): object|false
+                        {
+                            return $this->objectMap['product'][$productID] ?? false;
+                        }
+                    };
+                }
+
+                if(isset($this->objectMap[$moduleName]))
+                {
+                    return new class($moduleName, $this->objectMap)
+                    {
+                        protected string $moduleName = '';
+                        protected array $objectMap = array();
+
+                        public function __construct(string $moduleName, array $objectMap)
+                        {
+                            $this->moduleName = $moduleName;
+                            $this->objectMap  = $objectMap;
+                        }
+
+                        public function getByID(int $objectID): object|false
+                        {
+                            return $this->objectMap[$this->moduleName][$objectID] ?? false;
+                        }
+                    };
+                }
+
+                return parent::loadModel($moduleName, $appName);
+            }
+        };
+
+        $result = $model->loadContextFromFormSchema($formSchema);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
      * Test AIResponseException::__construct method.
      *
      * @param  string $type
