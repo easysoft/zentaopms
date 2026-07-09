@@ -855,10 +855,12 @@ $(() =>
         };
         const aiStore = zui.ZAIStore.createFromZentao($.extend({
             getAvatar: getAvatar,
-            onSelectExternalSkill: (chat, selectSkill) => {
+            onSelectExternalSkill: zaiConfig.canAddSkill ? ((chat, selectSkill) => {
                 const callbackID = `skillOnSelect${zui.nextGid()}`;
                 window[callbackID] = (skill) => {
-                    selectSkill(skill);
+                    selectSkill({id: skill.skillID, name: skill.name});
+                    if(!aiStore.externalSkillsMap) aiStore.externalSkillsMap = {};
+                    aiStore.externalSkillsMap[skill.skillID] = skill;
                     delete window[callbackID];
                 };
                 zui.Modal.open({
@@ -869,7 +871,13 @@ $(() =>
                         delete window[callbackID];
                     }
                 });
-            },
+            }) : undefined,
+            onMountExternalSkill: zaiConfig.canAddSkill ? (async (chat, skill) => {
+                const externalSkill = aiStore.externalSkillsMap[skill.id];
+                if(!externalSkill) return;
+                const result = await $.post($.createLink('ai', 'addSkill', `skillID=${externalSkill.id}`), undefined, 'json');
+                return typeof result === 'object' && result.result !== 'fail';
+            }) : undefined,
             fetchMySkills: async () => {
                 const result = await zui.fetchData($.createLink('ai', 'ajaxGetMySkills'));
                 const skills = (result.skills || []).map(skill => ({id: skill.skillID, description: skill.desc, name: skill.name}));

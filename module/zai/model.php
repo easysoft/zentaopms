@@ -115,6 +115,7 @@ class zaiModel extends model
 
         if(!$includeAdmin) unset($setting->adminToken);
         $setting->userAgent = $this->getUserAgent();
+        $setting->canAddSkill = common::hasPriv('ai', 'addSkill');
 
         return $setting;
     }
