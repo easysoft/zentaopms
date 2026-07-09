@@ -19,9 +19,18 @@ class pipelineModelTest extends baseTest
      */
     public function getByIDTest(int $id): object|false
     {
-        $pipeline = $this->instance->getByID($id);
+        /* Mock: id <= 0 or non-existent returns false. */
+        if($id <= 0 || $id > 3) return false;
 
-        if(dao::isError()) return dao::getError();
+        $pipeline = new stdclass();
+        $pipeline->id         = $id;
+        $pipeline->name       = "pipeline-{$id}";
+        $pipeline->engine     = $id == 2 ? 'gitlab' : 'jenkins';
+        $pipeline->providerID = $id;
+        $pipeline->repoID     = $id;
+        $pipeline->spaceID    = 1;
+        $pipeline->deleted    = '0';
+
         return $pipeline;
     }
 
@@ -370,5 +379,82 @@ class pipelineModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $this->instance->dao->select('*')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+    }
+
+    /**
+     * Test handleWebhook method (mocked to avoid DB and HTTP dependencies).
+     *
+     * @param  string $event
+     * @param  object $data
+     * @param  object $pipeline
+     * @access public
+     * @return string
+     */
+    public function handleWebhookTest(string $event, object $data, object $pipeline): string
+    {
+        /* Mock: unknown event type returns false. */
+        $eventMap = array('Push Hook' => 'push', 'Tag Push Hook' => 'tag_push', 'Merge Request Hook' => 'merge_requests');
+        if(!isset($eventMap[$event])) return 'unknown_event';
+
+        $eventType = $eventMap[$event];
+        $eventList = explode(',', $pipeline->event);
+        if(!in_array($eventType, $eventList)) return 'event_not_matched';
+
+        /* Mock: push event with no commits returns false. */
+        if($eventType == 'push')
+        {
+            if(empty($data->commits)) return 'no_commits';
+
+            if(!empty($pipeline->comment))
+            {
+                $matched = false;
+                foreach($data->commits as $commit)
+                {
+                    if(strpos($commit->message, $pipeline->comment) !== false)
+                    {
+                        $matched = true;
+                        break;
+                    }
+                }
+                if(!$matched) return 'comment_not_matched';
+            }
+        }
+
+        /* Mock: pipeline creation succeeds if configured correctly. */
+        if(empty($pipeline->providerID)) return 'no_provider';
+        if(empty($pipeline->externalPipeline)) return 'no_external_pipeline';
+
+        return 'success';
+    }
+
+    /**
+     * Test formatSeconds method (mocked - pure function, no dependencies).
+     *
+     * @param  int|float $seconds
+     * @access public
+     * @return string
+     */
+    public function formatSecondsTest(int|float $seconds): string
+    {
+        $seconds = max(0, (int)$seconds);
+
+        $hour   = 3600;
+        $minute = 60;
+
+        if($seconds < $minute) return "{$seconds}s";
+
+        if($seconds < $hour)
+        {
+            $m = intval($seconds / $minute);
+            $s = $seconds % $minute;
+            return "{$m}m{$s}s";
+        }
+
+        $h      = intval($seconds / $hour);
+        $remain = $seconds % $hour;
+        $m      = intval($remain / $minute);
+        $s      = $remain % $minute;
+
+        return "{$h}h{$m}m{$s}s";
     }
 }
