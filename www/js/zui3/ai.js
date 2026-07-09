@@ -211,15 +211,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
 };
 
 /**
- * 执行通用表单智能体。
- *
- * @param {Object} formSchema - 表单结构和当前值
- * @param {Object} contextIDs - 上下文字段 ID 映射
- * @param {number} promptID - 智能体 ID
- * @param {Array}  promptFields - 自定义输入字段列表
- * @param {Array}  allowedFields - 可操作字段白名单
- */
-/**
  * 执行通用表单智能体（同步流程）。
  * 收集当前表单结构和值，构建 schema 和 prompt，打开 AI Panel 供 LLM 填充。
  * 支持单个表单（type: object）和批量表单（type: array）。
