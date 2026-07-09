@@ -210,7 +210,7 @@ class aiModel extends model
             if($action == 'promptaudit')     return common::hasPriv('ai', 'designPrompt') && $executable && !$published;
             if($action == 'promptedit')      return common::hasPriv('ai', 'promptedit');
             if($action == 'promptpublish')   return common::hasPriv('ai', 'promptpublish') && !$published && $executable;
-            if($action == 'promptunpublish') return common::hasPriv('ai', 'promptunpublish') && $published && $executable;
+            if($action == 'promptunpublish') return common::hasPriv('ai', 'promptunpublish') && $published;
         }
 
         if(in_array($this->app->rawMethod, array('miniprograms', 'miniprogramview')))
