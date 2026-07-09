@@ -207,7 +207,7 @@ class ai extends control
         $userList  = $this->user->getList('nodeleted');
 
         /* Set pager and order. */
-        $this->app->loadClass('pager', $static = true);
+        $this->app->loadClass('pager', true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $order = common::appendOrder($orderBy);
 
@@ -241,13 +241,24 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
-        $this->view->prompt      = $prompt;
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
-        $this->view->actions     = $this->loadModel('action')->getList('prompt', $id);
-        $this->view->dataPreview = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
-        $this->view->title       = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
-        $this->view->fieldConfig = $this->ai->getPromptFields($id);
+        $knowledgeLibIDs = array();
+        if(!empty($prompt->knowledgeLib)) $knowledgeLibIDs = array_filter(explode(',', trim($prompt->knowledgeLib, ',')));
+
+        $knowledgeLibs = array();
+        if(!empty($knowledgeLibIDs) && method_exists($this->ai, 'getKnowledgeLibsByIDs')) $knowledgeLibs = $this->ai->getKnowledgeLibsByIDs($knowledgeLibIDs);
+
+        $skill = false;
+        if(!empty($prompt->skill) && method_exists($this->ai, 'getSkillByID')) $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
+
+        $this->view->prompt        = $prompt;
+        $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
+        $this->view->actions       = $this->loadModel('action')->getList('prompt', $id);
+        $this->view->dataPreview   = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title         = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
+        $this->view->fieldConfig   = $this->ai->getPromptFields($id);
+        $this->view->knowledgeLibs = $knowledgeLibs;
+        $this->view->skill         = $skill;
 
         $this->display();
     }
@@ -267,7 +278,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $url = commonModel::hasPriv('ai', 'designPrompt') ? $this->createLink('ai', 'promptassignrole', "prompt=$promptID") : $this->createLink('ai', 'promptview', "id=$promptID");
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $url));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $url));
         }
 
         $this->view->title = $this->lang->ai->prompts->create;
@@ -319,13 +330,72 @@ class ai extends control
     }
 
     /**
+     * Set basic info of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptBasicInfo(int $promptID = 0)
+    {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+
+        $prompt = empty($promptID) ? new stdclass() : $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) $prompt = new stdclass();
+        if(!empty($prompt->status) && $prompt->status == 'active') return $this->locate($this->inlink('promptView', "id={$prompt->id}"));
+
+        if($_POST)
+        {
+            $data = form::data($this->config->ai->form->promptBasicInfo)->get();
+
+            if(empty($prompt->id))
+            {
+                $promptID = $this->ai->createPrompt($data);
+            }
+            else
+            {
+                $originalPrompt = clone $prompt;
+
+                $prompt->module          = $data->module;
+                $prompt->actionPurpose   = $data->actionPurpose;
+                $prompt->displayPosition = $data->displayPosition;
+                $prompt->name            = $data->name;
+                $prompt->model           = $data->model;
+                $prompt->desc            = $data->desc;
+
+                $this->ai->updatePrompt($prompt, $originalPrompt);
+                $promptID = $prompt->id;
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $nextMethod = $data->displayPosition == 'form' ? 'promptSetInputForm' : 'promptSetInputFields';
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink($nextMethod, "promptID=$promptID")));
+        }
+
+        if(empty($prompt->id)) $prompt->id = 0;
+        if(!isset($prompt->name)) $prompt->name = '';
+        if(!isset($prompt->module)) $prompt->module = '';
+        if(!isset($prompt->actionPurpose)) $prompt->actionPurpose = '';
+        if(!isset($prompt->displayPosition)) $prompt->displayPosition = '';
+        if(!isset($prompt->model)) $prompt->model = '';
+        if(!isset($prompt->desc)) $prompt->desc = '';
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = $this->lang->ai->promptBasicInfo;
+        $this->display();
+    }
+
+    /**
      * Edit role of prompt, prompt editing step 2.
      *
      * @param  int    $promptID
      * @access public
      * @return void
      */
-    public function promptAssignRole($promptID)
+    public function promptAssignRole(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -357,7 +427,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->assignRole . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->assignRole . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->view->roleTemplates  = $this->ai->getRoleTemplates();
         $this->display();
     }
@@ -369,7 +439,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSelectDataSource($promptID)
+    public function promptSelectDataSource(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -387,17 +457,55 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSelectDataSource', "promptID=$promptID")));
         }
 
         $this->view->activeDataSource = empty($prompt->module) ? current(array_keys($this->config->ai->dataSource)) : $prompt->module;
-        $this->view->dataSource       = $this->config->ai->dataSource;
+        $this->view->dataSource       = $this->ai->getDataSource();
         $this->view->prompt           = $prompt;
         $this->view->promptID         = $promptID;
         $this->view->lastActiveStep   = $this->ai->getLastActiveStep($prompt);
-        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title            = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->selectDataSource . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Set input fields of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptSetInputFields(int $promptID = 0)
+    {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+        if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
+
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->locate($this->inlink('promptBasicInfo'));
+        if($prompt->displayPosition == 'form') return $this->locate($this->inlink('promptSetInputForm', "promptID=$promptID"));
+
+        if($_POST)
+        {
+            $data = fixer::input('post')->get();
+
+            $originalPrompt = clone $prompt;
+            $prompt->source = ",$data->datasource,";
+
+            $this->ai->updatePrompt($prompt, $originalPrompt);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
+        }
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->dataSource     = $this->ai->getDataSource();
+        $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputfields'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -408,35 +516,25 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetPurpose($promptID)
+    public function promptSetPurpose(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
 
         if($_SERVER['REQUEST_METHOD'] === 'POST')
         {
-            if(!empty($_POST))
-            {
-                $data = fixer::input('post')->get();
-            }
-            else
-            {
-                $input = file_get_contents('php://input');
-                $data  = json_decode($input);
-
-                if(json_last_error() !== JSON_ERROR_NONE)
-                {
-                    return $this->send(array('result' => 'fail', 'message' => 'JSON解析失败：' . json_last_error_msg()));
-                }
-            }
-
+            $error = '';
+            $data  = $this->aiZen->getPostData($error);
+            if($error) return $this->send(array('result' => 'fail', 'message' => $error));
             if(!is_object($data)) $data = new stdClass();
 
             $originalPrompt = clone $prompt;
 
             $prompt->purpose      = isset($data->purpose) ? $data->purpose : '';
             $prompt->elaboration  = '';
+            $prompt->role         = isset($data->role) ? $data->role : '';
             $prompt->knowledgeLib = $data->knowledgeLib ?? '';
+            $prompt->skill        = !empty($data->skill) ? (int)$data->skill : 0;
 
             if(isset($data->fields))
             {
@@ -449,7 +547,7 @@ class ai extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetTargetForm', "promptID=$promptID")));
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
         }
 
@@ -467,8 +565,46 @@ class ai extends control
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
+        $this->view->skill          = $this->ai->getSkillByID((int)$prompt->skill, false);
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->display();
+    }
+
+    /**
+     * Set input form of prompt.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function promptSetInputForm(int $promptID = 0)
+    {
+        if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
+        if(empty($promptID)) return $this->locate($this->inlink('promptBasicInfo'));
+
+        $prompt = $this->ai->getPromptByID($promptID);
+
+        if($_SERVER['REQUEST_METHOD'] === 'POST')
+        {
+            $error = '';
+            $data  = $this->aiZen->getPostData($error);
+            if($error) return $this->send(array('result' => 'fail', 'message' => $error));
+            if(!is_object($data)) $data = new stdClass();
+
+            $fields = isset($data->fields) && is_array($data->fields) ? $data->fields : array();
+            $this->ai->savePromptFields($promptID, $fields);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetPurpose', "promptID=$promptID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptSetInputForm', "promptID=$promptID")));
+        }
+
+        $this->view->prompt         = $prompt;
+        $this->view->promptID       = $promptID;
+        $this->view->currentFields  = $this->ai->getPromptFields($promptID);
+        $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->designStepNav['setinputform'] . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -479,7 +615,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptSetTargetForm($promptID)
+    public function promptSetTargetForm(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -490,7 +626,8 @@ class ai extends control
 
             $originalPrompt = clone $prompt;
 
-            $prompt->targetForm = $data->targetForm;
+            $prompt->targetForm    = $data->targetForm;
+            $prompt->actionPurpose = $data->targetForm;
 
             $this->ai->updatePrompt($prompt, $originalPrompt);
 
@@ -499,7 +636,7 @@ class ai extends control
             if(!empty($data->goTesting)) // Go to testing object view.
             {
                 $location = $this->ai->getTestingLocation($prompt);
-                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'msg' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
             }
 
             if(!empty($data->jumpToNext)) $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
@@ -510,7 +647,7 @@ class ai extends control
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setTargetForm . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -521,7 +658,7 @@ class ai extends control
      * @access public
      * @return void
      */
-    public function promptFinalize($promptID)
+    public function promptFinalize(int $promptID)
     {
         if(!common::hasPriv('ai', 'designPrompt')) $this->loadModel('common')->deny('ai', 'designPrompt', false);
         $prompt = $this->ai->getPromptByID($promptID);
@@ -530,26 +667,30 @@ class ai extends control
         {
             $data = fixer::input('post')->get();
 
-            $originalPrompt = clone $prompt;
+            if(!empty($data->goTesting))
+            {
+                $location = $this->ai->getTestingLocation($prompt);
+                return $this->send(empty($location) ? array('result' => 'fail', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTestingFail) : array('result' => 'success', 'target' => '#go-test-btn', 'message' => $this->lang->ai->prompts->goingTesting, 'locate' => $location));
+            }
 
-            $prompt->name = $data->name;
-            $prompt->desc = $data->desc;
+            $publish = !empty($data->publish);
+            if($publish) $this->ai->togglePromptStatus($prompt, 'active');
 
-            $this->ai->updatePrompt($prompt, $originalPrompt);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(!empty($data->jumpToNext)) $this->ai->togglePromptStatus($prompt, 'active');
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if(!empty($data->jumpToNext)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts')));
+            if($publish) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('prompts')));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->inlink('promptFinalize', "promptID=$promptID")));
         }
 
+        $currentPrompt = $prompt->purpose;
+        if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
+
+        $this->view->dataPreview    = $this->ai->generateDemoDataPrompt($prompt->module, $prompt->source);
+        $this->view->currentPrompt  = $currentPrompt;
         $this->view->prompt         = $prompt;
         $this->view->promptID       = $promptID;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
-        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} $prompt->name {$this->lang->hyphen} " . $this->lang->ai->prompts->finalize . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
+        $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->finalize . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
     }
 
@@ -575,7 +716,11 @@ class ai extends control
         list($objectData, $rawObject) = $object;
 
         list($location, $stop) = $this->ai->getTargetFormLocation($prompt, $rawObject);
-        if(!empty($stop)) return header("location: $location", true, 302);
+        if(!empty($stop))
+        {
+            header("location: $location", true, 302);
+            return;
+        }
 
         /* Execute prompt and catch exceptions. */
         try
@@ -597,12 +742,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm))
-        {
-            $targetFormPaths            = explode('.', $prompt->targetForm);
-            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
-        }
+        if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
 
         $fields = array_values($this->ai->getPromptFields($promptId));
         if($fields)
@@ -619,6 +759,7 @@ class ai extends control
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['model']        = $prompt->model;
+        $this->appendPromptSkillToResponse($response, $prompt);
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
@@ -778,11 +919,15 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->targetForm) && $prompt->targetForm != 'empty')
+        if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
+
+        $fields = array_values($this->ai->getPromptFields($promptID));
+        if($fields)
         {
-            $targetFormPaths            = explode('.', $prompt->targetForm);
-            $response['targetFormName'] = $this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]];
-            $response['dataPropNames']  = $this->lang->ai->dataSource[$prompt->module];
+            $response['fields']     = $fields;
+            $response['formConfig'] = array();
+            $response['formConfig']['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $response['formConfig']['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
         }
 
         $response['objectType']   = $prompt->module;
@@ -791,8 +936,223 @@ class ai extends control
         $response['model']        = $prompt->model;
         $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
         $response['content']      = $showText;
+        $this->appendPromptSkillToResponse($response, $prompt);
 
         return $this->send(array('result' => 'success', 'data' => $response));
+    }
+
+    /**
+     * 执行通用表单提示词
+     * Execute universal form prompt for target form pages.
+     *
+     * @param  int    $promptID
+     * @access public
+     * @return void
+     */
+    public function executeUniversalPrompt($promptID)
+    {
+        $prompt = $this->ai->getPromptByID($promptID);
+        if(empty($prompt)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noPrompt'])));
+
+        if(!common::hasPriv('ai', 'promptExecute')) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
+
+        $formSchema = json_decode($_POST['formSchema'] ?? '{}', true);
+        if(empty($formSchema)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
+
+        if(empty($prompt->displayPosition) || $prompt->displayPosition !== 'form' || empty($prompt->actionPurpose)) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
+
+        $targetForm = $prompt->actionPurpose;
+
+        $targetFormParts = explode('.', $targetForm, 2);
+        if(count($targetFormParts) !== 2) return $this->send(array('result' => 'fail', 'message' => $this->lang->ai->execute->failReasons['noFormSchema']));
+
+        $contextDesc    = '';
+        $allowedFields  = $this->ai->getFormAllowedFields($targetFormParts[0], $targetFormParts[1]);
+        $filteredFields = $this->ai->filterAllowedFields($formSchema['fields'] ?? array(), $allowedFields);
+
+        $isBatchForm = strpos($targetFormParts[1], 'batch') === 0;
+        $promptLang  = $this->lang->ai->prompts;
+        if($isBatchForm)
+        {
+            $headers   = array();
+            $values    = array();
+            $fieldDefs = array();
+            foreach($formSchema['fields'] as $name => $field)
+            {
+                $label    = $field['label'] ?? $name;
+                $input    = $field['controlType'] ?? 'input';
+                $value    = $field['currentValue'] ?? '';
+                $required = !empty($field['required']) ? 'true' : 'false';
+
+                $headers[] = $label;
+
+                $displayValue = $value;
+                if($value !== '' && !empty($field['options']) && is_array($field['options']))
+                {
+                    foreach($field['options'] as $opt)
+                    {
+                        if((string)($opt['value'] ?? '') === (string)$value)
+                        {
+                            $displayValue = $opt['text'] ?? $value;
+                            break;
+                        }
+                    }
+                }
+                $values[] = $displayValue;
+
+                $def = "- {$name}({$label}): {$input}" . ($required === 'true' ? " {$promptLang->requiredField}" : '');
+                if(!empty($field['options']) && is_array($field['options']))
+                {
+                    $optStrs = array();
+                    foreach($field['options'] as $opt)
+                    {
+                        $optVal    = $opt['value'] ?? '';
+                        $optText   = $opt['text'] ?? '';
+                        $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
+                    }
+                    $def .= "{$promptLang->fieldSeparator}{$promptLang->optionsLabel}" . implode(', ', $optStrs);
+                }
+                $fieldDefs[] = $def;
+            }
+
+            $sepLine     = '| ' . implode(' | ', array_fill(0, count($headers), '---')) . ' |';
+            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
+            $fullPrompt .= "{$promptLang->batchFormData}\n\n";
+            $fullPrompt .= '| ' . implode(' | ', $headers) . " |\n";
+            $fullPrompt .= $sepLine . "\n";
+            $fullPrompt .= '| ' . implode(' | ', $values) . " |\n\n";
+            $fullPrompt .= "{$promptLang->fieldDefinition}\n" . implode("\n", $fieldDefs) . "\n\n";
+            $fullPrompt .= "{$promptLang->targetFormInfo}\n";
+            $fullPrompt .= sprintf($promptLang->formLabel, $prompt->name ?? $targetForm) . "\n\n";
+            if(!empty($filteredFields))
+            {
+                $fullPrompt .= "{$promptLang->fillableFields}\n";
+                foreach($filteredFields as $fName => $fField) $fullPrompt .= "- {$fName}\n";
+            }
+            $fullPrompt .= "\n{$promptLang->returnJSONArray}\n";
+        }
+        else
+        {
+            $formDataLines = array();
+            if(!empty($formSchema['fields']))
+            {
+                foreach($formSchema['fields'] as $name => $field)
+                {
+                    $label    = $field['label'] ?? $name;
+                    $input    = $field['controlType'] ?? 'input';
+                    $valType  = $field['valueType'] ?? 'string';
+                    $value    = $field['currentValue'] ?? '';
+                    $required = !empty($field['required']) ? 'true' : 'false';
+                    $line     = "- {$label}\n  name: {$name}\n  input: {$input}\n  type: {$valType}\n  required: {$required}\n  value: {$value}";
+
+                    if(!empty($field['options']) && is_array($field['options']))
+                    {
+                        $optStrs = array();
+                        foreach($field['options'] as $opt)
+                        {
+                            $optVal    = $opt['value'] ?? '';
+                            $optText   = $opt['text'] ?? '';
+                            $optStrs[] = $optText ? "{$optVal}({$optText})" : $optVal;
+                        }
+                        $line .= "\n  options: " . implode(', ', $optStrs);
+                    }
+
+                    $formDataLines[] = $line;
+                }
+            }
+
+            $fillableDesc = $this->ai->getFormSchemaDescription($prompt, $filteredFields);
+
+            $fullPrompt  = "{$promptLang->pageContext}\n{$contextDesc}\n\n";
+            $fullPrompt .= "{$promptLang->currentFormData}\n" . implode("\n", $formDataLines) . "\n\n";
+            $fullPrompt .= $fillableDesc;
+        }
+
+        $schema       = $this->ai->buildDynamicSchema($filteredFields, $prompt, $isBatchForm);
+        $location     = $_POST['pageUrl'] ?? $_SERVER['HTTP_REFERER'] ?? '';
+        $formMetaData = $this->buildPromptFormMeta($prompt, $filteredFields, $targetForm);
+
+        $originObject = new stdclass();
+        foreach($filteredFields as $name => $field)
+        {
+            if(isset($field['currentValue']) && $field['currentValue'] !== '') $originObject->$name = $field['currentValue'];
+        }
+
+        $extraFields = array_values($this->ai->getPromptFields($promptID));
+        $formConfig  = array();
+        if($extraFields)
+        {
+            $formConfig['title']         = $this->lang->ai->prompts->formDefaultTitle;
+            $formConfig['submitBtnText'] = $this->lang->ai->prompts->formSubmitBtnText;
+        }
+
+        $callbackData = array(
+            'role'           => $prompt->role . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''),
+            'schema'         => $schema,
+            'dataPrompt'     => $fullPrompt,
+            'name'           => $prompt->name,
+            'purpose'        => $prompt->purpose,
+            'targetForm'     => $targetForm,
+            'promptID'       => $prompt->id,
+            'formLocation'   => $location,
+            'objectID'       => 0,
+            'objectType'     => $prompt->module,
+            'object'         => array($prompt->module => $originObject),
+            'model'          => $prompt->model,
+            'targetFormName' => $formMetaData['targetFormName'],
+            'dataPropNames'  => $formMetaData['dataPropNames'],
+            'knowledgeLib'   => $prompt->knowledgeLib ?? '',
+            'fields'         => $extraFields,
+            'formConfig'     => $formConfig,
+        );
+        $this->appendPromptSkillToResponse($callbackData, $prompt);
+
+        return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($callbackData, false))));
+    }
+
+    /**
+     * Append mounted skill info for AI chat.
+     *
+     * @param  array  $response
+     * @param  object $prompt
+     * @access private
+     * @return void
+     */
+    private function appendPromptSkillToResponse(array &$response, object $prompt): void
+    {
+        $response['skill']     = $prompt->skill ?? 0;
+        $response['skillID']   = '';
+        $response['skillName'] = '';
+
+        if(empty($prompt->skill)) return;
+
+        $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
+        if(!$skill || empty($skill->skillID)) return;
+
+        $response['skillID']   = $skill->skillID;
+        $response['skillName'] = $skill->name;
+    }
+
+    /**
+     * Build prompt target form metadata.
+     *
+     * @param  object $prompt
+     * @param  array  $fields
+     * @param  string $targetForm
+     * @access private
+     * @return array
+     */
+    private function buildPromptFormMeta(object $prompt, array $fields, string $targetForm): array
+    {
+        $targetFormPaths = explode('.', $targetForm, 2);
+        $targetFormName  = count($targetFormPaths) === 2 ? ($this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]] ?? '') : '';
+
+        $dataPropNames = new stdclass();
+        $dataPropNames->{$prompt->module} = new stdclass();
+        $dataPropNames->{$prompt->module}->common = $prompt->name ?: $targetForm;
+        foreach($fields as $name => $field) $dataPropNames->{$prompt->module}->{$name} = is_array($field) ? ($field['label'] ?? $name) : $field;
+
+        return array('targetFormName' => $targetFormName, 'dataPropNames' => $dataPropNames);
     }
 
     /**
@@ -825,6 +1185,9 @@ class ai extends control
                 case 'edit':
                     $result = $this->ai->updateRoleTemplate($data->id, $data->role, $data->characterization);
                     $message = $result ? $this->lang->saveSuccess : $this->lang->ai->saveFail;
+                    break;
+                default:
+                    $message = $this->lang->ai->saveFail;
                     break;
             }
 

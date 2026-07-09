@@ -43,6 +43,7 @@ $lang->ai->modelTestConnection     = 'Test Model Connection';
 $lang->ai->promptCreate            = 'Create ZenTao Agent';
 $lang->ai->promptEdit              = 'Edit ZenTao Agent';
 $lang->ai->promptDelete            = 'Delete ZenTao Agent';
+$lang->ai->promptBasicInfo         = 'ZenTao Agent Basic Info';
 $lang->ai->promptAssignRole        = 'Assign ZenTao Agent Role';
 $lang->ai->promptSelectDataSource  = 'Select ZenTao Agent Data';
 $lang->ai->promptSetPurpose        = 'Set ZenTao Agent Purpose';
@@ -84,6 +85,7 @@ $lang->ai->store                  = 'Store';
 $lang->ai->export                 = 'Export';
 $lang->ai->import                 = 'Import';
 $lang->ai->saveFail               = 'Save failed';
+$lang->ai->jsonParseFail          = 'JSON parse failed: %s';
 $lang->ai->installPackage         = 'Installation package';
 $lang->ai->toPublish              = 'Publish after installation';
 $lang->ai->toZentaoStoreAIPage    = 'Click to jump to Zentao official app store general agents page.';
@@ -112,33 +114,56 @@ $lang->ai->validate->dirtyForm     = 'The design step of %s has changed. Do you 
 $lang->ai->validate->nameNotUnique = 'A zenTao agent with the same name already exists, please change the name.';
 
 $lang->ai->prompts = new stdclass();
-$lang->ai->prompts->common       = 'ZenTao Agent';
-$lang->ai->prompts->emptyList    = 'No ZenTao Agent yet.';
-$lang->ai->prompts->create       = 'Create ZenTao Agent';
-$lang->ai->prompts->edit         = 'Edit ZenTao Agent';
-$lang->ai->prompts->id           = 'ID';
-$lang->ai->prompts->name         = 'Name';
-$lang->ai->prompts->description  = 'Description';
-$lang->ai->prompts->createdBy    = 'Creator';
-$lang->ai->prompts->createdDate  = 'Created Date';
-$lang->ai->prompts->targetForm   = 'Target Form';
-$lang->ai->prompts->funcDesc     = 'Function Description';
-$lang->ai->prompts->deleted      = 'Deleted';
-$lang->ai->prompts->stage        = 'Stage';
-$lang->ai->prompts->basicInfo    = 'Basic Info';
-$lang->ai->prompts->editInfo     = 'Edit Info';
-$lang->ai->prompts->createdBy    = 'Creator';
-$lang->ai->prompts->publishedBy  = 'Published by';
-$lang->ai->prompts->draftedBy    = 'Drafted by';
-$lang->ai->prompts->lastEditor   = 'Last Editor';
-$lang->ai->prompts->modelNeutral = 'Model Neutral';
+$lang->ai->prompts->common          = 'ZenTao Agent';
+$lang->ai->prompts->emptyList       = 'No ZenTao Agent yet.';
+$lang->ai->prompts->create          = 'Create ZenTao Agent';
+$lang->ai->prompts->edit            = 'Edit ZenTao Agent';
+$lang->ai->prompts->id              = 'ID';
+$lang->ai->prompts->name            = 'Name';
+$lang->ai->prompts->description     = 'Description';
+$lang->ai->prompts->createdBy       = 'Creator';
+$lang->ai->prompts->createdDate     = 'Created Date';
+$lang->ai->prompts->targetForm      = 'Target Form';
+$lang->ai->prompts->funcDesc        = 'Function Description';
+$lang->ai->prompts->deleted         = 'Deleted';
+$lang->ai->prompts->stage           = 'Stage';
+$lang->ai->prompts->basicInfo       = 'Basic Info';
+$lang->ai->prompts->processObject   = 'Processing Object';
+$lang->ai->prompts->actionObject    = 'Operation Object';
+$lang->ai->prompts->actionPurpose   = 'Operation Purpose';
+$lang->ai->prompts->displayPosition = 'Display Position';
+$lang->ai->prompts->prompt          = 'Prompt';
+$lang->ai->prompts->skill           = 'Mounted Skill';
+$lang->ai->prompts->knowledgeLib    = 'Mounted Knowledge Library';
+$lang->ai->prompts->editInfo        = 'Edit Info';
+$lang->ai->prompts->createdBy       = 'Creator';
+$lang->ai->prompts->publishedBy     = 'Published by';
+$lang->ai->prompts->draftedBy       = 'Drafted by';
+$lang->ai->prompts->lastEditor      = 'Last Editor';
+$lang->ai->prompts->modelNeutral    = 'Model Neutral';
 
 $lang->ai->prompts->viewTypeList            = array();
 $lang->ai->prompts->viewTypeList['list']    = 'List View';
 $lang->ai->prompts->viewTypeList['card']    = 'Card View';
 
-$lang->ai->prompts->summary = 'There are %s zenTao agents on this page.';
-$lang->ai->prompts->fieldSeparator = ', ';
+$lang->ai->prompts->displayPositionList = array();
+$lang->ai->prompts->displayPositionList['detail'] = 'Detail';
+$lang->ai->prompts->displayPositionList['form']   = 'Form';
+
+$lang->ai->prompts->summary           = 'There are %s zenTao agents on this page.';
+$lang->ai->prompts->fieldSeparator    = ', ';
+$lang->ai->prompts->pageContext       = 'Current page context:';
+$lang->ai->prompts->currentFormData   = 'Current form data:';
+$lang->ai->prompts->batchFormData     = 'The current form is for batch creation, and each row contains the following fields:';
+$lang->ai->prompts->fieldDefinition   = 'Field definitions:';
+$lang->ai->prompts->targetFormInfo    = '[Target form information]';
+$lang->ai->prompts->formLabel         = 'Form: %s';
+$lang->ai->prompts->fillableFields    = 'Fillable fields:';
+$lang->ai->prompts->returnJSONObject  = 'Please return a JSON object. The keys must match the field names above. Required fields must have values.';
+$lang->ai->prompts->returnJSONArray   = 'Please return a JSON array. Each element must match one row in the table and be an object whose keys match the fillable field names above. Required fields must have values.';
+$lang->ai->prompts->processDataPrefix = "The data to process is as follows:\n%s";
+$lang->ai->prompts->useToolResult     = 'Please use tool `%s` to return the result.';
+$lang->ai->prompts->useZentaoAPITip   = 'If you need detailed information about related objects, please fetch them via the ZenTao API.';
 
 $lang->ai->prompts->action = new stdclass();
 $lang->ai->prompts->action->goDesignConfirm  = 'The current zenTao agent is not complete, continue designing?';
@@ -386,232 +411,163 @@ Starting today, we offer a 30-day free trial. Scan the QR code below to start yo
 /* Finalize page. */
 $lang->ai->moduleDisableTip = 'Module is automatically selected based on selected objects.';
 
-/* Data source definition. */
-$lang->ai->dataSource = array();
+$lang->ai->moduleList = array();
 
-$lang->ai->dataSource['my']['common']          = 'My';
-$lang->ai->dataSource['product']['common']     = 'Product';
-$lang->ai->dataSource['story']['common']       = 'Story';
-$lang->ai->dataSource['productplan']['common'] = 'Product Plan';
-$lang->ai->dataSource['release']['common']     = 'Release';
-$lang->ai->dataSource['project']['common']     = 'Project';
-$lang->ai->dataSource['execution']['common']   = 'Execution';
-$lang->ai->dataSource['task']['common']        = 'Task';
-$lang->ai->dataSource['bug']['common']         = 'Bug';
-$lang->ai->dataSource['case']['common']        = 'Test Case';
-$lang->ai->dataSource['doc']['common']         = 'Document';
-
-$lang->ai->dataSource['my']['efforts']['common']    = 'Efforts';
-$lang->ai->dataSource['my']['efforts']['date']      = 'Date';
-$lang->ai->dataSource['my']['efforts']['work']      = 'Work';
-$lang->ai->dataSource['my']['efforts']['account']   = 'Account';
-$lang->ai->dataSource['my']['efforts']['consumed']  = 'Consumed';
-$lang->ai->dataSource['my']['efforts']['left']      = 'Left';
-$lang->ai->dataSource['my']['efforts']['objectID']  = 'Object';
-$lang->ai->dataSource['my']['efforts']['product']   = 'Product';
-$lang->ai->dataSource['my']['efforts']['project']   = 'Project';
-$lang->ai->dataSource['my']['efforts']['execution'] = 'Execution';
-
-$lang->ai->dataSource['product']['product']['common']  = 'Product';
-$lang->ai->dataSource['product']['product']['name']    = 'Product Name';
-$lang->ai->dataSource['product']['product']['desc']    = 'Description';
-$lang->ai->dataSource['product']['modules']['common']  = 'Module';
-$lang->ai->dataSource['product']['modules']['name']    = 'Module Name';
-$lang->ai->dataSource['product']['modules']['modules'] = 'Sub Modules';
-
-$lang->ai->dataSource['productplan']['productplan']['common'] = 'Product Plan';
-$lang->ai->dataSource['productplan']['productplan']['title']  = 'Title';
-$lang->ai->dataSource['productplan']['productplan']['desc']   = 'Description';
-$lang->ai->dataSource['productplan']['productplan']['begin']  = 'Begin';
-$lang->ai->dataSource['productplan']['productplan']['end']    = 'End';
-
-$lang->ai->dataSource['productplan']['stories']['common']   = 'Stories';
-$lang->ai->dataSource['productplan']['stories']['title']    = 'Title';
-$lang->ai->dataSource['productplan']['stories']['module']   = 'Module';
-$lang->ai->dataSource['productplan']['stories']['pri']      = 'Priority';
-$lang->ai->dataSource['productplan']['stories']['estimate'] = 'Estimates';
-$lang->ai->dataSource['productplan']['stories']['status']   = 'Status';
-$lang->ai->dataSource['productplan']['stories']['stage']    = 'Stage';
-
-$lang->ai->dataSource['productplan']['bugs']['common'] = 'Bugs';
-$lang->ai->dataSource['productplan']['bugs']['title']  = 'Title';
-$lang->ai->dataSource['productplan']['bugs']['pri']    = 'Priority';
-$lang->ai->dataSource['productplan']['bugs']['status'] = 'Status';
-
-$lang->ai->dataSource['release']['release']['common']  = 'Release';
-$lang->ai->dataSource['release']['release']['product'] = 'Product';
-$lang->ai->dataSource['release']['release']['name']    = 'Name';
-$lang->ai->dataSource['release']['release']['desc']    = 'Description';
-$lang->ai->dataSource['release']['release']['date']    = 'Release Date';
-
-$lang->ai->dataSource['release']['stories']['common']   = 'Stories';
-$lang->ai->dataSource['release']['stories']['title']    = 'Title';
-$lang->ai->dataSource['release']['stories']['estimate'] = 'Estimates';
-
-$lang->ai->dataSource['release']['bugs']['common'] = 'Bugs';
-$lang->ai->dataSource['release']['bugs']['title']  = 'Title';
-
-$lang->ai->dataSource['project']['project']['common']   = 'Project';
-$lang->ai->dataSource['project']['project']['name']     = 'Name';
-$lang->ai->dataSource['project']['project']['type']     = 'Type';
-$lang->ai->dataSource['project']['project']['desc']     = 'Description';
-$lang->ai->dataSource['project']['project']['begin']    = 'Begin';
-$lang->ai->dataSource['project']['project']['end']      = 'End';
-$lang->ai->dataSource['project']['project']['estimate'] = 'Estimates';
-
-$lang->ai->dataSource['project']['programplans']['common']    = 'Program Plan';
-$lang->ai->dataSource['project']['programplans']['name']      = 'Name';
-$lang->ai->dataSource['project']['programplans']['desc']      = 'Description';
-$lang->ai->dataSource['project']['programplans']['status']    = 'Status';
-$lang->ai->dataSource['project']['programplans']['begin']     = 'Begin';
-$lang->ai->dataSource['project']['programplans']['end']       = 'End';
-$lang->ai->dataSource['project']['programplans']['realBegan'] = 'Actual Start';
-$lang->ai->dataSource['project']['programplans']['realEnd']   = 'Actual End';
-$lang->ai->dataSource['project']['programplans']['progress']  = 'Progress';
-$lang->ai->dataSource['project']['programplans']['estimate']  = 'Estimates';
-$lang->ai->dataSource['project']['programplans']['consumed']  = 'Consumed';
-$lang->ai->dataSource['project']['programplans']['left']      = 'Left';
-
-$lang->ai->dataSource['project']['executions']['common']    = 'Execution';
-$lang->ai->dataSource['project']['executions']['name']      = 'Name';
-$lang->ai->dataSource['project']['executions']['desc']      = 'Description';
-$lang->ai->dataSource['project']['executions']['status']    = 'Status';
-$lang->ai->dataSource['project']['executions']['begin']     = 'Begin';
-$lang->ai->dataSource['project']['executions']['end']       = 'End';
-$lang->ai->dataSource['project']['executions']['realBegan'] = 'Actual Start';
-$lang->ai->dataSource['project']['executions']['realEnd']   = 'Actual End';
-$lang->ai->dataSource['project']['executions']['estimate']  = 'Estimates';
-$lang->ai->dataSource['project']['executions']['consumed']  = 'Consumed';
-$lang->ai->dataSource['project']['executions']['left']      = 'Left';
-$lang->ai->dataSource['project']['executions']['progress']  = 'Progress';
-
-$lang->ai->dataSource['story']['story']['common']   = 'Story';
-$lang->ai->dataSource['story']['story']['title']    = 'Title';
-$lang->ai->dataSource['story']['story']['spec']     = 'Description';
-$lang->ai->dataSource['story']['story']['verify']   = 'Acceptance criteria';
-$lang->ai->dataSource['story']['story']['product']  = 'Product';
-$lang->ai->dataSource['story']['story']['module']   = 'Module';
-$lang->ai->dataSource['story']['story']['pri']      = 'Priority';
-$lang->ai->dataSource['story']['story']['category'] = 'Category';
-$lang->ai->dataSource['story']['story']['estimate'] = 'Estimated hours';
-
-$lang->ai->dataSource['execution']['execution']['common']   = 'Execution';
-$lang->ai->dataSource['execution']['execution']['name']     = 'Name';
-$lang->ai->dataSource['execution']['execution']['desc']     = 'Description';
-$lang->ai->dataSource['execution']['execution']['estimate'] = 'Estimated hours';
-
-$lang->ai->dataSource['execution']['tasks']['common']       = 'Task List';
-$lang->ai->dataSource['execution']['tasks']['name']         = 'Name';
-$lang->ai->dataSource['execution']['tasks']['pri']          = 'Priority';
-$lang->ai->dataSource['execution']['tasks']['status']       = 'Status';
-$lang->ai->dataSource['execution']['tasks']['estimate']     = 'Estimated hours';
-$lang->ai->dataSource['execution']['tasks']['consumed']     = 'Consumed hours';
-$lang->ai->dataSource['execution']['tasks']['left']         = 'Remaining hours';
-$lang->ai->dataSource['execution']['tasks']['progress']     = 'Progress';
-$lang->ai->dataSource['execution']['tasks']['estStarted']   = 'Estimated start date';
-$lang->ai->dataSource['execution']['tasks']['realStarted']  = 'Actual start date';
-$lang->ai->dataSource['execution']['tasks']['finishedDate'] = 'Finished date';
-$lang->ai->dataSource['execution']['tasks']['closedReason'] = 'Closing reason';
-
-$lang->ai->dataSource['task']['task']['common']      = 'Task';
-$lang->ai->dataSource['task']['task']['name']        = 'Name';
-$lang->ai->dataSource['task']['task']['desc']        = 'Description';
-$lang->ai->dataSource['task']['task']['pri']         = 'Priority';
-$lang->ai->dataSource['task']['task']['status']      = 'Status';
-$lang->ai->dataSource['task']['task']['estimate']    = 'Estimates';
-$lang->ai->dataSource['task']['task']['consumed']    = 'Consumed';
-$lang->ai->dataSource['task']['task']['left']        = 'Left';
-$lang->ai->dataSource['task']['task']['progress']    = 'Progress';
-$lang->ai->dataSource['task']['task']['estStarted']  = 'Start Date';
-$lang->ai->dataSource['task']['task']['realStarted'] = 'Actual Start';
-$lang->ai->dataSource['task']['task']['story']       = 'Related story';
-
-$lang->ai->dataSource['case']['case']['common']        = 'Test Case';
-$lang->ai->dataSource['case']['case']['title']         = 'Title';
-$lang->ai->dataSource['case']['case']['precondition']  = 'Prerequisite';
-$lang->ai->dataSource['case']['case']['scene']         = 'Scene';
-$lang->ai->dataSource['case']['case']['product']       = 'Product';
-$lang->ai->dataSource['case']['case']['module']        = 'Module';
-$lang->ai->dataSource['case']['case']['pri']           = 'Priority';
-$lang->ai->dataSource['case']['case']['type']          = 'Type';
-$lang->ai->dataSource['case']['case']['lastRunResult'] = 'Result';
-$lang->ai->dataSource['case']['case']['status']        = 'Status';
-
-$lang->ai->dataSource['case']['steps']['common'] = 'Steps';
-$lang->ai->dataSource['case']['steps']['desc']   = 'Description';
-$lang->ai->dataSource['case']['steps']['expect'] = 'Expectation';
-
-$lang->ai->dataSource['bug']['bug']['common']    = 'Bug';
-$lang->ai->dataSource['bug']['bug']['title']     = 'Title';
-$lang->ai->dataSource['bug']['bug']['steps']     = 'Repro Steps';
-$lang->ai->dataSource['bug']['bug']['severity']  = 'Severity';
-$lang->ai->dataSource['bug']['bug']['pri']       = 'Priority';
-$lang->ai->dataSource['bug']['bug']['status']    = 'Status';
-$lang->ai->dataSource['bug']['bug']['confirmed'] = 'Confirmed';
-$lang->ai->dataSource['bug']['bug']['type']      = 'Type';
-
-$lang->ai->dataSource['doc']['doc']['common']     = 'Document';
-$lang->ai->dataSource['doc']['doc']['title']      = 'Title';
-$lang->ai->dataSource['doc']['doc']['content']    = 'Text';
-$lang->ai->dataSource['doc']['doc']['addedBy']    = 'Creator';
-$lang->ai->dataSource['doc']['doc']['addedDate']  = 'Created Date';
-$lang->ai->dataSource['doc']['doc']['editedBy']   = 'Edited by';
-$lang->ai->dataSource['doc']['doc']['editedDate'] = 'Edited Date';
+$lang->ai->moduleList['program']['common']       = 'Program';
+$lang->ai->moduleList['program']['name']         = 'Program Name';
+$lang->ai->moduleList['program']['desc']         = 'Program Description';
+$lang->ai->moduleList['program']['begin']        = 'Start Time';
+$lang->ai->moduleList['program']['end']          = 'End Time';
+$lang->ai->moduleList['product']['common']       = 'Product';
+$lang->ai->moduleList['story']['common']         = 'Story';
+$lang->ai->moduleList['story']['spec']           = 'Story Description';
+$lang->ai->moduleList['story']['verify']         = 'Story Verify';
+$lang->ai->moduleList['stories']['common']       = 'Story List';
+$lang->ai->moduleList['productplan']['common']   = 'Plan';
+$lang->ai->moduleList['release']['common']       = 'Release';
+$lang->ai->moduleList['charter']['common']       = 'Charter';
+$lang->ai->moduleList['charter']['name']         = 'Charter Name';
+$lang->ai->moduleList['charter']['desc']         = 'Charter Description';
+$lang->ai->moduleList['project']['common']       = 'Project';
+$lang->ai->moduleList['execution']['common']     = 'Execution';
+$lang->ai->moduleList['build']['common']         = 'Build';
+$lang->ai->moduleList['executions']['common']    = 'Execution List';
+$lang->ai->moduleList['programplans']['common']  = 'Program Plan List';
+$lang->ai->moduleList['task']['common']          = 'Task';
+$lang->ai->moduleList['tasks']['common']         = 'Task List';
+$lang->ai->moduleList['bug']['common']           = 'Bug';
+$lang->ai->moduleList['bugs']['common']          = 'Bug List';
+$lang->ai->moduleList['case']['common']          = 'Test Case';
+$lang->ai->moduleList['steps']['common']         = 'Test Case Steps';
+$lang->ai->moduleList['steps']['desc']           = 'Description';
+$lang->ai->moduleList['steps']['expect']         = 'Expectation';
+$lang->ai->moduleList['caselib']['common']       = 'Test Case Library';
+$lang->ai->moduleList['caselib']['name']         = 'Test Case Library Name';
+$lang->ai->moduleList['caselib']['desc']         = 'Test Case Library Description';
+$lang->ai->moduleList['testsuite']['common']     = 'Test Suite';
+$lang->ai->moduleList['testsuite']['name']       = 'Test Suite Name';
+$lang->ai->moduleList['testsuite']['desc']       = 'Test Suite Description';
+$lang->ai->moduleList['testtask']['common']      = 'Test Task';
+$lang->ai->moduleList['testtask']['name']        = 'Test Task Name';
+$lang->ai->moduleList['testtask']['desc']        = 'Test Task Description';
+$lang->ai->moduleList['testtask']['begin']       = 'Start Time';
+$lang->ai->moduleList['testtask']['end']         = 'End Time';
+$lang->ai->moduleList['doc']['common']           = 'Document';
+$lang->ai->moduleList['doc']['title']            = 'Document Name';
+$lang->ai->moduleList['doc']['desc']             = 'Document Description';
+$lang->ai->moduleList['doc']['addedBy']          = 'Created By';
+$lang->ai->moduleList['doc']['addedDate']        = 'Created Time';
+$lang->ai->moduleList['doc']['editedBy']         = 'Edited By';
+$lang->ai->moduleList['doc']['editedDate']       = 'Edited Time';
+$lang->ai->moduleList['doc']['content']          = 'Document Content';
+$lang->ai->moduleList['feedback']['common']      = 'Feedback';
+$lang->ai->moduleList['ticket']['common']        = 'Ticket';
+$lang->ai->moduleList['issue']['common']         = 'Issue';
+$lang->ai->moduleList['opportunity']['common']   = 'Opportunity';
+$lang->ai->moduleList['risk']['common']          = 'Risk';
+$lang->ai->moduleList['projectchange']['common'] = 'Project Change';
+$lang->ai->moduleList['cm']['common']            = 'Configuration Management';
 
 /* Target form definition. See `$config->ai->targetForm`. */
 $lang->ai->targetForm = array();
+$lang->ai->targetForm['program']['common']        = 'Program';
+$lang->ai->targetForm['charter']['common']        = 'Charter';
 $lang->ai->targetForm['product']['common']        = 'Product';
 $lang->ai->targetForm['story']['common']          = 'Story';
 $lang->ai->targetForm['productplan']['common']    = 'Plan';
+$lang->ai->targetForm['release']['common']        = 'Release';
 $lang->ai->targetForm['projectrelease']['common'] = 'Release';
 $lang->ai->targetForm['project']['common']        = 'Project';
+$lang->ai->targetForm['build']['common']          = 'Build';
 $lang->ai->targetForm['execution']['common']      = 'Execution';
 $lang->ai->targetForm['task']['common']           = 'Task';
+$lang->ai->targetForm['task']['create']           = 'Create Task';
 $lang->ai->targetForm['testcase']['common']       = 'Test Case';
+$lang->ai->targetForm['testsuite']['common']      = 'Test Suite';
+$lang->ai->targetForm['testtask']['common']       = 'Test Task';
 $lang->ai->targetForm['bug']['common']            = 'Bug';
 $lang->ai->targetForm['doc']['common']            = 'Document';
-$lang->ai->targetForm['empty']['common']          = '';
+$lang->ai->targetForm['feedback']['common']       = 'Feedback';
+$lang->ai->targetForm['ticket']['common']         = 'Ticket';
+$lang->ai->targetForm['issue']['common']          = 'Issue';
+$lang->ai->targetForm['opportunity']['common']    = 'Opportunity';
+$lang->ai->targetForm['risk']['common']           = 'Risk';
+$lang->ai->targetForm['projectchange']['common']  = 'Change';
+$lang->ai->targetForm['cm']['common']             = 'Configuration Management';
 
+$lang->ai->targetForm['program']['create'] = 'Create Program';
+
+$lang->ai->targetForm['product']['create']           = 'Create Product';
+$lang->ai->targetForm['product']['edit']             = 'Edit Product';
 $lang->ai->targetForm['product']['tree/managechild'] = 'Manage Modules';
 $lang->ai->targetForm['product']['doc/create']       = 'Create Doc';
 
+$lang->ai->targetForm['charter']['create'] = 'Create Charter';
+
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
+$lang->ai->targetForm['story']['edit']           = 'Edit Story';
+$lang->ai->targetForm['story']['batchedit']      = 'Batch Edit Story';
 $lang->ai->targetForm['story']['change']         = 'Change Story';
 $lang->ai->targetForm['story']['totask']         = 'Story to Task';
 $lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
 
-$lang->ai->targetForm['productplan']['edit']   = 'Edit Plan';
-$lang->ai->targetForm['productplan']['create'] = 'Create Sub-Plan';
+$lang->ai->targetForm['productplan']['create']      = 'Create Plan';
+$lang->ai->targetForm['productplan']['edit']        = 'Edit Plan';
+$lang->ai->targetForm['productplan']['createchild'] = 'Create Sub-Plan';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
 
-$lang->ai->targetForm['project']['risk/create']        = 'Create Risk';
-$lang->ai->targetForm['project']['issue/create']       = 'Create Issue';
-$lang->ai->targetForm['project']['doc/create']         = 'Create Doc';
+$lang->ai->targetForm['release']['create'] = 'Create Release';
+$lang->ai->targetForm['release']['edit']   = 'Edit Release';
+
+$lang->ai->targetForm['project']['create']             = 'Create Project';
+$lang->ai->targetForm['project']['edit']               = 'Edit Project';
 $lang->ai->targetForm['project']['programplan/create'] = 'Set Program Plan';
 
-$lang->ai->targetForm['execution']['batchcreatetask']  = 'Batch Create Task';
-$lang->ai->targetForm['execution']['createtestreport'] = 'Create Test Report';
-$lang->ai->targetForm['execution']['createqa']         = 'Create QA';
-$lang->ai->targetForm['execution']['createrisk']       = 'Create Risk';
-$lang->ai->targetForm['execution']['createissue']      = 'Create Issue';
+$lang->ai->targetForm['execution']['create'] = 'Create Execution';
+$lang->ai->targetForm['execution']['edit']   = 'Edit Execution';
 
+$lang->ai->targetForm['task']['create']      = 'Create Task';
 $lang->ai->targetForm['task']['edit']        = 'Edit Task';
 $lang->ai->targetForm['task']['batchcreate'] = 'Batch Create Task';
+$lang->ai->targetForm['task']['batchedit']   = 'Batch Edit Task';
+$lang->ai->targetForm['task']['subdivide']   = 'Subdivide Task';
 
+$lang->ai->targetForm['testcase']['create']       = 'Create Test Case';
+$lang->ai->targetForm['testcase']['batchcreate']  = 'Batch Create Test Case';
 $lang->ai->targetForm['testcase']['edit']         = 'Edit Test Case';
+$lang->ai->targetForm['testcase']['batchedit']    = 'Batch Edit Test Case';
 $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
 
+$lang->ai->targetForm['bug']['create']          = 'Create Bug';
+$lang->ai->targetForm['bug']['batchcreate']     = 'Batch Create Bug';
 $lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
+$lang->ai->targetForm['bug']['batchedit']       = 'Batch Edit Bug';
 $lang->ai->targetForm['bug']['story/create']    = 'Bug to Story';
 $lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 
 $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
-$lang->ai->targetForm['empty']['empty'] = 'Empty';
+$lang->ai->targetForm['build']['create']         = 'Create Build';
+$lang->ai->targetForm['testsuite']['create']     = 'Create Test Suite';
+$lang->ai->targetForm['testtask']['create']      = 'Create Test Task';
+$lang->ai->targetForm['feedback']['create']      = 'Create Feedback';
+$lang->ai->targetForm['ticket']['create']        = 'Create Ticket';
+$lang->ai->targetForm['ticket']['edit']          = 'Edit Ticket';
+$lang->ai->targetForm['ticket']['batchcreate']   = 'Batch Create Ticket';
+$lang->ai->targetForm['ticket']['batchedit']     = 'Batch Edit Ticket';
+$lang->ai->targetForm['issue']['create']         = 'Create Issue';
+$lang->ai->targetForm['issue']['edit']           = 'Edit Issue';
+$lang->ai->targetForm['issue']['batchcreate']    = 'Batch Create Issue';
+$lang->ai->targetForm['opportunity']['create']   = 'Create Opportunity';
+$lang->ai->targetForm['risk']['create']          = 'Create Risk';
+$lang->ai->targetForm['risk']['edit']            = 'Edit Risk';
+$lang->ai->targetForm['risk']['batchcreate']     = 'Batch Create Risk';
+$lang->ai->targetForm['projectchange']['create'] = 'Create Change';
+$lang->ai->targetForm['cm']['create']            = 'Create Baseline';
 
 $lang->ai->prompts->statuses = array();
 $lang->ai->prompts->statuses['']       = 'All';
@@ -623,18 +579,29 @@ $lang->ai->featureBar['prompts']['draft']  = 'Draft';
 $lang->ai->featureBar['prompts']['active'] = 'Active';
 
 $lang->ai->prompts->modules = array();
-$lang->ai->prompts->modules['']            = 'All';
-// $lang->ai->prompts->modules['my']          = 'My';
-$lang->ai->prompts->modules['product']     = 'Product';
-$lang->ai->prompts->modules['project']     = 'Project';
-$lang->ai->prompts->modules['story']       = 'Story';
-$lang->ai->prompts->modules['productplan'] = 'Product Plan';
-$lang->ai->prompts->modules['release']     = 'Release';
-$lang->ai->prompts->modules['execution']   = 'Execution';
-$lang->ai->prompts->modules['task']        = 'Task';
-$lang->ai->prompts->modules['case']        = 'Test Case';
-$lang->ai->prompts->modules['bug']         = 'Bug';
-$lang->ai->prompts->modules['doc']         = 'Document';
+$lang->ai->prompts->modules['program']       = 'Program';
+$lang->ai->prompts->modules['product']       = 'Product';
+$lang->ai->prompts->modules['project']       = 'Project';
+$lang->ai->prompts->modules['charter']       = 'Charter';
+$lang->ai->prompts->modules['story']         = 'Story';
+$lang->ai->prompts->modules['productplan']   = 'Plan';
+$lang->ai->prompts->modules['release']       = 'Release';
+$lang->ai->prompts->modules['build']         = 'Build';
+$lang->ai->prompts->modules['execution']     = 'Execution';
+$lang->ai->prompts->modules['task']          = 'Task';
+$lang->ai->prompts->modules['caselib']       = 'Test Case Library';
+$lang->ai->prompts->modules['testsuite']     = 'Test Suite';
+$lang->ai->prompts->modules['testtask']      = 'Test Task';
+$lang->ai->prompts->modules['case']          = 'Test Case';
+$lang->ai->prompts->modules['bug']           = 'Bug';
+$lang->ai->prompts->modules['doc']           = 'Document';
+$lang->ai->prompts->modules['feedback']      = 'Feedback';
+$lang->ai->prompts->modules['ticket']        = 'Ticket';
+$lang->ai->prompts->modules['issue']         = 'Issue';
+$lang->ai->prompts->modules['opportunity']   = 'Opportunity';
+$lang->ai->prompts->modules['risk']          = 'Risk';
+$lang->ai->prompts->modules['projectchange'] = 'Change';
+$lang->ai->prompts->modules['cm']            = 'Baseline';
 
 $lang->ai->conversations = new stdclass();
 $lang->ai->conversations->common = 'Conversations';
@@ -698,6 +665,7 @@ $lang->ai->miniPrograms->field->fields            = 'Form Configuration';
 $lang->ai->miniPrograms->field->prompt            = 'Prompt';
 $lang->ai->miniPrograms->field->fieldConfig       = 'Field configuration';
 $lang->ai->miniPrograms->field->knowledgeLibs     = 'Knowledge Libraries Mounting';
+$lang->ai->miniPrograms->field->skills              = 'Skills Mounting';
 $lang->ai->miniPrograms->field->option            = 'Options';
 $lang->ai->miniPrograms->field->contentDebugging  = 'Content debugging';
 $lang->ai->miniPrograms->field->contentDebuggingTip = 'Please enter the field here to debug.';
@@ -818,11 +786,11 @@ $lang->ai->models->proxyTypes['socks5'] = 'SOCKS5';
 $lang->ai->models->promptFor = 'ZenTao agent for %s';
 
 $lang->ai->designStepNav = array();
-$lang->ai->designStepNav['assignrole']       = 'Specify Role';
-$lang->ai->designStepNav['selectdatasource'] = 'Select Object';
-$lang->ai->designStepNav['setpurpose']       = 'Confirm Action';
-$lang->ai->designStepNav['settargetform']    = 'Process Result';
-$lang->ai->designStepNav['finalize']         = 'Ready to Publish';
+$lang->ai->designStepNav['basicinfo']      = 'Basic Info';
+$lang->ai->designStepNav['setinputfields'] = 'Set Input Fields';
+$lang->ai->designStepNav['setinputform']   = 'Set Input Form';
+$lang->ai->designStepNav['setprompt']      = 'Set Prompt';
+$lang->ai->designStepNav['preview']        = 'Result Preview';
 
 $lang->ai->dataTypeDesc = '%s is %s type, %s';
 
@@ -932,6 +900,7 @@ $lang->ai->formSchema['story']['create']->properties->spec->description   = 'Des
 $lang->ai->formSchema['story']['create']->properties->verify->type        = 'string';
 $lang->ai->formSchema['story']['create']->properties->verify->description = 'Acceptance criteria of story';
 $lang->ai->formSchema['story']['create']->required = array('title', 'spec', 'verify');
+$lang->ai->formSchema['story']['edit'] = $lang->ai->formSchema['story']['create'];
 $lang->ai->formSchema['story']['change'] = $lang->ai->formSchema['story']['create'];
 
 $lang->ai->formSchema['story']['batchcreate'] = new stdclass();
@@ -942,6 +911,48 @@ $lang->ai->formSchema['story']['batchcreate']->properties->stories  = new stdcla
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->type        = 'array';
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->description = 'Stories';
 $lang->ai->formSchema['story']['batchcreate']->properties->stories->items       = $lang->ai->formSchema['story']['create'];
+
+$lang->ai->formSchema['product']['create'] = new stdclass();
+$lang->ai->formSchema['product']['create']->title = 'Product';
+$lang->ai->formSchema['product']['create']->type  = 'object';
+$lang->ai->formSchema['product']['create']->properties = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->name     = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->code     = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->type     = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->PO       = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->reviewer = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->QD       = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->RD       = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->desc     = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->acl      = new stdclass();
+$lang->ai->formSchema['product']['create']->properties->name->type             = 'string';
+$lang->ai->formSchema['product']['create']->properties->name->description      = 'Name of product';
+$lang->ai->formSchema['product']['create']->properties->code->type             = 'string';
+$lang->ai->formSchema['product']['create']->properties->code->description      = 'Code of product';
+$lang->ai->formSchema['product']['create']->properties->type->type             = 'string';
+$lang->ai->formSchema['product']['create']->properties->type->description      = 'Type of product';
+$lang->ai->formSchema['product']['create']->properties->type->enum             = array('normal', 'branch', 'platform');
+$lang->ai->formSchema['product']['create']->properties->PO->type               = 'string';
+$lang->ai->formSchema['product']['create']->properties->PO->description        = 'Manager of product';
+$lang->ai->formSchema['product']['create']->properties->reviewer->type         = 'string';
+$lang->ai->formSchema['product']['create']->properties->reviewer->description  = 'Reviewers of product, separated by commas';
+$lang->ai->formSchema['product']['create']->properties->QD->type               = 'string';
+$lang->ai->formSchema['product']['create']->properties->QD->description        = 'QA owner of product';
+$lang->ai->formSchema['product']['create']->properties->RD->type               = 'string';
+$lang->ai->formSchema['product']['create']->properties->RD->description        = 'Release owner of product';
+$lang->ai->formSchema['product']['create']->properties->desc->type             = 'string';
+$lang->ai->formSchema['product']['create']->properties->desc->format           = 'html';
+$lang->ai->formSchema['product']['create']->properties->desc->description      = 'Description of product';
+$lang->ai->formSchema['product']['create']->properties->acl->type              = 'string';
+$lang->ai->formSchema['product']['create']->properties->acl->description       = 'Access control of product';
+$lang->ai->formSchema['product']['create']->properties->acl->enum              = array('open', 'private');
+$lang->ai->formSchema['product']['create']->required = array('name', 'type');
+$lang->ai->formSchema['product']['edit'] = clone $lang->ai->formSchema['product']['create'];
+$lang->ai->formSchema['product']['edit']->properties = clone $lang->ai->formSchema['product']['create']->properties;
+$lang->ai->formSchema['product']['edit']->properties->status = new stdclass();
+$lang->ai->formSchema['product']['edit']->properties->status->type        = 'string';
+$lang->ai->formSchema['product']['edit']->properties->status->description = 'Status of product';
+$lang->ai->formSchema['product']['edit']->properties->status->enum        = array('normal', 'closed');
 
 $lang->ai->formSchema['productplan']['create'] = new stdclass();
 $lang->ai->formSchema['productplan']['create']->title = 'Product Plan';
@@ -960,7 +971,6 @@ $lang->ai->formSchema['productplan']['create']->properties->end->description    
 $lang->ai->formSchema['productplan']['create']->properties->desc->type          = 'string';
 $lang->ai->formSchema['productplan']['create']->properties->desc->description   = 'Description of product plan';
 $lang->ai->formSchema['productplan']['create']->required = array('title', 'begin', 'end');
-$lang->ai->formSchema['productplan']['edit'] = $lang->ai->formSchema['productplan']['create'];
 
 $lang->ai->formSchema['task']['create'] = new stdclass();
 $lang->ai->formSchema['task']['create']->title = 'Task';
@@ -1084,8 +1094,6 @@ $lang->ai->formSchema['testreport']['create']->properties->title->description  =
 $lang->ai->formSchema['testreport']['create']->properties->report->type        = 'string';
 $lang->ai->formSchema['testreport']['create']->properties->report->description = 'Report content';
 $lang->ai->formSchema['testreport']['create']->required = array('begin', 'end', 'title', 'report');
-$lang->ai->formSchema['execution']['testreport'] = $lang->ai->formSchema['testreport']['create'];
-
 $lang->ai->formSchema['doc']['edit'] = new stdclass();
 $lang->ai->formSchema['doc']['edit']->title = 'Document';
 $lang->ai->formSchema['doc']['edit']->type  = 'object';
@@ -1101,6 +1109,7 @@ $lang->ai->formSchema['doc']['edit']->properties->contentType->type        = 'st
 $lang->ai->formSchema['doc']['edit']->properties->contentType->description = 'Content type';
 $lang->ai->formSchema['doc']['edit']->properties->contentType->enum        = array('html', 'markdown');
 $lang->ai->formSchema['doc']['edit']->required = array('title', 'content');
+$lang->ai->formSchema['doc']['setdocbasic'] = $lang->ai->formSchema['doc']['edit'];
 
 $lang->ai->formSchema['doc']['selectlibtype'] = $lang->ai->formSchema['doc']['edit'];
 

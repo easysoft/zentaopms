@@ -292,6 +292,9 @@ CSS;
         $className    = isset($item['className']) ? $item['className'] : null;
         if($titleActions) unset($item['titleActions']);
 
+        $titleActionNode = null;
+        if($titleActions) $titleActionNode = div(setClass('ml-auto'), toolbar::create($titleActions));
+
         return div
         (
             setClass('detail-section'),
@@ -300,7 +303,7 @@ CSS;
             (
                 setClass('detail-section-title row items-center gap-2'),
                 span(setClass('text-md py-1 font-bold'), $title),
-                $titleActions ? toolbar::create($titleActions) : null
+                $titleActionNode
             ) : null,
             div
             (
@@ -316,7 +319,8 @@ CSS;
         $sections = $this->prop('sections', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
-        $list = array();
+        $list                = array();
+        $firstSectionHandled = false;
         foreach($sections as $key => $item)
         {
             if($item === '-')
@@ -324,6 +328,32 @@ CSS;
                 $list[] = hr();
                 continue;
             }
+
+            if(!$firstSectionHandled)
+            {
+                $normalizedItem = $item instanceof setting ? $item->toArray() : $item;
+                $title = is_string($key) ? $key : null;
+
+                if(is_array($normalizedItem) && isset($normalizedItem['title'])) $title = $normalizedItem['title'];
+
+                if($title && is_array($normalizedItem))
+                {
+                    $titleActions   = $normalizedItem['titleActions'] ?? array();
+                    $titleActions[] = aiAgentEntry
+                    (
+                        set::type('detail'),
+                        set::module($this->prop('objectType')),
+                        set::method('view'),
+                        set::objectID((int)$this->prop('objectID')),
+                        set::objectVarName($this->prop('objectType'))
+                    );
+                    $normalizedItem['titleActions'] = $titleActions;
+
+                    $item                = $normalizedItem;
+                    $firstSectionHandled = true;
+                }
+            }
+
             $list[] = $this->buildSection($item, is_string($key) ? $key : null);
         }
 

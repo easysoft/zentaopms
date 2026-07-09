@@ -11,8 +11,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 $fields = useFields('bug.create');
 if(!empty($executionType) && $executionType == 'kanban') $fields->merge('bug.kanban');
 

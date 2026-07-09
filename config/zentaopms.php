@@ -450,6 +450,7 @@ define('TABLE_INSTANCE',     '`' . $config->db->prefix . 'instance`');
 define('TABLE_ARTIFACTREPO', '`' . $config->db->prefix . 'artifactrepo`');
 
 define('TABLE_AI_AGENT',            '`' . $config->db->prefix . 'ai_agent`');
+define('TABLE_AI_USERAGENT',        '`' . $config->db->prefix . 'ai_useragent`');
 define('TABLE_AI_AGENTFIELD',       '`' . $config->db->prefix . 'ai_agentfield`');
 define('TABLE_AI_AGENTROLE',        '`' . $config->db->prefix . 'ai_agentrole`');
 define('TABLE_AI_MINIPROGRAM',      '`' . $config->db->prefix . 'ai_miniprogram`');

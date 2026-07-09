@@ -12,7 +12,6 @@ declare(strict_types=1);
 namespace zin;
 
 data('testcase', $case);
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
 
 $params = $app->getParams();
 array_shift($params);

@@ -65,7 +65,7 @@ $lang->aiapp->langData->doc                = 'Document';
 $lang->aiapp->langData->design             = 'Conception';
 $lang->aiapp->langData->feedback           = 'Retour';
 $lang->aiapp->langData->currentDocContent  = 'Document actuel';
-$lang->aiapp->langData->globalMemoryTitle  = 'ZenTao';
+$lang->aiapp->langData->globalMemoryTitle  = 'All';
 $lang->aiapp->langData->zaiConfigNotValid  = 'La configuration ZAI n\'a pas encore été effectuée. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->unauthorizedError  = 'Échec d\'autorisation, clé API invalide. Veuillez contacter l\'administrateur pour <a href="{zaiConfigUrl}">configurer ZAI</a>.<br>Si la configuration correspondante a été terminée, veuillez essayer de recharger la page.';
 $lang->aiapp->langData->processDataPrefix  = "Les données à traiter sont les suivantes :\n{data}";
@@ -81,7 +81,19 @@ $lang->aiapp->langData->promptTestDataIntro= 'Voici l\'exemple {type} de {name} 
 $lang->aiapp->langData->searchingKLibs     = 'Recherche de bases de connaissances...';
 $lang->aiapp->langData->recentChats        = 'Chats récents';
 $lang->aiapp->langData->aiTeammateTasks    = 'Tâches de l\'employé numérique';
-$lang->aiapp->langData->searchTasks        = 'Rechercher les tâches de l\'employé numérique';
+
+$lang->aiapp->langData->searchTasks           = 'Rechercher les tâches de l\'employé numérique';
+$lang->aiapp->langData->formFillTitle         = 'Remplissage du formulaire';
+$lang->aiapp->langData->formFillUserMessage   = 'Veuillez remplir le formulaire en fonction des informations de la page actuelle';
+$lang->aiapp->langData->formPageContext       = 'Contexte de la page actuelle';
+$lang->aiapp->langData->formCurrentData       = 'Données actuelles du formulaire';
+$lang->aiapp->langData->formFillableFields    = 'Champs remplissables';
+$lang->aiapp->langData->formZentaoAPITip      = "Veuillez d'abord utiliser les outils zentao-api pour obtenir les données de contexte nécessaires, puis utilisez l'outil submitFormData pour retourner les données du formulaire remplies. Les champs obligatoires doivent avoir des valeurs.\nNormalement, submitFormData n'a besoin d'être appelé qu'une seule fois, sauf si l'utilisateur demande plusieurs solutions.";
+$lang->aiapp->langData->formResultGenerated   = 'Les données du formulaire ont été générées.';
+$lang->aiapp->langData->formCurrentTarget     = 'Actuel';
+$lang->aiapp->langData->formApplyDataTip      = 'Veuillez cliquer sur le bouton "Appliquer au formulaire actuel" pour remplir les données dans le formulaire.';
+$lang->aiapp->langData->submitFormDisplayName = 'Soumettre les données du formulaire';
+$lang->aiapp->langData->submitFormDescription = 'Retourner les données du formulaire remplies à l\'utilisateur';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

@@ -2,20 +2,20 @@
 global $lang, $app, $config;
 
 $config->ai->actions = new stdclass();
-$config->ai->actions->prompts      = $config->edition != 'open' ? array('promptassignrole', 'promptaudit', 'promptedit', 'promptpublish', 'promptunpublish') : array('promptpublish', 'promptunpublish');
-$config->ai->actions->promptview   = array('mainActions' => array('promptassignrole', 'promptaudit', 'promptpublish', 'promptunpublish'), 'suffixActions' => array('promptedit', 'promptdelete'));
+$config->ai->actions->prompts      = $config->edition != 'open' ? array('promptbasicinfo', 'promptaudit', 'promptedit', 'promptpublish', 'promptunpublish') : array('promptpublish', 'promptunpublish');
+$config->ai->actions->promptview   = array('mainActions' => array('promptbasicinfo', 'promptaudit', 'promptpublish', 'promptunpublish'), 'suffixActions' => array('promptedit', 'promptdelete'));
 $config->ai->actions->miniPrograms = $config->edition == 'open' ?  array('publishminiprogram', 'unpublishminiprogram') : array('editminiprogram', 'testminiprogram', 'publishminiprogram', 'unpublishminiprogram', 'exportminiprogram');
 
 $config->ai->actionList = array();
-$config->ai->actionList['promptassignrole']['icon'] = 'design';
-$config->ai->actionList['promptassignrole']['text'] = $lang->ai->prompts->action->design;
-$config->ai->actionList['promptassignrole']['hint'] = $lang->ai->prompts->action->design;
-$config->ai->actionList['promptassignrole']['url']  = array('module' => 'ai', 'method' => 'promptassignrole', 'params' => 'prompt={id}');
+$config->ai->actionList['promptbasicinfo']['icon'] = 'design';
+$config->ai->actionList['promptbasicinfo']['text'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['promptbasicinfo']['hint'] = $lang->ai->prompts->action->design;
+$config->ai->actionList['promptbasicinfo']['url']  = array('module' => 'ai', 'method' => 'promptbasicinfo', 'params' => 'promptID={id}');
 
 $config->ai->actionList['promptaudit']['icon'] = 'menu-backend ';
 $config->ai->actionList['promptaudit']['text'] = $lang->ai->prompts->action->test;
 $config->ai->actionList['promptaudit']['hint'] = $lang->ai->prompts->action->test;
-$config->ai->actionList['promptaudit']['url']  = 'javascript:getTestingLocation("{id}")';
+$config->ai->actionList['promptaudit']['url']  = 'javascript:goPromptTesting("{id}")';
 
 $config->ai->actionList['promptedit']['icon']        = 'edit';
 $config->ai->actionList['promptedit']['text']        = $lang->ai->prompts->action->edit;

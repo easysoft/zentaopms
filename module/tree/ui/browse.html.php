@@ -238,7 +238,7 @@ div
                 set::items($tree),
                 set::canEdit(common::hasPriv('tree', 'edit') && $canBeChanged),
                 set::canDelete(common::hasPriv('tree', 'delete') && $canBeChanged),
-                set::canSplit($viewType != 'deliverable'),
+                set::canSplit($viewType != 'deliverable' && $viewType != 'aiskill'),
                 set::sortable(array('handle' => '.icon-move')),
                 set::onSort(jsRaw('window.updateOrder'))
             )

@@ -2058,8 +2058,9 @@ class treeModel extends model
 
         if($self)
         {
+            $rootlessType = ($type == 'host' || $type == 'aiskill');
             if($type == 'ticket' || $type == 'feedback') $module->root = $self->root;
-            if($type == 'host' || !isset($module->root)) $module->root = 0;
+            if($rootlessType || !isset($module->root)) $module->root = 0;
             if(strpos($this->config->tree->groupTypes, ",$type,") !== false) $module->root = $self->root;
             if($self->root && !$module->root) $module->root = $self->root;
             if($self->parent != $module->parent || $self->root != $module->root)

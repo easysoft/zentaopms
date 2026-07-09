@@ -20,7 +20,10 @@ jsVar('moduleParent', $module->parent);
 jsVar('type', $type);
 
 /* zin: Set variables to define control for form. */
-$hidden = $type != 'story' && $module->type == 'story';
+$hidden              = $type != 'story' && $module->type == 'story';
+$showParent          = $module->type != 'line' && $module->type != 'deliverable' && $module->type != 'aiskill';
+$moduleBoxClass      = $hidden ? 'hidden' : '';
+$parentLabel         = strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent;
 
 /* ====== Define the page structure with zin widgets ====== */
 if($type != 'docTemplate') modalHeader(set::title($title));
@@ -84,10 +87,10 @@ formPanel
         )
     ) : null,
     $type == 'api' ? formHidden('root', $module->root) : null,
-    $module->type != 'line' && $module->type != 'deliverable' ? formGroup
+    $showParent ? formGroup
     (
-        set::className('moduleBox ', $hidden ? 'hidden' : ''),
-        set::label(strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent),
+        set::className('moduleBox ', $moduleBoxClass),
+        set::label($parentLabel),
         picker
         (
             set::name('parent'),

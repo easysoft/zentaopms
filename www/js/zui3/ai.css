@@ -1,0 +1,29 @@
+/* AI smart agent entry button styles */
+
+.btn.ai-styled {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.btn.ai-styled .icon {
+    font-size: 14px;
+}
+
+.btn.ai-styled .caret-down {
+    margin-left: 2px;
+}
+
+.prompts.dropdown .dropdown-menu .menu-item .btn {
+    width: 100%;
+    white-space: nowrap;
+}
+
+/* detail view z-index fix to ensure dropdown menu appears above sections */
+.detail-view > .detail-body > .detail-main > .detail-sections:first-child > .detail-section {
+    position: relative;
+    z-index: 1;
+}
+.detail-view > .detail-body > .detail-main > .detail-sections:first-child > .detail-section:first-child {
+    z-index: 2;
+}

@@ -29,19 +29,22 @@ detailHeader
         (
             setClass('primary'),
             set::icon('plus'),
-            set::url(createLink('ai', 'createprompt')),
-            setData('toggle', 'modal'),
-            setData('size', 'sm'),
-            $lang->ai->prompts->create,
+            set::url(createLink('ai', 'promptbasicinfo')),
+            $lang->ai->prompts->create
         ) : null
     )
 );
 
-$selectTargetForm = '';
-if(!empty($prompt->targetForm))
+$actionObject = '';
+if(!empty($prompt->actionPurpose))
 {
-    $targetForm       = explode('.', $prompt->targetForm);
-    $selectTargetForm = $lang->ai->targetForm[$targetForm[0]][$targetForm[1]];
+    $actionPurposePath = explode('.', $prompt->actionPurpose, 2);
+    if(count($actionPurposePath) == 2)
+    {
+        $actionObjectCommon = $lang->ai->targetForm[$actionPurposePath[0]]['common'] ?? '';
+        $actionObjectName   = $lang->ai->targetForm[$actionPurposePath[0]][$actionPurposePath[1]] ?? '';
+        if(!empty($actionObjectName)) $actionObject = $prompt->actionPurpose == 'empty.empty' || empty($actionObjectCommon) ? $actionObjectName : $actionObjectCommon . ' / ' . $actionObjectName;
+    }
 }
 
 $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
@@ -75,37 +78,37 @@ $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
 if($prompt->status != 'draft' || !$this->ai->isExecutable($prompt)) unset($config->ai->actions->promptview['mainActions'][1]);
 $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 
-$fnBuildFieldConfig = function() use ($lang, $fieldConfig)
-{
-    if(empty($fieldConfig)) return array();
+$promptContent = $prompt->purpose;
+if(!empty($prompt->elaboration)) $promptContent .= "\n\n" . $prompt->elaboration;
 
-    $fields = array();
-    foreach($fieldConfig as $field)
+$skillName = !empty($skill) && !empty($skill->name) ? $skill->name : '';
+
+$knowledgeLibNames = array();
+if(!empty($knowledgeLibs))
+{
+    foreach($knowledgeLibs as $knowledgeLib)
     {
-        $control  = $lang->ai->miniPrograms->field->typeList[$field->type];
-        $required = $lang->ai->requiredList[$field->required];
-        $options  = $field->options ?: '-';
-        $fields[] = div(setClass('mb-1'), $field->name . ' (' . $control . ', ' . $required . ') : ' . $options);
+        if(!empty($knowledgeLib->name)) $knowledgeLibNames[] = $knowledgeLib->name;
     }
-    return section(set::title($lang->ai->miniPrograms->field->fields), $fields);
-};
+}
+$knowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $knowledgeLibNames);
+$displayPosition  = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
 
 detailBody
 (
     sectionList
     (
-        section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
-        section(set::title($lang->ai->prompts->characterization), set::content($prompt->characterization)),
         section
         (
-            set::title($lang->ai->prompts->object),
-            set::content($prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : '')
+            set::title($lang->ai->prompts->processObject),
+            set::content($prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : '')
         ),
-        section(set::title($lang->ai->prompts->field), set::content($dataPreview)),
-        $fnBuildFieldConfig(),
-        section(set::title($lang->ai->prompts->setPurpose), set::content($prompt->purpose)),
-        section(set::title($lang->ai->prompts->elaboration), set::content($prompt->elaboration)),
-        section(set::title($lang->ai->prompts->selectTargetForm), set::content($selectTargetForm))
+        section(set::title($lang->ai->prompts->actionObject), set::content($actionObject)),
+        section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
+        section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
+        section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
+        section(set::title($lang->ai->prompts->skill), set::content($skillName)),
+        section(set::title($lang->ai->prompts->knowledgeLib), set::content($knowledgeLibText))
     ),
     history
     (
@@ -134,7 +137,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->dataSource[$prompt->module]['common'] : ''),
+                    item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : ''),
                     item(set::name($lang->prompt->desc),   div(setClass('w-64 text-clip'), set::title($prompt->desc), $prompt->desc)),
                     item(set::name($lang->prompt->status), $lang->ai->prompts->statuses[$prompt->status]),
                     item(set::name($lang->prompt->model), zui::aiModelName($prompt->model)),
