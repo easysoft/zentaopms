@@ -236,6 +236,22 @@ $config->logonMethods[] = 'ppm.ajaxdeletereviewer';
 $config->logonMethods[] = 'ppm.ajaxcheckreviewflow';
 $config->logonMethods[] = 'provider.ajaxgetproviders';
 $config->logonMethods[] = 'repo.ajaxgetspacemembers';
+$config->logonMethods[] = 'my.ssh';
+$config->logonMethods[] = 'my.createssh';
+$config->logonMethods[] = 'my.editssh';
+$config->logonMethods[] = 'my.deletessh';
+$config->logonMethods[] = 'repo.apigetrepobyurl';
+$config->logonMethods[] = 'repo.showsynccommit';
+$config->logonMethods[] = 'ppm.submit';
+$config->logonMethods[] = 'ppm.recall';
+$config->logonMethods[] = 'codescan.refresh';
+$config->logonMethods[] = 'codescan.tips';
+$config->logonMethods[] = 'repo.viewwebhookrequest';
+$config->logonMethods[] = 'artifact.view';
+$config->logonMethods[] = 'artifact.downloadartifact';
+$config->logonMethods[] = 'artifact.history';
+$config->logonMethods[] = 'artifact.moveartifact';
+$config->logonMethods[] = 'artifact.copycmd';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
