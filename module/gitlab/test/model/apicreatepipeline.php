@@ -7,11 +7,11 @@ title=测试 gitlabModel::apiCreatePipeline();
 timeout=0
 cid=0
 
-- 使用有效参数创建流水线（对象参数）>> success
-- 使用有效参数创建流水线（字符串参数）>> success
-- 使用空的url创建流水线 >> has_error
-- 使用空的token创建流水线 >> has_error
-- 使用空的projectID创建流水线 >> has_error
+- 使用有效参数创建流水线（对象参数）@ success
+- 使用有效参数创建流水线（字符串参数）@ success
+- 使用空的url创建流水线 @ has_error
+- 使用空的token创建流水线 @ has_error
+- 使用空的projectID创建流水线 @ has_error
 
 */
 

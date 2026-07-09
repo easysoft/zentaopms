@@ -7,11 +7,11 @@ title=测试 gitlabModel::apiErrorHandling();
 timeout=0
 cid=0
 
-- 测试空响应（falsy）>> no_response
-- 测试带有error属性的响应 >> has_error
-- 测试带有message字符串的响应 >> has_message_string
-- 测试带有message对象的响应 >> has_message_object
-- 测试无错误无消息的响应 >> no_error
+- 测试空响应（falsy）@ no_response
+- 测试带有error属性的响应 @ has_error
+- 测试带有message字符串的响应 @ has_message_string
+- 测试带有message对象的响应 @ has_message_object
+- 测试无错误无消息的响应 @ no_error
 
 */
 
