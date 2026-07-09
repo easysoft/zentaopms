@@ -2225,6 +2225,8 @@ class repoModel extends model
         if($action == 'execjob')      return common::hasPriv('sonarqube', $action) && !$repo->exec;
         if($action == 'reportview')   return common::hasPriv('sonarqube', $action) && !$repo->report;
         if($action == 'deletebranch') return $repo->deletable;
+        if($action == 'scanexec')     return empty($repo->mirror);
+        if($action == 'scanissue')    return empty($repo->mirror);
 
         return true;
     }
