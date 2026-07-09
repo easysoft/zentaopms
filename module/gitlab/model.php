@@ -15,19 +15,6 @@ class gitlabModel extends model
 {
 
     /**
-     * 获取gitlab根据id。
-     * Get a gitlab by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object|false
-     */
-    public function getByID(int $id): object|false
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
      * 发送一个get api请求。
      * Send an api get request.
      *
@@ -127,5 +114,74 @@ class gitlabModel extends model
 
         $apiRoot .= '&sudo=' . $users[0]->id;
         return $this->apiGet($apiRoot, '/user');
+    }
+
+    /**
+     * 通过api创建一个流水线。
+     * Create a new pipeline by api.
+     *
+     * @param  string $url
+     * @param  string $token
+     * @param  string $projectID
+     * @param  object $params
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
+     */
+    public function apiCreatePipeline(string $url, string $token, string $projectID, object $params): object|array|null
+    {
+        if(!is_string($params)) $params = json_encode($params);
+        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
+        $url = sprintf($apiRoot, "/projects/{$projectID}/pipeline");
+        return json_decode(commonModel::http($url, $params, array(), array("Content-Type: application/json")));
+    }
+    
+    /**
+     * 错误处理。
+     * Api error handling.
+     *
+     * @param  object $response
+     * @access public
+     * @return bool
+     */
+    public function apiErrorHandling(object $response): bool
+    {
+        if(!empty($response->error))
+        {
+            dao::$errors[] = $response->error;
+            return false;
+        }
+        if(!empty($response->message))
+        {
+            if(is_string($response->message))
+            {
+                $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
+            }
+            else
+            {
+                foreach($response->message as $field => $fieldErrors)
+                {
+                    if(empty($fieldErrors)) continue;
+
+                    if(is_string($fieldErrors))
+                    {
+                        $errorKey = array_search($fieldErrors, $this->lang->gitlab->apiError);
+                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gitlab->errorLang, $errorKey);
+                    }
+                    else
+                    {
+                        foreach($fieldErrors as $error)
+                        {
+                            $errorKey = array_search($error, $this->lang->gitlab->apiError);
+                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitlab->errorLang, $errorKey);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!$response) dao::$errors[] = false;
+        return false;
     }
 }
