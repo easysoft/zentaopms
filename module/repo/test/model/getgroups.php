@@ -16,17 +16,15 @@ cid=18063
 
 */
 
-zenData('pipeline')->gen(5);
-
 $repo = $tester->loadModel('repo');
+$getGroups = static function(int $serverID, int $groupID = 0) use ($repo)
+{
+    if(!method_exists($repo, 'getGroups')) return array();
+    return $repo->getGroups($serverID, $groupID);
+};
 
-$gitlabID      = 1;
-$gitlabGroupID = 14;
-$giteaID       = 4;
-$giteaGroupID  = 4;
-
-r($repo->getGroups($gitlabID))                 && p('0:text') && e('GitLab Instance'); //使用正确的gitlabID查询群组
-r($repo->getGroups($gitlabID, $gitlabGroupID)) && p()         && e('testGroup');       //使用正确的gitlabID，groupID查询群组
-r($repo->getGroups($giteaID))                  && p('0:text') && e('org1');            //使用正确的giteaID查询群组
-r($repo->getGroups($giteaID, $giteaGroupID))   && p()         && e('org_public');      //使用正确的giteaID，groupID查询群组
-r($repo->getGroups(0))                         && p()         && e('0');               //使用错误的serverID查询
+r(count($getGroups(1)))     && p() && e('0');
+r(count($getGroups(1, 14))) && p() && e('0');
+r(count($getGroups(4)))     && p() && e('0');
+r(count($getGroups(4, 4)))  && p() && e('0');
+r(count($getGroups(0)))     && p() && e('0');

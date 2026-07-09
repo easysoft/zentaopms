@@ -18,30 +18,68 @@ cid=18107
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$repoTable = zenData('repo');
+global $dbh;
+$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` varchar(500) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `projects` varchar(255) NOT NULL DEFAULT '',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `forkID` int unsigned DEFAULT NULL,
+  `mirror` tinyint(1) NOT NULL DEFAULT 0,
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `connector` text DEFAULT NULL,
+  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  `synced` tinyint unsigned NOT NULL DEFAULT 0,
+  `branchArchivable` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+
+$repoTable = zenData('ops_repo');
 $repoTable->id->range('1-3');
-$repoTable->product->range('1');
-$repoTable->name->range('测试代码库{1-3}');
-$repoTable->SCM->range('Git');
-$repoTable->deleted->range('0');
+$repoTable->spaceID->range('1{3}');
+$repoTable->product->range('1{3}');
+$repoTable->name->range('repo1,repo2,repo3');
+$repoTable->gitUID->range('uid1,uid2,uid3');
+$repoTable->status->range('active{3}');
+$repoTable->deleted->range('0{3}');
 $repoTable->gen(3);
 
-$repohistoryTable = zenData('repohistory');
-$repohistoryTable->id->range('1-5');
-$repohistoryTable->repo->range('1{2},2{2},3{1}');
-$repohistoryTable->revision->range('rev001,rev002,rev003,rev004,rev005');
-$repohistoryTable->comment->range('测试提交{1-5}');
-$repohistoryTable->committer->range('admin');
-$repohistoryTable->gen(5);
+global $tester;
+$tester->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->in('1,2,3')->exec();
+$tester->dao->delete()->from(TABLE_RELATION)->where('AType')->eq('revision')->andWhere('AID')->in('1,2,3,4,5')->exec();
 
-$relationTable = zenData('relation');
-$relationTable->id->range('1-6');
-$relationTable->AType->range('revision');
-$relationTable->AID->range('1,2,3,1,2,3');
-$relationTable->relation->range('commit');
-$relationTable->BType->range('story,bug,task,story,bug,task');
-$relationTable->BID->range('1,2,3,4,5,6');
-$relationTable->gen(6);
+$histories = array(
+    array('id' => 1, 'repo' => 1, 'revision' => 'rev001', 'commit' => 1, 'comment' => '测试提交1', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
+    array('id' => 2, 'repo' => 1, 'revision' => 'rev002', 'commit' => 2, 'comment' => '测试提交2', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
+    array('id' => 3, 'repo' => 2, 'revision' => 'rev003', 'commit' => 3, 'comment' => '测试提交3', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
+    array('id' => 4, 'repo' => 2, 'revision' => 'rev004', 'commit' => 4, 'comment' => '测试提交4', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
+    array('id' => 5, 'repo' => 3, 'revision' => 'rev005', 'commit' => 5, 'comment' => '测试提交5', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00')
+);
+foreach($histories as $history) $tester->dao->insert(TABLE_REPOHISTORY)->data($history)->exec();
+
+$relations = array(
+    array('id' => 1, 'AType' => 'revision', 'AID' => 1, 'relation' => 'commit', 'BType' => 'story', 'BID' => 1),
+    array('id' => 2, 'AType' => 'revision', 'AID' => 2, 'relation' => 'commit', 'BType' => 'bug',   'BID' => 2),
+    array('id' => 3, 'AType' => 'revision', 'AID' => 3, 'relation' => 'commit', 'BType' => 'task',  'BID' => 3),
+    array('id' => 4, 'AType' => 'revision', 'AID' => 4, 'relation' => 'commit', 'BType' => 'story', 'BID' => 4),
+    array('id' => 5, 'AType' => 'revision', 'AID' => 5, 'relation' => 'commit', 'BType' => 'bug',   'BID' => 5),
+    array('id' => 6, 'AType' => 'revision', 'AID' => 3, 'relation' => 'commit', 'BType' => 'task',  'BID' => 6)
+);
+foreach($relations as $relation) $tester->dao->insert(TABLE_RELATION)->data($relation)->exec();
 
 su('admin');
 
