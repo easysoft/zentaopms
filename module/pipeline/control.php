@@ -337,8 +337,15 @@ class pipeline extends control
             }
 
             $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
-            $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
-            return $this->sendSuccess(array('locate' => $url));
+            if($pipeline->engine == 'gitlab')
+            {
+                $url = $this->createLink('pipeline', 'execution', "space={$space}&repoID={$repoID}&type={$type}&pipelineID={$pipelineID}");
+            }
+            else
+            {
+                $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
+            }
+            return $this->sendSuccess(array('locate' => $url, 'message' => $this->lang->pipeline->execSuccess));
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
