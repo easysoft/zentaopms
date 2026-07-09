@@ -94,9 +94,9 @@ $fields->field('mailto')->foldable();
 
 $fields->field('keywords')->foldable();
 
-$fields->field('module')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+$fields->field('module')->width($isShadowProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
-$fields->field('openedBuild')->className($isShadowProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+$fields->field('openedBuild')->width($isShadowProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
 $fields->field('fileList')->label($lang->bug->copyFiles)->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
 
