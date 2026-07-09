@@ -10,18 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
-modalHeader();
+$fields = useFields('bug.close');
 
-formPanel
-(
-    formGroup
-    (
-        set::label($lang->comment),
-        set::name('comment'),
-        set::control('editor')
-    )
-);
+modalHeader();
+formPanel(set::fields($fields));
+
 hr();
 history();
-
-render();

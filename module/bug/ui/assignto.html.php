@@ -10,37 +10,16 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$fields = useFields('bug.assignTo');
+
 jsVar('page', 'assignedto');
 
-modalHeader
-(
-    set::title($lang->bug->assignTo)
-);
+modalHeader(set::title($lang->bug->assignTo));
 
-/* zin: Define the form in main content. */
 formPanel
 (
     set::submitBtnText($lang->bug->assignTo),
-    formGroup
-    (
-        set::width('1/3'),
-        set::name('assignedTo'),
-        set::label($lang->bug->assignedTo),
-        set::value($bug->assignedTo),
-        set::items($users)
-    ),
-    formGroup
-    (
-        set::label($lang->bug->mailto),
-        mailto(set::items($users), set::value($bug->mailto))
-    ),
-    formGroup
-    (
-        set::label($lang->comment),
-        set::name('comment'),
-        set::control('editor'),
-        set::rows(6)
-    )
+    set::fields($fields)
 );
 hr();
 history(set::objectID($bug->id));
