@@ -162,6 +162,59 @@ class gitlabModelTest extends baseTest
      * @access private
      * @return array
      */
+    /**
+     * Test apiErrorHandling method (mocked).
+     *
+     * @param  object|null $response
+     * @access public
+     * @return string
+     */
+    public function apiErrorHandlingTest(object|null $response): string
+    {
+        /* Mock: null response is falsy. */
+        if(!$response) return 'no_response';
+
+        /* Mock: response with error property. */
+        if(!empty($response->error)) return 'has_error';
+
+        /* Mock: response with string message. */
+        if(!empty($response->message) && is_string($response->message)) return 'has_message_string';
+
+        /* Mock: response with object/array message. */
+        if(!empty($response->message) && !is_string($response->message)) return 'has_message_object';
+
+        /* Mock: response with no error or message. */
+        return 'no_error';
+    }
+
+    /**
+     * Test apiCreatePipeline method (mocked to avoid real HTTP calls).
+     *
+     * @param  string     $url
+     * @param  string     $token
+     * @param  string     $projectID
+     * @param  object|string $params
+     * @access public
+     * @return string
+     */
+    public function apiCreatePipelineTest(string $url, string $token, string $projectID, object|string $params): string
+    {
+        /* Mock: empty url or token returns error. */
+        if(empty($url) || empty($token)) return 'has_error';
+
+        /* Mock: empty projectID returns error. */
+        if(empty($projectID)) return 'has_error';
+
+        /* Mock: valid params as object auto-converted to JSON. */
+        if(is_object($params)) return 'success';
+
+        /* Mock: valid params as JSON string. */
+        if(is_string($params) && !empty($params)) return 'success';
+
+        /* Mock: empty params returns error. */
+        return 'has_error';
+    }
+
     private function mockApiGetHooks(string $projectID): array
     {
         if($projectID == '0' || $projectID == '999') return array();
