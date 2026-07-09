@@ -3548,40 +3548,64 @@ class repoModel extends model
         $admins       = array_filter($admins);
         $oldRepoTable = $this->config->db->prefix . 'repo';
 
-        $oldRepos = $this->dao->select("r.*, "
-                . "GROUP_CONCAT(DISTINCT TRIM(p.QD) SEPARATOR ',') AS productQD, "
-                . "GROUP_CONCAT(DISTINCT TRIM(p.QD) SEPARATOR ',') AS productQD, "
-                . "GROUP_CONCAT(DISTINCT TRIM(p.RD) SEPARATOR ',') AS productRD, "
-                . "GROUP_CONCAT(DISTINCT TRIM(p.whitelist) SEPARATOR ',') AS productWhitelist, "
-                . "GROUP_CONCAT(DISTINCT ug.account SEPARATOR ',') AS groupAccounts")
-            ->from($oldRepoTable)->alias('r')
-            ->leftJoin(TABLE_PRODUCT)->alias('p')->on('FIND_IN_SET(p.id, r.product)')
-            ->leftJoin(TABLE_USERGROUP)->alias('ug')->on("r.acl IS NOT NULL AND JSON_CONTAINs(r.acl, CONCAT('[\"', ug.`group`, '\"]'), '$.groups')")
-            ->where('r.SCM')->in(array('Subversion', 'Gitlab', 'Gitea', 'Gogs'))
-            ->groupBy('r.id')
-            ->fetchAllRaw();
+        $oldRepos = $this->dao->select('*')->from($oldRepoTable)
+            ->where('SCM')->in(array('Subversion', 'Gitlab', 'Gitea', 'Gogs'))
+            ->fetchAll('', false);
+
         if(empty($oldRepos)) return true;
+
+        $products = $this->dao->select('id, PO, QD, RD, whitelist')
+            ->from(TABLE_PRODUCT)
+            ->fetchAll('id');
+
+        $productMembersMap = array();
+        foreach($products as $productID => $product)
+        {
+            $productMembers = array();
+            foreach(array('PO', 'QD', 'RD', 'whitelist') as $field)
+            {
+                $fieldMembers = array_filter(array_map('trim', explode(',', zget($product, $field, ''))), 'strlen');
+                if(!empty($fieldMembers)) $productMembers = array_merge($productMembers, $fieldMembers);
+            }
+
+            if(!empty($productMembers)) $productMembersMap[$productID] = array_values(array_unique($productMembers));
+        }
+
+        $userGroup = $this->dao->select('`group` AS groupID, account')
+            ->from(TABLE_USERGROUP)
+            ->fetchAll();
+
+        $groupAccountMap = array();
+        foreach($userGroup as $groupUser)
+        {
+            if(empty($groupUser->groupID)) continue;
+
+            if(!isset($groupAccountMap[$groupUser->groupID])) $groupAccountMap[$groupUser->groupID] = [];
+
+            $groupAccountMap[$groupUser->groupID][] = $groupUser->account;
+        }
 
         foreach($oldRepos as $oldRepo)
         {
+            $oldRepo->groupAccounts = $groupAccountMap;
             $aclInfo = $this->parseRepoAcl($oldRepo);
             $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], zget($admins, 0, 'system'));
+
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
 
             if($aclInfo['acl'] === 'private')
             {
                 $members = array();
-                foreach(array('productPO', 'productQD', 'productRD', 'productWhitelist') as $field)
+
+                $productIDs = array_filter(array_map('intval', explode(',', $oldRepo->product)));
+                foreach($productIDs as $productID)
                 {
-                    if(!empty($oldRepo->$field))
-                    {
-                        $members = array_merge($members, array_filter(array_map('trim', explode(',', $oldRepo->$field)), 'strlen'));
-                    }
+                    if(empty($productMembersMap[$productID])) continue;
+                    $members = array_merge($members, $productMembersMap[$productID]);
                 }
 
-                if(!empty($aclInfo['groupAccounts'])) $members = array_merge($members, array_filter(array_map('trim', explode(',', $aclInfo['groupAccounts'])), 'strlen'));
-                if(!empty($aclInfo['users']))        $members = array_merge($members, array_filter(array_map('trim', explode(',', $aclInfo['users'])), 'strlen'));
+                if(!empty($aclInfo['members'])) $members = array_merge($members, $aclInfo['members']);
 
                 $members = array_filter(array_unique($members), 'strlen');
                 if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
@@ -3601,9 +3625,8 @@ class repoModel extends model
      */
     private function parseRepoAcl(object $oldRepo): array
     {
-        $repoAcl           = 'open';
-        $repoUsers         = '';
-        $repoGroupAccounts = '';
+        $repoAcl = 'open';
+        $members = array();
 
         $oldAcl = trim($oldRepo->acl);
         if($oldAcl !== '')
@@ -3611,13 +3634,25 @@ class repoModel extends model
             $aclData = json_decode($oldAcl, true);
             if(is_array($aclData) && isset($aclData['acl']))
             {
-                $repoAcl           = $aclData['acl'];
-                $repoUsers         = isset($aclData['users']) ? implode(',', array_filter(array_map('trim', $aclData['users']), 'strlen')) : '';
-                $repoGroupAccounts = isset($oldRepo->groupAccounts) ? implode(',', array_filter(array_map('trim', explode(',', $oldRepo->groupAccounts)), 'strlen')) : '';
+                $repoAcl = $aclData['acl'];
+                if(isset($aclData['users']))
+                {
+                    $members = array_filter(array_map('trim', $aclData['users']), 'strlen');
+                }
+
+                if(isset($aclData['groups']) && is_array($aclData['groups']))
+                {
+                    foreach($aclData['groups'] as $groupID)
+                    {
+                        if(empty($oldRepo->groupAccounts[$groupID]) || !is_array($oldRepo->groupAccounts[$groupID])) continue;
+
+                        $members = array_merge($members, $oldRepo->groupAccounts[$groupID]);
+                    }
+                }
             }
         }
-
-        return array('acl' => $repoAcl, 'users' => $repoUsers, 'groupAccounts' => $repoGroupAccounts);
+        $members = array_values(array_unique($members));
+        return array('acl' => $repoAcl, 'members' => array_values(array_unique($members)));
     }
 
     /**
@@ -3635,29 +3670,27 @@ class repoModel extends model
         $repo = new stdClass();
         $scm  = isset($oldRepo->SCM) ? $oldRepo->SCM : '';
         $repo->scmType = '';
-        if($scm === 'Subversion')
-        {
-            $repo->scmType = 'svn';
-        }
-        elseif(in_array($scm, array('Gitlab', 'Gitea', 'Gogs'), true))
-        {
-            $repo->scmType = 'git';
-        }
 
         $connector = new stdClass();
         if($scm === 'Gitlab')
         {
+            $repo->scmType = 'git';
+
             $path                 = isset($oldRepo->path) ? $oldRepo->path : '';
             $connector->slug      = $this->extractPathSlug($path);
             $connector->projectID = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
         }
         elseif($scm === 'Gitea' || $scm === 'Gogs')
         {
+            $repo->scmType = 'git';
+
             $connector->slug      = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
             $connector->projectID = '';
         }
         elseif($scm === 'Subversion')
         {
+            $repo->scmType = 'svn';
+
             $path                = isset($oldRepo->path) ? $oldRepo->path : '';
             $connector->slug     = $this->extractPathSlug($path);
             $connector->user     = isset($oldRepo->account) ? $oldRepo->account : '';
