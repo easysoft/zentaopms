@@ -18,14 +18,6 @@ cid=18085
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$repo = zenData('repo');
-$repo->id->range('1-5');
-$repo->name->range('repo1,repo2,repo3,repo4,repo5');
-$repo->SCM->range('Git');
-$repo->product->range('1');
-$repo->acl->range('open');
-$repo->gen(5);
-
 su('admin');
 
 $repoTest = new repoModelTest();

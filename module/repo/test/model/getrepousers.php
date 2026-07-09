@@ -16,15 +16,13 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-// 准备测试数据
 zenData('ops_repouser')->gen(10);
-zendata('repo')->gen(10);
 
 su('admin');
 global $tester;
 $repo = $tester->loadModel('repo');
-r($repo->getRepoUsers(1))        && p('admin') && e('admin'); //查询id为1的代码库用户
-r($repo->getRepoUsers(0))        && p()        && e('0');     //查询不存在的代码库用户
-r($repo->getRepoUsers(3))        && p('test2') && e('test2'); //查询id为3的代码库用户
-r($repo->getRepoUsers(4))        && p('test3') && e('test3'); //查询id为4的代码库用户
-r(count($repo->getRepoUsers(4))) && p()        && e('1');     //查询id为4的代码库用户总数
+r($repo->getRepoUsers(1))        && p('admin') && e('admin');
+r($repo->getRepoUsers(0))        && p()        && e('0');
+r($repo->getRepoUsers(3))        && p('test2') && e('test2');
+r($repo->getRepoUsers(4))        && p('test3') && e('test3');
+r(count($repo->getRepoUsers(4))) && p()        && e('1');
