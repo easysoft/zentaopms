@@ -43,6 +43,12 @@ class ciModel extends model
                 unset($this->lang->devops->menu->review);
                 unset($this->lang->devops->menu->repoCodeScan);
             }
+
+            if($repo && !empty($repo->mirror))
+            {
+                unset($this->lang->devops->menu->repoCodeScan);
+                unset($this->lang->devops->menu->review);
+            }
         }
         
         if($this->app->rawModule == 'pullreq') $this->lang->repo->menu->review['subMenu']->ppm['exclude'] = 'ppm-browse';
