@@ -507,16 +507,16 @@ $lang->ai->targetForm['charter']['create'] = 'Create Charter';
 
 $lang->ai->targetForm['story']['create']         = 'Create Story';
 $lang->ai->targetForm['story']['batchcreate']    = 'Batch Create Story';
+$lang->ai->targetForm['story']['totask']         = 'Story to Task';
+$lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['edit']           = 'Edit Story';
 $lang->ai->targetForm['story']['batchedit']      = 'Batch Edit Story';
 $lang->ai->targetForm['story']['change']         = 'Change Story';
-$lang->ai->targetForm['story']['totask']         = 'Story to Task';
-$lang->ai->targetForm['story']['testcasecreate'] = 'Create Test Case';
 $lang->ai->targetForm['story']['subdivide']      = 'Subdivide Story';
 
 $lang->ai->targetForm['productplan']['create']      = 'Create Plan';
-$lang->ai->targetForm['productplan']['edit']        = 'Edit Plan';
 $lang->ai->targetForm['productplan']['createchild'] = 'Create Sub-Plan';
+$lang->ai->targetForm['productplan']['edit']        = 'Edit Plan';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = 'Create Doc';
 
@@ -531,8 +531,8 @@ $lang->ai->targetForm['execution']['create'] = 'Create Execution';
 $lang->ai->targetForm['execution']['edit']   = 'Edit Execution';
 
 $lang->ai->targetForm['task']['create']      = 'Create Task';
-$lang->ai->targetForm['task']['edit']        = 'Edit Task';
 $lang->ai->targetForm['task']['batchcreate'] = 'Batch Create Task';
+$lang->ai->targetForm['task']['edit']        = 'Edit Task';
 $lang->ai->targetForm['task']['batchedit']   = 'Batch Edit Task';
 $lang->ai->targetForm['task']['subdivide']   = 'Subdivide Task';
 
@@ -544,10 +544,10 @@ $lang->ai->targetForm['testcase']['createscript'] = 'Create Script';
 
 $lang->ai->targetForm['bug']['create']          = 'Create Bug';
 $lang->ai->targetForm['bug']['batchcreate']     = 'Batch Create Bug';
+$lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 $lang->ai->targetForm['bug']['edit']            = 'Edit Bug';
 $lang->ai->targetForm['bug']['batchedit']       = 'Batch Edit Bug';
 $lang->ai->targetForm['bug']['story/create']    = 'Bug to Story';
-$lang->ai->targetForm['bug']['testcase/create'] = 'Bug to Test Case';
 
 $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
@@ -557,16 +557,16 @@ $lang->ai->targetForm['testsuite']['create']     = 'Create Test Suite';
 $lang->ai->targetForm['testtask']['create']      = 'Create Test Task';
 $lang->ai->targetForm['feedback']['create']      = 'Create Feedback';
 $lang->ai->targetForm['ticket']['create']        = 'Create Ticket';
-$lang->ai->targetForm['ticket']['edit']          = 'Edit Ticket';
 $lang->ai->targetForm['ticket']['batchcreate']   = 'Batch Create Ticket';
+$lang->ai->targetForm['ticket']['edit']          = 'Edit Ticket';
 $lang->ai->targetForm['ticket']['batchedit']     = 'Batch Edit Ticket';
 $lang->ai->targetForm['issue']['create']         = 'Create Issue';
-$lang->ai->targetForm['issue']['edit']           = 'Edit Issue';
 $lang->ai->targetForm['issue']['batchcreate']    = 'Batch Create Issue';
+$lang->ai->targetForm['issue']['edit']           = 'Edit Issue';
 $lang->ai->targetForm['opportunity']['create']   = 'Create Opportunity';
 $lang->ai->targetForm['risk']['create']          = 'Create Risk';
-$lang->ai->targetForm['risk']['edit']            = 'Edit Risk';
 $lang->ai->targetForm['risk']['batchcreate']     = 'Batch Create Risk';
+$lang->ai->targetForm['risk']['edit']            = 'Edit Risk';
 $lang->ai->targetForm['projectchange']['create'] = 'Create Change';
 $lang->ai->targetForm['cm']['create']            = 'Create Baseline';
 

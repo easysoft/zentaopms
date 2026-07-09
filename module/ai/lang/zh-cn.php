@@ -508,16 +508,16 @@ $lang->ai->targetForm['charter']['create'] = '创建立项';
 
 $lang->ai->targetForm['story']['create']         = '提需求';
 $lang->ai->targetForm['story']['batchcreate']    = '批量提需求';
+$lang->ai->targetForm['story']['totask']         = '需求建任务';
+$lang->ai->targetForm['story']['testcasecreate'] = '需求建用例';
 $lang->ai->targetForm['story']['edit']           = '编辑需求';
 $lang->ai->targetForm['story']['batchedit']      = '批量编辑需求';
 $lang->ai->targetForm['story']['change']         = '变更需求';
-$lang->ai->targetForm['story']['totask']         = '需求建任务';
-$lang->ai->targetForm['story']['testcasecreate'] = '需求建用例';
 $lang->ai->targetForm['story']['subdivide']      = '需求细分';
 
 $lang->ai->targetForm['productplan']['create']      = '创建计划';
-$lang->ai->targetForm['productplan']['edit']        = '编辑计划';
 $lang->ai->targetForm['productplan']['createchild'] = '创建子计划';
+$lang->ai->targetForm['productplan']['edit']        = '编辑计划';
 
 $lang->ai->targetForm['projectrelease']['doc/create'] = '创建文档';
 
@@ -532,8 +532,8 @@ $lang->ai->targetForm['execution']['create'] = '创建执行';
 $lang->ai->targetForm['execution']['edit']   = '编辑执行';
 
 $lang->ai->targetForm['task']['create']      = '创建任务';
-$lang->ai->targetForm['task']['edit']        = '编辑任务';
 $lang->ai->targetForm['task']['batchcreate'] = '批量创建';
+$lang->ai->targetForm['task']['edit']        = '编辑任务';
 $lang->ai->targetForm['task']['batchedit']   = '批量编辑';
 $lang->ai->targetForm['task']['subdivide']   = '细分任务';
 
@@ -545,10 +545,10 @@ $lang->ai->targetForm['testcase']['createscript'] = '创建自动化脚本';
 
 $lang->ai->targetForm['bug']['create']          = '创建 Bug';
 $lang->ai->targetForm['bug']['batchcreate']     = '批量创建 Bug';
+$lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 $lang->ai->targetForm['bug']['edit']            = '编辑 Bug';
 $lang->ai->targetForm['bug']['batchedit']       = '批量编辑 Bug';
 $lang->ai->targetForm['bug']['story/create']    = 'Bug 转需求';
-$lang->ai->targetForm['bug']['testcase/create'] = 'Bug 建用例';
 
 $lang->ai->targetForm['doc']['create'] = '创建文档';
 $lang->ai->targetForm['doc']['edit']   = '编辑文档';
@@ -558,16 +558,16 @@ $lang->ai->targetForm['testsuite']['create']     = '创建套件';
 $lang->ai->targetForm['testtask']['create']      = '创建测试单';
 $lang->ai->targetForm['feedback']['create']      = '创建反馈';
 $lang->ai->targetForm['ticket']['create']        = '创建工单';
-$lang->ai->targetForm['ticket']['edit']          = '编辑工单';
 $lang->ai->targetForm['ticket']['batchcreate']   = '批量创建工单';
+$lang->ai->targetForm['ticket']['edit']          = '编辑工单';
 $lang->ai->targetForm['ticket']['batchedit']     = '批量编辑工单';
 $lang->ai->targetForm['issue']['create']         = '创建问题';
-$lang->ai->targetForm['issue']['edit']           = '编辑问题';
 $lang->ai->targetForm['issue']['batchcreate']    = '批量创建问题';
+$lang->ai->targetForm['issue']['edit']           = '编辑问题';
 $lang->ai->targetForm['opportunity']['create']   = '创建机会';
 $lang->ai->targetForm['risk']['create']          = '创建风险';
-$lang->ai->targetForm['risk']['edit']            = '编辑风险';
 $lang->ai->targetForm['risk']['batchcreate']     = '批量创建风险';
+$lang->ai->targetForm['risk']['edit']            = '编辑风险';
 $lang->ai->targetForm['projectchange']['create'] = '创建变更';
 $lang->ai->targetForm['cm']['create']            = '创建基线';
 
