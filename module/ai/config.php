@@ -1,6 +1,22 @@
 <?php
 $config->ai->storeUrl = 'https://www.zentao.net/extension-browse-1625.html';
 
+/* 表单上下文对象类型 */
+$config->ai->formContextObjectTypes = array('execution', 'project', 'product', 'story', 'task', 'bug', 'case', 'testtask', 'build', 'release', 'doc');
+
+/* 表单上下文关联链 */
+$config->ai->formContextRelationChain = array(
+    'execution' => array(
+        array('module' => 'project', 'field' => 'project'),
+    ),
+    'project'   => array(
+        array('module' => 'product', 'via' => 'projectproduct'),
+    ),
+);
+
+/* 页面级对象类型（显示完整字段） */
+$config->ai->formContextPageLevelTypes = array('product', 'project', 'execution');
+
 $config->ai->vendorList = array();
 $config->ai->vendorList['openai']['credentials']           = array('key');
 $config->ai->vendorList['azure']['credentials']            = array('key', 'resource', 'deployment');

@@ -3659,6 +3659,109 @@ class aiModel extends model
     }
 
     /**
+     * 从 formSchema 字段值加载关联上下文对象并构建描述文本。
+     * Load context objects from form schema and build description text.
+     *
+     * @param  array  $formSchema getFormSchema() 返回的表单结构
+     * @access public
+     * @return string
+     */
+    public function loadContextFromFormSchema(array $formSchema): string
+    {
+        $fields = $formSchema['fields'] ?? array();
+        if(empty($fields)) return '';
+
+        $objectTypes    = (array)$this->config->ai->formContextObjectTypes;
+        $relationChain  = (array)$this->config->ai->formContextRelationChain;
+        $pageLevelTypes = (array)$this->config->ai->formContextPageLevelTypes;
+        $context        = array();
+
+        foreach($fields as $field)
+        {
+            $fieldName = $field['name'] ?? '';
+            if(empty($fieldName)) continue;
+
+            $value = $field['currentValue'] ?? '';
+            if($value === '' || $value === null) continue;
+
+            $numVal = (int)$value;
+            if($numVal <= 0) continue;
+
+            $cleanName = strtolower(preg_replace('/_?id$/', '', $fieldName));
+            if(!in_array($cleanName, $objectTypes)) continue;
+
+            if(!$this->loadModel('zai')->canViewObject($cleanName, $numVal)) continue;
+
+            $object = $this->loadModel($cleanName)->getById($numVal);
+            if(empty($object)) continue;
+
+            $context[$cleanName] = $object;
+        }
+
+        foreach($relationChain as $fromModule => $links)
+        {
+            if(!isset($context[$fromModule])) continue;
+            $object = $context[$fromModule];
+
+            foreach($links as $link)
+            {
+                $linkModule = $link['module'];
+                if(isset($context[$linkModule])) continue;
+
+                if(!empty($link['via']) && $link['via'] === 'projectproduct')
+                {
+                    $linkID = $this->loadModel('product')->getProductIDByProject($object->id, true);
+                    if(empty($linkID)) continue;
+                }
+                elseif(!empty($link['field']))
+                {
+                    $linkID = (int)($object->{$link['field']} ?? 0);
+                    if($linkID <= 0) continue;
+                }
+                else continue;
+
+                if(!$this->loadModel('zai')->canViewObject($linkModule, $linkID)) continue;
+
+                $linkObject = $this->loadModel($linkModule)->getById($linkID);
+                if(empty($linkObject)) continue;
+
+                $context[$linkModule] = $linkObject;
+            }
+        }
+
+        if(empty($context)) return '';
+
+        $lines = array();
+        foreach($context as $module => $object)
+        {
+            $label = $this->lang->ai->moduleList[$module] ?? $module;
+            $id    = (int)$object->id;
+
+            if(in_array($module, $pageLevelTypes))
+            {
+                $lines[] = "{$label}：#{$id}";
+
+                if(!empty($object->name))                          $lines[] = "  name：{$object->name}";
+                if(!empty($object->begin) || !empty($object->end)) $lines[] = "  begin：" . ($object->begin ?? '') . " ~ " . ($object->end ?? '');
+                if(!empty($object->desc))                          $lines[] = "  desc：" . strip_tags($object->desc);
+                if(!empty($object->model))                         $lines[] = "  model：{$object->model}";
+            }
+            else
+            {
+                $lines[] = "{$label}：#{$id}";
+                $title   = $object->title ?? $object->name ?? '';
+
+                if(!empty($title))          $lines[] = "  title：{$title}";
+                if(!empty($object->spec))   $lines[] = "  spec：" . strip_tags($object->spec);
+                if(!empty($object->pri))    $lines[] = "  pri：{$object->pri}";
+                if(!empty($object->status)) $lines[] = "  status：{$object->status}";
+            }
+        }
+
+        return implode("\n", $lines);
+    }
+
+    /**
      * 过滤字段白名单
      * Filter fields to only allowed ones.
      *

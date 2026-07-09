@@ -211,15 +211,20 @@ window.executeZentaoPrompt = async function(info, testingMode)
 };
 
 /**
- * 执行通用表单智能体。
+ * 执行通用表单智能体（同步流程）。
+ * 收集当前表单结构和值，构建 schema 和 prompt，打开 AI Panel 供 LLM 填充。
+ * 支持单个表单（type: object）和批量表单（type: array）。
  *
- * @param {Object} formSchema - 表单结构和当前值
- * @param {Object} contextIDs - 上下文字段 ID 映射
- * @param {number} promptID - 智能体 ID
- * @param {Array}  promptFields - 自定义输入字段列表
- * @param {Array}  allowedFields - 可操作字段白名单
+ * @param {Object}  formSchema     - 表单结构和当前值
+ * @param {Object}  contextIDs     - 上下文字段 ID 映射
+ * @param {number}  promptID       - 智能体 ID
+ * @param {Array}   promptFields   - 自定义输入字段列表
+ * @param {Array}   allowedFields  - 可操作字段白名单
+ * @param {string}  agentRole      - 智能体角色描述
+ * @param {string}  agentPurpose   - 智能体目的描述
+ * @param {boolean} isBatch        - 是否为批量表单
  */
-window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields, agentRole, agentPurpose)
+window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields, agentRole, agentPurpose, isBatch)
 {
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
@@ -263,11 +268,17 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
         if(field.label && field.label !== name) labelToName[field.label] = name;
     });
 
-    const schema = {
+    const objectSchema = {
         type: 'object',
         properties,
         required,
     };
+    const schema = isBatch
+        ? {
+            type: 'array',
+            items: objectSchema,
+        }
+        : objectSchema;
 
     const formConfig = getPromptFormConfig(promptFields, {
         title: langData.formFillTitle,
@@ -307,42 +318,86 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
     }
     const contextStr = contextLines.length ? `${langData.formPageContext}：\n${contextLines.join('\n')}\n` : '';
 
-    const fieldsList = fields.map(f =>
+    let dataPrompt;
+    if(isBatch)
     {
-        let optionsStr = '';
-        if(Array.isArray(f.options) && f.options.length)
+        const headers = fields.map(f => f.label || f.name);
+        const values  = fields.map(f => f.currentValue ?? '');
+        const sepLine = '| ' + headers.map(() => '---').join(' | ') + ' |';
+
+        const fieldDefs = fields.map(f =>
         {
-            const opts = f.options.map(o =>
+            let def = `- ${f.name}(${f.label || f.name}): ${f.type || f.controlType || 'input'}`;
+            if(f.required) def += ' ' + langData.formRequiredField;
+            if(Array.isArray(f.options) && f.options.length)
             {
-                const val = (typeof o === 'string') ? o : (o.value !== undefined ? o.value : '');
-                const txt = (typeof o === 'string') ? o : (o.text || o.value || '');
-                return `${val}(${txt})`;
-            });
-            optionsStr = `\n  options: ${opts.join(', ')}`;
-        }
-        return [
-            `- ${f.label || f.name}`,
-            `  name: ${f.name}`,
-            `  input: ${f.type || f.controlType || 'input'}`,
-            `  type: string`,
-            `  required: ${!!f.required}`,
-            `  value: ${f.currentValue ?? ''}`,
-            optionsStr,
+                const opts = f.options.map(o =>
+                {
+                    const val = (typeof o === 'string') ? o : (o.value !== undefined ? o.value : '');
+                    const txt = (typeof o === 'string') ? o : (o.text || o.value || '');
+                    return `${val}(${txt})`;
+                });
+                def += `\n  options: ${opts.join(', ')}`;
+            }
+            return def;
+        }).join('\n');
+
+        dataPrompt = [
+            contextStr,
+            langData.formCurrentData,
+            '',
+            '| ' + headers.join(' | ') + ' |',
+            sepLine,
+            '| ' + values.join(' | ') + ' |',
+            '',
+            langData.formFieldDefinition,
+            fieldDefs,
+            '',
+            langData.formFillableFields,
+            Object.keys(properties).map(n => '- ' + n).join('\n'),
+            '',
+            langData.formReturnJSONArray,
         ].filter(Boolean).join('\n');
-    }).join('\n');
+    }
+    else
+    {
+        const fieldsList = fields.map(f =>
+        {
+            let optionsStr = '';
+            if(Array.isArray(f.options) && f.options.length)
+            {
+                const opts = f.options.map(o =>
+                {
+                    const val = (typeof o === 'string') ? o : (o.value !== undefined ? o.value : '');
+                    const txt = (typeof o === 'string') ? o : (o.text || o.value || '');
+                    return `${val}(${txt})`;
+                });
+                optionsStr = `\n  options: ${opts.join(', ')}`;
+            }
+            return [
+                `- ${f.label || f.name}`,
+                `  name: ${f.name}`,
+                `  input: ${f.type || f.controlType || 'input'}`,
+                `  type: string`,
+                `  required: ${!!f.required}`,
+                `  value: ${f.currentValue ?? ''}`,
+                optionsStr,
+            ].filter(Boolean).join('\n');
+        }).join('\n');
 
-    const fillableFields = Object.keys(properties).map(n => `- ${n}`).join('\n');
+        const fillableFields = Object.keys(properties).map(n => `- ${n}`).join('\n');
 
-    const dataPrompt = [
-        contextStr,
-        langData.formCurrentData,
-        fieldsList,
-        '',
-        langData.formFillableFields,
-        fillableFields,
-        '',
-        langData.formZentaoAPITip,
-    ].filter(Boolean).join('\n');
+        dataPrompt = [
+            contextStr,
+            langData.formCurrentData,
+            fieldsList,
+            '',
+            langData.formFillableFields,
+            fillableFields,
+            '',
+            langData.formZentaoAPITip,
+        ].filter(Boolean).join('\n');
+    }
     const rolePrompt = agentRole || langData.formFillTitle;
     const prompt = [rolePrompt, zui.formatString(langData.processDataPrefix, {data: dataPrompt})].filter(Boolean).join('\n\n');
 
@@ -352,26 +407,57 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
             fn: (response) =>
             {
                 const rawData = response.data;
-                const result = rawData && typeof rawData === 'object' && !Array.isArray(rawData)
-                    ? Object.fromEntries(
-                        Object.entries(rawData)
-                            .map(([key, val]) =>
-                            {
-                                const mappedKey = labelToName[key] || key;
-                                if(mappedKey !== key && rawData[mappedKey] !== undefined) return null;
-                                return [mappedKey, val];
-                            })
-                            .filter(Boolean)
-                    )
-                    : rawData;
-                const formPropNames = {};
-                if(result && typeof result === 'object' && !Array.isArray(result))
+                const isArrayResult = Array.isArray(rawData);
+                let result;
+                if(isArrayResult)
                 {
-                    Object.keys(result).forEach(function(k) { formPropNames[k] = k; });
+                    result = rawData.map(item =>
+                        item && typeof item === 'object'
+                            ? Object.fromEntries(
+                                Object.entries(item)
+                                    .map(([key, val]) =>
+                                    {
+                                        const mappedKey = labelToName[key] || key;
+                                        if(mappedKey !== key && item[mappedKey] !== undefined) return null;
+                                        return [mappedKey, val];
+                                    })
+                                    .filter(Boolean)
+                            )
+                            : item
+                    );
+                }
+                else
+                {
+                    result = rawData && typeof rawData === 'object'
+                        ? Object.fromEntries(
+                            Object.entries(rawData)
+                                .map(([key, val]) =>
+                                {
+                                    const mappedKey = labelToName[key] || key;
+                                    if(mappedKey !== key && rawData[mappedKey] !== undefined) return null;
+                                    return [mappedKey, val];
+                                })
+                                .filter(Boolean)
+                        )
+                        : rawData;
+                }
+                const formPropNames = {};
+                if(result && typeof result === 'object')
+                {
+                    if(isArrayResult)
+                    {
+                        result.forEach(function(item) {
+                            if(item && typeof item === 'object') Object.keys(item).forEach(function(k) { formPropNames[k] = k; });
+                        });
+                    }
+                    else
+                    {
+                        Object.keys(result).forEach(function(k) { formPropNames[k] = k; });
+                    }
                 }
                 const taskResult = {
                     agentID: 'zentao-api',
-                    id: `zentao-agent-result-${Date.now()}`,
+                    id: 'zentao-agent-result-' + Date.now(),
                     tool: agentToolDef,
                     title: response.title,
                     result: response,
