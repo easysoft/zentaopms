@@ -551,6 +551,19 @@ class repo extends control
 
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
+        $mirrorLastExecuted = '';
+        $mirrorFailure      = '';
+        $mirrorStatus       = zget($repo, 'status', 'active');
+        if(!empty($repo->mirror) && $mirrorStatus != 'syncing')
+        {
+            $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+            if(!empty($progress) && is_object($progress))
+            {
+                if(!empty($progress->lastExecuted)) $mirrorLastExecuted = (string)$progress->lastExecuted;
+                if(!empty($progress->failure))      $mirrorFailure      = (string)$progress->failure;
+            }
+        }
+
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
         if($refresh)
@@ -574,25 +587,27 @@ class repo extends control
         if($branchOrTag == 'tag' && !in_array($branchID, $tags) && in_array($branchID, $branches)) $branchOrTag = 'branch';
         if($branchOrTag == 'branch' && in_array($branchID, $tags) && !in_array($branchID, $branches)) $branchOrTag = 'tag';
 
-        $this->view->title          = $this->lang->repo->common;
-        $this->view->repo           = $repo;
-        $this->view->revisions      = $revisions;
-        $this->view->revision       = $revision;
-        $this->view->lastRevision   = $lastRevision;
-        $this->view->infos          = $infos;
-        $this->view->repoID         = $repoID;
-        $this->view->branches       = $branches;
-        $this->view->tags           = $tags;
-        $this->view->branchID       = $branchID;
-        $this->view->base64BranchID = $base64BranchID;
-        $this->view->objectID       = $objectID;
-        $this->view->pager          = $pager;
-        $this->view->path           = urldecode($path);
-        $this->view->logType        = $type;
-        $this->view->cloneUrl       = $this->repo->getCloneUrl($repo);
-        $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
-        $this->view->branchOrTag    = $branchOrTag;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title              = $this->lang->repo->common;
+        $this->view->repo               = $repo;
+        $this->view->revisions          = $revisions;
+        $this->view->revision           = $revision;
+        $this->view->lastRevision       = $lastRevision;
+        $this->view->infos              = $infos;
+        $this->view->repoID             = $repoID;
+        $this->view->branches           = $branches;
+        $this->view->tags               = $tags;
+        $this->view->branchID           = $branchID;
+        $this->view->base64BranchID     = $base64BranchID;
+        $this->view->objectID           = $objectID;
+        $this->view->pager              = $pager;
+        $this->view->path               = urldecode($path);
+        $this->view->logType            = $type;
+        $this->view->cloneUrl           = $this->repo->getCloneUrl($repo);
+        $this->view->repoPairs          = $this->repo->getRepoPairs($this->app->tab, $objectID);
+        $this->view->branchOrTag        = $branchOrTag;
+        $this->view->users              = $this->loadModel('user')->getPairs('noletter');
+        $this->view->mirrorLastExecuted = $mirrorLastExecuted;
+        $this->view->mirrorFailure      = $mirrorFailure;
 
         $this->display();
     }
@@ -1401,14 +1416,16 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
-        $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
-        $status   = (!empty($progress) && is_object($progress) && !empty($progress->status))  ? (string)$progress->status  : '';
-        $failure  = (!empty($progress) && is_object($progress) && !empty($progress->failure)) ? (string)$progress->failure : '';
+        $progress      = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+        $status        = (!empty($progress) && is_object($progress) && !empty($progress->status))       ? (string)$progress->status       : '';
+        $failure       = (!empty($progress) && is_object($progress) && !empty($progress->failure))      ? (string)$progress->failure      : '';
+        $lastExecuted  = (!empty($progress) && is_object($progress) && !empty($progress->lastExecuted)) ? (string)$progress->lastExecuted : '';
 
         return $this->send(array(
-            'result'  => 'success',
-            'status'  => $status,
-            'failure' => $failure
+            'result'       => 'success',
+            'status'       => $status,
+            'failure'      => $failure,
+            'lastExecuted' => $lastExecuted
         ));
     }
 

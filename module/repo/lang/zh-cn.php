@@ -21,6 +21,7 @@ $lang->repo->download        = '下载';
 $lang->repo->mirror = new stdclass();
 $lang->repo->mirror->syncing             = '代码同步中...';
 $lang->repo->mirror->refreshSync         = '刷新同步状态';
+$lang->repo->mirror->lastUpdated         = '最后更新于：';
 $lang->repo->mirror->failedTitle         = '代码同步失败';
 $lang->repo->mirror->detail              = '查看详情';
 $lang->repo->mirror->syncCode            = '同步代码库';
