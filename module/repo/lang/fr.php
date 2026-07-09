@@ -21,6 +21,7 @@ $lang->repo->download        = 'Download File';
 $lang->repo->mirror = new stdclass();
 $lang->repo->mirror->syncing             = 'Syncing...';
 $lang->repo->mirror->refreshSync         = 'Refresh Sync Status';
+$lang->repo->mirror->lastUpdated         = 'Last Updated: ';
 $lang->repo->mirror->failedTitle         = 'Sync Failed';
 $lang->repo->mirror->detail              = 'View Detail';
 $lang->repo->mirror->syncCode            = 'Sync Repository';
