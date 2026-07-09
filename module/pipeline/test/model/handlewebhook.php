@@ -7,11 +7,11 @@ title=测试 pipelineModel::handleWebhook();
 timeout=0
 cid=0
 
-- 测试未知事件类型 >> unknown_event
-- 测试事件类型不在pipeline配置的事件列表中 >> event_not_matched
-- 测试Push事件且提交信息匹配 >> success
-- 测试Push事件且提交信息不匹配 >> comment_not_matched
-- 测试Push事件但无commits数据 >> no_commits
+- 测试未知事件类型 @ unknown_event
+- 测试事件类型不在pipeline配置的事件列表中 @ event_not_matched
+- 测试Push事件且提交信息匹配 @ success
+- 测试Push事件且提交信息不匹配 @ comment_not_matched
+- 测试Push事件但无commits数据 @ no_commits
 
 */
 
