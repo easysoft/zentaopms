@@ -28,7 +28,7 @@ window.loadName = function()
 {
     const $repoPicker = $('[name=repo]').zui('picker');
     const $nameInput  = $('[name=name]');
-    if(typeof importName != 'undefined')
+    if(typeof importName != 'undefined' && importName)
     {
         $nameInput.val(repoName);
         return;
