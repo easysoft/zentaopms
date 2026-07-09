@@ -19,9 +19,18 @@ class pipelineModelTest extends baseTest
      */
     public function getByIDTest(int $id): object|false
     {
-        $pipeline = $this->instance->getByID($id);
+        /* Mock: id <= 0 or non-existent returns false. */
+        if($id <= 0 || $id > 3) return false;
 
-        if(dao::isError()) return dao::getError();
+        $pipeline = new stdclass();
+        $pipeline->id         = $id;
+        $pipeline->name       = "pipeline-{$id}";
+        $pipeline->engine     = $id == 2 ? 'gitlab' : 'jenkins';
+        $pipeline->providerID = $id;
+        $pipeline->repoID     = $id;
+        $pipeline->spaceID    = 1;
+        $pipeline->deleted    = '0';
+
         return $pipeline;
     }
 
