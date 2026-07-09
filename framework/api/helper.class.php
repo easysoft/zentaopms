@@ -398,6 +398,46 @@ function getVisions(): array
 }
 
 /**
+ * Init page title based on the module name and the method name.
+ *
+ * @access public
+ * @return string
+ */
+function initPageTitle(): string
+{
+    global $app, $lang;
+    $module = $app->rawModule;
+    $method = $app->rawMethod;
+
+    if(empty($lang->$module)) $app->loadLang($module);
+
+    if(!empty($lang->$module->{$method . 'Action'})) return $lang->$module->{$method . 'Action'};
+    if(!empty($lang->$module->$method)) return $lang->$module->$method;
+    return zget($lang, $method);
+}
+
+/**
+ * Init page entity based on configuration of objectNameFields.
+ *
+ * @param  object $object
+ * @access public
+ * @return array
+ */
+function initPageEntity(object $object): array
+{
+    if(empty($object)) return array();
+
+    global $app, $config;
+    $app->loadModuleConfig('action');
+
+    $module     = $app->getModuleName();
+    $idField    = isset($config->action->objectIdFields[$module])   ? $config->action->objectIdFields[$module]   : 'id';
+    $titleField = isset($config->action->objectNameFields[$module]) ? $config->action->objectNameFields[$module] : 'title';
+
+    return array(zget($object, $titleField, ''), zget($object, $idField, 0));
+}
+
+/**
  * Fix for session error.
  *
  * @param  string    $class

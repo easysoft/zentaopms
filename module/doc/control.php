@@ -1030,6 +1030,7 @@ class doc extends control
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('acl', $doc->acl)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
                     ->setIF(!isset($_POST['module']), 'module', $doc->module)
                     ->setIF(!isset($_POST['mailto']), 'mailto', $doc->mailto)
                     ->setIF(!isset($_POST['users']), 'users', $doc->users)
