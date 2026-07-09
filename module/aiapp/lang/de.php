@@ -98,6 +98,7 @@ $lang->aiapp->langData->formApplyDataTip    = 'Bitte klicken Sie auf die Schaltf
 
 $lang->aiapp->langData->submitFormDisplayName = 'Formulardaten einreichen';
 $lang->aiapp->langData->submitFormDescription = 'Die ausgefüllten Formulardaten an den Benutzer zurückgeben';
+$lang->aiapp->langData->vectorizedData        = 'Vektorisierte Daten';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

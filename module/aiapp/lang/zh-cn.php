@@ -97,6 +97,7 @@ $lang->aiapp->langData->formApplyDataTip    = '请点击"应用到当前表单"�
 
 $lang->aiapp->langData->submitFormDisplayName = '提交表单数据';
 $lang->aiapp->langData->submitFormDescription = '将填充后的表单数据返回给用户';
+$lang->aiapp->langData->vectorizedData        = '向量化数据';
 
 $lang->aiapp->toolkitTitle = '禅道智能工具箱';
 $lang->aiapp->toolkitItems = array();

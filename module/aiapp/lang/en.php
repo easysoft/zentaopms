@@ -98,6 +98,7 @@ $lang->aiapp->langData->formApplyDataTip    = 'Please click the "Apply to the cu
 
 $lang->aiapp->langData->submitFormDisplayName = 'Submit Form Data';
 $lang->aiapp->langData->submitFormDescription = 'Return the filled form data to the user';
+$lang->aiapp->langData->vectorizedData        = 'Vectorized Data';
 
 $lang->aiapp->toolkitTitle = 'ZenTao Toolkit';
 $lang->aiapp->toolkitItems = array();

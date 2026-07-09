@@ -638,7 +638,7 @@ function registerZentaoAIPlugin(lang)
     plugin.defineContextProvider({
         code: 'vectorizedData',
         icon: 'db',
-        title: '向量化数据',
+        title: lang.vectorizedData,
         when:  ({store}) => !!store.globalMemory,
         items: ['story', 'demand', 'bug', 'doc', 'design', 'feedback', 'all'].map(objectType => {
             if(objectType === 'all') return {
