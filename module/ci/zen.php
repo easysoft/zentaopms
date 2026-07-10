@@ -28,7 +28,7 @@ class ciZen extends ci
         $jobID     = 0;
         if($compileID)
         {
-            $compile = $this->pipeline->getExecByID($compileID);
+            $compile = $this->loadModel('pipeline')->getExecByID($compileID);
             $jobID   = $compile->job;
             if(empty($productID)) $productID = $compile->product;
         }
