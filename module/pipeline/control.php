@@ -226,11 +226,14 @@ class pipeline extends control
         $pipeline = $this->pipeline->getByID($id);
         if(empty($pipeline)) return $this->locate($this->createLink('pipeline', 'browse'));
 
-        $this->commonAction((int)$pipeline->spaceID);
-
         if($pipeline->repoID)
         {
+            $this->commonAction();
             $this->loadModel('ci')->setMenu($pipeline->repoID);
+        }
+        else
+        {
+            $this->commonAction((int)$pipeline->spaceID);
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
