@@ -48,6 +48,7 @@ class ciModel extends model
             {
                 unset($this->lang->devops->menu->repoCodeScan);
                 unset($this->lang->devops->menu->review);
+                unset($this->lang->devops->menu->settings);
             }
         }
         
