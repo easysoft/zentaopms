@@ -1109,10 +1109,10 @@ class pipelineModel extends model
         $eventList = explode(',', $pipeline->event);
         if(!in_array($eventType, $eventList)) return false;
 
-        if($eventType == 'push') 
+        if($eventType == 'push')
         {
             if(empty($data->commits)) return false;
-            
+
             $matched = false;
             foreach($data->commits as $commit)
             {
@@ -1128,7 +1128,7 @@ class pipelineModel extends model
         }
 
         $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
-        $params = new stdclass(); 
+        $params = new stdclass();
         $params->ref = $data->ref ?? $pipeline->defaultBranch;
         $params->variables = array();
         if(!empty($pipeline->customParam))
@@ -1230,5 +1230,68 @@ class pipelineModel extends model
             return false;
         }
         return !dao::isError();
+    }
+
+    /**
+     * 迁移流水线。
+     * Migrate jobs to ops pipelines.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migrateJobsToOpsPipelines(): bool
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->fetchAll('id');
+        $jobs  = $this->dao->select('*')->from($this->config->db->prefix . 'job')->fetchAll('id');
+
+        $pipelineNames = array();
+        foreach($jobs as $job)
+        {
+            if(empty($job->repo) && !isset($repos[$job->repo])) continue;
+
+            $repo = $repos[$job->repo];
+            $legacyPipeline = json_decode((string)$job->pipeline);
+
+            $externalPipeline = '';
+            $defaultBranch    = '';
+            if($job->engine == 'gitlab')
+            {
+                if(!empty($legacyPipeline->project)) $externalPipeline = zget($legacyPipeline, 'project', '');
+                if(!empty($legacyPipeline->reference)) $defaultBranch  = zget($legacyPipeline, 'reference', '');
+            }
+            elseif($job->engine == 'jenkins')
+            {
+                $externalPipeline = $job->pipeline;
+            }
+
+            $pipeline = new stdclass();
+            $pipeline->name             = in_array($job->name, $pipelineNames) ? $job->name . '-' . $job->id : (string)$job->name;
+            $pipeline->engine           = strtolower((string)$job->engine);
+            $pipeline->providerID       = (int)$job->server;
+            $pipeline->scope            = 'repo';
+            $pipeline->spaceID          = (int)$repo->spaceID;
+            $pipeline->repoID           = (int)$repo->id;
+            $pipeline->desc             = '';
+            $pipeline->status           = 'active';
+            $pipeline->latestVersion    = 0;
+            $pipeline->defaultBranch    = $defaultBranch;
+            $pipeline->yamlPath         = '';
+            $pipeline->customParam      = empty($job->customParam) ? '' : $job->customParam;
+            $pipeline->lastExec         = empty($job->lastExec) ? null : $job->lastExec;
+            $pipeline->lastResult       = (string)$job->lastStatus;
+            $pipeline->externalPipeline = $externalPipeline;
+            $pipeline->createdBy        = (string)$job->createdBy;
+            $pipeline->createdDate      = empty($job->createdDate) ? helper::now() : $job->createdDate;
+            $pipeline->editedBy         = (string)$job->editedBy;
+            $pipeline->editedDate       = empty($job->editedDate) ? null : $job->editedDate;
+            $pipeline->deleted          = (int)$job->deleted;
+
+            $this->dao->insert(TABLE_PIPELINE)->data($pipeline)->exec();
+            if(dao::isError()) return false;
+
+            $pipelineNames[] = $job->name;
+        }
+
+        return dao::isError();
     }
 }
