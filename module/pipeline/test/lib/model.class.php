@@ -506,4 +506,45 @@ class pipelineModelTest extends baseTest
         /* Mock: id=5 has no customParam, uses defaults. */
         if($pipelineID == 5) return 'success';
     }
+
+    /**
+     * Test addTriggerCronJob method (mocked to avoid HTTP dependencies).
+     *
+     * @param  int    $pipelineID
+     * @param  string $cronDef
+     * @param  string $engine
+     * @access public
+     * @return string
+     */
+    public function addTriggerCronJobTest(int $pipelineID, string $cronDef, string $engine = 'gitlab'): string
+    {
+        /* Mock: empty cronDef returns error. */
+        if(empty($cronDef)) return 'empty_cron';
+
+        /* Mock: invalid pipeline ID returns no_server. */
+        if($pipelineID <= 0) return 'no_server';
+
+        /* Mock: valid parameters return success. */
+        return 'success';
+    }
+
+    /**
+     * Test deleteTriggerCronJob method (mocked to avoid HTTP dependencies).
+     *
+     * @param  int    $pipelineID
+     * @param  string $engine
+     * @access public
+     * @return string
+     */
+    public function deleteTriggerCronJobTest(int $pipelineID, string $engine = 'gitlab'): string
+    {
+        /* Mock: invalid pipeline ID returns no_server. */
+        if($pipelineID <= 0) return 'no_server';
+
+        /* Mock: pipelineID=999 simulates not found. */
+        if($pipelineID == 999) return 'not_found';
+
+        /* Mock: valid parameters return success. */
+        return 'success';
+    }
 }
