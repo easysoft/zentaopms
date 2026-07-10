@@ -1035,3 +1035,12 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('scm', '代码版本管理', 0);
 
 ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=svn&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=git&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=checkCompileStatus';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=exec';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=mr&methodName=syncMR';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=initQueue';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';
