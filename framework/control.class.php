@@ -538,8 +538,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
-        $this->session->set('workflowGroupID', $flow->group);
-        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object, $flow->group);
         $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
 
         /* 复制项目时显示被复制项目的工作流字段值。*/
@@ -579,8 +578,7 @@ class control extends baseControl
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType == 'none') return '';
 
-        $this->session->set('workflowGroupID', $flow->group);
-        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
+        $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object, $flow->group);
         $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID, $flow->group);
 
         $html = '';
@@ -624,8 +622,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return array();
 
-        $this->session->set('workflowGroupID', $flow->group);
-        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
+        $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object, $flow->group) : 0;
 
         $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $flow->group);
         $layouts      = $this->loadModel('workflowlayout')->getFields($moduleName, $methodName, $uiID, $flow->group);
@@ -716,10 +713,8 @@ class control extends baseControl
     {
         if($this->config->edition == 'open') return;
 
-        $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
-        $this->session->set('workflowGroupID', $groupID);
-
-        $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
+        $groupID      = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
+        $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID, $groupID);
         $fields       = $this->loadModel('workflowaction')->getPageFields($this->moduleName, $this->methodName, true, null, $uiID, $groupID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID, $groupID);
         $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
