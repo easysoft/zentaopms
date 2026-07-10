@@ -1172,4 +1172,63 @@ class pipelineModel extends model
         $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
         return !dao::isError();
     }
+
+    /**
+     * 调用 gitfox 接口添加定时任务。
+     * Add cron job via gitfox API.
+     *
+     * @param  int    $pipelineID
+     * @param  string $cronDef
+     * @param  string $engine
+     * @access public
+     * @return bool
+     */
+    public function addTriggerCronJob(int $pipelineID, string $cronDef, string $engine = 'gitlab'): bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url  = sprintf($apiRoot->url, '/cron/jobs');
+        $data = new stdclass();
+        $data->jobName            = "{$engine}:pipeline:cron:{$pipelineID}";
+        $data->jobType            = "{$engine}:pipeline:cron-trigger";
+        $data->jobData            = (string)$pipelineID;
+        $data->cronDef            = $cronDef;
+        $data->maxDurationSeconds = 300;
+
+        $response = json_decode(commonModel::http($url, $data, array(), $apiRoot->header, 'json', 'POST'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 调用 gitfox 接口删除定时任务。
+     * Delete cron job via gitfox API.
+     *
+     * @param  int    $pipelineID
+     * @param  string $engine
+     * @access public
+     * @return bool
+     */
+    public function deleteTriggerCronJob(int $pipelineID, string $engine = 'gitlab'): bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url  = sprintf($apiRoot->url, '/cron/jobs');
+        $data = new stdclass();
+        $data->jobName = "{$engine}:pipeline:cron:{$pipelineID}";
+
+        $response = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header, 'json', 'DELETE'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
+        return !dao::isError();
+    }
 }
