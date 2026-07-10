@@ -1,0 +1,54 @@
+title: table ops_step_executions
+desc: "流水线步骤执行表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "步骤唯一主键"
+    range: "1-10000"
+  - field: stageID
+    note: "关联阶段stages主键ID"
+    range: "1,2,3"
+  - field: name
+    note: "显示名称"
+    range: "拉取代码,执行测试,发布镜像"
+  - field: code
+    note: "步骤业务唯一标识"
+    range: "checkout,unit-test,publish"
+  - field: sn
+    note: "步骤在所属阶段内的序号"
+    range: "1,2,3"
+  - field: image
+    note: "步骤执行所需的容器镜像"
+    range: "alpine:3.19,node:20,php:8.2-cli"
+  - field: depends
+    note: "步骤依赖的其他步骤code"
+    range: "prepare,checkout,unit-test"
+  - field: groupID
+    note: "步骤所属分组ID"
+    range: "0,1,2,3"
+  - field: failPolicy
+    note: "失败策略：fail,ignore,warning"
+    range: "fail,ignore,warning"
+  - field: started
+    note: "步骤执行开始时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: finished
+    note: "步骤执行完成时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: duration
+    note: "执行时长(s)"
+    range: "30,120,600"
+  - field: status
+    note: "步骤执行状态（枚举）"
+    range: "created,running,success,failure,skipped"
+  - field: errorCode
+    note: "步骤执行退出码"
+    range: "0,1,126"
+  - field: errorLog
+    note: "步骤执行失败时的错误信息，成功时为空字符串"
+    range: "none,script-timeout,permission-denied"

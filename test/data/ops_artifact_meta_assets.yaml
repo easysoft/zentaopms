@@ -1,0 +1,48 @@
+title: table ops_artifact_meta_assets
+desc: "制品元数据资源表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: artifactLibID
+    note: "所属制品库ID"
+    range: "1,2,3"
+  - field: type
+    note: "制品类型:file/container/raw/helm/pypi/npm/maven/composer"
+    range: "file,container,raw,helm,pypi,npm,maven,composer"
+  - field: path
+    note: "元数据路径"
+    range: "src/App.php,module/repo/model.php,docs/readme.md"
+  - field: contentType
+    note: "内容类型"
+    range: "application/json,text/plain,application/x-yaml"
+  - field: rank
+    note: "制品等级 main/sub"
+    range: "main,sub"
+  - field: blobID
+    note: "关联文件对象ID"
+    range: "1,2,3"
+  - field: checkSum
+    note: "校验和"
+    range: "sha256-a1b2c3d4,sha256-e5f6g7h8,sha256-i9j0k1l2"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

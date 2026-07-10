@@ -1,0 +1,14 @@
+title: table ops_scan_issue_task_binds
+desc: "扫描问题与任务绑定关系表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: taskID
+    note: "扫描任务ID"
+    range: "1,2,3"
+  - field: issueID
+    note: "扫描问题ID"
+    range: "1,2,3"
