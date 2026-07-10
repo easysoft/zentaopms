@@ -94,6 +94,8 @@ $lang->aiapp->langData->formZentaoAPITip    = "请先使用 zentao-api 工具获
 $lang->aiapp->langData->formResultGenerated = '表单数据已生成。';
 $lang->aiapp->langData->formCurrentTarget   = '当前';
 $lang->aiapp->langData->formApplyDataTip    = '请点击"应用到当前表单"按钮将数据填充到表单中。';
+$lang->aiapp->langData->stepDescription     = '步骤描述';
+$lang->aiapp->langData->expectDescription   = '预期结果';
 
 $lang->aiapp->langData->submitFormDisplayName = '提交表单数据';
 $lang->aiapp->langData->submitFormDescription = '将填充后的表单数据返回给用户';

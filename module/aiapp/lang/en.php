@@ -95,6 +95,8 @@ $lang->aiapp->langData->formZentaoAPITip    = "Please first use the zentao-api t
 $lang->aiapp->langData->formResultGenerated = 'Form data has been generated.';
 $lang->aiapp->langData->formCurrentTarget   = 'Current';
 $lang->aiapp->langData->formApplyDataTip    = 'Please click the "Apply to the current form" button to fill the data into the form.';
+$lang->aiapp->langData->stepDescription     = 'Step description';
+$lang->aiapp->langData->expectDescription   = 'Expected result';
 
 $lang->aiapp->langData->submitFormDisplayName = 'Submit Form Data';
 $lang->aiapp->langData->submitFormDescription = 'Return the filled form data to the user';

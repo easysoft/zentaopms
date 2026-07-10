@@ -95,6 +95,8 @@ $lang->aiapp->langData->formZentaoAPITip    = "Bitte verwenden Sie zuerst die ze
 $lang->aiapp->langData->formResultGenerated = 'Formulardaten wurden generiert.';
 $lang->aiapp->langData->formCurrentTarget   = 'Aktuelles';
 $lang->aiapp->langData->formApplyDataTip    = 'Bitte klicken Sie auf die Schaltfläche "Auf das aktuelle Formular anwenden", um die Daten in das Formular zu übernehmen.';
+$lang->aiapp->langData->stepDescription     = 'Schrittbeschreibung';
+$lang->aiapp->langData->expectDescription   = 'Erwartetes Ergebnis';
 
 $lang->aiapp->langData->submitFormDisplayName = 'Formulardaten einreichen';
 $lang->aiapp->langData->submitFormDescription = 'Die ausgefüllten Formulardaten an den Benutzer zurückgeben';
