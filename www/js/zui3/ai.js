@@ -251,11 +251,30 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
         const name = field.name;
         if(seenNames.has(name)) return;
         seenNames.add(name);
-        const prop = {
-            type: 'string',
-            description: field.label || name,
-        };
-        if(Array.isArray(field.options) && field.options.length)
+        const isStepsEditor = field.controlType === 'stepsEditor';
+        const prop = isStepsEditor
+            ? {
+                type: 'array',
+                description: field.label || name,
+                    items: {
+                        type: 'object',
+                        properties: {
+                            step: {
+                                type: 'string',
+                                description: langData.stepDescription || '',
+                            },
+                            expect: {
+                                type: 'string',
+                                description: langData.expectDescription || '',
+                            },
+                        },
+                    },
+            }
+            : {
+                type: 'string',
+                description: field.label || name,
+            };
+        if(!isStepsEditor && Array.isArray(field.options) && field.options.length)
         {
             prop.enum = field.options.map(o =>
             {
@@ -374,13 +393,18 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                 });
                 optionsStr = `\n  options: ${opts.join(', ')}`;
             }
+            const isSteps = f.controlType === 'stepsEditor';
+            const valueType = f.valueType || 'string';
+            const currentVal = isSteps && Array.isArray(f.currentValue)
+                ? `[${f.currentValue.length} steps]`
+                : (typeof f.currentValue === 'object' ? JSON.stringify(f.currentValue) : f.currentValue ?? '');
             return [
                 `- ${f.label || f.name}`,
                 `  name: ${f.name}`,
                 `  input: ${f.type || f.controlType || 'input'}`,
-                `  type: string`,
+                `  type: ${valueType}`,
                 `  required: ${!!f.required}`,
-                `  value: ${f.currentValue ?? ''}`,
+                `  value: ${currentVal}`,
                 optionsStr,
             ].filter(Boolean).join('\n');
         }).join('\n');
