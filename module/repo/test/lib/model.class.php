@@ -2477,4 +2477,184 @@ class repoModelTest extends baseTest
         if(is_object($result)) return 'object';
         return 'other';
     }
+
+    /**
+     * Test getProviderRepo method.
+     *
+     * @param  object $provider
+     * @param  string $repoID
+     * @access public
+     * @return mixed
+     */
+    public function getProviderRepoTest(object $provider, string $repoID = '1')
+    {
+        try
+        {
+            $result = $this->instance->getProviderRepo($provider, $repoID);
+        }
+        catch(\Throwable $e)
+        {
+            $result = false;
+        }
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test migrateRepoData method.
+     *
+     * @param  bool $setupData
+     * @param  bool $cleanData
+     * @param  int  $testRepoID
+     * @access public
+     * @return array
+     */
+    public function migrateRepoDataTest(bool $setupData = false, bool $cleanData = false, int $testRepoID = 99999)
+    {
+        static $createdRepoTable = false;
+        $oldRepoTable            = $this->instance->config->db->prefix . 'repo';
+        if($setupData)
+        {
+            $repoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();
+            if(!$repoTableExists)
+            {
+                $this->instance->dao->exec("CREATE TABLE `{$oldRepoTable}`
+                (
+                    `id`             int(10) unsigned NOT NULL,
+                    `SCM`            varchar(20) NOT NULL DEFAULT '',
+                    `product`        varchar(255) NOT NULL DEFAULT '',
+                    `name`           varchar(255) NOT NULL DEFAULT '',
+                    `desc`           text DEFAULT NULL,
+                    `path`           varchar(255) NOT NULL DEFAULT '',
+                    `serviceProject` varchar(100) NOT NULL DEFAULT '',
+                    `serviceHost`    varchar(50) NOT NULL DEFAULT '',
+                    `account`        varchar(30) NOT NULL DEFAULT '',
+                    `password`       varchar(30) NOT NULL DEFAULT '',
+                    `acl`            text DEFAULT NULL,
+                    `deleted`        tinyint(3) unsigned NOT NULL DEFAULT 0,
+                    PRIMARY KEY (id)
+                ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
+                $createdRepoTable = true;
+            }
+            $this->instance->dao->exec("REPLACE INTO `{$oldRepoTable}` (id, SCM, product, name, `desc`, path, serviceProject, serviceHost, account, password, acl, deleted)
+            VALUES ({$testRepoID}, 'Gitlab', '', 'migrateRepoDataTestRepo', 'repo for migrateRepoData test', 'http://gitlab.example.com/group/repo', 'group/repo', 1, 'tester', 'pass', '', 0)");
+        }
+
+        $result   = false;
+        $errorMsg = '';
+        $output   = '';
+        try
+        {
+            ob_start();
+            try
+            {
+                $result = (bool)$this->instance->migrateRepoData();
+            }
+            catch(\Throwable $e)
+            {
+                $error = trim($e->getMessage());
+                $prev  = $e->getPrevious();
+                if((empty($error) || strpos($error, '#0 ') === 0) && $prev) $error = $prev->getMessage();
+                if(empty($error)) $error = get_class($e);
+                $errorMsg = (string)$error;
+            }
+            $output   = trim((string)ob_get_clean());
+            $daoError = '';
+            if(dao::isError())
+            {
+                $daoError = dao::getError();
+                if(is_array($daoError)) $daoError = json_encode($daoError, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+                if(empty($daoError)) $daoError = 'dao error';
+            }
+            $errorMsg = trim((string)($daoError ?: $errorMsg ?: $output));
+
+            if(!empty($errorMsg) && strpos($errorMsg, 'SQLSTATE') === false && preg_match('/SQLSTATE\[[^\]]+\].*/s', $errorMsg, $matches))
+            {
+                $errorMsg = $matches[0];
+            }
+
+            if(!empty($errorMsg))
+            {
+                $errorMsg = html_entity_decode(strip_tags($errorMsg), ENT_QUOTES, 'UTF-8');
+                $errorMsg = preg_replace('/\s+/', ' ', trim($errorMsg));
+                if(preg_match('/SQLSTATE\[[^\]]+\][^#]*/i', $errorMsg, $matches)) $errorMsg = trim($matches[0]);
+            }
+        }
+        finally
+        {
+            if($cleanData)
+            {
+                $this->instance->dao->delete()->from(TABLE_REPO)->where('id')->eq($testRepoID)->exec();
+                if($createdRepoTable) $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
+                else $this->instance->dao->delete()->from($oldRepoTable)->where('id')->eq($testRepoID)->exec();
+            }
+        }
+        if(!empty($errorMsg)) return array('result' => 'fail', 'error' => $errorMsg);
+        return array('result' => $result ? 'success' : 'fail', 'error' => $result ? 'none' : 'unknown error');
+    }
+
+    /**
+     * Test parseRepoAcl method.
+     *
+     * @param  string $aclJson
+     * @param  array  $groupAccounts
+     * @access public
+     * @return array
+     */
+    public function parseRepoAclTest(string $aclJson = '{"acl":"private","users":["dev1","dev2"]}', array $groupAccounts = array())
+    {
+        $oldRepo                = new stdclass();
+        $oldRepo->acl           = $aclJson;
+        $oldRepo->groupAccounts = $groupAccounts;
+        $result                 = $this->invokeArgs('parseRepoAcl', array($oldRepo));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildNewRepo method.
+     *
+     * @param  array  $oldRepoData
+     * @param  string $repoAcl
+     * @param  string $admins
+     * @access public
+     * @return mixed
+     */
+    public function buildNewRepoTest(array $oldRepoData = array(), string $repoAcl = 'open', string $admins = 'system')
+    {
+        $oldRepo = new stdclass();
+        foreach($oldRepoData as $key => $value) $oldRepo->$key = $value;
+
+        $result = $this->invokeArgs('buildNewRepo', array($oldRepo, $repoAcl, $admins));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test extractPathSlug method.
+     *
+     * @param  string $path
+     * @access public
+     * @return mixed
+     */
+    public function extractPathSlugTest(string $path)
+    {
+        $result = $this->invokeArgs('extractPathSlug', array($path));
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test insertMembers method.
+     *
+     * @param  array $members
+     * @access public
+     * @return string
+     */
+    public function insertMembersTest(int $repoID, array $members = array('dev1', 'dev2'))
+    {
+        $result = $this->invokeArgs('insertMembers', array($repoID, $members));
+        if(dao::isError()) return dao::getError();
+        return $result ? 'success' : 'fail';
+    }
 }
