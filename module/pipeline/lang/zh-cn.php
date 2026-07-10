@@ -309,6 +309,7 @@ $lang->pipeline->triggerForm->monthDay       = '每月';
 $lang->pipeline->triggerForm->time           = '时间';
 $lang->pipeline->triggerForm->comment        = '关键字';
 $lang->pipeline->triggerForm->submit         = '确定';
+$lang->pipeline->triggerForm->invalidData    = '无效的触发器数据';
 
 $lang->pipeline->triggerFormTypeList = array();
 $lang->pipeline->triggerFormTypeList['event']      = '事件';
