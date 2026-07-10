@@ -538,6 +538,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return $fields;
 
+        $this->session->set('workflowGroupID', $flow->group);
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object);
         $fieldList = $this->workflowaction->getPageFields($flow->module, $action->action, true, null, $uiID, $flow->group);
 
@@ -578,6 +579,7 @@ class control extends baseControl
         $action  = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType == 'none') return '';
 
+        $this->session->set('workflowGroupID', $flow->group);
         $uiID      = $this->loadModel('workflowlayout')->getUIByData($flow->module, !empty($action->action) ? $action->action: '', $object);
         $fieldList = $this->loadModel('workflowaction')->getPageFields($flow->module, !empty($action->action) ? $action->action: '', true, null, $uiID, $flow->group);
 
@@ -622,6 +624,7 @@ class control extends baseControl
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($flow->module, $methodName, $flow->group);
         if(!$action || $action->extensionType != 'extend') return array();
 
+        $this->session->set('workflowGroupID', $flow->group);
         $uiID = is_object($object) ? $this->loadModel('workflowlayout')->getUIByData($flow->module, $action->action, $object) : 0;
 
         $fieldList    = $this->workflowaction->getPageFields($flow->module, $action->action, true, $object, $uiID, $flow->group);
@@ -713,7 +716,9 @@ class control extends baseControl
     {
         if($this->config->edition == 'open') return;
 
-        $groupID      = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
+        $groupID = $this->loadModel('workflowgroup')->getGroupIDByDataID($this->moduleName, $objectID);
+        $this->session->set('workflowGroupID', $groupID);
+
         $uiID         = $this->loadModel('workflowlayout')->getUIByDataID($this->moduleName, $this->methodName, $objectID);
         $fields       = $this->loadModel('workflowaction')->getPageFields($this->moduleName, $this->methodName, true, null, $uiID, $groupID);
         $layouts      = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName, $uiID, $groupID);
