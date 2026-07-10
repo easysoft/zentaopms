@@ -310,6 +310,7 @@ $lang->pipeline->triggerForm->monthDay       = 'Monthly';
 $lang->pipeline->triggerForm->time           = 'Time';
 $lang->pipeline->triggerForm->comment        = 'Keyword';
 $lang->pipeline->triggerForm->submit         = 'OK';
+$lang->pipeline->triggerForm->invalidData    = 'Invalid trigger data';
 
 $lang->pipeline->triggerFormTypeList = array();
 $lang->pipeline->triggerFormTypeList['event']      = 'Event';
