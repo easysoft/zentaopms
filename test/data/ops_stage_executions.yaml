@@ -1,0 +1,78 @@
+title: table ops_stage_executions
+desc: "流水线阶段执行表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "阶段ID，自增主键"
+    range: "1-10000"
+  - field: repoID
+    note: "关联的代码仓库ID,并发控制用"
+    range: "0,1,2,3"
+  - field: executionID
+    note: "关联的流水线执行记录ID"
+    range: "0,1,2,3"
+  - field: parent
+    note: "父执行记录ID（用于阶段重试场景，无则为0）"
+    range: "0,1,2,3"
+  - field: name
+    note: "显示名称"
+    range: "构建阶段,测试阶段,发布阶段"
+  - field: code
+    note: "阶段内部标识名称"
+    range: "build,test,deploy"
+  - field: sn
+    note: "serial number阶段序号"
+    range: "1,2,3"
+  - field: type
+    note: "类型:agent"
+    range: "agent"
+  - field: host
+    note: "machine运行机器标识"
+    range: "runner-01,runner-02,runner-03"
+  - field: os
+    note: "阶段运行的操作系统（如：linux、windows、macos）"
+    range: "linux,windows,macos"
+  - field: arch
+    note: "阶段运行的CPU架构（如：amd64、arm64、x86）"
+    range: "amd64,arm64,x86_64"
+  - field: labels
+    note: "阶段标签，runtime.selector"
+    range: "linux-amd64,docker-shared,release-node"
+  - field: depends
+    note: "依赖的前置阶段code"
+    range: "prepare,build,test"
+  - field: runPolicy
+    note: "执行策略：onSuccess,onFailure,always,custom"
+    range: "onSuccess,onFailure,always,custom"
+  - field: customPolicy
+    note: "自定义执行策略"
+    range: "branch-main,tag-release,manual-only"
+  - field: failPolicy
+    note: "失败策略：fail,ignore,warning"
+    range: "fail,ignore,warning"
+  - field: started
+    note: "阶段开始执行时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: finished
+    note: "阶段结束执行时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: duration
+    note: "执行时长(s)"
+    range: "30,120,600"
+  - field: status
+    note: "阶段执行状态"
+    range: "created,running,success,failure,skipped"
+  - field: errorType
+    note: "失败类型"
+    range: "timeout,script,system,manual"
+  - field: errorCode
+    note: "阶段执行退出码（0=成功，非0=失败）"
+    range: "0,1,126"
+  - field: errorLog
+    note: "阶段执行错误信息（无错误则为空字符串）"
+    range: "none,script-timeout,permission-denied"

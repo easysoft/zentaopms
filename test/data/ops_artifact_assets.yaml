@@ -1,0 +1,57 @@
+title: table ops_artifact_assets
+desc: "制品资源表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: artifactLibID
+    note: "所属制品库ID"
+    range: "1,2,3"
+  - field: groupID
+    note: "所属分组ID，0表示无分组"
+    range: "0,1,2,3"
+  - field: packageID
+    note: "所属制品包ID"
+    range: "1,2,3"
+  - field: versionID
+    note: "所属版本ID，0表示无版本关联"
+    range: "0,1,2,3"
+  - field: blobID
+    note: "关联文件对象ID"
+    range: "1,2,3"
+  - field: type
+    note: "制品类型:file/container/raw/helm/pypi/npm/maven/composer"
+    range: "file,container,raw,helm,pypi,npm,maven,composer"
+  - field: basename
+    note: "制品名称"
+    range: "zentao.tar.gz,backend-service,frontend-app"
+  - field: contentType
+    note: "内容类型"
+    range: "application/octet-stream,application/json,text/plain"
+  - field: rank
+    note: "制品等级 main/sub"
+    range: "main,sub"
+  - field: checksum
+    note: "校验摘要"
+    range: "sha256-a1b2c3d4,sha256-e5f6g7h8,sha256-i9j0k1l2"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

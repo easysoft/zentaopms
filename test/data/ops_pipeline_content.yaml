@@ -1,0 +1,36 @@
+title: table ops_pipeline_content
+desc: "流水线配置表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: pipelineID
+    note: "关联的流水线ID"
+    range: "1,2,3"
+  - field: version
+    note: "流水线版本"
+    range: "1,2,3"
+  - field: data
+    note: "流水线内容"
+    range: "pipeline-content-main,pipeline-content-test,pipeline-content-release"
+  - field: variables
+    note: "流水线参数"
+    range: "branch-main,env-test,tag-v1.0"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"

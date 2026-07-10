@@ -1,0 +1,66 @@
+title: table ops_scan_rules
+desc: "扫描规则表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: ruleKey
+    note: "规则唯一标识"
+    range: "java-s001,php-s002,js-s003"
+  - field: name
+    note: "规则名称"
+    range: "扫描规则-空指针,扫描规则-SQL注入,扫描规则-资源释放"
+  - field: desc
+    note: "规则描述（中文）"
+    range: "检测潜在空指针访问,检测潜在SQL注入风险,检测未释放资源问题"
+  - field: descEn
+    note: "规则描述（英文）"
+    range: "Detect null pointer risk,Detect SQL injection risk,Detect resource leak risk"
+  - field: lang
+    note: "语言类型（如：java、python等）"
+    range: "java,php,javascript,python,go"
+  - field: plugin
+    note: "所属插件名称（标识规则归属的扫描插件）"
+    range: "sonar-java,semgrep,eslint,bandit,golangci-lint"
+  - field: tag
+    note: "规则标签（用于分类筛选，如：安全、规范、性能等）"
+    range: "security,convention,performance,maintainability"
+  - field: priority
+    note: "规则优先级（low-低、medium-中、high-高）"
+    range: "low,medium,high"
+  - field: type
+    note: "规则类型（如：defect(缺陷)、security(安全)、compliance(合规)、optimize(优化)等）"
+    range: "defect,security,compliance,optimize"
+  - field: content
+    note: "规则内容（中文，如扫描正则、检查逻辑描述等）"
+    range: "content-java,content-php,content-js"
+  - field: contentEn
+    note: "规则内容（英文，如扫描正则、检查逻辑描述等）"
+    range: "content-en-java,content-en-php,content-en-js"
+  - field: isCustom
+    note: "是否自定义规则（1=自定义规则，0=系统默认规则）"
+    range: "1,0"
+  - field: status
+    note: "规则状态（enabled-启用、disabled-禁用，默认启用）"
+    range: "enabled,disabled"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"
