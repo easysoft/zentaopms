@@ -15,6 +15,11 @@ global $app;
 
 $app->loadLang('pipeline');
 
+if($repo)
+{
+    dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+}
+
 jsVar('pipelineID', $pipeline->id);
 jsVar('branchList', $branchList);
 jsVar('defaultBranch', zget($pipeline, 'defaultBranch', ''));

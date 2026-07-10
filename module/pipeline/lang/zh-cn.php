@@ -318,8 +318,8 @@ $lang->pipeline->triggerFormTypeList['month']      = '按月';
 $lang->pipeline->triggerFormTypeList['comment']    = '提交注释包含关键字';
 
 $lang->pipeline->triggerFormEventList = array();
-$lang->pipeline->triggerFormEventList['push']            = 'Push';
-$lang->pipeline->triggerFormEventList['tag_push']        = 'Tag Push';
+$lang->pipeline->triggerFormEventList['push']            = '推送事件';
+$lang->pipeline->triggerFormEventList['tag_push']        = '标签推送事件';
 $lang->pipeline->triggerFormEventList['merge_requests']  = '合并请求';
 
 $lang->pipeline->triggerFormWeekList = array();
