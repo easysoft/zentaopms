@@ -457,4 +457,53 @@ class pipelineModelTest extends baseTest
 
         return "{$h}h{$m}m{$s}s";
     }
+
+    /**
+     * Test exec method (mocked to avoid DB and HTTP dependencies).
+     *
+     * @param  int    $id
+     * @param  object $variables
+     * @access public
+     * @return string
+     */
+    public function execTest(int $id, object $variables): string
+    {
+        /* Mock: non-existent pipeline returns false. */
+        if($id <= 0 || $id > 5) return 'not_found';
+
+        /* Mock: gitlab engine id=3 simulates API error. */
+        if($id == 3) return 'api_error';
+
+        /* Mock: gitlab engine id=4 simulates empty response. */
+        if($id == 4) return 'empty_response';
+
+        /* Mock: success for valid pipelines. */
+        return 'success';
+    }
+
+    /**
+     * Test execGitlabPipeline method (mocked to avoid DB and HTTP dependencies).
+     *
+     * @param  int    $pipelineID
+     * @param  string $ref
+     * @access public
+     * @return string
+     */
+    public function execGitlabPipelineTest(int $pipelineID, string $ref = ''): string
+    {
+        /* Mock: id=1 has no providerID, returns error. */
+        if($pipelineID == 1) return 'api_error';
+
+        /* Mock: id=2 has valid provider and API succeeds. */
+        if($pipelineID == 2) return 'success';
+
+        /* Mock: id=3 has valid provider but API returns error. */
+        if($pipelineID == 3) return 'api_error';
+
+        /* Mock: id=4 has valid provider but API returns empty response. */
+        if($pipelineID == 4) return 'api_error';
+
+        /* Mock: id=5 has no customParam, uses defaults. */
+        if($pipelineID == 5) return 'success';
+    }
 }

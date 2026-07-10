@@ -405,6 +405,14 @@ class pipelineModel extends model
      */
     public function exec(int $id, object $variables): object|false
     {
+        $pipeline = $this->getByID($id);
+        if(empty($pipeline)) return false;
+        if($pipeline->engine == 'gitlab')
+        {
+            $this->execGitlabPipeline($pipeline);
+            return !dao::isError() ? new stdclass() : false;
+        }
+
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, '/pipeline/executions');
         if(!empty($variables->gitRef)) $variables->gitRef = 'refs/heads/' . $variables->gitRef;
@@ -465,61 +473,68 @@ class pipelineModel extends model
     }
 
     /**
-     * 执行gitlab流水线。
+     * 执行 GitLab 流水线。
      * Exec gitlab pipeline.
      *
      * @param  object $pipeline
      * @access public
-     * @return object
+     * @return bool
      */
-    public function execGitlabPipeline(object $pipeline): object
+    public function execGitlabPipeline(object $pipeline): bool
     {
-        $pipeline = json_decode($pipeline->pipeline);
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
 
-        /* Set pipeline run branch. */
-        $pipelineParams = new stdclass;
-        $pipelineParams->ref = zget($pipeline, 'reference', '');
-        if(empty($pipelineParams->ref) && !empty($pipeline->project))
+        $params = new stdclass();
+        $params->ref       = $pipeline->defaultBranch ?: 'main';
+        $params->variables = array();
+        if(!empty($pipeline->customParam))
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($pipeline->server, (int)$pipeline->project, false);
-            $pipelineParams->ref = zget($project, 'default_branch', 'master');
-
-            $pipeline->reference = $pipelineParams->ref;
-            $this->dao->update(TABLE_JOB)->set('pipeline')->eq(json_encode($pipeline))->where('id')->eq($pipeline->id)->exec();
-        }
-
-        /* Set pipeline params. */
-        $customParams = json_decode($pipeline->customParam);
-        $variables    = array();
-        if($customParams)
-        {
-            foreach($customParams as $paramName => $paramValue)
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
             {
-                $variable = array();
-                $variable['key']           = $paramName;
-                $variable['value']         = $paramValue;
-                $variable['variable_type'] = "env_var";
-
-                $variables[] = $variable;
+                foreach($customParams as $key => $value)
+                {
+                    $params->variables[] = array(
+                        "key"           => $key,
+                        "value"         => $value,
+                        "variable_type" => "env_var"
+                    );
+                }
             }
         }
-        if(!empty($variables)) $pipelineParams->variables = $variables;
 
-        /* Run pipeline. */
-        $compile  = new stdclass();
-        $pipeline = (object)$this->loadModel('gitlab')->apiCreatePipeline($pipeline->server, (int)zget($pipeline, 'project', 0), $pipelineParams);
-        if(empty($pipeline->id))
+        $result    = $this->loadModel('gitlab')->apiCreatePipeline($provider->url, $provider->token, $pipeline->externalPipeline, (object)$params);
+        $execution = new stdclass();
+        if(empty($result->id))
         {
-            $this->gitlab->apiErrorHandling($pipeline);
-            $compile->status = 'create_fail';
+            $this->gitlab->apiErrorHandling($result);
+            $errors = dao::getError();
+            $errorMessage = '';
+            foreach((array)$errors as $error)
+            {
+                if(is_string($error)) $errorMessage .= $error . "\n";
+                if(is_array($error))  $errorMessage .= implode("\n", $error) . "\n";
+            }
+            dao::$errors['apiMessage'] = trim($errorMessage) ? $this->lang->pipeline->execFail . '：' . trim($errorMessage) : $this->lang->pipeline->execFail;
+            $execution->status = 'create_fail';
         }
         else
         {
-            $compile->queue  = $pipeline->id;
-            $compile->status = zget($pipeline, 'status', 'create_fail');
+            $execution->queue  = $result->id;
+            $execution->status = zget($result, 'status', 'create_fail');
         }
 
-        return $compile;
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = 'manual';
+        $execution->commit       = '';
+        $execution->ref          = $params->ref;
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = $this->app->user->account;
+        $execution->createdDate  = helper::now();
+
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
     }
 
     /**
