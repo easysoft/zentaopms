@@ -14,6 +14,11 @@ namespace zin;
 
 jsVar('repoID', $repoID);
 
+if($repo)
+{
+    dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+}
+
 $fields = defineFieldList('pipeline');
 
 $fields->field('providerID')

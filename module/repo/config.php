@@ -6,6 +6,9 @@ $app->loadLang('system');
 
 $config->repo->notSetMenuVars = array('maintain', 'create', 'createrepo', 'edit', 'import', 'group');
 
+$config->repo->groupPrivs = array();
+$config->repo->groupPrivs['import'] = 'create';
+
 $config->program = new stdclass();
 $config->program->suffix['c']    = "cpp";
 $config->program->suffix['cpp']  = "cpp";
