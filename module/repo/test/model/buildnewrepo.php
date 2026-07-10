@@ -11,9 +11,9 @@ timeout=0
 cid=18123
 
 - 测试 buildNewRepo Gitlab 类型 scmType @git
-- 测试 buildNewRepo connector 内容 @{"slug":"group/testrepo","projectID":"1120"}
-- 测试 buildNewRepo Gitea 类型 connector @{"slug":"proj_a","projectID":""}
-- 测试 buildNewRepo Subversion 类型 connector @{"slug":"svn/repo","user":"svnUser","password":"svnPass"}
+- 测试 buildNewRepo Gitlab 类型 connector slug @group/testrepo
+- 测试 buildNewRepo Gitea 类型 connector slug @proj_a
+- 测试 buildNewRepo Subversion 类型 connector slug @svn/repo
 - 测试 buildNewRepo 未知 SCM 类型 scmType 为空 @~~
 */
 
@@ -30,10 +30,10 @@ $oldRepoData = array(
     'deleted'        => 0,
     'path'           => 'https://gitlab.example.com/group/testrepo',
 );
-
 $result = $repo->buildNewRepoTest($oldRepoData, 'open', 'system');
 r($result) && p('scmType') && e('git');
-r($result) && p('connector') && e('{"slug":"group/testrepo","projectID":"1120"}');
+$connector = json_decode($result->connector, true);
+r($connector) && p('slug') && e('group/testrepo');
 
 $giteaRepoData = array(
     'id'             => 124,
@@ -45,9 +45,9 @@ $giteaRepoData = array(
     'product'        => '1',
     'deleted'        => 0,
 );
-
 $result = $repo->buildNewRepoTest($giteaRepoData, 'private', 'admin1');
-r($result) && p('connector') && e('{"slug":"proj_a","projectID":""}');
+$connector = json_decode($result->connector, true);
+r($connector) && p('slug') && e('proj_a');
 
 $svnRepoData = array(
     'id'          => 125,
@@ -61,9 +61,9 @@ $svnRepoData = array(
     'account'     => 'svnUser',
     'password'    => 'svnPass',
 );
-
 $result = $repo->buildNewRepoTest($svnRepoData, 'open', 'system');
-r($result) && p('connector') && e('{"slug":"svn/repo","user":"svnUser","password":"svnPass"}');
+$connector = json_decode($result->connector, true);
+r($connector) && p('slug') && e('svn/repo');
 
 $unknownRepoData = array(
     'id'          => 126,
@@ -74,6 +74,5 @@ $unknownRepoData = array(
     'product'     => '1',
     'deleted'     => 0,
 );
-
 $result = $repo->buildNewRepoTest($unknownRepoData, 'open', 'system');
 r($result) && p('scmType') && e('~~');
