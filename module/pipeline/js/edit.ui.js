@@ -53,7 +53,7 @@ window.resetTriggerModal = function()
     $('[name="event"]').val('').trigger('change');
     $('[name="comment"]').val('');
     $('[name="weekDay"]').val('').trigger('change');
-    $('[name="time"]').val('0:0');
+    $('[name="time"]').val('');
     $('[name="monthDay"]').val('').trigger('change');
 
     /* Reset modal title. */

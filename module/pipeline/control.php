@@ -912,21 +912,29 @@ class pipeline extends control
         elseif($type == 'week')
         {
             $field = 'cron';
-            $weekDay = $formData->weekDay ?? '*';
-            $time    = $formData->time ?? '0:0';
+            $weekDay = $formData->weekDay ?? '';
+            $time    = $formData->time ?? '';
+
+            if(empty($weekDay)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->weekDay));
+            if(empty($time))    return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->time));
+
             list($hour, $minute) = explode(':', $time);
             $value = "{$minute} {$hour} * * {$weekDay}";
         }
         elseif($type == 'month')
         {
             $field = 'cron';
-            $monthDay = $formData->monthDay ?? '*';
-            $time     = $formData->time ?? '0:0';
+            $monthDay = $formData->monthDay ?? '';
+            $time     = $formData->time ?? '';
+
+            if(empty($monthDay)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->monthDay));
+            if(empty($time))     return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->time));
+
             list($hour, $minute) = explode(':', $time);
             $value = "{$minute} {$hour} {$monthDay} * *";
         }
 
-        if(empty($field) || $value === '') return $this->sendError('Invalid trigger data');
+        if(empty($field) || $value === '') return $this->sendError($this->lang->pipeline->triggerForm->invalidData);
 
         /* Find existing trigger record or create a new one. */
         $triggers = $this->pipeline->getTriggers($pipelineID);
@@ -955,6 +963,14 @@ class pipeline extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
+        /* Sync cron job to gitfox when field is cron. */
+        if($field == 'cron')
+        {
+            $deleted = $this->pipeline->deleteTriggerCronJob($pipelineID, $pipeline->engine);
+            if($deleted) $this->pipeline->addTriggerCronJob($pipelineID, $value, $pipeline->engine);
+            if(dao::isError()) return $this->sendError(dao::getError());
+        }
+
         return $this->sendSuccess(array('closeModal' => true, 'callback' => array('name' => 'refreshTriggerGroup')));
     }
 
@@ -971,6 +987,14 @@ class pipeline extends control
         if($field && in_array($field, array('event', 'cron', 'comment')))
         {
             $this->pipeline->updateTriggerField($triggerID, $field, '');
+        }
+
+        /* Sync delete cron job to gitfox. */
+        if($field == 'cron')
+        {
+            $trigger  = $this->dao->select('pipelineID')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+            $pipeline = $trigger ? $this->pipeline->getByID((int)$trigger->pipelineID) : null;
+            if($pipeline) $this->pipeline->deleteTriggerCronJob((int)$trigger->pipelineID, $pipeline->engine);
         }
 
         if(dao::isError()) return $this->sendError(dao::getError());
