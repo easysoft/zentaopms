@@ -241,6 +241,9 @@ class ai extends control
     {
         $prompt = $this->ai->getPromptById($id);
 
+        $processObjectList = $this->lang->ai->prompts->modules;
+        if(method_exists($this->ai, 'getPromptProcessObjectList')) $processObjectList = $this->ai->getPromptProcessObjectList();
+
         $knowledgeLibIDs = array();
         if(!empty($prompt->knowledgeLib)) $knowledgeLibIDs = array_filter(explode(',', trim($prompt->knowledgeLib, ',')));
 
@@ -259,6 +262,7 @@ class ai extends control
         $this->view->fieldConfig   = $this->ai->getPromptFields($id);
         $this->view->knowledgeLibs = $knowledgeLibs;
         $this->view->skill         = $skill;
+        $this->view->processObject = zget($processObjectList, $prompt->module, $prompt->module);
 
         $this->display();
     }
