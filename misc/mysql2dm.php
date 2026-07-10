@@ -2,11 +2,13 @@
 <?php
 include '../framework/helper.class.php';
 include '../lib/dbh/dbh.class.php';
+include '../lib/dao/dao.class.php';
 
 $config = new stdclass();
 
 $config->db      = new stdclass();
 $config->default = new stdclass();
+include '../config/config.php';
 include '../config/my.php';
 
 if (!file_exists('dmconfig.php')) {
@@ -253,7 +255,14 @@ foreach ($indexes as $index) {
 
     $sql .= ' INDEX "' . $name . '" ON `' . $index['table'] . '` (' . implode(',', $fields) . ')';
 
-    $dm->rawQuery($sql);
+    try
+    {
+        $dm->rawQuery($sql);
+    }
+    catch(Exception $e)
+    {
+        /* 忽略索引错误，比如索引已创建，不支持长文本字段类型的索引 */
+    }
 }
 
 echo "生成达梦视图\n";
