@@ -3553,7 +3553,6 @@ class repoModel extends model
         $oldRepos = $this->dao->select('*')->from($oldRepoTable)
             ->where('SCM')->in(array('Subversion', 'Gitlab', 'Gitea', 'Gogs'))
             ->fetchAll('', false);
-
         if(empty($oldRepos)) return true;
 
         $products = $this->dao->select('id, PO, QD, RD, whitelist')
@@ -3569,7 +3568,6 @@ class repoModel extends model
                 $fieldMembers = array_filter(array_map('trim', explode(',', zget($product, $field, ''))), 'strlen');
                 if(!empty($fieldMembers)) $productMembers = array_merge($productMembers, $fieldMembers);
             }
-
             if(!empty($productMembers)) $productMembersMap[$productID] = array_values(array_unique($productMembers));
         }
 
@@ -3581,9 +3579,7 @@ class repoModel extends model
         foreach($userGroup as $groupUser)
         {
             if(empty($groupUser->groupID)) continue;
-
             if(!isset($groupAccountMap[$groupUser->groupID])) $groupAccountMap[$groupUser->groupID] = [];
-
             $groupAccountMap[$groupUser->groupID][] = $groupUser->account;
         }
 
@@ -3598,22 +3594,19 @@ class repoModel extends model
 
             if($aclInfo['acl'] === 'private')
             {
-                $members = array();
-
+                $members    = array();
                 $productIDs = array_filter(array_map('intval', explode(',', $oldRepo->product)));
                 foreach($productIDs as $productID)
                 {
                     if(empty($productMembersMap[$productID])) continue;
                     $members = array_merge($members, $productMembersMap[$productID]);
                 }
-
                 if(!empty($aclInfo['members'])) $members = array_merge($members, $aclInfo['members']);
 
                 $members = array_filter(array_unique($members), 'strlen');
                 if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
             }
         }
-
         return true;
     }
 
@@ -3629,8 +3622,7 @@ class repoModel extends model
     {
         $repoAcl = 'open';
         $members = array();
-
-        $oldAcl = trim($oldRepo->acl);
+        $oldAcl  = trim($oldRepo->acl);
         if($oldAcl !== '')
         {
             $aclData = json_decode($oldAcl, true);
@@ -3647,7 +3639,6 @@ class repoModel extends model
                     foreach($aclData['groups'] as $groupID)
                     {
                         if(empty($oldRepo->groupAccounts[$groupID]) || !is_array($oldRepo->groupAccounts[$groupID])) continue;
-
                         $members = array_merge($members, $oldRepo->groupAccounts[$groupID]);
                     }
                 }
@@ -3669,30 +3660,26 @@ class repoModel extends model
      */
     private function buildNewRepo(object $oldRepo, string $repoAcl, string $admins): object
     {
-        $repo = new stdClass();
-        $scm  = isset($oldRepo->SCM) ? $oldRepo->SCM : '';
+        $repo          = new stdClass();
+        $scm           = isset($oldRepo->SCM) ? $oldRepo->SCM : '';
         $repo->scmType = '';
-
-        $connector = new stdClass();
+        $connector     = new stdClass();
         if($scm === 'Gitlab')
         {
-            $repo->scmType = 'git';
-
+            $repo->scmType        = 'git';
             $path                 = isset($oldRepo->path) ? $oldRepo->path : '';
             $connector->slug      = $this->extractPathSlug($path);
             $connector->projectID = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
         }
         elseif($scm === 'Gitea' || $scm === 'Gogs')
         {
-            $repo->scmType = 'git';
-
+            $repo->scmType        = 'git';
             $connector->slug      = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
             $connector->projectID = '';
         }
         elseif($scm === 'Subversion')
         {
-            $repo->scmType = 'svn';
-
+            $repo->scmType       = 'svn';
             $path                = isset($oldRepo->path) ? $oldRepo->path : '';
             $connector->slug     = $this->extractPathSlug($path);
             $connector->user     = isset($oldRepo->account) ? $oldRepo->account : '';
@@ -3741,7 +3728,6 @@ class repoModel extends model
         {
             return ltrim($parsed['path'], '/');
         }
-        // 解析失败时仅去除开头斜杠返回原字符串
         return ltrim($path, '/');
     }
 
@@ -3757,12 +3743,10 @@ class repoModel extends model
     private function insertMembers(int $repoID, array $members): bool
     {
         $values = array();
-
         foreach($members as $account) $values[] = "('{$repoID}', '{$account}')";
 
         $sql = 'REPLACE INTO ' . TABLE_DEVOPSREPOUSER . ' (`repo`, `account`) VALUES ' . implode(', ', $values);
         $this->dao->exec($sql);
-
         return !dao::isError();
     }
 
