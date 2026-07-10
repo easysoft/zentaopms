@@ -28,7 +28,7 @@ $result = $aiTest->getDataSourceTest();
 
 global $config;
 
-r(count($config->ai->moduleGroup)) && p() && e('15'); // 返回内置数据源分组数量
+r(count($config->ai->moduleGroup)) && p() && e('18'); // 返回内置数据源分组数量
 r(count(array_intersect_key($result, $config->ai->moduleGroup)) == count($config->ai->moduleGroup) ? '1' : '0') && p() && e('1'); // 返回数据源包含全部内置分组
 r($result['program']['program'][0]) && p() && e('name'); // program模块使用配置的字段
 r($result['doc']['doc'][0]) && p() && e('title'); // doc模块使用配置的字段
