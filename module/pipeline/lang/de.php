@@ -303,19 +303,20 @@ $lang->pipeline->flowApp->labels['saturday']  = 'Saturday';
 $lang->pipeline->flowApp->labels['sunday']    = 'Sunday';
 
 $lang->pipeline->triggerForm = new stdClass();
-$lang->pipeline->triggerForm->type           = 'Trigger-Typ';
-$lang->pipeline->triggerForm->event          = 'Trigger-Ereignis';
-$lang->pipeline->triggerForm->weekDay        = 'Wöchentlich';
-$lang->pipeline->triggerForm->monthDay       = 'Monatlich';
-$lang->pipeline->triggerForm->time           = 'Zeit';
-$lang->pipeline->triggerForm->comment        = 'Schlüsselwort';
+$lang->pipeline->triggerForm->type           = 'Trigger Type';
+$lang->pipeline->triggerForm->event          = 'Trigger Event';
+$lang->pipeline->triggerForm->weekDay        = 'Weekly';
+$lang->pipeline->triggerForm->monthDay       = 'Monthly';
+$lang->pipeline->triggerForm->time           = 'Time';
+$lang->pipeline->triggerForm->comment        = 'Keyword';
 $lang->pipeline->triggerForm->submit         = 'OK';
+$lang->pipeline->triggerForm->invalidData    = 'Invalid trigger data';
 
 $lang->pipeline->triggerFormTypeList = array();
-$lang->pipeline->triggerFormTypeList['event']      = 'Ereignis';
-$lang->pipeline->triggerFormTypeList['week']       = 'Wöchentlich';
-$lang->pipeline->triggerFormTypeList['month']      = 'Monatlich';
-$lang->pipeline->triggerFormTypeList['comment']    = 'Commit-Kommentar enthält Schlüsselwort';
+$lang->pipeline->triggerFormTypeList['event']      = 'Event';
+$lang->pipeline->triggerFormTypeList['week']       = 'Weekly';
+$lang->pipeline->triggerFormTypeList['month']      = 'Monthly';
+$lang->pipeline->triggerFormTypeList['comment']    = 'Commit comment contains keyword';
 
 $lang->pipeline->triggerFormEventList = array();
 $lang->pipeline->triggerFormEventList['push']            = 'Push';
@@ -323,13 +324,13 @@ $lang->pipeline->triggerFormEventList['tag_push']        = 'Tag Push';
 $lang->pipeline->triggerFormEventList['merge_requests']  = 'Merge Requests';
 
 $lang->pipeline->triggerFormWeekList = array();
-$lang->pipeline->triggerFormWeekList['1'] = 'Montag';
-$lang->pipeline->triggerFormWeekList['2'] = 'Dienstag';
-$lang->pipeline->triggerFormWeekList['3'] = 'Mittwoch';
-$lang->pipeline->triggerFormWeekList['4'] = 'Donnerstag';
-$lang->pipeline->triggerFormWeekList['5'] = 'Freitag';
-$lang->pipeline->triggerFormWeekList['6'] = 'Samstag';
-$lang->pipeline->triggerFormWeekList['0'] = 'Sonntag';
+$lang->pipeline->triggerFormWeekList['1'] = 'Monday';
+$lang->pipeline->triggerFormWeekList['2'] = 'Tuesday';
+$lang->pipeline->triggerFormWeekList['3'] = 'Wednesday';
+$lang->pipeline->triggerFormWeekList['4'] = 'Thursday';
+$lang->pipeline->triggerFormWeekList['5'] = 'Friday';
+$lang->pipeline->triggerFormWeekList['6'] = 'Saturday';
+$lang->pipeline->triggerFormWeekList['0'] = 'Sunday';
 
 $lang->pipeline->triggerFormMonthList = array();
-for($i = 1; $i <= 31; $i++) $lang->pipeline->triggerFormMonthList[$i] = $i . 'ter';
+for($i = 1; $i <= 31; $i++) $lang->pipeline->triggerFormMonthList[$i] = $i . 'th';
