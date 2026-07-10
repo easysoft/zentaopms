@@ -265,40 +265,6 @@ class pipeline extends control
     }
 
     /**
-     * View pipeline and compile.
-     *
-     * @param  int    $pipelineID
-     * @param  int    $compileID
-     * @access public
-     * @return void
-     */
-    public function view(int $pipelineID, int $compileID = 0)
-    {
-        $pipeline = $this->pipeline->getById($pipelineID);
-
-        $this->loadModel('compile');
-        if($compileID)
-        {
-            $compile = $this->compile->getById($compileID);
-        }
-        else
-        {
-            $compile = $this->compile->getLastResult($pipelineID);
-        }
-
-        if($compile && $compile->testtask) $this->pipelineZen->getCompileData($compile);
-
-        $this->view->title   = $this->lang->ci->pipeline . $this->lang->hyphen . $this->lang->pipeline->browse;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pipeline     = $pipeline;
-        $this->view->compile = $compile;
-        $this->view->repo    = $this->loadModel('repo')->getByID($pipeline->repo);
-        $this->view->jenkins = $this->loadModel('pipeline')->getById($pipeline->server);
-        $this->view->product = $this->loadModel('product')->getById($pipeline->product);
-        $this->display();
-    }
-
-    /**
      * 执行流水线。
      * Exec a pipeline.
      *
