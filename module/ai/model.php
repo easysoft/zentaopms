@@ -101,7 +101,23 @@ class aiModel extends model
         $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
 
         if(empty($this->workflowfield)) $this->loadModel('workflowfield');
-        foreach($this->config->ai->moduleGroup as $group => $modules)
+
+        $moduleGroup = $this->config->ai->moduleGroup;
+        $flows       = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
+            ->where('type')->eq('flow')
+            ->andWhere('status')->eq('normal')
+            ->andWhere('buildin')->eq('0')
+            ->fetchPairs();
+
+        foreach($flows as $module => $name)
+        {
+            if(isset($moduleGroup[$module])) continue;
+
+            $moduleGroup[$module] = array($module);
+            $this->lang->ai->moduleList[$module]['common'] = $name;
+        }
+
+        foreach($moduleGroup as $group => $modules)
         {
             foreach($modules as $module)
             {
