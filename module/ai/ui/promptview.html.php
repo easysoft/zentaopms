@@ -101,7 +101,7 @@ detailBody
         section
         (
             set::title($lang->ai->prompts->processObject),
-            set::content($prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : '')
+            set::content($processObject)
         ),
         section(set::title($lang->ai->prompts->actionObject), set::content($actionObject)),
         section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
@@ -137,7 +137,7 @@ detailBody
                 set::active(true),
                 tableData
                 (
-                    item(set::name($lang->prompt->module), $prompt->module ? $lang->ai->moduleList[$prompt->module]['common'] : ''),
+                    item(set::name($lang->prompt->module), $processObject),
                     item(set::name($lang->prompt->desc),   div(setClass('w-64 text-clip'), set::title($prompt->desc), $prompt->desc)),
                     item(set::name($lang->prompt->status), $lang->ai->prompts->statuses[$prompt->status]),
                     item(set::name($lang->prompt->model), zui::aiModelName($prompt->model)),
