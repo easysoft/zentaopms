@@ -80,11 +80,12 @@ class repoModel extends model
         $repo = $this->fetchByID($repoID);
         $this->session->set('devopsSpace', empty($repo) ? 0 : $repo->spaceID);
 
-        /* 镜像代码库屏蔽"扫描(repoCodeScan)"与"代码问题(review)"两个一级菜单。 */
+        /* 镜像代码库屏蔽"扫描(repoCodeScan)"、"代码问题(review)"与"设置(settings)"三个一级菜单。 */
         if($repo && !empty($repo->mirror))
         {
             unset($this->lang->devops->menu->repoCodeScan);
             unset($this->lang->devops->menu->review);
+            unset($this->lang->devops->menu->settings);
         }
 
         /* SVN 代码库屏蔽分支、标签、代码评审、制品库、设置 5 个一级菜单。SVN 无原生分支/MR/制品库等概念。 */
