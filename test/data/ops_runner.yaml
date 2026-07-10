@@ -1,0 +1,63 @@
+title: table ops_runner
+desc: "runner 基本信息表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: name
+    note: "Runner名称"
+    range: "runner-linux-01,runner-win-01,runner-mac-01"
+  - field: desc
+    note: "Runner描述"
+    range: "Linux构建Runner,Windows测试Runner,Mac发布Runner"
+  - field: version
+    note: "Runner版本"
+    range: "1.0.0,1.1.0,2.0.0"
+  - field: hostname
+    note: "主机名"
+    range: "runner-01,runner-02,runner-03"
+  - field: ip
+    note: "IP地址"
+    range: "10.0.0.11,10.0.0.12,10.0.0.13"
+  - field: os
+    note: "操作系统"
+    range: "linux,windows,macos"
+  - field: arch
+    note: "系统架构"
+    range: "amd64,arm64,x86_64"
+  - field: labels
+    note: "标签（JSON格式）"
+    range: "linux-amd64,docker-shared,macos-arm64"
+  - field: token
+    note: "认证令牌"
+    range: "runner-token-001,runner-token-002,runner-token-003"
+  - field: heartBeat
+    note: "心跳时间戳"
+    range: "1720000000,1720000600,1720001200"
+  - field: online
+    note: "在线状态 (online:离线, offline:在线)"
+    range: "online,offline"
+  - field: status
+    note: "Runner状态 (disable:停用, enable:启用)"
+    range: "enable,disable"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

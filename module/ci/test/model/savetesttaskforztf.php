@@ -27,7 +27,7 @@ cid=15590
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('pipeline')->gen(3);
+zenData('ops_pipeline')->gen(3);
 zenData('testtask')->gen(5);
 zenData('project')->gen(5);
 zenData('projectproduct')->gen(5);

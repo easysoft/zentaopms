@@ -1,0 +1,51 @@
+title: table ops_plugins
+desc: "CI插件表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "插件ID，自增主键"
+    range: "1-10000"
+  - field: groupID
+    note: "插件分组ID"
+    range: "0,1,2,3"
+  - field: name
+    note: "插件名称（唯一标识符）"
+    range: "checkout-step,unit-test-step,deploy-stage"
+  - field: desc
+    note: "插件描述信息"
+    range: "代码拉取插件,单元测试插件,发布部署插件"
+  - field: logo
+    note: "插件Logo（SVG格式）"
+    range: "logo-checkout,logo-test,logo-deploy"
+  - field: yaml
+    note: "插件规范配置（YAML格式）"
+    range: "plugin-yaml-checkout,plugin-yaml-test,plugin-yaml-deploy"
+  - field: json
+    note: "插件规范配置（JSON格式）"
+    range: "plugin-json-checkout,plugin-json-test,plugin-json-deploy"
+  - field: type
+    note: "插件类型：step/stage"
+    range: "step,stage"
+  - field: kind
+    note: "插件 kind"
+    range: "source,test,deploy"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

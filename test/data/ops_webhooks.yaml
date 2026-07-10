@@ -1,0 +1,66 @@
+title: table ops_webhooks
+desc: "Web钩子配置表：存储Web钩子的基本信息、触发规则、认证方式、执行状态等"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "Web钩子主键ID，自增"
+    range: "1-10000"
+  - field: spaceID
+    note: "空间ID，关联spaces表id"
+    range: "0,1,2,3"
+  - field: repoID
+    note: "仓库ID，关联repository表id"
+    range: "0,1,2,3"
+  - field: displayName
+    note: "Web钩子显示名称"
+    range: "CI回调,发布通知,消息同步"
+  - field: desc
+    note: "Web钩子描述信息"
+    range: "触发CI回调的Webhook,触发发布通知的Webhook,同步外部消息的Webhook"
+  - field: url
+    note: "Web钩子回调地址"
+    range: "https://hooks.example.com/ci,https://hooks.example.com/release,https://hooks.example.com/notify"
+  - field: secret
+    note: "Web钩子签名密钥"
+    range: "secret-ci,secret-release,secret-notify"
+  - field: isSSL
+    note: "是否需要SSL证书验证：0=忽略，1=验证"
+    range: "0,1"
+  - field: triggers
+    note: "触发条件等"
+    range: "push,merge,release"
+  - field: internal
+    note: "是否为内部钩子：1=是，0=否，默认0"
+    range: "0,1"
+  - field: authMethod
+    note: "认证方式（如none/basic/bearer等），默认空"
+    range: "none,basic,bearer"
+  - field: authHeader
+    note: "认证请求头（如Basic Auth、Bearer Token等），默认空"
+    range: "BasicAuth,BearerToken,X-Signature"
+  - field: latestExecResult
+    note: "最近一次执行结果（成功/失败/异常等）"
+    range: "success,failure,timeout"
+  - field: enabled
+    note: "是否启用Web钩子：1=启用，0=禁用"
+    range: "1,0"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

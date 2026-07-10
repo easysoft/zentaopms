@@ -1,0 +1,67 @@
+title: table ops_pipeline_executions
+desc: "流水线执行记录表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "执行记录ID，自增主键"
+    range: "1-10000"
+  - field: pipelineID
+    note: "关联的流水线ID"
+    range: "1,2,3"
+  - field: parent
+    note: "父执行记录ID（用于子流水线/重试场景，无则为0）"
+    range: "0,1,2,3"
+  - field: trigger
+    note: "触发方式：manual,branch_updated"
+    range: "manual,branch_updated"
+  - field: commit
+    note: "CommitID"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"
+  - field: ref
+    note: "分支/tag/commit，如refs/heads/main,refs/tags/v1.0,commit"
+    range: "refs/heads/main,refs/heads/develop,refs/tags/v1.0"
+  - field: params
+    note: "执行入参（JSON格式）"
+    range: "param-main,param-test,param-release"
+  - field: startedDate
+    note: "执行开始时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: finishedDate
+    note: "执行结束时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: duration
+    note: "执行时长(s)"
+    range: "30,120,600"
+  - field: status
+    note: "执行状态"
+    range: "created,running,success,failure,canceled"
+  - field: error
+    note: "执行错误信息（无错误则为空字符串）"
+    range: "none,timeout,script-error"
+  - field: queue
+    note: "Jenkins队列号，用于后续状态查询和去重"
+    range: "1001,1002,1003"
+  - field: logs
+    note: "Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）"
+    range: "pipeline-log-build,pipeline-log-test,pipeline-log-release"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: commitBefore
+    note: "当前流水线执行时所用提交的前一个提交的SHA值"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"

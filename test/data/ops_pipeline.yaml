@@ -1,0 +1,79 @@
+title: table ops_pipeline
+desc: "流水线基本信息表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "流水线ID，自增主键"
+    range: 1-10000
+  - field: name
+    note: "流水线名称"
+    range: 1-10000
+    prefix: "流水线"
+  - field: engine
+    note: "引擎: gitlab, jenkins, gitfox"
+    range: gitfox,gitlab,jenkins
+  - field: providerID
+    note: "关联的外部服务ID"
+    range: 0-1000
+  - field: scope
+    note: "流水线类型：系统/空间/仓库"
+    range: system,space,repo
+  - field: spaceID
+    note: "关联的空间ID"
+    range: 0-1000
+  - field: repoID
+    note: "关联的代码仓库ID"
+    range: 0-1000
+  - field: desc
+    note: "流水线描述信息"
+    range: 1-10000
+    prefix: "流水线描述"
+  - field: status
+    note: "流水线状态：草稿/激活"
+    range: draft,active
+  - field: latestVersion
+    note: "流水线最新版本"
+    range: 1-10
+  - field: defaultBranch
+    note: "流水线默认分支"
+    range: main,master,develop
+  - field: yamlPath
+    note: "流水线配置文件路径"
+    range: .gitlab-ci.yml,Jenkinsfile,.gitfox/pipeline.yaml
+  - field: customParam
+    note: "Jenkins,GitLab 流水线执行传参"
+    range: ''
+    prefix: "["
+    postfix: "]"
+  - field: lastExec
+    note: "最后一次执行时间"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastResult
+    note: "最后一次执行状态"
+    range: created,success,failure,running
+  - field: externalPipeline
+    note: "Jenkins/GitLab pipeline"
+    range: 1-10000
+    prefix: "pipeline-"
+  - field: createdBy
+    note: "由谁创建"
+    range: admin,user1,user2
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: admin,user1,user2
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: 0

@@ -1,0 +1,72 @@
+title: table ops_repo
+desc: "代码库表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "代码库ID"
+    range: "1-10000"
+  - field: spaceID
+    note: "空间ID"
+    range: "0,1,2,3"
+  - field: product
+    note: "关联产品"
+    range: "1,2,3"
+  - field: name
+    note: "代码库唯一标识"
+    range: "zentao-web,zentao-api,zentao-mobile"
+  - field: desc
+    note: "代码库描述"
+    range: "前端主仓库,服务端主仓库,移动端仓库"
+  - field: scmType
+    note: "源代码管理类型"
+    range: "git,svn"
+  - field: gitUID
+    note: "Git仓库唯一标识"
+    range: "gituid000000000000000000000000000000000001,gituid000000000000000000000000000000000002,gituid000000000000000000000000000000000003"
+  - field: forkID
+    note: "派生来源代码库ID"
+    range: "0,1,2,3"
+  - field: mirror
+    note: "是否为镜像库（0=普通库，1=镜像库）"
+    range: "0,1"
+  - field: providerID
+    note: "源代码提供商ID"
+    range: "0,1,2,3"
+  - field: connector
+    note: "连接器信息"
+    range: "gitlab:root/zentao,gitea:zentao/api,svn:/svn/zentao"
+  - field: defaultBranch
+    note: "默认分支名"
+    range: "main,master,develop"
+  - field: acl
+    note: "权限:private,open"
+    range: "open,private"
+  - field: status
+    note: "代码库状态"
+    range: "active,inactive"
+  - field: synced
+    note: "同步标识"
+    range: "0,1"
+  - field: branchArchivable
+    note: "是否开启分支归档"
+    range: "0,1"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"
