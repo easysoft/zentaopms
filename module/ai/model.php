@@ -1852,7 +1852,7 @@ class aiModel extends model
         $this->dao->insert(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "`deleted` = '0'")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -1932,7 +1932,7 @@ class aiModel extends model
         $this->dao->update(TABLE_AI_AGENT)
             ->data($prompt)
             ->batchCheck($this->config->ai->createprompt->requiredFields, 'notempty')
-            ->check('name', 'unique', "`id` != {$prompt->id}")
+            ->check('name', 'unique', "`id` != {$prompt->id} AND `deleted` = '0'")
             ->autoCheck()
             ->where('id')->eq($prompt->id)
             ->exec();
