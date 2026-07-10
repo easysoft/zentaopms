@@ -160,34 +160,6 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
-     * Test apiGetBranchLabels method.
-     *
-     * @param  int         $gitfoxID
-     * @param  int         $repoID
-     * @param  string|null $apiResponse
-     * @access public
-     * @return mixed
-     */
-    public function apiGetBranchLabelsTest(int $gitfoxID, int $repoID, ?string $apiResponse = null)
-    {
-        if($apiResponse === null)
-        {
-            $this->restoreHttpClient();
-            dao::$errors = array();
-            $result = $this->invokeArgs('apiGetBranchLabels', array($gitfoxID, $repoID));
-            return $result;
-        }
-
-        $client = $this->resetHttpClient();
-        $client->setResponse('/branch-labels', $apiResponse);
-        dao::$errors = array();
-
-        $result = $this->invokeArgs('apiGetBranchLabels', array($gitfoxID, $repoID));
-        $this->restoreHttpClient();
-        return $result;
-    }
-
-    /**
      * Test getCommits method.
      *
      * @param  object      $repo
@@ -235,7 +207,6 @@ class gitfoxModelTest extends baseTest
         {
             $client = $this->resetHttpClient();
             $client->setResponse('/repos/', $apiResponse);
-            $client->setResponse('/branch-labels', $apiResponse);
         }
         else
         {
