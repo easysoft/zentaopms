@@ -228,6 +228,10 @@ $tabs['caseRelatedList'] = setting()
     ->title($lang->testcase->legendOther)
     ->control('caseRelatedList');
 
+$caseVersion = 0;
+if($from == 'testsuite') $caseVersion = '{caseVersion}';
+if($from == 'testtask') $caseVersion = '{version}';
+
 detail
 (
     set::urlFormatter(array('{caseID}' => $case->caseID, '{version}' => $case->version, '{product}' => $case->product, '{branch}' => $case->branch, '{module}' => $case->module, '{id}' => $case->id, '{lib}' => $case->lib, '{confirmeObjectID}' => isset($case->confirmeObjectID) ? $case->confirmeObjectID : 0)),
@@ -237,6 +241,6 @@ detail
     set::sections($sections),
     set::tabs($tabs),
     set::actions($actions),
-    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version=0&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
+    set::linkCreator(createLink('testcase', 'view', "caseID={id}&version={$caseVersion}&from={$from}&taskID={$taskID}&stepsType={$stepsType}&suiteID={$suiteID}")),
     $versionBtn
 );
