@@ -240,8 +240,9 @@ if($config->inContainer || $config->inQuickon)
 }
 
 $config->devops = new stdclass();
-$config->devops->gitfoxURL  = 'http://localhost';
-$config->devops->gitfoxPort = 3000;
+$config->devops->gitfoxURL     = 'http://localhost';
+$config->devops->gitfoxPort    = 3000;
+$config->devops->gitfoxVersion = '2.0';
 
 /* 引用自定义的配置。 Include the custom config file. */
 $myConfigRoot = (defined('RUN_MODE') and in_array(RUN_MODE, array('test', 'uitest'))) ? dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR . 'config' : dirname(__FILE__);

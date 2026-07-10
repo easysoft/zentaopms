@@ -1,10 +1,4 @@
 <?php
-$config->gitfox->create = new stdclass;
-$config->gitfox->create->requiredFields = 'name,url,token';
-
-$config->gitfox->edit = new stdclass;
-$config->gitfox->edit->requiredFields = 'name,url,token';
-
 $config->gitfox->createbranch = new stdclass;
 $config->gitfox->createbranch->requiredFields = 'branch,ref';
 
