@@ -9,42 +9,13 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$fields = useFields('task.start');
+
 /* ====== Preparing and processing page data ====== */
 jsVar('confirmFinish', $lang->task->confirmFinish);
 jsVar('confirmTeamFinish', $lang->task->confirmTeamFinish);
 jsVar('noticeTaskStart', $lang->task->noticeTaskStart);
 jsVar('currentTeam', $currentTeam);
-
-/* zin: Set variables to define control for form. */
-$assignedToControl = '';
-if($task->mode == 'linear')
-{
-    $assignedToControl = inputGroup(
-        set::className('no-background'),
-        picker
-        (
-            set::name('assignedTo'),
-            set::items($users),
-            set::value($assignedTo),
-            set::required(true),
-            set::disabled(true)
-        ),
-        input
-        (
-            set::className('hidden'),
-            set::name('assignedTo'),
-            set::value($assignedTo)
-        )
-    );
-}
-elseif($canRecordEffort)
-{
-    $assignedToControl = picker(
-        set::name('assignedTo'),
-        set::value($assignedTo),
-        set::items($members)
-    );
-}
 
 /* ====== Define the page structure with zin widgets ====== */
 
@@ -81,69 +52,8 @@ else
     (
         setID('startForm'),
         set::ajax(array('beforeSubmit' => jsRaw("clickSubmit"))),
-        formGroup
-        (
-            set::className($task->mode == 'multi' ? 'hidden' : ''),
-            set::width('1/2'),
-            set::label($lang->task->assignedTo),
-            $assignedToControl
-        ),
-        formGroup
-        (
-            set::width('1/2'),
-            set::label($lang->task->realStarted),
-            datetimePicker
-            (
-                set::name('realStarted'),
-                set::value(helper::isZeroDate($task->realStarted) ? helper::now() : $task->realStarted)
-            )
-        ),
-        formRow
-        (
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($task->mode == 'linear' ? $lang->task->myConsumed : $lang->task->consumed),
-                inputControl
-                (
-                    input
-                    (
-                        set::name('consumed'),
-                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->consumed) : helper::formatHours((float)$task->consumed))
-                    ),
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
-                )
-            ),
-            formGroup
-            (
-                set::width('1/2'),
-                set::label($lang->task->left),
-                inputControl
-                (
-                    input
-                    (
-                        set::name('left'),
-                        set::value(!empty($currentTeam) ? helper::formatHours((float)$currentTeam->left) : helper::formatHours((float)$task->left))
-                    ),
-                    to::suffix($lang->task->suffixHour),
-                    set::suffixWidth(20)
-                )
-            )
-        ),
-        formGroup
-        (
-            set::label($lang->comment),
-            editor
-            (
-                set::name('comment'),
-                set::rows('5')
-            )
-        )
+        set::fields($fields)
     );
     hr();
     history();
 }
-
-/* ====== Render page ====== */
-render();
