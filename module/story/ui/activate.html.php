@@ -20,7 +20,7 @@ modalHeader();
 formPanel
 (
     set::submitBtnText($lang->story->activate),
-    set::fields($fields),
+    set::fields($fields)
 );
 hr();
 history();
