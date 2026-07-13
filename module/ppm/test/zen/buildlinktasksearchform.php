@@ -1,32 +1,35 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
-title=测试 userZen::buildLinkTaskSearchForm();
+title=测试 ppmZen::buildLinkTaskSearchForm();
 timeout=0
-cid=17264
+cid=0
 
-- 搜素的模块属性module @mrTask
-- 搜索的URL属性actionURL @buildlinktasksearchform.php?m=mr&f=linkTask&MRID=1&repoID=2&browseType=bysearch&param=myQueryID&orderBy=id_desc
-- 搜素的queryID属性queryID @2
-- 搜素的字段
- - 第fields条的id属性 @编号
- - 第fields条的name属性 @任务名称
+- 执行$searchForm属性module @ppmTask
+- 执行$searchForm属性queryID @7
+- 执行$searchForm['params']['execution']['values'] @2
+- 执行$searchForm['fields']['module']) ? 1 : 0 @0
+- 执行$searchForm['actionURL'], 'linkTask') !== false ? 1 : 0 @1
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 global $app;
-$app->setMethodName('linkTask');
-
-zenData('mr')->gen(0);
-zenData('repo')->gen(0);
+$app->rawModule = 'ppm';
+$app->rawMethod = 'view';
+$app->setMethodName('view');
 
 su('admin');
 
-$mrTest = new mrZenTest();
-r($mrTest->buildLinkTaskSearchFormTest(1, 1, 'id_desc', 0, [])) && p('module')         && e('mrTask'); // 搜素的模块
-r($mrTest->buildLinkTaskSearchFormTest(1, 2, 'id_desc', 0, [])) && p('actionURL')      && e('buildlinktasksearchform.php?m=mr&f=linkTask&MRID=1&repoID=2&browseType=bysearch&param=myQueryID&orderBy=id_desc'); // 搜索的URL
-r($mrTest->buildLinkTaskSearchFormTest(2, 1, 'id_desc', 2, [])) && p('queryID')        && e('2'); // 搜素的queryID
-r($mrTest->buildLinkTaskSearchFormTest(2, 2, 'id_desc', 0, [])) && p('fields:id,name') && e('编号,任务名称'); // 搜素的字段
+$ppmZen     = new ppmZenTest();
+$searchForm = $ppmZen->buildLinkTaskSearchFormTest(8101, 6101, 'id_desc', 7, array(1 => '执行A', 2 => '执行B', 0 => ''));
+
+r($searchForm) && p('module') && e('ppmTask');
+r($searchForm) && p('queryID') && e('7');
+r(count($searchForm['params']['execution']['values'])) && p() && e('2');
+r(isset($searchForm['fields']['module']) ? 1 : 0) && p() && e('0');
+r(strpos($searchForm['actionURL'], 'linkTask') !== false ? 1 : 0) && p() && e('1');

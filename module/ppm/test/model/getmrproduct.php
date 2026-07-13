@@ -3,31 +3,35 @@
 
 /**
 
-title=测试 mrModel::getMRProduct();
+title=测试 ppmModel::getMRProduct();
 timeout=0
-cid=17252
+cid=0
 
-- 不存在的产品 @0
-- 代码库不存在 @0
-- 代码库产品为空 @0
-- 存在的产品
- - 属性name @正常产品1
- - 属性code @code1
- - 属性status @normal
+- 执行ppmModel模块的getMRProductTest方法 属性id @1
+- 执行ppmModel模块的getMRProductTest方法 属性id @2
+- 执行ppmModel模块的getMRProductTest方法  @0
+- 执行ppmModel模块的getMRProductTest方法  @0
+- 执行ppmModel模块的getMRProductTest方法 属性id @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('product')->gen(1);
-zenData('repo')->loadYaml('repo')->gen(5);
-zenData('mr')->loadYaml('mr')->gen(6);
+zenData('product')->gen(2);
 
-$mrModel = new mrModelTest();
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
+$repo->id->range('6101-6102');
+$repo->product->range('1,2');
+$repo->name->range('ppm-repo-6101,ppm-repo-6102');
+$repo->gen(2);
 
-r($mrModel->getMRProductTester(4)) && p() && e('0'); // 不存在的产品
-r($mrModel->getMRProductTester(6)) && p() && e('0'); // 代码库不存在
-r($mrModel->getMRProductTester(5)) && p() && e('0'); // 代码库产品为空
+su('admin');
 
-r($mrModel->getMRProductTester(1)) && p('name,code,status') && e('正常产品1,code1,normal'); // 存在的产品
+$ppmModel = new ppmModelTest();
+
+r($ppmModel->getMRProductTest((object)array('repoID' => 6101))) && p('id') && e('1');
+r($ppmModel->getMRProductTest((object)array('repoID' => 6102))) && p('id') && e('2');
+r($ppmModel->getMRProductTest((object)array('repoID' => 9999))) && p() && e('0');
+r($ppmModel->getMRProductTest((object)array('repoID' => 0))) && p() && e('0');
+r($ppmModel->getMRProductTest((object)array('repoID' => '6101'))) && p('id') && e('1');
