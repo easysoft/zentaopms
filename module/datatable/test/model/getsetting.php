@@ -41,16 +41,12 @@ cid=15945
 */
 
 global $lang, $app, $config;
-$lang->SRCommon    = '研发需求';
-$lang->URCommon    = '用户需求';
-$config->edition   = 'open';
-$app::$loadedLangs = array();
+$lang->SRCommon  = '研发需求';
+$lang->URCommon  = '用户需求';
+$config->edition = 'open';
 
-include($app->getModuleRoot() . '/story/control.php');
-$app->control = new story();
-$app->loadLang('custom');
-$app->control->loadModel('task');
-$app->control->loadModel('story');
+$app::$loadedLangs = array();
+$app->loadLang('story');
 
 $datatable = new datatableModelTest();
 r($datatable->getSettingTest('product', 'browse'))  && p('id:title;id:width;title:title;title:width')    && e('ID,80,研发需求名称,0.44');  //获取产品模块browse方法自定义列
