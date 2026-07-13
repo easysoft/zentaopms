@@ -1289,7 +1289,7 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $skipFields      = 'finalResult,result';
+        $skipFields      = 'finalResult,result,comment,checkAffection';
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         if($isSuperReviewer)
         {
