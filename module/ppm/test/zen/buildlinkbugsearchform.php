@@ -3,20 +3,15 @@
 
 /**
 
-title=测试 mrZen::buildLinkBugSearchForm();
+title=测试 ppmZen::buildLinkBugSearchForm();
 timeout=0
 cid=0
 
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性actionURL @buildlinkbugsearchform.php?m=mr&f=linkBug&MRID=1&repoID=1&browseType=bysearch&param=myQueryID&orderBy=id_desc
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 5 属性queryID @5
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是2, 3, 'title_asc', 0 属性actionURL @buildlinkbugsearchform.php?m=mr&f=linkBug&MRID=2&repoID=3&browseType=bysearch&param=myQueryID&orderBy=title_asc
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性style @simple
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasProduct @0
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasPlan @0
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasModule @0
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasExecution @0
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasOpenedBuild @0
-- 执行mrTest模块的buildLinkBugSearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasResolvedBuild @0
+- 执行$searchForm属性queryID @8
+- 执行$searchForm属性style @simple
+- 执行$searchForm['fields']['product']) ? 1 : 0 @0
+- 执行$searchForm['fields']['execution']) ? 1 : 0 @0
+- 执行$searchForm['fields']['branch']) ? 1 : 0 @0
 
 */
 
@@ -24,22 +19,17 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 global $app;
-$app->setMethodName('linkBug');
-
-zenData('mr')->gen(0);
-zenData('repo')->gen(0);
+$app->rawModule = 'ppm';
+$app->rawMethod = 'view';
+$app->setMethodName('view');
 
 su('admin');
 
-$mrTest = new mrZenTest();
+$ppmZen     = new ppmZenTest();
+$searchForm = $ppmZen->buildLinkBugSearchFormTest(8101, 6101, 'id_desc', 8);
 
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('actionURL') && e('buildlinkbugsearchform.php?m=mr&f=linkBug&MRID=1&repoID=1&browseType=bysearch&param=myQueryID&orderBy=id_desc');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 5)) && p('queryID') && e('5');
-r($mrTest->buildLinkBugSearchFormTest(2, 3, 'title_asc', 0)) && p('actionURL') && e('buildlinkbugsearchform.php?m=mr&f=linkBug&MRID=2&repoID=3&browseType=bysearch&param=myQueryID&orderBy=title_asc');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('style') && e('simple');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasProduct') && e('0');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasPlan') && e('0');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasModule') && e('0');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasExecution') && e('0');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasOpenedBuild') && e('0');
-r($mrTest->buildLinkBugSearchFormTest(1, 1, 'id_desc', 0)) && p('hasResolvedBuild') && e('0');
+r($searchForm) && p('queryID') && e('8');
+r($searchForm) && p('style') && e('simple');
+r(isset($searchForm['fields']['product']) ? 1 : 0) && p() && e('0');
+r(isset($searchForm['fields']['execution']) ? 1 : 0) && p() && e('0');
+r(isset($searchForm['fields']['branch']) ? 1 : 0) && p() && e('0');

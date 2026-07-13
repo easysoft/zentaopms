@@ -1,0 +1,30 @@
+title: entry
+author: Codex
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: GitFox
+  - field: account
+    range: admin
+  - field: code
+    range: gitfox
+  - field: key
+    range: cd65d97989fcb1fdb0d82471c3238a3a
+  - field: freePasswd
+    range: 1
+  - field: ip
+    range: '*'
+  - field: desc
+    range: GitFox entry for ppm unit tests
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '`2026-07-10 09:00:00`'
+  - field: calledTime
+    range: 0
+  - field: editedBy
+    range: admin
+  - field: deleted
+    range: 0

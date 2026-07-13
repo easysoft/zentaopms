@@ -3,45 +3,45 @@
 
 /**
 
-title=mrModel->isClickable();
+title=测试 ppmModel::isClickable();
 timeout=0
-cid=17255
+cid=0
 
-- 未同步合并请求检查编辑权限 @0
-- 已同步合并请求检查编辑权限 @1
-- 编辑被禁用的合并请求检查编辑权限 @0
-- 编辑未被禁用的合并请求检查删除权限 @1
-- 删除被禁用的合并请求检查删除权限 @0
-- 删除未被禁用的合并请求检查合并权限 @1
-- 检查其他权限 @1
+- 执行ppmModel模块的isClickableTest方法，参数是$closedPPM, 'reopen'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$openedPPM, 'close'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$openedPPM, 'review'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$reviewerPPM, 'review'  @0
+- 执行ppmModel模块的isClickableTest方法，参数是$openedPPM, 'progress'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$openedPPM, 'submit'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$approvedPPM, 'submit'  @0
+- 执行ppmModel模块的isClickableTest方法，参数是$rejectedPPM, 'submit'  @1
+- 执行ppmModel模块的isClickableTest方法，参数是$noFlowPPM, 'progress'  @0
+- 执行ppmModel模块的isClickableTest方法，参数是$noStatusPPM, 'reopen'  @0
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
-global $tester;
-$mrModel = $tester->loadModel('mr');
 
-$mr = new stdclass();
-$mr->synced    = 0;
-$mr->canEdit   = '';
-$mr->canDelete = '';
+$ppmModel = new ppmModelTest();
 
-r($mrModel->isClickable($mr, 'edit')) && p() && e('0'); // 未同步合并请求检查编辑权限
+$closedPPM   = (object)array('status' => 'closed', 'reviewers' => 'admin', 'reviewStatus' => 'pending', 'approvalflow' => 0, 'approval' => 0);
+$openedPPM   = (object)array('status' => 'opened', 'reviewers' => 'admin,user1', 'reviewStatus' => 'pending', 'approvalflow' => 1, 'approval' => 2);
+$reviewerPPM = (object)array('status' => 'opened', 'reviewers' => 'user1', 'reviewStatus' => 'pending', 'approvalflow' => 0, 'approval' => 0);
+$approvedPPM = (object)array('status' => 'opened', 'reviewers' => 'admin,user1', 'reviewStatus' => 'approved', 'approvalflow' => 1, 'approval' => 2);
+$rejectedPPM = (object)array('status' => 'opened', 'reviewers' => 'admin,user1', 'reviewStatus' => 'rejected', 'approvalflow' => 1, 'approval' => 2);
+$noFlowPPM   = (object)array('status' => 'opened', 'reviewers' => 'admin,user1', 'reviewStatus' => 'pending', 'approvalflow' => 0, 'approval' => 0);
+$noStatusPPM = (object)array('status' => '', 'reviewers' => 'admin,user1', 'reviewStatus' => 'pending', 'approvalflow' => 0, 'approval' => 0);
 
-$mr->synced = 1;
-r($mrModel->isClickable($mr, 'edit')) && p() && e('1'); // 已同步合并请求检查编辑权限
-
-$mr->canEdit = 'disabled';
-r($mrModel->isClickable($mr, 'edit')) && p() && e('0'); // 编辑被禁用的合并请求检查编辑权限
-
-$mr->canEdit = '';
-r($mrModel->isClickable($mr, 'delete')) && p() && e('1'); // 编辑未被禁用的合并请求检查删除权限
-
-$mr->canDelete = 'disabled';
-r($mrModel->isClickable($mr, 'delete')) && p() && e('0'); // 删除被禁用的合并请求检查删除权限
-
-$mr->canDelete = '';
-r($mrModel->isClickable($mr, 'merge')) && p() && e('1'); // 删除未被禁用的合并请求检查合并权限
-
-r($mrModel->isClickable($mr, 'other')) && p() && e('1'); // 检查其他权限
+r($ppmModel->isClickableTest($closedPPM, 'reopen')) && p() && e('1');
+r($ppmModel->isClickableTest($openedPPM, 'close')) && p() && e('1');
+r($ppmModel->isClickableTest($openedPPM, 'review')) && p() && e('1');
+r($ppmModel->isClickableTest($reviewerPPM, 'review')) && p() && e('0');
+r($ppmModel->isClickableTest($openedPPM, 'progress')) && p() && e('1');
+r($ppmModel->isClickableTest($openedPPM, 'submit')) && p() && e('1');
+r($ppmModel->isClickableTest($approvedPPM, 'submit')) && p() && e('0');
+r($ppmModel->isClickableTest($rejectedPPM, 'submit')) && p() && e('1');
+r($ppmModel->isClickableTest($noFlowPPM, 'progress')) && p() && e('0');
+r($ppmModel->isClickableTest($noStatusPPM, 'reopen')) && p() && e('0');
