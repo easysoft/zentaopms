@@ -842,8 +842,6 @@ class storyZen extends story
         $fields['closedReason']['required']   = true;
         $fields['duplicateStory']['required'] = true;
 
-        $fields['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'name' => 'comment', 'title' => $this->lang->comment, 'width' => 'full');
-
         if(strpos($this->config->{$story->type}->review->requiredFields, 'reviewedDate') !== false) $fields['reviewedDate']['required'] = true;
         if(strpos($this->config->{$story->type}->review->requiredFields, 'comment') !== false)      $fields['comment']['required']      = true;
 
