@@ -45,7 +45,8 @@ $fields->field('twinsStory')
 $fields->field('parent')
     ->id('parentBox')
     ->items($createFields['parent']['options'])
-    ->value($createFields['parent']['default']);
+    ->value($createFields['parent']['default'])
+    ->checkbox(array('text' => $lang->story->syncToChild, 'id' => 'syncToChild'));
 
 $fields->field('grade')
     ->disabled($gradeRule == 'stepwise')
@@ -170,3 +171,16 @@ $fields->field('keywords')->foldable()->required($createFields['keywords']['requ
 
 $fields->field('type')->control('hidden')->value($type);
 $fields->field('status')->control('hidden')->value('active');
+
+$fields->field('tmpModule')->control('hidden');
+$fields->field('tmpCategory')->control('hidden');
+$fields->field('tmpSource')->control('hidden');
+$fields->field('tmpMailto')->control('hidden');
+$fields->field('tmpPri')->control('hidden');
+$fields->field('tmpTitle')->control('hidden');
+$fields->field('tmpEstimate')->control('hidden');
+$fields->field('tmpSourceNote')->control('hidden');
+$fields->field('tmpKeywords')->control('hidden');
+$fields->field('tmpSpec')->control('hidden');
+$fields->field('tmpVerify')->control('hidden');
+$fields->field('tmpFiles')->control('hidden');

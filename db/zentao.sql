@@ -1968,6 +1968,7 @@ CREATE TABLE IF NOT EXISTS `zt_suitecase` (
   `suite` int unsigned NOT NULL DEFAULT 0,
   `product` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
+  `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT "用例版本",
   `version` smallint unsigned NOT NULL DEFAULT 1,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB;
@@ -2160,6 +2161,7 @@ CREATE TABLE IF NOT EXISTS `zt_testrun` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `task` int unsigned NOT NULL DEFAULT 0,
   `case` int unsigned NOT NULL DEFAULT 0,
+  `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本',
   `version` smallint unsigned NOT NULL DEFAULT 1,
   `assignedTo` varchar(30) NOT NULL DEFAULT '',
   `lastRunner` varchar(30) NOT NULL DEFAULT '',
@@ -2510,23 +2512,25 @@ REPLACE INTO `zt_stage` (`name`, `percent`, `type`, `createdBy`, `createdDate`, 
 ('总结评审', '5',  'review',  'admin', '2020-02-08 21:08:45', 'admin', '2020-02-12 13:50:27', '0');
 
 REPLACE INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
-('',   'system', 'common',      '',       'CRProduct',       '1'),
-('',   'system', 'common',      '',       'CRExecution',     '1'),
-('',   'system', 'common',      '',       'disabledFeatures','otherOA'),
-('',   'system', 'common',      'global', 'mode',            'ALM'),
-('',   'system', 'common',      'global', 'syncProduct',     '{"feedback":{},"ticket":{}}'),
-('',   'system', 'common',      'global', 'installedDate',   CURDATE()),
-('',   'system', 'custom',      '',       'enableER',        '1'),
-('',   'system', 'custom',      '',       'hourPoint',       '0'),
-('',   'system', 'custom',      '',       'URSR',            '2'),
-('',   'system', 'project',     '',       'defaultCurrency', 'CNY'),
-('',   'system', 'project',     '',       'unitList',        'CNY,USD'),
-('',   'system', 'epic',        '',       'gradeRule',       'stepwise'),
-('',   'system', 'requirement', '',       'gradeRule',       'stepwise'),
-('',   'system', 'story',       '',       'gradeRule',       'stepwise'),
-('',   'system', 'story',       '',       'reviewRules',     'allpass'),
-('or', 'system', 'demand',      '',       'reviewRules',     'allpass'),
-('or', 'system', 'demand',      '',       'needReview',      '1');
+('',   'system', 'common',      '',       'CRProduct',            '1'),
+('',   'system', 'common',      '',       'CRExecution',          '1'),
+('',   'system', 'common',      '',       'disabledFeatures',     'otherOA'),
+('',   'system', 'common',      'global', 'mode',                 'ALM'),
+('',   'system', 'common',      'global', 'syncProduct',          '{"feedback":{},"ticket":{}}'),
+('',   'system', 'common',      'global', 'installedDate',        CURDATE()),
+('',   'system', 'custom',      '',       'enableER',             '1'),
+('',   'system', 'custom',      '',       'hourPoint',            '0'),
+('',   'system', 'custom',      '',       'URSR',                 '2'),
+('',   'system', 'project',     '',       'defaultCurrency',      'CNY'),
+('',   'system', 'project',     '',       'unitList',             'CNY,USD'),
+('',   'system', 'project',     '',       'ganttVersionSettings', 'deliverable'),
+('',   'system', 'execution',   '',       'ganttVersionSettings', 'gantt'),
+('',   'system', 'epic',        '',       'gradeRule',            'stepwise'),
+('',   'system', 'requirement', '',       'gradeRule',            'stepwise'),
+('',   'system', 'story',       '',       'gradeRule',            'stepwise'),
+('',   'system', 'story',       '',       'reviewRules',          'allpass'),
+('or', 'system', 'demand',      '',       'reviewRules',          'allpass'),
+('or', 'system', 'demand',      '',       'needReview',           '1');
 
  -- DROP TABLE IF EXISTS `zt_relationoftasks`;
 CREATE TABLE IF NOT EXISTS `zt_relationoftasks` (

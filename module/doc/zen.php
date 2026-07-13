@@ -376,7 +376,7 @@ class docZen extends doc
      * @access protected
      * @return void
      */
-    protected function responseAfterCreate(array $docResult, string $objectType = 'doc')
+    protected function responseAfterCreate(array $docResult, string $objectType = 'doc', $from = '')
     {
         $docID = $docResult['id'];
         $files = zget($docResult, 'files', '');
@@ -387,6 +387,12 @@ class docZen extends doc
         $this->action->create($objectType, $docID, 'Created', $fileAction, '', '', false);
 
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
+
+        if($from == 'deliverable')
+        {
+            $newDoc = $this->dao->select('id,title,version')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "selectNewDoc(" . json_encode($newDoc) . ")"));
+        }
 
         $response = array(
             'result'  => 'success',
@@ -692,6 +698,7 @@ class docZen extends doc
             {
                 $actionID = $this->action->create('doc', $doc->id, $action, $fileAction . $this->post->comment, '', '', false);
                 $this->action->logHistory($actionID, $changes);
+                $this->doc->createAction($doc->id, 'edited');
             }
         }
 
@@ -715,10 +722,10 @@ class docZen extends doc
             $link   = $this->createLink($moduleName, $methodName, $params);
         }
 
-        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link);
+        if(isInModal()) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'actionID' => $actionID ?? 0);
 
         $doc->isCollector = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false;
-        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc);
+        return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link, 'doc' => $doc, 'actionID' => $actionID ?? 0);
     }
 
     /**

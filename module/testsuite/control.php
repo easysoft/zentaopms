@@ -398,7 +398,62 @@ class testsuite extends control
     public function confirmCaseChange(int $caseID, int $suiteID = 0, string $from = 'list')
     {
         $case = $this->loadModel('testcase')->getById($caseID);
-        $this->dao->update(TABLE_SUITECASE)->set('version')->eq($case->version)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($caseID)->exec();
+        $this->dao->update(TABLE_SUITECASE)->set('version')->eq($case->version)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($caseID)->andWhere('suite')->eq($suiteID)->exec();
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $from == 'list' ? true : $this->createLink('testcase', 'view', "caseID={$caseID}&version={$case->version}&from=testsuite&taskID=0&stepsType=&suiteID={$suiteID}")));
+    }
+
+    /**
+     * 忽略用例的更新。
+     * Ignore case changed in testtask.
+     *
+     * @param  int    $caseID
+     * @param  int    $suiteID
+     * @access public
+     * @return void
+     */
+    public function ignoreCaseChange(int $caseID, int $suiteID)
+    {
+        $suiteCaseVersion = $this->dao->select('version')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('case')->eq($caseID)->fetch('version');
+        $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($suiteCaseVersion)->where('case')->eq($caseID)->andWhere('suite')->eq($suiteID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+    }
+
+    /**
+     * 批量确认用例变更。
+     * Batch confirm testcase changed.
+     *
+     * @param  int    $suiteID
+     * @access public
+     * @return void
+     */
+    public function batchConfirmCaseChange(int $suiteID)
+    {
+        $caseIdList  = zget($_POST, 'caseIdList', array());
+        $caseList    = $this->loadModel('testcase')->getByList($caseIdList);
+        $versionList = $this->dao->select('`case`,caseVersion,version')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('case')->in($caseIdList)->fetchAll('case');
+        foreach($caseList as $case)
+        {
+            $versionInfo = $versionList[$case->id];
+            if(empty($versionInfo)) continue;
+            if($versionInfo->caseVersion == $versionInfo->version) continue;
+            $this->dao->update(TABLE_SUITECASE)->set('version')->eq($case->version)->where('suite')->eq($suiteID)->andWhere('`case`')->eq($case->id)->exec();
+        }
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
+    }
+
+    /**
+     * 批量忽略用例的更新。
+     * Batch Ignore case changed in testtask.
+     *
+     * @param  int    $suiteID
+     * @access public
+     * @return void
+     */
+    public function batchIgnoreCaseChange(int $suiteID)
+    {
+        $caseIdList   = zget($_POST, 'caseIdList', array());
+        $versionPairs = $this->dao->select('`case`,version')->from(TABLE_SUITECASE)->where('suite')->eq($suiteID)->andWhere('case')->in($caseIdList)->fetchPairs('case');
+        foreach($versionPairs as $caseID => $caseVersion) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($caseVersion)->where('case')->eq($caseID)->andWhere('suite')->eq($suiteID)->exec();
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true));
     }
 }

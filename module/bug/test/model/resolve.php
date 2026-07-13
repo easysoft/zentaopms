@@ -3,7 +3,13 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(1);
+zenData('notify')->gen(0);
+
+$user = zenData('user');
+$user->account->range('admin,user1');
+$user->realname->range('管理员,用户1');
+$user->gen(2);
+
 zenData('build')->gen(1);
 zenData('product')->gen(10);
 
@@ -46,7 +52,7 @@ cid=15405
 
 */
 
-$bugIdList = array(1, 2, 3, 4, 5, 6, 7);
+$bugIdList   = array(1, 2, 3, 4, 5, 6, 7);
 
 /* Normal condition. */
 $bydesignBug  = array('resolution' => 'bydesign');
@@ -54,7 +60,7 @@ $duplicateBug = array('resolution' => 'duplicate', 'duplicateBug' => 1);
 $fixedBug     = array('resolution' => 'fixed', 'resolvedBuild' => 1);
 
 /* Error condition. */
-$emptyResulution   = array('resolution' => '');
+$emptyResolution   = array('resolution' => '');
 $empthDuplicateBug = array('resolution' => 'duplicate');
 $emptyFixedBug     = array('resolution' => 'fixed');
 
@@ -68,6 +74,5 @@ r($bug->resolveTest($bugIdList[2], $fixedBug))     && p('resolution,assignedTo,r
 r($bug->resolveTest($bugIdList[3], $bydesignBug, $output))  && p('resolution,assignedTo') && e('bydesign,user99'); // 测试解决原因为设计如此的bug 传入output
 r($bug->resolveTest($bugIdList[5], $fixedBug, $output))     && p('resolution,assignedTo,resolvedBuild') && e('fixed,user99,1'); // 测试解决原因为解决 有解决版本的bug 传入output
 
-r($bug->resolveTest($bugIdList[6], $emptyResulution))   && p() && e('『解决方案』不能为空。'); // 测试解决原因为空的bug
+r($bug->resolveTest($bugIdList[6], $emptyResolution))   && p() && e('『解决方案』不能为空。'); // 测试解决原因为空的bug
 r($bug->resolveTest($bugIdList[6], $empthDuplicateBug)) && p() && e('『重复Bug』不能为空。');  // 测试解决原因为重复bug 无重复bugID的bug
-r($bug->resolveTest($bugIdList[6], $emptyFixedBug))     && p() && e('『解决版本』不能为空。'); // 测试解决原因为解决 无解决版本的bug

@@ -16,7 +16,7 @@ class customZen extends custom
      * Set the list of custom fields.
      *
      * @param  string    $module      todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field       priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field       priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @param  string    $lang        all|zh-cn|zh-tw|en|de|fr
      * @param  string    $currentLang all|zh-cn|zh-tw|en|de|fr
      * @access protected
@@ -65,7 +65,7 @@ class customZen extends custom
      * Set the list of custom variables.
      *
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @param  string    $lang        all|zh-cn|zh-tw|en|de|fr
      * @param  string    $currentLang all|zh-cn|zh-tw|en|de|fr
      * @access protected
@@ -126,6 +126,11 @@ class customZen extends custom
             $this->view->blockPairs  = $this->block->getClosedBlockPairs($closedBlock);
             $this->view->closedBlock = $closedBlock;
         }
+        if($module == 'user' && $field == 'outside')
+        {
+            $this->app->loadConfig('user');
+            $this->view->showOutside = isset($this->config->user->showOutside) ? $this->config->user->showOutside : '0';
+        }
         if($module == 'user' && $field == 'deleted')
         {
             $this->app->loadConfig('user');
@@ -138,7 +143,7 @@ class customZen extends custom
      * Set the value of the custom field.
      *
      * @param  string      $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string      $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string      $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @access protected
      * @return string|bool
      */
@@ -189,6 +194,10 @@ class customZen extends custom
             $data['contactField'] = implode(',', $data['contactField']);
             $this->loadModel('setting')->setItem('system.user.contactField', $data['contactField']);
         }
+        elseif($module == 'user' && $field == 'outside')
+        {
+            $this->loadModel('setting')->setItem('system.user.showOutside', $data['showOutside']);
+        }
         elseif($module == 'user' && $field == 'deleted')
         {
             $this->loadModel('setting')->setItem('system.user.showDeleted', $data['showDeleted']);
@@ -207,7 +216,7 @@ class customZen extends custom
      * Check whether the key of custom is valid.
      *
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @access protected
      * @return bool
      */
@@ -256,7 +265,7 @@ class customZen extends custom
      * Check whether the key of custom is duplicate.
      *
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @access protected
      * @return bool|string
      */
@@ -280,7 +289,7 @@ class customZen extends custom
      * Check whether the key of custom is valid.
      *
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @access protected
      * @return array|string
      */
@@ -318,7 +327,7 @@ class customZen extends custom
      * Check whether the key of custom is empty.
      *
      * @param  string    $module todo|story|task|bug|testcase|testtask|user|project
-     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|deleted|unitList
+     * @param  string    $field  priList|typeList|statusList|sourceList|reasonList|stageList|reviewRules|reviewResultList|review|severityList|osList|browserList|resolutionList|longlife|resultList|roleList|contactField|outside|deleted|unitList
      * @access protected
      * @return bool|string
      */

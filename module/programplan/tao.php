@@ -486,13 +486,7 @@ class programplanTao extends programplanModel
     {
         if($this->config->edition != 'ipd') return $datas;
 
-        $this->loadModel('review');
-        $reviewPoints = $this->dao->select('t1.*, t2.status, t2.`lastReviewedDate`,t2.id as reviewID')->from(TABLE_OBJECT)->alias('t1')
-            ->leftJoin(TABLE_REVIEW)->alias('t2')->on('t1.id = t2.object')
-            ->where('t1.deleted')->eq('0')
-            ->andWhere('t1.project')->eq($projectID)
-            ->andWhere('t1.enabled')->eq(1)
-            ->fetchAll('id', false);
+        $reviewPoints = $this->loadModel('review')->getPointsByProjectID($projectID);
 
         foreach($datas['data'] as $plan)
         {
@@ -742,7 +736,7 @@ class programplanTao extends programplanModel
         $end  = $this->getPointEndDate($planID, $point, $reviewDeadline);
         $data = new stdclass();
         $data->id             = $planID . '-point' . $point->category . '-' . $point->id;
-        $data->reviewID       = $point->reviewID;
+        $data->reviewID       = $point->review;
         $data->type           = 'point';
         $data->text           = "<i class='icon-seal'></i> " . $point->title;
         $data->name           = $point->title;

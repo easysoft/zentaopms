@@ -201,3 +201,10 @@ $config->task->actions = new stdclass();
 $config->task->actions->view = array();
 $config->task->actions->view['mainActions']   = array('batchCreate', 'assignTo', 'start', 'createBranch', 'recordWorkhour', 'restart', 'pause', 'finish', 'activate', 'close', 'cancel');
 $config->task->actions->view['suffixActions'] = array('edit', 'create', 'delete', 'view');
+
+$config->task->actionMaps = array();
+$config->task->actionMaps['Canceled']  = 'cancel';
+$config->task->actionMaps['Closed']    = 'close';
+$config->task->actionMaps['Started']   = 'start';
+$config->task->actionMaps['Restarted'] = 'start';
+$config->task->actionMaps['Finished']  = 'finish';

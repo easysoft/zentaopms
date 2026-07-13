@@ -914,7 +914,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0)
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0, string $from = '')
     {
         if(!empty($_POST))
         {
@@ -953,7 +953,7 @@ class doc extends control
 
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult);
+            return $this->docZen->responseAfterCreate($docResult, '', $from);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -1053,7 +1053,15 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
+            $response = $this->docZen->responseAfterEdit($doc, $changes, $files);
+
+            if(!empty($response['actionID']))
+            {
+                $docData->id = $docID;
+                $this->loadModel('message')->sendMentionNotice('doc', 'edit', $response['actionID'], $docData, $doc);
+            }
+
+            return $this->send($response);
         }
 
         /* Get doc and set menu. */
@@ -2321,7 +2329,7 @@ class doc extends control
      */
     public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
     {
-        if(empty($orderBy)) $orderBy = 'id_desc';
+        if(empty($orderBy)) $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
@@ -2381,7 +2389,8 @@ class doc extends control
         $browseType  = !empty($search) ? 'bykeyword' : 'all';
         $queryID     = $search;
 
-        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+        $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager, '', '', $filterType);
 
         $order = 0;
         $menu = $this->config->doc->quickMenu[$type];
@@ -2611,7 +2620,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text', string $from = '')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
@@ -2733,6 +2742,7 @@ class doc extends control
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;
+        $this->view->from       = $from;
         $this->display();
     }
 

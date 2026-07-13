@@ -34,6 +34,8 @@ cid=15350
 
 */
 
+zenData('product')->gen(10);
+
 $bug_codeerror    = array('title' => 'bug_codeerror', 'type' => 'codeerror');
 $bug_project      = array('title' => 'bug_project', 'project' => 1);
 $bug_execution    = array('title' => 'bug_execution', 'execution' => 2);

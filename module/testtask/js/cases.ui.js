@@ -78,6 +78,11 @@ window.onRenderCell = function(result, {row, col})
                 result.push({html: `[<a href=${caseLink} data-app='qa'><i class='icon icon-share'></i> #${row.data.fromCaseID}</a>]`}); // 添加来源用例链接
             }
         }
+
+        if(row.data.status == 'changed' && col.name == 'actions' && typeof result[0] != 'undefined')
+        {
+            if(result[0]['props']['items']) result[0]['props']['items'][0]['data-confirm'] = caseChangeTip.replace('%s', row.data.caseVersion);
+        }
     }
 
     if((col.name == 'assignedTo' || col.name == 'pri') && row.data.isScene) delete result[0];

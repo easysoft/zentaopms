@@ -2476,6 +2476,11 @@ class actionModel extends model
         {
             $objectName = $this->dao->select("pivot, {$field} AS name")->from($table)->where('pivot')->in($objectIdList)->orderBy('pivot_asc')->fetchPairs();
         }
+        elseif($objectType == 'ganttversion')
+        {
+            $ganttVersions = $this->dao->select("id, title, version")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            foreach($ganttVersions as $ganttVersion) $objectName[$ganttVersion->id] = $ganttVersion->title ?: $ganttVersion->version;
+        }
         else
         {
             $objectName = $this->dao->select("id, {$field} AS name")->from($table)->where('id')->in($objectIdList)->filterTpl(false)->orderBy('id_asc')->fetchPairs();

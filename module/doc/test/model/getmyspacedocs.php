@@ -4,6 +4,7 @@
 /**
 
 title=测试 docModel->getMySpaceDocs();
+timeout=0
 cid=16113
 
 - 获取最近浏览的所有文档
@@ -50,7 +51,15 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doclib')->loadYaml('doclib')->gen(30);
 zenData('doc')->loadYaml('doc')->gen(50);
-zenData('docaction')->loadYaml('docaction')->gen(20);
+
+$docactionTable = zenData('docaction');
+$docactionTable->id->range('1-30');
+$docactionTable->doc->range('1-10,1-10,1-10');
+$docactionTable->action->range('collect{10},view{10},edited{10}');
+$docactionTable->actor->range('admin');
+$docactionTable->date->range("(-2w):1D")->type('timestamp')->format("YY/MM/DD")->postfix("\t");
+$docactionTable->gen(30);
+
 zenData('action')->loadYaml('action')->gen(20);
 zenData('user')->gen(5);
 su('admin');

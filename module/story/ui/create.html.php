@@ -119,5 +119,17 @@ formGridPanel
     on::change('[name=parent]', 'loadGrade'),
     on::change('[name=source]', "toggleFeedback(e.target)"),
     on::change('[name=region]', 'setLane'),
+    on::change('[id=syncToChild]', 'syncToChild'),
+    on::change('[name=module]',    "saveTmpInfo(e, 'Module')"),
+    on::change('[name=category]',  "saveTmpInfo(e, 'Category')"),
+    on::change('[name=source]',    "saveTmpInfo(e, 'Source')"),
+    on::change('[name=pri]',       "saveTmpInfo(e, 'Pri')"),
+    on::change('[name^=mailto]',   "saveTmpInfo(e, 'Mailto')"),
+    on::keyup('[name=title]',      "saveTmpInfo(e, 'Title')"),
+    on::keyup('[name=estimate]',   "saveTmpInfo(e, 'Estimate')"),
+    on::keyup('[name=sourceNote]', "saveTmpInfo(e, 'SourceNote')"),
+    on::keyup('[name=keywords]',   "saveTmpInfo(e, 'Keywords')"),
+    on::keyup('[name=spec]',       "saveTmpInfo(e, 'Spec')"),
+    on::keyup('[name=verify]',     "saveTmpInfo(e, 'Verify')"),
     set::loadUrl($loadUrl)
 );
