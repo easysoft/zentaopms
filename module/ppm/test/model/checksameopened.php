@@ -3,80 +3,50 @@
 
 /**
 
-title=测试 mrModel::checkSameOpened();
+title=测试 ppmModel::checkSameOpened();
 timeout=0
-cid=17238
+cid=0
 
-- 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch属性message @存在重复并且未关闭的合并请求: ID1
-- 使用空的gitlabID属性result @success
-- 源项目为空属性result @success
-- 源分支为空属性result @success
-- 目标项目为空属性result @success
-- 目标分支为空属性result @success
-- 使用错误的gitlabID属性result @success
-- 使用错误的源项目属性result @success
-- 使用错误的目标分支属性result @success
-- 使用错误的目标项目属性result @success
+- 执行ppmModel模块的checkSameOpenedTest方法，参数是6101, 6101, 'master', 6101, 'master' 属性result @fail
+- 执行ppmModel模块的checkSameOpenedTest方法，参数是6101, 6101, 'feature/basic-opened', 6101, 'master' 属性message @存在重复并且未关闭的合并请求: ID6101
+- 执行ppmModel模块的checkSameOpenedTest方法，参数是6102, 6102, 'feature/basic-closed', 6102, 'master' 属性result @success
+- 执行ppmModel模块的checkSameOpenedTest方法，参数是6101, 6101, 'feature/basic-new', 6101, 'master' 属性result @success
+- 执行ppmModel模块的checkSameOpenedTest方法，参数是6101, 6102, 'feature/cross-repo', 6101, 'master' 属性result @success
 
 */
-include dirname(__FILE__, 5) . '/test/lib/init.php';
 
-zenData('pipeline')->gen(1);
-zenData('repo')->loadYaml('repo')->gen(1);
-zenData('mr')->loadYaml('mr')->gen(1);
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('user')->gen(3);
+zenData('product')->gen(2);
+
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
+$repo->id->range('6101-6102');
+$repo->product->range('1,2');
+$repo->name->range('ppm-repo-6101,ppm-repo-6102');
+$repo->gen(2);
+
+$ppm = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
+$ppm->id->range('6101-6103');
+$ppm->title->range('Opened PPM 6101,Closed PPM 6102,Review PPM 6103');
+$ppm->repoID->range('6101,6102,6101');
+$ppm->sourceRepoID->range('6101,6102,6101');
+$ppm->sourceBranch->range('feature/basic-opened,feature/basic-closed,feature/basic-review');
+$ppm->targetRepoID->range('6101,6102,6101');
+$ppm->targetBranch->range('master{3}');
+$ppm->status->range('opened,closed,opened');
+$ppm->createdBy->range('admin,user1,admin');
+$ppm->reviewers->range('admin,user1,admin');
+$ppm->reviewStatus->range('pending,approved,rejected');
+$ppm->gen(3);
+
 su('admin');
 
-global $tester;
-$mrModel = $tester->loadModel('mr');
+$ppmModel = new ppmModelTest();
 
-$gitlabID      = 1;
-$sourceProject = '3';
-$sourceBranch  = 'test1';
-$targetProject = '3';
-$targetBranch  = 'master';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('message') && e('存在重复并且未关闭的合并请求: ID1'); // 使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch
-
-$gitlabID = 0;
-$result   = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 使用空的gitlabID
-
-$gitlabID      = 1;
-$sourceProject = '0';
-$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 源项目为空
-
-$sourceProject = '3';
-$sourceBranch  = '';
-$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 源分支为空
-
-$sourceBranch  = 'test1';
-$targetProject = '';
-$result = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 目标项目为空
-
-$targetProject = '3';
-$targetBranch  = '';
-$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 目标分支为空
-
-$gitlabID     = 10;
-$targetBranch = 'master';
-$result       = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 使用错误的gitlabID
-
-$gitlabID      = 1;
-$sourceProject = 'test';
-$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 使用错误的源项目
-
-$sourceBranch = 'test1';
-$targetBranch = 'master1';
-$result       = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 使用错误的目标分支
-
-$targetProject = 'test';
-$targetBranch  = 'master';
-$result        = $mrModel->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-r($result) && p('result') && e('success'); // 使用错误的目标项目
+r($ppmModel->checkSameOpenedTest(6101, 6101, 'master', 6101, 'master')) && p('result') && e('fail');
+r($ppmModel->checkSameOpenedTest(6101, 6101, 'feature/basic-opened', 6101, 'master')) && p('message') && e('存在重复并且未关闭的合并请求: ID6101');
+r($ppmModel->checkSameOpenedTest(6102, 6102, 'feature/basic-closed', 6102, 'master')) && p('result') && e('success');
+r($ppmModel->checkSameOpenedTest(6101, 6101, 'feature/basic-new', 6101, 'master')) && p('result') && e('success');
+r($ppmModel->checkSameOpenedTest(6101, 6102, 'feature/cross-repo', 6101, 'master')) && p('result') && e('success');

@@ -1,0 +1,48 @@
+title: ops_repo
+author: Codex
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: spaceID
+    range: 1
+  - field: product
+    range: 1
+  - field: name
+    prefix: ppm-repo-
+    range: 1-1000
+  - field: desc
+    range: PPM Repo
+  - field: scmType
+    range: git
+  - field: gitUID
+    prefix: gituid
+    range: 1-1000
+  - field: forkID
+    range: 0
+  - field: mirror
+    range: 0
+  - field: providerID
+    range: 0
+  - field: connector
+    range: gitlab:root/zentao
+  - field: defaultBranch
+    range: master
+  - field: acl
+    range: open
+  - field: status
+    range: active
+  - field: synced
+    range: 1
+  - field: branchArchivable
+    range: 0
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '`2026-07-10 09:00:00`'
+  - field: editedBy
+    range: admin
+  - field: editedDate
+    range: '`2026-07-10 09:00:00`'
+  - field: deleted
+    range: 0
