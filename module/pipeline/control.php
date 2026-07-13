@@ -167,7 +167,7 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function edit(int $id)
+    public function edit(int $id, int $spaceID = 0, int $repoID = 0, string $type = '')
     {
         if($_POST)
         {
@@ -219,7 +219,14 @@ class pipeline extends control
                 }
             }
 
-            $locateUrl  = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+            if($type)
+            {
+                $locateUrl = $this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={$type}");
+            }
+            else
+            {
+                $locateUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+            }
             return $this->sendSuccess(array('locate' => $locateUrl));
         }
 
@@ -252,7 +259,14 @@ class pipeline extends control
             if(!$customParam) $customParam = array();
         }
 
-        $cancelUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+        if($type)
+        {
+            $cancelUrl = $this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={$type}");
+        }
+        else
+        {
+            $cancelUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+        }
 
         $triggers = $this->pipeline->getTriggers($id);
 
@@ -534,20 +548,6 @@ class pipeline extends control
 
         $this->pipelineZen->buildImportForm($repoID, $providerID);
         $this->display();
-    }
-
-    /**
-     * 流水线触发器。
-     * Pipeline trigger.
-     *
-     * @param  int    $pipelineID
-     * @access public
-     * @return void
-     */
-    public function trigger(int $pipelineID)
-    {
-        $this->lang->pipeline->edit = $this->lang->pipeline->trigger;
-        $this->edit($pipelineID);
     }
 
     /**
