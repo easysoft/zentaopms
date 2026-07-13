@@ -72,9 +72,10 @@ jsVar('grades', $grades);
 
 if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
-    $config->release->dtable->story->fieldList['id']['type']   = 'ID';
-    $config->release->dtable->bug->fieldList['id']['type']     = 'ID';
-    $config->release->dtable->leftBug->fieldList['id']['type'] = 'ID';
+    $config->release->dtable->story->fieldList['id']['type']      = 'ID';
+    $config->release->dtable->bug->fieldList['id']['type']        = 'ID';
+    $config->release->dtable->leftBug->fieldList['id']['type']    = 'ID';
+    $config->release->dtable->escapedBug->fieldList['id']['type'] = 'ID';
 
     unset($config->release->dtable->story->fieldList['actions']);
     unset($config->release->dtable->bug->fieldList['actions']);
@@ -147,6 +148,15 @@ if(commonModel::hasPriv($releaseModule, 'unlinkBug'))
 
 $leftBugFootToolbar = array();
 if($canBatchUnlinkBug) $leftBugFootToolbar['items'][] = array('className' => 'btn primary size-sm batch-btn', 'text' => $lang->release->batchUnlink, 'data-type' => 'bug', 'data-url' => createLink($releaseModule, 'batchUnlinkBug', "release={$release->id}&type=leftBug"));
+
+/* Table data and setting for escaped bugs tab. */
+$config->release->dtable->escapedBug->fieldList['resolvedBuild']['map'] = $builds;
+$escapedBugTableData = initTableData($escapedBugs, $config->release->dtable->escapedBug->fieldList, $this->release);
+$escapedBugTableData = array_map(function($bug)
+{
+    if(helper::isZeroDate($bug->resolvedDate)) $bug->resolvedDate = '';
+    return $bug;
+}, $escapedBugTableData);
 
 /* Process release info data. */
 $releaseBuild = array();
@@ -325,6 +335,34 @@ detailBody
                     set::extraHeight('+144'),
                     set::footToolbar($leftBugFootToolbar),
                     set::footPager(usePager('leftBugPager', '', array('recPerPage' => $leftBugPager->recPerPage, 'recTotal' => $leftBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$leftBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
+                )
+            ),
+
+            /* Escaped bug table. */
+            tabPane
+            (
+                to::prefix(icon('bug')),
+                set::key('escapedBug'),
+                to::suffix(set::title($lang->release->escapedBugTip), icon('help')),
+                set::title($lang->release->escapedBugs),
+                set::active($type == 'escapedBug'),
+                div
+                (
+                    setClass('tab-actions'),
+                    $exportBtn
+                ),
+                dtable
+                (
+                    setID('escapedBugDTable'),
+                    set::style(array('min-width' => '100%')),
+                    set::userMap($users),
+                    set::cols(array_values($config->release->dtable->escapedBug->fieldList)),
+                    set::data($escapedBugTableData),
+                    set::checkable(false),
+                    set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=escapedBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
+                    set::orderBy($orderBy),
+                    set::extraHeight('+144'),
+                    set::footPager(usePager('escapedBugPager', '', array('recPerPage' => $escapedBugPager->recPerPage, 'recTotal' => $escapedBugPager->recTotal, 'linkCreator' => createLink($releaseModule, 'view', "releaseID={$release->id}&type=escapedBug&link={$link}&param={$param}&orderBy={$orderBy}&recTotal={$escapedBugPager->recTotal}&recPerPage={recPerPage}&page={page}"))))
                 )
             ),
 

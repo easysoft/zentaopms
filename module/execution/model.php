@@ -823,6 +823,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Started', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'start', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -860,6 +866,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Delayed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($postData->comment)
+            {
+                $oldExecution->comment = $postData->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'putoff', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -891,6 +903,12 @@ class executionModel extends model
         {
             $actionID = $this->loadModel('action')->create('execution', $executionID, 'Suspended', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'suspend', $actionID, $oldExecution);
+            }
         }
         return $changes;
     }
@@ -995,6 +1013,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Activated', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'activate', $actionID, $oldExecution);
+            }
         }
 
         return $changes;
@@ -1035,6 +1059,12 @@ class executionModel extends model
             $this->loadModel('action');
             $actionID = $this->action->create('execution', $executionID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
+
+            if($this->post->comment)
+            {
+                $oldExecution->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('execution', 'close', $actionID, $oldExecution);
+            }
         }
 
         $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -2386,7 +2416,7 @@ class executionModel extends model
         $gradePairs = array();
         $gradeList  = $this->loadModel('story')->getGradeList('');
         $storyTypes = isset($project->storyType) ? $project->storyType : 'story';
-        if(!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design')))) $storyTypes = 'story';
+        if($execution->type != 'stage') $storyTypes = 'story';
         foreach($gradeList as $grade)
         {
             if(strpos($storyTypes, $grade->type) === false) continue;
@@ -2923,7 +2953,7 @@ class executionModel extends model
             if(empty($story)) continue;
             if(strpos($project->storyType, "$story->type") === false && $this->config->vision == 'rnd') continue;
 
-            if($execution->multiple && $story->type != 'story' && (!($execution->type == 'stage' && in_array($execution->attribute, array('mix', 'request', 'design'))) && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
+            if($execution->multiple && $story->type != 'story' && ($execution->type != 'stage' && $execution->type != 'project') && $this->config->vision == 'rnd') continue;
             if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
             $columnID = $this->kanban->getColumnIDByLaneID((int)$laneID, 'backlog');
@@ -3048,7 +3078,7 @@ class executionModel extends model
                 {
                     if($story->status != 'active' || (!empty($story->branch) && !empty($executionBranches) && !isset($executionBranches[$story->branch]))) unset($planStories[$id]);
                     if(strpos($project->storyType, $story->type) === false) unset($planStories[$id]);
-                    if(!in_array($execution->attribute, array('mix', 'request', 'design')) && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
+                    if($execution->type != 'stage' && $story->type != 'story' && $execution->multiple) unset($planStories[$id]);
                 }
                 $stories = array_merge($stories, array_keys($planStories));
             }
@@ -4255,6 +4285,39 @@ class executionModel extends model
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
     }
 
+    /**
+     * 构造用例列表的搜索表单。
+     * Build testtask search form.
+     *
+     * @param  array  $products
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTesttaskSearchForm(array $products, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testtask->search;
+        $searchConfig['module'] = 'executionTesttask';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('executionTesttask', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        unset($searchConfig['fields']['project']);
+        unset($searchConfig['params']['project']);
+        unset($searchConfig['fields']['execution']);
+        unset($searchConfig['params']['execution']);
+
+        $productPairs = array(0 => '');
+        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        $searchConfig['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
+        $this->loadModel('search')->setSearchParams($searchConfig);
+        return $searchConfig;
+    }
     /**
      * 构建搜索任务的表单。
      * Build task search form.

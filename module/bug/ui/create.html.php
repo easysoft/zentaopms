@@ -23,7 +23,10 @@ $fields->autoLoad('product',   array('items' => 'product,module,assignedTo,story
        ->autoLoad('allUsers',  'assignedTo')
        ->autoLoad('region',    'lane');
 
-if(!$product->shadow) $fields->fullModeOrders('module,project,execution,plan', 'pri,title');
+$fullModeMainOrder   = $product->shadow ? 'project,execution,module,openedBuild,assignedTo,deadline' : 'module,project,execution,plan,openedBuild,assignedTo,deadline';
+$fullModeSecondOrder = $product->shadow ? 'title,pri' : 'pri,title';
+$fields->fullModeOrders($fullModeMainOrder, $fullModeSecondOrder);
+
 $fields->sort('execution,plan');
 
 jsVar('bug',                   $bug);

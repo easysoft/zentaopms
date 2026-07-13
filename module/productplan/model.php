@@ -614,12 +614,18 @@ class productplanModel extends model
 
         $plan = form::data($this->config->productplan->form->close)->get();
         $plan = $this->buildPlanByStatus($status, (string)$this->post->closedReason, $plan);
-        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan, 'comment')->where('id')->eq($planID)->exec();
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldPlan, $plan);
         $actionID = $this->loadModel('action')->create('productplan', $planID, $action, (string)$this->post->comment);
         $this->action->logHistory($actionID, $changes);
+
+        if($status == 'closed' && $this->post->comment)
+        {
+            $oldPlan->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('productplan', 'close', $actionID, $oldPlan);
+        }
 
         if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 

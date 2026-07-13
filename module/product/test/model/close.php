@@ -37,7 +37,7 @@ zenData('product')->gen(10);
 
 $productIDList = array(1, 2, 3, 4, 5, 1000001, 0);
 
-$product = new productTest('admin');
+$product = new productModelTest();
 
 r($product->closeTest($productIDList[0])) && p('0:field,old,new') && e('status,normal,closed'); // 测试关闭产品1
 r($product->closeTest($productIDList[1])) && p('0:field,old,new') && e('status,normal,closed'); // 测试关闭产品2

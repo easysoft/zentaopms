@@ -68,6 +68,7 @@ else
 
     formBatchPanel
     (
+        set::id('showImportForm'),
         set::title($lang->transfer->import),
         set::mode('edit'),
         set::items($fields),
@@ -75,10 +76,13 @@ else
         set::actions(array()),
         set::showExtra(false),
         set::onRenderRow(jsRaw('renderRowData')),
+        in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? set::ajax(array('beforeSubmit' => jsRaw('saveDraft'))) : null,
+        in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? formHidden('status', '') : null,
         div
         (
             setClass('toolbar form-actions form-group no-label'),
             $this->session->insert ? btn(set::btnType('submit'), setClass('primary btn-wide'), $submitText) : btn(set('data-toggle', 'modal'), set('data-target', '#importNoticeModal'), setClass('primary btn-wide'), $submitText),
+            in_array($module, array('story', 'epic', 'requirement')) && $this->session->insert ? btn(set::btnType('submit'), setClass('secondary btn-wide'), set('data-status', 'draft'), $lang->story->saveDraft) : null,
             btn(set::url($backLink), setClass('btn-back btn-wide'), $lang->goback),
             $this->session->insert ? formHidden('insert', $dataInsert != '' ? $dataInsert : 1) : null,
             formHidden('isEndPage', $isEndPage ? 1 : 0),
@@ -109,6 +113,11 @@ else
     {
         $('#importNoticeModal [name=insert]').val(type == 'insert' ? 1 : 0);
     };
+    window.saveDraft = function(e)
+    {
+        let status = $(e.submitter).data('status');
+        $(e.submitter).closest('form').find('[name=status]').val(status ? status : '');
+    }
     window.renderRowData = function(\$row, index, row)
     {
         if(typeof renderImportRowData == 'function')

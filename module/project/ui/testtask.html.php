@@ -37,7 +37,8 @@ featureBar
             $lang->testtask->browse
         )
     ),
-    to::before($productDropdown)
+    to::before($productDropdown),
+    li(searchToggle(set::module('projectTesttask'), set::open($type == 'bysearch')))
 );
 
 $canModify = common::canModify('project', $project);

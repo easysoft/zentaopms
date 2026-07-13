@@ -24,6 +24,7 @@ $lang->projectstory->batchClose        = 'Batch Close Stories';
 $lang->projectstory->batchChangePlan   = 'Batch Change Plans';
 $lang->projectstory->batchAssignTo     = 'Batch Assign Stories';
 $lang->projectstory->batchEdit         = 'Batch Edit Stories';
+$lang->projectstory->batchSubmitReview = 'Batch Submit Review';
 $lang->projectstory->importToLib       = 'Import To Story Library';
 $lang->projectstory->batchImportToLib  = 'Batch Import To Story Library';
 $lang->projectstory->importCase        = 'Import Stories';

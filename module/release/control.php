@@ -165,7 +165,10 @@ class release extends control
             $releaseID = $this->release->create($releaseData, $this->post->sync ? true : false);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create('release', $releaseID, 'opened');
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'opened');
+
+            $releaseData->id = $releaseID;
+            $this->loadModel('message')->sendMentionNotice('release', 'create', $actionID, $releaseData);
 
             $result  = $this->executeHooks($releaseID);
             $message = $result ? $result : $this->lang->saveSuccess;
@@ -240,6 +243,9 @@ class release extends control
             {
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited');
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+
+                $releaseData->id = $releaseID;
+                $this->loadModel('message')->sendMentionNotice('release', 'edit', $actionID, $releaseData, $release);
             }
 
             $result  = $this->executeHooks($releaseID);
@@ -273,7 +279,7 @@ class release extends control
      * View a release.
      *
      * @param  int    $releaseID
-     * @param  string $type       story|bug|leftBug
+     * @param  string $type       story|bug|leftBug|escapedBug
      * @param  string $link
      * @param  string $param
      * @param  string $orderBy
@@ -291,7 +297,7 @@ class release extends control
         $uri = $this->app->getURI(true);
         if(!empty($release->build)) $this->session->set('buildList', $uri, 'project');
         if($type == 'story') $this->session->set('storyList', $uri, 'product');
-        if($type == 'bug' || $type == 'leftBug') $this->session->set('bugList', $uri, 'qa');
+        if(in_array($type, array('bug', 'leftBug', 'escapedBug'))) $this->session->set('bugList', $uri, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -301,10 +307,11 @@ class release extends control
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
         $sort .= ',buildID_asc';
 
-        $storyPager   = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $bugPager     = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
-        $leftBugPager = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
-        $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager);
+        $storyPager      = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
+        $bugPager        = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
+        $leftBugPager    = new pager($type == 'leftBug' ? $recTotal : 0, $recPerPage, $type == 'leftBug' ? $pageID : 1);
+        $escapedBugPager = new pager($type == 'escapedBug' ? $recTotal : 0, $recPerPage, $type == 'escapedBug' ? $pageID : 1);
+        $this->releaseZen->assignVarsForView($release, $type, $link, $param, $orderBy, $storyPager, $bugPager, $leftBugPager, $escapedBugPager);
 
         $this->commonAction($release->product, $this->getBranchForMenu($release));
         if($this->app->tab == 'project')
@@ -646,8 +653,12 @@ class release extends control
             $this->release->changeStatus($releaseID, $this->post->status, $this->post->releasedDate);
             if(dao::isError()) return $this->sendError(dao::getError());
 
-            $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
-
+            $actionID = $this->loadModel('action')->create('release', $releaseID, 'published', $this->post->comment, $this->post->status);
+            if($this->post->comment)
+            {
+                $release->comment = $this->post->comment;
+                $this->loadModel('message')->sendMentionNotice('release', 'publish', $actionID, $release);
+            }
             $message = $this->executeHooks($releaseID) ?: $this->lang->saveSuccess;
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => true, 'closeModal' => true));
         }

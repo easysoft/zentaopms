@@ -110,7 +110,7 @@ $config->testsuite->testcase->dtable->fieldList['id']['type']  = 'checkID';
 $config->testsuite->testcase->dtable->fieldList['title']['name']  = 'caseTitle';
 $config->testsuite->testcase->dtable->fieldList['title']['title'] = $lang->testcase->title;
 $config->testsuite->testcase->dtable->fieldList['title']['type']  = 'title';
-$config->testsuite->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={caseVersion}&from=testsuite&taskID=0&stepsType=&suiteID={suite}');
+$config->testsuite->testcase->dtable->fieldList['title']['link']  = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}&version={version}&from=testsuite&taskID=0&stepsType=&suiteID={suite}');
 
 $config->testsuite->testcase->dtable->fieldList['pri']['name']  = 'pri';
 $config->testsuite->testcase->dtable->fieldList['pri']['title'] = $lang->testcase->pri;

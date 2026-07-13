@@ -31,6 +31,7 @@ $user->visions->range('rnd');
 $user->gen(5);
 
 $usersToAppended = array('account5', 'account1');
+$showOutside     = '1';
 
 $user = new userModelTest();
 $outsideUsersWithClosed     = $user->getPairsTest('outside');

@@ -52,9 +52,11 @@ $config->product->form->batchEdit['acl']     = array('type' => 'string', 'contro
 $config->product->form->close = array();
 $config->product->form->close['status']     = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'close');
 $config->product->form->close['closedDate'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => helper::now());
+$config->product->form->close['comment']    = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 
 $config->product->form->activate = array();
-$config->product->form->activate['status'] = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'normal');
+$config->product->form->activate['status']  = array('type' => 'string', 'control' => 'hidden', 'required' => false, 'default' => 'normal');
+$config->product->form->activate['comment'] = array('type' => 'string', 'control' => 'editor', 'required' => false, 'default' => '', 'width' => 'full');
 
 $config->product->form->manageLine = array();
 $config->product->form->manageLine['products'] = array('type' => 'array', 'control' => 'text', 'required' => false, 'default' => '');

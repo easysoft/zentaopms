@@ -1196,10 +1196,12 @@ class docModel extends model
         $allLibs          = $this->getLibs('all');
         $allLibIDList     = array_keys($allLibs);
         $hasPrivDocIdList = $this->getPrivDocs($allLibIDList);
-        if(in_array($type, array('view', 'collect')))
+        if(in_array($type, array('view', 'collect', 'editedby')))
         {
+            $action = $type == 'editedby' ? 'edited' : $type;
+
             $docSQL = $this->dao->select('MAX(id)')->from(TABLE_DOCACTION)
-                ->where('action')->eq($type)
+                ->where('action')->eq($action)
                 ->andWhere('actor')->eq($this->app->user->account)
                 ->groupBy('doc')
                 ->get();
@@ -1222,7 +1224,6 @@ class docModel extends model
         }
         else
         {
-            $docIdList = $type == 'editedby' ? $this->docTao->getEditedDocIdList() : array();
             $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne(0)
@@ -1230,7 +1231,6 @@ class docModel extends model
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.type')->in($this->config->doc->docTypes)
                 ->beginIF($type == 'createdby')->andWhere('t1.`addedBy`')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'editedby')->andWhere('t1.id')->in($docIdList)->fi()
                 ->beginIF(!common::hasPriv('doc', 'productSpace'))->andWhere('t2.type')->ne('product')->fi()
                 ->beginIF(!common::hasPriv('doc', 'projectSpace'))->andWhere('t2.type')->notIN('project,execution')->fi()
                 ->beginIF(!common::hasPriv('doc', 'teamSpace'))->andWhere('t2.type')->ne('custom')->fi();

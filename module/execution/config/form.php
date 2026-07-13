@@ -72,6 +72,16 @@ $config->execution->form->edit['whitelist']   = array('type' => 'array',  'requi
 $config->execution->form->edit['syncStories'] = array('type' => 'string', 'required' => false, 'default' => 'no');
 if(!empty($config->setCode)) $config->execution->form->edit['code'] = array('type' => 'string', 'required' => false, 'control' => 'text',   'default' => '', 'filter' => 'trim');
 
+$config->execution->form->activate['comment'] = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+
+$config->execution->form->close['comment'] = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+
+$config->execution->form->putoff['comment'] = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+
+$config->execution->form->start['comment'] = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+
+$config->execution->form->suspend['comment'] = array('type' => 'string', 'required' => false, 'control' => 'editor', 'default' => '');
+
 $config->execution->form->importBug['id']         = array('type' => 'int',    'required' => false, 'default' => 0, 'base' => true);
 $config->execution->form->importBug['pri']        = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->execution->form->importBug['estStarted'] = array('type' => 'string', 'required' => false, 'default' => null);

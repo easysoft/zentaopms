@@ -258,6 +258,8 @@ class mailTao extends mailModel
     {
         if(empty($objectType) || empty($object) || empty($action)) return '';
 
+        $this->loadModel('action');
+
         $domain     = zget($this->config->mail, 'domain', common::getSysURL());
         $domain     = rtrim($domain, '/');
         $mailTitle  = strtoupper($objectType) . ' #' . $object->id;

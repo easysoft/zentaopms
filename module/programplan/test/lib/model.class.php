@@ -1050,4 +1050,193 @@ class programplanModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test rollbackStage method.
+     *
+     * @param  object $stage
+     * @access public
+     * @return object|false
+     */
+    public function rollbackStageTest(object $stage): object|false
+    {
+        $this->instance->rollbackStage($stage);
+
+        if(dao::isError()) return dao::getError();
+
+        return $this->instance->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($stage->id)->fetch();
+    }
+
+    /**
+     * Test rollbackTask method.
+     *
+     * @param  object $task
+     * @access public
+     * @return object|false
+     */
+    public function rollbackTaskTest(object $task): object|false
+    {
+        $this->instance->rollbackTask($task);
+
+        if(dao::isError()) return dao::getError();
+
+        $taskID = explode("-", $task->id);
+        return $this->instance->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID[1])->fetch();
+    }
+
+    /**
+     * Test rollbackTaskRelation method.
+     *
+     * @param  int   $projectID
+     * @param  array $relations
+     * @access public
+     * @return array|false
+     */
+    public function rollbackTaskRelationTest(int $projectID, array $relations): array|false
+    {
+        $result = $this->instance->rollbackTaskRelation($projectID, $relations);
+
+        if(dao::isError()) return dao::getError();
+
+        $relations = $this->instance->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('project')->eq($projectID)->fetchAll();
+        $output    = array('result' => $result, 'count' => count($relations));
+        foreach($relations as $relation) $output[] = $relation;
+        return $output;
+    }
+
+    /**
+     * Test deleteExtraStageAndTask method.
+     *
+     * @param  array $stages
+     * @param  array $tasks
+     * @access public
+     * @return array|false
+     */
+    public function deleteExtraStageAndTaskTest(array $stages, array $tasks): array|false
+    {
+        $result = $this->instance->deleteExtraStageAndTask($stages, $tasks);
+
+        if(dao::isError()) return dao::getError();
+
+        $output = array('result' => $result);
+
+        if(!empty($stages))
+        {
+            $stageList = $this->instance->dao->select('id, deleted')->from(TABLE_EXECUTION)->where('id')->in($stages)->orderBy('id_asc')->fetchAll();
+            $output['stageCount'] = count($stageList);
+            foreach($stageList as $stage) $output[] = $stage;
+        }
+        else
+        {
+            $output['stageCount'] = 0;
+        }
+
+        if(!empty($tasks))
+        {
+            $taskList = $this->instance->dao->select('id, deleted')->from(TABLE_TASK)->where('id')->in($tasks)->orderBy('id_asc')->fetchAll();
+            $output['taskCount'] = count($taskList);
+            foreach($taskList as $task) $output[] = $task;
+        }
+        else
+        {
+            $output['taskCount'] = 0;
+        }
+
+        return $output;
+    }
+
+    /**
+     * Test setTaskPath method.
+     *
+     * @param  int $taskID
+     * @access public
+     * @return array|false
+     */
+    public function setTaskPathTest(int $taskID): array|false
+    {
+        $result = $this->instance->setTaskPath($taskID);
+
+        if(dao::isError()) return dao::getError();
+
+        $tasks  = $this->instance->dao->select('id,parent,path')->from(TABLE_TASK)->orderBy('id_asc')->fetchAll();
+        $output = array('result' => $result);
+        foreach($tasks as $task) $output[] = $task;
+        return $output;
+    }
+
+    /**
+     * Test saveTmpGanttVersion method.
+     *
+     * @param  int    $projectID
+     * @param  string $type
+     * @param  string $data
+     * @access public
+     * @return array|false
+     */
+    public function saveTmpGanttVersionTest(int $projectID, string $type, string $data): array|false
+    {
+        $this->instance->saveTmpGanttVersion($projectID, $type, $data);
+
+        if(dao::isError()) return dao::getError();
+
+        $versions = $this->instance->dao->select('*')->from(TABLE_OBJECT)->where('status')->eq('tmpGantt')->andWhere('type')->eq('taged')->orderBy('id_asc')->fetchAll();
+        $output   = array('count' => count($versions));
+        foreach($versions as $version) $output[] = $version;
+        return $output;
+    }
+
+    /**
+     * 测试回滚评审点。
+     * Test rollbackPoint method.
+     *
+     * @param  object      $targetPoint
+     * @param  object|null $currentPoint
+     * @access public
+     * @return array|false
+     */
+    public function rollbackPointTest(object $targetPoint, ?object $currentPoint = null): array|false
+    {
+        $result = $this->instance->rollbackPoint($targetPoint, $currentPoint);
+        if(dao::isError()) return dao::getError();
+
+        $pointObjectID = explode('-', $targetPoint->id)[2];
+        $object        = $this->instance->dao->select('*')->from(TABLE_OBJECT)->where('id')->eq($pointObjectID)->fetch();
+        $review        = $this->instance->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($targetPoint->reviewID)->fetch();
+        $approvalID    = $this->instance->dao->select('approval')->from(TABLE_APPROVALOBJECT)->where('objectType')->eq('review')->andWhere('objectID')->eq($targetPoint->reviewID)->orderBy('id_desc')->limit(1)->fetch('approval');
+        $approvalNodes = $this->instance->dao->select('*')->from(TABLE_APPROVALNODE)->where('approval')->eq($approvalID)->orderBy('id_asc')->fetchAll();
+
+        $output = array('result' => $result);
+        $output['objectEnabled'] = $object ? $object->enabled : '0';
+        $output['reviewDeleted'] = $review ? $review->deleted : '1';
+        $output['reviewStatus']  = $review ? $review->status : '';
+        $output['nodeCount']     = count($approvalNodes);
+        foreach($approvalNodes as $node) $output[] = $node;
+        return $output;
+    }
+
+    /**
+     * 测试撤销评审。
+     * Test recallReview method.
+     *
+     * @param  int $reviewID
+     * @access public
+     * @return array|false
+     */
+    public function recallReviewTest(int $reviewID): array|false
+    {
+        $result = $this->instance->recallReview($reviewID);
+        if(dao::isError()) return dao::getError();
+
+        $review        = $this->instance->dao->select('*')->from(TABLE_REVIEW)->where('id')->eq($reviewID)->fetch();
+        $approvalID    = $this->instance->dao->select('approval')->from(TABLE_APPROVALOBJECT)->where('objectType')->eq('review')->andWhere('objectID')->eq($reviewID)->orderBy('id_desc')->limit(1)->fetch('approval');
+        $approvalNodes = $this->instance->dao->select('*')->from(TABLE_APPROVALNODE)->where('approval')->eq($approvalID)->orderBy('id_asc')->fetchAll();
+
+        $output = array('result' => $result);
+        $output['reviewDeleted'] = $review ? $review->deleted : '1';
+        $output['reviewStatus']  = $review ? $review->status : '';
+        $output['reviewResult']  = $review ? $review->result : '';
+        $output['nodeCount']     = count($approvalNodes);
+        foreach($approvalNodes as $node) $output[] = $node;
+        return $output;
+    }
 }

@@ -10,9 +10,19 @@ zenData('testrun')->loadYaml('testrun')->gen(5);
 zenData('testresult')->gen(0);
 zenData('action')->gen(0);
 
+$task = zenData('testtask');
+$task->id->range('1');
+$task->project->range('0');
+$task->execution->range('0');
+$task->product->range('1');
+$task->status->range('normal');
+$task->deleted->range('0');
+$task->gen(1);
+
 /**
 
 title=测试 testtaskModel->batchRun();
+timeout=0
 cid=19156
 
 - 测试用例参数为空数组返回 false。 @0
