@@ -1262,9 +1262,6 @@ class baseRouter
         }
         elseif(isset($_GET[$this->config->sessionVar]))
         {
-            /* 为了避免安全漏洞，必须在从GET参数恢复会话之前记录sessionID，以便在index.php判断session_id() != $app->sessionID后重启会话。*/
-            /* To avoid security issue, we have to record sessionID before restart session from GET param, so that we can restart session in index.php when session_id() != $app->sessionID. */
-            $this->sessionID = $_GET[$this->config->sessionVar];
             helper::restartSession($_GET[$this->config->sessionVar]);
         }
 
