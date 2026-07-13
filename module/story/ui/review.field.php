@@ -26,8 +26,11 @@ foreach($pageFields as $field => $attr)
 
     $value = $field == 'estimate' ? helper::formatHours($attr['default']) : $attr['default'];
 
-    if($field == 'result')       $control['data-on'] = 'change';
-    if($field == 'closedReason') $control['data-on'] = 'change';
+    if($field == 'result')       $control['data-call'] = 'switchShow';
+    if($field == 'closedReason') $control['data-call'] = 'setStory';
+
+    $control['data-on']     = 'change';
+    $control['data-params'] = 'event';
 
     $fields->field($fieldName)->label(!empty($attr['title']) ? $attr['title'] : null)->required($attr['required'])->readonly(!empty($attr['readonly']))->width($width)->control($control)->value($value);
 
