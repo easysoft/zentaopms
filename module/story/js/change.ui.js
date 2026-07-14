@@ -10,7 +10,7 @@ function toggleReviewer()
 {
     var $this     = $('#needNotReview');
     var isChecked = $this.prop('checked');
-    var $reviewer = $('#reviewer').zui('picker');
+    var $reviewer = $('[name^=reviewer]').zui('picker');
 
     if(isChecked)
     {
