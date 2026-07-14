@@ -320,7 +320,7 @@ class pipeline extends control
             }
 
             $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
-            if($pipeline->engine == 'gitlab')
+            if($pipeline->engine == 'gitlab' || $pipeline->engine == 'jenkins')
             {
                 $url = $this->createLink('pipeline', 'execution', "space={$space}&repoID={$repoID}&type={$type}&pipelineID={$pipelineID}");
             }

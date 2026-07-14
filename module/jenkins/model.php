@@ -59,18 +59,38 @@ class jenkinsModel extends model
     }
 
     /**
-     * 获取jenkins api 密码串。
-     * Get jenkins api userpwd string.
+     * 检查Jenkins是否支持参数化构建。
+     * Check if jenkins support parameterized build.
      *
-     * @param  object $jenkins
+     * @param  string $url
+     * @param  string $userPWD
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getApiUserPWD(object $jenkins): string
+    public function checkParameterizedBuild(string $url, string $userPWD): bool
     {
-        $jenkinsUser     = $jenkins->account;
-        $jenkinsPassword = $jenkins->token ? $jenkins->token : base64_decode($jenkins->password);
+        $response = common::http(rtrim($url, '/') . '/config.xml', null, array(CURLOPT_USERPWD => $userPWD));
 
-        return "$jenkinsUser:$jenkinsPassword";
+        return strpos($response, 'hudson.model.ParametersDefinitionProperty') !== false;
+    }
+
+    /**
+     * 通过api创建一个流水线。
+     * Create a new pipeline by api.
+     *
+     * @param  string $url
+     * @param  object $data
+     * @param  string $userPWD
+     * @access public
+     * @return string|int
+     */
+    public function apiCreatePipeline(string $url, object $data, string $userPWD = ''): string|int
+    {
+        $response = common::http($url, $data, array(
+            CURLOPT_HEADER => true,
+            CURLOPT_USERPWD => $userPWD
+        ));
+        if(preg_match("!Location: .*item/(.*)/!i", $response, $matches)) return $matches[1];
+        return 0;
     }
 }

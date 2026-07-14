@@ -173,15 +173,17 @@ window.getAvailableTriggerTypes = function()
 {
     if(_cachedAvailableTypes) return _cachedAvailableTypes;
 
+    var isJenkins = (pipelineEngine === 'jenkins');
+
     /* 初始从 DOM 读取 */
     var hasEvent   = $('#triggerTbody .del-trigger[data-field="event"]').length > 0;
     var hasCron    = $('#triggerTbody .del-trigger[data-field="cron"]').length > 0;
     var hasComment = $('#triggerTbody .del-trigger[data-field="comment"]').length > 0;
 
     var available = [];
-    if(!hasEvent)   available.push('event');
+    if(!isJenkins && !hasEvent)   available.push('event');
     if(!hasCron)    { available.push('week'); available.push('month'); }
-    if(!hasComment) available.push('comment');
+    if(!isJenkins && !hasComment) available.push('comment');
 
     _cachedAvailableTypes = available;
     return available;
@@ -227,18 +229,21 @@ window.refreshTriggerGroup = function()
                 /* 重新绑定 radio 切换事件（document 级委托，避免 #triggerModal 被替换后失效） */
                 $(document).off('change.triggerType', '#triggerModal [name="type"]').on('change.triggerType', '#triggerModal [name="type"]', window.changeTriggerType);
 
+                var isJenkins = (pipelineEngine === 'jenkins');
+
                 var hasEvent   = $('#triggerTbody .del-trigger[data-field="event"]').length > 0;
                 var hasCron    = $('#triggerTbody .del-trigger[data-field="cron"]').length > 0;
                 var hasComment = $('#triggerTbody .del-trigger[data-field="comment"]').length > 0;
 
                 var available = [];
-                if(!hasEvent)   available.push('event');
+                if(!isJenkins && !hasEvent)   available.push('event');
                 if(!hasCron)    { available.push('week'); available.push('month'); }
-                if(!hasComment) available.push('comment');
+                if(!isJenkins && !hasComment) available.push('comment');
                 _cachedAvailableTypes = available;
 
-                if(hasEvent && hasComment && hasCron) $('#addTriggerBtn').addClass('hidden');
-                else $('#addTriggerBtn').removeClass('hidden');
+                var canAdd = isJenkins ? !hasCron : !(hasEvent && hasComment && hasCron);
+                if(canAdd) $('#addTriggerBtn').removeClass('hidden');
+                else $('#addTriggerBtn').addClass('hidden');
             }, 0);
         }
     });

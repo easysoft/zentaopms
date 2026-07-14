@@ -376,6 +376,11 @@ class pipelineModel extends model
             $this->execGitlabPipeline($pipeline);
             return !dao::isError() ? new stdclass() : false;
         }
+        if($pipeline->engine == 'jenkins')
+        {
+            $this->execJenkinsPipeline($pipeline);
+            return !dao::isError() ? new stdclass() : false;
+        }
 
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, '/pipeline/executions');
@@ -394,10 +399,11 @@ class pipelineModel extends model
      * Exec gitlab pipeline.
      *
      * @param  object $pipeline
+     * @param  string $triggerType
      * @access public
      * @return bool
      */
-    public function execGitlabPipeline(object $pipeline): bool
+    public function execGitlabPipeline(object $pipeline, string $triggerType = 'manual'): bool
     {
         $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
 
@@ -442,7 +448,65 @@ class pipelineModel extends model
         }
 
         $execution->pipelineID   = $pipeline->id;
-        $execution->trigger      = 'manual';
+        $execution->trigger      = $triggerType;
+        $execution->commit       = '';
+        $execution->ref          = $params->ref;
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = $this->app->user->account;
+        $execution->createdDate  = helper::now();
+
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 执行 Jenkins 流水线。
+     * Exec jenkins pipeline.
+     *
+     * @param  object $pipeline
+     * @param  string $triggerType
+     * @access public
+     * @return bool
+     */
+    public function execJenkinsPipeline(object $pipeline, string $triggerType = 'manual'): bool
+    {
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
+        $baseUrl  = $provider->url . $pipeline->externalPipeline;
+        $userPWD  = $provider->account . ':' . $provider->token;
+
+        $params = new stdclass();
+        $params->ref = $pipeline->defaultBranch ?: 'main';
+        if(!empty($pipeline->customParam))
+        {
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
+            {
+                foreach($customParams as $key => $value)
+                {
+                    $params[$key] = $value;
+                }
+            }
+        }
+
+        $isParameterized = $this->loadModel('jenkins')->checkParameterizedBuild($baseUrl, $userPWD);
+        $url = $baseUrl . ($isParameterized ? 'buildWithParameters' : 'build');
+
+        $result = $this->jenkins->apiCreatePipeline($url, (object)$params, $userPWD);
+        $execution = new stdclass();
+        if(empty($result))
+        {
+            dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
+            $execution->status = 'create_fail';
+        }
+        else
+        {
+            $execution->queue  = $result;
+            $execution->status = 'created';
+        }
+
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = $triggerType;
         $execution->commit       = '';
         $execution->ref          = $params->ref;
         $execution->params       = json_encode($params);
