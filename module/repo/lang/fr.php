@@ -457,6 +457,7 @@ $lang->repo->defaultBranch       = 'Default Branch';
 $lang->repo->committerTip        = 'Committer has write permission on code repository';
 $lang->repo->commitDetail        = '%s committed at %s by %s';
 $lang->repo->hasNoProduct        = 'The project or execution does not have a product';
+$lang->repo->failCreateWebhook   = 'Create Webhook Failed';
 
 $lang->repo->browseWebhooks     = 'Webhook List';
 $lang->repo->createWebhook      = 'Create Webhook';
