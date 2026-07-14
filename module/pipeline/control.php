@@ -192,6 +192,11 @@ class pipeline extends control
             foreach($paramKeys as $index => $key)
             {
                 if(empty($key)) continue;
+                if(preg_match('/[^a-zA-Z0-9_]/', $key))
+                {
+                    dao::$errors['paramKey'] = sprintf($this->lang->pipeline->invalidParamName, $key);
+                    return $this->sendError(dao::getError());
+                }
                 $value = isset($paramValues[$index]) ? $paramValues[$index] : '';
                 $customParam->$key = $value;
             }

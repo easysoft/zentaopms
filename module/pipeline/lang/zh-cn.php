@@ -61,6 +61,7 @@ $lang->pipeline->comment         = '匹配关键字';
 $lang->pipeline->customParam     = '构建参数';
 $lang->pipeline->paramName       = '名称';
 $lang->pipeline->paramValue      = '值';
+$lang->pipeline->invalidParamName = '构建参数名 "%s" 不合法，仅支持字母、数字和下划线。';
 $lang->pipeline->custom          = '自定义';
 $lang->pipeline->createdBy       = '由谁创建';
 $lang->pipeline->createdDate     = '创建日期';
