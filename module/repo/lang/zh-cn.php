@@ -454,6 +454,7 @@ $lang->repo->defaultBranch       = '默认分支';
 $lang->repo->committerTip        = '提交人具有代码库的写入权限';
 $lang->repo->commitDetail        = '%s 提交时间：%s，提交人：%s';
 $lang->repo->hasNoProduct        = '当前项目或者执行没有关联产品';
+$lang->repo->failCreateWebhook   = '创建Webhook失败';
 
 $lang->repo->browseWebhooks     = 'Webhook列表';
 $lang->repo->createWebhook      = '创建Webhook';
