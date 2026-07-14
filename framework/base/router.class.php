@@ -1230,16 +1230,15 @@ class baseRouter
         /* API session use tmp/apisession directory. */
         $apiMode = $this->apiVersion && !isset($_GET[$this->config->sessionVar]);
 
-        if(ini_get('session.save_handler') == 'files' || $apiMode)
+        /* If token has ss_, auth by session, not token. */
+        $useToken = $apiMode && (!isset($_SERVER['HTTP_TOKEN']) || substr($_SERVER['HTTP_TOKEN'], 0, 3) !== 'ss_');
+
+        if(ini_get('session.save_handler') == 'files' || $useToken)
         {
-            $savePath = $this->getTmpRoot() . ($apiMode ? 'apisession' : 'session');
+            $savePath = $this->getTmpRoot() . ($useToken ? 'apisession' : 'session');
             if(!is_dir($savePath)) mkdir($savePath, 0777, true);
 
-            /*
-             * API token auth must read from the dedicated apisession directory even when the
-             * current process cannot write there. Read access is enough to restore the user.
-             */
-            if(is_writable($savePath) || ($apiMode && is_readable($savePath)))
+            if(is_writable($savePath))
             {
                 session_save_path($savePath);
 
@@ -1257,7 +1256,10 @@ class baseRouter
 
         if(isset($_SERVER['HTTP_TOKEN'])) // If request header has token, use it as session for authentication.
         {
-            helper::restartSession($_SERVER['HTTP_TOKEN']);
+            $tokenSession = $_SERVER['HTTP_TOKEN'];
+            if(substr($tokenSession, 0, 3) === 'ss_') $tokenSession = substr($tokenSession, 3);
+
+            helper::restartSession($tokenSession);
             $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
         }
         elseif(isset($_GET[$this->config->sessionVar]))
