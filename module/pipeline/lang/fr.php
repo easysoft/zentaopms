@@ -61,6 +61,7 @@ $lang->pipeline->comment         = 'Corres Mots cl閟';
 $lang->pipeline->customParam     = 'Paramètres de construction';
 $lang->pipeline->paramName       = 'Nom';
 $lang->pipeline->paramValue      = 'PH';
+$lang->pipeline->invalidParamName = 'Parameter name "%s" is invalid, only letters, numbers and underscores are allowed.';
 $lang->pipeline->custom          = 'Custom';
 $lang->pipeline->createdBy       = 'Created By';
 $lang->pipeline->createdDate     = 'Created Date';

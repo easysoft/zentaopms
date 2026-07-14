@@ -14,7 +14,10 @@ window.addParam = function()
     var paramValue = langParamValue;
     var deleteText = langDelete;
     var tbody      = $('#paramTbody');
-    var keyInput   = $('<input>').attr({type: 'text', name: 'paramKey[]', 'class': 'form-control', placeholder: paramName});
+    var keyInput   = $('<input>').attr({type: 'text', name: 'paramKey[]', 'class': 'form-control', placeholder: paramName, maxlength: 50})
+        .on('input', function() {
+            this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+        });
     var valInput   = $('<input>').attr({type: 'text', name: 'paramValue[]', 'class': 'form-control', placeholder: paramValue});
     var delBtn     = $('<button>').attr({type: 'button', title: deleteText}).addClass('btn ghost text-danger size-sm del-param')
         .append($('<i>').addClass('icon icon-trash'))
@@ -268,6 +271,12 @@ window.deleteTrigger = function(e)
 
 $(function()
 {
+    /* 限制参数名只能输入字母数字下划线。 */
+    $(document).on('input', '[name="paramKey[]"]', function()
+    {
+        this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
+    });
+
     /* 删除自定义构建参数。 */
     $(document).on('click', '.del-param', function()
     {
