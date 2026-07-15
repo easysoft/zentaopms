@@ -190,7 +190,7 @@ $lang->ai->prompts->setTargetForm    = '结果处理';
 $lang->ai->prompts->finalize         = '准备发布';
 
 /* Role assigning. */
-$lang->ai->prompts->model               = '默认模型';
+$lang->ai->prompts->model               = '使用模型';
 $lang->ai->prompts->role                = '角色';
 $lang->ai->prompts->characterization    = '角色描述';
 $lang->ai->prompts->rolePlaceholder     = '“你来扮演 <一个什么角色>”';
