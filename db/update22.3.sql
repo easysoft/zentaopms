@@ -1074,3 +1074,9 @@ DELETE FROM `zt_cron` WHERE `command` = 'moduleName=mr&methodName=syncMR';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=initQueue';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';
+
+ALTER TABLE `zt_testrun` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;
+ALTER TABLE `zt_suitecase` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;
+
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'project',   '', 'ganttVersionSettings', 'deliverable');
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'execution', '', 'ganttVersionSettings', 'gantt');
