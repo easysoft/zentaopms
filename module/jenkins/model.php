@@ -115,4 +115,22 @@ class jenkinsModel extends model
         if(empty($response) || empty($response->result)) return array();
         return $response;
     }
+    
+    /**
+     * 通过 queueID 查询 Jenkins job 的 build number。
+     * Get build number by queue ID.
+     *
+     * @param  string $jenkinsUrl Jenkins 服务地址, e.g. https://jenkins.example.com/
+     * @param  string $queueID    队列 ID
+     * @param  string $userPWD    "username:token"
+     * @access public
+     * @return int    0 表示尚未分配 build number
+     */
+    public function apiGetJobNumberByQueueID(string $jenkinsUrl, string $queueID, string $userPWD = ''): int
+    {
+        $response = common::http(rtrim($jenkinsUrl, '/') . "/queue/item/{$queueID}/api/json", '', array(CURLOPT_USERPWD => $userPWD));
+        $queue    = json_decode($response);
+        if(empty($queue) || empty($queue->executable) || empty($queue->executable->number)) return 0;
+        return (int)$queue->executable->number;
+    }
 }

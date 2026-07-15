@@ -443,7 +443,7 @@ class pipelineModel extends model
         }
         else
         {
-            $execution->queue  = $result->id;
+            $execution->number = $result->id;
             $execution->status = zget($result, 'status', 'create_fail');
         }
 
@@ -501,8 +501,24 @@ class pipelineModel extends model
         }
         else
         {
-            $execution->queue  = $result;
-            $execution->status = 'created';
+            $number = 0;
+            $maxRetry  = 10;
+            for($i = 0; $i < $maxRetry; $i ++)
+            {
+                sleep(1);
+                $number = $this->jenkins->apiGetJobNumberByQueueID($provider->url, $result, $userPWD);
+                if(!empty($number)) break;
+            }
+            if(empty($number))
+            {
+                dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
+                $execution->status = 'create_fail';
+            }
+            else
+            {
+                $execution->number = $number;
+                $execution->status = 'created';
+            }
         }
 
         $execution->pipelineID   = $pipeline->id;
