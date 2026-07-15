@@ -15820,7 +15820,7 @@ CREATE TABLE IF NOT EXISTS `ops_pipeline_executions` (
   `duration` int unsigned NOT NULL DEFAULT 0 COMMENT '执行时长(s)',
   `status` varchar(50) NOT NULL DEFAULT '' COMMENT '执行状态',
   `error` varchar(500) NOT NULL DEFAULT '' COMMENT '执行错误信息（无错误则为空字符串）',
-  `queue` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
+  `number` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
   `logs` longtext DEFAULT NULL COMMENT 'Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
