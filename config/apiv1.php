@@ -187,7 +187,8 @@ $routes['/ciresults'] = 'ciresults';
 
 $routes['/branchrules'] = 'branchrules';
 
-$routes['/pipelinetrigger']     = 'pipelinetrigger';
-$routes['/repomemberspriv']     = 'repomemberspriv';
-$routes['/artifactmemberspriv'] = 'artifactmemberspriv';
-$routes['/gitfox/webhook']      = 'gitfoxWebhook';
+$routes['/pipelinetrigger']      = 'pipelinetrigger';
+$routes['/repomemberspriv']      = 'repomemberspriv';
+$routes['/artifactmemberspriv']  = 'artifactmemberspriv';
+$routes['/gitfox/webhook']       = 'gitfoxWebhook';
+$routes['/syncexternalpipeline'] = 'syncexternalpipeline';
