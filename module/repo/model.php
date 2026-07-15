@@ -1813,7 +1813,7 @@ class repoModel extends model
      */
     public function handleWebhook(string $event, object $data, object $repo): bool
     {
-        if(!in_array($event, array('Push Hook', 'Merge Request Hook', 'branch_updated'))) return false;
+        if(!in_array($event, array('Push Hook', 'Merge Request Hook', 'branch_updated', 'branch_created'))) return false;
         if(empty($data->commits)) return false;
 
         $scm = $this->app->loadClass('scm');
