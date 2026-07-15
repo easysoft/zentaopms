@@ -55,7 +55,7 @@ $buildAssignedTo = function()
     $hiddenTeamBtn = empty(data('task.team')) ? 'hidden' : '';
     return div
         (
-            setClass('assignedToBox flex border rounded h-8'),
+            setClass('assignedTo flex border rounded h-8'),
             taskAssignedTo
             (
                 setClass($hiddenTeamBtn ? '' : 'hidden'),
@@ -95,7 +95,7 @@ if($config->vision != 'lite')
         ->items(data('parents'));
 }
 
-$fields->field('assignedToBox')
+$fields->field('assignedTo')
     ->label($lang->task->assignedTo)
     ->required(strpos($config->task->create->requiredFields, 'assignedTo') !== false)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))
@@ -196,7 +196,7 @@ $buildStoryBox = function()
         );
 };
 
-$fields->field('storyBox')
+$fields->field('story')
     ->required(strpos($config->task->create->requiredFields, 'story') !== false)
     ->label($lang->task->story)
     ->checkbox(array('text' => $lang->task->syncStory, 'name' => 'copyButton'))

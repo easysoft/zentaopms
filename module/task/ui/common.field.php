@@ -17,6 +17,7 @@ $fields->field('type')
 
 $fields->field('name')
     ->control('colorInput', array('colorValue' => data('task.color')))
+    ->width('full')
     ->value(data('task.name'));
 
 $fields->field('datePlan')
