@@ -3276,7 +3276,7 @@ class repoModel extends model
             ->andWhere('t3.deleted', true)->eq('0')
             ->orWhere('t3.id')->isNULL()
             ->markRight(true)
-            ->beginIF(!empty($spaceProducts))->andWhere('t1.product')->in($spaceProducts)->fi()
+            ->beginIF($space)->andWhere('t1.product')->in($spaceProducts)->fi()
             ->beginIF(!empty($systemQuery))->andWhere($systemQuery)->fi()
             ->orderBy('deployCreatedDate_asc')
             ->fetchAll('id');
