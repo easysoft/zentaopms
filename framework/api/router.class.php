@@ -1255,6 +1255,43 @@ class api extends router
     }
 
     /**
+     * 检查 APIV2 请求的权限。路由重定向改变控制器方法后，使用原始路由方法进行权限校验。
+     * Check APIV2 privilege using the route's original method when a redirect changes the control method.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkPriv()
+    {
+        [$module, $method] = $this->resolvePrivTarget();
+        global $common;
+        if($module and $method and !$common->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
+        {
+            die(helper::response(array('error' => 'Access not allowed'), 403));
+        }
+    }
+
+    /**
+     * 解析权限校验目标。路由重定向后的控制方法用于实际执行，原始方法用于权限判断。
+     * Resolve the privilege target before redirects change the control method.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function resolvePrivTarget(): array
+    {
+        $module = $this->getModuleName();
+        $method = $this->getMethodName();
+
+        if($module == 'my' && !empty($this->rawMethod) && $method != $this->rawMethod)
+        {
+            $method = $this->rawMethod;
+        }
+
+        return array($module, $method);
+    }
+
+    /**
      * 检查传入的对象是否有权限访问
      *
      * Check object priv.

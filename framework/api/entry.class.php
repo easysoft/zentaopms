@@ -656,28 +656,12 @@ class baseEntry
      */
     public function checkPriv()
     {
-        list($module, $method) = $this->resolvePrivTarget();
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
         if($module and $method and !$this->loadModel('common')->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
             die($this->send(403, array('error' => 'Access not allowed')));
         }
-    }
-
-    /**
-     * 解析 APIV2 权限校验应使用的模块和方法。
-     * Resolve the module and method used for APIV2 privilege checks.
-     */
-    protected function resolvePrivTarget(): array
-    {
-        $module = $this->app->getModuleName();
-        $method = $this->app->getMethodName();
-
-        if($module == 'my' && !empty($this->app->rawMethod) && $method != $this->app->rawMethod)
-        {
-            $method = $this->app->rawMethod;
-        }
-
-        return array($module, $method);
     }
 
     /**
