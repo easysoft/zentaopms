@@ -93,4 +93,26 @@ class jenkinsModel extends model
         if(preg_match("!Location: .*item/(.*)/!i", $response, $matches)) return $matches[1];
         return 0;
     }
+
+    /**
+     * 通过api获取执行信息。
+     * Get execution info by api.
+     *
+     * @param  int    $number
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return array|object
+     */
+    public function apiGetExecInfo(int $number, string $pipelineName, object $provider): array|object
+    {
+        if(empty($provider->token) || empty($provider->url)) return array();
+        $options = array(CURLOPT_USERPWD => base64_decode($provider->token));
+
+        $url = rtrim($provider->url, '/') . $pipelineName . $number . '/api/json';
+
+        $response = json_decode(common::http($url, null, $options, array('Accept: application/json'), 'json'));
+        if(empty($response) || empty($response->result)) return array();
+        return $response;
+    }
 }
