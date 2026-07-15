@@ -1103,4 +1103,60 @@ class pipelineModel extends model
 
         return dao::isError();
     }
+
+    /**
+     * 获取外部流水线。
+     * Get external pipelines.
+     *
+     * @param  array $statusList
+     * @access public
+     * @return array
+     */
+    public function getExternalPipeline(array $statusList = array()): array
+    {
+        return $this->dao->select('t1.*, t2.`providerID`, t2.`externalPipeline`, t2.`engine`')->from(TABLE_PIPELINEEXEC)->alias('t1')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t2.engine')->in('gitlab,jenkins')
+            ->andWhere('t1.number')->ne(0)
+            ->beginIF($statusList)->andWhere('t1.status')->in($statusList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * 同步外部流水线。
+     * Sync external pipelines.
+     *
+     * @access public
+     * @return bool
+     */
+    public function syncExternalPipeline(): bool
+    {
+        $syncStatus = array('', 'created', 'pending', 'running', 'building');
+        $externalPipelines = $this->getExternalPipeline($syncStatus);
+        if(empty($externalPipelines)) return true;
+
+        $providerList = $this->loadModel('provider')->getList();
+
+        $this->loadModel('jenkins');
+        $this->loadModel('gitlab');
+        foreach($externalPipelines as $externalPipeline)
+        {
+            if(!isset($providerList[$externalPipeline->providerID])) continue;
+
+            $provider = $providerList[$externalPipeline->providerID];
+            $engine   = $externalPipeline->engine;
+            $execInfo = $this->$engine->apiGetExecInfo($externalPipeline->number, $externalPipeline->externalPipeline, $provider);
+            if(empty($execInfo)) continue;
+
+            $syncData = new stdclass();
+            $syncData->status       = strtolower(zget($execInfo, 'result', ''));
+            $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
+            $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
+
+            $this->dao->update(TABLE_PIPELINEEXEC)->data($syncData)->where('id')->eq($externalPipeline->id)->exec();
+        }
+
+        return !dao::isError();
+    }
 }
