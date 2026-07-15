@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 gitfoxModel::apigetmirrorsyncprogress();
+title=测试 gitfoxModel::apigetsinglepipeline();
 timeout=0
 cid=0
 
@@ -25,10 +25,10 @@ $gitfoxTest = new gitfoxModelTest();
 $model = $gitfoxTest->instance;
 
 r((int)dao::isError()) && p() && e('0');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apigetsinglepipeline(1, 1, 'ci', 1);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apigetsinglepipeline(1, 1, 'ci', 1);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apigetsinglepipeline(1, 1, 'ci', 1);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');

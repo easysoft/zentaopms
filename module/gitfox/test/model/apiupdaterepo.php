@@ -3,7 +3,7 @@
 
 /**
 
-title=测试 gitfoxModel::apigetmirrorsyncprogress();
+title=测试 gitfoxModel::apiUpdateRepo();
 timeout=0
 cid=0
 
@@ -24,11 +24,13 @@ su('admin');
 $gitfoxTest = new gitfoxModelTest();
 $model = $gitfoxTest->instance;
 
+$repo = (object)array('name' => 'test', 'defaultBranch' => 'main', 'desc' => 'test', 'acl' => 'private', 'space' => 1, 'product' => 1);
+
 r((int)dao::isError()) && p() && e('0');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apiUpdateRepo(1, $repo);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apiUpdateRepo(1, $repo);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
-$r = $model->apigetmirrorsyncprogress(1);
+$r = $model->apiUpdateRepo(1, $repo);
 r(is_null($r) || is_bool($r) || is_array($r) || is_object($r)) && p() && e('1');
