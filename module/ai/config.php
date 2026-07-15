@@ -100,10 +100,12 @@ $config->ai->testPrompt   = new stdclass();
 $config->ai->createprompt->requiredFields = 'name';
 $config->ai->testPrompt->requiredFields   = 'name,module,source,purpose,actionPurpose';
 
-$config->ai->moduleGroup = [];
+$config->ai->moduleGroup = array();
 $config->ai->moduleGroup['program']     = array('program', 'project', 'product');
 $config->ai->moduleGroup['product']     = array('product');
 $config->ai->moduleGroup['project']     = array('project', 'programplans', 'executions');
+$config->ai->moduleGroup['epic']        = array('story');
+$config->ai->moduleGroup['requirement'] = array('story');
 $config->ai->moduleGroup['story']       = array('story');
 $config->ai->moduleGroup['productplan'] = array('productplan', 'stories', 'bugs');
 $config->ai->moduleGroup['release']     = array('release', 'stories', 'bugs');
@@ -133,6 +135,16 @@ $config->ai->moduleFields['doc']       = array('title', 'addedBy', 'addedDate', 
 $config->ai->targetForm = array();
 $config->ai->targetForm['program']['create']             = (object)array('m' => 'program', 'f' => 'create', 'for' => 'program');
 $config->ai->targetForm['charter']['create']             = (object)array('m' => 'charter', 'f' => 'create', 'for' => 'charter');
+$config->ai->targetForm['epic']['create']                = (object)array('m' => 'epic', 'f' => 'create', 'for' => 'epic');
+$config->ai->targetForm['epic']['batchcreate']           = (object)array('m' => 'epic', 'f' => 'batchcreate', 'for' => 'epic');
+$config->ai->targetForm['epic']['edit']                  = (object)array('m' => 'epic', 'f' => 'edit', 'for' => 'epic');
+$config->ai->targetForm['epic']['batchedit']             = (object)array('m' => 'epic', 'f' => 'batchedit', 'for' => 'epic');
+$config->ai->targetForm['epic']['change']                = (object)array('m' => 'epic', 'f' => 'change', 'for' => 'epic');
+$config->ai->targetForm['requirement']['create']         = (object)array('m' => 'requirement', 'f' => 'create', 'for' => 'requirement');
+$config->ai->targetForm['requirement']['batchcreate']    = (object)array('m' => 'requirement', 'f' => 'batchcreate', 'for' => 'requirement');
+$config->ai->targetForm['requirement']['edit']           = (object)array('m' => 'requirement', 'f' => 'edit', 'for' => 'requirement');
+$config->ai->targetForm['requirement']['batchedit']      = (object)array('m' => 'requirement', 'f' => 'batchedit', 'for' => 'requirement');
+$config->ai->targetForm['requirement']['change']         = (object)array('m' => 'requirement', 'f' => 'change', 'for' => 'requirement');
 $config->ai->targetForm['story']['create']               = (object)array('m' => 'story', 'f' => 'create', 'for' => 'story');
 $config->ai->targetForm['story']['batchcreate']          = (object)array('m' => 'story', 'f' => 'batchcreate', 'for' => 'story');
 $config->ai->targetForm['story']['totask']               = (object)array('m' => 'task', 'f' => 'batchcreate', 'for' => 'story');
@@ -211,6 +223,16 @@ foreach($config->ai->targetForm as $forms)
  * It will be used to get object ID and sprintf to format.
  */
 $config->ai->targetFormVars = array();
+$config->ai->targetFormVars['epic']['create']               = (object)array('format' => 'product=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['epic']['batchcreate']          = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['epic']['edit']                 = (object)array('format' => 'epicID=%d', 'args' => array('epic' => 1), 'app' => 'product');
+$config->ai->targetFormVars['epic']['batchedit']            = (object)array('format' => 'productID=%d&executionID=%d&branch=&storyType=epic&from=', 'args' => array('product' => 1, 'execution' => 0), 'app' => 'product');
+$config->ai->targetFormVars['epic']['change']               = (object)array('format' => 'storyID=%d', 'args' => array('epic' => 1), 'app' => 'product');
+$config->ai->targetFormVars['requirement']['create']        = (object)array('format' => 'product=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['requirement']['batchcreate']   = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
+$config->ai->targetFormVars['requirement']['edit']          = (object)array('format' => 'requirementID=%d', 'args' => array('requirement' => 1), 'app' => 'product');
+$config->ai->targetFormVars['requirement']['batchedit']     = (object)array('format' => 'productID=%d&executionID=%d&branch=&storyType=requirement&from=', 'args' => array('product' => 1, 'execution' => 0), 'app' => 'product');
+$config->ai->targetFormVars['requirement']['change']        = (object)array('format' => 'storyID=%d', 'args' => array('requirement' => 1), 'app' => 'product');
 $config->ai->targetFormVars['story']['create']              = (object)array('format' => 'product=%d', 'args' => array('product' => 1), 'app' => 'product');
 $config->ai->targetFormVars['story']['batchcreate']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'product');
 $config->ai->targetFormVars['story']['totask']              = (object)array('format' => 'executionID=%d&storyID=%d', 'args' => array('execution' => 1, 'story' => 0), 'app' => 'execution');
@@ -320,6 +342,10 @@ $config->ai->injectAuditButton->locations['product']['edit']       = $config->ai
 $config->ai->injectAuditButton->locations['project']['create']     = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['project']['edit']       = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['bug']['edit']           = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['epic']['edit']          = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['epic']['change']        = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['requirement']['edit']   = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['requirement']['change'] = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['story']['edit']         = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['story']['change']       = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testcase']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
@@ -330,6 +356,8 @@ $config->ai->injectAuditButton->locations['risk']['edit']          = $config->ai
 $config->ai->injectAuditButton->locations['issue']['edit']         = $config->ai->injectAuditButton->locations['task']['edit'];
 
 $config->ai->injectAuditButton->locations['product']['create']    = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['epic']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
+$config->ai->injectAuditButton->locations['requirement']['create'] = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['create']      = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['task']['create']       = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['testcase']['create']   = $config->ai->injectAuditButton->locations['bug']['create'];
@@ -342,19 +370,23 @@ $config->ai->injectAuditButton->locations['issue']['create']      = $config->ai-
 $config->ai->injectAuditButton->locations['story']['batchcreate'] = $config->ai->injectAuditButton->locations['bug']['create'];
 $config->ai->injectAuditButton->locations['story']['batchcreate']['toolbar']->targetContainer = '#mainContent .panel-heading .panel-actions';
 
-$config->ai->injectAuditButton->locations['story']['batchedit']      = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['task']['batchcreate']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['task']['batchedit']       = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['testcase']['batchcreate'] = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['testcase']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['bug']['batchcreate']      = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['bug']['batchedit']        = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['feedback']['batchcreate'] = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['feedback']['batchedit']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['ticket']['batchcreate']   = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['ticket']['batchedit']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['risk']['batchcreate']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
-$config->ai->injectAuditButton->locations['issue']['batchcreate']    = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['epic']['batchcreate']         = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['epic']['batchedit']           = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['requirement']['batchcreate']  = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['requirement']['batchedit']    = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['story']['batchedit']          = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['task']['batchcreate']         = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['task']['batchedit']           = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['testcase']['batchcreate']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['testcase']['batchedit']       = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['bug']['batchcreate']          = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['bug']['batchedit']            = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['feedback']['batchcreate']     = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['feedback']['batchedit']       = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['ticket']['batchcreate']       = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['ticket']['batchedit']         = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['risk']['batchcreate']         = $config->ai->injectAuditButton->locations['story']['batchcreate'];
+$config->ai->injectAuditButton->locations['issue']['batchcreate']        = $config->ai->injectAuditButton->locations['story']['batchcreate'];
 
 $config->ai->miniPrograms = new stdClass();
 $config->ai->miniPrograms->iconList = array();

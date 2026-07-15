@@ -262,7 +262,9 @@ class ai extends control
         $this->view->fieldConfig   = $this->ai->getPromptFields($id);
         $this->view->knowledgeLibs = $knowledgeLibs;
         $this->view->skill         = $skill;
-        $this->view->processObject = zget($processObjectList, $prompt->module, $prompt->module);
+        $processObject = zget($processObjectList, $prompt->module, $prompt->module);
+        if($processObject == $prompt->module && isset($this->lang->ai->moduleList[$prompt->module]['common'])) $processObject = $this->lang->ai->moduleList[$prompt->module]['common'];
+        $this->view->processObject = $processObject;
 
         $this->display();
     }

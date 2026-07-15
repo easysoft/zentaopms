@@ -163,6 +163,19 @@ class aiModel extends model
     }
 
     /**
+     * Get the source module used by prompt sample data.
+     *
+     * @param  string $module
+     * @access protected
+     * @return string
+     */
+    protected function getPromptSampleModule($module): string
+    {
+        $module = (string)$module;
+        return in_array($module, array('epic', 'requirement')) ? 'story' : $module;
+    }
+
+    /**
      * Build localized prompt data source definition for a module.
      *
      * @param  string $module
@@ -2097,7 +2110,8 @@ class aiModel extends model
      */
     public function generateDemoDataPrompt($module, $source)
     {
-        if(empty($this->lang->ai->demoData->$module)) return $this->lang->ai->demoData->notExist;
+        $sampleModule = $this->getPromptSampleModule($module);
+        if(empty($this->lang->ai->demoData->$sampleModule)) return $this->lang->ai->demoData->notExist;
 
         $sources = explode(',', $source);
         $sources = array_filter($sources);
@@ -2116,7 +2130,7 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($data[$objectName])) $data[$objectName] = array();
 
-            $moduleDemoData = $this->lang->ai->demoData->$module;
+            $moduleDemoData = $this->lang->ai->demoData->$sampleModule;
             $demoData       = zget($moduleDemoData, $objectName, array());
             if(empty($demoData)) continue;
 
@@ -2310,8 +2324,14 @@ class aiModel extends model
 
         switch($module)
         {
+            case 'epic':
+            case 'requirement':
             case 'story':
-                if(isset($sourceGroups['story'])) $object->story = $this->loadModel('story')->getById($objectId);
+                if(isset($sourceGroups['story']))
+                {
+                    $object->story = $this->loadModel('story')->getById($objectId);
+                    if($module != 'story') $object->$module = $object->story;
+                }
                 return $object;
             case 'execution':
                 if(isset($sourceGroups['execution'])) $object->execution = $this->loadModel('execution')->getByID($objectId);
@@ -2564,9 +2584,12 @@ class aiModel extends model
                 return $this->dao->select('MAX(id) AS maxId')->from(TABLE_PROJECT)
                     ->where('id')->in($this->app->user->view->projects)
                     ->fetch('maxId');
+            case 'epic':
+            case 'requirement':
             case 'story':
                 return $this->dao->select('MAX(id) AS maxId')->from(TABLE_STORY)
                     ->where('product')->in($this->app->user->view->products)
+                    ->andWhere('type')->eq($module)
                     ->fetch('maxId');
             case 'execution':
                 $executionIds = array_map('intval', explode(',', $this->app->user->view->sprints));
@@ -2663,13 +2686,17 @@ class aiModel extends model
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
         $method = strtolower($targetFormConfig->f);
+        $promptObject = !empty($object->{$prompt->module}) ? $object->{$prompt->module} : null;
+        if(empty($promptObject) && in_array($prompt->module, array('epic', 'requirement')) && !empty($object->story)) $promptObject = $object->story;
 
         if($targetForm == 'doc.create')
         {
             $objectType = '';
             $params     = '';
-            $objectData = $object->{$prompt->module};
-            if(in_array($prompt->module, array('product', 'story', 'productplan', 'release', 'case', 'bug')))
+            $objectData = $promptObject;
+            if(empty($objectData)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
+
+            if(in_array($prompt->module, array('product', 'epic', 'requirement', 'story', 'productplan', 'release', 'case', 'bug')))
             {
                 $objectType = 'product';
                 $productID  = $prompt->module == 'product' ? $objectData->id : $objectData->product;
@@ -2705,9 +2732,9 @@ class aiModel extends model
             {
                 $var = $object->$arg->id;
             }
-            elseif(!empty($object->{$prompt->module}->$arg)) // If object has the prop, use it.
+            elseif(!empty($promptObject->$arg)) // If object has the prop, use it.
             {
-                $var = $object->{$prompt->module}->$arg;
+                $var = $promptObject->$arg;
             }
             else
             {
@@ -2730,9 +2757,9 @@ class aiModel extends model
         }
         $linkVars = vsprintf($varsConfig->format, $vars);
 
-        /* Overrides for stories. */
-        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
-        if($module == 'story' && $method == 'change' && !empty($object->story) && $object->story->type == 'epic')    $module = 'epic';
+        /* Overrides for requirements. */
+        if(in_array($module, array('story', 'epic', 'requirement')) && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
+        if($module == 'story' && $method == 'change' && !empty($object->story) && in_array($object->story->type, array('epic', 'requirement'))) $module = $object->story->type;
 
         return array(helper::createLink($module, $method, $linkVars) . (empty($varsConfig->app) ? '' : "#app=$varsConfig->app"), false);
     }
@@ -2760,13 +2787,16 @@ class aiModel extends model
         $vars = array();
 
         /* If a native object of a module exists, try getting stuff related to its id. */
-        if(!empty($object->{$prompt->module}) && is_object($object->{$prompt->module}) && !empty($object->{$prompt->module}->id))
+        $promptObject = !empty($object->{$prompt->module}) ? $object->{$prompt->module} : null;
+        if(empty($promptObject) && in_array($prompt->module, array('epic', 'requirement')) && !empty($object->story)) $promptObject = $object->story;
+        if(!empty($promptObject) && is_object($promptObject) && !empty($promptObject->id))
         {
-            $objectId = $object->{$prompt->module}->id;
+            $objectId = $promptObject->id;
+            $promptModule = $this->getPromptSampleModule($prompt->module);
             foreach($objectNames as $objectName)
             {
                 /* Note that modules are within (product, story, productplan, release, project, execution, task, bug, case, doc). */
-                switch ($prompt->module)
+                switch ($promptModule)
                 {
                     case 'product': // story, branch, productplan, execution, task, bug, case, project, doc
                         if(in_array($objectName, array('story', 'branch', 'productplan', 'task', 'bug', 'case', 'doc')))
@@ -3184,11 +3214,12 @@ class aiModel extends model
     {
         $module       = $prompt->module ?? '';
         $promptSource = $prompt->source ?? '';
+        $sampleModule = $this->getPromptSampleModule($module);
         $source       = explode(',', (string)$promptSource);
         $source       = array_filter($source, function($value) {return !empty($value);});
 
         $titleData = $this->getPromptDataSourceDefinition($module);
-        $testData  = $this->lang->ai->prompts->testData[$module] ?? array();
+        $testData  = $this->lang->ai->prompts->testData[$sampleModule] ?? array();
         if(empty($module) || empty($source) || empty($titleData) || empty($testData)) return array($testData, '');
 
         $categorized = array();
@@ -3394,8 +3425,8 @@ class aiModel extends model
         $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
         if(empty($targetForm)) return;
 
-        /* Override method for story drafts. */
-        if($targetForm->m == 'story' && $targetForm->f == 'change') $_SESSION['aiInjectData']['story']['edit'] = is_string($data) ? $data : json_encode($data);
+        /* Override method for requirement drafts. */
+        if(in_array($targetForm->m, array('story', 'epic', 'requirement')) && $targetForm->f == 'change') $_SESSION['aiInjectData'][$targetForm->m]['edit'] = is_string($data) ? $data : json_encode($data);
 
         $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
