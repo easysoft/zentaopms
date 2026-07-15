@@ -252,6 +252,7 @@ $config->logonMethods[] = 'artifact.downloadartifact';
 $config->logonMethods[] = 'artifact.history';
 $config->logonMethods[] = 'artifact.moveartifact';
 $config->logonMethods[] = 'artifact.copycmd';
+$config->logonMethods[] = 'zai.ajaxgettoken';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
