@@ -61,6 +61,7 @@ $lang->pipeline->comment         = 'Match Keywords';
 $lang->pipeline->customParam     = 'Bauparameter';
 $lang->pipeline->paramName       = 'Name';
 $lang->pipeline->paramValue      = 'Wert';
+$lang->pipeline->invalidParamName = 'Parameter name "%s" is invalid, only letters, numbers and underscores are allowed.';
 $lang->pipeline->custom          = 'Custom';
 $lang->pipeline->createdBy       = 'Created By';
 $lang->pipeline->createdDate     = 'Created Date';

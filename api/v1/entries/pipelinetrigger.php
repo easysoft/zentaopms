@@ -47,7 +47,14 @@ class pipelinetriggerEntry extends baseEntry
 
         if($pipeline->engine == 'gitlab')
         {
-            $result = $this->pipeline->execGitlabPipeline($pipeline);
+            $result = $this->pipeline->execGitlabPipeline($pipeline, 'cron');
+            if($result) return $this->send(200, 'Pipeline triggered successfully');
+            return $this->sendError(400, 'Pipeline trigger failed');
+        }
+
+        if($pipeline->engine == 'jenkins')
+        {
+            $result = $this->pipeline->execJenkinsPipeline($pipeline, 'cron');
             if($result) return $this->send(200, 'Pipeline triggered successfully');
             return $this->sendError(400, 'Pipeline trigger failed');
         }
