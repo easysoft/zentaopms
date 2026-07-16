@@ -44,6 +44,18 @@ if(!empty($prompt->actionPurpose))
         $actionObjectCommon = $lang->ai->targetForm[$actionPurposePath[0]]['common'] ?? '';
         $actionObjectName   = $lang->ai->targetForm[$actionPurposePath[0]][$actionPurposePath[1]] ?? '';
         if(!empty($actionObjectName)) $actionObject = $prompt->actionPurpose == 'empty.empty' || empty($actionObjectCommon) ? $actionObjectName : $actionObjectCommon . ' / ' . $actionObjectName;
+
+        if(empty($actionObject) && method_exists($this->ai, 'getPromptActionPurposeListByModule'))
+        {
+            $moduleItems = isset($lang->ai->prompts->modules) ? $lang->ai->prompts->modules : array();
+            if(method_exists($this->ai, 'getPromptProcessObjectList')) $moduleItems = $this->ai->getPromptProcessObjectList();
+
+            $actionPurposeData  = $this->ai->getPromptActionPurposeListByModule($moduleItems);
+            $nameMap            = isset($actionPurposeData['nameMap']) ? $actionPurposeData['nameMap'] : array();
+            $actionObjectCommon = zget($moduleItems, $actionPurposePath[0], '');
+            $actionObjectName   = zget($nameMap, $prompt->actionPurpose, '');
+            if(!empty($actionObjectName)) $actionObject = $prompt->actionPurpose == 'empty.empty' || empty($actionObjectCommon) ? $actionObjectName : $actionObjectCommon . ' / ' . $actionObjectName;
+        }
     }
 }
 
@@ -103,7 +115,7 @@ detailBody
             set::title($lang->ai->prompts->processObject),
             set::content($processObject)
         ),
-        section(set::title($lang->ai->prompts->actionObject), set::content($actionObject)),
+        section(set::title($lang->ai->prompts->actionPurpose), set::content($actionObject)),
         section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
         section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
         section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
