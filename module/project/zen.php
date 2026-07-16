@@ -31,6 +31,7 @@ class projectZen extends project
             ->setIF($this->post->model == 'ipd', 'stageBy', 'project')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
+            ->setDefault('storyType', 'story') // API post data has no storyType.
             ->setDefault('team', $this->post->name)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
