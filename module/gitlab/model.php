@@ -135,7 +135,7 @@ class gitlabModel extends model
         $url = sprintf($apiRoot, "/projects/{$projectID}/pipeline");
         return json_decode(commonModel::http($url, $params, array(), array("Content-Type: application/json")));
     }
-    
+
     /**
      * 错误处理。
      * Api error handling.
@@ -183,5 +183,27 @@ class gitlabModel extends model
 
         if(!$response) dao::$errors[] = false;
         return false;
+    }
+
+    /**
+     * 通过api获取执行信息。
+     * Get execution info by api.
+     *
+     * @param  int    $number
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return array|object
+     */
+    public function apiGetExecInfo(int $number, string $pipelineName, object $provider): array|object
+    {
+        if(empty($provider->token) || empty($provider->url)) return array();
+
+        $url = rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
+        $url = sprintf($url, "/projects/{$pipelineName}/pipelines/{$number}");
+
+        $response = json_decode(common::http($url, null, array(), array('Accept: application/json'), 'json'));
+        if(empty($response) || empty($response->status)) return array();
+        return $response;
     }
 }
