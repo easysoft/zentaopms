@@ -115,7 +115,7 @@ detailBody
             set::title($lang->ai->prompts->processObject),
             set::content($processObject)
         ),
-        section(set::title($lang->ai->prompts->actionObject), set::content($actionObject)),
+        section(set::title($lang->ai->prompts->actionPurpose), set::content($actionObject)),
         section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
         section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
         section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
