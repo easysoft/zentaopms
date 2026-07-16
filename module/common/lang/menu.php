@@ -886,6 +886,7 @@ $lang->navGroup->repobranchtype  = 'devops';
 $lang->navGroup->repobranchrule  = 'devops';
 $lang->navGroup->codescan        = 'devops';
 $lang->navGroup->gitfox          = 'devops';
+$lang->navGroup->pipeline        = 'devops';
 
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->enableER) unset($lang->product->menu->epic, $lang->product->menuOrder[10]);
 if((empty($_SESSION['tutorialMode']) || $config->systemMode == 'light') && !$config->URAndSR)  unset($lang->product->menu->requirement, $lang->product->menuOrder[15]);
