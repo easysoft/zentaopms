@@ -159,14 +159,18 @@ $lang->pipeline->typeList['repo']  = '代码库';
 $lang->pipeline->typeList['space'] = '空间';
 
 $lang->pipeline->execStatusList = array();
-$lang->pipeline->execStatusList['success']  = '成功';
-$lang->pipeline->execStatusList['failure']  = '失败';
-$lang->pipeline->execStatusList['running']  = '运行中';
-$lang->pipeline->execStatusList['pending']  = '等待中';
-$lang->pipeline->execStatusList['error']    = '错误';
-$lang->pipeline->execStatusList['skipped']  = '跳过';
-$lang->pipeline->execStatusList['blocked']  = '阻塞';
-$lang->pipeline->execStatusList['declined'] = '拒绝';
+$lang->pipeline->execStatusList['success']     = '成功';
+$lang->pipeline->execStatusList['failure']     = '失败';
+$lang->pipeline->execStatusList['running']     = '运行中';
+$lang->pipeline->execStatusList['pending']     = '等待中';
+$lang->pipeline->execStatusList['error']       = '错误';
+$lang->pipeline->execStatusList['skipped']     = '跳过';
+$lang->pipeline->execStatusList['blocked']     = '阻塞';
+$lang->pipeline->execStatusList['declined']    = '拒绝';
+$lang->pipeline->execStatusList['created']     = '已创建';
+$lang->pipeline->execStatusList['create_fail'] = '创建失败';
+$lang->pipeline->execStatusList['timeout']     = '超时';
+$lang->pipeline->execStatusList['canceled']    = '已取消';
 
 $lang->pipeline->triggerTypeList = array();
 $lang->pipeline->triggerTypeList['manual']                 = '人工触发';

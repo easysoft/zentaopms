@@ -159,14 +159,18 @@ $lang->pipeline->typeList['repo']  = 'Repository';
 $lang->pipeline->typeList['space'] = 'Space';
 
 $lang->pipeline->execStatusList = array();
-$lang->pipeline->execStatusList['success']  = 'Success';
-$lang->pipeline->execStatusList['failure']  = 'Failure';
-$lang->pipeline->execStatusList['running']  = 'Running';
-$lang->pipeline->execStatusList['pending']  = 'Pending';
-$lang->pipeline->execStatusList['error']    = 'Error';
-$lang->pipeline->execStatusList['skipped']  = 'Skipped';
-$lang->pipeline->execStatusList['blocked']  = 'Blocked';
-$lang->pipeline->execStatusList['declined'] = 'Declined';
+$lang->pipeline->execStatusList['success']     = 'Success';
+$lang->pipeline->execStatusList['failure']     = 'Failure';
+$lang->pipeline->execStatusList['running']     = 'Running';
+$lang->pipeline->execStatusList['pending']     = 'Pending';
+$lang->pipeline->execStatusList['error']       = 'Error';
+$lang->pipeline->execStatusList['skipped']     = 'Skipped';
+$lang->pipeline->execStatusList['blocked']     = 'Blocked';
+$lang->pipeline->execStatusList['declined']    = 'Declined';
+$lang->pipeline->execStatusList['created']     = 'Created';
+$lang->pipeline->execStatusList['create_fail'] = 'Create Failed';
+$lang->pipeline->execStatusList['timeout']     = 'Timeout';
+$lang->pipeline->execStatusList['canceled']    = 'Canceled';
 
 $lang->pipeline->triggerTypeList = array();
 $lang->pipeline->triggerTypeList['manual']                 = 'Manual trigger';
