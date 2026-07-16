@@ -1054,6 +1054,13 @@ class pipeline extends control
      */
     public function execView(int $id, int $space = 0, int $repoID = 0, $type = 'space')
     {
+        $execution = $this->pipeline->getExecByID($id);
+        $pipeline  = $this->pipeline->getByID(empty($execution) ? 0 : $execution->pipelineID);
+        if(!empty($pipeline) && in_array($pipeline->engine, array('gitlab', 'jenkins')))
+        {
+            $this->locate($this->createLink('pipeline', 'ajaxExecLog', "id={$id}&space={$space}&repoID={$repoID}&type={$type}"));
+        }
+
         $this->commonAction($space);
         if($repoID)
         {
@@ -1069,8 +1076,8 @@ class pipeline extends control
         }
 
         $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
-        $this->view->execution = $this->pipeline->getExecByID($id);
-        $this->view->pipeline  = $this->pipeline->getByID(empty($this->view->execution) ? 0 : $this->view->execution->pipelineID);
+        $this->view->execution = $execution;
+        $this->view->pipeline  = $pipeline;
         $this->view->repoID    = $repoID;
         $this->view->type      = $type;
         $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
@@ -1096,5 +1103,57 @@ class pipeline extends control
 
         $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
         $this->sendSuccess($response);
+    }
+
+    /**
+     * 查看执行日志。
+     * View execution log.
+     *
+     * @param  int    $id
+     * @param  int    $space
+     * @param  int    $repoID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxExecLog(int $id, int $space = 0, int $repoID = 0, $type = 'space')
+    {
+        $this->commonAction($space);
+        if($repoID)
+        {
+            $this->pipelineZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
+
+            /* Set session. */
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+        $execution = $this->pipeline->getExecByID($id);
+        $pipeline  = $this->pipeline->getByID(empty($execution) ? 0 : $execution->pipelineID);
+
+        $this->loadModel('gitlab');
+        $this->loadModel('jenkins');
+        if(!empty($execution->status) && !in_array($execution->status, array('created', 'pending')))
+        {
+            $engine   = $pipeline->engine;
+            $provider = $this->loadModel('provider')->fetchByID($pipeline->providerID);
+            if($engine) $execution->logs = $this->$engine->getLogs($execution->number, $pipeline->externalPipeline, $provider);
+        }
+        $logs = $execution->logs ? str_replace(array("\r\n", "\n"), "<br />", $execution->logs) : '';
+
+        $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
+        $this->view->id        = $id;
+        $this->view->execution = $execution;
+        $this->view->pipeline  = $pipeline;
+        $this->view->repoID    = $repoID;
+        $this->view->type      = $type;
+        $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
+        $this->view->space     = $space;
+        $this->view->logs      = $execution->logs ? $logs : '';
+
+        $this->display();
     }
 }
