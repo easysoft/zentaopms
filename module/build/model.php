@@ -440,7 +440,7 @@ class buildModel extends model
             ->where('t1.product')->in($productIdList)
             ->beginIF($objectType === 'project' && $objectID)->andWhere("(FIND_IN_SET('$objectID', t1.project)")->orWhere('t1.project')->eq('0')->markRight(1)->fi()
             ->beginIF($objectType === 'execution' && $objectID)->andWhere('t2.execution')->eq($objectID)->fi()
-            ->beginIF(strpos($params, 'noreleased') !== false)->andWhere('t1.status')->ne('wait')->fi()
+            ->beginIF(strpos($params, 'nowaitrelease') !== false)->andWhere('t1.status')->ne('wait')->fi()
             ->beginIF(strpos($params, 'nofail') !== false)->andWhere('t1.status')->ne('fail')->fi()
             ->andWhere('((t1.deleted')->eq(0)
             ->andWhere('t1.shadow')->ne(0)

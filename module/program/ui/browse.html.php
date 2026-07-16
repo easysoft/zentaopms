@@ -19,9 +19,30 @@ $cols         = $this->loadModel('datatable')->getSetting('program');
 $data         = array();
 $parents      = array();
 $showCheckbox = false;
+
+$projectOptions = array();
+if($config->edition != 'open')
+{
+    $projectFields = $this->loadModel('workflowaction')->getPageFields('project', 'browse');
+    foreach($projectFields as $field => $fieldInfo)
+    {
+        if(!isset($cols[$field])) continue;
+        if(empty($fieldInfo->options)) continue;
+        if(!is_array($fieldInfo->options)) continue;
+        $projectOptions[$field] = $fieldInfo->options;
+    }
+}
+
 foreach($programs as $program)
 {
-    if($program->type == 'project') $showCheckbox = true;
+    if($program->type == 'project')
+    {
+        $showCheckbox = true;
+        foreach($projectOptions as $field => $options)
+        {
+            if(isset($program->$field)) $program->$field = zget($options, $program->$field);
+        }
+    }
 
     if(empty($program->parent))        $program->parent        = 0;
     if(empty($program->workflowGroup)) $program->workflowGroup = '';
