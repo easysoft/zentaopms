@@ -216,6 +216,7 @@ class form extends fixer
             foreach($fieldList as $key => $field)
             {
                 if($field->buildin || !$field->show || !isset($layouts[$field->field])) continue;
+                if(in_array($field->field, zget($config->workflow->layoutFields, $flow->module, array()))) continue;
                 if($field->control == 'file') continue;
 
                 $required = !$field->readonly && $notEmptyRule && strpos(",$field->rules,", ",{$notEmptyRule->id},") !== false;
