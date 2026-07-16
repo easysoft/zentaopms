@@ -1,5 +1,6 @@
 .case-precondition {color: var(--color-gray-700);}
 #caseStepForm, #caseStepForm .action-td {padding: 0px;}
+#caseStepForm .step-table-wrapper {width: 100%;}
 #caseStepForm tr {border-width: 0px;}
 #caseStepForm thead {background-color: unset;}
 #caseStepForm thead > tr > * {padding-left: 0px; font-size: 14px; color: var(--color-gray-900); font-weight: 600;}

@@ -109,6 +109,7 @@ $lang->testcase->stepID      = '編號';
 $lang->testcase->stepDesc    = '步驟';
 $lang->testcase->stepExpect  = '預期';
 $lang->testcase->stepVersion = '版本';
+$lang->testcase->stepTable   = '執行步驟';
 
 $lang->testcase->index                   = "用例管理首頁";
 $lang->testcase->create                  = "建用例";
