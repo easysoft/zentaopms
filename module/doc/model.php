@@ -473,6 +473,14 @@ class docModel extends model
             $this->checkApiLibName($lib, $type, $libID);
         }
 
+        /* API maybe has no acl param. */
+        if($lib->acl == '')
+        {
+            $lib->acl    = $oldLib->acl;
+            $lib->groups = $oldLib->groups;
+            $lib->users  = $oldLib->users;
+        }
+
         $this->dao->update(TABLE_DOCLIB)->data($lib, 'space')->autoCheck()
             ->batchCheck($this->config->doc->editlib->requiredFields, 'notempty')
             ->where('id')->eq($libID)
