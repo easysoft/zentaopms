@@ -115,7 +115,7 @@ class jenkinsModel extends model
         if(empty($response) || empty($response->result)) return array();
         return $response;
     }
-    
+
     /**
      * 通过 queueID 查询 Jenkins job 的 build number。
      * Get build number by queue ID.
@@ -132,5 +132,30 @@ class jenkinsModel extends model
         $queue    = json_decode($response);
         if(empty($queue) || empty($queue->executable) || empty($queue->executable->number)) return 0;
         return (int)$queue->executable->number;
+    }
+
+    /**
+     * 通过api获取流水线的日志。
+     * Get pipeline logs by api.
+     *
+     * @param  int    $buildNumber
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return string
+     */
+    public function getLogs(int $buildNumber, string $pipelineName, object $provider): string
+    {
+        if(empty($provider->token) || empty($provider->url)) return '';
+        $userPWD = base64_decode($provider->token);
+
+        $url = rtrim($provider->url, '/') . $pipelineName;
+        $url .= sprintf('%s/consoleText', $buildNumber);
+
+        $logs = common::http($url, '', array(CURLOPT_USERPWD => $userPWD));
+        if(empty($logs)) return '';
+        $this->dao->update(TABLE_PIPELINEEXEC)->set('logs')->eq($logs)->where('number')->eq($buildNumber)->exec();
+
+        return $logs;
     }
 }
