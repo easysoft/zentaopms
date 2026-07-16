@@ -1166,9 +1166,18 @@ class pipelineModel extends model
             if(empty($execInfo)) continue;
 
             $syncData = new stdclass();
-            $syncData->status       = strtolower(zget($execInfo, 'result', ''));
-            $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
-            $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
+            if($engine == 'jenkins')
+            {
+                $syncData->status       = strtolower(zget($execInfo, 'result', ''));
+                $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
+                $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
+            }
+            elseIF($engine == 'gitlab')
+            {
+                $syncData->status       = strtolower(zget($execInfo, 'status', ''));
+                $syncData->finishedDate = empty($execInfo->finished_at) ? null : date('Y-m-d H:i:s', strtotime($execInfo->finished_at));
+                $syncData->duration     = zget($execInfo, 'duration', 0);
+            }
 
             $this->dao->update(TABLE_PIPELINEEXEC)->data($syncData)->where('id')->eq($externalPipeline->id)->exec();
         }
