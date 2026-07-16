@@ -611,7 +611,6 @@ class testcaseZen extends testcase
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
         $this->view->suiteID     = $suiteID;
         $this->view->caseType    = $caseType;
         $this->view->users       = $this->user->getPairs('noletter');

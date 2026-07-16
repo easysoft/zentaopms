@@ -115,6 +115,7 @@ $lang->testcase->stepExpect        = '预期';
 $lang->testcase->stepVersion       = '版本';
 $lang->testcase->stepSameLevel     = '同级';
 $lang->testcase->stepSubLevel      = '子级';
+$lang->testcase->stepTable         = '执行步骤';
 $lang->testcase->expectDisabledTip = '分层级后不可填写预期';
 $lang->testcase->deleteStepTip     = '此步骤含有层级，无法删除';
 $lang->testcase->dragNestedTip     = '最多支持三层嵌套，无法拖拽到此处';
