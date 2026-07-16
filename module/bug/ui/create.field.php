@@ -59,6 +59,7 @@ if(common::hasPriv('build', 'create'))
 if(common::hasPriv('release', 'create') && !common::isTutorialMode())
 {
     $fields->field('openedBuild')
+        ->required(true)
         ->itemBegin()->control(array('control' => 'btn', 'data-toggle' => 'modal', 'data-size' => 'lg','id' => 'createRelease'))
         ->text($lang->release->create)->hint($lang->release->create)
         ->url(createLink('release', 'create', 'productID=' . data('bug.productID') . '&branch=' . data('bug.branch') . '&status=normal'))
@@ -66,7 +67,7 @@ if(common::hasPriv('release', 'create') && !common::isTutorialMode())
         ->itemEnd();
 }
 
-$fields->field('title')->width($isShadowProduct ? '1/2' : 'full');
+$fields->field('title')->required(true)->width($isShadowProduct ? '1/2' : 'full');
 
 $fields->field('steps')
     ->width('full')
