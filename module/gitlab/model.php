@@ -206,4 +206,44 @@ class gitlabModel extends model
         if(empty($response) || empty($response->status)) return array();
         return $response;
     }
+
+    /**
+     * 通过api获取流水线的日志。
+     * Get pipeline logs by api.
+     *
+     * @param  int    $buildNumber
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return string
+     */
+    public function getLogs(int $buildNumber, string $pipelineName, object $provider): string
+    {
+        if(empty($provider->token) || empty($provider->url)) return '';
+
+        $apiURL = rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
+        $url    = sprintf($apiURL, "/projects/{$pipelineName}/pipelines/{$buildNumber}/jobs");
+        $jobs   = json_decode(commonModel::http($url));
+        if(empty($jobs)) return '';
+
+        $this->loadModel('ci');
+        $logs = '';
+        foreach($jobs as $gitlabJob)
+        {
+            if(!is_object($gitlabJob)) continue;
+
+            if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
+            $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: {$gitlabJob->name}, Stage: {$gitlabJob->stage}, Status: {$gitlabJob->status}, Duration: {$gitlabJob->duration} Sec\r\n </font>";
+            $logs .= "Job URL: <a href=\"{$gitlabJob->web_url}\" target='_blank'>$gitlabJob->web_url</a> \r\n";
+
+            $jobLogUrl = sprintf($apiURL, "/projects/{$pipelineName}/jobs/{$gitlabJob->id}/trace");
+            $jobLog    = commonModel::http($jobLogUrl);
+            if(empty($jobLog)) continue;
+
+            $logs .= $this->ci->transformAnsiToHtml($jobLog);
+        }
+
+        $this->dao->update(TABLE_PIPELINEEXEC)->set('logs')->eq($logs)->where('number')->eq($buildNumber)->exec();
+        return $logs;
+    }
 }
