@@ -2428,12 +2428,13 @@ class doc extends control
      * @param  string $type
      * @param  int    $space
      * @param  string $picks
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0)
     {
-        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+        $this->doc->setMenuByType($type, (int)$spaceID, $libID);
 
         if($type === 'template')
         {
@@ -2456,7 +2457,7 @@ class doc extends control
             $this->send($data);
         }
 
-        $data = $this->buildSpaceDataBase($type, $spaceID, $picks);
+        $data = $this->buildSpaceDataBase($type, $spaceID, $picks, $libID);
         $this->send($data);
     }
 
@@ -2467,10 +2468,11 @@ class doc extends control
      * @param  string $type    空间类型
      * @param  int    $spaceID 空间ID
      * @param  string $picks   需要加载的数据项
+     * @param  int    $libID   文档库ID
      * @access private
      * @return array
      */
-    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = ''): array
+    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = '', int $libID = 0): array
     {
         $noPicks = empty($picks);
         $picks   = $noPicks ? '' : ",$picks,";
@@ -2478,7 +2480,7 @@ class doc extends control
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array();
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
+        $libIds = $libID ? array($libID) : array_keys($libs);
         foreach($libs as $lib)
         {
             $lib->order = (int)$lib->order;
