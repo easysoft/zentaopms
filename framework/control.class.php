@@ -550,6 +550,8 @@ class control extends baseControl
                 if($objectValue) $field->default = $objectValue;
             }
         }
+
+        $fields->defaultOrders = array(implode(',', array_keys($fieldList)));
         return $this->loadModel('flow')->buildFormFields($fields, $fieldList, array(), $object);
     }
 
