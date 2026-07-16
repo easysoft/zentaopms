@@ -1498,7 +1498,7 @@ class repoZen extends repo
      * @access public
      * @return object
      */
-    public function buildWebhook(object $webhookFormData, object $repo, object $editWebhook = null): object
+    public function buildWebhook(object $webhookFormData, object $repo, ?object $editWebhook = null): object
     {
         $name        = zget($webhookFormData, 'name');
         $webhookList = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id);
