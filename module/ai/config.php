@@ -118,6 +118,7 @@ $config->ai->moduleGroup['testtask']    = array('testtask', 'case');
 $config->ai->moduleGroup['case']        = array('case');
 $config->ai->moduleGroup['bug']         = array('bug');
 $config->ai->moduleGroup['doc']         = array('doc');
+$config->ai->moduleGroup['feedback']    = array('feedback');
 $config->ai->moduleGroup['ticket']      = array('ticket');
 $config->ai->moduleGroup['risk']        = array('risk');
 $config->ai->moduleGroup['issue']       = array('issue');
