@@ -2531,7 +2531,11 @@ class aiModel extends model
                 if($this->config->edition != 'open')
                 {
                     $flow = $this->loadModel('workflow')->getByModule($module);
-                    if($flow) return $this->loadModel('flow')->getDataByID($flow, $objectId);
+                    if($flow && $flow->type == 'flow' && empty($flow->buildin))
+                    {
+                        $data = $this->loadModel('flow')->getDataByID($flow, $objectId);
+                        if(!empty($data)) $object->$module = $data;
+                    }
                 }
                 return $object;
         }
@@ -2888,6 +2892,10 @@ class aiModel extends model
             elseif(!empty($promptObject->id) && ($arg == $prompt->module || $arg == $module)) // Workflow object itself.
             {
                 $var = $promptObject->id;
+            }
+            elseif(!empty($object->id) && ($arg == $prompt->module || $arg == $module)) // Flat workflow object.
+            {
+                $var = $object->id;
             }
             else
             {
