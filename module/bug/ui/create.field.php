@@ -26,16 +26,16 @@ $fields = defineFieldList('bug.create', 'bug');
 
 $fields->field('product')->hidden($isShadowProduct && $isOriginalProduct);
 
-$fields->field('deadline')->className($isShadowProduct && $isOriginalProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
+$fields->field('deadline')->width($isShadowProduct && $isOriginalProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
 $fields->field('project')
-     ->className($noMultipleProject ? 'w-1/2' : 'w-1/4')
+     ->width($noMultipleProject ? '1/2' : '1/4')
      ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
 
  $fields->field('execution')
      ->label(data('project.model') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
      ->hidden($noMultipleProject)
-     ->className('w-1/4')
+     ->width('1/4')
      ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
 
 $fields->field('plan')
