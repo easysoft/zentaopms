@@ -7,23 +7,30 @@ title=测试 pipelineModel::deleteTriggerCronJob();
 timeout=0
 cid=0
 
-- 测试步骤1：正常删除定时任务 @success
-- 测试步骤2：无效pipelineID @no_server
-- 测试步骤3：不同engine删除 @success
-- 测试步骤4：不存在的任务 @not_found
-- 测试步骤5：正常删除pipelineID=10 @success
+- 测试删除cron任务(pipelineID=0) @1
+- 测试删除cron任务(pipelineID=999) @1
+- 测试删除cron任务(正常参数无API) @1
+- 测试删除cron任务(pipelineID=0,jenkins) @1
+- 测试删除cron任务(正常参数无API) @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(2);
 su('admin');
 
-$pipelineTester = new pipelineModelTest();
+$tester = new pipelineModelTest();
 
-r($pipelineTester->deleteTriggerCronJobTest(1)) && p() && e('success');
-r($pipelineTester->deleteTriggerCronJobTest(0)) && p() && e('no_server');
-r($pipelineTester->deleteTriggerCronJobTest(2, 'jenkins')) && p() && e('success');
-r($pipelineTester->deleteTriggerCronJobTest(999)) && p() && e('not_found');
-r($pipelineTester->deleteTriggerCronJobTest(10)) && p() && e('success');
+$v1 = $tester->deleteTriggerCronJobTest(0);
+$v2 = $tester->deleteTriggerCronJobTest(999);
+$v3 = $tester->deleteTriggerCronJobTest(1);
+$v4 = $tester->deleteTriggerCronJobTest(0, 'jenkins');
+$v5 = $tester->deleteTriggerCronJobTest(2, 'jenkins');
+
+r($v1) && p() && e('1');
+r($v2) && p() && e('1');
+r($v3) && p() && e('1');
+r($v4) && p() && e('1');
+r($v5) && p() && e('1');

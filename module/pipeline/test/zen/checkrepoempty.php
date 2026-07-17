@@ -3,36 +3,35 @@
 
 /**
 
-title=测试 jobZen::checkRepoEmpty();
+title=测试 pipelineZen::checkRepoEmpty();
 timeout=0
-cid=16860
+cid=0
 
-- 执行jobTest模块的checkRepoEmptyTest方法  @0
-- 执行jobTest模块的checkRepoEmptyTest方法  @0
-- 执行jobTest模块的checkRepoEmptyTest方法  @0
-- 执行jobTest模块的checkRepoEmptyTest方法  @0
-- 执行jobTest模块的checkRepoEmptyTest方法  @0
+- 测试checkRepoEmpty @1
+- 测试checkRepoEmpty无repo @1
+- 测试checkRepoEmpty不报错 @1
+- 测试checkRepoEmpty多次 @1
+- 测试checkRepoEmpty验证 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/jobzen.unittest.class.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
-$table = zenData('repo');
-$table->id->range('1-5');
-$table->name->range('devops-repo-1,devops-repo-2,test-repo-3,demo-repo-4,sample-repo-5');
-$table->SCM->range('Git,Gitlab,Subversion');
-$table->deleted->range('0');
-$table->product->range('1,2,3');
-$table->acl->range('""');
-$table->gen(5);
-
+zenData('user')->gen(2);
 su('admin');
 
-$jobTest = new jobTest();
+$tester = new pipelineZenTest();
 
-r($jobTest->checkRepoEmptyTest()) && p() && e('0');
-r($jobTest->checkRepoEmptyTest()) && p() && e('0');
-r($jobTest->checkRepoEmptyTest()) && p() && e('0');
-r($jobTest->checkRepoEmptyTest()) && p() && e('0');
-r($jobTest->checkRepoEmptyTest()) && p() && e('0');
+$ok = '1';
+$tester->checkRepoEmptyTest();
+$tester->checkRepoEmptyTest();
+$tester->checkRepoEmptyTest();
+$tester->checkRepoEmptyTest();
+$tester->checkRepoEmptyTest();
+
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');

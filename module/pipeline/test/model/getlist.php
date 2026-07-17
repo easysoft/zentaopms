@@ -34,6 +34,7 @@ $pipeline->repoID->range('1,2,0,0,3');
 $pipeline->status->range('active{5}');
 $pipeline->defaultBranch->range('main{5}');
 $pipeline->createdBy->range('admin{5}');
+$pipeline->createdDate->setNull();
 $pipeline->deleted->range('0');
 $pipeline->gen(5);
 
@@ -48,7 +49,6 @@ $provider = zenData('ops_provider');
 $provider->id->range('1');
 $provider->type->range('gitlab');
 $provider->name->range('GitLab');
-$provider->url->range('[https://gitlabdev.qc.oop.cc]');
 $provider->deleted->range('0');
 $provider->gen(1);
 
