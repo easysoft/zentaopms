@@ -1,0 +1,73 @@
+title: table ops_scan_issues
+desc: "扫描问题表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: issueKey
+    note: "问题唯一标识（SHA1）"
+    range: "issuekey-001,issuekey-002,issuekey-003"
+  - field: ruleID
+    note: "关联规则ID"
+    range: "1,2,3"
+  - field: message
+    note: "问题描述信息"
+    range: "空指针访问风险,SQL注入风险,未处理异常风险"
+  - field: path
+    note: "文件路径"
+    range: "src/App.php,module/repo/model.php,docs/readme.md"
+  - field: line
+    note: "行号"
+    range: "10,25,88"
+  - field: repoID
+    note: "仓库ID"
+    range: "0,1,2,3"
+  - field: repoBranch
+    note: "仓库分支"
+    range: "main,develop,release/v1.0"
+  - field: createdByTaskID
+    note: "创建该问题的任务ID"
+    range: "admin,user1,user2"
+  - field: updatedByTaskID
+    note: "最后更新该问题的任务ID"
+    range: "admin,user1,user2"
+  - field: status
+    note: "问题状态（wait/todo/solving/solved/closed/ignore）"
+    range: "wait,todo,solving,solved,closed,ignore"
+  - field: scanMethod
+    note: "扫描方法（check/smell）"
+    range: "check,smell"
+  - field: payload
+    note: "扩展数据（JSON）"
+    range: "payload-check,payload-smell,payload-extra"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: resolution
+    note: "问题解决方案（bydesign/duplicate/external/fixed/notrepro/postponed/willnotfix/tostory）"
+    range: "bydesign,duplicate,external,fixed,notrepro,postponed,willnotfix,tostory"
+  - field: resolved
+    note: "问题解决时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: closed
+    note: "问题关闭时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: ignored
+    note: "问题忽略到期时间"
+    range: "0,1721000000,1722000000"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

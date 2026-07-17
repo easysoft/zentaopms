@@ -1,3 +1,33 @@
+ALTER TABLE `zt_ai_agent` ADD COLUMN `displayPosition` varchar(20) NOT NULL DEFAULT '' COMMENT '显示位置，目前包括：详情页（detail）、表单页（form）' AFTER `module`;
+ALTER TABLE `zt_ai_agent` ADD COLUMN `actionPurpose` varchar(100) NOT NULL DEFAULT '' COMMENT '操作目的编码' AFTER `displayPosition`;
+
+UPDATE `zt_ai_agent` SET `displayPosition` = 'detail', `actionPurpose` = `targetForm` WHERE `displayPosition` = '';
+ALTER TABLE `zt_ai_agent` ADD COLUMN `skill` int unsigned DEFAULT 0 COMMENT '关联的技能ID' AFTER `knowledgeLib`;
+
+CREATE TABLE `zt_ai_skill` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `name` varchar(255) NOT NULL DEFAULT '' COMMENT 'Skill名称',
+  `type` varchar(20) NOT NULL DEFAULT 'private' COMMENT '类型：个人/公开',
+  `category` int unsigned NOT NULL DEFAULT 0 COMMENT '技能类型(模块ID)',
+  `status` varchar(20) NOT NULL DEFAULT '' COMMENT '状态',
+  `fromID` int unsigned NOT NULL DEFAULT 0 COMMENT '来源ID（可将公开技能复制成个人技能）',
+  `skillID` varchar(64) NOT NULL DEFAULT '' COMMENT 'ZAI中的skillID',
+  `desc` text DEFAULT NULL COMMENT '描述',
+  `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '创建人',
+  `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
+  `editedBy` varchar(30) NOT NULL DEFAULT '' COMMENT '最后修改人ID',
+  `editedDate` datetime DEFAULT NULL COMMENT '最后修改时间',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+
+CREATE TABLE `zt_ai_useragent` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT '主键ID',
+  `account` varchar(30) NOT NULL DEFAULT '' COMMENT '禅道用户名',
+  `agent` varchar(255) NOT NULL DEFAULT '' COMMENT 'ZAI agent ID',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB;
+CREATE UNIQUE INDEX `uk_account_agent` ON `zt_ai_useragent` (`account`, `agent`);
 -- DROP TABLE IF EXISTS `ops_artifact_assets`;
 CREATE TABLE IF NOT EXISTS `ops_artifact_assets` (
   `id` int unsigned NOT NULL AUTO_INCREMENT COMMENT 'ID',
@@ -279,7 +309,7 @@ CREATE TABLE IF NOT EXISTS `ops_pipeline_executions` (
   `duration` int unsigned NOT NULL DEFAULT 0 COMMENT '执行时长(s)',
   `status` varchar(50) NOT NULL DEFAULT '' COMMENT '执行状态',
   `error` varchar(500) NOT NULL DEFAULT '' COMMENT '执行错误信息（无错误则为空字符串）',
-  `queue` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
+  `number` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
   `logs` longtext DEFAULT NULL COMMENT 'Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -357,6 +387,7 @@ CREATE TABLE IF NOT EXISTS `ops_ppm` (
   `reviewers` varchar(255) NOT NULL DEFAULT '' COMMENT '最新节点评审人',
   `approvalflow` int unsigned NOT NULL DEFAULT 0 COMMENT '审批流模板',
   `reviewStatus` varchar(20) NOT NULL DEFAULT '' COMMENT '审批状态',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='合并请求主表';
 CREATE INDEX `idx_createdBy` ON `ops_ppm` (`createdBy`);
@@ -1035,3 +1066,18 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('scm', '代码版本管理', 0);
 
 ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=svn&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=git&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=checkCompileStatus';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=exec';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=mr&methodName=syncMR';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=initQueue';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';
+
+ALTER TABLE `zt_testrun` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;
+ALTER TABLE `zt_suitecase` ADD COLUMN `caseVersion` smallint unsigned NOT NULL DEFAULT 0 COMMENT '用例版本' AFTER `case`;
+
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'project',   '', 'ganttVersionSettings', 'deliverable');
+INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'execution', '', 'ganttVersionSettings', 'gantt');

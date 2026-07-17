@@ -28,7 +28,7 @@ class branchRulesEntry extends baseEntry
             return $this->sendError(401, 'Unauthorized');
         }
 
-        $branchName = $this->param('branchName');
+        $branchName = urldecode($this->param('branchName'));
         $repoID     = $this->param('id');
 
         $this->loadModel('repobranchrule');

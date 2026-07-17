@@ -1,0 +1,28 @@
+title: table ops_repofiles
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "id"
+    range: "1-10000"
+  - field: repo
+    note: "仓库ID"
+    range: "1,2,3"
+  - field: revision
+    note: "修订版本"
+    range: "0"
+  - field: path
+    note: "路径"
+    range: "src/App.php,module/repo/model.php,docs/readme.md"
+  - field: oldPath
+    note: "旧路径"
+    range: "src/Legacy.php,module/repo/old.php,docs/old-readme.md"
+  - field: parent
+    note: "父级ID"
+    range: "src,module,docs"
+  - field: type
+    note: "类型"
+    range: "file,dir,symlink"
+  - field: action
+    note: "动作"
+    range: "A,M,D,R"

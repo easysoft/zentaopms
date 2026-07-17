@@ -414,6 +414,19 @@ class projectStory extends control
         echo $this->fetch('story', 'batchClose', "productID=$productID&executionID=$executionID&storyType=$storyType&from=$from");
     }
 
+    /**
+     * Batch submit review.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID = 0, string $storyType = 'story', string $storyIdList = '')
+    {
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType&storyIdList=$storyIdList");
+    }
+
 
     /**
      * Batch change the plan of story.

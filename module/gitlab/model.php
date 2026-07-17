@@ -15,19 +15,6 @@ class gitlabModel extends model
 {
 
     /**
-     * 获取gitlab根据id。
-     * Get a gitlab by id.
-     *
-     * @param  int $id
-     * @access public
-     * @return object|false
-     */
-    public function getByID(int $id): object|false
-    {
-        return $this->loadModel('pipeline')->getByID($id);
-    }
-
-    /**
      * 发送一个get api请求。
      * Send an api get request.
      *
@@ -127,5 +114,136 @@ class gitlabModel extends model
 
         $apiRoot .= '&sudo=' . $users[0]->id;
         return $this->apiGet($apiRoot, '/user');
+    }
+
+    /**
+     * 通过api创建一个流水线。
+     * Create a new pipeline by api.
+     *
+     * @param  string $url
+     * @param  string $token
+     * @param  string $projectID
+     * @param  object $params
+     * @access public
+     * @return object
+     * @docment https://docs.gitlab.com/ee/api/pipelines.html#create-a-new-pipeline
+     */
+    public function apiCreatePipeline(string $url, string $token, string $projectID, object $params): object|array|null
+    {
+        if(!is_string($params)) $params = json_encode($params);
+        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
+        $url = sprintf($apiRoot, "/projects/{$projectID}/pipeline");
+        return json_decode(commonModel::http($url, $params, array(), array("Content-Type: application/json")));
+    }
+
+    /**
+     * 错误处理。
+     * Api error handling.
+     *
+     * @param  object $response
+     * @access public
+     * @return bool
+     */
+    public function apiErrorHandling(object $response): bool
+    {
+        if(!empty($response->error))
+        {
+            dao::$errors[] = $response->error;
+            return false;
+        }
+        if(!empty($response->message))
+        {
+            if(is_string($response->message))
+            {
+                $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
+            }
+            else
+            {
+                foreach($response->message as $field => $fieldErrors)
+                {
+                    if(empty($fieldErrors)) continue;
+
+                    if(is_string($fieldErrors))
+                    {
+                        $errorKey = array_search($fieldErrors, $this->lang->gitlab->apiError);
+                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gitlab->errorLang, $errorKey);
+                    }
+                    else
+                    {
+                        foreach($fieldErrors as $error)
+                        {
+                            $errorKey = array_search($error, $this->lang->gitlab->apiError);
+                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitlab->errorLang, $errorKey);
+                        }
+                    }
+                }
+            }
+        }
+
+        if(!$response) dao::$errors[] = false;
+        return false;
+    }
+
+    /**
+     * 通过api获取执行信息。
+     * Get execution info by api.
+     *
+     * @param  int    $number
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return array|object
+     */
+    public function apiGetExecInfo(int $number, string $pipelineName, object $provider): array|object
+    {
+        if(empty($provider->token) || empty($provider->url)) return array();
+
+        $url = rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
+        $url = sprintf($url, "/projects/{$pipelineName}/pipelines/{$number}");
+
+        $response = json_decode(common::http($url, null, array(), array('Accept: application/json'), 'json'));
+        if(empty($response) || empty($response->status)) return array();
+        return $response;
+    }
+
+    /**
+     * 通过api获取流水线的日志。
+     * Get pipeline logs by api.
+     *
+     * @param  int    $buildNumber
+     * @param  string $pipelineName
+     * @param  object $provider
+     * @access public
+     * @return string
+     */
+    public function getLogs(int $buildNumber, string $pipelineName, object $provider): string
+    {
+        if(empty($provider->token) || empty($provider->url)) return '';
+
+        $apiURL = rtrim($provider->url, '/') . '/api/v4%s' . "?private_token={$provider->token}";
+        $url    = sprintf($apiURL, "/projects/{$pipelineName}/pipelines/{$buildNumber}/jobs");
+        $jobs   = json_decode(commonModel::http($url));
+        if(empty($jobs)) return '';
+
+        $this->loadModel('ci');
+        $logs = '';
+        foreach($jobs as $gitlabJob)
+        {
+            if(!is_object($gitlabJob)) continue;
+
+            if(empty($gitlabJob->duration)) $gitlabJob->duration = '-';
+            $logs .= "<font style='font-weight:bold'>&gt;&gt;&gt; Job: {$gitlabJob->name}, Stage: {$gitlabJob->stage}, Status: {$gitlabJob->status}, Duration: {$gitlabJob->duration} Sec\r\n </font>";
+            $logs .= "Job URL: <a href=\"{$gitlabJob->web_url}\" target='_blank'>$gitlabJob->web_url</a> \r\n";
+
+            $jobLogUrl = sprintf($apiURL, "/projects/{$pipelineName}/jobs/{$gitlabJob->id}/trace");
+            $jobLog    = commonModel::http($jobLogUrl);
+            if(empty($jobLog)) continue;
+
+            $logs .= $this->ci->transformAnsiToHtml($jobLog);
+        }
+
+        $this->dao->update(TABLE_PIPELINEEXEC)->set('logs')->eq($logs)->where('number')->eq($buildNumber)->exec();
+        return $logs;
     }
 }

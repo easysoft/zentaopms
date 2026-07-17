@@ -18,9 +18,18 @@ cid=18035
 
 */
 
-zenData('pipeline')->gen(5);
-zenData('repo')->gen(0);
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
+
+$gitlab = array(
+    'SCM'            => 'Gitlab',
+    'serviceHost'    => 1,
+    'serviceProject' => 100,
+    'name'           => 'zzxx',
+    'path'           => '/var/www/html/zentaopms/www/data/repo/zzxx',
+    'encoding'       => 'utf-8',
+    'client'         => '',
+    'desc'           => '',
+);
 
 $gitea = array(
     'SCM'            => 'Gitea',

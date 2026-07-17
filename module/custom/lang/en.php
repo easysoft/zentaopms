@@ -192,6 +192,7 @@ $lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = 'Role';
 $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact Methods';
+$lang->custom->user->fields['outside']      = 'Show External Users';
 $lang->custom->user->fields['deleted']      = 'Show Deleted Users';
 
 $lang->custom->currentLang = 'Apply to Current Language';
@@ -201,6 +202,7 @@ $lang->custom->confirmRestore = 'Are you sure you want to restore default settin
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userFieldNotice     = 'Controls the visibility of the above fields on user-related pages. Leave blank to show all.';
+$lang->custom->notice->outside             = 'External users can still be assigned in all personnel-related places, such as: program manager, product owner, project manager, execution manager, project team members, execution team members, whitelist, contacts, assignees, etc.';
 $lang->custom->notice->canNotAdd           = 'This item is used in calculations; custom additions are not available.';
 $lang->custom->notice->forceReview         = '%s submitted by specified users require review.';
 $lang->custom->notice->forceNotReview      = "%s submitted by specified users do not require review.";
@@ -254,6 +256,9 @@ $lang->custom->forceReview    = 'Mandatory Review';
 $lang->custom->forceNotReview = 'No Review Required';
 $lang->custom->reviewList[1]  = 'Enable';
 $lang->custom->reviewList[0]  = 'Disable';
+
+$lang->custom->outsideList[1] = 'Show';
+$lang->custom->outsideList[0] = 'Hide';
 
 $lang->custom->deletedList[1] = 'Show';
 $lang->custom->deletedList[0] = 'Hide';

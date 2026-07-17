@@ -48,3 +48,4 @@ $lang->message->label->archived     = '歸檔';
 $lang->message->label->restore      = '還原';
 $lang->message->label->moved        = '移動';
 $lang->message->label->nearing      = '到期提醒';
+$lang->message->label->mentioned    = '@通知';

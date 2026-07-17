@@ -9,18 +9,22 @@
  * @version     $Id: zh-cn.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
  * @link        https://www.zentao.net
  */
-$lang->testsuite->create           = "Erstellen";
-$lang->testsuite->delete           = "Löschen";
-$lang->testsuite->view             = "Übersicht";
-$lang->testsuite->edit             = "Bearbeiten";
-$lang->testsuite->browse           = "Liste";
-$lang->testsuite->linkCase         = "Fälle";
-$lang->testsuite->linkVersion      = "Version";
-$lang->testsuite->unlinkCase       = "Verknüpfung aufheben";
-$lang->testsuite->unlinkCaseAction = "Unlink Case";
-$lang->testsuite->batchUnlinkCases = "Mehrere Verknüpfungen aufheben";
-$lang->testsuite->deleted          = 'gelöscht';
-$lang->testsuite->successSaved     = 'Saved';
+$lang->testsuite->create                 = "Erstellen";
+$lang->testsuite->delete                 = "Löschen";
+$lang->testsuite->view                   = "Übersicht";
+$lang->testsuite->edit                   = "Bearbeiten";
+$lang->testsuite->browse                 = "Liste";
+$lang->testsuite->linkCase               = "Fälle";
+$lang->testsuite->linkVersion            = "Version";
+$lang->testsuite->unlinkCase             = "Verknüpfung aufheben";
+$lang->testsuite->unlinkCaseAction       = "Unlink Case";
+$lang->testsuite->batchUnlinkCases       = "Mehrere Verknüpfungen aufheben";
+$lang->testsuite->deleted                = 'gelöscht';
+$lang->testsuite->successSaved           = 'Saved';
+$lang->testsuite->confirmCaseChange      = 'Confirm Case Change';
+$lang->testsuite->ignoreCaseChange       = 'Ignore Case Change';
+$lang->testsuite->batchConfirmCaseChange = 'Batch Confirm Case Change';
+$lang->testsuite->batchIgnoreCaseChange  = 'Batch Ignore Case Change';
 
 $lang->testsuite->id             = 'ID';
 $lang->testsuite->pri            = 'Priority';

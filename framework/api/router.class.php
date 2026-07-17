@@ -1255,6 +1255,43 @@ class api extends router
     }
 
     /**
+     * 检查 APIV2 请求的权限。路由重定向改变控制器方法后，使用原始路由方法进行权限校验。
+     * Check APIV2 privilege using the route's original method when a redirect changes the control method.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkPriv()
+    {
+        [$module, $method] = $this->resolvePrivTarget();
+        global $common;
+        if($module and $method and !$common->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
+        {
+            die(helper::response(array('error' => 'Access not allowed'), 403));
+        }
+    }
+
+    /**
+     * 解析权限校验目标。路由重定向后的控制方法用于实际执行，原始方法用于权限判断。
+     * Resolve the privilege target before redirects change the control method.
+     *
+     * @access protected
+     * @return array
+     */
+    protected function resolvePrivTarget(): array
+    {
+        $module = $this->getModuleName();
+        $method = $this->getMethodName();
+
+        if($module == 'my' && !empty($this->rawMethod) && $method != $this->rawMethod)
+        {
+            $method = $this->rawMethod;
+        }
+
+        return array($module, $method);
+    }
+
+    /**
      * 检查传入的对象是否有权限访问
      *
      * Check object priv.
@@ -1542,6 +1579,69 @@ class api extends router
                 if(!isset($_POST[$key])) $_POST[$key] = $value;
             }
         }
+
+        $this->mergeWorkflowFields();
+    }
+
+    /**
+     * 为工作流更新请求补齐未提交的字段值。
+     * Merge missing workflow fields from current record for partial update requests.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function mergeWorkflowFields(): void
+    {
+        if($this->apiVersion != 'v2') return;
+        if($this->action != 'put') return;
+        if(empty($this->rawModule) || empty($this->rawMethod)) return;
+        if($this->methodName != 'edit') return;
+        if(!isset($_GET['dataID']) || !is_numeric($_GET['dataID'])) return;
+        if($this->config->edition == 'open') return;
+
+        $flow = $this->loadModel('workflow', 'flow')->getByModule($this->rawModule);
+        if(empty($flow) || empty($flow->table)) return;
+
+        $action = $this->loadModel('workflowaction', 'flow')->getByModuleAndAction($flow->module, $this->rawMethod);
+        if(empty($action) || $action->extensionType != 'override') return;
+
+        $fieldControls = $this->loadModel('workflowfield', 'flow')->getControlPairs($flow->module);
+        if(empty($fieldControls)) return;
+
+        $currentData = $this->loadModel('flow', 'flow')->getDataByID($flow, (int)$_GET['dataID']);
+        if(empty($currentData)) return;
+
+        $_POST = $this->mergeWorkflowMissingFields($_POST, $currentData, $fieldControls);
+    }
+
+    /**
+     * 用当前记录值回填工作流请求中缺失的字段。
+     * Merge workflow missing fields with current data.
+     *
+     * @param  array  $postData
+     * @param  object $currentData
+     * @param  array  $fieldControls
+     * @access protected
+     * @return array
+     */
+    protected function mergeWorkflowMissingFields(array $postData, object $currentData, array $fieldControls): array
+    {
+        foreach($fieldControls as $field => $control)
+        {
+            if(array_key_exists($field, $postData)) continue;
+            if(!isset($currentData->$field)) continue;
+            if(in_array($control, array('file'))) continue;
+
+            $value = $currentData->$field;
+            if(($control == 'multi-select' || $control == 'checkbox') && !is_array($value))
+            {
+                $value = strlen((string)$value) ? explode(',', (string)$value) : array();
+            }
+
+            $postData[$field] = $value;
+        }
+
+        return $postData;
     }
 
     /**

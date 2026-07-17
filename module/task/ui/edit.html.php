@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 $taskStatus = isset($task->rawStatus) ? $task->rawStatus : $task->status;
 
 /* ====== Preparing and processing page data ====== */

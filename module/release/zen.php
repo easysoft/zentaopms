@@ -179,10 +179,11 @@ class releaseZen extends release
      * @param  object    $storyPager
      * @param  object    $bugPager
      * @param  object    $leftBugPager
+     * @param  object    $escapedBugPager
      * @access protected
      * @return void
      */
-    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, ?object $storyPager = null, ?object $bugPager = null, ?object $leftBugPager = null): void
+    protected function assignVarsForView(object $release, string $type, string $link, string $param, string $orderBy, ?object $storyPager = null, ?object $bugPager = null, ?object $leftBugPager = null, ?object $escapedBugPager = null): void
     {
         $sort = common::appendOrder($orderBy);
         if(strpos($sort, 'pri_') !== false) $sort = str_replace('pri_', 'priOrder_', $sort);
@@ -210,33 +211,39 @@ class releaseZen extends release
         if($type == 'leftBug' && strpos($orderBy, 'severity_') !== false) $sort = str_replace('severity_', 'severityOrder_', $sort);
         $leftBugs = $this->release->getBugList($leftBugIdList, $type == 'leftBug' ? $sort : '', $leftBugPager, 'left');
 
+        $sort = common::appendOrder($orderBy);
+        $escapedBugs = $this->release->getEscapedBugList($release, $type == 'escapedBug' ? $sort : '', $escapedBugPager);
+
         $product = $this->loadModel('product')->getByID($release->product);
 
-        $this->view->title        = "RELEASE #$release->id $release->name/" . $product->name;
-        $this->view->actions      = $this->loadModel('action')->getList('release', $release->id);
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyPager   = $storyPager;
-        $this->view->stories      = $stories;
-        $this->view->release      = $release;
-        $this->view->orderBy      = $orderBy;
-        $this->view->type         = $type;
-        $this->view->link         = $link;
-        $this->view->grades       = $this->loadModel('story')->getGradePairs('story', 'all');
-        $this->view->showGrade    = $this->config->edition == 'ipd';
-        $this->view->param        = $param;
-        $this->view->storyCases   = $this->loadModel('testcase')->getStoryCaseCounts(array_column($stories, 'id'));
-        $this->view->summary      = $this->product->summary($stories);
-        $this->view->builds       = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
-        $this->view->bugs         = $bugs;
-        $this->view->leftBugs     = $leftBugs;
-        $this->view->bugPager     = $bugPager;
-        $this->view->leftBugPager = $leftBugPager;
+        $this->view->title           = "RELEASE #$release->id $release->name/" . $product->name;
+        $this->view->actions         = $this->loadModel('action')->getList('release', $release->id);
+        $this->view->users           = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyPager      = $storyPager;
+        $this->view->stories         = $stories;
+        $this->view->release         = $release;
+        $this->view->orderBy         = $orderBy;
+        $this->view->type            = $type;
+        $this->view->link            = $link;
+        $this->view->grades          = $this->loadModel('story')->getGradePairs('story', 'all');
+        $this->view->showGrade       = $this->config->edition == 'ipd';
+        $this->view->param           = $param;
+        $this->view->storyCases      = $this->loadModel('testcase')->getStoryCaseCounts(array_column($stories, 'id'));
+        $this->view->summary         = $this->product->summary($stories);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs(array($release->product), 'all', 'withbranch|hasproject|hasdeleted', 0, 'execution', '', true);
+        $this->view->bugs            = $bugs;
+        $this->view->leftBugs        = $leftBugs;
+        $this->view->escapedBugs     = $escapedBugs;
+        $this->view->bugPager        = $bugPager;
+        $this->view->leftBugPager    = $leftBugPager;
+        $this->view->escapedBugPager = $escapedBugPager;
 
         if($this->app->getViewType() == 'json')
         {
             unset($this->view->storyPager);
             unset($this->view->bugPager);
             unset($this->view->leftBugPager);
+            unset($this->view->escapedBugPager);
         }
     }
 

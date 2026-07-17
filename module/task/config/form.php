@@ -39,6 +39,7 @@ $config->task->form->assign['assignedDate']   = array('type' => 'datetime', 'req
 $config->task->form->assign['left']           = array('type' => 'float',    'required' => false, 'default' => 0);
 $config->task->form->assign['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->assign['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->task->form->assign['comment']        = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->cancel = array();
 $config->task->form->cancel['status']  = array('type' => 'string', 'required' => false, 'default' => 'cancel');
@@ -138,6 +139,7 @@ $config->task->form->pause = array();
 $config->task->form->pause['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->pause['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->pause['status']         = array('type' => 'string',   'required' => false, 'default' => 'pause');
+$config->task->form->pause['comment']        = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->activate = array();
 $config->task->form->activate['mode']           = array('type' => 'string',   'required' => false, 'default' => '');
@@ -165,6 +167,7 @@ $config->task->form->start['assignedTo']     = array('type' => 'string',   'requ
 $config->task->form->start['realStarted']    = array('type' => 'datetime', 'required' => false, 'default' => null);
 $config->task->form->start['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->start['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->task->form->start['comment']        = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->finish = array();
 $config->task->form->finish['realStarted']     = array('type' => 'datetime', 'required' => true);
@@ -178,6 +181,7 @@ $config->task->form->finish['assignedDate']    = array('type' => 'string',   're
 $config->task->form->finish['finishedBy']      = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->finish['lastEditedBy']    = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->finish['lastEditedDate']  = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->task->form->finish['comment']         = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->close = array();
 $config->task->form->close['status']         = array('type' => 'string',   'required' => false, 'default' => 'closed');
@@ -187,6 +191,7 @@ $config->task->form->close['closedBy']       = array('type' => 'string',   'requ
 $config->task->form->close['closedDate']     = array('type' => 'datetime', 'required' => false, 'default' => $now);
 $config->task->form->close['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => $account);
 $config->task->form->close['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
+$config->task->form->close['comment']        = array('type' => 'string',   'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->task->form->testTask->create = array();
 $config->task->form->testTask->create['selectTestStory'] = array('type' => 'string', 'required' => false, 'default' => 'off');

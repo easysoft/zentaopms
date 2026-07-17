@@ -7,6 +7,7 @@ $fields = defineFieldList('task.create', 'task');
 
 /* Set module field. */
 $fields->field('module')
+    ->data(['composite' => 'module'])
     ->checkbox(array('text' => $lang->task->allModule, 'name' => 'isShowAllModule', 'checked' => data('showAllModule')))
     ->control(array('control' => 'picker', 'required' => true))
     ->items(data('modulePairs'))
@@ -96,6 +97,7 @@ if($config->vision != 'lite')
 }
 
 $fields->field('assignedTo')
+    ->data(['composite' => 'assignedTo'])
     ->label($lang->task->assignedTo)
     ->required(strpos($config->task->create->requiredFields, 'assignedTo') !== false)
     ->checkbox(array('text' => $lang->task->multiple, 'name' => 'multiple', 'checked' => !empty(data('task.mode'))))

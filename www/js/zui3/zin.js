@@ -8,7 +8,7 @@
     const isIndexPage   = currentModule === 'index' && currentMethod === 'index';
     const moduleMethod  = `${currentModule}-${currentMethod}`;
 
-    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-deny|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|instance-terminal|ai-chat|instance-logs|gitfox-devopsintroduction'.split('|'));
+    const selfOpenList = new Set('index|tutorial|install|upgrade|sso|cron|misc|user-login|user-logout|user-reset|user-forgetpassword|user-resetpassword|my-changepassword|my-preference|file-read|file-download|file-preview|file-uploadimages|file-ajaxwopifiles|report-annualdata|misc-captcha|execution-printkanban|traincourse-ajaxuploadlargefile|traincourse-playvideo|screen-view|zanode-create|screen-ajaxgetchart|instance-terminal|ai-chat|instance-logs|gitfox-devopsintroduction'.split('|'));
     const iframeList = new Set(['cron-index', 'zanode-create']);
     const isAllowSelfOpen = !iframeList.has(moduleMethod) &&
         (isIndexPage
@@ -2016,6 +2016,16 @@
         {
             const frameElement = window.frameElement;
             if(frameElement && parent.window.$) parent.window.$(frameElement).trigger('ready.app');
+
+            $(document).on('mousemove', (e) =>
+            {
+                const frame = window.frameElement;
+                if(!frame || !parent.document) return;
+
+                const rect  = frame.getBoundingClientRect();
+                const event = new MouseEvent('mousemove', {bubbles: true, cancelable: true, view: parent.window, detail: e.detail, clientX: e.clientX + rect.left, clientY: e.clientY + rect.top, screenX: e.screenX, screenY: e.screenY, ctrlKey: e.ctrlKey, shiftKey: e.shiftKey, altKey: e.altKey, metaKey: e.metaKey, button: e.button, buttons: e.buttons, relatedTarget: frame});
+                parent.document.dispatchEvent(event);
+            });
         }
 
         if(DEBUG)

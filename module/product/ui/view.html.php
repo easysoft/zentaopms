@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
+require_once dirname(dirname(dirname(__DIR__))) . DS . 'lib' . DS . 'zin' . DS . 'wg' . DS . 'aiagententry' . DS . 'v1.php';
 
 /* Flag variable for hiding product code. */
 $hiddenCode    = (!isset($config->setCode) || $config->setCode == 0 || empty($product->code));
@@ -176,7 +176,18 @@ div
                             setClass('text-gray')
                         )
                     ),
-                    div(setClass('ai-menu-box flex-auto'))
+                    div
+                    (
+                        setClass('ai-menu-box flex-auto flex justify-end'),
+                        aiAgentEntry
+                        (
+                            set::module('product'),
+                            set::method('view'),
+                            set::type('detail'),
+                            set::objectID($product->id),
+                            set::objectVarName('product')
+                        )
+                    )
                 ),
                 div
                 (

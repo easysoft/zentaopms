@@ -226,6 +226,8 @@ class baseControl
         $installed = $this->config->installed ?? false;
         if($installed && !in_array($this->moduleName, $this->config->openModules) && empty($this->app->user) && !$this->loadModel('common')->isOpenMethod($this->moduleName, $this->methodName))
         {
+            if($this->app->apiVersion == 'v2' && $this->app->action != 'options') throw EndResponseException::create(helper::response(array('error' => 'Unauthorized'), 401));
+
             $uri = $this->app->getURI(true);
             if($this->moduleName == 'message' and $this->methodName == 'ajaxgetmessage')
             {

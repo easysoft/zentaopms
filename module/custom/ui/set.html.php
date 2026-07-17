@@ -358,6 +358,31 @@ elseif($module == 'user' && $field == 'contactField')
         );
     }
 }
+elseif($module == 'user' && $field == 'outside')
+{
+    $formItems[] = formGroup
+    (
+        set::width('1/2'),
+        $isEn ? null : set::labelWidth('100px'),
+        set::label($lang->custom->user->fields['outside']),
+        set::name('showOutside'),
+        set::value($showOutside),
+        set::control('radioListInline'),
+        set::items($lang->custom->outsideList)
+    );
+    $formItems[] = formRow
+    (
+        formGroup
+        (
+            set::width('full'),
+            span
+            (
+                icon('info text-warning mr-1 mt-0.5'),
+                span($lang->custom->notice->outside)
+            )
+        )
+    );
+}
 elseif($module == 'user' && $field == 'deleted')
 {
     $formItems[] = formGroup

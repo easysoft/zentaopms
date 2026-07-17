@@ -23,11 +23,19 @@ featureBar
     li(searchToggle(set::module($this->app->rawMethod . 'Testcase'), set::open($browseType == 'bysearch')))
 );
 
-$canBatchEdit = common::hasPriv('testcase', 'batchEdit');
-$footToolbar  = array('items' => array
-(
-    $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&from={$app->rawMethod}")) : null
-), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+$canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
+$canBatchRun    = common::hasPriv('testtask', 'batchRun') && $app->rawMethod == 'work';
+$canBatchAction = ($canBatchEdit || $canBatchRun);
+
+$footToolbar = null;
+if($canBatchAction)
+{
+    $footToolbar    = array('items' => array
+    (
+        $canBatchEdit ? array('text' => $lang->edit, 'className' => 'batch-btn', 'data-url' => helper::createLink('testcase', 'batchEdit', "productID=0&branch=all&type=case&from={$app->rawMethod}")) : null,
+        $canBatchRun  ? array('text' => $lang->testtask->runCase, 'className' => 'batch-btn batch-run not-open-url', 'data-url' => helper::createLink('testtask', 'batchRun', "productID=0&orderBy=id_desc&from={$app->rawMethod}")) : null
+    ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
+}
 
 if($browseType == 'openedbyme' || $app->rawMethod == 'contribute')
 {
@@ -65,6 +73,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::customCols(true),
     set::userMap($users),
+    set::rowKey('run'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->testcase->failCheckedSummary),

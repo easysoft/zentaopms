@@ -452,4 +452,208 @@ class messageModel extends model
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($expiredIdList)->exec();
     }
+
+    /**
+     * 从 html 中获取提及的用户。
+     * Get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return array
+     */
+    public function getMentionUsersFromHtml(string $html): array
+    {
+        $pattern = '/<span[^>]*?\bmention-label\b[^>]*?data-type=["\']mention["\'][^>]*?data-id=["\']([^"\']+)["\'][^>]*>/is';
+
+        $accounts = array();
+        if(preg_match_all($pattern, $html, $matches))
+        {
+            foreach($matches[1] as $match)
+            {
+                $account = trim($match);
+                if($account) $accounts[$account] = $account;
+            }
+        }
+        return array_keys($accounts);
+    }
+
+    /**
+     * 从 BlockSuite 文档 JSON 中获取被 @ 的用户账号。
+     * Get mention users from doc raw content.
+     *
+     * @param  string $rawContent
+     * @access public
+     * @return string[]
+     */
+    public function getMentionUsersFromDoc(string $rawContent): array
+    {
+        if(empty($rawContent)) return array();
+
+        $data = json_decode($rawContent, true);
+        if(empty($data)) return array();
+
+        $callback = function(array $block, array $accounts) : array
+        {
+            if(empty($block['props']['text']['delta']) || !is_array($block['props']['text']['delta'])) return $accounts;
+
+            $delta = $block['props']['text']['delta'];
+            foreach($delta as $op)
+            {
+                if(empty($op['attributes']['mention']['id'])) continue;
+
+                $account = trim($op['attributes']['mention']['id']);
+                if(!empty($account)) $accounts[$account] = $account;
+            }
+
+            return $accounts;
+        };
+
+        $mentionUsers = $this->loadModel('doc')->forEachDocBlock($data, $callback, array(), 'affine:paragraph');
+
+        return array_keys($mentionUsers);
+    }
+
+    /**
+     * 根据表单设置获取被@的用户。
+     * Extract mention uers from form.
+     *
+     * @param  array $formConfig
+     * @param  object $object
+     * @access public
+     * @return array
+     */
+    public function extractMentionUsersFromForm(array $formConfig, object $object): array
+    {
+        $users = array();
+        foreach($formConfig as $fieldKey => $fieldConfig)
+        {
+            if(isset($fieldConfig['control']) && $fieldConfig['control'] == 'editor' && !empty($object->$fieldKey))
+            {
+                $users = array_merge($users, $this->getMentionUsersFromHtml((string)$object->$fieldKey));
+            }
+        }
+
+        return array_values(array_unique($users));
+    }
+
+    /**
+     * 给被@的人发送消息通知。
+     * Send notice to mention users.
+     *
+     * @param  string $objectType
+     * @param  string $method
+     * @param  int    $actionID
+     * @param  object $object
+     * @param  object $oldObject
+     * @access public
+     * @return void
+     */
+    public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, object $oldObject = null)
+    {
+        $isBlocksuite = $objectType == 'doc';
+        if($isBlocksuite)
+        {
+            $mentionUsers = $this->getMentionUsersFromDoc($object->rawContent);
+            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc($oldObject->rawContent);
+        }
+        else
+        {
+            $module = $method == 'comment' ? 'action' : $objectType;
+            if(empty($this->config->{$module}->form->{$method})) return;
+
+            $formConfig = $this->config->{$module}->form->{$method};
+
+            $mentionUsers = $this->extractMentionUsersFromForm($formConfig, $object);
+            if($oldObject) $oldMentionUsers = $this->extractMentionUsersFromForm($formConfig, $oldObject);
+        }
+
+        if(!empty($oldMentionUsers)) $mentionUsers = array_diff($mentionUsers, $oldMentionUsers);
+
+        if(empty($mentionUsers)) return;
+
+        $messageSetting = $this->config->message->setting;
+        if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
+        if(empty($messageSetting)) return;
+
+        $action = $this->loadModel('action')->getByID($actionID);
+        if(!$action) return;
+
+        $actor           = zget($action, 'actor', '');
+        $user            = $this->loadModel('user')->getByID($actor);
+        $actorRealname   = zget($user, 'realname', $actor);
+        $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
+        $objectTitle     = strtoupper($objectType) . '#' . sprintf("%03d", $object->id) . zget($object, $objectNameField, '');
+        $viewLink        = helper::createLink($objectType, 'view', "id={$object->id}");
+
+        if(isset($messageSetting['mail']))
+        {
+            $actions = $messageSetting['mail']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            {
+                $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
+                $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
+            }
+        }
+
+        if(isset($messageSetting['message']))
+        {
+            $actions = $messageSetting['message']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            {
+                $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
+                $now  = helper::now();
+                foreach($mentionUsers as $mentionUser)
+                {
+                    if($mentionUser == $actor || empty($mentionUser)) continue;
+
+                    $notify = new stdclass();
+                    $notify->objectType  = 'message';
+                    $notify->action      = $actionID;
+                    $notify->toList      = ",{$mentionUser},";
+                    $notify->data        = $data;
+                    $notify->status      = 'wait';
+                    $notify->createdBy   = $actor;
+                    $notify->createdDate = $now;
+                    $notify->sendTime    = null;
+
+                    $this->dao->insert(TABLE_NOTIFY)->data($notify)->exec();
+                }
+            }
+        }
+
+        if(isset($messageSetting['webhook']))
+        {
+            $actions = $messageSetting['webhook']['setting'];
+            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            {
+                $webhooks = $this->loadModel('webhook')->getList();
+                if(!$webhooks) return true;
+
+                $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
+                foreach($webhooks as $id => $webhook)
+                {
+                    $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+                    $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
+                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
+                    if(!$data) continue;
+
+                    if($webhook->sendType == 'async')
+                    {
+                        if($webhook->type == 'dinguser')
+                        {
+                            $openIdList = $this->webhook->getOpenIdList($webhook->id, $actionID);
+                            if(empty($openIdList)) continue;
+                        }
+
+                        $this->webhook->saveData($id, $actionID, $data, $actor);
+                        continue;
+                    }
+
+                    $result = $this->webhook->fetchHook($webhook, $data, $actionID, $mentionUsers);
+                    if(!empty($result)) $this->webhook->saveLog($webhook, $actionID, $data, (string)$result);
+                }
+            }
+        }
+    }
 }

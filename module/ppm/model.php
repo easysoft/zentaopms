@@ -1116,7 +1116,7 @@ class ppmModel extends model
 
         $response = json_decode(commonModel::http($url, $params, array(), $apiRoot->header, 'json', 'GET'));
         $response = $this->gitfox->getResponse($response);
-        if(dao::isError()) return array();
+        if(empty($response) || dao::isError()) return array();
 
         if($ppm->status == 'merged')
         {

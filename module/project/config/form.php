@@ -43,13 +43,18 @@ unset($config->project->form->edit['stageBy']);
 unset($config->project->form->edit['multiple']);
 
 $config->project->form->start['realBegan'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
+$config->project->form->start['comment']   = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->project->form->close['realEnd'] = array('type' => 'date', 'required' => true, 'filter' => 'trim');
+$config->project->form->close['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->project->form->activate['begin']        = array('type' => 'date',   'required' => true);
 $config->project->form->activate['end']          = array('type' => 'date',   'required' => true);
 $config->project->form->activate['readjustTime'] = array('type' => 'int',    'required' => false, 'default' => '');
 $config->project->form->activate['readjustTask'] = array('type' => 'array',  'required' => false, 'default' => '');
+$config->project->form->activate['comment']      = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+
+$config->project->form->suspend['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
 
 $config->project->form->batchedit['id']     = array('type' => 'int',    'required' => false, 'base' => true);
 $config->project->form->batchedit['parent'] = array('type' => 'int',    'required' => false);

@@ -141,11 +141,8 @@ class todo extends control
             if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
             /* update a todo. */
-            $changes = $this->todo->update($todoID, $todo);
+            $this->todo->update($todoID, $todo);
             if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-
-            /* Handle data after edit todo. */
-            $this->todoZen->afterEdit($todoID, $changes);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));

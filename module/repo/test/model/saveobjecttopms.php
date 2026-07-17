@@ -19,20 +19,25 @@ cid=18097
 - 工时计算
  - 第2条的objectID属性 @2
  - 第2条的objectType属性 @task
-- 修复bug1
- - 第1条的objectID属性 @1
- - 第1条的objectType属性 @bug
-- 修复bug2
- - 第2条的objectID属性 @2
- - 第2条的objectType属性 @bug
+- 修复bug101
+ - 第101条的objectID属性 @101
+ - 第101条的objectType属性 @bug
+- 修复bug102
+ - 第102条的objectID属性 @102
+ - 第102条的objectType属性 @bug
 
 */
 
 zenData('task')->gen(10);
+
+global $tester;
+$tester->dao->delete()->from(TABLE_BUG)->where('id')->in('101,102')->exec();
+
 $bug = zenData('bug');
-$bug->execution->range('0');
-$bug->gen(10);
-zenData('repo')->loadYaml('repo')->gen(4);
+$bug->id->range('101-102');
+$bug->product->range('1{2}');
+$bug->execution->range('0{2}');
+$bug->gen(2);
 $dao->exec("delete from zt_action where action='gitcommited'");
 
 $repoID   = 1;
@@ -62,7 +67,7 @@ r($result) && p('1:objectID,objectType') && e('1,task'); //开始任务
 r($result) && p('8:objectID,objectType') && e('8,task'); //完成任务
 r($result) && p('2:objectID,objectType') && e('2,task'); //工时计算
 
-$log->msg = $log->comment = 'Fix bug#1,2';
+$log->msg = $log->comment = 'Fix bug#101,102';
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'bug');
-r($result) && p('1:objectID,objectType') && e('1,bug'); //修复bug1
-r($result) && p('2:objectID,objectType') && e('2,bug'); //修复bug2
+r($result) && p('101:objectID,objectType') && e('101,bug'); //修复bug101
+r($result) && p('102:objectID,objectType') && e('102,bug'); //修复bug102

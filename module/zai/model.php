@@ -114,6 +114,8 @@ class zaiModel extends model
         }
 
         if(!$includeAdmin) unset($setting->adminToken);
+        $setting->userAgent = $this->getUserAgent();
+        $setting->canAddSkill = common::hasPriv('ai', 'addSkill');
 
         return $setting;
     }
@@ -162,6 +164,64 @@ class zaiModel extends model
             $info->createdBy       = $this->app->user->account;
         }
         return $info;
+    }
+
+    /**
+     * 获取当前用户的ZAI agent。
+     * Get ZAI agent of current user.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserAgent(): string
+    {
+        $agent = $this->dao->select('agent')->from(TABLE_AI_USERAGENT)->where('account')->eq($this->app->user->account)->fetch('agent');
+        return $agent ? $agent : '';
+    }
+
+    /**
+     * 创建当前用户的ZAI agent。
+     * Create ZAI agent of current user.
+     *
+     * @access public
+     * @param string $account
+     * @return string
+     */
+    public function createUserAgent(string $account): string
+    {
+        $setting = $this->getSetting(true);
+        $token   = $this->loadModel('ai')->generateToken($setting);
+        $baseUrl = $this->ai->getZaiBaseUrl($setting);
+        $user    = $this->loadModel('user')->getByID($account);
+        $skills  = $this->config->edition == 'open' ? [] : $this->loadModel('ai')->getSkills('private', 'active');
+        $header  = array(
+            'Content-Type: application/json',
+            'Authorization: Bearer ' . $token
+        );
+
+        $skillIdList = [];
+        foreach($skills as $skill) $skillIdList[] = $skill->skillID;
+
+        $data = array(
+            'name' => $user->realname,
+            'type' => 'custom',
+            'is_default' => false,
+            'execution_runtime' => 'pi_coding_agent',
+            'opencode_mode' => 'serve',
+            'skills' => $skillIdList // 创建agent的时候直接挂载技能
+        );
+
+        $url    = $baseUrl . '/v8/agents';
+        $result = $this->loadModel('ai')->http('POST', $url, $data, $header);
+
+        if(!$result) return '';
+
+        $result = json_decode($result, true);
+        if(empty($result['id'])) return '';
+
+        $this->dao->insert(TABLE_AI_USERAGENT)->data(array('account' => $account, 'agent' => $result['id']))->exec();
+
+        return $result['id'];
     }
 
     /**
@@ -269,7 +329,7 @@ class zaiModel extends model
         if($code == 404) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->notFound, 'code' => $code);
         if($code == 401) return array('result' => 'fail', 'data' => null, 'message' => $this->lang->zai->authenticationFailed, 'code' => $code);
 
-        if($error || $code != 200)
+        if($error || $code < 200 || $code >= 300)
         {
             return array('result' => 'fail', 'data' => $data, 'code' => $code, 'postData' => $postData, 'message' => sprintf($this->lang->zai->callZaiAPIFailed, $url, ($this->app->config->debug ? $error : '') . "(code: $code, response: $response)"));
         }
@@ -648,6 +708,27 @@ class zaiModel extends model
             $project = isset($attrs['project']) ? $attrs['project'] : 0;
             if(!$project) $project = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('project');
             $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
+        }
+        elseif($objectType === 'execution' || $objectType === 'project') $canView = strpos(',' . $this->app->user->view->projects . ',', ",$objectID,") !== false;
+        elseif($objectType === 'product') $canView = strpos(',' . $this->app->user->view->products . ',', ",$objectID,") !== false;
+        elseif($objectType === 'build')
+        {
+            $build = $this->dao->select('product,project,execution')->from(TABLE_BUILD)->where('id')->eq($objectID)->fetch();
+            if($build)
+            {
+                if(!empty($build->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$build->product},") !== false;
+                if(!$canView && !empty($build->project))   $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$build->project},") !== false;
+                if(!$canView && !empty($build->execution)) $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$build->execution},") !== false;
+            }
+        }
+        elseif($objectType === 'testtask')
+        {
+            $testtask = $this->dao->select('product,execution')->from(TABLE_TESTTASK)->where('id')->eq($objectID)->fetch();
+            if($testtask)
+            {
+                if(!empty($testtask->product))                $canView = strpos(',' . $this->app->user->view->products . ',', ",{$testtask->product},") !== false;
+                if(!$canView && !empty($testtask->execution)) $canView = strpos(',' . $this->app->user->view->projects . ',', ",{$testtask->execution},") !== false;
+            }
         }
         elseif($objectType === 'feedback')
         {

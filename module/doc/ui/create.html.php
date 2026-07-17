@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 $isOfficeDoc = $docType != '' && strpos($config->doc->officeTypes, $docType) !== false;
 
 if($isOfficeDoc) include 'create.office.html.php';

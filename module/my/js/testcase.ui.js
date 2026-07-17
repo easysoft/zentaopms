@@ -28,7 +28,11 @@ $(document).off('click', '.batch-btn').on('click', '.batch-btn', function()
 
     const url  = $(this).data('url');
     const form = new FormData();
-    checkedList.forEach((id) => form.append('caseIdList[]', id));
+    checkedList.forEach(function(id)
+    {
+        form.append('caseIdList[]', dtable.$.getRowInfo(id).data.case);
+        form.append('runIdList[]', id);
+    });
 
     if($(this).hasClass('ajax-btn'))
     {

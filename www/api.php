@@ -53,7 +53,7 @@ try
     }
     elseif($app->apiVersion == 'v2')
     {
-        $common->checkPriv();
+        $app->checkPriv();
     }
 
     $app->loadModule();

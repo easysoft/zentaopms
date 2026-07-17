@@ -191,6 +191,7 @@ $lang->custom->user->fields['required']     = $lang->custom->required;
 $lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
+$lang->custom->user->fields['outside']      = '列出外部用户';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
 
 $lang->custom->currentLang = '适用当前语言';
@@ -200,6 +201,7 @@ $lang->custom->confirmRestore = '是否要恢复默认配置？';
 
 $lang->custom->notice = new stdclass();
 $lang->custom->notice->userFieldNotice     = '控制以上字段在用户相关页面是否显示，留空则全部显示';
+$lang->custom->notice->outside             = '外部人员可以正常设置到所有跟人员相关的地方，例如：作为项目集负责人、产品负责人、项目负责人、执行负责人、项目团队成员、执行团队成员、白名单、联系人、指派人等。';
 $lang->custom->notice->canNotAdd           = '该项参与运算，不提供自定义添加功能';
 $lang->custom->notice->forceReview         = "指定人提交的%s必须评审。";
 $lang->custom->notice->forceNotReview      = "指定人提交的%s不需要评审。";
@@ -253,6 +255,9 @@ $lang->custom->forceReview    = '强制评审';
 $lang->custom->forceNotReview = '不需要评审';
 $lang->custom->reviewList[1]  = '开启';
 $lang->custom->reviewList[0]  = '关闭';
+
+$lang->custom->outsideList[1] = '列出';
+$lang->custom->outsideList[0] = '不列出';
 
 $lang->custom->deletedList[1] = '列出';
 $lang->custom->deletedList[0] = '不列出';

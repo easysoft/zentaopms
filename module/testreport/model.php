@@ -89,12 +89,17 @@ class testreportModel extends model
      * @param  int    $extra
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $browseType
+     * @param  int    $queryID
      * @access public
      * @return array
      */
-    public function getList(int $objectID, string $objectType, int $extra = 0, string $orderBy = 'id_desc', ?object $pager = null): array
+    public function getList(int $objectID, string $objectType, int $extra = 0, string $browseType = '', int $queryID = 0, string $orderBy = 'id_desc', ?object $pager = null): array
     {
         if(common::isTutorialMode()) return $this->loadModel('tutorial')->getTestReports();
+
+        $reportQuery = '';
+        if($browseType == 'bysearch') $reportQuery = $this->testreportTao->processSearchQuery($queryID);
 
         return $this->dao->select('*')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
@@ -102,9 +107,77 @@ class testreportModel extends model
             ->beginIF($objectType == 'project')->andWhere('project')->eq($objectID)->fi()
             ->beginIF($objectType == 'product' && $extra)->andWhere('objectID')->eq($extra)->andWhere('objectType')->eq('testtask')->fi()
             ->beginIF($objectType == 'product' && !$extra)->andWhere('product')->eq($objectID)->fi()
+            ->beginIF($browseType == 'bysearch')->andWhere($reportQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
+    }
+
+    /**
+     * 构建测试报告搜索表单。
+     * Build testreport search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return array|void
+     */
+    public function buildTestreportSearchForm(int $objectID, string $objectType, int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    {
+        $searchConfig           = $this->config->testreport->search;
+        $searchConfig['module'] = 'testreport';
+        if($cacheSearchFunc)
+        {
+            $this->cacheSearchFunc('testreport', __METHOD__, func_get_args());
+            return $searchConfig;
+        }
+        $searchConfig['actionURL'] = $actionURL;
+        $searchConfig['queryID']   = $queryID;
+
+        if(in_array($objectType, array('project', 'execution')))
+        {
+            unset($searchConfig['fields']['project']);
+            unset($searchConfig['params']['project']);
+        }
+        if($objectType == 'execution')
+        {
+            unset($searchConfig['fields']['execution']);
+            unset($searchConfig['params']['execution']);
+        }
+
+        if($objectType == 'product')
+        {
+            $products                                      = $this->loadModel('product')->getPairs('', 0, '', 'all');
+            $productParams                                 = ($objectID && isset($products[$objectID])) ? array($objectID => $products[$objectID]) : $products;
+            $searchConfig['params']['product']['values']   = $productParams;
+            $searchConfig['params']['project']['values']   = $this->loadModel('product')->getProjectPairsByProduct($objectID);
+            $searchConfig['params']['execution']['values'] = $this->loadModel('product')->getExecutionPairsByProduct($objectID);
+            $searchConfig['params']['tasks']['values']     = $this->loadModel('testtask')->getPairs($objectID);
+        }
+        else
+        {
+            $products     = $this->loadModel('product')->getProducts($objectID);
+            $productPairs = array(0 => '');
+            foreach($products as $product) $productPairs[$product->id] = $product->name;
+            $searchConfig['params']['product']['values'] = $productPairs;
+
+            if($objectType == 'project')
+            {
+                $searchConfig['params']['execution']['values'] = $this->loadModel('execution')->getPairs($objectID);
+                $tasks = $this->loadModel('testtask')->getProjectTasks($objectID);
+                $searchConfig['params']['tasks']['values'] = helper::arrayColumn($tasks, 'name', 'id');
+            }
+            elseif($objectType == 'execution')
+            {
+                $tasks = $this->loadModel('testtask')->getExecutionTasks($objectID);
+                $searchConfig['params']['tasks']['values'] = helper::arrayColumn($tasks, 'name', 'id');
+            }
+        }
+
+        $this->loadModel('search')->setSearchParams($searchConfig);
+
+        return $searchConfig;
     }
 
     /**

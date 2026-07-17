@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 jsVar('objectID',        $objectID);
 jsVar('objectType',      $objectType);
 jsVar('extra',           $extra);

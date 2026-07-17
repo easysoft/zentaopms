@@ -50,6 +50,8 @@ class testreportTest
      * @param  int $objectID
      * @param  string $objectType
      * @param  int $extra
+     * @param  string $browseType
+     * @param  int $queryID
      * @param  string $orderBy
      * @param  int $recTotal
      * @param  int $recPerPage
@@ -57,7 +59,7 @@ class testreportTest
      * @access public
      * @return mixed
      */
-    public function getReportsForBrowseTest($objectID = 0, $objectType = 'product', $extra = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function getReportsForBrowseTest($objectID = 0, $objectType = 'product', $extra = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         try
         {
@@ -65,7 +67,7 @@ class testreportTest
             ob_start();
             $method = $this->testreportZenTest->getMethod('getReportsForBrowse');
             $method->setAccessible(true);
-            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($objectID, $objectType, $extra, $orderBy, $recTotal, $recPerPage, $pageID));
+            $result = $method->invokeArgs($this->testreportZenTest->newInstance(), array($objectID, $objectType, $extra, $browseType, $queryID, $orderBy, $recTotal, $recPerPage, $pageID));
             /* 清除输出缓冲 */
             ob_end_clean();
             if(dao::isError()) return dao::getError();

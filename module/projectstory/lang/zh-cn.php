@@ -24,6 +24,7 @@ $lang->projectstory->batchClose        = '批量关闭需求';
 $lang->projectstory->batchChangePlan   = '批量修改计划';
 $lang->projectstory->batchAssignTo     = '批量指派需求';
 $lang->projectstory->batchEdit         = '批量编辑需求';
+$lang->projectstory->batchSubmitReview = '批量提交评审';
 $lang->projectstory->importToLib       = '导入需求库';
 $lang->projectstory->batchImportToLib  = '批量导入需求库';
 $lang->projectstory->importCase        = '导入需求';

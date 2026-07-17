@@ -257,6 +257,17 @@ class requirement extends control
     }
 
     /**
+     * Batch submit review.
+     *
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID = 0, string $storyType = 'requirement', string $storyIdList = '')
+    {
+        echo $this->fetch('story', 'batchSubmitReview', "productID=$productID&storyType=$storyType&storyIdList=$storyIdList");
+    }
+
+    /**
      * Recall the requirement review or requirement change.
      *
      * @param  int    $storyID

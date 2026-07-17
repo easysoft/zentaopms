@@ -106,6 +106,30 @@ class formBatchPanel extends formPanel
         return $actions;
     }
 
+    protected function buildHeadingActions(): ?node
+    {
+        $actions             = $this->getHeadingActions();
+        $headingActionsClass = $this->prop('headingActionsClass');
+        $actionsBlock        = $this->block('headingActions');
+
+        if(empty($actions) && empty($actionsBlock)) return null;
+
+        $toolbarItems    = $actions;
+        $otherBlockItems = array();
+        foreach($actionsBlock as $item)
+        {
+            if($item instanceof aiAgentEntry) array_unshift($toolbarItems, $item);
+            else $otherBlockItems[] = $item;
+        }
+
+        return div
+        (
+            setClass('panel-actions', $headingActionsClass),
+            empty($toolbarItems) ? null : toolbar::create($toolbarItems),
+            $otherBlockItems
+        );
+    }
+
     public function children(): array
     {
         $children = parent::children();

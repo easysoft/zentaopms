@@ -19,9 +19,6 @@ cid=18081
 
 */
 
-zenData('pipeline')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(5);
-
 $repoIds  = array(1);
 $paths    = array('', 'public');
 $branches = array('master', 'branch1');

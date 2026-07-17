@@ -1,0 +1,36 @@
+title: table ops_artifact_versions
+desc: "制品版本表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: artifactLibID
+    note: "所属制品库ID"
+    range: "1,2,3"
+  - field: packageID
+    note: "所属制品包ID"
+    range: "1,2,3"
+  - field: version
+    note: "版本号"
+    range: "1.0.0,1.0.1,2.0.0"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

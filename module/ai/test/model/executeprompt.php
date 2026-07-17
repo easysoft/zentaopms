@@ -26,6 +26,7 @@ $promptTable->name->range('测试提示词1,测试提示词2,测试提示词3,�
 $promptTable->module->range('story,task,bug,project,testcase');
 $promptTable->source->range('story.title,task.name,bug.title,project.name,testcase.title');
 $promptTable->targetForm->range('story.create,task.edit,bug.edit,project.edit,invalid.form');
+$promptTable->actionPurpose->range('story.create,task.edit,bug.edit,project.edit,invalid.form');
 $promptTable->status->range('active,active,active,active,active');
 $promptTable->model->range('1,1,999,1,1');
 $promptTable->createdBy->range('admin');

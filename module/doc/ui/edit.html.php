@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/inputinject.html.php');
-
 $isTextDoc = $doc->type == 'text';
 
 if($isTextDoc) include 'edit.text.html.php';

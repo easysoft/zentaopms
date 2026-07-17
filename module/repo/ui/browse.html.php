@@ -221,18 +221,20 @@ $downloadWg = div
 
 
 
+$mirrorStatus = zget($repo, 'status', 'active');
+
 toolbar
 (
-    /* 镜像仓库状态工具栏区块。包裹在 #mirrorToolbar 内，便于 ajax-submit 后局部 reload（load: {selector: '#mirrorToolbar>*'}），无需整页刷新。 */
-    div
+    /* 镜像仓库状态工具栏区块。 */
+    !empty($repo->mirror) ? div
     (
         setID('mirrorToolbar'),
         setClass('flex items-center'),
-        (isset($repo->status) && $repo->status == 'syncFailed') ? div
+        $mirrorStatus == 'syncFailed' ? div
         (
             setClass('alert with-icon mr-3 sync-failure-alert text-danger flex items-center mb-0'),
-            /* 覆盖 .alert 默认 gap:.75rem，压紧惊叹号与文字的间隔。 */
             setStyle(array('--alert-bg' => 'var(--color-danger-50)', 'gap' => '.25rem')),
+            setData(array('failure' => zget($this->view, 'mirrorFailure', ''))),
             h::span(setClass('icon icon-exclamation-sign')),
             h::span($lang->repo->mirror->failedTitle),
             h::a
@@ -242,24 +244,21 @@ toolbar
                 $lang->repo->mirror->detail
             )
         ) : null,
-        (!empty($repo->mirror) && isset($repo->status) && $repo->status == 'syncing') ? div
+        $mirrorStatus == 'syncing' ? div
         (
             setClass('flex items-center'),
-            span
-            (
-                setClass('text-primary sync-progress-msg mr-3'),
-                $lang->repo->mirror->syncing
-            ),
+            span(setClass('text-primary sync-progress-msg mr-3'), $lang->repo->mirror->syncing),
             btn
             (
                 setClass('primary refresh-sync-btn'),
+                setData(array('mirror-status' => 'syncing')),
                 set::icon('refresh'),
                 $lang->repo->mirror->refreshSync
             )
-        ) : null,
-        (!empty($repo->mirror) && (!isset($repo->status) || $repo->status != 'syncing')) ? div
+        ) : div
         (
             setClass('flex items-center'),
+            $mirrorStatus == 'active' ? span(setClass('text-primary sync-last-executed mr-3'), $lang->repo->mirror->lastUpdated . zget($this->view, 'mirrorLastExecuted', '--')) : null,
             btn
             (
                 setClass('primary sync-code-btn ajax-submit'),
@@ -268,8 +267,8 @@ toolbar
                 set::icon('refresh'),
                 $lang->repo->mirror->syncCode
             )
-        ) : null
-    ),
+        )
+    ) : null,
     dropdown
     (
         set::staticMenu(true),

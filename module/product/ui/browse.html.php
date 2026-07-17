@@ -12,8 +12,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 data('storyType', $storyType);
 data('activeMenuID', $storyType);
 jsVar('userAccount', $this->app->user->account);
@@ -308,20 +306,22 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     if(!empty($project)) $canBeChanged = $canBeChanged && common::canModify('project', $project);
     if($isProjectStory && $config->vision == 'rnd')
     {
-        $storyModule        = 'projectstory';
-        $canBatchClose      = $canBeChanged && hasPriv($storyModule, 'batchClose') && strtolower($browseType) != 'closedbyme';
-        $canBatchEdit       = $canBeChanged && hasPriv($storyModule, 'batchEdit');
-        $canBatchReview     = $canBeChanged && hasPriv($storyModule, 'batchReview');
-        $canBatchAssignTo   = $canBeChanged && hasPriv($storyModule, 'batchAssignTo');
-        $canBatchChangePlan = $canBeChanged && hasPriv($storyModule, 'batchChangePlan') && $productID && $product;
+        $storyModule          = 'projectstory';
+        $canBatchClose        = $canBeChanged && hasPriv($storyModule, 'batchClose') && strtolower($browseType) != 'closedbyme';
+        $canBatchEdit         = $canBeChanged && hasPriv($storyModule, 'batchEdit');
+        $canBatchSubmitReview = $canBeChanged && hasPriv($storyModule, 'batchSubmitReview');
+        $canBatchReview       = $canBeChanged && hasPriv($storyModule, 'batchReview');
+        $canBatchAssignTo     = $canBeChanged && hasPriv($storyModule, 'batchAssignTo');
+        $canBatchChangePlan   = $canBeChanged && hasPriv($storyModule, 'batchChangePlan') && $productID && $product;
     }
     else
     {
-        $canBatchEdit       = $canBeChanged && hasPriv($storyType, 'batchEdit');
-        $canBatchClose      = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
-        $canBatchReview     = $canBeChanged && hasPriv($storyType, 'batchReview');
-        $canBatchAssignTo   = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
-        $canBatchChangePlan = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $config->vision == 'rnd' && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
+        $canBatchEdit         = $canBeChanged && hasPriv($storyType, 'batchEdit');
+        $canBatchClose        = hasPriv($storyType, 'batchClose') && strtolower($browseType) != 'closedbyme' && strtolower($browseType) != 'closedstory';
+        $canBatchSubmitReview = $canBeChanged && hasPriv($storyType, 'batchSubmitReview');
+        $canBatchReview       = $canBeChanged && hasPriv($storyType, 'batchReview');
+        $canBatchAssignTo     = $canBeChanged && hasPriv($storyType, 'batchAssignTo');
+        $canBatchChangePlan   = $canBeChanged && hasPriv($storyType, 'batchChangePlan') && $config->vision == 'rnd' && $productID && $product && (($product->type != 'normal' && $branchID != 'all') || $product->type == 'normal');
     }
 
     $canBatchChangeGrade   = $canBeChanged && hasPriv($storyType, 'batchChangeGrade') && count($gradePairs) > 1 && $config->{$storyType}->gradeRule == 'cross' && !$isProjectStory;
@@ -332,7 +332,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
     $canBatchUnlink        = empty($hasFrozenStories) && $canBeChanged && $projectHasProduct && hasPriv('projectstory', 'batchUnlinkStory');
     $canBatchImportToLib   = $canBeChanged && $isProjectStory && in_array($this->config->edition, array('max', 'ipd')) && hasPriv('story', 'batchImportToLib') && helper::hasFeature('storylib');
     $canBatchChangeRoadmap = $canBeChanged && hasPriv($storyType, 'batchChangeRoadmap') && $config->vision == 'or' && ($storyType == 'requirement' || $storyType == 'epic');
-    $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap;
+    $canBatchAction        = $canBatchEdit || $canBatchClose || $canBatchReview || $canBatchChangeGrade || $canBatchChangeStage || $canBatchChangeModule || $canBatchChangePlan || $canBatchChangeParent || $canBatchAssignTo || $canBatchUnlink || $canBatchImportToLib || $canBatchChangeBranch || $canBatchChangeRoadmap || $canBatchSubmitReview;
 
     /* Remove empty data from data list. */
     unset($lang->story->reviewResultList[''], $lang->story->reviewResultList['revert']);
@@ -371,6 +371,7 @@ $fnGenerateFootToolbar = function() use ($lang, $app, $product, $productID, $pro
 
     $navActionItems = array();
     if($canBatchClose)        $navActionItems[] = array('class' => 'batch-btn batchClostBtn', 'text' => $lang->close, 'data-page' => 'batch', 'data-formaction' => helper::createLink($storyModule, 'batchClose', "productID={$productID}&executionID=0"));
+    if($canBatchSubmitReview) $navActionItems[] = array('class' => 'batchSubmitReviewBtn', 'text' => $lang->story->submitReview);
     if($canBatchChangeGrade)  $navActionItems[] = array('class' => 'not-hide-menu batchGradeBtn', 'text' => $lang->story->grade, 'items' => $gradeItems);
     if($canBatchReview)       $navActionItems[] = array('class' => 'not-hide-menu batchReviewBtn', 'text' => $lang->story->review, 'items' => $reviewResultItems);
     if($canBatchChangeStage)  $navActionItems[] = array('class' => 'not-hide-menu batchChangeStageBtn', 'text' => $lang->story->stageAB, 'items' => $stageItems);

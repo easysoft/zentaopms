@@ -101,9 +101,19 @@ $items[] = array('name' => 'os', 'label' => $lang->bug->os, 'control' => 'picker
 /* Field of browser. */
 $items[] = array('name' => 'browser', 'label' => $lang->bug->browser, 'control'  => 'picker', 'items' => $lang->bug->browserList, 'width' => '200px', 'multiple' => true, 'required' => isset($requiredFields['browser']));
 
+/* Field of fromCase. */
+$items[] = array('name' => 'case', 'label' => $lang->bug->fromCase, 'control'  => 'picker', 'items' => $fromCases, 'width' => '200px', 'required' => isset($requiredFields['case']));
+
 /* Field of keywords. */
 $items[] = array('name' => 'keywords', 'label' => $lang->bug->keywords, 'width' => '200px', 'required' => isset($requiredFields['keywords']));
 
+if(in_array($config->edition, array('max', 'ipd')))
+{
+    /* Field of identify. */
+    $items[] = array('name' => 'identify', 'label' => $lang->bug->identify, 'control' => 'picker', 'items' => $lang->bug->identifyList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['identify']));
+    /* Field of injection. */
+    $items[] = array('name' => 'injection', 'label' => $lang->bug->injection, 'control' => 'picker', 'items' => $lang->bug->injectionList, 'value' => '', 'width' => '160px', 'required' => isset($requiredFields['injection']));
+}
 formBatchPanel
 (
     set::title($lang->bug->batchCreate),

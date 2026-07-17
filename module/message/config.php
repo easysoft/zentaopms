@@ -1,22 +1,23 @@
 <?php
 $config->message->objectTypes = array();
-$config->message->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted');
-if($config->enableER) $config->message->objectTypes['epic']        = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
-if($config->URAndSR)  $config->message->objectTypes['requirement'] = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
-$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned');
-$config->message->objectTypes['productplan'] = array('opened', 'edited');
-$config->message->objectTypes['release']     = array('opened', 'edited', 'published', 'changestatus');
-$config->message->objectTypes['project']     = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'undeleted');
-$config->message->objectTypes['execution']   = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated');
-$config->message->objectTypes['task']        = array('opened', 'edited', 'commented', 'assigned', 'confirmed', 'started', 'finished', 'paused', 'canceled', 'restarted', 'closed', 'activated');
-$config->message->objectTypes['bug']         = array('opened', 'edited', 'commented', 'assigned', 'confirmed', 'bugconfirmed', 'resolved', 'closed', 'activated');
-$config->message->objectTypes['case']        = array('opened', 'edited', 'commented', 'reviewed', 'confirmed');
-$config->message->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated');
-$config->message->objectTypes['todo']        = array('opened', 'edited');
-$config->message->objectTypes['doc']         = array('releaseddoc', 'edited');
-$config->message->objectTypes['kanbancard']  = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved', 'nearing');
+$config->message->objectTypes['product']     = array('opened', 'edited', 'closed', 'undeleted', 'mentioned');
+if($config->enableER) $config->message->objectTypes['epic']        = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned', 'mentioned');
+if($config->URAndSR)  $config->message->objectTypes['requirement'] = array('opened', 'edited', 'commented', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned', 'mentioned');
+$config->message->objectTypes['story']       = array('opened', 'edited', 'commented', 'frombug', 'changed', 'submitreview', 'reviewed', 'closed', 'activated', 'assigned', 'mentioned');
+$config->message->objectTypes['productplan'] = array('opened', 'edited', 'mentioned');
+$config->message->objectTypes['release']     = array('opened', 'edited', 'published', 'changestatus', 'mentioned');
+$config->message->objectTypes['project']     = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'undeleted', 'mentioned');
+$config->message->objectTypes['execution']   = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'mentioned');
+$config->message->objectTypes['task']        = array('opened', 'edited', 'commented', 'assigned', 'confirmed', 'started', 'finished', 'paused', 'canceled', 'restarted', 'closed', 'activated', 'mentioned');
+$config->message->objectTypes['bug']         = array('opened', 'edited', 'commented', 'assigned', 'confirmed', 'bugconfirmed', 'resolved', 'closed', 'activated', 'mentioned');
+$config->message->objectTypes['case']        = array('opened', 'edited', 'commented', 'reviewed', 'confirmed', 'mentioned');
+$config->message->objectTypes['testtask']    = array('opened', 'edited', 'started', 'blocked', 'closed', 'activated', 'mentioned');
+$config->message->objectTypes['todo']        = array('opened', 'edited', 'mentioned');
+$config->message->objectTypes['doc']         = array('releaseddoc', 'edited', 'mentioned');
+$config->message->objectTypes['kanbancard']  = array('created', 'edited', 'finished', 'activated', 'archived', 'restore', 'deleted', 'moved', 'nearing', 'mentioned');
 
 $config->message->available = array();
+$config->message->available['mail']['product']     = array('mentioned');
 if($config->enableER) $config->message->available['mail']['epic']        = $config->message->objectTypes['epic'];
 if($config->URAndSR)  $config->message->available['mail']['requirement'] = $config->message->objectTypes['requirement'];
 $config->message->available['mail']['story']       = $config->message->objectTypes['story'];
@@ -30,6 +31,7 @@ $config->message->available['mail']['kanbancard']  = $config->message->objectTyp
 
 $config->message->available['webhook']  = $config->message->objectTypes;
 
+$config->message->available['message']['product']     = array('mentioned');
 $config->message->available['message']['bug']         = $config->message->objectTypes['bug'];
 if($config->enableER) $config->message->available['message']['epic']        = $config->message->objectTypes['epic'];
 if($config->URAndSR)  $config->message->available['message']['requirement'] = $config->message->objectTypes['requirement'];

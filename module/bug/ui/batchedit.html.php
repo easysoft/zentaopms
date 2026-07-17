@@ -52,6 +52,7 @@ formBatchPanel
     set::mode('edit'),
     set::data(array_values($bugs)),
     set::onRenderRow(jsRaw('renderRowData')),
+    set::customFields(array('list' => $customFields, 'show' => explode(',', $showFields), 'key' => 'batchEditFields')),
     on::change('[data-name="project"]', 'projectChange'),
     on::change('[data-name="execution"]', 'executionChange'),
     on::change('[data-name="branch"]', 'branchChange'),
@@ -179,6 +180,16 @@ formBatchPanel
         set::required(isset($requiredFields['plan'])),
         set::ditto(true),
         set::defaultDitto('off')
+    ),
+    /* Field of fromCase. */
+    formBatchItem
+    (
+        set::name('case'),
+        set::label($lang->bug->fromCase),
+        set::control(array('control' => 'picker', 'required' => false)),
+        set::items($fromCases),
+        set::width('200px'),
+        set::required(isset($requiredFields['case']))
     ),
     /* Field of assignedTo. */
     formBatchItem

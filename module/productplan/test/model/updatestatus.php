@@ -33,7 +33,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('productplan')->loadYaml('productplan')->gen(10);
-$plan = new productplanModelTest();
+$plan = new productPlanModelTest();
 
 r($plan->updateStatus(1, 'doing'))  && p('id,title,status') && e('1,计划1,doing');  //修改状态为doing
 r($plan->updateStatus(2, 'done'))   && p('id,title,status') && e('2,计划2,done');   //修改状态为done

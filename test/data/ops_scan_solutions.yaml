@@ -1,0 +1,45 @@
+title: table ops_scan_solutions
+desc: "扫描方案表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: name
+    note: "扫描解决方案名称"
+    range: "安全加固方案,漏洞修复方案,合规整改方案"
+  - field: desc
+    note: "解决方案描述（中文）"
+    range: "针对安全问题的统一加固方案,针对漏洞问题的修复步骤,针对合规项的整改方案"
+  - field: descEn
+    note: "解决方案描述（英文）"
+    range: "Security hardening solution,Vulnerability fix solution,Compliance remediation solution"
+  - field: status
+    note: "规则状态（enabled-启用、disabled-禁用，默认启用）"
+    range: "enabled,disabled"
+  - field: tag
+    note: "解决方案标签（用于分类筛选，如：安全加固、漏洞修复、合规整改等）"
+    range: "security-hardening,vulnerability-fix,compliance-remediation"
+  - field: isCustom
+    note: "是否自定义解决方案（1=自定义，0=系统默认解决方案）"
+    range: "1,0"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

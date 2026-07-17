@@ -26,18 +26,17 @@ $fields = defineFieldList('bug.create', 'bug');
 
 $fields->field('product')->hidden($isShadowProduct && $isOriginalProduct);
 
-$fields->field('project')
-    ->foldable(!$isShadowProduct)
-    ->wrapAfter($isShadowProduct && $isOriginalProduct  && $noMultipleProject)
-    ->className($isShadowProduct && !$isOriginalProduct && !$noMultipleProject ? 'w-1/4' : 'w-1/2')
-    ->className(($isShadowProduct && $isOriginalProduct) || $noMultipleProject ? 'full:w-1/2' : 'full:w-1/4');
+$fields->field('deadline')->className($isShadowProduct && $isOriginalProduct ? 'w-1/2' : 'w-1/4')->className('full:w-1/2');
 
-$fields->field('execution')
-    ->label(data('project.model') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
-    ->hidden($noMultipleProject)
-    ->className($isShadowProduct && !$isOriginalProduct ? 'w-1/4' : 'w-1/2')
-    ->className($isShadowProduct && $isOriginalProduct ? 'full:w-1/2' : 'full:w-1/4')
-    ->foldable(!$isShadowProduct);
+$fields->field('project')
+     ->className($noMultipleProject ? 'w-1/2' : 'w-1/4')
+     ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
+
+ $fields->field('execution')
+     ->label(data('project.model') === 'kanban' ? $lang->bug->kanban : $lang->bug->execution)
+     ->hidden($noMultipleProject)
+     ->className('w-1/4')
+     ->className($isShadowProduct  ? 'full:w-1/2' : 'full:w-1/4');
 
 $fields->field('plan')
     ->label($lang->bug->plan)
@@ -95,9 +94,11 @@ $fields->field('mailto')->foldable();
 
 $fields->field('keywords')->foldable();
 
-$fields->field('module')->width($isShadowProduct ? '1/2' : '1/4')->className('full:w-1/2');
+$fields->field('module')->width($isShadowProduct && $isOriginalProduct ? '1/2' : '1/4')->className('full:w-1/2');
 
-$fields->field('openedBuild')->width($isShadowProduct ? '1/2' : '1/4')->className('full:w-1/2');
+$fields->field('openedBuild')->width('1/4')->className('full:w-1/2');
+
+$fields->field('assignedTo')->width('1/4')->className('full:w-1/2');
 
 $fields->field('fileList')->label($lang->bug->copyFiles)->control('hidden')->value($copyFiles ? $copyFiles : $resultFiles);
 

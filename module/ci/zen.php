@@ -28,10 +28,9 @@ class ciZen extends ci
         $jobID     = 0;
         if($compileID)
         {
-            $compile = $this->ci->getCompileByID($compileID);
+            $compile = $this->loadModel('pipeline')->getExecByID($compileID);
             $jobID   = $compile->job;
             if(empty($productID)) $productID = $compile->product;
-            if(!in_array($compile->status, array('success', 'fail', 'create_fail', 'timeout'))) $this->ci->syncCompileStatus($compile);
         }
 
         /* Get productID from caseResult when productID is null. */

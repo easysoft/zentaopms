@@ -75,7 +75,7 @@ class file extends control
         {
             if($file['size'] == 0)
             {
-                if(defined('RUN_MODE') && RUN_MODE == 'api') return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+                if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->file->errorFileUpload));
                 return $this->send(array('error' => 1, 'message' => $this->lang->file->errorFileUpload));
             }
 

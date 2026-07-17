@@ -865,4 +865,57 @@ class releaseModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * Test getReleaseBuildIdList method.
+     *
+     * @param  object $release
+     * @access public
+     * @return string
+     */
+    public function getReleaseBuildIdListTest(object $release): string
+    {
+        $result = $this->instance->getReleaseBuildIdList($release);
+        if(dao::isError()) return dao::getError();
+
+        $buildIdList = array_map('intval', $result);
+        sort($buildIdList);
+
+        return implode(',', $buildIdList);
+    }
+
+    /**
+     * Test getEscapedBugList method.
+     *
+     * @param  object $release
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return string|array
+     */
+    public function getEscapedBugListTest(object $release, string $orderBy = '', ?object $pager = null): string|array
+    {
+        $result = $this->instance->getEscapedBugList($release, $orderBy, $pager);
+        if(dao::isError()) return dao::getError();
+
+        $bugIdList = array_map(function($bug) { return (int)$bug->id; }, $result);
+        sort($bugIdList);
+
+        return implode(',', $bugIdList);
+    }
+
+    /**
+     * Test getEscapedBugList method and return bug count.
+     *
+     * @param  object $release
+     * @access public
+     * @return int|array
+     */
+    public function getEscapedBugCountTest(object $release): int|array
+    {
+        $result = $this->instance->getEscapedBugList($release);
+        if(dao::isError()) return dao::getError();
+
+        return count($result);
+    }
 }

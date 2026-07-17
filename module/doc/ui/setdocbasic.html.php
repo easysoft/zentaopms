@@ -19,7 +19,9 @@ if($objectType == 'template')
 if($modalType == 'chapter') $lang->doc->aclList['private'] = $lang->doclib->aclList['private'];
 
 $docType   = $this->view->docType ?? '';
-$submitUrl = ($docType == 'url' && isset($doc) && $doc->id) ? $this->createLink('doc', 'edit', "docID={$doc->id}") : '';
+$submitUrl =  '';
+if($docType == 'url' && isset($doc) && $doc->id) $submitUrl = $this->createLink('doc', 'edit', "docID={$doc->id}");
+if($from == 'deliverable' && $docType == 'url')  $submitUrl = $this->createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=$moduleID&docType=url&appendID=0&from=deliverable");
 $urlValue  = isset($doc) ? $doc->content : '';
 $files     = !empty($doc->files) ? array_values($doc->files) : null;
 

@@ -45,7 +45,7 @@ $config->ai->dtable->miniPrograms['id']['required'] = true;
 $config->ai->dtable->miniPrograms['name']['title']    = $lang->prompt->name;
 $config->ai->dtable->miniPrograms['name']['width']    = '180';
 $config->ai->dtable->miniPrograms['name']['required'] = true;
-if($config->edition != 'open' && common::hasPriv('ai', 'miniProgramView')) $config->ai->dtable->miniPrograms['name']['link'] = array('module' => 'ai', 'method' => 'miniprogramview', 'params' => "id={id}");
+if($config->edition != 'open' && class_exists('common') && common::hasPriv('ai', 'miniProgramView')) $config->ai->dtable->miniPrograms['name']['link'] = array('module' => 'ai', 'method' => 'miniprogramview', 'params' => "id={id}");
 
 $config->ai->dtable->miniPrograms['publishedLabel']['title']    = $lang->prompt->status;
 $config->ai->dtable->miniPrograms['publishedLabel']['required'] = true;

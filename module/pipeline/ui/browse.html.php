@@ -54,7 +54,7 @@ $importItem    = array('text' => $lang->pipeline->importBtn, 'url' => inLink('im
 //$runnerItem    = array('text' => $lang->runner->manageRunner, 'url' => createLink('runner', 'browse'), 'class' => 'primary');
 $executionItem = array('text' => $lang->pipeline->execution,  'url' => inLink('execution', "spaceID={$spaceID}&repoID={$repoID}&type={$type}"), 'class' => 'primary');
 $config->pipeline->dtable->fieldList['actions']['list']['arrange'] = array('icon' => 'pencil-alt', 'text' => $lang->pipeline->arrange, 'hint' => $lang->pipeline->arrange, 'url' => helper::createLink('pipeline', 'arrange', "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
-$config->pipeline->dtable->fieldList['actions']['list']['edit']    = array('icon' => 'edit', 'text' => $lang->pipeline->edit, 'hint' => $lang->pipeline->edit, 'url' => helper::createLink('pipeline', 'edit', "id={id}"));
+$config->pipeline->dtable->fieldList['actions']['list']['edit']    = array('icon' => 'edit', 'text' => $lang->pipeline->edit, 'hint' => $lang->pipeline->edit, 'url' => helper::createLink('pipeline', 'edit', "id={id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}"));
 $config->pipeline->dtable->fieldList['actions']['list']['exec']['url'] = array('module' => 'pipeline', 'method' => 'exec', 'params' => "pipelineID={id}&space={$spaceID}&repoID={$repoID}&type={$type}");
 if($needServer)
 {

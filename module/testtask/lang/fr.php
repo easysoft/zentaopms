@@ -58,20 +58,24 @@ $lang->testtask->compile          = 'Compile';
 $lang->testtask->duration         = 'Duration';
 $lang->testtask->myInvolved       = 'Involved';
 
-$lang->testtask->viewAction     = "View Request";
-$lang->testtask->casesAction    = 'Browse Cases List';
-$lang->testtask->activateAction = "Activer Campagne";
-$lang->testtask->blockAction    = "Bloquer Campagne";
-$lang->testtask->closeAction    = "Clôturer Campagne";
-$lang->testtask->startAction    = "Démarrer Campagne";
-$lang->testtask->resultsAction  = "Résultats CasTest";
-$lang->testtask->reportAction   = 'Rapport CasTests';
+$lang->testtask->viewAction             = "View Request";
+$lang->testtask->casesAction            = 'Browse Cases List';
+$lang->testtask->activateAction         = "Activer Campagne";
+$lang->testtask->blockAction            = "Bloquer Campagne";
+$lang->testtask->closeAction            = "Clôturer Campagne";
+$lang->testtask->startAction            = "Démarrer Campagne";
+$lang->testtask->resultsAction          = "Résultats CasTest";
+$lang->testtask->reportAction           = 'Rapport CasTests';
+$lang->testtask->ignoreCaseChange       = 'Ignore Case Change';
+$lang->testtask->batchConfirmCaseChange = 'Batch Confirm Case Change';
+$lang->testtask->batchIgnoreCaseChange  = 'Batch Ingore Case Change';
 
 $lang->testtask->id                = 'ID';
 $lang->testtask->common            = 'Recette';
 $lang->testtask->product           = $lang->productCommon;
 $lang->testtask->project           = $lang->projectCommon;;
 $lang->testtask->execution         = $lang->execution->common;
+$lang->testtask->allProject        = 'All' . $lang->projectCommon;
 $lang->testtask->type              = 'Type';
 $lang->testtask->build             = 'Build';
 $lang->testtask->owner             = 'Owner';
@@ -167,6 +171,7 @@ $lang->testtask->cannotBeParsed    = 'The content of the imported XML file is in
 $lang->testtask->finishedDateLess  = 'Actual Finished Date cannot be <= Begin Date %s';
 $lang->testtask->finishedDateMore  = 'Actual Finished Date cannot be > Today';
 $lang->testtask->emptyUnitTip      = 'No unit test results.';
+$lang->testtask->caseChangeTip     = 'The content of this test case will be synchronized to version #%s in the test case list. Do you want to continue?';
 
 $lang->testtask->assignedToMe  = 'Affecté à Moi';
 $lang->testtask->allCases      = 'Tous les CasTests';

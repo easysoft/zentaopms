@@ -914,7 +914,7 @@ class doc extends control
      * @access public
      * @return void
      */
-    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0)
+    public function create(string $objectType, int $objectID, int $libID, int $moduleID = 0, string $docType = '', int $appendLib = 0, string $from = '')
     {
         if(!empty($_POST))
         {
@@ -953,7 +953,7 @@ class doc extends control
 
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult);
+            return $this->docZen->responseAfterCreate($docResult, '', $from);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -1030,6 +1030,7 @@ class doc extends control
                     ->setDefault('editedBy', $this->app->user->account)
                     ->setDefault('acl', $doc->acl)
                     ->setIF(strpos(",$doc->editedList,", ",{$this->app->user->account},") === false, 'editedList', $doc->editedList . ",{$this->app->user->account}")
+                    ->setIF(!isset($_POST['lib']), 'lib', $doc->lib)
                     ->setIF(!isset($_POST['module']), 'module', $doc->module)
                     ->setIF(!isset($_POST['mailto']), 'mailto', $doc->mailto)
                     ->setIF(!isset($_POST['users']), 'users', $doc->users)
@@ -1052,7 +1053,15 @@ class doc extends control
                 $files   = $result['files'];
             }
 
-            return $this->send($this->docZen->responseAfterEdit($doc, $changes, $files));
+            $response = $this->docZen->responseAfterEdit($doc, $changes, $files);
+
+            if(!empty($response['actionID']))
+            {
+                $docData->id = $docID;
+                $this->loadModel('message')->sendMentionNotice('doc', 'edit', $response['actionID'], $docData, $doc);
+            }
+
+            return $this->send($response);
         }
 
         /* Get doc and set menu. */
@@ -2320,7 +2329,7 @@ class doc extends control
      */
     public function quick(string $type = 'view', int $docID = 0, string $orderBy = '', int $recPerPage = 20, int $pageID = 1)
     {
-        if(empty($orderBy)) $orderBy = 'id_desc';
+        if(empty($orderBy)) $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
         if(!isset($this->config->doc->quickMenu[$type])) $type = 'view';
         $menu = $this->config->doc->quickMenu[$type];
 
@@ -2380,7 +2389,8 @@ class doc extends control
         $browseType  = !empty($search) ? 'bykeyword' : 'all';
         $queryID     = $search;
 
-        $docs = $this->doc->getMineList($type, $browseType, $queryID, 'id_desc', $pager, '', '', $filterType);
+        $orderBy = in_array($type, array('view', 'editedby')) ? 't2.date_desc' : 'id_desc';
+        $docs = $this->doc->getMineList($type, $browseType, $queryID, $orderBy, $pager, '', '', $filterType);
 
         $order = 0;
         $menu = $this->config->doc->quickMenu[$type];
@@ -2418,12 +2428,13 @@ class doc extends control
      * @param  string $type
      * @param  int    $space
      * @param  string $picks
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '')
+    public function ajaxGetSpaceData(string $type = 'custom', int $spaceID = 0, string $picks = '', int $libID = 0)
     {
-        $this->doc->setMenuByType($type, (int)$spaceID, 0);
+        $this->doc->setMenuByType($type, (int)$spaceID, $libID);
 
         if($type === 'template')
         {
@@ -2446,7 +2457,7 @@ class doc extends control
             $this->send($data);
         }
 
-        $data = $this->buildSpaceDataBase($type, $spaceID, $picks);
+        $data = $this->buildSpaceDataBase($type, $spaceID, $picks, $libID);
         $this->send($data);
     }
 
@@ -2457,10 +2468,11 @@ class doc extends control
      * @param  string $type    空间类型
      * @param  int    $spaceID 空间ID
      * @param  string $picks   需要加载的数据项
+     * @param  int    $libID   文档库ID
      * @access private
      * @return array
      */
-    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = ''): array
+    private function buildSpaceDataBase(string $type, int $spaceID, string $picks = '', int $libID = 0): array
     {
         $noPicks = empty($picks);
         $picks   = $noPicks ? '' : ",$picks,";
@@ -2468,7 +2480,7 @@ class doc extends control
         list($spaces, $spaceID) = $this->doc->getSpaces($type, $spaceID);
         $data   = array();
         $libs   = $this->doc->getLibsOfSpace($type, $spaceID);
-        $libIds = array_keys($libs);
+        $libIds = $libID ? array($libID) : array_keys($libs);
         foreach($libs as $lib)
         {
             $lib->order = (int)$lib->order;
@@ -2610,7 +2622,7 @@ class doc extends control
      * @param  string $isDraft
      * @access public
      */
-    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text')
+    public function setDocBasic(string $objectType, int $objectID, int $libID = 0, int $moduleID = 0, int $parentID = 0, int $docID = 0, string $isDraft = 'no', string $modalType = 'doc', string $docType = 'text', string $from = '')
     {
         $this->doc->setMenuByType($objectType, (int)$objectID, (int)$libID);
         $lib      = $libID ? $this->doc->getLibByID($libID) : '';
@@ -2732,6 +2744,7 @@ class doc extends control
         $this->view->title      = $title;
         $this->view->modalType  = $modalType;
         $this->view->isCreate   = $isCreate;
+        $this->view->from       = $from;
         $this->display();
     }
 

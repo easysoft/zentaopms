@@ -75,6 +75,8 @@ $(document).on('click', 'form.form-setting-form .row label.state', function()
 
 window.loadGrade = function(e)
 {
+    $('[id=syncToChild]').prop('checked', false);
+
     const parent = e.target.value;
     const link   = $.createLink('story', 'ajaxGetGrade', 'parent=' + parent + '&type=' + storyType);
     $.getJSON(link, function(data)
@@ -83,4 +85,61 @@ window.loadGrade = function(e)
         $grade.render({items: data.items});
         $grade.$.setValue(data.default);
     })
+}
+
+window.saveTmpInfo = function(e, controlName)
+{
+    $('[name=tmp' + controlName + ']').val($(e.target).val());
+}
+
+/**
+ * 同步至子需求。
+ * Sync to child.
+ *
+ * @access public
+ * @return void
+ */
+window.syncToChild = function()
+{
+    const parentStoryID = $('[name=parent]').val();
+    if(!parentStoryID || parentStoryID == 0) return;
+
+    if($('[id=syncToChild]').prop('checked'))
+    {
+        $.getJSON($.createLink('story', 'ajaxGetParentStoryInfo', 'storyID=' + parentStoryID), function(data)
+        {
+            if(data.module)     $('[name=module]').zui('picker').$.setValue(data.module, true);
+            if(data.category)   $('[name=category]').zui('picker').$.setValue(data.category, true);
+            if(data.source)     $('[name=source]').zui('picker').$.setValue(data.source, true);
+            if(data.mailto)     $('[name="mailto[]"]').zui('picker').$.setValue(data.mailto, true);
+            if(data.pri)        $('[name=pri]').zui('priPicker').$.setValue(data.pri, true);
+            if(data.title)      $('[name=title]').val(data.title);
+            if(data.estimate)   $('[name=estimate]').val(data.estimate);
+            if(data.sourceNote) $('[name=sourceNote]').val(data.sourceNote);
+            if(data.keywords)   $('[name=keywords]').val(data.keywords);
+            if(data.spec)       $('zen-editor[name=spec]')[0].setHTML(data.spec);
+            if(data.verify)     $('zen-editor[name=verify]')[0].setHTML(data.verify);
+            if(data.files)
+            {
+                $('[name="files[]"]').closest('[data-zui-fileselector]').zui('fileSelector').$.setFiles(Object.values(data.files));
+                $('[name=fileList]').val(JSON.stringify(data.files));
+            }
+        });
+    }
+    else
+    {
+        $('[name=module]').zui('picker').$.setValue($('[name=tmpModule]').val() ? $('[name=tmpModule]').val() : 0);
+        $('[name=pri]').zui('priPicker').$.setValue($('[name=tmpPri]').val() ? $('[name=tmpPri]').val() : 3);
+        $('[name=category]').zui('picker').$.setValue($('[name=tmpCategory]').val());
+        $('[name=source]').zui('picker').$.setValue($('[name=tmpSource]').val());
+        $('[name="mailto[]"]').zui('picker').$.setValue($('[name=tmpMailto]').val());
+        $('[name=title]').val($('[name=tmpTitle]').val());
+        $('[name=estimate]').val($('[name=tmpEstimate]').val());
+        $('[name=sourceNote]').val($('[name=tmpSourceNote]').val());
+        $('[name=keywords]').val($('[name=tmpKeywords]').val());
+        $('zen-editor[name=spec]')[0].setHTML($('[name=tmpSpec]').val());
+        $('zen-editor[name=verify]')[0].setHTML($('[name=tmpVerify]').val());
+        $('[name="files[]"]').closest('[data-zui-fileselector]').zui('fileSelector').$.setFiles([]);
+        $('[name=fileList]').val('');
+    }
 }

@@ -34,7 +34,6 @@ $bug->status->range('active{5},resolved{3},closed{2}');
 $bug->resolution->range('',',fixed{3},duplicate{2}');
 $bug->gen(10);
 
-zenData('repo')->loadYaml('repo')->gen(4);
 
 // 用户登录
 su('admin');

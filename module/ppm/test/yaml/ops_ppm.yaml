@@ -1,0 +1,76 @@
+title: ops_ppm
+author: Codex
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: title
+    prefix: PPM
+    range: 1-1000
+  - field: desc
+    range: PPM test description
+  - field: repoID
+    range: 1
+  - field: sourceRepoID
+    range: 1
+  - field: sourceBranch
+    prefix: feature/
+    range: 1-1000
+  - field: sourceSHA
+    range: '1111111111111111111111111111111111111111'
+  - field: targetRepoID
+    range: 1
+  - field: targetBranch
+    range: master
+  - field: mergedBy
+    range: ''
+  - field: mergeMethod
+    range: ''
+  - field: mergeTargetSHA
+    range: '2222222222222222222222222222222222222222'
+  - field: mergeBaseSHA
+    range: '3333333333333333333333333333333333333333'
+  - field: mergeSHA
+    range: '4444444444444444444444444444444444444444'
+  - field: mergeCheckStatus
+    range: unchecked
+  - field: mergeConflicts
+    range: ''
+  - field: rebaseCheckStatus
+    range: unchecked
+  - field: rebaseConflicts
+    range: ''
+  - field: commitCount
+    range: 0
+  - field: fileCount
+    range: 0
+  - field: additions
+    range: 0
+  - field: deletions
+    range: 0
+  - field: flow
+    range: 0
+  - field: reviewFlowID
+    range: 0
+  - field: executionID
+    range: 0
+  - field: status
+    range: opened
+  - field: mergedDate
+    range: '`2026-07-10 09:00:00`'
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '`2026-07-10 09:00:00`'
+  - field: editedBy
+    range: ''
+  - field: editedDate
+    range: '`2026-07-10 09:00:00`'
+  - field: approval
+    range: 0
+  - field: reviewers
+    range: ''
+  - field: approvalflow
+    range: 0
+  - field: reviewStatus
+    range: pending

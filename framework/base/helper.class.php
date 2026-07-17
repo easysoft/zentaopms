@@ -107,11 +107,14 @@ class baseHelper
         }
 
         /* 生成url链接的开始部分。Set the begin parts of the link. */
-        if($config->requestType == 'PATH_INFO2')
+        /* API requests use GET internally, but links should keep the original site URL format. */
+        $requestType = isset($config->originRequestType) ? $config->originRequestType : $config->requestType;
+
+        if($requestType == 'PATH_INFO2')
         {
             $link = '/';
         }
-        elseif($config->requestType == 'PATH_INFO')
+        elseif($requestType == 'PATH_INFO')
         {
             $link = $config->webRoot . $appName;
         }
@@ -129,7 +132,7 @@ class baseHelper
          * Input: moduleName=article&methodName=index&var1=value1. Output: ?m=article&f=index&var1=value1.
          *
          */
-        if($config->requestType == 'GET')
+        if($requestType == 'GET')
         {
             $link .= "?{$config->moduleVar}=$moduleName&{$config->methodVar}=$methodName";
             if($viewType != 'html') $link .= "&{$config->viewVar}=" . $viewType;
@@ -1493,6 +1496,7 @@ function getWebRoot($full = false)
     if(!empty($_SERVER['REQUEST_URI']))
     {
         $requestPath = parse_url((string)$_SERVER['REQUEST_URI'], PHP_URL_PATH);
+        $requestPath = rawurldecode($requestPath);
         if(is_string($requestPath) && $requestPath !== '')
         {
             /* REQUEST_URI may contain extra PATH_INFO after the entry script, such as /www/api.php/v2/bugs/1. */

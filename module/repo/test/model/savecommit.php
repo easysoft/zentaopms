@@ -21,11 +21,85 @@ cid=18094
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-// 准备测试数据
-zenData('repo')->loadYaml('repo_savecommit', false, 2)->gen(10);
-zenData('repohistory')->gen(0); // 清空历史记录
-zenData('repofiles')->gen(0);   // 清空文件记录
-zenData('repobranch')->gen(0);  // 清空分支记录
+global $dbh;
+$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` varchar(500) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `projects` varchar(255) NOT NULL DEFAULT '',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `forkID` int unsigned DEFAULT NULL,
+  `mirror` tinyint(1) NOT NULL DEFAULT 0,
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `connector` text DEFAULT NULL,
+  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  `synced` tinyint unsigned NOT NULL DEFAULT 0,
+  `branchArchivable` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repohistory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` varchar(40) NOT NULL DEFAULT '',
+  `commit` int unsigned NOT NULL DEFAULT 0,
+  `comment` text DEFAULT NULL,
+  `committer` varchar(100) NOT NULL DEFAULT '',
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `repo` (`repo`),
+  KEY `revision` (`revision`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repobranch` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` int unsigned NOT NULL DEFAULT 0,
+  `branch` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repofiles` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` int unsigned NOT NULL DEFAULT 0,
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `parent` varchar(255) NOT NULL DEFAULT '',
+  `type` varchar(30) NOT NULL DEFAULT '',
+  `action` varchar(2) NOT NULL DEFAULT '',
+  `oldPath` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`),
+  KEY `repo_revision` (`repo`, `revision`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+
+$repo = zenData('ops_repo');
+$repo->id->range('1-10');
+$repo->spaceID->range('1{10}');
+$repo->product->range('1{10}');
+$repo->name->range('repo1,repo2,repo3,repo4,repo5,repo6,repo7,repo8,repo9,repo10');
+$repo->gitUID->range('uid1,uid2,uid3,uid4,uid5,uid6,uid7,uid8,uid9,uid10');
+$repo->status->range('active{10}');
+$repo->deleted->range('0{10}');
+$repo->gen(10);
 
 // 使用管理员身份登录
 su('admin');

@@ -24,4 +24,23 @@ class storyZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * 测试批量提交评审的数据组装方法。
+     * Test buildStoriesForBatchSubmitReview method.
+     *
+     * @param  array $postData
+     * @access public
+     * @return array
+     */
+    public function buildStoriesForBatchSubmitReviewTest(array $postData): mixed
+    {
+        /* 清除之前的DAO错误。 */
+        dao::$errors = array();
+
+        $_POST = $postData;
+        $result = $this->invokeArgs('buildStoriesForBatchSubmitReview', []);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

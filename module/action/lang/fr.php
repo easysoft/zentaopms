@@ -1264,6 +1264,15 @@ $lang->action->desc->exec                         = '$date, <strong>$actor</stro
 $lang->action->desc->resend                       = '$date, Resend by <strong>$actor</strong>.';
 $lang->action->desc->resendCompile                = '$date, Replay by <strong>$actor</strong>.';
 
+$lang->action->desc->rollbackversion      = '$date, <strong>$actor</strong> rolled back the project Gantt to <strong>$extra</strong>.' . "\n";
+$lang->action->desc->editedbyrollback     = '$date, edited by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->desc->deletedbyrollback    = '$date, deleted by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->desc->undeletedbyrollback  = '$date, restored by <strong>$actor</strong> through the project Gantt version rollback.' . "\n";
+$lang->action->label->editedbyrollback    = 'through project Gantt version rollback edited';
+$lang->action->label->deletedbyrollback   = 'through project Gantt version rollback deleted';
+$lang->action->label->undeletedbyrollback = 'through project Gantt version rollback restored';
+$lang->action->label->rollbackversion     = 'rolled back project Gantt to';
+
 $lang->action->reviewStatusList['wait']      = 'Pending approval';
 $lang->action->reviewStatusList['doing']     = 'Reviewing';
 $lang->action->reviewStatusList['pass']      = 'Pass';

@@ -3,51 +3,60 @@
 
 /**
 
-title=测试 mrModel::apiGetMRCommits();
+title=测试 ppmModel::apiGetMRCommits();
 timeout=0
-cid=17229
+cid=0
 
-- 正确的Gitlab合并请求
- - 属性short_id @59b9ec0f
- - 属性author_name @Administrator
-- 正确的Gitea合并请求
- - 属性sha @d30919bdb9b4cf8e2698f4a6a30e41910427c01c
- - 第committer条的login属性 @gitea
-- gogs没有接口，返回0 @0
-- 错误的Gitlab合并请求属性message @404 Project Not Found
-- 错误的Gitea合并请求 @0
+- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81  @0
+- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
+- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager1  @1
+- 执行$pager1->recTotal @0
+- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('pipeline')->gen(5);
-zenData('oauth')->loadYaml('oauth')->gen(1);
+global $app;
+$app->loadClass('pager', true);
+$app->rawModule = 'ppm';
+$app->rawMethod = 'browse';
+$app->setMethodName('browse');
 
-$mrModel = new mrModelTest();
+zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+zenData('user')->gen(3);
+zenData('product')->gen(1);
 
-$hostID = array(
-    'gitlab' => 1,
-    'gitea'  => 4,
-    'gogs'   => 5
-);
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
+$repo->id->range('42');
+$repo->product->range('1');
+$repo->name->range('ppm-repo-42');
+$repo->defaultBranch->range('main');
+$repo->gen(1);
 
-$projectID = array(
-    'gitlab' => 3,
-    'gitea'  => 'gitea/unittest',
-    'gogs'   => 'easycorp/unittest'
-);
+$ppm = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
+$ppm->id->range('81');
+$ppm->title->range('API PPM 81');
+$ppm->repoID->range('42');
+$ppm->sourceRepoID->range('42');
+$ppm->sourceBranch->range('feature/bbb');
+$ppm->sourceSHA->range('6bada47137f46e3b6b3792b397b714e3726e6990');
+$ppm->targetRepoID->range('42');
+$ppm->targetBranch->range('main');
+$ppm->mergeSHA->range('4444444444444444444444444444444444444444');
+$ppm->status->range('opened');
+$ppm->createdBy->range('admin');
+$ppm->gen(1);
 
-$mrID = array(
-    'gitlab' => 36,
-    'gitea'  => 11,
-    'gogs'   => 1
-);
+su('admin');
 
-r($mrModel->apiGetMRCommitsTester($hostID['gitlab'], $projectID['gitlab'], $mrID['gitlab'])) && p('short_id,author_name') && e('59b9ec0f,Administrator');        // 正确的Gitlab合并请求
-r($mrModel->apiGetMRCommitsTester($hostID['gitea'],  $projectID['gitea'],  $mrID['gitea']))  && p('sha;committer:login')  && e('d30919bdb9b4cf8e2698f4a6a30e41910427c01c,gitea'); // 正确的Gitea合并请求
-r($mrModel->apiGetMRCommitsTester($hostID['gogs'],   $projectID['gogs'],   $mrID['gogs']))   && p()                       && e('0');                                              // gogs没有接口，返回0
+$ppmModel = new ppmModelTest();
+$pager1   = new pager(0, 20, 1);
+$pager2   = new pager(0, 20, 2);
 
-r($mrModel->apiGetMRCommitsTester($hostID['gitlab'], 9999, $mrID['gitlab'])) && p('message') && e('404 Project Not Found'); // 错误的Gitlab合并请求
-r($mrModel->apiGetMRCommitsTester($hostID['gitea'],  9999, $mrID['gitea']))  && p()          && e('0');                     // 错误的Gitea合并请求
+r(count((array)$ppmModel->apiGetMRCommitsTest(42, 81))) && p() && e('0');
+r(strpos(json_encode($ppmModel->apiGetMRCommitsTest(42, 81, $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager1))) && p() && e('1');
+r($pager1->recTotal) && p() && e('0');
+r(strpos(json_encode($ppmModel->apiGetMRCommitsTest(42, 81, $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');

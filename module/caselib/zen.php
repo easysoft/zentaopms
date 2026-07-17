@@ -559,7 +559,7 @@ class caselibZen extends caselib
     protected function processCasesForExport(array $cases, int $libID): array
     {
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $relatedModules = $this->loadModel('tree')->getModulePairs($libID, 'caselib');
+        $relatedModules = $this->loadModel('tree')->getAllModulePairs('caselib', $libID);
         $relatedSteps   = $this->loadModel('testcase')->getRelatedSteps(array_keys($cases));
         $relatedFiles   = $this->testcase->getRelatedFiles(array_keys($cases));
 

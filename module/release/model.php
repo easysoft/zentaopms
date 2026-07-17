@@ -1300,6 +1300,66 @@ class releaseModel extends model
     }
 
     /**
+     * 获取发布关联的版本 ID 列表（含子发布）。
+     * Get build id list of a release.
+     *
+     * @param  object $release
+     * @access public
+     * @return array
+     */
+    public function getReleaseBuildIdList(object $release): array
+    {
+        $buildIdList = array_filter(explode(',', trim($release->build, ',')));
+        if(!empty($release->shadow)) $buildIdList[] = $release->shadow;
+
+        if(!empty($release->releases))
+        {
+            $linkedReleases = $this->getListByCondition(explode(',', $release->releases));
+            foreach($linkedReleases as $linkedRelease)
+            {
+                $buildIdList = array_merge($buildIdList, array_filter(explode(',', trim($linkedRelease->build, ','))));
+                if(!empty($linkedRelease->shadow)) $buildIdList[] = $linkedRelease->shadow;
+            }
+        }
+
+        return array_unique($buildIdList);
+    }
+
+    /**
+     * 获取发布逃逸的 Bug 列表。
+     * Get escaped bug list of a release.
+     *
+     * @param  object $release
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getEscapedBugList(object $release, string $orderBy = '', object $pager = null): array
+    {
+        if(!in_array($release->status, array('normal', 'terminate'))) return array();
+
+        $buildIdList = $this->getReleaseBuildIdList($release);
+        if(empty($buildIdList)) return array();
+
+        $conditions = array();
+        foreach($buildIdList as $buildID) $conditions[] = "FIND_IN_SET('{$buildID}', openedBuild)";
+
+        $bugs = $this->dao->select("*, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder")->from(TABLE_BUG)
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->eq($release->product)
+            ->andWhere('openedDate')->ge($release->releasedDate)
+            ->andWhere('(' . implode(' OR ', $conditions) . ')')
+            ->beginIF($orderBy)->orderBy($orderBy)->fi()
+            ->page($pager)
+            ->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'escapedBugs');
+
+        return $bugs;
+    }
+
+    /**
      * 删除发布。
      * Delete a release.
      *

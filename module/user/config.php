@@ -17,6 +17,7 @@ $config->user->custom = new stdclass();
 $config->user->custom->batchCreateFields = 'dept,join,email,gender';
 $config->user->custom->batchEditFields   = 'dept,join,email,commiter';
 
+$config->user->export = new stdclass();
 $config->user->contactField         = 'mobile,phone,qq,dingding,weixin,skype,whatsapp,slack';
 $config->user->failTimes            = 6;
 $config->user->lockMinutes          = 10;

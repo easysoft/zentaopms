@@ -67,6 +67,7 @@ $config->story->form->edit['closedReason']   = array('type' => 'string',  'contr
 $config->story->form->edit['duplicateStory'] = array('type' => 'int',     'control' => 'select',       'required' => false, 'default' => '', 'options' => array());
 $config->story->form->edit['deleteFiles']    = array('type' => 'array',   'control' => 'hidden',       'required' => false, 'default' => array());
 $config->story->form->edit['renameFiles']    = array('type' => 'array',   'control' => 'hidden',       'required' => false, 'default' => array());
+$config->story->form->edit['comment']        = array('type' => 'string',  'control' => 'editor',       'required' => false, 'default' => '');
 
 $config->story->form->batchCreate = array();
 $config->story->form->batchCreate['branch']     = array('ditto' => true,  'type' => 'int',    'control' => 'select',    'required' => false, 'width' => '200px', 'default' => 0,  'options' => array());
@@ -173,6 +174,11 @@ $config->story->form->submitReview['reviewer']     = array('type' => 'array',   
 $config->story->form->submitReview['reviewedBy']   = array('type' => 'string',   'control' => 'hidden',       'required' => false, 'default' => '');
 $config->story->form->submitReview['reviewedDate'] = array('type' => 'datetime', 'control' => 'hidden',       'required' => false, 'default' => '');
 $config->story->form->submitReview['status']       = array('type' => 'string',   'control' => 'hidden',       'required' => false, 'default' => 'active');
+
+$config->story->form->batchSubmitReview = array();
+$config->story->form->batchSubmitReview['id']       = array('type' => 'int',    'required' => true,  'default' => '', 'base' => true);
+$config->story->form->batchSubmitReview['reviewer'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
+$config->story->form->batchSubmitReview['status']   = array('type' => 'string', 'required' => false, 'default' => 'active');
 
 $config->story->form->batchToTask['module']     = array('type' => 'int',    'required' => false, 'default' => 0);
 $config->story->form->batchToTask['story']      = array('type' => 'int',    'required' => false, 'default' => 0);

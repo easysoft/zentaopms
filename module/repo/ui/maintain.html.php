@@ -48,20 +48,6 @@ if(empty($config->repo->maintain->disableVisit)) $config->logonMethods[] = 'repo
 $repos         = initTableData($repoList, $config->repo->dtable->fieldList, $this->repo);
 $queryMenuLink = createLink('repo', 'maintain', "inSpace={$inSpace}&objectID=$objectID&space={$spaceID}&orderBy=&recTotal={$pager->recTotal}&pageID={$pager->pageID}&type=bysearch&param={queryID}");
 
-/* Process data which the function initTableData() not provided. */
-foreach($repos as $repo)
-{
-    /* 镜像代码库屏蔽"执行扫描/扫描问题"两个操作项。 */
-    if(!empty($repo->mirror) && !empty($repo->actions))
-    {
-        $repo->actions = array_values(array_filter($repo->actions, function($action)
-        {
-            return empty($action['name']) || !in_array($action['name'], array('scanExec', 'scanIssue'), true);
-        }));
-    }
-
-    if(!empty($repo->actions[0]['name']) && $repo->actions[0]['name'] != 'visit') continue;
-}
 
 $spaceItems = array();
 $spaceItems[] = array('text' => $lang->repo->allSpace, 'url' => createLink('repo', 'maintain', "inSpace=0&space=0&objectID={$objectID}"));

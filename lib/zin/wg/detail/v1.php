@@ -292,6 +292,9 @@ CSS;
         $className    = isset($item['className']) ? $item['className'] : null;
         if($titleActions) unset($item['titleActions']);
 
+        $titleActionNode = null;
+        if($titleActions) $titleActionNode = div(setClass('ml-auto'), toolbar::create($titleActions));
+
         return div
         (
             setClass('detail-section'),
@@ -300,7 +303,7 @@ CSS;
             (
                 setClass('detail-section-title row items-center gap-2'),
                 span(setClass('text-md py-1 font-bold'), $title),
-                $titleActions ? toolbar::create($titleActions) : null
+                $titleActionNode
             ) : null,
             div
             (
@@ -316,7 +319,8 @@ CSS;
         $sections = $this->prop('sections', []);
         if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
-        $list = array();
+        $list                = array();
+        $firstSectionHandled = false;
         foreach($sections as $key => $item)
         {
             if($item === '-')
@@ -324,6 +328,32 @@ CSS;
                 $list[] = hr();
                 continue;
             }
+
+            if(!$firstSectionHandled)
+            {
+                $normalizedItem = $item instanceof setting ? $item->toArray() : $item;
+                $title = is_string($key) ? $key : null;
+
+                if(is_array($normalizedItem) && isset($normalizedItem['title'])) $title = $normalizedItem['title'];
+
+                if($title && is_array($normalizedItem))
+                {
+                    $titleActions   = $normalizedItem['titleActions'] ?? array();
+                    $titleActions[] = aiAgentEntry
+                    (
+                        set::type('detail'),
+                        set::module($this->prop('objectType')),
+                        set::method('view'),
+                        set::objectID((int)$this->prop('objectID')),
+                        set::objectVarName($this->prop('objectType'))
+                    );
+                    $normalizedItem['titleActions'] = $titleActions;
+
+                    $item                = $normalizedItem;
+                    $firstSectionHandled = true;
+                }
+            }
+
             $list[] = $this->buildSection($item, is_string($key) ? $key : null);
         }
 
@@ -564,6 +594,21 @@ CSS;
             $objectID = $preAndNext->pre->$idKey;
             $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $prevBtn['hint'] = "#{$objectID} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
+
+            if($objectType == 'testcase')
+            {
+                if(strpos($prevBtn['url'], '{caseVersion}') !== false)
+                {
+                    $caseVersion = !empty($preAndNext->pre->caseVersion) ? $preAndNext->pre->caseVersion : 0;
+                    $prevBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $prevBtn['url']);
+                }
+
+                if(strpos($prevBtn['url'], '{version}') !== false)
+                {
+                    $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
+                    $prevBtn['url'] = str_replace('{version}', "{$version}", $prevBtn['url']);
+                }
+            }
         }
         elseif(is_string($prevBtn))
         {
@@ -575,6 +620,21 @@ CSS;
             $objectID = $preAndNext->next->$idKey;
             $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $nextBtn['hint'] = "#{$objectID} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
+
+            if($objectType == 'testcase')
+            {
+                if(strpos($nextBtn['url'], '{caseVersion}')!== false)
+                {
+                    $caseVersion = !empty($preAndNext->next->caseVersion) ? $preAndNext->next->caseVersion : 0;
+                    $nextBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $nextBtn['url']);
+                }
+
+                if(strpos($nextBtn['url'], '{version}') !== false)
+                {
+                    $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
+                    $nextBtn['url'] = str_replace('{version}', "{$version}", $nextBtn['url']);
+                }
+            }
         }
         elseif(is_string($nextBtn))
         {

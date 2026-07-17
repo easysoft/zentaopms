@@ -19,9 +19,6 @@ cid=18082
 
 */
 
-zenData('pipeline')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(4);
-
 $repo = new repoModelTest();
 
 $gitlabID = 1;
@@ -30,11 +27,11 @@ $svnID    = 4;
 $result    = $repo->getUnsyncedCommitsTest($gitlabID);
 $oneCommit = array_shift($result);
 r($oneCommit)                        && p('revision') && e('2e0dd521b4a29930d5670a2c142a4400d7cffc1a'); //获取gitlab版本库未同步commit
-r(count($oneCommit->files['A']) > 2) && p()           && e('1'); //获取gitlab版本库未同步commit file数量
-r(count($result) > 2)                && p()           && e('1'); //获取gitlab版本库未同步commit数量
+r(count($oneCommit->files['A']))     && p()           && e('1'); //获取gitlab版本库未同步commit file数量
+r(count($result))                    && p()           && e('1'); //获取gitlab版本库未同步commit数量
 
 $result    = $repo->getUnsyncedCommitsTest($svnID);
 $oneCommit = array_shift($result);
 r($oneCommit)                        && p('comment') && e('+ Add file.'); //获取svn版本库未同步commit
-r(count($oneCommit->files['A']) > 0) && p()          && e('1');           //获取svn版本库未同步commit file数量
-r(count($result) > 1)                && p()          && e('1');           //获取svn版本库未同步commit数量
+r(count($oneCommit->files['A']))     && p()          && e('1');           //获取svn版本库未同步commit file数量
+r(count($result))                    && p()          && e('1');           //获取svn版本库未同步commit数量

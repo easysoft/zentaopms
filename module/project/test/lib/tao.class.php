@@ -1098,8 +1098,8 @@ class projectTaoTest extends baseTest
      */
     public function createProductDocLibTest(int $productID): object
     {
-        $this->objectModel->createProductDocLib($productID);
-        return $this->objectModel->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('product')->andWhere('product')->eq($productID)->fetch();
+        $this->instance->createProductDocLib($productID);
+        return $this->instance->dao->select('*')->from(TABLE_DOCLIB)->where('type')->eq('product')->andWhere('product')->eq($productID)->fetch();
     }
 
     /**

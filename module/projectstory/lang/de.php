@@ -24,6 +24,7 @@ $lang->projectstory->batchClose        = 'Batch Close Requirement';
 $lang->projectstory->batchChangePlan   = 'Batch Change Plan';
 $lang->projectstory->batchAssignTo     = 'Batch Assign Requirement';
 $lang->projectstory->batchEdit         = 'Batch Edit Requirement';
+$lang->projectstory->batchSubmitReview = 'Batch Submit Review';
 $lang->projectstory->importToLib       = 'Import To Library';
 $lang->projectstory->batchImportToLib  = 'Batch Import To Library';
 $lang->projectstory->importCase        = 'Import Requirement';

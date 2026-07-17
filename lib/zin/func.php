@@ -72,6 +72,10 @@ function center(): center {return createWg('center', func_get_args());}
 function cell(): cell {return createWg('cell', func_get_args());}
 function divider(): divider {return createWg('divider', func_get_args());}
 function actionItem(): actionItem {return createWg('actionItem', func_get_args());}
+function aiAgentEntry(): aiAgentEntry     { return createWg('aiAgentEntry', func_get_args()); }
+function aiAgentMenu(): aiAgentMenu       { return createWg('aiAgentMenu', func_get_args()); }
+function aiTeammateMenu(): aiTeammateMenu { return createWg('aiTeammateMenu', func_get_args()); }
+function aiFormInject(): aiFormInject     { return createWg('aiFormInject', func_get_args()); }
 function nav(): nav {return createWg('nav', func_get_args());}
 function label(): label {return createWg('label', func_get_args());}
 function statusLabel(): statusLabel {return createWg('statusLabel', func_get_args());}

@@ -207,3 +207,7 @@ $config->release->dtable->leftBug->fieldList['actions']['menu']  = array('unlink
 unset($config->release->dtable->leftBug->fieldList['resolvedBuild']);
 unset($config->release->dtable->leftBug->fieldList['resolvedBy']);
 unset($config->release->dtable->leftBug->fieldList['resolvedDate']);
+
+$config->release->dtable->escapedBug = clone $config->release->dtable->bug;
+$config->release->dtable->escapedBug->fieldList['id']['type'] = 'id';
+unset($config->release->dtable->escapedBug->fieldList['actions']);

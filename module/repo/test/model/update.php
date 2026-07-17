@@ -2,7 +2,6 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-su('admin');
 
 /**
 
@@ -22,23 +21,77 @@ cid=18109
  - 第0条的field属性 @projects
  - 第0条的old属性 @~~
  - 第0条的new属性 @3
-- 更新版本库1仓库第webhook条的0属性 @changeServerProject
+- 更新版本库1仓库服务项目
+ - 第0条的field属性 @serviceProject
+ - 第0条的old属性 @2
+ - 第0条的new属性 @1
 
 */
 
-$repo = zenData('repo')->loadYaml('repo');
-$repo->projects->range('');
-$repo->gen(1);
+global $dbh, $tester;
+$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `space` int NOT NULL DEFAULT 0,
+  `spaceID` int NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `path` varchar(255) NOT NULL DEFAULT '',
+  `SCM` varchar(30) NOT NULL DEFAULT '',
+  `serviceHost` varchar(255) NOT NULL DEFAULT '',
+  `serviceProject` varchar(255) NOT NULL DEFAULT '',
+  `projects` varchar(255) NOT NULL DEFAULT '',
+  `account` varchar(100) NOT NULL DEFAULT '',
+  `password` varchar(255) NOT NULL DEFAULT '',
+  `encrypt` varchar(30) NOT NULL DEFAULT 'base64',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'private',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repouser` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `account` varchar(30) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+
+$tester->dao->insert(TABLE_REPO)->data((object)array(
+    'id'             => 1,
+    'space'          => 1,
+    'spaceID'        => 1,
+    'product'        => '1',
+    'name'           => 'testHtml',
+    'path'           => 'http://repo.local/testhtml',
+    'SCM'            => 'Gitlab',
+    'serviceHost'    => '1',
+    'serviceProject' => '2',
+    'projects'       => '',
+    'gitUID'         => 'uid1',
+    'acl'            => 'private',
+    'status'         => 'active',
+    'deleted'        => 0,
+))->exec();
+$tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => 1, 'account' => 'admin'))->exec();
+
+su('admin');
 
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
 
-$data1 = (object)array('product' => '1', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => 1, 'serviceProject' => 2, 'encrypt' => 'plain', 'path' => '42');
-$data2 = (object)array('product' => '2', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => 1, 'serviceProject' => 2, 'encrypt' => 'plain', 'path' => '42');
-$data3 = (object)array('product' => '2', 'projects' => '3','SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => 1, 'serviceProject' => 2, 'encrypt' => 'plain', 'path' => '42');
-$data4 = (object)array('product' => '2', 'projects' => '3','SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => 1, 'serviceProject' => 1, 'encrypt' => 'plain', 'path' => '42');
+$data1 = (object)array('space' => 1, 'product' => '1', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '2', 'acl' => 'private', 'members' => 'admin');
+$data2 = (object)array('space' => 1, 'product' => '2', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '2', 'acl' => 'private', 'members' => 'admin');
+$data3 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '2', 'acl' => 'private', 'members' => 'admin');
+$data4 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '1', 'acl' => 'private', 'members' => 'admin');
 
 $repo = new repoModelTest();
-r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1'); //更新版本库1名字
-r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');        //更新版本库1所属产品
-r($repo->updateTest(1, $data3, true)) && p('0:field,old,new') && e('projects,~~,3');      //更新版本库1相关项目
-r($repo->updateTest(1, $data4, true)) && p('webhook:0')       && e('changeServerProject');      //更新版本库1仓库
+$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/testhtml', 'gitURL' => 'http://gitfox.local/space/testhtml.git'));
+r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1');
+r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');
+r($repo->updateTest(1, $data3, true)) && p('0:field,old,new') && e('projects,~~,3');
+r($repo->updateTest(1, $data4, true)) && p('0:field,old,new') && e('serviceProject,2,1');

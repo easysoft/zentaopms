@@ -1,6 +1,13 @@
 <?php
 declare(strict_types=1);
 
+$config->todo->form = new stdclass();
+$config->todo->form->create = array();
+$config->todo->form->create['desc'] = array('required' => false, 'type' => 'string',  'default' => '', 'control' => 'editor');
+
+$config->todo->form->edit = array();
+$config->todo->form->edit['desc'] = array('required' => false, 'type' => 'string',  'default' => '', 'control' => 'editor');
+
 $config->todo->create->form = array();
 $config->todo->create->form['type']         = array('required' => true,  'type' => 'string');
 $config->todo->create->form['name']         = array('required' => true,  'type' => 'string', 'default'  => '');

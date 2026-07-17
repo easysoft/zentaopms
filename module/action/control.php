@@ -349,6 +349,12 @@ class action extends control
                     if($isInZinPage) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
                     return print(js::error($this->lang->error->accessDenied));
                 }
+
+                $table = $this->config->objectTables[$objectType];
+                $objectData = $this->dao->select('*')->from($table)->where('id')->eq($objectID)->fetch();
+                $objectData->actioncomment = $commentData->actioncomment;
+                $this->loadModel('message')->sendMentionNotice($objectType, 'comment', $actionID, $objectData);
+
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $actionID));
             }
             if($isInZinPage) return $this->send(array('status' => 'success', 'closeModal' => true, 'callback' => array('name' => 'zui.HistoryPanel.update', 'params' => array('objectType' => $objectType, 'objectID' => (int)$objectID))));

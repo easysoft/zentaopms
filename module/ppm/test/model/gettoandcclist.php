@@ -1,43 +1,49 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-
-su('admin');
 
 /**
 
-title=mrModel->getToAndCcList();
+title=测试 ppmModel::getToAndCcList();
 timeout=0
 cid=0
 
-- 计算有指派者和创建者的情况
- -  @admin
- - 属性1 @user1
-- 计算无指派者有创建者的情况
- -  @admin
- - 属性1 @~~
-- 计算无指派者无创建者的情况
- -  @~~
- - 属性1 @~~
-- 计算有指派者无创建者的情况
- -  @~~
- - 属性1 @user1
+- 执行ppmModel模块的getToAndCcListTest方法  @admin,user1
+
+- 执行ppmModel模块的getToAndCcListTest方法  @admin,
+
+- 执行ppmModel模块的getToAndCcListTest方法  @user1,admin
+
+- 执行ppmModel模块的getToAndCcListTest方法  @admin,admin
+
+- 执行ppmModel模块的getToAndCcListTest方法  @2
+- 执行ppmModel模块的getToAndCcListTest方法  @,
+
+- 执行ppmModel模块的getToAndCcListTest方法  @admin,user2
+
+- 执行ppmModel模块的getToAndCcListTest方法  @2
+- 执行ppmModel模块的getToAndCcListTest方法  @,user1
+
+- 执行ppmModel模块的getToAndCcListTest方法  @user2,user3
+
+- 执行ppmModel模块的getToAndCcListTest方法  @~~
 
 */
 
-$MR = new stdclass();
-$MR->assignee  = 'user1';
-$MR->createdBy = 'admin';
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-$mrModel = $tester->loadModel('mr');
-r($mrModel->getToAndCcList($MR)) && p('0,1') && e('admin,user1'); // 计算有指派者和创建者的情况
+su('admin');
 
-$MR->assignee = '';
-r($mrModel->getToAndCcList($MR)) && p('0,1') && e('admin,~~'); // 计算无指派者有创建者的情况
+$ppmModel = new ppmModelTest();
 
-$MR->createdBy = '';
-r($mrModel->getToAndCcList($MR)) && p('0,1') && e('~~,~~'); // 计算无指派者无创建者的情况
-
-$MR->assignee  = 'user1';
-r($mrModel->getToAndCcList($MR)) && p('0,1') && e('~~,user1'); // 计算有指派者无创建者的情况
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'admin', 'assignee' => 'user1')))) && p() && e('admin,user1');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'admin', 'assignee' => '')))) && p() && e('admin,');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'user1', 'assignee' => 'admin')))) && p() && e('user1,admin');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'admin', 'assignee' => 'admin')))) && p() && e('admin,admin');
+r(count($ppmModel->getToAndCcListTest((object)array('createdBy' => 'admin', 'assignee' => 'user1')))) && p() && e('2');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => '', 'assignee' => '')))) && p() && e(',');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'admin', 'assignee' => 'user2')))) && p() && e('admin,user2');
+r(count($ppmModel->getToAndCcListTest((object)array('createdBy' => '', 'assignee' => 'user1')))) && p() && e('2');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => '', 'assignee' => 'user1')))) && p() && e(',user1');
+r(implode(',', $ppmModel->getToAndCcListTest((object)array('createdBy' => 'user2', 'assignee' => 'user3')))) && p() && e('user2,user3');
+r($ppmModel->getToAndCcListTest((object)array('createdBy' => '', 'assignee' => 'user1'))) && p('0') && e('~~');

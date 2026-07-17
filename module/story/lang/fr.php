@@ -31,6 +31,7 @@ $lang->story->recallAction       = 'Undo';
 $lang->story->relation           = 'Relations';
 $lang->story->needReview         = 'Validation requise';
 $lang->story->batchReview        = 'Validation par lot';
+$lang->story->batchSubmitReview  = 'Batch Submit Review';
 $lang->story->edit               = "Editer Story";
 $lang->story->editDraft          = "Modifier le projet";
 $lang->story->batchEdit          = "Editer par Lot";
@@ -240,6 +241,7 @@ $lang->story->storyChanged     = 'Story Changed';
 $lang->story->demand           = 'Demand';
 $lang->story->unlinkReason     = 'Unlink Reason';
 $lang->story->retractedReason  = 'Retracted Reason';
+$lang->story->syncToChild      = 'Sync to child';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "This story is not linked to the same {$lang->productCommon} as the last one is!";
@@ -398,6 +400,7 @@ $lang->story->batchGradeGtParent     = 'The grade of %s requirements cannot be h
 $lang->story->batchParentError       = "The parent requirement of %s requirement cannot be itself or its child requirement, which has been ignored in this modification.";
 $lang->story->errorNoGradeSplit      = "There has no grade to split.";
 $lang->story->errorRecordMinus       = '『%s』should not be negative number.';
+$lang->story->closeParentTips        = 'There are still unclosed child stories under this parent story: %s. If the parent story is closed, the child stories will also be closed. Are you sure you want to close the parent story?';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -606,3 +609,6 @@ $lang->story->trackSortList['desc'] = ' Descending';
 
 $lang->story->error = new stdclass();
 $lang->story->error->length = "Length exceeds %d characters, cannot save. Please modify it and try again.";
+
+$lang->story->batchSubmitReviewStatusTips = "Story %s cannot be submitted for review as its status is neither Draft nor Under Change!";
+$lang->story->batchSubmitReviewPrivTips   = "You do not have permission to batch submit %s for review. Demands of this type have been filtered.\n";

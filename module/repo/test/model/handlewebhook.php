@@ -23,11 +23,9 @@ cid=18083
 */
 
 zenData('task')->gen(10);
-zenData('pipeline')->gen(5);
 $bug = zenData('bug');
 $bug->execution->range('0');
 $bug->gen(10);
-zenData('repo')->loadYaml('repo')->gen(4);
 
 $repoID = 1;
 $event  = 'Push Hook';
@@ -140,12 +138,6 @@ $data   = '{
     "visibility_level": 0
   }
 }';
-
-global $app;
-include($app->getModuleRoot() . '/repo/control.php');
-$app->control = new repo();
-$app->rawModule = 'repo';
-$app->rawMethod = 'browse';
 
 $repo = new repoModelTest();
 $repo->handleWebhookTest($event, json_decode($data), $repoID);

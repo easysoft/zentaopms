@@ -106,7 +106,7 @@ class projectEntry extends entry
 
         $useCode = $this->checkCodeUsed();
         /* Set $_POST variables. */
-        $fields = 'name,begin,end,acl,parent,desc,PM,whitelist,model';
+        $fields = 'name,begin,end,acl,parent,desc,PM,whitelist,model,days,budget,budgetUnit,workflowGroup';
         if($useCode) $fields .= ',code';
         $this->batchSetPost($fields, $oldProject);
 

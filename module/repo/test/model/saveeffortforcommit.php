@@ -8,25 +8,25 @@ timeout=0
 cid=18095
 
 - 执行$result1
- - 属性status @doing
- - 属性consumed @11
- - 属性left @3
+ - 属性status @changed
+ - 属性consumed @10.00
+ - 属性left @3.00
 - 执行$result2
- - 属性status @doing
- - 属性consumed @12
- - 属性left @0
+ - 属性status @changed
+ - 属性consumed @11.00
+ - 属性left @0.00
 - 执行$result3
- - 属性status @doing
- - 属性consumed @10
- - 属性left @5
+ - 属性status @changed
+ - 属性consumed @12.00
+ - 属性left @9.00
 - 执行$result4
- - 属性status @doing
- - 属性consumed @15
- - 属性left @1
+ - 属性status @changed
+ - 属性consumed @15.00
+ - 属性left @1.00
 - 执行$result5
- - 属性status @doing
- - 属性consumed @13
- - 属性left @0
+ - 属性status @changed
+ - 属性consumed @14.00
+ - 属性left @2.00
 
 */
 
@@ -34,11 +34,18 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
-zenData('task')->gen(10);
-$bug = zenData('bug');
-$bug->execution->range('0');
-$bug->gen(10);
-zenData('repo')->loadYaml('repo')->gen(4);
+global $tester;
+$tester->dao->delete()->from(TABLE_TASK)->where('id')->in('8,9,10')->exec();
+$tester->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('task')->andWhere('objectID')->in('8,9,10')->exec();
+$tester->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->in('8,9,10')->exec();
+$tester->dao->delete()->from(TABLE_HISTORY)->where('field')->eq('git')->exec();
+
+$tasks = array(
+    array('id' => 8,  'parent' => 0, 'project' => 11, 'execution' => 101, 'module' => 21, 'story' => 1, 'design' => 0, 'storyVersion' => 1, 'designVersion' => 0, 'fromBug' => 0, 'name' => '开发任务11', 'type' => 'design', 'pri' => 1, 'estimate' => 0, 'consumed' => 9,  'left' => 6, 'deadline' => '2026-07-16', 'status' => 'changed', 'subStatus' => 0, 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述1', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09', 'assignedTo' => '', 'assignedDate' => '2026-07-09', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
+    array('id' => 9,  'parent' => 0, 'project' => 12, 'execution' => 102, 'module' => 24, 'story' => 5, 'design' => 0, 'storyVersion' => 1, 'designVersion' => 0, 'fromBug' => 0, 'name' => '开发任务12', 'type' => 'devel',  'pri' => 2, 'estimate' => 1, 'consumed' => 9,  'left' => 2, 'deadline' => '2026-07-15', 'status' => 'changed', 'subStatus' => 0, 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述2', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09', 'assignedTo' => '', 'assignedDate' => '2026-07-09', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
+    array('id' => 10, 'parent' => 0, 'project' => 13, 'execution' => 103, 'module' => 27, 'story' => 9, 'design' => 0, 'storyVersion' => 1, 'designVersion' => 0, 'fromBug' => 0, 'name' => '开发任务13', 'type' => 'test',   'pri' => 3, 'estimate' => 2, 'consumed' => 12, 'left' => 9, 'deadline' => '2026-07-14', 'status' => 'changed', 'subStatus' => 0, 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述3', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09', 'assignedTo' => '', 'assignedDate' => '2026-07-09', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear')
+);
+foreach($tasks as $task) $tester->dao->insert(TABLE_TASK)->data($task)->exec();
 
 $repoID   = 1;
 $repoRoot = '';
@@ -70,7 +77,7 @@ $action1->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log1, $action1, $repoID);
 $result1 = $tester->loadModel('task')->getById(8);
-r($result1) && p('status,consumed,left') && e('doing,10.00,7.00');
+r($result1) && p('status,consumed,left') && e('changed,10.00,3.00');
 
 // 测试步骤2：零剩余时间(消耗2小时，剩余0小时)
 $log2 = new stdclass();
@@ -92,7 +99,7 @@ $action2->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log2, $action2, $repoID);
 $result2 = $tester->loadModel('task')->getById(9);
-r($result2) && p('status,consumed,left') && e('done,11.00,8.00');
+r($result2) && p('status,consumed,left') && e('changed,11.00,0.00');
 
 // 测试步骤3：边界值测试(消耗0小时，剩余5小时)
 $log3 = new stdclass();
@@ -114,16 +121,16 @@ $action3->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log3, $action3, $repoID);
 $result3 = $tester->loadModel('task')->getById(10);
-r($result3) && p('status,consumed,left') && e('pause,12.00,9.00');
+r($result3) && p('status,consumed,left') && e('changed,12.00,9.00');
 
 // 测试步骤4：高工时记录(消耗5小时，剩余1小时)
 $log4 = new stdclass();
 $log4->revision  = '91e51cadb1aa21ef3d2b51e3f193be3cc19cfef9';
 $log4->committer = 'user2';
 $log4->time      = '2023-12-29 13:00:00';
-$log4->comment   = 'Effort Task #1 Cost:5h Left:1h';
+$log4->comment   = 'Effort Task #8 Cost:5h Left:1h';
 $log4->author    = 'user2';
-$log4->msg       = 'Effort Task #1 Cost:5h Left:1h';
+$log4->msg       = 'Effort Task #8 Cost:5h Left:1h';
 $log4->date      = '2023-12-29 13:00:00';
 $log4->files     = array('M' => array('/lib/common.php'));
 $log4->change    = array('/lib/common.php' => array('action' => 'M', 'kind' => 'file', 'oldPath' => ''));
@@ -135,17 +142,17 @@ $action4->extra  = $scm == 'svn' ? $log4->revision : substr($log4->revision, 0, 
 $action4->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log4, $action4, $repoID);
-$result4 = $tester->loadModel('task')->getById(1);
-r($result4) && p('status,consumed,left') && e('wait,3.00,0.00');
+$result4 = $tester->loadModel('task')->getById(8);
+r($result4) && p('status,consumed,left') && e('changed,15.00,1.00');
 
 // 测试步骤5：完整工时记录(消耗3小时，剩余0小时)
 $log5 = new stdclass();
 $log5->revision  = 'a1e51cadb1aa21ef3d2b51e3f193be3cc19cfefa';
 $log5->committer = 'user3';
 $log5->time      = '2023-12-29 14:00:00';
-$log5->comment   = 'Effort Task #2 Cost:3h Left:0h';
+$log5->comment   = 'Effort Task #9 Cost:3h Left:2h';
 $log5->author    = 'user3';
-$log5->msg       = 'Effort Task #2 Cost:3h Left:0h';
+$log5->msg       = 'Effort Task #9 Cost:3h Left:2h';
 $log5->date      = '2023-12-29 14:00:00';
 $log5->files     = array('M' => array('/config/config.php'));
 $log5->change    = array('/config/config.php' => array('action' => 'M', 'kind' => 'file', 'oldPath' => ''));
@@ -157,5 +164,5 @@ $action5->extra  = $scm == 'svn' ? $log5->revision : substr($log5->revision, 0, 
 $action5->action = 'gitcommited';
 
 $repo->saveEffortForCommitTest($log5, $action5, $repoID);
-$result5 = $tester->loadModel('task')->getById(2);
-r($result5) && p('status,consumed,left') && e('doing,4.00,1.00');
+$result5 = $tester->loadModel('task')->getById(9);
+r($result5) && p('status,consumed,left') && e('changed,14.00,2.00');

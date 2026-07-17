@@ -889,10 +889,11 @@ class bug extends control
         /* Show the variables associated with the batch creation bugs. */
         $this->bugZen->assignBatchCreateVars($executionID, $product, $branch, $output, $bugImagesFile);
 
-        $this->view->title    = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
-        $this->view->moduleID = $moduleID;
-        $this->view->product  = $product;
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->title     = $this->products[$productID] . $this->lang->hyphen . $this->lang->bug->batchCreate;
+        $this->view->moduleID  = $moduleID;
+        $this->view->product   = $product;
+        $this->view->fromCases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branch));
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed');
         $this->display();
     }
 

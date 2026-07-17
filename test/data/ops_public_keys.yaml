@@ -1,0 +1,47 @@
+title: table ops_public_keys
+desc: "SSH公钥表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: account
+    note: "关联用户账号"
+    range: "admin,user1,user2"
+  - field: identifier
+    note: "公钥唯一标识"
+    range: "key-admin,key-user1,key-user2"
+  - field: verifiedDate
+    note: "公钥验证时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: fingerprint
+    note: "公钥指纹"
+    range: "SHA256_admin,SHA256_user1,SHA256_user2"
+  - field: content
+    note: "公钥原始内容"
+    range: "ssh-rsa-AAAAB3NzaC1yc2EAAAADAQABAAABAQD1,ssh-ed25519-AAAAC3NzaC1lZDI1NTE5AAAAI2,ecdsa-sha2-nistp256-AAAAE2VjZHNhLXNoYTIt"
+  - field: comment
+    note: "公钥注释部分"
+    range: "admin@laptop,user1@mac,user2@ci"
+  - field: type
+    note: "公钥算法类型"
+    range: "ssh-rsa,ssh-ed25519,ecdsa-sha2-nistp256"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"

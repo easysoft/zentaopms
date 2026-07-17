@@ -12,7 +12,7 @@ $(document).off('click','.dtable-footer .batch-btn-repo').on('click', '.dtable-f
     const checkedList = dtable.$.getChecks();
     if(!checkedList.length) return;
 
-    const tabType  = $(this).data('type');
+    const tabType  = 'tasks';
     const postData = new FormData();
     checkedList.forEach((id) => postData.append(`${tabType}[]`, id));
 

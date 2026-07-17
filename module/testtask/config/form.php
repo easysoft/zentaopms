@@ -41,6 +41,7 @@ $config->testtask->form->edit['mailto']      = array('required' => false, 'type'
 $config->testtask->form->edit['deleteFiles'] = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testtask->form->edit['renameFiles'] = array('required' => false, 'type' => 'array',  'default' => array());
 $config->testtask->form->edit['members']     = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->testtask->form->edit['comment']     = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
 $config->testtask->form->start = array();
 $config->testtask->form->start['status']    = array('required' => true,  'type' => 'string', 'default' => 'doing');

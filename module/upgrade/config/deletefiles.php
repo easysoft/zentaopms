@@ -2617,3 +2617,6 @@ $config->delete['22_3'][] = 'module/space/test/yaml/space.yaml';
 $config->delete['22_3'][] = 'module/space/test/zen/getspaceinstances.php';
 $config->delete['22_3'][] = 'module/space/ui/createapplication.html.php';
 $config->delete['22_3'][] = 'module/store';
+$config->delete['22_3'][] = 'module/git';
+$config->delete['22_3'][] = 'module/svn';
+$config->delete['22_3'][] = 'module/compile';

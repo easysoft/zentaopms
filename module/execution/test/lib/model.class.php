@@ -564,7 +564,7 @@ class executionModelTest extends baseTest
      * @access public
      * @return array
      */
-    public function suspendTest($executionID, $param = array())
+    public function suspendTest(int $executionID, array $param = array())
     {
         $createFields = array('status' => 'suspended', 'comment' => '挂起描述测试');
 

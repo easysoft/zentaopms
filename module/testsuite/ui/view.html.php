@@ -10,7 +10,10 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$app->loadLang('testtask');
+
 data('testsuite', $suite);
+jsVar('caseChangeTip', $lang->testtask->caseChangeTip);
 $config->testsuite->actionList['edit']['text'] = $config->testsuite->actionList['edit']['hint'] = $lang->edit;
 $config->testsuite->actionList['delete']['text'] = $config->testsuite->actionList['delete']['hint'] = $lang->delete;
 $actions = $this->loadModel('common')->buildOperateMenu($suite);
@@ -48,11 +51,15 @@ detailHeader
 $canBatchEdit   = common::hasPriv('testcase', 'batchEdit');
 $canBatchUnlink = common::hasPriv('testsuite', 'batchUnlinkCases');
 $canBatchRun    = common::hasPriv('testtask', 'batchRun');
-$hasCheckbox    = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchRun));
+$canBatchConfirmCaseChange = common::hasPriv('testsuite', 'batchConfirmCaseChange');
+$canBatchIgnoreCaseChange  = common::hasPriv('testsuite', 'batchIgnoreCaseChange');
+$hasCheckbox = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchRun || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange));
 
 $batchItems = array(
     $canBatchUnlink ? array('text' => $lang->testsuite->unlinkCase, 'innerClass' => 'batch-btn ajax-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchUnlinkCases', "suiteID={$suite->id}"))              : null,
     $canBatchRun    ? array('text' => $lang->testtask->runCase,     'innerClass' => 'batch-btn not-open-url',          'data-url' => helper::createLink('testtask', 'batchRun', "productID={$productID}&&orderBy={$orderBy}")) : null,
+    $canBatchConfirmCaseChange ? array('text' => $lang->testcase->confirmLibcaseChange, 'innerClass' => 'batch-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchConfirmCaseChange', "suiteID={$suite->id}")) : null,
+    $canBatchIgnoreCaseChange  ? array('text' => $lang->testcase->ignoreLibcaseChange,  'innerClass' => 'batch-btn not-open-url', 'data-url' => helper::createLink('testsuite', 'batchIgnoreCaseChange',  "suiteID={$suite->id}")) : null,
 );
 
 $footToolbar = array('items' => array(
@@ -68,7 +75,7 @@ $config->testsuite->testcase->dtable->fieldList['status']['statusMap']['changed'
 
 foreach($cases as $case)
 {
-    if($case->version > $case->caseVersion) $case->status = 'changed';
+    if($case->version < $case->caseVersion) $case->status = 'changed';
 }
 
 $tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList);
@@ -85,7 +92,8 @@ detailBody
             set::orderBy($orderBy),
             set::sortLink(createLink('testsuite', 'view', "suiteID={$suite->id}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
             set::footToolbar($footToolbar),
-            set::footPager(usePager('pager'))
+            set::footPager(usePager('pager')),
+            set::onRenderCell(jsRaw('window.onRenderCell'))
         )
     ),
     history

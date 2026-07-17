@@ -692,6 +692,8 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $objectType   project|execution|product
      * @param  string $extra
+     * @param  string $browseType
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -699,9 +701,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testreport(int $executionID = 0, string $objectType = 'execution', string $extra = '', string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testreport(int $executionID = 0, string $objectType = 'execution', string $extra = '', string $browseType = 'all', int $queryID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
-        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('testreport', 'browse', "objectID=$executionID&objectType=$objectType&extra=$extra&browseType=$browseType&queryID=$queryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -765,6 +767,8 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  string $type
+     * @param  int    $param
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -772,7 +776,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testtask(int $executionID = 0, int $productID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
+    public function testtask(int $executionID = 0, int $productID = 0, string $type = 'all', int $param = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $this->loadModel('testtask');
         $this->app->loadLang('testreport');
@@ -788,7 +792,12 @@ class execution extends control
         /* Load pager. */
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
-        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', 'product_asc,' . $sort, $pager);
+        $tasks = $this->testtask->getExecutionTasks($executionID, $productID, 'execution', $type, $param, 'product_asc,' . $sort, $pager);
+
+        $products = $this->product->getProducts($executionID);
+        /* Build the search form. */
+        $actionURL = $this->createLink('execution', 'testtask', "executionID=$executionID&productID=$productID&type=bysearch&queryID=myQueryID&orderBy=$orderBy");
+        $this->execution->buildTesttaskSearchForm($products, $param, $actionURL);
 
         $this->executionZen->assignTesttaskVars($tasks);
 
@@ -799,6 +808,7 @@ class execution extends control
         $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
+        $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
@@ -2519,7 +2529,7 @@ class execution extends control
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $object);
 
         $project   = (strpos('sprint,stage,kanban', $object->type) !== false) ? $this->loadModel('project')->getByID($object->project) : $object;
-        $storyType = (($object->type == 'stage' && in_array($object->attribute, array('mix', 'request', 'design'))) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
+        $storyType = (($object->type == 'stage' && in_array($project->model, (array)$this->config->project->waterfallList)) || $object->type == 'project' || !$object->multiple) ? ($project->storyType ?? 'story') : 'story';
 
         if($browseType == 'bysearch') $allStories = $this->story->getBySearch('all', '', $queryID, $orderBy, $objectID, $storyType);
         if($browseType != 'bysearch') $allStories = $this->story->getProductStories(implode(',', array_keys($products)), $branchIDList, '0', 'active,launched', $storyType, $orderBy, true, '', null);

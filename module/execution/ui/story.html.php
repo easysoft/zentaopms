@@ -11,8 +11,6 @@ declare(strict_types=1);
 
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 data('activeMenuID', $storyType);
 jsVar('orderBy', $orderBy);
 jsVar('storyPageID', $pager->pageID);
@@ -135,7 +133,9 @@ featureBar
 if($isFromDoc || $isFromAI) div(setID('docSearchForm'));
 
 $linkStoryByPlanTips = $multiBranch ? sprintf($lang->execution->linkBranchStoryByPlanTips, $lang->project->branch) : $lang->execution->linkNormalStoryByPlanTips;
+$linkStoryByPlanTips = $execution->type == 'sprint' ? str_replace($lang->execution->common, $lang->execution->typeList['sprint'], $linkStoryByPlanTips) : $linkStoryByPlanTips;
 $linkStoryByPlanTips = $execution->multiple ? $linkStoryByPlanTips : str_replace($lang->execution->common, $lang->projectCommon, $linkStoryByPlanTips);
+if($execution->type == 'sprint') $linkStoryByPlanTips = substr_replace($linkStoryByPlanTips, $lang->SRCommon, strrpos($linkStoryByPlanTips, $lang->common->story), strlen($lang->common->story));
 modal
 (
     setID('linkStoryByPlan'),
@@ -200,7 +200,7 @@ if(commonModel::isTutorialMode())
 $createItems = array();
 $batchItems  = array();
 if($canOpreate['batchCreate']) $batchItems[] = array('text' => $lang->SRCommon, 'url' => $batchCreateLink);
-if((in_array($execution->attribute, array('mix', 'request', 'design')) && $execution->type == 'stage') || !$execution->multiple)
+if($execution->type == 'stage' || !$execution->multiple)
 
 {
     if($canOpreate['createRequirement'])      $createItems[] = array('text' => $lang->requirement->create, 'url' => $createRequirementLink, 'hint' => $hasFrozenStories ? sprintf($lang->story->frozenTip, $lang->requirement->create) : '');

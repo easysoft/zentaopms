@@ -966,19 +966,19 @@ class bugZen extends bug
 
         if(!empty($bug->allBuilds))
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreplace', 0, '');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,noreplace', 0, '');
         }
         elseif($executionID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $executionID, 'execution');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail', $executionID, 'execution');
         }
         elseif($projectID)
         {
-            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail', $projectID, 'project');
+            $builds = $this->build->getBuildPairs(array($productID), $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail', $projectID, 'project');
         }
         else
         {
-            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,noreleased,nofail');
+            $builds = $this->build->getBuildPairs(array($productID), empty($branch) ? 'all' : $branch, 'noempty,noterminate,nodone,withbranch,nowaitrelease,noreleased,nofail');
         }
         $builds = $this->build->addReleaseLabelForBuilds($productID, $builds);
 
@@ -1615,8 +1615,13 @@ class bugZen extends bug
         /* Get custom Fields. */
         foreach(explode(',', $this->config->bug->list->customBatchEditFields) as $field) $customFields[$field] = $this->lang->bug->$field;
 
+        /* Set display fields. */
+        $showFields = $this->config->bug->custom->batchEditFields;
+        $showFields = trim($showFields, ',');
+
         $this->view->title        = ($productID ? (zget($products, $productID, '', $products[$productID]->name . $this->lang->hyphen) . "BUG") : '') . $this->lang->bug->batchEdit;
         $this->view->customFields = $customFields;
+        $this->view->showFields   = $showFields;
 
         /* Judge whether the editedBugs is too large and set session. */
         $countInputVars  = count($bugs) * (count(explode(',', $this->config->bug->custom->batchEditFields)) + 2);
@@ -1631,6 +1636,7 @@ class bugZen extends bug
         $branchTagOption = $this->assignProductRelatedVars($bugs, $products);
         $this->view->productID = $productID;
         $this->view->branch    = $branch;
+        $this->view->fromCases = $this->loadModel('testcase')->getPairsByProduct($productID, array(0, $branch));
 
         /* Assign project related variables. */
         $this->assignProjectRelatedVars($bugs, $products);

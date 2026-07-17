@@ -11,12 +11,16 @@ class userModelTest extends baseTest
     /**
      * Test get user list.
      *
-     * @param  bool $count
+     * @param  bool        $count
+     * @param  string|null $showOutside
      * @access public
      * @return void
      */
-    public function getListTest($params = 'nodeleted', $count = false)
+    public function getListTest($params = 'nodeleted', $count = false, $showOutside = null)
     {
+        global $config;
+        if($showOutside !== null) $config->user->showOutside = $showOutside;
+
         $objects = $this->instance->getList($params);
         if(dao::isError())
         {
@@ -71,12 +75,16 @@ class userModelTest extends baseTest
      * @param  string $params
      * @param  string $usersToAppended
      * @param  int    $maxCount
-     * @param  array  $accounts
+     * @param  array       $accounts
+     * @param  string|null $showOutside
      * @access public
      * @return void
      */
-    public function getPairsTest($params = '', $usersToAppended = '', $maxCount = 0, $accounts = array())
+    public function getPairsTest($params = '', $usersToAppended = '', $maxCount = 0, $accounts = array(), $showOutside = null)
     {
+        global $config;
+        if($showOutside !== null) $config->user->showOutside = $showOutside;
+
         $objects = $this->instance->getPairs($params, $usersToAppended, $maxCount, $accounts);
         if(dao::isError())
         {

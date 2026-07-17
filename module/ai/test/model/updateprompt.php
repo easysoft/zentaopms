@@ -11,8 +11,9 @@ cid=15078
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt2, $originalPrompt2  @1
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt3, $originalPrompt3  @1
 - 执行aiTest模块的updatePromptTest方法，参数是$prompt4, null  @1
-- 执行aiTest模块的updatePromptTest方法，参数是$prompt5, null 第name条的0属性 @该名称已使用，请尝试其他名称。
-- 执行aiTest模块的updatePromptTest方法，参数是$prompt6, null 第name条的0属性 @『name』不能为空。
+- 执行aiTest模块的updatePromptTest方法，参数是$prompt5, null  @1
+- 执行aiTest模块的updatePromptTest方法，参数是$prompt6, null 第name条的0属性 @该名称已使用，请尝试其他名称。
+- 执行aiTest模块的updatePromptTest方法，参数是$prompt7, null 第name条的0属性 @『name』不能为空。
 
 */
 
@@ -29,7 +30,7 @@ $table->createdBy->range('admin{10}');
 $table->createdDate->range('`2023-01-01 10:00:00`');
 $table->editedBy->range('admin');
 $table->editedDate->range('`2023-01-01 11:00:00`');
-$table->deleted->range('0{10}');
+$table->deleted->range('0{9},1');
 $table->gen(10);
 
 su('admin');
@@ -100,22 +101,32 @@ $prompt4->status = 'active';
 
 r($aiTest->updatePromptTest($prompt4, null)) && p() && e('1');
 
-// 测试步骤5：名称重复验证
+// 测试步骤5：已删除同名记录不参与名称重复校验
 $prompt5 = new stdClass();
-$prompt5->id = 4;
-$prompt5->name = '提示2';
-$prompt5->desc = '重复名称测试';
-$prompt5->module = 'user';
+$prompt5->id = 6;
+$prompt5->name = '提示10';
+$prompt5->desc = '已删除同名测试';
+$prompt5->module = 'project';
 $prompt5->status = 'active';
 
-r($aiTest->updatePromptTest($prompt5, null)) && p('name:0') && e('该名称已使用，请尝试其他名称。');
+r($aiTest->updatePromptTest($prompt5, null)) && p() && e('1');
 
-// 测试步骤6：必填字段验证
+// 测试步骤6：名称重复验证
 $prompt6 = new stdClass();
-$prompt6->id = 5;
-$prompt6->name = '';
-$prompt6->desc = '空名称测试';
-$prompt6->module = 'project';
+$prompt6->id = 4;
+$prompt6->name = '提示2';
+$prompt6->desc = '重复名称测试';
+$prompt6->module = 'user';
 $prompt6->status = 'active';
 
-r($aiTest->updatePromptTest($prompt6, null)) && p('name:0') && e('『name』不能为空。');
+r($aiTest->updatePromptTest($prompt6, null)) && p('name:0') && e('该名称已使用，请尝试其他名称。');
+
+// 测试步骤7：必填字段验证
+$prompt7 = new stdClass();
+$prompt7->id = 5;
+$prompt7->name = '';
+$prompt7->desc = '空名称测试';
+$prompt7->module = 'project';
+$prompt7->status = 'active';
+
+r($aiTest->updatePromptTest($prompt7, null)) && p('name:0') && e('『name』不能为空。');

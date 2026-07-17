@@ -2031,11 +2031,12 @@ class executionZenTest
         if(!isset($lang->executionCommon)) $lang->executionCommon = '执行';
         if(!isset($lang->story)) $lang->story = new stdClass();
         if(!isset($lang->story->common)) $lang->story->common = '需求';
+        if(!isset($lang->SRCommon)) $lang->SRCommon = '研发需求';
         if(!isset($lang->story->typeList)) $lang->story->typeList = array('story' => '用户故事', 'epic' => '史诗', 'requirement' => '需求');
         if(!isset($lang->execution->stage)) $lang->execution->stage = '阶段';
         if(!isset($lang->execution->tips)) $lang->execution->tips = '提示';
-        if(!isset($lang->execution->importPlanStory)) $lang->execution->importPlanStory = '当前计划关联了%s，是否要导入这些需求？';
-        if(!isset($lang->execution->importBranchPlanStory)) $lang->execution->importBranchPlanStory = '当前分支计划关联了%s，是否要导入这些需求？';
+        if(!isset($lang->execution->importPlanStory)) $lang->execution->importPlanStory = '当前计划关联了%s，是否要导入这些%s？';
+        if(!isset($lang->execution->importBranchPlanStory)) $lang->execution->importBranchPlanStory = '当前分支计划关联了%s，是否要导入这些%s？';
 
         // 设置app变量，支持不同的tab上下文
         $app->tab = $tabContext;
@@ -2126,8 +2127,8 @@ class executionZenTest
                 }
                 if(empty($storyType)) $storyType = $lang->story->common;
 
-                // 构建导入提示信息
-                $importPlanStoryTips = sprintf($multiBranchProduct ? $lang->execution->importBranchPlanStory : $lang->execution->importPlanStory, trim($storyType, ', '));
+                if($execution->type == 'sprint') $storyType = $lang->SRCommon;
+                $importPlanStoryTips = sprintf($multiBranchProduct ? $lang->execution->importBranchPlanStory : $lang->execution->importPlanStory, trim($storyType, ', '), $execution->type == 'sprint' ? $lang->SRCommon : $lang->common->story);
                 if($execution->type == 'stage') $importPlanStoryTips = str_replace($lang->executionCommon, $lang->execution->stage, $importPlanStoryTips);
 
                 // 模拟返回确认对话框数据

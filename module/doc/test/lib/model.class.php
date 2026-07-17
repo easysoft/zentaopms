@@ -764,21 +764,6 @@ class docModelTest extends baseTest
     }
 
     /**
-     * 获取编辑过的文档ID列表。
-     * Get the list of doc id list that have been edited.
-     *
-     * @access public
-     * @return array
-     */
-    public function getEditedDocIdListTest(): array
-    {
-        $docIdList = $this->instance->getEditedDocIdList();
-
-        if(dao::isError()) return dao::getError();
-        return $docIdList;
-    }
-
-    /**
      * 获取我的空间下的文档列表数据。
      * Get doc list under the my space.
      *

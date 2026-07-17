@@ -10,8 +10,6 @@ declare(strict_types=1);
  */
 namespace zin;
 
-include($this->app->getModuleRoot() . 'ai/ui/promptmenu.html.php');
-
 /*
  * 定义库类型名称和图标。
  * Define the lib types and icons.
@@ -111,6 +109,15 @@ $privs['bugBrowse']   = $privs['productBug'] || $privs['productplanView'];
 
 $homeName = false;
 if($app->moduleName == 'doc' && isset($lang->doc->spaceList[$type]) && !$noSpace) $homeName = $lang->doc->spaceList[$type];
+
+aiAgentEntry
+(
+    set::module('doc'),
+    set::method('app'),
+    set::type('detail'),
+    set::objectID(1),
+    set::objectVarName('doc')
+);
 
 docApp
 (

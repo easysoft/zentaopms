@@ -31,6 +31,7 @@ $lang->story->recallAction       = '撤销';
 $lang->story->relation           = '查看关联需求';
 $lang->story->needReview         = '需要评审';
 $lang->story->batchReview        = '批量评审';
+$lang->story->batchSubmitReview  = '批量提交评审';
 $lang->story->edit               = "编辑";
 $lang->story->editDraft          = "编辑草稿";
 $lang->story->batchEdit          = "批量编辑";
@@ -240,6 +241,7 @@ $lang->story->storyChanged     = '需求已变更';
 $lang->story->demand           = '需求池需求';
 $lang->story->unlinkReason     = '移除原因';
 $lang->story->retractedReason  = '撤销原因';
+$lang->story->syncToChild      = '同步至子需求';
 
 $lang->story->ditto       = '同上';
 $lang->story->dittoNotice = "该{$lang->SRCommon}与上一{$lang->SRCommon}不属于同一{$lang->productCommon}！";
@@ -398,6 +400,7 @@ $lang->story->batchGradeGtParent     = '%s需求的层级不能高于其父需�
 $lang->story->batchParentError       = "%s需求的父需求不能为其本身或其子需求，本次修改已将其忽略。";
 $lang->story->errorNoGradeSplit      = "没有可拆分的需求层级";
 $lang->story->errorRecordMinus       = '『%s』不能为负数';
+$lang->story->closeParentTips        = "该父需求下还有未关闭的子需求：%s。父需求关闭后，子需求也将同时关闭，您确定要关闭父需求吗？";
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";
@@ -606,3 +609,6 @@ $lang->story->trackSortList['desc'] = '降序';
 
 $lang->story->error = new stdclass();
 $lang->story->error->length = "长度超过了%d个字符，无法保存，请修改后再试";
+
+$lang->story->batchSubmitReviewStatusTips = "需求%s不是草稿或变更中状态，不能提交评审！";
+$lang->story->batchSubmitReviewPrivTips   = "您无%s批量提交评审权限，已过滤掉该类型的需求。\n";

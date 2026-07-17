@@ -26,60 +26,6 @@ class pipelineZen extends pipeline
     }
 
     /**
-     * 获取流水线执行数据。
-     * Get pipeline compile data.
-     *
-     * @param  object    $compile
-     * @access protected
-     * @return void
-     */
-    protected function getCompileData(object $compile): void
-    {
-        $this->app->loadLang('project');
-        $taskID = $compile->testtask;
-        $task   = $this->loadModel('testtask')->getById($taskID);
-        $runs   = $this->testtask->getRunsForUnitCases($taskID, 'id');
-
-        $cases = array();
-        $runs = $this->loadModel('testcase')->appendData($runs, 'testrun');
-        foreach($runs as $run) $cases[$run->case] = $run;
-
-        $results = $this->dao->select('*')->from(TABLE_TESTRESULT)->where('`case`')->in(array_keys($cases))->andWhere('run')->in(array_keys($runs))->fetchAll('run');
-        foreach($results as $result)
-        {
-            $runs[$result->run]->caseResult = $result->caseResult;
-            $runs[$result->run]->xml        = $result->xml;
-            $runs[$result->run]->duration   = $result->duration;
-        }
-
-        $groupCases = $this->dao->select('*')->from(TABLE_SUITECASE)->where('`case`')->in(array_keys($cases))->orderBy('case')->fetchGroup('suite', 'case');
-        $summary    = array();
-        if(empty($groupCases)) $groupCases[] = $cases;
-        foreach($groupCases as $suiteID => $groupCase)
-        {
-            $caseCount = 0;
-            $failCount = 0;
-            $duration  = 0;
-            foreach($groupCase as $caseID => $suitecase)
-            {
-                $case = $cases[$caseID];
-                $groupCases[$suiteID][$caseID] = $case;
-                $duration += $case->duration;
-                $caseCount ++;
-                if($case->caseResult == 'fail') $failCount ++;
-            }
-            $summary[$suiteID] = sprintf($this->lang->testtask->summary, $caseCount, $failCount, $duration);
-        }
-
-        $suites = $this->loadModel('testsuite')->getUnitSuites($task->product);
-
-        $this->view->groupCases = $groupCases;
-        $this->view->suites     = $suites;
-        $this->view->summary    = $summary;
-        $this->view->taskID     = $taskID;
-    }
-
-    /**
      * 构建搜索表单。
      * Build search form.
      *
@@ -212,7 +158,7 @@ class pipelineZen extends pipeline
         {
             if($isJenkins)
             {
-                $jenkinsPipelines = $this->getJenkinsPipelineList($selectedProviderID, $repoID);
+                $jenkinsPipelines = $this->getJenkinsPipelineList($selectedProviderID);
             }
             else
             {
@@ -235,11 +181,10 @@ class pipelineZen extends pipeline
      * Get Jenkins pipeline list from provider.
      *
      * @param  int    $providerID
-     * @param  int    $repoID
      * @access public
      * @return array
      */
-    public function getJenkinsPipelineList(int $providerID, int $repoID = 0): array
+    public function getJenkinsPipelineList(int $providerID): array
     {
         $provider = $this->loadModel('provider')->getByID($providerID);
         if(!$provider || $provider->type !== 'Jenkins') return array();

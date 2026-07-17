@@ -419,7 +419,7 @@ class searchTao extends searchModel
                 $againstCond[] = '(+"' . $trimmedWord . '")';
             }
 
-            if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond .= "(-\" $word \") ";
+            if(is_numeric($word) && strpos($word, '.') === false && strlen($word) == 5) $againstCond[] = "(-\" $word \") ";
         }
 
         if(in_array($this->config->db->driver, $this->config->pgsqlDriverList))

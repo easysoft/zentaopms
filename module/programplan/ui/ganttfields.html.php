@@ -39,9 +39,10 @@ $ganttLang->wrongKanbanTasks    = $lang->execution->error->wrongKanbanTasks;
 $ganttLang->warningNoToday      = $lang->execution->gantt->warning->noTodayMarker;
 $ganttLang->deadline            = $lang->programplan->end;
 
-if($from == 'doc')
+if($from == 'doc' || !empty($versionID))
 {
-    $typeHtml = $lang->programplan->ganttBrowseType['gantt'];
+    $showType = $from == 'doc' ? 'gantt' : $type;
+    $typeHtml = $lang->programplan->ganttBrowseType[$showType];
 }
 else
 {

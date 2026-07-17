@@ -1,0 +1,41 @@
+title: table ops_tokens
+desc: "令牌表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: account
+    note: "关联用户账号"
+    range: "admin,user1,user2"
+  - field: identifier
+    note: "Token唯一标识"
+    range: "key-admin,key-user1,key-user2"
+  - field: type
+    note: "Token类型: pat,app"
+    range: "pat,app"
+  - field: expirationDate
+    note: "过期时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: token
+    note: "Token值"
+    range: "pat-token-001,app-token-002,pat-token-003"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"

@@ -1,0 +1,54 @@
+title: table ops_scan_rulesets
+desc: "扫描规则集表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: name
+    note: "规则集名称"
+    range: "Java安全规则集,PHP规范规则集,前端性能规则集"
+  - field: desc
+    note: "规则集描述（中文）"
+    range: "Java安全相关规则集合,PHP编码规范规则集合,前端性能优化规则集合"
+  - field: descEn
+    note: "规则集描述（英文）"
+    range: "Java security ruleset,PHP convention ruleset,Frontend performance ruleset"
+  - field: type
+    note: "规则集类型（如：代码扫描、依赖扫描、全量扫描等）"
+    range: "defect,security,compliance,optimize"
+  - field: lang
+    note: "适配语言类型（java、python，NULL表示适配所有语言）"
+    range: "java,php,javascript,python,go"
+  - field: plugin
+    note: "所属插件名称（标识规则集归属的扫描插件）"
+    range: "sonar-java,semgrep,eslint,bandit,golangci-lint"
+  - field: tag
+    note: "规则集标签（用于分类筛选，如：安全合规、代码规范、性能优化等）"
+    range: "security,convention,performance,maintainability"
+  - field: isCustom
+    note: "是否自定义规则集（1=自定义，0=系统默认规则集）"
+    range: "1,0"
+  - field: status
+    note: "规则状态（enabled-启用、disabled-禁用，默认启用）"
+    range: "enabled,disabled"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

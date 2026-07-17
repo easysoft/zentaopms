@@ -1,0 +1,45 @@
+title: table ops_scan_plans
+desc: "扫描计划表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: repoID
+    note: "仓库ID"
+    range: "0,1,2,3"
+  - field: name
+    note: "扫描计划名称"
+    range: "主干全量扫描,开发分支增量扫描,发布前安全扫描"
+  - field: desc
+    note: "扫描计划描述"
+    range: "主干代码日常全量扫描,开发分支提交后增量扫描,发布前安全基线扫描"
+  - field: scanType
+    note: "扫描类型（full/incremental）"
+    range: "full,incremental"
+  - field: branches
+    note: "扫描分支范围"
+    range: "main,develop,release/*"
+  - field: files
+    note: "扫描文件范围"
+    range: "src/**,module/**/*.php,web/**/*.js"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

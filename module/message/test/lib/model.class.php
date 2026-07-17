@@ -332,4 +332,107 @@ class messageModelTest extends baseTest
 
         return $result;
     }
+
+    /**
+     * 测试从 html 中获取提及的用户。
+     * Test get mention users from html.
+     *
+     * @param  string $html
+     * @access public
+     * @return string
+     */
+    public function getMentionUsersFromHtmlTest(string $html): string
+    {
+        $users = $this->instance->getMentionUsersFromHtml($html);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', $users);
+    }
+
+    /**
+     * 测试从 BlockSuite 文档 JSON 中获取被 @ 的用户账号。
+     * Test get mention users from doc raw content.
+     *
+     * @param  string $rawContent
+     * @access public
+     * @return string
+     */
+    public function getMentionUsersFromDocTest(string $rawContent): string
+    {
+        $users = $this->instance->getMentionUsersFromDoc($rawContent);
+
+        if(dao::isError()) return dao::getError();
+
+        return implode(',', $users);
+    }
+
+    /**
+     * 测试根据表单设置从对象中提取被 @ 的用户。
+     * Test extract mention users from form config and object.
+     *
+     * @param  array  $formConfig
+     * @param  object $object
+     * @access public
+     * @return string
+     */
+    public function extractMentionUsersFromFormTest(array $formConfig, object $object): string
+    {
+        $users = $this->instance->extractMentionUsersFromForm($formConfig, $object);
+
+        if(dao::isError()) return dao::getError();
+
+        return empty($users) ? '0' : implode(',', $users);
+    }
+
+    /**
+     * 测试发送 @ 提及通知。
+     * Test send mention notice.
+     *
+     * @param  string      $objectType
+     * @param  string      $method
+     * @param  int         $actionID
+     * @param  object      $object
+     * @param  object|null $oldObject
+     * @param  string      $settingMode  message|empty
+     * @access public
+     * @return array|string
+     */
+    public function sendMentionNoticeTest(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null, string $settingMode = 'message'): array|string
+    {
+        global $tester;
+
+        $originalSetting = $tester->config->message->setting;
+        if($settingMode === 'empty')
+        {
+            $tester->config->message->setting = array();
+        }
+        else
+        {
+            $tester->config->message->setting = array();
+            $tester->config->message->setting['message'] = array();
+            $tester->config->message->setting['message']['setting'] = array();
+            $tester->config->message->setting['message']['setting'][$objectType] = array('mentioned');
+        }
+
+        $countBefore = (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+
+        $this->instance->sendMentionNotice($objectType, $method, $actionID, $object, $oldObject);
+
+        if(dao::isError())
+        {
+            $tester->config->message->setting = $originalSetting;
+            return dao::getError();
+        }
+
+        $countAfter = (int)$tester->dao->select('COUNT(*) AS count')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->fetch('count');
+
+        $notify = $tester->dao->select('*')->from(TABLE_NOTIFY)->where('objectType')->eq('message')->orderBy('id_desc')->fetch();
+
+        $tester->config->message->setting = $originalSetting;
+
+        if(empty($notify)) return array('notifyCount' => $countAfter - $countBefore);
+
+        return array('notifyCount' => $countAfter - $countBefore, 'objectType' => $notify->objectType, 'action' => $notify->action, 'mentionUser' => trim($notify->toList, ','), 'status' => $notify->status, 'createdBy' => $notify->createdBy);
+    }
 }

@@ -1,0 +1,72 @@
+title: table ops_branch_ruleset
+desc: "分支规则表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: repo
+    note: "仓库ID"
+    range: "1,2,3"
+  - field: branchType
+    note: "分支类型ID"
+    range: "main,master,develop"
+  - field: branchName
+    note: "分支名"
+    range: "main,develop,release/*"
+  - field: createUser
+    note: "创建分支权限人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: deleteUser
+    note: "删除分支权限人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: updateUser
+    note: "更新分支权限人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: forcePushUser
+    note: "强制推送权限人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: ppmCreateUser
+    note: "创建推送合并请求人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: ppmHandleUser
+    note: "处理推送合并请求人员"
+    range: "admin|user1,user2|admin,devops|qa"
+  - field: sourceBranch
+    note: "允许合并来源类型，为空为全部分支"
+    range: "feature/*,bugfix/*,hotfix/*"
+  - field: targetBranch
+    note: "允许合并的目标分支类型，为空为全部分支"
+    range: "develop,main,release/*"
+  - field: commitLine
+    note: "commit限制行数"
+    range: "100,500,1000"
+  - field: pushLine
+    note: "push行数限制行数"
+    range: "500,1000,5000"
+  - field: forceReview
+    note: "是否开启强制评审"
+    range: "0,1"
+  - field: reviewFlowID
+    note: "评审流程ID"
+    range: "0,1,2,3"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

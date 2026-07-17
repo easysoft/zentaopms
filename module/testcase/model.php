@@ -241,7 +241,7 @@ class testcaseModel extends model
         $case->currentVersion = $version ? $version : $case->version;
         $case->files          = $this->loadModel('file')->getByObject('testcase', $caseID);
 
-        $case->steps = $this->testcaseTao->getSteps($caseID, $case->currentVersion);
+        $case->steps = $this->getSteps($caseID, $case->currentVersion);
 
         $spec = $this->dao->select('title,precondition,files')->from(TABLE_CASESPEC)->where('case')->eq($caseID)->andWhere('version')->eq($version)->fetch();
         if($spec)
@@ -250,6 +250,8 @@ class testcaseModel extends model
             $case->precondition = $spec->precondition;
             $case->files        = $this->file->getByIdList($spec->files);
         }
+
+        if(!empty($case->fromCaseID)) $case->libCaseVersion = $this->dao->select('version')->from(TABLE_CASE)->where('id')->eq($case->fromCaseID)->fetch('version');
 
         return $case;
     }
@@ -690,6 +692,12 @@ class testcaseModel extends model
         $changes  = common::createChanges($oldCase, $case);
         $actionID = $this->loadModel('action')->create('case', $oldCase->id, 'Reviewed', $this->post->comment, ucfirst($case->result));
         $this->action->logHistory($actionID, $changes);
+
+        if($this->post->comment)
+        {
+            $oldCase->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('testcase', 'review', $actionID, $oldCase);
+        }
         return true;
     }
 
@@ -3013,5 +3021,94 @@ class testcaseModel extends model
         $searchConfig['params'] = $this->search->setDefaultParams('testcase', $searchConfig['fields'], $searchConfig['params']);
 
         return $searchConfig;
+    }
+
+    /**
+     * 过滤自动测试用例的ID列表。
+     * Ignore auto testcase id list.
+     *
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function ignoreAutoCaseIdList(array $caseIdList): array
+    {
+        if(empty($caseIdList)) return array();
+        return $this->dao->select('id')->from(TABLE_CASE)->where('id')->in($caseIdList)->andWhere('auto')->ne('auto')->fetchPairs('id', 'id');
+    }
+
+    /**
+     * 确认用例库用例的更新。
+     * Confirm case changed in lib.
+     *
+     * @param  int    $caseID
+     * @param  int    $libCaseID
+     * @access public
+     * @return void
+     */
+    public function confirmLibCaseChange(int $caseID, int $libCaseID)
+    {
+        $case = $this->getById($caseID);
+        if($case->fromCaseVersion == $case->version) return;
+
+        $libCase = $this->getById($libCaseID);
+        $version = $case->version + 1;
+
+        /* 更新用例基础信息。 */
+        /* Update case base information. */
+        $this->dao->update(TABLE_CASE)
+            ->set('version')->eq($version)
+            ->set('fromCaseVersion')->eq($version)
+            ->set('precondition')->eq($libCase->precondition)
+            ->set('title')->eq($libCase->title)
+            ->set('keywords')->eq($libCase->keywords)
+            ->where('id')->eq($caseID)
+            ->exec();
+
+        /* 更新用例步骤。 */
+        /* Update case steps. */
+        $parentSteps = array();
+        foreach($libCase->steps as $step)
+        {
+            $data = new stdclass();
+            $data->parent  = zget($parentSteps, $step->parent, 0);
+            $data->case    = $caseID;
+            $data->version = $version;
+            $data->type    = $step->type;
+            $data->desc    = $step->desc;
+            $data->expect  = $step->expect;
+            $this->dao->insert(TABLE_CASESTEP)->data($data)->exec();
+            $parentSteps[$step->id] = $this->dao->lastInsertID();
+        }
+
+        /* 更新用例文件。 */
+        /* Update case files. */
+        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
+        foreach($libCase->files as $file)
+        {
+            $fileName = pathinfo($file->pathname, PATHINFO_FILENAME);
+            $datePath = substr($file->pathname, 0, 6);
+            $realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $fileName;
+
+            $rand        = rand();
+            $newFileName = $fileName . 'copy' . $rand;
+            $newFilePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $newFileName;
+            copy($realPath, $newFilePath);
+
+            $newFileName = $file->pathname;
+            $newFileName = str_replace('.', "copy$rand.", $newFileName);
+            $file->title = $file->name;
+
+            unset($file->id, $file->name, $file->realPath, $file->webPath, $file->url);
+            $file->objectID = $caseID;
+            $file->pathname = $newFileName;
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        }
+
+        $testtaskCases = $this->dao->select('id')->from(TABLE_TESTRUN)->where('case')->eq($caseID)->andWhere('task')->ne(0)->fetchPairs();
+        if(!empty($testtaskCases)) $this->dao->update(TABLE_TESTRUN)->set('caseVersion')->eq($version)->where('id')->in($testtaskCases)->exec();
+
+        $testsuiteCases = $this->dao->select('id')->from(TABLE_SUITECASE)->where('case')->eq($caseID)->andWhere('suite')->ne(0)->fetchPairs();
+        if(!empty($testsuiteCases)) $this->dao->update(TABLE_SUITECASE)->set('caseVersion')->eq($version)->where('id')->in($testsuiteCases)->exec();
     }
 }

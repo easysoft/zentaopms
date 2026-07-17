@@ -84,6 +84,7 @@ class formSettingBtn extends wg
                 formpanel
                 (
                     setClass('form-setting-btn'),
+                    set::autoAIEntry(false),
                     set::title($lang->customField),
                     set::url($customLink),
                     set::showExtra(false),

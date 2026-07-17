@@ -1,0 +1,10 @@
+title: table ops_migrations
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: version
+    note: "版本"
+    range: "202607100001,202607100002,202607100003"

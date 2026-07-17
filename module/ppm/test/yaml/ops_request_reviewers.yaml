@@ -1,0 +1,24 @@
+title: ops_request_reviewers
+author: Codex
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: requestID
+    range: 1
+  - field: repoID
+    range: 1
+  - field: decision
+    range: pending
+  - field: sha
+    range: '1111111111111111111111111111111111111111'
+  - field: account
+    range: admin
+  - field: opinion
+    range: ''
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: '`2026-07-10 09:00:00`'
+  - field: editedDate
+    range: '`2026-07-10 09:00:00`'

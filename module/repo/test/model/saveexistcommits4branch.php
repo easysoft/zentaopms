@@ -18,14 +18,36 @@ cid=18096
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$dao->exec('truncate table zt_repohistory');
-$dao->exec('truncate table zt_repobranch');
+global $dbh, $tester;
+$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repohistory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` varchar(40) NOT NULL DEFAULT '',
+  `commit` int unsigned NOT NULL DEFAULT 0,
+  `comment` text DEFAULT NULL,
+  `committer` varchar(100) NOT NULL DEFAULT '',
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repobranch` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` int unsigned NOT NULL DEFAULT 0,
+  `branch` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
 
-zenData('pipeline')->gen(4);
-zenData('repo')->loadYaml('repo')->gen(5);
-zenData('repohistory')->loadYaml('repohistory')->gen(6);
-zenData('repofiles')->loadYaml('repofiles')->gen(7);
-zenData('repobranch')->loadYaml('repobranch')->gen(2);
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('id' => 1, 'repo' => 3, 'revision' => 'r1', 'commit' => 1, 'comment' => 'older commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('id' => 2, 'repo' => 3, 'revision' => 'r2', 'commit' => 2, 'comment' => 'master commit', 'committer' => 'admin', 'time' => '2024-01-02 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('id' => 3, 'repo' => 1, 'revision' => 'r3', 'commit' => 1, 'comment' => 'repo1 commit', 'committer' => 'admin', 'time' => '2024-01-03 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 3, 'revision' => 2, 'branch' => 'master'))->exec();
+$tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 1, 'revision' => 3, 'branch' => 'master'))->exec();
 
 su('admin');
 

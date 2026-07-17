@@ -77,18 +77,23 @@ $lang->programplan->enabled          = 'Enabling Stage';
 $lang->programplan->point            = 'Review Point';
 $lang->programplan->progress         = 'Progress';
 
-$lang->programplan->relation            = 'Manage Task Relation';
-$lang->programplan->setTaskRelation     = 'Manage Task Relation';
-$lang->programplan->viewTaskRelation    = 'View Task Relation';
-$lang->programplan->createRelation      = 'Create Task Relation';
-$lang->programplan->editRelation        = 'Manage Task Relation';
-$lang->programplan->batchEditRelation   = 'Batch Manage Task Relation';
-$lang->programplan->deleteRelation      = 'Delete Relation';
-$lang->programplan->batchDeleteRelation = 'Batch Delete Relation';
-$lang->programplan->createGanttVersion  = 'Create Version';
-$lang->programplan->editGanttVersion    = 'Edit Version';
-$lang->programplan->deleteGanttVersion  = 'Delete Version';
-$lang->programplan->diffGanttVersion    = 'Version comparison';
+$lang->programplan->relation             = 'Manage Task Relation';
+$lang->programplan->setTaskRelation      = 'Manage Task Relation';
+$lang->programplan->viewTaskRelation     = 'View Task Relation';
+$lang->programplan->createRelation       = 'Create Task Relation';
+$lang->programplan->editRelation         = 'Manage Task Relation';
+$lang->programplan->batchEditRelation    = 'Batch Manage Task Relation';
+$lang->programplan->deleteRelation       = 'Delete Relation';
+$lang->programplan->batchDeleteRelation  = 'Batch Delete Relation';
+$lang->programplan->createGanttVersion   = 'Create Version';
+$lang->programplan->editGanttVersion     = 'Edit Version';
+$lang->programplan->deleteGanttVersion   = 'Delete Version';
+$lang->programplan->diffGanttVersion     = 'Version comparison';
+$lang->programplan->rollbackGanttVersion = 'Version Rollback';
+$lang->programplan->deliverableVersion   = 'Deliverables & Baseline Version';
+$lang->programplan->ganttVersion         = 'Plan Version';
+$lang->programplan->tmpGanttVersion      = 'Temporary Version';
+$lang->programplan->versionDisplay       = 'Version Display';
 
 $lang->programplan->errorBegin       = "{$lang->projectCommon} begin date: %s, begin date should be >= {$lang->projectCommon} begin date.";
 $lang->programplan->errorEnd         = "{$lang->projectCommon} end date: %s, end date should be <= {$lang->projectCommon} end date.";
@@ -101,6 +106,10 @@ $lang->programplan->cropStageTip     = "Stages that have already started cannot 
 $lang->programplan->childEnabledTip  = "Child stage enabled follows parent stage.";
 $lang->programplan->reviewedPointTip = "The review point has been submitted for review and can no longer be operated.";
 $lang->programplan->typeTip          = "The first level only supports creating stages, and stages can be created or {$lang->executionCommon}/Kanban can be created under the same stage. It's not supported to further split the {$lang->executionCommon}/Kanban.";
+$lang->programplan->rollbackTip      = 'New executions and tasks will be deleted, deleted ones will be restored, and only some fields will be rolled back. This operation will overwrite the current schedule and cannot be recovered. Please proceed with caution. Continue?';
+$lang->programplan->rollbackTip4IPD  = 'New executions and tasks will be deleted, deleted ones will be restored, and only some fields will be rolled back, and some TR and DCP review points need to be resubmitted. This operation will overwrite the current schedule and cannot be recovered. Please proceed with caution. Continue?';
+$lang->programplan->canNotCallback   = 'Unable to rollback. The execution plan dates would exceed the project plan dates. Please adjust the project plan dates first.';
+$lang->programplan->frozenCallback   = 'Version rollback is not allowed after the stage has been baselined.';
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';

@@ -1,0 +1,17 @@
+title: table ops_plugin_group
+desc: "插件分组基本信息表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "插件分组ID，自增主键"
+    range: "1-10000"
+  - field: name
+    note: "插件分组名称"
+    range: "基础插件,测试插件,发布插件"
+  - field: desc
+    note: "插件分组描述信息"
+    range: "基础能力插件分组,测试流程插件分组,发布流程插件分组"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

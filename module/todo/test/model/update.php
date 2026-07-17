@@ -24,6 +24,11 @@ cid=19267
  - 第0条的old属性 @custom
  - 第0条的new属性 @bug
 - 不更新待办数据的情况 @没有数据更新
+- 更新待办数据优先级
+ - 第0条的field属性 @pri
+ - 第0条的old属性 @3
+ - 第0条的new属性 @1
+- 更新待办名称为空第name条的0属性 @『待办名称』不能为空。
 
 */
 
@@ -32,11 +37,15 @@ $tester->loadModel('todo');
 
 initData();
 
-$t_upname = array('name' => '我的待办11', 'type' => 'custom');
-$t_uptype = array('type' => 'bug', 'objectID' => '1');
-$t_unname = array('name' => '我的待办2', 'type' => 'custom');
+$t_upname     = array('name' => '我的待办11', 'type' => 'custom');
+$t_uptype     = array('type' => 'bug', 'objectID' => '1');
+$t_unname     = array('name' => '我的待办2', 'type' => 'custom');
+$t_uppri      = array('pri' => 1, 'type' => 'custom');
+$t_emptyname  = array('name' => '', 'type' => 'custom');
 
 $todo = new todoModelTest();
-r($todo->updateTest(1, $t_upname)) && p('0:field,old,new') && e('name,我的待办1,我的待办11'); // 更新待办数据名称
-r($todo->updateTest(1, $t_uptype)) && p('0:field,old,new') && e('type,custom,bug');           // 更新待办数据类型
-r($todo->updateTest(2, $t_unname)) && p()                  && e('没有数据更新');              // 不更新待办数据的情况
+r($todo->updateTest(1, $t_upname))     && p('0:field,old,new') && e('name,我的待办1,我的待办11'); // 更新待办数据名称
+r($todo->updateTest(1, $t_uptype))     && p('0:field,old,new') && e('type,custom,bug');           // 更新待办数据类型
+r($todo->updateTest(2, $t_unname))     && p()                  && e('没有数据更新');              // 不更新待办数据的情况
+r($todo->updateTest(3, $t_uppri))      && p('0:field,old,new') && e('pri,3,1');                   // 更新待办数据优先级
+r($todo->updateTest(4, $t_emptyname))  && p('name:0')          && e('『待办名称』不能为空。');    // 更新待办名称为空

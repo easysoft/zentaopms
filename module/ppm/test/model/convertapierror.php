@@ -3,28 +3,27 @@
 
 /**
 
-title=测试 mrModel::convertApiError();
+title=测试 ppmModel::convertApiError();
 timeout=0
-cid=17240
+cid=0
 
-- 执行mrModel模块的convertApiError方法，参数是array  @存在另外一个同样的合并请求在源项目分支中: ID123
-- 执行mrModel模块的convertApiError方法，参数是"You can't use same project/branch for source and target"  @源项目分支与目标项目分支不能相同
-- 执行mrModel模块的convertApiError方法，参数是'Unknown error message'  @Unknown error message
-- 执行mrModel模块的convertApiError方法，参数是''  @0
-- 执行mrModel模块的convertApiError方法，参数是'403 Forbidden'  @权限不足
-- 执行mrModel模块的convertApiError方法，参数是'401 Unauthorized'  @权限不足
-- 执行mrModel模块的convertApiError方法，参数是array  @存在另外一个同样的合并请求在源项目分支中
+- 执行ppmModel模块的convertApiErrorTest方法，参数是'401 Unauthorized'  @权限不足
+- 执行ppmModel模块的convertApiErrorTest方法，参数是array  @权限不足
+- 执行ppmModel模块的convertApiErrorTest方法，参数是'Another open merge request already exists for this source branch: !12'  @存在另外一个同样的合并请求在源项目分支中: ID12
+- 执行ppmModel模块的convertApiErrorTest方法，参数是array  @存在另外一个同样的合并请求在源项目分支中: ID34
+- 执行ppmModel模块的convertApiErrorTest方法，参数是'custom error'  @custom error
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$mrModel = $tester->loadModel('mr');
+su('admin');
 
-r($mrModel->convertApiError(array('Another open merge request already exists for this source branch: !123'))) && p() && e('存在另外一个同样的合并请求在源项目分支中: ID123');
-r($mrModel->convertApiError("You can't use same project/branch for source and target")) && p() && e('源项目分支与目标项目分支不能相同');
-r($mrModel->convertApiError('Unknown error message')) && p() && e('Unknown error message');
-r($mrModel->convertApiError('')) && p() && e('0');
-r($mrModel->convertApiError('403 Forbidden')) && p() && e('权限不足');
-r($mrModel->convertApiError('401 Unauthorized')) && p() && e('权限不足');
-r($mrModel->convertApiError(array('pull request already exists for these targets and source'))) && p() && e('存在另外一个同样的合并请求在源项目分支中');
+$ppmModel = new ppmModelTest();
+
+r($ppmModel->convertApiErrorTest('401 Unauthorized')) && p() && e('权限不足');
+r($ppmModel->convertApiErrorTest(array('401 Unauthorized'))) && p() && e('权限不足');
+r($ppmModel->convertApiErrorTest('Another open merge request already exists for this source branch: !12')) && p() && e('存在另外一个同样的合并请求在源项目分支中: ID12');
+r($ppmModel->convertApiErrorTest(array('Another open merge request already exists for this source branch: !34'))) && p() && e('存在另外一个同样的合并请求在源项目分支中: ID34');
+r($ppmModel->convertApiErrorTest('custom error')) && p() && e('custom error');

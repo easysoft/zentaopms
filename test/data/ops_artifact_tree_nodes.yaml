@@ -1,0 +1,48 @@
+title: table ops_artifact_tree_nodes
+desc: "制品树节点表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: artifactLibID
+    note: "所属制品库ID"
+    range: "1,2,3"
+  - field: parentID
+    note: "父级节点ID，0表示根节点"
+    range: "0,1,2,3"
+  - field: nodeName
+    note: "节点名称"
+    range: "library,backend,frontend"
+  - field: nodePath
+    note: "节点路径"
+    range: "/,/library,/library/zentao"
+  - field: linkTable
+    note: "关联表"
+    range: "ops_artifact_groups,ops_artifact_packages,ops_artifact_versions"
+  - field: linkRecord
+    note: "关联表ID"
+    range: "0"
+  - field: type
+    note: "制品类型:file/container/raw/helm/pypi/npm/maven/composer"
+    range: "file,container,raw,helm,pypi,npm,maven,composer"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

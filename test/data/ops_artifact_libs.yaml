@@ -1,0 +1,45 @@
+title: table ops_artifact_libs
+desc: "制品库主表（支持全局/空间/代码库三级作用域）"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: spaceID
+    note: "所属空间ID，0表示全局级"
+    range: "0,1,2,3"
+  - field: repoID
+    note: "所属代码库ID，0表示非代码库级"
+    range: "0,1,2,3"
+  - field: name
+    note: "制品库名称"
+    range: "公共制品库,前端制品库,服务端制品库"
+  - field: desc
+    note: "制品库描述"
+    range: "公共依赖制品库,前端构建产物库,服务端发布产物库"
+  - field: type
+    note: "制品类型:file/container/raw/helm/pypi/npm/maven/composer"
+    range: "file,container,raw,helm,pypi,npm,maven,composer"
+  - field: scope
+    note: "制品库类型:global/space/repo"
+    range: "global,space,repo"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

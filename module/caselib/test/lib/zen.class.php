@@ -440,4 +440,22 @@ class caselibZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return true;
     }
+
+    /**
+     * 处理导出的用例数据。
+     * Process export cases.
+     *
+     * @param  array  $cases
+     * @param  int    $libID
+     * @access public
+     * @return array
+     */
+    public function processCasesForExportTest(array $caseIdList, int $libID): array
+    {
+        $cases  = $this->instance->loadModel('testcase')->getByList($caseIdList);
+        $result = $this->invokeArgs('processCasesForExport', [$cases, $libID]);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

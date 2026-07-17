@@ -14,6 +14,8 @@ cid=0
 - 步骤5:获取execution类型objectID为1且带extra参数的报告列表 @1
 - 步骤6:获取project类型objectID为1且带taskIdList的报告列表 @1
 - 步骤7:获取product类型objectID为1,按id_asc排序 @1
+- 步骤8:获取project类型objectID为1,browseType为all的报告列表 @1
+- 步骤9:获取product类型objectID为1,browseType为bysearch的报告列表 @1
 
 */
 
@@ -46,10 +48,12 @@ su('admin');
 $testreportTest = new testreportTest();
 
 // 5. 🔴 强制要求:必须包含至少5个测试步骤
-r(count($testreportTest->getReportsForBrowseTest(1, 'product', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤1:获取product类型objectID为1的报告列表,默认分页
-r(count($testreportTest->getReportsForBrowseTest(2, 'execution', 0, 'id_desc', 0, 10, 1)) >= 0) && p() && e('1'); // 步骤2:获取execution类型objectID为2的报告列表,每页10条
-r(count($testreportTest->getReportsForBrowseTest(3, 'project', 0, 'id_desc', 0, 20, 2)) >= 0) && p() && e('1'); // 步骤3:获取project类型objectID为3的报告列表,第2页
-r(count($testreportTest->getReportsForBrowseTest(0, 'product', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤4:获取product类型objectID为0的报告列表,测试无对象情况
-r(count($testreportTest->getReportsForBrowseTest(1, 'execution', 1, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤5:获取execution类型objectID为1且带extra参数的报告列表
-r(count($testreportTest->getReportsForBrowseTest(1, 'project', 1, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤6:获取project类型objectID为1且带taskIdList的报告列表
-r(count($testreportTest->getReportsForBrowseTest(1, 'product', 0, 'id_asc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤7:获取product类型objectID为1,按id_asc排序
+r(count($testreportTest->getReportsForBrowseTest(1, 'product', 0, 'all', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤1:获取product类型objectID为1的报告列表,默认分页
+r(count($testreportTest->getReportsForBrowseTest(2, 'execution', 0, 'all', 0, 'id_desc', 0, 10, 1)) >= 0) && p() && e('1'); // 步骤2:获取execution类型objectID为2的报告列表,每页10条
+r(count($testreportTest->getReportsForBrowseTest(3, 'project', 0, 'all', 0, 'id_desc', 0, 20, 2)) >= 0) && p() && e('1'); // 步骤3:获取project类型objectID为3的报告列表,第2页
+r(count($testreportTest->getReportsForBrowseTest(0, 'product', 0, 'all', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤4:获取product类型objectID为0的报告列表,测试无对象情况
+r(count($testreportTest->getReportsForBrowseTest(1, 'execution', 1, 'all', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤5:获取execution类型objectID为1且带extra参数的报告列表
+r(count($testreportTest->getReportsForBrowseTest(1, 'project', 1, 'all', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤6:获取project类型objectID为1且带taskIdList的报告列表
+r(count($testreportTest->getReportsForBrowseTest(1, 'product', 0, 'all', 0, 'id_asc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤7:获取product类型objectID为1,按id_asc排序
+r(count($testreportTest->getReportsForBrowseTest(1, 'project', 0, 'all', 0, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤8:获取project类型objectID为1,browseType为all的报告列表
+r(count($testreportTest->getReportsForBrowseTest(1, 'product', 0, 'bysearch', 1, 'id_desc', 0, 20, 1)) >= 0) && p() && e('1'); // 步骤9:获取product类型objectID为1,browseType为bysearch的报告列表

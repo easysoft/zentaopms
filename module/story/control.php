@@ -131,6 +131,7 @@ class story extends control
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
         parse_str($extras, $params);
         if(!isset($params['needNotReview'])) $extra .= ',needNotReview={needNotReview}';
+        if(in_array($this->config->edition, array('max', 'ipd'))) $extra .= ",source={source},sourceNote={sourceNote}";
         $this->view->needNotReview = $params['needNotReview'] ?? !$this->view->forceReview;
         $this->view->loadUrl       = $this->createLink($storyType, $this->app->rawMethod, "productID={product}&branch={branch}&moduleID=$moduleID&story=$storyID&objectID=$objectID&bugID=$bugID&planID=$planID&todoID=$todoID&extra=$extra&storyType=$storyType");
 
@@ -345,7 +346,7 @@ class story extends control
             if(!$storyData) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->storyZen->processDataForEdit($storyID, $storyData);
-            $this->story->update($storyID, $storyData, $this->post->comment);
+            $this->story->update($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $message = $this->executeHooks($storyID);
@@ -455,17 +456,6 @@ class story extends control
 
             $changes = $this->story->change($storyID, $storyData);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            if($this->post->comment != '' or !empty($changes))
-            {
-                $action   = !empty($changes) ? 'Changed' : 'Commented';
-                $actionID = $this->action->create('story', $storyID, $action, $this->post->comment);
-                $this->action->logHistory($actionID, $changes);
-
-                /* Record submit review action. */
-                $story = $this->story->fetchByID($storyID);
-                if($story->status == 'reviewing') $this->action->create('story', $storyID, 'submitReview');
-            }
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
@@ -919,19 +909,125 @@ class story extends control
     }
 
     /**
+     * 批量提交评审。
+     * Batch submit review.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function batchSubmitReview(int $productID, string $storyType = 'story', string $storyIdList = '')
+    {
+        if($this->post->reviewer)
+        {
+            $this->story->replaceURLang($storyType);
+
+            $stories = $this->storyZen->buildStoriesForBatchSubmitReview();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->story->batchSubmitReview($stories);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => true, 'closeModal' => true));
+        }
+
+        $storyIdList = $storyIdList ? explode(',', $storyIdList) : array();
+        if(empty($storyIdList)) return $this->send(array('result' => 'success', 'load' => $this->session->storyList));
+
+        /* Get reviewers. */
+        $product   = $this->product->getById($productID);
+        $reviewers = '';
+        if($product)
+        {
+            $reviewers = $product->reviewer;
+            if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product);
+        }
+
+        $this->view->stories   = $this->story->getByList($storyIdList);
+        $this->view->product   = $product;
+        $this->view->productID = $productID;
+        $this->view->storyType = $storyType;
+        $this->view->message   = '';
+        $this->view->reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+
+        $this->display();
+    }
+
+    /**
+     * AJAX检查批量提交评审的需求是否满足条件.
+     *
+     * @param  int    $productID
+     * @param  string $storyType story|requirement|epic
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckBatchSubmitReview(int $productID, string $storyType = 'story', string $storyIdList = '')
+    {
+        $storyIdList = $storyIdList ? explode(',', $storyIdList) : array();
+        if(empty($storyIdList)) return print(json_encode(array('result' => 'fail')));
+
+        $storyList = $this->dao->select('id,type,status')->from(TABLE_STORY)->where('id')->in($storyIdList)->orderBy('id_asc')->fetchAll();
+
+        $invalidTypes       = array();
+        $invalidStoryIdList = array();
+        $allowedStoryIdList = array();
+
+        /* 判断是否有选中的需求类型的提交评审权限。 */
+        $privModule = $this->app->tab == 'project' ? 'projectstory' : '';
+        $typeList = array_unique(array_column($storyList, 'type'));
+        foreach($typeList as $type) if(!common::hasPriv($privModule ? $privModule : $type, 'batchsubmitreview')) $invalidTypes[$type] = $this->lang->story->typeList[$type];
+
+        /* 判断选中的需求状态是否符合提交评审的条件。 */
+        foreach($storyList as $story)
+        {
+            if(!common::hasPriv($privModule ? $privModule : $story->type, 'batchsubmitreview')) continue;
+            if(!in_array($story->status, array('draft', 'changing')))
+            {
+                $invalidStoryIdList[] = '#' . $story->id;
+                continue;
+            }
+            $allowedStoryIdList[] = $story->id;
+        }
+
+        $message = '';
+        if(!empty($invalidTypes))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewPrivTips, implode('、', $invalidTypes));
+        }
+        if(!empty($invalidStoryIdList))
+        {
+            $message .= sprintf($this->lang->story->batchSubmitReviewStatusTips, implode(', ', $invalidStoryIdList));
+        }
+
+        return print(json_encode(array('result' => 'success', 'message' => $message, 'hasValid' => !empty($allowedStoryIdList), 'allowedStoryIdList' => $allowedStoryIdList)));
+    }
+
+    /**
      * 关闭需求。
      * Close the story.
      *
      * @param  int    $storyID
      * @param  string $from        taskkanban
      * @param  string $storyType   story|requirement
+     * @param  string $confirm     yes|no
      * @access public
      * @return void
      */
-    public function close(int $storyID, string $from = '', string $storyType = 'story')
+    public function close(int $storyID, string $from = '', string $storyType = 'story', string $confirm = 'no')
     {
         $story = $this->story->getById($storyID);
         $this->commonAction($storyID);
+
+        if($confirm == 'no')
+        {
+            $childIdList = $this->story->getAllChildId($storyID, false, false, 'closed');
+            if(!empty($childIdList))
+            {
+                $confirmURL = $this->createLink('story', 'close', "storyID=$storyID&from=$from&storyType=$storyType&confirm=yes");
+                return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.confirm({message:'" . sprintf($this->lang->story->closeParentTips, '#' . implode(',#', $childIdList)) . "'}).then((res) => {if(res) openUrl({url: '{$confirmURL}', load: 'modal'});});"));
+            }
+        }
 
         if(!empty($_POST))
         {
@@ -2259,5 +2355,19 @@ class story extends control
     public function unlinkBranch()
     {
         return print($this->fetch('repo', 'unlinkBranch'));
+    }
+
+    /**
+     * AJAX: 获取父需求的信息。
+     * AJAX: Get parent story info.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return json
+     */
+    public function ajaxGetParentStoryInfo(int $storyID)
+    {
+        $story = $this->story->getByID($storyID);
+        return print(json_encode($story));
     }
 }

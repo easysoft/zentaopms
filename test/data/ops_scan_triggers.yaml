@@ -1,0 +1,60 @@
+title: table ops_scan_triggers
+desc: "扫描计划触发器表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: planID
+    note: "扫描计划ID"
+    range: "1,2,3"
+  - field: repoID
+    note: "仓库ID"
+    range: "0,1,2,3"
+  - field: name
+    note: "触发器名称"
+    range: "每日定时扫描,手动触发扫描,事件触发扫描"
+  - field: desc
+    note: "触发器描述"
+    range: "每天凌晨执行扫描,由用户手动发起扫描,由代码事件自动触发扫描"
+  - field: type
+    note: "触发器类型（cron/manual/event）"
+    range: "cron,manual,event"
+  - field: scanType
+    note: "扫描类型（full/incremental）"
+    range: "full,incremental"
+  - field: cron
+    note: "cron 表达式"
+    range: "0 0 * * *,*/10 * * * *,0 2 * * 1"
+  - field: cronBranch
+    note: "cron 扫描分支"
+    range: "main,develop,release/v1.0"
+  - field: keywords
+    note: "关键字过滤条件"
+    range: "security,quality,release"
+  - field: actions
+    note: "触发动作配置"
+    range: "push,merge,tag"
+  - field: disabled
+    note: "是否禁用，0-启用，1-禁用"
+    range: "0,1"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

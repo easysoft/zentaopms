@@ -1,0 +1,42 @@
+title: table ops_artifact_packages
+desc: "制品包表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: artifactLibID
+    note: "所属制品库ID"
+    range: "1,2,3"
+  - field: groupID
+    note: "所属分组ID"
+    range: "0,1,2,3"
+  - field: namespace
+    note: "命名空间"
+    range: "library,backend,frontend"
+  - field: name
+    note: "制品包名称"
+    range: "zentao-api,zentao-web,zentao-worker"
+  - field: type
+    note: "制品类型:file/container/raw/helm/pypi/npm/maven/composer"
+    range: "file,container,raw,helm,pypi,npm,maven,composer"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"
