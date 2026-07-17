@@ -2169,21 +2169,158 @@ class aiModel extends model
      *
      * @param  string $form
      * @access public
-     * @return array
+     * @return array|object|string
      */
     public function getFunctionCallSchema($form)
     {
         if($form == 'empty.empty') return $form;
 
-        $formPath = explode('.', $form);
+        $formPath = explode('.', $form, 2);
         if(count($formPath) !== 2) return array();
 
-        $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]] ?? null;
-        if(empty($targetForm)) return array();
+        list($module, $action) = $formPath;
+        $targetForm = $this->config->ai->targetForm[$module][$action] ?? null;
+        if(!empty($targetForm))
+        {
+            $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+            if(!empty($schema)) return $schema;
+        }
 
-        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+        return $this->getWorkflowFunctionCallSchema($module, $action); // 找不到语言项定义的，就去工作流中获取
+    }
 
-        return empty($schema) ? array() : $schema;
+    /**
+     * 从工作流动作动态构建 function call schema。
+     * Build function call schema from workflow action fields.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return array|object
+     */
+    public function getWorkflowFunctionCallSchema(string $module, string $action)
+    {
+        if($this->config->edition == 'open') return array();
+
+        $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+        if(empty($workflowAction)) return array();
+
+        $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+
+        $fields = $this->loadModel('workflowaction')->getPageFields($module, $action);
+        if(empty($fields)) return array();
+
+        $schema = new stdclass();
+        $schema->title      = !empty($workflowAction->name) ? $workflowAction->name : $module;
+        $schema->type       = 'object';
+        $schema->properties = new stdclass();
+        $required           = array();
+
+        foreach($fields as $fieldName => $field)
+        {
+            if(empty($field) || !is_object($field)) continue;
+            if(!empty($field->readonly)) continue;
+            if(strpos((string)$fieldName, 'sub_') === 0) continue;
+            if(in_array($fieldName, array('actions', 'id', 'deleted', 'uid'), true)) continue;
+
+            $prop = new stdclass();
+            $prop->type        = 'string';
+            $prop->description = !empty($field->name) ? $field->name : $fieldName;
+
+            if(!empty($field->options) && is_array($field->options))
+            {
+                $enum = array();
+                foreach($field->options as $key => $value)
+                {
+                    if($key === '' || $key === null) continue;
+                    $enum[] = (string)$key;
+                }
+                if(!empty($enum)) $prop->enum = $enum;
+            }
+
+            $rules = !empty($field->rules) ? ",{$field->rules}," : '';
+            if(strpos($rules, ',notempty,') !== false || strpos($rules, ',1,') !== false) $required[] = $fieldName;
+
+            $schema->properties->$fieldName = $prop;
+        }
+
+        if(empty(get_object_vars($schema->properties))) return array();
+
+        $schema->required = $required;
+        if(empty($this->lang->ai->formSchema[$module])) $this->lang->ai->formSchema[$module] = array();
+        $this->lang->ai->formSchema[$module][$action] = $schema;
+
+        return $schema;
+    }
+
+    /**
+     * 获取智能体可用的工作流动作。
+     * Get workflow action for prompt target form.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object|false
+     */
+    public function getWorkflowActionForPrompt(string $module, string $action)
+    {
+        return $this->dao->select('module, action, method, name')->from(TABLE_WORKFLOWACTION)
+            ->where('module')->eq($module)
+            ->andWhere('action')->eq($action)
+            ->andWhere('status')->eq('enable')
+            ->andWhere('`virtual`')->eq(0)
+            ->andWhere('buildin')->eq(0)
+            ->fetch();
+    }
+
+    /**
+     * 确保工作流目标表单配置存在。
+     * Ensure workflow target form config exists.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  object $workflowAction
+     * @access public
+     * @return object
+     */
+    public function ensureWorkflowTargetForm(string $module, string $action, object $workflowAction): object
+    {
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $this->config->ai->targetForm[$module][$action] = (object)array('m' => $module, 'f' => $action, 'for' => $module);
+        }
+
+        if(empty($this->lang->ai->targetForm[$module]['common']) && !empty($workflowAction->name))
+        {
+            if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+            $this->lang->ai->targetForm[$module]['common'] = $workflowAction->name;
+        }
+        if(empty($this->lang->ai->targetForm[$module][$action]) && !empty($workflowAction->name))
+        {
+            $this->lang->ai->targetForm[$module][$action] = $workflowAction->name;
+        }
+
+        return $this->config->ai->targetForm[$module][$action];
+    }
+
+    /**
+     * 构建工作流目标表单的链接参数配置。
+     * Build target form vars config for workflow action.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object
+     */
+    public function buildWorkflowTargetFormVars(string $module, string $action): object
+    {
+        $actionLower = strtolower($action);
+        if($actionLower == 'create' || $actionLower == 'copy' || strpos($actionLower, 'batchcreate') !== false)
+        {
+            return (object)array('format' => '', 'args' => array());
+        }
+
+        return (object)array('format' => 'dataID=%d', 'args' => array($module => 1));
     }
 
     /**
@@ -2394,6 +2531,15 @@ class aiModel extends model
                 return $object;
             case 'my':
             default:
+                if($this->config->edition != 'open')
+                {
+                    $flow = $this->loadModel('workflow')->getByModule($module);
+                    if($flow && $flow->type == 'flow' && empty($flow->buildin))
+                    {
+                        $data = $this->loadModel('flow')->getDataByID($flow, $objectId);
+                        if(!empty($data)) $object->$module = $data;
+                    }
+                }
                 return $object;
         }
     }
@@ -2459,6 +2605,7 @@ class aiModel extends model
      * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
      * @return string|int    returns either JSON string or negative integer on error.
+     *
      * @throws AIResponseException
      */
     public function executePrompt($prompt, $object)
@@ -2684,7 +2831,12 @@ class aiModel extends model
         if(count($targetFormPath) !== 2) return array(false, true);
 
         list($m, $f) = $targetFormPath;
-        if(empty($this->config->ai->targetForm[$m][$f])) return array(false, true);
+        if(empty($this->config->ai->targetForm[$m][$f]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($m, $f);
+            if(empty($workflowAction)) return array(false, true);
+            $this->ensureWorkflowTargetForm($m, $f, $workflowAction);
+        }
 
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
@@ -2722,7 +2874,8 @@ class aiModel extends model
         }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
-        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
+        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : ($this->config->ai->targetFormVars[$module][$method] ?? null);
+        if(empty($varsConfig)) $varsConfig = $this->buildWorkflowTargetFormVars($module, $method);
         $vars = array();
         foreach($varsConfig->args as $arg => $isRequired)
         {
@@ -2738,6 +2891,14 @@ class aiModel extends model
             elseif(!empty($promptObject->$arg)) // If object has the prop, use it.
             {
                 $var = $promptObject->$arg;
+            }
+            elseif(!empty($promptObject->id) && ($arg == $prompt->module || $arg == $module)) // Workflow object itself.
+            {
+                $var = $promptObject->id;
+            }
+            elseif(!empty($object->id) && ($arg == $prompt->module || $arg == $module)) // Flat workflow object.
+            {
+                $var = $object->id;
             }
             else
             {
@@ -2758,7 +2919,7 @@ class aiModel extends model
             if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
         }
-        $linkVars = vsprintf($varsConfig->format, $vars);
+        $linkVars = empty($varsConfig->format) ? '' : vsprintf($varsConfig->format, $vars);
 
         /* Overrides for requirements. */
         if(in_array($module, array('story', 'epic', 'requirement')) && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';

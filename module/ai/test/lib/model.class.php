@@ -1855,28 +1855,10 @@ class aiModelTest extends baseTest
      */
     public function getFunctionCallSchemaTest($form = null)
     {
-        // Custom implementation to handle edge cases cleanly
         if(empty($form)) return array();
 
-        $formPath = explode('.', $form);
-        if(count($formPath) !== 2) return array();
-
-        // Check if targetForm config exists for the form path
-        if(!isset($this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]])) {
-            return array();
-        }
-
-        $targetForm = $this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]];
-        if(empty($targetForm)) return array();
-
-        // Check if formSchema exists for the target module and function
-        if(!isset($this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)])) {
-            return array();
-        }
-
-        $schema = $this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
-
-        return empty($schema) ? array() : $schema;
+        $result = $this->instance->getFunctionCallSchema($form);
+        return empty($result) ? array() : $result;
     }
 
     /**

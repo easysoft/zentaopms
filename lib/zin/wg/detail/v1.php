@@ -590,6 +590,7 @@ CSS;
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
         {
+            if(!isset($preAndNext->pre->name)) $preAndNext->pre->name = '';
             $prevBtn  = array();
             $objectID = $preAndNext->pre->$idKey;
             $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
@@ -616,6 +617,7 @@ CSS;
         }
         if($nextBtn === true && $preAndNext && $preAndNext->next && $linkCreator)
         {
+            if(!isset($preAndNext->next->name)) $preAndNext->next->name = '';
             $nextBtn  = array();
             $objectID = $preAndNext->next->$idKey;
             $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
