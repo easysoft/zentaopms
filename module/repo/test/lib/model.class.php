@@ -2657,4 +2657,260 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result ? 'success' : 'fail';
     }
+
+    /**
+     * Test getListByPriv method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getListByPrivTest(string $type = 'all')
+    {
+        $result = $this->instance->getListByPriv($type);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getBugProductsAndExecutions method.
+     *
+     * @param  array $bugs
+     * @access public
+     * @return array
+     */
+    public function getBugProductsAndExecutionsTest(array $bugs)
+    {
+        $result = $this->instance->getBugProductsAndExecutions($bugs);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getReview method.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return mixed
+     */
+    public function getReviewTest(int $repoID, string $entry = '', string $revision = '')
+    {
+        $result = $this->instance->getReview($repoID, $entry, $revision);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getComments method.
+     *
+     * @param  array $bugIDList
+     * @access public
+     * @return array
+     */
+    public function getCommentsTest(array $bugIDList)
+    {
+        $result = $this->instance->getComments($bugIDList);
+        if(dao::isError()) return '0';
+        return count($result) . '';
+    }
+
+    /**
+     * Test getBugsByRepo method.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  int    $executionID
+     * @param  array  $bugs
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getBugsByRepoTest(int $repoID = 0, string $browseType = '', int $executionID = 0, array $bugs = array(), string $orderBy = 'id_desc', ?object $pager = null)
+    {
+        $result = $this->instance->getBugsByRepo($repoID, $browseType, $executionID, $bugs, $orderBy, $pager);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test updateBug method.
+     *
+     * @param  int    $bugID
+     * @param  string $title
+     * @access public
+     * @return string
+     */
+    public function updateBugTest(int $bugID, string $title)
+    {
+        $result = $this->instance->updateBug($bugID, $title);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateComment method.
+     *
+     * @param  int    $commentID
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function updateCommentTest(int $commentID, string $comment)
+    {
+        $result = $this->instance->updateComment($commentID, $comment);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test deleteComment method.
+     *
+     * @param  int $commentID
+     * @access public
+     * @return mixed
+     */
+    public function deleteCommentTest(int $commentID)
+    {
+        $result = $this->instance->deleteComment($commentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getLastReviewInfo method.
+     *
+     * @param  string $entry
+     * @access public
+     * @return mixed
+     */
+    public function getLastReviewInfoTest(string $entry)
+    {
+        $result = $this->instance->getLastReviewInfo($entry);
+        if(dao::isError()) return '0';
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getDiffFileTree method.
+     *
+     * @param  array $diffs
+     * @access public
+     * @return array
+     */
+    public function getDiffFileTreeTest(?array $diffs = null)
+    {
+        $result = $this->instance->getDiffFileTree($diffs);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getSystemList method.
+     *
+     * @param  string $systemQuery
+     * @param  int    $space
+     * @access public
+     * @return mixed
+     */
+    public function getSystemListTest(string $systemQuery = '', int $space = 0)
+    {
+        $result = $this->instance->getSystemList($systemQuery, $space);
+        if(dao::isError()) return '0';
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getGitFoxRepos method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGitFoxReposTest()
+    {
+        $result = $this->instance->getGitFoxRepos();
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test buildSystemSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return mixed
+     */
+    public function buildSystemSearchFormTest(int $queryID = 0, string $actionURL = '/repo-system', bool $cacheSearchFunc = false)
+    {
+        if(!isset($this->instance->config->repo->system->search))
+        {
+            $this->instance->config->repo->system = new stdclass();
+            $this->instance->config->repo->system->search = array(
+                'module'    => 'repo',
+                'method'    => 'systemSearch',
+                'fields'    => array(),
+                'params'    => array('product' => array('operator' => '=', 'control' => 'select', 'values' => array())),
+                'queryID'   => 0,
+                'actionURL' => '/repo-system',
+            );
+        }
+        $result = $this->instance->buildSystemSearchForm($queryID, $actionURL, $cacheSearchFunc);
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? '1' : '0';
+    }
+
+    /**
+     * Test getGitLabRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGitLabReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGitLabRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getGiteaRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGiteaReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGiteaRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getGogsRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGogsReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGogsRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
