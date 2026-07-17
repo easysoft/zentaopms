@@ -13275,7 +13275,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `name` varchar(30) NOT NULL DEFAULT '',
   `code` varchar(30) NOT NULL DEFAULT '',
   `datasource` text DEFAULT NULL,
-  `view` varchar(20) NOT NULL DEFAULT '',
+  `view` varchar(50) NOT NULL DEFAULT '',
   `keyField` varchar(50) NOT NULL DEFAULT '',
   `valueField` varchar(50) NOT NULL DEFAULT '',
   `buildin` tinyint unsigned NOT NULL DEFAULT 0,
@@ -13651,8 +13651,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql',         '分发需求',         'demandStory',               '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_story WHERE `deleted`=\'0\'',      'view_datasource_122', 'id', 'title'),
 ('lang',        '任务模式',         'taskMode',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'taskMode',    '',     '',     ''),
 ('lang',        '需求类型',         'storyCategory',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyCategory',   '',     '',     ''),
-('sql',         '相关文档',         'taskDocs',                  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_doc WHERE `deleted`=\'0\'',       'view_datasource_125', 'id', 'title'),
-('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_126', 'id', 'title');
+('sql',         '相关文档',         'taskDocs',                  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_doc WHERE `deleted`=\'0\'',       'view_datasource_taskDocs',  'id', 'title'),
+('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_caseScene', 'id', 'title');
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
@@ -15525,6 +15525,8 @@ DROP VIEW IF EXISTS `view_datasource_119`;
 DROP VIEW IF EXISTS `view_datasource_120`;
 DROP VIEW IF EXISTS `view_datasource_121`;
 DROP VIEW IF EXISTS `view_datasource_122`;
+DROP VIEW IF EXISTS `view_datasource_taskDocs`;
+DROP VIEW IF EXISTS `view_datasource_caseScene`;
 DROP VIEW IF EXISTS `ztv_projectnotpl`;
 DROP VIEW IF EXISTS `ztv_tasknotpl`;
 
@@ -15545,6 +15547,8 @@ CREATE VIEW `view_datasource_121` AS SELECT `id`,`name`  FROM `zt_roadmap`     W
 CREATE VIEW `view_datasource_122` AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0';
 CREATE VIEW `ztv_projectnotpl`    AS SELECT *            FROM `zt_project`     WHERE `deleted` = '0' AND `isTpl` = 0;
 CREATE VIEW `ztv_tasknotpl`       AS SELECT *            FROM `zt_task`        WHERE `deleted` = '0' AND `isTpl` = 0;
+CREATE VIEW `view_datasource_taskDocs`  AS SELECT `id`,`title` FROM `zt_doc`        WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_caseScene` AS SELECT `id`,`title` FROM `zt_scene`      WHERE `deleted` = '0';
 
 -- DROP TABLE IF EXISTS `ops_artifact_assets`;
 CREATE TABLE IF NOT EXISTS `ops_artifact_assets` (
