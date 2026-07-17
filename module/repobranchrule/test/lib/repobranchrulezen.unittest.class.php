@@ -6,20 +6,10 @@ class repobranchruleZenTest extends baseTest
     protected $moduleName = 'repobranchrule';
     protected $className  = 'zen';
 
-    /**
-     * Test buildBranchRuleData method.
-     *
-     * @param  int    $typeID
-     * @param  int    $repoID
-     * @param  string $branchName
-     * @param  object $data
-     * @access public
-     * @return object|false
-     */
-    public function buildBranchRuleDataTest(int $typeID, int $repoID, string $branchName, object $data): object|bool
+    public function checkRulesTest(object $formData)
     {
-        $result = $this->invokeArgs('buildBranchRuleData', [$typeID, $repoID, $branchName, $data]);
-        if(dao::isError()) return dao::getError();
+        $result = $this->invokeArgs('checkRules', [$formData]);
+        if(dao::isError()) return false;
         return $result;
     }
 }
