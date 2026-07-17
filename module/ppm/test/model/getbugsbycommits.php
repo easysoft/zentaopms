@@ -37,7 +37,6 @@ $repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
 $repo->id->range('42');
 $repo->product->range('1');
 $repo->name->range('ppm-repo-42');
-$repo->defaultBranch->range('main');
 $repo->gen(1);
 
 $ppm = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
