@@ -3490,7 +3490,7 @@ class repoModel extends model
                 $params->provider->host     = $path['scheme'] . '://' . $path['host'];
                 $params->provider->password = $formData->password;
                 $params->provider->username = $formData->account;
-                $params->provider->slug     = $path['path'];
+                $params->provider->slug     = $formData->slug ? $formData->slug : $path['path'];
             }
         }
         else

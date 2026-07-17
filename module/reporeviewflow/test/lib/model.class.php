@@ -113,4 +113,18 @@ class reporeviewflowTest
 
         return $this->objectModel->dao->select('*')->from(TABLE_REVIEWFLOW)->where('id')->eq($flowID)->fetch();
     }
+
+    public function getByBranchNameTest(int $repoID, string $branchName)
+    {
+        $result = $this->objectModel->getByBranchName($repoID, $branchName);
+        if(dao::isError()) return false;
+        return $result;
+    }
+
+    public function getPairsTest(int $repoID = 0, string $status = '')
+    {
+        $result = $this->objectModel->getPairs($repoID, $status);
+        if(dao::isError()) return false;
+        return $result;
+    }
 }
