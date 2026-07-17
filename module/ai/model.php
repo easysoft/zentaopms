@@ -2377,6 +2377,9 @@ class aiModel extends model
             case 'bug':
                 if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
                 return $object;
+            case 'feedback':
+                if(isset($sourceGroups['feedback'])) $object->feedback = zget($this->loadModel('feedback')->getByList(array($objectId)), $objectId, null);
+                return $object;
             case 'ticket':
                 if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
                 return $object;
