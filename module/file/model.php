@@ -43,6 +43,7 @@ class fileModel extends model
      */
     public function getByObject(string $objectType, int|array $objectID, string $extra = ''): array
     {
+        if(!$objectID) return array();
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->in($objectID)

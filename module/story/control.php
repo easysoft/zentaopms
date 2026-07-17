@@ -125,7 +125,7 @@ class story extends control
         $this->view->blockID     = $this->storyZen->getAssignMeBlockID();
         $this->view->type        = $storyType;
         $this->view->story       = $initStory;
-        $this->view->storyFiles  = $storyID ? $this->loadModel('file')->getByObject('story', $storyID) : array();
+        $this->view->storyFiles  = $this->loadModel('file')->getByObject('story', $storyID);
         $this->view->forceReview = $this->story->checkForceReview($storyType);
 
         $extras = str_replace(array(',', ' ', '*'), array('&', '', '-'), $extra);
