@@ -41,7 +41,7 @@ $fields->field('story')
     ->control('inputGroup')
     ->items(false)
     ->itemBegin('story')->control(array('control' => 'remotepicker', 'params' => "productID=$productID&moduleID=$moduleID&branch=$branch&storyID=$storyID", 'type' => 'casestories'))->id('story')->value($storyID)->itemEnd()
-    ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . $storyID), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className('hidden', empty($storyID))->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
+    ->itemBegin()->control('btn', array('url' => helper::createLink('story', 'view', 'storyID=' . $storyID), 'data-toggle' => 'modal', 'data-size' => 'lg'))->className(empty($storyID) ? 'hidden' : '')->icon('eye text-primary')->hint($lang->preview)->id('preview')->itemEnd();
 
 $fields->field('scene')
     ->control(array('control' => 'picker', 'required' => true))
