@@ -62,6 +62,8 @@ if(isset($cols['status']))
     $cols['status']['statusMap']['changed']     = $lang->story->changed;
     $cols['status']['statusMap']['casechanged'] = $lang->testcase->changed;
 }
+if(isset($cols['story'])) $cols['story']['map'] = $stories;
+if(isset($cols['scene'])) $cols['scene']['map'] = $scenePairs;
 $cases = initTableData($cases, $cols, $this->testcase);
 $data  = array_values($cases);
 
