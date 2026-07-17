@@ -185,6 +185,23 @@ window.loadGrade = function(e)
             }
         });
     })
+
+    if(parent > 0)
+    {
+        const $productPicker = $('[name=product]').zui('picker');
+        $productPicker.render({disabled: true});
+
+        const $branchPicker = $('[name=branch]').zui('picker');
+        $branchPicker.render({disabled: true});
+    }
+    else
+    {
+        const $productPicker = $('[name=product]').zui('picker');
+        $productPicker.render({disabled: false});
+
+        const $branchPicker = $('[name=branch]').zui('picker');
+        $branchPicker.render({disabled: false});
+    }
 }
 
 window.checkGrade = function(e)
