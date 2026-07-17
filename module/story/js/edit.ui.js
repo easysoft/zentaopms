@@ -185,6 +185,12 @@ window.loadGrade = function(e)
             }
         });
     })
+
+    const $productPicker = $('[name=product]').zui('picker');
+    $productPicker.render({disabled: parent > 0});
+
+    const $branchPicker = $('[name=branch]').zui('picker');
+    $branchPicker.render({disabled: parent > 0});
 }
 
 window.checkGrade = function(e)
