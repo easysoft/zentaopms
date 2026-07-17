@@ -13647,9 +13647,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('sql',         '路标',             'roadmap',                   '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_roadmap WHERE `deleted`=\'0\'',    'view_datasource_121', 'id', 'name'),
 ('sql',         '分发需求',         'demandStory',               '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`name` FROM zt_story WHERE `deleted`=\'0\'',      'view_datasource_122', 'id', 'title'),
 ('lang',        '任务模式',         'taskMode',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'taskMode',    '',     '',     ''),
-('lang',        '需求类型',         'storyCategory',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyCategory',   '',     '',     '');
+('lang',        '需求类型',         'storyCategory',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyCategory',   '',     '',     ''),
 ('sql',         '相关文档',         'taskDocs',                  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_doc WHERE `deleted`=\'0\'',       'view_datasource_125', 'id', 'title'),
-('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_126', 'id', 'title'),
+('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_126', 'id', 'title');
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
