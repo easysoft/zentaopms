@@ -231,4 +231,14 @@ class ppmModelTest extends ppmBaseTest
     {
         return $this->invokeMethod('getBugsByCommits', array($repoID, $ppmID, $pager));
     }
+
+    public function createMRLinkedActionTest(int $id, string $action, string $actionDate = '')
+    {
+        return $this->invokeMethod('createMRLinkedAction', array($id, $action, $actionDate));
+    }
+
+    public function execJobTest(int $ppmID, int $jobID)
+    {
+        return $this->invokeMethod('execJob', array($ppmID, $jobID));
+    }
 }

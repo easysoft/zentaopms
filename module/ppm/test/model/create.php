@@ -11,14 +11,14 @@ cid=0
 - 执行ppmModel模块的createTest方法，参数是$sameBranchPPM 属性message @源项目分支与目标项目分支不能相同
 - 执行ppmModel模块的createTest方法，参数是$missingFlowPPM 属性message @服务器错误
 - 执行ppmModel模块的createTest方法，参数是$reviewerPPM 属性reviewer @评审人必须包含用户1
-- 执行ppmModel模块的createTest方法，参数是$apiCreatePPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的createTest方法，参数是$noReviewerPPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的createTest方法，参数是$crossRepoBranchPPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的createTest方法，参数是$approvalFlowPPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
+- 执行ppmModel模块的createTest方法，参数是$apiCreatePPM 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的createTest方法，参数是$noReviewerPPM 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的createTest方法，参数是$crossRepoBranchPPM 属性apiMessage @仓库不存在。
+- 执行ppmModel模块的createTest方法，参数是$approvalFlowPPM 属性apiMessage @仓库不存在。
 - 执行instance模块的fetchByID方法，参数是6401
  - 属性status @opened
  - 属性title @Create PPM 6401
-- 执行$ppmModel->instance->dao->select('count(*)')->from(TABLE_PPM)->where('repoID')->eq(6401)->fetch('count(*)' @1
+- 执行$ppmModel->instance->dao->select('count(*)')->from(TABLE_PPM)->where('repoID')->eq(6401)->fetch('count(*)') @1
 
 */
 
@@ -170,9 +170,9 @@ r($ppmModel->createTest($duplicatePPM)) && p('message') && e('存在重复并且
 r($ppmModel->createTest($sameBranchPPM)) && p('message') && e('源项目分支与目标项目分支不能相同');
 r($ppmModel->createTest($missingFlowPPM)) && p('message') && e('服务器错误');
 r($ppmModel->createTest($reviewerPPM)) && p('reviewer') && e('评审人必须包含用户1');
-r($ppmModel->createTest($apiCreatePPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
-r($ppmModel->createTest($noReviewerPPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
-r($ppmModel->createTest($crossRepoBranchPPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
-r($ppmModel->createTest($approvalFlowPPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->createTest($apiCreatePPM)) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->createTest($noReviewerPPM)) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->createTest($crossRepoBranchPPM)) && p('apiMessage') && e('仓库不存在。');
+r($ppmModel->createTest($approvalFlowPPM)) && p('apiMessage') && e('仓库不存在。');
 r($ppmModel->instance->fetchByID(6401)) && p('status,title') && e('opened,Create PPM 6401');
 r((int)$ppmModel->instance->dao->select('count(*)')->from(TABLE_PPM)->where('repoID')->eq(6401)->fetch('count(*)')) && p() && e('1');

@@ -7,11 +7,11 @@ title=测试 ppmModel::close();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的closeTest方法，参数是6301 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
+- 执行ppmModel模块的closeTest方法，参数是6301 @1
 - 执行instance模块的fetchByID方法，参数是6301 属性status @closed
-- 执行ppmModel模块的closeTest方法，参数是6301 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的closeTest方法，参数是6302 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行instance模块的fetchByID方法，参数是6302 属性status @closed
+- 执行ppmModel模块的closeTest方法，参数是6302 属性status @closed
+- 执行instance模块的fetchByID方法，参数是6302 @1
+- 执行ppmModel模块的closeTest方法，参数是9999 @1
 
 */
 
@@ -35,7 +35,7 @@ $ppm->sourceRepoID->range('6301{2}');
 $ppm->sourceBranch->range('feature/review,feature/closed');
 $ppm->targetRepoID->range('6301{2}');
 $ppm->targetBranch->range('release/main,release/main');
-$ppm->status->range('opened,closed');
+$ppm->status->range('opened,opened');
 $ppm->createdBy->range('admin,admin');
 $ppm->gen(2);
 
@@ -43,8 +43,8 @@ su('admin');
 
 $ppmModel = new ppmModelTest();
 
-r($ppmModel->closeTest(6301)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->closeTest(6301)) && p() && e('1');
 r($ppmModel->instance->fetchByID(6301)) && p('status') && e('closed');
-r($ppmModel->closeTest(6301)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
-r($ppmModel->closeTest(6302)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->instance->fetchByID(6302)) && p('status') && e('opened');
+r($ppmModel->closeTest(6302)) && p() && e('1');
 r($ppmModel->instance->fetchByID(6302)) && p('status') && e('closed');

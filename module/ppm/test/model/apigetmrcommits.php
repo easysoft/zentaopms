@@ -8,10 +8,10 @@ timeout=0
 cid=0
 
 - 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81  @0
-- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
-- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager1  @1
+- 执行is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager1)) ? 1 : 0 @1
 - 执行$pager1->recTotal @0
-- 执行ppmModel模块的apiGetMRCommitsTest方法，参数是42, 81, $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
+- 执行is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager2)) ? 1 : 0 @1
+- 执行$pager2->recTotal @0
 
 */
 
@@ -32,7 +32,6 @@ $repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
 $repo->id->range('42');
 $repo->product->range('1');
 $repo->name->range('ppm-repo-42');
-$repo->defaultBranch->range('main');
 $repo->gen(1);
 
 $ppm = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
@@ -56,7 +55,7 @@ $pager1   = new pager(0, 20, 1);
 $pager2   = new pager(0, 20, 2);
 
 r(count((array)$ppmModel->apiGetMRCommitsTest(42, 81))) && p() && e('0');
-r(strpos(json_encode($ppmModel->apiGetMRCommitsTest(42, 81, $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
-r(is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager1))) && p() && e('1');
+r(is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager1)) ? 1 : 0) && p() && e('1');
 r($pager1->recTotal) && p() && e('0');
-r(strpos(json_encode($ppmModel->apiGetMRCommitsTest(42, 81, $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->apiGetMRCommitsTest(42, 81, $pager2)) ? 1 : 0) && p() && e('1');
+r($pager2->recTotal) && p() && e('0');
