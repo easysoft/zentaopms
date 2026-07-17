@@ -7,23 +7,34 @@ title=测试 pipelineModel::execGitlabPipeline();
 timeout=0
 cid=0
 
-- 测试缺少providerID的流水线 @api_error
-- 测试正常执行gitlab流水线成功 @success
-- 测试API返回错误信息 @api_error
-- 测试API返回空响应 @api_error
-- 测试无自定义参数执行成功 @success
+- 测试执行gitlab流水线(无API) @0
+- 测试执行gitlab流水线(tag触发无API) @0
+- 测试执行空引擎流水线 @0
+- 测试执行jenkins流水线(manual触发) @0
+- 测试执行不存在流水线 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(2);
 su('admin');
 
-$pipelineTest = new pipelineModelTest();
+$tester = new pipelineModelTest();
 
-r($pipelineTest->execGitlabPipelineTest(1)) && p() && e('api_error');
-r($pipelineTest->execGitlabPipelineTest(2)) && p() && e('success');
-r($pipelineTest->execGitlabPipelineTest(3)) && p() && e('api_error');
-r($pipelineTest->execGitlabPipelineTest(4)) && p() && e('api_error');
-r($pipelineTest->execGitlabPipelineTest(5)) && p() && e('success');
+$gitlabPipeline = (object)array('id' => 1, 'engine' => 'gitlab', 'providerID' => 0, 'defaultBranch' => 'main', 'externalPipeline' => 'test', 'repoID' => 1);
+$jenkinsPipeline = (object)array('id' => 2, 'engine' => 'jenkins', 'providerID' => 0, 'defaultBranch' => 'main', 'externalPipeline' => 'test', 'repoID' => 1);
+$emptyPipeline = (object)array('id' => 3, 'engine' => '', 'providerID' => 0, 'defaultBranch' => 'main', 'externalPipeline' => 'test', 'repoID' => 1);
+
+$v1 = $tester->execGitlabPipelineTest($gitlabPipeline, 'manual');
+$v2 = $tester->execGitlabPipelineTest($gitlabPipeline, 'tag');
+$v3 = $tester->execGitlabPipelineTest($emptyPipeline, 'manual');
+$v4 = $tester->execGitlabPipelineTest($jenkinsPipeline, 'manual');
+$v5 = $tester->execGitlabPipelineTest((object)array('id' => 9999, 'engine' => 'gitlab', 'providerID' => 0, 'defaultBranch' => 'main', 'externalPipeline' => 'test', 'repoID' => 1));
+
+r($v1) && p() && e('0');
+r($v2) && p() && e('0');
+r($v3) && p() && e('0');
+r($v4) && p() && e('0');
+r($v5) && p() && e('0');

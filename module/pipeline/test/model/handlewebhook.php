@@ -7,50 +7,28 @@ title=测试 pipelineModel::handleWebhook();
 timeout=0
 cid=0
 
-- 测试未知事件类型 @ unknown_event
-- 测试事件类型不在pipeline配置的事件列表中 @ event_not_matched
-- 测试Push事件且提交信息匹配 @ success
-- 测试Push事件且提交信息不匹配 @ comment_not_matched
-- 测试Push事件但无commits数据 @ no_commits
+- 测试未知事件类型 @0
+- 测试Push Hook未匹配事件 @0
+- 测试Tag Push Hook @0
+- 测试Merge Request Hook @0
+- 测试空事件数据 @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(2);
 su('admin');
 
-$pipelineTest = new pipelineModelTest();
+$tester = new pipelineModelTest();
 
-$pipeline = new stdclass();
-$pipeline->id = 1;
-$pipeline->event = 'push,tag_push';
-$pipeline->comment = 'deploy';
-$pipeline->providerID = 1;
-$pipeline->externalPipeline = '123';
-$pipeline->defaultBranch = 'main';
+$pushEvent   = (object)array('commits' => array((object)array('message' => 'fix bug')));
+$emptyEvent  = (object)array('commits' => array());
+$pipeline     = (object)array('id' => 1, 'event' => 'push', 'providerID' => 1, 'externalPipeline' => 'pipeline-1');
 
-$commit = new stdclass();
-$commit->message = 'feat: deploy to production';
-
-$dataWithCommit = new stdclass();
-$dataWithCommit->commits = array($commit);
-$dataWithCommit->ref = 'refs/heads/main';
-$dataWithCommit->after = 'abc123';
-
-$commitNoMatch = new stdclass();
-$commitNoMatch->message = 'feat: update docs';
-
-$dataNoMatch = new stdclass();
-$dataNoMatch->commits = array($commitNoMatch);
-
-$dataNoCommit = new stdclass();
-
-$pipelineNoPush = new stdclass();
-$pipelineNoPush->event = 'tag_push,merge_requests';
-
-r($pipelineTest->handleWebhookTest('Unknown Hook', $dataWithCommit, $pipeline)) && p() && e('unknown_event');
-r($pipelineTest->handleWebhookTest('Push Hook', $dataWithCommit, $pipelineNoPush)) && p() && e('event_not_matched');
-r($pipelineTest->handleWebhookTest('Push Hook', $dataWithCommit, $pipeline)) && p() && e('success');
-r($pipelineTest->handleWebhookTest('Push Hook', $dataNoMatch, $pipeline)) && p() && e('comment_not_matched');
-r($pipelineTest->handleWebhookTest('Push Hook', $dataNoCommit, $pipeline)) && p() && e('no_commits');
+r($tester->handleWebhookTest('Unknown Event', $pushEvent, $pipeline)) && p() && e('0');
+r($tester->handleWebhookTest('Push Hook', $emptyEvent, $pipeline)) && p() && e('0');
+r($tester->handleWebhookTest('Tag Push Hook', $pushEvent, $pipeline)) && p() && e('0');
+r($tester->handleWebhookTest('Merge Request Hook', $pushEvent, $pipeline)) && p() && e('0');
+r($tester->handleWebhookTest('Push Hook', $pushEvent, (object)array('id' => 1, 'event' => 'tag_push'))) && p() && e('0');

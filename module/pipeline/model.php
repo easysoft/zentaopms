@@ -154,23 +154,6 @@ class pipelineModel extends model
     }
 
      /**
-     * 获取流水线列表根据版本库ID。
-     * Get pipeline list by RepoID.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return array
-     */
-    public function getListByRepoID(int $repoID): array
-    {
-        return $this->dao->select('id, name, lastStatus')->from(TABLE_PIPELINE)
-            ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
-            ->orderBy('id_desc')
-            ->fetchAll('id');
-    }
-
-     /**
      * 获取流水线键值对根据版本库ID。
      * Get pipeline pairs by RepoID.
      *
@@ -185,22 +168,6 @@ class pipelineModel extends model
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id_desc')
             ->fetchPairs();
-    }
-
-   /**
-     * Get list by triggerType field.
-     *
-     * @param  string  $triggerType
-     * @param  array   $repoIdList
-     * @access public
-     * @return array
-     */
-    public function getListByTriggerType(string $triggerType, array $repoIdList = array()): array
-    {
-        return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('deleted')->eq('0')
-            ->beginIF($repoIdList)->andWhere('repo')->in($repoIdList)->fi()
-            ->fetchAll('id');
     }
 
     /**
