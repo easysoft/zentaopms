@@ -90,15 +90,15 @@ class pipelineZen extends pipeline
 
         $spaceIdList = array_keys($spaces);
         $pipelines   = $this->pipeline->getBySpaces($spaceIdList);
+        $repoList    = $this->loadModel('repo')->getListBySpaces($spaceIdList);
 
         $pipelineItems = array();
         if($repoID)
         {
-            $repoList = $this->loadModel('repo')->getListBySpaces($spaceIdList);
             foreach($pipelines as $pipeline)
             {
                 if(empty($pipeline->repoID)) continue;
-                if(empty($repoList[$pipeline->repoID])) continue;
+                if(empty($repoList[$pipeline->repoID]) || $repoList[$pipeline->repoID]->mirror) continue;
                 if(!isset($pipelineItems[$pipeline->repoID]))
                 {
                     $pipelineItems[$pipeline->repoID]['items'] = array();
@@ -112,6 +112,7 @@ class pipelineZen extends pipeline
             foreach($pipelines as $pipeline)
             {
                 if(empty($pipeline->spaceID)) continue;
+                if(!empty($repoList[$pipeline->repoID]) && $repoList[$pipeline->repoID]->mirror) continue;
                 if(!isset($pipelineItems[$pipeline->spaceID]))
                 {
                     $pipelineItems[$pipeline->spaceID]['items'] = array();
