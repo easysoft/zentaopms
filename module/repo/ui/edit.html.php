@@ -54,7 +54,7 @@ formPanel
         set::placeholder($lang->repo->descPlaceholder),
         set::value(strip_tags($repo->desc))
     ),
-    $repo->scmType == 'svn' ? null : formGroup
+    $repo->scmType == 'svn' || $repo->mirror ? null : formGroup
     (
         set::width('1/2'),
         set::name("defaultBranch"),
