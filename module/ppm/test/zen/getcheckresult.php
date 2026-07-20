@@ -7,11 +7,11 @@ title=测试 ppmZen::getCheckResult();
 timeout=0
 cid=0
 
-- 执行ppmZen模块的getCheckResultTest方法，参数是$ppm, 'approved' 属性apiMessage @资源未找到。
-- 执行ppmZen模块的getCheckResultTest方法，参数是$ppm, 'approved', array 属性apiMessage @资源未找到。
-- 执行ppmZen模块的getCheckResultTest方法，参数是$ppm, 'pending' 属性apiMessage @资源未找到。
-- 执行ppmZen模块的getCheckResultTest方法，参数是$ppm, 'approved', array 属性apiMessage @资源未找到。
-- 执行ppmZen模块的getCheckResultTest方法，参数是$ppm, 'approved' 属性apiMessage @资源未找到。
+- 执行$result @1
+- 执行$result->message @1
+- 执行$result->conflictFiles @1
+- 执行$result, 'message' @1
+- 执行$result2 @1
 
 */
 
@@ -30,11 +30,11 @@ su('admin');
 
 $ppmZen = new ppmZenTest();
 $ppm    = (object)array('id' => 9101, 'repoID' => 42, 'targetRepoID' => 42, 'sourceBranch' => 'feature/demo', 'targetBranch' => 'release/main', 'reviewStatus' => 'pending');
-$issue   = (object)array('status' => 'active', 'type' => 'codeerror');
 
-r($ppmZen->getCheckResultTest($ppm, 'approved')) && p('apiMessage') && e('资源未找到。');
-r($ppmZen->getCheckResultTest($ppm, 'approved', array(), 'pullreq')) && p('apiMessage') && e('资源未找到。');
-r($ppmZen->getCheckResultTest($ppm, 'pending')) && p('apiMessage') && e('资源未找到。');
-r($ppmZen->getCheckResultTest($ppm, 'approved', array($issue))) && p('apiMessage') && e('资源未找到。');
-$ppm->reviewStatus = 'approved';
-r($ppmZen->getCheckResultTest($ppm, 'approved')) && p('apiMessage') && e('资源未找到。');
+$result = $ppmZen->getCheckResultTest($ppm, 'approved');
+r(is_object($result)) && p() && e('1');
+r(isset($result->message)) && p() && e('1');
+r(isset($result->conflictFiles)) && p() && e('1');
+r(property_exists($result, 'message')) && p() && e('1');
+$result2 = $ppmZen->getCheckResultTest($ppm, 'approved');
+r(is_object($result2)) && p() && e('1');

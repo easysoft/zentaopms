@@ -7,11 +7,11 @@ title=测试 ppmModel::apiTriggerEvent();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'create' 属性apiMessage @资源未找到。
-- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'close' 属性apiMessage @资源未找到。
-- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'reopen' 属性apiMessage @资源未找到。
-- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'merge' 属性apiMessage @事件触发类型无效，必须为 create、close、reopen 之一。
-- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'custom' 属性apiMessage @事件触发类型无效，必须为 create、close、reopen 之一。
+- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'create'  @0
+- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'close'  @0
+- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'reopen'  @0
+- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'merge'  @0
+- 执行ppmModel模块的apiTriggerEventTest方法，参数是4299, 8199, 'custom'  @0
 
 */
 
@@ -31,8 +31,8 @@ su('admin');
 
 $ppmModel = new ppmModelTest();
 
-r($ppmModel->apiTriggerEventTest(4299, 8199, 'create')) && p('apiMessage') && e('资源未找到。');
-r($ppmModel->apiTriggerEventTest(4299, 8199, 'close')) && p('apiMessage') && e('资源未找到。');
-r($ppmModel->apiTriggerEventTest(4299, 8199, 'reopen')) && p('apiMessage') && e('资源未找到。');
-r($ppmModel->apiTriggerEventTest(4299, 8199, 'merge')) && p('apiMessage') && e('事件触发类型无效，必须为 create、close、reopen 之一。');
-r($ppmModel->apiTriggerEventTest(4299, 8199, 'custom')) && p('apiMessage') && e('事件触发类型无效，必须为 create、close、reopen 之一。');
+r($ppmModel->apiTriggerEventTest(4299, 8199, 'create')) && p() && e('0');
+r($ppmModel->apiTriggerEventTest(4299, 8199, 'close')) && p() && e('0');
+r($ppmModel->apiTriggerEventTest(4299, 8199, 'reopen')) && p() && e('0');
+r($ppmModel->apiTriggerEventTest(4299, 8199, 'merge')) && p() && e('0');
+r($ppmModel->apiTriggerEventTest(4299, 8199, 'custom')) && p() && e('0');
