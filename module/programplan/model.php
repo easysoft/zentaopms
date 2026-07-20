@@ -1424,7 +1424,7 @@ class programplanModel extends model
      * @access public
      * @return bool
      */
-    public function rollbackPoint(object $targetPoint, object $currentPoint = null): bool
+    public function rollbackPoint(object $targetPoint, ?object $currentPoint = null): bool
     {
         $pointObjectID = explode('-', $targetPoint->id)[2];
         $this->dao->update(TABLE_OBJECT)->set('enabled')->eq(1)->where('id')->eq($pointObjectID)->exec();
