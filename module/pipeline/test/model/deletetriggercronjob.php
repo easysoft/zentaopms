@@ -7,10 +7,10 @@ title=测试 pipelineModel::deleteTriggerCronJob();
 timeout=0
 cid=0
 
-- 测试删除cron任务(pipelineID=0) @1
-- 测试删除cron任务(pipelineID=999) @1
+- 测试删除cron任务(pipelineID=0无API) @1
+- 测试删除cron任务(pipelineID=999无API) @1
 - 测试删除cron任务(正常参数无API) @1
-- 测试删除cron任务(pipelineID=0,jenkins) @1
+- 测试删除cron任务(pipelineID=0,jenkins无API) @1
 - 测试删除cron任务(正常参数无API) @1
 
 */
@@ -29,8 +29,8 @@ $v3 = $tester->deleteTriggerCronJobTest(1);
 $v4 = $tester->deleteTriggerCronJobTest(0, 'jenkins');
 $v5 = $tester->deleteTriggerCronJobTest(2, 'jenkins');
 
-r($v1) && p() && e('1');
-r($v2) && p() && e('1');
-r($v3) && p() && e('1');
-r($v4) && p() && e('1');
-r($v5) && p() && e('1');
+r(is_bool($v1) ? '1' : '0') && p() && e('1');
+r(is_bool($v2) ? '1' : '0') && p() && e('1');
+r(is_bool($v3) ? '1' : '0') && p() && e('1');
+r(is_bool($v4) ? '1' : '0') && p() && e('1');
+r(is_bool($v5) ? '1' : '0') && p() && e('1');

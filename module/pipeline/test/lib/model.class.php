@@ -49,4 +49,6 @@ class pipelineModelTest extends baseTest
     public function migrateJobsToOpsPipelinesTest(): bool { return $this->safeCall(fn() => $this->instance->migrateJobsToOpsPipelines(), false); }
     public function getExternalPipelineTest(array $statusList = array()): array { return $this->safeCall(fn() => $this->instance->getExternalPipeline($statusList), array()); }
     public function syncExternalPipelineTest(): bool { return $this->safeCall(fn() => $this->instance->syncExternalPipeline(), false); }
+    public function apiUpdateTriggerTest(int $pipelineID, int $triggerID, object $trigger): object|bool { return $this->safeCall(fn() => $this->instance->apiUpdateTrigger($pipelineID, $triggerID, $trigger), false); }
+    public function apiCreateTriggerTest(int $pipelineID, object $trigger): object|bool { return $this->safeCall(fn() => $this->instance->apiCreateTrigger($pipelineID, $trigger), false); }
 }
