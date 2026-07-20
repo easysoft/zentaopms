@@ -30,7 +30,7 @@ $repo->id->range('6101');
 $repo->spaceID->range('1');
 $repo->product->range('1');
 $repo->name->range('ppm-repo-6101');
-$repo->SCM->range('git');
+$repo->scmType->range('git');
 $repo->acl->range('private');
 $repo->gen(1);
 
