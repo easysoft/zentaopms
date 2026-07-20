@@ -11,7 +11,7 @@ fields:
   - field: name
     prefix: ppm-repo-
     range: 1-1000
-  - field: SCM
+  - field: scmType
     range: git
   - field: gitUID
     prefix: gituid
