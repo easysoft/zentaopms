@@ -317,7 +317,7 @@ CSS;
     {
         global $app, $config;
         $sections = $this->prop('sections', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list                = array();
         $firstSectionHandled = false;
@@ -513,7 +513,7 @@ CSS;
     {
         global $app, $config;
         $tabs = $this->prop('tabs', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();
