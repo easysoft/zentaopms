@@ -43,8 +43,8 @@ fields:
   - field: error
     note: "执行错误信息（无错误则为空字符串）"
     range: "none,timeout,script-error"
-  - field: queue
-    note: "Jenkins队列号，用于后续状态查询和去重"
+  - field: number
+    note: "执行编号，用于后续状态查询和去重"
     range: "1001,1002,1003"
   - field: logs
     note: "Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）"
