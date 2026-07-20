@@ -15,7 +15,7 @@ fields:
   - field: name
     note: "代码库唯一标识"
     range: "zentao-web,zentao-api,zentao-mobile"
-  - field: SCM
+  - field: scmType
     note: "源代码管理类型"
     range: "git,svn"
   - field: gitUID
