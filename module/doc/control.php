@@ -2556,7 +2556,7 @@ class doc extends control
         }
         if($docID) $this->doc->createAction($docID, 'view');
 
-        $this->send($doc);
+        $this->send(array('result' => 'success', 'doc' => $doc));
     }
 
     /**
