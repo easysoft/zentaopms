@@ -258,7 +258,7 @@ toolbar
         ) : div
         (
             setClass('flex items-center'),
-            $mirrorStatus == 'active' ? span(setClass('text-primary sync-last-executed mr-3'), $lang->repo->mirror->lastUpdated . zget($this->view, 'mirrorLastExecuted', '--')) : null,
+            $mirrorStatus == 'active' ? span(setClass('text-primary sync-last-executed mr-3'), $lang->repo->mirror->lastUpdated . (zget($this->view, 'mirrorLastExecuted', '') ?: '--')) : null,
             btn
             (
                 setClass('primary sync-code-btn ajax-submit'),
