@@ -21,6 +21,9 @@ window.refreshProvider = function(providerType)
         {
             $providerPicker.$.setValue(data.value);
         }
+        $('[name=mirror]').closest('.form-group').addClass('hidden');
+        $('#mirrorwritable').prop('checked', false);
+        $('#mirrorreadonly').prop('checked', true);
     });
 }
 
