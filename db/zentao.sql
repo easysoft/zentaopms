@@ -13652,7 +13652,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '任务模式',         'taskMode',                  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'taskMode',    '',     '',     ''),
 ('lang',        '需求类型',         'storyCategory',             '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'storyCategory',   '',     '',     ''),
 ('sql',         '相关文档',         'taskDocs',                  '1', 'or',  'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_doc WHERE `deleted`=\'0\'',       'view_datasource_taskDocs',  'id', 'title'),
-('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_caseScene', 'id', 'title');
+('sql',         '所属场景',         'caseScene',                 '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_scene WHERE `deleted`=\'0\'',     'view_datasource_caseScene', 'id', 'title'),
 ('lang',        '注入环节',         'bugInjection',              '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugInjection',    '',     '',     ''),
 ('lang',        '发现环节',         'bugIdentify',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugIdentify',     '',     '',     '');
 
