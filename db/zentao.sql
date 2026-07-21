@@ -15611,6 +15611,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
   `spaceID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间ID，0表示全局级',
   `repoID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属代码库ID，0表示非代码库级',
   `name` varchar(100) NOT NULL DEFAULT '' COMMENT '制品库名称',
+  `code` varchar(50) NOT NULL DEFAULT '' COMMENT '唯一标识',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '制品库描述',
   `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `scope` varchar(30) NOT NULL DEFAULT '' COMMENT '制品库类型:global/space/repo',
@@ -15621,6 +15622,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品库主表（支持全局/空间/代码库三级作用域）';
+CREATE UNIQUE INDEX `uk_spaceID_repoID_code` ON `ops_artifact_libs` (`spaceID`, `repoID`, `code`);
 CREATE INDEX `idx_spaceID_repoID_name` ON `ops_artifact_libs` (`spaceID`, `repoID`, `name`);
 CREATE INDEX `idx_spaceID_deleted` ON `ops_artifact_libs` (`spaceID`, `deleted`);
 CREATE INDEX `idx_repoID_deleted` ON `ops_artifact_libs` (`repoID`, `deleted`);

@@ -195,7 +195,7 @@ class artifact extends control
                 ->add('repoID', (int)$repoID)
                 ->add('spaceID', $type == 'repo' && !empty($repo) ? $repo->spaceID : (int)$space)
                 ->get();
-            if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            if(in_array($formData->format, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->code))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
@@ -228,7 +228,7 @@ class artifact extends control
         {
             $formData = form::data($this->config->artifact->form->edit)->get();
 
-            if(in_array($artifactLib->type, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->name))
+            if(in_array($artifactLib->type, array('container', 'helm')) && !preg_match('/[a-zA-Z0-9_\-\.]+$/', $formData->code))
             {
                 return $this->sendError(array('name' => $this->lang->artifact->notice->nameNotSupportChinese));
             }
