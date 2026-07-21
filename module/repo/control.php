@@ -331,7 +331,7 @@ class repo extends control
             if(!$check) return $this->sendError(array('name' => $this->lang->repo->error->repoNameInvalid));
 
             $res = $this->loadModel('gitfox')->addPushWebhook($repo);
-            if(!$res) return $this->sendError(array('webhook' => isset($res['message']) ? $res['message'] : $this->lang->gitlab->failCreateWebhook));
+            if(!$res) return $this->sendError(array('webhook' => isset($res['message']) ? $res['message'] : $this->lang->repo->failCreateWebhook));
 
             if($formData->acl == 'private' && empty($formData->members))
             {
@@ -551,6 +551,19 @@ class repo extends control
 
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.lastRepo", $repoID);
 
+        $mirrorLastExecuted = '';
+        $mirrorFailure      = '';
+        $mirrorStatus       = zget($repo, 'status', 'active');
+        if(!empty($repo->mirror) && $mirrorStatus != 'syncing')
+        {
+            $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+            if(!empty($progress) && is_object($progress))
+            {
+                if(!empty($progress->lastExecuted)) $mirrorLastExecuted = (string)$progress->lastExecuted;
+                if(!empty($progress->failure))      $mirrorFailure      = (string)$progress->failure;
+            }
+        }
+
         /* Refresh repo. */
         $refresh = $refresh || $this->cookie->repoRefresh;
         if($refresh)
@@ -574,25 +587,27 @@ class repo extends control
         if($branchOrTag == 'tag' && !in_array($branchID, $tags) && in_array($branchID, $branches)) $branchOrTag = 'branch';
         if($branchOrTag == 'branch' && in_array($branchID, $tags) && !in_array($branchID, $branches)) $branchOrTag = 'tag';
 
-        $this->view->title          = $this->lang->repo->common;
-        $this->view->repo           = $repo;
-        $this->view->revisions      = $revisions;
-        $this->view->revision       = $revision;
-        $this->view->lastRevision   = $lastRevision;
-        $this->view->infos          = $infos;
-        $this->view->repoID         = $repoID;
-        $this->view->branches       = $branches;
-        $this->view->tags           = $tags;
-        $this->view->branchID       = $branchID;
-        $this->view->base64BranchID = $base64BranchID;
-        $this->view->objectID       = $objectID;
-        $this->view->pager          = $pager;
-        $this->view->path           = urldecode($path);
-        $this->view->logType        = $type;
-        $this->view->cloneUrl       = $this->repo->getCloneUrl($repo);
-        $this->view->repoPairs      = $this->repo->getRepoPairs($this->app->tab, $objectID);
-        $this->view->branchOrTag    = $branchOrTag;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->title              = $this->lang->repo->common;
+        $this->view->repo               = $repo;
+        $this->view->revisions          = $revisions;
+        $this->view->revision           = $revision;
+        $this->view->lastRevision       = $lastRevision;
+        $this->view->infos              = $infos;
+        $this->view->repoID             = $repoID;
+        $this->view->branches           = $branches;
+        $this->view->tags               = $tags;
+        $this->view->branchID           = $branchID;
+        $this->view->base64BranchID     = $base64BranchID;
+        $this->view->objectID           = $objectID;
+        $this->view->pager              = $pager;
+        $this->view->path               = urldecode($path);
+        $this->view->logType            = $type;
+        $this->view->cloneUrl           = $this->repo->getCloneUrl($repo);
+        $this->view->repoPairs          = $this->repo->getRepoPairs($this->app->tab, $objectID);
+        $this->view->branchOrTag        = $branchOrTag;
+        $this->view->users              = $this->loadModel('user')->getPairs('noletter');
+        $this->view->mirrorLastExecuted = $mirrorLastExecuted;
+        $this->view->mirrorFailure      = $mirrorFailure;
 
         $this->display();
     }
@@ -1128,20 +1143,21 @@ class repo extends control
      * @param  string $type
      * @param  int    $providerID
      * @param  string $groupID
+     * @param  string $acl
      * @param  int    $isTryAgain
      * @access public
      * @return void
      */
-    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', int $isTryAgain = 0)
+    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', string $acl = 'open', int $isTryAgain = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
         if($_POST)
         {
-            $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID);
+            $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID, $this->post->acl);
             $formData = form::data($this->config->repo->form->import)->get();
             $this->session->set('importRepo', json_encode($formData));
 
-            $result   = $this->repo->import($formData);
+            $result = $this->repo->import($formData);
             if(dao::isError()) $this->sendError(dao::getError());
             return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
         }
@@ -1154,6 +1170,7 @@ class repo extends control
             $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
             $groupID    = urlencode($groupID);
             $type       = zget($importRepo, 'origin', 'GitLab');
+            $acl        = zget($importRepo, 'acl', 'open');
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
@@ -1162,9 +1179,11 @@ class repo extends control
         $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->view->type       = $type;
         $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
+        $this->view->acl        = $acl;
         $this->view->tryAgain   = $isTryAgain;
         $this->view->spaceID    = $spaceID;
         $this->view->inSpace    = !empty($spaceID);
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->display();
     }
 
@@ -1397,14 +1416,16 @@ class repo extends control
         $repo = $this->repo->getByID($repoID);
         if(empty($repo)) return $this->send(array('result' => 'fail', 'message' => $this->lang->repo->error->noFound));
 
-        $progress = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
-        $status   = (!empty($progress) && is_object($progress) && !empty($progress->status))  ? (string)$progress->status  : '';
-        $failure  = (!empty($progress) && is_object($progress) && !empty($progress->failure)) ? (string)$progress->failure : '';
+        $progress      = $this->loadModel('gitfox')->apiGetMirrorSyncProgress((int)$repo->id);
+        $status        = (!empty($progress) && is_object($progress) && !empty($progress->status))       ? (string)$progress->status       : '';
+        $failure       = (!empty($progress) && is_object($progress) && !empty($progress->failure))      ? (string)$progress->failure      : '';
+        $lastExecuted  = (!empty($progress) && is_object($progress) && !empty($progress->lastExecuted)) ? (string)$progress->lastExecuted : '';
 
         return $this->send(array(
-            'result'  => 'success',
-            'status'  => $status,
-            'failure' => $failure
+            'result'       => 'success',
+            'status'       => $status,
+            'failure'      => $failure,
+            'lastExecuted' => $lastExecuted
         ));
     }
 
@@ -1445,38 +1466,6 @@ class repo extends control
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
         echo $commitCount;
-    }
-
-    /**
-     * 获取SVN目录。
-     * Ajax get svn dir.
-     *
-     * @param  int    $repoID
-     * @param  string $path
-     * @access public
-     * @return void
-     */
-    public function ajaxGetSVNDirs(int $repoID, string $path = '')
-    {
-        $repo = $this->repo->getByID($repoID);
-        if(!$this->repo->isSvn($repo)) return print(json_encode(array()));
-
-        $path = $this->repo->decodePath($path);
-        $dirs = array();
-        if(empty($path))
-        {
-            $dirs['/'] = '';
-            if(empty($repo->prefix)) $path = '/';
-        }
-
-        $tags = $this->loadModel('svn')->getRepoTags($repo, $path);
-        if($tags)
-        {
-            $dirs['/'] = $this->repo->encodePath($path);
-            foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
-        }
-
-        echo json_encode($dirs);
     }
 
     /**
@@ -1531,65 +1520,6 @@ class repo extends control
         $this->view->link      = $link;
 
         $this->display();
-    }
-
-    /**
-     * 根据产品ID获取项目列表。
-     * Get projects list by product id list by ajax.
-     *
-     * @access public
-     * @return void
-     */
-    public function ajaxProjectsOfProducts()
-    {
-        $productIds = $this->post->products ? explode(',', $this->post->products) : array();
-        if(empty($productIds))
-        {
-            $products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
-            $productIds = array_keys($products);
-        }
-        /* Get all projects that can be accessed. */
-        $accessProjects = $this->loadModel('product')->getProjectPairsByProductIDList($productIds);
-
-        $options = array();
-        foreach($accessProjects as $projectID => $project)
-        {
-            $options[] = array('text' => $project, 'value' => $projectID);
-        }
-        return print(json_encode($options));
-    }
-
-
-    /**
-     * 获取各个服务器下的项目。
-     * Ajax get projects by server.
-     *
-     * @param  int    $serverID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetProjects(int $serverID)
-    {
-        $repos = $this->repo->ajaxGetGitFoxProjects($serverID);
-        return print(json_encode($this->repoZen->buildRepoPaths(array_column($repos, 'text', 'value'))));
-    }
-
-    /**
-     * 根据服务器ID获取分组。
-     * Ajax get groups by server.
-     *
-     * @param  int    $serverID
-     * @access public
-     * @return void
-     */
-    public function ajaxGetGroups(int $serverID)
-    {
-        $options = $this->repo->getGroups($serverID);
-
-        $result = new stdclass();
-        $result->options = $options;
-
-        return print(json_encode($result));
     }
 
     /**

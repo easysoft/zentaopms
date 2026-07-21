@@ -1,0 +1,49 @@
+title: table ops_artifact_blobs
+desc: "制品文件对象表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: storageID
+    note: "存储后端ID"
+    range: "1,2,3"
+  - field: assetID
+    note: "关联制品资源ID"
+    range: "1,2,3"
+  - field: ref
+    note: "存储引用"
+    range: "blob-ref-001,blob-ref-002,blob-ref-003"
+    prefix: "ref-"
+  - field: size
+    note: "文件大小"
+    range: "1024,2048,4096"
+  - field: downloads
+    note: "下载次数"
+    range: "0,5,10"
+  - field: metadata
+    note: "文件元数据"
+    range: "meta-linux-amd64,meta-package-index,meta-layer-cache"
+  - field: checksum
+    note: "校验摘要"
+    range: "sha256-a1b2c3d4,sha256-e5f6g7h8,sha256-i9j0k1l2"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

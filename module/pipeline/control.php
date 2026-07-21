@@ -167,7 +167,7 @@ class pipeline extends control
      * @access public
      * @return void
      */
-    public function edit(int $id)
+    public function edit(int $id, int $spaceID = 0, int $repoID = 0, string $type = '')
     {
         if($_POST)
         {
@@ -192,6 +192,11 @@ class pipeline extends control
             foreach($paramKeys as $index => $key)
             {
                 if(empty($key)) continue;
+                if(preg_match('/[^a-zA-Z0-9_]/', $key))
+                {
+                    dao::$errors['paramKey'] = sprintf($this->lang->pipeline->invalidParamName, $key);
+                    return $this->sendError(dao::getError());
+                }
                 $value = isset($paramValues[$index]) ? $paramValues[$index] : '';
                 $customParam->$key = $value;
             }
@@ -219,18 +224,28 @@ class pipeline extends control
                 }
             }
 
-            $locateUrl  = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+            if($type)
+            {
+                $locateUrl = $this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={$type}");
+            }
+            else
+            {
+                $locateUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+            }
             return $this->sendSuccess(array('locate' => $locateUrl));
         }
 
         $pipeline = $this->pipeline->getByID($id);
         if(empty($pipeline)) return $this->locate($this->createLink('pipeline', 'browse'));
 
-        $this->commonAction((int)$pipeline->spaceID);
-
         if($pipeline->repoID)
         {
+            $this->commonAction();
             $this->loadModel('ci')->setMenu($pipeline->repoID);
+        }
+        else
+        {
+            $this->commonAction((int)$pipeline->spaceID);
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
@@ -249,7 +264,14 @@ class pipeline extends control
             if(!$customParam) $customParam = array();
         }
 
-        $cancelUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+        if($type)
+        {
+            $cancelUrl = $this->createLink('pipeline', 'browse', "spaceID={$spaceID}&repoID={$repoID}&type={$type}");
+        }
+        else
+        {
+            $cancelUrl = $pipeline->repoID ? $this->createLink('pipeline', 'browse', "spaceID=0&repoID={$pipeline->repoID}&type=repo") : $this->createLink('pipeline', 'browse', "spaceID={$pipeline->spaceID}&type=space");
+        }
 
         $triggers = $this->pipeline->getTriggers($id);
 
@@ -261,40 +283,6 @@ class pipeline extends control
         $this->view->cancelUrl   = $cancelUrl;
         $this->view->triggers    = $triggers;
 
-        $this->display();
-    }
-
-    /**
-     * View pipeline and compile.
-     *
-     * @param  int    $pipelineID
-     * @param  int    $compileID
-     * @access public
-     * @return void
-     */
-    public function view(int $pipelineID, int $compileID = 0)
-    {
-        $pipeline = $this->pipeline->getById($pipelineID);
-
-        $this->loadModel('compile');
-        if($compileID)
-        {
-            $compile = $this->compile->getById($compileID);
-        }
-        else
-        {
-            $compile = $this->compile->getLastResult($pipelineID);
-        }
-
-        if($compile && $compile->testtask) $this->pipelineZen->getCompileData($compile);
-
-        $this->view->title   = $this->lang->ci->pipeline . $this->lang->hyphen . $this->lang->pipeline->browse;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pipeline     = $pipeline;
-        $this->view->compile = $compile;
-        $this->view->repo    = $this->loadModel('repo')->getByID($pipeline->repo);
-        $this->view->jenkins = $this->loadModel('pipeline')->getById($pipeline->server);
-        $this->view->product = $this->loadModel('product')->getById($pipeline->product);
         $this->display();
     }
 
@@ -337,8 +325,15 @@ class pipeline extends control
             }
 
             $this->loadModel('action')->create('pipeline', $pipelineID, 'executed');
-            $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
-            return $this->sendSuccess(array('locate' => $url));
+            if($pipeline->engine == 'gitlab' || $pipeline->engine == 'jenkins')
+            {
+                $url = $this->createLink('pipeline', 'execution', "space={$space}&repoID={$repoID}&type={$type}&pipelineID={$pipelineID}");
+            }
+            else
+            {
+                $url = $this->createLink('pipeline', 'execView', "id={$result->id}&space={$space}&repoID={$repoID}&type={$type}");
+            }
+            return $this->sendSuccess(array('locate' => $url, 'message' => $this->lang->pipeline->execSuccess));
         }
 
         $repo = $this->loadModel('repo')->getByID($pipeline->repoID);
@@ -558,20 +553,6 @@ class pipeline extends control
 
         $this->pipelineZen->buildImportForm($repoID, $providerID);
         $this->display();
-    }
-
-    /**
-     * 流水线触发器。
-     * Pipeline trigger.
-     *
-     * @param  int    $pipelineID
-     * @access public
-     * @return void
-     */
-    public function trigger(int $pipelineID)
-    {
-        $this->lang->pipeline->edit = $this->lang->pipeline->trigger;
-        $this->edit($pipelineID);
     }
 
     /**
@@ -939,21 +920,29 @@ class pipeline extends control
         elseif($type == 'week')
         {
             $field = 'cron';
-            $weekDay = $formData->weekDay ?? '*';
-            $time    = $formData->time ?? '0:0';
+            $weekDay = $formData->weekDay ?? '';
+            $time    = $formData->time ?? '';
+
+            if(empty($weekDay)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->weekDay));
+            if(empty($time))    return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->time));
+
             list($hour, $minute) = explode(':', $time);
             $value = "{$minute} {$hour} * * {$weekDay}";
         }
         elseif($type == 'month')
         {
             $field = 'cron';
-            $monthDay = $formData->monthDay ?? '*';
-            $time     = $formData->time ?? '0:0';
+            $monthDay = $formData->monthDay ?? '';
+            $time     = $formData->time ?? '';
+
+            if(empty($monthDay)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->monthDay));
+            if(empty($time))     return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->pipeline->triggerForm->time));
+
             list($hour, $minute) = explode(':', $time);
             $value = "{$minute} {$hour} {$monthDay} * *";
         }
 
-        if(empty($field) || $value === '') return $this->sendError('Invalid trigger data');
+        if(empty($field) || $value === '') return $this->sendError($this->lang->pipeline->triggerForm->invalidData);
 
         /* Find existing trigger record or create a new one. */
         $triggers = $this->pipeline->getTriggers($pipelineID);
@@ -982,6 +971,14 @@ class pipeline extends control
 
         if(dao::isError()) return $this->sendError(dao::getError());
 
+        /* Sync cron job to gitfox when field is cron. */
+        if($field == 'cron')
+        {
+            $deleted = $this->pipeline->deleteTriggerCronJob($pipelineID, $pipeline->engine);
+            if($deleted) $this->pipeline->addTriggerCronJob($pipelineID, $value, $pipeline->engine);
+            if(dao::isError()) return $this->sendError(dao::getError());
+        }
+
         return $this->sendSuccess(array('closeModal' => true, 'callback' => array('name' => 'refreshTriggerGroup')));
     }
 
@@ -998,6 +995,14 @@ class pipeline extends control
         if($field && in_array($field, array('event', 'cron', 'comment')))
         {
             $this->pipeline->updateTriggerField($triggerID, $field, '');
+        }
+
+        /* Sync delete cron job to gitfox. */
+        if($field == 'cron')
+        {
+            $trigger  = $this->dao->select('pipelineID')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+            $pipeline = $trigger ? $this->pipeline->getByID((int)$trigger->pipelineID) : null;
+            if($pipeline) $this->pipeline->deleteTriggerCronJob((int)$trigger->pipelineID, $pipeline->engine);
         }
 
         if(dao::isError()) return $this->sendError(dao::getError());
@@ -1049,6 +1054,13 @@ class pipeline extends control
      */
     public function execView(int $id, int $space = 0, int $repoID = 0, $type = 'space')
     {
+        $execution = $this->pipeline->getExecByID($id);
+        $pipeline  = $this->pipeline->getByID(empty($execution) ? 0 : $execution->pipelineID);
+        if(!empty($pipeline) && in_array($pipeline->engine, array('gitlab', 'jenkins')))
+        {
+            $this->locate($this->createLink('pipeline', 'ajaxExecLog', "id={$id}&space={$space}&repoID={$repoID}&type={$type}"));
+        }
+
         $this->commonAction($space);
         if($repoID)
         {
@@ -1064,8 +1076,8 @@ class pipeline extends control
         }
 
         $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
-        $this->view->execution = $this->pipeline->getExecByID($id);
-        $this->view->pipeline  = $this->pipeline->getByID(empty($this->view->execution) ? 0 : $this->view->execution->pipelineID);
+        $this->view->execution = $execution;
+        $this->view->pipeline  = $pipeline;
         $this->view->repoID    = $repoID;
         $this->view->type      = $type;
         $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
@@ -1091,5 +1103,57 @@ class pipeline extends control
 
         $response = json_decode(commonModel::http($url, null, array(), $apiRoot->header));
         $this->sendSuccess($response);
+    }
+
+    /**
+     * 查看执行日志。
+     * View execution log.
+     *
+     * @param  int    $id
+     * @param  int    $space
+     * @param  int    $repoID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxExecLog(int $id, int $space = 0, int $repoID = 0, $type = 'space')
+    {
+        $this->commonAction($space);
+        if($repoID)
+        {
+            $this->pipelineZen->checkRepoEmpty();
+            $repoID = $this->loadModel('repo')->saveState($repoID);
+
+            /* Set session. */
+            $this->loadModel('ci')->setMenu($repoID);
+        }
+        else
+        {
+            $this->session->set('repoID', '');
+        }
+        $execution = $this->pipeline->getExecByID($id);
+        $pipeline  = $this->pipeline->getByID(empty($execution) ? 0 : $execution->pipelineID);
+
+        $this->loadModel('gitlab');
+        $this->loadModel('jenkins');
+        if(!empty($execution->status) && !in_array($execution->status, array('created', 'pending')))
+        {
+            $engine   = $pipeline->engine;
+            $provider = $this->loadModel('provider')->fetchByID($pipeline->providerID);
+            if($engine) $execution->logs = $this->$engine->getLogs($execution->number, $pipeline->externalPipeline, $provider);
+        }
+        $logs = $execution->logs ? str_replace(array("\r\n", "\n"), "<br />", $execution->logs) : '';
+
+        $this->view->title     = $this->lang->pipeline->pipeline . $this->lang->hyphen . $this->lang->pipeline->execView;
+        $this->view->id        = $id;
+        $this->view->execution = $execution;
+        $this->view->pipeline  = $pipeline;
+        $this->view->repoID    = $repoID;
+        $this->view->type      = $type;
+        $this->view->repo      = $this->loadModel('repo')->getByID($repoID);
+        $this->view->space     = $space;
+        $this->view->logs      = $execution->logs ? $logs : '';
+
+        $this->display();
     }
 }

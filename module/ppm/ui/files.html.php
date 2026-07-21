@@ -65,6 +65,7 @@ $domBox = empty($diffs) ? p(setClass('detail-content'), $lang->ppm->noChanges) :
             set::expandedIcon('folder-open'),
             set::normalIcon('file-text-alt'),
             set::selected($currentEntry),
+            set::defaultNestedShow(true),
             set::onClickItem(jsRaw('window.treeClick'))
         )
     ),

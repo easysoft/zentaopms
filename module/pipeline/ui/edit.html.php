@@ -15,6 +15,11 @@ global $app;
 
 $app->loadLang('pipeline');
 
+if($repo)
+{
+    dropmenu(set::objectID($repo->id), set::text($repo->name), set::tab('repo'));
+}
+
 jsVar('pipelineID', $pipeline->id);
 jsVar('branchList', $branchList);
 jsVar('defaultBranch', zget($pipeline, 'defaultBranch', ''));
@@ -145,17 +150,15 @@ foreach($triggers as $trigger)
 jsVar('hasEvent', $hasEvent);
 jsVar('hasComment', $hasComment);
 jsVar('hasCron', $hasCron);
-$canAddTrigger = !($hasEvent && $hasComment && $hasCron);
+jsVar('pipelineEngine', $pipeline->engine);
+
+$isJenkins = ($pipeline->engine == 'jenkins');
+$canAddTrigger = $isJenkins ? !$hasCron : !($hasEvent && $hasComment && $hasCron);
 
 /* 根据已有触发器动态构建可用的触发类型列表 */
 /* 原则：只显示还没有配置的类型（每种类型只能配置一次） */
+/* Jenkins 只支持定时触发（按周/按月），不支持事件和关键字 */
 $availableTriggerTypes = array();
-
-/* event类型：如果还没配置，就显示"事件" */
-if(!$hasEvent)
-{
-    $availableTriggerTypes['event'] = $lang->pipeline->triggerFormTypeList['event'];
-}
 
 /* cron类型：如果还没配置，就显示"按周"和"按月" */
 if(!$hasCron)
@@ -164,14 +167,20 @@ if(!$hasCron)
     $availableTriggerTypes['month'] = $lang->pipeline->triggerFormTypeList['month'];
 }
 
-/* comment类型：如果还没配置，就显示"关键字" */
-if(!$hasComment)
+/* event类型：非Jenkins且还没配置，显示"事件" */
+if(!$isJenkins && !$hasEvent)
+{
+    $availableTriggerTypes['event'] = $lang->pipeline->triggerFormTypeList['event'];
+}
+
+/* comment类型：非Jenkins且还没配置，显示"关键字" */
+if(!$isJenkins && !$hasComment)
 {
     $availableTriggerTypes['comment'] = $lang->pipeline->triggerFormTypeList['comment'];
 }
 
 /* 获取第一个可用的触发器类型作为默认值 */
-$defaultTriggerType = !empty($availableTriggerTypes) ? key($availableTriggerTypes) : 'event';
+$defaultTriggerType = !empty($availableTriggerTypes) ? key($availableTriggerTypes) : ($isJenkins ? 'week' : 'event');
 
 /* Build custom param rows. */
 $paramRows = array();

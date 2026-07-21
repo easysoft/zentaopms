@@ -223,6 +223,12 @@ class tree extends control
             $title       = $this->lang->tree->manageLine;
             $parentLabel = $this->lang->tree->parent;
         }
+        elseif($type == 'host')
+        {
+            $title       = $this->lang->tree->groupMaintenance;
+            $name        = $this->lang->tree->groupName;
+            $parentLabel = $this->lang->tree->parentGroup;
+        }
         else
         {
             $name        = $this->lang->tree->name;
@@ -230,11 +236,8 @@ class tree extends control
             $parentLabel = $this->lang->tree->parent;
         }
 
-        if($type == 'host') $this->app->loadLang('host');
-
         $this->view->name        = $name;
         $this->view->title       = $title;
-        $this->view->title       = $type == 'host' ? $this->lang->host->groupMaintenance : $title;
         $this->view->parentLabel = $parentLabel;
         $this->view->module      = $module;
         $this->view->type        = $type;

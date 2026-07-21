@@ -176,7 +176,7 @@
         {
             const response = await fetch(importProgressPollingLink, {credentials: 'same-origin'});
             const result = await response.json();
-            if(result && result.data && result.data.status === 'finished')
+            if(result && result.data && (result.data.status === 'finished' || result.data.status === 'failed'))
             {
                 finishImport();
                 return;

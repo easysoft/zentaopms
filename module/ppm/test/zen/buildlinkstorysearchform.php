@@ -3,20 +3,15 @@
 
 /**
 
-title=测试 mrZen::buildLinkStorySearchForm();
+title=测试 ppmZen::buildLinkStorySearchForm();
 timeout=0
-cid=17263
+cid=0
 
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性actionURL @buildlinkstorysearchform.php?m=mr&f=linkStory&MRID=1&repoID=1&browseType=bysearch&param=myQueryID&orderBy=id_desc
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 5 属性queryID @5
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是2, 3, 'title_asc', 0 属性actionURL @buildlinkstorysearchform.php?m=mr&f=linkStory&MRID=2&repoID=3&browseType=bysearch&param=myQueryID&orderBy=title_asc
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性style @simple
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasProduct @0
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasPlan @0
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasModule @0
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasBranch @0
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasGrade @0
-- 执行mrTest模块的buildLinkStorySearchFormTest方法，参数是1, 1, 'id_desc', 0 属性hasClosed @0
+- 执行$searchForm属性queryID @9
+- 执行$searchForm属性style @simple
+- 执行$searchForm['params']['status']['values']['closed']) ? 1 : 0 @0
+- 执行$searchForm['fields']['product']) ? 1 : 0 @0
+- 执行$searchForm['fields']['branch']) ? 1 : 0 @0
 
 */
 
@@ -24,22 +19,17 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 global $app;
-$app->setMethodName('linkStory');
-
-zenData('mr')->gen(0);
-zenData('repo')->gen(0);
+$app->rawModule = 'ppm';
+$app->rawMethod = 'view';
+$app->setMethodName('view');
 
 su('admin');
 
-$mrTest = new mrZenTest();
+$ppmZen    = new ppmZenTest();
+$searchForm = $ppmZen->buildLinkStorySearchFormTest(8101, 6101, 'id_desc', 9);
 
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('actionURL') && e('buildlinkstorysearchform.php?m=mr&f=linkStory&MRID=1&repoID=1&browseType=bysearch&param=myQueryID&orderBy=id_desc');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 5)) && p('queryID') && e('5');
-r($mrTest->buildLinkStorySearchFormTest(2, 3, 'title_asc', 0)) && p('actionURL') && e('buildlinkstorysearchform.php?m=mr&f=linkStory&MRID=2&repoID=3&browseType=bysearch&param=myQueryID&orderBy=title_asc');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('style') && e('simple');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasProduct') && e('0');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasPlan') && e('0');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasModule') && e('0');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasBranch') && e('0');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasGrade') && e('0');
-r($mrTest->buildLinkStorySearchFormTest(1, 1, 'id_desc', 0)) && p('hasClosed') && e('0');
+r($searchForm) && p('queryID') && e('9');
+r($searchForm) && p('style') && e('simple');
+r(isset($searchForm['params']['status']['values']['closed']) ? 1 : 0) && p() && e('0');
+r(isset($searchForm['fields']['product']) ? 1 : 0) && p() && e('0');
+r(isset($searchForm['fields']['branch']) ? 1 : 0) && p() && e('0');

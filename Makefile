@@ -69,9 +69,9 @@ common:
 	# 把隐式可空类型声明 Type $param = null 改为显式可空类型声明 ?Type $param = null
 	php misc/fix_nullable_types.php zentaopms/lib/vendor > /dev/null && rm misc/nullable_types_fix_*.log
 	if [ ! -d "zentaopms/www/js/zui3/editor" ]; then mkdir -p zentaopms/www/js/zui3/editor; fi
-	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
+	curl https://$(GITFOX_HOST)/_artifacts/space/zentao/default/zui3/static/blocksuite/$(SUITEVERSION)/blocksuite-$(SUITEVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/editor/
 	if [ ! -d "zentaopms/www/js/zui3/whiteboard" ]; then mkdir -p zentaopms/www/js/zui3/whiteboard; fi
-	curl https://$(GITFOX_HOST)/_artifacts/zentao/raw/zui3/static/whiteboard/$(WHITEBDVERSION)/whiteboard-$(WHITEBDVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/whiteboard/
+	curl https://$(GITFOX_HOST)/_artifacts/space/zentao/default/zui3/static/whiteboard/$(WHITEBDVERSION)/whiteboard-$(WHITEBDVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/whiteboard/
 	# disable the autoExclude function.
 	sed -i 's/\$$autoExclude = true;/\$$autoExclude = false;/' zentaopms/lib/base/dao/dao.class.php
 	mkdir zentaopms/tmp

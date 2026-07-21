@@ -6,13 +6,13 @@
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "feature/devops"
+      "gitVersion": "release/13.4"
     },
     "zentaomax": {
-      "gitVersion": "feature/devops"
+      "gitVersion": "release/8.4"
     },
     "zentaoipd": {
-      "gitVersion": "feature/devops"
+      "gitVersion": "release/5.4"
     },
     "devops": {
       "gitRepo": "zentao/devops"
@@ -64,8 +64,8 @@
     }
   },
   "notice": {
-    "users": "caiyan,zhaixiaojian",
-    "groups": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4",
-    "groups2": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
+    "users": "qishiyao,zhujinyong,caoyanyi",
+    "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",
+    "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
 }

@@ -18,23 +18,38 @@ cid=18064
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('repo')->loadYaml('repo')->gen(4);
-zenData('repohistory')->gen(0);
-zenData('repobranch')->gen(0);
+global $dbh, $tester;
+$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repohistory` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` varchar(40) NOT NULL DEFAULT '',
+  `commit` int unsigned NOT NULL DEFAULT 0,
+  `comment` text DEFAULT NULL,
+  `committer` varchar(100) NOT NULL DEFAULT '',
+  `time` datetime DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+$dbh->exec(<<<'SQL'
+CREATE TABLE `ops_repobranch` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` int unsigned NOT NULL DEFAULT 0,
+  `branch` varchar(255) NOT NULL DEFAULT '',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
 
 su('admin');
-
-global $tester, $dao;
-$repo      = $tester->loadModel('repo')->getByID(1);
-$logs      = $tester->repo->getUnsyncedCommits($repo);
-$revision  = 1;
-$revisions = array();
-foreach($logs as $log)
-{
-    $tester->repo->saveOneCommit($repo->id, $log, $revision);
-    $revisions[] = $log->revision;
-    $revision ++;
-}
+$revisions = array(
+    '2e0dd521b4a29930d5670a2c142a4400d7cffc1a',
+    'd30919bdb9b4cf8e2698f4a6a30e41910427c01c',
+);
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 1, 'revision' => $revisions[0], 'commit' => 1, 'comment' => 'commit1', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 1, 'revision' => $revisions[1], 'commit' => 2, 'comment' => 'commit2', 'committer' => 'admin', 'time' => '2024-01-02 10:00:00'))->exec();
 
 $repoTest = new repoModelTest();
 

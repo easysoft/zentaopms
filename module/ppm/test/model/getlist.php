@@ -3,87 +3,63 @@
 
 /**
 
-title=测试 mrModel::getList();
+title=测试 ppmModel::getList();
 timeout=0
-cid=17251
+cid=0
 
-- 获取合并请求列表数量 @8
-- 获取合并请求列表ID为1的合并请求的主机ID和标题
- - 第1条的hostID属性 @1
- - 第1条的title属性 @test-merge
-- 获取合并请求列表数量 @3
-- 获取开放中的合并请求列表的标题第7条的title属性 @test-merge7
-- 获取合并请求列表数量 @2
-- 获取指派给user1的合并请求列表的标题第6条的title属性 @test-merge6
-- 获取合并请求列表数量 @2
-- 获取创建者为user2的合并请求列表的标题第3条的title属性 @test-merge3
-- 获取合并请求列表数量 @1
-- 获取仓库ID为1的合并请求列表的标题第1条的title属性 @test-merge
-- 获取合并请求列表数量 @1
-- 获取执行ID为4的合并请求列表的标题第4条的title属性 @test-merge4
-- 获取服务器ID是1，项目ID是5的合并请求列表数量 @0
-- 获取服务器ID是1，项目ID是3的合并请求列表数量 @1
+- 执行ppmModel模块的getListTest方法  @4
+- 执行ppmModel模块的getListTest方法，参数是'status', 'opened'  @3
+- 执行ppmModel模块的getListTest方法，参数是'status', 'closed' 第6102条的title属性 @Closed PPM 6102
+- 执行ppmModel模块的getListTest方法，参数是'creator', 'user1'
+ - 第6102条的title属性 @Closed PPM 6102
+ - 第6102条的title属性 @Closed PPM 6102
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array  @2
+- 执行ppmModel模块的getListTest方法，参数是'creator', 'all'  @4
+- 执行ppmModel模块的getListTest方法，参数是'status', 'all'  @4
+- 执行ppmModel模块的getListTest方法，参数是'creator', 'nonexistent'  @0
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_asc' 第6101条的status属性 @opened
+- 执行ppmModel模块的getListTest方法，参数是'all', 'all', 'id_desc', array  @2
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('user')->gen(5);
-zenData('mr')->loadYaml('mr')->gen(10);
+zenData('user')->gen(3);
+zenData('product')->gen(2);
+
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
+$repo->id->range('6101-6102');
+$repo->product->range('1,2');
+$repo->name->range('ppm-repo-6101,ppm-repo-6102');
+$repo->gen(2);
+
+$ppm = zenData('ops_ppm')->loadYaml('ops_ppm', false, 2);
+$ppm->id->range('6101-6104');
+$ppm->title->range('Opened PPM 6101,Closed PPM 6102,Review PPM 6103,Extra PPM 6104');
+$ppm->repoID->range('6101,6102,6101,6102');
+$ppm->sourceRepoID->range('6101,6102,6101,6102');
+$ppm->sourceBranch->range('feature/basic-opened,feature/basic-closed,feature/basic-review,feature/extra');
+$ppm->targetRepoID->range('6101,6102,6101,6102');
+$ppm->targetBranch->range('master{4}');
+$ppm->status->range('opened,closed,opened,opened');
+$ppm->createdBy->range('admin,user1,admin,user1');
+$ppm->reviewers->range('admin,user1,admin,user1');
+$ppm->reviewStatus->range('pending,approved,rejected,pending');
+$ppm->gen(4);
+
 su('admin');
 
-$mrModel = $tester->loadModel('mr');
+$ppmModel = new ppmModelTest();
 
-$mode     = 'all';
-$param    = 'all';
-$orderBy  = 'id_desc';
-$projects = array();
-$repoID   = 0;
-$objectID = 0;
-
-$result = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()                 && e('8');            // 获取合并请求列表数量
-r($result)        && p('1:hostID,title') && e('1,test-merge'); // 获取合并请求列表ID为1的合并请求的主机ID和标题
-
-$mode   = 'status';
-$param  = 'opened';
-$result = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()          && e('3');           // 获取合并请求列表数量
-r($result)        && p('7:title') && e('test-merge7'); // 获取开放中的合并请求列表的标题
-
-$mode   = 'assignee';
-$param  = 'user1';
-$result = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()          && e('2');           // 获取合并请求列表数量
-r($result)        && p('6:title') && e('test-merge6'); // 获取指派给user1的合并请求列表的标题
-
-$mode   = 'creator';
-$param  = 'user2';
-$result = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()          && e('2');           // 获取合并请求列表数量
-r($result)        && p('3:title') && e('test-merge3'); // 获取创建者为user2的合并请求列表的标题
-
-$mode    = 'all';
-$repoID  = 1;
-$result  = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()          && e('1');          // 获取合并请求列表数量
-r($result)        && p('1:title') && e('test-merge'); // 获取仓库ID为1的合并请求列表的标题
-
-$repoID   = 0;
-$objectID = 4;
-$result   = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p()          && e('1');           // 获取合并请求列表数量
-r($result)        && p('4:title') && e('test-merge4'); // 获取执行ID为4的合并请求列表的标题
-
-/* Set user is not a adminer. */
-global $app;
-$app->user->admin = false;
-
-$objectID = 0;
-$projects = array(1 => 5);
-$result   = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p() && e('0');           // 获取服务器ID是1，项目ID是5的合并请求列表数量
-
-$projects = array(1 => 3);
-$result   = $mrModel->getList($mode, $param, $orderBy, $projects, $repoID, $objectID);
-r(count($result)) && p() && e('1');           // 获取服务器ID是1，项目ID是3的合并请求列表数量
+r(count($ppmModel->getListTest())) && p() && e('4');
+r(count($ppmModel->getListTest('status', 'opened'))) && p() && e('3');
+r($ppmModel->getListTest('status', 'closed')) && p('6102:title') && e('Closed PPM 6102');
+r($ppmModel->getListTest('creator', 'user1')) && p('6102:title,title') && e('Closed PPM 6102,Closed PPM 6102');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(), 6101))) && p() && e('2');
+r(count($ppmModel->getListTest('creator', 'all'))) && p() && e('4');
+r(count($ppmModel->getListTest('status', 'all'))) && p() && e('4');
+r(count($ppmModel->getListTest('creator', 'nonexistent'))) && p() && e('0');
+r($ppmModel->getListTest('all', 'all', 'id_asc')) && p('6101:status') && e('opened');
+su('user1');
+r(count($ppmModel->getListTest('all', 'all', 'id_desc', array(6102 => 6102)))) && p() && e('2');

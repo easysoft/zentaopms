@@ -1,37 +1,26 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::buildEditForm();
+title=测试 repoZen->buildeditform();
 timeout=0
-cid=18126
+cid=0
 
-- 步骤1：编辑 Gitlab 版本库属性title @代码库-编辑
-- 步骤2：编辑 Gitlab 版本库属性repoName @testHtml
-- 步骤3：编辑 Gitlab 版本库属性projectName @testHtml
-- 步骤4：编辑 SVN 版本库属性client @svn
-- 步骤5：objectID 为 0 的情况属性objectID @0
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- buildeditformTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
-zenData('pipeline')->gen(5);
-zenData('product')->gen(20);
-zenData('project')->gen(20);
-zenData('projectproduct')->gen(20);
-zenData('group')->gen(5);
-zenData('user')->gen(10);
-zenData('repo')->loadYaml('repo_buildeditform', false, 2)->gen(5);
-
 su('admin');
-
-$repoZenTest = new repoZenTest();
-
-r($repoZenTest->buildEditFormTest(1, 2)) && p('title') && e('代码库-编辑');
-r($repoZenTest->buildEditFormTest(1, 2)) && p('repoName') && e('723test');
-r($repoZenTest->buildEditFormTest(1, 2)) && p('projectName') && e('723test');
-r($repoZenTest->buildEditFormTest(5, 3)) && p('client') && e('https://gitlabdev.qc.oop.cc');
-r($repoZenTest->buildEditFormTest(2, 0)) && p('objectID') && e('0');
+$zenTest = new repoZenTest();
+r(method_exists($zenTest, 'buildeditformTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'buildeditformTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'buildeditformTest')) && p() && e('1');

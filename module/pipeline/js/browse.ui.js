@@ -18,7 +18,7 @@ window.renderCell = function(result, {col, row})
         {
             result[0].props.items = btnItems.filter(function(item)
             {
-                return item.icon !== 'pencil-alt';
+                return item.icon !== 'design';
             });
         }
         else

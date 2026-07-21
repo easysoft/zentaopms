@@ -35,7 +35,6 @@ zenData('task')->gen(10);
 zenData('bug')->gen(10);
 zenData('action')->gen(0);
 zenData('history')->gen(0);
-zenData('repo')->loadYaml('repo')->gen(4);
 
 // 用户登录
 su('admin');

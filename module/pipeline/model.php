@@ -23,7 +23,7 @@ class pipelineModel extends model
      */
     public function getByID(int $id): object|false
     {
-        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`')->from(TABLE_PIPELINE)->alias('t1')
+        $pipeline = $this->dao->select('t1.*, t2.`variables`, t2.`data`, t3.`id` AS triggerID, t3.`event`, t3.`cron`, t3.`comment`')->from(TABLE_PIPELINE)->alias('t1')
             ->leftJoin(TABLE_PIPELINECONTENT)->alias('t2')->on('t1.id=t2.pipelineID')
             ->leftJoin(TABLE_PIPELINETRIGGER)->alias('t3')->on('t1.id=t3.pipelineID')
             ->where('t1.id')->eq($id)
@@ -154,23 +154,6 @@ class pipelineModel extends model
     }
 
      /**
-     * 获取流水线列表根据版本库ID。
-     * Get pipeline list by RepoID.
-     *
-     * @param  int    $repoID
-     * @access public
-     * @return array
-     */
-    public function getListByRepoID(int $repoID): array
-    {
-        return $this->dao->select('id, name, lastStatus')->from(TABLE_PIPELINE)
-            ->where('deleted')->eq('0')
-            ->andWhere('repoID')->eq($repoID)
-            ->orderBy('id_desc')
-            ->fetchAll('id');
-    }
-
-     /**
      * 获取流水线键值对根据版本库ID。
      * Get pipeline pairs by RepoID.
      *
@@ -185,22 +168,6 @@ class pipelineModel extends model
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id_desc')
             ->fetchPairs();
-    }
-
-   /**
-     * Get list by triggerType field.
-     *
-     * @param  string  $triggerType
-     * @param  array   $repoIdList
-     * @access public
-     * @return array
-     */
-    public function getListByTriggerType(string $triggerType, array $repoIdList = array()): array
-    {
-        return $this->dao->select('*')->from(TABLE_PIPELINE)
-            ->where('deleted')->eq('0')
-            ->beginIF($repoIdList)->andWhere('repo')->in($repoIdList)->fi()
-            ->fetchAll('id');
     }
 
     /**
@@ -358,42 +325,6 @@ class pipelineModel extends model
     }
 
     /**
-     * 创建或者更新流水线的时候初始化工作。
-     * Init when create or update pipeline.
-     *
-     * @param  int    $id
-     * @param  object $pipeline
-     * @access public
-     * @return bool
-     */
-    public function initJob(int $id, object $pipeline): bool
-    {
-        if(empty($id) || empty($pipeline->triggerType)) return false;
-
-        if(strpos($pipeline->triggerType, 'schedule') !== false && strpos($pipeline->atDay, date('w')) !== false)
-        {
-            $compiles = $this->dao->select('*')->from(TABLE_COMPILE)->where('pipeline')->eq($id)->andWhere('LEFT(createdDate, 10)')->eq(date('Y-m-d'))->fetchAll();
-            foreach($compiles as $compile)
-            {
-                if(!empty($compile->status)) continue;
-                $this->dao->delete()->from(TABLE_COMPILE)->where('id')->eq($compile->id)->exec();
-            }
-            $this->loadModel('compile')->createByJob($id, $pipeline->atTime, 'atTime');
-        }
-
-        if(strpos($pipeline->triggerType, 'tag') !== false)
-        {
-            $repo = $this->loadModel('repo')->getByID($pipeline->repo);
-            if(!$repo) return false;
-
-            $lastTag = $this->getLastTagByRepo($repo, $pipeline);
-            $this->updateLastTag($id, $lastTag);
-        }
-
-        return true;
-    }
-
-    /**
      * 执行流水线。
      * Exec pipeline.
      *
@@ -405,6 +336,19 @@ class pipelineModel extends model
      */
     public function exec(int $id, object $variables): object|false
     {
+        $pipeline = $this->getByID($id);
+        if(empty($pipeline)) return false;
+        if($pipeline->engine == 'gitlab')
+        {
+            $this->execGitlabPipeline($pipeline);
+            return !dao::isError() ? new stdclass() : false;
+        }
+        if($pipeline->engine == 'jenkins')
+        {
+            $this->execJenkinsPipeline($pipeline);
+            return !dao::isError() ? new stdclass() : false;
+        }
+
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, '/pipeline/executions');
         if(!empty($variables->gitRef)) $variables->gitRef = 'refs/heads/' . $variables->gitRef;
@@ -418,280 +362,143 @@ class pipelineModel extends model
     }
 
     /**
-     * 执行jenkins流水线。
-     * Exec jenkins pipeline.
-     *
-     * @param  object    $pipeline
-     * @param  object    $repo
-     * @param  int       $compileID
-     * @param  array     $extraParam
-     * @access public
-     * @return object
-     */
-    public function execJenkinsPipeline(object $pipeline, object $repo, int $compileID, array $extraParam = array()): object
-    {
-        $pipeline = new stdclass();
-        $pipeline->PARAM_TAG   = '';
-        $pipeline->ZENTAO_DATA = "compile={$compileID}";
-        if(strpos($pipeline->triggerType, 'tag') !== false) $pipeline->PARAM_TAG = $pipeline->lastTag;
-
-        /* Add custom parameters to the data. */
-        if(!empty($pipeline->customParam))
-        {
-            foreach(json_decode($pipeline->customParam) as $paramName => $paramValue)
-            {
-                $paramValue = str_replace('$zentao_version',  $this->config->version, $paramValue);
-                $paramValue = str_replace('$zentao_account',  $this->app->user->account, $paramValue);
-                $paramValue = str_replace('$zentao_product',  (string)$pipeline->product, $paramValue);
-                $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
-
-                $pipeline->$paramName = $paramValue;
-            }
-        }
-
-        foreach($extraParam as $paramName => $paramValue)
-        {
-            if(!isset($pipeline->$paramName)) $pipeline->$paramName = $paramValue;
-        }
-
-        $url = $this->loadModel('compile')->getBuildUrl($pipeline);
-
-        $compile = new stdclass();
-        $compile->id     = $compileID;
-        $compile->queue  = $this->loadModel('ci')->sendRequest($url->url, $pipeline, $url->userPWD);
-        $compile->status = $compile->queue ? 'created' : 'create_fail';
-
-        return $compile;
-    }
-
-    /**
-     * 执行gitlab流水线。
+     * 执行 GitLab 流水线。
      * Exec gitlab pipeline.
      *
      * @param  object $pipeline
+     * @param  string $triggerType
      * @access public
-     * @return object
+     * @return bool
      */
-    public function execGitlabPipeline(object $pipeline): object
+    public function execGitlabPipeline(object $pipeline, string $triggerType = 'manual'): bool
     {
-        $pipeline = json_decode($pipeline->pipeline);
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
 
-        /* Set pipeline run branch. */
-        $pipelineParams = new stdclass;
-        $pipelineParams->ref = zget($pipeline, 'reference', '');
-        if(empty($pipelineParams->ref) && !empty($pipeline->project))
+        $params = new stdclass();
+        $params->ref       = $pipeline->defaultBranch ?: 'main';
+        $params->variables = array();
+        if(!empty($pipeline->customParam))
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($pipeline->server, (int)$pipeline->project, false);
-            $pipelineParams->ref = zget($project, 'default_branch', 'master');
-
-            $pipeline->reference = $pipelineParams->ref;
-            $this->dao->update(TABLE_JOB)->set('pipeline')->eq(json_encode($pipeline))->where('id')->eq($pipeline->id)->exec();
-        }
-
-        /* Set pipeline params. */
-        $customParams = json_decode($pipeline->customParam);
-        $variables    = array();
-        if($customParams)
-        {
-            foreach($customParams as $paramName => $paramValue)
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
             {
-                $variable = array();
-                $variable['key']           = $paramName;
-                $variable['value']         = $paramValue;
-                $variable['variable_type'] = "env_var";
-
-                $variables[] = $variable;
+                foreach($customParams as $key => $value)
+                {
+                    $params->variables[] = array(
+                        "key"           => $key,
+                        "value"         => $value,
+                        "variable_type" => "env_var"
+                    );
+                }
             }
         }
-        if(!empty($variables)) $pipelineParams->variables = $variables;
 
-        /* Run pipeline. */
-        $compile  = new stdclass();
-        $pipeline = (object)$this->loadModel('gitlab')->apiCreatePipeline($pipeline->server, (int)zget($pipeline, 'project', 0), $pipelineParams);
-        if(empty($pipeline->id))
+        $result    = $this->loadModel('gitlab')->apiCreatePipeline($provider->url, $provider->token, $pipeline->externalPipeline, (object)$params);
+        $execution = new stdclass();
+        if(empty($result->id))
         {
-            $this->gitlab->apiErrorHandling($pipeline);
-            $compile->status = 'create_fail';
+            $this->gitlab->apiErrorHandling($result);
+            $errors = dao::getError();
+            $errorMessage = '';
+            foreach((array)$errors as $error)
+            {
+                if(is_string($error)) $errorMessage .= $error . "\n";
+                if(is_array($error))  $errorMessage .= implode("\n", $error) . "\n";
+            }
+            dao::$errors['apiMessage'] = trim($errorMessage) ? $this->lang->pipeline->execFail . '：' . trim($errorMessage) : $this->lang->pipeline->execFail;
+            $execution->status = 'create_fail';
         }
         else
         {
-            $compile->queue  = $pipeline->id;
-            $compile->status = zget($pipeline, 'status', 'create_fail');
+            $execution->number = $result->id;
+            $execution->status = zget($result, 'status', 'create_fail');
         }
 
-        return $compile;
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = $triggerType;
+        $execution->commit       = '';
+        $execution->ref          = $params->ref;
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = $this->app->user->account;
+        $execution->createdDate  = helper::now();
+
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
     }
 
     /**
-     * 获取版本库最新tag。
-     * Get last tag of one repo.
+     * 执行 Jenkins 流水线。
+     * Exec jenkins pipeline.
      *
-     * @param  object $repo
      * @param  object $pipeline
+     * @param  string $triggerType
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getLastTagByRepo(object $repo, object $pipeline): string
+    public function execJenkinsPipeline(object $pipeline, string $triggerType = 'manual'): bool
     {
-        if($repo->SCM == 'Subversion')
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
+        $baseUrl  = $provider->url . $pipeline->externalPipeline;
+        $userPWD  = $provider->account . ':' . $provider->token;
+
+        $params = new stdclass();
+        $params->ref = $pipeline->defaultBranch ?: 'main';
+        if(!empty($pipeline->customParam))
         {
-            $dirs = $this->loadModel('svn')->getRepoTags($repo, $pipeline->svnDir);
-            if($dirs)
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
             {
-                end($dirs);
-                $lastTag = current($dirs);
-                return rtrim($repo->path , '/') . '/' . trim($pipeline->svnDir, '/') . '/' . $lastTag;
+                foreach($customParams as $key => $value)
+                {
+                    $params[$key] = $value;
+                }
             }
+        }
+
+        $isParameterized = $this->loadModel('jenkins')->checkParameterizedBuild($baseUrl, $userPWD);
+        $url = $baseUrl . ($isParameterized ? 'buildWithParameters' : 'build');
+
+        $result = $this->jenkins->apiCreatePipeline($url, (object)$params, $userPWD);
+        $execution = new stdclass();
+        if(empty($result))
+        {
+            dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
+            $execution->status = 'create_fail';
         }
         else
         {
-            $tags = $this->loadModel('git')->getRepoTags($repo);
-            if($tags)
+            $number = 0;
+            $maxRetry  = 10;
+            for($i = 0; $i < $maxRetry; $i ++)
             {
-                end($tags);
-                return current($tags);
+                sleep(1);
+                $number = $this->jenkins->apiGetJobNumberByQueueID($provider->url, $result, $userPWD);
+                if(!empty($number)) break;
+            }
+            if(empty($number))
+            {
+                dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
+                $execution->status = 'create_fail';
+            }
+            else
+            {
+                $execution->number = $number;
+                $execution->status = 'created';
             }
         }
 
-        return '';
-    }
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = $triggerType;
+        $execution->commit       = '';
+        $execution->ref          = $params->ref;
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = $this->app->user->account;
+        $execution->createdDate  = helper::now();
 
-     /**
-     * 根据版本库获取sonarqube框架的流水线。
-     * Get sonarqube by RepoID.
-     *
-     * @param  array  $repoIDList
-     * @param  int    $pipelineID
-     * @param  bool   $showDeleted
-     * @access public
-     * @return array
-     */
-    public function getSonarqubeByRepo(array $repoIDList, int $pipelineID = 0, bool $showDeleted = false)
-    {
-        return $this->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
-            ->where('frame')->eq('sonarqube')
-            ->andWhere('repo')->in($repoIDList)
-            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
-            ->beginIF($pipelineID > 0)->andWhere('id')->ne($pipelineID)->fi()
-            ->fetchAll('repo');
-    }
-
-    /**
-     * 获取流水线键值对根据sonarqubeID或者sonarqube项目。
-     * Get pipeline pairs by sonarqube projectkeys.
-     *
-     * @param  int    $sonarqubeID
-     * @param  array  $projectKeys
-     * @param  bool   $emptyShowAll
-     * @param  bool   $showDeleted
-     * @access public
-     * @return array|false
-     */
-    public function getJobBySonarqubeProject(int $sonarqubeID, array $projectKeys = array(), bool $emptyShowAll = false, bool $showDeleted = false): array|false
-    {
-        return $this->dao->select('projectKey,id')->from(TABLE_JOB)
-            ->where('frame')->eq('sonarqube')
-            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
-            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
-            ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
-            ->fetchPairs();
-    }
-
-    /**
-     * 检查jenkins是否启用参数构建。
-     * Check if jenkins has enabled parameterized build.
-     *
-     * @param  string $url
-     * @param  string $userPWD
-     * @access public
-     * @return bool
-     */
-    public function checkParameterizedBuild(string $url, string $userPWD): bool
-    {
-        $response = common::http($url, null, array(CURLOPT_HEADER => true, CURLOPT_USERPWD => $userPWD));
-
-        return strpos($response, 'hudson.model.ParametersDefinitionProperty') !== false;
-    }
-
-    /**
-     * 更新流水线最新tag。
-     * Update pipeline last tag.
-     *
-     * @param  int       $pipelineID
-     * @param  string    $lastTag
-     * @access protected
-     * @return void
-     */
-    public function updateLastTag(int $pipelineID, string $lastTag): void
-    {
-        $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($pipelineID)->exec();
-    }
-
-    /**
-     * 通过代码库ID导入该代码库的流水线。
-     * Import the pipeline of the repository with the repoID.
-     *
-     * @param  mixed $repoID
-     * @return bool
-     */
-    public function import(string|int $repoID)
-    {
-        $repo = $this->loadModel('repo')->getByID((int)$repoID);
-        if($repo->SCM != 'Gitlab') return false;
-
-        $pipelines = $this->loadModel(strtolower($repo->SCM))->apiGetPipeline((int)$repo->serviceHost, (int)$repo->serviceProject, '');
-        if(!is_array($pipelines) or empty($pipelines)) return false;
-
-        $pipeline = new stdclass();
-        $pipeline->name      = $repo->name;
-        $pipeline->repo      = $repoID;
-        $pipeline->product   = is_numeric($repo->product) ? $repo->product : explode(',', $repo->product)[0];
-        $pipeline->engine    = strtolower($repo->SCM);
-        $pipeline->server    = $repo->serviceHost;
-        $pipeline->createdBy = 'system';
-
-        $pipelines = $this->dao->select('id, pipeline')->from(TABLE_JOB)->where('repo')->eq($repoID)->fetchPairs();
-        $existsPipelines = array();
-        foreach($pipelines as $pipeline)
-        {
-            if(empty($pipeline)) continue;
-
-            $pipeline = json_decode($pipeline);
-            if(empty($pipeline)) continue;
-
-            $existsPipelines[] = $pipeline->reference;
-        }
-
-        $addedPipelines = array();
-        foreach($pipelines as $pipeline)
-        {
-            if(!empty($pipeline->disabled)) continue;
-
-            $ref = isset($pipeline->ref) ? $pipeline->ref : $pipeline->default_branch;
-            if(in_array($ref, $existsPipelines)) continue;
-
-            $createdDate = helper::now();
-            if(isset($pipeline->created_at)) $createdDate = date('Y-m-d H:i:s', strtotime($pipeline->created_at));
-            $pipeline->createdDate = $createdDate;
-            if(isset($pipeline->updated_at)) $pipeline->editedDate = date('Y-m-d H:i:s', strtotime($pipeline->updated_at));
-
-            $pipelineMeta  = array('project' => $repo->serviceProject, 'reference' => $ref);
-            $pipeline->pipeline = json_encode($pipelineMeta);
-
-            $hash = md5($pipeline->pipeline);
-            if(array_key_exists($hash, array_flip($addedPipelines))) continue;
-            $addedPipelines[] = $hash;
-
-            $this->dao->insert(TABLE_JOB)->data($pipeline)
-                ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
-                ->autoCheck()
-                ->exec();
-            if(dao::isError()) return false;
-
-            $this->loadModel('action')->create('pipeline', $this->dao->lastInsertId(), 'imported');
-        }
-
-        return true;
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
     }
 
     /**
@@ -1069,5 +876,279 @@ class pipelineModel extends model
         $s      = $remain % $minute;
 
         return "{$h}h{$m}m{$s}s";
+    }
+
+    /**
+     * 处理 webhook 请求(事件触发)。
+     * Handle received GitLab webhook.
+     *
+     * @param  string $event
+     * @param  object $data
+     * @param  object $pipeline
+     * @access public
+     * @return bool
+     */
+    public function handleWebhook(string $event, object $data, object $pipeline): bool
+    {
+        $eventMap = array(
+            'Push Hook'          => 'push',
+            'Tag Push Hook'      => 'tag_push',
+            'Merge Request Hook' => 'merge_requests',
+        );
+        if(!isset($eventMap[$event])) return false;
+
+        $eventType = $eventMap[$event];
+        $eventList = explode(',', $pipeline->event);
+        if(!in_array($eventType, $eventList)) return false;
+
+        if($eventType == 'push')
+        {
+            if(empty($data->commits)) return false;
+
+            $matched = false;
+            foreach($data->commits as $commit)
+            {
+                if(strpos($commit->message, $pipeline->comment) !== false)
+                {
+                    $matched = true;
+                    break;
+                }
+            }
+
+            if(empty($pipeline->comment)) $matched = true;
+            if(!$matched) return false;
+        }
+
+        $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
+        $params = new stdclass();
+        $params->ref = $data->ref ?? $pipeline->defaultBranch;
+        $params->variables = array();
+        if(!empty($pipeline->customParam))
+        {
+            $customParams = json_decode($pipeline->customParam, true);
+            if(!empty($customParams))
+            {
+                foreach($customParams as $key => $value)
+                {
+                    $params->variables[] = array(
+                        "key" => $key,
+                        "value" => $value,
+                        "variable_type" => "env_var"
+                    );
+                }
+            }
+        }
+
+        $result    = $this->loadModel('gitlab')->apiCreatePipeline($provider->url, $provider->token, $pipeline->externalPipeline, (object)$params);
+        $execution = new stdclass();
+        if(empty($result->id))
+        {
+            $this->gitlab->apiErrorHandling($result);
+            $execution->status = 'create_fail';
+        }
+        else
+        {
+            $execution->queue  = $result->id;
+            $execution->status = zget($result, 'status', 'create_fail');
+        }
+
+        $execution->pipelineID   = $pipeline->id;
+        $execution->trigger      = $eventType;
+        $execution->commit       = $data->after ?? $data->checkout_sha ?? '';
+        $execution->ref          = $data->ref ?? '';
+        $execution->params       = json_encode($params);
+        $execution->startedDate  = helper::now();
+        $execution->createdBy    = 'admin';
+        $execution->createdDate  = helper::now();
+
+        $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * 调用 gitfox 接口添加定时任务。
+     * Add cron job via gitfox API.
+     *
+     * @param  int    $pipelineID
+     * @param  string $cronDef
+     * @param  string $engine
+     * @access public
+     * @return bool
+     */
+    public function addTriggerCronJob(int $pipelineID, string $cronDef, string $engine = 'gitlab'): bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url  = sprintf($apiRoot->url, '/cron/jobs');
+        $data = new stdclass();
+        $data->jobName            = "{$engine}:pipeline:cron:{$pipelineID}";
+        $data->jobType            = "{$engine}:pipeline:cron-trigger";
+        $data->jobData            = (string)$pipelineID;
+        $data->cronDef            = $cronDef;
+        $data->maxDurationSeconds = 300;
+
+        $response = json_decode(commonModel::http($url, $data, array(), $apiRoot->header, 'json', 'POST'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 调用 gitfox 接口删除定时任务。
+     * Delete cron job via gitfox API.
+     *
+     * @param  int    $pipelineID
+     * @param  string $engine
+     * @access public
+     * @return bool
+     */
+    public function deleteTriggerCronJob(int $pipelineID, string $engine = 'gitlab'): bool
+    {
+        $apiRoot = $this->loadModel('gitfox')->getApiRoot();
+        if(!$apiRoot) return false;
+
+        $url  = sprintf($apiRoot->url, '/cron/jobs');
+        $data = new stdclass();
+        $data->jobName = "{$engine}:pipeline:cron:{$pipelineID}";
+
+        $response = json_decode(commonModel::http($url, $data, array(CURLOPT_CUSTOMREQUEST => 'DELETE'), $apiRoot->header, 'json', 'DELETE'));
+        if(empty($response) || empty($response->code) || $response->code != 'success')
+        {
+            dao::$errors['apiMessage'] = !empty($response->message) ? $response->message : $this->lang->error->httpServerError;
+            return false;
+        }
+        return !dao::isError();
+    }
+
+    /**
+     * 迁移流水线。
+     * Migrate jobs to ops pipelines.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migrateJobsToOpsPipelines(): bool
+    {
+        $repos = $this->dao->select('*')->from(TABLE_REPO)->fetchAll('id');
+        $jobs  = $this->dao->select('*')->from($this->config->db->prefix . 'job')->fetchAll('id');
+
+        $pipelineNames = array();
+        foreach($jobs as $job)
+        {
+            if(empty($job->repo) && !isset($repos[$job->repo])) continue;
+
+            $repo = $repos[$job->repo];
+            $legacyPipeline = json_decode((string)$job->pipeline);
+
+            $externalPipeline = '';
+            $defaultBranch    = '';
+            if($job->engine == 'gitlab')
+            {
+                if(!empty($legacyPipeline->project)) $externalPipeline = zget($legacyPipeline, 'project', '');
+                if(!empty($legacyPipeline->reference)) $defaultBranch  = zget($legacyPipeline, 'reference', '');
+            }
+            elseif($job->engine == 'jenkins')
+            {
+                $externalPipeline = $job->pipeline;
+            }
+
+            $pipeline = new stdclass();
+            $pipeline->name             = in_array($job->name, $pipelineNames) ? $job->name . '-' . $job->id : (string)$job->name;
+            $pipeline->engine           = strtolower((string)$job->engine);
+            $pipeline->providerID       = (int)$job->server;
+            $pipeline->scope            = 'repo';
+            $pipeline->spaceID          = (int)$repo->spaceID;
+            $pipeline->repoID           = (int)$repo->id;
+            $pipeline->desc             = '';
+            $pipeline->status           = 'active';
+            $pipeline->latestVersion    = 0;
+            $pipeline->defaultBranch    = $defaultBranch;
+            $pipeline->yamlPath         = '';
+            $pipeline->customParam      = empty($job->customParam) ? '' : $job->customParam;
+            $pipeline->lastExec         = empty($job->lastExec) ? null : $job->lastExec;
+            $pipeline->lastResult       = (string)$job->lastStatus;
+            $pipeline->externalPipeline = $externalPipeline;
+            $pipeline->createdBy        = (string)$job->createdBy;
+            $pipeline->createdDate      = empty($job->createdDate) ? helper::now() : $job->createdDate;
+            $pipeline->editedBy         = (string)$job->editedBy;
+            $pipeline->editedDate       = empty($job->editedDate) ? null : $job->editedDate;
+            $pipeline->deleted          = (int)$job->deleted;
+
+            $this->dao->insert(TABLE_PIPELINE)->data($pipeline)->exec();
+            if(dao::isError()) return false;
+
+            $pipelineNames[] = $job->name;
+        }
+
+        return dao::isError();
+    }
+
+    /**
+     * 获取外部流水线。
+     * Get external pipelines.
+     *
+     * @param  array $statusList
+     * @access public
+     * @return array
+     */
+    public function getExternalPipeline(array $statusList = array()): array
+    {
+        return $this->dao->select('t1.*, t2.`providerID`, t2.`externalPipeline`, t2.`engine`')->from(TABLE_PIPELINEEXEC)->alias('t1')
+            ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.pipelineID=t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t2.engine')->in('gitlab,jenkins')
+            ->andWhere('t1.number')->ne(0)
+            ->beginIF($statusList)->andWhere('t1.status')->in($statusList)->fi()
+            ->fetchAll('id');
+    }
+
+    /**
+     * 同步外部流水线。
+     * Sync external pipelines.
+     *
+     * @access public
+     * @return bool
+     */
+    public function syncExternalPipeline(): bool
+    {
+        $syncStatus = array('', 'created', 'pending', 'running', 'building');
+        $externalPipelines = $this->getExternalPipeline($syncStatus);
+        if(empty($externalPipelines)) return true;
+
+        $providerList = $this->loadModel('provider')->getList();
+
+        $this->loadModel('jenkins');
+        $this->loadModel('gitlab');
+        foreach($externalPipelines as $externalPipeline)
+        {
+            if(!isset($providerList[$externalPipeline->providerID])) continue;
+
+            $provider = $providerList[$externalPipeline->providerID];
+            $engine   = $externalPipeline->engine;
+            $execInfo = $this->$engine->apiGetExecInfo($externalPipeline->number, $externalPipeline->externalPipeline, $provider);
+            if(empty($execInfo)) continue;
+
+            $syncData = new stdclass();
+            if($engine == 'jenkins')
+            {
+                $syncData->status       = strtolower(zget($execInfo, 'result', ''));
+                $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
+                $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
+            }
+            elseIF($engine == 'gitlab')
+            {
+                $syncData->status       = strtolower(zget($execInfo, 'status', ''));
+                $syncData->finishedDate = empty($execInfo->finished_at) ? null : date('Y-m-d H:i:s', strtotime($execInfo->finished_at));
+                $syncData->duration     = zget($execInfo, 'duration', 0);
+            }
+
+            $this->dao->update(TABLE_PIPELINEEXEC)->data($syncData)->where('id')->eq($externalPipeline->id)->exec();
+        }
+
+        return !dao::isError();
     }
 }

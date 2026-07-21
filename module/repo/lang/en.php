@@ -21,6 +21,7 @@ $lang->repo->download        = 'Download File';
 $lang->repo->mirror = new stdclass();
 $lang->repo->mirror->syncing             = 'Syncing...';
 $lang->repo->mirror->refreshSync         = 'Refresh Sync Status';
+$lang->repo->mirror->lastUpdated         = 'Last Updated: ';
 $lang->repo->mirror->failedTitle         = 'Sync Failed';
 $lang->repo->mirror->detail              = 'View Detail';
 $lang->repo->mirror->syncCode            = 'Sync Repository';
@@ -91,7 +92,7 @@ $lang->repo->cloneUrl           = 'Clone URL';
 $lang->repo->linkTask           = 'Link Task';
 $lang->repo->unlinkedTasks      = 'Unlinked Tasks';
 $lang->repo->importAction       = 'Import Repo';
-$lang->repo->import             = 'Import';
+$lang->repo->import             = 'Import Repo';
 $lang->repo->importName         = 'Name after import';
 $lang->repo->importServer       = 'Please select a server';
 $lang->repo->hide               = 'hide';
@@ -453,6 +454,7 @@ $lang->repo->defaultBranch       = 'Default Branch';
 $lang->repo->committerTip        = 'Committer has write permission on code repository';
 $lang->repo->commitDetail        = '%s committed at %s by %s';
 $lang->repo->hasNoProduct        = 'The project or execution does not have a product';
+$lang->repo->failCreateWebhook   = 'Create Webhook Failed';
 
 $lang->repo->browseWebhooks     = 'Webhook List';
 $lang->repo->createWebhook      = 'Create Webhook';
@@ -531,8 +533,8 @@ $lang->repo->sourceList['Gogs']       = 'Gogs';
 $lang->repo->sourceList['Subversion'] = 'Subversion';
 
 $lang->repo->accessList = array();
-$lang->repo->accessList['writable'] = 'Readable and writable';
-$lang->repo->accessList['readonly'] = 'Only readable(the repository can be managed by DevOps)';
+$lang->repo->accessList['writable'] = 'Readable, Writable, Manageable';
+$lang->repo->accessList['readonly'] = 'Read-only (for image import, managed via third-party code repository, automatically synced regularly by DevOps)';
 
 $lang->repo->importProgress = new stdclass();
 $lang->repo->importProgress->title        = 'Importing repository...';

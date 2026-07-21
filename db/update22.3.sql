@@ -70,6 +70,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
   `spaceID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属空间ID，0表示全局级',
   `repoID` int unsigned NOT NULL DEFAULT 0 COMMENT '所属代码库ID，0表示非代码库级',
   `name` varchar(100) NOT NULL DEFAULT '' COMMENT '制品库名称',
+  `code` varchar(50) NOT NULL DEFAULT '' COMMENT '唯一标识',
   `desc` varchar(500) NOT NULL DEFAULT '' COMMENT '制品库描述',
   `type` varchar(50) NOT NULL DEFAULT '' COMMENT '制品类型:file/container/raw/helm/pypi/npm/maven/composer',
   `scope` varchar(30) NOT NULL DEFAULT '' COMMENT '制品库类型:global/space/repo',
@@ -80,6 +81,7 @@ CREATE TABLE IF NOT EXISTS `ops_artifact_libs` (
   `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='制品库主表（支持全局/空间/代码库三级作用域）';
+CREATE UNIQUE INDEX `uk_spaceID_repoID_code` ON `ops_artifact_libs` (`spaceID`, `repoID`, `code`);
 CREATE INDEX `idx_spaceID_repoID_name` ON `ops_artifact_libs` (`spaceID`, `repoID`, `name`);
 CREATE INDEX `idx_spaceID_deleted` ON `ops_artifact_libs` (`spaceID`, `deleted`);
 CREATE INDEX `idx_repoID_deleted` ON `ops_artifact_libs` (`repoID`, `deleted`);
@@ -279,7 +281,7 @@ CREATE TABLE IF NOT EXISTS `ops_pipeline_executions` (
   `duration` int unsigned NOT NULL DEFAULT 0 COMMENT '执行时长(s)',
   `status` varchar(50) NOT NULL DEFAULT '' COMMENT '执行状态',
   `error` varchar(500) NOT NULL DEFAULT '' COMMENT '执行错误信息（无错误则为空字符串）',
-  `queue` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
+  `number` int unsigned NOT NULL DEFAULT 0 COMMENT 'Jenkins队列号，用于后续状态查询和去重',
   `logs` longtext DEFAULT NULL COMMENT 'Jenkins,GitLab的流水线日志，支持 longtext（最大 4GB）',
   `createdBy` varchar(30) NOT NULL DEFAULT '' COMMENT '由谁创建',
   `createdDate` datetime DEFAULT NULL COMMENT '创建时间',
@@ -357,6 +359,7 @@ CREATE TABLE IF NOT EXISTS `ops_ppm` (
   `reviewers` varchar(255) NOT NULL DEFAULT '' COMMENT '最新节点评审人',
   `approvalflow` int unsigned NOT NULL DEFAULT 0 COMMENT '审批流模板',
   `reviewStatus` varchar(20) NOT NULL DEFAULT '' COMMENT '审批状态',
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0 COMMENT '是否删除',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB COMMENT='合并请求主表';
 CREATE INDEX `idx_createdBy` ON `ops_ppm` (`createdBy`);
@@ -1035,3 +1038,12 @@ INSERT INTO `ops_plugin_group` (`name`, `desc`, `deleted`) VALUES
 ('scm', '代码版本管理', 0);
 
 ALTER TABLE `zt_group` ADD `devopsSpace` int unsigned NOT NULL DEFAULT 0 AFTER `project`;
+
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=svn&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=git&methodName=run';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=checkCompileStatus';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=exec';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=mr&methodName=syncMR';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=initQueue';
+DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';

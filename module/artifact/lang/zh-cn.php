@@ -18,6 +18,7 @@ $lang->artifact->copyCMD             = '复制命令';
 $lang->artifact->copied              = '复制成功';
 
 $lang->artifact->name          = '名称';
+$lang->artifact->code          = '唯一标识';
 $lang->artifact->path          = '所属目录';
 $lang->artifact->type          = '类型';
 $lang->artifact->size          = '大小';

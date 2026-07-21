@@ -46,25 +46,6 @@ class ci extends control
     }
 
     /**
-     * 执行构建。
-     * Exec compile.
-     *
-     * @access public
-     * @return void
-     */
-    public function exec()
-    {
-        $compiles = $this->loadModel('compile')->getUnexecutedList();
-        foreach($compiles as $compile)
-        {
-            if($compile->atTime && date('H:i') < $compile->atTime) continue;
-            $this->compile->exec($compile);
-        }
-
-        echo 'success';
-    }
-
-    /**
      * 向jenkins或gitlab发送请求以检查构建状态。
      * Send a request to jenkins or gitlab to check build status.
      *

@@ -1,0 +1,54 @@
+title: table ops_scan_tasks
+desc: "扫描任务表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: planID
+    note: "扫描计划ID"
+    range: "1,2,3"
+  - field: executionID
+    note: "执行ID"
+    range: "0,1,2,3"
+  - field: repoNumber
+    note: "仓库编号"
+    range: "0"
+  - field: planNumber
+    note: "计划编号"
+    range: "0"
+  - field: triggerID
+    note: "触发器ID"
+    range: "1,2,3"
+  - field: triggerType
+    note: "触发类型（manual/cron/action）"
+    range: "manual,cron,action"
+  - field: status
+    note: "任务状态（in_progress/success/failed）"
+    range: "in_progress,success,failed"
+  - field: result
+    note: "任务结果（pass/no-pass/-）"
+    range: "pass,no-pass,-"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: scanType
+    note: "扫描类型（full/incremental）"
+    range: "full,incremental"
+  - field: issueNumber
+    note: "问题编号"
+    range: "0"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

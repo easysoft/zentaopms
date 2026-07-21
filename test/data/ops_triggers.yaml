@@ -1,0 +1,42 @@
+title: table ops_triggers
+desc: "流水线触发器表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "触发器ID，自增主键"
+    range: "1-10000"
+  - field: repoID
+    note: "关联的仓库ID"
+    range: "0,1,2,3"
+  - field: pipelineID
+    note: "关联的流水线ID"
+    range: "1,2,3"
+  - field: event
+    note: "事件触发动作"
+    range: "branch_updated,tag_push,merge_request"
+  - field: comment
+    note: "当事件为 branch_updated 时进行提交关键词匹配"
+    range: "build,release,hotfix"
+  - field: cron
+    note: "定时配置"
+    range: "0 0 * * *,*/10 * * * *,0 2 * * 1"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: "0"

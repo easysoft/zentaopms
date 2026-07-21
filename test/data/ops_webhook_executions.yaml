@@ -1,0 +1,63 @@
+title: table ops_webhook_executions
+desc: "Web钩子执行记录表：存储每次Web钩子回调的请求、响应、执行状态、耗时等全量信息"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "Web钩子执行记录主键ID，自增"
+    range: "1-10000"
+  - field: webhookID
+    note: "关联的Web钩子ID"
+    range: "1,2,3"
+  - field: triggerType
+    note: "触发类型（如push、merge、release等）"
+    range: "push,merge,release"
+  - field: eventID
+    note: "触发事件唯一标识,内部事件ID"
+    range: "evt-1001,evt-1002,evt-1003"
+  - field: result
+    note: "执行结果（成功/失败/超时等状态描述）"
+    range: "success,failure,timeout"
+  - field: duration
+    note: "执行耗时（毫秒），从请求发送到接收响应的总时长"
+    range: "30,120,600"
+  - field: error
+    note: "执行错误信息（无错误则为空字符串）"
+    range: "none,timeout,bad-request"
+  - field: reqUrl
+    note: "回调请求URL"
+    range: "https://hooks.example.com/push,https://hooks.example.com/merge,https://hooks.example.com/release"
+  - field: reqHeaders
+    note: "回调请求头（JSON格式文本存储）"
+    range: "header-json,header-auth,header-signature"
+  - field: reqBody
+    note: "回调请求体（JSON/表单等格式文本）"
+    range: "body-push,body-merge,body-release"
+  - field: respStatusCode
+    note: "回调响应状态码（如200、400、500等）"
+    range: "200,400,500"
+  - field: respStatus
+    note: "回调响应状态描述（如OK、Bad Request等）"
+    range: "OK,BadRequest,ServerError"
+  - field: respHeaders
+    note: "回调响应头（JSON格式文本存储）"
+    range: "resp-header-ok,resp-header-fail,resp-header-timeout"
+  - field: respBody
+    note: "回调响应体（JSON/文本等格式）"
+    range: "resp-body-ok,resp-body-fail,resp-body-timeout"
+  - field: retriggerID
+    note: "关联重触发的执行记录ID（若为重试则指向原执行记录）"
+    range: "1,2,3"
+  - field: retriggerable
+    note: "是否可重触发：1=可重触发，0=不可重触发"
+    range: "0,1"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"

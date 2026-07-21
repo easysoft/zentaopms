@@ -1,0 +1,28 @@
+title: ops_repo
+author: Claude Code
+version: "1.0"
+fields:
+  - field: id
+    range: 1-1000
+  - field: spaceID
+    range: 1
+  - field: product
+    range: 1
+  - field: name
+    prefix: ppm-repo-
+    range: 1-1000
+  - field: scmType
+    range: git
+  - field: gitUID
+    prefix: gituid
+    range: 1-1000
+  - field: providerID
+    range: 0
+  - field: mirror
+    range: 0
+  - field: acl
+    range: open
+  - field: status
+    range: active
+  - field: deleted
+    range: 0

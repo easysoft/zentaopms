@@ -1,0 +1,116 @@
+title: table ops_ppm
+desc: "合并请求主表"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+  - field: title
+    note: "PR 标题"
+    range: "合并请求-登录优化,合并请求-接口修复,合并请求-版本发布"
+  - field: desc
+    note: "拉取请求详细描述"
+    range: "修复登录链路并补充测试,完善接口错误处理,准备版本发布内容"
+  - field: repoID
+    note: "关联zt_repo表的id"
+    range: "0,1,2,3"
+  - field: sourceRepoID
+    note: "源仓库ID，关联repository表的id"
+    range: "1,2,3"
+  - field: sourceBranch
+    note: "源分支名称（待合并的分支）"
+    range: "feature/login,bugfix/api,release/v1.0"
+  - field: sourceSHA
+    note: "源分支最新提交的SHA-1值"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"
+  - field: targetRepoID
+    note: "目标仓库ID，关联repository表的id"
+    range: "1,2,3"
+  - field: targetBranch
+    note: "目标分支名称（合并目标分支）"
+    range: "develop,main,release/v1.0"
+  - field: mergedBy
+    note: "执行合并操作的用户（未合并则为NULL）"
+    range: "admin,user1,user2"
+  - field: mergeMethod
+    note: "合并方法:merge/squash/rebase/fast-forward"
+    range: "merge,squash,rebase,fast-forward"
+  - field: mergeTargetSHA
+    note: "合并时目标分支的 SHA,用于验证目标分支未变更"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"
+  - field: mergeBaseSHA
+    note: "合并基准 SHA(源分支和目标分支的共同祖先)"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"
+  - field: mergeSHA
+    note: "合并后生成的 commit SHA"
+    range: "1111111111111111111111111111111111111111,2222222222222222222222222222222222222222,3333333333333333333333333333333333333333"
+  - field: mergeCheckStatus
+    note: "合并前检查状态unchecked=未检查，conflict=有冲突，mergeable=无冲突）"
+    range: "unchecked,conflict,mergeable"
+  - field: mergeConflicts
+    note: "merge/squash 冲突文件列表,换行符分隔"
+    range: "src-login,module-repo,docs-readme"
+  - field: rebaseCheckStatus
+    note: "变基检查状态（unchecked=未检查，conflict=有冲突，mergeable=无冲突）"
+    range: "unchecked,conflict,mergeable"
+  - field: rebaseConflicts
+    note: "变基时产生的冲突详情（文件路径、冲突内容，未变基/无冲突则为NULL）"
+    range: "api-service,db-schema,ui-style"
+  - field: commitCount
+    note: "PR 包含的 commit 数量"
+    range: "1,3,5"
+  - field: fileCount
+    note: "PR 修改的文件数量"
+    range: "1,8,20"
+  - field: additions
+    note: "新增的代码行数"
+    range: "10,120,560"
+  - field: deletions
+    note: "删除的代码行数"
+    range: "0,15,80"
+  - field: flow
+    note: "拉取请求对应的流程标识（0=默认流程，其他值对应自定义流程）"
+    range: "0,1,2,3"
+  - field: reviewFlowID
+    note: "关联的评审流程ID"
+    range: "0,1,2,3"
+  - field: executionID
+    note: "关联的禅道执行ID"
+    range: "0,1,2,3"
+  - field: status
+    note: "拉取请求状态（如open/closed/merged/draft等）"
+    range: "open,closed,merged,draft"
+  - field: mergedDate
+    note: "合并时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: createdBy
+    note: "由谁创建"
+    range: "admin,user1,user2"
+  - field: createdDate
+    note: "创建时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: editedBy
+    note: "由谁编辑"
+    range: "admin,user1,user2"
+  - field: editedDate
+    note: "编辑时间"
+    range: "(M)-(w)"
+    type: "timestamp"
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: approval
+    note: "审批实例"
+    range: "0,1,2,3"
+  - field: reviewers
+    note: "最新节点评审人"
+    range: "admin,user1,user2"
+  - field: approvalflow
+    note: "审批流模板"
+    range: "0,1,2,3"
+  - field: reviewStatus
+    note: "审批状态"
+    range: "pending,approved,rejected"

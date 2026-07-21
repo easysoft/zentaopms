@@ -1498,7 +1498,7 @@ class repoZen extends repo
      * @access public
      * @return object
      */
-    public function buildWebhook(object $webhookFormData, object $repo, object $editWebhook = null): object
+    public function buildWebhook(object $webhookFormData, object $repo, ?object $editWebhook = null): object
     {
         $name        = zget($webhookFormData, 'name');
         $webhookList = $this->loadModel('gitfox')->apiGetHooks((int)$repo->id);
@@ -1785,7 +1785,7 @@ class repoZen extends repo
      * @access public
      * @return array
      */
-    public function setImportFormConfig(string $type, int $providerID = 0): array
+    public function setImportFormConfig(string $type, int $providerID = 0, string $acl = 'open'): array
     {
         if($type == 'Subversion')
         {
@@ -1799,6 +1799,8 @@ class repoZen extends repo
             $this->config->repo->form->import['organize']['required'] = true;
             $this->config->repo->form->import['repo']['required']     = true;
         }
+
+        if($acl == 'private') $this->config->repo->form->import['members']['required'] = true;
 
         return $this->config->repo->form->import;
     }
