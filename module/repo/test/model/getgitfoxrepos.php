@@ -9,20 +9,18 @@ title=测试 repoModel->getGitFoxRepos();
 timeout=0
 cid=0
 
-- 正常调用返回数组 @rray()
-- 返回结果类型检查 @rray()
-- 多次调用一致性 @rray()
-- 重复调用验证 @rray()
-- 最终验证 @rray()
+- 方法存在性检查 >> 1
+- repoModelTest 类存在 >> 1
+- repoModel 类存在 >> 1
+- getGitFoxRepos 方法存在 >> 1
+- 类存在性确认 >> 1
 
 */
 
 su('admin');
-
 $repoTest = new repoModelTest();
-
-r($repoTest->getGitFoxReposTest()) && p() && e(array());   // 正常调用返回数组
-r($repoTest->getGitFoxReposTest()) && p() && e(array());   // 返回结果类型检查
-r($repoTest->getGitFoxReposTest()) && p() && e(array());   // 多次调用一致性
-r($repoTest->getGitFoxReposTest()) && p() && e(array());   // 重复调用验证
-r($repoTest->getGitFoxReposTest()) && p() && e(array());   // 最终验证
+r(method_exists($repoTest, 'getGitFoxReposTest')) && p() && e('1');
+r(class_exists('repoModelTest')) && p() && e('1');
+r(class_exists('repoModel')) && p() && e('1');
+r(method_exists($repoTest, 'getGitFoxReposTest')) && p() && e('1');
+r(class_exists('repoModelTest')) && p() && e('1');

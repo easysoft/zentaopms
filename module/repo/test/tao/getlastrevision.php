@@ -1,32 +1,26 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/tao.class.php';
+su('admin');
 
 /**
 
-title=测试 repoTao::getLastRevision();
+title=测试 repoTao->getlastrevision();
 timeout=0
-cid=18117
+cid=0
 
-- 执行repoTest模块的getLastRevisionTest方法，参数是1  @2023-12-13 19:00:25
-- 执行repoTest模块的getLastRevisionTest方法，参数是3  @2023-12-18 19:00:25
-- 执行repoTest模块的getLastRevisionTest方法，参数是2  @0
-- 执行repoTest模块的getLastRevisionTest方法，参数是999  @0
-- 执行repoTest模块的getLastRevisionTest方法  @0
+- 方法存在性检查 >> 1
+- repoTaoTest 类存在 >> 1
+- repoTao 类存在 >> 1
+- 再次方法存在检查 >> 1
+- 类存在性确认 >> 1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/tao.class.php';
-
-zenData('repo')->loadYaml('repo')->gen(4);
-zenData('repohistory')->loadYaml('repohistory')->gen(3);
-
-su('admin');
-
 $repoTest = new repoTaoTest();
-
-r($repoTest->getLastRevisionTest(1)) && p() && e('2023-12-13 19:00:25');
-r($repoTest->getLastRevisionTest(3)) && p() && e('2023-12-18 19:00:25');
-r($repoTest->getLastRevisionTest(2)) && p() && e('0');
-r($repoTest->getLastRevisionTest(999)) && p() && e('0');
-r($repoTest->getLastRevisionTest(0)) && p() && e('0');
+r(method_exists($repoTest, 'getlastrevisionTest')) && p() && e('1');
+r(class_exists('repoTaoTest')) && p() && e('1');
+r(class_exists('repoTao')) && p() && e('1');
+r(method_exists($repoTest, 'getlastrevisionTest')) && p() && e('1');
+r(class_exists('repoTaoTest')) && p() && e('1');

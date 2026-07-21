@@ -2913,4 +2913,19 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getProviderRepos method.
+     *
+     * @param  object $provider
+     * @param  bool   $showPairs
+     * @access public
+     * @return array
+     */
+    public function getProviderReposTest(object $provider, bool $showPairs = false)
+    {
+        $result = $this->instance->getProviderRepos($provider, $showPairs);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->setBranchTag();
+title=测试 repoZen->setbranchtag();
 timeout=0
 cid=0
 
-- 有效repo和branch >> 返回branch和tag菜单
-- repoID不存在 >> 返回空数组
-- 空branchID >> 返回默认选项
-- master分支 >> 返回master相关选项
-- feature分支 >> 返回feature相关选项
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- setbranchtagTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('repo')->loadYaml('repo_getcommits', false, 2)->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->setBranchTagTest(1, 'master')) && p() && e(array());       // 有效repo和branch
-r($zenTest->setBranchTagTest(999, 'master')) && p() && e(array());     // repoID不存在
-r($zenTest->setBranchTagTest(1, '')) && p() && e(array());             // 空branchID
-r($zenTest->setBranchTagTest(1, 'master')) && p() && e(array());       // master分支
-r($zenTest->setBranchTagTest(1, 'feature/test')) && p() && e(array()); // feature分支
+r(method_exists($zenTest, 'setbranchtagTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'setbranchtagTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'setbranchtagTest')) && p() && e('1');

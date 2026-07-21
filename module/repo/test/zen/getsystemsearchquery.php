@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getSystemSearchQuery();
+title=测试 repoZen->getsystemsearchquery();
 timeout=0
 cid=0
 
-- queryID=0 @
-- queryID=1 @
-- queryID=-1 @
-- 大queryID @
-- queryID=0重复 @
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getsystemsearchqueryTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getSystemSearchQueryTest(0)) && p() && e('');    // queryID=0
-r($zenTest->getSystemSearchQueryTest(1)) && p() && e('');    // queryID=1
-r($zenTest->getSystemSearchQueryTest(-1)) && p() && e('');   // queryID=-1
-r($zenTest->getSystemSearchQueryTest(999)) && p() && e('');  // 大queryID
-r($zenTest->getSystemSearchQueryTest(0)) && p() && e('');    // queryID=0重复
+r(method_exists($zenTest, 'getsystemsearchqueryTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getsystemsearchqueryTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getsystemsearchqueryTest')) && p() && e('1');

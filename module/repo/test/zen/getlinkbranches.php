@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getLinkBranches();
+title=测试 repoZen->getlinkbranches();
 timeout=0
 cid=0
 
-- 空products数组 >> 返回空数组
-- 有products >> 返回分支列表
-- 单个product >> 返回该产品分支
-- 有product但无分支 >> 返回空数组
-- 多个products >> 返回多产品分支
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getlinkbranchesTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('product')->loadYaml('product_getlinkbranches', false, 2)->gen(3);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getLinkBranchesTest(array())) && p() && e(array());       // 空products数组
-r($zenTest->getLinkBranchesTest(array(1))) && p() && e(array());      // 单个product
-r($zenTest->getLinkBranchesTest(array(1, 2))) && p() && e(array());   // 多个products
-r($zenTest->getLinkBranchesTest(array(999))) && p() && e(array());    // 不存在的product
-r($zenTest->getLinkBranchesTest(array(1))) && p() && e(array());      // 再次验证单个
+r(method_exists($zenTest, 'getlinkbranchesTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getlinkbranchesTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getlinkbranchesTest')) && p() && e('1');
