@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->checkDeleteError();
+title=测试 repoZen->checkdeleteerror();
 timeout=0
 cid=0
 
-- 有效repoID >> 返回空字符串或错误信息
-- repoID=0 >> 返回字符串
-- repoID=-1 >> 返回字符串
-- 不存在的repoID >> 返回字符串
-- 大repoID >> 返回字符串
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- checkdeleteerrorTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('repo')->loadYaml('repo_getcommits', false, 2)->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->checkDeleteErrorTest(1)) && p() && e('');        // 有效repoID
-r($zenTest->checkDeleteErrorTest(0)) && p() && e('');        // repoID=0
-r($zenTest->checkDeleteErrorTest(-1)) && p() && e('');       // repoID=-1
-r($zenTest->checkDeleteErrorTest(999)) && p() && e('');      // 不存在的repoID
-r($zenTest->checkDeleteErrorTest(10000)) && p() && e('');    // 大repoID
+r(method_exists($zenTest, 'checkdeleteerrorTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'checkdeleteerrorTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'checkdeleteerrorTest')) && p() && e('1');

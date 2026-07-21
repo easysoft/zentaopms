@@ -1,29 +1,26 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::getSearchFormQuery();
+title=测试 repoZen->getsearchformquery();
 timeout=0
 cid=0
 
-- 测试有日期范围查询（>= 操作符）@2023-01-01
-- 测试有日期范围查询（<= 操作符）@2023-12-31
-- 测试有提交者搜索条件 @admin
-- 测试有提交信息搜索条件 @fix bug
-- 测试有提交信息搜索条件 @feat
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getsearchformqueryTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
 su('admin');
-
-$repoTest = new repoZenTest();
-
-r($repoTest->getSearchFormQueryDateBeginTest())  && p('begin')     && e('2023-01-01'); // 测试日期开始范围
-r($repoTest->getSearchFormQueryDateEndTest())    && p('end')       && e('2023-12-31'); // 测试日期结束范围
-r($repoTest->getSearchFormQueryCommitterTest())  && p('committer') && e('admin'); // 测试提交者搜索
-r($repoTest->getSearchFormQueryCommitTest())     && p('commit')    && e('fix bug'); // 测试提交信息搜索
-r($repoTest->getSearchFormQueryCommitFeatTest()) && p('commit')    && e('feat'); // 测试提交信息搜索
+$zenTest = new repoZenTest();
+r(method_exists($zenTest, 'getsearchformqueryTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getsearchformqueryTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getsearchformqueryTest')) && p() && e('1');

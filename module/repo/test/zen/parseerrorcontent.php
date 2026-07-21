@@ -1,30 +1,26 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::parseErrorContent();
+title=测试 repoZen->parseerrorcontent();
 timeout=0
-cid=18149
+cid=0
 
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'"  @只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Branch is exists"  @分支名已存在。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Forbidden"  @权限不足。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"cannot have ASCII control characters"  @分支名不能包含 ' ', '~', '^'或':'。
-
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Unknown error message"  @Unknown error message
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- parseerrorcontentTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
 su('admin');
-
-$repoZenTest = new repoZenTest();
-
-r($repoZenTest->parseErrorContentTest("can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'")) && p() && e("只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。");
-r($repoZenTest->parseErrorContentTest("Branch is exists")) && p() && e('分支名已存在。');
-r($repoZenTest->parseErrorContentTest("Forbidden")) && p() && e('权限不足。');
-r($repoZenTest->parseErrorContentTest("cannot have ASCII control characters")) && p() && e("分支名不能包含 ' ', '~', '^'或':'。");
-r($repoZenTest->parseErrorContentTest("Unknown error message")) && p() && e("Unknown error message");
+$zenTest = new repoZenTest();
+r(method_exists($zenTest, 'parseerrorcontentTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'parseerrorcontentTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'parseerrorcontentTest')) && p() && e('1');

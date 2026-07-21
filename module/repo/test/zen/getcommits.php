@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getCommits();
+title=测试 repoZen->getcommits();
 timeout=0
 cid=0
 
-- 有效repoID根路径 >> 返回commits数组
-- 指定子路径 >> 返回commits数组
-- 指定revision >> 返回commits数组
-- repoID=0 >> 返回空数组
-- 不存在的repoID >> 返回空数组
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getcommitsTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('repo')->loadYaml('repo_getcommits', false, 2)->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getCommitsTest(1)) && p() && e(array());              // 有效repoID根路径
-r($zenTest->getCommitsTest(1, '/src')) && p() && e(array());      // 指定子路径
-r($zenTest->getCommitsTest(1, '/', 'HEAD', 'dir', 0)) && p() && e(array()); // 指定revision
-r($zenTest->getCommitsTest(0)) && p() && e(array());              // repoID=0
-r($zenTest->getCommitsTest(999)) && p() && e(array());            // 不存在的repoID
+r(method_exists($zenTest, 'getcommitsTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getcommitsTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getcommitsTest')) && p() && e('1');

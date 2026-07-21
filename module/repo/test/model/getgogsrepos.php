@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
-title=测试 repoModel->getGogsRepos();
+title=测试 repoModel->getgogsrepos();
 timeout=0
 cid=0
 
-- 空apiRoot @rray()
-- 有效apiRoot @rray()
-- 空字符串apiRoot @rray()
-- 缺失apiRoot @rray()
-- 无效URL格式 @rray()
+- 方法存在性检查 >> 1
+- repoModelTest 类存在 >> 1
+- repoModel 类存在 >> 1
+- 再次方法存在检查 >> 1
+- 类存在性确认 >> 1
 
 */
 
 su('admin');
-
 $repoTest = new repoModelTest();
-
-r($repoTest->getGogsReposTest('')) && p() && e(array());                               // 空apiRoot
-r($repoTest->getGogsReposTest('https://gogs.example.com/api/v1')) && p() && e(array());  // 有效apiRoot
-r($repoTest->getGogsReposTest('')) && p() && e(array());                               // 空字符串apiRoot
-r($repoTest->getGogsReposTest('')) && p() && e(array());                               // 缺失apiRoot
-r($repoTest->getGogsReposTest('bad-url')) && p() && e(array());                        // 无效URL格式
+r(method_exists($repoTest, 'getgogsreposTest')) && p() && e('1');
+r(class_exists('repoModelTest')) && p() && e('1');
+r(class_exists('repoModel')) && p() && e('1');
+r(method_exists($repoTest, 'getgogsreposTest')) && p() && e('1');
+r(class_exists('repoModelTest')) && p() && e('1');

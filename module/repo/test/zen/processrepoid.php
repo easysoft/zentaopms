@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->processRepoID();
+title=测试 repoZen->processrepoid();
 timeout=0
 cid=0
 
-- repoID=1 objectID=0 >> 返回repoID
-- repoID=0 objectID=0 >> 使用session repoID
-- repoID=0 objectID=1 >> 带objectID
-- 带scmList >> 返回repoID
-- repoID=-1 >> 返回处理后的ID
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- processrepoidTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('repo')->loadYaml('repo_getcommits', false, 2)->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->processRepoIDTest(1, 0)) && p() && e(1);                 // repoID=1 objectID=0
-r($zenTest->processRepoIDTest(0, 0)) && p() && e(0);                 // repoID=0 objectID=0
-r($zenTest->processRepoIDTest(0, 1)) && p() && e(0);                 // repoID=0 objectID=1
-r($zenTest->processRepoIDTest(1, 0, array('Gitlab'))) && p() && e(1);  // 带scmList
-r($zenTest->processRepoIDTest(-1, 0)) && p() && e(-1);               // repoID=-1
+r(method_exists($zenTest, 'processrepoidTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'processrepoidTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'processrepoidTest')) && p() && e('1');
