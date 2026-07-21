@@ -22,3 +22,5 @@ DROP VIEW IF EXISTS `view_datasource_caseScene`;
 
 CREATE VIEW `view_datasource_taskDocs`  AS SELECT `id`,`title` FROM `zt_doc`        WHERE `deleted` = '0';
 CREATE VIEW `view_datasource_caseScene` AS SELECT `id`,`title` FROM `zt_scene`      WHERE `deleted` = '0';
+
+UPDATE `zt_workflowaction` SET `action` = 'assignTo' WHERE `module` = 'ticket' AND `action` = 'assign';
