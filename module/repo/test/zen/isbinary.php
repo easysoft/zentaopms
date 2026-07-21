@@ -5,22 +5,23 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->isbinary();
+title=测试 repoZen::isBinary();
 timeout=0
 cid=0
 
-- 方法存在性检查 @1
-- repoZenTest 类存在检查 @1
-- isbinaryTest 方法存在 @1
-- repoZen 类存在 @1
-- 再次方法存在性确认 @1
+- 正常文本 @0
+- PDF后缀 @1
+- null字节 @1
+- 高频率回车换行 @1
+- 空字符串 @0
 
 */
 
 su('admin');
-$zenTest = new repoZenTest();
-r(method_exists($zenTest, 'isbinaryTest')) && p() && e('1');
-r(class_exists('repoZenTest')) && p() && e('1');
-r(method_exists($zenTest, 'isbinaryTest')) && p() && e('1');
-r(class_exists('repoZen')) && p() && e('1');
-r(method_exists($zenTest, 'isbinaryTest')) && p() && e('1');
+$test = new repoZenTest();
+
+r($test->isBinaryTest('This is normal text', '')) && p() && e('0');
+r($test->isBinaryTest('content', 'pdf')) && p() && e('1');
+r($test->isBinaryTest("content\x00null", '')) && p() && e('1');
+r($test->isBinaryTest(str_repeat("\r\n", 200), '')) && p() && e('1');
+r($test->isBinaryTest('', '')) && p() && e('0');

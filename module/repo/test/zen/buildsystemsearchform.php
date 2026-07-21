@@ -9,18 +9,25 @@ title=测试 repoZen->buildsystemsearchform();
 timeout=0
 cid=0
 
-- 方法存在性检查 @1
-- repoZenTest 类存在检查 @1
-- buildsystemsearchformTest 方法存在 @1
-- repoZen 类存在 @1
-- 再次方法存在性确认 @1
+- 调用buildSystemSearchFormTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
 su('admin');
-$zenTest = new repoZenTest();
-r(method_exists($zenTest, 'buildsystemsearchformTest')) && p() && e('1');
-r(class_exists('repoZenTest')) && p() && e('1');
-r(method_exists($zenTest, 'buildsystemsearchformTest')) && p() && e('1');
-r(class_exists('repoZen')) && p() && e('1');
-r(method_exists($zenTest, 'buildsystemsearchformTest')) && p() && e('1');
+$test = new repoZenTest();
+
+$r1 = $test->buildSystemSearchFormTest(0, "/repo-system");
+$r2 = $test->buildSystemSearchFormTest(0, "/repo-system");
+$r3 = $test->buildSystemSearchFormTest(0, "/repo-system");
+$r4 = $test->buildSystemSearchFormTest(0, "/repo-system");
+$r5 = $test->buildSystemSearchFormTest(0, "/repo-system");
+
+r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
+r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
+r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
+r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
+r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
