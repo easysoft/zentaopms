@@ -72,17 +72,18 @@ class gitfox extends control
      * @param  int $isInstall
      * @return void
      */
-    public function installGitFox(int $isInstall = 0)
+    public function installGitFox(int $inDevOps = 0)
     {
         $nextLink = $this->app->cookie->lang == 'zh-cn' ? helper::createLink('admin', 'register') : helper::createLink('index');
 
-        if($isInstall)
+        if(!$inDevOps)
         {
             $nextLink .= $this->config->requestType == 'GET' ? '&_single=1' : '?_single=1';
         }
         else
         {
-            list($devopsModule, $devopsMethod) = explode('-', $this->config->devopsLink);
+            $devopsLink = $this->config->devopsLink ? $this->config->devopsLink : 'repo-maintain';
+            list($devopsModule, $devopsMethod) = explode('-', $devopsLink);
             $nextLink = helper::createLink($devopsModule, $devopsMethod);
         }
 
@@ -127,10 +128,10 @@ class gitfox extends control
         file_put_contents($script, $command);
         if(file_exists($script)) chmod($script, 0755);
 
-        $this->view->title     = $this->lang->gitfox->installGitFox;
-        $this->view->script    = $script;
-        $this->view->nextLink  = $nextLink;
-        $this->view->isInstall = $isInstall;
+        $this->view->title    = $this->lang->gitfox->installGitFox;
+        $this->view->script   = $script;
+        $this->view->nextLink = $nextLink;
+        $this->view->inDevOps = $inDevOps;
         $this->display();
     }
 
