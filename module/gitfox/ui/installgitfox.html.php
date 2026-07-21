@@ -65,7 +65,7 @@ div
                 (
                     array
                     (
-                        $inDevOps ? array
+                        !$inDevOps ? array
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
