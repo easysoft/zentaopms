@@ -1388,6 +1388,24 @@ class zaiModel extends model
     }
 
     /**
+     * 将关联对象 ID 解析为名称。
+     * Resolve related object ID to display name.
+     *
+     * @param  mixed  $id
+     * @param  string $table
+     * @param  string $nameField
+     * @access public
+     * @return string
+     */
+    public static function resolveRelatedName($id, string $table, string $nameField = 'name'): string
+    {
+        if(!$id) return '';
+
+        global $app;
+        return $app->dao->select($nameField)->from($table)->where('id')->eq($id)->fetch($nameField);
+    }
+
+    /**
      * 将 STORY 对象转换为 Markdown 格式。
      * Convert story object to Markdown format.
      *
@@ -1727,6 +1745,11 @@ class zaiModel extends model
         $app->loadLang('doc');
         $lang = $app->lang;
 
+        $productName   = static::resolveRelatedName($doc->product ?? 0, TABLE_PRODUCT);
+        $projectName   = static::resolveRelatedName($doc->project ?? 0, TABLE_PROJECT);
+        $executionName = static::resolveRelatedName($doc->execution ?? 0, TABLE_EXECUTION);
+        $libName       = static::resolveRelatedName($doc->lib ?? 0, TABLE_DOCLIB);
+
         if(isset($doc->protocol) || !empty($doc->api))
         {
             $app->loadLang('api');
@@ -1735,8 +1758,8 @@ class zaiModel extends model
 
             $content[] = "# {$app->lang->api->common} #$doc->id $doc->title\n";
             $content[] = "## {$lang->doc->basicInfo}\n";
-            $content[] = "* {$lang->doc->product}: $doc->product";
-            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$lang->doc->product}: {$productName}";
+            $content[] = "* {$lang->doc->lib}: {$libName}";
             $content[] = "* {$app->lang->api->module}: $doc->module";
             $content[] = "* {$app->lang->api->title}: $doc->title";
             $content[] = "* {$app->lang->api->path}: $doc->path";
@@ -1746,7 +1769,6 @@ class zaiModel extends model
             $content[] = "* {$app->lang->api->status}: " . zget($app->lang->api->statusOptions, $doc->status);
             $content[] = "* {$app->lang->api->owner}: $doc->owner";
             $content[] = "* {$app->lang->api->version}: $doc->version";
-
             if(!empty($doc->params->header))
             {
                 $content[] = "\n## {$app->lang->api->header}\n";
@@ -1841,11 +1863,11 @@ class zaiModel extends model
             $content[] = "## {$lang->doc->basicInfo}\n";
             $content[] = "* {$lang->doc->title}: $docContent->title";
             $content[] = "* {$lang->doc->type}: " . zget($lang->doc->typeList, $doc->type);
-            $content[] = "* {$lang->doc->product}: $doc->product";
-            $content[] = "* {$lang->doc->project}: $doc->project";
-            $content[] = "* {$lang->doc->execution}: $doc->execution";
+            $content[] = "* {$lang->doc->product}: {$productName}";
+            $content[] = "* {$lang->doc->project}: {$projectName}";
+            $content[] = "* {$lang->doc->execution}: {$executionName}";
             $content[] = "* {$lang->doc->version}: $doc->version";
-            $content[] = "* {$lang->doc->lib}: $doc->lib";
+            $content[] = "* {$lang->doc->lib}: {$libName}";
             $content[] = "* {$lang->doc->module}: $doc->module";
 
             $content[] = "\n---\n";
