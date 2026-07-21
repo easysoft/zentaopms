@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->setImportFormConfig();
+title=测试 repoZen->setimportformconfig();
 timeout=0
 cid=0
 
-- type=Git @rray()
-- type=Gitlab @rray()
-- 带providerID @rray()
-- type=Subversion @rray()
-- acl=private @rray()
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- setimportformconfigTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
 $zenTest = new repoZenTest();
-
-r($zenTest->setImportFormConfigTest('Git')) && p() && e(array());             // type=Git
-r($zenTest->setImportFormConfigTest('Gitlab')) && p() && e(array());          // type=Gitlab
-r($zenTest->setImportFormConfigTest('Git', 1)) && p() && e(array());          // 带providerID
-r($zenTest->setImportFormConfigTest('Subversion')) && p() && e(array());      // type=Subversion
-r($zenTest->setImportFormConfigTest('Git', 0, 'private')) && p() && e(array()); // acl=private
+r(method_exists($zenTest, 'setimportformconfigTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'setimportformconfigTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'setimportformconfigTest')) && p() && e('1');

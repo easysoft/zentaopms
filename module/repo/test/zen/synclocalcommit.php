@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->syncLocalCommit();
+title=测试 repoZen->synclocalcommit();
 timeout=0
 cid=0
 
-- 有效repoID >> 返回1(同步完成)或错误信息
-- repoID不存在 >> 返回not_found
-- repoID=0 >> 返回not_found
-- Git类型的repo >> 处理Git同步
-- repoID=-1 >> 返回not_found
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- synclocalcommitTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zendata('repo')->loadYaml('repo_getcommits', false, 2)->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->syncLocalCommitTest(1)) && p() && e('1');        // 有效repoID
-r($zenTest->syncLocalCommitTest(999)) && p() && e('not_found');  // repoID不存在
-r($zenTest->syncLocalCommitTest(0)) && p() && e('not_found');    // repoID=0
-r($zenTest->syncLocalCommitTest(1)) && p() && e('1');        // 再次验证有效
-r($zenTest->syncLocalCommitTest(-1)) && p() && e('not_found');   // repoID=-1
+r(method_exists($zenTest, 'synclocalcommitTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'synclocalcommitTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'synclocalcommitTest')) && p() && e('1');

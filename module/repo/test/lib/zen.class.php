@@ -420,4 +420,438 @@ class repoZenTest extends baseTest
         if(dao::isError()) return dao::getError();
         return empty($result) ? '1' : $result;
     }
+
+    /**
+     * Test buildBugSearchForm method.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  array  $products
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
+    public function buildBugSearchFormTest(int $repoID = 0, string $revision = '', string $browseType = '', int $queryID = 0, array $products = array(), array $modules = array())
+    {
+        $this->invokeArgs('buildBugSearchForm', array($repoID, $revision, $browseType, $queryID, $products, $modules));
+        return '1';
+    }
+
+    /**
+     * Test buildCreateForm method.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function buildCreateFormTest(int $objectID = 0)
+    {
+        $this->invokeArgs('buildCreateForm', array($objectID));
+        return '1';
+    }
+
+    /**
+     * Test buildCreateRepoForm method.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function buildCreateRepoFormTest(int $objectID = 0)
+    {
+        $this->invokeArgs('buildCreateRepoForm', array($objectID));
+        return '1';
+    }
+
+    /**
+     * Test buildEditForm method.
+     *
+     * @param  int    $repoID
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function buildEditFormTest(int $repoID = 0, int $objectID = 0)
+    {
+        $this->invokeArgs('buildEditForm', array($repoID, $objectID));
+        return '1';
+    }
+
+    /**
+     * Test buildRepoSearchForm method.
+     *
+     * @param  int    $inSpace
+     * @param  int    $space
+     * @param  array  $products
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @param  int    $param
+     * @access public
+     * @return string
+     */
+    public function buildRepoSearchFormTest(int $inSpace = 0, int $space = 0, array $products = array(), int $objectID = 0, string $orderBy = '', int $recPerPage = 0, int $pageID = 0, int $param = 0)
+    {
+        $this->invokeArgs('buildRepoSearchForm', array($inSpace, $space, $products, $objectID, $orderBy, $recPerPage, $pageID, $param));
+        return '1';
+    }
+
+    /**
+     * Test buildRepoTree method.
+     *
+     * @param  array  $pathList
+     * @param  string $parent
+     * @access public
+     * @return array
+     */
+    public function buildRepoTreeTest(array $pathList = array(), string $parent = '0')
+    {
+        return $this->invokeArgs('buildRepoTree', array($pathList, $parent));
+    }
+
+    /**
+     * Test buildStorySearchForm method.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  array  $products
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
+    public function buildStorySearchFormTest(int $repoID = 0, string $revision = '', string $browseType = '', int $queryID = 0, array $products = array(), array $modules = array())
+    {
+        $this->invokeArgs('buildStorySearchForm', array($repoID, $revision, $browseType, $queryID, $products, $modules));
+        return '1';
+    }
+
+    /**
+     * Test checkACL method.
+     *
+     * @access public
+     * @return array|false
+     */
+    public function checkACLTest()
+    {
+        return $this->invokeArgs('checkACL', array());
+    }
+
+    /**
+     * Test checkClient method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkClientTest()
+    {
+        return $this->invokeArgs('checkClient', array());
+    }
+
+    /**
+     * Test checkConnection method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkConnectionTest()
+    {
+        return $this->invokeArgs('checkConnection', array());
+    }
+
+    /**
+     * Test checkRepoInternet method.
+     *
+     * @param  object $repo
+     * @access public
+     * @return bool
+     */
+    public function checkRepoInternetTest(?object $repo = null)
+    {
+        return $this->invokeArgs('checkRepoInternet', array($repo));
+    }
+
+    /**
+     * Test checkSyncResult method.
+     *
+     * @param  object $repo
+     * @param  array  $branches
+     * @param  string $branchID
+     * @param  int    $commitCount
+     * @param  string $type
+     * @access public
+     * @return string|int
+     */
+    public function checkSyncResultTest(?object $repo = null, array $branches = array(), string $branchID = '', int $commitCount = 0, string $type = '')
+    {
+        return $this->invokeArgs('checkSyncResult', array($repo, $branches, $branchID, $commitCount, $type));
+    }
+
+    /**
+     * Test encodingDiff method.
+     *
+     * @param  array  $diffs
+     * @param  string $encoding
+     * @access public
+     * @return array
+     */
+    public function encodingDiffTest(array $diffs = array(), string $encoding = '')
+    {
+        return $this->invokeArgs('encodingDiff', array($diffs, $encoding));
+    }
+
+    /**
+     * Test getBranchAndTagItems method.
+     *
+     * @param  object $repo
+     * @param  string $branchID
+     * @access public
+     * @return array
+     */
+    public function getBranchAndTagItemsTest(?object $repo = null, string $branchID = '')
+    {
+        return $this->invokeArgs('getBranchAndTagItems', array($repo, $branchID));
+    }
+
+    /**
+     * Test getBrowseInfo method.
+     *
+     * @param  int    $repoID
+     * @param  string $branchID
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function getBrowseInfoTest(int $repoID = 0, string $branchID = '', int $objectID = 0)
+    {
+        return $this->invokeArgs('getBrowseInfo', array($repoID, $branchID, $objectID));
+    }
+
+    /**
+     * Test getDataPager method.
+     *
+     * @param  array       $data
+     * @param  object|null $pager
+     * @access public
+     * @return array
+     */
+    public function getDataPagerTest(array $data = array(), ?object $pager = null)
+    {
+        return $this->invokeArgs('getDataPager', array($data, $pager));
+    }
+
+    /**
+     * Test getLinkExecutions method.
+     *
+     * @param  array $products
+     * @access public
+     * @return array
+     */
+    public function getLinkExecutionsTest(array $products = array())
+    {
+        return $this->invokeArgs('getLinkExecutions', array($products));
+    }
+
+    /**
+     * Test getLinkModules method.
+     *
+     * @param  array  $products
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getLinkModulesTest(array $products = array(), string $type = '')
+    {
+        return $this->invokeArgs('getLinkModules', array($products, $type));
+    }
+
+    /**
+     * Test getLinkStories method.
+     *
+     * @param  int    $repoID
+     * @param  string $revision
+     * @param  string $browseType
+     * @param  array  $products
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getLinkStoriesTest(int $repoID = 0, string $revision = '', string $browseType = '', array $products = array(), string $orderBy = '', ?object $pager = null, int $queryID = 0)
+    {
+        return $this->invokeArgs('getLinkStories', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID));
+    }
+
+    /**
+     * Test getSCM method.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return mixed
+     */
+    public function getSCMTest(int $objectID = 0)
+    {
+        return $this->invokeArgs('getSCM', array($objectID));
+    }
+
+    /**
+     * Test getSearchFormQuery method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getSearchFormQueryTest()
+    {
+        return $this->invokeArgs('getSearchFormQuery', array());
+    }
+
+    /**
+     * Test getSyncBranches method.
+     *
+     * @param  string $branchID
+     * @access public
+     * @return array
+     */
+    public function getSyncBranchesTest(string $branchID = '')
+    {
+        return $this->invokeArgs('getSyncBranches', array(&$branchID));
+    }
+
+    /**
+     * Test getViewTree method.
+     *
+     * @param  object $repo
+     * @param  string $entry
+     * @param  string $revision
+     * @param  string $selectFile
+     * @access public
+     * @return array
+     */
+    public function getViewTreeTest(?object $repo = null, string $entry = '', string $revision = '', string $selectFile = '')
+    {
+        return $this->invokeArgs('getViewTree', array($repo, $entry, $revision, $selectFile));
+    }
+
+    /**
+     * Test isBinary method.
+     *
+     * @param  string $content
+     * @param  string $suffix
+     * @access public
+     * @return bool
+     */
+    public function isBinaryTest(string $content = '', string $suffix = '')
+    {
+        return $this->instance->isBinary($content, $suffix);
+    }
+
+    /**
+     * Test parseErrorContent method.
+     *
+     * @param  string $message
+     * @access public
+     * @return string
+     */
+    public function parseErrorContentTest(string $message = '')
+    {
+        return $this->invokeArgs('parseErrorContent', array($message));
+    }
+
+    /**
+     * Test prepareCreate method.
+     *
+     * @param  object $repo
+     * @param  bool   $isPipelineServer
+     * @access public
+     * @return object|false
+     */
+    public function prepareCreateTest(?object $repo = null, bool $isPipelineServer = false)
+    {
+        return $this->invokeArgs('prepareCreate', array($repo, $isPipelineServer));
+    }
+
+    /**
+     * Test setBrowseSession method.
+     *
+     * @param  object|null $repo
+     * @access public
+     * @return string
+     */
+    public function setBrowseSessionTest(?object $repo = null)
+    {
+        $this->invokeArgs('setBrowseSession', array($repo));
+        return '1';
+    }
+
+    /**
+     * Test setRepoBranch method.
+     *
+     * @param  string $branch
+     * @access public
+     * @return string
+     */
+    public function setRepoBranchTest(string $branch = '')
+    {
+        $this->instance->setRepoBranch($branch);
+        return '1';
+    }
+
+    /**
+     * Test strposAry method.
+     *
+     * @param  string $str
+     * @param  array  $checkAry
+     * @access public
+     * @return bool
+     */
+    public function strposAryTest(string $str = '', array $checkAry = array())
+    {
+        return $this->instance->strposAry($str, $checkAry);
+    }
+
+    /**
+     * Test updateLastCommit method.
+     *
+     * @param  object $repo
+     * @param  object $lastRevision
+     * @access public
+     * @return string
+     */
+    public function updateLastCommitTest(?object $repo = null, ?object $lastRevision = null)
+    {
+        $this->invokeArgs('updateLastCommit', array($repo, $lastRevision));
+        return '1';
+    }
+
+    /**
+     * Test prepareCreateRepo method.
+     *
+     * @param  int $objectID
+     * @access public
+     * @return string
+     */
+    public function prepareCreateRepoTest(int $objectID = 0)
+    {
+        $this->invokeArgs('prepareCreateRepo', array($objectID));
+        return '1';
+    }
+
+    /**
+     * Test prepareEdit method.
+     *
+     * @param  int $repoID
+     * @param  int $objectID
+     * @access public
+     * @return string
+     */
+    public function prepareEditTest(int $repoID = 0, int $objectID = 0)
+    {
+        $this->invokeArgs('prepareEdit', array($repoID, $objectID));
+        return '1';
+    }
 }

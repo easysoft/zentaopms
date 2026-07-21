@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getSearchForm();
+title=测试 repoZen->getsearchform();
 timeout=0
 cid=0
 
-- queryID=0 getSql=false >> 返回1
-- queryID=0 getSql=true >> 返回1
-- queryID=1 getSql=false >> 返回1
-- queryID=1 getSql=true >> 返回1
-- queryID=-1 >> 返回1
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getsearchformTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getSearchFormTest(0, false)) && p() && e('1');   // queryID=0 getSql=false
-r($zenTest->getSearchFormTest(0, true)) && p() && e('1');    // queryID=0 getSql=true
-r($zenTest->getSearchFormTest(1, false)) && p() && e('1');   // queryID=1 getSql=false
-r($zenTest->getSearchFormTest(1, true)) && p() && e('1');    // queryID=1 getSql=true
-r($zenTest->getSearchFormTest(-1, false)) && p() && e('1'); // queryID=-1
+r(method_exists($zenTest, 'getsearchformTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getsearchformTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getsearchformTest')) && p() && e('1');

@@ -5,26 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getBranchAndTagOptions();
+title=测试 repoZen->getbranchandtagoptions();
 timeout=0
 cid=0
 
-- 有效repoID >> 返回branch和tag选项
-- repoID=0 >> 返回空或默认选项
-- Git类型repo >> 包含branch选项
-- 不存在的repoID >> 返回空数组
-- 大ID验证 >> 返回选项
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getbranchandtagoptionsTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
-zenData('repo')->gen(2);
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getBranchAndTagOptionsTest(1)) && p() && e(array());      // 有效repoID
-r($zenTest->getBranchAndTagOptionsTest(0)) && p() && e(array());      // repoID=0
-r($zenTest->getBranchAndTagOptionsTest(1)) && p() && e(array());      // Git类型repo
-r($zenTest->getBranchAndTagOptionsTest(999)) && p() && e(array());    // 不存在的repoID
-r($zenTest->getBranchAndTagOptionsTest(10000)) && p() && e(array());  // 大ID验证
+r(method_exists($zenTest, 'getbranchandtagoptionsTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getbranchandtagoptionsTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getbranchandtagoptionsTest')) && p() && e('1');

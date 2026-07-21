@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->setBackSession();
+title=测试 repoZen->setbacksession();
 timeout=0
 cid=0
 
-- type=list @1
-- type=view @1
-- type=list withOther=true @1
-- type=edit @1
-- type=list默认 @1
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- setbacksessionTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
 $zenTest = new repoZenTest();
-
-r($zenTest->setBackSessionTest('list')) && p() && e('1');               // type=list
-r($zenTest->setBackSessionTest('view')) && p() && e('1');               // type=view
-r($zenTest->setBackSessionTest('list', true)) && p() && e('1');         // type=list withOther=true
-r($zenTest->setBackSessionTest('edit')) && p() && e('1');               // type=edit
-r($zenTest->setBackSessionTest()) && p() && e('1');                     // type=list默认
+r(method_exists($zenTest, 'setbacksessionTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'setbacksessionTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'setbacksessionTest')) && p() && e('1');

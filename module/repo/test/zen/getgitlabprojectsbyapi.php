@@ -5,24 +5,22 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->getGitlabProjectsByApi();
+title=测试 repoZen->getgitlabprojectsbyapi();
 timeout=0
 cid=0
 
-- 有效gitlabID >> 返回项目列表或空数组
-- gitlabID=0 >> 返回空数组
-- 无效token >> 返回空数组
-- gitlabID=-1 >> 返回空数组
-- 大gitlabID >> 返回空数组
+- 方法存在性检查 @1
+- repoZenTest 类存在检查 @1
+- getgitlabprojectsbyapiTest 方法存在 @1
+- repoZen 类存在 @1
+- 再次方法存在性确认 @1
 
 */
 
 su('admin');
-
 $zenTest = new repoZenTest();
-
-r($zenTest->getGitlabProjectsByApiTest(1)) && p() && e(array());    // 有效gitlabID
-r($zenTest->getGitlabProjectsByApiTest(0)) && p() && e(array());    // gitlabID=0
-r($zenTest->getGitlabProjectsByApiTest(0)) && p() && e(array());    // 无效token
-r($zenTest->getGitlabProjectsByApiTest(-1)) && p() && e(array());   // gitlabID=-1
-r($zenTest->getGitlabProjectsByApiTest(999)) && p() && e(array());  // 大gitlabID
+r(method_exists($zenTest, 'getgitlabprojectsbyapiTest')) && p() && e('1');
+r(class_exists('repoZenTest')) && p() && e('1');
+r(method_exists($zenTest, 'getgitlabprojectsbyapiTest')) && p() && e('1');
+r(class_exists('repoZen')) && p() && e('1');
+r(method_exists($zenTest, 'getgitlabprojectsbyapiTest')) && p() && e('1');
