@@ -29,5 +29,11 @@ formPanel
         set::name('name'),
         set::required(true),
         set::placeholder($lang->artifact->placeholder->name)
+    ),
+    formGroup
+    (
+        set::label($lang->artifact->code),
+        set::name('code'),
+        set::required(true)
     )
 );
