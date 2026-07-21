@@ -41,14 +41,16 @@ div
                     setClass('block overflow-hidden h-auto p-3'),
                     col
                     (
+                        div(html($lang->gitfox->devopsDescription)),
                         div
                         (
-                            setClass('font-bold mt-2 mb-4'),
+                            setClass('font-bold text-danger mt-2 mb-4'),
                             $lang->gitfox->installGitFoxTip
                         ),
                         div
                         (
-                            setClass('mb-2'),
+                            setClass('mb-2 mt-5'),
+                            div(setClass('font-bold'), $lang->gitfox->InstallScript),
                             h::pre
                             (
                                 setID('script'),
@@ -56,17 +58,6 @@ div
                                 $script,
                                 btn(setClass('ghost ml-2'), set(array('icon' => 'copy', 'url' => 'javascript:copyCommand("#script");'))),
                             ),
-                        ),
-                        div
-                        (
-                            setClass('mt-2 mb-2'),
-                            checkbox
-                            (
-                                on::change('agreeChange'),
-                                set::primary(false),
-                                set::checked(false),
-                                html($lang->gitfox->checkInstall)
-                            )
                         )
                     )
                 ),
@@ -74,7 +65,7 @@ div
                 (
                     array
                     (
-                        $isInstall ? array
+                        !$inDevOps ? array
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
@@ -82,9 +73,8 @@ div
                         ) : null,
                         array
                         (
-                            'text'  => $isInstall ? $lang->install->next : $lang->gitfox->startUse,
+                            'text'  => $lang->gitfox->completedInstall,
                             'type'  => 'primary',
-                            'class' => 'btn-install',
                             'url'   => 'javascript:checkGitFoxServer();'
                         )
                     )

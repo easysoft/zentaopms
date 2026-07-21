@@ -15,7 +15,7 @@ class codescan extends control
     {
         parent::__construct();
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox", 'inDevOps=1'));
 
         $this->loadModel('space')->setMenu(0);
     }

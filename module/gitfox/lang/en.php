@@ -139,20 +139,16 @@ $lang->gitfox->featureBar['binduser']['binded']  = $lang->gitfox->binded;
 $lang->gitfox->devopsIntroduction = 'Zentao DevOps Solution: Comprehensive Refactoring, Leading the Future';
 $lang->gitfox->devopsDescription  = <<<EOD
 <p class="leading-relaxed mb-2">
-  To address increasingly complex business challenges and embrace intelligent transformation, the DevOps solution welcomes the revolutionary refactoring of version <span class="font-black">4.0 Beta</span>. This is a starting point for intelligent R&D, creating a lightweight, integrated R&D base for <span class="font-black">future AI deep empowerment</span> that can perfectly support the implementation of core AI capabilities such as subsequent AI code review, assisted programming, automated testing, and intelligent operations.
+  The underlying capabilities of DevOps 4.0 are powered by the GitFox engine. GitFox is a fully self-developed Git source code management platform focused on enterprise R&D collaboration. It delivers one-stop capabilities spanning code hosting, pipeline building, quality scanning and artifact management, designed to enable efficient CI/CD for enterprises.
 </p>
-<ul class="feature-list leading-relaxed">
-  <li>Using self-developed code hosting platform with comprehensive features, supporting one-click installation, providing full lifecycle management from code submission to delivery.</li>
-  <li>Supporting comprehensive R&D process configuration, providing fine-grained permission control such as branch classification, code submission, and merge processes, making large-scale collaboration return to simplicity and order.</li>
-  <li>Multi-level code repository, artifact repository, and Webhook configuration, better adapted to company organizational structure, clearer and more scalable.</li>
-  <li>Pipeline supports visual orchestration capability, providing a more concise and easy-to-use interface, making deployment as simple as drawing.</li>
-</ul>
 EOD;
 
 $lang->gitfox->installGitFox    = 'Install GitFox';
-$lang->gitfox->installGitFoxTip = 'DevOps solution requires GitFox installation. Please run the script below to install GitFox, then click Next to continue.';
+$lang->gitfox->installGitFoxTip = 'Before using ZenTao DevOps, GitFox needs to be installed. Please run the following installation script on the host machine to complete the setup. Once the script finishes executing, click "Completed Installation".';
 $lang->gitfox->checkInstall     = 'I have completed the above installation steps';
 $lang->gitfox->execScript       = 'Execute installation script';
 $lang->gitfox->copySuccess      = 'Copy successful';
 $lang->gitfox->copyFail         = 'Browser does not support copy function, please copy manually';
 $lang->gitfox->startUse         = 'Start Use';
+$lang->gitfox->completedInstall = 'Completed Install';
+$lang->gitfox->InstallScript    = 'Install Script';
