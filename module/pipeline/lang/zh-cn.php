@@ -13,7 +13,6 @@ $lang->pipeline->exec          = '执行流水线';
 $lang->pipeline->runPipeline   = '运行流水线';
 $lang->pipeline->view          = '流水线详情';
 $lang->pipeline->delete        = '删除流水线';
-$lang->pipeline->confirmDelete = '确认删除该流水线';
 $lang->pipeline->dirChange     = '目录改动';
 $lang->pipeline->buildTag      = '打标签';
 $lang->pipeline->execSuccess   = '触发流水线成功';
@@ -27,6 +26,10 @@ $lang->pipeline->execution     = '执行历史';
 $lang->pipeline->log           = '执行日志';
 $lang->pipeline->arrange       = '编排流水线';
 $lang->pipeline->execView      = '执行详情';
+
+$lang->pipeline->confirmDelete      = '确认删除该流水线';
+$lang->pipeline->confirmExec        = '确认执行该Jenkins流水线？';
+$lang->pipeline->confirmExecPending = '当前有正在等待执行的任务，是否继续触发？';
 
 $lang->pipeline->browseAction    = '流水线列表';
 $lang->pipeline->executionAction = '流水线执行历史';
@@ -184,6 +187,9 @@ $lang->pipeline->triggerTypeList['pullreq_branch_updated'] = '合并请求的分
 $lang->pipeline->triggerTypeList['pullreq_closed']         = '合并请求关闭';
 $lang->pipeline->triggerTypeList['pullreq_merged']         = '合并请求合并';
 $lang->pipeline->triggerTypeList['cron']                   = '定时触发';
+$lang->pipeline->triggerTypeList['push']            = '代码推送';
+$lang->pipeline->triggerTypeList['tag_push']        = '标签推送';
+$lang->pipeline->triggerTypeList['merge_requests']  = '合并请求';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "保存失败,请重试。";
