@@ -538,4 +538,4 @@ $config->ajaxDependencies['artifact.ajaxgetdirparentitems']                   = 
 $config->ajaxDependencies['artifact.ajaxgetfolders']                          = 'artifact.view';
 $config->ajaxDependencies['artifact.ajaxbatchdeleteartifact']                 = 'artifact.deleteartifact';
 $config->ajaxDependencies['ppm.ajaxgetcreatechecklist']                       = 'ppm.create';
-$config->ajaxDependencies['pipeline.ajaxexeclog']                             = 'ppm.execview';
+$config->ajaxDependencies['pipeline.ajaxexeclog']                             = 'pipeline.execview';
