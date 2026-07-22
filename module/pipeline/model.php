@@ -907,16 +907,26 @@ class pipelineModel extends model
             if(empty($data->commits)) return false;
 
             $matched = false;
-            foreach($data->commits as $commit)
+            if(empty($pipeline->comment))
             {
-                if(strpos($commit->message, $pipeline->comment) !== false)
+                $matched = true;
+            }
+            else
+            {
+                $keywords = array_filter(array_map('trim', explode(',', $pipeline->comment)));
+                foreach($data->commits as $commit)
                 {
-                    $matched = true;
-                    break;
+                    foreach($keywords as $keyword)
+                    {
+                        if(strpos($commit->message, $keyword) !== false)
+                        {
+                            $matched = true;
+                            break 2;
+                        }
+                    }
                 }
             }
 
-            if(empty($pipeline->comment)) $matched = true;
             if(!$matched) return false;
         }
 
