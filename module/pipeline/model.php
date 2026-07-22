@@ -930,9 +930,19 @@ class pipelineModel extends model
             if(!$matched) return false;
         }
 
+        $ref = '';
+        if($eventType == 'merge_requests')
+        {
+            $ref = $data->object_attributes->target_branch ?? '';
+        }
+        else
+        {
+            $ref = $data->ref ?? '';
+        }
+
         $provider = $this->loadModel('provider')->getByID($pipeline->providerID);
         $params = new stdclass();
-        $params->ref = $data->ref ?? $pipeline->defaultBranch;
+        $params->ref = $ref ?: $pipeline->defaultBranch;
         $params->variables = array();
         if(!empty($pipeline->customParam))
         {
@@ -966,7 +976,7 @@ class pipelineModel extends model
         $execution->pipelineID   = $pipeline->id;
         $execution->trigger      = $eventType;
         $execution->commit       = $data->after ?? $data->checkout_sha ?? '';
-        $execution->ref          = $data->ref ?? '';
+        $execution->ref          = $params->ref;
         $execution->params       = json_encode($params);
         $execution->startedDate  = helper::now();
         $execution->createdBy    = 'admin';
