@@ -83,7 +83,7 @@ class gitlabModel extends model
     public function isWebhookExists(string $url, string $token, string $projectID, string $callbackURL = ''): bool
     {
         $apiRoot  = rtrim($url, '/') . "/api/v4%s?private_token={$token}";
-        $hookList = json_decode(commonModel::http(sprintf($apiRoot, "/projects/{$projectID}/hooks")));
+        $hookList = json_decode(commonModel::http(sprintf($apiRoot, "/projects/{$projectID}/hooks") . '&per_page=100'));
         if(!is_array($hookList)) return false;
 
         foreach($hookList as $hook)
