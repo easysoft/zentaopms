@@ -42,3 +42,5 @@ UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'  
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'editedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'resolvedDate';
 UPDATE `zt_workflowfield` SET `control` = 'checkbox' WHERE `module` = 'feedback' AND `field` = 'public';
+
+UPDATE `zt_workflowlayout` SET `action` = 'assignTo' WHERE `module` = 'ticket'   AND `action` = 'assign';
