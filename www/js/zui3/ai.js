@@ -983,9 +983,8 @@ $(() =>
                 });
             }) : undefined,
             onMountExternalSkill: zaiConfig.canAddSkill ? (async (chat, skill) => {
-                const externalSkill = aiStore.externalSkillsMap[skill.id];
-                if(!externalSkill) return;
-                const result = await $.post($.createLink('ai', 'addSkill', `skillID=${externalSkill.id}`), undefined, 'json');
+                const externalSkill = aiStore.externalSkillsMap ? aiStore.externalSkillsMap[skill.id] : null;
+                const result = await $.post($.createLink('ai', 'addSkill', `skillID=${zui.encodeBase64(externalSkill ? externalSkill.id : skill.id)}`), undefined, 'json');
                 return typeof result === 'object' && result.result !== 'fail';
             }) : undefined,
             fetchMySkills: async () => {
