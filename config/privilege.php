@@ -37,8 +37,8 @@ $config->openMethods[] = 'user.refreshrandom';
 $config->openMethods[] = 'user.reset';
 $config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'gitfox.devopsintroduction';
-$config->openMethods[] = 'gitfox.installgitFox';
-$config->openMethods[] = 'gitfox.ajaxCheckgitFoxhealth';
+$config->openMethods[] = 'gitfox.installgitfox';
+$config->openMethods[] = 'gitfox.ajaxcheckgitfoxhealth';
 
 /* 登录用户可以访问的方法。The methods that can be accessed by the logged users. */
 $config->logonMethods   = [];

@@ -61,7 +61,7 @@ window.checkGitFoxServer = function()
         }
         else
         {
-            openUrl(adminRegisterLink);
+            loadPage(adminRegisterLink);
         }
     })
 }

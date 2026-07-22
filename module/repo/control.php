@@ -48,7 +48,7 @@ class repo extends control
     public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitfox", 'inDevOps=1'));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -111,7 +111,7 @@ class repo extends control
     public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox", 'inDevOps=1'));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
@@ -518,7 +518,7 @@ class repo extends control
     public function browse(int $repoID = 0, string $branchID = '', int $objectID = 0, string $path = '', string $revision = 'HEAD', int $refresh = 0, string $branchOrTag = 'branch', string $type = 'dir', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox", 'inDevOps=1'));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $hasDevOpsLink = !empty($this->config->devopsLink) && $this->config->devopsLink == 'repo-browse';
         if(!$repoID && !empty($this->config->devopsLink) && $hasDevOpsLink) $repoID = (int)$this->config->lastRepo;
