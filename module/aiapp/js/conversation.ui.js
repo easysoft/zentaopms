@@ -38,7 +38,7 @@ function injectEmbedStyle()
         '@media (min-width: 1400px) {.ai-panel.is-embed {padding: 0 2.5rem}}',
         '@media (min-width: 1720px) {.ai-panel.is-embed {max-width: 1720px;}}',
         '.ai-panel.is-embed .ai-chats-panel {box-shadow: 0 0 0 1px rgba(var(--color-border-rgb), 1), var(--shadow); outline: none; width: 100%!important; backdrop-filter: none; height: calc(100% - 32px)!important; position: relative; transition: none; border-radius: var(--radius); bottom: auto!important}',
-        '.ai-panel.is-embed .ai-panel-header {display: none}',
+        '.ai-panel.is-embed .ai-panel-header, .ai-panel.is-embed .ai-chat-view-body::before {display: none}',
         '.ai-panel-root[z-last-mode="embed"].is-mode-changing .ai-panel {opacity: 0; transition: none}',
         '</style>'
     ].join('\n'));
