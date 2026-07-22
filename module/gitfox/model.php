@@ -1033,7 +1033,7 @@ class gitfoxModel extends model
             $target = 'refs/heads/' . $target;
         }
         $apiRoot = $this->getApiRoot();
-        $url     = sprintf($apiRoot->url, '/repos/' . $repoID . '/merge-check/' . $target . '...' . $source);
+        $url     = sprintf($apiRoot->url, '/repos/' . $repoID . '/merge-check');
         $result  = json_decode(common::http($url, array('source' => $source, 'target' => $target), array(CURLOPT_CUSTOMREQUEST => 'POST'), $apiRoot->header, 'json'));
         return $this->getResponse($result);
     }
@@ -1057,8 +1057,8 @@ class gitfoxModel extends model
             $target = 'refs/heads/' . $target;
         }
         $apiRoot = $this->getApiRoot();
-        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/diff-stats/{$target}...{$source}");
-        $result  = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json'));
+        $url     = sprintf($apiRoot->url, "/repos/{$repoID}/diff-stats");
+        $result  = json_decode(common::http($url, array('source' => $source, 'target' => $target), array(), $apiRoot->header, 'json'));
         return $this->getResponse($result);
     }
 
