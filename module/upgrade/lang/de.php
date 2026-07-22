@@ -247,3 +247,15 @@ $lang->upgrade->reviewObjectList['UM']         = 'User Manual';
 $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = 'Baseline Review';
 $lang->upgrade->baselineReview['change']   = 'Project Change Review';
+
+$lang->upgrade->upgradeFeatureDesc = 'Version 22.3.1 integrates powerful DevOps 4.0 capabilities';
+
+$lang->upgrade->upgradeFeatures = array();
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'rocket',    'title' => 'Comprehensive Upgrade', 'desc' => 'Built-in self-developed GitFox Engine connects CI/CD pipelines to enable full lifecycle management of code.');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'code-fork', 'title' => 'Branch Types',          'desc' => 'Customizable branch types with configurable rules for standardized management.');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'bell',      'title' => 'WebHook',               'desc' => 'Repository-level WebHook configuration enables easy integration with external systems for real-time notifications.');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'checkbox',  'title' => 'Code Scanning',         'desc' => 'Comes with over 2,000 built-in scanning rules to automatically detect specification violations and potential risks for rigorous code quality control.');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'code',      'title' => 'Code Management',       'desc' => 'Fully supports Git repository management and SVN repository viewing.');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'review',    'title' => 'Code Review',           'desc' => 'Reviews can be initiated for every push or merge request to strictly control code quality.');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'flow',      'title' => 'Pipeline Capabilities', 'desc' => 'Supports importing mainstream pipelines (e.g., Jenkins) with multiple configurable trigger modes.');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'stack',     'title' => 'Artifact Repository',   'desc' => 'Multi-level and multi-type artifact management. It interconnects CI/CD workflows to ensure secure and efficient artifact transfer.');
