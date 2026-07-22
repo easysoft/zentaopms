@@ -572,7 +572,7 @@ class docZen extends doc
         if(!$libID && !empty($libPairs)) $libID = key($libPairs);
         if(empty($lib) && $libID) $lib = $this->doc->getLibByID($libID);
 
-        $this->setObjectsForCreate(empty($lib->type) ? '' : $lib->type, empty($lib) ? null : $lib, $unclosed, $objectID);
+        $this->setObjectsForCreate($objectType, empty($lib) ? null : $lib, $unclosed, $objectID);
 
         $this->view->objectType = $objectType;
         $this->view->spaceType  = $objectType;
