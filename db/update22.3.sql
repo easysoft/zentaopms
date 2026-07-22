@@ -338,7 +338,7 @@ CREATE TABLE IF NOT EXISTS `ops_ppm` (
   `mergeTargetSHA` char(40) NOT NULL DEFAULT '' COMMENT '合并时目标分支的 SHA,用于验证目标分支未变更',
   `mergeBaseSHA` char(40) NOT NULL DEFAULT '' COMMENT '合并基准 SHA(源分支和目标分支的共同祖先)',
   `mergeSHA` char(40) NOT NULL DEFAULT '' COMMENT '合并后生成的 commit SHA',
-  `mergeCheckStatus` varchar(255) NOT NULL DEFAULT '' COMMENT '合并前检查状态unchecked=未检查，conflict=有冲突，mergeable=无冲突）',
+  `mergeCheckStatus` varchar(255) NOT NULL DEFAULT 'unchecked' COMMENT '合并前检查状态unchecked=未检查，conflict=有冲突，mergeable=无冲突）',
   `mergeConflicts` text DEFAULT NULL COMMENT 'merge/squash 冲突文件列表,换行符分隔',
   `rebaseCheckStatus` varchar(255) NOT NULL DEFAULT 'unchecked' COMMENT '变基检查状态（unchecked=未检查，conflict=有冲突，mergeable=无冲突）',
   `rebaseConflicts` text DEFAULT NULL COMMENT '变基时产生的冲突详情（文件路径、冲突内容，未变基/无冲突则为NULL）',
@@ -1047,3 +1047,5 @@ DELETE FROM `zt_cron` WHERE `command` = 'moduleName=mr&methodName=syncMR';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=compile&methodName=ajaxSyncCompile';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=ci&methodName=initQueue';
 DELETE FROM `zt_cron` WHERE `command` = 'moduleName=instance&methodName=cronCleanBackup';
+
+ALTER TABLE `zt_bug` MODIFY COLUMN `lines` varchar(50) NOT NULL DEFAULT '';
