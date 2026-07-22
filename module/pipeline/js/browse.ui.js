@@ -3,7 +3,7 @@ window.renderCell = function(result, {col, row})
     if(col.name === 'lastExecStatus')
     {
         let className = '';
-        if(row.data.lastExecStatus == 'failure' || row.data.lastExecStatus == 'create_fail') className = 'status-doing';
+        if(row.data.lastExecStatus == 'failure' || row.data.lastExecStatus == 'failed' || row.data.lastExecStatus == 'create_fail') className = 'status-doing';
         if(row.data.lastExecStatus == 'success') className = 'status-done';
         result[0] = {html:'<span class="' + className + '">' + result[0] + '</span>'};
     }
