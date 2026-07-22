@@ -388,19 +388,6 @@ class formdom
                 elseif (is_numeric($defaultValue)) $defaultValue = (float)$defaultValue;
             }
 
-            /* Match picker behavior: an invalid default selects the first item. */
-            $pickerOptions = json_decode(html_entity_decode($pickerConfig, ENT_QUOTES), false);
-            if($pickerOptions && isset($pickerOptions->items) && (is_array($pickerOptions->items) || is_object($pickerOptions->items)))
-            {
-                $itemValues = array();
-                foreach((array)$pickerOptions->items as $key => $item)
-                {
-                    $itemValues[] = is_object($item) && isset($item->value) ? $item->value : $key;
-                }
-
-                if($itemValues && !in_array((string)$defaultValue, array_map('strval', $itemValues), true)) $defaultValue = reset($itemValues);
-            }
-
             /* 5. 写入数据 */
             $this->addValue($data, $name, $defaultValue);
         }
