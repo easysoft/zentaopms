@@ -15,7 +15,10 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'bugIdentify'         LIMIT 1) WHERE `module` = 'bug'      AND `field` = 'identify';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketClosedReason' LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'closedReason';
 
-DELETE FROM zt_workflowfield WHERE `module`='ticket' AND `field`='consumed';
+DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='consumed';
+DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='deleted';
+DELETE FROM zt_workflowfield WHERE `module`='feedback' AND `field`='faq';
+DELETE FROM zt_workflowfield WHERE `module`='feedback' AND `field`='deleted';
 
 ALTER TABLE `zt_workflowlayout` ADD `foldable`   tinyint unsigned NOT NULL DEFAULT 0 AFTER `mobileShow`;
 ALTER TABLE `zt_workflowlayout` ADD `wrapBefore` tinyint unsigned NOT NULL DEFAULT 0 AFTER `foldable`;
@@ -27,4 +30,15 @@ DROP VIEW IF EXISTS `view_datasource_caseScene`;
 CREATE VIEW `view_datasource_taskDocs`  AS SELECT `id`,`title` FROM `zt_doc`        WHERE `deleted` = '0';
 CREATE VIEW `view_datasource_caseScene` AS SELECT `id`,`title` FROM `zt_scene`      WHERE `deleted` = '0';
 
-UPDATE `zt_workflowaction` SET `action` = 'assignTo' WHERE `module` = 'ticket' AND `action` = 'assign';
+UPDATE `zt_workflowaction` SET `action` = 'assignTo' WHERE `module` = 'ticket'   AND `action` = 'assign';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'assignedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'realStarted';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'startedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'deadline';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'openedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'activatedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'closedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'finishedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'editedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'resolvedDate';
+UPDATE `zt_workflowfield` SET `control` = 'checkbox' WHERE `module` = 'feedback' AND `field` = 'public';
