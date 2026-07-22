@@ -389,9 +389,10 @@ class ppm extends control
             }
             if($this->post->encoding) $encoding = $this->post->encoding;
         }
-        $reviewID     = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
-        $reviewers    = !empty($reviewID) ? array() : $this->ppm->getReviewers($id);
-        $reviewResult = $this->ppm->getReviewResult($reviewers, empty($flow) ? array() : $flow);
+        $reviewID         = !empty($flow) && !empty($flow->definition->reviewFlow) ? $flow->definition->reviewFlow->approvals->approvalID : 0;
+        $reviewers        = !empty($reviewID) ? array() : $this->ppm->getReviewers($id);
+        $reviewResult     = $this->ppm->getReviewResult($reviewers, empty($flow) ? array() : $flow);
+        $defaultMergeType = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
 
         $this->view->title            = $this->lang->ppm->view;
         $this->view->ppm              = $ppm;
@@ -410,10 +411,10 @@ class ppm extends control
         $this->view->encoding         = $encoding;
         $this->view->diffs            = $arrange == 'appose' ? $this->repo->getApposeDiff($diffs) : $diffs;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter');
-        $this->view->checkResult      = $this->ppmZen->getCheckResult($ppm, $reviewResult, $this->view->bugs);
         $this->view->oldRevision      = $ppm->targetBranch;
         $this->view->newRevision      = $ppm->sourceBranch;
-        $this->view->defaultMergeType = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
+        $this->view->defaultMergeType = $defaultMergeType;
+        $this->view->checkResult      = $this->ppmZen-> getCheckResult($ppm, $reviewResult, $this->view->bugs, $defaultMergeType);
         $this->view->param            = $param;
         $this->view->rule             = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
         $this->view->pipelines        = $this->ppm->getPipelinesByPPM($ppm);
