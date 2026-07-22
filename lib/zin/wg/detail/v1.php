@@ -598,12 +598,6 @@ CSS;
 
             if($objectType == 'testcase')
             {
-                if(strpos($prevBtn['url'], '{caseVersion}') !== false)
-                {
-                    $caseVersion = !empty($preAndNext->pre->caseVersion) ? $preAndNext->pre->caseVersion : 0;
-                    $prevBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $prevBtn['url']);
-                }
-
                 if(strpos($prevBtn['url'], '{version}') !== false)
                 {
                     $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
@@ -625,12 +619,6 @@ CSS;
 
             if($objectType == 'testcase')
             {
-                if(strpos($nextBtn['url'], '{caseVersion}')!== false)
-                {
-                    $caseVersion = !empty($preAndNext->next->caseVersion) ? $preAndNext->next->caseVersion : 0;
-                    $nextBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $nextBtn['url']);
-                }
-
                 if(strpos($nextBtn['url'], '{version}') !== false)
                 {
                     $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
