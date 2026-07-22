@@ -1600,7 +1600,7 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        $module = ltrim(trim($this->table, '`'), $config->db->prefix);
+        $module = preg_replace("/^{$config->db->prefix}/", '', trim($this->table, '`'));
         $module = strrpos($module, '_') ? substr($module, strrpos($module, '_') + 1) : $module;
         $module = strtolower($module);
 
