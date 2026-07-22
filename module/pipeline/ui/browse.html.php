@@ -77,6 +77,9 @@ toolbar
 );
 
 jsVar('confirmDelete', $lang->pipeline->confirmDelete);
+jsVar('confirmExec', $lang->pipeline->confirmExec);
+jsVar('confirmExecPending', $lang->pipeline->confirmExecPending);
+jsVar('spaceID', $spaceID);
 
 dtable
 (

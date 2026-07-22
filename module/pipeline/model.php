@@ -442,8 +442,8 @@ class pipelineModel extends model
         $baseUrl  = $provider->url . $pipeline->externalPipeline;
         $userPWD  = $provider->account . ':' . $provider->token;
 
-        $params = new stdclass();
-        $params->ref = $pipeline->defaultBranch ?: 'main';
+        $params = array();
+        $params['ref'] = $pipeline->defaultBranch ?: 'main';
         if(!empty($pipeline->customParam))
         {
             $customParams = json_decode($pipeline->customParam, true);
@@ -460,44 +460,45 @@ class pipelineModel extends model
         $url = $baseUrl . ($isParameterized ? 'buildWithParameters' : 'build');
 
         $result = $this->jenkins->apiCreatePipeline($url, (object)$params, $userPWD);
-        $execution = new stdclass();
         if(empty($result))
         {
             dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
-            $execution->status = 'create_fail';
-        }
-        else
-        {
-            $number = 0;
-            $maxRetry  = 10;
-            for($i = 0; $i < $maxRetry; $i ++)
-            {
-                sleep(1);
-                $number = $this->jenkins->apiGetJobNumberByQueueID($provider->url, $result, $userPWD);
-                if(!empty($number)) break;
-            }
-            if(empty($number))
-            {
-                dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
-                $execution->status = 'create_fail';
-            }
-            else
-            {
-                $execution->number = $number;
-                $execution->status = 'created';
-            }
+            $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+            return false;
         }
 
+        $execution = new stdclass();
         $execution->pipelineID   = $pipeline->id;
         $execution->trigger      = $triggerType;
         $execution->commit       = '';
-        $execution->ref          = $params->ref;
+        $execution->ref          = $params['ref'];
         $execution->params       = json_encode($params);
         $execution->startedDate  = helper::now();
         $execution->createdBy    = $this->app->user->account;
         $execution->createdDate  = helper::now();
+        $execution->status       = 'created';
+        $execution->number       = 0;
 
         $this->dao->insert(TABLE_PIPELINEEXEC)->data($execution)->exec();
+        $executionID = $this->dao->lastInsertId();
+
+        $number   = 0;
+        $maxRetry = 10;
+        for($i = 0; $i < $maxRetry; $i ++)
+        {
+            sleep(1);
+            $number = $this->jenkins->apiGetJobNumberByQueueID($provider->url, $result, $userPWD);
+            if(!empty($number)) break;
+        }
+
+        if(empty($number))
+        {
+            dao::$errors['apiMessage'] = $this->lang->pipeline->execFail;
+            $this->dao->update(TABLE_PIPELINEEXEC)->set('status')->eq('create_fail')->where('id')->eq($executionID)->exec();
+            return false;
+        }
+
+        $this->dao->update(TABLE_PIPELINEEXEC)->set('number')->eq($number)->where('id')->eq($executionID)->exec();
         return !dao::isError();
     }
 
@@ -906,16 +907,26 @@ class pipelineModel extends model
             if(empty($data->commits)) return false;
 
             $matched = false;
-            foreach($data->commits as $commit)
+            if(empty($pipeline->comment))
             {
-                if(strpos($commit->message, $pipeline->comment) !== false)
+                $matched = true;
+            }
+            else
+            {
+                $keywords = array_filter(array_map('trim', explode(',', $pipeline->comment)));
+                foreach($data->commits as $commit)
                 {
-                    $matched = true;
-                    break;
+                    foreach($keywords as $keyword)
+                    {
+                        if(strpos($commit->message, $keyword) !== false)
+                        {
+                            $matched = true;
+                            break 2;
+                        }
+                    }
                 }
             }
 
-            if(empty($pipeline->comment)) $matched = true;
             if(!$matched) return false;
         }
 
@@ -948,7 +959,7 @@ class pipelineModel extends model
         }
         else
         {
-            $execution->queue  = $result->id;
+            $execution->number  = $result->id;
             $execution->status = zget($result, 'status', 'create_fail');
         }
 
