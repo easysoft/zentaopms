@@ -44,7 +44,7 @@ foreach($lang->upgrade->upgradeFeatures as $group)
 
 div
 (
-    setStyle(['padding' => '3rem', 'height' => '100vh', 'overflow' => 'hidden']),
+    setStyle(['padding' => '3rem', 'height' => '120vh', 'overflow' => 'hidden']),
     col
     (
         setClass('rounded-md bg-white gap-5 m-auto'),
@@ -72,7 +72,8 @@ div
                         set::name('fromVersion'),
                         set::required(true),
                         set::items($lang->upgrade->fromVersions),
-                        set::value($version)
+                        set::value($version),
+                        on::change()->call('loadFeature')
                     )
                 ),
                 formGroup
@@ -100,6 +101,7 @@ div
         ),
         div
         (
+            setID('featureDesc'),
             setClass('border-t mt-5 pt-5'),
             div
             (
