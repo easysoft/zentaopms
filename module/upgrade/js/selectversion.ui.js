@@ -1,8 +1,8 @@
 const featureVersionLimits = {
     ""   : [22, 3],
     biz  : [13, 3],
-    max  : [5, 3],
-    ipd  : [4, 3]
+    max  : [8, 3],
+    ipd  : [5, 3]
 };
 
 const getFeatureVersionInfo = function(version)
