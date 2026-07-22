@@ -73,7 +73,7 @@ class caseBasicInfo extends wg
             }
 
         }
-        return empty($modulePath) ? array('/') : $moduleItems;
+        return empty($modulePath) ? array('/') : array(div(setStyle(array('display' => 'block')), $moduleItems));
     }
 
     protected function getFromCase($case): array
