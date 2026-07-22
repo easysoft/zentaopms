@@ -211,10 +211,10 @@ class ppmZen extends ppm
      * @access public
      * @return object
      */
-    public function getCheckResult(object $ppm, string $reviewResult, array $issues = array(), string $mergeType = "rebase"): object
+    public function getCheckResult(object $ppm, string $reviewResult, array $issues = array(), string $mergeType = 'rebase'): object
     {
         $result = new stdClass();
-        $mergeCheck = $this->loadModel('ppm')->merge($ppm->id, $mergeType, true);
+        $mergeCheck = $this->ppm->merge($ppm->id, $mergeType, true);
         $result->mergeable = zget($mergeCheck, 'mergeable', true);
         $result->conflictFiles = empty($mergeCheck) ? array() : zget($mergeCheck, 'conflictFiles', array());
 
