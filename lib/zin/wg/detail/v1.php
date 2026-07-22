@@ -596,13 +596,10 @@ CSS;
             $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $prevBtn['hint'] = "#{$objectID} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
 
-            if($objectType == 'testcase')
+            if($objectType == 'testcase' && strpos($prevBtn['url'], '{version}') !== false)
             {
-                if(strpos($prevBtn['url'], '{version}') !== false)
-                {
-                    $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
-                    $prevBtn['url'] = str_replace('{version}', "{$version}", $prevBtn['url']);
-                }
+                $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
+                $prevBtn['url'] = str_replace('{version}', "{$version}", $prevBtn['url']);
             }
         }
         elseif(is_string($prevBtn))
@@ -617,13 +614,10 @@ CSS;
             $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $nextBtn['hint'] = "#{$objectID} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
 
-            if($objectType == 'testcase')
+            if($objectType == 'testcase' && strpos($nextBtn['url'], '{version}') !== false)
             {
-                if(strpos($nextBtn['url'], '{version}') !== false)
-                {
-                    $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
-                    $nextBtn['url'] = str_replace('{version}', "{$version}", $nextBtn['url']);
-                }
+                $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
+                $nextBtn['url'] = str_replace('{version}', "{$version}", $nextBtn['url']);
             }
         }
         elseif(is_string($nextBtn))
