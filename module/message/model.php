@@ -548,7 +548,7 @@ class messageModel extends model
      * @access public
      * @return void
      */
-    public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, object $oldObject = null)
+    public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
         $isBlocksuite = $objectType == 'doc';
         if($isBlocksuite)

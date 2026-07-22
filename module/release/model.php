@@ -1335,7 +1335,7 @@ class releaseModel extends model
      * @access public
      * @return array
      */
-    public function getEscapedBugList(object $release, string $orderBy = '', object $pager = null): array
+    public function getEscapedBugList(object $release, string $orderBy = '', ?object $pager = null): array
     {
         if(!in_array($release->status, array('normal', 'terminate'))) return array();
 
