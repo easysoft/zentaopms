@@ -18,7 +18,7 @@ $app->loadLang('install');
 jsVar('copySuccess', $lang->upgrade->copySuccess);
 jsVar('copyFail', $lang->upgrade->copyFail);
 jsVar('nextLink', 'javascript:checkGitFoxServer();');
-jsVar('adminRegisterLink', $nextLink);
+jsVar('adminRegisterLink', inLink('installGitFox', "inPage={$inPage}&skipInstall=1&fromVersion={$fromVersion}"));
 
 div
 (
@@ -65,11 +65,11 @@ div
                 (
                     array
                     (
-                        !$inDevOps ? array
+                        $inPage != 'devops' ? array
                         (
                             'text'  => $lang->install->solution->skip,
                             'class' => 'gray-200',
-                            'url'   => $nextLink
+                            'url'   => inlink('installGitFox', "inPage={$inPage}&skipInstall=1&fromVersion={$fromVersion}")
                         ) : null,
                         array
                         (

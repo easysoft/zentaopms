@@ -63,7 +63,7 @@ class ppm extends control
     public function browse(int $repoID = 0, string $mode = 'status', string $param = 'opened', int $objectID = 0, string $orderBy = 'id_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox", 'inDevOps=1'));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $this->loadModel('repo');
         if($this->app->tab == 'execution')

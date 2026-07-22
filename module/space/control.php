@@ -24,7 +24,7 @@ class space extends control
     public function browse(int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox", 'inDevOps=1'));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $this->space->setMenu();
         $this->app->loadClass('pager', true);
