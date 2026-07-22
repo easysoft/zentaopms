@@ -437,7 +437,7 @@ class install extends control
         if($oldRequestType == 'PATH_INFO') $this->config->requestType = 'PATH_INFO';
 
         $sendEventLink = helper::createLink('misc', 'ajaxSendEvent', 'step=success');
-        $devopsLink    = helper::createLink('gitfox', 'installGitFox');
+        $devopsLink    = helper::createLink('gitfox', 'installGitFox', 'inPage=install&skipInstall=0&fromVersion=');
         $devopsLink    .= $oldRequestType != 'PATH_INFO' ? '&_single=1' : '?_single=1';
         if($oldRequestType != 'PATH_INFO')
         {
