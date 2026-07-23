@@ -394,7 +394,7 @@ class ppm extends control
         $reviewResult     = $this->ppm->getReviewResult($reviewers, empty($flow) ? array() : $flow);
         $defaultMergeType = $this->cookie->mergeType ? $this->cookie->mergeType : 'rebase';
 
-        $this->view->title            = $this->lang->ppm->view;
+        $this->view->title            = empty($repo->name) ? $this->lang->ppm->common : $repo->name . ' - ' . $this->lang->ppm->common;
         $this->view->ppm              = $ppm;
         $this->view->reviewers        = $reviewers;
         $this->view->reviewResult     = $reviewResult;
