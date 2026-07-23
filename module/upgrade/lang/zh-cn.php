@@ -278,7 +278,7 @@ $lang->upgrade->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除�
 $lang->upgrade->changeActions['method']      = '执行 %MODULE% 模块的 %METHOD% 方法';
 $lang->upgrade->changeActions['other']       = '其他操作';
 
-$lang->upgrade->upgradeFeatureDesc = '22.3.1版本，集成 DevOps 4.0 强大功能';
+$lang->upgrade->upgradeFeatureDesc = '22.4版本，集成 DevOps 4.0 强大功能';
 
 $lang->upgrade->upgradeFeatures = array();
 $lang->upgrade->upgradeFeatures[1][] = array('icon' => 'rocket',    'title' => '全面升级', 'desc' => '自研GitFox引擎，打通CI/CD流程，实现代码的全生命周期管理。');

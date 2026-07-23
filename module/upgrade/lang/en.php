@@ -278,7 +278,7 @@ $lang->upgrade->changeActions['deleteValue'] = 'Delete data from database table 
 $lang->upgrade->changeActions['method']      = 'Execute method %METHOD% of module %MODULE%';
 $lang->upgrade->changeActions['other']       = 'Other operations';
 
-$lang->upgrade->upgradeFeatureDesc = 'Version 22.3.1 integrates powerful DevOps 4.0 capabilities';
+$lang->upgrade->upgradeFeatureDesc = 'Version 22.4 integrates powerful DevOps 4.0 capabilities';
 
 $lang->upgrade->upgradeFeatures = array();
 $lang->upgrade->upgradeFeatures[1][] = array('icon' => 'rocket',    'title' => 'Comprehensive Upgrade', 'desc' => 'Built-in self-developed GitFox Engine connects CI/CD pipelines to enable full lifecycle management of code.');
