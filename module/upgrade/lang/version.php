@@ -591,3 +591,5 @@ $lang->upgrade->fromVersions['ipd5_0_beta']    = 'Ipd5.0.beta';
 $lang->upgrade->fromVersions['ipd5_0']         = 'Ipd5.0';
 $lang->upgrade->fromVersions['ipd5_1']         = 'Ipd5.1';
 $lang->upgrade->fromVersions['ipd5_2']         = 'Ipd5.2';
+$lang->upgrade->fromVersions['ipd5_3']         = 'Ipd5.3';
+$lang->upgrade->fromVersions['ipd5_4']         = 'Ipd5.4';
