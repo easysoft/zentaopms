@@ -248,7 +248,7 @@ $lang->upgrade->baselineReview = array();
 $lang->upgrade->baselineReview['baseline'] = 'Baseline Review';
 $lang->upgrade->baselineReview['change']   = 'Project Change Review';
 
-$lang->upgrade->upgradeFeatureDesc = 'Version 22.3.1 integrates powerful DevOps 4.0 capabilities';
+$lang->upgrade->upgradeFeatureDesc = 'Version 22.4 integrates powerful DevOps 4.0 capabilities';
 
 $lang->upgrade->upgradeFeatures = array();
 $lang->upgrade->upgradeFeatures[1][] = array('icon' => 'rocket',    'title' => 'Comprehensive Upgrade', 'desc' => 'Built-in self-developed GitFox Engine connects CI/CD pipelines to enable full lifecycle management of code.');

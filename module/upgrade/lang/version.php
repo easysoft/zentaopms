@@ -227,7 +227,7 @@ $lang->upgrade->fromVersions['22_0']        = '22.0';
 $lang->upgrade->fromVersions['22_1']        = '22.1';
 $lang->upgrade->fromVersions['22_2']        = '22.2';
 $lang->upgrade->fromVersions['22_3']        = '22.3';
-$lang->upgrade->fromVersions['22_3_1']      = '22.3.1';
+$lang->upgrade->fromVersions['22_4']        = '22.4';
 
 global $config;
 /* Lite. */
@@ -456,7 +456,7 @@ $lang->upgrade->fromVersions['biz13_0']         = 'Biz13.0';
 $lang->upgrade->fromVersions['biz13_1']         = 'Biz13.1';
 $lang->upgrade->fromVersions['biz13_2']         = 'Biz13.2';
 $lang->upgrade->fromVersions['biz13_3']         = 'Biz13.3';
-$lang->upgrade->fromVersions['biz13_3_1']       = 'Biz13.3.1'; // biz insert position.
+$lang->upgrade->fromVersions['biz13_4']         = 'Biz13.4'; // biz insert position.
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4']   = 'Max2.0.beta4';
@@ -543,7 +543,7 @@ $lang->upgrade->fromVersions['max8_0']         = 'Max8.0';
 $lang->upgrade->fromVersions['max8_1']         = 'Max8.1';
 $lang->upgrade->fromVersions['max8_2']         = 'Max8.2';
 $lang->upgrade->fromVersions['max8_3']         = 'Max8.3';
-$lang->upgrade->fromVersions['max8_3_1']       = 'Max8.3.1'; // max insert position.
+$lang->upgrade->fromVersions['max8_4']         = 'Max8.4'; // max insert position.
 
 /* Ipd */
 $lang->upgrade->fromVersions['ipd1_0_beta1']   = 'Ipd1.0.beta1';
