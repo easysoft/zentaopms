@@ -568,11 +568,7 @@ class pipelineModel extends model
         }
         else
         {
-            if(empty($formData->pipeline))
-            {
-                dao::$errors['pipeline'][] = sprintf($this->lang->error->notempty, $this->lang->pipeline->pipeline);
-                return false;
-            }
+            if(empty($formData->pipeline)) dao::$errors['pipeline'][] = sprintf($this->lang->error->notempty, $this->lang->pipeline->pipeline);
             $pipeline->externalPipeline = $formData->pipeline;
         }
 
