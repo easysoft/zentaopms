@@ -13,6 +13,7 @@ $config->cache->dao->lifetime      = 604800;  // DAO 缓存生存时间，默认
 $config->cache->dao->excludeTables = array(   // 不使用 SQL 查询结果缓存的表。Tables excluded from the SQL query result cache.
     TABLE_PPM,
     TABLE_REPO,
+    TABLE_DEVOPSREPOUSER,
     TABLE_BRANCHTYPE,
     TABLE_BRANCHRULESET,
     TABLE_REVIEWFLOW,
@@ -22,6 +23,8 @@ $config->cache->dao->excludeTables = array(   // 不使用 SQL 查询结果缓�
     TABLE_PIPELINETRIGGER,
     TABLE_ARTIFACT,
     TABLE_PPMREVIEWERS,
+    TABLE_SPACE,
+    TABLE_DEVOPSSPACEUSER
 );
 
 $config->cache->client = new stdClass();
