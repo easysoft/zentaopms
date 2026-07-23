@@ -9,22 +9,29 @@ title=测试 codescanZen->processConditions();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 测试多条件plan返回数组 >> 1
+- 测试空plan返回数组 >> 1
+- 测试不同条件plan返回数组 >> 1
+- 测试空对象返回数组 >> 1
+- 测试plan再次调用返回数组 >> 1
 
 */
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->processconditionsTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->processconditionsTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->processconditionsTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+$plan = new stdclass();
+$plan->severity = array('high', 'medium');
+$plan->type = array('bug', 'vuln');
+$plan->metric = array('count', 'percent');
+$plan->threshold = array('10', '80');
+r(is_array($test->processConditionsTest($plan))) && p() && e('1');
+r(is_array($test->processConditionsTest(new stdclass()))) && p() && e('1');
+$plan2 = new stdclass();
+$plan2->severity = array('low');
+$plan2->type = array('bug');
+$plan2->metric = array('count');
+$plan2->threshold = array('5');
+r(is_array($test->processConditionsTest($plan2))) && p() && e('1');
+r(is_array($test->processConditionsTest(new stdclass()))) && p() && e('1');
+r(is_array($test->processConditionsTest($plan))) && p() && e('1');

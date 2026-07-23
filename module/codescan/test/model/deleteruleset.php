@@ -3,28 +3,29 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+su('admin');
+
 /**
 
 title=测试 codescanModel->deleteRuleset();
 timeout=0
 cid=0
 
-- 测试空对象参数返回布尔值 >> 1
-- 测试返回值非空 >> 1
-- 测试无fatal错误 >> 1
+- 测试ID为1的调用 >> 0
 - 测试返回类型有效 >> 1
-- 测试再次调用一致性 >> 1
+- 测试ID为0的调用 >> 0
+- 测试返回类型验证 >> 1
+- 测试ID为2的调用 >> 0
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$formData = new stdclass();
-$result = $test->deleterulesetTest($formData);
-r(is_bool($result) || is_int($result) || is_object($result) || is_array($result) ? '1' : '0') && p() && e('1');
-r(isset($result) ? '1' : '0') && p() && e('1');
-$result2 = $test->deleterulesetTest($formData);
-r(is_bool($result2) || is_int($result2) || is_object($result2) || is_array($result2) ? '1' : '0') && p() && e('1');
-r(isset($result2) ? '1' : '0') && p() && e('1');
-r(true) && p() && e('1');
+r($test->deleterulesetTest(1)) && p() && e('0');
+$result = $test->deleterulesetTest(2);
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->deleterulesetTest(0)) && p() && e('0');
+$result2 = $test->deleterulesetTest(3);
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->deleterulesetTest(4)) && p() && e('0');

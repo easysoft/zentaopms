@@ -20,8 +20,8 @@ cid=0
 su('admin');
 $test = new codescanZenTest();
 
-r($test->buildParamsTest('ruleset', '') && p() && e('1');
-r($test->buildParamsTest('solution', '') && p() && e('1');
-r($test->buildParamsTest('task', '') && p() && e('1');
-r($test->buildParamsTest('ruleset', '', 1) && p() && e('1');
-r($test->buildParamsTest('ruleset', '', 0, 'id_desc') && p() && e('1');
+r(is_array($test->buildParamsTest('ruleset', ''))) && p() && e('1');
+r(is_array($test->buildParamsTest('solution', ''))) && p() && e('1');
+r(is_array($test->buildParamsTest('task', ''))) && p() && e('1');
+r(is_array($test->buildParamsTest('ruleset', '', 1))) && p() && e('1');
+r(is_array($test->buildParamsTest('ruleset', '', 0, 'id_desc'))) && p() && e('1');

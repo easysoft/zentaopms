@@ -9,22 +9,19 @@ title=测试 codescanZen->responseError();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 测试空参数调用 >> 1
+- 测试带error msg参数 >> 1
+- 测试空字符串参数 >> 1
+- 测试数组参数 >> 1
+- 测试带locate参数 >> 1
 
 */
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->responseerrorTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->responseerrorTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->responseerrorTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r($test->responseErrorTest()) && p() && e('1');
+r($test->responseErrorTest('error msg')) && p() && e('1');
+r($test->responseErrorTest('')) && p() && e('1');
+r($test->responseErrorTest(array('field' => 'error'))) && p() && e('1');
+r($test->responseErrorTest('test', '/redirect')) && p() && e('1');

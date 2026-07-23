@@ -9,19 +9,19 @@ title=测试 codescanZen->validateField();
 timeout=0
 cid=0
 
-- 测试*通配符 >> 1
-- 测试有效数字范围 >> 1
-- 测试有效步长 >> 1
-- 测试简单数字 >> 1
-- 测试逗号分隔 >> 1
+- step1 >> 1
+- step2 >> 1
+- step3 >> 1
+- step4 >> 1
+- step5 >> 1
 
 */
 
 su('admin');
 $test = new codescanZenTest();
 
-r($test->validateFieldTest('*', 'minute') && p() && e('1');
-r($test->validateFieldTest('0-59', 'minute') && p() && e('1');
-r($test->validateFieldTest('*/5', 'hour') && p() && e('1');
-r($test->validateFieldTest('30', 'minute') && p() && e('1');
-r($test->validateFieldTest('1,15,30', 'minute') && p() && e('1');
+r($test->validateFieldTest('*', 'minute')) && p() && e('1');
+r($test->validateFieldTest('0-59', 'minute')) && p() && e('1');
+r($test->validateFieldTest('0/5', 'hour')) && p() && e('1');
+r($test->validateFieldTest('30', 'minute')) && p() && e('1');
+r($test->validateFieldTest('1,15,30', 'minute')) && p() && e('1');

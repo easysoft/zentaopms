@@ -3,26 +3,28 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+su('admin');
+
 /**
 
 title=测试 codescanModel->getIssueResolvedByTop();
 timeout=0
 cid=0
 
-- 测试空参数调用 >> 1
-- 测试返回值为数组 >> 1
-- 测试返回值为数组或对象 >> 1
-- 测试无fatal错误 >> 1
-- 测试再次调用一致性 >> 1
+- 测试默认参数返回空数组 >> 0
+- 测试返回类型有效 >> 1
+- 测试top为5 >> 0
+- 测试top为3 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$result = $test->getissueresolvedbytopTest();
-r(is_array($result) || is_object($result) ? '1' : is_bool($result) ? '1' : '0') && p() && e('1');
-r(is_array($test->getissueresolvedbytopTest()) ? '1' : is_object($test->getissueresolvedbytopTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getissueresolvedbytopTest()) || is_object($test->getissueresolvedbytopTest()) ? '1' : '0') && p() && e('1');
-r(is_bool($test->getissueresolvedbytopTest()) || is_array($test->getissueresolvedbytopTest()) || is_object($test->getissueresolvedbytopTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getissueresolvedbytopTest()) || is_object($test->getissueresolvedbytopTest()) || is_bool($test->getissueresolvedbytopTest()) ? '1' : '0') && p() && e('1');
+r($test->getissueresolvedbytopTest()) && p() && e('0');
+$result = $test->getissueresolvedbytopTest(0, 5);
+r(is_array($result) ? '1' : '0') && p() && e('1');
+r($test->getissueresolvedbytopTest(0, 10)) && p() && e('0');
+$result2 = $test->getissueresolvedbytopTest(1, 3);
+r(is_array($result2) ? '1' : '0') && p() && e('1');
+r($test->getissueresolvedbytopTest(0, 20)) && p() && e('0');

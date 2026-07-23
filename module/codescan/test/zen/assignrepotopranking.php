@@ -20,11 +20,8 @@ cid=0
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->assignrepotoprankingTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->assignrepotoprankingTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->assignrepotoprankingTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'rule', 0))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array((object)array('name' => 'rule1', 'value' => 5)), 'rule', 1))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'file', 0))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array((object)array('name' => 'file1', 'value' => 3)), 'file', 2))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'rule', 0))) && p() && e('1');

@@ -9,22 +9,19 @@ title=测试 codescanZen->setPager();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 测试无参调用返回pager对象 >> 1
+- 测试带recPerPage和pageID返回pager对象 >> 1
+- 测试不同分页参数返回pager对象 >> 1
+- 测试较大分页返回pager对象 >> 1
+- 测试较大页码返回pager对象 >> 1
 
 */
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->setpagerTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->setpagerTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->setpagerTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_object($test->setPagerTest())) && p() && e('1');
+r(is_object($test->setPagerTest(20, 1))) && p() && e('1');
+r(is_object($test->setPagerTest(10, 2))) && p() && e('1');
+r(is_object($test->setPagerTest(50, 1))) && p() && e('1');
+r(is_object($test->setPagerTest(20, 5))) && p() && e('1');

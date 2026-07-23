@@ -20,8 +20,9 @@ cid=0
 su('admin');
 $test = new codescanZenTest();
 
-r(is_array($test->getDateFilterTest('$lastWeek')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$thisWeek')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$lastMonth')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$thisMonth')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$today')) && p() && e('1');
+$result = $test->getDateFilterTest('$today');
+r(isset($result['begin'], $result['end'])) && p() && e('1');
+r(is_array($test->getDateFilterTest('$lastWeek'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$thisMonth'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$yesterday'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('2026-01-15'))) && p() && e('1');

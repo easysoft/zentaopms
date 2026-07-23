@@ -3,26 +3,29 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+su('admin');
+
 /**
 
 title=测试 codescanModel->getScanPlan();
 timeout=0
 cid=0
 
-- 测试空参数调用 >> 1
-- 测试返回值为数组 >> 1
-- 测试返回值为数组或对象 >> 1
-- 测试无fatal错误 >> 1
-- 测试再次调用一致性 >> 1
+- 测试两个参数都有值 >> 0
+- 测试返回类型有效 >> 1
+- 测试默认参数 >> 0
+- 测试返回类型验证 >> 1
+- 测试不同参数组合 >> 0
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$result = $test->getscanplanTest();
-r(is_array($result) || is_object($result) ? '1' : is_bool($result) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanplanTest()) ? '1' : is_object($test->getscanplanTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanplanTest()) || is_object($test->getscanplanTest()) ? '1' : '0') && p() && e('1');
-r(is_bool($test->getscanplanTest()) || is_array($test->getscanplanTest()) || is_object($test->getscanplanTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanplanTest()) || is_object($test->getscanplanTest()) || is_bool($test->getscanplanTest()) ? '1' : '0') && p() && e('1');
+r($test->getscanplanTest(1, 1)) && p() && e('0');
+$result = $test->getscanplanTest(2, 2);
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscanplanTest(0, 0)) && p() && e('0');
+$result2 = $test->getscanplanTest(1, 0);
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscanplanTest(0, 1)) && p() && e('0');

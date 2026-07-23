@@ -3293,7 +3293,7 @@ class repoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->where('status')->ne('importing')
+            ->andWhere('status')->ne('importing')
             ->fetchAll('id');
     }
 

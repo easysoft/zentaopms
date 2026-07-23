@@ -9,22 +9,21 @@ title=测试 codescanZen->processIssueTrends();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 测试空metrics返回数组 >> 1
+- 测试month范围返回数组 >> 1
+- 测试issue_added指标返回数组 >> 1
+- 测试issue_fixed指标返回数组 >> 1
+- 测试month范围与指标返回数组 >> 1
 
 */
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->processissuetrendsTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->processissuetrendsTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->processissuetrendsTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_array($test->processIssueTrendsTest(array(), 'day'))) && p() && e('1');
+r(is_array($test->processIssueTrendsTest(array(), 'month'))) && p() && e('1');
+$metric = array((object)array('metric' => (object)array('name' => 'issue_added'), 'values' => array(array(0, 5))));
+r(is_array($test->processIssueTrendsTest($metric, 'day'))) && p() && e('1');
+$metric2 = array((object)array('metric' => (object)array('name' => 'issue_fixed'), 'values' => array(array(0, 3))));
+r(is_array($test->processIssueTrendsTest($metric2, 'day'))) && p() && e('1');
+r(is_array($test->processIssueTrendsTest($metric, 'month'))) && p() && e('1');

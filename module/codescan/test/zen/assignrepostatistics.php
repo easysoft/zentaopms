@@ -20,11 +20,8 @@ cid=0
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->assignrepostatisticsTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->assignrepostatisticsTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->assignrepostatisticsTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array((object)array('id' => 1, 'name' => 'repo1'))))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array((object)array('id' => 2, 'name' => 'repo2'))))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');

@@ -3,26 +3,28 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+su('admin');
+
 /**
 
 title=测试 codescanModel->getLinkedBugList();
 timeout=0
 cid=0
 
-- 测试空参数调用 >> 1
-- 测试返回值为数组 >> 1
-- 测试返回值为数组或对象 >> 1
-- 测试无fatal错误 >> 1
-- 测试再次调用一致性 >> 1
+- 测试默认空参数返回数组 >> 0
+- 测试返回类型有效 >> 1
+- 测试带status参数 >> 0
+- 测试带int参数 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$result = $test->getlinkedbuglistTest();
-r(is_array($result) || is_object($result) ? '1' : is_bool($result) ? '1' : '0') && p() && e('1');
-r(is_array($test->getlinkedbuglistTest()) ? '1' : is_object($test->getlinkedbuglistTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getlinkedbuglistTest()) || is_object($test->getlinkedbuglistTest()) ? '1' : '0') && p() && e('1');
-r(is_bool($test->getlinkedbuglistTest()) || is_array($test->getlinkedbuglistTest()) || is_object($test->getlinkedbuglistTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getlinkedbuglistTest()) || is_object($test->getlinkedbuglistTest()) || is_bool($test->getlinkedbuglistTest()) ? '1' : '0') && p() && e('1');
+r($test->getlinkedbuglistTest()) && p() && e('0');
+$result = $test->getlinkedbuglistTest(array());
+r(is_array($result) ? '1' : '0') && p() && e('1');
+r($test->getlinkedbuglistTest(array(1, 2, 3))) && p() && e('0');
+$result2 = $test->getlinkedbuglistTest(1, 'active');
+r(is_array($result2) ? '1' : '0') && p() && e('1');
+r($test->getlinkedbuglistTest(0, 'resolved')) && p() && e('0');
