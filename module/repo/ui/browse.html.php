@@ -225,6 +225,13 @@ $mirrorStatus = zget($repo, 'status', 'active');
 
 toolbar
 (
+    /* 普通仓库最后更新时间。 */
+    empty($repo->mirror) ? a
+    (
+        set::className('last-sync-time'),
+        empty($lastRevision->link) ? null : set::href($lastRevision->link),
+        $lang->repo->notice->lastSyncTime . (isset($lastRevision->time) ? date('m-d H:i', strtotime($lastRevision->time)) : date('m-d H:i'))
+    ) : null,
     /* 镜像仓库状态工具栏区块。 */
     !empty($repo->mirror) ? div
     (
