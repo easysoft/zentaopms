@@ -45,17 +45,19 @@ window.renderRowData = function($row, index, row)
     }
 
     /* Show the bugs of current bug's product. */
-    $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
+    $row.find('.form-batch-control[data-name="resolution"]').find('.input-group').find('.duplicate-select').on('inited', function(e, info)
     {
         let $duplicateBug = info[0];
         $.getJSON($.createLink('bug', 'ajaxGetDuplicateBugs', `bugID=${row.id}&duplicateBug=${row.duplicateBug}`), function(duplicateBugs)
         {
             $duplicateBug.render({items: duplicateBugs});
             $duplicateBug.$.setValue(row.duplicateBug);
+
+
+            $row.find('.picker-box[data-name="duplicateBug"]').toggleClass('hidden', row.resolution != 'duplicate');
         });
     });
 
-    $row.find('[data-name="resolutionBox"]').find('.input-group').find('.duplicate-select').toggleClass('hidden', row.resolution != 'duplicate');
 
     /* Change assigner. */
     let $assignedTo = $row.find('.form-batch-input[data-name="assignedTo"]');
@@ -141,15 +143,6 @@ window.renderRowData = function($row, index, row)
         const $openedBuild = info[0];
         $openedBuild.render({items: openedBuildItems, menu: {checkbox: true}});
     });
-}
-
-function setDuplicate(event)
-{
-    const $target     = $(event.target);
-    const $currentRow = $target.closest('tr');
-    const resolution  = $target.val();
-
-    $currentRow.find('[data-name="duplicateBug"]').toggleClass('hidden', resolution != 'duplicate');
 }
 
 function projectChange(event)
@@ -328,4 +321,13 @@ function loadExecutionBuilds($row, executionID)
         $buildPicker.render({items: data});
         $buildPicker.$.setValue(oldOpenedBuild);
     });
+}
+
+function setDuplicate(event)
+{
+    const $target     = $(event.target);
+    const $currentRow = $target.closest('tr');
+    const resolution  = $target.val();
+
+    $currentRow.find('[data-name="duplicateBug"]').toggleClass('hidden', resolution != 'duplicate');
 }
