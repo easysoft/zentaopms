@@ -205,6 +205,9 @@ $config->ai->targetForm['risk']['edit']                  = (object)array('m' => 
 $config->ai->targetForm['projectchange']['create']       = (object)array('m' => 'projectchange', 'f' => 'create', 'for' => 'projectchange');
 $config->ai->targetForm['cm']['create']                  = (object)array('m' => 'cm', 'f' => 'create', 'for' => 'cm');
 
+/* Workflow actions unavailable as prompt action purposes. */
+$config->ai->promptWorkflowExcludeActions = array('browse', 'view', 'delete', 'export', 'exporttemplate', 'import', 'showimport', 'report');
+
 /* Used to check if form injection is available, generated from `$config->ai->targetForm`. */
 $config->ai->availableForms = array();
 foreach($config->ai->targetForm as $forms)
