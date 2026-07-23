@@ -616,6 +616,7 @@ class space extends control
                 return $this->sendError(array('sourceGroup' => sprintf($this->lang->error->notempty, $this->lang->space->sourceGroup)));
             }
 
+            $this->lang->space->name = $this->lang->group->name;
             $newGroup = form::data($this->config->group->form->copy)
                 ->add('devopsSpace', $spaceID)
                 ->get();
