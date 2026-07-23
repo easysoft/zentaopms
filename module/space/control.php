@@ -607,6 +607,15 @@ class space extends control
         $this->loadModel('group');
         if(!empty($_POST))
         {
+            if(!$this->post->sourceSpace)
+            {
+                return $this->sendError(array('sourceSpace' => sprintf($this->lang->error->notempty, $this->lang->space->sourceSpace)));
+            }
+            if(!$this->post->sourceGroup)
+            {
+                return $this->sendError(array('sourceGroup' => sprintf($this->lang->error->notempty, $this->lang->space->sourceGroup)));
+            }
+
             $newGroup = form::data($this->config->group->form->copy)
                 ->add('devopsSpace', $spaceID)
                 ->get();
