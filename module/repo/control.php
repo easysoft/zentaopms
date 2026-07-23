@@ -1143,12 +1143,11 @@ class repo extends control
      * @param  string $type
      * @param  int    $providerID
      * @param  string $groupID
-     * @param  string $acl
      * @param  int    $isTryAgain
      * @access public
      * @return void
      */
-    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', string $acl = 'open', int $isTryAgain = 0)
+    public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', int $isTryAgain = 0)
     {
         if($this->viewType !== 'json') $this->commonAction();
         if($_POST)
@@ -1170,7 +1169,6 @@ class repo extends control
             $groupID    = $type == 'Subversion' ? '' : zget($importRepo, 'organize', '');
             $groupID    = urlencode($groupID);
             $type       = zget($importRepo, 'origin', 'GitLab');
-            $acl        = zget($importRepo, 'acl', 'open');
         }
         $this->repoZen->buildImportForm($providerID, $groupID, $type);
 
@@ -1179,7 +1177,6 @@ class repo extends control
         $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
         $this->view->type       = $type;
         $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
-        $this->view->acl        = $acl;
         $this->view->tryAgain   = $isTryAgain;
         $this->view->spaceID    = $spaceID;
         $this->view->inSpace    = !empty($spaceID);

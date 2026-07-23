@@ -61,21 +61,21 @@ $fields->field('members')->width('1/2')
     ->required(true)
     ->multiple(true)
     ->items($users)
-    ->hidden($acl == 'open')
+    ->hidden(true)
     ->value(!empty($importRepo) ? zget($importRepo, 'members') : '');
 
 $fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath,mirror');
 $fields->autoLoad('providerID', 'organize,repo,account,password,repoPath');
 $fields->autoLoad('organize', 'repo');
-$fields->autoLoad('acl', 'members');
 
 formGridPanel
 (
     setID('createForm'),
     on::change('[name=repo]', 'loadName'),
+    on::change('[name=acl]')->call('setMembers'),
     set::modeSwitcher(false),
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),
     set::fields($fields),
-    set::loadUrl(createLink('repo', 'import', "spaceID={$spaceID}&type={origin}&providerID={providerID}&groupID={organize|urlencode}&acl={acl}")),
+    set::loadUrl(createLink('repo', 'import', "spaceID={$spaceID}&type={origin}&providerID={providerID}&groupID={organize|urlencode}")),
 );
