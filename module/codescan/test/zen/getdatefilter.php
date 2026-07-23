@@ -17,11 +17,12 @@ cid=0
 
 */
 
+
 su('admin');
 $test = new codescanZenTest();
 
-r(is_array($test->getDateFilterTest('$lastWeek')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$thisWeek')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$lastMonth')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$thisMonth')) && p() && e('1');
-r(is_array($test->getDateFilterTest('$today')) && p() && e('1');
+r(is_array($test->getDateFilterTest('$lastWeek'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$thisWeek'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$lastMonth'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$thisMonth'))) && p() && e('1');
+r(is_array($test->getDateFilterTest('$today'))) && p() && e('1');

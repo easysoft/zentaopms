@@ -17,14 +17,12 @@ cid=0
 
 */
 
+
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->buildsearchformTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->buildsearchformTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->buildsearchformTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_null($test->buildsearchformTest(array('module' => 'codescan', 'params' => array()), 0, 'test-url'))) && p() && e('1');
+r(is_null($test->buildsearchformTest(array(), 1, ''))) && p() && e('1');
+r(is_null($test->buildsearchformTest(array('module' => 'codescan'), 0, 'url'))) && p() && e('1');
+r(is_null($test->buildsearchformTest(array('module' => 'codescan', 'params' => array('type' => array('values' => array('all' => 'all')))), 0, 'test'))) && p() && e('1');
+r(is_null($test->buildsearchformTest(array(), '0', 'test-url'))) && p() && e('1');

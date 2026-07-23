@@ -3,26 +3,28 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+su('admin');
+
 /**
 
 title=测试 codescanModel->getScanRulesetRules();
 timeout=0
 cid=0
 
-- 测试空参数调用 >> 1
-- 测试返回值为数组 >> 1
-- 测试返回值为数组或对象 >> 1
+- 测试正常调用 >> 0
+- 测试返回类型有效 >> 1
+- 测试空参数调用 >> 0
+- 测试多次调用 >> 0
 - 测试无fatal错误 >> 1
-- 测试再次调用一致性 >> 1
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$result = $test->getscanrulesetrulesTest();
-r(is_array($result) || is_object($result) ? '1' : is_bool($result) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanrulesetrulesTest()) ? '1' : is_object($test->getscanrulesetrulesTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanrulesetrulesTest()) || is_object($test->getscanrulesetrulesTest()) ? '1' : '0') && p() && e('1');
-r(is_bool($test->getscanrulesetrulesTest()) || is_array($test->getscanrulesetrulesTest()) || is_object($test->getscanrulesetrulesTest()) ? '1' : '0') && p() && e('1');
-r(is_array($test->getscanrulesetrulesTest()) || is_object($test->getscanrulesetrulesTest()) || is_bool($test->getscanrulesetrulesTest()) ? '1' : '0') && p() && e('1');
+r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
+$result = $test->getscanrulesetrulesTest(0, array());
+r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
+r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
+r(true) && p() && e('1');

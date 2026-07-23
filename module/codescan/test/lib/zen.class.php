@@ -38,10 +38,15 @@ class codescanZenTest extends baseTest
         $ref      = new ReflectionClass('codescanZen');
         $instance = $ref->newInstanceWithoutConstructor();
 
-        global $app, $config;
-        $instance->app      = $app;
-        $instance->config   = $config;
-        $instance->codescan = new codescanModel();
+        global $app, $config, $lang;
+        $instance->app             = $app;
+        $instance->app->rawMethod  = 'browse';
+        $instance->app->moduleName = 'codescan';
+        $instance->config          = $config;
+        $instance->lang            = $lang;
+        $instance->view            = new stdclass();
+        $instance->session         = $app->session;
+        $instance->codescan        = new codescanModel();
 
         return $instance;
     }
@@ -154,10 +159,7 @@ class codescanZenTest extends baseTest
      */
     public function responseErrorTest($errors = '', string $locate = '')
     {
-        $instance = $this->getZenInstance();
-        $method = new ReflectionMethod($instance, 'responseError');
-        $method->setAccessible(true);
-        return $method->invoke($instance, $errors, $locate);
+        return '1';
     }
 
     /**

@@ -27,10 +27,10 @@ $cs2 = new stdclass(); $cs2->status = 'enabled';
 r($test->isClickableTest($cs2, 'disable')) && p() && e('1');
 
 $cs3 = new stdclass(); $cs3->status = 'enabled';
-r(!$test->isClickableTest($cs3, 'enable') ? '0' : 'x') && p() && e('0');
+r($test->isClickableTest($cs3, 'enable')) && p() && e('0');
 
 $cs4 = new stdclass(); $cs4->status = 'disabled';
-r(!$test->isClickableTest($cs4, 'disable') ? '0' : 'x') && p() && e('0');
+r($test->isClickableTest($cs4, 'disable')) && p() && e('0');
 
 $cs5 = new stdclass(); $cs5->bugID = 0; $cs5->status = 'active';
 r($test->isClickableTest($cs5, 'bug')) && p() && e('1');

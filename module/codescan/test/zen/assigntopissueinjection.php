@@ -17,14 +17,12 @@ cid=0
 
 */
 
+
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->assigntopissueinjectionTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->assigntopissueinjectionTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->assigntopissueinjectionTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_null($test->assigntopissueinjectionTest(array()))) && p() && e('1');
+r(is_null($test->assigntopissueinjectionTest(array((object)array('name' => 'user1', 'value' => 5))))) && p() && e('1');
+r(is_null($test->assigntopissueinjectionTest(array()))) && p() && e('1');
+r(is_null($test->assigntopissueinjectionTest(array((object)array('name' => 'user2', 'value' => 10))))) && p() && e('1');
+r(is_null($test->assigntopissueinjectionTest(array()))) && p() && e('1');

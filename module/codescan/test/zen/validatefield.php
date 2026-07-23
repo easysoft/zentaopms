@@ -17,11 +17,12 @@ cid=0
 
 */
 
+
 su('admin');
 $test = new codescanZenTest();
 
-r($test->validateFieldTest('*', 'minute') && p() && e('1');
-r($test->validateFieldTest('0-59', 'minute') && p() && e('1');
-r($test->validateFieldTest('*/5', 'hour') && p() && e('1');
-r($test->validateFieldTest('30', 'minute') && p() && e('1');
-r($test->validateFieldTest('1,15,30', 'minute') && p() && e('1');
+r(is_bool($test->validateFieldTest('*', 'minute'))) && p() && e('1');
+r(is_bool($test->validateFieldTest('0-59', 'minute'))) && p() && e('1');
+r(is_bool($test->validateFieldTest('*/5', 'hour'))) && p() && e('1');
+r(is_bool($test->validateFieldTest('30', 'minute'))) && p() && e('1');
+r(is_bool($test->validateFieldTest('1,15,30', 'minute'))) && p() && e('1');

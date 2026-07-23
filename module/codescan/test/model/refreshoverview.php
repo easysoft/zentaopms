@@ -3,28 +3,28 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+su('admin');
+
 /**
 
 title=测试 codescanModel->refreshOverview();
 timeout=0
 cid=0
 
-- 测试空对象参数返回布尔值 >> 1
-- 测试返回值非空 >> 1
-- 测试无fatal错误 >> 1
+- 测试正常调用不报错 >> 0
 - 测试返回类型有效 >> 1
-- 测试再次调用一致性 >> 1
+- 测试空参数调用 >> 0
+- 测试多次调用一致性 >> 0
+- 测试无fatal错误 >> 1
 
 */
 
-su('admin');
 $test = new codescanModelTest();
 
-$formData = new stdclass();
-$result = $test->refreshoverviewTest($formData);
-r(is_bool($result) || is_int($result) || is_object($result) || is_array($result) ? '1' : '0') && p() && e('1');
-r(isset($result) ? '1' : '0') && p() && e('1');
-$result2 = $test->refreshoverviewTest($formData);
-r(is_bool($result2) || is_int($result2) || is_object($result2) || is_array($result2) ? '1' : '0') && p() && e('1');
-r(isset($result2) ? '1' : '0') && p() && e('1');
+r($test->refreshoverviewTest()) && p() && e('0');
+$result = $test->refreshoverviewTest();
+r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+r($test->refreshoverviewTest()) && p() && e('0');
+r($test->refreshoverviewTest()) && p() && e('0');
 r(true) && p() && e('1');
