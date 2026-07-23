@@ -110,6 +110,7 @@ class space extends control
             }
         }
 
+        $users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         if($_POST)
         {
             $formData = form::data($this->config->space->form->edit)
@@ -121,6 +122,25 @@ class space extends control
 
             if(!empty($changes))
             {
+                foreach($changes as &$change)
+                {
+                    if($change['field'] != 'manager') continue;
+                    if(!empty($change['old']))
+                    {
+                        $oldManagers = explode(',', $change['old']);
+                        $change['old'] = '';
+                        foreach($oldManagers as $oldManager) $change['old'] .= zget($users, $oldManager) . ',';
+                    }
+                    if(!empty($change['new']))
+                    {
+                        $newManagers = explode(',', $change['new']);
+                        $change['new'] = '';
+                        foreach($newManagers as $newManager) $change['new'] .= zget($users, $newManager) . ',';
+                    }
+                    $change['old'] = trim($change['old'], ',');
+                    $change['new'] = trim($change['new'], ',');
+                }
+
                 $actionID = $this->loadModel('action')->create('space', $id, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
@@ -130,7 +150,7 @@ class space extends control
 
         $this->view->title = $this->lang->space->edit;
         $this->view->space = $space;
-        $this->view->users = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
+        $this->view->users = $users;
         $this->display();
     }
 
@@ -616,6 +636,7 @@ class space extends control
                 return $this->sendError(array('sourceGroup' => sprintf($this->lang->error->notempty, $this->lang->space->sourceGroup)));
             }
 
+            $this->lang->space->name = $this->lang->group->name;
             $newGroup = form::data($this->config->group->form->copy)
                 ->add('devopsSpace', $spaceID)
                 ->get();
