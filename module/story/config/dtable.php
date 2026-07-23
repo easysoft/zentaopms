@@ -403,9 +403,12 @@ $config->story->taskTable->fieldList['id']['group']    = 1;
 $config->story->taskTable->fieldList['name']['name']         = 'name';
 $config->story->taskTable->fieldList['name']['title']        = $lang->task->name;
 $config->story->taskTable->fieldList['name']['type']         = 'nestedTitle';
+$config->story->taskTable->fieldList['name']['link']         = array('module' => 'task', 'method' => 'view', 'params' => 'taskID={id}');
 $config->story->taskTable->fieldList['name']['nestedToggle'] = true;
 $config->story->taskTable->fieldList['name']['sortType']     = false;
 $config->story->taskTable->fieldList['name']['group']        = 2;
+$config->story->taskTable->fieldList['name']['data-toggle']  = 'modal';
+$config->story->taskTable->fieldList['name']['data-size']    = 'lg';
 
 $config->story->taskTable->fieldList['pri']['name']     = 'pri';
 $config->story->taskTable->fieldList['pri']['title']    = $lang->priAB;
@@ -459,11 +462,14 @@ $config->story->bugTable->fieldList['id']['type']     = 'checkID';
 $config->story->bugTable->fieldList['id']['sortType'] = true;
 $config->story->bugTable->fieldList['id']['group']    = 1;
 
-$config->story->bugTable->fieldList['title']['name']     = 'title';
-$config->story->bugTable->fieldList['title']['title']    = $lang->bug->title;
-$config->story->bugTable->fieldList['title']['type']     = 'text';
-$config->story->bugTable->fieldList['title']['sortType'] = true;
-$config->story->bugTable->fieldList['title']['group']    = 2;
+$config->story->bugTable->fieldList['title']['name']        = 'title';
+$config->story->bugTable->fieldList['title']['title']       = $lang->bug->title;
+$config->story->bugTable->fieldList['title']['link']        = array('module' => 'bug', 'method' => 'view', 'params' => 'bugID={id}');
+$config->story->bugTable->fieldList['title']['type']        = 'text';
+$config->story->bugTable->fieldList['title']['sortType']    = true;
+$config->story->bugTable->fieldList['title']['group']       = 2;
+$config->story->bugTable->fieldList['title']['data-toggle'] = 'modal';
+$config->story->bugTable->fieldList['title']['data-size']   = 'lg';
 
 $config->story->bugTable->fieldList['pri']['name']     = 'pri';
 $config->story->bugTable->fieldList['pri']['title']    = $lang->priAB;
@@ -513,11 +519,14 @@ $config->story->caseTable->fieldList['id']['sortType'] = true;
 $config->story->caseTable->fieldList['id']['fixed']    = 'left';
 $config->story->caseTable->fieldList['id']['group']    = 1;
 
-$config->story->caseTable->fieldList['title']['name']     = 'title';
-$config->story->caseTable->fieldList['title']['title']    = $lang->testcase->title;
-$config->story->caseTable->fieldList['title']['type']     = 'text';
-$config->story->caseTable->fieldList['title']['sortType'] = true;
-$config->story->caseTable->fieldList['title']['group']    = 2;
+$config->story->caseTable->fieldList['title']['name']        = 'title';
+$config->story->caseTable->fieldList['title']['title']       = $lang->testcase->title;
+$config->story->caseTable->fieldList['title']['link']        = array('module' => 'testcase', 'method' => 'view', 'params' => 'caseID={id}');
+$config->story->caseTable->fieldList['title']['type']        = 'text';
+$config->story->caseTable->fieldList['title']['sortType']    = true;
+$config->story->caseTable->fieldList['title']['group']       = 2;
+$config->story->caseTable->fieldList['title']['data-toggle'] = 'modal';
+$config->story->caseTable->fieldList['title']['data-size']   = 'lg';
 
 $config->story->caseTable->fieldList['pri']['name']     = 'pri';
 $config->story->caseTable->fieldList['pri']['title']    = $lang->priAB;
