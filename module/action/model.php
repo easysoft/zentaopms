@@ -1763,7 +1763,7 @@ class actionModel extends model
         $content = '';
         foreach($histories as $history)
         {
-            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, $this->lang->action->label->space);
+            $history->fieldLabel = str_pad($history->fieldLabel, $maxLength, ' ');
             if(strpos(',addDiff,removeDiff,', ",{$history->field},") !== false)
             {
                 $fileLabel = isset($this->lang->file->common) ? $this->lang->file->common . ' ' : '';
