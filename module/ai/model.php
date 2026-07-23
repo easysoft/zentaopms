@@ -2205,10 +2205,10 @@ class aiModel extends model
         $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
         if(empty($workflowAction)) return array();
 
-        $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
-
-        $fields = $this->loadModel('workflowaction')->getPageFields($module, $action);
+        $fields = $this->getWorkflowPromptFields($module, $action);
         if(empty($fields)) return array();
+
+        $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
 
         $schema = new stdclass();
         $schema->title      = !empty($workflowAction->name) ? $workflowAction->name : $module;
@@ -2218,11 +2218,6 @@ class aiModel extends model
 
         foreach($fields as $fieldName => $field)
         {
-            if(empty($field) || !is_object($field)) continue;
-            if(!empty($field->readonly)) continue;
-            if(strpos((string)$fieldName, 'sub_') === 0) continue;
-            if(in_array($fieldName, array('actions', 'id', 'deleted', 'uid'), true)) continue;
-
             $prop = new stdclass();
             $prop->type        = 'string';
             $prop->description = !empty($field->name) ? $field->name : $fieldName;
@@ -2254,6 +2249,56 @@ class aiModel extends model
     }
 
     /**
+     * 获取工作流动作可用于智能体表单的字段。
+     * Get workflow action fields available for prompt forms.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  bool   $getRealOptions
+     * @access protected
+     * @return array
+     */
+    protected function getWorkflowPromptFields(string $module, string $action, bool $getRealOptions = true): array
+    {
+        if(isset($this->config->edition) && $this->config->edition == 'open') return array();
+        if(!defined('TABLE_WORKFLOWACTION')) return array();
+
+        $workflowAction = $this->loadModel('workflowaction');
+        if(empty($workflowAction) || !method_exists($workflowAction, 'getPageFields')) return array();
+
+        $pageFields = $workflowAction->getPageFields($module, $action, $getRealOptions);
+        $fields     = array();
+        foreach($pageFields as $fieldName => $field)
+        {
+            if(!$this->isWorkflowPromptFieldAvailable($fieldName, $field)) continue;
+            $fields[$fieldName] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 判断工作流字段是否可用于智能体表单。
+     * Check whether a workflow field is available for prompt forms.
+     *
+     * @param  string $fieldName
+     * @param  mixed  $field
+     * @access protected
+     * @return bool
+     */
+    protected function isWorkflowPromptFieldAvailable($fieldName, $field): bool
+    {
+        if(empty($field) || !is_object($field)) return false;
+        if(!empty($field->readonly)) return false;
+
+        $fieldName = (string)$fieldName;
+        if(strpos($fieldName, 'sub_') === 0) return false;
+        if(in_array($fieldName, array('actions', 'id', 'deleted', 'uid'), true)) return false;
+
+        return true;
+    }
+
+    /**
      * 获取智能体可用的工作流动作。
      * Get workflow action for prompt target form.
      *
@@ -2264,10 +2309,16 @@ class aiModel extends model
      */
     public function getWorkflowActionForPrompt(string $module, string $action)
     {
+        if(!defined('TABLE_WORKFLOWACTION')) return false;
+
+        $promptWorkflowExcludeActions = isset($this->config->ai->promptWorkflowExcludeActions) ? $this->config->ai->promptWorkflowExcludeActions : array('browse', 'view', 'delete', 'export', 'exporttemplate', 'import', 'showimport', 'report');
+        if(in_array(strtolower($action), $promptWorkflowExcludeActions)) return false;
+
         return $this->dao->select('module, action, method, name')->from(TABLE_WORKFLOWACTION)
             ->where('module')->eq($module)
             ->andWhere('action')->eq($action)
             ->andWhere('status')->eq('enable')
+            ->andWhere('open')->ne('none')
             ->andWhere('`virtual`')->eq(0)
             ->andWhere('buildin')->eq(0)
             ->fetch();
