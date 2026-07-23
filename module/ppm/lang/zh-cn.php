@@ -313,8 +313,8 @@ $lang->ppm->bug->status   = '状态';
 
 $lang->ppm->mergeTypeInfoList = array();
 $lang->ppm->mergeTypeInfoList['merge']  = '此分支上的所有提交将通过合并提交的方式添加到基础分支。';
-$lang->ppm->mergeTypeInfoList['squash'] = '此分支上的所有提交将合并为一个提交，并添加到基础分支。';
-$lang->ppm->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变基并添加到基础分支。';
+$lang->ppm->mergeTypeInfoList['squash'] = '此分支上的所有提交将合并为一个提交，并添加到基础分支。当前合并方式会更改commitID的值，会造成关联项缺失。';
+$lang->ppm->mergeTypeInfoList['rebase'] = '此分支上的所有提交将被变基并添加到基础分支。当前合并方式会更改commitID的值，会造成关联项缺失。';
 $lang->ppm->mergeTypeInfoList['fast']   = '此分支上的所有提交将直接添加到基础分支，而不产生合并提交,可能需要进行变基。';
 
 $lang->ppm->notice = new stdclass();
