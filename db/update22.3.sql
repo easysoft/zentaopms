@@ -1083,3 +1083,5 @@ ALTER TABLE `zt_suitecase` ADD COLUMN `caseVersion` smallint unsigned NOT NULL D
 
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'project',   '', 'ganttVersionSettings', 'deliverable');
 INSERT INTO `zt_config`(`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES ('', 'system', 'execution', '', 'ganttVersionSettings', 'gantt');
+
+UPDATE `zt_config` SET `value` = 'ui20' WHERE `module` = 'common' AND `section` = 'global' AND `key` = 'showUpgradeGuide';
