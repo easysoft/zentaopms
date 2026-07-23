@@ -215,8 +215,9 @@ class ppmZen extends ppm
     {
         $result = new stdClass();
         $mergeCheck = $this->ppm->merge($ppm->id, $mergeType, true);
-        $result->mergeable = zget($mergeCheck, 'mergeable', true);
+        $result->mergeable     = zget($mergeCheck, 'mergeable', true);
         $result->conflictFiles = empty($mergeCheck) ? array() : zget($mergeCheck, 'conflictFiles', array());
+        $result->message       = empty($result->message) ? '' : $result->message;
 
         $rule          = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
         $ppmHandLeUser = empty($rule) ? array() : explode(',', zget($rule, 'ppmHandleUser', ''));
