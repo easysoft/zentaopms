@@ -2,8 +2,8 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
-
 zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+
 su('admin');
 
 /**

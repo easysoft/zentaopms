@@ -408,7 +408,7 @@ class codescanModel extends model
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/solutions/{$solutionID}");
 
-        $rulesets = explode(',', $formData->rulesets);
+        $rulesets = explode(',', (string)$formData->rulesets);
         unset($formData->rulesets);
 
         $formData->updatedBy = $this->app->user->account;
@@ -447,7 +447,7 @@ class codescanModel extends model
      * @access public
      * @return array|object
      */
-    public function getSolutionUnlinkRulesets(int $solutionID, array $param): array|object
+    public function getSolutionUnlinkRulesets(int $solutionID, array $param): array|object|bool
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/solutions/{$solutionID}/rulesets/unbind");
@@ -696,7 +696,7 @@ class codescanModel extends model
      * @access public
      * @return array|object
      */
-    public function getScanTasks(int $repoID, int $planID, array $params): array|object
+    public function getScanTasks(int $repoID, int $planID, array $params): array|object|bool
     {
         if(!isset($params['repoID'])) $params['repoID'] = (int)$repoID;
         if(!isset($params['planID'])) $params['planID'] = (int)$planID;
@@ -757,7 +757,7 @@ class codescanModel extends model
      * @access public
      * @return array|object
      */
-    public function getScanTask(int $taskID): array|object
+    public function getScanTask(int $taskID): array|object|bool
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/tasks/{$taskID}");
@@ -900,7 +900,7 @@ class codescanModel extends model
      * @access public
      * @return object|array
      */
-    public function getScanIssueListByIdList(array $issueIdList): object|array
+    public function getScanIssueListByIdList(array $issueIdList): object|array|bool
     {
         $IdList = array();
         foreach($issueIdList as $issueID) $IdList[] = (int)$issueID;
@@ -918,13 +918,14 @@ class codescanModel extends model
      * @access public
      * @return array|object
      */
-    public function getScanIssue(int $issueID, bool $showBug = true): array|object
+    public function getScanIssue(int $issueID, bool $showBug = true): array|object|bool
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/issues/{$issueID}");
 
         $result = json_decode(common::http($url, array(), array(), $apiRoot->header, 'json', 'GET'));
         $result = $this->gitfox->getResponse($result);
+        if(empty($result)) return array();
 
         if($showBug)
         {
@@ -1139,7 +1140,7 @@ class codescanModel extends model
      * @access public
      * @return array
      */
-    public function getIssueTrendsByRepo(int $repoID, int $beginDate = 0, string $scope = 'day'): array
+    public function getIssueTrendsByRepo(int $repoID, int $beginDate = 0, string $scope = 'day'): array|bool
     {
         $apiRoot = $this->loadModel('gitfox')->getApiRoot();
         $url     = sprintf($apiRoot->url, "/scan/metrics/repo/{$repoID}/query");

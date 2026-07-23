@@ -22,8 +22,8 @@ cid=0
 
 $test = new codescanZenTest();
 
-r(is_array($test->processexecbranchTest(1, 0))) && p() && e('1');
-r(is_array($test->processexecbranchTest(2, 0))) && p() && e('1');
-r(is_array($test->processexecbranchTest(0, 0))) && p() && e('1');
-r(is_array($test->processexecbranchTest(1, 0))) && p() && e('1');
-r(is_array($test->processexecbranchTest(0, 1))) && p() && e('1');
+r(is_array($test->processExecBranchTest(0, 0))) && p() && e('1');
+r(is_array($test->processExecBranchTest(1, 0))) && p() && e('1');
+r(is_array($test->processExecBranchTest(0, 1))) && p() && e('1');
+r(is_array($test->processExecBranchTest(2, 0))) && p() && e('1');
+r(is_array($test->processExecBranchTest(1, 1))) && p() && e('1');

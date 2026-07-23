@@ -12,19 +12,20 @@ title=测试 codescanModel->getScanSolutions();
 timeout=0
 cid=0
 
-- 测试正常调用 >> 0
+- 测试空数组参数 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用 >> 0
-- 测试无fatal错误 >> 1
+- 测试带ID的数组 >> 0
+- 测试带page的数组 >> 1
+- 测试带limit的数组 >> 0
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getscansolutionsTest(array())) && p() && e('0');
-$result = $test->getscansolutionsTest(array());
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getscansolutionsTest(array())) && p() && e('0');
-r($test->getscansolutionsTest(array())) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->getscansolutionsTest(array('id' => 1));
+r(is_array($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscansolutionsTest(array('page' => 1))) && p() && e('0');
+$result2 = $test->getscansolutionsTest(array('limit' => 10));
+r(is_array($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscansolutionsTest(array('sort' => 'id'))) && p() && e('0');

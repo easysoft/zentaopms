@@ -17,12 +17,11 @@ cid=0
 
 */
 
-
 su('admin');
 $test = new codescanZenTest();
 
-r(is_null($test->assignrepotoprankingTest(array(), 'rule', 0))) && p() && e('1');
-r(is_null($test->assignrepotoprankingTest(array(array('name' => 'rule1', 'value' => 5)), 'rule', 1))) && p() && e('1');
-r(is_null($test->assignrepotoprankingTest(array(), 'file', 0))) && p() && e('1');
-r(is_null($test->assignrepotoprankingTest(array(array('name' => 'file1', 'value' => 3)), 'file', 2))) && p() && e('1');
-r(is_null($test->assignrepotoprankingTest(array(), 'rule', 0))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'rule', 0))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array((object)array('name' => 'rule1', 'value' => 5)), 'rule', 1))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'file', 0))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array((object)array('name' => 'file1', 'value' => 3)), 'file', 2))) && p() && e('1');
+r(is_null($test->assignRepoTopRankingTest(array(), 'rule', 0))) && p() && e('1');

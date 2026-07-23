@@ -12,19 +12,20 @@ title=测试 codescanModel->changeIssueState();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试固定状态参数 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试默认参数 >> 0
+- 测试忽略日期参数 >> 1
+- 测试数组ID参数 >> 0
 
 */
 
 $test = new codescanModelTest();
 
 r($test->changeissuestateTest(1, 'fixed', 'solution', '2026-01-01', 0)) && p() && e('0');
-$result = $test->changeissuestateTest(1, 'fixed', 'solution', '2026-01-01', 0);
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->changeissuestateTest()) && p() && e('0');
-r($test->changeissuestateTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->changeissuestateTest(2, 'wontfix');
+r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
+r($test->changeissuestateTest(0, '')) && p() && e('0');
+$result2 = $test->changeissuestateTest(array(1, 2, 3), 'fixed');
+r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');
+r($test->changeissuestateTest(3, 'ignore', '', '', -1)) && p() && e('0');

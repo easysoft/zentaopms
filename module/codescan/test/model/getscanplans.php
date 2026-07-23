@@ -12,19 +12,19 @@ title=测试 codescanModel->getScanPlans();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
-- 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- step1 >> 0
+- step2 >> 1
+- step3 >> 0
+- step4 >> 1
+- step5 >> 0
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getscanplansTest(1, array())) && p() && e('0');
-$result = $test->getscanplansTest(1, array());
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getscanplansTest()) && p() && e('0');
-r($test->getscanplansTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->getscanplansTest(2, array('page' => 1));
+r(is_array($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscanplansTest(3, array('limit' => 10))) && p() && e('0');
+$result2 = $test->getscanplansTest(4, array('page' => 1, 'limit' => 5));
+r(is_array($result2) || is_object($result2) ? '1' : '0') && p() && e('1');

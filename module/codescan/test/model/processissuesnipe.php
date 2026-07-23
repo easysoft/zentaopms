@@ -9,22 +9,39 @@ title=测试 codescanModel->processIssueSnipe();
 timeout=0
 cid=0
 
-- 测试空对象参数返回布尔值 >> 1
-- 测试返回值非空 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试再次调用一致性 >> 1
+- 测试完整代码片段行号计算 >> 9,12
+- 测试空对象返回对象 >> 1
+- 测试不匹配snippet返回0,0 >> 0,0
+- 测试单行匹配 >> 1,1
+- 测试空参数返回对象 >> 1
 
 */
 
 su('admin');
 $test = new codescanModelTest();
 
-$formData = new stdclass();
-$result = $test->processissuesnipeTest($formData);
-r(is_bool($result) || is_int($result) || is_object($result) || is_array($result) ? '1' : '0') && p() && e('1');
-r(isset($result) ? '1' : '0') && p() && e('1');
-$result2 = $test->processissuesnipeTest($formData);
-r(is_bool($result2) || is_int($result2) || is_object($result2) || is_array($result2) ? '1' : '0') && p() && e('1');
-r(isset($result2) ? '1' : '0') && p() && e('1');
-r(true) && p() && e('1');
+$issue1 = new stdclass();
+$issue1->snippetWithContext = "line1\nline2\nline3\nline4";
+$issue1->snippet = "line2";
+$issue1->rangeStartLine = 10;
+$issue1->rangeEndLine = 11;
+r($test->processissuesnipeTest($issue1)) && p('snippetStartLine,snippetEndLine') && e('9,13');
+
+$empty = new stdclass();
+r(is_object($test->processissuesnipeTest($empty))) && p() && e('1');
+
+$noMatch = new stdclass();
+$noMatch->snippetWithContext = "abc\ndef";
+$noMatch->snippet = "xyz";
+$noMatch->rangeStartLine = 5;
+$noMatch->rangeEndLine = 6;
+r($test->processissuesnipeTest($noMatch)) && p('snippetStartLine,snippetEndLine') && e('0,0');
+
+$single = new stdclass();
+$single->snippetWithContext = "abc";
+$single->snippet = "abc";
+$single->rangeStartLine = 1;
+$single->rangeEndLine = 1;
+r($test->processissuesnipeTest($single)) && p('snippetStartLine,snippetEndLine') && e('1,1');
+
+r(is_object($test->processissuesnipeTest())) && p() && e('1');

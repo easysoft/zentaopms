@@ -12,19 +12,20 @@ title=测试 codescanModel->getScanRulesetRules();
 timeout=0
 cid=0
 
-- 测试正常调用 >> 0
+- 测试有ID和数组参数 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用 >> 0
-- 测试无fatal错误 >> 1
+- 测试默认参数 >> 0
+- 测试返回类型验证 >> 1
+- 测试不同数组参数 >> 0
 
 */
 
 $test = new codescanModelTest();
 
-r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
-$result = $test->getscanrulesetrulesTest(0, array());
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
-r($test->getscanrulesetrulesTest(0, array())) && p() && e('0');
-r(true) && p() && e('1');
+r($test->getscanrulesetrulesTest(1, array(1, 2, 3))) && p() && e('0');
+$result = $test->getscanrulesetrulesTest(2, array());
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscanrulesetrulesTest(0, array(1))) && p() && e('0');
+$result2 = $test->getscanrulesetrulesTest(1, array(4, 5, 6));
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscanrulesetrulesTest(2, array(7, 8))) && p() && e('0');

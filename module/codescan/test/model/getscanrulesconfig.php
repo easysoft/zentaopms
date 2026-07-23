@@ -12,11 +12,11 @@ title=测试 codescanModel->getScanRulesConfig();
 timeout=0
 cid=0
 
-- 测试正常调用 >> 0
+- 测试langs类型 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用 >> 0
-- 测试无fatal错误 >> 1
+- 测试tags类型 >> 0
+- 测试默认空值 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
@@ -24,7 +24,8 @@ $test = new codescanModelTest();
 
 r($test->getscanrulesconfigTest('langs')) && p() && e('0');
 $result = $test->getscanrulesconfigTest('tags');
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+r(is_array($result) ? '1' : '0') && p() && e('1');
 r($test->getscanrulesconfigTest('plugins')) && p() && e('0');
-r($test->getscanrulesconfigTest('types')) && p() && e('0');
-r(true) && p() && e('1');
+$result2 = $test->getscanrulesconfigTest('types');
+r(is_array($result2) ? '1' : '0') && p() && e('1');
+r($test->getscanrulesconfigTest('')) && p() && e('0');

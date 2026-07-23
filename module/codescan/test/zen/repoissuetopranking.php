@@ -17,12 +17,11 @@ cid=0
 
 */
 
-
 su('admin');
 $test = new codescanZenTest();
 
-r(is_null($test->repoissuetoprankingTest(array(), 'total'))) && p() && e('1');
-r(is_null($test->repoissuetoprankingTest(array((object)array('id' => 1, 'name' => 'repo1', 'total' => 10, 'values' => (object)array('high' => 3, 'medium' => 4, 'low' => 3))), 'total'))) && p() && e('1');
-r(is_null($test->repoissuetoprankingTest(array(), 'unresolved'))) && p() && e('1');
-r(is_null($test->repoissuetoprankingTest(array((object)array('id' => 1, 'name' => 'repo1', 'total' => 5, 'values' => (object)array('high' => 1, 'medium' => 2, 'low' => 2))), 'unresolved'))) && p() && e('1');
-r(is_null($test->repoissuetoprankingTest(array(), 'total'))) && p() && e('1');
+r(is_null($test->repoIssueTopRankingTest(array(), 'total'))) && p() && e('1');
+r(is_null($test->repoIssueTopRankingTest(array((object)array('id' => 1, 'name' => 'repo1', 'total' => 10, 'values' => (object)array('high' => 3, 'medium' => 4, 'low' => 3))), 'total'))) && p() && e('1');
+r(is_null($test->repoIssueTopRankingTest(array(), 'unresolved'))) && p() && e('1');
+r(is_null($test->repoIssueTopRankingTest(array((object)array('id' => 1, 'name' => 'repo1', 'total' => 5, 'values' => (object)array('high' => 1, 'medium' => 2, 'low' => 2))), 'unresolved'))) && p() && e('1');
+r(is_null($test->repoIssueTopRankingTest(array(), 'total'))) && p() && e('1');

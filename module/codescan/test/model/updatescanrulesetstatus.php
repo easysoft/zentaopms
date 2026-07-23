@@ -12,19 +12,20 @@ title=测试 codescanModel->updateScanRulesetStatus();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试disabled状态 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试enabled状态 >> 0
+- 测试默认参数 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
 $test = new codescanModelTest();
 
 r($test->updatescanrulesetstatusTest(1, 'disabled')) && p() && e('0');
-$result = $test->updatescanrulesetstatusTest(1, 'disabled');
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->updatescanrulesetstatusTest()) && p() && e('0');
-r($test->updatescanrulesetstatusTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->updatescanrulesetstatusTest(2, 'enabled');
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->updatescanrulesetstatusTest(0, 'disabled')) && p() && e('0');
+$result2 = $test->updatescanrulesetstatusTest(3, 'enabled');
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->updatescanrulesetstatusTest(4)) && p() && e('0');

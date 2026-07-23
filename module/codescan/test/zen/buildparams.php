@@ -17,7 +17,6 @@ cid=0
 
 */
 
-
 su('admin');
 $test = new codescanZenTest();
 

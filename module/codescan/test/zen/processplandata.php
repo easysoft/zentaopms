@@ -9,14 +9,13 @@ title=测试 codescanZen->processPlanData();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- step1 >> 1
+- step2 >> 1
+- step3 >> 1
+- step4 >> 1
+- step5 >> 1
 
 */
-
 
 su('admin');
 $test = new codescanZenTest();
@@ -30,13 +29,13 @@ $plan->severity = array('high');
 $plan->type = array('bug');
 $plan->metric = array('count');
 $plan->threshold = array('10');
+$plan->branch = '';
+$plan->branchReg = '';
+$plan->excludePath = '';
+$plan->excludeFile = '';
 
-r($test->processplanDataTest($plan)) && p() && e('1');
-$plan2 = new stdclass();
-r($test->processplanDataTest($plan2)) && p() && e('1');
-$plan3 = new stdclass();
-$plan3->branchReg = 'main,develop';
-$plan3->excludePath = 'vendor,node_modules';
-r($test->processplanDataTest($plan3)) && p() && e('1');
-r(is_object($test->processplanDataTest($plan))) && p() && e('1');
-r($test->processplanDataTest(new stdclass())) && p() && e('1');
+r(is_object($test->processPlanDataTest($plan))) && p() && e('1');
+r(is_object($test->processPlanDataTest(new stdclass()))) && p() && e('1');
+r(is_object($test->processPlanDataTest($plan))) && p() && e('1');
+r(is_object($test->processPlanDataTest(new stdclass()))) && p() && e('1');
+r(is_object($test->processPlanDataTest($plan))) && p() && e('1');

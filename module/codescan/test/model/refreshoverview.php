@@ -12,19 +12,20 @@ title=测试 codescanModel->refreshOverview();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试正常调用返回true >> 1
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试再次调用返回true >> 1
+- 测试返回类型验证 >> 1
+- 测试多次调用一致性 >> 1
 
 */
 
 $test = new codescanModelTest();
 
-r($test->refreshoverviewTest()) && p() && e('0');
-$result = $test->refreshoverviewTest();
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->refreshoverviewTest()) && p() && e('0');
-r($test->refreshoverviewTest()) && p() && e('0');
-r(true) && p() && e('1');
+r($test->refreshOverviewTest()) && p() && e('1');
+$result = $test->refreshOverviewTest();
+r(is_bool($result) ? '1' : '0') && p() && e('1');
+r($test->refreshOverviewTest()) && p() && e('1');
+$result2 = $test->refreshOverviewTest();
+r(is_bool($result2) ? '1' : '0') && p() && e('1');
+r($test->refreshOverviewTest()) && p() && e('1');

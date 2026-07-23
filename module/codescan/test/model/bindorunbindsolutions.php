@@ -12,19 +12,20 @@ title=测试 codescanModel->bindOrUnbindSolutions();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试绑定操作 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试默认参数 >> 0
+- 测试解绑操作 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
 $test = new codescanModelTest();
 
 r($test->bindorunbindsolutionsTest(1, 1, array(1, 2), true)) && p() && e('0');
-$result = $test->bindorunbindsolutionsTest(1, 1, array(), true);
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->bindorunbindsolutionsTest()) && p() && e('0');
-r($test->bindorunbindsolutionsTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->bindorunbindsolutionsTest(2, 2, array(), true);
+r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
+r($test->bindorunbindsolutionsTest(0, 0, array(1), false)) && p() && e('0');
+$result2 = $test->bindorunbindsolutionsTest(1, 2, array(1, 2, 3), true);
+r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');
+r($test->bindorunbindsolutionsTest(3, 3, array(1), true)) && p() && e('0');

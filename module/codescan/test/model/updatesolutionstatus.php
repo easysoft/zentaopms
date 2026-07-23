@@ -12,19 +12,20 @@ title=测试 codescanModel->updateSolutionStatus();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试ID为1的调用 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试ID为0的调用 >> 0
+- 测试返回类型验证 >> 1
+- 测试ID为2的调用 >> 0
 
 */
 
 $test = new codescanModelTest();
 
 r($test->updatesolutionstatusTest(1)) && p() && e('0');
-$result = $test->updatesolutionstatusTest(1);
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->updatesolutionstatusTest()) && p() && e('0');
-r($test->updatesolutionstatusTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->updatesolutionstatusTest(2);
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->updatesolutionstatusTest(0)) && p() && e('0');
+$result2 = $test->updatesolutionstatusTest(3);
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->updatesolutionstatusTest(4)) && p() && e('0');

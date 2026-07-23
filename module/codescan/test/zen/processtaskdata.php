@@ -9,23 +9,25 @@ title=测试 codescanZen->processTaskData();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 校验runTime字段 >> 2m5s
+- 测试空task返回对象 >> 1
+- 测试带repoList返回对象 >> 1
+- 测试空task空repoList返回对象 >> 1
+- 测试有效task返回对象 >> 1
 
 */
-
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->processtaskdataTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->processtaskdataTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->processtaskdataTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+$task = new stdclass();
+$task->repoID = 100;
+$task->cost = 125;
+$task->started = 1700000000000;
+$task->finished = 1700000125000;
+$task->repoNumber = 5;
+r($test->processTaskDataTest($task)) && p('runTime') && e('2m5s');
+r(is_object($test->processTaskDataTest(new stdclass()))) && p() && e('1');
+r(is_object($test->processTaskDataTest($task, array(100 => 'my-repo')))) && p() && e('1');
+r(is_object($test->processTaskDataTest(new stdclass(), array()))) && p() && e('1');
+r(is_object($test->processTaskDataTest($task))) && p() && e('1');

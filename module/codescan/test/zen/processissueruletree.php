@@ -9,23 +9,21 @@ title=测试 codescanZen->processIssueRuleTree();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- 测试空参数返回数组 >> 1
+- 测试带ruleTree返回数组 >> 1
+- 测试带params返回数组 >> 1
+- 测试空参数再次返回数组 >> 1
+- 测试带taskID返回数组 >> 1
 
 */
-
 
 su('admin');
 $test = new codescanZenTest();
 
-$r1 = $test->processissueruletreeTest();
-r(isset($r1) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
-$r2 = $test->processissueruletreeTest();
-r(is_array($r2) || is_object($r2) || is_bool($r2) || is_string($r2) || is_null($r2) || is_int($r2) ? '1' : '0') && p() && e('1');
-$r3 = $test->processissueruletreeTest();
-r(isset($r3) ? '1' : '0') && p() && e('1');
-r('1') && p() && e('1');
+r(is_array($test->processIssueRuleTreeTest(array(), '', array()))) && p() && e('1');
+$ruleTree = array((object)array('name' => 'root', 'ref' => '', 'children' => array()));
+r(is_array($test->processIssueRuleTreeTest($ruleTree, 'url/%s', array()))) && p() && e('1');
+$ruleTree2 = array((object)array('name' => 'PHPStan', 'ref' => '1', 'children' => array()));
+r(is_array($test->processIssueRuleTreeTest($ruleTree2, 'url', array('repoID' => 1)))) && p() && e('1');
+r(is_array($test->processIssueRuleTreeTest(array(), 'url', array()))) && p() && e('1');
+r(is_array($test->processIssueRuleTreeTest(array(), '', array('taskID' => 5)))) && p() && e('1');

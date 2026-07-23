@@ -9,20 +9,19 @@ title=测试 codescanZen->buildSearchForm();
 timeout=0
 cid=0
 
-- 测试空参数调用返回有效结果 >> 1
-- 测试无fatal错误 >> 1
-- 测试返回类型有效 >> 1
-- 测试第二次调用一致性 >> 1
-- 测试第三次调用 >> 1
+- step1 >> 1
+- step2 >> 1
+- step3 >> 1
+- step4 >> 1
+- step5 >> 1
 
 */
-
 
 su('admin');
 $test = new codescanZenTest();
 
-r(is_null($test->buildsearchformTest(array('module' => 'codescan', 'params' => array()), 0, 'test-url'))) && p() && e('1');
-r(is_null($test->buildsearchformTest(array(), 1, ''))) && p() && e('1');
-r(is_null($test->buildsearchformTest(array('module' => 'codescan'), 0, 'url'))) && p() && e('1');
-r(is_null($test->buildsearchformTest(array('module' => 'codescan', 'params' => array('type' => array('values' => array('all' => 'all')))), 0, 'test'))) && p() && e('1');
-r(is_null($test->buildsearchformTest(array(), '0', 'test-url'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest(array('module' => 'codescan', 'params' => array()), 0, 'url'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 1, ''))) && p() && e('1');
+r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 0, 'url2'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), 0, 'url3'))) && p() && e('1');
+r(is_null($test->buildSearchFormTest(array('module' => 'codescan'), '0', 'url4'))) && p() && e('1');

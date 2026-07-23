@@ -382,7 +382,7 @@ class codescanZen extends codescan
             $plan->excludePath = trim($plan->excludePath, ',');
         }
 
-        $solutions = explode(',', $plan->solutions);
+        $solutions = explode(',', (string)$plan->solutions);
         foreach($solutions as &$solution) $solution = (int)$solution;
 
         $params = new stdclass();
@@ -393,11 +393,11 @@ class codescanZen extends codescan
         $params->conditions  = $this->processConditions($plan);
 
         $params->branches = new stdclass();
-        $branchesInclude  = array_filter(array_merge(explode(',', $plan->branch), explode(',', $plan->branchReg)));
+        $branchesInclude  = array_filter(array_merge(explode(',', (string)$plan->branch), explode(',', (string)$plan->branchReg)));
         $params->branches->include = array_values($branchesInclude);
 
         $params->files = new stdclass();
-        $filesExclude  = array_filter(array_merge(explode(',', $plan->excludePath), explode(',', $plan->excludeFile)));
+        $filesExclude  = array_filter(array_merge(explode(',', (string)$plan->excludePath), explode(',', (string)$plan->excludeFile)));
         $params->files->exclude = array_values($filesExclude);
 
         return $params;

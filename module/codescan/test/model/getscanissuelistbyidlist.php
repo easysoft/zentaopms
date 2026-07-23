@@ -12,19 +12,20 @@ title=测试 codescanModel->getScanIssueListByIdList();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试空数组参数 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试带ID的数组 >> 0
+- 测试带page的数组 >> 1
+- 测试带limit的数组 >> 0
 
 */
 
 $test = new codescanModelTest();
 
-r($test->getscanissuelistbyidlistTest(array(1, 2, 3))) && p() && e('0');
-$result = $test->getscanissuelistbyidlistTest(array(1, 2, 3));
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getscanissuelistbyidlistTest()) && p() && e('0');
-r($test->getscanissuelistbyidlistTest()) && p() && e('0');
-r(true) && p() && e('1');
+r($test->getscanissuelistbyidlistTest(array())) && p() && e('0');
+$result = $test->getscanissuelistbyidlistTest(array('id' => 1));
+r(is_array($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscanissuelistbyidlistTest(array('page' => 1))) && p() && e('0');
+$result2 = $test->getscanissuelistbyidlistTest(array('limit' => 10));
+r(is_array($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscanissuelistbyidlistTest(array('sort' => 'id'))) && p() && e('0');

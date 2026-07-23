@@ -12,11 +12,11 @@ title=测试 codescanModel->getIssueTreeList();
 timeout=0
 cid=0
 
-- 测试正常调用 >> 0
+- 测试file类型 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用 >> 0
-- 测试无fatal错误 >> 1
+- 测试rule类型 >> 0
+- 测试默认参数 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
@@ -24,7 +24,8 @@ $test = new codescanModelTest();
 
 r($test->getissuetreelistTest(0, 0, 'file')) && p() && e('0');
 $result = $test->getissuetreelistTest(0, 0, 'file');
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getissuetreelistTest(0, 0, 'file')) && p() && e('0');
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
 r($test->getissuetreelistTest(0, 0, 'rule')) && p() && e('0');
-r(true) && p() && e('1');
+$result2 = $test->getissuetreelistTest(1, 0, 'file');
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getissuetreelistTest(0, 1, 'rule')) && p() && e('0');

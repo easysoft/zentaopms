@@ -12,19 +12,20 @@ title=测试 codescanModel->getListByAPI();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试带api参数 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试默认参数 >> 0
+- 测试带page参数 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getlistbyapiTest('gitfox', array())) && p() && e('0');
-$result = $test->getlistbyapiTest('gitfox', array());
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+$result = $test->getlistbyapiTest('scan/list', array('page' => 1));
+r(is_array($result) || is_object($result) ? '1' : '0') && p() && e('1');
 r($test->getlistbyapiTest()) && p() && e('0');
-r($test->getlistbyapiTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result2 = $test->getlistbyapiTest('scan/tasks', array('limit' => 10));
+r(is_array($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getlistbyapiTest('scan/issues', array())) && p() && e('0');

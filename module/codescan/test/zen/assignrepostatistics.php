@@ -17,12 +17,11 @@ cid=0
 
 */
 
-
 su('admin');
 $test = new codescanZenTest();
 
-r(is_null($test->assignrepostatisticsTest(array()))) && p() && e('1');
-r(is_null($test->assignrepostatisticsTest(array(array('id' => 1, 'name' => 'repo1'))))) && p() && e('1');
-r(is_null($test->assignrepostatisticsTest(array()))) && p() && e('1');
-r(is_null($test->assignrepostatisticsTest(array(array('id' => 1, 'name' => 'repo1'))))) && p() && e('1');
-r(is_null($test->assignrepostatisticsTest(array()))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array((object)array('id' => 1, 'name' => 'repo1'))))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array((object)array('id' => 2, 'name' => 'repo2'))))) && p() && e('1');
+r(is_null($test->assignRepoStatisticsTest(array()))) && p() && e('1');

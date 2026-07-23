@@ -12,19 +12,20 @@ title=测试 codescanModel->getIssueTrendsByRepo();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试day范围 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试week范围 >> 0
+- 测试month范围 >> 0
+- 测试返回类型验证 >> 1
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getissuetrendsbyrepoTest(1, 0, 'day')) && p() && e('0');
-$result = $test->getissuetrendsbyrepoTest(1, 0, 'day');
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->getissuetrendsbyrepoTest()) && p() && e('0');
-r($test->getissuetrendsbyrepoTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->getissuetrendsbyrepoTest(2, 0, 'day');
+r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getissuetrendsbyrepoTest(0, 0, 'week')) && p() && e('0');
+$result2 = $test->getissuetrendsbyrepoTest(1, 0, 'month');
+r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getissuetrendsbyrepoTest(3, 0, 'year')) && p() && e('0');

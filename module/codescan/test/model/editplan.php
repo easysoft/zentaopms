@@ -12,20 +12,21 @@ title=测试 codescanModel->editPlan();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
-- 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- step1 >> 0
+- step2 >> 1
+- step3 >> 0
+- step4 >> 1
+- step5 >> 0
 
 */
 
 $test = new codescanModelTest();
 $formData = new stdclass();
+$formData->solutionIDs = array(1);
 
 r($test->editplanTest(1, 1, $formData)) && p() && e('0');
-$result = $test->editplanTest(1, 1, $formData);
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->editplanTest()) && p() && e('0');
-r($test->editplanTest()) && p() && e('0');
-r(true) && p() && e('1');
+$result = $test->editplanTest(2, 2, $formData);
+r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
+r($test->editplanTest(3, 3, $formData)) && p() && e('0');
+$result2 = $test->editplanTest(4, 4, new stdclass());
+r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');

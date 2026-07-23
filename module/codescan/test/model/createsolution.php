@@ -12,20 +12,22 @@ title=测试 codescanModel->createSolution();
 timeout=0
 cid=0
 
-- 测试正常调用不报错 >> 0
+- 测试带名称的对象 >> 0
 - 测试返回类型有效 >> 1
-- 测试空参数调用 >> 0
-- 测试多次调用一致性 >> 0
-- 测试无fatal错误 >> 1
+- 测试空对象 >> 0
+- 测试返回类型验证 >> 1
+- 测试不同对象参数 >> 0
 
 */
 
 $test = new codescanModelTest();
-$formData = new stdclass();
 
-r($test->createsolutionTest($formData)) && p() && e('0');
-$result = $test->createsolutionTest($formData);
-r(is_array($result) || is_object($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
-r($test->createsolutionTest($formData)) && p() && e('0');
-r($test->createsolutionTest($formData)) && p() && e('0');
-r(true) && p() && e('1');
+$data1 = new stdclass(); $data1->name = 'test1';
+r($test->createsolutionTest($data1)) && p() && e('0');
+$result = $test->createsolutionTest(new stdclass());
+r(is_array($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+r($test->createsolutionTest(new stdclass())) && p() && e('0');
+$data2 = new stdclass(); $data2->name = 'test2';
+$result2 = $test->createsolutionTest($data2);
+r(is_array($result2) || is_bool($result2) || is_int($result2) ? '1' : '0') && p() && e('1');
+r($test->createsolutionTest(new stdclass())) && p() && e('0');

@@ -65,8 +65,7 @@ class codescanZenTest extends baseTest
         $instance->view = new stdclass();
         $method = new ReflectionMethod($instance, 'commonData');
         $method->setAccessible(true);
-        $method->invoke($instance, $include, $usePair);
-        return '1';
+        return $method->invoke($instance, $include, $usePair);
     }
 
     /**
