@@ -158,23 +158,123 @@ class miscModel extends model
     }
 
     /**
+     * 获取需要弹出的新功能提醒页。
+     * Get feature notice pages to show.
+     *
+     * 打开弹窗时即写入 zt_featurenotice，标记当前用户已提醒。
+     * Mark notices as shown when returning pages.
+     *
+     * @access public
+     * @return array
+     */
+    public function getFeatureNotices(): array
+    {
+        $features = $this->getPendingFeatureNotices();
+        if(empty($features)) return array();
+
+        $this->markFeatureNoticesShown($features);
+
+        return $this->buildFeatureNoticePages($features);
+    }
+
+    /**
+     * 获取当前用户尚未提醒、且满足版本/edition 条件的功能配置。
+     * Get pending feature notice configs for current user.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPendingFeatureNotices(): array
+    {
+        if(empty($this->config->featureNotice) || !is_array($this->config->featureNotice)) return array();
+
+        $pending = array();
+        $edition = $this->config->edition;
+        $noticed = $this->config->global->showUpgradeGuide ?? '';
+        foreach($this->config->featureNotice as $feature)
+        {
+            if(empty($feature['code'])) continue;
+            if(!empty($feature['editions']) && !in_array($edition, $feature['editions'], true)) continue;
+
+            /* hideUpgradeGuide 仍用于跳过 20.0 重构引导。 */
+            if(!empty($this->config->global->hideUpgradeGuide) && $feature['code'] === 'ui20') continue;
+
+            if(strpos(",{$noticed},", ",{$feature['code']},") !== false) continue;
+
+            $pending[] = $feature;
+        }
+
+        return $pending;
+    }
+
+    /**
+     * 将待提醒功能标记为已提醒。
+     * Mark feature notices as shown for current user.
+     *
+     * @param  array $features
+     * @access public
+     * @return void
+     */
+    public function markFeatureNoticesShown(array $features): void
+    {
+        $account = $this->app->user->account;
+        $noticed = $this->config->global->showUpgradeGuide ?? '';
+        foreach($features as $feature) $noticed .= ',' . $feature['code'];
+        $noticed = trim($noticed, ',');
+        $this->loadModel('setting')->setItem("{$account}.common.global.showUpgradeGuide", $noticed);
+    }
+
+    /**
+     * 将功能配置展开为弹窗翻页数据。
+     * Build modal pages from feature configs.
+     *
+     * @param  array $features
+     * @access public
+     * @return array
+     */
+    public function buildFeatureNoticePages(array $features): array
+    {
+        $edition    = $this->config->edition;
+        $clientLang = common::checkNotCN() ? 'en' : 'cn';
+        $pages      = array();
+
+        foreach($features as $feature)
+        {
+            $images = $feature['images'] ?? array();
+            if(!empty($feature['editionImages'][$edition])) $images = $feature['editionImages'][$edition];
+            if(empty($images)) continue;
+
+            $linkItem = '';
+            if(!empty($feature['linkItem']))
+            {
+                $linkItem = is_array($feature['linkItem']) ? zget($feature['linkItem'], $edition, '') : $feature['linkItem'];
+            }
+            $moreLink = $linkItem ? 'https://api.zentao.net/goto.php?item=' . $linkItem : '';
+
+            foreach($images as $image)
+            {
+                $pages[] = array(
+                    'code'     => $feature['code'],
+                    'src'      => str_replace('{lang}', $clientLang, $image),
+                    'moreLink' => $moreLink
+                );
+            }
+        }
+
+        return $pages;
+    }
+
+    /**
      * 获取升级提示的通知。
      * Get upgrade remind.
      *
      * @access public
      * @return bool
+     * @deprecated Use getFeatureNotices() instead.
      */
     public function getUpgradeRemind(): bool
     {
-        if(!empty($this->config->global->hideUpgradeGuide)) return false;
-
-        $remind = false;
-        if(empty($this->config->global->showUpgradeGuide))
-        {
-            $remind = true;
-            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showUpgradeGuide", 1);
-        }
-        return $remind;
+        return !empty($this->getFeatureNotices());
     }
 
 
