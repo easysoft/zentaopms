@@ -104,7 +104,7 @@ $fields->field('assignedTo')
     ->control($buildAssignedTo);
 
 /* Set name field width. */
-$nameWidth = 'w-full';
+$nameWidth = '';
 if(empty(data('features.story')) && data('execution.type') != 'kanban' && !empty(data('execution.multiple'))) $nameWidth .= ' full:w-full';
 if(data('execution.type') == 'kanban')  $nameWidth .= ' lite:w-full';
 if(data('execution.lifetime') == 'ops') $nameWidth  = ' w-1/2';
