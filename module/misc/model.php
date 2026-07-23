@@ -265,20 +265,6 @@ class miscModel extends model
     }
 
     /**
-     * 获取升级提示的通知。
-     * Get upgrade remind.
-     *
-     * @access public
-     * @return bool
-     * @deprecated Use getFeatureNotices() instead.
-     */
-    public function getUpgradeRemind(): bool
-    {
-        return !empty($this->getFeatureNotices());
-    }
-
-
-    /**
      * 获取最近版本列表.
      * Get the latest version list
      * @param  string       $url
