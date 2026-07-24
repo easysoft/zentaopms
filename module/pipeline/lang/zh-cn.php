@@ -164,7 +164,6 @@ $lang->pipeline->typeList['space'] = '空间';
 $lang->pipeline->execStatusList = array();
 $lang->pipeline->execStatusList['success']     = '成功';
 $lang->pipeline->execStatusList['failure']     = '失败';
-$lang->pipeline->execStatusList['failed']      = '失败';
 $lang->pipeline->execStatusList['running']     = '运行中';
 $lang->pipeline->execStatusList['pending']     = '等待中';
 $lang->pipeline->execStatusList['error']       = '错误';

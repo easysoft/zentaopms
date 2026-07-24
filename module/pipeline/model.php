@@ -568,11 +568,7 @@ class pipelineModel extends model
         }
         else
         {
-            if(empty($formData->pipeline))
-            {
-                dao::$errors['pipeline'][] = sprintf($this->lang->error->notempty, $this->lang->pipeline->pipeline);
-                return false;
-            }
+            if(empty($formData->pipeline)) dao::$errors['pipeline'][] = sprintf($this->lang->error->notempty, $this->lang->pipeline->pipeline);
             $pipeline->externalPipeline = $formData->pipeline;
         }
 
@@ -1160,7 +1156,7 @@ class pipelineModel extends model
                 $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
                 $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
             }
-            elseIF($engine == 'gitlab')
+            elseif($engine == 'gitlab')
             {
                 $syncData->status       = strtolower(zget($execInfo, 'status', ''));
                 $syncData->status       = $syncData->status == 'failed' ? 'failure' : $syncData->status;

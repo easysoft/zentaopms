@@ -524,7 +524,15 @@ class pipeline extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->pipeline->form->import)
+            $formConfig = $this->config->pipeline->form->import;
+            $postProviderID = (int)($this->post->providerID ?: $providerID);
+            if($postProviderID)
+            {
+                $postProvider = $this->loadModel('provider')->getByID($postProviderID);
+                if($postProvider && $postProvider->type !== 'GitLab') $formConfig['pipeline']['required'] = true;
+            }
+
+            $formData = form::data($formConfig)
                 ->setDefault('providerID', $providerID)
                 ->get();
             $repo = $this->loadModel('repo')->getByID($repoID);

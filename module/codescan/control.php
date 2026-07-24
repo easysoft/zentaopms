@@ -748,7 +748,11 @@ class codescan extends control
         $this->view->title        = $this->lang->codescan->createPlan;
         $this->view->repoID       = $repoID;
         $this->view->repoList     = $this->loadModel('repo')->getRepoPairs();
-        $this->view->solutionList = $this->codescanZen->getListByQuery('solution', 0, 0, 'enabled');
+        $solutionList = $this->codescanZen->getListByQuery('solution', 0, 0, 'enabled');
+        $this->view->solutionList = array_filter($solutionList, function($solution)
+        {
+            return $solution->name !== $this->lang->codescan->cSharpDefaultSolution;
+        });
         $this->display();
     }
 
@@ -813,7 +817,11 @@ class codescan extends control
         $this->view->plan         = $oldPlan;
         $this->view->repoList     = $this->loadModel('repo')->getGitFoxRepos();
         $this->view->conditions   = $oldConditions;
-        $this->view->solutionList = $this->codescanZen->getListByQuery('solution');;
+        $solutionList = $this->codescanZen->getListByQuery('solution');
+        $this->view->solutionList = array_filter($solutionList, function($solution)
+        {
+            return $solution->name !== $this->lang->codescan->cSharpDefaultSolution;
+        });
         $this->display();
     }
 
