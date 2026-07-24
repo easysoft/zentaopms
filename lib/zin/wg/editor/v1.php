@@ -164,7 +164,7 @@ class editor extends wg
         /* Set initial content. */
         $initialContent = $this->prop('value');
         $children       = $this->children();
-        if(empty($children)) $editor->setProp('initial-content', $initialContent);
+        if(empty($children)) $editor->setProp('initial-content', htmlspecialchars($initialContent, ENT_COMPAT | ENT_SUBSTITUTE | ENT_HTML5, null, true));
         else                 $editor->add(h('article', set('slot', 'content'), $initialContent? html($initialContent) : null, $children));
 
         $templateType = $this->prop('templateType');
