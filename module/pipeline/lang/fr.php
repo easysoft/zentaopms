@@ -86,9 +86,10 @@ $lang->pipeline->varValue        = 'Var Value';
 $lang->pipeline->lastExecResult  = 'Last Exec Result';
 $lang->pipeline->level           = 'Level';
 
-$lang->pipeline->lblBasic  = 'Infos de Base';
-$lang->pipeline->okBtn     = 'Ok';
-$lang->pipeline->execTitle = 'Specify Execution Parameters';
+$lang->pipeline->paramNamePlaceholder = 'uniquement lettres, chiffres et underscores';
+$lang->pipeline->lblBasic             = 'Infos de Base';
+$lang->pipeline->okBtn                = 'Ok';
+$lang->pipeline->execTitle            = 'Specify Execution Parameters';
 
 $lang->pipeline->auto           = 'Auto';
 $lang->pipeline->example        = 'ex.';

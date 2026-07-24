@@ -86,9 +86,10 @@ $lang->pipeline->value           = '变量值';
 $lang->pipeline->lastExecResult  = '最后执行结果';
 $lang->pipeline->level           = '级别';
 
-$lang->pipeline->lblBasic  = '基本信息';
-$lang->pipeline->okBtn     = '确定';
-$lang->pipeline->execTitle = '指定运行参数';
+$lang->pipeline->paramNamePlaceholder = '仅支持字母、数字、下划线';
+$lang->pipeline->lblBasic             = '基本信息';
+$lang->pipeline->okBtn                = '确定';
+$lang->pipeline->execTitle            = '指定运行参数';
 
 $lang->pipeline->auto           = '自动';
 $lang->pipeline->example        = '举例';
