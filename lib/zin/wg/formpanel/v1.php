@@ -350,13 +350,13 @@ class formPanel extends panel
         {
             if(!empty($buildinItems[$field->field]))
             {
-                $items[] = $buildinItems[$field->field];
+                $items[$field->field] = $buildinItems[$field->field];
             }
             else
             {
                 $value = isset($field->defaultValue) && $field->defaultValue != '' ? $field->defaultValue : $field->default;
                 $value = isset($data->{$field->field}) ? $data->{$field->field} : $value;
-                $items[] = !empty($buildinItems) ? array
+                $items[$field->field] = !empty($buildinItems) ? array
                 (
                     'name' => $field->field,
                     'label' => $field->name,
@@ -379,6 +379,11 @@ class formPanel extends panel
                     set::placeholder($field->placeholder)
                 );
             }
+        }
+        foreach($buildinItems as $key => $field)
+        {
+            if(!empty($items[$key])) continue;
+            $items[$key] = $field;
         }
         return array_values($items);
     }
