@@ -17,6 +17,7 @@ $items[] = array('name' => 'title',       'label' => $lang->bug->title,         
 $items[] = array('name' => 'assignedTo',  'label' => $lang->bug->assignedTo,    'control' => 'picker', 'width' => '160px', 'items' => $users);
 $items[] = array('name' => 'openedBuild', 'label' => $lang->bug->openedBuild,   'control' => 'picker', 'multiple' => true, 'width' => '200px', 'items' => $builds);
 $items[] = array('name' => 'comment',     'label' => $lang->bug->legendComment, 'control' => 'input',  'width' => '1/3');
+$items[] = array('name' => 'status',      'label' => $lang->bug->status,        'control' => 'hidden', 'hidden' => true);
 
 foreach($bugs as $bug)
 {
@@ -33,13 +34,6 @@ formBatchPanel
     (
         set::name('id'),
         set::label($lang->idAB),
-        set::control('hidden'),
-        set::hidden(true)
-    ),
-    formBatchItem
-    (
-        set::name('status'),
-        set::label($lang->bug->status),
         set::control('hidden'),
         set::hidden(true)
     )
