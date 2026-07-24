@@ -19,7 +19,7 @@ window.addParam = function()
             this.value = this.value.replace(/[^a-zA-Z0-9_]/g, '');
         });
     var valInput   = $('<input>').attr({type: 'text', name: 'paramValue[]', 'class': 'form-control', placeholder: paramValue});
-    var delBtn     = $('<button>').attr({type: 'button', title: deleteText}).addClass('btn ghost text-danger size-sm del-param')
+    var delBtn     = $('<button>').attr({type: 'button', title: deleteText}).addClass('btn ghost text-primary size-sm del-param')
         .append($('<i>').addClass('icon icon-trash'))
         .on('click', function() { window.deleteParam(this); });
     var row = $('<tr>').addClass('param-row').append(
