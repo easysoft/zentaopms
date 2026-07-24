@@ -750,7 +750,7 @@ class codescan extends control
         $this->view->repoList     = $this->loadModel('repo')->getRepoPairs();
         $solutionList = $this->codescanZen->getListByQuery('solution', 0, 0, 'enabled');
         $this->view->solutionList = array_filter($solutionList, function($solution) {
-            return $solution->name !== 'C#默认扫描方案';
+            return $solution->name !== $this->lang->codescan->cSharpDefaultSolution;
         });
         $this->display();
     }
@@ -818,7 +818,7 @@ class codescan extends control
         $this->view->conditions   = $oldConditions;
         $solutionList = $this->codescanZen->getListByQuery('solution');
         $this->view->solutionList = array_filter($solutionList, function($solution) {
-            return $solution->name !== 'C#默认扫描方案';
+            return $solution->name !== $this->lang->codescan->cSharpDefaultSolution;
         });
         $this->display();
     }
