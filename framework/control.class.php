@@ -640,7 +640,7 @@ class control extends baseControl
 
             foreach($fieldList as $key => $field)
             {
-                if($field->buildin || !$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
+                if(!$field->show || !isset($layouts[$field->field]) || (!empty($field->position) && $position != $field->position)) unset($fieldList[$key]);
 
                 if((is_numeric($field->default) || $field->default) && empty($field->defaultValue)) $field->defaultValue = $field->default;
                 if($object && empty($object->{$field->field}) && $field->defaultValue !== '') $object->{$field->field} = $field->defaultValue;

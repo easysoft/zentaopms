@@ -19,8 +19,9 @@ $(function()
 {
     $('#duplicateBugBox').closest('.form-row').addClass('hidden');
     $('[data-name=newBuildBox]').closest('.form-row').addClass('hidden');
-    $('#createBuild').on('change', function()
+    $('[name=createBuild]').on('change', function()
     {
+        $('[name=createBuild]').prop('checked', $(this).prop('checked'));
         $('[data-name=resolvedBuild]').closest('.form-row').toggleClass('hidden', $(this).prop('checked'));
         $('[data-name=newBuildBox]').closest('.form-row').toggleClass('hidden', !$(this).prop('checked'));
     })

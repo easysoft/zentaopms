@@ -21,7 +21,7 @@ $fields->field('resolvedBuild')
     ->width('1/3')
     ->control('inputGroup')
     ->itemBegin('resolvedBuild')->control('picker')->items(data('builds'))->itemEnd()
-    ->itemBegin('createBuild')->control(array('control' => 'checkbox', 'id' => 'createBuild', 'rootClass' => 'items-center absolute', 'rootStyle' => array('top' => '5px', 'right' => '-60px'), 'text' => $lang->bug->createBuild))->itemEnd();
+    ->itemBegin('createBuild')->control(array('control' => 'checkbox', 'rootClass' => 'items-center absolute', 'rootStyle' => array('top' => '5px', 'right' => '-60px'), 'text' => $lang->bug->createBuild))->itemEnd();
 
 $fields->field('newBuildBox')
     ->required(true)
@@ -34,7 +34,7 @@ $fields->field('newBuildBox')
     ->itemBegin('buildName')
     ->control(array('control' => 'formGroup', 'label' => $lang->bug->resolvedBuild, 'required' => true, 'style' => array('position' => 'absolute', 'right' => '-270px')))
     ->itemEnd()
-    ->itemBegin('createBuild')->control(array('control' => 'checkbox', 'id' => 'createBuild', 'rootClass' => 'items-center absolute', 'rootStyle' => array('top' => '5px', 'right' => '-330px'), 'text' => $lang->bug->createBuild, 'checked' => true))->itemEnd();
+    ->itemBegin('createBuild')->control(array('control' => 'checkbox', 'rootClass' => 'items-center absolute', 'rootStyle' => array('top' => '5px', 'right' => '-330px'), 'text' => $lang->bug->createBuild))->itemEnd();
 
 $fields->field('resolvedDate')->width('1/3')->control('datetimePicker')->value(helper::now());
 $fields->field('assignedTo')->width('1/3')->control('picker')->items(data('users'))->value(data('assignedTo'));

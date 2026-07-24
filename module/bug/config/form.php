@@ -134,10 +134,10 @@ $config->bug->form->activate['comment']        = array('required' => false, 'typ
 
 $config->bug->form->batchActivate = array();
 $config->bug->form->batchActivate['id']             = array('required' => false, 'type' => 'int',    'base'    => true);
-$config->bug->form->batchActivate['status']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchActivate['assignedTo']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchActivate['openedBuild']    = array('required' => true,  'type' => 'array',  'default' => '', 'filter' => 'join');
-$config->bug->form->batchActivate['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
+$config->bug->form->batchActivate['comment']        = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor', 'label' => $lang->comment);
+$config->bug->form->batchActivate['status']         = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchActivate['activatedDate']  = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->batchActivate['assignedDate']   = array('required' => false, 'type' => 'date',   'default' => helper::now());
 $config->bug->form->batchActivate['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
@@ -196,7 +196,7 @@ $config->bug->form->batchEdit['browser']        = array('required' => false, 'ty
 $config->bug->form->batchEdit['keywords']       = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['resolvedBy']     = array('required' => false, 'type' => 'string', 'default' => '');
 $config->bug->form->batchEdit['resolution']     = array('required' => false, 'type' => 'string', 'default' => '');
-$config->bug->form->batchEdit['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->bug->form->batchEdit['duplicateBug']   = array('required' => false, 'type' => 'int',    'default' => 0, 'hidden' => true);
 $config->bug->form->batchEdit['lastEditedBy']   = array('required' => false, 'type' => 'string', 'default' => isset($app->user->account) ? $app->user->account : '');
 $config->bug->form->batchEdit['lastEditedDate'] = array('required' => false, 'type' => 'date',   'default' => helper::now());
 
