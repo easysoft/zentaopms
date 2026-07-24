@@ -1163,6 +1163,7 @@ class pipelineModel extends model
             elseIF($engine == 'gitlab')
             {
                 $syncData->status       = strtolower(zget($execInfo, 'status', ''));
+                $syncData->status       = $syncData->status == 'failed' ? 'failure' : $syncData->status;
                 $syncData->finishedDate = empty($execInfo->finished_at) ? null : date('Y-m-d H:i:s', strtotime($execInfo->finished_at));
                 $syncData->duration     = zget($execInfo, 'duration', 0);
             }
