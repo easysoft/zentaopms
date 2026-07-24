@@ -1156,7 +1156,7 @@ class pipelineModel extends model
                 $syncData->finishedDate = empty($execInfo->timestamp) ? null : date('Y-m-d H:i:s', intval($execInfo->timestamp / 1000));
                 $syncData->duration     = zget($execInfo, 'estimatedDuration', 0);
             }
-            elseIF($engine == 'gitlab')
+            elseif($engine == 'gitlab')
             {
                 $syncData->status       = strtolower(zget($execInfo, 'status', ''));
                 $syncData->finishedDate = empty($execInfo->finished_at) ? null : date('Y-m-d H:i:s', strtotime($execInfo->finished_at));
