@@ -994,7 +994,7 @@ class repo extends control
         $productIds = explode(',', $repo->product);
         $products   = $this->loadModel('product')->getByIdList($productIds);
         $modules    = $this->repoZen->getLinkModules($products, 'story');
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);

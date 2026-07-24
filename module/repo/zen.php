@@ -689,7 +689,7 @@ class repoZen extends repo
         unset($this->lang->story->statusList['closed']);
         $storyStatusList = $this->lang->story->statusList;
 
-        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bysearch&queryID=myQueryID");
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array_keys($products));
@@ -737,7 +737,7 @@ class repoZen extends repo
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         $linkedStories = empty($linkedStories) ? array() : array_column($linkedStories, 'id');
         $allStories    = array();
-        if($browseType == 'bysearch')
+        if($browseType == 'bySearch')
         {
             foreach($products as $productID => $product)
             {

@@ -609,7 +609,7 @@ class space extends control
     public function ajaxTips(int $spaceID): void
     {
         $this->space->setMenu($spaceID);
-        $this->view->title   = $this->lang->space->create;
+        $this->view->title   = $this->lang->space->tips;
         $this->view->spaceID = $spaceID;
         $this->display();
     }
