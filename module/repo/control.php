@@ -1207,9 +1207,8 @@ class repo extends control
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
-        /* 前端 diff.ui.js 把 revision 走 btoa(encodeURIComponent(...)) 加密;此处走已有的 decodeEditorRevision 复原。 */
-        $revision  = $this->decodeEditorRevision(str_replace('*', '-', $oldRevision));
-        $nRevision = $this->decodeEditorRevision(str_replace('*', '-', $newRevision));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
@@ -1699,6 +1698,7 @@ class repo extends control
         $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->sourceRevision);
 
         $this->scm->setEngine($repo);
+
         $blames = $this->scm->blame($entry, $revision);
         if(!$blames) $blames =$this->scm->blame($entry, $sourceRevision);
 
