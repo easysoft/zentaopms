@@ -2897,7 +2897,7 @@ class aiModel extends model
 
         if($targetForm == 'doc.create')
         {
-            $objectType = '';
+            $objectType = 'mine';
             $params     = '';
             $objectData = $promptObject;
             if(empty($objectData)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
@@ -2918,6 +2918,16 @@ class aiModel extends model
                 $objectType  = 'project';
                 $executionID = $prompt->module == 'execution' ? $objectData->id : $objectData->execution;
                 $params      = helper::safe64Encode("&objectID=$objectData->project&executionID=$executionID");
+            }
+            if(in_array($prompt->module, array('feedback', 'ticket')) && !empty($objectData->product))
+            {
+                $objectType = 'product';
+                $params     = helper::safe64Encode("objectID={$objectData->product}");
+            }
+            if(in_array($prompt->module, array('issue', 'risk')) && !empty($objectData->project))
+            {
+                $objectType = 'project';
+                $params     = helper::safe64Encode("objectID={$objectData->project}");
             }
             if($prompt->module == 'doc') $objectType = 'mine';
 
