@@ -3597,12 +3597,16 @@ class repoModel extends model
             $userAccount[] = $user->account;
         }
 
+        $oldName = array();
+
         foreach($oldRepos as $oldRepo)
         {
             $oldRepo->groupAccounts = $groupAccountMap;
             $aclInfo = $this->parseRepoAcl($oldRepo);
             $admin   = zget($admins, 0, 'system');
             $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], $admin);
+
+            if(in_array($repo->name,$oldName)) $repo->name = $repo->name . $repo->id;
 
             if($repo->scmType === 'svn')
             {
@@ -3635,6 +3639,8 @@ class repoModel extends model
 
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
+
+            $oldName[] = $repo->name;
 
             if($aclInfo['acl'] === 'private')
             {
