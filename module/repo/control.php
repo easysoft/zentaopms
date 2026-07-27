@@ -3047,7 +3047,7 @@ class repo extends control
             $this->loadModel('action')->create('repo', $repoID, 'imported');
         }
 
-        $this->view->title   = $this->lang->repo->showImportResult;
+        $this->view->title   = $this->lang->repo->tips;
         $this->view->message = $message;
         $this->view->repoID  = $repoID;
         $this->view->spaceID = $spaceID;
