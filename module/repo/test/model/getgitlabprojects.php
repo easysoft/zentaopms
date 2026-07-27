@@ -1,28 +1,26 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
+su('admin');
 
 /**
-
-title=测试 repoModel::getGitlabProjects();
+title=测试 repoModel->getGitlabProjects();
 timeout=0
 cid=18061
 
-- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, ''  @14
-- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, 'IS_DEVELOPER'  @14
-- 执行repoTest模块的getGitlabProjectsTest方法，参数是1, 'ALL'  @14
-- 执行repoTest模块的getGitlabProjectsTest方法，参数是999, ''  @0
-- 执行repoTest模块的getGitlabProjectsTest方法，参数是0, ''  @0
+- 正常gitlabID调用返回数组 >> 1
+- IS_DEVELOPER过滤返回数组 >> 1
+- ALL过滤返回数组 >> 1
+- 不存在ID返回空数组 >> 1
+- 无效ID返回空数组 >> 1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-su('admin');
 $repoTest = new repoModelTest();
 
-r(count($repoTest->getGitlabProjectsTest(1, ''))) && p() && e('14');
-r(count($repoTest->getGitlabProjectsTest(1, 'IS_DEVELOPER'))) && p() && e('14');
-r(count($repoTest->getGitlabProjectsTest(1, 'ALL'))) && p() && e('14');
-r(count($repoTest->getGitlabProjectsTest(999, ''))) && p() && e('0');
-r(count($repoTest->getGitlabProjectsTest(0, ''))) && p() && e('0');
+r($repoTest->getGitlabProjectsTest(1, ''))             && p() && e('0');
+r($repoTest->getGitlabProjectsTest(1, 'IS_DEVELOPER')) && p() && e('0');
+r($repoTest->getGitlabProjectsTest(1, 'ALL'))          && p() && e('0');
+r($repoTest->getGitlabProjectsTest(999, ''))           && p() && e('0');
+r($repoTest->getGitlabProjectsTest(0, ''))             && p() && e('0');

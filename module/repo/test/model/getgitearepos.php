@@ -2,25 +2,44 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+su('admin');
+
+global $dbh, $tester;
 
 /**
-
-title=测试 repoModel->getgitearepos();
+title=测试 repoModel->getGiteaRepos();
 timeout=0
 cid=0
 
-- 方法存在性检查 >> 1
-- repoModelTest 类存在 >> 1
-- repoModel 类存在 >> 1
-- 再次方法存在检查 >> 1
-- 类存在性确认 >> 1
+- 正常apiRoot返回项目列表 >> 1
+- 返回结果包含data字段 >> 1
+- apiRoot为空字符串返回空数组 >> 1
+- 调用方法返回值为array类型 >> 1
+- 返回的项目数量 >= 2 >> 1
 
 */
 
-su('admin');
 $repoTest = new repoModelTest();
-r(method_exists($repoTest, 'getgiteareposTest')) && p() && e('1');
-r(class_exists('repoModelTest')) && p() && e('1');
-r(class_exists('repoModel')) && p() && e('1');
-r(method_exists($repoTest, 'getgiteareposTest')) && p() && e('1');
-r(class_exists('repoModelTest')) && p() && e('1');
+
+$mockResponse = new stdclass();
+$mockResponse->ok   = true;
+$mockResponse->data = array();
+for($i = 1; $i <= 2; $i++)
+{
+    $project = new stdclass();
+    $project->id        = $i + 200;
+    $project->name      = "Gitea Project $i";
+    $project->full_name = "gitea-user/gitea-project-$i";
+    $mockResponse->data[] = $project;
+}
+
+$httpClient = $repoTest->resetHttpClient();
+$httpClient->setResponse('/repos/search', json_encode($mockResponse));
+
+r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:id,0:full_name,1:id') && e('201,gitea-user/gitea-project-1,202');
+r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('1:full_name') && e('gitea-user/gitea-project-2');
+r($repoTest->getGiteaReposTest('')) && p() && e('0');
+r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:name') && e('Gitea Project 1');
+r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:id,1:id') && e('201,202');
+
+$repoTest->restoreHttpClient();
