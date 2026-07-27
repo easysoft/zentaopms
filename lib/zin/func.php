@@ -279,3 +279,8 @@ if(is_dir(__DIR__ . DS . 'wg' . DS . 'teammatemenu'))
 {
     function teammateMenu(): teammateMenu {return createWg('teammateMenu', func_get_args());}
 }
+
+if(is_dir(__DIR__ . DS . 'wg' . DS . 'aiprocedureapp'))
+{
+    function aiProcedureApp(): aiProcedureApp {return createWg('aiProcedureApp', func_get_args());}
+}
