@@ -4297,7 +4297,7 @@ class upgradeModel extends model
      */
     public function mergeRepo(array $repoes, string $products): void
     {
-        foreach($repoes as $repoID) $this->dao->update($this->config->db->prefix . 'repo';)->set('product')->eq($products)->where('id')->eq($repoID)->exec();
+        foreach($repoes as $repoID) $this->dao->update($this->config->db->prefix . 'repo')->set('product')->eq($products)->where('id')->eq($repoID)->exec();
     }
 
     /**
