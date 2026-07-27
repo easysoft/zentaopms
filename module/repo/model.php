@@ -3556,13 +3556,16 @@ class repoModel extends model
             ->fetchAll('', false);
         if(empty($oldRepos)) return true;
 
-        $products = $this->dao->select('id, PO, QD, RD, whitelist')
+        $products = $this->dao->select('id, PO, QD, RD, whitelist, acl')
             ->from(TABLE_PRODUCT)
             ->fetchAll('id');
 
         $productMembersMap = array();
+        $productAcl        = array();
         foreach($products as $productID => $product)
         {
+            $productAcl[$productID] = $product->acl;
+
             $productMembers = array();
             foreach(array('PO', 'QD', 'RD', 'whitelist') as $field)
             {
@@ -3582,6 +3585,16 @@ class repoModel extends model
             if(empty($groupUser->groupID)) continue;
             if(!isset($groupAccountMap[$groupUser->groupID])) $groupAccountMap[$groupUser->groupID] = [];
             $groupAccountMap[$groupUser->groupID][] = $groupUser->account;
+        }
+
+        $users = $this->dao->select('account')
+            ->from(TABLE_USER)
+            ->fetchAll();
+
+        $userAccount = array();
+        foreach($users as $user)
+        {
+            $userAccount[] = $user->account;
         }
 
         foreach($oldRepos as $oldRepo)
@@ -3614,6 +3627,12 @@ class repoModel extends model
                 $repo->providerID = $this->dao->lastInsertID();
             }
             unset($repo->url);
+
+            if($aclInfo['acl'] === 'custom')
+            {
+                $repo->acl = 'private';
+            }
+
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
 
@@ -3623,9 +3642,21 @@ class repoModel extends model
                 $productIDs = array_filter(array_map('intval', explode(',', $oldRepo->product)));
                 foreach($productIDs as $productID)
                 {
+                    if($productAcl[$productID] === 'open')
+                    {
+                        $members = $userAccount;
+                        break;
+                    }
+
                     if(empty($productMembersMap[$productID])) continue;
                     $members = array_merge($members, $productMembersMap[$productID]);
                 }
+
+                if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
+            }
+            else if($aclInfo['acl'] === 'custom')
+            {
+                $members    = array();
                 if(!empty($aclInfo['members'])) $members = array_merge($members, $aclInfo['members']);
 
                 $members = array_filter(array_unique($members), 'strlen');
