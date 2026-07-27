@@ -2546,6 +2546,15 @@ class aiModel extends model
                 if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
                 if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
                 return $object;
+            case 'build':
+                if(!isset($sourceGroups['build'])) return $object;
+
+                $object->build = $this->loadModel('build')->getByID($objectId);
+                if(empty($object->build)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->build->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->build->bugs))));
+                return $object;
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
                 if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
@@ -2576,6 +2585,9 @@ class aiModel extends model
                 return $object;
             case 'issue':
                 if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
+                return $object;
+            case 'opportunity':
+                if(isset($sourceGroups['opportunity'])) $object->opportunity = $this->loadModel('opportunity')->getByID($objectId);
                 return $object;
             case 'doc':
                 if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);

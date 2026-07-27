@@ -602,6 +602,7 @@ $lang->ai->prompts->modules['requirement']   = $lang->URCommon;
 $lang->ai->prompts->modules['story']         = $lang->SRCommon;
 $lang->ai->prompts->modules['productplan']   = 'Plan';
 $lang->ai->prompts->modules['release']       = 'Release';
+$lang->ai->prompts->modules['build']         = 'Build';
 $lang->ai->prompts->modules['execution']     = 'Execution';
 $lang->ai->prompts->modules['task']          = 'Task';
 $lang->ai->prompts->modules['case']          = 'Test Case';
@@ -610,6 +611,7 @@ $lang->ai->prompts->modules['doc']           = 'Document';
 $lang->ai->prompts->modules['feedback']      = 'Feedback';
 $lang->ai->prompts->modules['ticket']        = 'Ticket';
 $lang->ai->prompts->modules['issue']         = 'Issue';
+$lang->ai->prompts->modules['opportunity']   = 'Opportunity';
 $lang->ai->prompts->modules['risk']          = 'Risk';
 
 $lang->ai->conversations = new stdclass();
