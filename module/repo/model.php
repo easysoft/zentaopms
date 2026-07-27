@@ -3556,13 +3556,16 @@ class repoModel extends model
             ->fetchAll('', false);
         if(empty($oldRepos)) return true;
 
-        $products = $this->dao->select('id, PO, QD, RD, whitelist')
+        $products = $this->dao->select('id, PO, QD, RD, whitelist, acl')
             ->from(TABLE_PRODUCT)
             ->fetchAll('id');
 
         $productMembersMap = array();
+        $productAcl        = array();
         foreach($products as $productID => $product)
         {
+            $productAcl[$productID] = $product->acl;
+
             $productMembers = array();
             foreach(array('PO', 'QD', 'RD', 'whitelist') as $field)
             {
@@ -3584,12 +3587,26 @@ class repoModel extends model
             $groupAccountMap[$groupUser->groupID][] = $groupUser->account;
         }
 
+        $users = $this->dao->select('account')
+            ->from(TABLE_USER)
+            ->fetchAll();
+
+        $userAccount = array();
+        foreach($users as $user)
+        {
+            $userAccount[] = $user->account;
+        }
+
+        $oldName = array();
+
         foreach($oldRepos as $oldRepo)
         {
             $oldRepo->groupAccounts = $groupAccountMap;
             $aclInfo = $this->parseRepoAcl($oldRepo);
             $admin   = zget($admins, 0, 'system');
             $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], $admin);
+
+            if(in_array($repo->name,$oldName)) $repo->name = $repo->name . $repo->id;
 
             if($repo->scmType === 'svn')
             {
@@ -3614,8 +3631,16 @@ class repoModel extends model
                 $repo->providerID = $this->dao->lastInsertID();
             }
             unset($repo->url);
+
+            if($aclInfo['acl'] === 'custom')
+            {
+                $repo->acl = 'private';
+            }
+
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
+
+            $oldName[] = $repo->name;
 
             if($aclInfo['acl'] === 'private')
             {
@@ -3623,9 +3648,21 @@ class repoModel extends model
                 $productIDs = array_filter(array_map('intval', explode(',', $oldRepo->product)));
                 foreach($productIDs as $productID)
                 {
+                    if($productAcl[$productID] === 'open')
+                    {
+                        $members = $userAccount;
+                        break;
+                    }
+
                     if(empty($productMembersMap[$productID])) continue;
                     $members = array_merge($members, $productMembersMap[$productID]);
                 }
+
+                if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
+            }
+            else if($aclInfo['acl'] === 'custom')
+            {
+                $members    = array();
                 if(!empty($aclInfo['members'])) $members = array_merge($members, $aclInfo['members']);
 
                 $members = array_filter(array_unique($members), 'strlen');
@@ -3714,10 +3751,12 @@ class repoModel extends model
             $connector->password = isset($oldRepo->password) ? $oldRepo->password : '';
         }
 
+        $this->loadModel('common');
+
         $repo->id               = $oldRepo->id;
         $repo->spaceID          = 1;
         $repo->product          = $oldRepo->product;
-        $repo->name             = $oldRepo->name;
+        $repo->name             = $this->common->convertChineseToPinyin($oldRepo->name);
         $repo->desc             = $oldRepo->desc;
         $repo->gitUID           = 'empty_gituid_'.$oldRepo->id;
         $repo->forkID           = 0;
@@ -3789,4 +3828,34 @@ class repoModel extends model
         return !dao::isError();
     }
 
+    /**
+     * 判断字符串是否包含中文。
+     * Check whether a string contains Chinese characters.
+     *
+     * @param  string $string
+     * @access public
+     * @return bool
+     */
+    public function hasChinese(string $string): bool
+    {
+        return preg_match('/[\x{4e00}-\x{9fff}]/u', $string) === 1;
+    }
+
+    /**
+     * 若字符串包含中文则转换为拼音并返回，否则返回原字符串。
+     * Convert Chinese in string to Pinyin when needed.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertChineseToPinyin(string $string): string
+    {
+        if(!$this->hasChinese($string)) return $string;
+
+        $pinyin = $this->app->loadClass('pinyin');
+
+        $converted = $pinyin->permalink($string);
+        return $converted;
+    }
 }

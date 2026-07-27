@@ -2928,4 +2928,32 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test hasChinese method.
+     *
+     * @param  string $string
+     * @access public
+     * @return bool
+     */
+    public function hasChineseTest(string $string): bool
+    {
+        $result = $this->instance->hasChinese($string);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test convertChineseToPinyin method.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertChineseToPinyinTest(string $string): string
+    {
+        $result = $this->instance->convertChineseToPinyin($string);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }
