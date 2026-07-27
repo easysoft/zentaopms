@@ -369,6 +369,8 @@ class ai extends control
                 $prompt->model           = $data->model;
                 $prompt->desc            = $data->desc;
 
+                if($data->module != $originalPrompt->module) $prompt->source = ''; // 处理对象变了清空输入字段。
+
                 $this->ai->updatePrompt($prompt, $originalPrompt);
                 $promptID = $prompt->id;
             }
