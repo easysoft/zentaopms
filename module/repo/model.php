@@ -3751,12 +3751,10 @@ class repoModel extends model
             $connector->password = isset($oldRepo->password) ? $oldRepo->password : '';
         }
 
-        $this->loadModel('common');
-
         $repo->id               = $oldRepo->id;
         $repo->spaceID          = 1;
         $repo->product          = $oldRepo->product;
-        $repo->name             = $this->common->convertChineseToPinyin($oldRepo->name);
+        $repo->name             = $this->convertChineseToPinyin($oldRepo->name);
         $repo->desc             = $oldRepo->desc;
         $repo->gitUID           = 'empty_gituid_'.$oldRepo->id;
         $repo->forkID           = 0;
