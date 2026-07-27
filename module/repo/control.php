@@ -1157,7 +1157,12 @@ class repo extends control
             $this->session->set('importRepo', json_encode($formData));
 
             $result = $this->repo->import($formData);
-            if(dao::isError()) $this->sendError(dao::getError());
+            if(dao::isError())
+            {
+                $error   = dao::getError();
+                $message = isset($error['apiMessage']) ? $error['apiMessage'] : $this->lang->repo->importProgress->importFailed;
+                $this->sendError($message);
+            }
             return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
         }
 
