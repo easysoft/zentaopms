@@ -3853,9 +3853,7 @@ class repoModel extends model
     {
         if(!$this->hasChinese($string)) return $string;
 
-        global $app;
-        static $pinyin;
-        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
+        $pinyin = $this->app->loadClass('pinyin');
 
         $converted = $pinyin->permalink($string);
         return $converted;
