@@ -3293,7 +3293,7 @@ class repoModel extends model
     {
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
-            ->where('status')->ne('importing')
+            ->andWhere('status')->ne('importing')
             ->fetchAll('id');
     }
 
@@ -3588,8 +3588,32 @@ class repoModel extends model
         {
             $oldRepo->groupAccounts = $groupAccountMap;
             $aclInfo = $this->parseRepoAcl($oldRepo);
-            $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], zget($admins, 0, 'system'));
+            $admin   = zget($admins, 0, 'system');
+            $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], $admin);
 
+            if($repo->scmType === 'svn')
+            {
+                $provider = new stdClass();
+
+                $provider->type        = 'Subversion';
+                $provider->name        = 'Subversion';
+                $provider->url         = $repo->url;
+                $provider->token       = '';
+                $provider->createdBy   = $admin;
+                $provider->createdDate = helper::now();
+                $provider->editedBy    = $admin;
+                $provider->editedDate  = helper::now();
+                $provider->deleted     = 0;
+
+                $this->dao->insert(TABLE_PROVIDER)->data($provider)
+                    ->batchCheck($this->config->provider->create->requiredFields, 'notempty')
+                    ->autoCheck()
+                    ->exec();
+                if(dao::isError()) return false;
+
+                $repo->providerID = $this->dao->lastInsertID();
+            }
+            unset($repo->url);
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
 
@@ -3669,7 +3693,8 @@ class repoModel extends model
         {
             $repo->scmType        = 'git';
             $path                 = isset($oldRepo->path) ? $oldRepo->path : '';
-            $connector->slug      = $this->extractPathSlug($path);
+            $route                = $this->extractPathSlug($path);
+            $connector->slug      = $route['path'];
             $connector->projectID = isset($oldRepo->serviceProject) ? $oldRepo->serviceProject : '';
         }
         elseif($scm === 'Gitea' || $scm === 'Gogs')
@@ -3682,7 +3707,9 @@ class repoModel extends model
         {
             $repo->scmType       = 'svn';
             $path                = isset($oldRepo->path) ? $oldRepo->path : '';
-            $connector->slug     = $this->extractPathSlug($path);
+            $route               = $this->extractPathSlug($path);
+            $connector->slug     = $route['path'];
+            $repo->url           = $route['url'];
             $connector->user     = isset($oldRepo->account) ? $oldRepo->account : '';
             $connector->password = isset($oldRepo->password) ? $oldRepo->password : '';
         }
@@ -3717,19 +3744,30 @@ class repoModel extends model
      *
      * @param  string $path
      * @access private
-     * @return string
+     * @return array
      */
-    private function extractPathSlug(string $path): string
+    private function extractPathSlug(string $path): array
     {
-        $path = trim($path);
-        if($path === '') return '';
+        $path  = trim($path);
+        if($path === '') return array('url'  => '','path' => '');
 
         $parsed = parse_url($path);
-        if(!empty($parsed['path']))
+
+        // 获取 url 路径
+        $url = '';
+        if (!empty($parsed['scheme']) && !empty($parsed['host']))
         {
-            return ltrim($parsed['path'], '/');
+            $url = $parsed['scheme'] . '://' . $parsed['host'];
         }
-        return ltrim($path, '/');
+
+        // 获取 path 路径，并去除最左侧斜杠
+        $rawPath = isset($parsed['path']) ? $parsed['path'] : '';
+        $routePath = ltrim($rawPath, '/');
+
+        return array(
+            'url'  => $url,
+            'path' => $routePath
+        );
     }
 
     /**
@@ -3750,5 +3788,4 @@ class repoModel extends model
         $this->dao->exec($sql);
         return !dao::isError();
     }
-
 }

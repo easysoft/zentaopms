@@ -405,10 +405,22 @@ class baseDAO
         /* Parse the cache time and value to variables. */
         list($cachedTime, $cachedSQL, $cachedValue) = $cache;
 
+        /* 外部服务（GitFox）会直接更新部分数据表，这些表不使用 SQL 查询结果缓存。*/
+        /* Some tables are updated directly by the external service GitFox, so don't use the SQL query result cache for them. */
+        $excludeTables = $this->config->cache->dao->excludeTables ?? array();
+        foreach($excludeTables as $key => $excludeTable) $excludeTables[$key] = trim($excludeTable, '`" ');
+
+        preg_match_all('/(?:\b(?:FROM|JOIN)\s+|,\s*)(?:[`"]?\w+[`"]?\.)?[`"]?(ops_\w+)[`"]?/i', $cachedSQL, $opsTables);
+
         /* 查找 sql 语句中包含的表名。*/
         /* Find the table names in the sql. */
-        preg_match_all("/({$this->config->db->prefix}\w+)[`\" ]/", $cachedSQL, $tables);
-        if(!isset($tables[1])) return self::CACHE_MISS;
+        preg_match_all("/(?:\b(?:FROM|JOIN)\s+|,\s*)(?:[`\"]?\w+[`\"]?\.)?[`\"]?({$this->config->db->prefix}\w+)[`\"]?/i", $cachedSQL, $tables);
+        if(empty($opsTables[1]) && empty($tables[1])) return self::CACHE_MISS;
+
+        foreach($opsTables[1] as $table)
+        {
+            if(in_array($table, $excludeTables, true)) return self::CACHE_MISS;
+        }
 
         /* 检查 sql 语句中包含的表的更新时间是否大于缓存的更新时间，如果大于则不使用缓存。*/
         /* Check if the update time of the tables in the sql is greater than the cache time, if greater, don't use the cache. */
@@ -1588,7 +1600,7 @@ class baseDAO
         /* 设置字段值。 */
         /* Set the field label and value. */
         global $lang, $config;
-        $module = ltrim(trim($this->table, '`'), $config->db->prefix);
+        $module = preg_replace("/^{$config->db->prefix}/", '', trim($this->table, '`'));
         $module = strrpos($module, '_') ? substr($module, strrpos($module, '_') + 1) : $module;
         $module = strtolower($module);
 

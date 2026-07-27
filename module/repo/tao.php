@@ -50,21 +50,21 @@ class repoTao extends repoModel
      */
     protected function processSearchQuery(int $queryID): string
     {
-            $queryName = 'repoQuery';
+        $queryName = 'repoQuery';
 
-            if($queryID)
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+
+            if($query)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
-
-                if($query)
-                {
-                    $this->session->set($queryName, $query->sql);
-                    $this->session->set('repoForm', $query->form);
-                }
+                $this->session->set($queryName, $query->sql);
+                $this->session->set('repoForm', $query->form);
             }
-            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+        if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
 
-            return  $this->session->$queryName;
+        return  $this->session->$queryName;
     }
 
     /**

@@ -163,4 +163,204 @@ class spaceModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         return $result;
     }
+
+    /**
+     * Test getMemberList method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getMemberListTest(): array
+    {
+        $members = $this->instance->getMemberList();
+
+        if(dao::isError()) return dao::getError();
+        return $members;
+    }
+
+    /**
+     * Test getByIdList method.
+     *
+     * @param  array $spaceIdList
+     * @param  bool  $showDeleted
+     * @access public
+     * @return array
+     */
+    public function getByIdListTest(array $spaceIdList = array(), bool $showDeleted = true): array
+    {
+        $spaces = $this->instance->getByIdList($spaceIdList, $showDeleted);
+
+        if(dao::isError()) return dao::getError();
+        return $spaces;
+    }
+
+    /**
+     * Test getSpaceUsers method.
+     *
+     * @param  int    $spaceID
+     * @param  string $role
+     * @access public
+     * @return array
+     */
+    public function getSpaceUsersTest(int $spaceID, string $role = ''): array
+    {
+        $users = $this->instance->getSpaceUsers($spaceID, $role);
+
+        if(dao::isError()) return dao::getError();
+        return $users;
+    }
+
+    /**
+     * Test getRepoUsersBySpace method.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return array
+     */
+    public function getRepoUsersBySpaceTest(int $spaceID = 0): array
+    {
+        $users = $this->instance->getRepoUsersBySpace($spaceID);
+
+        if(dao::isError()) return dao::getError();
+        return $users;
+    }
+
+    /**
+     * Test getGroupMembersBySpace method.
+     *
+     * @param  int  $spaceID
+     * @param  bool $allVision
+     * @access public
+     * @return array
+     */
+    public function getGroupMembersBySpaceTest(int $spaceID = 0, bool $allVision = false): array
+    {
+        $members = $this->instance->getGroupMembersBySpace($spaceID, $allVision);
+
+        if(dao::isError()) return dao::getError();
+        return $members;
+    }
+
+    /**
+     * Test getSpaceMembers method.
+     *
+     * @param  int  $spaceID
+     * @param  bool $allVision
+     * @access public
+     * @return array
+     */
+    public function getSpaceMembersTest(int $spaceID, bool $allVision = false): array
+    {
+        $members = $this->instance->getSpaceMembers($spaceID, $allVision);
+
+        if(dao::isError()) return dao::getError();
+        return $members;
+    }
+
+    /**
+     * Test manageMembers method.
+     *
+     * @param  int   $spaceID
+     * @param  array $members
+     * @access public
+     * @return bool
+     */
+    public function manageMembersTest(int $spaceID, array $members): bool
+    {
+        $result = $this->instance->manageMembers($spaceID, $members);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test removeMember method.
+     *
+     * @param  int    $spaceID
+     * @param  string $account
+     * @access public
+     * @return bool
+     */
+    public function removeMemberTest(int $spaceID, string $account): bool
+    {
+        $result = $this->instance->removeMember($spaceID, $account);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test restore method.
+     *
+     * @param  int $spaceID
+     * @param  int $actionID
+     * @access public
+     * @return bool
+     */
+    public function restoreTest(int $spaceID, int $actionID): bool|array
+    {
+        $result = $this->instance->restore($spaceID, $actionID);
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getProductsBySpace method.
+     *
+     * @param  int  $spaceID
+     * @param  bool $hasPairs
+     * @access public
+     * @return array
+     */
+    public function getProductsBySpaceTest(int $spaceID, bool $hasPairs = false): array
+    {
+        $products = $this->instance->getProductsBySpace($spaceID, $hasPairs);
+
+        if(dao::isError()) return dao::getError();
+        return $products;
+    }
+
+    /**
+     * Test setMenu method.
+     *
+     * @param  int $spaceID
+     * @access public
+     * @return void
+     */
+    public function setMenuTest(int $spaceID = 0)
+    {
+        $this->instance->setMenu($spaceID);
+
+        if(dao::isError()) return dao::getError();
+        return $this->instance->session->devopsSpace;
+    }
+
+    /**
+     * Test getPrivs method.
+     *
+     * @access public
+     * @return object
+     */
+    public function getPrivsTest(): object
+    {
+        $privs = $this->instance->getPrivs();
+
+        if(dao::isError()) return dao::getError();
+        return $privs;
+    }
+
+    /**
+     * Test migrateGroupPrivs method.
+     *
+     * @access public
+     * @return bool
+     */
+    public function migrateGroupPrivsTest(): bool
+    {
+        $result = $this->instance->migrateGroupPrivs();
+
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 }

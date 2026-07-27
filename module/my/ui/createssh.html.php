@@ -9,9 +9,10 @@ declare(strict_types=1);
  * @link        https://www.zentao.net
  */
 namespace zin;
+$width = common::checkNotCN() ? 'full' : '1/2';
 
 $fields = defineFieldList('my');
-$fields->field('name')->required(true)->width('1/2');
+$fields->field('name')->required(true)->placeholder($lang->my->nameFormat)->width($width);
 $fields->field('publicKey')->labelHintIcon('help')->labelHint($lang->my->sshKeyTip)->required(true)->control(array('control' => 'textarea', 'rows' => 5))->width('full');
 
 formGridPanel

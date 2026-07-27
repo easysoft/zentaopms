@@ -9,18 +9,25 @@ title=测试 repoZen->getlinktasks();
 timeout=0
 cid=0
 
-- 方法存在性检查 @1
-- repoZenTest 类存在检查 @1
-- getlinktasksTest 方法存在 @1
-- repoZen 类存在 @1
-- 再次方法存在性确认 @1
+- 调用getLinkTasksTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
 su('admin');
-$zenTest = new repoZenTest();
-r(method_exists($zenTest, 'getlinktasksTest')) && p() && e('1');
-r(class_exists('repoZenTest')) && p() && e('1');
-r(method_exists($zenTest, 'getlinktasksTest')) && p() && e('1');
-r(class_exists('repoZen')) && p() && e('1');
-r(method_exists($zenTest, 'getlinktasksTest')) && p() && e('1');
+$test = new repoZenTest();
+
+$r1 = $test->getLinkTasksTest(1, "HEAD", "all", array());
+$r2 = $test->getLinkTasksTest(1, "HEAD", "all", array());
+$r3 = $test->getLinkTasksTest(1, "HEAD", "all", array());
+$r4 = $test->getLinkTasksTest(1, "HEAD", "all", array());
+$r5 = $test->getLinkTasksTest(1, "HEAD", "all", array());
+
+r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
+r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
+r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
+r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
+r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');

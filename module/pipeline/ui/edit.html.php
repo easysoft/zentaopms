@@ -25,7 +25,7 @@ jsVar('branchList', $branchList);
 jsVar('defaultBranch', zget($pipeline, 'defaultBranch', ''));
 
 /* 传递给JS使用的lang字符串。 */
-jsVar('langParamName', $lang->pipeline->paramName);
+jsVar('langParamName', $lang->pipeline->paramNamePlaceholder);
 jsVar('langParamValue', $lang->pipeline->paramValue);
 jsVar('langDelete', $lang->pipeline->flowApp->labels['delete']);
 jsVar('addTriggerTitle', $lang->pipeline->addTrigger);
@@ -65,7 +65,7 @@ foreach($triggers as $trigger)
                 btn(
                     set::icon('trash'),
                     set::size('sm'),
-                    setClass('btn ghost text-danger del-trigger'),
+                    setClass('btn ghost text-primary del-trigger'),
                     set('data-trigger-id', $trigger->id),
                     set('data-field', 'event'),
                     set('title', $lang->pipeline->flowApp->labels['delete']),
@@ -88,7 +88,7 @@ foreach($triggers as $trigger)
                 btn(
                     set::icon('trash'),
                     set::size('sm'),
-                    setClass('btn ghost text-danger del-trigger'),
+                    setClass('btn ghost text-primary del-trigger'),
                     set('data-trigger-id', $trigger->id),
                     set('data-field', 'comment'),
                     set('title', $lang->pipeline->flowApp->labels['delete']),
@@ -135,7 +135,7 @@ foreach($triggers as $trigger)
                     btn(
                         set::icon('trash'),
                         set::size('sm'),
-                        setClass('btn ghost text-danger del-trigger'),
+                        setClass('btn ghost text-primary del-trigger'),
                         set('data-trigger-id', $trigger->id),
                         set('data-field', 'cron'),
                         set('title', $lang->pipeline->flowApp->labels['delete']),
@@ -190,14 +190,14 @@ if(!empty($customParam) && is_array($customParam))
     {
         $paramRows[] = h::tr(
             setClass('param-row'),
-            h::td(input(set::name('paramKey[]'), set::value($key), set::placeholder($lang->pipeline->paramName))),
+            h::td(input(set::name('paramKey[]'), set::value($key), set::placeholder($lang->pipeline->paramNamePlaceholder))),
             h::td(input(set::name('paramValue[]'), set::value($value), set::placeholder($lang->pipeline->paramValue))),
             h::td(
                 setClass('text-center'),
                 btn(
                     set::icon('trash'),
                     set::size('sm'),
-                    setClass('btn ghost text-danger del-param'),
+                    setClass('btn ghost text-primary del-param'),
                     set('title', $lang->pipeline->flowApp->labels['delete']),
                     on::click('deleteParam')
                 )

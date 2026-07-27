@@ -115,6 +115,7 @@ $lang->misc->feature->promptLearnMore   = 'https://www.zentao.pm/book/zentaopms/
 
 /* Release Date. */
 $lang->misc->releaseDate['22.5']        = '2026-07-23';
+$lang->misc->releaseDate['22.4']        = '2026-07-21';
 $lang->misc->releaseDate['22.3']        = '2026-06-08';
 $lang->misc->releaseDate['22.2']        = '2026-05-09';
 $lang->misc->releaseDate['22.1']        = '2026-04-13';

@@ -852,6 +852,7 @@ class actionTao extends actionModel
         {
             $extra = $action->action == 'deleted' ? $action->comment : $action->extra;
             $action->objectName = empty(explode('|', $extra)[1]) ? $action->extra : explode('|', $extra)[1];
+            $action->objectName = strip_tags($action->objectName);
         }
     }
 

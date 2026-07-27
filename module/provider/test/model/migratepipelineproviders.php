@@ -15,6 +15,7 @@ cid=0
 - 步骤4：Jenkins 类型的 token 使用 base64(account:token) 编码 @1
 - 步骤5：excludeTypes（gitfox/sonarqube）不被迁移 @0
 - 步骤6：无映射的 bitbucket 类型被静默跳过 @0
+- 步骤7：迁移后 ops_provider 的 id 与原始 pipeline id 一致 @1
 
 */
 
@@ -54,3 +55,6 @@ r($excludeCount) && p() && e('0'); // 步骤5：excludeTypes 不迁移
 
 $unknownCount = (int)$dao->select('COUNT(1) AS cnt')->from(TABLE_PROVIDER)->where('name')->eq('BitB-Unknown')->fetch('cnt');
 r($unknownCount) && p() && e('0'); // 步骤6：无映射类型跳过
+
+$gitlabProvider = $dao->select('id')->from(TABLE_PROVIDER)->where('name')->eq('GitLab-A')->fetch();
+r($gitlabProvider && (int)$gitlabProvider->id === 1 ? '1' : '0') && p() && e('1'); // 步骤7：迁移后保留旧id

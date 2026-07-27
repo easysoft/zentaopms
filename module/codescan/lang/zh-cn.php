@@ -56,6 +56,7 @@ $lang->codescan->general         = '通用';
 $lang->codescan->default         = '默认';
 $lang->codescan->resend          = '重试扫描任务';
 
+$lang->codescan->cSharpDefaultSolution     = 'C#默认扫描方案';
 $lang->codescan->resolvedByTop             = '问题解决排行榜TOP10';
 $lang->codescan->issueInjectionTop         = '问题注入数量排行榜TOP10';
 $lang->codescan->issueRanking              = '代码库总问题数排行榜TOP10';

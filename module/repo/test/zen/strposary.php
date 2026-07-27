@@ -9,18 +9,19 @@ title=测试 repoZen->strposary();
 timeout=0
 cid=0
 
-- 方法存在性检查 @1
-- repoZenTest 类存在检查 @1
-- strposaryTest 方法存在 @1
-- repoZen 类存在 @1
-- 再次方法存在性确认 @1
+- 正常匹配fatal @1
+- 不匹配 @0
+- 空数组 @0
+- 中文匹配 @1
+- 空字符串匹配 @1
 
 */
 
 su('admin');
-$zenTest = new repoZenTest();
-r(method_exists($zenTest, 'strposaryTest')) && p() && e('1');
-r(class_exists('repoZenTest')) && p() && e('1');
-r(method_exists($zenTest, 'strposaryTest')) && p() && e('1');
-r(class_exists('repoZen')) && p() && e('1');
-r(method_exists($zenTest, 'strposaryTest')) && p() && e('1');
+$test = new repoZenTest();
+
+r($test->strposAryTest('fatal error', array('fatal', 'error'))) && p() && e('1');
+r($test->strposAryTest('normal log', array('fatal', 'error'))) && p() && e('0');
+r($test->strposAryTest('any', array())) && p() && e('0');
+r($test->strposAryTest('包含中文', array('中文', 'english'))) && p() && e('1');
+r($test->strposAryTest('test', array('', 'none'))) && p() && e('1');

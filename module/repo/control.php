@@ -48,7 +48,7 @@ class repo extends control
     public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -111,7 +111,7 @@ class repo extends control
     public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
@@ -518,7 +518,7 @@ class repo extends control
     public function browse(int $repoID = 0, string $branchID = '', int $objectID = 0, string $path = '', string $revision = 'HEAD', int $refresh = 0, string $branchOrTag = 'branch', string $type = 'dir', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $hasDevOpsLink = !empty($this->config->devopsLink) && $this->config->devopsLink == 'repo-browse';
         if(!$repoID && !empty($this->config->devopsLink) && $hasDevOpsLink) $repoID = (int)$this->config->lastRepo;
@@ -994,7 +994,7 @@ class repo extends control
         $productIds = explode(',', $repo->product);
         $products   = $this->loadModel('product')->getByIdList($productIds);
         $modules    = $this->repoZen->getLinkModules($products, 'story');
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1210,9 +1210,8 @@ class repo extends control
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
-        /* 前端 diff.ui.js 把 revision 走 btoa(encodeURIComponent(...)) 加密;此处走已有的 decodeEditorRevision 复原。 */
-        $revision  = $this->decodeEditorRevision(str_replace('*', '-', $oldRevision));
-        $nRevision = $this->decodeEditorRevision(str_replace('*', '-', $newRevision));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
@@ -1452,6 +1451,7 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+        if($repo->scmType == 'git' && $revision > 1) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
@@ -1701,6 +1701,7 @@ class repo extends control
         $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->sourceRevision);
 
         $this->scm->setEngine($repo);
+
         $blames = $this->scm->blame($entry, $revision);
         if(!$blames) $blames =$this->scm->blame($entry, $sourceRevision);
 

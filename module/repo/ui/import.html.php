@@ -61,7 +61,7 @@ $fields->field('members')->width('1/2')
     ->required(true)
     ->multiple(true)
     ->items($users)
-    ->hidden($acl == 'open')
+    ->hidden(true)
     ->value(!empty($importRepo) ? zget($importRepo, 'members') : '');
 
 $fields->autoLoad('origin', 'provider,organize,repo,account,password,repoPath,mirror');
@@ -73,6 +73,7 @@ formGridPanel
 (
     setID('createForm'),
     on::change('[name=repo]', 'loadName'),
+    on::change('[name=acl]')->call('setMembers'),
     set::modeSwitcher(false),
     set::title($title),
     set::labelWidth($app->clientLang == 'zh-cn' ? '6em' : '10em'),

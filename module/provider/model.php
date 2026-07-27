@@ -186,7 +186,7 @@ class providerModel extends model
         );
 
         $excludeTypes = array('gitfox', 'sonarqube');
-        $pipelines = $this->dao->select('type, name, url, account, password, token, createdBy, createdDate, editedBy, editedDate, deleted')
+        $pipelines = $this->dao->select('id, type, name, url, account, password, token, createdBy, createdDate, editedBy, editedDate, deleted')
             ->from('`' . $this->config->db->prefix . 'pipeline`')
             ->where('deleted')->eq('0')
             ->fetchAll();
@@ -199,6 +199,7 @@ class providerModel extends model
             if(!isset($typeMap[$typeKey])) continue;
 
             $provider       = new stdclass();
+            $provider->id   = (int)$pipeline->id;
             $provider->type = $typeMap[$typeKey];
             $provider->name = (string)$pipeline->name;
             $provider->url  = (string)$pipeline->url;

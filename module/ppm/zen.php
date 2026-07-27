@@ -211,12 +211,13 @@ class ppmZen extends ppm
      * @access public
      * @return object
      */
-    public function getCheckResult(object $ppm, string $reviewResult, array $issues = array()): object
+    public function getCheckResult(object $ppm, string $reviewResult, array $issues = array(), string $mergeType = 'rebase'): object
     {
         $result = new stdClass();
-        $mergeCheck = $this->loadModel('gitfox')->apiGetMergeCheckMessage($ppm->repoID, $ppm->sourceBranch, $ppm->targetBranch);
+        $mergeCheck = $this->ppm->merge($ppm->id, $mergeType, true);
+        $result->mergeable     = zget($mergeCheck, 'mergeable', true);
         $result->conflictFiles = empty($mergeCheck) ? array() : zget($mergeCheck, 'conflictFiles', array());
-        $result->message       = empty($mergeCheck) ? '' : zget($mergeCheck, 'message', '');
+        $result->message       = empty($result->message) ? '' : $result->message;
 
         $rule          = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
         $ppmHandLeUser = empty($rule) ? array() : explode(',', zget($rule, 'ppmHandleUser', ''));
@@ -271,7 +272,7 @@ class ppmZen extends ppm
             }
         }
 
-        $result->canMerge = empty($result->conflictFiles) && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$result->message;
+        $result->canMerge = empty($result->conflictFiles) && ($reviewResult == 'approved' || $ppm->reviewStatus == 'approved') && !$result->message && $result->mergeable;
         return $result;
     }
 }

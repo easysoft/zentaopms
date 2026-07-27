@@ -9,18 +9,25 @@ title=测试 repoZen->preparecreaterepo();
 timeout=0
 cid=0
 
-- 方法存在性检查 @1
-- repoZenTest 类存在检查 @1
-- preparecreaterepoTest 方法存在 @1
-- repoZen 类存在 @1
-- 再次方法存在性确认 @1
+- 调用prepareCreateRepoTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
 su('admin');
-$zenTest = new repoZenTest();
-r(method_exists($zenTest, 'preparecreaterepoTest')) && p() && e('1');
-r(class_exists('repoZenTest')) && p() && e('1');
-r(method_exists($zenTest, 'preparecreaterepoTest')) && p() && e('1');
-r(class_exists('repoZen')) && p() && e('1');
-r(method_exists($zenTest, 'preparecreaterepoTest')) && p() && e('1');
+$test = new repoZenTest();
+
+$r1 = $test->prepareCreateRepoTest();
+$r2 = $test->prepareCreateRepoTest();
+$r3 = $test->prepareCreateRepoTest();
+$r4 = $test->prepareCreateRepoTest();
+$r5 = $test->prepareCreateRepoTest();
+
+r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
+r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
+r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
+r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
+r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');

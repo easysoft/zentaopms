@@ -8,8 +8,24 @@ $config->cache->namespace = '';          // 缓存命名空间。The namespace o
 $config->cache->lifetime  = 0;           // 缓存生存时间，默认永不过期。The lifetime of cache. Default is no expiration.
 
 $config->cache->dao = new stdClass();
-$config->cache->dao->enable   = true;    // 是否开启 DAO 缓存。Enable DAO cache or not.
-$config->cache->dao->lifetime = 604800;  // DAO 缓存生存时间，默认为 7 天。The lifetime of DAO cache. Default is 7 days.
+$config->cache->dao->enable        = true;    // 是否开启 DAO 缓存。Enable DAO cache or not.
+$config->cache->dao->lifetime      = 604800;  // DAO 缓存生存时间，默认为 7 天。The lifetime of DAO cache. Default is 7 days.
+$config->cache->dao->excludeTables = array(   // 不使用 SQL 查询结果缓存的表。Tables excluded from the SQL query result cache.
+    TABLE_PPM,
+    TABLE_REPO,
+    TABLE_DEVOPSREPOUSER,
+    TABLE_BRANCHTYPE,
+    TABLE_BRANCHRULESET,
+    TABLE_REVIEWFLOW,
+    TABLE_PIPELINE,
+    TABLE_PIPELINECONTENT,
+    TABLE_PIPELINEEXEC,
+    TABLE_PIPELINETRIGGER,
+    TABLE_ARTIFACT,
+    TABLE_PPMREVIEWERS,
+    TABLE_SPACE,
+    TABLE_DEVOPSSPACEUSER
+);
 
 $config->cache->client = new stdClass();
 $config->cache->client->enable = false; // 是否开启客户端缓存。Enable client cache or not.

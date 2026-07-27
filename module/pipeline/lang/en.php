@@ -13,7 +13,6 @@ $lang->pipeline->exec          = 'Execute Pipeline';
 $lang->pipeline->runPipeline   = 'Run pipeline';
 $lang->pipeline->view          = 'Pipeline Details';
 $lang->pipeline->delete        = 'Delete Pipeline';
-$lang->pipeline->confirmDelete = 'Do you want to delete this pipeline?';
 $lang->pipeline->dirChange     = 'Directory Changed';
 $lang->pipeline->buildTag      = 'Build Tag';
 $lang->pipeline->execSuccess   = 'Pipeline execution started';
@@ -27,6 +26,10 @@ $lang->pipeline->execution     = 'Execution History';
 $lang->pipeline->log           = 'Execution Log';
 $lang->pipeline->arrange       = 'Arrange Pipeline';
 $lang->pipeline->execView      = 'Execution Details';
+
+$lang->pipeline->confirmDelete      = 'Do you want to delete this pipeline?';
+$lang->pipeline->confirmExec        = 'Are you sure you want to execute this Jenkins pipeline?';
+$lang->pipeline->confirmExecPending = 'There is a job pending execution. Are you sure you want to continue?';
 
 $lang->pipeline->browseAction    = 'Pipeline List';
 $lang->pipeline->executionAction = 'Pipeline Execution History';
@@ -83,9 +86,10 @@ $lang->pipeline->varValue        = 'Var Value';
 $lang->pipeline->lastExecResult  = 'Last Exec Result';
 $lang->pipeline->level           = 'Level';
 
-$lang->pipeline->lblBasic  = 'Basic Info';
-$lang->pipeline->okBtn     = 'Ok';
-$lang->pipeline->execTitle = 'Specify Execution Parameters';
+$lang->pipeline->paramNamePlaceholder = 'only letters, numbers and underscores';
+$lang->pipeline->lblBasic             = 'Basic Info';
+$lang->pipeline->okBtn                = 'Ok';
+$lang->pipeline->execTitle            = 'Specify Execution Parameters';
 
 $lang->pipeline->auto           = 'Auto';
 $lang->pipeline->example        = 'e.g.';
@@ -184,6 +188,9 @@ $lang->pipeline->triggerTypeList['pullreq_branch_updated'] = 'Merge request bran
 $lang->pipeline->triggerTypeList['pullreq_closed']         = 'Merge request close';
 $lang->pipeline->triggerTypeList['pullreq_merged']         = 'Merge request merge';
 $lang->pipeline->triggerTypeList['cron']                   = 'Cron trigger';
+$lang->pipeline->triggerTypeList['push']            = 'Push';
+$lang->pipeline->triggerTypeList['tag_push']        = 'Tag Push';
+$lang->pipeline->triggerTypeList['merge_requests']  = 'Merge Request';
 
 $lang->pipeline->notice = new stdclass();
 $lang->pipeline->notice->saveFailed = "Save Failed, Please Retry.";
