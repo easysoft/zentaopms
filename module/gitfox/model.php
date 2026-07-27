@@ -43,17 +43,17 @@ class gitfoxModel extends model
      * Get gitfox server info.
      *
      * @access public
-     * @return object|bool
+     * @return object
      */
-    public function getServer(): object|bool
+    public function getServer(): object
     {
         $server = $this->dao->select('*')->from(TABLE_ENTRY)->where('code')->eq('gitfox')->fetch();
-        if(empty($server)) return false;
 
-        $server->url   = $this->config->devops->gitfoxURL;
-        if($this->config->devops->gitfoxPort) $server->url .= ':' . $this->config->devops->gitfoxPort;
-        $server->token = md5('zentao' . $this->app->user->account . $server->key);
-        return $server;
+        $gitfox = new stdclass;
+        $gitfox->url   = $this->config->devops->gitfoxURL;
+        if($this->config->devops->gitfoxPort) $gitfox->url .= ':' . $this->config->devops->gitfoxPort;
+        $gitfox->token = empty($server->key) ? '' : md5('zentao' . $this->app->user->account . $server->key);
+        return $gitfox;
     }
 
     /**
@@ -67,7 +67,6 @@ class gitfoxModel extends model
     public function getApiRoot(): string|object
     {
         $gitfox = $this->getServer();
-        if(!$gitfox) return '';
 
         $apiRoot = new stdclass;
         $apiRoot->url    = rtrim($gitfox->url, '/') . '/api/v2%s';
