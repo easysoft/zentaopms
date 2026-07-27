@@ -3828,4 +3828,36 @@ class repoModel extends model
         return !dao::isError();
     }
 
+    /**
+     * 判断字符串是否包含中文。
+     * Check whether a string contains Chinese characters.
+     *
+     * @param  string $string
+     * @access public
+     * @return bool
+     */
+    public function hasChinese(string $string): bool
+    {
+        return preg_match('/[\x{4e00}-\x{9fff}]/u', $string) === 1;
+    }
+
+    /**
+     * 若字符串包含中文则转换为拼音并返回，否则返回原字符串。
+     * Convert Chinese in string to Pinyin when needed.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertChineseToPinyin(string $string): string
+    {
+        if(!$this->hasChinese($string)) return $string;
+
+        global $app;
+        static $pinyin;
+        if(empty($pinyin)) $pinyin = $app->loadClass('pinyin');
+
+        $converted = $pinyin->permalink($string);
+        return $converted;
+    }
 }
