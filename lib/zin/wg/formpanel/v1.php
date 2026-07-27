@@ -380,11 +380,22 @@ class formPanel extends panel
                 );
             }
         }
+
         foreach($buildinItems as $key => $field)
         {
             if(!empty($items[$key])) continue;
-            $items[$key] = $field;
+            if(empty($preKey))
+            {
+                $items = array_merge(array($key => $field), $items);
+            }
+            else
+            {
+                $index = array_search($preKey, array_keys($items)) + 1;
+                $items = array_merge(array_slice($items, 0, $index, true), array($key => $field), array_slice($items, $index, null, true));
+            }
+            $preKey = $key;
         }
+
         return array_values($items);
     }
 
