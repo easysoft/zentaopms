@@ -4,7 +4,6 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
-
 title=测试 repoModel->update();
 timeout=0
 cid=18109
@@ -25,13 +24,20 @@ cid=18109
  - 第0条的field属性 @serviceProject
  - 第0条的old属性 @2
  - 第0条的new属性 @1
+- 更新版本库1名字为repo1_rename
+ - 第0条的field属性 @name
+ - 第0条的old属性 @repo1
+ - 第0条的new属性 @repo1_rename
+- 更新版本库1产品为3
+ - 第0条的field属性 @product
+ - 第0条的old属性 @2
+ - 第0条的new属性 @3
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int NOT NULL DEFAULT 0,
@@ -50,35 +56,35 @@ CREATE TABLE `ops_repo` (
   `acl` varchar(30) NOT NULL DEFAULT 'private',
   `status` varchar(30) NOT NULL DEFAULT 'active',
   `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 
-$tester->dao->insert(TABLE_REPO)->data((object)array(
-    'id'             => 1,
-    'space'          => 1,
-    'spaceID'        => 1,
-    'product'        => '1',
-    'name'           => 'testHtml',
-    'path'           => 'http://repo.local/testhtml',
-    'SCM'            => 'Gitlab',
-    'serviceHost'    => '1',
-    'serviceProject' => '2',
-    'projects'       => '',
-    'gitUID'         => 'uid1',
-    'acl'            => 'private',
-    'status'         => 'active',
-    'deleted'        => 0,
-))->exec();
-$tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => 1, 'account' => 'admin'))->exec();
+zenData('ops_repouser')->gen(0);
+
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1');
+$repoTable->space->range('1');
+$repoTable->spaceID->range('1');
+$repoTable->product->range('1');
+$repoTable->name->range('testHtml');
+$repoTable->path->range('http://repo.local/testhtml');
+$repoTable->SCM->range('Gitlab');
+$repoTable->serviceHost->range('1');
+$repoTable->serviceProject->range('2');
+$repoTable->projects->range('');
+$repoTable->gitUID->range('uid1');
+$repoTable->acl->range('private');
+$repoTable->status->range('active');
+$repoTable->deleted->range('0');
+$repoTable->gen(1);
+
+$repoUserTable = zenData('ops_repouser');
+$repoUserTable->repo->range('1');
+$repoUserTable->account->range('admin');
+$repoUserTable->gen(1);
 
 su('admin');
 
@@ -88,10 +94,13 @@ $data1 = (object)array('space' => 1, 'product' => '1', 'SCM' => 'Gitlab', 'name'
 $data2 = (object)array('space' => 1, 'product' => '2', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '2', 'acl' => 'private', 'members' => 'admin');
 $data3 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '2', 'acl' => 'private', 'members' => 'admin');
 $data4 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1', 'serviceHost' => '1', 'serviceProject' => '1', 'acl' => 'private', 'members' => 'admin');
+$data5 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1_rename', 'serviceHost' => '1', 'serviceProject' => '1', 'acl' => 'private', 'members' => 'admin');
+$data6 = (object)array('space' => 1, 'product' => '3', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1_rename', 'serviceHost' => '1', 'serviceProject' => '1', 'acl' => 'private', 'members' => 'admin');
 
 $repo = new repoModelTest();
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/testhtml', 'gitURL' => 'http://gitfox.local/space/testhtml.git'));
 r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1');
 r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');
 r($repo->updateTest(1, $data3, true)) && p('0:field,old,new') && e('projects,~~,3');
 r($repo->updateTest(1, $data4, true)) && p('0:field,old,new') && e('serviceProject,2,1');
+r($repo->updateTest(1, $data5, true)) && p('0:field,old,new') && e('name,repo1,repo1_rename');
+r($repo->updateTest(1, $data6, true)) && p('0:field,old,new') && e('product,2,3');

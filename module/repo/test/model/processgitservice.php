@@ -2,18 +2,29 @@
 <?php
 
 /**
-
 title=测试 repoModel::processGitService();
 timeout=0
 cid=18089
 
 - 步骤1：正常处理Gitlab版本库
- - 属性client @http://gitfox.local:3000
- - 属性codePath @http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml
-- 步骤2：正常处理Gitea版本库
- - 属性codePath @/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea
- - 属性name @unittest
-- 步骤3：处理另一个Gitlab版本库属性serviceProject @1
+- 步骤1：正常处理 Gitlab 版本库
+ - 属性client @http://localhost:3000
+ - 属性codePath @http://liyang.oop.cc:3000/git/test1/test0909.git
+- 步骤2：正常处理 GitFox 版本库
+ - 属性codePath @http://liyang.oop.cc:3000/git/test1/test120101.git
+ - 属性name @repo4
+- 步骤3：处理另一个 Gitlab 版本库
+ - 属性serviceProject @1
+ - 属性client @http://localhost:3000
+- 步骤4：带 codePath 参数处理版本库1
+ - 属性client @http://localhost:3000
+ - 属性apiPath @http://localhost:3000/api/v2/repos/1
+- 步骤5：空 serviceHost 时保留 GitFox 服务信息
+ - 属性serviceHost @0
+ - 属性client @http://localhost:3000
+- 步骤6：无效 path 会被远端仓库地址覆盖
+ - 属性path @http://liyang.oop.cc:3000/git/test1/test0909.git
+ - 属性codePath @http://liyang.oop.cc:3000/git/test1/test0909.git
 
 */
 
@@ -21,10 +32,9 @@ cid=18089
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -34,58 +44,68 @@ CREATE TABLE `ops_repo` (
   `SCM` varchar(30) NOT NULL DEFAULT '',
   `scmType` varchar(10) NOT NULL DEFAULT 'git',
   `serviceProject` varchar(255) NOT NULL DEFAULT '',
+  `serviceHost` varchar(50) NOT NULL DEFAULT '',
   `gitUID` char(42) NOT NULL DEFAULT '',
   `acl` varchar(30) NOT NULL DEFAULT 'private',
   `status` varchar(30) NOT NULL DEFAULT 'active',
   `deleted` tinyint NOT NULL DEFAULT 0,
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repouser')->gen(0);
+zenData('entry')->gen(0);
 
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
-    'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
+$entry = zenData('entry');
+$entry->id->range('1');
+$entry->name->range('GitFox');
+$entry->account->range('');
+$entry->code->range('gitfox');
+$entry->key->range('cd65d97989fcb1fdb0d82471c3238a3a');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->createdBy->range('admin');
+$entry->createdDate->range('2026-01-01 00:00:00');
+$entry->calledTime->range('0');
+$entry->editedBy->range('admin');
+$entry->editedDate->range('2026-01-01 00:00:00');
+$entry->deleted->range('0');
+$entry->gen(1);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml', 'path' => 'http://repo.local/testhtml', 'SCM' => 'Gitlab', 'scmType' => 'git', 'serviceProject' => '2', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'project1', 'path' => 'http://repo.local/project1', 'SCM' => 'Gitlab', 'scmType' => 'git', 'serviceProject' => '1', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'unittest', 'path' => '/tmp/unittest', 'SCM' => 'GitFox', 'scmType' => 'git', 'serviceProject' => 'gitea/unittest', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
-foreach(range(1, 3) as $repoID) $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1,2,4');
+$repoTable->spaceID->range('1');
+$repoTable->product->range('1');
+$repoTable->name->range('repo1,repo2,repo4');
+$repoTable->path->range('http://repo.local/repo1,http://repo.local/repo2,/tmp/repo4');
+$repoTable->SCM->range('Gitlab,Gitlab,GitFox');
+$repoTable->scmType->range('git');
+$repoTable->serviceProject->range('2,1,4');
+$repoTable->serviceHost->range('1');
+$repoTable->gitUID->range('uid1,uid2,uid4');
+$repoTable->acl->range('private');
+$repoTable->status->range('active');
+$repoTable->deleted->range('0');
+$repoTable->gen(3);
+
+$repoUserTable = zenData('ops_repouser');
+$repoUserTable->repo->range('1,2,4');
+$repoUserTable->account->range('admin');
+$repoUserTable->gen(3);
 
 // 3. 用户登录
 su('admin');
 
 // 4. 创建测试实例
 $repo = new repoModelTest();
-$repo->instance->config->devops->gitfoxURL  = 'http://gitfox.local';
+$repo->instance->config->devops->gitfoxURL  = 'http://localhost';
 $repo->instance->config->devops->gitfoxPort = 3000;
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/testhtml', 'gitURL' => 'http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml'));
-$repo->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/project1', 'gitURL' => 'http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/Monitoring'));
-$repo->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/unittest', 'gitURL' => '/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea'));
 
-// 5. 强制要求：必须包含至少7个测试步骤
-r($repo->processGitServiceTest(1)) && p('client,codePath') && e('http://gitfox.local:3000,http://gitlabdev.qc.oop.cc/gitlab-instance-76af86df/testhtml'); // 步骤1：正常处理Gitlab版本库
-r($repo->processGitServiceTest(3)) && p('codePath,name') && e('/var/www/html/gitlab/test2/zentaopms/www/data/repo/unittest_gitea,unittest'); // 步骤2：正常处理Gitea版本库
-r($repo->processGitServiceTest(2)) && p('serviceProject') && e('1'); // 步骤3：处理另一个Gitlab版本库
+// 5. 测试步骤
+r($repo->processGitServiceTest(1)) && p('client,codePath') && e('http://localhost:3000,http://liyang.oop.cc:3000/git/test1/test0909.git');
+r($repo->processGitServiceTest(4)) && p('codePath,name') && e('http://liyang.oop.cc:3000/git/test1/test120101.git,repo4');
+r($repo->processGitServiceTest(2)) && p('serviceProject,client') && e('1,http://localhost:3000');
+r($repo->processGitServiceTestWithCodePath(1)) && p('client,apiPath') && e('http://localhost:3000,http://localhost:3000/api/v2/repos/1');
+r($repo->processGitServiceTestWithEmptyHost(4)) && p('serviceHost,client') && e('0,http://localhost:3000');
+r($repo->processGitServiceTestWithInvalidPath(1)) && p('path,codePath') && e('http://liyang.oop.cc:3000/git/test1/test0909.git,http://liyang.oop.cc:3000/git/test1/test0909.git');

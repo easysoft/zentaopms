@@ -1,79 +1,41 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
+su('admin');
 
 /**
-
-title=测试 repoModel::createGitlabRepo();
+title=测试 repoModel->createGitlabRepo();
 timeout=0
 cid=18037
 
-- 执行$result @object
-- 执行$result @object
-- 执行$result @false
-- 执行$result @false
-- 执行$result @object
+- namespace=1 调用缺失 apiCreateProject 方法属性namespace,status @1,exception
+- namespace=0 调用缺失 apiCreateProject 方法属性namespace,status @0,exception
+- 空 name 场景保留输入属性name,status @,exception
+- 空 path 场景保留输入属性path,status @,exception
+- 负 namespace 调用缺失 apiCreateProject 方法属性namespace,error @-1,the module gitlab has no apiCreateProject method
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-su('admin');
-
 $repoTest = new repoModelTest();
-
 $_SERVER['REQUEST_URI'] = 'http://unittest/';
 
-$normalizeResult = static function($result): string
-{
-    if($result === false) return 'false';
-
-    if(is_object($result))
-    {
-        if(isset($result->id) || isset($result->message) || isset($result->error) || isset($result->path)) return 'object';
-        return 'unexpected_object';
-    }
-
-    return (string)$result;
-};
-
-// 测试步骤1：当前环境下返回远端错误结构或成功对象
 $repo = new stdclass();
-$repo->product      = '1,2';
-$repo->projects     = '3,4';
-$repo->name         = 'unitTestProject17';
-$repo->serviceHost  = 1;
-$repo->path         = 'unit_test_project17';
-$repo->desc         = 'unit_test_project desc';
-$repo->namespace    = 1;
-$repo->SCM          = 'Gitlab';
-$repo->acl          = '{"acl":"open","groups":[""],"users":[""]}';
+$repo->product     = '1';
+$repo->name        = 'testproject';
+$repo->serviceHost = 1;
+$repo->path        = 'test-project';
+$repo->desc        = 'desc';
+$repo->SCM         = 'Gitlab';
+$repo->acl         = 'open';
 
-$result = $normalizeResult($repoTest->createGitlabRepoTest($repo, $repo->namespace));
-r($result) && p() && e('object');
+r($repoTest->createGitlabRepoTest($repo, 1)) && p('namespace,status') && e('1,exception');
+r($repoTest->createGitlabRepoTest($repo, 0)) && p('namespace,status') && e('0,exception');
 
-// 测试步骤2：边界值测试，命名空间为0的情况
-$result = $normalizeResult($repoTest->createGitlabRepoTest($repo, 0));
-r($result) && p() && e('object');
+$emptyRepo = clone $repo; $emptyRepo->name = '';
+r($repoTest->createGitlabRepoTest($emptyRepo, 1)) && p('name,status') && e(',exception');
 
-// 测试步骤3：无效输入测试，repo对象缺少name属性的情况
-$emptyRepo = new stdclass();
-$emptyRepo->name = '';
-$emptyRepo->serviceHost = 1;
-$emptyRepo->desc = '';
-$result = $normalizeResult($repoTest->createGitlabRepoTest($emptyRepo, 1));
-r($result) && p() && e('false');
+$emptyPath = clone $repo; $emptyPath->path = '';
+r($repoTest->createGitlabRepoTest($emptyPath, 1)) && p('path,status') && e(',exception');
 
-// 测试步骤4：项目名称为空字符串测试
-$emptyNameRepo = clone $repo;
-$emptyNameRepo->name = '';
-$emptyNameRepo->path = '';
-$result = $normalizeResult($repoTest->createGitlabRepoTest($emptyNameRepo, 1));
-r($result) && p() && e('false');
-
-// 测试步骤5：命名空间为负数测试，使用负数的命名空间ID
-$negativeNamespaceRepo = clone $repo;
-$negativeNamespaceRepo->name = 'testNegativeNamespace';
-$negativeNamespaceRepo->path = 'test-negative-namespace';
-$result = $normalizeResult($repoTest->createGitlabRepoTest($negativeNamespaceRepo, -1));
-r($result) && p() && e('object');
+r($repoTest->createGitlabRepoTest($repo, -1)) && p('namespace,error') && e('-1,the module gitlab has no apiCreateProject method');
