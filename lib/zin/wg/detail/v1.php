@@ -131,7 +131,7 @@ class detail extends wg
         .detail-sections .history-panel-header > .listitem {padding: 0}
         .important-w-0 {width: 0!important;}
         .no-width {padding: 0!important; width: 0!important; overflow: hidden!important;}
-        .detail-toggle {margin: 0!important;}
+        .detail-toggle {margin: 0!important; z-index: 1}
         .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
         .article > .files-list > li.file{white-space:normal;}
         .ai-task-status .status-doing {color: #FAAE1A;}
