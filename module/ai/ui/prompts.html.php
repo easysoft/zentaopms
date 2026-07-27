@@ -64,8 +64,11 @@ foreach($userList as $user)
     $userListMap[$user->account] = $user;
 }
 
-unset($lang->ai->prompts->modules['']);
-$moduleList = $this->config->edition == 'open' ? array_intersect_key($lang->ai->prompts->modules, array_flip($promptModules)) : $lang->ai->prompts->modules;
+$promptProcessObjectList = $lang->ai->prompts->modules;
+if(method_exists($this->ai, 'getPromptProcessObjectList')) $promptProcessObjectList = $this->ai->getPromptProcessObjectList();
+unset($promptProcessObjectList['']);
+
+$moduleList = $this->config->edition == 'open' ? array_intersect_key($promptProcessObjectList, array_flip($promptModules)) : $promptProcessObjectList;
 $moduleTree = array();
 $index      = 1;
 $activeKey  = 0;
