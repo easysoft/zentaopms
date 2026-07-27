@@ -3419,6 +3419,7 @@ class upgradeModel extends model
     public function importRepoFromConfig()
     {
         $this->app->loadConfig('svn');
+        $repoTable = $this->config->db->prefix . 'repo';
         if(isset($this->config->svn->repos))
         {
             $scm = $this->app->loadClass('scm');
@@ -3427,7 +3428,7 @@ class upgradeModel extends model
                 $repoPath = $repo['path'];
                 if(empty($repoPath)) continue;
 
-                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Subversion')->fetch();
+                $existRepo = $this->dao->select('*')->from($repoTable)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Subversion')->fetch();
                 if($existRepo) continue;
 
                 $svnRepo = new stdclass();
@@ -3446,7 +3447,7 @@ class upgradeModel extends model
                 if($svnRepo->prefix) $svnRepo->prefix = '/' . $svnRepo->prefix;
 
                 $svnRepo->password = base64_encode($repo['password']);
-                $this->dao->insert(TABLE_REPO)->data($svnRepo)->exec();
+                $this->dao->insert($repoTable)->data($svnRepo)->exec();
             }
         }
 
@@ -3458,7 +3459,7 @@ class upgradeModel extends model
                 $repoPath = $repo['path'];
                 if(empty($repoPath)) continue;
 
-                $existRepo = $this->dao->select('*')->from(TABLE_REPO)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Git')->fetch();
+                $existRepo = $this->dao->select('*')->from($repoTable)->where('path')->eq($repoPath)->andWhere('SCM')->eq('Git')->fetch();
                 if($existRepo) continue;
 
                 $gitRepo = new stdclass();
@@ -3471,7 +3472,7 @@ class upgradeModel extends model
                 $gitRepo->password = '';
                 $gitRepo->encrypt  = 'base64';
                 $gitRepo->encoding = zget($repo, 'encoding', $this->config->git->encoding);
-                $this->dao->insert(TABLE_REPO)->data($gitRepo)->exec();
+                $this->dao->insert($repoTable)->data($gitRepo)->exec();
             }
         }
         return true;
@@ -4296,7 +4297,7 @@ class upgradeModel extends model
      */
     public function mergeRepo(array $repoes, string $products): void
     {
-        foreach($repoes as $repoID) $this->dao->update(TABLE_REPO)->set('product')->eq($products)->where('id')->eq($repoID)->exec();
+        foreach($repoes as $repoID) $this->dao->update($this->config->db->prefix . 'repo';)->set('product')->eq($products)->where('id')->eq($repoID)->exec();
     }
 
     /**
@@ -4655,7 +4656,10 @@ class upgradeModel extends model
      */
     public function processGitlabRepo()
     {
-        $repoList = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')->fetchAll();
+        $repoTable     = $this->config->db->prefix . 'repo';
+        $pipelineTable = $this->config->db->prefix . 'pipeline';
+
+        $repoList  = $this->dao->select('*')->from($repoTable)->where('SCM')->eq('Gitlab')->fetchAll();
         foreach($repoList as $repo)
         {
             if(is_numeric($repo->path)) continue;
@@ -4667,12 +4671,12 @@ class upgradeModel extends model
             $gitlab->url     = $repo->client;
             $gitlab->token   = $repo->encrypt == 'base64' ? base64_decode($repo->password) : $repo->password;
             $gitlab->private = md5(uniqid());
-            $this->dao->insert(TABLE_PIPELINE)->data($gitlab)->exec();
+            $this->dao->insert($pipelineTable)->data($gitlab)->exec();
 
             $gitlabID = $this->dao->lastInsertID();
-            $this->dao->update(TABLE_REPO)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
+            $this->dao->update($repoTable)->set('client')->eq($gitlabID)->set('path')->eq($repo->extra)->where('id')->eq($repo->id)->exec();
         }
-        $this->dao->update(TABLE_REPO)->set('prefix')->eq('')->where('SCM')->eq('Gitlab')->exec();
+        $this->dao->update($repoTable)->set('prefix')->eq('')->where('SCM')->eq('Gitlab')->exec();
         return true;
     }
 
