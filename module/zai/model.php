@@ -709,7 +709,8 @@ class zaiModel extends model
             if(!$project) $project = $this->dao->select('project')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch('project');
             $canView = strpos(',' . $this->app->user->view->projects . ',', ",$project,") !== false;
         }
-        elseif($objectType === 'execution' || $objectType === 'project') $canView = strpos(',' . $this->app->user->view->projects . ',', ",$objectID,") !== false;
+        elseif($objectType === 'project') $canView = strpos(',' . $this->app->user->view->projects . ',', ",$objectID,") !== false;
+        elseif($objectType === 'execution') $canView = strpos(',' . $this->app->user->view->sprints . ',', ",$objectID,") !== false;
         elseif($objectType === 'product') $canView = strpos(',' . $this->app->user->view->products . ',', ",$objectID,") !== false;
         elseif($objectType === 'build')
         {
