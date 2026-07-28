@@ -34,10 +34,11 @@ for($i = 1; $i <= 3; $i++)
 $httpClient = $repoTest->resetHttpClient();
 $httpClient->setResponse('/projects', json_encode($mockProjects));
 
-r($repoTest->getGitLabReposTest('https://gitlab.example.com/api/v4/projects?private_token=testtoken')) && p('0:id,0:name,1:name') && e('101,Test Project 1,Test Project 2');
-r($repoTest->getGitLabReposTest('https://gitlab.example.com/api/v4/projects?private_token=testtoken')) && p('0:path_with_namespace') && e('test-group/test-project-1');
-r($repoTest->getGitLabReposTest('https://gitlab.example.com/api/v4/projects?private_token=testtoken')) && p('2:id,2:path') && e('103,test-project-3');
-r($repoTest->getGitLabReposTest('')) && p() && e('0');
-r($repoTest->getGitLabReposTest('https://gitlab.example.com/api/v4/projects?private_token=testtoken')) && p('0:id,1:id,2:id') && e('101,102,103');
+$apiRoot = 'https://gitlab.example.com/api/v4%s?private_token=testtoken';
+r($repoTest->getGitLabReposTest($apiRoot)) && p('0:id')                  && e('101');
+r($repoTest->getGitLabReposTest($apiRoot)) && p('0:name')                && e('Test Project 1');
+r($repoTest->getGitLabReposTest($apiRoot)) && p('1:name')                && e('Test Project 2');
+r($repoTest->getGitLabReposTest($apiRoot)) && p('2:path')                && e('test-project-3');
+r($repoTest->getGitLabReposTest($apiRoot)) && p('0:path_with_namespace') && e('test-group/test-project-1');
 
 $repoTest->restoreHttpClient();

@@ -21,15 +21,12 @@ cid=18065
 
 zenData('ops_repohistory')->gen(0);
 
-$historyTable = zenData('ops_repohistory');
-$historyTable->id->range('1-3');
-$historyTable->repo->range('3');
-$historyTable->revision->range('2e0dd521b4a29930d5670a2c142a4400d7cffc1a,d30919bdb9b4cf8e2698f4a6a30e41910427c01c,0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb');
-$historyTable->commit->range('3,2,1');
-$historyTable->comment->range('commit3,commit2,commit1');
-$historyTable->committer->range('admin');
-$historyTable->time->range('2024-01-03 10:00:00,2024-01-02 10:00:00,2024-01-01 10:00:00');
-$historyTable->gen(3);
+$historyRows = array(
+    array('id' => 1, 'repo' => 3, 'revision' => '2e0dd521b4a29930d5670a2c142a4400d7cffc1a', 'commit' => 3, 'comment' => 'commit3', 'committer' => 'admin', 'time' => '2024-01-03 10:00:00'),
+    array('id' => 2, 'repo' => 3, 'revision' => 'd30919bdb9b4cf8e2698f4a6a30e41910427c01c', 'commit' => 2, 'comment' => 'commit2', 'committer' => 'admin', 'time' => '2024-01-02 10:00:00'),
+    array('id' => 3, 'repo' => 3, 'revision' => '0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb', 'commit' => 1, 'comment' => 'commit1', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'),
+);
+foreach($historyRows as $historyRow) $tester->dao->insert(TABLE_REPOHISTORY)->data((object)$historyRow)->exec();
 
 $repoModel = $tester->loadModel('repo');
 

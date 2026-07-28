@@ -60,6 +60,7 @@ foreach($repos as $repoData)
 }
 
 $repo       = new repoModelTest();
+$repo->seedGitFoxEntry();
 $httpClient = $repo->resetHttpClient();
 foreach($repos as $repoData)
 {
@@ -73,7 +74,7 @@ foreach($repos as $repoData)
 
     if($repoData['scmType'] != 'svn')
     {
-        $httpClient->setResponse($repoData['path'], json_encode((object)array(
+        $httpClient->setResponse("/api/v2/repos/{$repoID}/", json_encode((object)array(
             'data' => (object)array(
                 'gitURL'    => $repoData['path'],
                 'gitSSHURL' => "ssh://git@gitfox.local/space/repo{$repoID}.git",

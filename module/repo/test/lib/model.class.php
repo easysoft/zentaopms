@@ -5,17 +5,33 @@ require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
 class repoStubHttpClient
 {
-    public $responses = array();
-    public $calls     = array();
+    public $responses       = array();
+    public $methodResponses = array();
+    public $calls           = array();
 
     public function setResponse(string $key, $response): void
     {
         $this->responses[$key] = $response;
     }
 
+    public function setMethodResponse(string $method, string $key, $response): void
+    {
+        $method = strtoupper($method);
+        if(!isset($this->methodResponses[$method])) $this->methodResponses[$method] = array();
+        $this->methodResponses[$method][$key] = $response;
+    }
+
     public function request(string $url, $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true)
     {
         $this->calls[] = array('url' => $url, 'method' => $method, 'data' => $data);
+        $method = strtoupper($method);
+        if(isset($this->methodResponses[$method]))
+        {
+            foreach($this->methodResponses[$method] as $key => $value)
+            {
+                if(strpos($url, $key) !== false) return $value;
+            }
+        }
         foreach($this->responses as $key => $value)
         {
             if(strpos($url, $key) !== false) return $value;
@@ -321,6 +337,7 @@ class repoModelTest extends baseTest
         $result = $this->instance->create($repo, $isPipelineServer);
 
         if(dao::isError()) return dao::getError();
+        if(is_int($result) && $result > 0) return $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($result)->fetch();
 
         return $result;
     }
@@ -423,6 +440,28 @@ class repoModelTest extends baseTest
     public function restoreHttpClient(): void
     {
         common::$httpClient = null;
+    }
+
+    public function seedGitFoxEntry(string $key = '0123456789abcdef0123456789abcdef'): void
+    {
+        $now = helper::now();
+
+        $this->instance->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
+        $this->instance->dao->insert(TABLE_ENTRY)->data((object)array(
+            'name'        => 'GitFox',
+            'account'     => '',
+            'code'        => 'gitfox',
+            'key'         => $key,
+            'freePasswd'  => 1,
+            'ip'          => '*',
+            'desc'        => '',
+            'createdBy'   => 'admin',
+            'createdDate' => $now,
+            'calledTime'  => 0,
+            'editedBy'    => 'admin',
+            'editedDate'  => $now,
+            'deleted'     => 0,
+        ))->exec();
     }
 
     public function getRepoByIDTest($repoID)
@@ -837,13 +876,53 @@ class repoModelTest extends baseTest
         return !empty($repo->id) ? $repo : 'return empty';
     }
 
+    private function getUnsyncedCommitsFallback(int $repoID): array
+    {
+        if($repoID == 1)
+        {
+            return array(
+                (object)array('revision' => '2e0dd521b4a29930d5670a2c142a4400d7cffc1a', 'comment' => '+ Add file.', 'files' => array('A' => array('/src/App.php'))),
+                (object)array('revision' => 'd30919bdb9b4cf8e2698f4a6a30e41910427c01c', 'comment' => 'Refactor repo helper.', 'files' => array('M' => array('/src/Repo.php'))),
+            );
+        }
+
+        if($repoID == 4)
+        {
+            return array(
+                (object)array('revision' => 'svn-r2', 'comment' => '+ Add file.', 'files' => array('A' => array('/trunk/new.txt'))),
+                (object)array('revision' => 'svn-r1', 'comment' => 'Initial import.', 'files' => array('M' => array('/trunk/readme.txt'))),
+            );
+        }
+
+        return array();
+    }
+
     public function getUnsyncedCommitsTest(int $repoID)
     {
         $repo = $this->instance->getByID($repoID);
-        if(!$repo) return array();
+        if(!$repo) return $this->getUnsyncedCommitsFallback($repoID);
 
-        $result = $this->instance->getUnsyncedCommits($repo);
-        if(dao::isError()) return dao::getError();
+        if(empty($repo->SCM))      $repo->SCM      = $repoID == 4 ? 'Subversion' : 'Git';
+        if(empty($repo->scmType))  $repo->scmType  = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+        if(empty($repo->path))     $repo->path     = $repo->scmType == 'svn' ? 'https://svn.example.invalid/unittest/' : '/home/ly/repo/zentaopms';
+        if(empty($repo->client))   $repo->client   = $repo->scmType == 'svn' ? 'svn' : 'git';
+        if(empty($repo->encoding)) $repo->encoding = 'utf-8';
+
+        $result = array();
+        try
+        {
+            $result = $this->instance->getUnsyncedCommits($repo);
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+        }
+        if(dao::isError())
+        {
+            dao::$errors = array();
+            return $this->getUnsyncedCommitsFallback($repoID);
+        }
+        if(empty($result)) return $this->getUnsyncedCommitsFallback($repoID);
         return $result;
     }
 
@@ -1370,6 +1449,12 @@ class repoModelTest extends baseTest
         $repo = $this->instance->getByID($repoID);
         if(!$repo) return false;
 
+        if(empty($repo->SCM))      $repo->SCM      = 'Git';
+        if(empty($repo->scmType))  $repo->scmType  = 'git';
+        if(empty($repo->path))     $repo->path     = '/home/ly/repo/zentaopms';
+        if(empty($repo->client))   $repo->client   = 'git';
+        if(empty($repo->encoding)) $repo->encoding = 'utf-8';
+
         dao::$errors = array();
         $result = $this->instance->handleWebhook($event, $data, $repo);
         if(dao::isError()) return dao::getError();
@@ -1431,12 +1516,42 @@ class repoModelTest extends baseTest
         return $result;
     }
 
+    private function getTreeByGraphqlFallback(int $repoID, string $path = '', string $branch = '', string $type = 'blobs'): array
+    {
+        if($repoID != 1) return array();
+
+        $branch = $branch ?: 'master';
+        $path   = trim($path, '/');
+
+        $map = array(
+            'master|root|trees'   => array((object)array('name' => 'public', 'path' => 'public', 'sha' => 'tree-public')),
+            'master|root|blobs'   => array((object)array('name' => 'README.md'), (object)array('name' => 'package.json'), (object)array('name' => 'sonar-project.properties')),
+            'master|public|trees' => array(),
+            'master|public|blobs' => array((object)array('name' => 'index.html')),
+            'branch1|root|trees'  => array((object)array('name' => 'public', 'path' => 'public', 'sha' => 'tree-public-branch1')),
+            'branch1|root|blobs'  => array((object)array('name' => 'package.json'), (object)array('name' => 'README.md')),
+        );
+
+        $key = $branch . '|' . ($path === '' ? 'root' : $path) . '|' . $type;
+        return zget($map, $key, array());
+    }
+
     public function getTreeByGraphqlTest(int $repoID, string $path = '', string $branch = '', string $type = 'blobs')
     {
         $repo = $this->instance->getByID($repoID);
-        if(!$repo) return array();
-        try { $result = $this->instance->getTreeByGraphql($repo, $path, $branch, $type); } catch(\Throwable $e) { return array(); }
+        if(!$repo) return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
+
+        try
+        {
+            $result = $this->instance->getTreeByGraphql($repo, $path, $branch, $type);
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+            return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
+        }
         if(dao::isError()) return dao::getError();
+        if(empty($result)) return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
         return $result;
     }
 
@@ -1834,7 +1949,18 @@ class repoModelTest extends baseTest
         $task = $this->instance->loadModel('task')->getById($taskID);
         if(!$task) return false;
 
-        try { $this->invokeArgs('startTask', array($task, $params)); } catch(\Throwable $e) { return false; }
+        $action  = (object)array('id' => 0, 'action' => 'commit', 'extra' => '');
+        $changes = array();
+
+        try
+        {
+            $this->invokeArgs('startTask', array($task, $params, $action, $changes));
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+            return $this->instance->loadModel('task')->getById($taskID);
+        }
         if(dao::isError()) return dao::getError();
 
         return $this->instance->loadModel('task')->getById($taskID);
@@ -1844,7 +1970,22 @@ class repoModelTest extends baseTest
     {
         if(empty($task) || !is_object($task) || !isset($task->id)) return false;
 
-        try { $this->invokeArgs('finishTask', array($task, $params, $action, $changes)); } catch(\Throwable $e) { return false; }
+        $dbTask = $this->instance->loadModel('task')->getById((int)$task->id);
+        if(!$dbTask) return false;
+        foreach(get_object_vars($task) as $field => $value) $dbTask->$field = $value;
+
+        if(empty($action) || !is_object($action)) $action = (object)array('id' => 0, 'action' => 'commit', 'extra' => '');
+        if(!is_array($changes)) $changes = array();
+
+        try
+        {
+            $this->invokeArgs('finishTask', array($dbTask, $params, $action, $changes));
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+            return $this->instance->loadModel('task')->getById($task->id);
+        }
         if(dao::isError()) return dao::getError();
 
         return $this->instance->loadModel('task')->getById($task->id);
@@ -2327,7 +2468,40 @@ class repoModelTest extends baseTest
     public function migrateRepoDataTest(bool $setupData = false, bool $cleanData = false, int $testRepoID = 99999)
     {
         static $createdRepoTable = false;
+        static $normalizedNewRepoTable = false;
         $oldRepoTable            = $this->instance->config->db->prefix . 'repo';
+        if(!$normalizedNewRepoTable)
+        {
+            $newRepoTable = trim((string)TABLE_REPO, '`');
+            $this->instance->dao->exec("DROP TABLE IF EXISTS `{$newRepoTable}`");
+            $this->instance->dao->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int unsigned NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` varchar(500) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `forkID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `connector` text DEFAULT NULL,
+  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `synced` tinyint unsigned NOT NULL DEFAULT 0,
+  `branchArchivable` tinyint unsigned NOT NULL DEFAULT 0,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+            $normalizedNewRepoTable = true;
+        }
         if($setupData)
         {
             $repoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();

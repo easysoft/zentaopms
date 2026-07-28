@@ -19,17 +19,30 @@ cid=0
 
 */
 
-$repoTable = zenData('ops_repo');
-$repoTable->id->range('1-5');
-$repoTable->spaceID->range('1');
-$repoTable->product->range('1');
-$repoTable->name->range('repo1,repo2,repo3,repo4,repo5');
-$repoTable->scmType->range('git');
-$repoTable->gitUID->range('uid1,uid2,uid3,uid4,uid5');
-$repoTable->status->range('active{3},importing,active');
-$repoTable->deleted->range('0{3},0,1');
-$repoTable->acl->range('open');
-$repoTable->gen(5);
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+
+$repos = array(
+    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'repo1', 'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
+    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'repo2', 'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
+    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'repo3', 'scmType' => 'git', 'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
+    array('id' => 4, 'spaceID' => 1, 'product' => '1', 'name' => 'repo4', 'scmType' => 'git', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'importing', 'deleted' => 0),
+    array('id' => 5, 'spaceID' => 1, 'product' => '1', 'name' => 'repo5', 'scmType' => 'git', 'gitUID' => 'uid5', 'acl' => 'open', 'status' => 'active',    'deleted' => 1),
+);
+foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
 
 $repoTest = new repoModelTest();
 r($repoTest->getGitFoxReposTest()) && p('1')     && e('repo1');

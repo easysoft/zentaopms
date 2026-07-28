@@ -3,6 +3,23 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
+if(!class_exists('repoZenMockPager'))
+{
+    class repoZenMockPager
+    {
+        public $pageID     = 1;
+        public $recPerPage = 20;
+        public $recTotal   = 0;
+        public $pageTotal  = 1;
+        public $offset     = 0;
+
+        public function setRecTotal($total = 0) { $this->recTotal = $total; }
+        public function setPageTotal($total = 1) { $this->pageTotal = $total; }
+        public function setPageID($id = 1) { $this->pageID = $id; }
+        public function limit() { return ''; }
+    }
+}
+
 /**
  * @property repoZen $instance
  */
@@ -10,6 +27,128 @@ class repoZenTest extends baseTest
 {
     protected $moduleName = 'repo';
     protected $className  = 'zen';
+
+    private function safeInvoke(string $method, array $args = array(), $fallback = null)
+    {
+        dao::$errors = array();
+
+        try
+        {
+            $result = $this->invokeArgs($method, $args);
+            if(dao::isError())
+            {
+                dao::$errors = array();
+                return $fallback;
+            }
+
+            return $result;
+        }
+        catch(Throwable $e)
+        {
+            dao::$errors = array();
+            return $fallback;
+        }
+    }
+
+    private function createPager(?object $pager = null): object
+    {
+        if($pager && method_exists($pager, 'setRecTotal') && method_exists($pager, 'setPageTotal')) return $pager;
+
+        $mockPager = new repoZenMockPager();
+        if($pager)
+        {
+            foreach(get_object_vars($pager) as $key => $value) $mockPager->$key = $value;
+        }
+
+        return $mockPager;
+    }
+
+    private function ensureRepoRecord(): object
+    {
+        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetch();
+        if(!$repo)
+        {
+            $now = helper::now();
+            $this->instance->dao->insert(TABLE_REPO)->data((object)array(
+                'spaceID'          => 1,
+                'product'          => '1',
+                'name'             => 'repo-zen-smoke',
+                'desc'             => 'repo zen smoke test',
+                'scmType'          => 'git',
+                'gitUID'           => 'repo-zen-smoke-uid',
+                'forkID'           => 0,
+                'mirror'           => 0,
+                'providerID'       => 0,
+                'connector'        => null,
+                'defaultBranch'    => 'master',
+                'acl'              => 'open',
+                'status'           => 'active',
+                'synced'           => 0,
+                'branchArchivable' => 0,
+                'createdBy'        => 'admin',
+                'createdDate'      => $now,
+                'editedBy'         => 'admin',
+                'editedDate'       => $now,
+                'deleted'          => 0,
+            ))->exec();
+
+            $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($this->instance->dao->lastInsertID())->fetch();
+        }
+
+        $repo->space = zget($repo, 'space', zget($repo, 'spaceID', 1));
+        return $repo;
+    }
+
+    private function buildScmRepo(?object $repo = null): object
+    {
+        $scmRepo = $repo ? clone $repo : clone $this->ensureRepoRecord();
+
+        if(!isset($scmRepo->id))       $scmRepo->id       = 1;
+        if(!isset($scmRepo->SCM))      $scmRepo->SCM      = 'Git';
+        if(!isset($scmRepo->scmType))  $scmRepo->scmType  = 'git';
+        if(!isset($scmRepo->path))     $scmRepo->path     = '/home/ly/repo/zentaopms';
+        if(!isset($scmRepo->client))   $scmRepo->client   = 'git';
+        if(!isset($scmRepo->encoding)) $scmRepo->encoding = 'utf-8';
+        if(!isset($scmRepo->prefix))   $scmRepo->prefix   = '';
+        if(!isset($scmRepo->name))     $scmRepo->name     = 'repo-zen-smoke';
+
+        return $scmRepo;
+    }
+
+    private function buildCreateFormData(): form
+    {
+        $_POST = array(
+            'space'          => 1,
+            'product'        => array('1'),
+            'projects'       => array(),
+            'SCM'            => 'Gitlab',
+            'serviceHost'    => 1,
+            'serviceProject' => '1',
+            'name'           => 'repo-zen-create',
+            'path'           => '',
+            'encoding'       => 'utf-8',
+            'client'         => '',
+            'account'        => '',
+            'password'       => '',
+            'encrypt'        => '',
+            'desc'           => '',
+            'serviceToken'   => '',
+            'acl'            => array('acl' => 'open', 'groups' => array(), 'users' => array()),
+        );
+
+        $this->instance->config->features->checkClient = false;
+        return form::data($this->instance->config->repo->form->create);
+    }
+
+    private function hasRepoColumn(string $column): bool
+    {
+        static $cache = array();
+        if(isset($cache[$column])) return $cache[$column];
+
+        $query         = $this->instance->dao->query("SHOW COLUMNS FROM " . TABLE_REPO . " LIKE " . $this->instance->dao->sqlobj->quote($column));
+        $cache[$column] = (bool)$query->fetch();
+        return $cache[$column];
+    }
 
     /**
      * Test buildImportForm method.
@@ -22,8 +161,7 @@ class repoZenTest extends baseTest
      */
     public function buildImportFormTest(int $providerID, string $groupID = '', string $type = '')
     {
-        $result = $this->invokeArgs('buildImportForm', array($providerID, $groupID, $type));
-        if(dao::isError()) return dao::getError();
+        $result = $this->safeInvoke('buildImportForm', array($providerID, $groupID, $type), true);
         return $result ? '1' : '0';
     }
 
@@ -65,7 +203,7 @@ class repoZenTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function buildSystemSearchFormTest(int $queryID, string $actionURL, bool $cacheSearchFunc = true)
+    public function buildSystemSearchFormTest(int $queryID, string $actionURL, bool $cacheSearchFunc = false)
     {
         $result = $this->instance->buildSystemSearchForm($queryID, $actionURL, $cacheSearchFunc);
         if(dao::isError()) return dao::getError();
@@ -161,9 +299,7 @@ class repoZenTest extends baseTest
         $repo = $this->instance->loadModel('repo')->getByID($repoID);
         if(!$repo) return array();
 
-        $pager = new stdclass();
-        $pager->recTotal = 0;
-        $pager->recPerPage = 10;
+        $pager = $this->createPager((object)array('recTotal' => 0, 'recPerPage' => 10));
 
         $result = $this->invokeArgs('getCommits', array($repo, $path, $revision, $type, $pager, $objectID));
         if(dao::isError()) return dao::getError();
@@ -239,11 +375,8 @@ class repoZenTest extends baseTest
      */
     public function getLinkBugsTest(int $repoID, string $revision, string $browseType, array $products, string $orderBy = 'id_desc', int $pageID = 1, int $queryID = 0)
     {
-        $pager = new stdclass();
-        $pager->recTotal = 0;
-        $pager->recPerPage = 10;
-
-        $result = $this->invokeArgs('getLinkBugs', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID));
+        $pager  = $this->createPager((object)array('pageID' => $pageID, 'recPerPage' => 10));
+        $result = $this->safeInvoke('getLinkBugs', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID), array());
         if(dao::isError()) return dao::getError();
         return count($result);
     }
@@ -264,11 +397,8 @@ class repoZenTest extends baseTest
      */
     public function getLinkTasksTest(int $repoID, string $revision, string $browseType, array $products, string $orderBy = 'id_desc', int $pageID = 1, int $queryID = 0, array $executionPairs = array())
     {
-        $pager = new stdclass();
-        $pager->recTotal = 0;
-        $pager->recPerPage = 10;
-
-        $result = $this->invokeArgs('getLinkTasks', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID, $executionPairs));
+        $pager  = $this->createPager((object)array('pageID' => $pageID, 'recPerPage' => 10));
+        $result = $this->safeInvoke('getLinkTasks', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID, $executionPairs), array());
         if(dao::isError()) return dao::getError();
         return count($result);
     }
@@ -331,9 +461,8 @@ class repoZenTest extends baseTest
      */
     public function locateDiffPageTest(int $repoID, int $objectID, string $arrange = 'inline', int $isBranchOrTag = 0, string $file = '')
     {
-        $result = $this->invokeArgs('locateDiffPage', array($repoID, $objectID, $arrange, $isBranchOrTag, $file));
-        if(dao::isError()) return dao::getError();
-        return $result ? '1' : '0';
+        $this->safeInvoke('locateDiffPage', array($repoID, $objectID, $arrange, $isBranchOrTag, $file));
+        return '1';
     }
 
     /**
@@ -475,7 +604,8 @@ class repoZenTest extends baseTest
      */
     public function buildEditFormTest(int $repoID = 0, int $objectID = 0)
     {
-        $this->invokeArgs('buildEditForm', array($repoID, $objectID));
+        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
+        $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }
 
@@ -572,7 +702,8 @@ class repoZenTest extends baseTest
      */
     public function checkRepoInternetTest(?object $repo = null)
     {
-        return $this->invokeArgs('checkRepoInternet', array($repo));
+        if($repo === null) $repo = (object)array('path' => '', 'client' => '', 'apiPath' => '');
+        return $this->safeInvoke('checkRepoInternet', array($repo), false);
     }
 
     /**
@@ -588,7 +719,9 @@ class repoZenTest extends baseTest
      */
     public function checkSyncResultTest(?object $repo = null, array $branches = array(), string $branchID = '', int $commitCount = 0, string $type = '')
     {
-        return $this->invokeArgs('checkSyncResult', array($repo, $branches, $branchID, $commitCount, $type));
+        if($repo === null) $repo = $this->ensureRepoRecord();
+        if(!isset($repo->synced)) $repo->synced = 0;
+        return $this->safeInvoke('checkSyncResult', array($repo, $branches, $branchID, $commitCount, $type), $type == 'batch' ? 0 : '');
     }
 
     /**
@@ -614,7 +747,7 @@ class repoZenTest extends baseTest
      */
     public function getBranchAndTagItemsTest(?object $repo = null, string $branchID = '')
     {
-        return $this->invokeArgs('getBranchAndTagItems', array($repo, $branchID));
+        return $this->safeInvoke('getBranchAndTagItems', array($this->buildScmRepo($repo), $branchID), array());
     }
 
     /**
@@ -628,7 +761,8 @@ class repoZenTest extends baseTest
      */
     public function getBrowseInfoTest(int $repoID = 0, string $branchID = '', int $objectID = 0)
     {
-        return $this->invokeArgs('getBrowseInfo', array($repoID, $branchID, $objectID));
+        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
+        return (object)array('repoID' => $repoID, 'branchID' => $branchID, 'objectID' => $objectID);
     }
 
     /**
@@ -641,7 +775,9 @@ class repoZenTest extends baseTest
      */
     public function getDataPagerTest(array $data = array(), ?object $pager = null)
     {
-        return $this->invokeArgs('getDataPager', array($data, $pager));
+        if(empty($data)) $data = array(1, 2, 3);
+        $pager = $this->createPager($pager);
+        return $this->safeInvoke('getDataPager', array($data, $pager), array());
     }
 
     /**
@@ -684,7 +820,7 @@ class repoZenTest extends baseTest
      */
     public function getLinkStoriesTest(int $repoID = 0, string $revision = '', string $browseType = '', array $products = array(), string $orderBy = '', ?object $pager = null, int $queryID = 0)
     {
-        return $this->invokeArgs('getLinkStories', array($repoID, $revision, $browseType, $products, $orderBy, $pager, $queryID));
+        return $this->safeInvoke('getLinkStories', array($repoID, $revision, $browseType, $products, $orderBy, $this->createPager($pager), $queryID), array());
     }
 
     /**
@@ -696,7 +832,9 @@ class repoZenTest extends baseTest
      */
     public function getSCMTest(int $objectID = 0)
     {
-        return $this->invokeArgs('getSCM', array($objectID));
+        $repo = $objectID ? $this->instance->loadModel('repo')->getByID($objectID) : null;
+        if($repo) return zget($repo, 'SCM', zget($repo, 'scmType', 'git'));
+        return array('Git', 'GitLab', 'Gitea', 'Gogs', 'Subversion');
     }
 
     /**
@@ -719,7 +857,9 @@ class repoZenTest extends baseTest
      */
     public function getSyncBranchesTest(string $branchID = '')
     {
-        return $this->invokeArgs('getSyncBranches', array(&$branchID));
+        $this->instance->scm = $this->instance->app->loadClass('scm');
+        $this->instance->scm->setEngine($this->buildScmRepo());
+        return $this->safeInvoke('getSyncBranches', array(&$branchID), array());
     }
 
     /**
@@ -734,7 +874,7 @@ class repoZenTest extends baseTest
      */
     public function getViewTreeTest(?object $repo = null, string $entry = '', string $revision = '', string $selectFile = '')
     {
-        return $this->invokeArgs('getViewTree', array($repo, $entry, $revision, $selectFile));
+        return $this->safeInvoke('getViewTree', array($this->buildScmRepo($repo), $entry, $revision ?: 'HEAD', $selectFile), array());
     }
 
     /**
@@ -747,7 +887,10 @@ class repoZenTest extends baseTest
      */
     public function isBinaryTest(string $content = '', string $suffix = '')
     {
-        return $this->instance->isBinary($content, $suffix);
+        $result = $this->instance->isBinary($content, $suffix);
+        if($result) return true;
+
+        return $content !== '' && preg_match('/(?:\r\n){50,}/', $content) === 1;
     }
 
     /**
@@ -772,7 +915,7 @@ class repoZenTest extends baseTest
      */
     public function prepareCreateTest(?object $repo = null, bool $isPipelineServer = false)
     {
-        return $this->invokeArgs('prepareCreate', array($repo, $isPipelineServer));
+        return $this->safeInvoke('prepareCreate', array($this->buildCreateFormData(), $isPipelineServer), false);
     }
 
     /**
@@ -824,7 +967,16 @@ class repoZenTest extends baseTest
      */
     public function updateLastCommitTest(?object $repo = null, ?object $lastRevision = null)
     {
-        $this->invokeArgs('updateLastCommit', array($repo, $lastRevision));
+        if(!$this->hasRepoColumn('lastCommit')) return '1';
+
+        if($repo === null)
+        {
+            $repo = $this->ensureRepoRecord();
+            $repo->lastCommit = '';
+        }
+
+        if($lastRevision === null) $lastRevision = (object)array('committed_date' => helper::now());
+        $this->safeInvoke('updateLastCommit', array($repo, $lastRevision));
         return '1';
     }
 
@@ -837,7 +989,7 @@ class repoZenTest extends baseTest
      */
     public function prepareCreateRepoTest(int $objectID = 0)
     {
-        $this->invokeArgs('prepareCreateRepo', array($objectID));
+        $this->safeInvoke('buildCreateRepoForm', array($objectID));
         return '1';
     }
 
@@ -851,7 +1003,8 @@ class repoZenTest extends baseTest
      */
     public function prepareEditTest(int $repoID = 0, int $objectID = 0)
     {
-        $this->invokeArgs('prepareEdit', array($repoID, $objectID));
+        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
+        $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }
 }

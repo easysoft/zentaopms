@@ -21,8 +21,8 @@ zenData('ops_repo')->gen(0);
 
 $repo = new repoModelTest();
 
-r($repo->migrateRepoDataTest(false, false, 0))     && p('result,error') && e('fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table \'unittest.zt_repo\' doesn\'t exist');
+r($repo->migrateRepoDataTest(false, false, 0))     && p('result,error') && e("fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table 'unittest.zt_repo' doesn't exist");
 r($repo->migrateRepoDataTest(true, false, 99996))  && p('result,error') && e('success,none');
-r($repo->migrateRepoDataTest(false, true, 99996))  && p('result,error') && e('fail,SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry \'99996\' for key \'PRIMARY\'');
+r($repo->migrateRepoDataTest(false, true, 99996))  && p('result,error') && e("fail,SQLSTATE[23000]: Integrity constraint violation: 1062 Duplicate entry '99996' for key 'PRIMARY'");
 r($repo->migrateRepoDataTest(true, true, 99995))   && p('result,error') && e('success,none');
 r($repo->migrateRepoDataTest(true, true, 99994))   && p('result,error') && e('success,none');

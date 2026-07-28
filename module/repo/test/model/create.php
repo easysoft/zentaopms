@@ -50,31 +50,18 @@ CREATE TABLE `ops_repo` (
 SQL);
 
 zenData('ops_repouser')->gen(0);
-zenData('entry')->gen(0);
-
-$entry = zenData('entry');
-$entry->id->range('1');
-$entry->name->range('GitFox');
-$entry->account->range('');
-$entry->code->range('gitfox');
-$entry->key->range('cd65d97989fcb1fdb0d82471c3238a3a');
-$entry->freePasswd->range('1');
-$entry->ip->range('*');
-$entry->createdBy->range('admin');
-$entry->createdDate->range('2026-01-01 00:00:00');
-$entry->calledTime->range('0');
-$entry->editedBy->range('admin');
-$entry->editedDate->range('2026-01-01 00:00:00');
-$entry->deleted->range('0');
-$entry->gen(1);
 
 $_SERVER['REQUEST_URI'] = 'http://unittest.com';
 
 su('admin');
 
 $repo = new repoModelTest();
+$repo->seedGitFoxEntry();
 $repo->instance->config->devops->gitfoxURL  = 'http://localhost';
 $repo->instance->config->devops->gitfoxPort = 3000;
+$httpClient = $repo->resetHttpClient();
+$httpClient->setMethodResponse('GET',  '/webhooks', json_encode((object)array('code' => 'success', 'data' => array())));
+$httpClient->setMethodResponse('POST', '/webhooks', json_encode((object)array('code' => 'success', 'data' => (object)array('id' => 1))));
 
 $gitlab = array(
     'SCM'            => 'Gitlab',
@@ -128,3 +115,5 @@ $gitea['client'] = '/usr/bin/git';
 r($repo->createTest($gitea))             && p('SCM')    && e('Gitea');
 r($repo->createTest($git, false))        && p('client:0') && e('『客户端』不能为空。');
 r($repo->createTest($svn, false))        && p('client:0') && e('『客户端』不能为空。');
+
+$repo->restoreHttpClient();
