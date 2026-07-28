@@ -26,7 +26,6 @@ div
     setClass('flex justify-center'),
     div
     (
-        setID('mainContent'),
         setClass('px-1 mt-2 w-full max-w-7xl'),
         panel
         (
@@ -84,4 +83,4 @@ div
     )
 );
 
-render('pagebase');
+if($inPage != 'devops')render('pagebase');
