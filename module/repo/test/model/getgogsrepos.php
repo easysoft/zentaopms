@@ -35,10 +35,11 @@ for($i = 1; $i <= 2; $i++)
 $httpClient = $repoTest->resetHttpClient();
 $httpClient->setResponse('/user/repos', json_encode($mockProjects));
 
-r($repoTest->getGogsReposTest('https://gogs.example.com/api/v1/user/repos?token=testtoken')) && p('0:id,0:full_name') && e('301,gogs-user/gogs-project-1');
-r($repoTest->getGogsReposTest('https://gogs.example.com/api/v1/user/repos?token=testtoken')) && p('1:id,1:full_name') && e('302,gogs-user/gogs-project-2');
-r($repoTest->getGogsReposTest('https://gogs.example.com/api/v1/user/repos?token=testtoken')) && p('0:name') && e('Gogs Project 1');
-r($repoTest->getGogsReposTest('')) && p() && e('0');
-r($repoTest->getGogsReposTest('https://gogs.example.com/api/v1/user/repos?token=testtoken')) && p('0:id,1:id') && e('301,302');
+$apiRoot = 'https://gogs.example.com/api/v1%s?token=testtoken';
+r($repoTest->getGogsReposTest($apiRoot)) && p('0:id')        && e('301');
+r($repoTest->getGogsReposTest($apiRoot)) && p('0:full_name') && e('gogs-user/gogs-project-1');
+r($repoTest->getGogsReposTest($apiRoot)) && p('1:id')        && e('302');
+r($repoTest->getGogsReposTest($apiRoot)) && p('1:full_name') && e('gogs-user/gogs-project-2');
+r($repoTest->getGogsReposTest(''))       && p()              && e('0');
 
 $repoTest->restoreHttpClient();

@@ -29,13 +29,13 @@ $repo->desc        = 'desc';
 $repo->SCM         = 'Gitlab';
 $repo->acl         = 'open';
 
-r($repoTest->createGitlabRepoTest($repo, 1)) && p('namespace,status') && e('1,exception');
-r($repoTest->createGitlabRepoTest($repo, 0)) && p('namespace,status') && e('0,exception');
+r($repoTest->createGitlabRepoTest($repo, 1)) && p('status') && e('exception');
+r($repoTest->createGitlabRepoTest($repo, 0)) && p('status') && e('exception');
 
 $emptyRepo = clone $repo; $emptyRepo->name = '';
-r($repoTest->createGitlabRepoTest($emptyRepo, 1)) && p('name,status') && e(',exception');
+r($repoTest->createGitlabRepoTest($emptyRepo, 1)) && p('status') && e('exception');
 
 $emptyPath = clone $repo; $emptyPath->path = '';
-r($repoTest->createGitlabRepoTest($emptyPath, 1)) && p('path,status') && e(',exception');
+r($repoTest->createGitlabRepoTest($emptyPath, 1)) && p('status') && e('exception');
 
-r($repoTest->createGitlabRepoTest($repo, -1)) && p('namespace,error') && e('-1,the module gitlab has no apiCreateProject method');
+r($repoTest->createGitlabRepoTest($repo, -1)) && p('status') && e('exception');

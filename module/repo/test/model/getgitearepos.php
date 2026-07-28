@@ -36,10 +36,11 @@ for($i = 1; $i <= 2; $i++)
 $httpClient = $repoTest->resetHttpClient();
 $httpClient->setResponse('/repos/search', json_encode($mockResponse));
 
-r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:id,0:full_name,1:id') && e('201,gitea-user/gitea-project-1,202');
-r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('1:full_name') && e('gitea-user/gitea-project-2');
-r($repoTest->getGiteaReposTest('')) && p() && e('0');
-r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:name') && e('Gitea Project 1');
-r($repoTest->getGiteaReposTest('https://gitea.example.com/api/v1/repos/search?token=testtoken')) && p('0:id,1:id') && e('201,202');
+$apiRoot = 'https://gitea.example.com/api/v1%s?token=testtoken';
+r($repoTest->getGiteaReposTest($apiRoot)) && p('0:id')        && e('201');
+r($repoTest->getGiteaReposTest($apiRoot)) && p('0:full_name') && e('gitea-user/gitea-project-1');
+r($repoTest->getGiteaReposTest($apiRoot)) && p('1:id')        && e('202');
+r($repoTest->getGiteaReposTest(''))       && p()              && e('0');
+r($repoTest->getGiteaReposTest($apiRoot)) && p('0:name')      && e('Gitea Project 1');
 
 $repoTest->restoreHttpClient();

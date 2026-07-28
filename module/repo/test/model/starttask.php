@@ -17,8 +17,16 @@ cid=18106
 
 */
 
-zenData('task')->gen(10);
-zenData('user')->gen(5);
+$tester->dao->delete()->from(TABLE_TASK)->where('id')->in('1,2,3,4')->exec();
+
+$now   = helper::now();
+$tasks = array(
+    array('id' => 1, 'project' => 1, 'execution' => 1, 'path' => ',1,', 'name' => 'task1', 'type' => 'devel', 'mode' => '', 'estimate' => 8.00, 'consumed' => 0.00, 'left' => 8.00, 'status' => 'wait', 'openedBy' => 'admin', 'openedDate' => $now, 'assignedTo' => 'admin', 'assignedDate' => $now, 'vision' => 'rnd', 'deleted' => 0),
+    array('id' => 2, 'project' => 1, 'execution' => 1, 'path' => ',2,', 'name' => 'task2', 'type' => 'devel', 'mode' => '', 'estimate' => 8.00, 'consumed' => 0.00, 'left' => 8.00, 'status' => 'wait', 'openedBy' => 'admin', 'openedDate' => $now, 'assignedTo' => 'admin', 'assignedDate' => $now, 'vision' => 'rnd', 'deleted' => 0),
+    array('id' => 3, 'project' => 1, 'execution' => 1, 'path' => ',3,', 'name' => 'task3', 'type' => 'devel', 'mode' => '', 'estimate' => 8.00, 'consumed' => 0.00, 'left' => 8.00, 'status' => 'wait', 'openedBy' => 'admin', 'openedDate' => $now, 'assignedTo' => 'admin', 'assignedDate' => $now, 'vision' => 'rnd', 'deleted' => 0),
+    array('id' => 4, 'project' => 1, 'execution' => 1, 'path' => ',4,', 'name' => 'task4', 'type' => 'devel', 'mode' => '', 'estimate' => 8.00, 'consumed' => 0.00, 'left' => 8.00, 'status' => 'wait', 'openedBy' => 'admin', 'openedDate' => $now, 'assignedTo' => 'admin', 'assignedDate' => $now, 'vision' => 'rnd', 'deleted' => 0),
+);
+foreach($tasks as $taskData) $tester->dao->insert(TABLE_TASK)->data((object)$taskData)->exec();
 
 $repoTest = new repoModelTest();
 

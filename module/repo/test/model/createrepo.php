@@ -20,25 +20,11 @@ cid=18039
 $repoTest = new repoModelTest();
 
 $_SERVER['REQUEST_URI'] = 'http://unittest/';
-zenData('entry')->gen(0);
-
-$entry = zenData('entry');
-$entry->id->range('1');
-$entry->name->range('GitFox');
-$entry->account->range('');
-$entry->code->range('gitfox');
-$entry->key->range('cd65d97989fcb1fdb0d82471c3238a3a');
-$entry->freePasswd->range('1');
-$entry->ip->range('*');
-$entry->createdBy->range('admin');
-$entry->createdDate->range('2026-01-01 00:00:00');
-$entry->calledTime->range('0');
-$entry->editedBy->range('admin');
-$entry->editedDate->range('2026-01-01 00:00:00');
-$entry->deleted->range('0');
-$entry->gen(1);
+$repoTest->seedGitFoxEntry();
 $repoTest->instance->config->devops->gitfoxURL  = 'http://localhost';
 $repoTest->instance->config->devops->gitfoxPort = 3000;
+$httpClient = $repoTest->resetHttpClient();
+$httpClient->setMethodResponse('POST', '/repos', json_encode((object)array('code' => 'success', 'data' => (object)array())));
 
 $baseRepo = new stdclass();
 $baseRepo->product  = '1';
@@ -61,3 +47,5 @@ r($repoTest->createRepoTest($repo4)) && p('name,status') && e('validrepo,false')
 
 $repo5 = clone $baseRepo; $repo5->name = 'repo-valid-1';
 r($repoTest->createRepoTest($repo5)) && p('name,status') && e('repo-valid-1,false');
+
+$repoTest->restoreHttpClient();

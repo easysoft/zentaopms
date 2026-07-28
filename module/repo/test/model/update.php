@@ -64,27 +64,25 @@ SQL);
 
 zenData('ops_repouser')->gen(0);
 
-$repoTable = zenData('ops_repo');
-$repoTable->id->range('1');
-$repoTable->space->range('1');
-$repoTable->spaceID->range('1');
-$repoTable->product->range('1');
-$repoTable->name->range('testHtml');
-$repoTable->path->range('http://repo.local/testhtml');
-$repoTable->SCM->range('Gitlab');
-$repoTable->serviceHost->range('1');
-$repoTable->serviceProject->range('2');
-$repoTable->projects->range('');
-$repoTable->gitUID->range('uid1');
-$repoTable->acl->range('private');
-$repoTable->status->range('active');
-$repoTable->deleted->range('0');
-$repoTable->gen(1);
-
-$repoUserTable = zenData('ops_repouser');
-$repoUserTable->repo->range('1');
-$repoUserTable->account->range('admin');
-$repoUserTable->gen(1);
+$tester->dao->insert(TABLE_REPO)->data((object)array(
+    'id'             => 1,
+    'space'          => 1,
+    'spaceID'        => 1,
+    'product'        => '1',
+    'name'           => 'testHtml',
+    'path'           => 'http://repo.local/testhtml',
+    'SCM'            => 'Gitlab',
+    'serviceHost'    => '1',
+    'serviceProject' => '2',
+    'projects'       => '',
+    'gitUID'         => 'uid1',
+    'acl'            => 'private',
+    'status'         => 'active',
+    'deleted'        => 0,
+    'providerID'     => 0,
+    'mirror'         => 0,
+))->exec();
+$tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => 1, 'account' => 'admin'))->exec();
 
 su('admin');
 
@@ -98,6 +96,11 @@ $data5 = (object)array('space' => 1, 'product' => '2', 'projects' => '3', 'SCM' 
 $data6 = (object)array('space' => 1, 'product' => '3', 'projects' => '3', 'SCM' => 'Gitlab', 'name' => 'repo1_rename', 'serviceHost' => '1', 'serviceProject' => '1', 'acl' => 'private', 'members' => 'admin');
 
 $repo = new repoModelTest();
+$repo->seedGitFoxEntry();
+$repo->instance->config->devops->gitfoxURL  = 'http://localhost';
+$repo->instance->config->devops->gitfoxPort = 3000;
+$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'test/testhtml', 'gitURL' => 'http://repo.local/testhtml', 'importing' => false));
+
 r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1');
 r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');
 r($repo->updateTest(1, $data3, true)) && p('0:field,old,new') && e('projects,~~,3');

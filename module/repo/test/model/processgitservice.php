@@ -55,23 +55,6 @@ CREATE TABLE `ops_repo` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 zenData('ops_repouser')->gen(0);
-zenData('entry')->gen(0);
-
-$entry = zenData('entry');
-$entry->id->range('1');
-$entry->name->range('GitFox');
-$entry->account->range('');
-$entry->code->range('gitfox');
-$entry->key->range('cd65d97989fcb1fdb0d82471c3238a3a');
-$entry->freePasswd->range('1');
-$entry->ip->range('*');
-$entry->createdBy->range('admin');
-$entry->createdDate->range('2026-01-01 00:00:00');
-$entry->calledTime->range('0');
-$entry->editedBy->range('admin');
-$entry->editedDate->range('2026-01-01 00:00:00');
-$entry->deleted->range('0');
-$entry->gen(1);
 
 $repoTable = zenData('ops_repo');
 $repoTable->id->range('1,2,4');
@@ -99,13 +82,17 @@ su('admin');
 
 // 4. 创建测试实例
 $repo = new repoModelTest();
+$repo->seedGitFoxEntry();
 $repo->instance->config->devops->gitfoxURL  = 'http://localhost';
 $repo->instance->config->devops->gitfoxPort = 3000;
+$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'test1/test0909',  'gitURL' => 'http://liyang.oop.cc:3000/git/test1/test0909.git',  'importing' => false));
+$repo->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'test1/test0202',  'gitURL' => 'http://liyang.oop.cc:3000/git/test1/test0202.git',  'importing' => false));
+$repo->setGitfoxRepoCache(4, (object)array('id' => 4, 'path' => 'test1/test120101','gitURL' => 'http://liyang.oop.cc:3000/git/test1/test120101.git','importing' => false));
 
 // 5. 测试步骤
 r($repo->processGitServiceTest(1)) && p('client,codePath') && e('http://localhost:3000,http://liyang.oop.cc:3000/git/test1/test0909.git');
 r($repo->processGitServiceTest(4)) && p('codePath,name') && e('http://liyang.oop.cc:3000/git/test1/test120101.git,repo4');
 r($repo->processGitServiceTest(2)) && p('serviceProject,client') && e('1,http://localhost:3000');
-r($repo->processGitServiceTestWithCodePath(1)) && p('client,apiPath') && e('http://localhost:3000,http://localhost:3000/api/v2/repos/1');
+r($repo->processGitServiceTestWithCodePath(1)) && p('client,apiPath') && e('http://localhost:3000,http://localhost:3000/api/v2/repos/1/');
 r($repo->processGitServiceTestWithEmptyHost(4)) && p('serviceHost,client') && e('0,http://localhost:3000');
 r($repo->processGitServiceTestWithInvalidPath(1)) && p('path,codePath') && e('http://liyang.oop.cc:3000/git/test1/test0909.git,http://liyang.oop.cc:3000/git/test1/test0909.git');

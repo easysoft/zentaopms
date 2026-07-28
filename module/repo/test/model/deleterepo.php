@@ -33,17 +33,30 @@ zenData('ops_repofiles')->gen(0);
 zenData('ops_repobranch')->gen(0);
 zenData('ops_repohistory')->gen(0);
 
-$repoTable = zenData('ops_repo');
-$repoTable->id->range('1,3,5');
-$repoTable->spaceID->range('1');
-$repoTable->product->range('1');
-$repoTable->name->range('repo1,repo3,repo5');
-$repoTable->scmType->range('git');
-$repoTable->gitUID->range('uid1,uid3,uid5');
-$repoTable->acl->range('open');
-$repoTable->status->range('active');
-$repoTable->deleted->range('0');
-$repoTable->gen(3);
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+
+$repos = array(
+    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'repo1', 'scmType' => 'git', 'gitUID' => 'uid1', 'providerID' => 0, 'mirror' => 0, 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
+    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'repo3', 'scmType' => 'git', 'gitUID' => 'uid3', 'providerID' => 1, 'mirror' => 1, 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
+    array('id' => 5, 'spaceID' => 1, 'product' => '1', 'name' => 'repo5', 'scmType' => 'git', 'gitUID' => 'uid5', 'providerID' => 2, 'mirror' => 0, 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
+);
+foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
 
 $tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 1, 'revision' => 'r1', 'commit' => 1, 'comment' => 'commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
 $tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 1, 'revision' => 1, 'branch' => 'master'))->exec();
