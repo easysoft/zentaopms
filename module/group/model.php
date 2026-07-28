@@ -13,6 +13,48 @@ declare(strict_types=1);
 class groupModel extends model
 {
     /**
+     * 获取当前用户在指定 DevOps 空间中的分组权限。
+     * 空间管理员和系统管理员直接返回空间全部权限，不受分组限制。
+     * Get the current user's group permissions for a devops space.
+     * Space managers and system admins get all space privs, unrestricted by groups.
+     *
+     * @param  int   $spaceID
+     * @access public
+     * @return array|null  [module][method] => 1, or null if user not in any group and not manager
+     */
+    public function getDevOpsSpacePrivs(int $spaceID): ?array
+    {
+        if(!empty($this->app->user->admin)) return $this->loadModel('space')->getDevOpsAllPrivs();
+
+        $isManager = $this->dao->select('count(*) as count')->from(TABLE_DEVOPSSPACEUSER)
+            ->where('space')->eq($spaceID)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->andWhere('role')->eq('manager')
+            ->fetch('count');
+        if($isManager) return $this->loadModel('space')->getDevOpsAllPrivs();
+
+        $inGroup = $this->dao->select('count(*) as count')->from(TABLE_GROUP)->alias('g')
+            ->leftJoin(TABLE_USERGROUP)->alias('ug')->on('g.id = ug.`group`')
+            ->where('g.project')->eq(0)
+            ->andWhere('g.devopsSpace')->eq($spaceID)
+            ->andWhere('ug.account')->eq($this->app->user->account)
+            ->fetch('count');
+        if(!$inGroup) return null;
+
+        $rows = $this->dao->select('gp.module, gp.method')->from(TABLE_GROUP)->alias('g')
+            ->leftJoin(TABLE_USERGROUP)->alias('ug')->on('g.id = ug.`group`')
+            ->leftJoin(TABLE_GROUPPRIV)->alias('gp')->on('ug.`group`=gp.`group`')
+            ->where('g.project')->eq(0)
+            ->andWhere('g.devopsSpace')->eq($spaceID)
+            ->andWhere('ug.account')->eq($this->app->user->account)
+            ->fetchAll();
+
+        $privs = array();
+        foreach($rows as $row) $privs[strtolower($row->module)][strtolower($row->method)] = 1;
+        return $privs;
+    }
+
+    /**
      * 创建一个分组。
      * Create a group.
      *

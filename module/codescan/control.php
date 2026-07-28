@@ -17,7 +17,14 @@ class codescan extends control
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
         if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
-        $this->loadModel('space')->setMenu(0);
+        $spaceID = 0;
+        $repoID  = (int)zget($this->app->params, 'repoID', 0);
+        if($repoID)
+        {
+            $repo = $this->loadModel('repo')->fetchByID($repoID);
+            if($repo && !empty($repo->spaceID)) $spaceID = (int)$repo->spaceID;
+        }
+        $this->loadModel('space')->setMenu($spaceID);
     }
     /**
      * 规则列表。
