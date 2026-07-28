@@ -2,7 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-include dirname(__FILE__) . '/common.php';
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 
 /**
 
@@ -20,7 +20,6 @@ cid=0
 
 su('admin');
 $test = new codescanModelTest();
-initCodescanGitFox($test);
 
 $data1 = (object)array('name' => 'codescan-edit-solution-a', 'rulesets' => '1,2',    'desc' => 'two rulesets');
 $data2 = (object)array('name' => 'codescan-edit-solution-b', 'rulesets' => '',       'desc' => 'empty rulesets');
