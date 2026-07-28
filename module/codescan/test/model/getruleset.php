@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 su('admin');
 
 /**
@@ -12,20 +12,18 @@ title=测试 codescanModel->getRuleset();
 timeout=0
 cid=0
 
-- 测试ID为1的调用 >> 0
-- 测试返回类型有效 >> 1
-- 测试ID为0的调用 >> 0
-- 测试返回类型验证 >> 1
-- 测试ID为2的调用 >> 0
+- 获取 1 号规则集详情 @edit1,enabled
+- 获取 2 号规则集详情 @test2,enabled
+- 获取 0 号规则集详情失败 @0
+- 获取 3 号规则集详情失败 @0
+- 获取 4 号规则集详情失败 @0
 
 */
 
 $test = new codescanModelTest();
 
-r($test->getrulesetTest(1)) && p() && e('0');
-$result = $test->getrulesetTest(2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->getrulesetTest(0)) && p() && e('0');
-$result2 = $test->getrulesetTest(3);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->getrulesetTest(4)) && p() && e('0');
+r($test->getRulesetTest(1)) && p('name,status') && e('edit1,enabled');
+r($test->getRulesetTest(2)) && p('name,status') && e('test2,enabled');
+r($test->getRulesetTest(0)) && p() && e('0');
+r($test->getRulesetTest(3)) && p() && e('0');
+r($test->getRulesetTest(4)) && p() && e('0');

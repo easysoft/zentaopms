@@ -1,20 +1,20 @@
 ---
 title: zt_entry 表数据 - GitFox 服务器入口
 desc: 为 codescan 模块提供 gitfox API 入口记录
-author: Claude Code
+author: Codex
 version: "1.0"
 
 fields:
 - field: id
   range: 1
 - field: name
-  range: GitFox入口
+  range: GitFox
 - field: account
   range: admin
 - field: code
   range: gitfox
 - field: key
-  range: testkey1234567890testkey1234567
+  range: 0123456789abcdef0123456789abcdef
 - field: freePasswd
   range: "0"
 - field: ip

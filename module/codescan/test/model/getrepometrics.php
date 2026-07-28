@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 su('admin');
 
 /**
@@ -13,9 +13,9 @@ timeout=0
 cid=0
 
 - 测试两个参数都有值 >> 0
-- 测试返回类型有效 >> 1
+- 测试repo2 task2统计返回0 >> 2,2,/scan/metrics/repo/2/task/2,0
 - 测试默认参数 >> 0
-- 测试返回类型验证 >> 1
+- 测试repo1统计返回0 >> 1,0,/scan/metrics/repo/1,0
 - 测试不同参数组合 >> 0
 
 */
@@ -23,9 +23,7 @@ cid=0
 $test = new codescanModelTest();
 
 r($test->getrepometricsTest(1, 1)) && p() && e('0');
-$result = $test->getrepometricsTest(2, 2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getrepometricsTest(2, 2)) && p() && e('0');
 r($test->getrepometricsTest(0, 0)) && p() && e('0');
-$result2 = $test->getrepometricsTest(1, 0);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getrepometricsTest(1, 0)) && p() && e('0');
 r($test->getrepometricsTest(0, 1)) && p() && e('0');

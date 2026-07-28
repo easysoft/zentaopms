@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 
 /**
 
@@ -12,20 +10,19 @@ title=测试 codescanModel->bindOrUnbindSolutions();
 timeout=0
 cid=0
 
-- 测试绑定操作 >> 0
-- 测试返回类型有效 >> 1
-- 测试默认参数 >> 0
-- 测试解绑操作 >> 0
-- 测试返回类型验证 >> 1
+- 绑定一个扫描方案 @1,1,1,5,1,1
+- 绑定两个扫描方案 @1,2,1,5,10,2,1
+- 解绑一个扫描方案 @1,2,0,10,1,1
+- 绑定空方案列表 @2,3,1,empty,0,1
+- 解绑三个扫描方案 @3,4,0,5,10,15,3,1
 
 */
 
+su('admin');
 $test = new codescanModelTest();
 
-r($test->bindorunbindsolutionsTest(1, 1, array(1, 2), true)) && p() && e('0');
-$result = $test->bindorunbindsolutionsTest(2, 2, array(), true);
-r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
-r($test->bindorunbindsolutionsTest(0, 0, array(1), false)) && p() && e('0');
-$result2 = $test->bindorunbindsolutionsTest(1, 2, array(1, 2, 3), true);
-r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');
-r($test->bindorunbindsolutionsTest(3, 3, array(1), true)) && p() && e('0');
+r($test->bindOrUnbindSolutionsTest(1, 1, array(5), true)) && p() && e('0');
+r($test->bindOrUnbindSolutionsTest(1, 2, array(5, 10), true)) && p() && e('0');
+r($test->bindOrUnbindSolutionsTest(1, 2, array(10), false)) && p() && e('0');
+r($test->bindOrUnbindSolutionsTest(2, 3, array(), true)) && p() && e('0');
+r($test->bindOrUnbindSolutionsTest(3, 4, array(5, 10, 15), false)) && p() && e('0');

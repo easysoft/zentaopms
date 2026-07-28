@@ -113,6 +113,8 @@ class repo extends control
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
         if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
+        if(!$inSpace) $this->session->set('repoID', 0);
+
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
 
@@ -125,6 +127,8 @@ class repo extends control
 
         if($repoList && !isset($repoList[$pageID - 1])) $pageID = 1;
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
+
+        $this->repo->loadMaintainSpacePrivs($repoList);
 
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
 
@@ -152,7 +156,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function create(int $objectID = 0)
+    public function create(int $objectID = 0, int $spaceID = 0)
     {
         if($_POST)
         {
@@ -180,7 +184,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link, 'callback' => "importJob($repoID)"));
         }
 
-        $this->commonAction(0, $objectID);
+        $this->commonAction(0, $objectID, $spaceID);
         $this->repoZen->buildCreateForm($objectID);
 
         $this->display();
@@ -216,7 +220,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $this->commonAction(0, $objectID);
+        $this->commonAction(0, $objectID, $spaceID);
         $this->repoZen->buildCreateRepoForm($objectID);
         $this->view->inSpace = !empty($spaceID);
         $this->view->spaceID = $spaceID;
@@ -312,7 +316,7 @@ class repo extends control
      */
     public function edit(int $repoID, int $objectID = 0, int $spaceID = 0)
     {
-        $this->commonAction($repoID, $objectID);
+        $this->commonAction($repoID, $objectID, $spaceID);
         $repo = $this->repo->getByID($repoID);
 
         $this->scm->setEngine($repo);
@@ -1150,7 +1154,7 @@ class repo extends control
      */
     public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', string $acl = 'open', int $isTryAgain = 0)
     {
-        if($this->viewType !== 'json') $this->commonAction();
+        if($this->viewType !== 'json') $this->commonAction(0, 0, $spaceID);
         if($_POST)
         {
             $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID, $this->post->acl);
@@ -1158,7 +1162,12 @@ class repo extends control
             $this->session->set('importRepo', json_encode($formData));
 
             $result = $this->repo->import($formData);
-            if(dao::isError()) $this->sendError(dao::getError());
+            if(dao::isError())
+            {
+                $error   = dao::getError();
+                $message = isset($error['apiMessage']) ? $error['apiMessage'] : $this->lang->repo->importProgress->importFailed;
+                $this->sendError($message);
+            }
             return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
         }
 
@@ -1176,7 +1185,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->repo->import;
         $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account, true);
         $this->view->type       = $type;
         $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
         $this->view->acl        = $acl;
@@ -3050,7 +3059,7 @@ class repo extends control
             $this->loadModel('action')->create('repo', $repoID, 'imported');
         }
 
-        $this->view->title   = $this->lang->repo->showImportResult;
+        $this->view->title   = $this->lang->repo->tips;
         $this->view->message = $message;
         $this->view->repoID  = $repoID;
         $this->view->spaceID = $spaceID;

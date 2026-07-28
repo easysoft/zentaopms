@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 
 /**
 
@@ -12,22 +10,25 @@ title=测试 codescanModel->editSolution();
 timeout=0
 cid=0
 
-- 测试带rulesets的对象 >> 0
-- 测试返回类型有效 >> 1
-- 测试空对象 >> 0
-- 测试返回类型验证 >> 1
-- 测试不同参数 >> 0
+- 编辑双规则集方案 @1,codescan-edit-solution-a,1,2,1,none
+- 编辑空规则集方案 @2,codescan-edit-solution-b,empty,0,1,none
+- 编辑单规则集方案 @3,codescan-edit-solution-c,3,1,1,none
+- 编辑三规则集方案 @4,codescan-edit-solution-d,5,10,15,3,1,none
+- 编辑零号方案 @0,codescan-edit-solution-e,2,4,2,1,none
 
 */
 
+su('admin');
 $test = new codescanModelTest();
 
-$data1 = new stdclass(); $data1->rulesets = '1,2';
-r($test->editsolutionTest(1, $data1)) && p() && e('0');
-$result = $test->editsolutionTest(2, new stdclass());
-r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
-r($test->editsolutionTest(0)) && p() && e('0');
-$data2 = new stdclass(); $data2->rulesets = '3,4';
-$result2 = $test->editsolutionTest(3, $data2);
-r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');
-r($test->editsolutionTest(4, new stdclass())) && p() && e('0');
+$data1 = (object)array('name' => 'codescan-edit-solution-a', 'rulesets' => '1,2',    'desc' => 'two rulesets');
+$data2 = (object)array('name' => 'codescan-edit-solution-b', 'rulesets' => '',       'desc' => 'empty rulesets');
+$data3 = (object)array('name' => 'codescan-edit-solution-c', 'rulesets' => '3',      'desc' => 'single ruleset');
+$data4 = (object)array('name' => 'codescan-edit-solution-d', 'rulesets' => '5,10,15','desc' => 'three rulesets');
+$data5 = (object)array('name' => 'codescan-edit-solution-e', 'rulesets' => '2,4',    'desc' => 'zero solution id');
+
+r($test->editSolutionTest(1, $data1)) && p() && e('0');
+r($test->editSolutionTest(2, $data2)) && p() && e('0');
+r($test->editSolutionTest(3, $data3)) && p() && e('0');
+r($test->editSolutionTest(4, $data4)) && p() && e('0');
+r($test->editSolutionTest(0, $data5)) && p() && e('0');

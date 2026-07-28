@@ -15,6 +15,16 @@ declare(strict_types=1);
 class repoModel extends model
 {
     /**
+     * maintain 页面空间权限缓存：key=spaceID, value=array(module=>array(method=>1))。
+     * 非 maintain 页面不设置此属性。
+     *
+     * @var array|null
+     * @access public
+     * @static
+     */
+    public static $maintainSpacePrivs = null;
+
+    /**
      * 判断是否为 SVN 类型代码库。
      * Check if repo is subversion type.
      *
@@ -156,20 +166,23 @@ class repoModel extends model
      * Get list by priv.
      *
      * @param  string $type  all|haspriv
+     * @param  string $scmType
+     * @param  bool   $useSCM
      * @access public
      * @return array
      */
-    public function getListByPriv(string $type = 'all')
+    public function getListByPriv(string $type = 'all', string $scmType = '', bool $useSCM = true)
     {
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('status')->ne('importing')
+            ->beginIF($scmType)->andWhere('scmType')->eq($scmType)->fi()
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
 
         foreach($repos as $i => $repo)
         {
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
-            $repo = $this->processGitService($repo);
+            if($useSCM) $repo = $this->processGitService($repo);
         }
 
         return $repos;
@@ -2211,6 +2224,41 @@ class repoModel extends model
     }
 
     /**
+     * 为 maintain 页面预加载空间权限缓存，供 isClickable 使用。
+     * Load space permission cache for maintain page.
+     *
+     * @param  array  $repoList
+     * @access public
+     * @return void
+     */
+    public function loadMaintainSpacePrivs(array $repoList): void
+    {
+        self::$maintainSpacePrivs = array();
+        if(empty($repoList)) return;
+
+        $spaceIDs = array();
+        foreach($repoList as $repo)
+        {
+            $sid = isset($repo->spaceID) ? (int)$repo->spaceID : 0;
+            if($sid > 0) $spaceIDs[$sid] = true;
+        }
+        if(empty($spaceIDs)) return;
+
+        foreach(array_keys($spaceIDs) as $spaceID)
+        {
+            $privs = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
+            if($privs !== null) self::$maintainSpacePrivs[$spaceID] = $privs;
+        }
+
+        /* render 管道：hasPriv 控制显隐，isClickable 控制置灰。不含这些 right 按钮会直接隐藏，
+         * 此处补回使按钮可见，置灰状态由 isClickable 接管，安全由下次请求 checkPriv 兜底。 */
+        $this->app->user->rights['rights']['repo']['edit']     = 1;
+        $this->app->user->rights['rights']['repo']['delete']   = 1;
+        $this->app->user->rights['rights']['codescan']['exec']  = 1;
+        $this->app->user->rights['rights']['codescan']['issue'] = 1;
+    }
+
+    /**
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *
@@ -2226,8 +2274,19 @@ class repoModel extends model
         if($action == 'execjob')      return common::hasPriv('sonarqube', $action) && !$repo->exec;
         if($action == 'reportview')   return common::hasPriv('sonarqube', $action) && !$repo->report;
         if($action == 'deletebranch') return $repo->deletable;
-        if($action == 'scanexec')     return empty($repo->mirror);
-        if($action == 'scanissue')    return empty($repo->mirror);
+        if($action == 'scanexec' && !empty($repo->mirror))     return false;
+        if($action == 'scanissue' && !empty($repo->mirror))    return false;
+
+        if(self::$maintainSpacePrivs !== null && !empty($repo->spaceID))
+        {
+            $map = array('edit' => array('repo', 'edit'), 'delete' => array('repo', 'delete'), 'scanexec' => array('codescan', 'exec'), 'scanissue' => array('codescan', 'issue'));
+            if(isset($map[$action]))
+            {
+                list($m, $method) = $map[$action];
+                $sid = (int)$repo->spaceID;
+                if(isset(self::$maintainSpacePrivs[$sid]) && !isset(self::$maintainSpacePrivs[$sid][$m][$method])) return false;
+            }
+        }
 
         return true;
     }
@@ -3294,6 +3353,7 @@ class repoModel extends model
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
+            ->andWhere('scmType')->eq('git')
             ->fetchAll('id');
     }
 
@@ -3556,13 +3616,16 @@ class repoModel extends model
             ->fetchAll('', false);
         if(empty($oldRepos)) return true;
 
-        $products = $this->dao->select('id, PO, QD, RD, whitelist')
+        $products = $this->dao->select('id, PO, QD, RD, whitelist, acl')
             ->from(TABLE_PRODUCT)
             ->fetchAll('id');
 
         $productMembersMap = array();
+        $productAcl        = array();
         foreach($products as $productID => $product)
         {
+            $productAcl[$productID] = $product->acl;
+
             $productMembers = array();
             foreach(array('PO', 'QD', 'RD', 'whitelist') as $field)
             {
@@ -3584,12 +3647,26 @@ class repoModel extends model
             $groupAccountMap[$groupUser->groupID][] = $groupUser->account;
         }
 
+        $users = $this->dao->select('account')
+            ->from(TABLE_USER)
+            ->fetchAll();
+
+        $userAccount = array();
+        foreach($users as $user)
+        {
+            $userAccount[] = $user->account;
+        }
+
+        $oldName = array();
+
         foreach($oldRepos as $oldRepo)
         {
             $oldRepo->groupAccounts = $groupAccountMap;
             $aclInfo = $this->parseRepoAcl($oldRepo);
             $admin   = zget($admins, 0, 'system');
             $repo    = $this->buildNewRepo($oldRepo, $aclInfo['acl'], $admin);
+
+            if(in_array($repo->name,$oldName)) $repo->name = $repo->name . $repo->id;
 
             if($repo->scmType === 'svn')
             {
@@ -3614,8 +3691,16 @@ class repoModel extends model
                 $repo->providerID = $this->dao->lastInsertID();
             }
             unset($repo->url);
+
+            if($aclInfo['acl'] === 'custom')
+            {
+                $repo->acl = 'private';
+            }
+
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
             if(dao::isError()) return false;
+
+            $oldName[] = $repo->name;
 
             if($aclInfo['acl'] === 'private')
             {
@@ -3623,9 +3708,21 @@ class repoModel extends model
                 $productIDs = array_filter(array_map('intval', explode(',', $oldRepo->product)));
                 foreach($productIDs as $productID)
                 {
+                    if($productAcl[$productID] === 'open')
+                    {
+                        $members = $userAccount;
+                        break;
+                    }
+
                     if(empty($productMembersMap[$productID])) continue;
                     $members = array_merge($members, $productMembersMap[$productID]);
                 }
+
+                if(!empty($members) && !$this->insertMembers($repo->id, $members)) return false;
+            }
+            else if($aclInfo['acl'] === 'custom')
+            {
+                $members    = array();
                 if(!empty($aclInfo['members'])) $members = array_merge($members, $aclInfo['members']);
 
                 $members = array_filter(array_unique($members), 'strlen');
@@ -3717,7 +3814,7 @@ class repoModel extends model
         $repo->id               = $oldRepo->id;
         $repo->spaceID          = 1;
         $repo->product          = $oldRepo->product;
-        $repo->name             = $oldRepo->name;
+        $repo->name             = $this->convertChineseToPinyin($oldRepo->name);
         $repo->desc             = $oldRepo->desc;
         $repo->gitUID           = 'empty_gituid_'.$oldRepo->id;
         $repo->forkID           = 0;
@@ -3787,5 +3884,36 @@ class repoModel extends model
         $sql = 'REPLACE INTO ' . TABLE_DEVOPSREPOUSER . ' (`repo`, `account`) VALUES ' . implode(', ', $values);
         $this->dao->exec($sql);
         return !dao::isError();
+    }
+
+    /**
+     * 判断字符串是否包含中文。
+     * Check whether a string contains Chinese characters.
+     *
+     * @param  string $string
+     * @access public
+     * @return bool
+     */
+    public function hasChinese(string $string): bool
+    {
+        return preg_match('/[\x{4e00}-\x{9fff}]/u', $string) === 1;
+    }
+
+    /**
+     * 若字符串包含中文则转换为拼音并返回，否则返回原字符串。
+     * Convert Chinese in string to Pinyin when needed.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertChineseToPinyin(string $string): string
+    {
+        if(!$this->hasChinese($string)) return $string;
+
+        $pinyin = $this->app->loadClass('pinyin');
+
+        $converted = $pinyin->permalink($string);
+        return $converted;
     }
 }

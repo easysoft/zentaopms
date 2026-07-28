@@ -243,8 +243,8 @@ formPanel
         )
     ),
 
-    /* 第三列：执行分支 */
-    formRow
+    /* 第三列：执行分支（Jenkins 流水线不需要分支配置，直接使用 null 跳过） */
+    $isJenkins ? null : formRow
     (
         formGroup
         (

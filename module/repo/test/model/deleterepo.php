@@ -5,7 +5,6 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
-
 title=测试 repoModel::deleteRepo();
 timeout=0
 cid=18041
@@ -20,72 +19,45 @@ cid=18041
  - 属性repoHistoryCount @0
  - 属性repoBranchCount @0
  - 属性repoFilesCount @0
+- 删除不存在的版本库仍然清除关联数据 >> 1
+- 删除已删除版本库仍然清除关联数据 >> 1
+- 删除第三个版本库
+ - 属性repoCount @0
+ - 属性repoHistoryCount @0
+ - 属性repoBranchCount @0
+ - 属性repoFilesCount @0
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(40) NOT NULL DEFAULT '',
-  `commit` int unsigned NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(100) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repobranch` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repofiles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `parent` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repofiles')->gen(0);
+zenData('ops_repobranch')->gen(0);
+zenData('ops_repohistory')->gen(0);
 
-$tester->dao->insert(TABLE_REPO)->data((object)array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'repo1', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active', 'deleted' => 0))->exec();
-$tester->dao->insert(TABLE_REPO)->data((object)array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'repo3', 'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active', 'deleted' => 0))->exec();
-foreach(array(1, 3) as $repoID)
-{
-    $tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => $repoID, 'revision' => 'r' . $repoID, 'commit' => 1, 'comment' => 'commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
-    $historyID = $tester->dao->lastInsertID();
-    $tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => $repoID, 'revision' => $historyID, 'branch' => 'master'))->exec();
-    $tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => $repoID, 'revision' => $historyID, 'parent' => '/', 'path' => '/file' . $repoID))->exec();
-}
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1,3,5');
+$repoTable->spaceID->range('1');
+$repoTable->product->range('1');
+$repoTable->name->range('repo1,repo3,repo5');
+$repoTable->scmType->range('git');
+$repoTable->gitUID->range('uid1,uid3,uid5');
+$repoTable->acl->range('open');
+$repoTable->status->range('active');
+$repoTable->deleted->range('0');
+$repoTable->gen(3);
+
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 1, 'revision' => 'r1', 'commit' => 1, 'comment' => 'commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 1, 'revision' => 1, 'branch' => 'master'))->exec();
+$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 1, 'revision' => 1, 'parent' => '/', 'path' => '/file1'))->exec();
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 3, 'revision' => 'r3', 'commit' => 1, 'comment' => 'commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 3, 'revision' => 2, 'branch' => 'master'))->exec();
+$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 3, 'revision' => 2, 'parent' => '/', 'path' => '/file3'))->exec();
+$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array('repo' => 5, 'revision' => 'r5', 'commit' => 1, 'comment' => 'commit', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'))->exec();
+$tester->dao->insert(TABLE_REPOBRANCH)->data((object)array('repo' => 5, 'revision' => 3, 'branch' => 'master'))->exec();
+$tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 5, 'revision' => 3, 'parent' => '/', 'path' => '/file5'))->exec();
 
 $repoTest = new repoModelTest();
-$gitlabID = 1;
-$giteaID  = 3;
-
-r($repoTest->deleteRepoTest($gitlabID)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0'); //删除gitlab版本库
-r($repoTest->deleteRepoTest($giteaID))  && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0'); //删除gitea版本库
+r($repoTest->deleteRepoTest(1)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0');
+r($repoTest->deleteRepoTest(3)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0');
+r($repoTest->deleteRepoTest(999)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0');
+r($repoTest->deleteRepoTest(1)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0');
+r($repoTest->deleteRepoTest(5)) && p('repoCount,repoHistoryCount,repoBranchCount,repoFilesCount') && e('0,0,0,0');

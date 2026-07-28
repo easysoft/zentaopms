@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 
 /**
 
@@ -12,20 +10,19 @@ title=测试 codescanModel->linkRulesetInSolution();
 timeout=0
 cid=0
 
-- 测试有ID和数组参数 >> 0
-- 测试返回类型有效 >> 1
-- 测试默认参数 >> 0
-- 测试返回类型验证 >> 1
-- 测试不同数组参数 >> 0
+- 关联一个规则集到方案 @1,1,1,1
+- 关联两个规则集到方案 @1,2,3,4,2,1
+- 关联空规则集列表到方案 @2,empty,0,1
+- 关联三个规则集到方案 @3,5,6,7,3,1
+- 关联零号方案到两个规则集 @0,8,9,2,1
 
 */
 
+su('admin');
 $test = new codescanModelTest();
 
-r($test->linkrulesetinsolutionTest(1, array(1, 2, 3))) && p() && e('0');
-$result = $test->linkrulesetinsolutionTest(2, array());
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->linkrulesetinsolutionTest(0, array(1))) && p() && e('0');
-$result2 = $test->linkrulesetinsolutionTest(1, array(4, 5, 6));
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->linkrulesetinsolutionTest(2, array(7, 8))) && p() && e('0');
+r($test->linkRulesetInSolutionTest(1, array(1))) && p() && e('0');
+r($test->linkRulesetInSolutionTest(1, array(3, 4))) && p() && e('0');
+r($test->linkRulesetInSolutionTest(2, array())) && p() && e('0');
+r($test->linkRulesetInSolutionTest(3, array(5, 6, 7))) && p() && e('0');
+r($test->linkRulesetInSolutionTest(0, array(8, 9))) && p() && e('0');

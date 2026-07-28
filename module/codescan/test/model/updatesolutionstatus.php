@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+zenData('entry')->loadYaml('entry', false, 2)->gen(1, true, false);
 
 /**
 
@@ -12,20 +10,19 @@ title=测试 codescanModel->updateSolutionStatus();
 timeout=0
 cid=0
 
-- 测试ID为1的调用 >> 0
-- 测试返回类型有效 >> 1
-- 测试ID为0的调用 >> 0
-- 测试返回类型验证 >> 1
-- 测试ID为2的调用 >> 0
+- 更新 1 号方案状态 @1,1
+- 更新 2 号方案状态 @2,1
+- 更新 3 号方案状态 @3,1
+- 更新 4 号方案状态 @4,1
+- 更新 0 号方案状态 @0,1
 
 */
 
+su('admin');
 $test = new codescanModelTest();
 
-r($test->updatesolutionstatusTest(1)) && p() && e('0');
-$result = $test->updatesolutionstatusTest(2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->updatesolutionstatusTest(0)) && p() && e('0');
-$result2 = $test->updatesolutionstatusTest(3);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->updatesolutionstatusTest(4)) && p() && e('0');
+r($test->updateSolutionStatusTest(1)) && p() && e('0');
+r($test->updateSolutionStatusTest(2)) && p() && e('0');
+r($test->updateSolutionStatusTest(3)) && p() && e('0');
+r($test->updateSolutionStatusTest(4)) && p() && e('0');
+r($test->updateSolutionStatusTest(0)) && p() && e('0');

@@ -5,24 +5,24 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
-
 title=测试 repoModel->migrateRepoData();
-cid=18121
 timeout=0
+cid=18121
 
-- 方法存在性检查 >> 1
-- repoModel 类存在检查 >> 1
-- 调用返回布尔值检查 >> 1
-- migrateRepoData 是公共方法 >> 1
-- 类存在性确认 >> 1
+- 初始化旧 repo 数据后第一次迁移属性result,error @success,none
+- 同一 repoID 再次初始化迁移仍可成功属性result,error @success,none
+- 同一 repoID 第三次初始化迁移仍可成功属性result,error @success,none
+- 切换另一个 repoID 初始化迁移属性result,error @success,none
+- 未初始化旧 repo 表时属性result,error @fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table 'unittest.zt_repo' doesn't exist
 
 */
 
+zenData('ops_repo')->gen(0);
+
 $repo = new repoModelTest();
 
-r(method_exists($repo, 'migrateRepoDataTest')) && p() && e('1');
-r(class_exists('repoModel')) && p() && e('1');
-$result = $repo->migrateRepoDataTest(false, false, 0);
-r(is_bool($result) || is_array($result)) && p() && e('1');
-r(class_exists('repoModelTest')) && p() && e('1');
-r(class_exists('repoModel')) && p() && e('1');
+r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('success,none');
+r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('success,none');
+r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('success,none');
+r($repo->migrateRepoDataTest(true, true, 99997))   && p('result,error') && e('success,none');
+r($repo->migrateRepoDataTest(false, false, 0))     && p('result,error') && e('fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table \'unittest.zt_repo\' doesn\'t exist');

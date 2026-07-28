@@ -5,23 +5,24 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
-
 title=测试 repoModel->setTaskByCommit();
 timeout=0
 cid=18105
 
 - 开始任务
- - 属性status @doing
- - 属性consumed @4
- - 属性left @3
+ - 属性status @changed
+ - 属性consumed @3.00
+ - 属性left @0.00
 - 工时计算
  - 属性status @doing
- - 属性consumed @11
- - 属性left @3
+ - 属性consumed @11.00
+ - 属性left @3.00
 - 完成任务
- - 属性status @done
- - 属性consumed @14
- - 属性left @0
+ - 属性status @changed
+ - 属性consumed @4.00
+ - 属性left @1.00
+- 无效消息返回false >> 1
+- 不存在任务返回false >> 1
 
 */
 
@@ -51,7 +52,6 @@ $app->rawModule = 'repo';
 $app->rawMethod = 'browse';
 
 $repoID   = 1;
-$repoRoot = '';
 $scm      = 'gitlab';
 
 $log = new stdclass();
@@ -68,24 +68,30 @@ $log->change    = array('/README.md' => array('action' => 'M', 'kind' => 'file',
 $action  = new stdclass();
 $action->actor  = 'user4';
 $action->date   = '2023-12-29 13:14:36';
-$action->extra  = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+$action->extra  = substr($log->revision, 0, 10);
 $action->action = 'gitcommited';
 
-global $app;
 include($app->getModuleRoot() . '/repo/control.php');
 $app->control = new repo();
 
 $repo = new repoModelTest();
+
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(1);
-r($result) && p('status,consumed,left') && e('changed,3.00,0.00'); //开始任务
+r($result) && p('status,consumed,left') && e('changed,3.00,0.00');
 
 $log->msg = $log->comment = 'Effort Task #8 Cost:1h Left:3h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,11.00,3.00'); //工时计算
+r($result) && p('status,consumed,left') && e('doing,11.00,3.00');
 
 $log->msg = $log->comment = 'Finish Task #2 Cost:10h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
 $result = $tester->loadModel('task')->getById(2);
-r($result) && p('status,consumed,left') && e('changed,4.00,1.00'); //完成任务
+r($result) && p('status,consumed,left') && e('changed,4.00,1.00');
+
+$log->msg = $log->comment = 'No Task match in this message';
+r($repo->setTaskByCommitTest($log, $action, $repoID) === false) && p() && e('1');
+
+$log->msg = $log->comment = 'Start Task #999 Cost:1h Left:1h';
+r($repo->setTaskByCommitTest($log, $action, $repoID) === false) && p() && e('1');

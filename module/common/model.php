@@ -4021,26 +4021,28 @@ EOF;
             $spaceID = $repo->spaceID;
         }
 
-        if(empty($spaceID) && $this->session->devopsSpace) $spaceID = $this->session->devopsSpace;
+        if(empty($spaceID) && $this->session->devopsSpace)
+        {
+            /* URL 中无 repoID/space/spaceID 但 session 有 spaceID → 用户已离开空间，清 session 恢复全局权限。 */
+            if(empty($params['repoID']) && empty($params['space']) && empty($params['spaceID']))
+            {
+                $this->session->set('devopsSpace', 0);
+            }
+            else
+            {
+                $spaceID = $this->session->devopsSpace;
+            }
+        }
         if(empty($spaceID)) return;
 
         $space = $this->loadModel('space')->getByID((int)$spaceID);
         if(empty($space)) return;
 
-        $spaceRights = $this->dao->select('t1.name, t3.module, t3.method')->from(TABLE_GROUP)->alias('t1')
-            ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
-            ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
-            ->where('t1.project')->eq(0)
-            ->andWhere('t1.devopsSpace')->eq($spaceID)
-            ->andWhere('t2.account')->eq($this->app->user->account)
-            ->fetchAll();
-
-        /* Group priv by module the same as rights. */
-        $spaceRightGroup = array();
-        foreach($spaceRights as $spaceRight) $spaceRightGroup[strtolower($spaceRight->module)][strtolower($spaceRight->method)] = 1;
+        $spaceRightGroup = $this->loadModel('group')->getDevOpsSpacePrivs((int)$spaceID) ?? array();
 
         /* Reset priv by space privway. */
         $this->app->user = clone $_SESSION['user'];
+        if(is_object($this->app->user->rights)) $this->app->user->rights = clone $this->app->user->rights;
         $rights = $this->app->user->rights['rights'];
 
         if($space->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($spaceRightGroup, $rights);
@@ -4071,7 +4073,8 @@ EOF;
             $devopsSpaceRights = zget($this->app->user->rights['rights'], 'space', array());
             if(isset($devopsSpaceRights['browse']) and !isset($rights['space']['browse'])) $rights['project']['browse'] = 1;
 
-            $this->app->user->rights['rights'] = $rights;
+            $this->app->user->rights['rights']        = $rights;
+            $_SESSION['user']->rights['rights'] = $rights;
         }
     }
 
