@@ -221,6 +221,7 @@ $config->logonMethods[] = 'user.ajaxgetcontactlist';
 $config->logonMethods[] = 'user.ajaxgetcontactusers';
 $config->logonMethods[] = 'user.ajaxgetitems';
 $config->logonMethods[] = 'user.ajaxgettemplates';
+$config->logonMethods[] = 'user.ajaxgetmore';
 $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
