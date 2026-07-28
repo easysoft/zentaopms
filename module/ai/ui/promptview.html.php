@@ -106,21 +106,59 @@ if(!empty($knowledgeLibs))
 $knowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $knowledgeLibNames);
 $displayPosition  = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
 
+$formConfigItems = array();
+if(!empty($fieldConfig))
+{
+    foreach($fieldConfig as $field)
+    {
+        $fieldType    = isset($field->type) ? $field->type : '';
+        $typeLabel    = zget($lang->ai->miniPrograms->field->typeList, $fieldType, $fieldType);
+        $required     = isset($field->required) ? (string)$field->required : '0';
+        $requiredText = zget($lang->ai->requiredList, $required, zget($lang->ai->requiredList, '0'));
+        $fieldName    = isset($field->name) ? $field->name : '';
+        $fieldValue   = '';
+
+        if(in_array($fieldType, array('radio', 'checkbox')))
+        {
+            $fieldValue = !empty($field->options) ? $field->options : '-';
+        }
+        else
+        {
+            $fieldValue = !empty($field->placeholder) ? $field->placeholder : '-';
+        }
+
+        $formConfigItems[] = div("{$fieldName}（{$typeLabel}, {$requiredText}）{$lang->colon} {$fieldValue}");
+    }
+}
+
+$promptSections = array
+(
+    section
+    (
+        set::title($lang->ai->prompts->processObject),
+        set::content($processObject)
+    ),
+    section(set::title($lang->ai->prompts->actionPurpose), set::content($actionObject)),
+    section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition))
+);
+if(isset($prompt->displayPosition) && $prompt->displayPosition == 'form')
+{
+    $promptSections[] = section
+    (
+        set::title($lang->ai->miniPrograms->field->fields),
+        empty($formConfigItems) ? set::content($lang->noData) : div(...$formConfigItems)
+    );
+}
+$promptSections[] = section(set::title($lang->ai->prompts->role), set::content($prompt->role));
+$promptSections[] = section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent))));
+$promptSections[] = section(set::title($lang->ai->prompts->skill), set::content($skillName));
+$promptSections[] = section(set::title($lang->ai->prompts->knowledgeLib), set::content($knowledgeLibText));
+
 detailBody
 (
     sectionList
     (
-        section
-        (
-            set::title($lang->ai->prompts->processObject),
-            set::content($processObject)
-        ),
-        section(set::title($lang->ai->prompts->actionPurpose), set::content($actionObject)),
-        section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition)),
-        section(set::title($lang->ai->prompts->role), set::content($prompt->role)),
-        section(set::title($lang->ai->prompts->prompt), set::content(wg(p(setClass('pre'), $promptContent)))),
-        section(set::title($lang->ai->prompts->skill), set::content($skillName)),
-        section(set::title($lang->ai->prompts->knowledgeLib), set::content($knowledgeLibText))
+        ...$promptSections
     ),
     history
     (
