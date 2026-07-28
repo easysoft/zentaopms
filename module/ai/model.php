@@ -2034,21 +2034,31 @@ class aiModel extends model
         /* Handle empty sources array. */
         if(empty($sources)) return '';
 
-        $storyData = [];
-        if(in_array(['task', 'story'], $sources, true) && $data['task']['story'])
+        $storyData = array();
+        $taskStory = 0;
+        if(isset($data['task']))
         {
-            $story     = $this->loadModel('story')->getById($data['task']['story']);
-            $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
-            $storyData = [];
-            foreach($fields as $field)
+            $taskData = $data['task'];
+            if(is_object($taskData)) $taskData = (array)$taskData;
+            if(is_array($taskData) && isset($taskData['story'])) $taskStory = $taskData['story'];
+        }
+        if(in_array(array('task', 'story'), $sources, true) && !empty($taskStory))
+        {
+            $story     = $this->loadModel('story')->getById($taskStory);
+            $fields    = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate');
+            $storyData = array();
+            if(!empty($story))
             {
-                $langLabel = $this->lang->story->$field;
-                $value     = $story->$field;
-                if($field == 'title') $langLabel = $this->lang->story->name;
-                if($field == 'type')  $value = zget($this->lang->story->typeList, $story->type);
-                if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
+                foreach($fields as $field)
+                {
+                    $langLabel = $this->lang->story->$field;
+                    $value     = isset($story->$field) ? $story->$field : '';
+                    if($field == 'title') $langLabel = $this->lang->story->name;
+                    if($field == 'type')  $value = zget($this->lang->story->typeList, $value);
+                    if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
 
-                $storyData[$langLabel] = $value;
+                    $storyData[$langLabel] = $value;
+                }
             }
         }
 
@@ -2060,11 +2070,14 @@ class aiModel extends model
         $dataSourceDefinition = $this->getPromptDataSourceDefinition($module);
         foreach($sources as $source)
         {
+            if(!is_array($source) || count($source) < 2) continue;
+
             $objectName = $source[0];
             $objectKey  = $source[1];
 
             if(!isset($dataSourceDefinition[$objectName]['common'])) continue;
             if(!isset($dataSourceDefinition[$objectName][$objectKey])) continue;
+            if(!isset($data[$objectName])) continue;
 
             $semanticName = $dataSourceDefinition[$objectName]['common'];
             $semanticKey  = $dataSourceDefinition[$objectName][$objectKey];
@@ -2072,9 +2085,11 @@ class aiModel extends model
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
             $obj = $data[$objectName];
+            if(is_object($obj)) $obj = (array)$obj;
+            if(!is_array($obj)) continue;
             if(static::isAssoc($obj))
             {
-                $dataObject[$semanticName][$semanticKey] = isset($data[$objectName][$objectKey]) ? $data[$objectName][$objectKey] : '';
+                $dataObject[$semanticName][$semanticKey] = isset($obj[$objectKey]) ? $obj[$objectKey] : '';
             }
             else
             {
@@ -2082,7 +2097,8 @@ class aiModel extends model
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     if(!isset($dataObject[$semanticName][$idx][$semanticKey])) $dataObject[$semanticName][$idx][$semanticKey] = '';
-                    $row = zget($data[$objectName], $idx, array());
+                    $row = zget($obj, $idx, array());
+                    if(is_object($row)) $row = (array)$row;
                     $dataObject[$semanticName][$idx][$semanticKey] = zget($row, $objectKey, '');
                 }
             }
