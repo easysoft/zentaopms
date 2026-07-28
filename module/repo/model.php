@@ -15,6 +15,16 @@ declare(strict_types=1);
 class repoModel extends model
 {
     /**
+     * maintain 页面空间权限缓存：key=spaceID, value=array(module=>array(method=>1))。
+     * 非 maintain 页面不设置此属性。
+     *
+     * @var array|null
+     * @access public
+     * @static
+     */
+    public static $maintainSpacePrivs = null;
+
+    /**
      * 判断是否为 SVN 类型代码库。
      * Check if repo is subversion type.
      *
@@ -2211,6 +2221,41 @@ class repoModel extends model
     }
 
     /**
+     * 为 maintain 页面预加载空间权限缓存，供 isClickable 使用。
+     * Load space permission cache for maintain page.
+     *
+     * @param  array  $repoList
+     * @access public
+     * @return void
+     */
+    public function loadMaintainSpacePrivs(array $repoList): void
+    {
+        self::$maintainSpacePrivs = array();
+        if(empty($repoList)) return;
+
+        $spaceIDs = array();
+        foreach($repoList as $repo)
+        {
+            $sid = isset($repo->spaceID) ? (int)$repo->spaceID : 0;
+            if($sid > 0) $spaceIDs[$sid] = true;
+        }
+        if(empty($spaceIDs)) return;
+
+        foreach(array_keys($spaceIDs) as $spaceID)
+        {
+            $privs = $this->loadModel('group')->getDevOpsSpacePrivs($spaceID);
+            if($privs !== null) self::$maintainSpacePrivs[$spaceID] = $privs;
+        }
+
+        /* render 管道：hasPriv 控制显隐，isClickable 控制置灰。不含这些 right 按钮会直接隐藏，
+         * 此处补回使按钮可见，置灰状态由 isClickable 接管，安全由下次请求 checkPriv 兜底。 */
+        $this->app->user->rights['rights']['repo']['edit']     = 1;
+        $this->app->user->rights['rights']['repo']['delete']   = 1;
+        $this->app->user->rights['rights']['codescan']['exec']  = 1;
+        $this->app->user->rights['rights']['codescan']['issue'] = 1;
+    }
+
+    /**
      * 判断按钮是否可点击。
      * Judge an action is clickable or not.
      *
@@ -2226,8 +2271,19 @@ class repoModel extends model
         if($action == 'execjob')      return common::hasPriv('sonarqube', $action) && !$repo->exec;
         if($action == 'reportview')   return common::hasPriv('sonarqube', $action) && !$repo->report;
         if($action == 'deletebranch') return $repo->deletable;
-        if($action == 'scanexec')     return empty($repo->mirror);
-        if($action == 'scanissue')    return empty($repo->mirror);
+        if($action == 'scanexec' && !empty($repo->mirror))     return false;
+        if($action == 'scanissue' && !empty($repo->mirror))    return false;
+
+        if(self::$maintainSpacePrivs !== null && !empty($repo->spaceID))
+        {
+            $map = array('edit' => array('repo', 'edit'), 'delete' => array('repo', 'delete'), 'scanexec' => array('codescan', 'exec'), 'scanissue' => array('codescan', 'issue'));
+            if(isset($map[$action]))
+            {
+                list($m, $method) = $map[$action];
+                $sid = (int)$repo->spaceID;
+                if(isset(self::$maintainSpacePrivs[$sid]) && !isset(self::$maintainSpacePrivs[$sid][$m][$method])) return false;
+            }
+        }
 
         return true;
     }

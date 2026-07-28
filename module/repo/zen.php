@@ -300,7 +300,7 @@ class repoZen extends repo
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->account, true);
     }
 
     /**
@@ -334,7 +334,7 @@ class repoZen extends repo
         $this->view->products     = $products;
         $this->view->repoGroups   = $repoGroups;
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account, true);
     }
 
     /**
