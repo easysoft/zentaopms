@@ -12,19 +12,17 @@ timeout=0
 cid=0
 
 - 测试默认参数返回空数组 >> 0
-- 测试返回类型有效 >> 1
+- 测试默认仓库top5返回0 >> 0,5,0,none
 - 测试top为5 >> 0
 - 测试top为3 >> 0
-- 测试返回类型验证 >> 1
+- 测试指定仓库top3返回0 >> 1,3,0,none
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getissueresolvedbytopTest()) && p() && e('0');
-$result = $test->getissueresolvedbytopTest(0, 5);
-r(is_array($result) ? '1' : '0') && p() && e('1');
+r($test->getissueresolvedbytopTest(0, 5)) && p() && e('0');
 r($test->getissueresolvedbytopTest(0, 10)) && p() && e('0');
-$result2 = $test->getissueresolvedbytopTest(1, 3);
-r(is_array($result2) ? '1' : '0') && p() && e('1');
+r($test->getissueresolvedbytopTest(1, 3)) && p() && e('0');
 r($test->getissueresolvedbytopTest(0, 20)) && p() && e('0');

@@ -13,19 +13,17 @@ timeout=0
 cid=0
 
 - 测试disabled状态 >> 0
-- 测试返回类型有效 >> 1
+- 测试规则集2启用状态返回0 >> 2,enabled,0,none
 - 测试enabled状态 >> 0
 - 测试默认参数 >> 0
-- 测试返回类型验证 >> 1
+- 测试规则集3启用状态返回0 >> 3,enabled,0,none
 
 */
 
 $test = new codescanModelTest();
 
 r($test->updatescanrulesetstatusTest(1, 'disabled')) && p() && e('0');
-$result = $test->updatescanrulesetstatusTest(2, 'enabled');
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->updatescanrulesetstatusTest(2, 'enabled')) && p() && e('0');
 r($test->updatescanrulesetstatusTest(0, 'disabled')) && p() && e('0');
-$result2 = $test->updatescanrulesetstatusTest(3, 'enabled');
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->updatescanrulesetstatusTest(3, 'enabled')) && p() && e('0');
 r($test->updatescanrulesetstatusTest(4)) && p() && e('0');

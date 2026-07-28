@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+include dirname(__FILE__) . '/common.php';
 
 /**
 
@@ -12,20 +10,20 @@ title=测试 codescanModel->getIssueTreeList();
 timeout=0
 cid=0
 
-- 测试file类型 >> 0
-- 测试返回类型有效 >> 1
-- 测试rule类型 >> 0
-- 测试默认参数 >> 0
-- 测试返回类型验证 >> 1
+- 获取 file 树的空仓库结果 @0
+- 获取 rule 树的空仓库结果 @0
+- 获取 file 树的 1 号仓库结果 @0
+- 获取 rule 树的 1 号任务结果 @0
+- 获取 file 树的 2 号仓库 3 号任务结果 @0
 
 */
 
+su('admin');
 $test = new codescanModelTest();
+initCodescanGitFox($test);
 
-r($test->getissuetreelistTest(0, 0, 'file')) && p() && e('0');
-$result = $test->getissuetreelistTest(0, 0, 'file');
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->getissuetreelistTest(0, 0, 'rule')) && p() && e('0');
-$result2 = $test->getissuetreelistTest(1, 0, 'file');
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->getissuetreelistTest(0, 1, 'rule')) && p() && e('0');
+r($test->getIssueTreeListTest(0, 0, 'file')) && p() && e('0');
+r($test->getIssueTreeListTest(0, 0, 'rule')) && p() && e('0');
+r($test->getIssueTreeListTest(1, 0, 'file')) && p() && e('0');
+r($test->getIssueTreeListTest(0, 1, 'rule')) && p() && e('0');
+r($test->getIssueTreeListTest(2, 3, 'file')) && p() && e('0');

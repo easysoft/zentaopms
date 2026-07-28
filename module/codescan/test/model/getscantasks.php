@@ -13,9 +13,9 @@ timeout=0
 cid=0
 
 - 测试完整参数调用 >> 0
-- 测试返回类型有效 >> 1
+- 测试repo2 plan2空参数返回0 >> 2,2,empty,0,0
 - 测试默认参数 >> 0
-- 测试带空数组 >> 1
+- 测试repo1 plan2多参数返回0 >> 1,2,1|2,2,0
 - 测试不同参数 >> 0
 
 */
@@ -23,9 +23,7 @@ cid=0
 $test = new codescanModelTest();
 
 r($test->getscantasksTest(1, 1, array(1, 2, 3))) && p() && e('0');
-$result = $test->getscantasksTest(2, 2, array());
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscantasksTest(2, 2, array())) && p() && e('0');
 r($test->getscantasksTest(0, 0, array(1))) && p() && e('0');
-$result2 = $test->getscantasksTest(1, 2, array(1, 2));
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscantasksTest(1, 2, array(1, 2))) && p() && e('0');
 r($test->getscantasksTest(2, 1, array(1, 2, 3, 4))) && p() && e('0');

@@ -13,19 +13,17 @@ timeout=0
 cid=0
 
 - 测试day范围 >> 0
-- 测试返回类型有效 >> 1
+- 测试day维度趋势返回0 >> 2,day,0,none
 - 测试week范围 >> 0
 - 测试month范围 >> 0
-- 测试返回类型验证 >> 1
+- 测试month维度趋势返回0 >> 1,month,0,none
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getissuetrendsbyrepoTest(1, 0, 'day')) && p() && e('0');
-$result = $test->getissuetrendsbyrepoTest(2, 0, 'day');
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getissuetrendsbyrepoTest(2, 0, 'day')) && p() && e('0');
 r($test->getissuetrendsbyrepoTest(0, 0, 'week')) && p() && e('0');
-$result2 = $test->getissuetrendsbyrepoTest(1, 0, 'month');
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getissuetrendsbyrepoTest(1, 0, 'month')) && p() && e('0');
 r($test->getissuetrendsbyrepoTest(3, 0, 'year')) && p() && e('0');
