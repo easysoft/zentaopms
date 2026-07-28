@@ -12,19 +12,17 @@ timeout=0
 cid=0
 
 - 测试默认空参数返回数组 >> 0
-- 测试返回类型有效 >> 1
+- 测试空问题列表返回0 >> empty,0,empty,0
 - 测试带status参数 >> 0
 - 测试带int参数 >> 0
-- 测试返回类型验证 >> 1
+- 测试单个问题active状态返回0 >> 1,1,active,0
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getlinkedbuglistTest()) && p() && e('0');
-$result = $test->getlinkedbuglistTest(array());
-r(is_array($result) ? '1' : '0') && p() && e('1');
+r($test->getlinkedbuglistTest(array())) && p() && e('0');
 r($test->getlinkedbuglistTest(array(1, 2, 3))) && p() && e('0');
-$result2 = $test->getlinkedbuglistTest(1, 'active');
-r(is_array($result2) ? '1' : '0') && p() && e('1');
+r($test->getlinkedbuglistTest(1, 'active')) && p() && e('0');
 r($test->getlinkedbuglistTest(0, 'resolved')) && p() && e('0');

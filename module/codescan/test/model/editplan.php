@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+include dirname(__FILE__) . '/common.php';
 
 /**
 
@@ -12,21 +10,26 @@ title=测试 codescanModel->editPlan();
 timeout=0
 cid=0
 
-- step1 >> 0
-- step2 >> 1
-- step3 >> 0
-- step4 >> 1
-- step5 >> 0
+- 编辑单方案主分支计划 @0
+- 编辑双方案双分支计划 @0
+- 缺少 solutionIDs 的计划 @0
+- 编辑空分支计划 @0
+- 编辑三方案计划 @0
 
 */
 
+su('admin');
 $test = new codescanModelTest();
-$formData = new stdclass();
-$formData->solutionIDs = array(1);
+initCodescanGitFox($test);
 
-r($test->editplanTest(1, 1, $formData)) && p() && e('0');
-$result = $test->editplanTest(2, 2, $formData);
-r(is_array($result) || is_bool($result) ? '1' : '0') && p() && e('1');
-r($test->editplanTest(3, 3, $formData)) && p() && e('0');
-$result2 = $test->editplanTest(4, 4, new stdclass());
-r(is_array($result2) || is_bool($result2) ? '1' : '0') && p() && e('1');
+$planA = (object)array('name' => 'codescan-plan-a', 'solutionIDs' => array(5),      'branches' => (object)array('include' => array('main')));
+$planB = (object)array('name' => 'codescan-plan-b', 'solutionIDs' => array(5, 10),  'branches' => (object)array('include' => array('main', 'develop')));
+$planC = new stdclass();
+$planD = (object)array('name' => 'codescan-plan-c', 'solutionIDs' => array(),       'branches' => (object)array('include' => array()));
+$planE = (object)array('name' => 'codescan-plan-d', 'solutionIDs' => array(5, 10, 15), 'branches' => (object)array('include' => array('release')));
+
+r($test->editPlanTest(1, 1, $planA)) && p() && e('0');
+r($test->editPlanTest(1, 2, $planB)) && p() && e('0');
+r($test->editPlanTest(2, 3, $planC)) && p() && e('0');
+r($test->editPlanTest(2, 4, $planD)) && p() && e('0');
+r($test->editPlanTest(3, 5, $planE)) && p() && e('0');

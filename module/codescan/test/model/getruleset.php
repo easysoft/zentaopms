@@ -13,9 +13,9 @@ timeout=0
 cid=0
 
 - 测试ID为1的调用 >> 0
-- 测试返回类型有效 >> 1
+- 测试规则集2详情返回0 >> 2,0,none
 - 测试ID为0的调用 >> 0
-- 测试返回类型验证 >> 1
+- 测试规则集3详情返回0 >> 3,0,none
 - 测试ID为2的调用 >> 0
 
 */
@@ -23,9 +23,7 @@ cid=0
 $test = new codescanModelTest();
 
 r($test->getrulesetTest(1)) && p() && e('0');
-$result = $test->getrulesetTest(2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getrulesetTest(2)) && p() && e('0');
 r($test->getrulesetTest(0)) && p() && e('0');
-$result2 = $test->getrulesetTest(3);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getrulesetTest(3)) && p() && e('0');
 r($test->getrulesetTest(4)) && p() && e('0');
