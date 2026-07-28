@@ -13,19 +13,17 @@ timeout=0
 cid=0
 
 - 测试showBug为true >> 0
-- 测试返回类型有效 >> 1
+- 测试问题2展示bug返回0 >> 2,1,0,none
 - 测试showBug为false >> 0
 - 测试默认参数 >> 0
-- 测试返回类型验证 >> 1
+- 测试问题3隐藏bug返回0 >> 3,0,0,none
 
 */
 
 $test = new codescanModelTest();
 
 r($test->getscanissueTest(1, true)) && p() && e('0');
-$result = $test->getscanissueTest(2, true);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
+r($test->getscanissueTest(2, true)) && p() && e('0');
 r($test->getscanissueTest(0, false)) && p() && e('0');
-$result2 = $test->getscanissueTest(3, false);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
+r($test->getscanissueTest(3, false)) && p() && e('0');
 r($test->getscanissueTest(4, true)) && p() && e('0');

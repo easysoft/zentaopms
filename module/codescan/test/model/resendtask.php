@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+include dirname(__FILE__) . '/common.php';
 
 /**
 
@@ -12,20 +10,20 @@ title=测试 codescanModel->resendTask();
 timeout=0
 cid=0
 
-- 测试ID为1的调用 >> 0
-- 测试返回类型有效 >> 1
-- 测试ID为0的调用 >> 0
-- 测试返回类型验证 >> 1
-- 测试ID为2的调用 >> 0
+- 重试 1 号任务 @1,1
+- 重试 2 号任务 @2,1
+- 重试 3 号任务 @3,1
+- 重试 4 号任务 @4,1
+- 重试 0 号任务 @0,1
 
 */
 
+su('admin');
 $test = new codescanModelTest();
+initCodescanGitFox($test);
 
-r($test->resendtaskTest(1)) && p() && e('0');
-$result = $test->resendtaskTest(2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->resendtaskTest(0)) && p() && e('0');
-$result2 = $test->resendtaskTest(3);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->resendtaskTest(4)) && p() && e('0');
+r($test->resendTaskTest(1)) && p() && e('0');
+r($test->resendTaskTest(2)) && p() && e('0');
+r($test->resendTaskTest(3)) && p() && e('0');
+r($test->resendTaskTest(4)) && p() && e('0');
+r($test->resendTaskTest(0)) && p() && e('0');

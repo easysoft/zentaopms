@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+include dirname(__FILE__) . '/common.php';
 
 /**
 
@@ -12,20 +10,20 @@ title=测试 codescanModel->getScanIssueListByIdList();
 timeout=0
 cid=0
 
-- 测试空数组参数 >> 0
-- 测试返回类型有效 >> 1
-- 测试带ID的数组 >> 0
-- 测试带page的数组 >> 1
-- 测试带limit的数组 >> 0
+- 查询单个问题ID @1,1,boolean,0
+- 查询两个问题ID @1,2,2,boolean,0
+- 查询空问题列表 @empty,0,boolean,0
+- 查询三个较大问题ID @100,101,102,3,boolean,0
+- 查询零号问题ID @0,1,boolean,0
 
 */
 
+su('admin');
 $test = new codescanModelTest();
+initCodescanGitFox($test);
 
-r($test->getscanissuelistbyidlistTest(array())) && p() && e('0');
-$result = $test->getscanissuelistbyidlistTest(array('id' => 1));
-r(is_array($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->getscanissuelistbyidlistTest(array('page' => 1))) && p() && e('0');
-$result2 = $test->getscanissuelistbyidlistTest(array('limit' => 10));
-r(is_array($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->getscanissuelistbyidlistTest(array('sort' => 'id'))) && p() && e('0');
+r($test->getScanIssueListByIdListTest(array(1))) && p() && e('0');
+r($test->getScanIssueListByIdListTest(array(1, 2))) && p() && e('0');
+r($test->getScanIssueListByIdListTest(array())) && p() && e('0');
+r($test->getScanIssueListByIdListTest(array(100, 101, 102))) && p() && e('0');
+r($test->getScanIssueListByIdListTest(array(0))) && p() && e('0');

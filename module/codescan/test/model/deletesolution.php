@@ -2,9 +2,7 @@
 <?php
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
-
-zenData('entry')->loadYaml('entry', false, 2)->gen(1);
-su('admin');
+include dirname(__FILE__) . '/common.php';
 
 /**
 
@@ -12,20 +10,20 @@ title=测试 codescanModel->deleteSolution();
 timeout=0
 cid=0
 
-- 测试ID为1的调用 >> 0
-- 测试返回类型有效 >> 1
-- 测试ID为0的调用 >> 0
-- 测试返回类型验证 >> 1
-- 测试ID为2的调用 >> 0
+- 删除 1 号方案 @1,1
+- 删除 2 号方案 @2,1
+- 删除 3 号方案 @3,1
+- 删除 4 号方案 @4,1
+- 删除 0 号方案 @0,1
 
 */
 
+su('admin');
 $test = new codescanModelTest();
+initCodescanGitFox($test);
 
-r($test->deletesolutionTest(1)) && p() && e('0');
-$result = $test->deletesolutionTest(2);
-r(is_array($result) || is_bool($result) || is_object($result) ? '1' : '0') && p() && e('1');
-r($test->deletesolutionTest(0)) && p() && e('0');
-$result2 = $test->deletesolutionTest(3);
-r(is_array($result2) || is_bool($result2) || is_object($result2) ? '1' : '0') && p() && e('1');
-r($test->deletesolutionTest(4)) && p() && e('0');
+r($test->deleteSolutionTest(1)) && p() && e('0');
+r($test->deleteSolutionTest(2)) && p() && e('0');
+r($test->deleteSolutionTest(3)) && p() && e('0');
+r($test->deleteSolutionTest(4)) && p() && e('0');
+r($test->deleteSolutionTest(0)) && p() && e('0');

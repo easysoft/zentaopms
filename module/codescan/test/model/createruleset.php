@@ -13,9 +13,9 @@ timeout=0
 cid=0
 
 - 测试带名称的对象 >> 0
-- 测试返回类型有效 >> 1
+- 测试空对象返回0 >> empty,0,none
 - 测试空对象 >> 0
-- 测试返回类型验证 >> 1
+- 测试不同名称对象返回0 >> test2,0,none
 - 测试不同对象参数 >> 0
 
 */
@@ -24,10 +24,8 @@ $test = new codescanModelTest();
 
 $data1 = new stdclass(); $data1->name = 'test1';
 r($test->createrulesetTest($data1)) && p() && e('0');
-$result = $test->createrulesetTest(new stdclass());
-r(is_array($result) || is_bool($result) || is_int($result) ? '1' : '0') && p() && e('1');
+r($test->createrulesetTest(new stdclass())) && p() && e('0');
 r($test->createrulesetTest(new stdclass())) && p() && e('0');
 $data2 = new stdclass(); $data2->name = 'test2';
-$result2 = $test->createrulesetTest($data2);
-r(is_array($result2) || is_bool($result2) || is_int($result2) ? '1' : '0') && p() && e('1');
+r($test->createrulesetTest($data2)) && p() && e('0');
 r($test->createrulesetTest(new stdclass())) && p() && e('0');
