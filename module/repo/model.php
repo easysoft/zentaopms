@@ -166,20 +166,23 @@ class repoModel extends model
      * Get list by priv.
      *
      * @param  string $type  all|haspriv
+     * @param  string $scmType
+     * @param  bool   $useSCM
      * @access public
      * @return array
      */
-    public function getListByPriv(string $type = 'all')
+    public function getListByPriv(string $type = 'all', string $scmType = '', bool $useSCM = true)
     {
         $repos = $this->dao->select('*,acl')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('status')->ne('importing')
+            ->beginIF($scmType)->andWhere('scmType')->eq($scmType)->fi()
             ->andWhere('synced')->eq(1)
             ->fetchAll('id', false);
 
         foreach($repos as $i => $repo)
         {
             if($type == 'haspriv' and !$this->checkPriv($repo)) unset($repos[$i]);
-            $repo = $this->processGitService($repo);
+            if($useSCM) $repo = $this->processGitService($repo);
         }
 
         return $repos;
@@ -3350,6 +3353,7 @@ class repoModel extends model
         return $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('importing')
+            ->andWhere('scmType')->eq('git')
             ->fetchAll('id');
     }
 

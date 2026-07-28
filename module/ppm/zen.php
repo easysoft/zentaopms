@@ -218,6 +218,7 @@ class ppmZen extends ppm
         $result->mergeable     = zget($mergeCheck, 'mergeable', true);
         $result->conflictFiles = empty($mergeCheck) ? array() : zget($mergeCheck, 'conflictFiles', array());
         $result->message       = empty($result->message) ? '' : $result->message;
+        if(dao::isError()) $result->message = zget(dao::getError(), 'apiMessage', $result->message);
 
         $rule          = $this->loadModel('repobranchrule')->getRuleByBranchName($ppm->targetRepoID, $ppm->targetBranch);
         $ppmHandLeUser = empty($rule) ? array() : explode(',', zget($rule, 'ppmHandleUser', ''));
