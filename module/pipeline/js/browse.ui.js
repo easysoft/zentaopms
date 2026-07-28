@@ -14,20 +14,20 @@ window.renderCell = function(result, {col, row})
         const btnItems = result[0].props.items;
 
         /* 根据引擎类型决定显示编辑还是编排按钮。 */
-        if(row.data.engine && row.data.engine !== 'gitfox')
-        {
-            result[0].props.items = btnItems.filter(function(item)
-            {
-                return item.icon !== 'design';
-            });
-        }
-        else
-        {
-            result[0].props.items = btnItems.filter(function(item)
-            {
-                return item.icon !== 'edit';
-            });
-        }
+        // if(row.data.engine && row.data.engine !== 'gitfox')
+        // {
+        //     result[0].props.items = btnItems.filter(function(item)
+        //     {
+        //         return item.icon !== 'design';
+        //     });
+        // }
+        // else
+        // {
+        //     result[0].props.items = btnItems.filter(function(item)
+        //     {
+        //         return item.icon !== 'edit';
+        //     });
+        // }
 
         if(!row.data.showVars)
         {
