@@ -7,8 +7,8 @@ window.checkZAIPanel = async function(showMessage)
         if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.zaiConfigNotValid}});
         return;
     }
-    const isOK = await store.isOK();
-    if(!isOK)
+    await store.waitInited();
+    if(!store.ok)
     {
         if(showMessage) zui.Modal.alert((store ? store.error : '') || {content: {html: zaiLang.unauthorizedError}});
         return;
