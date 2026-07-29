@@ -2467,8 +2467,9 @@ class aiModel extends model
      */
     public function getObjectForPromptById(object $prompt, int $objectId)
     {
-        $module  = $prompt->module;
-        $sources = array_filter(explode(',', $prompt->source));
+        $module       = $prompt->module;
+        $promptSource = isset($prompt->source) ? $prompt->source : '';
+        $sources      = array_filter(explode(',', $promptSource));
 
         /* Explode into grouped sources list. */
         $sourceGroups = array();
@@ -2479,6 +2480,11 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
             $sourceGroups[$objectName][] = $objectKey;
+        }
+        if(empty($sourceGroups))
+        {
+            $sourceModule = $this->getPromptSampleModule($module);
+            $sourceGroups[$sourceModule] = array();
         }
 
         $object     = $this->getObjectByModuleAndSourceGroups($module, $sourceGroups, $objectId);
@@ -2702,7 +2708,8 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $source, $objectData);
         if(empty($dataPrompt))
         {
-            if($displayPosition != 'form') return -3;
+            $sources = array_filter(explode(',', $source));
+            if($displayPosition != 'form' && !empty($sources)) return -3;
             $dataPrompt = '';
         }
 
@@ -2744,7 +2751,6 @@ class aiModel extends model
         if(empty($displayPosition)) return false;
 
         $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
-        if($displayPosition !== 'form') $requiredFields[] = 'source';
 
         foreach($requiredFields as $field)
         {
