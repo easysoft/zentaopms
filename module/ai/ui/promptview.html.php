@@ -105,9 +105,10 @@ if(!empty($knowledgeLibs))
 }
 $knowledgeLibText = implode($lang->ai->prompts->fieldSeparator, $knowledgeLibNames);
 $displayPosition  = isset($prompt->displayPosition) && isset($lang->ai->prompts->displayPositionList[$prompt->displayPosition]) ? $lang->ai->prompts->displayPositionList[$prompt->displayPosition] : '';
+$isFormPosition   = isset($prompt->displayPosition) && $prompt->displayPosition == 'form';
 
 $formConfigItems = array();
-if(!empty($fieldConfig))
+if($isFormPosition && !empty($fieldConfig))
 {
     foreach($fieldConfig as $field)
     {
@@ -127,7 +128,7 @@ if(!empty($fieldConfig))
             $fieldValue = !empty($field->placeholder) ? $field->placeholder : '-';
         }
 
-        $formConfigItems[] = div("{$fieldName}（{$typeLabel}, {$requiredText}）{$lang->colon} {$fieldValue}");
+        $formConfigItems[] = htmlspecialchars("{$fieldName}（{$typeLabel}, {$requiredText}）{$lang->colon} {$fieldValue}", ENT_QUOTES);
     }
 }
 
@@ -141,12 +142,13 @@ $promptSections = array
     section(set::title($lang->ai->prompts->actionPurpose), set::content($actionObject)),
     section(set::title($lang->ai->prompts->displayPosition), set::content($displayPosition))
 );
-if(isset($prompt->displayPosition) && $prompt->displayPosition == 'form')
+if($isFormPosition)
 {
     $promptSections[] = section
     (
         set::title($lang->ai->miniPrograms->field->fields),
-        empty($formConfigItems) ? set::content($lang->noData) : div(...$formConfigItems)
+        empty($formConfigItems) ? set::content($lang->noData) : set::content(implode('<br />', $formConfigItems)),
+        empty($formConfigItems) ? null : set::useHtml(true)
     );
 }
 $promptSections[] = section(set::title($lang->ai->prompts->role), set::content($prompt->role));
