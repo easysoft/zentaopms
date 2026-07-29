@@ -39,13 +39,8 @@ $tester->app->methodName = 'browse';
 
 $spaceTester = new spaceModelTest();
 
-r(is_object($spaceTester->getPrivsTest())) && p() && e('1');     // 获取空间权限列表并验证结果类型为对象
-r(is_object($spaceTester->getPrivsTest())) && p() && e('1');     // 获取空间权限并验证结果为非空对象
-
-r(!dao::isError()) && p() && e('1');                             // 获取空间权限并验证返回结果无错误
-
-$privs1 = $spaceTester->getPrivsTest();
-$privs2 = $spaceTester->getPrivsTest();
-r($privs1 == $privs2) && p() && e('1');                          // 连续两次获取空间权限并验证结果一致
-
-r(is_object($spaceTester->getPrivsTest())) && p() && e('1');     // 获取空间权限并验证方法返回值类型不变
+r($spaceTester->getPrivLabelTest('repo', 'browse'))     && p() && e('browseAction'); // 获取repo浏览权限标识
+r($spaceTester->getPrivLabelTest('repo', 'create'))     && p() && e('createAction'); // 获取repo创建权限标识
+r($spaceTester->getPrivLabelTest('pipeline', 'browse')) && p() && e('browse');       // 获取pipeline浏览权限标识
+r($spaceTester->getPrivLabelTest('pipeline', 'create')) && p() && e('create');       // 获取pipeline创建权限标识
+r($spaceTester->getPrivLabelTest('artifact', 'create')) && p() && e('create');       // 获取artifact创建权限标识

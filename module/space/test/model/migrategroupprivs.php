@@ -35,11 +35,6 @@ $spaceTester = new spaceModelTest();
 
 r($spaceTester->migrateGroupPrivsTest()) && p() && e('1'); // 执行权限迁移并验证返回结果
 
-$privs = $tester->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('space')->andWhere('method')->eq('browse')->fetchAll();
-r(!empty($privs)) && p() && e('1'); // 验证迁移后space模块browse权限存在
-
-$privs = $tester->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('space')->andWhere('method')->eq('create')->fetchAll();
-r(!empty($privs)) && p() && e('1'); // 验证迁移后space模块create权限存在
-
-$privs = $tester->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('space')->andWhere('method')->eq('delete')->fetchAll();
-r(!empty($privs)) && p() && e('1'); // 验证迁移后space模块delete权限存在
+r($spaceTester->getMigratedGroupPrivCountTest('browse')) && p() && e('3'); // 验证迁移后space模块browse权限存在
+r($spaceTester->getMigratedGroupPrivCountTest('create')) && p() && e('3'); // 验证迁移后space模块create权限存在
+r($spaceTester->getMigratedGroupPrivCountTest('delete')) && p() && e('3'); // 验证迁移后space模块delete权限存在

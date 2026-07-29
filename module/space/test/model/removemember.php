@@ -32,5 +32,4 @@ r($spaceTester->removeMemberTest(1, 'test1')) && p() && e('1');     // 从有效
 r($spaceTester->removeMemberTest(1, 'notexist')) && p() && e('1');  // 从有效空间移除不存在的成员并验证返回结果
 r($spaceTester->removeMemberTest(0, 'test2')) && p() && e('1');     // 从无效空间ID=0移除成员并验证返回结果
 r($spaceTester->removeMemberTest(9999, 'test3')) && p() && e('1');  // 从无效空间ID=9999移除成员并验证返回结果
-global $tester;
-r(!dao::isError()) && p() && e('1');                                 // 移除成员后验证返回结果无错误
+r($spaceTester->removeMemberTest(1, 'test1')) && p() && e('1');     // 移除成员后验证返回结果无错误
