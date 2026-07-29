@@ -185,11 +185,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
     const klibs        = (info.knowledgeLib ? info.knowledgeLib.split(',') : []).filter(Boolean).map(x => `zentao:${x}`);
     const formConfig   = getPromptFormConfig(info.fields, info.formConfig);
     const postMessage  = {content: [{role: 'user', content: info.purpose, custom_data: {invisible: true}}]};
-    if(info.skillID)
-    {
-        postMessage.skillID   = info.skillID;
-        postMessage.skillName = info.skillName || '';
-    }
     const popupOptions = {
         id         : 'zentao-prompt-popoup',
         viewType   : 'chat',
