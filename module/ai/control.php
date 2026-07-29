@@ -568,6 +568,7 @@ class ai extends control
 
         $knowledgeLibs = (empty($knowledgeLibIds)) ? [] : $this->ai->getKnowledgeLibsByIDs($knowledgeLibIds);
 
+        $skills = [];
         if($this->config->edition != 'open' && !empty($prompt->skill))
         {
             $skillIds = array_filter(explode(',', trim((string)$prompt->skill, ',')));
