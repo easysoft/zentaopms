@@ -3657,6 +3657,8 @@ class repoModel extends model
             $userAccount[] = $user->account;
         }
 
+        $providerList = $this->loadModel('provider')->getList();
+
         $oldName = array();
 
         foreach($oldRepos as $oldRepo)
@@ -3695,6 +3697,18 @@ class repoModel extends model
             if($aclInfo['acl'] === 'custom')
             {
                 $repo->acl = 'private';
+            }
+
+            if($oldRepo->SCM === 'Gitlab' && empty($oldRepo->path))
+            {
+                $provider = $providerList[$oldRepo->serviceHost];
+                if(empty($provider) || $provider->type != 'GitLab') continue;
+                $repoInfo = $this->getProviderRepo($provider, $oldRepo->serviceProject);
+
+                $connector            = new stdClass();
+                $connector->slug      = zget($repoInfo, 'path_with_namespace', '');
+                $connector->projectID = (string)zget($repoInfo, 'id', 0);
+                $repo->connector      = json_encode($connector, JSON_UNESCAPED_SLASHES);
             }
 
             $this->dao->insert(TABLE_REPO)->data($repo)->exec();
