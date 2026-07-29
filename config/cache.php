@@ -24,7 +24,8 @@ $config->cache->dao->excludeTables = array(   // 不使用 SQL 查询结果缓�
     TABLE_ARTIFACT,
     TABLE_PPMREVIEWERS,
     TABLE_SPACE,
-    TABLE_DEVOPSSPACEUSER
+    TABLE_DEVOPSSPACEUSER,
+    TABLE_PROVIDER
 );
 
 $config->cache->client = new stdClass();
