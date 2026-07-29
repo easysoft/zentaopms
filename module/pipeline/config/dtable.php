@@ -96,7 +96,7 @@ $config->pipeline->dtable->fieldList['actions']['name']  = 'actions';
 $config->pipeline->dtable->fieldList['actions']['title'] = $lang->actions;
 $config->pipeline->dtable->fieldList['actions']['width'] = 170;
 $config->pipeline->dtable->fieldList['actions']['type']  = 'actions';
-$config->pipeline->dtable->fieldList['actions']['menu']  = array('exec', 'execution', 'delete');
+$config->pipeline->dtable->fieldList['actions']['menu']  = array('exec', 'execution', 'edit', 'delete');
 $config->pipeline->dtable->fieldList['actions']['list']  = $config->pipeline->actionList;
 
 $config->pipeline->execution->dtable = new stdclass();
