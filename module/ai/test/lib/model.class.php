@@ -2002,6 +2002,7 @@ class aiModelTest extends baseTest
             3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'model' => 999, 'deleted' => 0),
             4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'actionPurpose' => 'project.edit', 'model' => 1, 'deleted' => 0),
             5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'actionPurpose' => 'invalid.form', 'model' => 1, 'deleted' => 0),
+            6 => (object)array('id' => 6, 'module' => 'story', 'source' => ',,', 'targetForm' => 'story.create', 'actionPurpose' => 'story.create', 'model' => 1, 'displayPosition' => 'detail', 'deleted' => 0)
         );
 
         // 模拟object数据
