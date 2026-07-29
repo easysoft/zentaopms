@@ -115,12 +115,15 @@ class artifact extends control
      */
     public function view(int $artifactLibID, int $spaceID = 0, int $repoID = 0, string $type = 'space', string $selectPath = '', int $leaf = 0, string $orderBy = 'edited_desc', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
+        $this->session->set('artifactLibViewLink', $this->inLink('view', "artifactLibID={$artifactLibID}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&leaf={$leaf}"));
+
         $this->config->file->dangers = '';
         $this->checkAccess($spaceID, $repoID);
         $selectPath = helper::safe64Decode($selectPath);
 
         $artifactLib = $this->artifact->fetchByID($artifactLibID);
         if(empty($artifactLib)) return print(js::error($this->lang->artifact->notice->noArtifact));
+
 
         $this->commonAction((int)$artifactLib->spaceID, (int)$artifactLib->repoID);
         $this->app->loadClass('pager', true);
@@ -415,13 +418,27 @@ class artifact extends control
                 $oldName = !empty($asset->metadata) && !empty($asset->metadata->name) ? $asset->metadata->name : basename($asset->path);
                 $extra   = sprintf($this->lang->artifact->actionComment->edited, $oldName, $formData->name);
                 $this->loadModel('action')->create('artifactAsset', $assetID, 'editedasset', '', "{$artifactLibID}|{$extra}");
+                if($this->session->artifactLibViewLink && $asset->metadata->group)
+                {
+                    $oldPath = helper::safe64Encode('/' . $asset->metadata->group . '/' . $oldName);
+                    $newPath = helper::safe64Encode('/' . $asset->metadata->group . '/' . $formData->name);
+                    $link = str_replace($oldPath, $newPath, $this->session->artifactLibViewLink);
+                }
             }
             if(dao::isError()) $this->sendError(dao::getError());
             $response = array();
             $response['result']     = 'success';
             $response['message']    = $this->lang->saveSuccess;
             $response['closeModal'] = true;
-            $response['callback']   = "window.expandNode();";
+            if(!empty($link) && $link != $this->session->artifactLibViewLink)
+            {
+
+                $response['locate'] = $link;
+            }
+            else
+            {
+                $response['callback'] = "window.expandNode();";
+            }
             $this->sendSuccess($response);
         }
 
