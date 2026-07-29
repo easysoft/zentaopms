@@ -779,7 +779,7 @@ class ai extends control
         $response['formLocation'] = $location;
         $response['model']        = $prompt->model;
 
-        $skills = $this->getPromptSkillIDs($prompt);
+        $skills = ($this->config->edition != 'open' && method_exists($this->ai, 'getPromptSkillIDs')) ? $this->ai->getPromptSkillIDs($prompt) : [];
         if($skills) $response['skills'] = $skills;
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
@@ -1126,30 +1126,10 @@ class ai extends control
             'formConfig'     => $formConfig,
         );
 
-        $skills = $this->getPromptSkillIDs($prompt);
+        $skills = ($this->config->edition != 'open' && method_exists($this->ai, 'getPromptSkillIDs')) ? $this->ai->getPromptSkillIDs($prompt) : [];
         if($skills) $callbackData['skills'] = $skills;
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($callbackData, false))));
-    }
-
-    /**
-     * 根据智能体挂载的本地 skill id，解析为 ZAI skillID（UUID）列表。
-     *
-     * @param  object $prompt
-     * @access private
-     * @return array
-     */
-    private function getPromptSkillIDs(object $prompt): array
-    {
-        if(empty($prompt->skill) || $this->config->edition == 'open') return [];
-
-        $localIDs = array_filter(explode(',', trim((string)$prompt->skill, ',')));
-        if(empty($localIDs)) return [];
-
-        $skillList = $this->ai->getSkillsByIDs($localIDs);
-        $skillIDs  = array_column($skillList, 'skillID');
-
-        return array_values(array_unique($skillIDs));
     }
 
     /**

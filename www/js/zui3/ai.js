@@ -219,8 +219,9 @@ window.executeZentaoPrompt = async function(info, testingMode)
  * @param {string}  agentRole      - 智能体角色描述
  * @param {string}  agentPurpose   - 智能体目的描述
  * @param {boolean} isBatch        - 是否为批量表单
+ * @param {Array}   skills         - ZAI skillID UUID 列表
  */
-window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields, agentRole, agentPurpose, isBatch)
+window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextIDs, promptID, promptFields, allowedFields, agentRole, agentPurpose, isBatch, skills)
 {
     const zaiPanel = await checkZAIPanel(true);
     if(!zaiPanel) return;
@@ -531,6 +532,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
             prompt: prompt,
             tools: tools,
             form: formConfig,
+            skills: Array.isArray(skills) && skills.length ? skills : undefined,
         },
     };
 
