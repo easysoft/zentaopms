@@ -36,5 +36,4 @@ r($spaceTester->manageMembersTest(2, $members)) && p() && e('1');   // 向有效
 r($spaceTester->manageMembersTest(9999, array())) && p() && e('1');  // 用空成员数据管理无效空间并验证返回结果
 r($spaceTester->manageMembersTest(0, array())) && p() && e('1');     // 用空成员数据管理空间ID=0并验证返回结果
 
-global $tester;
-r(!dao::isError()) && p() && e('1');                                 // 管理成员后验证返回结果无错误
+r($spaceTester->manageMembersTest(1, array())) && p() && e('1');     // 管理成员后验证返回结果无错误

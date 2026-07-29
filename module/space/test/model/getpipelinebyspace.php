@@ -16,19 +16,24 @@ cid=16029
 - 查询空间1下的流水线总数 @1
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zendata('user')->gen(10);
-zendata('repo')->gen(10);
-zendata('job')->gen(10);
-zendata('ops_space')->gen(10);
-zendata('ops_spaceuser')->gen(10);
+zenData('user')->gen(5);
+
+$pipeline = zenData('ops_pipeline');
+$pipeline->id->range('1-4');
+$pipeline->spaceID->range('1,1,2,1');
+$pipeline->name->range('build-one,deploy-one,test-two,deleted-one');
+$pipeline->engine->range('gitfox,jenkins,gitlab,gitfox');
+$pipeline->deleted->range('0,0,0,1');
+$pipeline->gen(4);
 
 su('admin');
 
-global $tester;
-$spaceModel = $tester->loadModel('space');
+$spaceTester = new spaceModelTest();
 
-r($spaceModel->getPipelineBySpace(0))        && p()                && e('0'); //查询无效的空间
-r($spaceModel->getPipelineBySpace(1))        && p('1:id;1:name')   && e('1,这是一个Job1'); //查询空间1下的流水线列表
-r($spaceModel->getPipelineBySpace(2))        && p('2:id;2:engine') && e('2,gitlab'); //查询空间2下的流水线列表
-r(count($spaceModel->getPipelineBySpace(1))) && p()                && e('1'); //查询空间1下的流水线总数
+r($spaceTester->getPipelineBySpaceCountTest(0))            && p() && e('0');          // 查询无效的空间
+r($spaceTester->getPipelineBySpaceCountTest(1))            && p() && e('2');          // 查询空间1下的流水线数量
+r($spaceTester->getPipelineBySpaceFieldTest(1, 1, 'name'))   && p() && e('build-one');  // 查询空间1下的第1条流水线名称
+r($spaceTester->getPipelineBySpaceFieldTest(2, 3, 'engine')) && p() && e('gitlab');     // 查询空间2下的流水线引擎
+r($spaceTester->getPipelineBySpaceFieldTest(1, 2, 'engine')) && p() && e('jenkins');    // 查询空间1下的第2条流水线引擎
