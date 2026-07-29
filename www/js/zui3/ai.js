@@ -198,6 +198,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
             form     : formConfig,
             memories : klibs.length ? [{collections: klibs}] : undefined,
+            skills   : Array.isArray(info.skills) && info.skills.length ? info.skills : undefined,
         },
     };
     const popup = zaiPanel.openPopup(popupOptions);
