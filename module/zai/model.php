@@ -219,7 +219,7 @@ class zaiModel extends model
         $result = json_decode($result, true);
         if(empty($result['agent']['id'])) return '';
 
-        $this->dao->replace(TABLE_AI_USERAGENT)->data(array('account' => $account, 'agent' => $result['agent']['id']))->exec();
+        $this->dao->insert(TABLE_AI_USERAGENT)->data(array('account' => $account, 'agent' => $result['agent']['id']))->exec();
 
         return $result['id'];
     }
