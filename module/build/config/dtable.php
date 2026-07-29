@@ -2,6 +2,7 @@
 global $lang, $app;
 $app->loadLang('bug');
 $app->loadLang('story');
+if(!isset($config->bug->dtable)) $app->loadConfig('bug');
 $config->build->dtable = new stdclass();
 
 $config->build->dtable->fieldList['id']['title'] = $lang->idAB;
@@ -168,10 +169,20 @@ $config->build->bug->dtable->fieldList['actions']['menu']     = array('unlinkBug
 $config->build->bug->dtable->fieldList['actions']['list']     = $config->build->actionList;
 $config->build->bug->dtable->fieldList['actions']['minWidth'] = '60';
 
-$config->build->generatedBug->dtable = clone $config->build->bug->dtable;
-array_splice($config->build->generatedBug->dtable->fieldList, 5, 0, array('openedBuild' => array('title' => $lang->bug->openedBuild, 'name' => 'openedBuild', 'type' => 'html', 'width' => '200px', 'hint' => true)));
-$config->build->generatedBug->dtable->fieldList['id']['checkbox'] = false;
+$config->build->generatedBug->dtable = clone $config->bug->dtable;
+$config->build->generatedBug->dtable->defaultField = array('id', 'title', 'severity', 'pri', 'status', 'openedBuild', 'openedBy', 'openedDate', 'resolvedBy', 'resolvedDate');
 unset($config->build->generatedBug->dtable->fieldList['actions']);
+foreach($config->build->generatedBug->dtable->fieldList as $field => $fieldConfig)
+{
+    $config->build->generatedBug->dtable->fieldList[$field]['show'] = in_array($field, $config->build->generatedBug->dtable->defaultField);
+}
+$config->build->generatedBug->dtable->fieldList['id']['type']             = 'id';
+$config->build->generatedBug->dtable->fieldList['id']['checkbox']         = false;
+$config->build->generatedBug->dtable->fieldList['openedBuild']['width']   = '200px';
+$config->build->generatedBug->dtable->fieldList['openedBuild']['hint']    = true;
+$config->build->generatedBug->dtable->fieldList['resolvedDate']['show']   = true;
+$config->build->generatedBug->dtable->fieldList['resolvedBy']['show']     = true;
+$config->build->generatedBug->dtable->fieldList['openedBuild']['show']    = true;
 
 $config->build->defaultFields['linkStory'] = array('id', 'pri', 'title', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage');
 $config->build->defaultFields['linkBug']   = array('id', 'pri', 'title', 'openedBy', 'resolvedBy', 'status');
