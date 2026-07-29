@@ -93,7 +93,15 @@ $actionList = $this->loadModel('common')->buildOperateMenu($prompt);
 $promptContent = $prompt->purpose;
 if(!empty($prompt->elaboration)) $promptContent .= "\n\n" . $prompt->elaboration;
 
-$skillName = !empty($skill) && !empty($skill->name) ? $skill->name : '';
+$skillNames = array();
+if(!empty($skills))
+{
+    foreach($skills as $skill)
+    {
+        if(!empty($skill->name)) $skillNames[] = $skill->name;
+    }
+}
+$skillName = implode($lang->ai->prompts->fieldSeparator, $skillNames);
 
 $knowledgeLibNames = array();
 if(!empty($knowledgeLibs))

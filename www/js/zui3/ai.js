@@ -185,11 +185,6 @@ window.executeZentaoPrompt = async function(info, testingMode)
     const klibs        = (info.knowledgeLib ? info.knowledgeLib.split(',') : []).filter(Boolean).map(x => `zentao:${x}`);
     const formConfig   = getPromptFormConfig(info.fields, info.formConfig);
     const postMessage  = {content: [{role: 'user', content: info.purpose, custom_data: {invisible: true}}]};
-    if(info.skillID)
-    {
-        postMessage.skillID   = info.skillID;
-        postMessage.skillName = info.skillName || '';
-    }
     const popupOptions = {
         id         : 'zentao-prompt-popoup',
         viewType   : 'chat',
@@ -203,6 +198,7 @@ window.executeZentaoPrompt = async function(info, testingMode)
             prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
             form     : formConfig,
             memories : klibs.length ? [{collections: klibs}] : undefined,
+            skills   : Array.isArray(info.skills) && info.skills.length ? info.skills : undefined,
         },
     };
     const popup = zaiPanel.openPopup(popupOptions);

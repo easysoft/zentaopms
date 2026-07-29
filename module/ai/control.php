@@ -250,8 +250,12 @@ class ai extends control
         $knowledgeLibs = array();
         if(!empty($knowledgeLibIDs) && method_exists($this->ai, 'getKnowledgeLibsByIDs')) $knowledgeLibs = $this->ai->getKnowledgeLibsByIDs($knowledgeLibIDs);
 
-        $skill = false;
-        if(!empty($prompt->skill) && method_exists($this->ai, 'getSkillByID')) $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
+        $skills = array();
+        if(!empty($prompt->skill) && $this->config->edition != 'open')
+        {
+            $skillIDs = array_filter(explode(',', trim((string)$prompt->skill, ',')));
+            $skills   = $this->ai->getSkillsByIDs($skillIDs);
+        }
 
         $this->view->prompt        = $prompt;
         $this->view->preAndNext    = $this->loadModel('common')->getPreAndNextObject('prompt', $id);
@@ -261,7 +265,7 @@ class ai extends control
         $this->view->title         = "{$this->lang->aiapp->zentaoAgent}#{$prompt->id} " . htmlspecialchars($prompt->name);
         $this->view->fieldConfig   = $this->ai->getPromptFields($id);
         $this->view->knowledgeLibs = $knowledgeLibs;
-        $this->view->skill         = $skill;
+        $this->view->skills        = $skills;
         $processObject = zget($processObjectList, $prompt->module, $prompt->module);
         if($processObject == $prompt->module && isset($this->lang->ai->moduleList[$prompt->module]['common'])) $processObject = $this->lang->ai->moduleList[$prompt->module]['common'];
         $this->view->processObject = $processObject;
@@ -542,7 +546,7 @@ class ai extends control
             $prompt->elaboration  = '';
             $prompt->role         = isset($data->role) ? $data->role : '';
             $prompt->knowledgeLib = $data->knowledgeLib ?? '';
-            $prompt->skill        = !empty($data->skill) ? (int)$data->skill : 0;
+            $prompt->skill        = !empty($data->skill) ? trim((string)$data->skill, ',') : '';
 
             if(isset($data->fields))
             {
@@ -564,6 +568,13 @@ class ai extends control
 
         $knowledgeLibs = (empty($knowledgeLibIds)) ? [] : $this->ai->getKnowledgeLibsByIDs($knowledgeLibIds);
 
+        $skills = [];
+        if($this->config->edition != 'open' && !empty($prompt->skill))
+        {
+            $skillIds = array_filter(explode(',', trim((string)$prompt->skill, ',')));
+            $skills   = $this->ai->getSkillsByIDs($skillIds);
+        }
+
         $currentPrompt = $prompt->purpose;
         if(!empty($prompt->elaboration)) $currentPrompt .= "\n\n" . $prompt->elaboration;
 
@@ -573,7 +584,7 @@ class ai extends control
         $this->view->currentFields  = $this->ai->getPromptFields($promptID);
         $this->view->currentPrompt  = $currentPrompt;
         $this->view->knowledgeLibs  = $knowledgeLibs;
-        $this->view->skill          = $this->ai->getSkillByID((int)$prompt->skill, false);
+        $this->view->skills         = $skills;
         $this->view->lastActiveStep = $this->ai->getLastActiveStep($prompt);
         $this->view->title          = "{$this->lang->ai->prompts->common}#{$prompt->id} {$prompt->name} {$this->lang->hyphen} " . $this->lang->ai->prompts->setPurpose . " {$this->lang->hyphen} " . $this->lang->ai->prompts->common;
         $this->display();
@@ -767,7 +778,9 @@ class ai extends control
         $response['object']       = $objectData;
         $response['formLocation'] = $location;
         $response['model']        = $prompt->model;
-        $this->appendPromptSkillToResponse($response, $prompt);
+
+        $skills = $this->getPromptSkillIDs($prompt);
+        if($skills) $response['skills'] = $skills;
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($response, $mode === 'testing'))));
     }
@@ -944,7 +957,6 @@ class ai extends control
         $response['model']        = $prompt->model;
         $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
         $response['content']      = $showText;
-        $this->appendPromptSkillToResponse($response, $prompt);
 
         return $this->send(array('result' => 'success', 'data' => $response));
     }
@@ -1113,32 +1125,31 @@ class ai extends control
             'fields'         => $extraFields,
             'formConfig'     => $formConfig,
         );
-        $this->appendPromptSkillToResponse($callbackData, $prompt);
+
+        $skills = $this->getPromptSkillIDs($prompt);
+        if($skills) $callbackData['skills'] = $skills;
 
         return $this->send(array('result' => 'success', 'callback' => array('name' => 'parent.executeZentaoPrompt', 'params' => array($callbackData, false))));
     }
 
     /**
-     * Append mounted skill info for AI chat.
+     * 根据智能体挂载的本地 skill id，解析为 ZAI skillID（UUID）列表。
      *
-     * @param  array  $response
      * @param  object $prompt
      * @access private
-     * @return void
+     * @return array
      */
-    private function appendPromptSkillToResponse(array &$response, object $prompt): void
+    private function getPromptSkillIDs(object $prompt): array
     {
-        $response['skill']     = $prompt->skill ?? 0;
-        $response['skillID']   = '';
-        $response['skillName'] = '';
+        if(empty($prompt->skill) || $this->config->edition == 'open') return [];
 
-        if(empty($prompt->skill)) return;
+        $localIDs = array_filter(explode(',', trim((string)$prompt->skill, ',')));
+        if(empty($localIDs)) return [];
 
-        $skill = $this->ai->getSkillByID((int)$prompt->skill, false);
-        if(!$skill || empty($skill->skillID)) return;
+        $skillList = $this->ai->getSkillsByIDs($localIDs);
+        $skillIDs  = array_column($skillList, 'skillID');
 
-        $response['skillID']   = $skill->skillID;
-        $response['skillName'] = $skill->name;
+        return array_values(array_unique($skillIDs));
     }
 
     /**
