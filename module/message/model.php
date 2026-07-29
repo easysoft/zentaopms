@@ -24,12 +24,10 @@ class messageModel extends model
     public function getMessages(string $status = 'all', string $orderBy = 'createdDate'): array
     {
         $now = helper::now();
-        return $this->dao->select('t1.*')->from(TABLE_NOTIFY)->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.`objectType` = 'message' AND t1.action = t2.id")
-            ->where('t1.`objectType`')->eq('message')
-            ->andWhere('t1.`toList`')->eq(",{$this->app->user->account},")
-            ->beginIF(!empty($status) && $status != 'all')->andWhere('t1.status')->eq($status)->fi()
-            ->andWhere("(t1.`sendTime` IS NULL OR t1.`sendTime` <= '{$now}')")
+        return $this->dao->select('*')->from(TABLE_NOTIFY)->where('`objectType`')->eq('message')
+            ->andWhere('`toList`')->eq(",{$this->app->user->account},")
+            ->beginIF(!empty($status) && $status != 'all')->andWhere('status')->eq($status)->fi()
+            ->andWhere("(`sendTime` IS NULL OR `sendTime` <= '{$now}')")
             ->orderBy($orderBy)
             ->fetchAll('id', false);
     }
