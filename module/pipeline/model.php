@@ -601,12 +601,11 @@ class pipelineModel extends model
         $action = strtolower($action);
         if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
 
-        if(in_array($action, array('edit')))
+        if($action === 'edit')
         {
             return $pipeline->engine != 'gitfox';
         }
-
-        if(in_array($action, array('arrange')))
+        if($action === 'arrange')
         {
             return $pipeline->engine == 'gitfox';
         }
