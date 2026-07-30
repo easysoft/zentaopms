@@ -39,22 +39,7 @@ foreach($prompts as $prompt)
 {
     if($prompt->actionPurpose)
     {
-        $targetFormPath = explode('.', $prompt->actionPurpose);
-        if(count($targetFormPath) == 2)
-        {
-            if($prompt->actionPurpose == 'empty.empty')
-            {
-                $prompt->targetFormLabel = isset($lang->ai->prompts->noRedirect) ? $lang->ai->prompts->noRedirect : $prompt->actionPurpose;
-            }
-            elseif(isset($lang->ai->targetForm[$targetFormPath[0]]['common']) && isset($lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]]))
-            {
-                $prompt->targetFormLabel = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
-            }
-            else
-            {
-                $prompt->targetFormLabel = $prompt->actionPurpose;
-            }
-        }
+        $prompt->targetFormLabel = $this->ai->getTargetFormLabel($prompt->actionPurpose);
     }
 }
 
