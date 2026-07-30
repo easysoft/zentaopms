@@ -1143,8 +1143,7 @@ class ai extends control
      */
     private function buildPromptFormMeta(object $prompt, array $fields, string $targetForm): array
     {
-        $targetFormPaths = explode('.', $targetForm, 2);
-        $targetFormName  = count($targetFormPaths) === 2 ? ($this->lang->ai->targetForm[$targetFormPaths[0]][$targetFormPaths[1]] ?? '') : '';
+        $targetFormName = $this->ai->getTargetFormLabel($targetForm, false);
 
         $dataPropNames = new stdclass();
         $dataPropNames->{$prompt->module} = new stdclass();
