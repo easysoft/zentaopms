@@ -100,29 +100,34 @@ class aiModel extends model
         $fieldCache = array();
         $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
 
-        if(empty($this->workflowfield)) $this->loadModel('workflowfield');
-
         $moduleGroup = $this->config->ai->moduleGroup;
-        $flows       = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
-            ->where('type')->eq('flow')
-            ->andWhere('status')->eq('normal')
-            ->andWhere('buildin')->eq('0')
-            ->fetchPairs();
-
-        foreach($flows as $module => $name)
+        if($this->config->edition != 'open')
         {
-            if(isset($moduleGroup[$module])) continue;
+            if(empty($this->workflowfield)) $this->loadModel('workflowfield');
 
-            $moduleGroup[$module] = array($module);
-            $this->lang->ai->moduleList[$module]['common'] = $name;
+            $flows = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
+                ->where('type')->eq('flow')
+                ->andWhere('status')->eq('normal')
+                ->andWhere('buildin')->eq('0')
+                ->fetchPairs();
+
+            foreach($flows as $module => $name)
+            {
+                if(isset($moduleGroup[$module])) continue;
+
+                $moduleGroup[$module] = array($module);
+                $this->lang->ai->moduleList[$module]['common'] = $name;
+            }
         }
 
+        $hasWorkflowField = !empty($this->workflowfield) && method_exists($this->workflowfield, 'getList');
         foreach($moduleGroup as $group => $modules)
         {
             foreach($modules as $module)
             {
                 $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
                 if(!empty($dataSource[$group][$module])) continue;
+                if(!$hasWorkflowField) continue;
 
                 $cacheKey = "$group.$module";
                 if(isset($fieldCache[$cacheKey]))
@@ -2357,10 +2362,11 @@ class aiModel extends model
             $this->config->ai->targetForm[$module][$action] = (object)array('m' => $module, 'f' => $action, 'for' => $module);
         }
 
-        if(empty($this->lang->ai->targetForm[$module]['common']) && !empty($workflowAction->name))
+        $moduleLabel = $this->getTargetFormModuleLabel($module);
+        if(empty($this->lang->ai->targetForm[$module]['common']) && !empty($moduleLabel))
         {
             if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
-            $this->lang->ai->targetForm[$module]['common'] = $workflowAction->name;
+            $this->lang->ai->targetForm[$module]['common'] = $moduleLabel;
         }
         if(empty($this->lang->ai->targetForm[$module][$action]) && !empty($workflowAction->name))
         {
@@ -2368,6 +2374,107 @@ class aiModel extends model
         }
 
         return $this->config->ai->targetForm[$module][$action];
+    }
+
+    /**
+     * 获取目标表单显示名称。
+     * Get target form label.
+     *
+     * @param  string $targetForm
+     * @param  bool   $withModule
+     * @param  string $objectModule
+     * @access public
+     * @return string
+     */
+    public function getTargetFormLabel(string $targetForm, bool $withModule = true, string $objectModule = ''): string
+    {
+        if(empty($targetForm)) return '';
+        if($targetForm == 'empty.empty') return isset($this->lang->ai->prompts->noRedirect) ? $this->lang->ai->prompts->noRedirect : $targetForm;
+
+        $targetFormPath = explode('.', $targetForm, 2);
+        if(count($targetFormPath) != 2) return $targetForm;
+
+        list($module, $action) = $targetFormPath;
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+            if(!empty($workflowAction)) $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+        }
+
+        $moduleLabel = $this->getTargetFormModuleLabel(empty($objectModule) ? $module : $objectModule);
+        $actionLabel = $this->getTargetFormActionLabel($module, $action);
+
+        if($withModule && !empty($moduleLabel) && !empty($actionLabel)) return $moduleLabel . ' / ' . $actionLabel;
+        if(!empty($actionLabel)) return $actionLabel;
+
+        return $targetForm;
+    }
+
+    /**
+     * 获取目标表单模块显示名称。
+     * Get target form module label.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getTargetFormModuleLabel(string $module): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module]['common'])) return $this->lang->ai->targetForm[$module]['common'];
+        if(isset($this->lang->ai->moduleList[$module]) && is_array($this->lang->ai->moduleList[$module]) && isset($this->lang->ai->moduleList[$module]['common'])) return $this->lang->ai->moduleList[$module]['common'];
+
+        if(defined('TABLE_WORKFLOW'))
+        {
+            $flowName = $this->dao->select('name')->from(TABLE_WORKFLOW)
+                ->where('module')->eq($module)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($flowName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module]['common'] = $flowName;
+                return $flowName;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * 获取目标表单动作显示名称。
+     * Get target form action label.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return string
+     */
+    public function getTargetFormActionLabel(string $module, string $action): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module][$action])) return $this->lang->ai->targetForm[$module][$action];
+
+        if(defined('TABLE_WORKFLOWACTION'))
+        {
+            $actionName = $this->dao->select('name')->from(TABLE_WORKFLOWACTION)
+                ->where('module')->eq($module)
+                ->andWhere('action')->eq($action)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($actionName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module][$action] = $actionName;
+                return $actionName;
+            }
+        }
+
+        if($this->config->edition != 'open')
+        {
+            $this->app->loadLang('workflowaction');
+            if(isset($this->lang->workflowaction->approval->actions[$action])) return $this->lang->workflowaction->approval->actions[$action];
+        }
+
+        return '';
     }
 
     /**
