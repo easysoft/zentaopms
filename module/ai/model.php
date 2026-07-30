@@ -100,29 +100,34 @@ class aiModel extends model
         $fieldCache = array();
         $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
 
-        if(empty($this->workflowfield)) $this->loadModel('workflowfield');
-
         $moduleGroup = $this->config->ai->moduleGroup;
-        $flows       = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
-            ->where('type')->eq('flow')
-            ->andWhere('status')->eq('normal')
-            ->andWhere('buildin')->eq('0')
-            ->fetchPairs();
-
-        foreach($flows as $module => $name)
+        if($this->config->edition != 'open')
         {
-            if(isset($moduleGroup[$module])) continue;
+            if(empty($this->workflowfield)) $this->loadModel('workflowfield');
 
-            $moduleGroup[$module] = array($module);
-            $this->lang->ai->moduleList[$module]['common'] = $name;
+            $flows = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
+                ->where('type')->eq('flow')
+                ->andWhere('status')->eq('normal')
+                ->andWhere('buildin')->eq('0')
+                ->fetchPairs();
+
+            foreach($flows as $module => $name)
+            {
+                if(isset($moduleGroup[$module])) continue;
+
+                $moduleGroup[$module] = array($module);
+                $this->lang->ai->moduleList[$module]['common'] = $name;
+            }
         }
 
+        $hasWorkflowField = !empty($this->workflowfield) && method_exists($this->workflowfield, 'getList');
         foreach($moduleGroup as $group => $modules)
         {
             foreach($modules as $module)
             {
                 $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
                 if(!empty($dataSource[$group][$module])) continue;
+                if(!$hasWorkflowField) continue;
 
                 $cacheKey = "$group.$module";
                 if(isset($fieldCache[$cacheKey]))
