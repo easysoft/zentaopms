@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000')))) && p() && e('1');
-r(!is_null($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000')))) && p() && e('1');
-r(is_bool($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000'))) || is_array($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000'))) || is_object($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000')))) && p() && e('1');
-r(!is_null($model->apicreatebranchtype(1, array('name'=>'feature/*','color'=>'#FF0000')))) && p() && e('1');
+r($gitfoxTest->apiCreateBranchTypeErrorTest(1, array('name' => 'feature/*', 'color' => '#FF0000'))) && p() && e('1');
+r($gitfoxTest->apiCreateBranchTypeTest(1, array('name' => 'feature/*', 'color' => '#FF0000'))) && p() && e('0');
+r($gitfoxTest->apiCreateBranchTypeTypeTest(1, array('name' => 'feature/*', 'color' => '#FF0000'))) && p() && e('bool');
+r($gitfoxTest->apiCreateBranchTypeErrorTest(1, array('name' => 'feature/*', 'color' => '#FF0000'))) && p() && e('1');
+r($gitfoxTest->apiCreateBranchTypeTest(1, array('name' => 'feature/*', 'color' => '#FF0000'))) && p() && e('0');

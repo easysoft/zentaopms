@@ -7,11 +7,11 @@ title=测试 gitfoxModel::apiGetPipelineLogs();
 timeout=0
 cid=0
 
-- 执行model模块的apiGetPipelineLogs方法，参数是1, 1,   @0
-- 执行model模块的apiGetPipelineLogs方法，参数是1, 1,   @0
-- 执行model模块的apiGetPipelineLogs方法，参数是1, 1,   @1
-- 执行 @0
-- 执行model模块的apiGetPipelineLogs方法，参数是1, 1,   @1
+- 步骤 1：流水线名称为空时返回空字符串 @0
+- 步骤 2：流水线编号为空时返回空字符串 @0
+- 步骤 3：有效参数时返回值类型为 string @string
+- 步骤 4：有效参数时不产生 dao 错误 @0
+- 步骤 5：有效参数时日志长度为 0 @0
 
 */
 
@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r($model->apiGetPipelineLogs(1, 1, (object)array('name' => '', 'number' => 1))) && p() && e('0');
-r($model->apiGetPipelineLogs(1, 1, (object)array('name' => 'build', 'number' => ''))) && p() && e('0');
-r(is_string($model->apiGetPipelineLogs(1, 1, (object)array('name' => 'build', 'number' => 1)))) && p() && e('1');
-r((int)dao::isError()) && p() && e('0');
-r(is_string($model->apiGetPipelineLogs(1, 1, (object)array('name' => 'build', 'number' => 1)))) && p() && e('1');
+r($gitfoxTest->apiGetPipelineLogsTest(1, 1, (object)array('name' => '', 'number' => 1))) && p() && e('0');
+r($gitfoxTest->apiGetPipelineLogsTest(1, 1, (object)array('name' => 'build', 'number' => ''))) && p() && e('0');
+r($gitfoxTest->apiGetPipelineLogsTypeTest(1, 1, (object)array('name' => 'build', 'number' => 1))) && p() && e('string');
+r($gitfoxTest->apiGetPipelineLogsErrorTest(1, 1, (object)array('name' => 'build', 'number' => 1))) && p() && e('0');
+r($gitfoxTest->apiGetPipelineLogsCountTest(1, 1, (object)array('name' => 'build', 'number' => 1))) && p() && e('0');
