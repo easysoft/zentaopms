@@ -7,11 +7,11 @@ title=测试 gitfoxModel::apigetcommits();
 timeout=0
 cid=0
 
-- 执行 @0
-- 执行model模块的apigetcommits方法，参数是1, array  @1
-- 执行model模块的apigetcommits方法，参数是1, array  @1
-- 执行$model->apigetcommits(1, array())) || is_array($model->apigetcommits(1, array())) || is_object($model->apigetcommits(1, array( @1
-- 执行model模块的apigetcommits方法，参数是1, array  @1
+- 步骤 1：apiGetCommits 不产生 dao 错误 @0
+- 步骤 2：apiGetCommits 返回 false @0
+- 步骤 3：apiGetCommits 返回值类型为 bool @bool
+- 步骤 4：apiGetCommits 的结果条数为 0 @0
+- 步骤 5：带分页参数时仍返回 false @0
 
 */
 
@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apigetcommits(1, array()))) && p() && e('1');
-r(!is_null($model->apigetcommits(1, array()))) && p() && e('1');
-r(is_bool($model->apigetcommits(1, array())) || is_array($model->apigetcommits(1, array())) || is_object($model->apigetcommits(1, array()))) && p() && e('1');
-r(!is_null($model->apigetcommits(1, array()))) && p() && e('1');
+r($gitfoxTest->apiGetCommitsErrorTest(1, array())) && p() && e('0');
+r($gitfoxTest->apiGetCommitsTest(1, array())) && p() && e('0');
+r($gitfoxTest->apiGetCommitsTypeTest(1, array())) && p() && e('bool');
+r($gitfoxTest->apiGetCommitsCountTest(1, array())) && p() && e('0');
+r($gitfoxTest->apiGetCommitsTest(1, array('page' => 1))) && p() && e('0');

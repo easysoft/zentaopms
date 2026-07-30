@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apideletespace(1))) && p() && e('1');
-r(!is_null($model->apideletespace(1))) && p() && e('1');
-r(is_bool($model->apideletespace(1)) || is_array($model->apideletespace(1)) || is_object($model->apideletespace(1))) && p() && e('1');
-r(!is_null($model->apideletespace(1))) && p() && e('1');
+r($gitfoxTest->apiDeleteSpaceErrorTest(1)) && p() && e('1');
+r($gitfoxTest->apiDeleteSpaceTest(1)) && p() && e('0');
+r($gitfoxTest->apiDeleteSpaceTypeTest(1)) && p() && e('bool');
+r($gitfoxTest->apiDeleteSpaceErrorTest(1)) && p() && e('1');
+r($gitfoxTest->apiDeleteSpaceTest(1)) && p() && e('0');

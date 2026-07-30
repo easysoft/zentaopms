@@ -7,11 +7,11 @@ title=测试 gitfoxModel::apigethooks();
 timeout=0
 cid=0
 
-- 执行 @0
-- 执行model模块的apigethooks方法，参数是1  @1
-- 执行model模块的apigethooks方法，参数是1  @1
-- 执行$model->apigethooks(1)) || is_array($model->apigethooks(1)) || is_object($model->apigethooks(1 @1
-- 执行model模块的apigethooks方法，参数是1  @1
+- 步骤 1：apiGetHooks 不产生 dao 错误 @0
+- 步骤 2：apiGetHooks 返回值类型为 array @array
+- 步骤 3：apiGetHooks 能查到新建 webhook @1
+- 步骤 4：删除该 webhook 后查询不到它 @0
+- 步骤 5：删除后 apiGetHooks 仍返回 array @array
 
 */
 
@@ -22,10 +22,12 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
+$hookURL    = 'http://example.com/list-hook-' . uniqid();
+$hook       = $gitfoxTest->apiCreateHookTest(1, (object)array('url' => $hookURL, 'displayName' => 'list-hook-' . uniqid()));
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apigethooks(1))) && p() && e('1');
-r(!is_null($model->apigethooks(1))) && p() && e('1');
-r(is_bool($model->apigethooks(1)) || is_array($model->apigethooks(1)) || is_object($model->apigethooks(1))) && p() && e('1');
-r(!is_null($model->apigethooks(1))) && p() && e('1');
+r($gitfoxTest->apiGetHooksErrorTest(1)) && p() && e('0');
+r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');
+r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('1');
+$gitfoxTest->apiDeleteWebhookTest(1, (int)$hook->id);
+r($gitfoxTest->apiGetHooksContainsUrlTest(1, $hookURL)) && p() && e('0');
+r($gitfoxTest->apiGetHooksTypeTest(1)) && p() && e('array');

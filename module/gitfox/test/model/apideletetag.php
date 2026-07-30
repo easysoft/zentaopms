@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apideletetag(1, 'v1.0'))) && p() && e('1');
-r(!is_null($model->apideletetag(1, 'v1.0'))) && p() && e('1');
-r(is_bool($model->apideletetag(1, 'v1.0')) || is_array($model->apideletetag(1, 'v1.0')) || is_object($model->apideletetag(1, 'v1.0'))) && p() && e('1');
-r(!is_null($model->apideletetag(1, 'v1.0'))) && p() && e('1');
+r($gitfoxTest->apiDeleteTagErrorTest(1, 'v1.0')) && p() && e('1');
+r($gitfoxTest->apiDeleteTagTest(1, 'v1.0')) && p() && e('0');
+r($gitfoxTest->apiDeleteTagTypeTest(1, 'v1.0')) && p() && e('bool');
+r($gitfoxTest->apiDeleteTagErrorTest(1, 'v1.0')) && p() && e('1');
+r($gitfoxTest->apiDeleteTagTest(1, 'v1.0')) && p() && e('0');
