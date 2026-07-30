@@ -7,27 +7,26 @@ title=测试 gitfoxModel::getApiRoot();
 timeout=0
 cid=0
 
-- 执行getApiRoot()模块的url, 'api/v2') !== false方法  @1
-- 执行$model->getApiRoot()->header[0]) && strpos($model->getApiRoot()->header[0], 'Authorization') !== false @1
-- 执行model模块的getApiRoot方法  @0
-- 执行model模块的getApiRoot方法  @1
-- 执行getApiRoot()模块的header方法  @1
+- 步骤 1：存在 GitFox 入口时 url 正确 @http://localhost:3001/api/v2%s
+- 步骤 2：存在 GitFox 入口时 Authorization 头正确 @Authorization: 252f92b992f64597e84f910fd9135230
+- 步骤 3：移除 GitFox 入口后 Authorization 头为空 @Authorization:
+- 步骤 4：getApiRoot 返回对象属性数为 2 @2
+- 步骤 5：getApiRoot 返回值类型为 object @object
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
+$gitfoxTest->seedGitFoxEntry();
 
-r(strpos($model->getApiRoot()->url, 'api/v2') !== false) && p() && e('1');
-r(isset($model->getApiRoot()->header[0]) && strpos($model->getApiRoot()->header[0], 'Authorization') !== false) && p() && e('1');
-zenData('entry')->gen(0);
-r($model->getApiRoot()) && p() && e('0');
-zenData('entry')->loadYaml('entry')->gen(1);
-r((bool)$model->getApiRoot()) && p() && e('1');
-r(!empty($model->getApiRoot()->header)) && p() && e('1');
+r($gitfoxTest->getApiRootTest()) && p('url') && e('http://localhost:3001/api/v2%s');
+r($gitfoxTest->getApiRootTest()) && p('header:0') && e('Authorization: 252f92b992f64597e84f910fd9135230');
+$gitfoxTest->clearGitFoxEntry();
+r($gitfoxTest->getApiRootTest()) && p('header:0') && e('Authorization: ');
+$gitfoxTest->seedGitFoxEntry();
+r($gitfoxTest->getApiRootCountTest()) && p() && e('2');
+r($gitfoxTest->getApiRootTypeTest()) && p() && e('object');

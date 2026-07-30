@@ -3,15 +3,15 @@
 
 /**
 
-title=测试 gitfoxModel::apigetrepos();
+title=测试 gitfoxModel::apiGetRepos();
 timeout=0
 cid=0
 
-- 执行 @0
-- 执行model模块的apigetrepos方法  @1
-- 执行model模块的apigetrepos方法  @1
-- 执行$model->apigetrepos()) || is_array($model->apigetrepos()) || is_object($model->apigetrepos( @1
-- 执行model模块的apigetrepos方法  @1
+- 步骤 1：默认查询 apiGetRepos 不产生 dao 错误 @0
+- 步骤 2：默认查询 apiGetRepos 返回值类型为 array @array
+- 步骤 3：不存在的仓库关键字不产生 dao 错误 @0
+- 步骤 4：不存在的仓库关键字返回 0 条记录 @0
+- 步骤 5：带关键字查询时返回值类型仍为 array @array
 
 */
 
@@ -22,10 +22,10 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
+$missingRepo = 'missing-repo-' . uniqid();
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apigetrepos())) && p() && e('1');
-r(!is_null($model->apigetrepos())) && p() && e('1');
-r(is_bool($model->apigetrepos()) || is_array($model->apigetrepos()) || is_object($model->apigetrepos())) && p() && e('1');
-r(!is_null($model->apigetrepos())) && p() && e('1');
+r($gitfoxTest->apiGetReposErrorTest()) && p() && e('0');
+r($gitfoxTest->apiGetReposTypeTest()) && p() && e('array');
+r($gitfoxTest->apiGetReposErrorTest($missingRepo)) && p() && e('0');
+r($gitfoxTest->apiGetReposCountTest($missingRepo)) && p() && e('0');
+r($gitfoxTest->apiGetReposTypeTest($missingRepo)) && p() && e('array');

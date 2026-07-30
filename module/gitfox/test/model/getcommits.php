@@ -7,11 +7,11 @@ title=测试 gitfoxModel::getCommits();
 timeout=0
 cid=0
 
-- 执行model模块的getCommits方法，参数是$repo, ''  @1
-- 执行model模块的getCommits方法，参数是$repo, ''  @0
-- 执行 @0
-- 执行model模块的getCommits方法，参数是$repo, '', null, '', '', null  @1
-- 执行model模块的getCommits方法，参数是$repo, ''  @1
+- 步骤 1：getCommits 返回值类型为 array @array
+- 步骤 2：getCommits 默认返回 0 条提交 @0
+- 步骤 3：getCommits 不产生 dao 错误 @0
+- 步骤 4：传入完整参数时返回值类型仍为 array @array
+- 步骤 5：重复调用 getCommits 返回值类型仍为 array @array
 
 */
 
@@ -21,7 +21,6 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
 $repo = new stdclass();
 $repo->id       = 1;
@@ -30,8 +29,8 @@ $repo->client   = 'http://gitfox.test';
 $repo->apiPath  = 'http://gitfox.test/api/v1/';
 $repo->password = 'token';
 
-r(is_array($model->getCommits($repo, ''))) && p() && e('1');
-r(count($model->getCommits($repo, ''))) && p() && e('0');
-r((int)dao::isError()) && p() && e('0');
-r(is_array($model->getCommits($repo, '', null, '', '', null))) && p() && e('1');
-r(is_array($model->getCommits($repo, ''))) && p() && e('1');
+r($gitfoxTest->getCommitsTypeTest($repo, '')) && p() && e('array');
+r($gitfoxTest->getCommitsCountTest($repo, '')) && p() && e('0');
+r($gitfoxTest->getCommitsErrorTest($repo, '')) && p() && e('0');
+r($gitfoxTest->getCommitsTypeTest($repo, '', null, '', '', null)) && p() && e('array');
+r($gitfoxTest->getCommitsTypeTest($repo, '')) && p() && e('array');

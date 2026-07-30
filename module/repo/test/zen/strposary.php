@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->strposary();
+title=测试 repoZen::strposAry();
 timeout=0
 cid=0
 

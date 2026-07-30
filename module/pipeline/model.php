@@ -601,6 +601,14 @@ class pipelineModel extends model
         $action = strtolower($action);
         if(in_array($action, array('execution', 'exec'))) return !empty($pipeline->status) && $pipeline->status != 'draft';
 
+        if($action === 'edit')
+        {
+            return $pipeline->engine != 'gitfox';
+        }
+        if($action === 'arrange')
+        {
+            return $pipeline->engine == 'gitfox';
+        }
         return true;
     }
 

@@ -25,4 +25,4 @@ r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('su
 r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('success,none');
 r($repo->migrateRepoDataTest(true, true, 99998))   && p('result,error') && e('success,none');
 r($repo->migrateRepoDataTest(true, true, 99997))   && p('result,error') && e('success,none');
-r($repo->migrateRepoDataTest(false, false, 0))     && p('result,error') && e('fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table \'unittest.zt_repo\' doesn\'t exist');
+r($repo->migrateRepoDataTest(false, false, 0))     && p('result,error') && e("fail,SQLSTATE[42S02]: Base table or view not found: 1146 Table 'unittest.zt_repo' doesn't exist");

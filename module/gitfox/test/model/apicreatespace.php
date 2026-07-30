@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apicreatespace((object)array('name'=>'test-space')))) && p() && e('1');
-r(!is_null($model->apicreatespace((object)array('name'=>'test-space')))) && p() && e('1');
-r(is_bool($model->apicreatespace((object)array('name'=>'test-space'))) || is_array($model->apicreatespace((object)array('name'=>'test-space'))) || is_object($model->apicreatespace((object)array('name'=>'test-space')))) && p() && e('1');
-r(!is_null($model->apicreatespace((object)array('name'=>'test-space')))) && p() && e('1');
+r($gitfoxTest->apiCreateSpaceErrorTest((object)array('name' => 'test-space'))) && p() && e('1');
+r($gitfoxTest->apiCreateSpaceTest((object)array('name' => 'test-space'))) && p() && e('0');
+r($gitfoxTest->apiCreateSpaceTypeTest((object)array('name' => 'test-space'))) && p() && e('bool');
+r($gitfoxTest->apiCreateSpaceErrorTest((object)array('name' => 'test-space'))) && p() && e('1');
+r($gitfoxTest->apiCreateSpaceTest((object)array('name' => 'test-space'))) && p() && e('0');

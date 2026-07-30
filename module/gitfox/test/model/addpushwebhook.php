@@ -23,21 +23,11 @@ su('admin');
 $_SERVER['REQUEST_URI'] = '/zentao/gitfox-browse.html';
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
 $repo = (object)array('id' => 1, 'name' => 'test');
 
-r((int)dao::isError()) && p() && e('0');
-ob_start();
-$r = $model->addPushWebhook($repo);
-ob_end_clean();
-r(is_bool($r) || is_array($r)) && p() && e('1');
-r(!is_null($r)) && p() && e('1');
-ob_start();
-$r = $model->addPushWebhook($repo);
-ob_end_clean();
-r(is_bool($r) || is_array($r)) && p() && e('1');
-ob_start();
-$r = $model->addPushWebhook($repo);
-ob_end_clean();
-r(is_bool($r) || is_array($r)) && p() && e('1');
+r($gitfoxTest->addPushWebhookErrorTest($repo)) && p() && e('0');
+r($gitfoxTest->addPushWebhookTest($repo)) && p() && e('1');
+r($gitfoxTest->addPushWebhookTypeTest($repo)) && p() && e('bool');
+r($gitfoxTest->addPushWebhookTest($repo)) && p() && e('1');
+r($gitfoxTest->addPushWebhookTest($repo, 'secret-token')) && p() && e('1');

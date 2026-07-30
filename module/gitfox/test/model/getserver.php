@@ -7,27 +7,26 @@ title=测试 gitfoxModel::getServer();
 timeout=0
 cid=0
 
-- 执行model模块的getServer方法 属性code @gitfox
-- 执行getServer()模块的url) > 0方法  @1
-- 执行model模块的getServer方法  @0
-- 执行getServer()模块的key) > 0方法  @1
-- 执行getServer()模块的token) > 0方法  @1
+- 步骤 1：存在 GitFox 入口时 url 正确 @http://localhost:3001
+- 步骤 2：存在 GitFox 入口时 token 匹配预期 @1
+- 步骤 3：移除 GitFox 入口后 token 为空 @1
+- 步骤 4：getServer 返回对象属性数为 2 @2
+- 步骤 5：getServer 返回值类型为 object @object
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
+$gitfoxTest->seedGitFoxEntry();
 
-r($model->getServer()) && p('code') && e('gitfox');
-r(strlen($model->getServer()->url) > 0) && p() && e('1');
-zenData('entry')->gen(0);
-r($model->getServer()) && p() && e('0');
-zenData('entry')->loadYaml('entry')->gen(1);
-r(strlen($model->getServer()->key) > 0) && p() && e('1');
-r(strlen($model->getServer()->token) > 0) && p() && e('1');
+r($gitfoxTest->getServerTest()) && p('url') && e('http://localhost:3001');
+r($gitfoxTest->getServerTokenMatchesTest('252f92b992f64597e84f910fd9135230')) && p() && e('1');
+$gitfoxTest->clearGitFoxEntry();
+r($gitfoxTest->getServerTokenEmptyTest()) && p() && e('1');
+$gitfoxTest->seedGitFoxEntry();
+r($gitfoxTest->getServerCountTest()) && p() && e('2');
+r($gitfoxTest->getServerTypeTest()) && p() && e('object');

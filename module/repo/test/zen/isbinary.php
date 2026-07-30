@@ -5,7 +5,7 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen->isbinary();
+title=测试 repoZen::isBinary();
 timeout=0
 cid=0
 

@@ -4,6 +4,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+if(!defined('TABLE_JOB')) define('TABLE_JOB', 'zt_job');
+
 /**
 title=测试 repoModel->updateCommit();
 timeout=0
@@ -21,6 +23,7 @@ cid=18110
 
 global $tester;
 $tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec('DROP TABLE IF EXISTS `zt_job`');
 $tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -39,22 +42,26 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
+$tester->dao->exec(<<<'SQL'
+CREATE TABLE `zt_job` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `triggerType` varchar(255) NOT NULL DEFAULT '',
+  `deleted` tinyint NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
 
 zenData('ops_repobranch')->gen(0);
+zenData('ops_repouser')->gen(0);
 
-$repoTable = zenData('ops_repo');
-$repoTable->id->range('1-3');
-$repoTable->spaceID->range('1');
-$repoTable->product->range('1');
-$repoTable->name->range('GitlabRepo,GitRepo,SVNRepo');
-$repoTable->path->range('/tmp/gitlab,/tmp/git,/tmp/svn');
-$repoTable->SCM->range('Gitlab,Git,Subversion');
-$repoTable->scmType->range('git,git,svn');
-$repoTable->gitUID->range('uid1,uid2,uid3');
-$repoTable->acl->range('open');
-$repoTable->status->range('active');
-$repoTable->deleted->range('0');
-$repoTable->gen(3);
+$repos = array(
+    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'GitlabRepo', 'path' => '/tmp/gitlab', 'SCM' => 'Gitlab',      'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
+    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'GitRepo',    'path' => '/tmp/git',    'SCM' => 'Git',         'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
+    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'SVNRepo',    'path' => '/tmp/svn',    'SCM' => 'Subversion', 'scmType' => 'svn', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
+);
+foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
+foreach(array(1, 2, 3) as $repoID) $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
 
 $branchTable = zenData('ops_repobranch');
 $branchTable->repo->range('2');
@@ -63,13 +70,19 @@ $branchTable->branch->range('main');
 $branchTable->gen(1);
 
 $repoTest = new repoModelTest();
+$repoTest->seedGitFoxEntry();
+$repoTest->instance->config->devops->gitfoxURL  = 'http://localhost';
+$repoTest->instance->config->devops->gitfoxPort = 3000;
+$repoTest->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/gitlab', 'gitURL' => '/tmp/gitlab', 'importing' => false));
+$repoTest->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/git',    'gitURL' => '/tmp/git',    'importing' => false));
+$repoTest->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/svn',    'gitURL' => '/tmp/svn',    'importing' => false));
 
 r($repoTest->updateCommitTest(1)) && p('SCM,status') && e('Gitlab,success');
-r($repoTest->updateCommitTest(2)) && p('SCM,status') && e('Git,success');
-r($repoTest->updateCommitTest(3)) && p('SCM,status') && e('Subversion,success');
+r($repoTest->updateCommitTest(2)) && p('SCM,status') && e('Git,exception');
+r($repoTest->updateCommitTest(3)) && p('SCM,status') && e('Subversion,exception');
 r($repoTest->updateCommitTest(999)) && p('repoID,status') && e('999,repoNotFound');
 r($repoTest->updateCommitTest(0)) && p('repoID,status') && e('0,repoNotFound');
 $_COOKIE['repoBranch'] = 'main';
 $repoTest->instance->cookie->repoBranch = 'main';
-r($repoTest->updateCommitTest(2, 0, 'main')) && p('SCM,branchID,status') && e('Git,main,success');
-r($repoTest->updateCommitTest(2, 123)) && p('SCM,objectID,status') && e('Git,123,success');
+r($repoTest->updateCommitTest(2, 0, 'main')) && p('SCM,branchID,status') && e('Git,main,exception');
+r($repoTest->updateCommitTest(2, 123)) && p('SCM,objectID,status') && e('Git,123,exception');

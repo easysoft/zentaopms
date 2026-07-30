@@ -2450,7 +2450,7 @@ class repo extends control
         if(!empty($_POST))
         {
             $now  = helper::now();
-            $bug  = $this->loadModel('bug')->getByID($this->post->objectID);
+            $bug  = $this->loadModel('bug')->getByID((int)$this->post->objectID);
             $data = fixer::input('post')
                 ->add('objectType', 'bug')
                 ->add('product', ',' . $bug->product . ',')

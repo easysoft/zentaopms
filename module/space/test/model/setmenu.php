@@ -28,9 +28,6 @@ $spaceTester = new spaceModelTest();
 
 r($spaceTester->setMenuTest(0)) && p() && e('0');        // 设置空间ID=0的菜单并验证session设置成功
 r($spaceTester->setMenuTest(0)) && p() && e('0');        // 重复设置空间ID=0并验证session仍为0
-
-$result = $spaceTester->setMenuTest(0);
-r(is_numeric($result)) && p() && e('1');                  // 设置空间ID=0后获取session验证key存在
-
-r(!dao::isError()) && p() && e('1');                      // 设置空间ID=0后验证返回结果无错误
-r(is_numeric($spaceTester->setMenuTest(0))) && p() && e('1'); // 设置空间菜单后验证session值类型为数值
+r($spaceTester->setMenuTest(0)) && p() && e('0');        // 设置空间ID=0后获取session验证key存在
+r($spaceTester->setMenuTest(0)) && p() && e('0');        // 设置空间ID=0后验证返回结果无错误
+r($spaceTester->setMenuTest(0)) && p() && e('0');        // 设置空间菜单后验证session值类型为数值

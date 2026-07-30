@@ -271,6 +271,7 @@ class artifactModel extends model
      */
     public function getLibsByProduct(int $productID): array
     {
+        if(empty($productID)) return array();
         $repoIdList = array();
         if(!$this->app->user->admin)
         {

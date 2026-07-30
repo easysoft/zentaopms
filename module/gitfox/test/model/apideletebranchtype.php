@@ -22,10 +22,9 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apideletebranchtype(1, 1))) && p() && e('1');
-r(!is_null($model->apideletebranchtype(1, 1))) && p() && e('1');
-r(is_bool($model->apideletebranchtype(1, 1)) || is_array($model->apideletebranchtype(1, 1)) || is_object($model->apideletebranchtype(1, 1))) && p() && e('1');
-r(!is_null($model->apideletebranchtype(1, 1))) && p() && e('1');
+r($gitfoxTest->apiDeleteBranchTypeErrorTest(1, 1)) && p() && e('1');
+r($gitfoxTest->apiDeleteBranchTypeTest(1, 1)) && p() && e('0');
+r($gitfoxTest->apiDeleteBranchTypeTypeTest(1, 1)) && p() && e('bool');
+r($gitfoxTest->apiDeleteBranchTypeErrorTest(1, 1)) && p() && e('1');
+r($gitfoxTest->apiDeleteBranchTypeTest(1, 1)) && p() && e('0');
