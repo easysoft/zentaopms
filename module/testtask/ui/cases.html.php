@@ -78,7 +78,7 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    li(searchToggle(set::open($browseType == 'bysearch')))
+    li(searchToggle(set::module('testtaskTestcase'), set::open($browseType == 'bysearch')))
 );
 
 $viewItems   = array();
