@@ -2382,10 +2382,11 @@ class aiModel extends model
      *
      * @param  string $targetForm
      * @param  bool   $withModule
+     * @param  string $objectModule
      * @access public
      * @return string
      */
-    public function getTargetFormLabel(string $targetForm, bool $withModule = true): string
+    public function getTargetFormLabel(string $targetForm, bool $withModule = true, string $objectModule = ''): string
     {
         if(empty($targetForm)) return '';
         if($targetForm == 'empty.empty') return isset($this->lang->ai->prompts->noRedirect) ? $this->lang->ai->prompts->noRedirect : $targetForm;
@@ -2400,7 +2401,7 @@ class aiModel extends model
             if(!empty($workflowAction)) $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
         }
 
-        $moduleLabel = $this->getTargetFormModuleLabel($module);
+        $moduleLabel = $this->getTargetFormModuleLabel(empty($objectModule) ? $module : $objectModule);
         $actionLabel = $this->getTargetFormActionLabel($module, $action);
 
         if($withModule && !empty($moduleLabel) && !empty($actionLabel)) return $moduleLabel . ' / ' . $actionLabel;

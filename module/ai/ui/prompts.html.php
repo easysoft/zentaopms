@@ -39,7 +39,7 @@ foreach($prompts as $prompt)
 {
     if($prompt->actionPurpose)
     {
-        $prompt->targetFormLabel = $this->ai->getTargetFormLabel($prompt->actionPurpose);
+        $prompt->targetFormLabel = $this->ai->getTargetFormLabel($prompt->actionPurpose, true, $prompt->module);
     }
 }
 

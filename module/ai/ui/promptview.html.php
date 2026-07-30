@@ -38,7 +38,7 @@ detailHeader
 $actionObject = '';
 if(!empty($prompt->actionPurpose))
 {
-    $actionObject = $this->ai->getTargetFormLabel($prompt->actionPurpose);
+    $actionObject = $this->ai->getTargetFormLabel($prompt->actionPurpose, true, $prompt->module);
 }
 
 $fnBuildPublishInfo = function() use ($actions, $prompt, $users, $lang)
