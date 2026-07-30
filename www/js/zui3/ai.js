@@ -51,7 +51,7 @@ window.openPageForm = function(url, data, callback)
     });
 }
 
-function getPromptFormConfig(fields, extraConfig)
+window.getPromptFormConfig = function(fields, extraConfig)
 {
     if(!Array.isArray(fields) || !fields.length) return;
     const typeMap    = {radio: 'picker', checkbox: 'multiPicker', text: 'input'};
