@@ -220,6 +220,7 @@ class bug extends control
         $this->view->branchID    = $bug->branch;
         $this->view->product     = $product;
         $this->view->project     = $this->loadModel('project')->getByID($bug->project);
+        $this->view->execution   = $this->loadModel('execution')->fetchByID($bug->execution);
         $this->view->projects    = $projects;
         $this->view->executions  = $this->product->getExecutionPairsByProduct($bug->product, (string)$bug->branch, (int)$projectID, 'noclosed');
         $this->view->bug         = $bug;
