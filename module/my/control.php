@@ -575,10 +575,11 @@ class my extends control
 
         /* Append id for second sort. */
         $this->app->loadLang('project');
-        $sort  = common::appendOrder($orderBy);
-        $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
+        $sort   = common::appendOrder($orderBy);
+        $count  = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
+        $users  = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $status = $browseType == 'assignedTo' ? 'wait' : $browseType;
+        $tasks  = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $status, $queryID, $browseType);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
