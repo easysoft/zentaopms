@@ -81,7 +81,7 @@ dtable
     set::taskData($tasks),
     set::userMap($users),
     set::orderBy($orderBy),
-    set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
+    set::sortLink(createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&type={$type}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::plugins(array('cellspan')),
     set::getCellSpan(jsRaw('window.getCellSpan')),
     set::footToolbar($footToolbar),
@@ -89,7 +89,7 @@ dtable
     (
         'recPerPage'  => $pager->recPerPage,
         'recTotal'    => $pager->recTotal,
-        'linkCreator' => helper::createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
+        'linkCreator' => helper::createLink('project', 'testtask', "projectID={$project->id}&productID={$productID}&type={$type}&param={$param}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={recPerPage}&page={page}")
     ))),
     set::checkInfo(jsRaw('function(checkedIDList){return window.setStatistics(this, checkedIDList);}')),
     set::emptyTip($lang->testtask->noTesttask),
