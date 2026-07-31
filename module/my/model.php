@@ -1472,7 +1472,6 @@ class myModel extends model
             ->beginIF(!helper::hasFeature('project_opportunity'))->andWhere('objectType')->ne('opportunity')->fi()
             ->beginIF($this->config->systemMode == 'light' || (!helper::hasFeature('program') && $this->config->edition != 'ipd'))->andWhere('objectType')->ne('charter')->fi()
             ->orderBy("t2.{$orderBy}")
-            ->beginIF($checkExists)->limit(1)->fi()
             ->fetchAll();
 
         $objectIdList = array();

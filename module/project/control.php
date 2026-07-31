@@ -1018,6 +1018,7 @@ class project extends control
         $this->view->productID = $productID;
         $this->view->projectID = $projectID;
         $this->view->type      = $type;
+        $this->view->param     = $param;
         $this->view->pager     = $pager;
         $this->view->orderBy   = $orderBy;
         $this->view->users     = $this->loadModel('user')->getPairs('noclosed|noletter');

@@ -320,6 +320,9 @@ class myTao extends myModel
                 $data->app     = isset($flows[$objectType]->app) ? $flows[$objectType]->app : zget($this->lang->navGroup, $objectType, '');
                 $data->product = isset($object->product) ? $object->product : 0;
                 $data->project = isset($object->project) ? $object->project : 0;
+
+                if(isset($object->type) && $object->type == 'project') $data->project = $object->id;
+
                 $approvalList[] = $data;
             }
         }

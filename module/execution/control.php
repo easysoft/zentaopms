@@ -808,6 +808,7 @@ class execution extends control
         $this->view->productID     = $productID;
         $this->view->executionName = $this->executions[$executionID];
         $this->view->pager         = $pager;
+        $this->view->param         = $param;
         $this->view->type          = $type;
         $this->view->orderBy       = $orderBy;
         $this->view->users         = $this->loadModel('user')->getPairs('noclosed|noletter');
