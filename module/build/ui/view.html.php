@@ -146,7 +146,9 @@ if(isset($generatedBugCols['story']))          $generatedBugCols['story']['map']
 if(isset($generatedBugCols['task']))           $generatedBugCols['task']['map']           = array('') + $generatedBugTasks;
 if(isset($generatedBugCols['toTask']))         $generatedBugCols['toTask']['map']         = array('') + $generatedBugTasks;
 if(isset($generatedBugCols['activatedCount'])) $generatedBugCols['activatedCount']['map'] = array('');
-$generatedBugs = initTableData($generatedBugs, $generatedBugCols, $this->bug);
+
+$bugModel      = $this->loadModel('bug');
+$generatedBugs = initTableData($generatedBugs, $generatedBugCols, $bugModel);
 
 $onlyNoCheckCount = 0;
 if(!empty($build->builds))
