@@ -576,6 +576,13 @@ class testtaskZen extends testtask
     protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList, array $runIdList = array()): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
+        if($this->app->tab == 'my' && $from == 'work')
+        {
+            $this->loadModel('my');
+            $this->lang->my->menu->{$from}['subModule'] = 'testtask';
+            $this->lang->my->menu->{$from}['subMenu']->testcase['subModule'] = 'testtask';
+        }
+
         $menu = isset($this->lang->{$this->app->tab}->menu) ? $this->lang->{$this->app->tab}->menu : array();
         if($this->app->tab != 'qa')
         {
