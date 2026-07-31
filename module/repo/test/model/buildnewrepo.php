@@ -30,10 +30,8 @@ $oldRepoData = array(
     'deleted'        => 0,
     'path'           => 'https://gitlab.example.com/group/testrepo',
 );
-$result = $repo->buildNewRepoTest($oldRepoData, 'open', 'system');
-r($result) && p('scmType') && e('git');
-$connector = json_decode($result->connector, true);
-r($connector) && p('slug') && e('group/testrepo');
+r($repo->buildNewRepoTest($oldRepoData, 'open', 'system')) && p('scmType') && e('git');
+r($repo->buildNewRepoConnectorTest($oldRepoData, 'open', 'system')) && p('slug') && e('group/testrepo');
 
 $giteaRepoData = array(
     'id'             => 124,
@@ -45,9 +43,7 @@ $giteaRepoData = array(
     'product'        => '1',
     'deleted'        => 0,
 );
-$result = $repo->buildNewRepoTest($giteaRepoData, 'private', 'admin1');
-$connector = json_decode($result->connector, true);
-r($connector) && p('slug') && e('proj_a');
+r($repo->buildNewRepoConnectorTest($giteaRepoData, 'private', 'admin1')) && p('slug') && e('proj_a');
 
 $svnRepoData = array(
     'id'          => 125,
@@ -61,9 +57,7 @@ $svnRepoData = array(
     'account'     => 'svnUser',
     'password'    => 'svnPass',
 );
-$result = $repo->buildNewRepoTest($svnRepoData, 'open', 'system');
-$connector = json_decode($result->connector, true);
-r($connector) && p('slug') && e('svn/repo');
+r($repo->buildNewRepoConnectorTest($svnRepoData, 'open', 'system')) && p('slug') && e('svn/repo');
 
 $unknownRepoData = array(
     'id'          => 126,
@@ -74,5 +68,4 @@ $unknownRepoData = array(
     'product'     => '1',
     'deleted'     => 0,
 );
-$result = $repo->buildNewRepoTest($unknownRepoData, 'open', 'system');
-r($result) && p('scmType') && e('~~');
+r($repo->buildNewRepoTest($unknownRepoData, 'open', 'system')) && p('scmType') && e('~~');

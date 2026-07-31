@@ -21,9 +21,9 @@ cid=18074
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -87,7 +87,7 @@ $repoTest = new repoModelTest();
 r($repoTest->getRelationByCommitTest(1, 'c808480afe22d3a55d94e91c59a8f3170212ade0', 'task')) && p('0:type') && e('task'); // 步骤1：根据代码库ID和提交版本获取任务关联信息
 r($repoTest->getRelationByCommitTest(1, 'c808480afe22d3a55d94e91c59a8f3170212ade0', 'bug')) && p('0:id') && e('4'); // 步骤2：根据代码库ID和提交版本获取缺陷关联信息
 r($repoTest->getRelationByCommitTest(1, 'c808480afe22d3a55d94e91c59a8f3170212ade0', 'story')) && p('0:type') && e('story'); // 步骤3：根据代码库ID和提交版本获取需求关联信息
-r(count($repoTest->getRelationByCommitTest(1, 'nonexistent-commit-hash', 'task'))) && p() && e('0'); // 步骤4：测试不存在的提交版本查询
-r(count($repoTest->getRelationByCommitTest(999, 'c808480afe22d3a55d94e91c59a8f3170212ade0', 'task'))) && p() && e('0'); // 步骤5：测试无效的代码库ID查询
-r(count($repoTest->getRelationByCommitTest(1, 'c808480afe22d3a55d94e91c59a8f3170212ade0', ''))) && p() && e('6'); // 步骤6：测试获取所有类型的关联信息
-r(count($repoTest->getRelationByCommitTest(1, '', 'task'))) && p() && e('0'); // 步骤7：测试空提交版本参数查询
+r($repoTest->getRelationByCommitCountTest(1, 'nonexistent-commit-hash', 'task')) && p() && e('0'); // 步骤4：测试不存在的提交版本查询
+r($repoTest->getRelationByCommitCountTest(999, 'c808480afe22d3a55d94e91c59a8f3170212ade0', 'task')) && p() && e('0'); // 步骤5：测试无效的代码库ID查询
+r($repoTest->getRelationByCommitCountTest(1, 'c808480afe22d3a55d94e91c59a8f3170212ade0', '')) && p() && e('6'); // 步骤6：测试获取所有类型的关联信息
+r($repoTest->getRelationByCommitCountTest(1, '', 'task')) && p() && e('0'); // 步骤7：测试空提交版本参数查询

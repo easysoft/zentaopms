@@ -35,13 +35,13 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 function resetDeletedBranchTables(): void
 {
-    global $dbh;
+    global $tester;
 
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-    $dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+    $tester->dao->exec('DROP TABLE IF EXISTS `ops_repofiles`');
+    $tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+    $tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
 
-    $dbh->exec(<<<'SQL'
+    $tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -54,7 +54,7 @@ CREATE TABLE `ops_repohistory` (
   KEY `repo` (`repo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-    $dbh->exec(<<<'SQL'
+    $tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repobranch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -63,7 +63,7 @@ CREATE TABLE `ops_repobranch` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-    $dbh->exec(<<<'SQL'
+    $tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repofiles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,

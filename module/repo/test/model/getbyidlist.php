@@ -18,9 +18,9 @@ cid=18049
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec("CREATE TABLE `ops_repo` (
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec("CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
@@ -42,14 +42,14 @@ $dels = array(0,0,0,0,0,0,1,1);
 
 for($i=1; $i<=8; $i++) {
     $p = $i<=4 ? '1' : '2';
-    $dbh->exec("INSERT INTO `ops_repo` (`id`,`spaceID`,`product`,`name`,`SCM`,`password`,`encrypt`,`acl`,`status`,`deleted`) VALUES ($i,1,'$p','{$repos[$i]}','{$scms[$i-1]}','{$pwds[$i-1]}','{$encs[$i-1]}','open','active',{$dels[$i-1]})");
+    $tester->dao->exec("INSERT INTO `ops_repo` (`id`,`spaceID`,`product`,`name`,`SCM`,`password`,`encrypt`,`acl`,`status`,`deleted`) VALUES ($i,1,'$p','{$repos[$i]}','{$scms[$i-1]}','{$pwds[$i-1]}','{$encs[$i-1]}','open','active',{$dels[$i-1]})");
 }
 
 su('admin');
 $repoTest = new repoModelTest();
 
-r(count($repoTest->getByIdListTest(array(1,2,3,4)))) && p() && e('4');
+r($repoTest->getByIdListCountTest(array(1,2,3,4))) && p() && e('4');
 r($repoTest->getByIdListTest(array(1))) && p('1:name') && e('repo1');
-r(count($repoTest->getByIdListTest(array(999,1000)))) && p() && e('0');
-r(count($repoTest->getByIdListTest(array()))) && p() && e('0');
-r(count($repoTest->getByIdListTest(array(1,2,999,1000)))) && p() && e('2');
+r($repoTest->getByIdListCountTest(array(999,1000))) && p() && e('0');
+r($repoTest->getByIdListCountTest(array())) && p() && e('0');
+r($repoTest->getByIdListCountTest(array(1,2,999,1000))) && p() && e('2');

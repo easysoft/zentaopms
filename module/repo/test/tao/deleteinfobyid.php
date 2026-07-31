@@ -19,8 +19,8 @@ cid=0
 */
 
 $repoTest = new repoTaoTest();
-r(method_exists($repoTest, 'deleteinfobyidTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
-r(class_exists('repoTao')) && p() && e('1');
-r(method_exists($repoTest, 'deleteinfobyidTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
+r($repoTest->deleteInfoByIDAvailableTest(0)) && p() && e('1');
+r($repoTest->deleteInfoByIDAvailableTest(1)) && p() && e('1');
+r($repoTest->deleteInfoByIDAvailableTest(2)) && p() && e('1');
+r($repoTest->deleteInfoByIDAvailableTest(3)) && p() && e('1');
+r($repoTest->deleteInfoByIDAvailableTest(4)) && p() && e('1');

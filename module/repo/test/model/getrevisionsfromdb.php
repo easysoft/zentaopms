@@ -19,9 +19,9 @@ cid=18079
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -52,12 +52,12 @@ $minRevision = 'd30919bdb9b4cf8e2698f4a6a30e41910427c01c';
 r($repo->getRevisionsFromDBTest($repoID)) && p('0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb:id') && e('3'); //获取版本库提交记录
 
 $result = $repo->getRevisionsFromDBTest($repoID, $limit);
-r(count($result)) && p() && e('1'); //获取limit为1版本库提交记录数量
+r($repo->getRevisionsFromDBCountTest($repoID, $limit)) && p() && e('1'); //获取limit为1版本库提交记录数量
 
 $result = $repo->getRevisionsFromDBTest($repoID, 0, $maxRevision, '');
-r($result) && p('0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb:commit') && e('1'); // 获取maxrevision的列表
-r(count($result)) && p() && e('1'); // 获取maxrevision的列表数量
+r($repo->getRevisionsFromDBTest($repoID, 0, $maxRevision, '')) && p('0dbb150d4904c9a9d5a804b6cdddea3cb3d856bb:commit') && e('1'); // 获取maxrevision的列表
+r($repo->getRevisionsFromDBCountTest($repoID, 0, $maxRevision, '')) && p() && e('1'); // 获取maxrevision的列表数量
 
 $result = $repo->getRevisionsFromDBTest($repoID, 0, '', $minRevision);
-r($result) && p('d30919bdb9b4cf8e2698f4a6a30e41910427c01c:commit') && e('2'); // 获取minrevision的列表
-r(count($result)) && p() && e('1'); // 获取minrevision的列表数量
+r($repo->getRevisionsFromDBTest($repoID, 0, '', $minRevision)) && p('d30919bdb9b4cf8e2698f4a6a30e41910427c01c:commit') && e('2'); // 获取minrevision的列表
+r($repo->getRevisionsFromDBCountTest($repoID, 0, '', $minRevision)) && p() && e('1'); // 获取minrevision的列表数量

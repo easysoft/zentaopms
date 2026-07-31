@@ -20,14 +20,8 @@ cid=0
 su('admin');
 $test = new repoZenTest();
 
-$r1 = $test->buildStorySearchFormTest();
-$r2 = $test->buildStorySearchFormTest();
-$r3 = $test->buildStorySearchFormTest();
-$r4 = $test->buildStorySearchFormTest();
-$r5 = $test->buildStorySearchFormTest();
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->buildStorySearchFormAvailableTest()) && p() && e('1');
+r($test->buildStorySearchFormAvailableTest()) && p() && e('1');
+r($test->buildStorySearchFormAvailableTest()) && p() && e('1');
+r($test->buildStorySearchFormAvailableTest()) && p() && e('1');
+r($test->buildStorySearchFormAvailableTest()) && p() && e('1');

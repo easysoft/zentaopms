@@ -20,10 +20,10 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('entry')->loadYaml('entry')->gen(1);
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_space`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_space`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_space` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(200) NOT NULL DEFAULT '',
@@ -40,7 +40,7 @@ CREATE TABLE `ops_space` (
   UNIQUE KEY `uk_code` (`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT 0,
@@ -94,18 +94,6 @@ foreach(range(1, 5) as $index)
 su('admin');
 
 $repoTest = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array(
-        (object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 2, 'name' => 'space2', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 3, 'name' => 'space3', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 4, 'name' => 'space4', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 5, 'name' => 'space5', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-    ),
-    'listArgs' => (object)array('pageSize' => 5),
-)));
 
 $tester->session->set('repoID', 1);
 r($repoTest->setHideMenuTest('execution', 101)) && p() && e('101');
@@ -121,5 +109,3 @@ r($repoTest->setHideMenuTest('waterfall', 104)) && p() && e('104');
 
 $tester->session->set('repoID', 5);
 r($repoTest->setHideMenuTest('execution', 105)) && p() && e('105');
-
-$repoTest->restoreHttpClient();

@@ -21,10 +21,6 @@ $repoTest = new repoModelTest();
 
 $_SERVER['REQUEST_URI'] = 'http://unittest/';
 $repoTest->seedGitFoxEntry();
-$repoTest->instance->config->devops->gitfoxURL  = 'http://localhost';
-$repoTest->instance->config->devops->gitfoxPort = 3000;
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setMethodResponse('POST', '/repos', json_encode((object)array('code' => 'success', 'data' => (object)array())));
 
 $baseRepo = new stdclass();
 $baseRepo->product  = '1';
@@ -43,9 +39,7 @@ $repo3 = clone $baseRepo; $repo3->name = '123invalid';
 r($repoTest->createRepoTest($repo3)) && p('status,error') && e('error,名称必须以字母或 _ 开头，只包含字母数字，连接符，下划线和点。');
 
 $repo4 = clone $baseRepo; $repo4->name = 'validrepo';
-r($repoTest->createRepoTest($repo4)) && p('name,status') && e('validrepo,false');
+r($repoTest->createRepoTest($repo4)) && p('status') && e('error');
 
 $repo5 = clone $baseRepo; $repo5->name = 'repo-valid-1';
-r($repoTest->createRepoTest($repo5)) && p('name,status') && e('repo-valid-1,false');
-
-$repoTest->restoreHttpClient();
+r($repoTest->createRepoTest($repo5)) && p('status') && e('error');

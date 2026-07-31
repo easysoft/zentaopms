@@ -18,9 +18,9 @@ cid=18066
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -50,16 +50,16 @@ su('admin');
 $repoTest = new repoModelTest();
 
 // 测试步骤1：正常查询存在版本库的服务器ID为1
-r(count($repoTest->getImportedProjectsTest(1))) && p() && e('3'); // 期望返回3个项目
+r($repoTest->getImportedProjectsCountTest(1)) && p() && e('3'); // 期望返回3个项目
 
 // 测试步骤2：查询不存在版本库的服务器ID
-r(count($repoTest->getImportedProjectsTest(999))) && p() && e('0'); // 期望返回空数组
+r($repoTest->getImportedProjectsCountTest(999)) && p() && e('0'); // 期望返回空数组
 
 // 测试步骤3：边界值测试服务器ID为0
-r(count($repoTest->getImportedProjectsTest(0))) && p() && e('0'); // 期望返回空数组
+r($repoTest->getImportedProjectsCountTest(0)) && p() && e('0'); // 期望返回空数组
 
 // 测试步骤4：负数服务器ID测试
-r(count($repoTest->getImportedProjectsTest(-1))) && p() && e('0'); // 期望返回空数组
+r($repoTest->getImportedProjectsCountTest(-1)) && p() && e('0'); // 期望返回空数组
 
 // 测试步骤5：超大服务器ID测试
-r(count($repoTest->getImportedProjectsTest(999999))) && p() && e('0'); // 期望返回空数组
+r($repoTest->getImportedProjectsCountTest(999999)) && p() && e('0'); // 期望返回空数组

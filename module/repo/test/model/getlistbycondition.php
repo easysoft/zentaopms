@@ -11,21 +11,21 @@ title=测试 repoModel::getListByCondition();
 timeout=0
 cid=18070
 
-- 执行repoTest模块的getListByConditionTest方法，参数是'' @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'' @5
-- 执行repoTest模块的getListByConditionTest方法，参数是"name='testHtml'" @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'', 2 @2
-- 执行$results第0条的id属性 @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'', 0, 'id_desc', $pager @2
-- 执行repoTest模块的getListByConditionTest方法，参数是"name like '%test%'" @3
-- 执行repoTest模块的getListByConditionTest方法，参数是"name = 'nonexistent'" @0
+- 执行repoTest模块的getListByConditionIsArrayTest方法，参数是''  @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是''  @5
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name='testHtml'"  @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是'', 2  @2
+- 执行repoTest模块的getListByConditionTest方法，参数是'', 0, 'id_asc' 第0条的id属性 @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是'', 0, 'id_desc', $pager  @2
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name like '%test%'"  @3
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name = 'nonexistent'"  @0
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -39,7 +39,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT 0,
@@ -51,11 +51,11 @@ SQL);
 
 $tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
 $tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
+    'name'        => 'GitFox',
+    'account'     => '',
     'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
+    'key'         => 'gitfox',
+    'freePasswd'  => 1,
     'ip'          => '*',
     'createdBy'   => 'admin',
     'createdDate' => '2026-01-01 00:00:00',
@@ -82,15 +82,6 @@ $tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 2, 'r
 su('admin');
 
 $repoTest = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array(
-        (object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 2, 'name' => 'space2', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-    ),
-    'listArgs' => (object)array('pageSize' => 2),
-)));
 
 $pager = new stdclass();
 $pager->recPerPage = 2;
@@ -100,14 +91,11 @@ $repoTest->instance->app->rawMethod = 'browse';
 $repoTest->instance->app->loadClass('pager', true);
 $pager = pager::init(0, $pager->recPerPage, $pager->pageID);
 
-r(is_array($repoTest->getListByConditionTest(''))) && p() && e('1');
-r(count($repoTest->getListByConditionTest(''))) && p() && e('5');
-r(count($repoTest->getListByConditionTest("name='testHtml'"))) && p() && e('1');
-r(count($repoTest->getListByConditionTest('', 2))) && p() && e('2');
-$results = $repoTest->getListByConditionTest('', 0, 'id_asc');
-r(array_values($results)) && p('0:id') && e('1');
-r(count($repoTest->getListByConditionTest('', 0, 'id_desc', $pager))) && p() && e('2');
-r(count($repoTest->getListByConditionTest("name like '%test%'"))) && p() && e('3');
-r(count($repoTest->getListByConditionTest("name = 'nonexistent'"))) && p() && e('0');
-
-$repoTest->restoreHttpClient();
+r($repoTest->getListByConditionIsArrayTest('')) && p() && e('1');
+r($repoTest->getListByConditionCountTest('')) && p() && e('5');
+r($repoTest->getListByConditionCountTest("name='testHtml'")) && p() && e('1');
+r($repoTest->getListByConditionCountTest('', 2)) && p() && e('2');
+r(array_values($repoTest->getListByConditionTest('', 0, 'id_asc'))) && p('0:id') && e('1');
+r($repoTest->getListByConditionCountTest('', 0, 'id_desc', $pager)) && p() && e('2');
+r($repoTest->getListByConditionCountTest("name like '%test%'")) && p() && e('3');
+r($repoTest->getListByConditionCountTest("name = 'nonexistent'")) && p() && e('0');

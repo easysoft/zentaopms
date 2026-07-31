@@ -20,13 +20,13 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-global $lang, $dbh, $app;
+global $lang, $app;
 if(!isset($lang->codescan)) $lang->codescan = new stdclass();
 if(!isset($lang->codescan->exec)) $lang->codescan->exec = 'exec';
 if(!isset($lang->codescan->issue)) $lang->codescan->issue = 'issue';
 
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -66,8 +66,8 @@ $repo->gen(5);
 
 $repoTest = new repoModelTest();
 
-r(count($repoTest->getListBySpacesTest(array(1))))    && p() && e('1');
-r(isset($repoTest->getListBySpacesTest(array(3))[4])) && p() && e('1');
-r(isset($repoTest->getListBySpacesTest(array(3))[5])) && p() && e('1');
-r(count($repoTest->getListBySpacesTest(array(2))))    && p() && e('0');
-r(count($repoTest->getListBySpacesTest(array(1, 3)))) && p() && e('3');
+r($repoTest->getListBySpacesCountTest(array(1))) && p() && e('1');
+r($repoTest->getListBySpacesHasKeyTest(array(3), 4)) && p() && e('1');
+r($repoTest->getListBySpacesHasKeyTest(array(3), 5)) && p() && e('1');
+r($repoTest->getListBySpacesCountTest(array(2))) && p() && e('0');
+r($repoTest->getListBySpacesCountTest(array(1, 3))) && p() && e('3');

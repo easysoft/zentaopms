@@ -18,10 +18,10 @@ cid=18101
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -34,7 +34,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT 0,
@@ -52,10 +52,10 @@ $tester->dao->insert(TABLE_REPO)->data((object)array('id' => 2, 'spaceID' => 1, 
 $tester->dao->insert('ops_spaceuser')->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
 $tester->dao->insert(TABLE_PROJECTPRODUCT)->data((object)array('project' => 11, 'product' => 1, 'branch' => 0, 'plan' => '', 'roadmap' => ''))->exec();
 $tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
+    'name'        => 'GitFox',
     'account'     => 'admin',
     'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
+    'key'         => 'gitfox',
     'freePasswd'  => 0,
     'ip'          => '*',
     'createdBy'   => 'admin',
@@ -69,12 +69,6 @@ $tester->dao->insert(TABLE_ENTRY)->data((object)array(
 su('admin');
 
 $repo = new repoModelTest();
-$httpClient = $repo->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array((object)array('id' => 1, 'name' => 'Space 1', 'createdDate' => '2026-01-01T00:00:00+08:00')),
-    'listArgs' => (object)array('pageSize' => 1),
-)));
 
 r($repo->saveStateTest(2)) && p() && e('2'); // 步骤1：正常设置有效的代码库ID
 r($repo->saveStateTest(10001)) && p() && e('1'); // 步骤2：设置无效的代码库ID
@@ -82,5 +76,3 @@ r($repo->saveStateTest()) && p() && e('1'); // 步骤3：不传入代码库ID且
 $repo->objectModel->app->tab = 'project';
 r($repo->saveStateTest(2, 11)) && p() && e('1'); // 步骤4：在project tab下设置代码库ID
 r($repo->saveStateTest(0)) && p() && e('1'); // 步骤5：测试边界值repoID为0的情况
-
-$repo->restoreHttpClient();

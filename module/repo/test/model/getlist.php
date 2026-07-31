@@ -9,19 +9,19 @@ title=测试 repoModel->getList();
 timeout=0
 cid=18069
 
-- 获取代码库列表第1条的name属性 @testHtml
-- 获取代码库列表数量 @4
-- 获取代码库列表第4条的name属性 @testSvn
-- 获取代码库列表第3条的name属性 @unittest
-- 获取所有代码库列表数量 @4
+- 执行repo模块的getListTest方法，参数是0, 0, 'id_asc' 第1条的name属性 @testHtml
+- 执行repo模块的getListCountTest方法，参数是0, 0, 'id_asc'  @4
+- 执行repo模块的getListTest方法，参数是0, 0, 'id_asc' 第4条的name属性 @testSvn
+- 执行repo模块的getListTest方法，参数是0, 0, 'id_asc' 第3条的name属性 @unittest
+- 执行repo模块的getListCountTest方法，参数是0, 0, 'id_asc'  @4
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_provider`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_provider`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -37,7 +37,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_provider` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -46,7 +46,7 @@ CREATE TABLE `ops_provider` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT 0,
@@ -58,11 +58,11 @@ SQL);
 
 $tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
 $tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
+    'name'        => 'GitFox',
+    'account'     => '',
     'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
+    'key'         => 'gitfox',
+    'freePasswd'  => 1,
     'ip'          => '*',
     'createdBy'   => 'admin',
     'createdDate' => '2026-01-01 00:00:00',
@@ -83,18 +83,10 @@ $tester->dao->insert('ops_spaceuser')->data((object)array('space' => 1, 'role' =
 
 su('admin');
 
-$repo       = new repoModelTest();
-$httpClient = $repo->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array((object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00')),
-    'listArgs' => (object)array('pageSize' => 1),
-)));
+$repo = new repoModelTest();
 
 r($repo->getListTest(0, 0, 'id_asc')) && p('1:name') && e('testHtml');
-r(count($repo->getListTest(0, 0, 'id_asc'))) && p() && e('4');
+r($repo->getListCountTest(0, 0, 'id_asc')) && p() && e('4');
 r($repo->getListTest(0, 0, 'id_asc')) && p('4:name') && e('testSvn');
 r($repo->getListTest(0, 0, 'id_asc')) && p('3:name') && e('unittest');
-r(count($repo->getListTest(0, 0, 'id_asc'))) && p() && e('4');
-
-$repo->restoreHttpClient();
+r($repo->getListCountTest(0, 0, 'id_asc')) && p() && e('4');

@@ -18,9 +18,9 @@ cid=18071
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec("CREATE TABLE `ops_repo` (
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec("CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
@@ -31,11 +31,11 @@ $dbh->exec("CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
 
-$dbh->exec("INSERT INTO `ops_repo` VALUES (1,1,'1','repo1','Git','active',0)");
-$dbh->exec("INSERT INTO `ops_repo` VALUES (2,1,'1','repo2','Git','active',0)");
-$dbh->exec("INSERT INTO `ops_repo` VALUES (3,1,'2','repo3','Gitlab','active',0)");
-$dbh->exec("INSERT INTO `ops_repo` VALUES (4,1,'1','repo4','SVN','active',0)");
-$dbh->exec("INSERT INTO `ops_repo` VALUES (5,1,'3','repo5','Gitlab','active',0)");
+$tester->dao->exec("INSERT INTO `ops_repo` VALUES (1,1,'1','repo1','Git','active',0)");
+$tester->dao->exec("INSERT INTO `ops_repo` VALUES (2,1,'1','repo2','Git','active',0)");
+$tester->dao->exec("INSERT INTO `ops_repo` VALUES (3,1,'2','repo3','Gitlab','active',0)");
+$tester->dao->exec("INSERT INTO `ops_repo` VALUES (4,1,'1','repo4','SVN','active',0)");
+$tester->dao->exec("INSERT INTO `ops_repo` VALUES (5,1,'3','repo5','Gitlab','active',0)");
 
 su('admin');
 $repoTest = new repoModelTest();
@@ -43,5 +43,5 @@ $repoTest = new repoModelTest();
 r($repoTest->getListByProductTest(1)) && p('1:name') && e('repo1');
 r($repoTest->getListByProductTest(2)) && p('3:name') && e('repo3');
 r($repoTest->getListByProductTest(1,2)) && p('1:name') && e('repo1');
-r(count($repoTest->getListByProductTest(999))) && p() && e('0');
-r(count($repoTest->getListByProductTest(0))) && p() && e('0');
+r($repoTest->getListByProductCountTest(999)) && p() && e('0');
+r($repoTest->getListByProductCountTest(0)) && p() && e('0');

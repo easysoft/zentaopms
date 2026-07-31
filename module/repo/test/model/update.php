@@ -4,31 +4,32 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
+
 title=测试 repoModel->update();
 timeout=0
 cid=18109
 
-- 更新版本库1名字
+- 执行repo模块的updateTest方法，参数是1, $data1, true
  - 第0条的field属性 @name
  - 第0条的old属性 @testHtml
  - 第0条的new属性 @repo1
-- 更新版本库1所属产品
+- 执行repo模块的updateTest方法，参数是1, $data2, true
  - 第0条的field属性 @product
  - 第0条的old属性 @1
  - 第0条的new属性 @2
-- 更新版本库1相关项目
+- 执行repo模块的updateTest方法，参数是1, $data3, true
  - 第0条的field属性 @projects
  - 第0条的old属性 @~~
  - 第0条的new属性 @3
-- 更新版本库1仓库服务项目
+- 执行repo模块的updateTest方法，参数是1, $data4, true
  - 第0条的field属性 @serviceProject
  - 第0条的old属性 @2
  - 第0条的new属性 @1
-- 更新版本库1名字为repo1_rename
+- 执行repo模块的updateTest方法，参数是1, $data5, true
  - 第0条的field属性 @name
  - 第0条的old属性 @repo1
  - 第0条的new属性 @repo1_rename
-- 更新版本库1产品为3
+- 执行repo模块的updateTest方法，参数是1, $data6, true
  - 第0条的field属性 @product
  - 第0条的old属性 @2
  - 第0条的new属性 @3
@@ -97,9 +98,6 @@ $data6 = (object)array('space' => 1, 'product' => '3', 'projects' => '3', 'SCM' 
 
 $repo = new repoModelTest();
 $repo->seedGitFoxEntry();
-$repo->instance->config->devops->gitfoxURL  = 'http://localhost';
-$repo->instance->config->devops->gitfoxPort = 3000;
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'test/testhtml', 'gitURL' => 'http://repo.local/testhtml', 'importing' => false));
 
 r($repo->updateTest(1, $data1, true)) && p('0:field,old,new') && e('name,testHtml,repo1');
 r($repo->updateTest(1, $data2, true)) && p('0:field,old,new') && e('product,1,2');

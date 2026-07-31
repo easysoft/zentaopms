@@ -9,20 +9,20 @@ title=测试 repoModel->getRepoPairs();
 timeout=0
 cid=18078
 
-- 获取type为repo的结果集
+- 执行repoTest模块的getRepoPairsTest方法，参数是$typeList[1]
  - 属性1 @testHtml
  - 属性4 @testSvn
-- 获取type为repo的结果数量 @4
-- 获取指定projectID的结果集属性1 @testHtml
-- 获取指定projectID的结果数量 @1
-- 获取type为repo的结果集，showScm参数为false属性2 @project1
+- 执行repoTest模块的getRepoPairsCountTest方法，参数是$typeList[1]  @4
+- 执行repoTest模块的getRepoPairsTest方法，参数是$typeList[0], $projectID 属性1 @testHtml
+- 执行repoTest模块的getRepoPairsCountTest方法，参数是$typeList[0], $projectID  @1
+- 执行repoTest模块的getRepoPairsTest方法，参数是$typeList[1], 0, false 属性2 @project1
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -35,7 +35,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_spaceuser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `space` int unsigned NOT NULL DEFAULT 0,
@@ -48,10 +48,10 @@ SQL);
 $tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
 $tester->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->eq(11)->exec();
 $tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
+    'name'        => 'GitFox',
     'account'     => 'admin',
     'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
+    'key'         => 'gitfox',
     'freePasswd'  => 0,
     'ip'          => '*',
     'createdBy'   => 'admin',
@@ -76,24 +76,12 @@ su('admin');
 
 $repo       = $tester->loadModel('repo');
 $repoTest   = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array((object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00')),
-    'listArgs' => (object)array('pageSize' => 1),
-)));
 
 $typeList  = array('project', 'repo');
 $projectID = 11;
 
-$result = $repo->getRepoPairs($typeList[1]);
-r($result)        && p('1,4') && e('testHtml,testSvn');
-r(count($result)) && p()      && e('4');
-
-$result = $repo->getRepoPairs($typeList[0], $projectID);
-r($result)        && p('1') && e('testHtml');
-r(count($result)) && p()    && e('1');
-
-r($repo->getRepoPairs($typeList[1], 0, false)) && p('2') && e('project1');
-
-$repoTest->restoreHttpClient();
+r($repoTest->getRepoPairsTest($typeList[1])) && p('1,4') && e('testHtml,testSvn');
+r($repoTest->getRepoPairsCountTest($typeList[1])) && p() && e('4');
+r($repoTest->getRepoPairsTest($typeList[0], $projectID)) && p('1') && e('testHtml');
+r($repoTest->getRepoPairsCountTest($typeList[0], $projectID)) && p() && e('1');
+r($repoTest->getRepoPairsTest($typeList[1], 0, false)) && p('2') && e('project1');
