@@ -71,11 +71,6 @@ $branchTable->gen(1);
 
 $repoTest = new repoModelTest();
 $repoTest->seedGitFoxEntry();
-$repoTest->instance->config->devops->gitfoxURL  = 'http://localhost';
-$repoTest->instance->config->devops->gitfoxPort = 3000;
-$repoTest->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/gitlab', 'gitURL' => '/tmp/gitlab', 'importing' => false));
-$repoTest->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/git',    'gitURL' => '/tmp/git',    'importing' => false));
-$repoTest->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/svn',    'gitURL' => '/tmp/svn',    'importing' => false));
 
 r($repoTest->updateCommitTest(1)) && p('SCM,status') && e('Gitlab,success');
 r($repoTest->updateCommitTest(2)) && p('SCM,status') && e('Git,exception');

@@ -20,13 +20,13 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 su('admin');
 
-global $lang, $dbh, $app;
+global $lang, $app;
 if(!isset($lang->codescan)) $lang->codescan = new stdclass();
 if(!isset($lang->codescan->exec)) $lang->codescan->exec = 'exec';
 if(!isset($lang->codescan->issue)) $lang->codescan->issue = 'issue';
 
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -66,8 +66,8 @@ $repo->gen(5);
 
 $repoTest = new repoModelTest();
 
-r(count($repoTest->getPairsTest()))    && p()        && e('3');
+r($repoTest->getPairsCountTest()) && p() && e('3');
 r($repoTest->getPairsTest())           && p('1,4,5') && e('repo1,repo4,repo5');
-r(isset($repoTest->getPairsTest()[2])) && p()        && e('0');
-r(isset($repoTest->getPairsTest()[3])) && p()        && e('0');
+r($repoTest->getPairsHasKeyTest(2)) && p() && e('0');
+r($repoTest->getPairsHasKeyTest(3)) && p() && e('0');
 r($repoTest->getPairsTest())           && p('4')     && e('repo4');

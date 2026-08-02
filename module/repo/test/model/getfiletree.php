@@ -14,7 +14,7 @@ cid=18057
  - 第0条的parent属性 @0
  - 第0条的name属性 @LICENSE
  - 第0条的path属性 @LICENSE
-- 获取代码文件得提交信息数量 @1
+- 获取代码文件得提交信息数量大于1 @1
 - 获取svn代码文件得提交信息第一个文件夹信息
  - 第0条的id属性 @dGFn
  - 第0条的name属性 @tag
@@ -27,13 +27,13 @@ cid=18057
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repofiles`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -49,7 +49,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -57,7 +57,7 @@ CREATE TABLE `ops_repouser` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -68,7 +68,7 @@ CREATE TABLE `ops_repohistory` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repobranch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -77,7 +77,7 @@ CREATE TABLE `ops_repobranch` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repofiles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -108,21 +108,9 @@ $tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 3, 'revision
 $tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 4, 'revision' => 2, 'path' => '/tag/README.md', 'parent' => '/tag', 'type' => 'file', 'action' => 'A'))->exec();
 
 $repo = new repoModelTest();
-foreach($repos as $repoData)
-{
-    $repoID = $repoData['id'];
-    $repo->setGitfoxRepoCache($repoID, (object)array(
-        'id'     => $repoID,
-        'path'   => "space/repo{$repoID}",
-        'gitURL' => "http://gitfox.local/space/repo{$repoID}.git",
-    ));
-}
+r($repo->getFileTreeTest(3, '')) && p('0:parent,name,path') && e('0,LICENSE,LICENSE');
+r($repo->getFileTreeCountGreaterThanTest(3, '', 1)) && p() && e('1');
 
-$result = $repo->getFileTreeTest(3, '');
-r($result)            && p('0:parent,name,path') && e('0,LICENSE,LICENSE');
-r(count($result) > 1) && p()                     && e('1');
-
-$result = $repo->getFileTreeTest(4, '');
-r($result)                && p('0:id,name,parent') && e('dGFn,tag,0');
-r($result[0]['children']) && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn');
-r(count($result))         && p()                   && e('1');
+r($repo->getFileTreeTest(4, '')) && p('0:id,name,parent') && e('dGFn,tag,0');
+r($repo->getFileTreeChildrenTest(4, '', 0)) && p('0:id,name,parent') && e('dGFnJTJGUkVBRE1FLm1k,README.md,dGFn');
+r($repo->getFileTreeCountTest(4, '')) && p() && e('1');

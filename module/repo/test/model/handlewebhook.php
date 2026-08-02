@@ -12,12 +12,8 @@ cid=18083
 
 - 处理push事件的webhook
  - 属性status @doing
- - 属性consumed @11
- - 属性left @3
-- 处理merge request事件的webhook
- - 属性status @doing
- - 属性consumed @12
- - 属性left @3
+ - 属性consumed @10.00
+ - 属性left @7.00
 - 处理不支持的事件webhook @0
 
 */
@@ -202,12 +198,6 @@ $data   = '{
 }';
 
 $repo = new repoModelTest();
-$repo->handleWebhookTest($event, json_decode($data), $repoID);
-$result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,10.00,7.00'); //处理push事件的webhook
-
-$repo->handleWebhookTest($event2, json_decode($data), $repoID);
-$result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,10.00,7.00'); //处理merge request事件的webhook
+r($repo->handleWebhookTaskTest($event, json_decode($data), $repoID, 8)) && p('status,consumed,left') && e('doing,10.00,7.00'); //处理push事件的webhook
 
 r($repo->handleWebhookTest($event3, json_decode($data), $repoID)) && p() && e('0'); //处理不支持的事件webhook

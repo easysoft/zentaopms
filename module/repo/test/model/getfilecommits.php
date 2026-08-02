@@ -20,13 +20,13 @@ cid=18056
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repofiles`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -43,7 +43,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -51,7 +51,7 @@ CREATE TABLE `ops_repouser` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -62,7 +62,7 @@ CREATE TABLE `ops_repohistory` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repobranch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -71,7 +71,7 @@ CREATE TABLE `ops_repobranch` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repofiles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -107,16 +107,7 @@ $tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 3, 'revision
 $tester->dao->insert(TABLE_REPOFILES)->data((object)array('repo' => 4, 'revision' => 3, 'path' => '/trunk/zentaoext/zentaopro/cmmi/db/README.md', 'parent' => '/trunk/zentaoext/zentaopro/cmmi/db', 'type' => 'file', 'action' => 'A', 'oldPath' => ''))->exec();
 
 $repo = new repoModelTest();
-foreach($repos as $repoData)
-{
-    $repoID = $repoData['id'];
-    $repo->setGitfoxRepoCache($repoID, (object)array(
-        'id'     => $repoID,
-        'path'   => "space/repo{$repoID}",
-        'gitURL' => "http://gitfox.local/space/repo{$repoID}.git",
-    ));
-}
-
+$repo->seedGitFoxEntry();
 $parent = '/trunk/zentaoext/zentaopro/cmmi/db';
 
 r($repo->getFileCommitsTest(1, 'branch3')) && p('0:revision,date')    && e('c808480afe22d3a55d94e91c59a8f3170212ade0,2023-12-13 19:00:25');

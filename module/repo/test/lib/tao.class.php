@@ -18,6 +18,51 @@ class repoTaoTest extends baseTest
         $this->objectTao   = $this->instance;
     }
 
+    public function __call(string $methodName, array $arguments)
+    {
+        foreach(array('CountGreaterThanTest', 'AvailableTest', 'CountTest', 'IsArrayTest', 'HasKeyTest') as $suffix)
+        {
+            if(!str_ends_with($methodName, $suffix)) continue;
+
+            $baseMethod = substr($methodName, 0, -strlen($suffix)) . 'Test';
+            if(!method_exists($this, $baseMethod)) break;
+
+            $invokeArguments = $arguments;
+            if(in_array($suffix, array('CountGreaterThanTest', 'HasKeyTest'), true)) array_pop($invokeArguments);
+
+            $result = call_user_func_array(array($this, $baseMethod), $invokeArguments);
+            if($suffix == 'AvailableTest')        return '1';
+            if($suffix == 'CountTest')            return (string)$this->countResult($result);
+            if($suffix == 'IsArrayTest')          return is_array($result) ? '1' : '0';
+            if($suffix == 'CountGreaterThanTest') return $this->countGreaterThan($result, $arguments);
+            if($suffix == 'HasKeyTest')           return $this->hasResultKey($result, $arguments);
+        }
+
+        throw new BadMethodCallException("Undefined method {$methodName}.");
+    }
+
+    protected function countResult(mixed $result): int
+    {
+        if($result === false || $result === null || $result === 'empty') return 0;
+        if(is_array($result) || $result instanceof Countable) return count($result);
+        if(is_object($result)) return count(get_object_vars($result));
+        return (int)!empty($result);
+    }
+
+    protected function countGreaterThan(mixed $result, array $arguments): string
+    {
+        $threshold = (int)array_pop($arguments);
+        return $this->countResult($result) > $threshold ? '1' : '0';
+    }
+
+    protected function hasResultKey(mixed $result, array $arguments): string
+    {
+        $key = array_pop($arguments);
+        if(is_array($result))  return array_key_exists($key, $result) ? '1' : '0';
+        if(is_object($result)) return property_exists($result, (string)$key) ? '1' : '0';
+        return '0';
+    }
+
     /**
      * Check priv test.
      *
@@ -1547,9 +1592,21 @@ class repoTaoTest extends baseTest
         return $this->objectModel->buildFileTree($files);
     }
 
+    public function buildFileTreeChildrenTest(array $files, int $index = 0)
+    {
+        $result = $this->buildFileTreeTest($files);
+        return zget(zget($result, $index, array()), 'children', array());
+    }
+
     public function buildTreeTest(array $files)
     {
         return $this->objectModel->buildTree($files);
+    }
+
+    public function buildTreeChildrenTest(array $files, int $index = 0)
+    {
+        $result = $this->buildTreeTest($files);
+        return zget(zget($result, $index, array()), 'children', array());
     }
 
     public function getImportedProjectsTest($hostID)

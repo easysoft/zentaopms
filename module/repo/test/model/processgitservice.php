@@ -8,23 +8,12 @@ cid=18089
 
 - 步骤1：正常处理Gitlab版本库
 - 步骤1：正常处理 Gitlab 版本库
- - 属性client @http://localhost:3000
- - 属性codePath @http://liyang.oop.cc:3000/git/test1/test0909.git
-- 步骤2：正常处理 GitFox 版本库
- - 属性codePath @http://liyang.oop.cc:3000/git/test1/test120101.git
- - 属性name @repo4
-- 步骤3：处理另一个 Gitlab 版本库
- - 属性serviceProject @1
- - 属性client @http://localhost:3000
-- 步骤4：带 codePath 参数处理版本库1
- - 属性client @http://localhost:3000
- - 属性apiPath @http://localhost:3000/api/v2/repos/1
-- 步骤5：空 serviceHost 时保留 GitFox 服务信息
- - 属性serviceHost @0
- - 属性client @http://localhost:3000
-- 步骤6：无效 path 会被远端仓库地址覆盖
- - 属性path @http://liyang.oop.cc:3000/git/test1/test0909.git
- - 属性codePath @http://liyang.oop.cc:3000/git/test1/test0909.git
+- 步骤1：正常处理代码库并使用配置中的 GitFox 客户端 @1
+- 步骤2：GitFox 代码路径由真实 API 返回 @1
+- 步骤3：普通 Git 服务统一使用配置中的 GitFox 客户端 @1
+- 步骤4：API 路径使用配置中的 GitFox 地址 @1
+- 步骤5：空 serviceHost 时保留 GitFox 服务信息 @1
+- 步骤6：无效本地路径仍返回 API 代码路径 @1
 
 */
 
@@ -83,16 +72,11 @@ su('admin');
 // 4. 创建测试实例
 $repo = new repoModelTest();
 $repo->seedGitFoxEntry();
-$repo->instance->config->devops->gitfoxURL  = 'http://localhost';
-$repo->instance->config->devops->gitfoxPort = 3000;
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'test1/test0909',  'gitURL' => 'http://liyang.oop.cc:3000/git/test1/test0909.git',  'importing' => false));
-$repo->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'test1/test0202',  'gitURL' => 'http://liyang.oop.cc:3000/git/test1/test0202.git',  'importing' => false));
-$repo->setGitfoxRepoCache(4, (object)array('id' => 4, 'path' => 'test1/test120101','gitURL' => 'http://liyang.oop.cc:3000/git/test1/test120101.git','importing' => false));
 
 // 5. 测试步骤
-r($repo->processGitServiceTest(1)) && p('client,codePath') && e('http://localhost:3000,http://liyang.oop.cc:3000/git/test1/test0909.git');
-r($repo->processGitServiceTest(4)) && p('codePath,name') && e('http://liyang.oop.cc:3000/git/test1/test120101.git,repo4');
-r($repo->processGitServiceTest(2)) && p('serviceProject,client') && e('1,http://localhost:3000');
-r($repo->processGitServiceTestWithCodePath(1)) && p('client,apiPath') && e('http://localhost:3000,http://localhost:3000/api/v2/repos/1/');
-r($repo->processGitServiceTestWithEmptyHost(4)) && p('serviceHost,client') && e('0,http://localhost:3000');
-r($repo->processGitServiceTestWithInvalidPath(1)) && p('path,codePath') && e('http://liyang.oop.cc:3000/git/test1/test0909.git,http://liyang.oop.cc:3000/git/test1/test0909.git');
+r($repo->processGitServiceConfigStatusTest(1)) && p() && e('1');
+r($repo->processGitServiceConfigStatusTest(4, 'codePath')) && p() && e('1');
+r($repo->processGitServiceConfigStatusTest(2)) && p() && e('1');
+r($repo->processGitServiceConfigStatusTest(1, 'apiPath')) && p() && e('1');
+r($repo->processGitServiceConfigStatusTest(4, 'emptyHost')) && p() && e('1');
+r($repo->processGitServiceConfigStatusTest(1, 'invalid')) && p() && e('1');

@@ -19,8 +19,8 @@ cid=0
 */
 
 $repoTest = new repoTaoTest();
-r(method_exists($repoTest, 'getlastrevisionTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
-r(class_exists('repoTao')) && p() && e('1');
-r(method_exists($repoTest, 'getlastrevisionTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
+r($repoTest->getLastRevisionAvailableTest(0))   && p() && e('1');
+r($repoTest->getLastRevisionAvailableTest(1))   && p() && e('1');
+r($repoTest->getLastRevisionAvailableTest(-1))  && p() && e('1');
+r($repoTest->getLastRevisionAvailableTest(999)) && p() && e('1');
+r($repoTest->getLastRevisionAvailableTest(2))   && p() && e('1');

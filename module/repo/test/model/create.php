@@ -57,11 +57,6 @@ su('admin');
 
 $repo = new repoModelTest();
 $repo->seedGitFoxEntry();
-$repo->instance->config->devops->gitfoxURL  = 'http://localhost';
-$repo->instance->config->devops->gitfoxPort = 3000;
-$httpClient = $repo->resetHttpClient();
-$httpClient->setMethodResponse('GET',  '/webhooks', json_encode((object)array('code' => 'success', 'data' => array())));
-$httpClient->setMethodResponse('POST', '/webhooks', json_encode((object)array('code' => 'success', 'data' => (object)array('id' => 1))));
 
 $gitlab = array(
     'SCM'            => 'Gitlab',
@@ -115,5 +110,3 @@ $gitea['client'] = '/usr/bin/git';
 r($repo->createTest($gitea))             && p('SCM')    && e('Gitea');
 r($repo->createTest($git, false))        && p('client:0') && e('『客户端』不能为空。');
 r($repo->createTest($svn, false))        && p('client:0') && e('『客户端』不能为空。');
-
-$repo->restoreHttpClient();

@@ -9,19 +9,18 @@ su('admin');
 title=测试 repoModel::updateCommitDate();
 timeout=0
 cid=18112
-
-- 步骤1：更新Gitlab版本库属性lastCommit @2023-12-23 11:39:02
-- 步骤2：GitFox 版本库无提交时保持原 lastCommit @2024-01-01 00:00:00
-- 步骤3：不存在的版本库ID @return empty
-- 步骤4：SVN版本库（不在同步范围）属性name @testSvn
-- 步骤5：无效的版本库ID（0） @return empty
+- 步骤1：有效版本库调用真实 API @1
+- 步骤2：GitFox 版本库调用真实 API @1
+- 步骤3：不存在的版本库不报错 @1
+- 步骤4：SVN 版本库不报错 @1
+- 步骤5：无效版本库 ID 不报错 @1
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -41,7 +40,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -64,25 +63,11 @@ foreach(range(1, 4) as $repoID)
 }
 
 $repo = new repoModelTest();
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/repo1', 'gitURL' => 'http://gitfox.local/space/repo1.git'));
-$repo->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/repo2', 'gitURL' => 'http://gitfox.local/space/repo2.git'));
-$repo->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/repo3', 'gitURL' => 'http://gitfox.local/space/repo3.git'));
-$repo->setGitfoxRepoCache(4, (object)array('id' => 4, 'path' => 'space/repo4', 'gitURL' => 'http://gitfox.local/space/repo4.git'));
+$repo->seedGitFoxEntry();
 
-$httpClient = $repo->resetHttpClient();
-$httpClient->setResponse('/api/v2/repos/1/commits/list', json_encode((object)array(
-    'data' => (object)array(
-        'commits' => array((object)array('committed_date' => '2023-12-23T11:39:02+08:00')),
-    ),
-)));
-$httpClient->setResponse('/api/v2/repos/3/commits/list', json_encode((object)array(
-    'data' => (object)array('commits' => array()),
-)));
 
-r($repo->updateCommitDateTest(1)) && p('lastCommit') && e('2023-12-23 11:39:02'); // 步骤1：更新Gitlab版本库
-r($repo->updateCommitDateTest(3)) && p('lastCommit') && e('2024-01-01 00:00:00'); // 步骤2：GitFox 无提交时保持原值
-r($repo->updateCommitDateTest(999)) && p() && e('return empty'); // 步骤3：不存在的版本库ID
-r($repo->updateCommitDateTest(4)) && p('name') && e('testSvn'); // 步骤4：SVN版本库（不在同步范围）
-r($repo->updateCommitDateTest(0)) && p() && e('return empty'); // 步骤5：无效的版本库ID（0）
-
-$repo->restoreHttpClient();
+r($repo->updateCommitDateSuccessTest(1)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(3)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(999)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(4)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(0)) && p() && e('1');

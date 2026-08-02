@@ -77,18 +77,15 @@ $app->control = new repo();
 $repo = new repoModelTest();
 
 $repo->setTaskByCommitTest($log, $action, $repoID);
-$result = $tester->loadModel('task')->getById(1);
-r($result) && p('status,consumed,left') && e('changed,3.00,0.00');
+r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 1)) && p('status,consumed,left') && e('changed,3.00,0.00');
 
 $log->msg = $log->comment = 'Effort Task #8 Cost:1h Left:3h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
-$result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,11.00,3.00');
+r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 8)) && p('status,consumed,left') && e('doing,11.00,3.00');
 
 $log->msg = $log->comment = 'Finish Task #2 Cost:10h';
 $repo->setTaskByCommitTest($log, $action, $repoID);
-$result = $tester->loadModel('task')->getById(2);
-r($result) && p('status,consumed,left') && e('changed,4.00,1.00');
+r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 2)) && p('status,consumed,left') && e('changed,4.00,1.00');
 
 $log->msg = $log->comment = 'No Task match in this message';
 r($repo->setTaskByCommitTest($log, $action, $repoID) === false) && p() && e('1');

@@ -39,8 +39,8 @@ $multiRepo   = (object)array('members' => array('admin' => 'admin', 'user1' => '
 $mixedRepo   = (object)array('members' => array('user1' => 'user1', 'ghost' => 'ghost'));
 $missingRepo = (object)array('members' => array('ghost' => 'ghost'));
 
-r(count($repoTest->getRepoMembersTest($emptyRepo)))   && p()              && e('0');
+r($repoTest->getRepoMembersCountTest($emptyRepo)) && p() && e('0');
 r($repoTest->getRepoMembersTest($adminRepo))          && p('admin')       && e('管理员');
 r($repoTest->getRepoMembersTest($multiRepo))          && p('admin,user1') && e('管理员,用户一');
 r($repoTest->getRepoMembersTest($mixedRepo))          && p('user1')       && e('用户一');
-r(count($repoTest->getRepoMembersTest($missingRepo))) && p()              && e('0');
+r($repoTest->getRepoMembersCountTest($missingRepo)) && p() && e('0');

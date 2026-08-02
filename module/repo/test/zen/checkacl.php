@@ -20,14 +20,8 @@ cid=0
 su('admin');
 $test = new repoZenTest();
 
-$r1 = $test->checkACLTest();
-$r2 = $test->checkACLTest();
-$r3 = $test->checkACLTest();
-$r4 = $test->checkACLTest();
-$r5 = $test->checkACLTest();
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->checkACLAvailableTest()) && p() && e('1');
+r($test->checkACLAvailableTest()) && p() && e('1');
+r($test->checkACLAvailableTest()) && p() && e('1');
+r($test->checkACLAvailableTest()) && p() && e('1');
+r($test->checkACLAvailableTest()) && p() && e('1');

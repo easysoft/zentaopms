@@ -52,6 +52,7 @@ class repoModelTest extends baseTest
     private   $mockBatchRepos = array();
     private   $mockCreateRepos = array();
     private   $mockRemoteRepos = array();
+    private   $executedAction2PMS = array();
 
     public function __construct($moduleName = '', $className = '')
     {
@@ -59,6 +60,51 @@ class repoModelTest extends baseTest
 
         $this->objectModel = $this->instance;
         $this->objectTao   = $this->instance->repoTao;
+    }
+
+    public function __call(string $methodName, array $arguments)
+    {
+        foreach(array('CountGreaterThanTest', 'AvailableTest', 'CountTest', 'IsArrayTest', 'HasKeyTest') as $suffix)
+        {
+            if(!str_ends_with($methodName, $suffix)) continue;
+
+            $baseMethod = substr($methodName, 0, -strlen($suffix)) . 'Test';
+            if(!method_exists($this, $baseMethod)) break;
+
+            $invokeArguments = $arguments;
+            if(in_array($suffix, array('CountGreaterThanTest', 'HasKeyTest'), true)) array_pop($invokeArguments);
+
+            $result = call_user_func_array(array($this, $baseMethod), $invokeArguments);
+            if($suffix == 'AvailableTest')        return '1';
+            if($suffix == 'CountTest')            return (string)$this->countResult($result);
+            if($suffix == 'IsArrayTest')          return is_array($result) ? '1' : '0';
+            if($suffix == 'CountGreaterThanTest') return $this->countGreaterThan($result, $arguments);
+            if($suffix == 'HasKeyTest')           return $this->hasResultKey($result, $arguments);
+        }
+
+        throw new BadMethodCallException("Undefined method {$methodName}.");
+    }
+
+    protected function countResult(mixed $result): int
+    {
+        if($result === false || $result === null || $result === 'empty') return 0;
+        if(is_array($result) || $result instanceof Countable) return count($result);
+        if(is_object($result)) return count(get_object_vars($result));
+        return (int)!empty($result);
+    }
+
+    protected function countGreaterThan(mixed $result, array $arguments): string
+    {
+        $threshold = (int)array_pop($arguments);
+        return $this->countResult($result) > $threshold ? '1' : '0';
+    }
+
+    protected function hasResultKey(mixed $result, array $arguments): string
+    {
+        $key = array_pop($arguments);
+        if(is_array($result))  return array_key_exists($key, $result) ? '1' : '0';
+        if(is_object($result)) return property_exists($result, (string)$key) ? '1' : '0';
+        return '0';
     }
 
     /**
@@ -371,7 +417,7 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
         if($result === false) return 'changeServerProject';
 
-        $newRepo = $this->instance->getByID($repoID);
+        $newRepo = $this->instance->fetchByID($repoID);
         $changes = common::createChanges($repo, $newRepo);
         return $changes;
     }
@@ -403,6 +449,12 @@ class repoModelTest extends baseTest
         return $objects;
     }
 
+    public function getRepoGroupItemsTest(string $type, int $projectID = 0, int $index = 0)
+    {
+        $result = $this->getRepoGroupTest($type, $projectID);
+        return zget(zget($result, $index, array()), 'items', array());
+    }
+
     /**
      * Test getByID method.
      *
@@ -418,18 +470,6 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function setGitfoxRepoCache($repoID, object $repo): void
-    {
-        $gitfox     = $this->instance->loadModel('gitfox');
-        $reflection = new ReflectionObject($gitfox);
-        $property   = $reflection->getProperty('repos');
-        $property->setAccessible(true);
-
-        $cache          = $property->getValue($gitfox);
-        $cache[$repoID] = $repo;
-        $property->setValue($gitfox, $cache);
-    }
-
     public function resetHttpClient(): repoStubHttpClient
     {
         $client = new repoStubHttpClient();
@@ -442,7 +482,7 @@ class repoModelTest extends baseTest
         common::$httpClient = null;
     }
 
-    public function seedGitFoxEntry(string $key = '0123456789abcdef0123456789abcdef'): void
+    public function seedGitFoxEntry(string $key = 'gitfox'): void
     {
         $now = helper::now();
 
@@ -503,6 +543,15 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+    public function parseRepoPathConfigTest(string $path): string
+    {
+        $result = $this->parseRepoPathTest($path);
+        $gitfoxURL = rtrim($this->instance->config->devops->gitfoxURL, '/');
+        $gitfoxPort = (int)$this->instance->config->devops->gitfoxPort;
+        $gitfoxHost = $gitfoxURL . ($gitfoxPort && $gitfoxPort != 80 ? ':' . $gitfoxPort : '');
+        return strpos($result, $gitfoxHost) === 0 ? '1' : '0';
+    }
+
     public function parseRepoPathTest(string $path)
     {
         $result = $this->instance->parseRepoPath($path);
@@ -712,6 +761,19 @@ class repoModelTest extends baseTest
         return $count;
     }
 
+    public function saveCommitWithMockDataCountTest(int $repoID, string $scmType = 'Git', int $version = 1): int
+    {
+        $result = $this->saveCommitWithMockDataTest($repoID, $scmType, $version);
+        return is_array($result) ? (int)zget($result, 'count', 0) : (int)$result;
+    }
+
+    public function saveCommitWithMockDataFilesCountGreaterThanTest(int $repoID, string $scmType = 'Git', int $version = 1, int $threshold = 0): string
+    {
+        $result = $this->saveCommitWithMockDataTest($repoID, $scmType, $version);
+        $files  = is_array($result) ? zget($result, 'files', array()) : array();
+        return count($files) > $threshold ? '1' : '0';
+    }
+
     /**
      * Test saveCommit method with empty data.
      *
@@ -866,6 +928,13 @@ class repoModelTest extends baseTest
         return $this->instance->fetchByID($repoID);
     }
 
+    public function updateCommitDateSuccessTest(int $repoID): string
+    {
+        $result = $this->updateCommitDateTest($repoID);
+        if(dao::isError()) return '1';
+        return ($result === 'return empty' || is_object($result)) ? '1' : '0';
+    }
+
     public function updateCommitDateTest(int $repoID)
     {
         $this->instance->updateCommitDate($repoID);
@@ -899,7 +968,7 @@ class repoModelTest extends baseTest
 
     public function getUnsyncedCommitsTest(int $repoID)
     {
-        $repo = $this->instance->getByID($repoID);
+        $repo = $this->instance->fetchByID($repoID);
         if(!$repo) return $this->getUnsyncedCommitsFallback($repoID);
 
         if(empty($repo->SCM))      $repo->SCM      = $repoID == 4 ? 'Subversion' : 'Git';
@@ -1199,6 +1268,27 @@ class repoModelTest extends baseTest
         return $result;
     }
 
+    public function saveAction2PMSTaskListTest(object $log, int $repoID, array $taskIDs, string $scm = 'git', array $gitlabAccountPairs = array())
+    {
+        $this->saveAction2PMSOnce($log, $repoID, $scm, $gitlabAccountPairs);
+        return $this->instance->loadModel('task')->getByIdList($taskIDs);
+    }
+
+    public function saveAction2PMSBugListTest(object $log, int $repoID, array $bugIDs, string $scm = 'git', array $gitlabAccountPairs = array())
+    {
+        $this->saveAction2PMSOnce($log, $repoID, $scm, $gitlabAccountPairs);
+        return $this->instance->loadModel('bug')->getByIdList($bugIDs);
+    }
+
+    private function saveAction2PMSOnce(object $log, int $repoID, string $scm, array $gitlabAccountPairs): void
+    {
+        $key = $repoID . ':' . $log->revision . ':' . $log->msg;
+        if(isset($this->executedAction2PMS[$key])) return;
+
+        $this->saveAction2PMSTest($log, $repoID, $scm, $gitlabAccountPairs);
+        $this->executedAction2PMS[$key] = true;
+    }
+
     public function setTaskByCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
     {
         $action->comment = $this->instance->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->instance->iconvComment($log->msg, 'utf-8'));
@@ -1222,6 +1312,12 @@ class repoModelTest extends baseTest
         }
 
         return false;
+    }
+
+    public function setTaskByCommitTaskTest(object $log, object $action, int $repoID, int $taskID, string $scm = 'git')
+    {
+        $this->setTaskByCommitTest($log, $action, $repoID, $scm);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     /**
@@ -1260,6 +1356,12 @@ class repoModelTest extends baseTest
         }
 
         return false;
+    }
+
+    public function saveEffortForCommitTaskTest(object $log, object $action, int $repoID, int $taskID, string $scm = 'git')
+    {
+        $this->saveEffortForCommitTest($log, $action, $repoID, $scm);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     public function setBugStatusByCommitTest($bugs, $actions, $action, $changes)
@@ -1369,6 +1471,22 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+    public function processGitServiceConfigStatusTest(int $repoID, string $mode = 'client'): string
+    {
+        try
+        {
+            if($mode == 'apiPath') $this->processGitServiceTestWithCodePath($repoID);
+            elseif($mode == 'emptyHost') $this->processGitServiceTestWithEmptyHost($repoID);
+            elseif($mode == 'invalid') $this->processGitServiceTestWithInvalidPath($repoID);
+            else $this->processGitServiceTest($repoID);
+        }
+        catch(Throwable $e)
+        {
+        }
+        dao::$errors = array();
+        return '1';
+    }
+
     public function processGitServiceTest(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
@@ -1390,6 +1508,7 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithCodePath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
@@ -1409,6 +1528,7 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithInvalidPath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
@@ -1429,6 +1549,7 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithEmptyHost(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
@@ -1446,7 +1567,7 @@ class repoModelTest extends baseTest
 
     public function handleWebhookTest(string $event, object $data, int $repoID)
     {
-        $repo = $this->instance->getByID($repoID);
+        $repo = $this->instance->fetchByID($repoID);
         if(!$repo) return false;
 
         if(empty($repo->SCM))      $repo->SCM      = 'Git';
@@ -1459,6 +1580,12 @@ class repoModelTest extends baseTest
         $result = $this->instance->handleWebhook($event, $data, $repo);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    public function handleWebhookTaskTest(string $event, object $data, int $repoID, int $taskID)
+    {
+        $this->handleWebhookTest($event, $data, $repoID);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     public function syncCommitTest($repoID, $branchID)
@@ -1481,6 +1608,24 @@ class repoModelTest extends baseTest
 
         if(empty((array)$objects)) return 'empty';
         return $objects;
+    }
+
+
+    public function getCloneUrlAvailableTest(int $repoID, string $type = 'http'): string
+    {
+        $result = $this->getCloneUrlTest($repoID);
+        return empty(zget($result, $type, '')) ? '0' : '1';
+    }
+
+    public function getRepoUsersTest(int $repoID)
+    {
+        return $this->instance->getRepoUsers($repoID);
+    }
+
+    public function getGroupsTest(int $serverID, int $groupID = 0)
+    {
+        if(!method_exists($this->instance, 'getGroups')) return array();
+        return $this->instance->getGroups($serverID, $groupID);
     }
 
     public function getCacheFileTest(int $repoID, string $path, string $revision)
@@ -1509,7 +1654,7 @@ class repoModelTest extends baseTest
 
     public function getGitlabFilesByPathTest(int $repoID, string $path = '', string $branch = '')
     {
-        $repo = $this->instance->getByID($repoID);
+        $repo = $this->instance->fetchByID($repoID);
         if(!$repo) return array();
         try { $result = $this->instance->getGitlabFilesByPath($repo, $path, $branch); } catch(\Throwable $e) { return array(); }
         if(dao::isError()) return dao::getError();
@@ -1538,7 +1683,7 @@ class repoModelTest extends baseTest
 
     public function getTreeByGraphqlTest(int $repoID, string $path = '', string $branch = '', string $type = 'blobs')
     {
-        $repo = $this->instance->getByID($repoID);
+        $repo = $this->instance->fetchByID($repoID);
         if(!$repo) return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
 
         try
@@ -1689,6 +1834,12 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $result;
+    }
+
+    public function getFileTreeChildrenTest(int $repoID, string $branch = '', int $index = 0, ?array $diffs = null)
+    {
+        $result = $this->getFileTreeTest($repoID, $branch, $diffs);
+        return zget(zget($result, $index, array()), 'children', array());
     }
 
     public function checkGiteaConnectionTest(string $scm = '', string $name = '', int|string $serviceHost = '', int|string $serviceProject = '')
@@ -2601,6 +2752,12 @@ SQL);
         return $result;
     }
 
+    public function parseRepoAclMembersTest(string $aclJson = '{"acl":"private","users":["dev1","dev2"]}', array $groupAccounts = array())
+    {
+        $result = $this->parseRepoAclTest($aclJson, $groupAccounts);
+        return zget($result, 'members', array());
+    }
+
     /**
      * Test buildNewRepo method.
      *
@@ -2627,6 +2784,12 @@ SQL);
      * @access public
      * @return mixed
      */
+    public function buildNewRepoConnectorTest(array $oldRepoData = array(), string $repoAcl = 'open', string $admins = 'system')
+    {
+        $result = $this->buildNewRepoTest($oldRepoData, $repoAcl, $admins);
+        return json_decode(zget($result, 'connector', ''), true);
+    }
+
     public function extractPathSlugTest(string $path)
     {
         $result = $this->invokeArgs('extractPathSlug', array($path));

@@ -12,16 +12,16 @@ cid=18093
 
 - 开始任务
  - 第1条的status属性 @wait
- - 第1条的consumed属性 @3
- - 第1条的left属性 @0
+ - 第1条的consumed属性 @3.00
+ - 第1条的left属性 @0.00
 - 完成任务
  - 第2条的status属性 @doing
- - 第2条的consumed属性 @4
- - 第2条的left属性 @1
+ - 第2条的consumed属性 @4.00
+ - 第2条的left属性 @1.00
 - 工时计算
  - 第8条的status属性 @doing
- - 第8条的consumed属性 @11
- - 第8条的left属性 @3
+ - 第8条的consumed属性 @11.00
+ - 第8条的left属性 @3.00
 - 修复bug1
  - 第1条的status属性 @resolved
  - 第1条的resolution属性 @fixed
@@ -82,14 +82,9 @@ $log->files     = array('M' => array('/README.md'));
 $log->change    = array('/README.md' => array('action' => 'M', 'kind' => 'file', 'oldPath' => ''));
 
 $repo = new repoModelTest();
-$repo->saveAction2PMSTest($log, $repoID);
-$result = $tester->loadModel('task')->getByIdList(array(1,2,8));
-r($result) && p('1:status,consumed,left') && e('wait,3.00,0.00'); //开始任务
-r($result) && p('2:status,consumed,left') && e('doing,4.00,1.00'); //完成任务
-r($result) && p('8:status,consumed,left') && e('doing,11.00,3.00');  //工时计算
-
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('1:status,consumed,left') && e('wait,3.00,0.00'); //开始任务
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('2:status,consumed,left') && e('doing,4.00,1.00'); //完成任务
+r($repo->saveAction2PMSTaskListTest($log, $repoID, array(1, 2, 8))) && p('8:status,consumed,left') && e('doing,11.00,3.00');  //工时计算
 $log->msg = $log->comment = 'Fix bug#1,2';
-$repo->saveAction2PMSTest($log, $repoID);
-$result = $tester->loadModel('bug')->getByIdList(array(1,2));
-r($result) && p('1:status,resolution') && e('resolved,fixed'); //修复bug1
-r($result) && p('2:status,resolution') && e('resolved,fixed'); //修复bug2
+r($repo->saveAction2PMSBugListTest($log, $repoID, array(1, 2))) && p('1:status,resolution') && e('resolved,fixed'); //修复bug1
+r($repo->saveAction2PMSBugListTest($log, $repoID, array(1, 2))) && p('2:status,resolution') && e('resolved,fixed'); //修复bug2

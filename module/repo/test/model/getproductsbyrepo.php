@@ -20,10 +20,10 @@ cid=18073
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -38,7 +38,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -90,14 +90,7 @@ foreach($repoProducts as $repoID => $product)
 su('admin');
 
 $repo = new repoModelTest();
-foreach(array_keys($repoProducts) as $repoID)
-{
-    $repo->setGitfoxRepoCache($repoID, (object)array(
-        'id'     => $repoID,
-        'path'   => "space/repo{$repoID}",
-        'gitURL' => "http://gitfox.local/space/repo{$repoID}.git",
-    ));
-}
+$repo->seedGitFoxEntry();
 
 r($repo->getProductsByRepoTest(0)) && p() && e('0');                    // 步骤1：无效代码库ID(0)
 r($repo->getProductsByRepoTest(99)) && p() && e('0');                   // 步骤2：不存在的代码库ID(99)

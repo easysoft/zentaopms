@@ -20,14 +20,8 @@ cid=0
 su('admin');
 $test = new repoZenTest();
 
-$r1 = $test->checkRepoInternetTest();
-$r2 = $test->checkRepoInternetTest();
-$r3 = $test->checkRepoInternetTest();
-$r4 = $test->checkRepoInternetTest();
-$r5 = $test->checkRepoInternetTest();
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');

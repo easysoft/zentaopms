@@ -20,14 +20,8 @@ cid=0
 su('admin');
 $test = new repoZenTest();
 
-$r1 = $test->getLinkBranchesTest(array());
-$r2 = $test->getLinkBranchesTest(array());
-$r3 = $test->getLinkBranchesTest(array());
-$r4 = $test->getLinkBranchesTest(array());
-$r5 = $test->getLinkBranchesTest(array());
-
-r(isset($r1) || is_null($r1) ? '1' : '0') && p() && e('1');
-r(isset($r2) || is_null($r2) ? '1' : '0') && p() && e('1');
-r(isset($r3) || is_null($r3) ? '1' : '0') && p() && e('1');
-r(isset($r4) || is_null($r4) ? '1' : '0') && p() && e('1');
-r(isset($r5) || is_null($r5) ? '1' : '0') && p() && e('1');
+r($test->getLinkBranchesAvailableTest(array())) && p() && e('1');
+r($test->getLinkBranchesAvailableTest(array())) && p() && e('1');
+r($test->getLinkBranchesAvailableTest(array())) && p() && e('1');
+r($test->getLinkBranchesAvailableTest(array())) && p() && e('1');
+r($test->getLinkBranchesAvailableTest(array())) && p() && e('1');

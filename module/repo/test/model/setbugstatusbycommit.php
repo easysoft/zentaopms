@@ -55,28 +55,26 @@ $baseChanges = array();
 $bugs1 = array(1 => 1, 2 => 2);
 $actions1 = array('bug' => array(1 => array('resolve' => array()), 2 => array('resolve' => array())));
 $result1 = $repoTest->setBugStatusByCommitTest($bugs1, $actions1, $baseAction, $baseChanges);
-r($result1) && p('1,2') && e('0,0'); // 步骤1：正常resolve操作
+r($repoTest->setBugStatusByCommitTest($bugs1, $actions1, $baseAction, $baseChanges)) && p('1,2') && e('0,0'); // 步骤1：正常resolve操作
 
 // 测试步骤2：测试已经resolved状态的Bug
 $bugs2 = array(6 => 6, 7 => 7);
 $actions2 = array('bug' => array(6 => array('resolve' => array()), 7 => array('resolve' => array())));
-$result2 = $repoTest->setBugStatusByCommitTest($bugs2, $actions2, $baseAction, $baseChanges);
-r(is_array($result2) ? 1 : 0) && p() && e('1'); // 步骤2：已resolved状态的Bug处理
+r($repoTest->setBugStatusByCommitIsArrayTest($bugs2, $actions2, $baseAction, $baseChanges)) && p() && e('1'); // 步骤2：已resolved状态的Bug处理
 
 // 测试步骤3：测试空Bug数组输入
 $bugs3 = array();
 $actions3 = array('bug' => array());
-$result3 = $repoTest->setBugStatusByCommitTest($bugs3, $actions3, $baseAction, $baseChanges);
-r(is_array($result3) ? 1 : 0) && p() && e('1'); // 步骤3：空数组输入
+r($repoTest->setBugStatusByCommitIsArrayTest($bugs3, $actions3, $baseAction, $baseChanges)) && p() && e('1'); // 步骤3：空数组输入
 
 // 测试步骤4：测试不存在的Bug ID
 $bugs4 = array(999 => 999, 1000 => 1000);
 $actions4 = array('bug' => array(999 => array('resolve' => array()), 1000 => array('resolve' => array())));
 $result4 = $repoTest->setBugStatusByCommitTest($bugs4, $actions4, $baseAction, $baseChanges);
-r($result4) && p('999,1000') && e('999,1000'); // 步骤4：不存在的Bug ID处理
+r($repoTest->setBugStatusByCommitTest($bugs4, $actions4, $baseAction, $baseChanges)) && p('999,1000') && e('999,1000'); // 步骤4：不存在的Bug ID处理
 
 // 测试步骤5：测试空actions数组
 $bugs5 = array(3 => 3, 4 => 4);
 $actions5 = array();
 $result5 = $repoTest->setBugStatusByCommitTest($bugs5, $actions5, $baseAction, $baseChanges);
-r($result5) && p('3,4') && e('3,4'); // 步骤5：空actions数组处理
+r($repoTest->setBugStatusByCommitTest($bugs5, $actions5, $baseAction, $baseChanges)) && p('3,4') && e('3,4'); // 步骤5：空actions数组处理

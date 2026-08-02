@@ -27,10 +27,10 @@ cid=18048
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -58,7 +58,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repouser` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -85,10 +85,7 @@ su('admin');
 
 // 创建测试实例
 $repoTest = new repoModelTest();
-$repoTest->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/testhtml', 'gitURL' => 'http://gitfox.local/space/testhtml.git'));
-$repoTest->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/project1', 'gitURL' => 'http://gitfox.local/space/project1.git'));
-$repoTest->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/unittest', 'gitURL' => 'http://gitfox.local/space/unittest.git'));
-$repoTest->setGitfoxRepoCache(4, (object)array('id' => 4, 'path' => 'space/testsvn', 'gitURL' => 'http://gitfox.local/space/testsvn.git'));
+$repoTest->seedGitFoxEntry();
 
 r($repoTest->getByIDTest(1)) && p('id,name,SCM') && e('1,testHtml,Subversion'); // 测试步骤1：正常获取存在的repo对象
 r($repoTest->getByIDTest(2)) && p('serviceProject') && e('1'); // 测试步骤2：验证repo对象的基本属性

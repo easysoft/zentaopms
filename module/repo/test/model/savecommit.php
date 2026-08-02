@@ -21,12 +21,12 @@ cid=18094
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec(<<<'SQL'
+global $tester;
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repofiles`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
+$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `spaceID` int NOT NULL DEFAULT 0,
@@ -53,7 +53,7 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repohistory` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -67,7 +67,7 @@ CREATE TABLE `ops_repohistory` (
   KEY `revision` (`revision`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repobranch` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -76,7 +76,7 @@ CREATE TABLE `ops_repobranch` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-$dbh->exec(<<<'SQL'
+$tester->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repofiles` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `repo` int unsigned NOT NULL DEFAULT 0,
@@ -111,9 +111,8 @@ $repoTest = new repoModelTest();
 r($repoTest->saveCommitWithMockDataTest(1, 'Git', 1)) && p() && e('3'); // 步骤1：正常Git提交保存
 
 // 测试步骤2：正常保存SVN仓库提交数据并验证文件记录
-$svnResult = $repoTest->saveCommitWithMockDataTest(2, 'Subversion', 1);
-r($svnResult['count']) && p() && e('2'); // 步骤2：SVN提交数量验证
-r(count($svnResult['files']) > 0) && p() && e('1'); // 步骤2：SVN文件记录验证
+r($repoTest->saveCommitWithMockDataCountTest(2, 'Subversion', 1)) && p() && e('2'); // 步骤2：SVN提交数量验证
+r($repoTest->saveCommitWithMockDataFilesCountGreaterThanTest(2, 'Subversion', 1, 0)) && p() && e('1'); // 步骤2：SVN文件记录验证
 
 // 测试步骤3：测试空提交数据处理
 r($repoTest->saveCommitWithEmptyDataTest(3)) && p() && e('0'); // 步骤3：空数据处理

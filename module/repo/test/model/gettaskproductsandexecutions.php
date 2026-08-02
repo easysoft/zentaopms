@@ -47,9 +47,8 @@ $repo = $tester->loadModel('repo');
 
 $taskIds = array(1, 2, 4);
 
-$result = $repo->getTaskProductsAndExecutions($taskIds);
-r($result)                                        && p('1:execution')    && e('30');       // 获取任务执行
-r($result)                                        && p('4:product', ';') && e(',24,26,');  // 获取任务产品
+r($repo->getTaskProductsAndExecutions($taskIds)) && p('1:execution')    && e('30');       // 获取任务执行
+r($repo->getTaskProductsAndExecutions($taskIds)) && p('4:product', ';') && e(',24,26,');  // 获取任务产品
 r($repo->getTaskProductsAndExecutions(array()))  && p()                 && e('0');        // 任务为空时获取列表
 r($repo->getTaskProductsAndExecutions(array(999, 1000))) && p()          && e('0');        // 不存在任务ID时获取列表
 r($repo->getTaskProductsAndExecutions(array(1, 999, 2))) && p('1:execution') && e('30');   // 混合有效无效任务ID

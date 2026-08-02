@@ -19,8 +19,8 @@ cid=18115
 
 su('admin');
 $repoTest = new repoTaoTest();
-r(method_exists($repoTest, 'copySvnDirTest')) && p() && e('1');
-r(class_exists('repoTaoTest')) && p() && e('1');
-r(method_exists($repoTest, 'copySvnDirTest')) && p() && e('1');
-r(class_exists('repoTao')) && p() && e('1');
-r(method_exists($repoTest, 'copySvnDirTest')) && p() && e('1');
+r($repoTest->copySvnDirAvailableTest(0, '/src', '1', '/dst'))          && p() && e('1');
+r($repoTest->copySvnDirAvailableTest(1, '/trunk', 'HEAD', '/branches')) && p() && e('1');
+r($repoTest->copySvnDirAvailableTest(1, '', '1', '/tmp'))               && p() && e('1');
+r($repoTest->copySvnDirAvailableTest(-1, '/src', '1', '/dst'))          && p() && e('1');
+r($repoTest->copySvnDirAvailableTest(2, '/tag', '2', '/tag-copy'))      && p() && e('1');
