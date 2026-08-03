@@ -578,8 +578,7 @@ class my extends control
         $sort   = common::appendOrder($orderBy);
         $count  = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
         $users  = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $status = $browseType == 'assignedTo' ? 'wait' : $browseType;
-        $tasks  = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $status, $queryID, $browseType);
+        $tasks  = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
