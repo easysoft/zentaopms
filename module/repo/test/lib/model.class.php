@@ -3,43 +3,6 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
-class repoStubHttpClient
-{
-    public $responses       = array();
-    public $methodResponses = array();
-    public $calls           = array();
-
-    public function setResponse(string $key, $response): void
-    {
-        $this->responses[$key] = $response;
-    }
-
-    public function setMethodResponse(string $method, string $key, $response): void
-    {
-        $method = strtoupper($method);
-        if(!isset($this->methodResponses[$method])) $this->methodResponses[$method] = array();
-        $this->methodResponses[$method][$key] = $response;
-    }
-
-    public function request(string $url, $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true)
-    {
-        $this->calls[] = array('url' => $url, 'method' => $method, 'data' => $data);
-        $method = strtoupper($method);
-        if(isset($this->methodResponses[$method]))
-        {
-            foreach($this->methodResponses[$method] as $key => $value)
-            {
-                if(strpos($url, $key) !== false) return $value;
-            }
-        }
-        foreach($this->responses as $key => $value)
-        {
-            if(strpos($url, $key) !== false) return $value;
-        }
-        return '';
-    }
-}
-
 /**
  * @property repoModel $instance
  */
@@ -470,38 +433,11 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function resetHttpClient(): repoStubHttpClient
-    {
-        $client = new repoStubHttpClient();
-        common::$httpClient = $client;
-        return $client;
-    }
-
-    public function restoreHttpClient(): void
-    {
-        common::$httpClient = null;
-    }
-
     public function seedGitFoxEntry(string $key = 'gitfox'): void
     {
-        $now = helper::now();
-
-        $this->instance->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
-        $this->instance->dao->insert(TABLE_ENTRY)->data((object)array(
-            'name'        => 'GitFox',
-            'account'     => '',
-            'code'        => 'gitfox',
-            'key'         => $key,
-            'freePasswd'  => 1,
-            'ip'          => '*',
-            'desc'        => '',
-            'createdBy'   => 'admin',
-            'createdDate' => $now,
-            'calledTime'  => 0,
-            'editedBy'    => 'admin',
-            'editedDate'  => $now,
-            'deleted'     => 0,
-        ))->exec();
+        $entry = zendata('entry')->loadYaml('entry', true, 2);
+        $entry->key->range($key);
+        $entry->gen(1);
     }
 
     public function getRepoByIDTest($repoID)
@@ -1819,10 +1755,11 @@ class repoModelTest extends baseTest
 
     public function getFileCommitsTest(int $repoID, string $branch, string $parent = '')
     {
-        $repo   = $this->instance->getByID($repoID);
+        $repo   = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return array();
         $result = $this->instance->getFileCommits($repo, $branch, $parent);
 
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -1845,19 +1782,6 @@ class repoModelTest extends baseTest
     public function checkGiteaConnectionTest(string $scm = '', string $name = '', int|string $serviceHost = '', int|string $serviceProject = '')
     {
         if(!method_exists($this->instance, 'checkGiteaConnection')) return '0';
-
-        // 基础参数验证测试
-        if($name == '' || $serviceProject == '')
-        {
-            return $this->instance->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
-        }
-
-        // 模拟外部依赖错误，避免真实调用外部API
-        if($name != '' && $serviceProject != '')
-        {
-            dao::$errors['serviceProject'] = '该项目克隆地址未找到';
-            return false;
-        }
 
         $result = $this->instance->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
 
@@ -2618,12 +2542,19 @@ class repoModelTest extends baseTest
      */
     public function migrateRepoDataTest(bool $setupData = false, bool $cleanData = false, int $testRepoID = 99999)
     {
-        static $createdRepoTable = false;
-        static $normalizedNewRepoTable = false;
-        $oldRepoTable            = $this->instance->config->db->prefix . 'repo';
-        if(!$normalizedNewRepoTable)
+        dao::$errors = array();
+
+        $oldRepoTable = $this->instance->config->db->prefix . 'repo';
+        $newRepoTable = trim((string)TABLE_REPO, '`');
+        $requiredColumns = array('id', 'spaceID', 'product', 'name', 'desc', 'scmType', 'gitUID', 'forkID', 'mirror', 'providerID', 'connector', 'defaultBranch', 'acl', 'status', 'synced', 'branchArchivable', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'deleted');
+        $newRepoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$newRepoTable}'")->fetch();
+        $newRepoColumns = array();
+        if($newRepoTableExists)
         {
-            $newRepoTable = trim((string)TABLE_REPO, '`');
+            foreach($this->instance->dao->query("SHOW COLUMNS FROM `{$newRepoTable}`")->fetchAll() as $column) $newRepoColumns[] = $column->Field;
+        }
+        if(!$newRepoTableExists || !empty(array_diff($requiredColumns, $newRepoColumns)))
+        {
             $this->instance->dao->exec("DROP TABLE IF EXISTS `{$newRepoTable}`");
             $this->instance->dao->exec(<<<'SQL'
 CREATE TABLE `ops_repo` (
@@ -2651,12 +2582,12 @@ CREATE TABLE `ops_repo` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
-            $normalizedNewRepoTable = true;
         }
+        $oldRepoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();
+        if(!$setupData && !$cleanData && $oldRepoTableExists) $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
         if($setupData)
         {
-            $repoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();
-            if(!$repoTableExists)
+            if(!$oldRepoTableExists)
             {
                 $this->instance->dao->exec("CREATE TABLE `{$oldRepoTable}`
                 (
@@ -2674,7 +2605,6 @@ SQL);
                     `deleted`        tinyint(3) unsigned NOT NULL DEFAULT 0,
                     PRIMARY KEY (id)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-                $createdRepoTable = true;
             }
             $this->instance->dao->exec("REPLACE INTO `{$oldRepoTable}` (id, SCM, product, name, `desc`, path, serviceProject, serviceHost, account, password, acl, deleted)
             VALUES ({$testRepoID}, 'Gitlab', '', 'migrateRepoDataTestRepo', 'repo for migrateRepoData test', 'http://gitlab.example.com/group/repo', 'group/repo', 1, 'tester', 'pass', '', 0)");
@@ -2726,8 +2656,7 @@ SQL);
             if($cleanData)
             {
                 $this->instance->dao->delete()->from(TABLE_REPO)->where('id')->eq($testRepoID)->exec();
-                if($createdRepoTable) $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
-                else $this->instance->dao->delete()->from($oldRepoTable)->where('id')->eq($testRepoID)->exec();
+                $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
             }
         }
         if(!empty($errorMsg)) return array('result' => 'fail', 'error' => $errorMsg);
@@ -3069,6 +2998,27 @@ SQL);
         $result = $this->instance->getGogsRepos($apiRoot);
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    public function getGitLabReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGitLabReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
+    }
+
+    public function getGiteaReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGiteaReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
+    }
+
+    public function getGogsReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGogsReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
     }
 
     /**

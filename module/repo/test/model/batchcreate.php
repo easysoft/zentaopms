@@ -5,15 +5,16 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
+
 title=测试 repoModel->batchCreate();
 timeout=0
 cid=18029
 
-- 批量创建一个版本库 >> 1
-- 批量创建两个版本库 >> 1
-- SCM为空返回验证错误 >> 1
-- 正常调用batchCreate不抛异常 >> 1
-- 方法可正常调用 >> 1
+- 执行repo模块的batchCreateTest方法，参数是array  @1
+- 执行repo模块的batchCreateTest方法，参数是array  @1
+- 执行repo模块的batchCreateTest方法，参数是array  @1
+- 执行repo模块的batchCreateTest方法，参数是array  @1
+- 执行repo模块的batchCreateTest方法，参数是array  @1
 
 */
 
@@ -57,6 +58,7 @@ $repo4 = (object)array('space' => 2, 'serviceProject' => 4, 'product' => 2, 'nam
 $repo5 = (object)array('space' => 3, 'serviceProject' => 5, 'product' => 3, 'name' => 'imortRepo5', 'projects' => 5);
 
 $repo = new repoModelTest();
+baseRouter::$loadedTargets['model'][$repo->instance->appName]['instance'] = new stdclass();
 
 r($repo->batchCreateTest(array($repo1), 1, 'Git')) && p() && e('1');
 r($repo->batchCreateTest(array($repo2), 1, 'Git')) && p() && e('1');

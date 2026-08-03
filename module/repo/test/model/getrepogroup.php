@@ -56,23 +56,8 @@ CREATE TABLE `ops_spaceuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
 $tester->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('project')->in('1,11')->exec();
 $tester->dao->delete()->from(TABLE_PRODUCT)->where('id')->in('1,2,3,4')->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox',
-    'account'     => '',
-    'code'        => 'gitfox',
-    'key'         => 'gitfox',
-    'freePasswd'  => 1,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
 
 foreach(range(1, 4) as $productID)
 {
@@ -99,6 +84,7 @@ su('admin');
 
 $repo       = $tester->loadModel('repo');
 $repoTest   = new repoModelTest();
+$repoTest->seedGitFoxEntry();
 
 $type      = 'project';
 $projectID = 1;
