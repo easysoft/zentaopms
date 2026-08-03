@@ -75,7 +75,7 @@ dtable
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::customCols(true),
     set::userMap($users),
-    set::rowKey('run'),
+    set::rowKey($browseType == 'assigntome' ? 'run' : 'id'),
     set::checkable(true),
     set::defaultSummary(array('html' => $defaultSummary)),
     set::checkedSummary($lang->testcase->failCheckedSummary),
