@@ -20,11 +20,11 @@ function changeResolution(event)
     const resolution = $(event.target).val();
     if(resolution == 'duplicate')
     {
-        $('[name=duplicateBug]').closest('tr').removeClass('hidden');
+        $('[name=duplicateBug]').closest('.form-group').removeClass('hidden');
     }
     else
     {
-        $('[name=duplicateBug]').closest('tr').addClass('hidden');
+        $('[name=duplicateBug]').closest('.form-group').addClass('hidden');
     }
 }
 
