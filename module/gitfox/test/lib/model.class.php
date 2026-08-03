@@ -96,6 +96,25 @@ class gitfoxModelTest extends baseTest
     }
 
     /**
+     * Check getApiRoot URL against the active test configuration.
+     *
+     * @access public
+     * @return int
+     */
+    public function getApiRootURLMatchesConfigTest(): int
+    {
+        $apiRoot = $this->invokeForTest('getApiRoot');
+        if(!is_object($apiRoot)) return 0;
+
+        $expectedURL = rtrim($this->instance->config->devops->gitfoxURL, '/');
+        $gitfoxPort  = $this->instance->config->devops->gitfoxPort;
+        if($gitfoxPort) $expectedURL .= ':' . $gitfoxPort;
+        $expectedURL .= '/api/v2%s';
+
+        return zget($apiRoot, 'url', '') === $expectedURL ? 1 : 0;
+    }
+
+    /**
      * Check if page result contains page field.
      *
      * @param  object|null $pager

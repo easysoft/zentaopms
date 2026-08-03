@@ -23,7 +23,7 @@ zenData('group')->gen(0);
 zenData('usergroup')->gen(0);
 zenData('ops_repo')->gen(0);
 zenData('ops_repouser')->gen(0);
-zenData('entry')->loadYaml('entry')->gen(2);
+zenData('entry')->loadYaml('entry')->gen(1);
 
 su('admin');
 
