@@ -1023,6 +1023,7 @@ class repoZen extends repo
     {
         $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
         $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+        $encoding    = '';
 
         if($this->post->encoding)      $encoding      = $this->post->encoding;
         if($this->post->isBranchOrTag) $isBranchOrTag = (int)$this->post->isBranchOrTag;
@@ -1074,7 +1075,7 @@ class repoZen extends repo
      */
     protected function syncLocalCommit(object $repo): string
     {
-        $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
+        $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->scmType) . ".{$repo->name}.log");
         if($logFile && file_exists($logFile))
         {
             $content  = file($logFile);

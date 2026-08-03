@@ -268,10 +268,12 @@ class repoTao extends repoModel
      */
     protected function getMatchedReposByUrl(string $url): array
     {
-        /* Convert to id by url. */
-        $this->loadModel('gitlab');
         $matches   = array();
         $parsedUrl = parse_url($url);
+        if(!is_array($parsedUrl) || empty($parsedUrl['scheme']) || empty($parsedUrl['host'])) return $matches;
+
+        /* Convert to id by url. */
+        $this->loadModel('gitlab');
         $isSSH     = $parsedUrl['scheme'] == 'ssh';
         $baseURL   = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
         $url       = str_replace('https://', 'http://', strtolower($url));

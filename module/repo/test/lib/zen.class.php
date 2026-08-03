@@ -110,35 +110,21 @@ class repoZenTest extends baseTest
 
     private function ensureRepoRecord(): object
     {
-        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq(0)->fetch();
-        if(!$repo)
-        {
-            $now = helper::now();
-            $this->instance->dao->insert(TABLE_REPO)->data((object)array(
-                'spaceID'          => 1,
-                'product'          => '1',
-                'name'             => 'repo-zen-smoke',
-                'desc'             => 'repo zen smoke test',
-                'scmType'          => 'git',
-                'gitUID'           => 'repo-zen-smoke-uid',
-                'forkID'           => 0,
-                'mirror'           => 0,
-                'providerID'       => 0,
-                'connector'        => null,
-                'defaultBranch'    => 'master',
-                'acl'              => 'open',
-                'status'           => 'active',
-                'synced'           => 0,
-                'branchArchivable' => 0,
-                'createdBy'        => 'admin',
-                'createdDate'      => $now,
-                'editedBy'         => 'admin',
-                'editedDate'       => $now,
-                'deleted'          => 0,
-            ))->exec();
+        $repoTable = zenData('ops_repo');
+        $repoTable->id->range('1');
+        $repoTable->spaceID->range('1');
+        $repoTable->product->range('1');
+        $repoTable->name->range('repo-zen-smoke');
+        $repoTable->scmType->range('git');
+        $repoTable->gitUID->range('repo-zen-smoke-uid');
+        $repoTable->providerID->range('0');
+        $repoTable->mirror->range('0');
+        $repoTable->acl->range('open');
+        $repoTable->status->range('active');
+        $repoTable->deleted->range('0');
+        $repoTable->gen(1);
 
-            $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($this->instance->dao->lastInsertID())->fetch();
-        }
+        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq(1)->fetch();
 
         $repo->space = zget($repo, 'space', zget($repo, 'spaceID', 1));
         return $repo;
@@ -149,10 +135,11 @@ class repoZenTest extends baseTest
         $scmRepo = $repo ? clone $repo : clone $this->ensureRepoRecord();
 
         if(!isset($scmRepo->id))       $scmRepo->id       = 1;
-        if(!isset($scmRepo->SCM))      $scmRepo->SCM      = 'Git';
         if(!isset($scmRepo->scmType))  $scmRepo->scmType  = 'git';
         if(!isset($scmRepo->path))     $scmRepo->path     = '/home/ly/repo/zentaopms';
-        if(!isset($scmRepo->client))   $scmRepo->client   = 'git';
+        if(!isset($scmRepo->client))   $scmRepo->client   = 'http://gitfox';
+        if(!isset($scmRepo->apiPath))  $scmRepo->apiPath  = '/api/v2/repos/' . (int)$scmRepo->id;
+        if(!isset($scmRepo->password)) $scmRepo->password = '';
         if(!isset($scmRepo->encoding)) $scmRepo->encoding = 'utf-8';
         if(!isset($scmRepo->prefix))   $scmRepo->prefix   = '';
         if(!isset($scmRepo->name))     $scmRepo->name     = 'repo-zen-smoke';
@@ -713,6 +700,9 @@ class repoZenTest extends baseTest
      */
     public function checkACLTest()
     {
+        $this->instance->post = (object)array(
+            'acl' => array('acl' => 'open', 'groups' => array(), 'users' => array())
+        );
         return $this->invokeArgs('checkACL', array());
     }
 
