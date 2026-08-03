@@ -1547,6 +1547,11 @@ class testtaskModel extends model
             $result->stepResults = serialize($stepResults);
             $this->dao->insert(TABLE_TESTRESULT)->data($result)->autoCheck()->exec();
 
+            /* 把上传的文件关联到到执行结果的用例步骤中。*/
+            /* Associated the uploaded files to the test case steps of the execution results. */
+            $resultID = $this->dao->lastInsertID();
+            foreach($stepResults as $stepID => $stepResult) $this->loadModel('file')->saveUpload('stepResult', $resultID, $stepID, "files{$stepID}", "labels{$stepID}");
+
             $case->lastRunResult = $caseResult;
             $this->dao->update(TABLE_CASE)->data($case)->where('id')->eq($caseID)->exec();
 
