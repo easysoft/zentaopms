@@ -27,16 +27,31 @@ cid=18105
 
 */
 
-global $tester;
-$tester->dao->delete()->from(TABLE_PROJECT)->where('id')->in('1,2,3')->exec();
-$tester->dao->delete()->from(TABLE_TASK)->where('id')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('task')->andWhere('objectID')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->in('1,2,8')->exec();
-$tester->dao->delete()->from(TABLE_HISTORY)->where('field')->eq('git')->exec();
+zenData('project')->gen(0);
+$projectData = zenData('project');
+$projectData->id->range('3');
+$projectData->project->range('3');
+$projectData->name->range('repo-test-execution');
+$projectData->code->range('repo-test-execution');
+$projectData->type->range('sprint');
+$projectData->status->range('wait');
+$projectData->grade->range('1');
+$projectData->parent->range('0');
+$projectData->path->range(',3,');
+$projectData->acl->range('open');
+$projectData->multiple->range('1');
+$projectData->vision->range('rnd');
+$projectData->deleted->range('0');
+$projectData->gen(1);
+
+zenData('task')->gen(0);
+zenData('effort')->gen(0);
+zenData('action')->gen(0);
+zenData('history')->gen(0);
 
 $taskData = zenData('task');
 $taskData->id->range('1,2,8');
-$taskData->project->range('11,12,18');
+$taskData->project->range('3');
 $taskData->execution->range('3');
 $taskData->module->range('21,24,42');
 $taskData->story->range('0');
