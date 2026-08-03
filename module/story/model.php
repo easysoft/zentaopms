@@ -3903,7 +3903,7 @@ class storyModel extends model
     public function getToAndCcList(object $story, string $actionType): bool|array
     {
         /* Set toList and ccList. */
-        $toList = $story->assignedTo;
+        $toList = $story->assignedTo == 'closed' ? $story->openedBy : $story->assignedTo;
         $ccList = isset($story->mailto) ? str_replace(' ', '', trim($story->mailto, ',')) : '';
 
         /* If the action is changed or reviewed, mail to the project or execution team. */
