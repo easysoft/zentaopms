@@ -510,6 +510,10 @@ class repoModelTest extends baseTest
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return array();
 
+        if(empty($repo->client))   $repo->client   = 'http://gitfox';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
+
         $branches = $this->instance->getBranches($repo, $printLabel, $source);
         if(dao::isError()) return dao::getError();
         return $branches;
@@ -531,6 +535,13 @@ class repoModelTest extends baseTest
      */
     public function getCommitsTest($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = '', $end = '', $query = null)
     {
+        if(!isset($repo->scmType))  $repo->scmType  = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+        if(!isset($repo->client))   $repo->client   = 'http://gitfox';
+        if(!isset($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
+        if(!isset($repo->path))     $repo->path     = $repo->scmType == 'svn' ? 'https://svn.example.invalid/unittest/' : '/repo';
+        if(!isset($repo->encoding)) $repo->encoding = 'utf-8';
+
         $result = $this->instance->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end, $query);
         if(dao::isError()) return dao::getError();
         return $result;
@@ -911,6 +922,8 @@ class repoModelTest extends baseTest
         if(empty($repo->scmType))  $repo->scmType  = $repo->SCM == 'Subversion' ? 'svn' : 'git';
         if(empty($repo->path))     $repo->path     = $repo->scmType == 'svn' ? 'https://svn.example.invalid/unittest/' : '/home/ly/repo/zentaopms';
         if(empty($repo->client))   $repo->client   = $repo->scmType == 'svn' ? 'svn' : 'git';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
         if(empty($repo->encoding)) $repo->encoding = 'utf-8';
 
         $result = array();
@@ -1510,6 +1523,8 @@ class repoModelTest extends baseTest
         if(empty($repo->scmType))  $repo->scmType  = 'git';
         if(empty($repo->path))     $repo->path     = '/home/ly/repo/zentaopms';
         if(empty($repo->client))   $repo->client   = 'git';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
         if(empty($repo->encoding)) $repo->encoding = 'utf-8';
 
         dao::$errors = array();
@@ -2024,7 +2039,7 @@ class repoModelTest extends baseTest
         $task = $this->instance->loadModel('task')->getById($taskID);
         if(!$task) return false;
 
-        $action  = (object)array('id' => 0, 'action' => 'commit', 'extra' => '');
+        $action  = (object)array('id' => 0, 'action' => 'commit', 'extra' => '', 'objectType' => 'task', 'objectID' => (int)$taskID);
         $changes = array();
 
         try
@@ -2050,6 +2065,8 @@ class repoModelTest extends baseTest
         foreach(get_object_vars($task) as $field => $value) $dbTask->$field = $value;
 
         if(empty($action) || !is_object($action)) $action = (object)array('id' => 0, 'action' => 'commit', 'extra' => '');
+        if(!isset($action->objectType)) $action->objectType = 'task';
+        if(!isset($action->objectID))   $action->objectID   = (int)$task->id;
         if(!is_array($changes)) $changes = array();
 
         try

@@ -27,7 +27,7 @@ CREATE TABLE `ops_repo` (
   `spaceID` int NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
   `gitUID` char(42) NOT NULL DEFAULT '',
   `providerID` int unsigned NOT NULL DEFAULT 0,
   `mirror` tinyint(1) NOT NULL DEFAULT 0,
@@ -56,14 +56,35 @@ CREATE TABLE `ops_spaceuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml', 'SCM' => 'Gitlab', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '2', 'name' => 'project1', 'SCM' => 'Gitlab', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '3', 'name' => 'unittest', 'SCM' => 'GitFox', 'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-    array('id' => 4, 'spaceID' => 1, 'product' => '4', 'name' => 'testSvn', 'SCM' => 'Subversion', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
-$tester->dao->insert('ops_spaceuser')->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
+zenData('ops_space')->gen(0);
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range('1');
+$spaceTable->name->range('repo-test-space');
+$spaceTable->code->range('repo-test-space');
+$spaceTable->acl->range('open');
+$spaceTable->auth->range('extend');
+$spaceTable->deleted->range('0');
+$spaceTable->gen(1);
+
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-4');
+$repoTable->spaceID->range('1{4}');
+$repoTable->product->range('1,2,3,4');
+$repoTable->name->range('testHtml,project1,unittest,testSvn');
+$repoTable->scmType->range('git,git,git,svn');
+$repoTable->gitUID->range('uid1,uid2,uid3,uid4');
+$repoTable->providerID->range('0{4}');
+$repoTable->mirror->range('0{4}');
+$repoTable->acl->range('open{4}');
+$repoTable->status->range('active{4}');
+$repoTable->deleted->range('0{4}');
+$repoTable->gen(4);
+
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range('1');
+$spaceUserTable->role->range('manager');
+$spaceUserTable->account->range('admin');
+$spaceUserTable->gen(1);
 
 su('admin');
 
