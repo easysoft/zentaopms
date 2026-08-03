@@ -39,8 +39,8 @@ $tester->app->methodName = 'browse';
 
 $spaceTester = new spaceModelTest();
 
-r($spaceTester->getPrivLabelTest('repo', 'browse'))     && p() && e('browseAction'); // 获取repo浏览权限标识
-r($spaceTester->getPrivLabelTest('repo', 'create'))     && p() && e('createAction'); // 获取repo创建权限标识
-r($spaceTester->getPrivLabelTest('pipeline', 'browse')) && p() && e('browse');       // 获取pipeline浏览权限标识
-r($spaceTester->getPrivLabelTest('pipeline', 'create')) && p() && e('create');       // 获取pipeline创建权限标识
-r($spaceTester->getPrivLabelTest('artifact', 'create')) && p() && e('create');       // 获取artifact创建权限标识
+r($spaceTester->getPrivsTest()) && p('repo:browse') && e('browseAction');       // 获取repo浏览权限标识
+r($spaceTester->getPrivsTest()) && p('repo:create') && e('createAction');       // 获取repo创建权限标识
+r($spaceTester->getPrivsTest()) && p('pipeline:browse') && e('browse');         // 获取pipeline浏览权限标识
+r($spaceTester->getPrivsTest()) && p('pipeline:create') && e('create');         // 获取pipeline创建权限标识
+r($spaceTester->getPrivsTest()) && p('artifact:create') && e('create');         // 获取artifact创建权限标识

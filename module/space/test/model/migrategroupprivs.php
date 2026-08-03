@@ -12,6 +12,7 @@ cid=0
 - 验证迁移后space模块browse权限存在 @1
 - 验证迁移后space模块create权限存在 @1
 - 验证迁移后space模块delete权限存在 @1
+- 验证迁移后space模块view权限存在 @1
 
 */
 
@@ -38,3 +39,4 @@ r($spaceTester->migrateGroupPrivsTest()) && p() && e('1'); // 执行权限迁移
 r($spaceTester->getMigratedGroupPrivCountTest('browse')) && p() && e('3'); // 验证迁移后space模块browse权限存在
 r($spaceTester->getMigratedGroupPrivCountTest('create')) && p() && e('3'); // 验证迁移后space模块create权限存在
 r($spaceTester->getMigratedGroupPrivCountTest('delete')) && p() && e('3'); // 验证迁移后space模块delete权限存在
+r($spaceTester->getMigratedGroupPrivCountTest('view'))   && p() && e('3'); // 验证迁移后space模块view权限存在

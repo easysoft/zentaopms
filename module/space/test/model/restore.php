@@ -21,7 +21,7 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 zenData('user')->gen(10);
 zenData('ops_space')->gen(0);
 zenData('ops_spaceuser')->gen(0);
-zenData('entry')->loadYaml('entry')->gen(2);
+zenData('entry')->loadYaml('entry')->gen(1);
 
 su('admin');
 

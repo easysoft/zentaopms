@@ -1,35 +1,35 @@
 ---
 title: zt_entry 表数据 - GitFox 服务器入口
-desc: 为 space 模块调用 gitfox API 提供认证入口记录，并补充 name=GitFox key=gitfox 的测试记录
+desc: 为 space 模块调用 gitfox API 提供 name=GitFox、key=gitfox 的认证入口记录
 author: Codex
 version: "1.0"
 
 fields:
 - field: id
-  range: 1-2
+  range: 1
 - field: name
-  range: GitFox,GitFox
+  range: GitFox
 - field: account
-  range: admin,admin
+  range: admin
 - field: code
-  range: gitfox,gitfox_stub
+  range: gitfox
 - field: key
-  range: testkey1234567890testkey1234567,gitfox
+  range: gitfox
 - field: freePasswd
-  range: "0,0"
+  range: "0"
 - field: ip
-  range: '*,*'
+  range: '*'
 - field: desc
-  range: GitFox api auth entry,GitFox literal key entry
+  range: GitFox api auth entry
 - field: createdBy
-  range: admin,admin
+  range: admin
 - field: createdDate
-  range: '`2026-01-01 00:00:00`,`2026-01-01 00:00:00`'
+  range: '`2026-01-01 00:00:00`'
 - field: calledTime
-  range: "0,0"
+  range: "0"
 - field: editedBy
-  range: admin,admin
+  range: admin
 - field: editedDate
-  range: '`2026-01-01 00:00:00`,`2026-01-01 00:00:00`'
+  range: '`2026-01-01 00:00:00`'
 - field: deleted
-  range: "0,0"
+  range: "0"
