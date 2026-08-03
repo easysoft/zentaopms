@@ -1441,6 +1441,7 @@ class repoModelTest extends baseTest
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
 
         $objects = $this->instance->processGitService($repo);
@@ -1461,6 +1462,8 @@ class repoModelTest extends baseTest
     public function processGitServiceTestWithCodePath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
 
         $objects = $this->instance->processGitService($repo, true);
@@ -1481,6 +1484,8 @@ class repoModelTest extends baseTest
     public function processGitServiceTestWithInvalidPath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
         $repo->path = '/invalid/path/that/does/not/exist';
 
@@ -1504,6 +1509,7 @@ class repoModelTest extends baseTest
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
         $repo->serviceHost = 0;
 
@@ -1512,6 +1518,17 @@ class repoModelTest extends baseTest
         if(dao::isError()) return dao::getError();
 
         return $objects;
+    }
+
+    public function setGitFoxRepoCache(int $repoID, object $repo): void
+    {
+        $gitfox     = $this->instance->loadModel('gitfox');
+        $reflection = new ReflectionObject($gitfox);
+        $property   = $reflection->getProperty('repos');
+        $property->setAccessible(true);
+        $cache          = $property->getValue($gitfox);
+        $cache[$repoID] = $repo;
+        $property->setValue($gitfox, $cache);
     }
 
     public function handleWebhookTest(string $event, object $data, int $repoID)
