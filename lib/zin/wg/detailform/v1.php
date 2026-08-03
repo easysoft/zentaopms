@@ -269,8 +269,23 @@ class detailForm extends wg
         if(is_array($control) && !isset($control['id'])) $control['id'] = '';
         $field['control'] = $control;
 
-        $view = new formGroup(set($field));
-        if($useRow) $view = new formRow($view);
+        if($useRow)
+        {
+            $view = new formRow
+            (
+                empty($field['hidden']) ? null : set::hidden(),
+                setData('name', $name),
+                new formGroup
+                (
+                    set($field),
+                    set::hidden(false)
+                )
+            );
+        }
+        else
+        {
+            $view = new formGroup(set($field));
+        }
         return $view;
     }
 
