@@ -76,16 +76,15 @@ window.getPromptFormConfig = function(fields, extraConfig)
     }, extraConfig);
 }
 
-window.executeZentaoPrompt = async function(info, testingMode)
+window.getAgentCreatingOptions = function(info, langData)
 {
-    testingMode = testingMode && testingMode !== '0';
-    const zaiPanel = await checkZAIPanel(true);
-    if(!zaiPanel) return;
+    langData = langData || zui.AIPanel.shared.options.langData || {};
 
-    const langData      = zaiPanel.options.langData || {};
-    const noTargetForm  = !info.targetForm || info.targetForm === 'empty.empty';
-    const toolName      = `zentao_tool_${info.promptID}`;
-    const agentTool     = noTargetForm ? null : {
+    const noTargetForm = !info.targetForm || info.targetForm === 'empty.empty';
+    const toolName     = `zentao_tool_${info.promptID}`;
+    const klibs        = (info.knowledgeLib ? info.knowledgeLib.split(',') : []).filter(Boolean).map(x => `zentao:${x}`);
+    const formConfig   = getPromptFormConfig(info.fields, info.formConfig);
+    const agentTool    = noTargetForm ? null : {
         name       : toolName,
         displayName: info.name,
         description: info.name,
@@ -182,24 +181,32 @@ window.executeZentaoPrompt = async function(info, testingMode)
             return {message: message};
         },
     }];
-    const klibs        = (info.knowledgeLib ? info.knowledgeLib.split(',') : []).filter(Boolean).map(x => `zentao:${x}`);
-    const formConfig   = getPromptFormConfig(info.fields, info.formConfig);
+
+    return {
+        title    : info.name,
+        type     : 'agent',
+        model    : info.model,
+        tools    : tools,
+        prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
+        form     : formConfig,
+        memories : klibs.length ? [{collections: klibs}] : undefined,
+        skills   : Array.isArray(info.skills) && info.skills.length ? info.skills : undefined,
+    };
+};
+
+window.executeZentaoPrompt = async function(info, testingMode)
+{
+    testingMode = testingMode && testingMode !== '0';
+    const zaiPanel = await checkZAIPanel(true);
+    if(!zaiPanel) return;
+
     const postMessage  = {content: [{role: 'user', content: info.purpose, custom_data: {invisible: true}}]};
     const popupOptions = {
         id         : 'zentao-prompt-popoup',
         viewType   : 'chat',
         width      : info.content ? 800 : 600,
         postMessage,
-        creatingChat: {
-            title    : info.name,
-            type     : 'agent',
-            model    : info.model,
-            tools    : tools,
-            prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
-            form     : formConfig,
-            memories : klibs.length ? [{collections: klibs}] : undefined,
-            skills   : Array.isArray(info.skills) && info.skills.length ? info.skills : undefined,
-        },
+        creatingChat: getAgentCreatingOptions(info),
     };
     const popup = zaiPanel.openPopup(popupOptions);
     await new Promise(resolve => requestAnimationFrame(resolve));
