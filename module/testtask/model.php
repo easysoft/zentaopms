@@ -365,11 +365,10 @@ class testtaskModel extends model
      * @access  public
      * @return  array
      */
-    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $status = '', int $queryID = 0, string $type = ''): array
+    public function getByUser(string $account, ?object $pager = null, string $orderBy = 'id_desc', string $type = '', int $queryID = 0): array
     {
         $testtaskQuery = '';
-        $type = strtolower($type);
-        if($type == 'bysearch') $testtaskQuery = $this->testtaskTao->processSearchQuery(0, $queryID, 'myTesttask');
+        if($type == 'bySearch') $testtaskQuery = $this->testtaskTao->processSearchQuery(0, $queryID, 'myTesttask');
         return $this->dao->select("t1.*, t2.name AS executionName, t2.multiple AS executionMultiple, t5.name AS projectName, t3.name AS buildName, t4.name AS productName, CONCAT(t2.name, '/', t3.name) as executionBuild")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
@@ -382,8 +381,8 @@ class testtaskModel extends model
             ->andWhere('(t1.owner')->eq($account)
             ->orWhere("FIND_IN_SET('$account', t1.members)")
             ->markRight(1)
-            ->beginIF($status == 'wait')->andWhere('t1.status')->ne('done')->fi()
-            ->beginIF($status == 'done')->andWhere('t1.status')->eq('done')->fi()
+            ->beginIF($this->app->rawMethod == 'work')->andWhere('t1.status')->ne('done')->fi()
+            ->beginIF($this->app->rawMethod == 'contribute')->andWhere('t1.status')->eq('done')->fi()
             ->beginIF($testtaskQuery)->andWhere($testtaskQuery)->fi()
             ->orderBy($orderBy)
             ->page($pager)
