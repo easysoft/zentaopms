@@ -70,19 +70,20 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
+$storyCols = $this->loadModel('datatable')->getSetting('release', 'story');
 if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
-    $config->release->dtable->story->fieldList['id']['type']      = 'ID';
+    $storyCols['id']['type'] = 'ID';
     $config->release->dtable->bug->fieldList['id']['type']        = 'ID';
     $config->release->dtable->leftBug->fieldList['id']['type']    = 'ID';
     $config->release->dtable->escapedBug->fieldList['id']['type'] = 'ID';
 
-    unset($config->release->dtable->story->fieldList['actions']);
+    unset($storyCols['actions']);
     unset($config->release->dtable->bug->fieldList['actions']);
     unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
-if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
+if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($storyCols['actions']['list']['unlinkStory']);
 if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug']);
 
 /* Table data and setting for finished stories tab. */
@@ -90,7 +91,7 @@ jsVar('storyCases', $storyCases);
 jsVar('confirmunlinkstory', $lang->release->confirmUnlinkStory);
 jsVar('checkedSummary', $lang->product->checkedSRSummary);
 jsVar('unlinkstoryurl', helper::createLink($releaseModule, 'unlinkStory', "releaseID={$release->id}&storyID=%s"));
-$storyTableData = initTableData($stories, $config->release->dtable->story->fieldList, $this->release);
+$storyTableData = initTableData($stories, $storyCols, $this->release);
 
 $canBatchUnlinkStory = !$isInModal && $canBeChanged && common::hasPriv($releaseModule, 'batchUnlinkStory');
 $canBatchCloseStory  = !$isInModal && $canBeChanged && common::hasPriv('story', 'batchClose');
@@ -265,8 +266,10 @@ detailBody
                 dtable
                 (
                     setID('finishedStoryDTable'),
+                    set::methodName('story'),
                     set::style(array('min-width' => '100%')),
-                    set::cols(array_values($config->release->dtable->story->fieldList)),
+                    set::customCols(true),
+                    set::cols(array_values($storyCols)),
                     set::data($storyTableData),
                     set::userMap($users),
                     set::checkable(empty($release->releases) && ($canBatchUnlinkStory || $canBatchCloseStory)),

@@ -6,7 +6,6 @@ $app->loadLang('build');
 $isEn = $app->getClientLang() == 'en';
 
 $config->release->dtable = new stdclass();
-$config->release->dtable->story   = new stdclass();
 $config->release->dtable->bug     = new stdclass();
 $config->release->dtable->leftBug = new stdclass();
 
@@ -87,56 +86,140 @@ $config->release->dtable->fieldList['actions']['width'] = 'auto';
 $config->release->dtable->fieldList['actions']['list']  = $config->release->actionList;
 $config->release->dtable->fieldList['actions']['menu']  = array('linkStory', 'linkBug', 'publish|play|pause', 'edit', 'notify', 'delete');
 
-$config->release->dtable->story->fieldList['id']['title']    = $lang->idAB;
-$config->release->dtable->story->fieldList['id']['name']     = 'id';
-$config->release->dtable->story->fieldList['id']['type']     = 'checkID';
-$config->release->dtable->story->fieldList['id']['sortType'] = 'desc';
-$config->release->dtable->story->fieldList['id']['checkbox'] = true;
+$config->release->story = new stdclass();
+$config->release->story->dtable = new stdclass();
+$config->release->story->dtable->fieldList['id']['title']    = $lang->idAB;
+$config->release->story->dtable->fieldList['id']['name']     = 'id';
+$config->release->story->dtable->fieldList['id']['type']     = 'checkID';
+$config->release->story->dtable->fieldList['id']['sortType'] = 'desc';
+$config->release->story->dtable->fieldList['id']['checkbox'] = true;
 
-$config->release->dtable->story->fieldList['title']['title']       = $lang->story->title;
-$config->release->dtable->story->fieldList['title']['name']        = 'title';
-$config->release->dtable->story->fieldList['title']['type']        = 'title';
-$config->release->dtable->story->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
-$config->release->dtable->story->fieldList['title']['data-toggle'] = 'modal';
-$config->release->dtable->story->fieldList['title']['data-size']   = 'lg';
-$config->release->dtable->story->fieldList['title']['data-app']    = $app->tab;
+$config->release->story->dtable->fieldList['title']['title']       = $lang->story->title;
+$config->release->story->dtable->fieldList['title']['name']        = 'title';
+$config->release->story->dtable->fieldList['title']['type']        = 'title';
+$config->release->story->dtable->fieldList['title']['link']        = helper::createLink('story', 'view', 'storyID={id}');
+$config->release->story->dtable->fieldList['title']['data-toggle'] = 'modal';
+$config->release->story->dtable->fieldList['title']['data-size']   = 'lg';
+$config->release->story->dtable->fieldList['title']['data-app']    = $app->tab;
 
-$config->release->dtable->story->fieldList['pri']['title']   = $lang->priAB;
-$config->release->dtable->story->fieldList['pri']['name']    = 'pri';
-$config->release->dtable->story->fieldList['pri']['type']    = 'pri';
-$config->release->dtable->story->fieldList['pri']['priList'] = $lang->story->priList;
+$config->release->story->dtable->fieldList['pri']['title']   = $lang->priAB;
+$config->release->story->dtable->fieldList['pri']['name']    = 'pri';
+$config->release->story->dtable->fieldList['pri']['type']    = 'pri';
+$config->release->story->dtable->fieldList['pri']['priList'] = $lang->story->priList;
+$config->release->story->dtable->fieldList['pri']['show']    = true;
 
-$config->release->dtable->story->fieldList['status']['title']     = $lang->statusAB;
-$config->release->dtable->story->fieldList['status']['name']      = 'status';
-$config->release->dtable->story->fieldList['status']['type']      = 'status';
-$config->release->dtable->story->fieldList['status']['statusMap'] = $lang->story->statusList;
+$config->release->story->dtable->fieldList['category']['name']     = 'category';
+$config->release->story->dtable->fieldList['category']['title']    = $lang->story->category;
+$config->release->story->dtable->fieldList['category']['sortType'] = true;
+$config->release->story->dtable->fieldList['category']['type']     = 'category';
+$config->release->story->dtable->fieldList['category']['map']      = $lang->story->categoryList;
 
-$config->release->dtable->story->fieldList['linkedBuild']['title'] = $lang->build->linkedBuild;
-$config->release->dtable->story->fieldList['linkedBuild']['name']  = 'buildName';
-$config->release->dtable->story->fieldList['linkedBuild']['type']  = 'text';
+$config->release->story->dtable->fieldList['status']['title']     = $lang->statusAB;
+$config->release->story->dtable->fieldList['status']['name']      = 'status';
+$config->release->story->dtable->fieldList['status']['type']      = 'status';
+$config->release->story->dtable->fieldList['status']['statusMap'] = $lang->story->statusList;
+$config->release->story->dtable->fieldList['status']['show']      = true;
 
-$config->release->dtable->story->fieldList['openedBy']['title'] = $lang->openedByAB;
-$config->release->dtable->story->fieldList['openedBy']['name']  = 'openedBy';
-$config->release->dtable->story->fieldList['openedBy']['type']  = 'user';
+$config->release->story->dtable->fieldList['openedBy']['title'] = $lang->openedByAB;
+$config->release->story->dtable->fieldList['openedBy']['name']  = 'openedBy';
+$config->release->story->dtable->fieldList['openedBy']['type']  = 'user';
+$config->release->story->dtable->fieldList['openedBy']['show']  = true;
 
-$config->release->dtable->story->fieldList['estimate']['title'] = $lang->story->estimateAB;
-$config->release->dtable->story->fieldList['estimate']['name']  = 'estimate';
-$config->release->dtable->story->fieldList['estimate']['type']  = 'number';
-if($isEn) $config->release->dtable->story->fieldList['estimate']['width'] = 100;
+$config->release->story->dtable->fieldList['openedDate']['name']     = 'openedDate';
+$config->release->story->dtable->fieldList['openedDate']['title']    = $lang->story->openedDate;
+$config->release->story->dtable->fieldList['openedDate']['sortType'] = true;
+$config->release->story->dtable->fieldList['openedDate']['type']     = 'date';
 
-$config->release->dtable->story->fieldList['stage']['title'] = $lang->story->stageAB;
-$config->release->dtable->story->fieldList['stage']['name']  = 'stage';
-$config->release->dtable->story->fieldList['stage']['type']  = 'category';
-$config->release->dtable->story->fieldList['stage']['map']   = $lang->story->stageList;
-if($isEn) $config->release->dtable->story->fieldList['stage']['width'] = 100;
+$config->release->story->dtable->fieldList['linkedBuild']['title'] = $lang->build->linkedBuild;
+$config->release->story->dtable->fieldList['linkedBuild']['name']  = 'buildName';
+$config->release->story->dtable->fieldList['linkedBuild']['type']  = 'text';
+$config->release->story->dtable->fieldList['linkedBuild']['show']  = true;
 
-$config->release->dtable->story->fieldList['actions']['title']    = $lang->actions;
-$config->release->dtable->story->fieldList['actions']['name']     = 'actions';
-$config->release->dtable->story->fieldList['actions']['type']     = 'actions';
-$config->release->dtable->story->fieldList['actions']['minWidth'] = 60;
-$config->release->dtable->story->fieldList['actions']['menu']     = array('unlinkStory');
-$config->release->dtable->story->fieldList['actions']['list']     = $config->release->actionList;
-if($isEn) $config->release->dtable->story->fieldList['actions']['width'] = 80;
+$config->release->story->dtable->fieldList['estimate']['title'] = $lang->story->estimateAB;
+$config->release->story->dtable->fieldList['estimate']['name']  = 'estimate';
+$config->release->story->dtable->fieldList['estimate']['type']  = 'number';
+$config->release->story->dtable->fieldList['estimate']['show']  = true;
+if($isEn) $config->release->story->dtable->fieldList['estimate']['width'] = 100;
+
+$config->release->story->dtable->fieldList['stage']['title'] = $lang->story->stageAB;
+$config->release->story->dtable->fieldList['stage']['name']  = 'stage';
+$config->release->story->dtable->fieldList['stage']['type']  = 'category';
+$config->release->story->dtable->fieldList['stage']['map']   = $lang->story->stageList;
+$config->release->story->dtable->fieldList['stage']['show']  = true;
+if($isEn) $config->release->story->dtable->fieldList['stage']['width'] = 100;
+
+$config->release->story->dtable->fieldList['assignedTo']['name']     = 'assignedTo';
+$config->release->story->dtable->fieldList['assignedTo']['title']    = $lang->story->assignedTo;
+$config->release->story->dtable->fieldList['assignedTo']['sortType'] = true;
+$config->release->story->dtable->fieldList['assignedTo']['type']     = 'user';
+
+$config->release->story->dtable->fieldList['assignedDate']['name']     = 'assignedDate';
+$config->release->story->dtable->fieldList['assignedDate']['title']    = $lang->story->assignedDate;
+$config->release->story->dtable->fieldList['assignedDate']['sortType'] = true;
+$config->release->story->dtable->fieldList['assignedDate']['type']     = 'date';
+
+$config->release->story->dtable->fieldList['closedBy']['name']     = 'closedBy';
+$config->release->story->dtable->fieldList['closedBy']['title']    = $lang->story->closedBy;
+$config->release->story->dtable->fieldList['closedBy']['sortType'] = true;
+$config->release->story->dtable->fieldList['closedBy']['type']     = 'user';
+
+$config->release->story->dtable->fieldList['closedDate']['name']     = 'closedDate';
+$config->release->story->dtable->fieldList['closedDate']['title']    = $lang->story->closedDate;
+$config->release->story->dtable->fieldList['closedDate']['sortType'] = true;
+$config->release->story->dtable->fieldList['closedDate']['type']     = 'date';
+
+$config->release->story->dtable->fieldList['closedReason']['name']       = 'closedReason';
+$config->release->story->dtable->fieldList['closedReason']['title']      = $lang->story->closedReason;
+$config->release->story->dtable->fieldList['closedReason']['sortType']   = true;
+$config->release->story->dtable->fieldList['closedReason']['width']      = '90';
+$config->release->story->dtable->fieldList['closedReason']['map']        = $lang->story->reasonList;
+
+$config->release->story->dtable->fieldList['lastEditedBy']['name']     = 'lastEditedBy';
+$config->release->story->dtable->fieldList['lastEditedBy']['title']    = $lang->story->lastEditedBy;
+$config->release->story->dtable->fieldList['lastEditedBy']['sortType'] = true;
+$config->release->story->dtable->fieldList['lastEditedBy']['type']     = 'user';
+
+$config->release->story->dtable->fieldList['lastEditedDate']['name']     = 'lastEditedDate';
+$config->release->story->dtable->fieldList['lastEditedDate']['title']    = $lang->story->lastEditedDate;
+$config->release->story->dtable->fieldList['lastEditedDate']['sortType'] = true;
+$config->release->story->dtable->fieldList['lastEditedDate']['type']     = 'date';
+$config->release->story->dtable->fieldList['lastEditedDate']['width']    = 120;
+
+$config->release->story->dtable->fieldList['keywords']['name']     = 'keywords';
+$config->release->story->dtable->fieldList['keywords']['title']    = $lang->story->keywords;
+$config->release->story->dtable->fieldList['keywords']['sortType'] = true;
+$config->release->story->dtable->fieldList['keywords']['width']    = '100';
+
+$config->release->story->dtable->fieldList['source']['name']     = 'source';
+$config->release->story->dtable->fieldList['source']['title']    = $lang->story->source;
+$config->release->story->dtable->fieldList['source']['sortType'] = true;
+$config->release->story->dtable->fieldList['source']['width']    = '90';
+$config->release->story->dtable->fieldList['source']['group']    = 10;
+
+$config->release->story->dtable->fieldList['sourceNote']['name']     = 'sourceNote';
+$config->release->story->dtable->fieldList['sourceNote']['title']    = $lang->story->sourceNote;
+$config->release->story->dtable->fieldList['sourceNote']['width']    = '90';
+$config->release->story->dtable->fieldList['sourceNote']['sortType'] = true;
+$config->release->story->dtable->fieldList['sourceNote']['group']    = 10;
+
+$config->release->story->dtable->fieldList['activatedDate']['name']     = 'activatedDate';
+$config->release->story->dtable->fieldList['activatedDate']['title']    = $lang->story->activatedDate;
+$config->release->story->dtable->fieldList['activatedDate']['sortType'] = true;
+$config->release->story->dtable->fieldList['activatedDate']['type']     = 'date';
+$config->release->story->dtable->fieldList['activatedDate']['group']    = 11;
+
+$config->release->story->dtable->fieldList['version']['name']     = 'version';
+$config->release->story->dtable->fieldList['version']['title']    = $lang->story->version;
+$config->release->story->dtable->fieldList['version']['type']     = 'number';
+$config->release->story->dtable->fieldList['version']['sortType'] = true;
+$config->release->story->dtable->fieldList['version']['group']    = 11;
+
+$config->release->story->dtable->fieldList['actions']['title']    = $lang->actions;
+$config->release->story->dtable->fieldList['actions']['name']     = 'actions';
+$config->release->story->dtable->fieldList['actions']['type']     = 'actions';
+$config->release->story->dtable->fieldList['actions']['width']    = 100;
+$config->release->story->dtable->fieldList['actions']['menu']     = array('unlinkStory');
+$config->release->story->dtable->fieldList['actions']['list']     = $config->release->actionList;
 
 $config->release->dtable->bug->fieldList['id']['title']    = $lang->idAB;
 $config->release->dtable->bug->fieldList['id']['name']     = 'id';
