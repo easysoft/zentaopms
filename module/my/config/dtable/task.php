@@ -91,14 +91,7 @@ $config->my->task->dtable->fieldList['status']['type']      = 'status';
 $config->my->task->dtable->fieldList['status']['statusMap'] = $lang->task->statusList + array('changed' => $lang->task->storyChange);
 $config->my->task->dtable->fieldList['status']['group']     = 'pri';
 $config->my->task->dtable->fieldList['status']['sortType']  = true;
-$config->my->task->dtable->fieldList['status']['show']     = true;
-
-$config->my->task->dtable->fieldList['type']['name']     = 'type';
-$config->my->task->dtable->fieldList['type']['title']    = $lang->task->typeAB;
-$config->my->task->dtable->fieldList['type']['type']     = 'category';
-$config->my->task->dtable->fieldList['type']['map']      = $lang->task->typeList;
-$config->my->task->dtable->fieldList['type']['group']    = 'pri';
-$config->my->task->dtable->fieldList['type']['sortType'] = true;
+$config->my->task->dtable->fieldList['status']['show']      = true;
 
 $config->my->task->dtable->fieldList['projectName']['name']     = 'projectName';
 $config->my->task->dtable->fieldList['projectName']['title']    = $lang->task->project;
@@ -115,6 +108,13 @@ $config->my->task->dtable->fieldList['executionName']['link']     = array('modul
 $config->my->task->dtable->fieldList['executionName']['group']    = 'project';
 $config->my->task->dtable->fieldList['executionName']['sortType'] = true;
 $config->my->task->dtable->fieldList['executionName']['show']     = true;
+
+$config->my->task->dtable->fieldList['type']['name']     = 'type';
+$config->my->task->dtable->fieldList['type']['title']    = $lang->task->typeAB;
+$config->my->task->dtable->fieldList['type']['type']     = 'category';
+$config->my->task->dtable->fieldList['type']['map']      = $lang->task->typeList;
+$config->my->task->dtable->fieldList['type']['group']    = 'pri';
+$config->my->task->dtable->fieldList['type']['sortType'] = true;
 
 $config->my->task->dtable->fieldList['openedBy']['name']     = 'openedBy';
 $config->my->task->dtable->fieldList['openedBy']['title']    = $lang->task->openedByAB;
