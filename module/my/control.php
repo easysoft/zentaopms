@@ -628,7 +628,7 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('caseList', $uri, 'qa');
+        $this->session->set('caseList', $uri, $this->app->tab);
         $this->session->set('bugList',  $uri . "#app={$this->app->tab}", 'qa');
 
         /* Load pager. */
