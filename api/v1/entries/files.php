@@ -22,7 +22,9 @@ class filesEntry extends entry
         $uid = $this->param('uid', '');
 
         $control = $this->loadController('file', 'ajaxUpload');
-        $control->ajaxUpload($uid);
+        $objectType = isset($_POST['objectType']) ? $_POST['objectType'] : '';
+        $objectID = isset($_POST['objectID']) ? $_POST['objectID'] : 0;
+        $control->ajaxUpload($uid, $objectType, $objectID);
 
         $data = $this->getData();
 
