@@ -60,6 +60,7 @@ $repo->seedGitFoxEntry();
 
 $gitlab = array(
     'SCM'            => 'Gitlab',
+    'acl'            => 'private',
     'serviceHost'    => 1,
     'serviceProject' => 100,
     'name'           => 'zzxx',
@@ -71,6 +72,7 @@ $gitlab = array(
 
 $gitea = array(
     'SCM'            => 'Gitea',
+    'acl'            => 'private',
     'serviceHost'    => 4,
     'serviceProject' => 'gitea/unittest',
     'name'           => 'Demo',
@@ -83,6 +85,7 @@ $gitea = array(
 
 $git = array(
     'SCM'            => 'Git',
+    'acl'            => 'private',
     'name'           => '本地git',
     'path'           => '/var/www/html/zentaopms/',
     'encoding'       => 'utf-8',
@@ -93,6 +96,7 @@ $git = array(
 $svn = array(
     'product'        => '1',
     'SCM'            => 'Subversion',
+    'acl'            => 'private',
     'name'           => 'svn',
     'path'           => 'https://svn.zcorp.cc',
     'encoding'       => 'utf-8',

@@ -31,8 +31,10 @@ CREATE TABLE `ops_repo` (
   `spaceID` int NOT NULL DEFAULT 0,
   `product` varchar(255) NOT NULL DEFAULT '',
   `name` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
   `gitUID` char(42) NOT NULL DEFAULT '',
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint(1) NOT NULL DEFAULT 0,
   `acl` varchar(30) NOT NULL DEFAULT 'open',
   `status` varchar(30) NOT NULL DEFAULT 'active',
   `deleted` tinyint NOT NULL DEFAULT 0,
@@ -49,19 +51,35 @@ CREATE TABLE `ops_spaceuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml',    'SCM' => 'Gitlab', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'testApi',     'SCM' => 'Gitlab', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 3, 'spaceID' => 2, 'product' => '1', 'name' => 'projectRepo', 'SCM' => 'Git',    'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 4, 'spaceID' => 2, 'product' => '1', 'name' => 'testDocs',    'SCM' => 'GitFox', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 5, 'spaceID' => 1, 'product' => '1', 'name' => 'archiveRepo', 'SCM' => 'Gitlab', 'gitUID' => 'uid5', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 6, 'spaceID' => 1, 'product' => '1', 'name' => 'hiddenRepo',  'SCM' => 'Gitlab', 'gitUID' => 'uid6', 'acl' => 'open', 'status' => 'importing', 'deleted' => 0),
-    array('id' => 7, 'spaceID' => 1, 'product' => '1', 'name' => 'deletedRepo', 'SCM' => 'Gitlab', 'gitUID' => 'uid7', 'acl' => 'open', 'status' => 'active',    'deleted' => 1),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
+zenData('ops_space')->gen(0);
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range('1,2');
+$spaceTable->name->range('repo-test-space-1,repo-test-space-2');
+$spaceTable->code->range('repo-test-space-1,repo-test-space-2');
+$spaceTable->acl->range('open{2}');
+$spaceTable->auth->range('extend{2}');
+$spaceTable->deleted->range('0{2}');
+$spaceTable->gen(2);
 
-$tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
-$tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 2, 'role' => 'manager', 'account' => 'admin'))->exec();
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-7');
+$repoTable->spaceID->range('1,1,2,2,1,1,1');
+$repoTable->product->range('1{7}');
+$repoTable->name->range('testHtml,testApi,projectRepo,testDocs,archiveRepo,hiddenRepo,deletedRepo');
+$repoTable->scmType->range('git{6},svn');
+$repoTable->gitUID->range('uid1,uid2,uid3,uid4,uid5,uid6,uid7');
+$repoTable->providerID->range('0{7}');
+$repoTable->mirror->range('0{7}');
+$repoTable->acl->range('open{7}');
+$repoTable->status->range('active{5},importing,active');
+$repoTable->deleted->range('0{6},1');
+$repoTable->gen(7);
+
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range('1,2');
+$spaceUserTable->role->range('manager{2}');
+$spaceUserTable->account->range('admin{2}');
+$spaceUserTable->gen(2);
 
 su('admin');
 
