@@ -675,7 +675,6 @@ class projectZen extends project
         $this->view->moduleTree  = $moduleTree;
         $this->view->modules     = $modules;
         $this->view->moduleID    = $moduleID;
-        $this->view->moduleName  = !empty($tree->name) ? $tree->name : $this->lang->tree->all;
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
     }
 
