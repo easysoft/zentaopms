@@ -49,22 +49,6 @@ CREATE TABLE `ops_spaceuser` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
 SQL);
 
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox',
-    'account'     => '',
-    'code'        => 'gitfox',
-    'key'         => 'gitfox',
-    'freePasswd'  => 1,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
-
 $repos = array(
     array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml',    'SCM' => 'Gitlab', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
     array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'testApi',     'SCM' => 'Gitlab', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
@@ -82,6 +66,7 @@ $tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 2, 'r
 su('admin');
 
 $repoTest = new repoModelTest();
+$repoTest->seedGitFoxEntry();
 
 $pager = new stdclass();
 $pager->recPerPage = 2;

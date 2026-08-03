@@ -26,6 +26,27 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 // 2. 用户登录
 su('admin');
 
+global $tester;
+$historyTable = trim((string)TABLE_REPOHISTORY, '`');
+$historyExists = (bool)$tester->dao->query("SHOW TABLES LIKE '{$historyTable}'")->fetch();
+if(!$historyExists)
+{
+    $tester->dao->exec(<<<SQL
+CREATE TABLE `{$historyTable}` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `repo` int unsigned NOT NULL DEFAULT 0,
+  `revision` varchar(255) NOT NULL DEFAULT '',
+  `commit` int unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+}
+else
+{
+    $commitColumn = $tester->dao->query("SHOW COLUMNS FROM `{$historyTable}` LIKE 'commit'")->fetch();
+    if(!$commitColumn) $tester->dao->exec("ALTER TABLE `{$historyTable}` ADD `commit` int unsigned NOT NULL DEFAULT 0");
+}
+
 // 3. 创建测试实例
 $repoTest = new repoModelTest();
 

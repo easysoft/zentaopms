@@ -5,24 +5,25 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
+
 title=测试 repoModel->setTaskByCommit();
 timeout=0
 cid=18105
 
-- 开始任务
- - 属性status @changed
- - 属性consumed @3.00
- - 属性left @0.00
-- 工时计算
+- 执行repo模块的setTaskByCommitTaskTest方法，参数是$log, $action, $repoID, 1
+ - 属性status @doing
+ - 属性consumed @4.00
+ - 属性left @3.00
+- 执行repo模块的setTaskByCommitTaskTest方法，参数是$log, $action, $repoID, 8
  - 属性status @doing
  - 属性consumed @11.00
  - 属性left @3.00
-- 完成任务
- - 属性status @changed
- - 属性consumed @4.00
- - 属性left @1.00
-- 无效消息返回false >> 1
-- 不存在任务返回false >> 1
+- 执行repo模块的setTaskByCommitTaskTest方法，参数是$log, $action, $repoID, 2
+ - 属性status @done
+ - 属性consumed @14.00
+ - 属性left @0.00
+- 执行repo模块的setTaskByCommitTest方法，参数是$log, $action, $repoID) === false  @1
+- 执行repo模块的setTaskByCommitTest方法，参数是$log, $action, $repoID) === false  @1
 
 */
 
@@ -33,19 +34,21 @@ $tester->dao->delete()->from(TABLE_EFFORT)->where('objectType')->eq('task')->and
 $tester->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('task')->andWhere('objectID')->in('1,2,8')->exec();
 $tester->dao->delete()->from(TABLE_HISTORY)->where('field')->eq('git')->exec();
 
-$executions = array(
-    array('id' => 1, 'name' => '项目集1', 'type' => 'program', 'status' => 'doing', 'model' => '',      'parent' => 0, 'project' => 0, 'path' => ',1,',     'grade' => 1, 'code' => 'program1', 'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd'),
-    array('id' => 2, 'name' => '项目1',   'type' => 'project', 'status' => 'doing', 'model' => 'scrum', 'parent' => 1, 'project' => 0, 'path' => ',1,2,',   'grade' => 2, 'code' => 'project1', 'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd'),
-    array('id' => 3, 'name' => '迭代1',   'type' => 'sprint',  'status' => 'doing', 'model' => '',      'parent' => 2, 'project' => 2, 'path' => ',1,2,3,', 'grade' => 3, 'code' => 'sprint1',  'begin' => '2026-07-09', 'end' => '2026-07-16', 'acl' => 'open', 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'vision' => 'rnd')
-);
-foreach($executions as $execution) $tester->dao->insert(TABLE_PROJECT)->data($execution)->exec();
-
-$tasks = array(
-    array('id' => 1, 'parent' => 0, 'project' => 11, 'execution' => 3, 'module' => 21, 'story' => 1,  'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务11', 'type' => 'design', 'pri' => 1, 'estimate' => 0, 'consumed' => 3,  'left' => 0, 'deadline' => '2026-07-16', 'status' => 'wait',  'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述1', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
-    array('id' => 2, 'parent' => 0, 'project' => 12, 'execution' => 3, 'module' => 24, 'story' => 5,  'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务12', 'type' => 'devel',  'pri' => 2, 'estimate' => 1, 'consumed' => 4,  'left' => 1, 'deadline' => '2026-07-15', 'status' => 'doing', 'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述2', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear'),
-    array('id' => 8, 'parent' => 0, 'project' => 18, 'execution' => 3, 'module' => 42, 'story' => 29, 'design' => 0, 'storyVersion' => 1, 'designVersion' => 1, 'fromBug' => 0, 'name' => '开发任务18', 'type' => 'misc',   'pri' => 4, 'estimate' => 7, 'consumed' => 10, 'left' => 4, 'deadline' => '2026-07-09', 'status' => 'doing', 'subStatus' => '', 'color' => '', 'mailto' => '', 'desc' => '这里是任务描述8', 'version' => 1, 'openedBy' => 'admin', 'openedDate' => '2026-07-09 00:00:00', 'assignedTo' => '', 'assignedDate' => '2026-07-09 00:00:00', 'estStarted' => '2026-07-09', 'realStarted' => '2026-07-09 00:00:00', 'finishedBy' => '', 'finishedList' => '', 'canceledBy' => '', 'closedBy' => '', 'realDuration' => 1, 'planDuration' => 1, 'closedReason' => '', 'lastEditedBy' => '', 'deleted' => 0, 'mode' => 'linear')
-);
-foreach($tasks as $task) $tester->dao->insert(TABLE_TASK)->data($task)->exec();
+$taskData = zenData('task');
+$taskData->id->range('1,2,8');
+$taskData->project->range('11,12,18');
+$taskData->execution->range('3');
+$taskData->module->range('21,24,42');
+$taskData->story->range('0');
+$taskData->name->range('开发任务11,开发任务12,开发任务18');
+$taskData->type->range('design,devel,misc');
+$taskData->consumed->range('3,4,10');
+$taskData->left->range('0,1,4');
+$taskData->status->range('wait,doing,doing');
+$taskData->openedBy->range('admin');
+$taskData->deleted->range('0');
+$taskData->mode->range('none');
+$taskData->gen(3);
 
 global $app;
 $app->rawModule = 'repo';
@@ -76,16 +79,13 @@ $app->control = new repo();
 
 $repo = new repoModelTest();
 
-$repo->setTaskByCommitTest($log, $action, $repoID);
-r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 1)) && p('status,consumed,left') && e('changed,3.00,0.00');
+r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 1)) && p('status,consumed,left') && e('doing,4.00,3.00');
 
 $log->msg = $log->comment = 'Effort Task #8 Cost:1h Left:3h';
-$repo->setTaskByCommitTest($log, $action, $repoID);
 r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 8)) && p('status,consumed,left') && e('doing,11.00,3.00');
 
 $log->msg = $log->comment = 'Finish Task #2 Cost:10h';
-$repo->setTaskByCommitTest($log, $action, $repoID);
-r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 2)) && p('status,consumed,left') && e('changed,4.00,1.00');
+r($repo->setTaskByCommitTaskTest($log, $action, $repoID, 2)) && p('status,consumed,left') && e('done,14.00,0.00');
 
 $log->msg = $log->comment = 'No Task match in this message';
 r($repo->setTaskByCommitTest($log, $action, $repoID) === false) && p() && e('1');

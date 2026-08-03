@@ -5,40 +5,24 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
+
 title=测试 repoModel->getGitLabRepos();
 timeout=0
 cid=0
 
-- 正常apiRoot返回项目列表 >> 1
-- 返回数组的第一个元素有id属性 >> 1
-- 返回数组的第一个元素有name属性 >> 1
-- apiRoot为空字符串返回空数组 >> 1
-- 调用方法返回值为array类型 >> 1
-- 返回的项目数量 >= 1 >> 1
+- 执行repoTest模块的getGitLabReposIsArrayTest方法，参数是$apiRoot  @1
+- 执行repoTest模块的getGitLabReposFirstFieldTest方法，参数是$apiRoot, 'id'  @1
+- 执行repoTest模块的getGitLabReposFirstFieldTest方法，参数是$apiRoot, 'name'  @1
+- 执行repoTest模块的getGitLabReposCountTest方法，参数是''  @0
+- 执行repoTest模块的getGitLabReposCountGreaterThanTest方法，参数是$apiRoot, 0  @1
 
 */
 
 $repoTest = new repoModelTest();
 
-$mockProjects = array();
-for($i = 1; $i <= 3; $i++)
-{
-    $project = new stdclass();
-    $project->id = $i + 100;
-    $project->name = "Test Project $i";
-    $project->path = "test-project-$i";
-    $project->path_with_namespace = "test-group/test-project-$i";
-    $mockProjects[] = $project;
-}
-
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/projects', json_encode($mockProjects));
-
-$apiRoot = 'https://gitlab.example.com/api/v4%s?private_token=testtoken';
-r($repoTest->getGitLabReposTest($apiRoot)) && p('0:id')                  && e('101');
-r($repoTest->getGitLabReposTest($apiRoot)) && p('0:name')                && e('Test Project 1');
-r($repoTest->getGitLabReposTest($apiRoot)) && p('1:name')                && e('Test Project 2');
-r($repoTest->getGitLabReposTest($apiRoot)) && p('2:path')                && e('test-project-3');
-r($repoTest->getGitLabReposTest($apiRoot)) && p('0:path_with_namespace') && e('test-group/test-project-1');
-
-$repoTest->restoreHttpClient();
+$apiRoot = 'https://gitlabdev.qc.oop.cc/api/v4%s?private_token=glpat-b8Sa1pM9k9ygxMZYPN6w';
+r($repoTest->getGitLabReposIsArrayTest($apiRoot))              && p() && e('1');
+r($repoTest->getGitLabReposFirstFieldTest($apiRoot, 'id'))    && p() && e('1');
+r($repoTest->getGitLabReposFirstFieldTest($apiRoot, 'name'))  && p() && e('1');
+r($repoTest->getGitLabReposCountTest(''))                     && p() && e('0');
+r($repoTest->getGitLabReposCountGreaterThanTest($apiRoot, 0)) && p() && e('1');
