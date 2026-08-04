@@ -326,6 +326,7 @@ class release extends control
         $this->view->appList        = $this->loadModel('system')->getPairs();
         $this->view->linkedReleases = $release->releases ? $this->release->getListByCondition(explode(',', $release->releases)) : array();
         $this->view->includedApps   = $this->release->getListByCondition(array(), $release->id);
+        $this->view->modules        = $this->loadModel('bug')->getDatatableModules($release->product);
         $this->display();
     }
 

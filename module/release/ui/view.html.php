@@ -70,18 +70,21 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
-$storyCols = $this->loadModel('datatable')->getSetting('release', 'story');
+$storyCols   = $this->loadModel('datatable')->getSetting('release', 'story');
+$leftBugCols = $this->datatable->getSetting('release', 'leftBug');
 if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
-    $storyCols['id']['type'] = 'ID';
+    $storyCols['id']['type']   = 'ID';
+    $leftBugCols['id']['type'] = 'ID';
     $config->release->dtable->bug->fieldList['id']['type']        = 'ID';
-    $config->release->dtable->leftBug->fieldList['id']['type']    = 'ID';
     $config->release->dtable->escapedBug->fieldList['id']['type'] = 'ID';
 
     unset($storyCols['actions']);
     unset($config->release->dtable->bug->fieldList['actions']);
-    unset($config->release->dtable->leftBug->fieldList['actions']);
+    unset($leftBugCols['actions']);
 }
+
+$leftBugCols['module']['map'] = $modules;
 
 if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($storyCols['actions']['list']['unlinkStory']);
 if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug']);
@@ -125,7 +128,7 @@ jsVar('unlinkleftbugurl', helper::createLink($releaseModule, 'unlinkBug', "relea
 
 $releaseBuild = array();
 foreach($release->builds as $build) $releaseBuild[] = $build->name;
-$leftBugTableData = initTableData($leftBugs, $config->release->dtable->leftBug->fieldList, $this->release);
+$leftBugTableData = initTableData($leftBugs, $leftBugCols, $this->release);
 $leftBugTableData = array_map(function($bug)
 {
     if(helper::isZeroDate($bug->resolvedDate)) $bug->resolvedDate = '';
@@ -328,9 +331,11 @@ detailBody
                 dtable
                 (
                     setID('leftBugDTable'),
+                    set::methodName('leftBug'),
                     set::style(array('min-width' => '100%')),
+                    set::customCols(true),
                     set::userMap($users),
-                    set::cols(array_values($config->release->dtable->leftBug->fieldList)),
+                    set::cols(array_values($leftBugCols)),
                     set::data($leftBugTableData),
                     set::checkable(empty($release->releases) && ($canBatchUnlinkBug || $canBatchCloseBug)),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=leftBug&link={$link}&param={$param}&orderBy={name}_{sortType}")),
