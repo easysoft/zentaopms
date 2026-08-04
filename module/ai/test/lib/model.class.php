@@ -1955,21 +1955,6 @@ class aiModelTest extends baseTest
     }
 
     /**
-     * Test assemblePrompt method.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public function assemblePromptTest($prompt = null, $dataPrompt = '')
-    {
-        $result = aiModel::assemblePrompt($prompt, $dataPrompt);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test isExecutable method.
      *
      * @param  mixed $prompt
@@ -2419,21 +2404,6 @@ class aiModelTest extends baseTest
         $result = $this->instance->filterPromptsForExecution($prompts, $keepUnauthorized);
         if(dao::isError()) return dao::getError();
         return $result;
-    }
-
-    /**
-     * Test setInjectData method.
-     *
-     * @param  mixed $form
-     * @param  mixed $data
-     * @access public
-     * @return mixed
-     */
-    public function setInjectDataTest($form = null, $data = null)
-    {
-        $this->instance->setInjectData($form, $data);
-        if(dao::isError()) return dao::getError();
-        return '0';
     }
 
     /**
