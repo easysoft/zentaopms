@@ -200,3 +200,19 @@ window.checkGrade = function(e)
         }
     });
 }
+
+window.toggleFeedback = function(event)
+{
+    if(storyType == 'requirement') return false;
+
+    const $this  = $(event.target);
+    const source = $this.val();
+    if(!source) return;
+    $('.feedbackBox').toggleClass('hidden', !feedbackSource.includes(source));
+}
+
+window.setStory = function(event)
+{
+    var reason = $(event.target).val();
+    $('[name=duplicateStory]').closest('.form-row').toggleClass('hidden', reason != 'duplicate');
+}
