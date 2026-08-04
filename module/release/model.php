@@ -845,7 +845,7 @@ class releaseModel extends model
     {
         $release = form::data($this->config->release->form->publish)->add('status', $status)->setIF($releasedDate, 'releasedDate', $releasedDate)->get();
 
-        $this->dao->update(TABLE_RELEASE)->data($release)->where('id')->eq($releaseID)->exec();
+        $this->dao->update(TABLE_RELEASE)->data($release, 'comment')->where('id')->eq($releaseID)->exec();
 
         if($status == 'normal') $this->setStoriesStage($releaseID);
         return !dao::isError();
