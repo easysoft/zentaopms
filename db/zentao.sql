@@ -1749,14 +1749,12 @@ CREATE TABLE IF NOT EXISTS `zt_rule` (
   `workflowGroup` varchar(255) DEFAULT NULL,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `action` varchar(30) NOT NULL DEFAULT '',
+  `alertLevel` varchar(10) NOT NULL DEFAULT 'notice',
   `triggerKind` varchar(30) NOT NULL DEFAULT 'object',
   `nodes` mediumtext DEFAULT NULL,
-  `draftNodes` mediumtext DEFAULT NULL,
-  `publishedNodes` mediumtext DEFAULT NULL,
   `version` mediumint unsigned NOT NULL DEFAULT 0,
   `priority` mediumint unsigned NOT NULL DEFAULT 1,
   `runAs` varchar(30) NOT NULL DEFAULT '',
-  `cronID` mediumint unsigned NOT NULL DEFAULT 0,
   `method` varchar(30) NOT NULL DEFAULT 'sync',
   `status` char(30) NOT NULL DEFAULT 'disable',
   `notifyUsers` text NULL,
@@ -1767,11 +1765,11 @@ CREATE TABLE IF NOT EXISTS `zt_rule` (
   `lastEditedDate` date DEFAULT NULL,
   `lastRunTime` datetime DEFAULT NULL,
   `lastRunResult` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`),
-  KEY `idx_rule_scene_status` (`scene`, `status`),
-  KEY `idx_rule_object_action` (`objectType`, `action`),
-  KEY `idx_rule_priority` (`priority`, `id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+CREATE INDEX `idx_rule_scene_status` ON `zt_rule` (`scene`, `status`);
+CREATE INDEX `idx_rule_object_action` ON `zt_rule` (`objectType`, `action`);
+CREATE INDEX `idx_rule_priority` ON `zt_rule` (`priority`, `id`);
 
 -- DROP TABLE IF EXISTS `zt_rulequeue`;
 CREATE TABLE IF NOT EXISTS `zt_rulequeue` (
@@ -1779,13 +1777,8 @@ CREATE TABLE IF NOT EXISTS `zt_rulequeue` (
   `rule` mediumint unsigned NOT NULL DEFAULT 0,
   `ruleVersion` mediumint unsigned NOT NULL DEFAULT 0,
   `fromObject` mediumtext DEFAULT NULL,
-  `eventPayload` mediumtext DEFAULT NULL,
   `actions` longtext DEFAULT NULL,
-  `plannedActions` longtext DEFAULT NULL,
   `status` char(30) NOT NULL DEFAULT 'wait',
-  `claimToken` varchar(64) NOT NULL DEFAULT '',
-  `claimedAt` datetime DEFAULT NULL,
-  `attempts` smallint unsigned NOT NULL DEFAULT 0,
   `runAs` varchar(30) NOT NULL DEFAULT '',
   `log` text DEFAULT NULL,
   `triggeredBy` varchar(30) DEFAULT NULL,
