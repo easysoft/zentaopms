@@ -101,7 +101,7 @@ $fields->field('twins')
     ->position('info')
     ->label($lang->story->changeSyncTip)
     ->hidden(empty(data('twins')))
-    ->control(function() use($lang, $fieldData, $forceReview, $branches)
+    ->control(function() use($lang, $branches)
     {
         return h::ul
         (
@@ -136,7 +136,7 @@ $fields->field('product')
     ->position('basic')
     ->group($lang->story->legendBasicInfo)
     ->hidden(!empty(data('product.shadow')))
-    ->control(function() use($lang, $fieldData, $forceReview)
+    ->control(function() use($fieldData)
     {
         return inputGroup
         (
@@ -204,7 +204,7 @@ $fields->field('plan')
     ->position('basic')
     ->group($lang->story->legendBasicInfo)
     ->hidden(empty($showPlan))
-    ->control(function() use($fieldData)
+    ->control(function() use($fieldData, $multiplePlan)
     {
         return inputGroup
         (
