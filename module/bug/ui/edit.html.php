@@ -38,5 +38,5 @@ detailForm
     on::click('#allBuilds', 'loadAllBuilds'),
     on::click('#allUsers',  'loadAllUsers'),
     set::data($bug),
-    set::fields($fields),
+    set::fields($fields)
 );

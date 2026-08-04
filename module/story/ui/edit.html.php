@@ -11,42 +11,7 @@ declare(strict_types=1);
  */
 namespace zin;
 
-$uid            = uniqid();
 $canEditContent = str_contains(',draft,changing,', ",{$story->status},");
-$forceReview    = $this->story->checkForceReview($story->type);
-$assignedToList = $story->status == 'closed' ? array('closed' => 'Closed') : $users;
-$storyEstimate  = $story->estimate ? helper::formatHours($story->estimate) : 0;
-
-$planCount    = !empty($story->planTitle) ? count($story->planTitle) : 0;
-$multiplePlan = ($product->type != 'normal' && empty($story->branch) && $planCount > 1) || ($story->type != 'story');
-$showPlan     = $config->vision == 'or' ? false : true;
-
-$minStage    = $story->stage;
-$stageList   = implode(',', array_keys($this->lang->story->stageList));
-$minStagePos = strpos($stageList, $minStage);
-if(!empty($story->stages) && isset($fields['stage']['options']))
-{
-    foreach($story->stages as $branch => $stage)
-    {
-        $position = strpos(",{$stageList},", ",{$stage},");
-        if($position !== false && $position > $minStagePos)
-        {
-            $minStage    = $stage;
-            $minStagePos = $position;
-        }
-    }
-}
-
-if(!empty($story->files))
-{
-    foreach($story->files as $file) $file->extra = $story->version;
-}
-
-if($story->type == 'story')
-{
-    unset($fields['stage']['options']['delivered']);
-    unset($fields['stage']['options']['delivering']);
-}
 
 if($app->tab == 'product') data('activeMenuID', $story->type);
 jsVar('storyType', $story->type);
@@ -71,25 +36,11 @@ jsVar('langTreeManage', $lang->tree->manage);
 jsVar('feedbackSource', $config->story->feedbackSource);
 jsVar('relievedTip', $lang->story->relievedTip);
 
-detailHeader
-(
-    to::prefix($lang->story->edit),
-    to::title
-    (
-        entityLabel
-        (
-            set::level(1),
-            set::entityID($story->id),
-            set::reverse(true),
-            span(setID('storyTitle'), $story->title)
-        )
-    )
-);
+$fields = useFields('story.edit');
 
-detailBody
+detailForm
 (
     setID('dataform'),
-    set::isForm(true),
     set::ajax(array('beforeSubmit' => jsRaw('clickSubmit'))),
     on::change('[name=parent]', 'loadGrade'),
     on::change('[name=grade]', 'checkGrade'),
@@ -99,6 +50,6 @@ detailBody
         array('btnType' => 'submit', 'class' => 'secondary', 'data-status' => 'draft',  'text' => $story->status == 'changing' ? $lang->story->doNotSubmit : $lang->story->saveDraft),
         isInModal() ? null : array('text' => $lang->goback, 'back' => 'APP')
     )) : null,
+    set::data($story),
+    set::fields($fields)
 );
-
-render();

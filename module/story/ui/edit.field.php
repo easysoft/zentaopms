@@ -10,6 +10,9 @@ $canEditContent = str_contains(',draft,changing,', ',' . (data('story.status') ?
 $forceReview    = $app->control->story->checkForceReview($storyType);
 $storyEstimate  = data('story.estimate') ? helper::formatHours(data('story.estimate')) : 0;
 $assignedToList = data('story.status') == 'closed' ? array('closed' => 'Closed') : data('users');
+$planCount      = !empty(data('story.planTitle')) ? count(data('story.planTitle')) : 0;
+$multiplePlan   = (data('product.type') != 'normal' && empty(data('story.branch')) && $planCount > 1) || ($storyType != 'story');
+$showPlan       = $config->vision == 'or' ? false : true;
 
 $minStage    = data('story.stage') ?: '';
 $stageList   = implode(',', array_keys($lang->story->stageList));
@@ -25,6 +28,18 @@ if(!empty(data('story.stages')) && isset($fieldData['stage']['options']))
             $minStagePos = $position;
         }
     }
+}
+
+$files = data('story.files') ?: null;
+if(!empty($files))
+{
+    foreach($files as $file) $file->extra = data('story.version');
+}
+
+if($storyType == 'story')
+{
+    unset($fieldData['stage']['options']['delivered']);
+    unset($fieldData['stage']['options']['delivering']);
 }
 
 $fields = defineFieldList('story.edit');
@@ -69,15 +84,24 @@ $fields->field('reviewer')
             formHidden('needNotReview', $forceReview ? 0 : 1)
         );
     });
-
-$fields->field('spec')->position('info')->label($lang->story->legendSpec)->disabled(empty($canEditContent))->control('editor')->value(data('story.spec'));
-$fields->field('verify')->position('info')->disabled(empty($canEditContent))->control('editor')->value(data('story.verify'));
+$fields->field('spec')->position('info')->label($lang->story->legendSpec);
+$fields->field('verify')->position('info');
+if(empty($canEditContent))
+{
+    $fields->field('spec')->control('html')->value(data('story.spec'));
+    $fields->field('verify')->control('html')->value(data('story.verify'));
+}
+else
+{
+    $fields->field('spec')->control('editor')->value(data('story.spec'));
+    $fields->field('verify')->control('editor')->value(data('story.verify'));
+}
 
 $fields->field('twins')
     ->position('info')
     ->label($lang->story->changeSyncTip)
     ->hidden(empty(data('twins')))
-    ->control(function() use($lang, $fieldData, $forceReview)
+    ->control(function() use($lang, $fieldData, $forceReview, $branches)
     {
         return h::ul
         (
@@ -105,7 +129,7 @@ $fields->field('files')
     ->id('files')
     ->label($lang->story->legendAttach)
     ->hidden(empty($canEditContent))
-    ->control(array('control' => 'fileSelector', 'defaultFiles' => data('story.files') ?: null, 'extra' => data('story.version')))
+    ->control(array('control' => 'fileSelector', 'defaultFiles' => $files, 'extra' => data('story.version')))
     ->value('');
 
 $fields->field('product')
@@ -114,7 +138,7 @@ $fields->field('product')
     ->hidden(!empty(data('product.shadow')))
     ->control(function() use($lang, $fieldData, $forceReview)
     {
-        return row
+        return inputGroup
         (
             on::change('[name=branch]')->call('loadBranch'),
             picker
@@ -179,7 +203,7 @@ $fields->field('grade')
 $fields->field('plan')
     ->position('basic')
     ->group($lang->story->legendBasicInfo)
-    ->hidden(empty(data('showPlan')))
+    ->hidden(empty($showPlan))
     ->control(function() use($fieldData)
     {
         return inputGroup
@@ -192,7 +216,7 @@ $fields->field('plan')
                     set::name('plan'),
                     set::items(!empty($fieldData['plan']['options']) ? $fieldData['plan']['options'] : array()),
                     set::value(!empty($fieldData['plan']['default']) ? $fieldData['plan']['default'] : ''),
-                    set::multiple(!empty(data('multiplePlan')))
+                    set::multiple(!empty($multiplePlan))
                 ),
             ),
             empty($fieldData['plan']['options']) ? btn(set::url(createLink('productplan', 'create', "productID=" . data('story.product') . "&branch=" . data('story.branch'))), setData(array('toggle' => 'modal')), icon('plus')) : null,
