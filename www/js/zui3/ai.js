@@ -536,9 +536,10 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
         creatingChat: {
             agent: 'zentao-api',
             title: langData.formFillTitle,
+            type:  'agent',
             prompt: prompt,
-            tools: tools,
-            form: formConfig,
+            tools:  tools,
+            form:   formConfig,
             skills: Array.isArray(skills) && skills.length ? skills : undefined,
         },
     };
