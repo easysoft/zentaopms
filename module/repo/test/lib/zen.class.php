@@ -108,50 +108,16 @@ class repoZenTest extends baseTest
         return $mockPager;
     }
 
-    private function ensureRepoTable(): void
-    {
-        static $initialized = false;
-        if($initialized) return;
-
-        $this->instance->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-        $this->instance->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int unsigned NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` varchar(500) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `forkID` int unsigned NOT NULL DEFAULT 0,
-  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `connector` text DEFAULT NULL,
-  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `synced` tinyint unsigned NOT NULL DEFAULT 0,
-  `branchArchivable` tinyint unsigned NOT NULL DEFAULT 0,
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-
-        $dao = $this->instance->dao;
-        register_shutdown_function(function() use ($dao) {
-            $dao->exec('TRUNCATE TABLE `ops_repo`');
-        });
-
-        $initialized = true;
-    }
-
     private function ensureRepoRecord(int $repoID = 1): object
     {
-        $this->ensureRepoTable();
+        static $cleanupRegistered = false;
+        if(!$cleanupRegistered)
+        {
+            register_shutdown_function(function() {
+                zenData('ops_repo')->gen(0);
+            });
+            $cleanupRegistered = true;
+        }
 
         $repoTable = zenData('ops_repo');
         $repoTable->id->range((string)$repoID);
@@ -175,6 +141,12 @@ SQL);
         $repoTable->editedBy->range('admin');
         $repoTable->editedDate->range('20240101 000000')->type('timestamp')->format('YYYY-MM-DD hh:mm:ss');
         $repoTable->deleted->range('0');
+
+        foreach(array('id', 'spaceID', 'product', 'name', 'desc', 'scmType', 'gitUID', 'forkID', 'providerID', 'mirror', 'connector', 'defaultBranch', 'acl', 'status', 'synced', 'branchArchivable', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'deleted') as $field)
+        {
+            if(!$this->hasRepoColumn($field)) $repoTable->$field->setNull();
+        }
+
         $repoTable->gen(1, true, false);
 
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
