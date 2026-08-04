@@ -106,6 +106,7 @@ class testtaskZen extends testtask
             $searchConfig['params']['branch']['values'] = $this->testtask->getBranchesByTask($testtask);
         }
 
+        if(isset($_SESSION['testtaskSearchFunc'])) unset($_SESSION['testtaskSearchFunc']);
         $this->config->testcase->search = $searchConfig;
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
