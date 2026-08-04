@@ -26,7 +26,7 @@ $fields->field('steps')
     ->control('editor')
     ->value(data('bug.steps'));
 
-$fields->field('files')->control(array('control' => 'fileSelector', 'defaultFiles' => $files ?: null))->value('');
+$fields->field('files')->position('info')->control(array('control' => 'fileSelector', 'defaultFiles' => $files ?: null))->value('');
 
 $fields->field('product')
     ->position('basic')
