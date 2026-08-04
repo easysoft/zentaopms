@@ -116,7 +116,6 @@ $lang->custom->project->defaultCurrency    = '默认货币';
 $lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['project']  = '关闭设置';
 $lang->custom->project->fields['unitList'] = '预算单位';
-$lang->custom->project->fields['alert']    = '预警规则';
 
 $lang->custom->execution = new stdClass();
 $lang->custom->execution->fields['required']  = $lang->custom->required;

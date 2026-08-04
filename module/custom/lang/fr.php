@@ -116,7 +116,6 @@ $lang->custom->project->defaultCurrency    = 'Default Currency';
 $lang->custom->project->fields['required'] = $lang->custom->required;
 $lang->custom->project->fields['project']  = 'Close Setting';
 $lang->custom->project->fields['unitList'] = 'Unit List';
-$lang->custom->project->fields['alert']    = 'Alert Rule';
 
 $lang->custom->execution = new stdClass();
 $lang->custom->execution->fields['required']  = $lang->custom->required;
