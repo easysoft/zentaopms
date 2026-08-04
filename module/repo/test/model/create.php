@@ -3,6 +3,20 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+class repoCreateHttpClient
+{
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        if(strpos($url, '/webhooks') !== false)
+        {
+            if(strtoupper($method) == 'GET') return json_encode((object)array('code' => 'success', 'data' => array()));
+            return json_encode((object)array('code' => 'success', 'data' => (object)array('id' => 1)));
+        }
+
+        return json_encode((object)array('code' => 'success', 'data' => (object)array('gitURL' => 'http://localhost:3000/repo.git', 'path' => 'repo', 'importing' => false)));
+    }
+}
+
 /**
 
 title=测试 repoModel->create();
@@ -56,6 +70,8 @@ $_SERVER['REQUEST_URI'] = 'http://unittest.com';
 su('admin');
 
 $repo = new repoModelTest();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoCreateHttpClient();
 $repo->seedGitFoxEntry();
 
 $gitlab = array(
@@ -114,3 +130,5 @@ $gitea['client'] = '/usr/bin/git';
 r($repo->createTest($gitea))             && p('SCM')    && e('Gitea');
 r($repo->createTest($git, false))        && p('client:0') && e('『客户端』不能为空。');
 r($repo->createTest($svn, false))        && p('client:0') && e('『客户端』不能为空。');
+
+common::$httpClient = $oldHttpClient;
