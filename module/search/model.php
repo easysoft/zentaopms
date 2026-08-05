@@ -156,12 +156,12 @@ class searchModel extends model
             if($fieldControl == 'input' && $value === '0') $this->post->set($valueName, 'ZERO');
             if($field == 'id' && $value === '0') $this->post->set($valueName, 'ZERO');
 
+            /* Skip empty values in where clause, but keep field selection in session. */
+            if($value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
+
             /* set queryForm. */
             list($andOr, $operator, $value) = $this->searchTao->processQueryFormDatas($fieldParams, $field, $andOrName, $operatorName, $valueName);
             $queryForm[$formIndex] = array('field' => $field, 'andOr' => strtolower($andOr), 'operator' => $operator, 'value' => $value);
-
-            /* Skip empty values in where clause, but keep field selection in session. */
-            if($value === '' || $value === false) continue; // false means no exist this post item. '' means no search data. ignore it.
 
             /* Set where. */
             $where = $this->searchTao->setWhere($where, $field, $operator, $value, $andOr, $fieldControl);

@@ -26,6 +26,7 @@ test/data/sql/
 .gitignore
 .DS_Store
 docker
+.codegraph
 .docker-sync
 CodeSniffer.conf
 test/runtime
