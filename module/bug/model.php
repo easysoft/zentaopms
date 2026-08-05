@@ -1016,16 +1016,32 @@ class bugModel extends model
         }
         else
         {
+            $lastEditedDate = '';
+            if($type == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
+
+            $bugIdListAssignedByMe = array();
+            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+                ->beginIF($type == 'needconfirm')->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story=t3.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('t1.project')->eq($projectID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($productID) and $branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
-                ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'unclosed' || $type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'assignedtome')->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'openedbyme')->andWhere('t1.`openedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'resolvedbyme')->andWhere('t1.`resolvedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'assigntonull')->andWhere('t1.`assignedTo`')->eq('')->fi()
+                ->beginIF($type == 'unconfirmed')->andWhere('t1.confirmed')->eq(0)->fi()
+                ->beginIF($type == 'toclosed')->andWhere('t1.status')->eq('resolved')->fi()
+                ->beginIF($type == 'postponedbugs')->andWhere('t1.resolution')->eq('postponed')->fi()
+                ->beginIF($type == 'assignedbyme')->andWhere('t1.status')->ne('closed')->andWhere('t1.id')->in($bugIdListAssignedByMe)->fi()
+                ->beginIF($type == 'longlifebugs')->andWhere('t1.lastEditedDate')->lt($lastEditedDate)->andWhere('t1.openedDate')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'overduebugs')->andWhere('t1.status')->eq('active')->andWhere('t1.deadline')->lt(helper::today())->fi()
+                ->beginIF($type == 'needconfirm')->andWhere('t3.status')->eq('active')->andWhere('t3.version > t1.`storyVersion`')->fi()
                 ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
                 ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
