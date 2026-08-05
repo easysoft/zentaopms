@@ -94,7 +94,6 @@ $lang->aiapp->langData->formReturnJSONArray = 'Bitte geben Sie ein JSON-Array zu
 $lang->aiapp->langData->formZentaoAPITip    = "Bitte verwenden Sie zuerst die zentao-api-Tools, um die erforderlichen Kontextdaten abzurufen, und verwenden Sie dann das submitFormData-Tool, um die ausgefüllten Formulardaten zurückzugeben. Pflichtfelder müssen Werte haben.\nNormalerweise muss submitFormData nur einmal aufgerufen werden, es sei denn, der Benutzer benötigt mehrere Lösungen.";
 $lang->aiapp->langData->formResultGenerated = 'Formulardaten wurden generiert.';
 $lang->aiapp->langData->formCurrentTarget   = 'Aktuelles';
-$lang->aiapp->langData->formApplyDataTip    = 'Bitte klicken Sie auf die Schaltfläche "Auf das aktuelle Formular anwenden", um die Daten in das Formular zu übernehmen.';
 $lang->aiapp->langData->stepDescription     = 'Schrittbeschreibung';
 $lang->aiapp->langData->expectDescription   = 'Erwartetes Ergebnis';
 
