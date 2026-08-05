@@ -61,6 +61,45 @@ cid=15392
  - 第8条的title属性 @BUG8
  - 第4条的title属性 @BUG4
  - 第2条的title属性 @BUG2
+- 测试获取项目ID为2,未关闭的bug
+ - 第10条的title属性 @BUG10
+ - 第8条的title属性 @BUG8
+ - 第4条的title属性 @BUG4
+ - 第2条的title属性 @BUG2
+- 测试获取项目ID为1,指派给我的bug
+ - 第9条的title属性 @BUG9
+ - 第7条的title属性 @BUG7
+ - 第5条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第1条的title属性 @BUG1
+- 测试获取项目ID为1,由我创建的bug
+ - 第9条的title属性 @BUG9
+ - 第7条的title属性 @BUG7
+ - 第5条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第1条的title属性 @BUG1
+- 测试获取项目ID为2,由我解决的bug
+ - 第10条的title属性 @BUG10
+ - 第8条的title属性 @BUG8
+ - 第6条的title属性 @BUG6
+ - 第4条的title属性 @BUG4
+ - 第2条的title属性 @BUG2
+- 测试获取项目ID为1,未确认的bug
+ - 第9条的title属性 @BUG9
+ - 第7条的title属性 @BUG7
+ - 第5条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第1条的title属性 @BUG1
+- 测试获取项目ID为2,待关闭的bug
+ - 第10条的title属性 @BUG10
+ - 第4条的title属性 @BUG4
+- 测试获取项目ID为1,被延期的bug
+ - 第9条的title属性 @BUG9
+ - 第7条的title属性 @BUG7
+ - 第5条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第1条的title属性 @BUG1
+- 测试获取项目ID为2,未指派的bug数量 @0
 
 */
 
@@ -68,7 +107,7 @@ $projectIdList = array(2, 1, 1000001);
 $productIdList = array(1, 2);
 $branchIdList  = array('1');
 $buildIdList   = array(1, 'trunk');
-$typeList      = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme');
+$typeList      = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme', 'unclosed', 'resolvedbyme', 'unconfirmed', 'toclosed', 'postponedbugs', 'assigntonull');
 $paramList     = array(1);
 $excludeBugs   = array(10);
 
@@ -80,3 +119,11 @@ r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], 'all'))        
 r($bug->getProjectBugsTest($projectIdList[0], $productIdList[1], $branchIdList[0]))    && p('6:title')                                  && e('BUG6');                      // 测试获取项目ID为2,产品ID为2, 分支为1的bug
 r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[0]))              && p('8:title;2:title')                          && e('BUG8;BUG2');                 // 测试获取项目ID为2,未解决的bug
 r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[1]))              && p('10:title;8:title;4:title;2:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[4]))              && p('10:title;8:title;4:title;2:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
+r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, $typeList[2]))              && p('9:title;7:title;5:title;3:title;1:title')  && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,指派给我的bug
+r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, $typeList[3]))              && p('9:title;7:title;5:title;3:title;1:title')  && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,由我创建的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[5]))              && p('10:title;8:title;6:title;4:title;2:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取项目ID为2,由我解决的bug
+r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, $typeList[6]))              && p('9:title;7:title;5:title;3:title;1:title')  && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,未确认的bug
+r($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[7]))              && p('10:title;4:title')                         && e('BUG10;BUG4');                // 测试获取项目ID为2,待关闭的bug
+r($bug->getProjectBugsTest($projectIdList[1], 0, 'all', 0, $typeList[8]))              && p('9:title;7:title;5:title;3:title;1:title')  && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取项目ID为1,被延期的bug
+r(count($bug->getProjectBugsTest($projectIdList[0], 0, 'all', 0, $typeList[9])))       && p()                                           && e('0');                         // 测试获取项目ID为2,未指派的bug数量
