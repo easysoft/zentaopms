@@ -10,10 +10,10 @@ title=测试 codescanModel->deleteSolution();
 timeout=0
 cid=0
 
-- 删除 1 号方案成功 @1
-- 删除 2 号方案成功 @1
-- 删除不存在的 3 号方案也返回成功 @1
-- 删除不存在的 4 号方案也返回成功 @1
+- 删除第一个方案成功 @1
+- 删除第二个方案成功 @1
+- 删除不存在的方案失败 @0
+- 删除另一个不存在的方案失败 @0
 - 删除 0 号方案失败 @0
 
 */
@@ -21,8 +21,17 @@ cid=0
 su('admin');
 $test = new codescanModelTest();
 
-r($test->deleteSolutionTest(1)) && p() && e('1');
-r($test->deleteSolutionTest(2)) && p() && e('1');
-r($test->deleteSolutionTest(3)) && p() && e('1');
-r($test->deleteSolutionTest(4)) && p() && e('1');
+$runID = date('YmdHis') . '-' . getmypid();
+$rulesetID = $test->createRulesetTest((object)array('name' => "codescan-delete-solution-ruleset-{$runID}", 'isCustom' => true));
+$solutionAID = $test->createSolutionTest((object)array('name' => "codescan-delete-solution-{$runID}-a", 'rulesets' => array($rulesetID), 'status' => 'enabled'));
+$solutionBID = $test->createSolutionTest((object)array('name' => "codescan-delete-solution-{$runID}-b", 'rulesets' => array($rulesetID), 'status' => 'disabled'));
+$missingID = 999999999;
+
+r($test->deleteSolutionTest($solutionAID)) && p() && e('1');
+r($test->deleteSolutionTest($solutionBID)) && p() && e('1');
+r($test->deleteSolutionTest($missingID)) && p() && e('0');
+r($test->deleteSolutionTest($missingID + 1)) && p() && e('0');
 r($test->deleteSolutionTest(0)) && p() && e('0');
+
+dao::$errors = array();
+$test->deleteRulesetTest($rulesetID);

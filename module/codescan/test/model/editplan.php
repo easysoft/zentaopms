@@ -12,7 +12,7 @@ cid=0
 
 - 编辑单方案主分支计划 @0
 - 编辑双方案双分支计划 @0
-- 缺少 solutionIDs 的计划 @0
+- 空 solutionIDs 的计划 @0
 - 编辑空分支计划 @0
 - 编辑三方案计划 @0
 
@@ -23,7 +23,7 @@ $test = new codescanModelTest();
 
 $planA = (object)array('name' => 'codescan-plan-a', 'solutionIDs' => array(5),      'branches' => (object)array('include' => array('main')));
 $planB = (object)array('name' => 'codescan-plan-b', 'solutionIDs' => array(5, 10),  'branches' => (object)array('include' => array('main', 'develop')));
-$planC = new stdclass();
+$planC = (object)array('name' => '', 'solutionIDs' => array(), 'branches' => (object)array('include' => array()));
 $planD = (object)array('name' => 'codescan-plan-c', 'solutionIDs' => array(),       'branches' => (object)array('include' => array()));
 $planE = (object)array('name' => 'codescan-plan-d', 'solutionIDs' => array(5, 10, 15), 'branches' => (object)array('include' => array('release')));
 

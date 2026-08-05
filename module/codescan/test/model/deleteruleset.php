@@ -12,18 +12,23 @@ title=测试 codescanModel->deleteRuleset();
 timeout=0
 cid=0
 
-- 测试ID为1的调用 >> 0
-- 测试删除规则集2返回0 >> 2,0,none
-- 测试ID为0的调用 >> 0
-- 测试删除规则集3返回0 >> 3,0,none
-- 测试ID为2的调用 >> 0
+- 删除第一个自定义规则集 @1
+- 删除第二个自定义规则集 @1
+- 测试ID为0的调用 @0
+- 删除不存在的规则集 @0
+- 删除另一个不存在的规则集 @0
 
 */
 
 $test = new codescanModelTest();
 
-r($test->deleterulesetTest(1)) && p() && e('0');
-r($test->deleterulesetTest(2)) && p() && e('0');
-r($test->deleterulesetTest(0)) && p() && e('0');
-r($test->deleterulesetTest(3)) && p() && e('0');
-r($test->deleterulesetTest(4)) && p() && e('0');
+$runID = date('YmdHis') . '-' . getmypid();
+$rulesetAID = $test->createRulesetTest((object)array('name' => "codescan-delete-ruleset-{$runID}-a", 'isCustom' => true));
+$rulesetBID = $test->createRulesetTest((object)array('name' => "codescan-delete-ruleset-{$runID}-b", 'isCustom' => true));
+$missingID = 999999999;
+
+r($test->deleteRulesetTest($rulesetAID)) && p() && e('1');
+r($test->deleteRulesetTest($rulesetBID)) && p() && e('1');
+r($test->deleteRulesetTest(0)) && p() && e('0');
+r($test->deleteRulesetTest($missingID)) && p() && e('0');
+r($test->deleteRulesetTest($missingID + 1)) && p() && e('0');

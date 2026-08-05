@@ -11,7 +11,7 @@ timeout=0
 cid=0
 
 - 创建绑定一个规则集的启用方案 @1
-- 创建绑定两个规则集的禁用方案 @2
+- 创建绑定两个规则集的禁用方案 @1
 - 空规则集创建方案失败 @0
 - 空对象创建方案失败 @0
 - 绑定不存在规则集的方案失败 @0
@@ -21,14 +21,38 @@ cid=0
 su('admin');
 $test = new codescanModelTest();
 
-$solutionA = (object)array('name' => 'codescan-unit-solution-b', 'rulesets' => array(1),    'status' => 'enabled',  'desc' => 'link one ruleset', 'createdBy' => 'admin');
-$solutionB = (object)array('name' => 'codescan-unit-solution-d', 'rulesets' => array(1, 2), 'status' => 'disabled', 'desc' => 'disabled solution', 'createdBy' => 'admin');
-$solutionC = (object)array('name' => 'codescan-unit-solution-a', 'rulesets' => array(),     'status' => 'enabled',  'desc' => '', 'createdBy' => 'admin');
-$solutionD = new stdclass();
-$solutionE = (object)array('name' => 'codescan-unit-solution-e', 'rulesets' => array(99),   'status' => 'enabled',  'desc' => 'missing ruleset', 'createdBy' => 'admin');
+$runID = date('YmdHis') . '-' . getmypid();
 
-r($test->createSolutionTest($solutionA)) && p() && e('1');
-r($test->createSolutionTest($solutionB)) && p() && e('2');
+dao::$errors = array();
+$rulesetA = $test->createRulesetTest((object)array('name' => "codescan-unit-ruleset-{$runID}-a", 'isCustom' => true));
+dao::$errors = array();
+$rulesetB = $test->createRulesetTest((object)array('name' => "codescan-unit-ruleset-{$runID}-b", 'isCustom' => true));
+
+$rulesetAID = is_int($rulesetA) ? $rulesetA : 0;
+$rulesetBID = is_int($rulesetB) ? $rulesetB : 0;
+
+$solutionA = (object)array('name' => "codescan-unit-solution-{$runID}-a", 'rulesets' => array($rulesetAID),        'status' => 'enabled',  'desc' => 'link one ruleset', 'createdBy' => 'admin');
+$solutionB = (object)array('name' => "codescan-unit-solution-{$runID}-b", 'rulesets' => array($rulesetAID, $rulesetBID), 'status' => 'disabled', 'desc' => 'disabled solution', 'createdBy' => 'admin');
+$solutionC = (object)array('name' => '', 'rulesets' => array(), 'status' => 'enabled', 'desc' => '');
+$solutionD = (object)array('name' => '', 'rulesets' => array(), 'status' => 'enabled', 'desc' => '');
+$solutionE = (object)array('name' => '', 'rulesets' => array(999999), 'status' => 'enabled', 'desc' => 'missing ruleset');
+
+r(is_int($solutionAIDResult = $test->createSolutionTest($solutionA)) && $solutionAIDResult > 0) && p() && e('1');
+r(is_int($solutionBIDResult = $test->createSolutionTest($solutionB)) && $solutionBIDResult > 0) && p() && e('1');
 r($test->createSolutionTest($solutionC)) && p() && e('0');
 r($test->createSolutionTest($solutionD)) && p() && e('0');
 r($test->createSolutionTest($solutionE)) && p() && e('0');
+
+foreach(array($solutionAIDResult, $solutionBIDResult) as $solutionID)
+{
+    if(!is_int($solutionID) || $solutionID <= 0) continue;
+    dao::$errors = array();
+    $test->deleteSolutionTest($solutionID);
+}
+
+foreach(array($rulesetAID, $rulesetBID) as $rulesetID)
+{
+    if($rulesetID <= 0) continue;
+    dao::$errors = array();
+    $test->deleteRulesetTest($rulesetID);
+}
