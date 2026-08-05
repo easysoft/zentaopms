@@ -309,7 +309,7 @@ $fields->field('keywords')
     ->control('input')
     ->value(data('case.keywords'));
 
-$fields->field('linkCase')
+$fields->field('relatedCase')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
     ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
@@ -325,7 +325,7 @@ $fields->field('linkCaseList')
     ->items($linkCaseItems)
     ->value(data('case.linkCaseTitles') !== null ? array_keys(data('case.linkCaseTitles')) : '');
 
-$fields->field('linkBug')
+$fields->field('relatedBug')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
     ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkBugs'))
