@@ -305,6 +305,7 @@ class dtable extends wg
         global $app, $config;
 
         $footToolbar = $this->prop('footToolbar');
+        $hasClass    = true;
         if(!empty($footToolbar))
         {
             if(!is_array($footToolbar))     $footToolbar = array('items' => array($footToolbar));
@@ -316,6 +317,7 @@ class dtable extends wg
                 {
                     if($item instanceof item) $item = $item->props->toJSON();
                     $footToolbarItems[] = $item;
+                    if(!isset($item['className'])) $hasClass = false;
                 }
                 $footToolbar['items'] = $footToolbarItems;
             }
@@ -352,7 +354,7 @@ class dtable extends wg
 
         if(!empty($footToolbar))
         {
-            $footToolbar['btnProps'] = array('className' => 'secondary', 'size' => 'sm');
+            if(!$hasClass) $footToolbar['btnProps'] = array('className' => 'secondary', 'size' => 'sm');
 
             $this->setProp('checkable', true);
             $this->setProp('footToolbar', $footToolbar);
