@@ -70,20 +70,31 @@ jsVar('releaseID', $release->id);
 jsVar('showGrade', $showGrade);
 jsVar('grades', $grades);
 
+$bugCols = $this->loadModel('datatable')->getSetting('release', 'bug');
 if(!empty($release->releases) || $release->deleted || ($app->tab == 'project' && !common::canModify('project', $project)))
 {
     $config->release->dtable->story->fieldList['id']['type']      = 'ID';
-    $config->release->dtable->bug->fieldList['id']['type']        = 'ID';
+    $bugCols['id']['type']                                        = 'ID';
     $config->release->dtable->leftBug->fieldList['id']['type']    = 'ID';
     $config->release->dtable->escapedBug->fieldList['id']['type'] = 'ID';
 
     unset($config->release->dtable->story->fieldList['actions']);
-    unset($config->release->dtable->bug->fieldList['actions']);
+    unset($bugCols['actions']);
     unset($config->release->dtable->leftBug->fieldList['actions']);
 }
 
+if($product->type == 'normal')     unset($bugCols['branch']);
+if(isset($bugCols['module']))      $bugCols['module']['map']     = $modules;
+if(isset($bugCols['branch']))      $bugCols['branch']['map']     = array(BRANCH_MAIN => $lang->trunk) + $branches;
+if(isset($bugCols['project']))     $bugCols['project']['map']    = array('') + $projectPairs;
+if(isset($bugCols['execution']))   $bugCols['execution']['map']  = array('') + $executions;
+if(isset($bugCols['openedBuild'])) $bugCols['openedBuild']['map'] = array('') + $builds;
+if(isset($bugCols['story']))       $bugCols['story']['map']      = array('') + $bugStories;
+if(isset($bugCols['task']))        $bugCols['task']['map']       = array('') + $bugTasks;
+if(isset($bugCols['toTask']))      $bugCols['toTask']['map']     = array('') + $bugTasks;
+
 if(!common::hasPriv($releaseModule, 'unlinkStory')) unset($config->release->dtable->story->fieldList['actions']['list']['unlinkStory']);
-if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($config->release->dtable->bug->fieldList['actions']['list']['unlinkBug']);
+if(!common::hasPriv($releaseModule, 'unlinkBug'))   unset($bugCols['actions']['list']['unlinkBug']);
 
 /* Table data and setting for finished stories tab. */
 jsVar('storyCases', $storyCases);
@@ -103,8 +114,8 @@ if($canBatchCloseStory)  $storyFootToolbar['items'][] = array('className' => 'bt
 jsVar('confirmunlinkbug', $lang->release->confirmUnlinkBug);
 jsVar('unlinkbugurl', helper::createLink($releaseModule, 'unlinkBug', "releaseID={$release->id}&bugID=%s"));
 
-$config->release->dtable->bug->fieldList['resolvedBuild']['map'] = $builds;
-$bugTableData = initTableData($bugs, $config->release->dtable->bug->fieldList, $this->release);
+$bugCols['resolvedBuild']['map'] = $builds;
+$bugTableData = initTableData($bugs, $bugCols, $this->release);
 $bugTableData = array_map(function($bug)
 {
     if(helper::isZeroDate($bug->resolvedDate)) $bug->resolvedDate = '';
@@ -296,9 +307,11 @@ detailBody
                 dtable
                 (
                     setID('resolvedBugDTable'),
+                    set::methodName('bug'),
                     set::style(array('min-width' => '100%')),
                     set::userMap($users),
-                    set::cols(array_values($config->release->dtable->bug->fieldList)),
+                    set::customCols(true),
+                    set::cols(array_values($bugCols)),
                     set::data($bugTableData),
                     set::checkable(empty($release->releases) && ($canBatchUnlinkBug || $canBatchCloseBug)),
                     set::sortLink(createLink($releaseModule, 'view', "releaseID={$release->id}&type=bug&link={$link}&param={$param}&orderBy={name}_{sortType}")),

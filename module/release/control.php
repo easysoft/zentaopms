@@ -323,9 +323,23 @@ class release extends control
 
         $this->executeHooks($releaseID);
 
+        /* 收集解决Bug列表中的需求与任务ID，用于高级表格字段映射。 */
+        $storyIdList = $taskIdList = array();
+        foreach($this->view->bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+
         $this->view->appList        = $this->loadModel('system')->getPairs();
         $this->view->linkedReleases = $release->releases ? $this->release->getListByCondition(explode(',', $release->releases)) : array();
         $this->view->includedApps   = $this->release->getListByCondition(array(), $release->id);
+        $this->view->modules        = $this->loadModel('bug')->getDatatableModules($release->product);
+        $this->view->projectPairs   = $this->loadModel('project')->getPairsByProgram();
+        $this->view->executions     = $this->loadModel('execution')->fetchPairs($this->app->tab == 'project' ? (int)$this->session->project : 0, 'all', false);
+        $this->view->bugStories     = $this->loadModel('story')->getPairsByList($storyIdList);
+        $this->view->bugTasks       = $this->loadModel('task')->getPairsByIdList($taskIdList);
         $this->display();
     }
 
