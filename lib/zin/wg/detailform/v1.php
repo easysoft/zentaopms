@@ -394,6 +394,8 @@ class detailForm extends wg
 
     protected function beforeBuild()
     {
+        global $app;
+
         list($object, $labelData, $fields) = $this->prop(array('object', 'labelData', 'fields'));
 
         $this->object     = $object;
@@ -401,7 +403,11 @@ class detailForm extends wg
         $this->infoFields = array();
         $this->sideGroups = array();
 
+        $moduleName = $app->rawModule;
+        $methodName = $app->rawMethod;
+        $fields = $app->control->appendExtendFields($fields, $moduleName, $methodName, $object);
         if($fields instanceof fieldList) $fields = $fields->toArray();
+
         if(!$fields) $fields = array();
 
         foreach($fields as $field)
