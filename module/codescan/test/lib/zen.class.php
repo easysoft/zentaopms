@@ -40,6 +40,7 @@ class codescanZenTest extends baseTest
 
         global $app, $config, $lang;
         $instance->app             = $app;
+        $instance->app->rawModule  = 'codescan';
         $instance->app->rawMethod  = 'browse';
         $instance->app->moduleName = 'codescan';
         $instance->config          = $config;
