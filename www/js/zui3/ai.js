@@ -176,9 +176,9 @@ window.getAgentCreatingOptions = function(info, langData)
             {
                 role: 'user',
                 content: [info.name + zui.formatString(langData.processedDataResult, {data: JSON.stringify(result)}), zui.formatString(langData.promptResultReturn, {formName: info.targetFormName})].join('\n\n'),
-                custom_data: {taskResults: [taskResult], asRole: 'assistant'}
+                custom_data: {taskResults: [taskResult], asRole: 'assistant'},
             };
-            return {message: message};
+            return {message: message, noTools: true};
         },
     }];
 
@@ -504,8 +504,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                     content: [
                         langData.formResultGenerated,
                         JSON.stringify(result),
-                        '',
-                        langData.formApplyDataTip,
+                        zui.formatString(langData.promptResultReturn, {formName: langData.formCurrentTarget})
                     ].join('\n\n'),
                     custom_data: {
                         taskResults: [taskResult],
@@ -514,6 +513,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                 };
                 return {
                     message,
+                    noTools: true,
                 };
             },
         },

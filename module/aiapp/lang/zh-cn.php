@@ -93,7 +93,6 @@ $lang->aiapp->langData->formReturnJSONArray = '请返回 JSON 数组，每个数
 $lang->aiapp->langData->formZentaoAPITip    = "请先使用 zentao-api 工具获取所需的上下文数据，然后使用 submitFormData 工具返回填充后的表单数据。必填字段必须提供值。\n通常 submitFormData 只需要调用一次，除非用户特殊要求提供多个方案。";
 $lang->aiapp->langData->formResultGenerated = '表单数据已生成。';
 $lang->aiapp->langData->formCurrentTarget   = '当前';
-$lang->aiapp->langData->formApplyDataTip    = '请点击"应用到当前表单"按钮将数据填充到表单中。';
 $lang->aiapp->langData->stepDescription     = '步骤描述';
 $lang->aiapp->langData->expectDescription   = '预期结果';
 
