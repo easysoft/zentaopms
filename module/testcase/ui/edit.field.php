@@ -5,46 +5,43 @@ namespace zin;
 global $lang, $config, $app;
 
 $fields = defineFieldList('testcase.edit');
-$case = data('case');
-$isLibCase = data('isLibCase');
 
-if($case->type != 'unit') unset($lang->testcase->typeList['unit']);
-
-$priList = array_filter($lang->testcase->priList);
+if(data('case.type') != 'unit') unset($lang->testcase->typeList['unit']);
 
 $files = array();
-foreach($case->files as $caseFile)
+if(!empty(data('case.files')))
 {
-    if($caseFile->extra != '') continue;
-    $files[] = $caseFile;
+    foreach(data('case.files') as $caseFile)
+    {
+        if($caseFile->extra != '') continue;
+        $files[] = $caseFile;
+    }
 }
 
 $linkCaseItems = array();
-if(isset($case->linkCaseTitles))
+if(data('case.linkCaseTitles') !== null)
 {
-    foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+    foreach(data('case.linkCaseTitles') as $linkCaseID => $linkCaseTitle)
     {
         $linkCaseItems[] = array('text' => "#{$linkCaseID} {$linkCaseTitle}", 'value' => $linkCaseID, 'checked' => true);
     }
 }
 
 $linkBugItems = array();
-if(isset($case->toBugs))
+if(data('case.toBugs') !== null)
 {
-    foreach($case->toBugs as $bugID => $bug)
+    foreach(data('case.toBugs') as $bugID => $bug)
     {
         $linkBugItems[] = array('text' => "#{$bugID} {$bug->title}", 'value' => $bugID, 'checked' => true);
     }
 }
 
-$rootID   = $isLibCase ? $case->lib : $case->product;
-$viewType = $isLibCase ? 'caselib' : 'case';
-$createModuleLink = createLink('tree', 'browse', "rootID={$rootID}&view={$viewType}&currentModuleID=0&branch={$case->branch}");
+$rootID   = data('isLibCase') ? data('case.lib') : data('case.product');
+$viewType = data('isLibCase') ? 'caselib' : 'case';
+$createModuleLink = createLink('tree', 'browse', 'rootID=' . $rootID . '&view=' . $viewType . '&currentModuleID=0&branch=' . data('case.branch'));
 
-$buildProduct = function() use ($case)
+$buildProduct = function()
 {
-    $product = data('product');
-
     return inputGroup
     (
         picker
@@ -53,44 +50,44 @@ $buildProduct = function() use ($case)
             set::name('product'),
             set::items(data('products')),
             set::required(true),
-            set::value($case->product)
+            set::value(data('case.product'))
         ),
         picker
         (
-            setClass(!isset($product->type) || $product->type == 'normal' ? 'hidden' : ''),
+            setClass(data('product.type') === null || data('product.type') == 'normal' ? 'hidden' : ''),
             setID('branch'),
             set::name('branch'),
             set::required(true),
             set::items(data('branchTagOption')),
-            set::value($case->branch)
+            set::value(data('case.branch'))
         )
     );
 };
 
-$buildModule = function() use ($createModuleLink, $case)
+$buildModule = function() use ($createModuleLink)
 {
     return modulePicker
     (
         setID('module'),
         set::items(data('moduleOptionMenu')),
-        set::value($case->module),
+        set::value(data('case.module')),
         set::manageLink($createModuleLink)
     );
 };
 
-$buildStory = function() use ($case)
+$buildStory = function()
 {
     return remotePicker
     (
         setID('story'),
         set::name('story'),
         set::type('casestories'),
-        set::params("productID={$case->product}&moduleID={$case->module}&branch={$case->branch}&storyID={$case->story}"),
-        $case->story ? set::value($case->story) : null
+        set::params('productID=' . data('case.product') . '&moduleID=' . data('case.module') . '&branch=' . data('case.branch') . '&storyID=' . data('case.story')),
+        data('case.story') ? set::value(data('case.story')) : null
     );
 };
 
-$buildType = function() use ($case)
+$buildType = function()
 {
     global $lang;
 
@@ -100,9 +97,9 @@ $buildType = function() use ($case)
         (
             set::name('type'),
             set::items($lang->testcase->typeList),
-            set::value($case->type),
+            set::value(data('case.type')),
             set::required(true),
-            $case->type == 'unit' ? set::disabled(true) : null
+            data('case.type') == 'unit' ? set::disabled(true) : null
         ),
         helper::hasFeature('automated') ? span
         (
@@ -113,7 +110,7 @@ $buildType = function() use ($case)
                 set::name('auto'),
                 set::value('auto'),
                 set::text($lang->testcase->automated),
-                set::checked($case->auto == 'auto' ? true : false)
+                set::checked(data('case.auto') == 'auto' ? true : false)
             )
         ) : null
     );
@@ -143,42 +140,41 @@ $buildAutoScript = function()
     );
 };
 
-$buildStatus = function() use ($case)
+$buildStatus = function()
 {
     global $lang;
-    $forceNotReview = data('forceNotReview');
 
-    if(!$forceNotReview && $case->status == 'wait') return span(setClass('form-control-static'), $lang->testcase->statusList[$case->status]);
+    if(!data('forceNotReview') && data('case.status') == 'wait') return span(setClass('form-control-static'), $lang->testcase->statusList[data('case.status')]);
 
     return picker
     (
         set::name('status'),
         set::items($lang->testcase->statusList),
         set::required(true),
-        set::value($case->status)
+        set::value(data('case.status'))
     );
 };
 
-$buildLinkCase = function() use ($case)
+$buildLinkCase = function()
 {
     global $lang;
 
     return a
     (
-        set::href(createLink('testcase', 'linkCases', "caseID={$case->id}")),
+        set::href(createLink('testcase', 'linkCases', 'caseID=' . data('case.id'))),
         set('data-toggle', 'modal'),
         set('data-size', 'lg'),
         $lang->testcase->linkCases
     );
 };
 
-$buildLinkBug = function() use ($case)
+$buildLinkBug = function()
 {
     global $lang;
 
     return a
     (
-        set::href(createLink('testcase', 'linkBugs', "caseID={$case->id}")),
+        set::href(createLink('testcase', 'linkBugs', 'caseID=' . data('case.id'))),
         set('data-toggle', 'modal'),
         set('data-size', 'lg'),
         $lang->testcase->linkBugs
@@ -190,20 +186,18 @@ $buildFiles = function() use ($files)
     return fileSelector($files ? set::defaultFiles(array_values($files)) : false);
 };
 
-$buildOpenedBy = function() use ($case)
+$buildOpenedBy = function()
 {
     global $lang;
-    $users = data('users');
-    if(!$case->openedBy) return null;
-    return span(setClass('form-control-static'), zget($users, $case->openedBy) . $lang->at . $case->openedDate);
+    if(!data('case.openedBy')) return null;
+    return span(setClass('form-control-static'), zget(data('users'), data('case.openedBy')) . $lang->at . data('case.openedDate'));
 };
 
-$buildLastEdited = function() use ($case)
+$buildLastEdited = function()
 {
     global $lang;
-    $users = data('users');
-    if(!$case->lastEditedBy) return null;
-    return span(setClass('form-control-static'), zget($users, $case->lastEditedBy) . $lang->at . $case->lastEditedDate);
+    if(!data('case.lastEditedBy')) return null;
+    return span(setClass('form-control-static'), zget(data('users'), data('case.lastEditedBy')) . $lang->at . data('case.lastEditedDate'));
 };
 
 /* ====== Main column fields (position = info) ====== */
@@ -212,29 +206,29 @@ $fields->field('title')
     ->position('info')
     ->width('full')
     ->required(true)
-    ->control('colorInput', array('colorValue' => $case->color))
+    ->control('colorInput', array('colorValue' => data('case.color')))
     ->placeholder($lang->case->title)
-    ->value($case->title);
+    ->value(data('case.title'));
 
 $fields->field('scene')
     ->position('info')
     ->width('full')
-    ->hidden($isLibCase)
+    ->hidden(data('isLibCase'))
     ->control('picker')
     ->items(data('sceneOptionMenu'))
-    ->value($case->scene);
+    ->value(data('case.scene'));
 
 $fields->field('precondition')
     ->position('info')
     ->width('full')
     ->required(strpos(",{$config->testcase->edit->requiredFields},", ",precondition,") !== false)
     ->control('textarea', array('rows' => 2))
-    ->value($case->precondition);
+    ->value(data('case.precondition'));
 
 $fields->field('steps')
     ->position('info')
     ->width('full')
-    ->control('stepsEditor', array('data' => $case->steps));
+    ->control('stepsEditor', array('data' => data('case.steps')));
 
 $fields->field('files')
     ->position('info')
@@ -243,21 +237,19 @@ $fields->field('files')
 
 /* ====== Sidebar: legendBasicInfo ====== */
 
-$product = data('product');
-
 $fields->field('lib')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden(!$isLibCase)
+    ->hidden(!data('isLibCase'))
     ->control('picker')
     ->required(true)
     ->items(data('libraries'))
-    ->value($case->lib);
+    ->value(data('case.lib'));
 
 $fields->field('product')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase || (isset($product->shadow) && $product->shadow))
+    ->hidden(data('isLibCase') || !empty(data('product.shadow')))
     ->control($buildProduct);
 
 $fields->field('module')
@@ -269,7 +261,7 @@ $fields->field('module')
 $fields->field('story')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase)
+    ->hidden(data('isLibCase'))
     ->required(strpos(",{$config->testcase->edit->requiredFields},", ",story,") !== false)
     ->control($buildStory);
 
@@ -284,7 +276,7 @@ $fields->field('autoScript')
     ->group($lang->testcase->legendBasicInfo)
     ->width('full')
     ->className('autoScript')
-    ->hidden($case->auto != 'auto')
+    ->hidden(data('case.auto') != 'auto')
     ->control($buildAutoScript);
 
 $fields->field('stage')
@@ -293,7 +285,7 @@ $fields->field('stage')
     ->required(strpos(",{$config->testcase->edit->requiredFields},", ",stage,") !== false)
     ->control('picker')
     ->items($lang->testcase->stageList)
-    ->value($case->stage)
+    ->value(data('case.stage'))
     ->multiple(true);
 
 $fields->field('pri')
@@ -301,8 +293,8 @@ $fields->field('pri')
     ->group($lang->testcase->legendBasicInfo)
     ->required(strpos(",{$config->testcase->edit->requiredFields},", ",pri,") !== false)
     ->control('priPicker')
-    ->items($priList)
-    ->value($case->pri);
+    ->items(array_filter($lang->testcase->priList))
+    ->value(data('case.pri'));
 
 $fields->field('status')
     ->position('basic')
@@ -315,39 +307,39 @@ $fields->field('keywords')
     ->group($lang->testcase->legendBasicInfo)
     ->required(strpos(",{$config->testcase->edit->requiredFields},", ",keywords,") !== false)
     ->control('input')
-    ->value($case->keywords);
+    ->value(data('case.keywords'));
 
-$fields->field('linkCase')
+$fields->field('relatedCase')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
+    ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
     ->control($buildLinkCase);
 
 $fields->field('linkCaseList')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
+    ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkCases') || $config->edition != 'open')
     ->label('')
-    ->className(!isset($case->linkCaseTitles) ? 'hidden' : '')
+    ->className(data('case.linkCaseTitles') === null ? 'hidden' : '')
     ->control(array('control' => 'checkList', 'name' => 'linkCase[]'))
     ->items($linkCaseItems)
-    ->value(isset($case->linkCaseTitles) ? array_keys($case->linkCaseTitles) : '');
+    ->value(data('case.linkCaseTitles') !== null ? array_keys(data('case.linkCaseTitles')) : '');
 
-$fields->field('linkBug')
+$fields->field('relatedBug')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase || !hasPriv('testcase', 'linkBugs'))
+    ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkBugs'))
     ->control($buildLinkBug);
 
 $fields->field('linkBugList')
     ->position('basic')
     ->group($lang->testcase->legendBasicInfo)
-    ->hidden($isLibCase || !hasPriv('testcase', 'linkBugs'))
+    ->hidden(data('isLibCase') || !hasPriv('testcase', 'linkBugs'))
     ->label('')
-    ->className(!isset($case->toBugs) ? 'hidden' : '')
+    ->className(data('case.toBugs') === null ? 'hidden' : '')
     ->control(array('control' => 'checkList', 'name' => 'linkBug[]'))
     ->items($linkBugItems)
-    ->value(isset($case->toBugs) ? array_keys($case->toBugs) : '');
+    ->value(data('case.toBugs') !== null ? array_keys(data('case.toBugs')) : '');
 
 /* ====== Sidebar: legendOpenAndEdit ====== */
 
