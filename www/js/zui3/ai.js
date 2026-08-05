@@ -286,6 +286,7 @@ window.executeUniversalPromptWithZentaoAPI = async function(formSchema, contextI
                 return o.value !== undefined ? String(o.value) : String(o);
             });
         }
+        if(field.controlType === 'zenEditor' || field.controlType === 'editor') prop.format = 'html';
         properties[name] = prop;
         if(field.required) required.push(name);
         if(field.label && field.label !== name) labelToName[field.label] = name;

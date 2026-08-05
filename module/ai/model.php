@@ -2556,6 +2556,7 @@ class aiModel extends model
                 }
             }
             if(!empty($field['required'])) $required[] = $name;
+            if(isset($field['controlType']) && in_array($field['controlType'], array('zenEditor', 'editor'))) $prop['format'] = 'html';
             $properties[$name] = $prop;
         }
 
@@ -2767,27 +2768,6 @@ class aiModel extends model
         if(empty($matches)) $sentence .= '.';
 
         return $newline ? "$sentence\n" : $sentence;
-    }
-
-    /**
-     * Assemble prompt with prompt data.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public static function assemblePrompt($prompt, $dataPrompt)
-    {
-        $wholePrompt = empty($dataPrompt) ? '' : "$dataPrompt\n";
-
-        $wholePrompt .= static::tryPunctuate($prompt->role);
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->purpose));
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->elaboration, true));
-
-        return $wholePrompt;
     }
 
     /**
@@ -3773,28 +3753,6 @@ class aiModel extends model
         }
 
         return $result . "\n";
-    }
-
-
-    /**
-     * Set inject data for a form. For how injection works, see lib/zin/wg/aiforminject/v1.php.
-     *
-     * @param  string|array  $form  'module.method' or array('module', 'method').
-     * @param  string|object $data  data to inject, object will be json encoded.
-     * @access public
-     * @return void
-     */
-    public function setInjectData($form, $data)
-    {
-        if(is_string($form)) $form = explode('.', $form);
-
-        $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
-        if(empty($targetForm)) return;
-
-        /* Override method for requirement drafts. */
-        if(in_array($targetForm->m, array('story', 'epic', 'requirement')) && $targetForm->f == 'change') $_SESSION['aiInjectData'][$targetForm->m]['edit'] = is_string($data) ? $data : json_encode($data);
-
-        $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
 
     /**
