@@ -253,8 +253,10 @@ class detailForm extends wg
     protected function getFieldValue(string $name): ?string
     {
         $object = $this->object;
-        if(!$object) return null;
-        return isset($object->$name) ? strval($object->$name) : null;
+        if(!$object || !isset($object->$name)) return null;
+        $value = $object->$name;
+        if(!is_scalar($value)) return null;
+        return strval($value);
     }
 
     protected function buildField(array $field, bool $useRow = false)
