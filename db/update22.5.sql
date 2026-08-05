@@ -40,10 +40,13 @@ UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'  
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'ticket'   AND `field` = 'resolvedDate';
 UPDATE `zt_workflowfield` SET `control` = 'checkbox' WHERE `module` = 'feedback' AND `field` = 'public';
 
+UPDATE `zt_workflowaction` SET `action` = 'showimport', `method` = 'showimport' WHERE `module` = 'caselib' AND `action` = 'showImport';
 UPDATE `zt_workflowaction` SET `action` = 'assignTo' WHERE `module` = 'ticket'   AND `action` = 'assign';
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'testcase' AND `action` = 'batchcreate';
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'testcase' AND `action` = 'batchedit';
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'ticket'   AND `action` = 'batchedit';
+UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'bug'      AND `action` = 'showimport';
+UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'caselib'  AND `action` = 'showimport';
 
 ALTER TABLE `zt_workflowlayout` ADD `block`      text DEFAULT NULL AFTER `position`;
 ALTER TABLE `zt_workflowlayout` ADD `foldable`   tinyint unsigned NOT NULL DEFAULT 0 AFTER `mobileShow`;
