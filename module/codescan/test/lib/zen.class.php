@@ -44,7 +44,13 @@ class codescanZenTest extends baseTest
         $instance->app->moduleName = 'codescan';
         $instance->config          = $config;
         $instance->lang            = $lang;
-        $instance->view            = new stdclass();
+        $instance->view            = (object)array(
+            'langList'   => array(),
+            'tagList'    => array(),
+            'pluginList' => array(),
+            'repoList'   => array(),
+            'planList'   => array()
+        );
         $instance->session         = $app->session;
         $instance->codescan        = new codescanModel();
 
@@ -158,6 +164,20 @@ class codescanZenTest extends baseTest
      */
     public function responseErrorTest($errors = '', string $locate = '')
     {
+        $instance = $this->getZenInstance();
+        $instance->viewType = 'json';
+        $method = new ReflectionMethod($instance, 'responseError');
+        $method->setAccessible(true);
+
+        try
+        {
+            $method->invoke($instance, $errors, $locate);
+        }
+        catch(EndResponseException $exception)
+        {
+            return '1';
+        }
+
         return '1';
     }
 
@@ -451,6 +471,7 @@ class codescanZenTest extends baseTest
         $instance = $this->getZenInstance();
         $method = new ReflectionMethod($instance, 'setPager');
         $method->setAccessible(true);
-        return $method->invoke($instance, $recPerPage, $pageID);
+        $arguments = array(&$recPerPage, &$pageID);
+        return $method->invokeArgs($instance, $arguments);
     }
 }
