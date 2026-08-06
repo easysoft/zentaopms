@@ -670,7 +670,7 @@ class releaseModel extends model
                 /* Reset story stagedBy field for auto compute stage. */
                 $storyID = (int)$storyID;
                 $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
-                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
+                if($product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->in(explode(',', (string)$release->branch))->exec();
 
                 if($release->status == 'normal') $this->story->setStage($storyID);
 
