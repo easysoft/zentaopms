@@ -2,18 +2,17 @@
 <?php
 
 /**
+
 title=测试 spaceModel::getSystemBySpace();
 timeout=0
 cid=16031
 
 - 查询无效的空间 @0
-- 查询空间1下的应用列表
- - 第1条的id属性 @1
- - 第1条的name属性 @应用1
-- 查询空间2下的应用列表
- - 第1条的id属性 @1
- - 第1条的product属性 @1
-- 查询空间1下的应用总数 @1
+- 查询空间1下的应用数量 @2
+- 查询空间1下的第1个应用名称 @system-one
+- 查询空间2下应用关联的产品 @3
+- 查询空间1下的第2个应用名称 @system-two
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';

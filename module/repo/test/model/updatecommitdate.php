@@ -9,11 +9,12 @@ su('admin');
 title=测试 repoModel::updateCommitDate();
 timeout=0
 cid=18112
-- 步骤1：有效版本库调用真实 API @1
-- 步骤2：GitFox 版本库调用真实 API @1
-- 步骤3：不存在的版本库不报错 @1
-- 步骤4：SVN 版本库不报错 @1
-- 步骤5：无效版本库 ID 不报错 @1
+
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是1  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是3  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是999  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是4  @1
+- 执行repo模块的updateCommitDateSuccessTest方法  @1
 
 */
 
@@ -54,7 +55,6 @@ class repoUpdateCommitDateHttpClient
 $repo = new repoModelTest();
 $oldHttpClient = common::$httpClient;
 common::$httpClient = new repoUpdateCommitDateHttpClient();
-
 
 r($repo->updateCommitDateSuccessTest(1)) && p() && e('1');
 r($repo->updateCommitDateSuccessTest(3)) && p() && e('1');

@@ -7,11 +7,11 @@ title=测试 repoModel::getByIdList();
 timeout=0
 cid=18049
 
-- 测试正常获取多个存在的ID >> 4
-- 测试获取单个存在ID验证name >> repo1
-- 测试不存在的ID >> 0
-- 测试空ID列表 >> 0
-- 测试混合存在不存在的ID >> 2
+- 执行repoTest模块的getByIdListCountTest方法，参数是array  @4
+- 执行repoTest模块的getByIdListTest方法，参数是array 第1条的name属性 @repo1
+- 执行repoTest模块的getByIdListCountTest方法，参数是array  @0
+- 执行repoTest模块的getByIdListCountTest方法，参数是array  @0
+- 执行repoTest模块的getByIdListCountTest方法，参数是array  @2
 
 */
 
