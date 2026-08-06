@@ -1753,7 +1753,6 @@ CREATE TABLE IF NOT EXISTS `zt_rule` (
   `triggerKind` varchar(30) NOT NULL DEFAULT 'object' COMMENT '触发类型',
   `nodes` mediumtext DEFAULT NULL COMMENT '节点',
   `version` mediumint unsigned NOT NULL DEFAULT 0 COMMENT '版本',
-  `priority` mediumint unsigned NOT NULL DEFAULT 1 COMMENT '优先级',
   `runAs` varchar(30) NOT NULL DEFAULT '' COMMENT '规则执行人',
   `method` varchar(30) NOT NULL DEFAULT 'sync' COMMENT '执行方法',
   `status` char(30) NOT NULL DEFAULT 'disable' COMMENT '状态',
@@ -1769,7 +1768,6 @@ CREATE TABLE IF NOT EXISTS `zt_rule` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 CREATE INDEX `idx_rule_scene_status` ON `zt_rule` (`scene`, `status`);
 CREATE INDEX `idx_rule_object_action` ON `zt_rule` (`objectType`, `action`);
-CREATE INDEX `idx_rule_priority` ON `zt_rule` (`priority`, `id`);
 
 -- DROP TABLE IF EXISTS `zt_rulequeue`;
 CREATE TABLE IF NOT EXISTS `zt_rulequeue` (
