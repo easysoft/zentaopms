@@ -47,6 +47,9 @@ UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'testcase'
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'ticket'   AND `action` = 'batchedit';
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'bug'      AND `action` = 'showimport';
 UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'caselib'  AND `action` = 'showimport';
+UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'testcase' AND `action` = 'showimport';
+UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'task'     AND `action` = 'showimport';
+UPDATE `zt_workflowaction` SET `type`   = 'batch'    WHERE `module` = 'feedback' AND `action` = 'showimport';
 
 ALTER TABLE `zt_workflowlayout` ADD `block`      text DEFAULT NULL AFTER `position`;
 ALTER TABLE `zt_workflowlayout` ADD `foldable`   tinyint unsigned NOT NULL DEFAULT 0 AFTER `mobileShow`;

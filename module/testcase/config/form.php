@@ -113,21 +113,21 @@ $config->testcase->form->review['result']       = array('required' => true,  'ty
 $config->testcase->form->review['reviewedBy']   = array('required' => false, 'type' => 'array',  'default' => array(''));
 $config->testcase->form->review['comment']      = array('required' => false, 'type' => 'string', 'default' => '', 'control' => 'editor');
 
-$config->testcase->form->showImport = array();
-$config->testcase->form->showImport['rawID']        = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
-$config->testcase->form->showImport['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['type']         = array('required' => true,  'type' => 'string', 'default' => '');
-$config->testcase->form->showImport['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
-$config->testcase->form->showImport['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->showImport['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->showImport['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
-$config->testcase->form->showImport['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
-$config->testcase->form->showImport['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
-if($config->edition != 'open') $config->testcase->form->showImport['scene'] = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->testcase->form->showimport = array();
+$config->testcase->form->showimport['rawID']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->showimport['product']      = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->showimport['branch']       = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->showimport['title']        = array('required' => true,  'type' => 'string', 'default' => '', 'base' => true);
+$config->testcase->form->showimport['module']       = array('required' => false, 'type' => 'int',    'default' => 0);
+if($config->edition != 'open') $config->testcase->form->showimport['scene'] = array('required' => false, 'type' => 'int', 'default' => 0);
+$config->testcase->form->showimport['story']        = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->showimport['type']         = array('required' => true,  'type' => 'string', 'default' => '');
+$config->testcase->form->showimport['pri']          = array('required' => false, 'type' => 'int',    'default' => 0);
+$config->testcase->form->showimport['precondition'] = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->showimport['keywords']     = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->showimport['stage']        = array('required' => false, 'type' => 'array',  'default' => array(''), 'filter' => 'join');
+$config->testcase->form->showimport['steps']        = array('required' => false, 'type' => 'string', 'default' => '');
+$config->testcase->form->showimport['expects']      = array('required' => false, 'type' => 'string', 'default' => '');
 
 $config->testcase->form->automation = array();
 $config->testcase->form->automation['product']      = array('required' => true,  'type' => 'int',    'default' => 0);
