@@ -7,35 +7,26 @@ title=测试 repoModel::getListByProduct();
 timeout=0
 cid=18071
 
-- 测试productID=1验证第1条name >> repo1
-- 测试productID=2验证第3条name >> repo3
-- 测试productID=1 limit=2验证第1条name >> repo1
-- 测试无效productID返回空 >> 0
-- 测试productID=0返回空 >> 0
+- 执行repoTest模块的getListByProductTest方法，参数是1 第1条的name属性 @repo1
+- 执行repoTest模块的getListByProductTest方法，参数是2 第3条的name属性 @repo3
+- 执行repoTest模块的getListByProductTest方法，参数是1, 2 第1条的name属性 @repo1
+- 执行repoTest模块的getListByProductCountTest方法，参数是999  @0
+- 执行repoTest模块的getListByProductCountTest方法  @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec("CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-
-$tester->dao->exec("INSERT INTO `ops_repo` VALUES (1,1,'1','repo1','Git','active',0)");
-$tester->dao->exec("INSERT INTO `ops_repo` VALUES (2,1,'1','repo2','Git','active',0)");
-$tester->dao->exec("INSERT INTO `ops_repo` VALUES (3,1,'2','repo3','Gitlab','active',0)");
-$tester->dao->exec("INSERT INTO `ops_repo` VALUES (4,1,'1','repo4','SVN','active',0)");
-$tester->dao->exec("INSERT INTO `ops_repo` VALUES (5,1,'3','repo5','Gitlab','active',0)");
+$repo = zenData('ops_repo');
+$repo->id->range('1-5');
+$repo->spaceID->range('1{5}');
+$repo->product->range('1,1,2,1,3');
+$repo->name->range('repo1,repo2,repo3,repo4,repo5');
+$repo->gitUID->range('product-repo-uid-1,product-repo-uid-2,product-repo-uid-3,product-repo-uid-4,product-repo-uid-5');
+$repo->status->range('active{5}');
+$repo->deleted->range('0{5}');
+$repo->gen(5);
 
 su('admin');
 $repoTest = new repoModelTest();

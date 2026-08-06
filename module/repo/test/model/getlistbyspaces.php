@@ -25,34 +25,7 @@ if(!isset($lang->codescan)) $lang->codescan = new stdclass();
 if(!isset($lang->codescan->exec)) $lang->codescan->exec = 'exec';
 if(!isset($lang->codescan->issue)) $lang->codescan->issue = 'issue';
 
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `desc` varchar(500) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `projects` varchar(255) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `forkID` int unsigned DEFAULT NULL,
-  `mirror` tinyint(1) NOT NULL DEFAULT 0,
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `connector` text DEFAULT NULL,
-  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `createdBy` varchar(30) NOT NULL DEFAULT '',
-  `createdDate` datetime DEFAULT NULL,
-  `editedBy` varchar(30) NOT NULL DEFAULT '',
-  `editedDate` datetime DEFAULT NULL,
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  `synced` tinyint unsigned NOT NULL DEFAULT 0,
-  `branchArchivable` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repo')->gen(0);
 
 $repo = zenData('ops_repo');
 $repo->id->range('1-5');

@@ -18,88 +18,67 @@ cid=18087
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'private',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  `synced` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(40) NOT NULL DEFAULT '',
-  `commit` int unsigned NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(100) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`),
-  KEY `repo` (`repo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repobranch` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$repo = zenData('ops_repo');
+$repo->id->range('1-4');
+$repo->spaceID->range('1{4}');
+$repo->product->range('1{4}');
+$repo->name->range('测试代码库1,测试代码库2,测试代码库3,测试代码库4');
+$repo->gitUID->range('mark-synced-uid-1,mark-synced-uid-2,mark-synced-uid-3,mark-synced-uid-4');
+$repo->acl->range('private{4}');
+$repo->status->range('active{4}');
+$repo->synced->range('0{4}');
+$repo->deleted->range('0{4}');
+$repo->gen(4);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => '测试代码库1', 'path' => '/test/repo1', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'synced' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => '测试代码库2', 'path' => '/test/repo2', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'synced' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => '测试代码库3', 'path' => '/test/repo3', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'synced' => 0),
-    array('id' => 4, 'spaceID' => 1, 'product' => '1', 'name' => '测试代码库4', 'path' => '/test/repo4', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid4', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'synced' => 0),
-);
-foreach($repos as $repo) $tester->dao->insert(TABLE_REPO)->data((object)$repo)->exec();
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1-4');
+$repoUser->account->range('admin{4}');
+$repoUser->gen(4);
 
-foreach(range(1, 4) as $repoID)
+zenData('ops_repobranch')->gen(0);
+
+$history = zenData('ops_repohistory');
+$history->id->range('1-3');
+$history->repo->range('1,2,2');
+$history->revision->range('r1,r2,r3');
+$history->commit->range('10,20,30');
+$history->comment->range('commit1,commit2,commit3');
+$history->committer->range('admin{3}');
+$history->time->range('10,12,11')->prefix('2024-01-01 ')->postfix(':00:00');
+$history->gen(3);
+
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+if(!class_exists('repoMarkSyncedHttpClient'))
 {
-    $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+    class repoMarkSyncedHttpClient
+    {
+        public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+        {
+            return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'importing' => false)));
+        }
+    }
 }
-
-$histories = array(
-    array('id' => 1, 'repo' => 1, 'revision' => 'r1', 'commit' => 10, 'comment' => 'commit1', 'committer' => 'admin', 'time' => '2024-01-01 10:00:00'),
-    array('id' => 2, 'repo' => 2, 'revision' => 'r2', 'commit' => 20, 'comment' => 'commit2', 'committer' => 'admin', 'time' => '2024-01-01 12:00:00'),
-    array('id' => 3, 'repo' => 2, 'revision' => 'r3', 'commit' => 30, 'comment' => 'commit3', 'committer' => 'admin', 'time' => '2024-01-01 11:00:00'),
-);
-foreach($histories as $history) $tester->dao->insert(TABLE_REPOHISTORY)->data((object)$history)->exec();
 
 // 用户登录
 su('admin');
 
 // 创建测试实例
 $repoTest = new repoModelTest();
-$repoTest->seedGitFoxEntry();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoMarkSyncedHttpClient();
 
 r($repoTest->markSyncedTest(1)) && p('synced') && e('1');    // 步骤1：正常代码库ID
 r($repoTest->markSyncedTest(999)) && p('synced') && e('0');  // 步骤2：不存在的代码库ID
 r($repoTest->markSyncedTest(0)) && p('synced') && e('0');    // 步骤3：边界值0
 r($repoTest->markSyncedTest(-1)) && p('synced') && e('0');   // 步骤4：负数代码库ID
 r($repoTest->markSyncedTest(2)) && p('synced') && e('1');    // 步骤5：验证fixCommit功能的代码库
+
+common::$httpClient = $oldHttpClient;

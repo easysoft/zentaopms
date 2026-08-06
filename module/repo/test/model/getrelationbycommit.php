@@ -21,20 +21,6 @@ cid=18074
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(255) NOT NULL DEFAULT '',
-  `comment` text DEFAULT NULL,
-  `committer` varchar(255) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-
 // 2. zendata数据准备
 $taskTable = zenData('task');
 $taskTable->id->range('1-20');
@@ -68,14 +54,14 @@ $relationTable->BVersion->range('1{6}');
 $relationTable->extra->range('1{6}');
 $relationTable->gen(6);
 
-$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array(
-    'id'        => 1,
-    'repo'      => 1,
-    'revision'  => 'c808480afe22d3a55d94e91c59a8f3170212ade0',
-    'comment'   => '关联提交',
-    'committer' => 'admin',
-    'time'      => '2026-01-01 00:00:00',
-))->exec();
+$history = zenData('ops_repohistory');
+$history->id->range('1');
+$history->repo->range('1');
+$history->revision->range('c808480afe22d3a55d94e91c59a8f3170212ade0');
+$history->comment->range('关联提交');
+$history->committer->range('admin');
+$history->time->range('01')->prefix('2026-01-')->postfix(' 00:00:00');
+$history->gen(1);
 
 // 3. 用户登录
 su('admin');

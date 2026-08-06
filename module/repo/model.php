@@ -199,12 +199,17 @@ class repoModel extends model
      */
     public function create(object $repo, bool $isPipelineServer): int|false
     {
-        $this->dao->insert(TABLE_REPO)->data($repo, 'serviceToken,members,serviceHost')
+        $repo->spaceID    = (int)$repo->space;
+        $repo->providerID = (int)$repo->serviceHost;
+        $repo->connector  = empty($repo->serviceProject) ? '' : json_encode(array('projectID' => (string)$repo->serviceProject));
+        $repo->scmType    = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+
+        $this->dao->insert(TABLE_REPO)->data($repo, 'space,SCM,serviceHost,serviceProject,projects,path,encoding,client,account,password,encrypt,uid,serviceToken,members')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF(!in_array($repo->SCM, $this->config->repo->notSyncSCM), 'path,client', 'notempty')
             ->batchCheckIF($isPipelineServer, 'serviceProject', 'notempty')
             ->batchCheckIF($repo->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
+            ->check('name', 'unique', "`spaceID` = " . $this->dao->sqlobj->quote($repo->spaceID))
             ->autoCheck()
             ->exec();
 
@@ -330,12 +335,15 @@ class repoModel extends model
 
             $repo->serviceHost = $serviceHost;
             $repo->SCM         = $scm;
+            $repo->spaceID     = (int)$repo->space;
+            $repo->providerID  = $serviceHost;
+            $repo->connector   = json_encode(array('projectID' => (string)$repo->serviceProject));
+            $repo->scmType     = $scm == 'Subversion' ? 'svn' : 'git';
 
-            $this->dao->insert(TABLE_REPO)->data($repo)
+            $this->dao->insert(TABLE_REPO)->data($repo, 'space,SCM,serviceHost,serviceProject,projects,path,encoding,client,account,password,encrypt,uid,members,serviceToken')
                 ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
                 ->check('serviceHost,serviceProject', 'notempty')
-                ->check('name', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM))
-                ->check('serviceProject', 'unique', "`SCM` = " . $this->dao->sqlobj->quote($repo->SCM) . " and `serviceHost` = " . $this->dao->sqlobj->quote($repo->serviceHost))
+                ->check('name', 'unique', "`spaceID` = " . $this->dao->sqlobj->quote($repo->spaceID))
                 ->autoCheck()
                 ->exec();
 
@@ -343,12 +351,13 @@ class repoModel extends model
 
             $repoID = $this->dao->lastInsertID();
 
-            if(in_array($repo->SCM, $this->config->repo->notSyncSCM))
+            if(in_array($scm, $this->config->repo->notSyncSCM))
             {
                 /* Add webhook. */
                 $repo = $this->getByID($repoID);
-                $this->loadModel($repo->SCM)->addPushWebhook($repo);
-                $this->{$repo->SCM}->updateCodePath($repo->serviceHost, (int)$repo->serviceProject, (int)$repo->id);
+                $connector = json_decode($repo->connector);
+                $this->loadModel($scm)->addPushWebhook($repo);
+                $this->{$scm}->updateCodePath($repo->providerID, (int)$connector->projectID, (int)$repo->id);
             }
 
             $this->loadModel('action')->create('repo', $repoID, 'created');
@@ -369,7 +378,8 @@ class repoModel extends model
      */
     public function update(object $data, object $repo): bool
     {
-        $this->dao->update(TABLE_REPO)->data($data, 'serviceToken,members')
+        $data->spaceID = $data->space;
+        $this->dao->update(TABLE_REPO)->data($data, 'space,serviceToken,members,SCM,serviceHost,serviceProject,projects,path,encoding,client,account,password,encrypt,uid')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->where('id')->eq($repo->id)
@@ -1173,8 +1183,7 @@ class repoModel extends model
      */
     public function updateCommitCount(int $repoID, int $count): bool
     {
-        $this->dao->update(TABLE_REPO)->set('commits')->eq($count)->where('id')->eq($repoID)->exec();
-        return !dao::isError();
+        return false;
     }
 
     /**
@@ -2169,12 +2178,12 @@ class repoModel extends model
     public function updateCommit(int $repoID, int $objectID = 0, string $branchID = ''): bool
     {
         $repo = $this->getByID($repoID);
-        if($repo->SCM == 'Gitlab') return true;
+        if(empty($repo)) return false;
 
-        /* Update code commit history. */
-        $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList))
+        if($repo->scmType == 'git')
         {
+            /* Update code commit history. */
+            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
             $branch = $this->cookie->repoBranch;
             if($branchID)
             {
@@ -2189,7 +2198,12 @@ class repoModel extends model
             $_COOKIE['repoBranch'] = $branch;
         }
 
-        if($repo->SCM == 'Subversion') $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
+        if($repo->scmType == 'svn')
+        {
+            /* Update code commit history. */
+            $commentGroup = $this->loadModel('job')->getTriggerGroup('commit', array($repoID));
+            $this->loadModel('svn')->updateCommit($repo, $commentGroup, false);
+        }
         return !dao::isError();
     }
 
@@ -2916,13 +2930,22 @@ class repoModel extends model
      */
     public function getImportedProjects(int $hostID)
     {
-        $importedProjects = $this->dao->select('serviceProject')->from(TABLE_REPO)
-            ->where('serviceHost')->eq($hostID)
+        $repos = $this->dao->select('connector')->from(TABLE_REPO)
+            ->where('providerID')->eq($hostID)
             ->andWhere('deleted')->eq('0')
             ->andWhere('status')->ne('importing')
-            ->fetchAll('serviceProject');
+            ->fetchAll();
 
         if(dao::isError()) return array();
+
+        $importedProjects = array();
+        foreach($repos as $repo)
+        {
+            $connector = json_decode($repo->connector);
+            if(empty($connector->projectID)) continue;
+
+            $importedProjects[(string)$connector->projectID] = true;
+        }
 
         return array_keys($importedProjects);
     }

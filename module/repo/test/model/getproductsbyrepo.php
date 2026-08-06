@@ -20,32 +20,7 @@ cid=18073
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'private',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repouser')->gen(0);
 
 $productTable = zenData('product');
 $productTable->id->range('1-12');
@@ -54,43 +29,42 @@ $productTable->code->range('product1,product2,product3,product4,product5,product
 $productTable->deleted->range('0,0,0,0,0,0,0,0,1,1,0,0');
 $productTable->gen(12);
 
-$repoProducts = array(1 => '1', 2 => '2', 3 => '3', 4 => '1', 5 => '2', 6 => '2', 7 => '3', 8 => '4', 9 => '5', 10 => '', 11 => '10', 12 => '99', 13 => '9');
-$repoNames    = array(
-    1  => 'singleProductRepo',
-    2  => 'multiProductRepo1',
-    3  => 'multiProductRepo2',
-    4  => 'testRepo1',
-    5  => 'testRepo2',
-    6  => 'mixedRepo1',
-    7  => 'mixedRepo2',
-    8  => 'withDeletedProductRepo',
-    9  => 'validRepo',
-    10 => 'emptyProductRepo',
-    11 => 'invalidProductRepo1',
-    12 => 'invalidProductRepo2',
-    13 => 'deletedProductRepo',
-);
+$repo = zenData('ops_repo');
+$repo->id->range('1-13');
+$repo->spaceID->range('1{13}');
+$repo->product->range('1,2,3,1,2,2,3,4,5,[]{1},10,99,9');
+$repo->name->range('singleProductRepo,multiProductRepo1,multiProductRepo2,testRepo1,testRepo2,mixedRepo1,mixedRepo2,withDeletedProductRepo,validRepo,emptyProductRepo,invalidProductRepo1,invalidProductRepo2,deletedProductRepo');
+$repo->gitUID->range('products-uid-1,products-uid-2,products-uid-3,products-uid-4,products-uid-5,products-uid-6,products-uid-7,products-uid-8,products-uid-9,products-uid-10,products-uid-11,products-uid-12,products-uid-13');
+$repo->acl->range('private{13}');
+$repo->status->range('active{13}');
+$repo->deleted->range('0{13}');
+$repo->gen(13);
 
-foreach($repoProducts as $repoID => $product)
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+if(!class_exists('repoGetProductsByRepoHttpClient'))
 {
-    $tester->dao->insert(TABLE_REPO)->data((object)array(
-        'id'      => $repoID,
-        'spaceID' => 1,
-        'product' => $product,
-        'name'    => $repoNames[$repoID],
-        'path'    => "http://repo.local/repo{$repoID}",
-        'SCM'     => 'Gitlab',
-        'gitUID'  => "uid{$repoID}",
-        'acl'     => 'private',
-        'status'  => 'active',
-        'deleted' => 0,
-    ))->exec();
-    $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+    class repoGetProductsByRepoHttpClient
+    {
+        public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+        {
+            return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'importing' => false)));
+        }
+    }
 }
+
 su('admin');
 
 $repo = new repoModelTest();
-$repo->seedGitFoxEntry();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoGetProductsByRepoHttpClient();
 
 r($repo->getProductsByRepoTest(0)) && p() && e('0');                    // 步骤1：无效代码库ID(0)
 r($repo->getProductsByRepoTest(99)) && p() && e('0');                   // 步骤2：不存在的代码库ID(99)
@@ -100,3 +74,5 @@ r($repo->getProductsByRepoTest(8)) && p('4') && e('正常产品4');          // 
 r($repo->getProductsByRepoTest(10)) && p() && e('0');                   // 步骤6：产品字段为空(product='')
 r($repo->getProductsByRepoTest(11)) && p() && e('0');                   // 步骤7：关联不存在产品(product=10)
 r($repo->getProductsByRepoTest(13)) && p() && e('0');                   // 步骤8：关联已删除产品(product=9，已删除)
+
+common::$httpClient = $oldHttpClient;

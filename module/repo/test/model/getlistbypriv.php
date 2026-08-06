@@ -18,20 +18,15 @@ cid=0
 */
 
 su('admin');
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `synced` tinyint unsigned NOT NULL DEFAULT 0,
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL
-);
-$tester->dao->insert('ops_repo')->data((object)array('status' => 'active', 'acl' => 'open', 'synced' => 0, 'deleted' => 0))->exec();
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->name->range('private-list-repo');
+$repo->gitUID->range('private-list-uid');
+$repo->status->range('active');
+$repo->acl->range('open');
+$repo->synced->range('0');
+$repo->deleted->range('0');
+$repo->gen(1);
 
 $repoTest = new repoModelTest();
 r($repoTest->getListByPrivTest('all'))     && p() && e('0');
