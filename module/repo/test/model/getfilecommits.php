@@ -10,16 +10,15 @@ title=测试 repoModel->getFileCommits();
 timeout=0
 cid=18056
 
-- 获取代码文件得提交信息
+- 执行repo模块的getFileCommitsTest方法，参数是1, 'branch3'
  - 第0条的revision属性 @c808480afe22d3a55d94e91c59a8f3170212ade0
  - 第0条的date属性 @2023-12-13 19:00:25
-- 获取操作为删除文件得提交信息 @0
-- 获取svn代码库得提交信息
+- 执行repo模块的getFileCommitsTest方法，参数是3, ''  @0
+- 执行repo模块的getFileCommitsTest方法，参数是4, '', $parent
  - 第0条的revision属性 @1
  - 第0条的comment属性 @+ Add file.
 
 */
-
 
 $repo = zenData('ops_repo');
 $repo->id->range('1,3,4');

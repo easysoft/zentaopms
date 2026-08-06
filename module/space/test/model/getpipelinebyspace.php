@@ -2,18 +2,17 @@
 <?php
 
 /**
+
 title=测试 spaceModel::getPipelineBySpace();
 timeout=0
 cid=16029
 
 - 查询无效的空间 @0
-- 查询空间1下的流水线列表
- - 第1条的id属性 @1
- - 第1条的name属性 @这是一个Job1
-- 查询空间2下的流水线列表
- - 第2条的id属性 @2
- - 第2条的engine属性 @gitlab
-- 查询空间1下的流水线总数 @1
+- 查询空间1下的流水线数量 @2
+- 查询空间1下的第1条流水线名称 @build-one
+- 查询空间2下的流水线引擎 @gitlab
+- 查询空间1下的第2条流水线引擎 @jenkins
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
