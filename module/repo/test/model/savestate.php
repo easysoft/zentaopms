@@ -19,33 +19,8 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `mirror` tinyint(1) NOT NULL DEFAULT 0,
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_spaceuser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `space` int unsigned NOT NULL DEFAULT 0,
-  `role` varchar(10) NOT NULL DEFAULT '',
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repo')->gen(0);
+zenData('ops_spaceuser')->gen(0);
 
 zenData('ops_space')->gen(0);
 $spaceTable = zenData('ops_space');

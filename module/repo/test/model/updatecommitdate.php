@@ -17,53 +17,43 @@ cid=18112
 
 */
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `account` varchar(100) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `encrypt` varchar(30) NOT NULL DEFAULT 'base64',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'private',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  `lastCommit` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$repoData = zenData('ops_repo');
+$repoData->id->range('1-4');
+$repoData->spaceID->range('1{4}');
+$repoData->product->range('1{4}');
+$repoData->name->range('testHtml,project1,unittest,testSvn');
+$repoData->scmType->range('git{3},svn');
+$repoData->gitUID->range('commitdate-gituid-1,commitdate-gituid-2,commitdate-gituid-3,commitdate-gituid-4');
+$repoData->acl->range('private{4}');
+$repoData->status->range('active{4}');
+$repoData->deleted->range('0{4}');
+$repoData->gen(4);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml', 'path' => 'http://repo.local/testhtml', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'project1', 'path' => 'http://repo.local/project1', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'unittest', 'path' => 'http://repo.local/unittest', 'SCM' => 'GitFox', 'scmType' => 'git', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'lastCommit' => '2024-01-01 00:00:00'),
-    array('id' => 4, 'spaceID' => 1, 'product' => '1', 'name' => 'testSvn', 'path' => 'https://svn.qc.oop.cc/svn/unittest/', 'SCM' => 'Subversion', 'scmType' => 'svn', 'account' => 'admin', 'password' => 'encoded', 'encrypt' => 'base64', 'gitUID' => 'uid4', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1-4');
+$repoUser->account->range('admin{4}');
+$repoUser->gen(4);
 
-foreach(range(1, 4) as $repoID)
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoUpdateCommitDateHttpClient
 {
-    $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo.git', 'importing' => false)));
+    }
 }
 
 $repo = new repoModelTest();
-$repo->seedGitFoxEntry();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoUpdateCommitDateHttpClient();
 
 
 r($repo->updateCommitDateSuccessTest(1)) && p() && e('1');
@@ -71,3 +61,5 @@ r($repo->updateCommitDateSuccessTest(3)) && p() && e('1');
 r($repo->updateCommitDateSuccessTest(999)) && p() && e('1');
 r($repo->updateCommitDateSuccessTest(4)) && p() && e('1');
 r($repo->updateCommitDateSuccessTest(0)) && p() && e('1');
+
+common::$httpClient = $oldHttpClient;

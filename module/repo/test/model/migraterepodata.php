@@ -28,19 +28,6 @@ cid=18121
 
 */
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_provider`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_provider` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '',
-  `url` varchar(255) NOT NULL DEFAULT '',
-  `token` varchar(255) NOT NULL DEFAULT '',
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
 zenData('ops_provider')->gen(0);
 zenData('ops_repo')->gen(0);
 

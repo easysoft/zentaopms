@@ -23,25 +23,6 @@ cid=0
 
 */
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int unsigned NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-
 $repo = zendata('ops_repo');
 $repo->id->range('1-5');
 $repo->spaceID->range('1{5}');

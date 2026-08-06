@@ -11,57 +11,37 @@ title=测试 repoModel->updateCommit();
 timeout=0
 cid=18110
 
-- Gitlab 类型版本库属性SCM,status @Gitlab,success
-- Git 类型版本库属性SCM,status @Git,success
-- SVN 类型版本库属性SCM,status @Subversion,success
+- Git 类型版本库属性scmType,status @git,exception
+- SVN 类型版本库属性scmType,status @svn,exception
+- 非 Git/SVN 类型版本库属性scmType,status @other,success
 - 不存在 repoID 属性repoID,status @999,repoNotFound
 - 非法 repoID 属性repoID,status @0,repoNotFound
-- 带 branchID 参数调用属性SCM,branchID,status @Git,main,success
-- 带 objectID 参数调用属性SCM,objectID,status @Git,123,success
+- 带 branchID 参数调用属性scmType,branchID,status @git,main,exception
+- 带 objectID 参数调用属性scmType,objectID,status @git,123,exception
 
 */
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repo`');
-$tester->dao->exec('DROP TABLE IF EXISTS `zt_job`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  `providerID` int unsigned NOT NULL DEFAULT 0,
-  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `zt_job` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `triggerType` varchar(255) NOT NULL DEFAULT '',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-
+zenData('ops_repo')->gen(0);
 zenData('ops_repobranch')->gen(0);
 zenData('ops_repouser')->gen(0);
+zenData('job')->gen(0);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'GitlabRepo', 'path' => '/tmp/gitlab', 'SCM' => 'Gitlab',      'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'GitRepo',    'path' => '/tmp/git',    'SCM' => 'Git',         'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'SVNRepo',    'path' => '/tmp/svn',    'SCM' => 'Subversion', 'scmType' => 'svn', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
-foreach(array(1, 2, 3) as $repoID) $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+$repo = zenData('ops_repo');
+$repo->id->range('1-4');
+$repo->spaceID->range('1{4}');
+$repo->product->range('1{4}');
+$repo->name->range('git-repo-one,git-repo-two,svn-repo,other-repo');
+$repo->scmType->range('git,git,svn,other');
+$repo->gitUID->range('update-commit-gituid-1,update-commit-gituid-2,update-commit-gituid-3,update-commit-gituid-4');
+$repo->acl->range('private{4}');
+$repo->status->range('active{4}');
+$repo->deleted->range('0{4}');
+$repo->gen(4);
+
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1-4');
+$repoUser->account->range('admin{4}');
+$repoUser->gen(4);
 
 $branchTable = zenData('ops_repobranch');
 $branchTable->repo->range('2');
@@ -69,15 +49,35 @@ $branchTable->revision->range('1');
 $branchTable->branch->range('main');
 $branchTable->gen(1);
 
-$repoTest = new repoModelTest();
-$repoTest->seedGitFoxEntry();
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
 
-r($repoTest->updateCommitTest(1)) && p('SCM,status') && e('Gitlab,success');
-r($repoTest->updateCommitTest(2)) && p('SCM,status') && e('Git,exception');
-r($repoTest->updateCommitTest(3)) && p('SCM,status') && e('Subversion,exception');
+class repoUpdateCommitHttpClient
+{
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo.git', 'importing' => false)));
+    }
+}
+
+$repoTest = new repoModelTest();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoUpdateCommitHttpClient();
+
+r($repoTest->updateCommitTest(1)) && p('scmType,status') && e('git,exception');
+r($repoTest->updateCommitTest(3)) && p('scmType,status') && e('svn,exception');
+r($repoTest->updateCommitTest(4)) && p('scmType,status') && e('other,success');
 r($repoTest->updateCommitTest(999)) && p('repoID,status') && e('999,repoNotFound');
 r($repoTest->updateCommitTest(0)) && p('repoID,status') && e('0,repoNotFound');
 $_COOKIE['repoBranch'] = 'main';
 $repoTest->instance->cookie->repoBranch = 'main';
-r($repoTest->updateCommitTest(2, 0, 'main')) && p('SCM,branchID,status') && e('Git,main,exception');
-r($repoTest->updateCommitTest(2, 123)) && p('SCM,objectID,status') && e('Git,123,exception');
+r($repoTest->updateCommitTest(2, 0, 'main')) && p('scmType,branchID,status') && e('git,main,exception');
+r($repoTest->updateCommitTest(2, 123)) && p('scmType,objectID,status') && e('git,123,exception');
+
+common::$httpClient = $oldHttpClient;

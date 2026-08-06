@@ -868,11 +868,11 @@ class repoModelTest extends baseTest
 
     public function updateCommitCountTest(int $repoID, int $count)
     {
-        $this->instance->updateCommitCount($repoID, $count);
+        $result = $this->instance->updateCommitCount($repoID, $count);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->fetchByID($repoID);
+        return $result;
     }
 
     public function updateCommitDateSuccessTest(int $repoID): string
@@ -1741,7 +1741,7 @@ class repoModelTest extends baseTest
             'repoID'   => (string)$repoID,
             'objectID' => (string)$objectID,
             'branchID' => $branchID,
-            'SCM'      => '',
+            'scmType'  => '',
             'status'   => 'repoNotFound',
             'error'    => 'none',
         );
@@ -1749,7 +1749,7 @@ class repoModelTest extends baseTest
         $repo = $this->instance->getByID($repoID);
         if(!$repo) return $resultInfo;
 
-        $resultInfo->SCM = $repo->SCM;
+        $resultInfo->scmType = $repo->scmType;
 
         try
         {

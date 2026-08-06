@@ -22,44 +22,9 @@ cid=18098
 
 */
 
-global $tester;
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repofiles`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repobranch`');
-$tester->dao->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(40) NOT NULL DEFAULT '',
-  `commit` int unsigned NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(100) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repobranch` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `branch` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$tester->dao->exec(<<<'SQL'
-CREATE TABLE `ops_repofiles` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` int unsigned NOT NULL DEFAULT 0,
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `parent` varchar(255) NOT NULL DEFAULT '',
-  `type` varchar(30) NOT NULL DEFAULT '',
-  `action` varchar(2) NOT NULL DEFAULT '',
-  `oldPath` varchar(255) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+zenData('ops_repohistory')->gen(0);
+zenData('ops_repobranch')->gen(0);
+zenData('ops_repofiles')->gen(0);
 
 $repo = new repoModelTest();
 
