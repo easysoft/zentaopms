@@ -13609,7 +13609,7 @@ class upgradeModel extends model
      */
     public function updateFieldOptions($version)
     {
-        if($version == '22.4')
+        if($version == '22.5')
         {
             $sqls = "
                 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskMode'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'mode';
