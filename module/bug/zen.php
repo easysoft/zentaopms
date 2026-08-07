@@ -1338,7 +1338,7 @@ class bugZen extends bug
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
             $bug->product     = $productID;
-            $bug->steps       = nl2br($bug->steps);
+            $bug->steps       = helper::textarea2Html((string)$bug->steps);
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))

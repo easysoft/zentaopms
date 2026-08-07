@@ -545,12 +545,12 @@ class spaceModel extends model
      */
     public function getGroupMembersBySpace(int $spaceID = 0, bool $allVision = false): array
     {
-        return $this->dao->select('t1.*, t2.id as groupID, t2.name as groupName, t2.devopsSpace as space')->from(TABLE_USERGROUP)->alias('t1')
+        return $this->dao->select('t1.*, t2.id AS `groupID`, t2.name AS `groupName`, t2.`devopsSpace` AS space')->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')
             ->on('t1.`group` = t2.id')
             ->where('t2.project')->eq(0)
-            ->beginIF($spaceID)->andWhere('t2.devopsSpace')->eq($spaceID)->fi()
-            ->beginIF(!$spaceID)->andWhere('t2.devopsSpace')->ne(0)->fi()
+            ->beginIF($spaceID)->andWhere('t2.`devopsSpace`')->eq($spaceID)->fi()
+            ->beginIF(!$spaceID)->andWhere('t2.`devopsSpace`')->ne(0)->fi()
             ->beginIF(!$allVision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->fetchAll();
     }

@@ -567,7 +567,15 @@ window.openAITaskPopup = async function(taskID)
 window.callZentaoAgent = async function(agentID, objectID)
 {
     const res = await $.ajax({url: $.createLink('ai', 'promptExecute', `promptId=${agentID}&objectId=${objectID}`), 'dataType': 'json'});
-    if(!res || res.result !== 'success' || !res.callback) return;
+    if(!res) return;
+
+    if(res.result !== 'success')
+    {
+        if(res.message) zui.Messager.show({content: res.message, type: 'danger', className: 'bg-danger text-canvas gap-2 messager-fail'});
+        return;
+    }
+
+    if(!res.callback) return;
     return executeZentaoPrompt(res.callback.params[0], res.callback.params[1]);
 };
 

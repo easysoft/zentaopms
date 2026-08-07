@@ -128,6 +128,15 @@ detailHeader
             set::text($task->name),
             set::reverse(true)
         )
+    ),
+    to::suffix
+    (
+        aiAgentEntry
+        (
+            set::module('task'),
+            set::method('edit'),
+            set::type('form')
+        )
     )
 );
 
