@@ -1,14 +1,12 @@
-title: zt_repo
+title: ops_repo
 author: XuePeng Wang
 version: "1.0"
 fields:
   - field: id
     range: 1-1000
-  - field: SCM
-    range: Gitlab,Gitea,Gogs
-  - field: client
-    range: 1
-  - field: serviceHost
+  - field: providerID
     range: 0,1{2}
+  - field: mirror
+    range: 0
   - field: deleted
     range: 1

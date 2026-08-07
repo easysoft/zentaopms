@@ -5,7 +5,14 @@ version: "1.0"
 fields:
   - field: objectType
     note: "对象类型"
-    range: story{10},pipeline{10}
+    range: story{10},provider{10}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 1-10,1-10
     prefix: ""
     postfix: ""
     loop: 0
