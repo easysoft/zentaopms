@@ -10,17 +10,29 @@ declare(strict_types=1);
  */
 namespace zin;
 
+$langData = [];
+$langData['model']        = $lang->aiapp->model;
+$langData['modelID']      = $lang->aiapp->modelID;
+$langData['actions']      = $lang->actions;
+$langData['startChat']    = $lang->aiapp->converse;
+$langData['pageSummary']  = $lang->aiapp->pageSummary;
+$langData['abilities']    = $lang->aiapp->abilities;
+$langData['abilityTypes'] = $lang->aiapp->abilityTypes;
+$langData['noDataTip']    = $lang->aiapp->tips->noData;
+
 div
 (
     setClass('models-view'),
-    setData(array('modelLang' => $lang->aiapp->model, 'actionLang' => $lang->actions, 'converseLang' => $lang->aiapp->converse, 'pageSummary' => $lang->aiapp->pageSummary, 'canConverse' => hasPriv('aiapp', 'conversation'))),
     on::init()->call('initModelList'),
     dtable
     (
         setID('modelsList'),
+        set::canStartChat(hasPriv('aiapp', 'conversation')),
+        set::langData($langData),
         set::cols(array()),
         set::data(array()),
         set::footer(jsRaw('function(){return window.setModelsStatistics.call(this);}')),
-        set::emptyTip($lang->aiapp->tips->noData)
+        set::emptyTip($lang->loading),
+        set::noDataTip($lang->aiapp->tips->noData)
     )
 );

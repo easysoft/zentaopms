@@ -45,8 +45,15 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'Model ID';
+$lang->aiapp->abilities          = 'Abilities';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->abilityTypes       = [];
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Function Calling';
+$lang->aiapp->abilityTypes['reasoning']        = 'Reasoning';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
