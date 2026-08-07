@@ -864,6 +864,7 @@ class dbh
             'YEAR',
             'DATEDIFF',
             'DATE_FORMAT',
+            'DATE',
             'INSTR',
             'LEFT',
         );
