@@ -16,7 +16,6 @@ $config->my->testcase->dtable->fieldList['title']['styleMap'] = array('--color-l
 $config->my->testcase->dtable->fieldList['title']['fixed']    = 'left';
 $config->my->testcase->dtable->fieldList['title']['sortType'] = true;
 
-$config->my->testcase->dtable->fieldList['branch'] = $config->testcase->dtable->fieldList['branch'];
 $config->my->testcase->dtable->fieldList['pri']    = $config->testcase->dtable->fieldList['pri'];
 $config->my->testcase->dtable->fieldList['scene']  = $config->testcase->dtable->fieldList['scene'];
 $config->my->testcase->dtable->fieldList['type']   = $config->testcase->dtable->fieldList['type'];
