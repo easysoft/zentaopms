@@ -888,8 +888,7 @@ class dbh
             'DATE_FORMAT',
             'DATE',
             'DATE_SUB',
-            'INSTR',
-            'LEFT',
+            'INSTR'
         );
 
         foreach($gaussCompatibleFunctions as $function)
