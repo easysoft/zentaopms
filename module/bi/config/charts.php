@@ -2013,7 +2013,7 @@ $config->bi->builtin->charts[] = array
 SELECT
 	account,
 CASE
-		`ROLE`
+		`role`
 		WHEN 'dev' THEN
 		'研发'
 		WHEN 'qa' THEN
