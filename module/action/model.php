@@ -2521,7 +2521,7 @@ class actionModel extends model
             $projectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
         }
-        elseif($action->objectType == 'repo')
+        elseif($action->objectType == 'repo' && !empty($object->mirror))
         {
             $provider = $this->dao->select('id')->from(TABLE_PROVIDER)->where('id')->eq(zget($object, 'providerID', 0))->andWhere('deleted')->eq('0')->fetch();
             if(empty($provider)) return $this->lang->action->repoNoServer;
