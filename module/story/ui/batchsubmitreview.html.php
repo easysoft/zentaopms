@@ -35,6 +35,7 @@ foreach($stories as $story)
     $row->id            = $story->id;
     $row->title         = $story->title;
     $row->reviewer      = $storyReviewers;
+    $row->reviewerItems = !empty($productReviewers[$story->product]) ? $productReviewers[$story->product] : null;
     $row->forceReview   = $rowForceReview ? 1 : 0;
     $row->needNotReview = $needNotReview ? 1 : 0;
     $data[] = $row;
