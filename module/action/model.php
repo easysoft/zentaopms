@@ -1893,7 +1893,7 @@ class actionModel extends model
             $this->story->updateParentStatus($action->objectID);
         }
         if($action->objectType == 'demand' && !empty($object->parent)) $this->loadModel('demand')->updateParentDemandStage($object->parent);
-        if($action->objectType == 'release') $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
+        if($action->objectType == 'release' && !empty($object->system)) $this->loadModel('system')->setSystemRelease((int)$object->system, $action->objectID);
         if(in_array($action->objectType, array('release', 'build')) && !empty($object->system))
         {
             $systemActionID = $this->dao->select('id')->from(TABLE_ACTION)->where('objectType')->eq('system')->andWhere('objectID')->eq($object->system)->andWhere('action')->eq('deleted')->orderBy('id_desc')->fetch('id');
@@ -2520,6 +2520,11 @@ class actionModel extends model
             if($object->deleted && empty($object->project)) return $this->lang->action->undeletedTips;
             $projectCount = $this->dao->select('COUNT(1) AS count')->from(TABLE_PROJECT)->where('id')->eq($object->project)->andWhere('deleted')->eq('0')->fetch('count');
             if((int)$projectCount == 0) return $this->lang->action->executionNoProject;
+        }
+        elseif($action->objectType == 'repo')
+        {
+            $provider = $this->dao->select('id')->from(TABLE_PROVIDER)->where('id')->eq(zget($object, 'providerID', 0))->andWhere('deleted')->eq('0')->fetch();
+            if(empty($provider)) return $this->lang->action->repoNoServer;
         }
         elseif($action->objectType == 'module')
         {
