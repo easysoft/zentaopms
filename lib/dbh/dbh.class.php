@@ -594,7 +594,7 @@ class dbh
         $sql = $this->formatLimitOffset($sql);
 
         $actionPos = strpos($sql, ' ');
-        $action    = strtoupper(substr($sql, 0, $actionPos));
+        $action    = strtoupper(trim(substr($sql, 0, $actionPos)));
         $setPos    = 0;
         switch($action)
         {
@@ -725,7 +725,7 @@ class dbh
         $sql = $this->processDmTableIndex($sql);
 
         $actionPos = strpos($sql, ' ');
-        $action    = strtoupper(substr($sql, 0, $actionPos));
+        $action    = strtoupper(trim(substr($sql, 0, $actionPos)));
         $setPos    = 0;
         switch($action)
         {
@@ -1191,7 +1191,7 @@ class dbh
 
         $sql       = str_replace(array('\r', '\n'), ' ', trim($sql));
         $actionPos = strpos($sql, ' ');
-        $action    = strtolower(substr($sql, 0, $actionPos));
+        $action    = strtolower(trim(substr($sql, 0, $actionPos)));
 
         if(!in_array($action, $allowedActions)) return null;
 
