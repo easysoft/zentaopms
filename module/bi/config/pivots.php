@@ -1926,8 +1926,8 @@ select
     ifnull((t3.number-t3.undone), 0) as doneTask,
     ifnull(t4.bugs, 0) as bugs,
     ifnull(t4.resolutions, 0) as resolutions,
-    ifnull(round(if(t2.stories>t2.undone,t4.bugs/(t2.stories-t2.undone),0),2), 0) as bugthanstory,
-    ifnull(round(if(t3.number>t3.undone,t4.bugs/(t3.number-t3.undone),0),2), 0) as bugthantask,
+    ifnull(round(case when t2.stories>t2.undone then t4.bugs/(t2.stories-t2.undone) else 0 end,2), 0) as bugthanstory,
+    ifnull(round(case when t3.number>t3.undone then t4.bugs/(t3.number-t3.undone) else 0 end,2), 0) as bugthantask,
     ifnull(t4.`seriousBugs`, 0) as seriousBugs
 from zt_project as t1
 left join ztv_projectstories as t2 on t1.id=t2.execution
@@ -2190,7 +2190,7 @@ select
     ifnull((t2.stories-t2.undone), 0) as doneStory,
     ifnull(t3.bugs, 0) as bugs,
     ifnull(t3.resolutions, 0) as resolutions,
-    ifnull(round(if(t2.stories>t2.undone,t3.bugs/(t2.stories-t2.undone),0),2), 0) as bugthanstory,
+    ifnull(round(case when t2.stories>t2.undone then t3.bugs/(t2.stories-t2.undone) else 0 end,2), 0) as bugthanstory,
     ifnull(t3.`seriousBugs`, 0) as seriousBugs
 from zt_product as t1
 left join ztv_productstories as t2 on t1.id=t2.product
