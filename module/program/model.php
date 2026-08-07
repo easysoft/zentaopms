@@ -386,7 +386,7 @@ class programModel extends model
         /* All involves in products table. */
         $products = $this->dao->select('id, program, createdBy, PO, QD, RD')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere("(createdBy = '$account' or PO = '$account' or QD = '$account' or RD = '$account')")
+            ->andWhere("(`createdBy` = '$account' OR `PO` = '$account' OR `QD` = '$account' OR `RD` = '$account')")
             ->fetchAll('id');
         foreach($products as $id => $product) $involvedProgramIdList[$product->program] = $product->program;
 
