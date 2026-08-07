@@ -4788,10 +4788,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 SELECT
-YEAR(t3.`openedDate`) AS `year`,t2.realname,count(1) AS count
+YEAR(t3.`openedDate`) AS `year`,t2.account,t2.realname,count(1) AS count
 FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_bug AS t3 ON t1.`objectID`=t3.id
 WHERE t1.`objectType`='bug' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC LIMIT 999999
+GROUP BY `year`,t2.account,t2.realname ORDER BY `year`,count DESC LIMIT 999999
 EOT
 ,
     'settings'  => array
