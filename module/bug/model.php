@@ -1123,7 +1123,7 @@ class bugModel extends model
                 ->beginIF($type == 'toclosed')->andWhere('t1.status')->eq('resolved')->fi()
                 ->beginIF($type == 'postponedbugs')->andWhere('t1.resolution')->eq('postponed')->fi()
                 ->beginIF($type == 'assignedbyme')->andWhere('t1.status')->ne('closed')->andWhere('t1.id')->in($bugIdListAssignedByMe)->fi()
-                ->beginIF($type == 'longlifebugs')->andWhere('t1.lastEditedDate')->lt($lastEditedDate)->andWhere('t1.openedDate')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'longlifebugs')->andWhere('t1.`lastEditedDate`')->lt($lastEditedDate)->andWhere('t1.openedDate')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'overduebugs')->andWhere('t1.status')->eq('active')->andWhere('t1.deadline')->lt(helper::today())->fi()
                 ->beginIF($type == 'needconfirm')->andWhere('t3.status')->eq('active')->andWhere('t3.version > t1.`storyVersion`')->fi()
                 ->beginIF($condition)->andWhere("$condition")->fi()
