@@ -80,7 +80,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -91,7 +91,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -102,7 +102,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
