@@ -2791,7 +2791,6 @@ class testcaseModel extends model
             ->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id and t1.product = t2.root')
             ->where('t1.product')->eq($productID)
-            ->andWhere('t1.lib')->eq($libID)
             ->andWhere('t1.`fromCaseID`')->ne('0')
             ->andWhere('t1.deleted')->eq('0')
             ->andWhere('((t2.type')->in('story,case')->andWhere('t2.deleted')->eq('0')->markRight(1)
@@ -2816,8 +2815,8 @@ class testcaseModel extends model
         $libCases  = $this->loadModel('caselib')->getLibCases($libID, 'all');
         foreach($libCases as $caseID => $case)
         {
-            $caseModuleCount = zget($caseModuleCount, $caseID, 0);
-            if(!empty($caseModuleCount) && $caseModuleCount >= $maxCount)
+            $moduleCount = zget($caseModuleCount, $caseID, 0);
+            if(!empty($moduleCount) && $moduleCount >= $maxCount)
             {
                 $canNotImport[$caseID] = $caseID;
             }

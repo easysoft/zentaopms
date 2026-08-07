@@ -565,6 +565,7 @@ $lang->ai->targetForm['doc']['create'] = 'Create Doc';
 $lang->ai->targetForm['doc']['edit']   = 'Edit Doc';
 
 $lang->ai->targetForm['build']['create']         = 'Create Build';
+$lang->ai->targetForm['build']['edit']           = 'Edit Build';
 $lang->ai->targetForm['testsuite']['create']     = 'Create Test Suite';
 $lang->ai->targetForm['testtask']['create']      = 'Create Test Task';
 $lang->ai->targetForm['feedback']['create']      = 'Create Feedback';

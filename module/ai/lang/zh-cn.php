@@ -566,6 +566,7 @@ $lang->ai->targetForm['doc']['create'] = '创建文档';
 $lang->ai->targetForm['doc']['edit']   = '编辑文档';
 
 $lang->ai->targetForm['build']['create']         = '创建构建';
+$lang->ai->targetForm['build']['edit']           = '编辑构建';
 $lang->ai->targetForm['testsuite']['create']     = '创建套件';
 $lang->ai->targetForm['testtask']['create']      = '创建测试单';
 $lang->ai->targetForm['feedback']['create']      = '创建反馈';
