@@ -503,14 +503,13 @@ class repoZenTest extends baseTest
      * @access public
      * @return array
      */
-    public function linkObjectTest(int $repoID, string $revision, string $type)
+    public function linkObjectTest(int $repoID, string $revision, string $type, array $post)
     {
-        $this->ensureRepoRecord($repoID);
-        $this->ensureRepoHistory($repoID, $revision);
-        $this->instance->post = (object)array('stories' => array(), 'bugs' => array(), 'tasks' => array());
+        $this->instance->post = (object)$post;
+        $this->instance->loadModel('repo')->post = (object)$post;
         $result = $this->safeInvoke('linkObject', array($repoID, $revision, $type), array());
         if(dao::isError()) return dao::getError();
-        return count($result);
+        return zget($result, 'result', '') == 'success' ? '1' : '0';
     }
 
     /**
@@ -676,9 +675,8 @@ class repoZenTest extends baseTest
      * @access public
      * @return string
      */
-    public function buildEditFormTest(int $repoID = 0, int $objectID = 0)
+    public function buildEditFormTest(int $repoID, int $objectID = 0)
     {
-        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
         $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }
@@ -1078,9 +1076,8 @@ class repoZenTest extends baseTest
      * @access public
      * @return string
      */
-    public function prepareEditTest(int $repoID = 0, int $objectID = 0)
+    public function prepareEditTest(int $repoID, int $objectID = 0)
     {
-        if(!$repoID) $repoID = (int)$this->ensureRepoRecord()->id;
         $this->safeInvoke('buildEditForm', array($repoID, $objectID));
         return '1';
     }

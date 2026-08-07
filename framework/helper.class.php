@@ -678,6 +678,32 @@ class helper extends baseHelper
 
         return $clauses;
     }
+
+    /**
+     * 将 textarea 纯文本换行转为编辑器可识别的段落 HTML。
+     * Convert plain textarea newlines to paragraph HTML for zen-editor/TipTap.
+     *
+     * TipTap 默认 preferHardBreak=false，会丢弃 <br>，因此不能用 nl2br。
+     *
+     * @param  string $text
+     * @access public
+     * @return string
+     */
+    public static function textarea2Html(string $text): string
+    {
+        if($text === '') return '';
+        if(strip_tags($text) !== $text) return $text;
+
+        $text  = htmlspecialchars_decode($text, ENT_QUOTES);
+        $text  = str_replace(array("\r\n", "\r"), "\n", $text);
+        $lines = explode("\n", $text);
+        $html  = '';
+        foreach($lines as $line)
+        {
+            $html .= '<p>' . ($line === '' ? '<br />' : htmlspecialchars($line, ENT_QUOTES)) . '</p>';
+        }
+        return $html;
+    }
 }
 
 /**

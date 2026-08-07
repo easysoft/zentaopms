@@ -4940,7 +4940,7 @@ $config->bi->builtin->charts[] = array
     'type'      => 'cluBarY',
     'group'     => '56',
     'sql'       => <<<EOT
-SELECT YEAR(t1.date) AS `year`,IFNULL(t2.realname,t1.actor) AS realname,count(1) AS count FROM zt_action t1 LEFT JOIN zt_user AS t2 ON t1.actor=t2.account where t1.actor is not null and t1.actor not in('', 'system') GROUP BY `year`,t1.actor ORDER BY `year`, `count` DESC LIMIT 999999
+SELECT YEAR(t1.date) AS `year`,IFNULL(t2.realname,t1.actor) AS realname,count(1) AS count FROM zt_action t1 LEFT JOIN zt_user AS t2 ON t1.actor=t2.account where t1.actor is not null and t1.actor not in('', 'system') GROUP BY `year`,t2.realname,t1.actor ORDER BY `year`, `count` DESC LIMIT 999999
 EOT
 ,
     'settings'  => array

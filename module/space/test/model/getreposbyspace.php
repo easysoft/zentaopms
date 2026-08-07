@@ -2,18 +2,17 @@
 <?php
 
 /**
+
 title=测试 spaceModel::getReposBySpace();
 timeout=0
 cid=16030
 
 - 查询无效的空间 @0
-- 查询空间1下的代码库列表
- - 第1条的id属性 @2
- - 第1条的name属性 @723test
-- 查询空间2下的代码库列表
- - 第2条的id属性 @2
- - 第2条的SCM属性 @Gitlab
-- 查询空间1下的代码库总数 @1
+- 查询空间1下的代码库数量 @2
+- 查询空间1下的第1个代码库名称 @space-one-main
+- 查询空间2下的代码库类型 @svn
+- 查询空间1下私有代码库数量 @1
+
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';

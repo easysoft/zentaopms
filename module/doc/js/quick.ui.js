@@ -7,7 +7,7 @@ window.setDocAppOptions = function(_, options)
     const docFetcher = options.docFetcher;
     options = $.extend(options,
     {
-        docFetcher: {...docFetcher, dataFilter: (data) => $.extend(data, {lib: initLibID || options.libID})},
+        docFetcher: {...docFetcher, dataFilter: (data) => $.extend(data.doc, {lib: initLibID || options.libID})},
         viewModeUrl: function(options)
         {
             const lib       = this.getLib(options.libID);

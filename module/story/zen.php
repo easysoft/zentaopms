@@ -1568,6 +1568,9 @@ class storyZen extends story
 
             !empty($story->assignedTo) && $story->assignedDate = $now;
             if($this->post->uploadImage && $this->post->uploadImage[$i]) $story->uploadImage = $this->post->uploadImage[$i];
+
+            $story->spec   = helper::textarea2Html((string)$story->spec);
+            $story->verify = helper::textarea2Html((string)$story->verify);
         }
 
         return $stories;
