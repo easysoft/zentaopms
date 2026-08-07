@@ -186,6 +186,7 @@ $config->ai->targetForm['bug']['story/create']           = (object)array('m' => 
 $config->ai->targetForm['doc']['create']                 = (object)array('m' => 'doc', 'f' => 'setDocBasic', 'for' => '');
 $config->ai->targetForm['doc']['edit']                   = (object)array('m' => 'doc', 'f' => 'edit', 'for' => 'doc');
 $config->ai->targetForm['build']['create']               = (object)array('m' => 'build', 'f' => 'create', 'for' => 'build');
+$config->ai->targetForm['build']['edit']                 = (object)array('m' => 'build', 'f' => 'edit', 'for' => 'build');
 $config->ai->targetForm['testsuite']['create']           = (object)array('m' => 'testsuite', 'f' => 'create', 'for' => 'testsuite');
 $config->ai->targetForm['testtask']['create']            = (object)array('m' => 'testtask', 'f' => 'create', 'for' => 'testtask');
 $config->ai->targetForm['feedback']['create']            = (object)array('m' => 'feedback', 'f' => 'create', 'for' => 'feedback');
@@ -270,6 +271,7 @@ $config->ai->targetFormVars['testcase']['batchedit']        = (object)array('for
 $config->ai->targetFormVars['testtask']['create']           = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['testreport']['create']         = (object)array('format' => 'productID=%d', 'args' => array('product' => 1), 'app' => 'qa');
 $config->ai->targetFormVars['build']['create']              = (object)array('format' => 'executionID=%d&productID=%d&projectID=%d', 'args' => array('execution' => 0, 'product' => 1, 'project' => 0), 'app' => 'project');
+$config->ai->targetFormVars['build']['edit']                = (object)array('format' => 'buildID=%d', 'args' => array('build' => 1), 'app' => 'project');
 $config->ai->targetFormVars['feedback']['create']           = (object)array('format' => 'extras=moduleID=%d,productID=%d', 'args' => array('module' => 0, 'product' => 1), 'app' => 'feedback');
 $config->ai->targetFormVars['feedback']['batchcreate']      = (object)array('format' => 'productID=%d&moduleID=%d', 'args' => array('product' => 1, 'module' => 0), 'app' => 'feedback');
 $config->ai->targetFormVars['feedback']['edit']             = (object)array('format' => 'feedbackID=%d&productID=%d&from=view', 'args' => array('feedback' => 1, 'product' => 0), 'app' => 'feedback');
@@ -357,6 +359,7 @@ $config->ai->injectAuditButton->locations['story']['edit']         = $config->ai
 $config->ai->injectAuditButton->locations['story']['change']       = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testcase']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['testreport']['create']  = $config->ai->injectAuditButton->locations['task']['edit'];
+$config->ai->injectAuditButton->locations['build']['edit']         = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['feedback']['edit']      = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['ticket']['edit']        = $config->ai->injectAuditButton->locations['task']['edit'];
 $config->ai->injectAuditButton->locations['risk']['edit']          = $config->ai->injectAuditButton->locations['task']['edit'];
