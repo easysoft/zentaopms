@@ -20,6 +20,23 @@ $langData['abilities']    = $lang->aiapp->abilities;
 $langData['abilityTypes'] = $lang->aiapp->abilityTypes;
 $langData['noDataTip']    = $lang->aiapp->tips->noData;
 
+$featureBarItems = [];
+$featureBarItems['all'] = ['text' => $lang->all, 'data-id' => 'all', 'active' => $type === 'all', 'url' => createLink('aiapp', 'models', 'type=all')];
+foreach($lang->aiapp->abilityTypes as $ability => $abilityType)
+{
+    $featureBarItems[$ability] = ['text' => $abilityType, 'data-id' => $ability, 'active' => $type === $ability, 'url' => createLink('aiapp', 'models', 'type=' . str_replace('-', '_', $ability))];
+}
+featureBar(set::items($featureBarItems));
+
+toolbar
+(
+    zui::searchBox
+    (
+        set::placeholder($lang->aiapp->searchModels),
+        set::onChange(jsRaw('window.handleSearchModels'))
+    )
+);
+
 div
 (
     setClass('models-view'),
@@ -29,6 +46,7 @@ div
         setID('modelsList'),
         set::canStartChat(hasPriv('aiapp', 'conversation')),
         set::langData($langData),
+        set::modelType($type),
         set::cols(array()),
         set::data(array()),
         set::footer(jsRaw('function(){return window.setModelsStatistics.call(this);}')),

@@ -49,7 +49,9 @@ $lang->aiapp->modelID            = 'ID du modèle';
 $lang->aiapp->abilities          = 'Capacités';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Rechercher des modèles';
 $lang->aiapp->abilityTypes       = [];
+
 $lang->aiapp->abilityTypes['chat']             = 'Chat';
 $lang->aiapp->abilityTypes['function-calling'] = 'Appel de fonction';
 $lang->aiapp->abilityTypes['reasoning']        = 'Raisonnement';
