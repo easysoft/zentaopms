@@ -77,8 +77,7 @@ formPanel
         set::label($lang->comment),
         editor
         (
-            set::name('comment'),
-            set::value()
+            set::name('comment')
         )
     )
 );

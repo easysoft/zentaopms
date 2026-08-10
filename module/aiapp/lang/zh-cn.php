@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = '查看智能工具';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = '模型名称';
+$lang->aiapp->modelID            = '模型ID';
+$lang->aiapp->abilities          = '能力';
 $lang->aiapp->converse           = '开始会话';
 $lang->aiapp->pageSummary        = '共%s项';
+$lang->aiapp->searchModels       = '搜索模型';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = '聊天';
+$lang->aiapp->abilityTypes['function-calling'] = '工具调用';
+$lang->aiapp->abilityTypes['reasoning']        = '推理';
+$lang->aiapp->abilityTypes['embedding']        = '向量化';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = '暂无数据';
