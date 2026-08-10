@@ -186,6 +186,7 @@ window.getAgentCreatingOptions = function(info, langData)
         title    : info.name,
         type     : 'agent',
         model    : info.model,
+        agent    : 'zentao-api',
         tools    : tools,
         prompt   : [info.role, zui.formatString(langData.processDataPrefix, {data: info.dataPrompt}), noTargetForm ? null : zui.formatString(langData.promptExtraLimit, {toolName: toolName})].filter(Boolean).join('\n\n'),
         form     : formConfig,
