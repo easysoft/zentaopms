@@ -86,7 +86,7 @@ formBatchPanel
         set::required($hasForceReview),
         set::multiple(true),
         set::items($reviewers),
-        set::width('270px')
+        set::width('240px')
     ),
     formBatchItem
     (
