@@ -683,11 +683,11 @@ select
     t1.status as executionstatus,
     t2.execution as execution,
     t2.id as taskID,
-    (case when cast(t2.deadline as date) < current_date()
+    (case when cast(t2.deadline as date) < current_date
          and t2.deadline is not null
          and t2.status != 'closed'
          and t2.status != 'done'
-         and t2.status != 'cancel' then 1=1 else 0 end
+         and t2.status != 'cancel' then 1 else 0 end
      ) as timeout
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
