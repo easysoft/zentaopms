@@ -577,9 +577,13 @@ class messageModel extends model
         $action = $this->loadModel('action')->getByID($actionID);
         if(!$action) return;
 
-        /* testcase 备注等场景 objectType 为 testcase，消息配置使用 case。 */
+
         if($objectType == 'testcase') $objectType = 'case';
-        $linkModule = $objectType == 'case' ? 'testcase' : $objectType;
+        if($objectType == 'kanban')   $objectType = 'kanbancard';
+
+        $linkModule = $objectType;
+        if($objectType == 'case')       $linkModule = 'testcase';
+        if($objectType == 'kanbancard') $linkModule = 'kanban';
 
         $actor           = zget($action, 'actor', '');
         $user            = $this->loadModel('user')->getByID($actor);
@@ -587,7 +591,7 @@ class messageModel extends model
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType));
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
-        $viewLink        = helper::createLink($linkModule, 'view', "id={$object->id}");
+        $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         if(isset($messageSetting['mail']))
         {
@@ -639,7 +643,7 @@ class messageModel extends model
                 {
                     $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
                     $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
-                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
+                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
                     if(!$data) continue;
 
                     if($webhook->sendType == 'async')
