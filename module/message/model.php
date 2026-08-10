@@ -576,13 +576,17 @@ class messageModel extends model
         $action = $this->loadModel('action')->getByID($actionID);
         if(!$action) return;
 
+        /* testcase 备注等场景 objectType 为 testcase，消息配置使用 case。 */
+        if($objectType == 'testcase') $objectType = 'case';
+        $linkModule = $objectType == 'case' ? 'testcase' : $objectType;
+
         $actor           = zget($action, 'actor', '');
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
         $objectTypeName  = zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType));
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
-        $viewLink        = helper::createLink($objectType, 'view', "id={$object->id}");
+        $viewLink        = helper::createLink($linkModule, 'view', "id={$object->id}");
 
         if(isset($messageSetting['mail']))
         {
@@ -590,7 +594,7 @@ class messageModel extends model
             if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
                 $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-                $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
+                $mailContent = $this->loadModel('mail')->getMailContent($linkModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
         }
