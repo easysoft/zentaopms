@@ -1202,9 +1202,9 @@ from (
             AS DECIMAL
         ),
         365
-    ) days
+    ) AS `days`
   FROM (SELECT cast(`value` as DATE) AS `firstDay` FROM zt_config WHERE `owner` = 'system' AND `key` = 'installedDate') AS subquery
-) data
+) AS `data`
 EOT
 ,
     'settings'  => array
@@ -1569,7 +1569,7 @@ LEFT JOIN (
   GROUP BY t1.`topProgram`
 ) AS t7 ON t1.id = t7.`topProgram`
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
-GROUP BY t1.name
+GROUP BY t1.name, t2.`subProgram`, t7.project, t7.execution, t7.task
 EOT
 ,
     'settings'  => array
