@@ -598,8 +598,10 @@ class messageModel extends model
             $actions = $messageSetting['mail']['setting'];
             if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
+                $mailModule = in_array($objectType, array('story', 'requirement', 'epic')) ? 'story' : $linkModule;
+
                 $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-                $mailContent = $this->loadModel('mail')->getMailContent($linkModule, $object, $action);
+                $mailContent = $this->loadModel('mail')->getMailContent($mailModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
         }
