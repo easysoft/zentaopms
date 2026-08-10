@@ -116,6 +116,8 @@ $config->kanban->form->editCard['desc']           = array('type' => 'string',   
 $config->kanban->form->editCard['lastEditedBy']   = array('type' => 'string',   'required' => false, 'default' => '');
 $config->kanban->form->editCard['lastEditedDate'] = array('type' => 'datetime', 'required' => false, 'default' => $now);
 
+$config->kanban->form->activateCard['comment'] = array('type' => 'string', 'required' => false, 'default' => '', 'control' => 'editor');
+
 $config->kanban->form->batchCreateCard['name']       = array('type' => 'string', 'required' => true,  'default' => '', 'base' => 'true');
 $config->kanban->form->batchCreateCard['lane']       = array('type' => 'int',    'required' => true,  'default' => '');
 $config->kanban->form->batchCreateCard['assignedTo'] = array('type' => 'array',  'required' => false, 'default' => '', 'filter' => 'join');
