@@ -2389,7 +2389,7 @@ class aiModel extends model
     public function getTargetFormLabel(string $targetForm, bool $withModule = true, string $objectModule = ''): string
     {
         if(empty($targetForm)) return '';
-        if($targetForm == 'empty.empty') return isset($this->lang->ai->prompts->noRedirect) ? $this->lang->ai->prompts->noRedirect : $targetForm;
+        if($targetForm == 'empty.empty') return '';
 
         $targetFormPath = explode('.', $targetForm, 2);
         if(count($targetFormPath) != 2) return $targetForm;
