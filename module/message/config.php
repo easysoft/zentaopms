@@ -21,6 +21,7 @@ $config->message->available['mail']['product']     = array('mentioned');
 if($config->enableER) $config->message->available['mail']['epic']        = $config->message->objectTypes['epic'];
 if($config->URAndSR)  $config->message->available['mail']['requirement'] = $config->message->objectTypes['requirement'];
 $config->message->available['mail']['story']       = $config->message->objectTypes['story'];
+$config->message->available['mail']['productplan'] = array('mentioned');
 $config->message->available['mail']['release']     = $config->message->objectTypes['release'];
 $config->message->available['mail']['execution']   = $config->message->objectTypes['execution'];
 $config->message->available['mail']['task']        = $config->message->objectTypes['task'];
@@ -32,6 +33,7 @@ $config->message->available['mail']['kanbancard']  = $config->message->objectTyp
 $config->message->available['webhook']  = $config->message->objectTypes;
 
 $config->message->available['message']['product']     = array('mentioned');
+$config->message->available['message']['productplan'] = array('mentioned');
 $config->message->available['message']['bug']         = $config->message->objectTypes['bug'];
 if($config->enableER) $config->message->available['message']['epic']        = $config->message->objectTypes['epic'];
 if($config->URAndSR)  $config->message->available['message']['requirement'] = $config->message->objectTypes['requirement'];
