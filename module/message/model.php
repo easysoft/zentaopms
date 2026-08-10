@@ -548,11 +548,12 @@ class messageModel extends model
      */
     public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
-        $isBlocksuite = $objectType == 'doc';
+        /* 文档正文用 rawContent 提取 @；备注等场景没有 rawContent，走表单提取。 */
+        $isBlocksuite = $objectType == 'doc' && isset($object->rawContent);
         if($isBlocksuite)
         {
             $mentionUsers = $this->getMentionUsersFromDoc($object->rawContent);
-            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc($oldObject->rawContent);
+            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc(isset($oldObject->rawContent) ? $oldObject->rawContent : '');
         }
         else
         {
