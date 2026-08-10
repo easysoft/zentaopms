@@ -580,7 +580,8 @@ class messageModel extends model
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
-        $objectTitle     = strtoupper($objectType) . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $objectTypeName  = zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType));
+        $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = helper::createLink($objectType, 'view', "id={$object->id}");
 
         if(isset($messageSetting['mail']))
