@@ -221,6 +221,33 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val TIMESTAMPTZ,
+    interval_val INTERVAL
+) RETURNS TIMESTAMPTZ AS $$
+    SELECT date_val - interval_val;
+$$ LANGUAGE SQL IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val TIMESTAMP,
+    interval_val INTERVAL
+) RETURNS TIMESTAMP AS $$
+    SELECT date_val - interval_val;
+$$ LANGUAGE SQL IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val DATE,
+    interval_val INTERVAL
+) RETURNS DATE AS $$
+    SELECT (date_val - interval_val)::DATE;
+$$ LANGUAGE SQL IMMUTABLE;
+
+--
+
 CREATE OR REPLACE FUNCTION day(date_val DATE)
 RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(DAY FROM date_val)::INTEGER; END; $$ LANGUAGE plpgsql;
 
