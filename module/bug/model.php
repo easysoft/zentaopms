@@ -1504,7 +1504,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerBuild(): array
     {
-        $datas = $this->dao->select('openedBuild AS name, COUNT(openedBuild) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`openedBuild` AS name, COUNT(`openedBuild`) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('`openedBuild`')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         foreach($datas as $buildIdList => $data)
@@ -1581,7 +1581,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('name')->fetchAll();
+        return $this->dao->select("DATE_FORMAT(`openedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('name')->fetchAll();
     }
 
     /**
@@ -1593,7 +1593,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(`resolvedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
             ->having('name != 0000-00-00')
@@ -1610,7 +1610,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(`closedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
             ->having('name != 0000-00-00')
@@ -1627,7 +1627,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerUser(): array
     {
-        $datas = $this->dao->select('openedBy AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`openedBy` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -1645,7 +1645,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerUser(): array
     {
-        $datas = $this->dao->select('resolvedBy AS name, COUNT(1) AS value')
+        $datas = $this->dao->select('`resolvedBy` AS name, COUNT(1) AS value')
             ->from(TABLE_BUG)->where($this->reportCondition())
             ->andWhere('resolvedBy')->ne('')
             ->groupBy('name')
@@ -1668,7 +1668,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerUser(): array
     {
-        $datas = $this->dao->select('closedBy AS name, COUNT(1) AS value')
+        $datas = $this->dao->select('`closedBy` AS name, COUNT(1) AS value')
             ->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->andWhere('closedBy')->ne('')
@@ -1765,7 +1765,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerActivatedCount(): array
     {
-        $datas = $this->dao->select('activatedCount AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`activatedCount` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerActivatedCount->graph->xAxisName . ':' . $data->name;
@@ -1799,7 +1799,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerAssignedTo(): array
     {
-        $datas = $this->dao->select('assignedTo AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`assignedTo` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -2214,7 +2214,7 @@ class bugModel extends model
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder, INSTR('active,resolved,closed,', status) as statusOrder")->from(TABLE_BUG)
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS `priOrder`, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS `severityOrder`, INSTR('active,resolved,closed,', status) AS `statusOrder`")->from(TABLE_BUG)
             ->where($bugQuery)
             ->andWhere('deleted')->eq('0')
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
