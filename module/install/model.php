@@ -451,9 +451,11 @@ class installModel extends model
         $this->loadModel('bi');
 
         /* Prepare built-in sqls of bi. */
+        $isMysql = in_array($this->config->db->driver, $this->config->mysqlDriverList);
+        $isPgsql = in_array($this->config->db->driver, $this->config->pgsqlDriverList);
 
         $insertTables = array();
-        if(in_array($this->config->db->driver, $this->config->mysqlDriverList) || in_array($this->config->db->driver, $this->config->pgsqlDriverList))
+        if($isMysql || $isPgsql)
         {
             $chartSQLs    = $this->bi->prepareBuiltinChartSQL();
             $pivotSQLs    = $this->bi->prepareBuiltinPivotSQL();
@@ -461,7 +463,7 @@ class installModel extends model
         }
 
         $metricSQLs   = $this->bi->prepareBuiltinMetricSQL();
-        $screenSQLs   = $this->bi->prepareBuiltinScreenSQL();
+        $screenSQLs   = $isMysql ? $this->bi->prepareBuiltinScreenSQL() : [];
         $insertTables = array_merge($insertTables, $metricSQLs, $screenSQLs);
 
         try
