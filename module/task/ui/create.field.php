@@ -258,3 +258,7 @@ $fields->field('testStoryBox')
     ->width('full')
     ->hidden()
     ->control($buildTestStoryBox);
+
+/* 工作流获取字段顺序与创建页一致。 */
+$parent = isset($fields->fields['parent']) ? 'parent,' : '';
+$fields->sort('type,module,story,testStoryBox', "type,module,story,testStoryBox,{$parent}assignedTo", 'desc,files,keywords,mailto');
