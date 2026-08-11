@@ -1741,6 +1741,9 @@ class my extends control
      */
     public function ssh(int $repoID = 0, int $objectID = 0)
     {
+        $health = $this->loadModel('gitfox')->checkHealth();
+        if(!$health) return $this->sendError($this->lang->gitfox->serverFail);
+
         $tab = $this->app->tab;
         if($tab != 'my')
         {
