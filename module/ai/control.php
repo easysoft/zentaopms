@@ -920,6 +920,16 @@ class ai extends control
         $object = $this->ai->getTestPromptData($prompt);
         list($objectData, $showText) = $object;
 
+        $formLocation     = '';
+        $testObject       = json_decode(json_encode($objectData));
+        $testPromptObject = is_object($testObject) && !empty($testObject->{$prompt->module}) && is_object($testObject->{$prompt->module}) ? $testObject->{$prompt->module} : null;
+        if(empty($testPromptObject) && in_array($prompt->module, array('epic', 'requirement')) && is_object($testObject) && !empty($testObject->story) && is_object($testObject->story)) $testPromptObject = $testObject->story;
+        if(!empty($testPromptObject->id))
+        {
+            list($formLocation, $stop) = $this->ai->getTargetFormLocation($prompt, $testObject);
+            $formLocation = empty($stop) && !empty($formLocation) ? $formLocation : '';
+        }
+
         /* Execute prompt and catch exceptions. */
         try
         {
@@ -940,7 +950,7 @@ class ai extends control
         if(is_int($response)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->executeErrors["$response"]) . (empty($this->ai->errors) ? '' : implode(', ', $this->ai->errors))));
         if(empty($response))  return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->ai->execute->failFormat, $this->lang->ai->execute->failReasons['noResponse'])));
 
-        if(!empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
+        if(!empty($formLocation) && !empty($prompt->actionPurpose) && $prompt->actionPurpose != 'empty.empty') $response = array_merge($response, $this->buildPromptFormMeta($prompt, (array)$this->lang->ai->moduleList[$prompt->module], $prompt->actionPurpose));
 
         $fields = array_values($this->ai->getPromptFields($promptID));
         if($fields)
@@ -953,10 +963,11 @@ class ai extends control
 
         $response['objectType']   = $prompt->module;
         $response['object']       = $objectData;
-        $response['formLocation'] = '';
+        $response['formLocation'] = $formLocation;
         $response['model']        = $prompt->model;
         $response['promptAudit']  = $this->ai->isClickable($prompt, 'promptaudit');
         $response['content']      = $showText;
+        if(empty($formLocation) && isset($response['targetForm']) && $response['targetForm'] != 'empty.empty') $response['targetForm'] = 'empty.empty';
 
         return $this->send(array('result' => 'success', 'data' => $response));
     }

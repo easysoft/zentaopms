@@ -586,12 +586,14 @@ class dbh
     public function formatPgSQL($sql)
     {
         $sql = trim($sql);
+        /* PostgreSQL requires the interval value to be quoted, unlike MySQL's INTERVAL 1 YEAR syntax. */
+        $sql = $this->formatPgInterval($sql);
         $sql = $this->formatFunction($sql);
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
         $sql = $this->formatLimitOffset($sql);
 
-        $actionPos = strpos($sql, ' ');
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
         switch($action)
@@ -676,6 +678,26 @@ class dbh
     }
 
     /**
+     * Convert MySQL interval literals to PostgreSQL syntax.
+     *
+     * @param string $sql
+     * @access private
+     * @return string
+     */
+    private function formatPgInterval(string $sql): string
+    {
+        return preg_replace_callback(
+            '/\bINTERVAL\s+([+-]?\d+(?:\.\d+)?)\s+'
+            . '(YEAR|MONTH|DAY|HOUR|MINUTE|SECOND|WEEK|QUARTER)\b/i',
+            function($matches)
+            {
+                return "INTERVAL '{$matches[1]} {$matches[2]}'";
+            },
+            $sql
+        );
+    }
+
+    /**
      * Format MySQL-style limit syntax to standard limit/offset syntax.
      *
      * @param  string $sql
@@ -702,7 +724,7 @@ class dbh
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
 
-        $actionPos = strpos($sql, ' ');
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
         switch($action)
@@ -865,8 +887,8 @@ class dbh
             'DATEDIFF',
             'DATE_FORMAT',
             'DATE',
-            'INSTR',
-            'LEFT',
+            'DATE_SUB',
+            'INSTR'
         );
 
         foreach($gaussCompatibleFunctions as $function)
@@ -1167,7 +1189,7 @@ class dbh
         $allowedActions = array('insert', 'update', 'delete', 'replace');
 
         $sql       = str_replace(array('\r', '\n'), ' ', trim($sql));
-        $actionPos = strpos($sql, ' ');
+        $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtolower(substr($sql, 0, $actionPos));
 
         if(!in_array($action, $allowedActions)) return null;

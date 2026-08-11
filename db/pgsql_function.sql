@@ -35,32 +35,43 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
-CREATE OR REPLACE FUNCTION GROUP_CONCAT(
-    input text,
-    delimiter text = ','
-) RETURNS text AS $$
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value anyelement)
+RETURNS text AS $$
 BEGIN
-    RETURN string_agg(input, delimiter);
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
+
+    RETURN state || ',' || value::text;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION GROUP_CONCAT(
-    input numeric,
-    delimiter text = ','
-) RETURNS text AS $$
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value anyelement, delimiter text)
+RETURNS text AS $$
 BEGIN
-    RETURN string_agg(input::text, delimiter);
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
+
+    RETURN state || COALESCE(delimiter, '') || value::text;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
-CREATE OR REPLACE FUNCTION GROUP_CONCAT(
-    input integer,
-    delimiter text = ','
-) RETURNS text AS $$
-BEGIN
-    RETURN string_agg(input::text, delimiter);
-END;
-$$ LANGUAGE plpgsql IMMUTABLE;
+--
+
+CREATE AGGREGATE GROUP_CONCAT(anyelement)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(anyelement, text)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
 
 --
 
@@ -69,7 +80,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -80,7 +91,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -91,7 +102,7 @@ CREATE OR REPLACE FUNCTION ROUND(
     decimals integer
 ) RETURNS numeric AS $$
 BEGIN
-    RETURN ROUND(num::numeric, decimals);
+    RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
@@ -207,6 +218,33 @@ BEGIN
   RETURN date_val::DATE;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val TIMESTAMPTZ,
+    interval_val INTERVAL
+) RETURNS TIMESTAMPTZ AS $$
+    SELECT date_val - interval_val;
+$$ LANGUAGE SQL IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val TIMESTAMP,
+    interval_val INTERVAL
+) RETURNS TIMESTAMP AS $$
+    SELECT date_val - interval_val;
+$$ LANGUAGE SQL IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATE_SUB(
+    date_val DATE,
+    interval_val INTERVAL
+) RETURNS DATE AS $$
+    SELECT (date_val - interval_val)::DATE;
+$$ LANGUAGE SQL IMMUTABLE;
 
 --
 

@@ -362,7 +362,7 @@ EOT)->from(TABLE_TASK)->alias('t1')
             ->andWhere('status')->eq('active')
             ->andWhere('assignedTo')->ne('')
             ->andWhere('assignedTo')->ne('closed')
-            ->groupBy('product, assignedTo')
+            ->groupBy('`product`, `assignedTo`')
             ->fetchGroup('assignedTo');
     }
 

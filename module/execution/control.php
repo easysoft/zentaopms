@@ -1105,7 +1105,9 @@ class execution extends control
             $executionID = $this->execution->create($execution, isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array());
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
+            $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', $project->hasProduct ? implode(',', $_POST['products']) : '');
+            $execution->id = $executionID;
+            $this->loadModel('message')->sendMentionNotice('execution', 'create', $actionID, $execution);
             if(!empty($projectID) and strpos(',kanban,agileplus,waterfallplus,ipd,', ",$project->model,") !== false and $execution->type == 'kanban')
             {
                 $execution = $this->execution->fetchByID($executionID);
@@ -1253,6 +1255,9 @@ class execution extends control
             {
                 $actionID = $this->action->create($this->objectType, $executionID, 'edited', '', $products);
                 $this->action->logHistory($actionID, $changes);
+
+                $formData->id = $executionID;
+                $this->loadModel('message')->sendMentionNotice('execution', 'edit', $actionID, $formData, $oldExecution);
             }
 
             if(in_array($project->model, array('waterfall', 'waterfallplus', 'ipd'))) $this->programplan->computeProgress($executionID, 'edit');

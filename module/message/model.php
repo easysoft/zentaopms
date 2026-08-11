@@ -548,11 +548,12 @@ class messageModel extends model
      */
     public function sendMentionNotice(string $objectType, string $method, int $actionID, object $object, ?object $oldObject = null)
     {
-        $isBlocksuite = $objectType == 'doc';
+        /* 文档正文用 rawContent 提取 @；备注等场景没有 rawContent，走表单提取。 */
+        $isBlocksuite = $objectType == 'doc' && isset($object->rawContent);
         if($isBlocksuite)
         {
             $mentionUsers = $this->getMentionUsersFromDoc($object->rawContent);
-            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc($oldObject->rawContent);
+            if($oldObject) $oldMentionUsers = $this->getMentionUsersFromDoc(isset($oldObject->rawContent) ? $oldObject->rawContent : '');
         }
         else
         {
@@ -576,12 +577,21 @@ class messageModel extends model
         $action = $this->loadModel('action')->getByID($actionID);
         if(!$action) return;
 
+
+        if($objectType == 'testcase') $objectType = 'case';
+        if($objectType == 'kanban')   $objectType = 'kanbancard';
+
+        $linkModule = $objectType;
+        if($objectType == 'case')       $linkModule = 'testcase';
+        if($objectType == 'kanbancard') $linkModule = 'kanban';
+
         $actor           = zget($action, 'actor', '');
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
-        $objectTitle     = strtoupper($objectType) . '#' . sprintf("%03d", $object->id) . zget($object, $objectNameField, '');
-        $viewLink        = helper::createLink($objectType, 'view', "id={$object->id}");
+        $objectTypeName  = zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType));
+        $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
+        $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         if(isset($messageSetting['mail']))
         {
@@ -589,7 +599,7 @@ class messageModel extends model
             if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
             {
                 $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-                $mailContent = $this->loadModel('mail')->getMailContent($objectType, $object, $action);
+                $mailContent = $this->loadModel('mail')->getMailContent($linkModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
         }
@@ -633,7 +643,7 @@ class messageModel extends model
                 {
                     $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
                     $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
-                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, $object->id);
+                    $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
                     if(!$data) continue;
 
                     if($webhook->sendType == 'async')

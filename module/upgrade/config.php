@@ -362,7 +362,8 @@ $config->upgrade->ipdVersion['ipd5_0']         = '22_0';
 $config->upgrade->ipdVersion['ipd5_1']         = '22_1';
 $config->upgrade->ipdVersion['ipd5_2']         = '22_2';
 $config->upgrade->ipdVersion['ipd5_3']         = '22_3';
-$config->upgrade->ipdVersion['ipd5_4']         = '22_4'; // ipd insert position.
+$config->upgrade->ipdVersion['ipd5_4']         = '22_4';
+$config->upgrade->ipdVersion['ipd5_5']         = '22_5'; // ipd insert position.
 
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';

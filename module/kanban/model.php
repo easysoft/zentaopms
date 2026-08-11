@@ -523,10 +523,13 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $cardID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('kanbanCard', $cardID, 'created');
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'created');
         $this->file->saveUpload('kanbancard', $cardID);
         $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
         $this->addKanbanCell((int)$card->kanban, (int)$this->post->lane, $columnID, 'common', (string)$cardID);
+
+        $card->id = $cardID;
+        $this->loadModel('message')->sendMentionNotice('kanban', 'createCard', $actionID, $card);
 
         return $cardID;
     }
@@ -2982,9 +2985,15 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress ? $this->post->progress : 0)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
         $card = $this->getCardByID($cardID);
 
-        $changes = common::createChanges($oldCard, $card);
-        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'activated');
+        $changes  = common::createChanges($oldCard, $card);
+        $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'activated', $this->post->comment);
         $this->action->logHistory($actionID, $changes);
+
+        if($this->post->comment)
+        {
+            $card->comment = $this->post->comment;
+            $this->loadModel('message')->sendMentionNotice('kanban', 'activateCard', $actionID, $card);
+        }
 
         return true;
     }
@@ -3043,6 +3052,10 @@ class kanbanModel extends model
         {
             $actionID = $this->loadModel('action')->create('kanbanCard', $cardID, 'edited');
             $this->action->logHistory($actionID, $changes);
+
+            $card->id     = $cardID;
+            $card->kanban = $oldCard->kanban;
+            $this->loadModel('message')->sendMentionNotice('kanban', 'editCard', $actionID, $card, $oldCard);
         }
 
         return true;

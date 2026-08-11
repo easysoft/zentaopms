@@ -1202,9 +1202,9 @@ from (
             AS DECIMAL
         ),
         365
-    ) days
+    ) AS `days`
   FROM (SELECT cast(`value` as DATE) AS `firstDay` FROM zt_config WHERE `owner` = 'system' AND `key` = 'installedDate') AS subquery
-) data
+) AS `data`
 EOT
 ,
     'settings'  => array
@@ -1569,7 +1569,7 @@ LEFT JOIN (
   GROUP BY t1.`topProgram`
 ) AS t7 ON t1.id = t7.`topProgram`
 WHERE t1.deleted = '0' AND t1.type = 'program' AND t1.grade = 1
-GROUP BY t1.name
+GROUP BY t1.name, t2.`subProgram`, t7.project, t7.execution, t7.task
 EOT
 ,
     'settings'  => array
@@ -2013,7 +2013,7 @@ $config->bi->builtin->charts[] = array
 SELECT
 	account,
 CASE
-		`ROLE`
+		`role`
 		WHEN 'dev' THEN
 		'研发'
 		WHEN 'qa' THEN
@@ -2999,7 +2999,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '36',
     'sql'       => <<<EOT
 SELECT t1.`YEARMONTH`, t1.year, t1.month AS `month`, IFNULL(t2.story, 0) AS `newStory`, IFNULL(t3.story, 0) AS `closedStory`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`openedDate`) AS `year`, MONTH(`openedDate`) AS `month`, COUNT(1) AS story FROM zt_story WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(`closedDate`) AS `year`, MONTH(`closedDate`) AS `month`, COUNT(1) AS story FROM zt_story WHERE deleted = '0' AND `closedReason` = 'done' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month LIMIT 999999
@@ -3055,8 +3055,8 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '44',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, t1.month AS `month`, IFNULL(t2.bug, 0) AS `newBug`, IFNULL(t3.bug, 0) AS `fixedBug`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+SELECT `YEARMONTH`, t1.year, t1.month AS `month`, IFNULL(t2.bug, 0) AS `newBug`, IFNULL(t3.bug, 0) AS `fixedBug`
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`openedDate`) AS `year`, MONTH(`openedDate`) AS `month`, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(`closedDate`) AS `year`, MONTH(`closedDate`) AS `month`, COUNT(1) AS bug FROM zt_bug WHERE deleted = '0' AND resolution = 'fixed' AND status = 'closed' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month LIMIT 999999
@@ -3111,8 +3111,8 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '39',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.task, 0) AS `newTask`, IFNULL(t3.task, 0) AS `closedTask`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+SELECT `YEARMONTH`, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.task, 0) AS `newTask`, IFNULL(t3.task, 0) AS `closedTask`
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`openedDate`) AS `year`, MONTH(`openedDate`) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND `isTpl` = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(`closedDate`) AS `year`, MONTH(`closedDate`) AS `month`, COUNT(1) AS task FROM zt_task WHERE deleted = '0' AND status = 'closed' AND `isTpl` = '0' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month LIMIT 999999
@@ -3167,8 +3167,8 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '38',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.project, 0) AS `newProject`, IFNULL(t3.project, 0) AS `closedProject`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+SELECT `YEARMONTH`, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.project, 0) AS `newProject`, IFNULL(t3.project, 0) AS `closedProject`
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`, Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`openedDate`) AS `year`, MONTH(`openedDate`) AS `month`, COUNT(1) AS project FROM zt_project WHERE deleted = '0' AND type = 'project' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(`closedDate`) AS `year`, MONTH(`closedDate`) AS `month`, COUNT(1) AS project FROM zt_project WHERE deleted = '0' AND type = 'project' AND status = 'closed' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month LIMIT 999999
@@ -3223,8 +3223,8 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '40',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.execution, 0) AS `newExecution`, IFNULL(t3.execution, 0) AS `closedExecution`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,YEAR(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+SELECT `YEARMONTH`, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.execution, 0) AS `newExecution`, IFNULL(t3.execution, 0) AS `closedExecution`
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`,YEAR(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`openedDate`) AS `year`, MONTH(`openedDate`) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND multiple = '1' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 LEFT JOIN (SELECT YEAR(`closedDate`) AS `year`, MONTH(`closedDate`) AS `month`, COUNT(1) AS execution FROM zt_project WHERE deleted = '0' AND type IN ('sprint', 'stage', 'kanban') AND status = 'closed' AND multiple = '1' GROUP BY `year`, `month`) AS t3 ON t1.year = t3.year AND t1.month = t3.month
 ORDER BY `year`, t1.month LIMIT 999999
@@ -3279,8 +3279,8 @@ $config->bi->builtin->charts[] = array
     'type'      => 'line',
     'group'     => '37',
     'sql'       => <<<EOT
-SELECT YEARMONTH, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.release, 0) AS `release`
-FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') YEARMONTH,Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
+SELECT `YEARMONTH`, t1.year, CONCAT(t1.month, '月') AS `month`, IFNULL(t2.release, 0) AS `release`
+FROM (SELECT DISTINCT DATE_FORMAT(date, '%Y-%m') `YEARMONTH`,Year(date) AS `year`, MONTH(date) AS `month` FROM zt_action) AS t1
 LEFT JOIN (SELECT YEAR(`createdDate`) AS `year`, MONTH(`createdDate`) AS `month`, COUNT(1) AS `release` FROM zt_release WHERE deleted = '0' GROUP BY `year`, `month`) AS t2 ON t1.year = t2.year AND t1.month = t2.month
 ORDER BY `year`, t1.month LIMIT 999999
 EOT
@@ -4686,10 +4686,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 SELECT
-YEAR(t3.`openedDate`) AS `year`,t2.realname,count(1) AS count
+YEAR(t3.`openedDate`) AS `year`,t2.account,t2.realname,count(1) AS count
 FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_story AS t3 ON t1.`objectID`=t3.id
 WHERE t1.`objectType`='story' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC LIMIT 999999
+GROUP BY `year`,t2.account,t2.realname ORDER BY `year`,count DESC LIMIT 999999
 EOT
 ,
     'settings'  => array
@@ -4737,10 +4737,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 SELECT
-YEAR(t3.`openedDate`) AS `year`,t2.realname,count(1) AS count
+YEAR(t3.`openedDate`) AS `year`,t2.account,t2.realname,count(1) AS count
 FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_case AS t3 ON t1.`objectID`=t3.id
 WHERE t1.`objectType`='case' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC LIMIT 999999
+GROUP BY `year`,t2.account,t2.realname ORDER BY `year`,count DESC LIMIT 999999
 EOT
 ,
     'settings'  => array
@@ -4788,10 +4788,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 SELECT
-YEAR(t3.`openedDate`) AS `year`,t2.realname,count(1) AS count
+YEAR(t3.`openedDate`) AS `year`,t2.account,t2.realname,count(1) AS count
 FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_bug AS t3 ON t1.`objectID`=t3.id
 WHERE t1.`objectType`='bug' AND t1.action='opened' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC LIMIT 999999
+GROUP BY `year`,t2.account,t2.realname ORDER BY `year`,count DESC LIMIT 999999
 EOT
 ,
     'settings'  => array
@@ -4839,10 +4839,10 @@ $config->bi->builtin->charts[] = array
     'group'     => '56',
     'sql'       => <<<EOT
 SELECT
-YEAR(t3.`openedDate`) AS `year`,t2.realname,count(DISTINCT t3.id) AS count
+YEAR(t3.`openedDate`) AS `year`,t2.account,t2.realname,count(DISTINCT t3.id) AS count
 FROM zt_action AS t1 RIGHT JOIN zt_user AS t2 ON t1.actor=t2.account LEFT JOIN zt_bug AS t3 ON t1.`objectID`=t3.id
 WHERE t1.`objectType`='bug' AND t1.action='resolved' AND t3.deleted='0'
-GROUP BY `year`,t2.account ORDER BY `year`,count DESC LIMIT 999999
+GROUP BY `year`,t2.account,t2.realname ORDER BY `year`,count DESC LIMIT 999999
 EOT
 ,
     'settings'  => array
@@ -8263,7 +8263,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '103',
     'sql'       => <<<EOT
 SELECT
-    base.YEARMONTH,
+    base.`YEARMONTH`,
     base.`year`,
     CONCAT(base.`month`, '月') as `month`,
     CONCAT(base.`day`, '日') as `day`,
@@ -8271,7 +8271,7 @@ SELECT
     IFNULL(compile_stats.`successNum`, 0) as `successNum`
 FROM (
     SELECT DISTINCT
-        DATE_FORMAT(date, '%Y-%m-%d') as YEARMONTH,
+        DATE_FORMAT(date, '%Y-%m-%d') as `YEARMONTH`,
         YEAR(date) as `year`,
         MONTH(date) as `month`,
         DAY(date) as `day`
@@ -8280,7 +8280,7 @@ FROM (
 ) base
 LEFT JOIN (
     SELECT
-        DATE_FORMAT(`createdDate`, '%Y-%m-%d') as YEARMONTH,
+        DATE_FORMAT(`createdDate`, '%Y-%m-%d') as `YEARMONTH`,
         YEAR(`createdDate`) as `year`,
         MONTH(`createdDate`) as `month`,
         DAY(`createdDate`) as `day`,
@@ -8293,7 +8293,7 @@ LEFT JOIN (
         YEAR(`createdDate`),
         MONTH(`createdDate`),
         DAY(`createdDate`)
-) compile_stats ON base.YEARMONTH = compile_stats.YEARMONTH
+) compile_stats ON base.`YEARMONTH` = compile_stats.`YEARMONTH`
 WHERE base.year > 0
 ORDER BY base.`year`, base.`month`, base.`day` LIMIT 999999;
 EOT
