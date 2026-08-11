@@ -461,7 +461,8 @@ class messageModel extends model
      */
     public function getMentionUsersFromHtml(string $html): array
     {
-        $pattern = '/<span[^>]*?\bmention-label\b[^>]*?data-type=["\']mention["\'][^>]*?data-id=["\']([^"\']+)["\'][^>]*>/is';
+        /* TipTap may output data-type before class; do not rely on attribute order. */
+        $pattern = '/<span(?=[^>]*\bmention-label\b)(?=[^>]*\bdata-type=["\']mention["\'])[^>]*\bdata-id=["\']([^"\']+)["\'][^>]*>/i';
 
         $accounts = array();
         if(preg_match_all($pattern, $html, $matches))
