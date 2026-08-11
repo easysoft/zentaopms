@@ -644,6 +644,8 @@ class messageModel extends model
                 $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
                 foreach($webhooks as $id => $webhook)
                 {
+                    if(strpos($webhook->type, 'group') !== false)  continue;
+
                     $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
                     $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
                     $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
