@@ -24,7 +24,8 @@ formPanel
         (
             set::name('assignedTo'),
             set::items($users),
-            set::value($bug->assignedTo)
+            set::value($bug->assignedTo),
+            set::required(strpos(",{$config->bug->confirm->requiredFields},", ',assignedTo,') !== false)
         )
     ),
     formGroup
@@ -34,7 +35,8 @@ formPanel
         set::label($lang->bug->type),
         set::control('picker'),
         set::items($lang->bug->typeList),
-        set::value($bug->type)
+        set::value($bug->type),
+        set::required(strpos(",{$config->bug->confirm->requiredFields},", ',type,') !== false)
     ),
     formGroup
     (
@@ -43,7 +45,8 @@ formPanel
         set::label($lang->bug->pri),
         set::control('priPicker'),
         set::items($lang->bug->priList),
-        set::value($bug->pri)
+        set::value($bug->pri),
+        set::required(strpos(",{$config->bug->confirm->requiredFields},", ',pri,') !== false)
     ),
     formGroup
     (
@@ -53,7 +56,8 @@ formPanel
         (
             setID('deadline'),
             set::name('deadline'),
-            set::value($bug->deadline)
+            set::value($bug->deadline),
+            set::required(strpos(",{$config->bug->confirm->requiredFields},", ',deadline,') !== false)
         )
     ),
     formRow

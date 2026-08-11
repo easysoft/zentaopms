@@ -7,11 +7,13 @@ $config->bug->removeFields = 'objectTypeList,productList,executionList,gitlabID,
 $config->bug->create      = new stdclass();
 $config->bug->edit        = new stdclass();
 $config->bug->resolve     = new stdclass();
+$config->bug->confirm     = new stdclass();
 $config->bug->batchcreate = new stdclass();
 $config->bug->create->requiredFields      = 'title,openedBuild';
 $config->bug->batchcreate->requiredFields = 'title,openedBuild';
 $config->bug->edit->requiredFields        = 'title,openedBuild';
 $config->bug->resolve->requiredFields     = 'resolution';
+$config->bug->confirm->requiredFields     = '';
 
 $config->bug->actions = new stdclass();
 $config->bug->actions->view = array();
