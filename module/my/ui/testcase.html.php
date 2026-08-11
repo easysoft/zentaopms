@@ -37,10 +37,9 @@ if($canBatchAction)
     ), 'btnProps' => array('size' => 'sm', 'btnType' => 'secondary'));
 }
 
-if($browseType == 'openedbyme' || $app->rawMethod == 'contribute')
+if($app->rawMethod == 'contribute')
 {
     unset($config->my->testcase->dtable->fieldList['taskName']);
-    unset($config->my->testcase->dtable->fieldList['openedBy']);
 }
 
 if($browseType == 'assigntome')
@@ -68,12 +67,13 @@ $cases = initTableData($cases, $cols, $this->testcase);
 $data  = array_values($cases);
 
 $defaultSummary = sprintf($lang->testcase->failSummary, count($cases), $failCount);
+$customExtra = ($app->rawMethod == 'contribute') ? 'openedbyme' : $browseType;
 dtable
 (
     set::data($data),
     set::cols($cols),
     set::onRenderCell(jsRaw('window.onRenderCell')),
-    set::customCols(true),
+    set::customCols(array('url' => createLink('datatable', 'ajaxcustom', "module={$app->moduleName}&method={$app->methodName}&extra={$customExtra}"))),
     set::userMap($users),
     set::rowKey($browseType == 'assigntome' ? 'run' : 'id'),
     set::checkable(true),
