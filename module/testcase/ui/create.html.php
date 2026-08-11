@@ -22,6 +22,7 @@ if($app->tab == 'execution') jsVar('objectID', $executionID);
 if($app->tab == 'project')   jsVar('objectID', $projectID);
 if($app->tab == 'qa')        jsVar('objectID', 0);
 
+$config->file->dangers = 'phtml,jsp,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 unset($lang->testcase->typeList['unit']);
 
 $fields = useFields('testcase.create');
