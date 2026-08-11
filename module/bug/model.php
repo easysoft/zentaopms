@@ -437,9 +437,15 @@ class bugModel extends model
      */
     public function confirm(object $bug, array $kanbanData = array()): bool
     {
-        $oldBug = $this->getByID($bug->id);
+        $oldBug         = $this->getByID($bug->id);
+        $requiredFields = $this->config->bug->confirm->requiredFields;
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')
+            ->autoCheck()
+            ->batchCheckIF(!empty($requiredFields), $requiredFields, 'notempty')
+            ->checkFlow()
+            ->where('id')->eq($bug->id)
+            ->exec();
         if(dao::isError()) return false;
 
         /* 确认 bug 后的积分变动。*/

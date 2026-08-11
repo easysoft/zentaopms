@@ -71,6 +71,7 @@ $config->custom->fieldList['build']['edit']          = 'scmPath,filePath,files,d
 $config->custom->fieldList['bug']['create']          = 'module,plan,project,execution,assignedTo,deadline,type,feedbackBy,os,browser,case,severity,pri,steps,keywords';
 $config->custom->fieldList['bug']['edit']            = 'module,plan,case,project,execution,assignedTo,deadline,type,feedbackBy,os,browser,severity,pri,steps,keywords';
 $config->custom->fieldList['bug']['resolve']         = 'resolvedBuild,resolvedDate,assignedTo,comment';
+$config->custom->fieldList['bug']['confirm']         = 'assignedTo,type,pri,deadline';
 $config->custom->fieldList['testcase']['create']     = 'stage,story,pri,precondition,keywords,scene,module';
 $config->custom->fieldList['testcase']['edit']       = 'stage,story,pri,precondition,keywords,scene,status,module';
 $config->custom->fieldList['testsuite']              = 'desc';
