@@ -28,7 +28,7 @@ $canBatchUnlink = hasPriv('testtask', 'batchUnlinkCases');
 $canBatchAssign = hasPriv('testtask', 'batchAssign');
 $canBatchRun    = hasPriv('testtask', 'batchRun');
 $canBatchConfirmCaseChange = hasPriv('testtask', 'batchConfirmCaseChange');
-$canBatchIgnoreCaseChange  = hasPriv('testtask', 'batchConfirmCaseChange');
+$canBatchIgnoreCaseChange  = hasPriv('testtask', 'batchIgnoreCaseChange');
 $canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange));
 
 $closeLink = inlink('cases', "taskID={$task->id}&browseType=bymodule&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
