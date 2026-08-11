@@ -113,8 +113,9 @@ $fields->field('assignedTo')
     ->position('basic')
     ->group($lang->bug->legendBasicInfo)
     ->required(strpos(",{$config->bug->edit->requiredFields},", ',assignedTo,') !== false)
-    ->control(function() use($lang)
+    ->control(function()
     {
+        global $lang;
         return inputGroup
         (
             picker
@@ -232,8 +233,9 @@ $fields->field('openedBuild')
     ->position('basic')
     ->group($lang->bug->legendLife)
     ->required(strpos(",{$config->bug->edit->requiredFields},", ',openedBuild,') !== false)
-    ->control(function() use($lang)
+    ->control(function()
     {
+        global $lang;
         return inputGroup
         (
             set('id', 'openedBuildBox'),
@@ -274,8 +276,9 @@ $fields->field('resolvedDate')
 $fields->field('resolvedBuild')
     ->position('basic')
     ->group($lang->bug->legendLife)
-    ->control(function() use($lang)
+    ->control(function()
     {
+        global $lang;
         return inputGroup
         (
             set('id', 'resolvedBuildBox'),
@@ -329,8 +332,9 @@ $fields->field('closedDate')
 $fields->field('relatedBug')
     ->position('basic')
     ->group($lang->bug->legendMisc)
-    ->control(function() use($lang)
+    ->control(function()
     {
+        global $lang;
         return inputGroup
         (
             set('id', 'linkBugsBox'),

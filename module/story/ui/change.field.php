@@ -19,8 +19,9 @@ $fields->field('reviewer')
 $fields->field('title')
     ->width('full')
     ->required(data('fields.title.required'))
-    ->control(function() use($lang)
+    ->control(function()
     {
+        global $lang;
         return inputGroup
         (
             inputControl
