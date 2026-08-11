@@ -6,10 +6,10 @@ global $lang, $app, $config;
 $files = array();
 if(!empty(data('bug.files')))
 {
-    foreach(data('bug.files') as $file)
+    foreach(data('bug.files') as $fileInfo)
     {
-        if($file->extra != '') continue;
-        $files[] = $file;
+        if($fileInfo->extra != '') continue;
+        $files[] = $fileInfo;
     }
 }
 

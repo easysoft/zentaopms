@@ -33,7 +33,7 @@ if(!empty(data('story.stages')) && isset($fieldData['stage']['options']))
 $files = data('story.files') ?: null;
 if(!empty($files))
 {
-    foreach($files as $file) $file->extra = data('story.version');
+    foreach($files as $fileInfo) $fileInfo->extra = data('story.version');
 }
 
 if($storyType == 'story')
