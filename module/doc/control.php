@@ -951,9 +951,13 @@ class doc extends control
                 $docData->module = $parentDoc->module;
             }
 
+            /* create 会 unset rawContent，克隆一份供 @ 通知解析。 */
+            /* create() unsets rawContent, clone one copy for parsing @ mentions. */
+            $docForMention = clone $docData;
+
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult, '', $from);
+            return $this->docZen->responseAfterCreate($docResult, 'doc', $from, $docForMention);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);

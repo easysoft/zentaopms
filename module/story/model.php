@@ -846,6 +846,9 @@ class storyModel extends model
             $actionID = $this->loadModel('action')->create('story', $storyID, $action, $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
+            $story->id   = $storyID;
+            $story->type = $oldStory->type;
+            if(!isset($story->spec)) $story->spec = $oldStory->spec;
             $this->loadModel('message')->sendMentionNotice($oldStory->type, 'change', $actionID, $story, $oldStory);
 
             /* Record submit review action. */
@@ -998,7 +1001,9 @@ class storyModel extends model
             $actionID = $this->action->create('story', $storyID, $action, $story->comment);
             $this->action->logHistory($actionID, $changes);
 
+            $story->id   = $storyID;
             $story->type = $oldStory->type;
+            if(!isset($story->spec)) $story->spec = $oldStory->spec;
             $this->loadModel('message')->sendMentionNotice($oldStory->type, 'edit', $actionID, $story, $oldStory);
 
             if(isset($story->finalResult))
