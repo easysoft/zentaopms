@@ -32,7 +32,7 @@ $routes['/releases/:releaseID']          = array('response' => 'release,actions(
 
 $routes['/projects']                    = array('response' => 'projectStats|projects,pager', 'search' => array('enabled' => true));
 $routes['/projects/list/:browseType']   = array('redirect' => '/projects?browseType=:browseType');
-$routes['/projects/execution']          = array('response' => 'executionStats|executions,pager');
+$routes['/projects/execution']          = array('response' => 'executionStats(array)|executions,pager');
 $routes['/projects/build']              = array('response' => 'builds,pager', 'search' => array('enabled' => true, 'searchModule' => 'build', 'querySessionKey' => 'projectBuild'));
 $routes['/projects/bug']                = array('response' => 'bugs,pager', 'response' => 'bugs(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'bug', 'querySessionKey' => 'projectBug'));
 $routes['/projects/testcase']           = array('response' => 'cases(array)|testcases,pager', 'search' => array('enabled' => true, 'searchModule' => 'testcase', 'querySessionKey' => 'testcase'));
@@ -43,7 +43,7 @@ $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/p
 $routes['/projects/:projectID']         = array('response' => 'project');
 $routes['/projects/:projectID/close']   = array('post' => array('response' => '*'));
 
-$routes['/executions']                      = array('method' => 'all', 'response' => 'executionStats|executions,pager', 'search' => array('enabled' => true, 'searchModule' => 'execution', 'querySessionKey' => 'execution'));
+$routes['/executions']                      = array('method' => 'all', 'response' => 'executionStats(array)|executions,pager', 'search' => array('enabled' => true, 'searchModule' => 'execution', 'querySessionKey' => 'execution'));
 $routes['/projects/:projectID/executions']  = array('redirect' => '/projects/execution?projectID=:projectID');
 $routes['/executions/task']                 = array('response' => 'tasks(array),pager');
 $routes['/executions/story']                = array('response' => 'stories(array),pager');
