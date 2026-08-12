@@ -894,7 +894,7 @@ class dbh
 
         foreach($gaussCompatibleFunctions as $function)
         {
-            $sql = preg_replace("/(?<![\\w\"'])(?<!\"){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
+            $sql = preg_replace("/(?<=\s){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;
