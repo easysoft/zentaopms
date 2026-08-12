@@ -264,7 +264,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get product list */
         $products = $this->dao->dbh($this->sourceDBH)
-            ->select("id, name, description as `desc`, created_on as createdDate")
+            ->select("id, name, description as `desc`, created_on as `createdDate`")
             ->from(REDMINE_TABLE_EXECUTIONS)
             ->fetchAll('id');
 
@@ -396,7 +396,7 @@ class redmine11ConvertModel extends redmineConvertModel
         /* Create a same plan with product */
         foreach($this->map['products'] as $productID)
         {
-            $productPlan = $this->dao->dbh($this->dbh)->select("name as title, createdDate as begin")->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            $productPlan = $this->dao->dbh($this->dbh)->select("name as title, `createdDate` as begin")->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
             $productPlan->product     = $productID;
             $productPlan->createdBy   = $this->app->user->account;
             $productPlan->createdDate = helper::now();
@@ -491,7 +491,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get all docs */
         $docs = $this->dao->dbh($this->sourceDBH)
-            ->select("t1.id, t1.execution_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS addedDate")
+            ->select("t1.id, t1.execution_id AS product, t2.id AS lib, t1.title, t1.description AS content, t1.created_on AS `addedDate`")
             ->from(REDMINE_TABLE_DOCUMENTS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_ENUMERATIONS)->alias('t2')->on('t1.category_id = t2.id')
             ->fetchAll('id');
@@ -520,7 +520,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get news from redmine */
         $news = $this->dao->dbh($this->sourceDBH)
-            ->select("t1.execution_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as addedBy, t1.created_on as addedDate")
+            ->select("t1.execution_id as product, t1.title, t1.summary as digest, t1.description as content, t2.login as `addedBy`, t1.created_on as `addedDate`")
             ->from(REDMINE_TABLE_NEWS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
             ->fetchAll();
@@ -590,7 +590,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get story list*/
         $stories = $this->dao->dbh($this->sourceDBH)
-            ->select("t1.id, t1.execution_id as product, t1.subject as title, t1.description as spec, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate")
+            ->select("t1.id, t1.execution_id as product, t1.subject as title, t1.description as spec, t1.status_id as status, t2.login as `assignedTo`, t1.priority_id as pri, t3.login as `openedBy`, t1.created_on as `openedDate`, t1.estimated_hours as estimate, t1.updated_on as `lastEditedDate`")
             ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
@@ -639,7 +639,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get task list */
         $tasks = $this->dao->dbh($this->sourceDBH)
-            ->select("t1.id, t1.execution_id as product, t1.fixed_version_id as execution, t1.subject as name, t1.description as `desc`, t1.due_date as deadline, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.estimated_hours as estimate, t1.updated_on as lastEditedDate")
+            ->select("t1.id, t1.execution_id as product, t1.fixed_version_id as execution, t1.subject as name, t1.description as `desc`, t1.due_date as deadline, t1.status_id as status, t2.login as `assignedTo`, t1.priority_id as pri, t3.login as `openedBy`, t1.created_on as `openedDate`, t1.estimated_hours as estimate, t1.updated_on as `lastEditedDate`")
             ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
@@ -684,7 +684,7 @@ class redmine11ConvertModel extends redmineConvertModel
     {
         /* Get bug list */
         $bugs = $this->dao->dbh($this->sourceDBH)
-            ->select("t1.id, t1.execution_id as product, t1.fixed_version_id execution, t1.subject as title, t1.description as steps, t1.status_id as status, t2.login as assignedTo, t1.priority_id as pri, t3.login as openedBy, t1.created_on as openedDate, t1.updated_on as lastEditedDate")
+            ->select("t1.id, t1.execution_id as product, t1.fixed_version_id execution, t1.subject as title, t1.description as steps, t1.status_id as status, t2.login as `assignedTo`, t1.priority_id as pri, t3.login as `openedBy`, t1.created_on as `openedDate`, t1.updated_on as `lastEditedDate`")
             ->from(REDMINE_TABLE_ISSUES)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.assigned_to_id = t2.id')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t3')->on('t1.author_id = t3.id')
@@ -735,7 +735,7 @@ class redmine11ConvertModel extends redmineConvertModel
 
         /* Get file list */
         $files = $this->dao->dbh($this->sourceDBH)
-            ->select('t1.id, t1.container_id as objectID, t1.container_type as objectType, t1.filename as title, t1.disk_filename as pathname, t1.filesize as size, t2.login as addedBy, t1.created_on as addedDate, description')
+            ->select('t1.id, t1.container_id as `objectID`, t1.container_type as `objectType`, t1.filename as title, t1.disk_filename as pathname, t1.filesize as size, t2.login as `addedBy`, t1.created_on as `addedDate`, description')
             ->from(REDMINE_TABLE_ATTACHMENTS)->alias('t1')
             ->leftJoin(REDMINE_TABLE_USERS)->alias('t2')->on('t1.author_id = t2.id')
             ->fetchAll('id');

@@ -1026,7 +1026,7 @@ class bugModel extends model
             if($type == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
 
             $bugIdListAssignedByMe = array();
-            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
 
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
@@ -1045,11 +1045,11 @@ class bugModel extends model
                 ->beginIF($type == 'toclosed')->andWhere('t1.status')->eq('resolved')->fi()
                 ->beginIF($type == 'postponedbugs')->andWhere('t1.resolution')->eq('postponed')->fi()
                 ->beginIF($type == 'assignedbyme')->andWhere('t1.status')->ne('closed')->andWhere('t1.id')->in($bugIdListAssignedByMe)->fi()
-                ->beginIF($type == 'longlifebugs')->andWhere('t1.lastEditedDate')->lt($lastEditedDate)->andWhere('t1.openedDate')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'longlifebugs')->andWhere('t1.`lastEditedDate`')->lt($lastEditedDate)->andWhere('t1.`openedDate`')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'overduebugs')->andWhere('t1.status')->eq('active')->andWhere('t1.deadline')->lt(helper::today())->fi()
                 ->beginIF($type == 'needconfirm')->andWhere('t3.status')->eq('active')->andWhere('t3.version > t1.`storyVersion`')->fi()
                 ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', t1.`openedBuild`, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
@@ -1110,7 +1110,7 @@ class bugModel extends model
             if($type == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
 
             $bugIdListAssignedByMe = array();
-            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
 
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder, INSTR('active,resolved,closed,', t1.status) as statusOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
@@ -1138,7 +1138,7 @@ class bugModel extends model
                 ->andWhere('t2.deleted')->eq('0')
                 ->fi()
                 ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1200,7 +1200,7 @@ class bugModel extends model
             ->andWhere('toStory')->eq(0)
             ->andWhere('openedDate')->ge($minBegin)
             ->andWhere('openedDate')->le($maxEnd)
-            ->andWhere("(status = 'active' OR resolvedDate > '{$maxEnd}')")
+            ->andWhere("(status = 'active' OR `resolvedDate` > '{$maxEnd}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in("0,$branch")->fi()
@@ -1357,7 +1357,7 @@ class bugModel extends model
     {
         /* 获取需求产生的bugs。 */
         /* Get bugs of the story. */
-        return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
+        return $this->dao->select('id, title, pri, type, status, `assignedTo`, `resolvedBy`, resolution')
             ->from(TABLE_BUG)
             ->where('story')->eq($storyID)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
@@ -1824,7 +1824,7 @@ class bugModel extends model
      */
     public function getBySonarqubeID(int $sonarqubeID): array|bool
     {
-        return $this->dao->select('issueKey')->from(TABLE_BUG)->where('issueKey')->like("$sonarqubeID:%")->fetchPairs();
+        return $this->dao->select('`issueKey`')->from(TABLE_BUG)->where('issueKey')->like("$sonarqubeID:%")->fetchPairs();
     }
 
     /**
@@ -1937,7 +1937,7 @@ class bugModel extends model
         }
 
         /* Get bug reactivated actions during the testreport. */
-        $actions = $this->dao->select('id,objectID')->from(TABLE_ACTION)
+        $actions = $this->dao->select('id,`objectID`')->from(TABLE_ACTION)
             ->where('objectType')->eq('bug')
             ->andWhere('action')->eq('activated')
             ->andWhere('date')->ge($begin)
@@ -2116,7 +2116,7 @@ class bugModel extends model
         $addedRelatedBugs   = array_diff($relatedBugs, $oldRelatedBugs);
         $removedRelatedBugs = array_diff($oldRelatedBugs, $relatedBugs);
         $changedRelatedBugs = array_merge($addedRelatedBugs, $removedRelatedBugs);
-        $changedRelatedBugs = $this->dao->select('id, relatedBug')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
+        $changedRelatedBugs = $this->dao->select('id, `relatedBug`')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
 
         /* 更新相关 bug。 */
         /* Update the related bug. */

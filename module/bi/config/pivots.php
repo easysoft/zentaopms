@@ -29,9 +29,9 @@ from
         CAST(substr(path,2,4) AS DECIMAL) as program1,
         begin,
         `end`,
-        realBegan,
-        realEnd,
-        left(closedDate, 10) as closedDate,
+        `realBegan`,
+        `realEnd`,
+        left(`closedDate`, 10) as `closedDate`,
         datediff(`end`, `begin`) as planduration,
         ifnull(if(left(`realEnd`,4) != '0000',datediff(`realEnd`,`realBegan`),datediff(`closedDate`,`realBegan`)),0) realduration
     from zt_project
@@ -120,7 +120,7 @@ from
             id,
             name,
             CAST(substr(`path`, 2, 4) AS DECIMAL) as program1,
-            closedDate
+            `closedDate`
         from zt_project
         where deleted = '0'
         and type = 'project'
@@ -260,7 +260,7 @@ from zt_product as t1
             sum(estimate) as exfixedstorysmate
         from zt_story
         where deleted = '0'
-        and (stage in ('developed', 'testing', 'verified', 'released') or (status = 'closed' and closedReason = 'done'))
+        and (stage in ('developed', 'testing', 'verified', 'released') or (status = 'closed' and `closedReason` = 'done'))
         group by product
     ) as t6 on t1.id = t6.product
     left join (
@@ -291,7 +291,7 @@ from zt_product as t1
         where tcase.deleted = '0'
         and tcase.story != '0'
         and tstory.deleted = '0'
-        and (tstory.stage IN ('developed', 'testing', 'verified', 'released') OR (tstory.status = 'closed' and tstory.closedReason = 'done'))
+        and (tstory.stage IN ('developed', 'testing', 'verified', 'released') OR (tstory.status = 'closed' and tstory.`closedReason` = 'done'))
         group by tcase.product
     ) as t10 on t1.id = t10.product
 where t1.deleted = '0'
@@ -682,7 +682,7 @@ select
     t1.name as executionname,
     t1.status as executionstatus,
     t2.execution as execution,
-    t2.id as taskID,
+    t2.id as `taskID`,
     (case when cast(t2.deadline as date) < current_date
          and t2.deadline is not null
          and t2.status != 'closed'
@@ -792,7 +792,7 @@ select
     t1.status as executionstatus,
     t1.id as execution,
     t2.type,
-    t2.id as taskID
+    t2.id as `taskID`
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
 left join zt_project as t3 on t3.id=t1.project
@@ -894,8 +894,8 @@ select
     t4.id as project,
     t1.name as executionname,
     t2.execution as execution,
-    (case when t3.account is not null then t3.account else t2.`assignedTo` end) as assignedTo,
-    t2.id as taskID,
+    (case when t3.account is not null then t3.account else t2.`assignedTo` end) as `assignedTo`,
+    t2.id as `taskID`,
     t1.status as executionstatus
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
@@ -1000,7 +1000,7 @@ select
  t1.name as executionname,
  t2.execution as execution,
  t2.`finishedBy`,
- t2.id as taskID,
+ t2.id as `taskID`,
  t1.status as executionstatus
 from zt_project as t1
 left join zt_task as t2 on t1.id=t2.execution
@@ -1534,7 +1534,7 @@ select
     t3.name as project,
     t3.id as projectID,
     t1.name as execution,
-    t1.id as executionID,
+    t1.id as `executionID`,
     t2.id as bugID,
     t2.status
 from zt_project as t1
@@ -1824,7 +1824,7 @@ select
     t3.name as project,
     t3.id as projectID,
     t1.name as execution,
-    t1.id as executionID,
+    t1.id as `executionID`,
     t2.id as bugID,
     t2.`assignedTo`
 from zt_project as t1

@@ -134,7 +134,7 @@ class stakeholderModel extends model
 
         $members  = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         $accounts = array_unique($accounts);
-        $oldJoin  = $this->dao->select('`user`, createdDate')->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->fetchPairs();
+        $oldJoin  = $this->dao->select('`user`, `createdDate`')->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->fetchPairs();
         $this->dao->delete()->from(TABLE_STAKEHOLDER)->where('objectID')->eq($projectID)->andWhere('objectType')->eq('project')->exec();
 
         $stakeholderList = array();
@@ -244,7 +244,7 @@ class stakeholderModel extends model
      */
     public function getStakeholders(int $projectID, string $browseType = 'all', string $orderBy = 'id_desc', ?object $pager = null): array
     {
-        return $this->dao->select('t1.*, t2.role, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as projectModel')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t1.*, t2.role, t2.phone, t2.realname as name, t2.email, t2.qq, t2.weixin, t2.nature, t2.analysis, t2.strategy, t3.name as companyName, t4.model as `projectModel`')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->leftJoin(TABLE_COMPANY)->alias('t3')->on('t2.company=t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.`objectID`=t4.id')
@@ -286,7 +286,7 @@ class stakeholderModel extends model
      */
     public function getStakeholderGroup(array $objectIdList): array
     {
-        $stakeholders     = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
+        $stakeholders     = $this->dao->select('`objectID`, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in($objectIdList)->andWhere('deleted')->eq('0')->fetchAll();
         $stakeholderGroup = array();
         foreach($stakeholders as $stakeholder)
         {
@@ -322,7 +322,7 @@ class stakeholderModel extends model
         if(empty($parents)) return array();
 
         /* Get all parent stakeholders. */
-        $parentStakeholders     = $this->dao->select('objectID, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
+        $parentStakeholders     = $this->dao->select('`objectID`, user')->from(TABLE_STAKEHOLDER)->where('objectID')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
         $parentStakeholderGroup = array();
         foreach($parentStakeholders as $parentStakeholder)
         {

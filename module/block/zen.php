@@ -603,7 +603,7 @@ class blockZen extends block
         $cases = array();
         if($block->params->type == 'assigntome')
         {
-            $cases = $this->dao->select('t1.`assignedTo` AS assignedTo, t2.*')->from(TABLE_TESTRUN)->alias('t1')
+            $cases = $this->dao->select('t1.`assignedTo` AS `assignedTo`, t2.*')->from(TABLE_TESTRUN)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
                 ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
                 ->Where('t1.`assignedTo`')->eq($this->app->user->account)
@@ -2047,10 +2047,10 @@ class blockZen extends block
      */
     protected function printQaOverviewBlock(object $block): void
     {
-        $casePairs = $this->dao->select('lastRunResult, COUNT(1) AS count')->from(TABLE_CASE)
+        $casePairs = $this->dao->select('`lastRunResult`, COUNT(1) AS count')->from(TABLE_CASE)
             ->where('1=1')
             ->beginIF($block->module != 'my' && $this->session->project)->andWhere('project')->eq((int)$this->session->project)->fi()
-            ->groupBy('lastRunResult')
+            ->groupBy('`lastRunResult`')
             ->fetchPairs();
 
         $total = array_sum($casePairs);
@@ -2530,7 +2530,7 @@ class blockZen extends block
         $involveds     = $this->product->getOrderedProducts('involved', 0, 0, 'all');
         $productIdList = array_merge(array_keys($products), array_keys($involveds));
 
-        $stmt = $this->dao->select('id,product,lib,title,type,addedBy,addedDate,editedDate,status,acl,`groups`,readGroups,users,readUsers,deleted')->from(TABLE_DOC)->alias('t1')
+        $stmt = $this->dao->select('id,product,lib,title,type,`addedBy`,`addedDate`,`editedDate`,status,acl,`groups`,`readGroups`,users,`readUsers`,deleted')->from(TABLE_DOC)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('product')->in($productIdList)
             ->beginIF($this->config->doc->notArticleType)->andWhere('t1.type')->notIN($this->config->doc->notArticleType)->fi()

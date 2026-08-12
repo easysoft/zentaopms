@@ -1424,7 +1424,7 @@ class zaiModel extends model
         $app->loadLang('story');
         $lang = $app->lang;
 
-        $spec = $app->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
+        $spec = $app->dao->select('title,spec,verify,files,docs,`docVersions`')->from(TABLE_STORYSPEC)->where('story')->eq($story->id)->andWhere('version')->eq($story->version)->fetch();
         if(empty($spec)) $spec = (object)array('title' => $story->title, 'spec' => '', 'verify' => '', 'files' => '', 'docs' => '', 'docVersions' => '');
 
         $planValue = $story->plan;

@@ -102,7 +102,7 @@ class systemModel extends model
      */
     public function getProductListBySystemIds(array $systemIDs)
     {
-        return $this->dao->select('t1.id,t1.name as appName,t1.product,t2.name as productName')
+        return $this->dao->select('t1.id,t1.name as `appName`,t1.product,t2.name as productName')
             ->from(TABLE_SYSTEM)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->where('t1.deleted')->eq('0')
@@ -518,7 +518,7 @@ class systemModel extends model
         {
             if($releaseID != $system->latestRelease) return false;
 
-            $release      = $this->dao->select('id,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('system')->eq($systemID)->orderBy('id DESC')->fetch();
+            $release      = $this->dao->select('id,`createdDate`')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('system')->eq($systemID)->orderBy('id DESC')->fetch();
             $releaseID    = $release ? $release->id : 0;
             $releasedDate = $release ? $release->createdDate : null;
         }
@@ -569,7 +569,7 @@ class systemModel extends model
     public function initSystem(): bool
     {
         $productPairs = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
-        $releasePairs = $this->dao->select('id,product,date,createdDate')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
+        $releasePairs = $this->dao->select('id,product,date,`createdDate`')->from(TABLE_RELEASE)->where('deleted')->eq('0')->fetchAll('product');
 
         $systemPairs = array();
         $systemNames = array();

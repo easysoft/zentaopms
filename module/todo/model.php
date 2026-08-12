@@ -435,7 +435,7 @@ class todoModel extends model
         /* Update status of feedback if the closed todo type is feedback. */
         if($this->config->edition != 'open')
         {
-            $feedbackID = $this->dao->select('objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
+            $feedbackID = $this->dao->select('`objectID`')->from(TABLE_TODO)->where('id')->eq($todoID)->andWhere('type')->eq('feedback')->fetch('objectID');
             if($feedbackID) $this->loadModel('feedback')->updateStatus('todo', $feedbackID, 'closed', '', $todoID);
         }
         return true;

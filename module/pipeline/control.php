@@ -1008,7 +1008,7 @@ class pipeline extends control
         /* Sync delete cron job to gitfox. */
         if($field == 'cron')
         {
-            $trigger  = $this->dao->select('pipelineID')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+            $trigger  = $this->dao->select('`pipelineID`')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
             $pipeline = $trigger ? $this->pipeline->getByID((int)$trigger->pipelineID) : null;
             if($pipeline) $this->pipeline->deleteTriggerCronJob((int)$trigger->pipelineID, $pipeline->engine);
         }

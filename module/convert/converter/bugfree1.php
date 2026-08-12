@@ -41,7 +41,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
     public function convertGroup()
     {
         $groups = $this->dao->dbh($this->sourceDBH)
-            ->select("groupID AS id, groupName AS name, groupUser AS users")
+            ->select("`groupID` AS id, groupName AS name, groupUser AS users")
             ->from('BugGroup')
             ->fetchAll('id');
         foreach($groups as $groupID => $group)
@@ -122,7 +122,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
      */
     public function convertExecution()
     {
-        $executions = $this->dao->dbh($this->sourceDBH)->select("executionID AS id, executionName AS name")->from('Bugexecution')->fetchAll('id');
+        $executions = $this->dao->dbh($this->sourceDBH)->select("`executionID` AS id, executionName AS name")->from('Bugexecution')->fetchAll('id');
         foreach($executions as $executionID => $execution)
         {
             unset($execution->id);
@@ -145,10 +145,10 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select(
                 'moduleID AS id, 
-                executionID AS root, 
+                `executionID` AS root, 
                 moduleName AS name, 
                 moduleGrade AS grade, 
-                parentID AS parent, 
+                `parentID` AS parent, 
                 "bug" AS type')
             ->from('BugModule')
             ->orderBy('id ASC')
@@ -183,7 +183,7 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             ->dbh($this->sourceDBH)
             ->select('
             bugID AS id, 
-            executionID AS product, 
+            `executionID` AS product, 
             moduleID AS module,
             bugTitle AS title,
             bugSeverity AS severity,
@@ -191,12 +191,12 @@ class bugfree1ConvertModel extends bugfreeConvertModel
             bugOS AS os,
             bugStatus AS status,
             mailto,
-            openedBy, openedDate, openedBuild,
-            assignedTo, assignedDate,
-            resolvedBy, resolution, resolvedBuild, resolvedDate,
-            closedBy, closedDate,
-            lastEditedBy, lastEditedDate,
-            linkID as duplicateBug
+            `openedBy`, `openedDate`, `openedBuild`,
+            `assignedTo`, `assignedDate`,
+            `resolvedBy`, resolution, `resolvedBuild`, `resolvedDate`,
+            `closedBy`, `closedDate`,
+            `lastEditedBy`, `lastEditedDate`,
+            linkID as `duplicateBug`
             ')
             ->from('BugInfo')
             ->orderBy('bugID')
@@ -236,8 +236,8 @@ class bugfree1ConvertModel extends bugfreeConvertModel
         $actions = $this->dao
             ->dbh($this->sourceDBH)
             ->select("
-                'bug' AS objectType, 
-                bugID AS objectID, 
+                'bug' AS `objectType`, 
+                bugID AS `objectID`, 
                 userName AS actor, 
                 action, 
                 fullInfo AS comment, 
@@ -282,11 +282,11 @@ class bugfree1ConvertModel extends bugfreeConvertModel
                 fileName AS pathname,
                 fileTitle AS title,
                 fileType AS extension,
-                fileSize AS size,
-                'bug' AS objectType,
-                bugID AS objectID,
-                addUser AS addedBy,
-                addDate AS addedDate
+                `fileSize` AS size,
+                'bug' AS `objectType`,
+                bugID AS `objectID`,
+                addUser AS `addedBy`,
+                addDate AS `addedDate`
                 ")
             ->from('BugFile')
             ->orderBy('fileID')

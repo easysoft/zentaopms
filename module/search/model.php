@@ -606,14 +606,14 @@ class searchModel extends model
             $filterObjects[] = $object;
         }
 
-        $typeCount = $this->dao->select("objectType, COUNT(1) AS objectCount")->from(TABLE_SEARCHINDEX)
+        $typeCount = $this->dao->select("`objectType`, COUNT(1) AS objectCount")->from(TABLE_SEARCHINDEX)
             ->where('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObjects)
+            ->orWhere('(`objectType`')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
-            ->groupBy('objectType')
+            ->groupBy('`objectType`')
             ->fetchPairs();
         arsort($typeCount);
         return $typeCount;
@@ -678,7 +678,7 @@ class searchModel extends model
             ->andWhere('((vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObjects)
             ->markRight(1)
-            ->orWhere('(objectType')->in($filterObjects)
+            ->orWhere('(`objectType`')->in($filterObjects)
             ->markRight(2)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')

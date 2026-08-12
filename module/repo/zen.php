@@ -966,7 +966,7 @@ class repoZen extends repo
      */
     protected function checkDeleteError(int $repoID): string
     {
-        $relationIds = $this->dao->select('distinct AID as AID')->from(TABLE_RELATION)
+        $relationIds = $this->dao->select('distinct `AID` as `AID`')->from(TABLE_RELATION)
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
             ->fetchAll();

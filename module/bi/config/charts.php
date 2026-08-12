@@ -6483,7 +6483,7 @@ LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 LEFT JOIN zt_project AS t3 on t1.project = t3.id AND t3.type = 'project' AND t3.deleted = '0'
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
 AND t2.deleted = '0' AND t2.parent < 1
-GROUP BY t1.id, t1.name, t1.begin, t1.end, t1.realBegan, t3.id, t3.name
+GROUP BY t1.id, t1.name, t1.begin, t1.end, t1.`realBegan`, t3.id, t3.name
 ) AS t
 ORDER BY `projectID` ASC, id ASC LIMIT 999999
 EOT

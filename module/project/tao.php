@@ -154,7 +154,7 @@ class projectTao extends projectModel
      */
     protected function fetchUndoneTasks(int $projectID): array
     {
-        return $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
+        return $this->dao->select('id,`estStarted`,deadline,status')->from(TABLE_TASK)
             ->where('deadline')->notZeroDate()
             ->andWhere('status')->in('wait,doing')
             ->andWhere('project')->eq($projectID)
@@ -1046,7 +1046,7 @@ class projectTao extends projectModel
      */
     protected function getTotalBugByProject(array $projectIdList): array
     {
-        return $this->dao->select("project, count(id) AS allBugs, count(if(status = 'active', 1, null)) AS leftBugs, count(if(status = 'resolved', 1, null)) AS doneBugs")->from(TABLE_BUG)
+        return $this->dao->select("project, count(id) AS allBugs, count(if(status = 'active', 1, null)) AS `leftBugs`, count(if(status = 'resolved', 1, null)) AS doneBugs")->from(TABLE_BUG)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->groupBy('project')

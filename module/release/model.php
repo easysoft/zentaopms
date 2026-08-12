@@ -35,7 +35,7 @@ class releaseModel extends model
             ->fetch();
         if(!$release) return false;
 
-        $release->builds  = $this->dao->select('id, branch, filePath, scmPath, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
+        $release->builds  = $this->dao->select('id, branch, `filePath`, `scmPath`, name, execution, project')->from(TABLE_BUILD)->where('id')->in($release->build)->fetchAll();
         $release->project = trim($release->project, ',');
         $release->branch  = trim($release->branch, ',');
         $release->build   = trim($release->build, ',');
@@ -593,7 +593,7 @@ class releaseModel extends model
                 $stories  = trim(str_replace(',,', ',', $stories), ',');
                 if(empty($stories)) continue;
 
-                $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
+                $openedByList   = $this->dao->select('`openedBy`')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
                 $notifyPersons += $openedByList;
             }
             elseif($notify == 'ET' && !empty($release->build))
@@ -1033,12 +1033,12 @@ class releaseModel extends model
         $stories = explode(',', trim($release->stories, ','));
         $bugs    = explode(',', trim($release->bugs, ','));
 
-        $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+        $storyNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_STORY)
             ->where('id')->in($stories)
             ->andWhere('notifyEmail')->ne('')
             ->fetchGroup('notifyEmail', 'id');
 
-        $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+        $bugNotifyList = $this->dao->select('id,title,`notifyEmail`')->from(TABLE_BUG)
             ->where('id')->in($bugs)
             ->andWhere('notifyEmail')->ne('')
             ->fetchGroup('notifyEmail', 'id');

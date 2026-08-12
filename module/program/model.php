@@ -350,7 +350,7 @@ class programModel extends model
         $involvedProgramIdList = array();
 
         /* All objects in program table. */
-        $objects = $this->dao->select('id,type,project,parent,path,openedBy,PM')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->fetchAll('id');
+        $objects = $this->dao->select('id,type,project,parent,path,`openedBy`,`PM`')->from(TABLE_PROGRAM)->where('deleted')->eq(0)->fetchAll('id');
         foreach($objects as $id => $object)
         {
             if($object->openedBy != $account && $object->PM != $account) continue;
@@ -384,7 +384,7 @@ class programModel extends model
         }
 
         /* All involves in products table. */
-        $products = $this->dao->select('id, program, createdBy, PO, QD, RD')->from(TABLE_PRODUCT)
+        $products = $this->dao->select('id, program, `createdBy`, `PO`, `QD`, `RD`')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere("(`createdBy` = '$account' OR `PO` = '$account' OR `QD` = '$account' OR `RD` = '$account')")
             ->fetchAll('id');
@@ -1065,7 +1065,7 @@ class programModel extends model
         }
 
         /* Get all parent PM.*/
-        $parentPM = $this->dao->select('id, PM')->from(TABLE_PROGRAM)->where('id')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
+        $parentPM = $this->dao->select('id, `PM`')->from(TABLE_PROGRAM)->where('id')->in(array_keys($parents))->andWhere('deleted')->eq('0')->fetchAll();
 
         $parentPMGroup = array();
         foreach($parentPM as $PM)
@@ -1311,7 +1311,7 @@ class programModel extends model
      */
     public function getBaseDataList(array $programIdList): array
     {
-        return $this->dao->select('id,name,PM,path,parent,type')
+        return $this->dao->select('id,name,`PM`,path,parent,type')
             ->from(TABLE_PROGRAM)
             ->where('id')->in($programIdList)
             ->andWhere('deleted')->eq('0')

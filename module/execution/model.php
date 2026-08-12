@@ -260,7 +260,7 @@ class executionModel extends model
         }
 
         /* 项目模板不校验访问权限。 */
-        $isTpl = $this->dao->select('isTpl')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
+        $isTpl = $this->dao->select('`isTpl`')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('id')->in($this->app->user->view->sprints)->fetch('isTpl');
         /* If the execution doesn't exist in the list, use the first execution in the list. */
         if(empty($isTpl) && !isset($executions[$executionID]))
         {
@@ -970,7 +970,7 @@ class executionModel extends model
         if(!empty($postData->readjustTask))
         {
             $beginTimeStamp = strtotime($execution->begin);
-            $tasks = $this->dao->select('id,estStarted,deadline,status')->from(TABLE_TASK)
+            $tasks = $this->dao->select('id,`estStarted`,deadline,status')->from(TABLE_TASK)
                 ->where('execution')->eq($executionID)
                 ->andWhere('deadline')->notNULL()
                 ->andWhere('status')->in('wait,doing')
@@ -1213,7 +1213,7 @@ class executionModel extends model
         $projectModel = '';
         if($projectID)
         {
-            $projectInfo  = $this->dao->select('model,isTpl')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
+            $projectInfo  = $this->dao->select('model,`isTpl`')->from(TABLE_EXECUTION)->where('id')->eq($projectID)->andWhere('deleted')->eq(0)->fetch();
             $projectModel = isset($projectInfo->model) ? $projectInfo->model : '';
             $orderBy      = in_array($projectModel, array('waterfall', 'waterfallplus')) ? 'sortStatus_asc,begin_asc,id_asc' : 'id_desc';
 
@@ -1346,7 +1346,7 @@ class executionModel extends model
      */
     public function getLaneMaxEditedTime(int $executionID): string|null
     {
-        return $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
+        return $this->dao->select("max(`lastEditedTime`) as `lastEditedTime`")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
     }
 
     /**
@@ -1428,7 +1428,7 @@ class executionModel extends model
      */
     public function getExecutionCounts(int $projectID = 0, string $browseType = 'all'): int
     {
-        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        $executions = $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1543,7 +1543,7 @@ class executionModel extends model
      */
     public function fetchExecutionsByProjectIdList(array $projectIdList = array()): array
     {
-        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.type')->in('sprint,stage,kanban')
             ->andWhere('t1.deleted')->eq('0')
@@ -1573,7 +1573,7 @@ class executionModel extends model
         $executionQuery = $browseType == 'bysearch' ? $this->getExecutionQuery($param) : '';
         $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model');
 
-        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as projectModel')->from(TABLE_EXECUTION)->alias('t1')
+        return $this->dao->select('t1.*,t2.`name` as projectName, t2.`model` as `projectModel`')->from(TABLE_EXECUTION)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->beginIF($productID)->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.id=t3.project')->fi()
             ->where('t1.type')->in('sprint,stage,kanban')
@@ -2243,7 +2243,7 @@ class executionModel extends model
      */
     public function getDefaultManagers(int $executionID): object
     {
-        $managers = $this->dao->select('PO,QD,RD')->from(TABLE_PRODUCT)->alias('t1')
+        $managers = $this->dao->select('`PO`,`QD`,`RD`')->from(TABLE_PRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.product')
             ->where('t2.project')->eq($executionID)
             ->fetch();
@@ -3248,7 +3248,7 @@ class executionModel extends model
     {
         if(commonModel::isTutorialMode()) return $this->loadModel('tutorial')->getTeamMembers();
 
-        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as userID, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select("t1.*, t1.hours * t1.days AS totalHours, t2.id as `userID`, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->eq((int)$executionID)
             ->andWhere('t1.type')->eq('execution')

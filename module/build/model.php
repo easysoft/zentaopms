@@ -431,7 +431,7 @@ class buildModel extends model
      */
     public function getRelatedReleases(array|int $productIdList, string|int $buildIdList = '', array|bool $shadows = false, string $objectType = '', int $objectID = 0, string $params = ''): array
     {
-        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as branchName,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
+        $releases = $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t1.status,t3.name as `branchName`,t4.type as productType')->from(TABLE_RELEASE)->alias('t1')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t5')->on("t1.id=t5.release AND t5.`objectType`='build'")
             ->leftJoin(TABLE_BUILD)->alias('t2')->on('t5.`objectID`=t2.id')
             ->leftJoin(TABLE_RELEASERELATED)->alias('t6')->on("t1.id=t6.release AND t6.`objectType`='branch'")
@@ -453,7 +453,7 @@ class buildModel extends model
         if($shadows)
         {
             /* Append releases of only shadow and not link build. */
-            $releases += $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as branchName,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
+            $releases += $this->dao->select('DISTINCT t1.id,t1.shadow,t1.product,t1.branch,t1.build,t1.name,t1.date,t2.name as `branchName`,t3.type as productType')->from(TABLE_RELEASE)->alias('t1')
                 ->leftJoin(TABLE_RELEASERELATED)->alias('t4')->on("t1.id=t4.release AND t4.`objectType`='branch'")
                 ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t4.`objectID`=t2.id')
                 ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')

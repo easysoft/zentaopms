@@ -291,7 +291,7 @@ class actionModel extends model
     {
         if(empty($history)) return $history;
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $action         = $this->dao->select('objectType,objectID')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch();
+        $action         = $this->dao->select('`objectType`,`objectID`')->from(TABLE_ACTION)->where('id')->eq($history->action)->fetch();
         $objectType     = $action->objectType == 'story' ? $this->dao->select('type')->from(TABLE_STORY)->where('id')->eq($action->objectID)->fetch('type') : $action->objectType;
         $objectTypeList = array();
         $history->old   = (string)$history->old;
@@ -462,7 +462,7 @@ class actionModel extends model
             ->beginIF($objectType == 'execution')->andWhere('objectID')->notIn($noMultipleExecutions)->fi()
             ->beginIF($objectType == 'all')
             ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->fi()
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
@@ -483,7 +483,7 @@ class actionModel extends model
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
 
-        $auditplanList = $this->dao->select('id,objectID,objectType')->from(TABLE_AUDITPLAN)->where('id')->in($auditplanIdList)->fetchAll('id');
+        $auditplanList = $this->dao->select('id,`objectID`,`objectType`')->from(TABLE_AUDITPLAN)->where('id')->in($auditplanIdList)->fetchAll('id');
         foreach($auditplanList as $auditplan) $typeTrashes[$auditplan->objectType][] = $auditplan->objectID;
 
         foreach($typeTrashes as $objectType => $objectIdList)
@@ -592,7 +592,7 @@ class actionModel extends model
             ->andWhere('t1.extra')->eq($extra)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
-            ->beginIF($objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
+            ->beginIF($objectType != 'all')->andWhere('t1.`objectType`')->eq($objectType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('objectID');
@@ -612,11 +612,11 @@ class actionModel extends model
     {
         $extra                = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $noMultipleExecutions = $this->dao->select('id')->from(TABLE_EXECUTION)->where('multiple')->eq('0')->andWhere('type')->in('sprint,kanban')->fetchPairs();
-        return $this->dao->select('objectType')->from(TABLE_ACTION)
+        return $this->dao->select('`objectType`')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq($extra)
             ->andWhere('objectType', true)->ne('execution')
-            ->orWhere('(objectType')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
+            ->orWhere('(`objectType`')->eq('execution')->andWhere('objectID')->notIn($noMultipleExecutions)
             ->markRight(2)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('objectType')->notIn($this->config->action->hiddenTrashObjects)
@@ -1307,7 +1307,7 @@ class actionModel extends model
         }
         if($projectIdList) $projectIdList = array_unique($projectIdList);
 
-        if($projectIdList) $projects = $this->dao->select('id,name,isTpl')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
+        if($projectIdList) $projects = $this->dao->select('id,name,`isTpl`')->from(TABLE_PROJECT)->where('project')->in($projectIdList)->andWhere('deleted')->eq('0')->fetchAll('id');
 
         $docIdList    = array();
         $apiIdList    = array();
@@ -2437,7 +2437,7 @@ class actionModel extends model
         $relatedProject = array();
         if($table == TABLE_TODO)
         {
-            $todos = $this->dao->select("id, {$field} AS name, account, private, type, objectID")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
+            $todos = $this->dao->select("id, {$field} AS name, account, private, type, `objectID`")->from($table)->where('id')->in($objectIdList)->orderBy('id_asc')->fetchAll();
             foreach($todos as $todo)
             {
                 /* Get related object name. */

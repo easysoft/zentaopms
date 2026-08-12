@@ -150,7 +150,7 @@ class commonModel extends model
         $today = helper::today();
         if($project->status == 'wait')
         {
-            $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('realBegan')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
+            $realBegan = helper::isZeroDate($project->realBegan) ? $this->dao->select('`realBegan`')->from(TABLE_PROJECT)->where('id')->eq($execution->id)->fetch('realBegan') : $project->realBegan;
             $this->dao->update(TABLE_PROJECT)
                  ->set('status')->eq('doing')
                  ->set('realBegan')->eq($realBegan)
@@ -1509,7 +1509,7 @@ eof;
             ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
             ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group`=t3.`group`')
             ->where('t1.project')->eq($program->id)
-            ->andWhere('t1.devopsSpace')->eq(0)
+            ->andWhere('t1.`devopsSpace`')->eq(0)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
 
@@ -2873,14 +2873,14 @@ eof;
         /* 如果当前账户是项目负责人，则可以修改团队成员日志。*/
         if(!empty($effort->project))
         {
-            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->project)->fetch('PM');
+            $PM = $this->dao->select('`PM`')->from(TABLE_PROJECT)->where('id')->eq($effort->project)->fetch('PM');
             if($PM == $this->app->user->account) return true;
         }
 
         /* 如果当前账户是执行负责人，则可以修改团队成员日志。*/
         if(!empty($effort->execution))
         {
-            $PM = $this->dao->select('PM')->from(TABLE_PROJECT)->where('id')->eq($effort->execution)->fetch('PM');
+            $PM = $this->dao->select('`PM`')->from(TABLE_PROJECT)->where('id')->eq($effort->execution)->fetch('PM');
             if($PM == $this->app->user->account) return true;
         }
 
