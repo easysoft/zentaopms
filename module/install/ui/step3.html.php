@@ -42,7 +42,7 @@ $schemaConfig
 \$config->webRoot        = getWebRoot();
 \$config->default->lang  = '{$myConfig['defaultLang']}';
 EOT;
-if($customSession) $configContent .= "\n\$config->customSession   = true;";
+if($customSession) $configContent .= "\n\$config->customSession  = true;";
 
 $configRoot   = $this->app->getConfigRoot();
 $myConfigFile = $configRoot . 'my.php';
