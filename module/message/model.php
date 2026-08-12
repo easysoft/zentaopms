@@ -582,6 +582,8 @@ class messageModel extends model
         if($objectType == 'testcase') $objectType = 'case';
         if($objectType == 'kanban')   $objectType = 'kanbancard';
 
+        $settingObjectType = in_array($objectType, array('review', 'projectchange')) ? 'waterfall' : $objectType;
+
         $linkModule = $objectType;
         if($objectType == 'case')       $linkModule = 'testcase';
         if($objectType == 'kanbancard') $linkModule = 'kanban';
@@ -590,14 +592,14 @@ class messageModel extends model
         $user            = $this->loadModel('user')->getByID($actor);
         $actorRealname   = zget($user, 'realname', $actor);
         $objectNameField = zget($this->config->action->objectNameFields, $objectType, 'title');
-        $objectTypeName  = zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType));
+        $objectTypeName  = zget($this->lang->action->objectTypes, $settingObjectType, zget($this->lang->action->objectTypes, $objectType, strtoupper($objectType)));
         $objectTitle     = $objectTypeName . '#' . sprintf("%03d", $object->id) . ($objectType != 'auditplan' ? zget($object, $objectNameField, '') : '');
         $viewLink        = $objectType == 'kanbancard' ? helper::createLink('kanban', 'viewCard', "cardID={$object->id}") : helper::createLink($linkModule, 'view', "id={$object->id}");
 
         if(isset($messageSetting['mail']))
         {
             $actions = $messageSetting['mail']['setting'];
-            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
                 $mailModule = in_array($objectType, array('story', 'requirement', 'epic')) ? 'story' : $linkModule;
 
@@ -610,7 +612,7 @@ class messageModel extends model
         if(isset($messageSetting['message']))
         {
             $actions = $messageSetting['message']['setting'];
-            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
                 $data = sprintf($this->lang->message->mention, $actorRealname, html::a($viewLink, "[{$objectTitle}]"));
                 $now  = helper::now();
@@ -636,7 +638,7 @@ class messageModel extends model
         if(isset($messageSetting['webhook']))
         {
             $actions = $messageSetting['webhook']['setting'];
-            if(isset($actions[$objectType]) && in_array('mentioned', $actions[$objectType]))
+            if(isset($actions[$settingObjectType]) && in_array('mentioned', $actions[$settingObjectType]))
             {
                 $webhooks = $this->loadModel('webhook')->getList();
                 if(!$webhooks) return true;
