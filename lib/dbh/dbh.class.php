@@ -587,8 +587,6 @@ class dbh
     public function formatPgSQL($sql)
     {
         $sql = trim($sql);
-        /* PostgreSQL requires the interval value to be quoted, unlike MySQL's INTERVAL 1 YEAR syntax. */
-        $sql = $this->formatPgInterval($sql);
         $sql = $this->formatFunction($sql);
         $sql = $this->processDmChangeColumn($sql);
         $sql = $this->processDmTableIndex($sql);
@@ -676,26 +674,6 @@ class dbh
         $fields = $this->formatField($fields);
 
         return $fields . substr($sql, $setPos);
-    }
-
-    /**
-     * Convert MySQL interval literals to PostgreSQL syntax.
-     *
-     * @param string $sql
-     * @access private
-     * @return string
-     */
-    private function formatPgInterval(string $sql): string
-    {
-        return preg_replace_callback(
-            '/\bINTERVAL\s+([+-]?\d+(?:\.\d+)?)\s+'
-            . '(YEAR|MONTH|DAY|HOUR|MINUTE|SECOND|WEEK|QUARTER)\b/i',
-            function($matches)
-            {
-                return "INTERVAL '{$matches[1]} {$matches[2]}'";
-            },
-            $sql
-        );
     }
 
     /**
