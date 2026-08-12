@@ -1758,6 +1758,7 @@ class execution extends control
                 ->setDefault('lastEditedBy', $this->app->user->account)
                 ->setDefault('lastEditedDate', $now)
                 ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
+                ->remove('verifyPassword')
                 ->get();
 
             $this->execution->computeBurn($executionID);
