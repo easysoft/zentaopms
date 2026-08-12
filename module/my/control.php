@@ -710,6 +710,7 @@ class my extends control
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->hyphen . $this->lang->my->doc;
         $this->view->docs       = $docs;
+        $this->view->libs       = $this->doc->getLibs();
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->browseType = $browseType;
         $this->view->recTotal   = $recTotal;
