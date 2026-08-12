@@ -132,12 +132,13 @@ class productsEntry extends entry
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
-        /* Response */
+        /* Response: return the newly created product object. */
         $product = $this->loadModel('product')->getByID($data->id);
-        $product = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
+        if(!$product) return $this->sendError(400, 'error');
 
-        return $this->send(201, $product);
+        return $this->send(201, $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user'));
     }
 
     /**
