@@ -1710,7 +1710,7 @@ CREATE TABLE IF NOT EXISTS `zt_release` (
   `releases` varchar(255) NOT NULL DEFAULT '',
   `marker` tinyint unsigned NOT NULL DEFAULT 0,
   `date` date DEFAULT NULL,
-  `releasedDate` date DEFAULT NULL,
+  `releasedDate` datetime DEFAULT NULL,
   `stories` text DEFAULT NULL,
   `bugs` text DEFAULT NULL,
   `leftBugs` text DEFAULT NULL,

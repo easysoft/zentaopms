@@ -37,7 +37,7 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
 
 $config->bug->list->defaultFields           = 'id,title,severity,pri,openedBy,assignedTo,resolvedBy,resolution';
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchEditFields   = 'project,execution,plan,case,steps,type,assignedTo,pri,deadline,severity,os,browser,resolvedBy,resolution,keywords';
+$config->bug->list->customBatchEditFields   = 'project,execution,plan,case,type,assignedTo,pri,deadline,severity,os,browser,resolvedBy,resolution,keywords';
 $config->bug->list->customBatchCreateFields = 'project,execution,plan,steps,type,assignedTo,pri,deadline,severity,os,browser,case,keywords';
 
 if(in_array($config->edition, array('max', 'ipd'))) $config->bug->list->customBatchCreateFields .= ',identify,injection';
