@@ -2800,7 +2800,8 @@ class pivotModel extends model
         $result = array();
         if($queryResult['result'] == 'success')
         {
-            $result['data'] = $queryResult['rows'];
+            $table = zget($this->config->objectTables, $object, '');
+            $result['data'] = $table ? helper::decodeHtmlSpecialChars((string)$table, $queryResult['rows']) : $queryResult['rows'];
             $result['cols'] = $this->getDrillCols($object);
         }
 
@@ -2878,7 +2879,8 @@ class pivotModel extends model
 
         if($status != 'success') return array();
 
-        return $data;
+        $table = zget($this->config->objectTables, $drill->object, '');
+        return $table ? helper::decodeHtmlSpecialChars((string)$table, $data) : $data;
     }
 
     /**
