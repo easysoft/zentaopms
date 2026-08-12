@@ -937,7 +937,14 @@ class dbh
             $pos = stripos($sql, ' ENGINE');
             if($pos > 0) $sql = substr($sql, 0, $pos);
 
-            $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            if($this->dbConfig->driver == 'dm')
+            {
+                $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            }
+            else
+            {
+                $sql = preg_replace('/\b(?:char|varchar)\s*\(\s*\d+\s*\)(*SKIP)(*F)|\(\ *\d+\ *\)/i', '', $sql);
+            }
 
             $replace = array(
                 " int "                     => ' integer ',
