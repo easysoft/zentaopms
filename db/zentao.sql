@@ -13657,7 +13657,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '注入环节',         'bugInjection',              '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugInjection',    '',     '',     ''),
 ('lang',        '发现环节',         'bugIdentify',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugIdentify',     '',     '',     ''),
 ('lang',        '关闭原因',         'ticketClosedReason',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketClosedReason', '',     '',     ''),
-('lang',        '反馈优先级',       'feedbackPri',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackPri',            '', '', '');
+('lang',        '反馈优先级',       'feedbackPri',               '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackPri',            '', '', ''),
+('sql',         '重复工单',         'ticketRepeat',              '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_ticket WHERE `deleted`=\'0\'',     'view_datasource_ticketRepeat', 'id', 'title');
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (
@@ -15534,6 +15535,7 @@ DROP VIEW IF EXISTS `view_datasource_taskDocs`;
 DROP VIEW IF EXISTS `view_datasource_caseScene`;
 DROP VIEW IF EXISTS `ztv_projectnotpl`;
 DROP VIEW IF EXISTS `ztv_tasknotpl`;
+DROP VIEW IF EXISTS `view_datasource_ticketRepeat`;
 
 CREATE VIEW `view_datasource_2`   AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'epic';
 CREATE VIEW `view_datasource_3`   AS SELECT `id`,`title` FROM `zt_story`       WHERE `deleted` = '0' AND type = 'requirement';
@@ -15554,6 +15556,7 @@ CREATE VIEW `ztv_projectnotpl`    AS SELECT *            FROM `zt_project`     W
 CREATE VIEW `ztv_tasknotpl`       AS SELECT *            FROM `zt_task`        WHERE `deleted` = '0' AND `isTpl` = 0;
 CREATE VIEW `view_datasource_taskDocs`  AS SELECT `id`,`title` FROM `zt_doc`        WHERE `deleted` = '0';
 CREATE VIEW `view_datasource_caseScene` AS SELECT `id`,`title` FROM `zt_scene`      WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_ticketRepeat` AS SELECT `id`,`title` FROM `zt_ticket`  WHERE `deleted` = '0';
 
 -- DROP TABLE IF EXISTS `ops_artifact_assets`;
 CREATE TABLE IF NOT EXISTS `ops_artifact_assets` (
