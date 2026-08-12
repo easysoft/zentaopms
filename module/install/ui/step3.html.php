@@ -19,6 +19,9 @@ if(empty($myConfig))
     return;
 }
 
+$dbSchema = trim($myConfig['dbSchema'] ?? 'public');
+$schemaConfig = $dbSchema != 'public' ? "\$config->db->schema = '{$dbSchema}';" : '';
+
 $configContent = <<<EOT
 <?php
 \$config->installed     = true;
@@ -34,6 +37,7 @@ $configContent = <<<EOT
 \$config->db->collation = '{$myConfig['dbCollation']}';
 \$config->db->password  = '{$myConfig['dbPassword']}';
 \$config->db->prefix    = '{$myConfig['dbPrefix']}';
+$schemaConfig
 \$config->webRoot       = getWebRoot();
 \$config->default->lang = '{$myConfig['defaultLang']}';
 EOT;

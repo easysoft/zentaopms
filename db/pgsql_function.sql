@@ -447,6 +447,38 @@ $$ LANGUAGE plpgsql;
 
 --
 
+CREATE OR REPLACE FUNCTION "IF"(
+    condition BOOLEAN,
+    true_val NUMERIC,
+    false_val INTEGER
+    ) RETURNS NUMERIC AS $$
+    BEGIN
+        IF condition THEN
+            RETURN true_val;
+        ELSE
+            RETURN false_val::NUMERIC;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
+CREATE OR REPLACE FUNCTION "IF"(
+    condition BOOLEAN,
+    true_val NUMERIC,
+    false_val NUMERIC
+    ) RETURNS NUMERIC AS $$
+    BEGIN
+        IF condition THEN
+            RETURN true_val;
+        ELSE
+            RETURN false_val;
+    END IF;
+END;
+$$ LANGUAGE plpgsql;
+
+--
+
 CREATE OR REPLACE FUNCTION DATE_FORMAT(
     date_val DATE,
     format_str TEXT
@@ -592,7 +624,7 @@ RETURNS void AS $$
     WHERE d.classid = 'pg_class'::regclass
       AND d.refclassid = 'pg_class'::regclass
       AND s.relkind = 'S'
-      AND n.nspname = 'public';
+      AND n.nspname = current_schema();
 
 	prepared_sql VARCHAR(255);
 

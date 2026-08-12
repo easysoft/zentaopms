@@ -3135,6 +3135,7 @@ class baseRouter
         $slaveDB->encoding   = $config->db->encoding;
         $slaveDB->strictMode = $config->db->strictMode;
         $slaveDB->prefix     = $config->db->prefix;
+        $slaveDB->schema     = $config->db->schema ?? 'public';
 
         return $slaveDB;
     }
