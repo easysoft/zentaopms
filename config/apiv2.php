@@ -87,10 +87,13 @@ $routes['/projects/:projectID/issues']     = array('redirect' => '/issues?object
 $routes['/executions/:executionID/issues'] = array('redirect' => '/issues?objectID=:executionID&from=execution', 'search' => array('enabled' => true));
 $routes['/issues/:issueID']                = array('response' => 'issue,actions(array)');
 
-$routes['/risks']                         = array('response' => 'risks(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/risks']     = array('redirect' => '/risks?projectID=:projectID', 'search' => array('enabled' => true));
-$routes['/executions/:executionID/risks'] = array('redirect' => '/risks?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
-$routes['/risks/:riskID']                 = array('response' => 'risk,actions(array)');
+$routes['/weeklies']           = array('post' => array('response' => '*'));
+$routes['/weeklies/:reportID'] = array('put' => array('response' => '*'));
+
+$routes['/risks']                         = array('get' => array('response' => 'risks(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
+$routes['/projects/:projectID/risks']     = array('redirect' => '/risks?projectID=:projectID', 'response' => 'risks(array),pager', 'search' => array('enabled' => true));
+$routes['/executions/:executionID/risks'] = array('redirect' => '/risks?executionID=:executionID&from=execution', 'response' => 'risks(array),pager', 'search' => array('enabled' => true));
+$routes['/risks/:riskID']                 = array('get' => array('response' => 'risk,actions(array)'), 'put' => array('response' => '*'));
 
 $routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
