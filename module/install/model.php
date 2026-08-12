@@ -118,7 +118,8 @@ class installModel extends model
         $sql = trim($sql);
         if(!$sql) return '';
 
-        $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? ($this->config->db->schema ?? 'public') : $this->config->db->name;
+        $schema = $this->config->db->schema ?? 'public';
+        $prefix = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? $schema : $this->config->db->name;
         $sql    = str_replace("`{$this->config->db->defaultPrefix}", $prefix . ".`{$this->config->db->defaultPrefix}", $sql);
         $sql    = str_replace('`ztv_', $prefix . '.`ztv_', $sql);
         $sql    = str_replace($this->config->db->defaultPrefix, $this->config->db->prefix, $sql);
