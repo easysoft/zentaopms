@@ -99,6 +99,7 @@ $routes['/meetings']                         = array('get' => array('response' =
 $routes['/projects/:projectID/meetings']     = array('redirect' => '/meetings?objectID=:projectID&from=project', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
 $routes['/executions/:executionID/meetings'] = array('redirect' => '/meetings?objectID=:executionID&from=execution', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
 $routes['/meetings/:meetingID']              = array('get' => array('response' => 'meeting,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
+$routes['/meetings/:meetingID/minutes']      = array('get' => array('method' => 'minutes', 'response' => '*'), 'post' => array('method' => 'minutes', 'response' => '*'), 'put' => array('method' => 'minutes', 'response' => '*'), 'delete' => array('method' => 'minutes', 'response' => '*'));
 
 $routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
