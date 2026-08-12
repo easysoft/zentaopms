@@ -5554,7 +5554,7 @@ select tt.*,
 tt.`故事点` / tt.`工时` as `单位时间交付需求规模数`
 from (
 select
-t1.name as project,
+t1.id,t1.name as project,
 (
 	select round(sum(t3.estimate), 1) from zt_projectstory t2
 	left join zt_story t3 on t3.id= t2.story and t3.status='closed' and t3.`closedReason` = 'done'
@@ -5569,7 +5569,7 @@ from zt_project t1
 where t1.status = 'closed'
 and t1.deleted = '0'
 and t1.type = 'project'
-group by t1.id) tt
+group by t1.id,t1.name) tt
 EOT
 ,
     'settings'  => array
@@ -6342,7 +6342,7 @@ FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
 AND ((t2.deleted = '0' AND t2.parent < 1) OR t2.id IS NULL)
-GROUP BY t1.id
+GROUP BY t1.id,t1.name,t1.begin,t1.end
 ) AS t
 EOT
 ,
@@ -6483,7 +6483,7 @@ LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 LEFT JOIN zt_project AS t3 on t1.project = t3.id AND t3.type = 'project' AND t3.deleted = '0'
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
 AND t2.deleted = '0' AND t2.parent < 1
-GROUP BY t1.id
+GROUP BY t1.id, t1.name, t1.begin, t1.end, t1.realBegan, t3.id, t3.name
 ) AS t
 ORDER BY `projectID` ASC, id ASC LIMIT 999999
 EOT
