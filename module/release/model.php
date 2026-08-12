@@ -552,6 +552,14 @@ class releaseModel extends model
 
         $this->processRelated($oldRelease->id, $release);
 
+        /* Update system latestRelease when the system is changed. */
+        if($release->system != $oldRelease->system)
+        {
+            $this->loadModel('system');
+            if($oldRelease->system) $this->system->setSystemRelease($oldRelease->system, $oldRelease->id);
+            if($release->system) $this->system->setSystemRelease($release->system, $oldRelease->id, $oldRelease->createdDate);
+        }
+
         $release = $this->file->replaceImgURL($release, 'desc');
         return common::createChanges($oldRelease, $release);
     }
