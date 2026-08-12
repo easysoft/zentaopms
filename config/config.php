@@ -162,7 +162,7 @@ $config->file = new stdclass();
 $config->file->dangers        = 'php,php3,php4,phtml,php5,jsp,py,rb,asp,aspx,ashx,asa,cer,cdx,aspl,shtm,shtml,html,htm';
 $config->file->allowed        = 'txt,md,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett,xlt,xlsm,csv,jpg,jpeg,png,psd,gif,ico,bmp,swf,avi,rmvb,rm,mp3,mp4,3gp,flv,mov,movie,rar,zip,bz,bz2,tar,gz,mpp,rp,pdm,vsdx,vsd,sql,xmind,mm';
 $config->file->storageType    = 'fs';       // fs or s3
-$config->file->allowedModules = 'artifact'; // 设置上传文件时不需要过滤文件类型的模块。
+$config->file->allowedModules = 'artifact,testcase'; // 设置上传文件时不需要过滤文件类型的模块。
 
 /* 文档多人协同配置。 Document Hocus Pocus. */
 $config->docHocuspocus = new stdclass();
