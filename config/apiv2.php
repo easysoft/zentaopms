@@ -9,7 +9,8 @@ $routes['/programs/:programID/products'] = array('redirect' => '/programs/:progr
 $routes['/products']            = array('redirect' => '/products/all');
 $routes['/products/all']        = array('response' => 'productStats|products,pager');
 $routes['/products/browse']     = array('response' => 'stories,pager', 'response' => 'stories(array),pager'); // stories
-$routes['/products/:productID'] = array('response' => 'product,dynamics,members,branches,reviewers');
+$routes['/products/:productID']       = array('response' => 'product,dynamics,members,branches,reviewers');
+$routes['/products/:productID/close'] = array('post' => array('response' => '*'));
 
 $routes['/products/:productID/stories']     = array('redirect' => '/products/browse?productID=:productID', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/stories']     = array('redirect' => '/projectstories/story?projectID=:projectID', 'response' => 'stories(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'projectstory', 'querySessionKey' => 'projectstory'));
@@ -40,6 +41,7 @@ $routes['/projects/testreport']         = array('response' => 'reports(array)|te
 $routes['/projects/team']               = array('response' => 'teamMembers(array)|members');
 $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
 $routes['/projects/:projectID']         = array('response' => 'project');
+$routes['/projects/:projectID/close']   = array('post' => array('response' => '*'));
 
 $routes['/executions']                      = array('method' => 'all', 'response' => 'executionStats|executions,pager', 'search' => array('enabled' => true, 'searchModule' => 'execution', 'querySessionKey' => 'execution'));
 $routes['/projects/:projectID/executions']  = array('redirect' => '/projects/execution?projectID=:projectID');
@@ -53,6 +55,7 @@ $routes['/executions/testreport']           = array('response' => 'reports(array
 $routes['/executions/team']                 = array('response' => 'teamMembers(array)|members');
 $routes['/executions/:executionID/members'] = array('get' => array('redirect' => '/executions/team?executionID=:executionID'), 'put' => array('redirect' => '/executions/manageMembers?executionID=:executionID'));
 $routes['/executions/:executionID']         = array('response' => 'execution');
+$routes['/executions/:executionID/close']   = array('post' => array('response' => '*'));
 
 $routes['/executions/:executionID/tasks'] = array('redirect' => '/executions/task?executionID=:executionID');
 $routes['/tasks/:taskID']                 = array('response' => 'task,actions(array)');
