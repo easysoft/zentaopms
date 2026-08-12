@@ -461,7 +461,8 @@ class messageModel extends model
      */
     public function getMentionUsersFromHtml(string $html): array
     {
-        $pattern = '/<span[^>]*?\bmention-label\b[^>]*?data-type=["\']mention["\'][^>]*?data-id=["\']([^"\']+)["\'][^>]*>/is';
+        /* TipTap may output data-type before class; do not rely on attribute order. */
+        $pattern = '/<span(?=[^>]*\bmention-label\b)(?=[^>]*\bdata-type=["\']mention["\'])[^>]*\bdata-id=["\']([^"\']+)["\'][^>]*>/i';
 
         $accounts = array();
         if(preg_match_all($pattern, $html, $matches))
@@ -643,6 +644,8 @@ class messageModel extends model
                 $title = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
                 foreach($webhooks as $id => $webhook)
                 {
+                    if(strpos($webhook->type, 'group') !== false)  continue;
+
                     $host = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
                     $text = sprintf($this->lang->message->mention, $actorRealname, "[{$objectTitle}]({$host}{$viewLink})");
                     $data = $this->webhook->getDataByType($webhook, $action, $title, $text, '', '', $objectType, (int)$object->id);
