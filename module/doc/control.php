@@ -2642,6 +2642,7 @@ class doc extends control
         {
             $editTitle = $docType == 'url' ? $this->lang->doc->edit : $this->lang->settings;
             $title     = $isCreate ? $this->lang->doc->create : $editTitle;
+            if($objectType == 'template' && $isCreate) $title = $this->lang->docTemplate->create;
         }
         elseif($modalType == 'doc' && $isDraft != 'no')
         {
