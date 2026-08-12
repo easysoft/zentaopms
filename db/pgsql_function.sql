@@ -75,6 +75,11 @@ CREATE AGGREGATE GROUP_CONCAT(anyelement, text)
 
 --
 
+CREATE OR REPLACE FUNCTION ROUND(num float)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
 CREATE OR REPLACE FUNCTION ROUND(
     num float,
     decimals integer
@@ -86,6 +91,11 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
+CREATE OR REPLACE FUNCTION ROUND(num double precision)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
 CREATE OR REPLACE FUNCTION ROUND(
     num double precision,
     decimals integer
@@ -94,6 +104,11 @@ BEGIN
     RETURN pg_catalog.ROUND(num::numeric, decimals);
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION ROUND(num text)
+RETURNS numeric AS $$ BEGIN RETURN pg_catalog.ROUND(num::numeric, 0); END; $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
@@ -293,14 +308,48 @@ RETURNS INTEGER AS $$ BEGIN RETURN EXTRACT(YEAR FROM date_val)::INTEGER; END; $$
 
 --
 
-CREATE OR REPLACE FUNCTION DATEDIFF(
-    end_date ANYELEMENT,
-    start_date ANYELEMENT
-) RETURNS INTEGER AS $$
-BEGIN
-    RETURN (end_date - start_date)::INTEGER;
-END;
-$$ LANGUAGE plpgsql;
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date DATE, start_date DATE)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date - start_date; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date DATE, start_date TIMESTAMP)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date DATE, start_date TIMESTAMPTZ)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMP, start_date DATE)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMP, start_date TIMESTAMP)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMP, start_date TIMESTAMPTZ)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMPTZ, start_date DATE)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMPTZ, start_date TIMESTAMP)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION DATEDIFF(end_date TIMESTAMPTZ, start_date TIMESTAMPTZ)
+RETURNS INTEGER AS $$ BEGIN RETURN end_date::DATE - start_date::DATE; END; $$ LANGUAGE plpgsql IMMUTABLE;
 --
 
 CREATE OR REPLACE FUNCTION "IF"(
