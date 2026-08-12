@@ -68,6 +68,7 @@ $config->default->method = 'index';       //默认方法。 Default method.
 $config->db = new stdclass();
 $config->db->persistent    = false;        // 是否为持续连接。                                   Whether use persistent connection or not.
 $config->db->driver        = 'mysql';      // 默认使用的数据库驱动。                             The default database driver.
+$config->db->schema        = 'public';     // PostgreSQL/Gauss schema。                          The PostgreSQL/Gauss schema.
 $config->db->encoding      = 'UTF8';       // 数据库编码。                                       The database encoding.
 $config->db->strictMode    = true;         // 是否开启MySQL的严格模式。                          Whether enable MySQL strict mode or not.
 $config->db->defaultName   = 'zentao';     // 默认数据库名称，安装时的推荐值。                   The default database name, recommended when install.
@@ -228,6 +229,7 @@ if($config->inContainer || $config->inQuickon)
     $config->requestType   = getenv('ZT_REQUEST_TYPE');
     $config->timezone      = getEnvData('ZT_TIMEZONE', 'Asia/Shanghai');
     $config->db->driver    = getenv('ZT_DB_DRIVER');
+    $config->db->schema    = getEnvData('ZT_DB_SCHEMA', 'public');
     $config->db->host      = getenv('ZT_DB_HOST');
     $config->db->port      = getenv('ZT_DB_PORT');
     $config->db->name      = getenv('ZT_DB_NAME');

@@ -458,7 +458,8 @@ class dbh
         if(in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $this->useDB($this->dbConfig->name);
-            $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_name='{$tableName}'";
+            $schema = $this->dbConfig->schema ?? 'public';
+            $sql = "SELECT * FROM information_schema.tables WHERE table_catalog = '{$this->dbConfig->name}' AND table_schema = '{$schema}' AND table_name='{$tableName}'";
             return $this->rawQuery($sql)->fetch();
         }
 

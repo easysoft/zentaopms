@@ -8725,7 +8725,8 @@ class upgradeModel extends model
      */
     public function update18101(): void
     {
-        $count = $this->dao->select('COUNT(1) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($this->config->db->name)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
+        $schema = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? ($this->config->db->schema ?? 'public') : $this->config->db->name;
+        $count  = $this->dao->select('COUNT(1) AS count')->from('information_schema.TABLES')->where('TABLE_SCHEMA')->eq($schema)->andWhere('TABLE_NAME')->eq(str_replace('`', '', TABLE_AI_MODEL))->fetch('count');
         if($count) return;
 
         /* Execute open edition. */
