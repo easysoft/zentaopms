@@ -99,6 +99,7 @@ $routes['/meetings']                         = array('get' => array('response' =
 $routes['/projects/:projectID/meetings']     = array('redirect' => '/meetings?objectID=:projectID&from=project', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
 $routes['/executions/:executionID/meetings'] = array('redirect' => '/meetings?objectID=:executionID&from=execution', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
 $routes['/meetings/:meetingID']              = array('get' => array('response' => 'meeting,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
+$routes['/meetings/:meetingID/minutes']      = array('put' => array('method' => 'minutes', 'response' => '*'));
 
 $routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
@@ -122,6 +123,8 @@ $routes['/tickets/:ticketID']             = array('response' => 'ticket,actions(
 $routes['/systems']                     = array('response' => 'appList(array)|systems,pager');
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
 $routes['/systems/:systemID']           = array('response' => 'system,actions(array)');
+
+$routes['/custom/relations/:objectType/:objectID/:relatedObjectType']                  = array('post' => array('redirect' => '/custom/relateObject?objectID=:objectID&objectType=:objectType&relatedObjectType=:relatedObjectType', 'response' => '*'));
 
 $routes['/todos/my']      = array('redirect' => '/my/todo', 'response' => 'todos(array),pager');
 $routes['/todos/:todoID'] = array('response' => 'todo');
