@@ -95,6 +95,11 @@ $routes['/projects/:projectID/risks']     = array('redirect' => '/risks?projectI
 $routes['/executions/:executionID/risks'] = array('redirect' => '/risks?executionID=:executionID&from=execution', 'response' => 'risks(array),pager', 'search' => array('enabled' => true));
 $routes['/risks/:riskID']                 = array('get' => array('response' => 'risk,actions(array)'), 'put' => array('response' => '*'));
 
+$routes['/meetings']                         = array('get' => array('response' => 'meetings(array),pager', 'search' => array('enabled' => true)), 'post' => array('response' => '*'));
+$routes['/projects/:projectID/meetings']     = array('redirect' => '/meetings?objectID=:projectID&from=project', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
+$routes['/executions/:executionID/meetings'] = array('redirect' => '/meetings?objectID=:executionID&from=execution', 'response' => 'meetings(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'meeting'));
+$routes['/meetings/:meetingID']              = array('get' => array('response' => 'meeting,actions(array)'), 'put' => array('response' => '*'), 'delete' => array('response' => '*'));
+
 $routes['/opportunities']                         = array('response' => 'opportunities(array),pager', 'search' => array('enabled' => true));
 $routes['/projects/:projectID/opportunities']     = array('redirect' => '/opportunities?projectID=:projectID', 'search' => array('enabled' => true));
 $routes['/executions/:executionID/opportunities'] = array('redirect' => '/opportunities?executionID=:executionID&from=execution', 'search' => array('enabled' => true));
