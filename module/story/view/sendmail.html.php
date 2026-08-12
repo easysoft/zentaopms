@@ -28,7 +28,7 @@
   <td style='padding: 10px; border: none;'>
     <fieldset style='border: 1px solid #e5e5e5'>
       <legend style='color: #114f8e'><?php echo $this->lang->story->legendSpec;?></legend>
-      <div style='padding:5px;'><?php echo $object->spec;?></div>
+      <div style='padding:5px;'><?php echo zget($object, 'spec', '');?></div>
     </fieldset>
   </td>
 </tr>
