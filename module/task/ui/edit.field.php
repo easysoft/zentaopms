@@ -201,10 +201,10 @@ $buildFiles = function()
     $files = array();
     if(!empty(data('task.files')))
     {
-        foreach(data('task.files') as $file)
+        foreach(data('task.files') as $fileInfo)
         {
-            if($file->extra != '') continue;
-            $files[] = $file;
+            if($fileInfo->extra != '') continue;
+            $files[] = $fileInfo;
         }
     }
 

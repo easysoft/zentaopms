@@ -4,7 +4,6 @@ namespace zin;
 global $lang, $app, $config;
 
 $storyType      = data('story.type') ?: 'story';
-$branches       = data('branches')   ?: array();
 $fieldData      = data('fields')     ?: array();
 $canEditContent = str_contains(',draft,changing,', ',' . (data('story.status') ?: '') . ',');
 $forceReview    = $app->control->story->checkForceReview($storyType);
@@ -33,7 +32,7 @@ if(!empty(data('story.stages')) && isset($fieldData['stage']['options']))
 $files = data('story.files') ?: null;
 if(!empty($files))
 {
-    foreach($files as $file) $file->extra = data('story.version');
+    foreach($files as $fileInfo) $fileInfo->extra = data('story.version');
 }
 
 if($storyType == 'story')
@@ -51,39 +50,44 @@ $fields->field('title')
     ->control('colorInput', array('colorValue' => data('story.color')))
     ->value(!empty($fieldData['title']['default']) ? $fieldData['title']['default'] : '');
 
-$fields->field('reviewer')
-    ->position('info')
-    ->hidden(empty($canEditContent))
-    ->required(true)
-    ->control(function() use($lang, $fieldData, $forceReview)
-    {
-        return inputGroup
-        (
-            data('story.status') != 'reviewing' ? picker
+if(data('story.status') != 'reviewing')
+{
+    $fields->field('reviewer')
+        ->position('info')
+        ->hidden(empty($canEditContent))
+        ->required(true)
+        ->control(function() use($fieldData, $forceReview)
+        {
+            global $lang;
+            return inputGroup
             (
-                setID('reviewer'),
-                set::name('reviewer[]'),
-                set::items($fieldData['reviewer']['options']),
-                set::value($fieldData['reviewer']['default']),
-                set::multiple(true),
-                on::change('changeReviewer')
-            ) : null,
-            $forceReview ? null : span
-            (
-                setClass('input-group-addon'),
-                checkbox
+                data('story.status') != 'reviewing' ? picker
                 (
-                    setID('needNotReview'),
-                    set::name('needNotReview'),
-                    set::checked(empty($fieldData['reviewer']['default'])),
-                    set::value(1),
-                    set::text($lang->story->needNotReview),
-                    on::change('changeNeedNotReview(e.target)')
-                )
-            ),
-            formHidden('needNotReview', $forceReview ? 0 : 1)
-        );
-    });
+                    setID('reviewer'),
+                    set::name('reviewer[]'),
+                    set::items($fieldData['reviewer']['options']),
+                    set::value($fieldData['reviewer']['default']),
+                    set::multiple(true),
+                    on::change('changeReviewer')
+                ) : null,
+                $forceReview ? null : span
+                (
+                    setClass('input-group-addon'),
+                    checkbox
+                    (
+                        setID('needNotReview'),
+                        set::name('needNotReview'),
+                        set::checked(empty($fieldData['reviewer']['default'])),
+                        set::value(1),
+                        set::text($lang->story->needNotReview),
+                        on::change('changeNeedNotReview(e.target)')
+                    )
+                ),
+                formHidden('needNotReview', $forceReview ? 0 : 1)
+            );
+        });
+}
+
 $fields->field('spec')->position('info')->label($lang->story->legendSpec);
 $fields->field('verify')->position('info');
 if(empty($canEditContent))
@@ -101,12 +105,14 @@ $fields->field('twins')
     ->position('info')
     ->label($lang->story->changeSyncTip)
     ->hidden(empty(data('twins')))
-    ->control(function() use($lang, $branches)
+    ->control(function()
     {
         return h::ul
         (
-            array_values(array_map(function($twin) use($branches, $lang)
+            array_values(array_map(function($twin)
             {
+                global $lang;
+                $branches   = data('branches')   ?: array();
                 $branch     = isset($branches[$twin->branch]) ? $branches[$twin->branch] : '';
                 $stage      = $lang->story->stageList[$twin->stage];
                 $labelClass = data('story.branch') == $twin->branch ? 'primary' : '';
@@ -136,8 +142,9 @@ $fields->field('product')
     ->position('basic')
     ->group($lang->story->legendBasicInfo)
     ->hidden(!empty(data('product.shadow')))
-    ->control(function() use($fieldData)
+    ->control(function()
     {
+        $fieldData = data('fields') ?: array();
         return inputGroup
         (
             on::change('[name=branch]')->call('loadBranch'),
