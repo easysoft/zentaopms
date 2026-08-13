@@ -61,7 +61,7 @@ formBatchPanel
     setID('dataform'),
     set::title($lang->story->batchToTask),
     set::items($fields),
-    set::maxRows(count($data)),
+    set::rowsCount(count($data)),
     set::data($data),
     set::onRenderRow(jsRaw('renderRowData')),
     on::change('[data-name="module"]', 'setStories'),
