@@ -35,31 +35,111 @@ $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
-CREATE OR REPLACE FUNCTION group_concat_trans(state text, value anyelement)
+DROP AGGREGATE IF EXISTS GROUP_CONCAT(anyelement);
+
+--
+
+DROP AGGREGATE IF EXISTS GROUP_CONCAT(anyelement, text);
+
+--
+
+DROP FUNCTION IF EXISTS group_concat_trans(text, anyelement);
+
+--
+
+DROP FUNCTION IF EXISTS group_concat_trans(text, anyelement, text);
+
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value text)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value; END IF;
+    RETURN state || ',' || value;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value varchar)
 RETURNS text AS $$
 BEGIN
     IF value IS NULL THEN RETURN state; END IF;
     IF state IS NULL THEN RETURN value::text; END IF;
-
     RETURN state || ',' || value::text;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
-CREATE OR REPLACE FUNCTION group_concat_trans(state text, value anyelement, delimiter text)
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value int)
 RETURNS text AS $$
 BEGIN
     IF value IS NULL THEN RETURN state; END IF;
     IF state IS NULL THEN RETURN value::text; END IF;
+    RETURN state || ',' || value::text;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
 
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value bigint)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
+    RETURN state || ',' || value::text;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value text, delimiter text)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value; END IF;
+    RETURN state || COALESCE(delimiter, '') || value;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value varchar, delimiter text)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
     RETURN state || COALESCE(delimiter, '') || value::text;
 END;
 $$ LANGUAGE plpgsql IMMUTABLE;
 
 --
 
-CREATE AGGREGATE GROUP_CONCAT(anyelement)
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value int, delimiter text)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
+    RETURN state || COALESCE(delimiter, '') || value::text;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE OR REPLACE FUNCTION group_concat_trans(state text, value bigint, delimiter text)
+RETURNS text AS $$
+BEGIN
+    IF value IS NULL THEN RETURN state; END IF;
+    IF state IS NULL THEN RETURN value::text; END IF;
+    RETURN state || COALESCE(delimiter, '') || value::text;
+END;
+$$ LANGUAGE plpgsql IMMUTABLE;
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(text)
 (
     SFUNC = group_concat_trans,
     STYPE = text
@@ -67,7 +147,55 @@ CREATE AGGREGATE GROUP_CONCAT(anyelement)
 
 --
 
-CREATE AGGREGATE GROUP_CONCAT(anyelement, text)
+CREATE AGGREGATE GROUP_CONCAT(varchar)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(int)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(bigint)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(text, text)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(varchar, text)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(int, text)
+(
+    SFUNC = group_concat_trans,
+    STYPE = text
+);
+
+--
+
+CREATE AGGREGATE GROUP_CONCAT(bigint, text)
 (
     SFUNC = group_concat_trans,
     STYPE = text
