@@ -2144,3 +2144,9 @@ ALTER TABLE `zt_zoutput`
   MODIFY COLUMN `deleted` char(1) NOT NULL DEFAULT '0';
 ALTER TABLE `zt_zoutput`
   MODIFY COLUMN `deleted` tinyint unsigned NOT NULL DEFAULT 0;
+
+DROP VIEW IF EXISTS `ztv_tasknotpl`;
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+
+CREATE OR REPLACE VIEW `ztv_tasknotpl` AS SELECT * FROM `zt_task` WHERE `deleted` = '0' AND `isTpl` = 0;
+CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
