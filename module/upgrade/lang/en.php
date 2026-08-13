@@ -74,6 +74,7 @@ $lang->upgrade->toVersion     = 'Upgrade to';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
 $lang->upgrade->upgradingTips = 'Upgrading in progress. Please wait. Do not refresh, power off, or shut down!';
+$lang->upgrade->executeFailed = 'The upgrade request was interrupted. Please refresh the page to retry. Completed changes will be skipped automatically and will not run again.';
 $lang->upgrade->forbiddenExt  = 'The following extensions are incompatible with the new version and have been automatically disabled:';
 $lang->upgrade->updateFile    = 'Attachment information update required.';
 $lang->upgrade->showSQLLog    = 'Database inconsistencies detected. Attempting to fix. Below are the SQL statements for repair:';
