@@ -51,7 +51,7 @@ formPanel
         set::label($lang->mail->async),
         set::control('radioListInline'),
         set::name('async'),
-        set::value(zget($config->mail, 'async', 0)),
+        set::value(zget($mailConfig, 'async', 0)),
         set::items($lang->mail->asyncList)
     ) : null,
     formRow

@@ -118,83 +118,78 @@ a:82:{i:0;O:8:"stdClass":24:{s:2:"id";s:1:"1";s:7:"product";s:1:"0";s:3:"lib";s:
     &quot;name&quot;: &quot;测试产品&quot;,
     &quot;code&quot;: &quot;test&quot;,
     &quot;program&quot;: 1
-}";s:15:"responseExample";s:3251:"{
-    &quot;total&quot;: 11,
-    &quot;products&quot;: [
-        {
-            &quot;id&quot;: 1,
-            &quot;program&quot;: 6,
-            &quot;name&quot;: &quot;公司企业网站建设1&quot;,
-            &quot;code&quot;: &quot;companyWebsite&quot;,
-            &quot;bind&quot;: &quot;0&quot;,
-            &quot;line&quot;: 0,
-            &quot;type&quot;: &quot;normal&quot;,
-            &quot;status&quot;: &quot;normal&quot;,
-            &quot;subStatus&quot;: &quot;&quot;,
-            &quot;desc&quot;: &quot;建立公司企业网站，可以更好对外展示。&lt;br /&gt;&quot;,
-            &quot;PO&quot;: {
-                &quot;id&quot;: 2,
-                &quot;account&quot;: &quot;productManager&quot;,
-                &quot;avatar&quot;: &quot;&quot;,
-                &quot;realname&quot;: &quot;产品经理&quot;
-            },
-            &quot;QD&quot;: {
-                &quot;id&quot;: 10,
-                &quot;account&quot;: &quot;testManager&quot;,
-                &quot;avatar&quot;: &quot;&quot;,
-                &quot;realname&quot;: &quot;测试经理&quot;
-            },
-            &quot;RD&quot;: {
-                &quot;id&quot;: 2,
-                &quot;account&quot;: &quot;productManager&quot;,
-                &quot;avatar&quot;: &quot;&quot;,
-                &quot;realname&quot;: &quot;产品经理&quot;
-            },
-            &quot;acl&quot;: &quot;open&quot;,
-            &quot;whitelist&quot;: [],
-            &quot;reviewer&quot;: &quot;&quot;,
-            &quot;createdBy&quot;: {
-                &quot;id&quot;: 2,
-                &quot;account&quot;: &quot;productManager&quot;,
-                &quot;avatar&quot;: &quot;&quot;,
-                &quot;realname&quot;: &quot;产品经理&quot;
-            },
-            &quot;createdDate&quot;: &quot;2012-06-05T01:57:07Z&quot;,
-            &quot;createdVersion&quot;: &quot;&quot;,
-            &quot;order&quot;: 5,
-            &quot;deleted&quot;: &quot;0&quot;,
-            &quot;lineName&quot;: &quot;&quot;,
-            &quot;programName&quot;: &quot;企业管理&quot;,
-            &quot;stories&quot;: {
-                &quot;active&quot;: 5,
-                &quot;draft&quot;: 3,
-                &quot;&quot;: 0,
-                &quot;closed&quot;: 0,
-                &quot;changed&quot;: 0
-            },
-            &quot;requirements&quot;: {
-                &quot;0&quot;: &quot;&quot;,
-                &quot;1&quot;: &quot;draft&quot;,
-                &quot;2&quot;: &quot;active&quot;,
-                &quot;3&quot;: &quot;closed&quot;,
-                &quot;4&quot;: &quot;changed&quot;,
-                &quot;&quot;: 0,
-                &quot;draft&quot;: 0,
-                &quot;active&quot;: 0,
-                &quot;closed&quot;: 0,
-                &quot;changed&quot;: 0
-            },
-            &quot;plans&quot;: 0,
-            &quot;releases&quot;: 0,
-            &quot;bugs&quot;: 5,
-            &quot;unResolved&quot;: 5,
-            &quot;closedBugs&quot;: 0,
-            &quot;fixedBugs&quot;: 0,
-            &quot;thisWeekBugs&quot;: 1,
-            &quot;assignToNull&quot;: 1,
-            &quot;progress&quot;: 0
-        }
-    ]
+}";s:15:"responseExample";s:2418:"{
+    &quot;id&quot;: 1,
+    &quot;program&quot;: 1,
+    &quot;name&quot;: &quot;测试产品&quot;,
+    &quot;code&quot;: &quot;test&quot;,
+    &quot;bind&quot;: &quot;0&quot;,
+    &quot;line&quot;: 0,
+    &quot;type&quot;: &quot;normal&quot;,
+    &quot;status&quot;: &quot;normal&quot;,
+    &quot;subStatus&quot;: &quot;&quot;,
+    &quot;desc&quot;: &quot;建立公司企业网站，可以更好对外展示。&lt;br /&gt;&quot;,
+    &quot;PO&quot;: {
+        &quot;id&quot;: 2,
+        &quot;account&quot;: &quot;productManager&quot;,
+        &quot;avatar&quot;: &quot;&quot;,
+        &quot;realname&quot;: &quot;产品经理&quot;
+    },
+    &quot;QD&quot;: {
+        &quot;id&quot;: 10,
+        &quot;account&quot;: &quot;testManager&quot;,
+        &quot;avatar&quot;: &quot;&quot;,
+        &quot;realname&quot;: &quot;测试经理&quot;
+    },
+    &quot;RD&quot;: {
+        &quot;id&quot;: 2,
+        &quot;account&quot;: &quot;productManager&quot;,
+        &quot;avatar&quot;: &quot;&quot;,
+        &quot;realname&quot;: &quot;产品经理&quot;
+    },
+    &quot;acl&quot;: &quot;open&quot;,
+    &quot;whitelist&quot;: [],
+    &quot;reviewer&quot;: &quot;&quot;,
+    &quot;createdBy&quot;: {
+        &quot;id&quot;: 2,
+        &quot;account&quot;: &quot;productManager&quot;,
+        &quot;avatar&quot;: &quot;&quot;,
+        &quot;realname&quot;: &quot;产品经理&quot;
+    },
+    &quot;createdDate&quot;: &quot;2012-06-05T01:57:07Z&quot;,
+    &quot;createdVersion&quot;: &quot;&quot;,
+    &quot;order&quot;: 5,
+    &quot;deleted&quot;: &quot;0&quot;,
+    &quot;lineName&quot;: &quot;&quot;,
+    &quot;programName&quot;: &quot;企业管理&quot;,
+    &quot;stories&quot;: {
+        &quot;active&quot;: 5,
+        &quot;draft&quot;: 3,
+        &quot;&quot;: 0,
+        &quot;closed&quot;: 0,
+        &quot;changed&quot;: 0
+    },
+    &quot;requirements&quot;: {
+        &quot;0&quot;: &quot;&quot;,
+        &quot;1&quot;: &quot;draft&quot;,
+        &quot;2&quot;: &quot;active&quot;,
+        &quot;3&quot;: &quot;closed&quot;,
+        &quot;4&quot;: &quot;changed&quot;,
+        &quot;&quot;: 0,
+        &quot;draft&quot;: 0,
+        &quot;active&quot;: 0,
+        &quot;closed&quot;: 0,
+        &quot;changed&quot;: 0
+    },
+    &quot;plans&quot;: 0,
+    &quot;releases&quot;: 0,
+    &quot;bugs&quot;: 5,
+    &quot;unResolved&quot;: 5,
+    &quot;closedBugs&quot;: 0,
+    &quot;fixedBugs&quot;: 0,
+    &quot;thisWeekBugs&quot;: 1,
+    &quot;assignToNull&quot;: 1,
+    &quot;progress&quot;: 0
 }";s:8:"response";s:2289:"[{"field":"id","paramsType":"int","required":"","desc":"产品ID","structType":"json","sub":1,"key":"kwbpz5jh94vauhx9ga6","children":[]},{"field":"name","paramsType":"string","required":"","desc":"产品名称","structType":"json","sub":1,"key":"kwbqhljxnscdsph7jh","children":[]},{"field":"program","paramsType":"int","required":"","desc":"所属项目集","structType":"json","sub":1,"key":"kwbqhueedi6o9jyr80g","children":[]},{"field":"code","paramsType":"string","required":"","desc":"产品代号","structType":"json","sub":1,"key":"kwbqi7fmwnjsrds8i3j","children":[]},{"field":"line","paramsType":"int","required":"","desc":"产品线","structType":"json","sub":1,"key":"kwbqk1pemf4rfcleksf","children":[]},{"field":"type","paramsType":"string","required":"","desc":"产品类型(normal 正常 | branch 多分支 | platform 多平台)","structType":"json","sub":1,"key":"kwbqo9fjuslzzbejx6","children":[]},{"field":"status","paramsType":"string","required":"","desc":"状态(normal 正常 | closed 结束)","structType":"json","sub":1,"key":"kwbqqfgzincm6qkym3","children":[]},{"field":"PO","paramsType":"string","required":"","desc":"产品负责人","structType":"json","sub":1,"key":"kwbr0v2vhqrrqh8y6l","children":[]},{"field":"QD","paramsType":"string","required":"","desc":"测试负责人","structType":"json","sub":1,"key":"kwbr107xvu791yqyaxk","children":[]},{"field":"RD","paramsType":"string","required":"","desc":"发布负责人","structType":"json","sub":1,"key":"kwbr10vxlfbpvdlvor9","children":[]},{"field":"acl","paramsType":"string","required":"","desc":"访问控制（open 公开 | private 私有）","structType":"json","sub":1,"key":"kwbr1lszosgjhp2c0zh","children":[]},{"field":"whitelist","paramsType":"array","required":"","desc":"白名单","structType":"json","sub":1,"key":"kwbr1uny368imqpppbd","children":[]},{"field":"createdBy","paramsType":"string","required":"","desc":"创建人","structType":"json","sub":1,"key":"kwbr24x72kgwwnbt8jh","children":[]},{"field":"createdDate","paramsType":"datetime","required":"","desc":"创建时间","structType":"json","sub":1,"key":"kwbr2agkwi1th2cc9l","children":[]},{"field":"desc","paramsType":"string","required":"","desc":"产品描述","structType":"json","sub":1,"key":"kwbr2x4zzb1jbw5g5qk","children":[]}]";s:12:"commonParams";s:0:"";s:7:"addedBy";s:6:"wwccss";s:9:"addedDate";s:19:"2023-01-05 10:41:36";s:8:"editedBy";s:6:"wwccss";s:10:"editedDate";s:19:"2023-01-05 10:41:36";s:7:"deleted";s:1:"0";}i:4;O:8:"stdClass":24:{s:2:"id";s:1:"5";s:7:"product";s:1:"0";s:3:"lib";s:3:"853";s:6:"module";s:4:"2962";s:5:"title";s:18:"获取产品列表";s:4:"path";s:9:"/products";s:8:"protocol";s:4:"HTTP";s:6:"method";s:3:"GET";s:11:"requestType";s:16:"application/json";s:12:"responseType";s:0:"";s:6:"status";s:4:"done";s:5:"owner";s:5:"admin";s:4:"desc";s:0:"";s:7:"version";s:1:"5";s:6:"params";s:118:"{"header":[{"field":"Token","required":"","desc":"认证凭证Token"}],"params":[],"paramsType":"formData","query":[]}";s:13:"paramsExample";s:0:"";s:15:"responseExample";s:3936:"{
     &quot;total&quot;: 1,
     &quot;products&quot;: [
