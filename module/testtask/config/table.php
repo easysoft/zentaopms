@@ -107,6 +107,24 @@ $config->testtask->cases->dtable->fieldList['actions']['width'] = 'auto';
 $config->testtask->cases->dtable->fieldList['actions']['list']  = $config->testtask->cases->actionList;
 $config->testtask->cases->dtable->fieldList['actions']['menu']  = array(array('confirmChange'), array('createBug', 'runCase', 'results', 'unlinkCase'));
 
+$config->testtask->groupCase = new stdclass();
+$config->testtask->groupCase->dtable = new stdclass();
+$config->testtask->groupCase->dtable->fieldList = $config->testcase->group->dtable->fieldList;
+
+$config->testtask->groupCase->actionList = $config->testcase->actionList;
+$config->testtask->groupCase->actionList['runCase']['url']             = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
+$config->testtask->groupCase->actionList['edit']['url']                = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID={execution}');
+$config->testtask->groupCase->actionList['unlinkCase']['url']          = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}');
+$config->testtask->groupCase->actionList['unlinkCase']['class']        = 'ajax-submit';
+$config->testtask->groupCase->actionList['unlinkCase']['data-confirm'] = $lang->testtask->confirmUnlinkCase;
+
+$config->testtask->groupCase->dtable->fieldList['actions']['list']         = $config->testtask->groupCase->actionList;
+$config->testtask->groupCase->dtable->fieldList['id']['name']              = 'id';
+$config->testtask->groupCase->dtable->fieldList['actions']['menu']         = array('runCase', 'edit', 'unlinkCase');
+$config->testtask->groupCase->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
+$config->testtask->groupCase->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
+foreach($config->testtask->groupCase->dtable->fieldList as $field => $setting) $config->testtask->groupCase->dtable->fieldList[$field]['show'] = true;
+
 $config->testtask->linkcase = new stdclass();
 $config->testtask->linkcase->dtable = new stdclass();
 $config->testtask->linkcase->dtable->fieldList['id']         = $config->testcase->dtable->fieldList['id'];

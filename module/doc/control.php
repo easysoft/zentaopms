@@ -951,9 +951,13 @@ class doc extends control
                 $docData->module = $parentDoc->module;
             }
 
+            /* create 会 unset rawContent，克隆一份供 @ 通知解析。 */
+            /* create() unsets rawContent, clone one copy for parsing @ mentions. */
+            $docForMention = clone $docData;
+
             $docResult = $this->doc->create($docData);
             if(!$docResult || dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->docZen->responseAfterCreate($docResult, '', $from);
+            return $this->docZen->responseAfterCreate($docResult, 'doc', $from, $docForMention);
         }
 
         $this->docZen->assignVarsForCreate($objectType, $objectID, $libID, $moduleID, $docType);
@@ -2556,7 +2560,7 @@ class doc extends control
         }
         if($docID) $this->doc->createAction($docID, 'view');
 
-        $this->send($doc);
+        $this->send(array('result' => 'success', 'doc' => $doc));
     }
 
     /**
@@ -2638,6 +2642,7 @@ class doc extends control
         {
             $editTitle = $docType == 'url' ? $this->lang->doc->edit : $this->lang->settings;
             $title     = $isCreate ? $this->lang->doc->create : $editTitle;
+            if($objectType == 'template' && $isCreate) $title = $this->lang->docTemplate->create;
         }
         elseif($modalType == 'doc' && $isDraft != 'no')
         {

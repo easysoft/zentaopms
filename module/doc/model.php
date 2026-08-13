@@ -589,14 +589,14 @@ class docModel extends model
 
         $query     = $this->getDocQuery($this->session->contributeDocQuery);
         $query     = preg_replace('/(`\w+`)/', 't1.$1', $query);
-        $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+        $docIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('objectType')->eq('doc')
             ->andWhere('objectID')->in($hasPrivDocIdList)
             ->andWhere('actor')->eq($this->app->user->account)
             ->andWhere('action')->eq('edited')
             ->fetchAll('objectID');
 
-        return $this->dao->select('t1.*, t2.name as libName, t2.type as objectType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('t1.*, t2.name as libName, t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
             ->where('t1.deleted')->eq(0)
             ->andWhere($query)
@@ -747,7 +747,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('templateType')->eq('')
             ->andWhere('id')->in($docIdList)
-            ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")->fi()
+            ->beginIF($browseType == 'all')->andWhere("(status = 'normal' or (status = 'draft' and `addedBy`='{$this->app->user->account}'))")->fi()
             ->beginIF($browseType == 'draft')->andWhere('status')->eq('draft')->andWhere('addedBy')->eq($this->app->user->account)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -1214,7 +1214,7 @@ class docModel extends model
                 ->groupBy('doc')
                 ->get();
 
-            $dao = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as objectType')->from(TABLE_DOC)->alias('t1')
+            $dao = $this->dao->select('t1.*,t2.date,t3.name as libName,t3.type as `objectType`')->from(TABLE_DOC)->alias('t1')
                 ->leftJoin(TABLE_DOCACTION)->alias('t2')->on("t1.id=t2.doc")
                 ->leftJoin(TABLE_DOCLIB)->alias('t3')->on("t1.lib=t3.id")
                 ->where('t1.deleted')->eq(0)
@@ -1232,7 +1232,7 @@ class docModel extends model
         }
         else
         {
-            $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as objectType')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
+            $dao = $this->dao->select('t1.*,t2.name as libName,t2.type as `objectType`')->from(TABLE_DOC)->alias('t1')->leftJoin(TABLE_DOCLIB)->alias('t2')->on("t1.lib=t2.id")
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.lib')->ne(0)
                 ->andWhere('t1.`templateType`')->eq('')
@@ -1433,7 +1433,7 @@ class docModel extends model
      */
     public function getByIdList(array $docIdList = array()): array
     {
-        return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as docVersion,t2.type as contentType')->from(TABLE_DOC)->alias('t1')
+        return $this->dao->select('*,t1.id as docID,t1.type as docType,t1.version as `docVersion`,t2.type as `contentType`')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc and t1.version=t2.version')
             ->where('t1.id')->in($docIdList)
             ->andWhere('deleted')->eq(0)
@@ -2274,7 +2274,7 @@ class docModel extends model
     public function batchCheckPrivDoc(array $docs): array
     {
         $libIdList = array_column($docs, 'lib');
-        $libs      = $this->dao->select('id,type,product,project,execution,addedBy,acl,users,`groups`')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
+        $libs      = $this->dao->select('id,type,product,project,execution,`addedBy`,acl,users,`groups`')->from(TABLE_DOCLIB)->where('id')->in($libIdList)->fetchAll('id');
 
         $hasPrivDocs = array();
         foreach($docs as $doc)
@@ -2714,29 +2714,29 @@ class docModel extends model
         $files = $this->dao->select('*')->from(TABLE_FILE)
             ->where('size')->gt('0')
             ->andWhere('deleted')->eq('0')
-            ->andWhere("(objectType = '$type' and objectID = $objectID)", true)
-            ->beginIF($docIdList)->orWhere("(objectType = 'doc' and objectID in ($docIdList))")->fi()
-            ->orWhere("(objectType = 'bug' and objectID in ($bugIdList))")
-            ->orWhere("(objectType = 'testreport' and objectID in ($testReportIdList))")
-            ->orWhere("(objectType = 'testcase' and objectID in ($caseIdList))")
+            ->andWhere("(`objectType` = '$type' and `objectID` = $objectID)", true)
+            ->beginIF($docIdList)->orWhere("(`objectType` = 'doc' and `objectID` in ($docIdList))")->fi()
+            ->orWhere("(`objectType` = 'bug' and `objectID` in ($bugIdList))")
+            ->orWhere("(`objectType` = 'testreport' and `objectID` in ($testReportIdList))")
+            ->orWhere("(`objectType` = 'testcase' and `objectID` in ($caseIdList))")
             ->beginIF($type == 'product')
-            ->orWhere("(objectType in ('story', 'requirement', 'epic') and objectID in ($storyIdList))")
-            ->orWhere("(objectType = 'release' and objectID in ($releaseIdList))")
-            ->orWhere("(objectType = 'productplan' and objectID in ($planIdList))")
-            ->orWhere("(objectType = 'stepResult' and objectID in ($resultIdList))")
+            ->orWhere("(`objectType` in ('story', 'requirement', 'epic') and `objectID` in ($storyIdList))")
+            ->orWhere("(`objectType` = 'release' and `objectID` in ($releaseIdList))")
+            ->orWhere("(`objectType` = 'productplan' and `objectID` in ($planIdList))")
+            ->orWhere("(`objectType` = 'stepResult' and `objectID` in ($resultIdList))")
             ->fi()
             ->beginIF($type == 'project')
-            ->orWhere("(objectType = 'execution' and objectID in ($executionIdList))")
-            ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
-            ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
-            ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
-            ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
+            ->orWhere("(`objectType` = 'execution' and `objectID` in ($executionIdList))")
+            ->orWhere("(`objectType` = 'issue' and `objectID` in ($issueIdList))")
+            ->orWhere("(`objectType` = 'review' and `objectID` in ($reviewIdList))")
+            ->orWhere("(`objectType` = 'meeting' and `objectID` in ($meetingIdList))")
+            ->orWhere("(`objectType` = 'design' and `objectID` in ($designIdList))")
             ->fi()
             ->beginIF($type == 'project' || $type == 'execution')
-            ->orWhere("(objectType = 'task' and objectID in ($taskIdList))")
-            ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
-            ->orWhere("(objectType = 'testtask' and objectID in ($testtaskIdList))")
-            ->beginIF($storyIdList)->orWhere("(objectType = 'story' and objectID in ($storyIdList))")->fi()
+            ->orWhere("(`objectType` = 'task' and `objectID` in ($taskIdList))")
+            ->orWhere("(`objectType` = 'build' and `objectID` in ($buildIdList))")
+            ->orWhere("(`objectType` = 'testtask' and `objectID` in ($testtaskIdList))")
+            ->beginIF($storyIdList)->orWhere("(`objectType` = 'story' and `objectID` in ($storyIdList))")->fi()
             ->fi()
             ->markRight(1)
             ->beginIF($browseType == 'bysearch')->andWhere("($docFileQuery)")->fi()
@@ -3354,7 +3354,7 @@ class docModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->beginIF(!empty($docIdList))->andWhere('id')->in($docIdList)->fi()
-            ->andWhere("(status = 'normal' or (status = 'draft' and addedBy='{$this->app->user->account}'))")
+            ->andWhere("(status = 'normal' or (status = 'draft' and `addedBy`='{$this->app->user->account}'))")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id', false);
@@ -3618,7 +3618,7 @@ class docModel extends model
             $docIDList = $this->getPrivDocs(array($lib->id));
             $docs      = $this->dao->select('*, title as name')->from(TABLE_DOC)
                 ->where('id')->in($docIDList)
-                ->andWhere("(status = 'normal' or (status = 'draft' && addedBy='{$this->app->user->account}'))")
+                ->andWhere("(status = 'normal' or (status = 'draft' && `addedBy`='{$this->app->user->account}'))")
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('module')->eq(0)
                 ->fetchAll('id', false);
@@ -3846,7 +3846,7 @@ class docModel extends model
         $now     = time();
         $account = $this->app->user->account;
         $docID   = (int)$docID;
-        $doc     = $this->dao->select('id,editingDate')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
+        $doc     = $this->dao->select('id,`editingDate`')->from(TABLE_DOC)->where('id')->eq($docID)->fetch();
         if(empty($doc)) return false;
 
         $editingDate  = $doc->editingDate ? json_decode($doc->editingDate, true) : array();
@@ -3883,13 +3883,13 @@ class docModel extends model
 
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('vision')->eq($this->config->vision)
-            ->andWhere('((objectType')->eq('doclib')
+            ->andWhere('((`objectType`')->eq('doclib')
             ->andWhere('objectID')->in(array_keys($allLibs))
             ->markRight(1)
-            ->orWhere('(objectType')->eq('doc')
+            ->orWhere('(`objectType`')->eq('doc')
             ->andWhere('objectID')->in($hasPrivDocIdList)
             ->markRight(1)
-            ->orWhere('(objectType')->eq('api')
+            ->orWhere('(`objectType`')->eq('api')
             ->andWhere('objectID')->in(array_keys($apiList))
             ->markRight(2)
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
@@ -4763,13 +4763,13 @@ class docModel extends model
     {
         if(!defined('CONFLUENCE_TMPRELATION')) define('CONFLUENCE_TMPRELATION', '`confluencetmprelation`');
 
-        $docID     = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
+        $docID     = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('AID')->eq($originPageID)->fetch('BID');
         $doc       = $this->getByID((int)$docID);
         $docIdList = $this->dao->select('id')->from(TABLE_DOC)->where('lib')->eq($doc->lib)->andWhere('title')->eq($title)->andWhere('status')->eq('normal')->andWhere('deleted')->eq(0)->fetchAll();
 
         $idList = array();
         foreach($docIdList as $item) $idList[] = $item->id;
-        $parentID = $this->dao->dbh($this->dbh)->select('BID')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
+        $parentID = $this->dao->dbh($this->dbh)->select('`BID`')->from(CONFLUENCE_TMPRELATION)->where('BType')->eq('zdoc')->andWhere('BID')->in($idList)->fetch('BID');
         return $parentID ? (int)$parentID : 0;
     }
 

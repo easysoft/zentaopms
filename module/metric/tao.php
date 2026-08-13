@@ -508,7 +508,7 @@ class metricTao extends metricModel
         $sql .= "    SELECT maxid FROM (";
         $sql .= "        SELECT MAX(id) AS maxid";
         $sql .= "        FROM $table";
-        $sql .= "        WHERE metricCode = '$code'";
+        $sql .= "        WHERE `metricCode` = '$code'";
         $sql .= "        GROUP BY ". implode(',', $fields);
         $sql .= "    ) AS tmp";
         $sql .= " )";

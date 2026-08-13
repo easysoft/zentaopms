@@ -65,7 +65,7 @@ class productModel extends model
      */
     public function getListByAcl(string $acl): array
     {
-        return $this->dao->select('id, program, PO, QD, RD, feedback, ticket, acl, whitelist, reviewer, PMT, createdBy')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
+        return $this->dao->select('id, program, `PO`, `QD`, `RD`, feedback, ticket, acl, whitelist, reviewer, `PMT`, `createdBy`')->from(TABLE_PRODUCT)->where('acl')->in($acl)->fetchAll('id');
     }
 
     /**
@@ -700,14 +700,7 @@ class productModel extends model
         {
             $unclosedStatus = $this->lang->story->statusList;
             unset($unclosedStatus['closed']);
-            $stories = $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
-            foreach($stories as $storyID => $story)
-            {
-                if($story->type != 'story' && $story->stage == 'closed') unset($stories[$storyID]);
-            }
-            $this->app->loadClass('pager', true);
-            $pager = new pager(count($stories), $pager ? $pager->recPerPage : 20, $pager ? $pager->pageID : 1);
-            return $stories ? current(array_chunk($stories, $pager->recPerPage, true)) : array();
+            return $this->story->getProductStories($productID, $branch, $modules, array_keys($unclosedStatus), $type, $sort, true, '', $pager);
         }
 
         /* Set default function called, when browseType is (draftstory, activestory, changingstory, reviewingstory, closedstory, developingstory, launchedstory). */

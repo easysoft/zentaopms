@@ -48,7 +48,7 @@ class repo extends control
     public function commonAction(int $repoID = 0, int $objectID = 0, int $spaceID = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $fromModal = in_array($this->app->rawModule, array('git', 'svn'));
         $tab       = $fromModal ? '' :$this->app->tab;
@@ -111,7 +111,9 @@ class repo extends control
     public function maintain(int $inSpace = 0, int $space = 0, int $objectID = 0, string $orderBy = 'id_desc', int $recPerPage = 20, int $pageID = 1, string $type = '', int $param = 0)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
+
+        if(!$inSpace) $this->session->set('repoID', 0);
 
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID, $inSpace ? $space : 0);
@@ -125,6 +127,8 @@ class repo extends control
 
         if($repoList && !isset($repoList[$pageID - 1])) $pageID = 1;
         $repoList = empty($repoList) ? array() : $repoList[$pageID - 1];
+
+        $this->repo->loadMaintainSpacePrivs($repoList);
 
         $products = $this->loadModel('product')->getPairs('all', 0, '', 'all');
 
@@ -152,7 +156,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function create(int $objectID = 0)
+    public function create(int $objectID = 0, int $spaceID = 0)
     {
         if($_POST)
         {
@@ -180,7 +184,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link, 'callback' => "importJob($repoID)"));
         }
 
-        $this->commonAction(0, $objectID);
+        $this->commonAction(0, $objectID, $spaceID);
         $this->repoZen->buildCreateForm($objectID);
 
         $this->display();
@@ -216,7 +220,7 @@ class repo extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $link));
         }
 
-        $this->commonAction(0, $objectID);
+        $this->commonAction(0, $objectID, $spaceID);
         $this->repoZen->buildCreateRepoForm($objectID);
         $this->view->inSpace = !empty($spaceID);
         $this->view->spaceID = $spaceID;
@@ -312,7 +316,7 @@ class repo extends control
      */
     public function edit(int $repoID, int $objectID = 0, int $spaceID = 0)
     {
-        $this->commonAction($repoID, $objectID);
+        $this->commonAction($repoID, $objectID, $spaceID);
         $repo = $this->repo->getByID($repoID);
 
         $this->scm->setEngine($repo);
@@ -518,7 +522,7 @@ class repo extends control
     public function browse(int $repoID = 0, string $branchID = '', int $objectID = 0, string $path = '', string $revision = 'HEAD', int $refresh = 0, string $branchOrTag = 'branch', string $type = 'dir', int $recTotal = 0, int $recPerPage = 20, int $pageID = 1)
     {
         $serverHeath = $this->loadModel('gitfox')->checkHealth();
-        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "devopsIntroduction"));
+        if(!$serverHeath) return $this->locate($this->createLink('gitfox', "installGitFox"));
 
         $hasDevOpsLink = !empty($this->config->devopsLink) && $this->config->devopsLink == 'repo-browse';
         if(!$repoID && !empty($this->config->devopsLink) && $hasDevOpsLink) $repoID = (int)$this->config->lastRepo;
@@ -994,7 +998,7 @@ class repo extends control
         $productIds = explode(',', $repo->product);
         $products   = $this->loadModel('product')->getByIdList($productIds);
         $modules    = $this->repoZen->getLinkModules($products, 'story');
-        $queryID    = $browseType == 'bysearch' ? (int)$param : 0;
+        $queryID    = $browseType == 'bySearch' ? (int)$param : 0;
 
         /* Load pager. */
         $this->app->loadClass('pager', true);
@@ -1150,7 +1154,7 @@ class repo extends control
      */
     public function import(int $spaceID = 0, string $type = 'GitLab', int $providerID = 0, string $groupID = '', string $acl = 'open', int $isTryAgain = 0)
     {
-        if($this->viewType !== 'json') $this->commonAction();
+        if($this->viewType !== 'json') $this->commonAction(0, 0, $spaceID);
         if($_POST)
         {
             $this->repoZen->setImportFormConfig($type, (int)$this->post->providerID, $this->post->acl);
@@ -1158,7 +1162,12 @@ class repo extends control
             $this->session->set('importRepo', json_encode($formData));
 
             $result = $this->repo->import($formData);
-            if(dao::isError()) $this->sendError(dao::getError());
+            if(dao::isError())
+            {
+                $error   = dao::getError();
+                $message = isset($error['apiMessage']) ? $error['apiMessage'] : $this->lang->repo->importProgress->importFailed;
+                $this->sendError($message);
+            }
             return $this->send(array('result' => 'success', 'message' => '', 'load' => $this->createLink('repo', 'ajaxShowImportProgress', "repoID={$result->id}&spaceID={$spaceID}")));
         }
 
@@ -1176,7 +1185,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->repo->import;
         $this->view->products   = $this->loadModel('product')->getPairs('', 0, '', 'all');
-        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces     = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account, true);
         $this->view->type       = $type;
         $this->view->importRepo = $isTryAgain ? json_decode($this->session->importRepo) : array();
         $this->view->acl        = $acl;
@@ -1210,9 +1219,8 @@ class repo extends control
         $file      = $entry;
         $repo      = $this->repo->getByID($repoID);
         $entry     = urldecode($this->repo->decodePath($entry));
-        /* 前端 diff.ui.js 把 revision 走 btoa(encodeURIComponent(...)) 加密;此处走已有的 decodeEditorRevision 复原。 */
-        $revision  = $this->decodeEditorRevision(str_replace('*', '-', $oldRevision));
-        $nRevision = $this->decodeEditorRevision(str_replace('*', '-', $newRevision));
+        $revision  = str_replace('*', '-', $oldRevision);
+        $nRevision = str_replace('*', '-', $newRevision);
 
         $entry    = urldecode($entry);
         $pathInfo = pathinfo($entry);
@@ -1452,6 +1460,7 @@ class repo extends control
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
         $logs     = array();
         $revision = $version == 1 ? 'HEAD' : $latestInDB->commit;
+        if($repo->scmType == 'git' && $revision > 1) $revision = $latestInDB->revision;
 
         $logs = $this->scm->getCommits($revision, $this->config->repo->batchNum, $branch);
         $commitCount = $this->repo->saveCommit($repoID, $logs, $version, $branch);
@@ -1701,6 +1710,7 @@ class repo extends control
         $sourceRevision = $this->post->sourceRevision == 'HEAD' ? 'HEAD' : $this->decodeEditorRevision((string)$this->post->sourceRevision);
 
         $this->scm->setEngine($repo);
+
         $blames = $this->scm->blame($entry, $revision);
         if(!$blames) $blames =$this->scm->blame($entry, $sourceRevision);
 
@@ -2440,7 +2450,7 @@ class repo extends control
         if(!empty($_POST))
         {
             $now  = helper::now();
-            $bug  = $this->loadModel('bug')->getByID($this->post->objectID);
+            $bug  = $this->loadModel('bug')->getByID((int)$this->post->objectID);
             $data = fixer::input('post')
                 ->add('objectType', 'bug')
                 ->add('product', ',' . $bug->product . ',')
@@ -3049,7 +3059,7 @@ class repo extends control
             $this->loadModel('action')->create('repo', $repoID, 'imported');
         }
 
-        $this->view->title   = $this->lang->repo->showImportResult;
+        $this->view->title   = $this->lang->repo->tips;
         $this->view->message = $message;
         $this->view->repoID  = $repoID;
         $this->view->spaceID = $spaceID;

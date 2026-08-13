@@ -32,7 +32,6 @@ $repo->product->range('1');
 $repo->name->range('ppm-repo-6101');
 $repo->scmType->range('git');
 $repo->acl->range('private');
-$repo->createdBy->range('admin');
 $repo->gen(1);
 
 su('admin');

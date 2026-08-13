@@ -342,7 +342,7 @@ class holidayModel extends model
      */
     public function updateProjectRealDuration(string $beginDate, string $endDate): void
     {
-        $updateProjectList = $this->dao->select('id, realBegan, realEnd')
+        $updateProjectList = $this->dao->select('id, `realBegan`, `realEnd`')
             ->from(TABLE_PROJECT)
             ->where('status')->ne('done')
             ->andWhere('type')->ne('program')
@@ -372,7 +372,7 @@ class holidayModel extends model
      */
     public function updateTaskPlanDuration(string $beginDate, string $endDate): void
     {
-        $updateTaskList = $this->dao->select('id, estStarted, deadline')
+        $updateTaskList = $this->dao->select('id, `estStarted`, deadline')
             ->from(TABLE_TASK)
             ->where('estStarted')->between($beginDate, $endDate)
             ->orWhere('deadline')->between($beginDate, $endDate)
@@ -400,7 +400,7 @@ class holidayModel extends model
      */
     public function updateTaskRealDuration(string $beginDate, string $endDate): void
     {
-        $updateTaskList = $this->dao->select('id, realStarted, finishedDate')
+        $updateTaskList = $this->dao->select('id, `realStarted`, `finishedDate`')
             ->from(TABLE_TASK)
             ->where('realStarted')->between($beginDate, $endDate)
             ->orWhere("date_format(`finishedDate`,'%Y-%m-%d')")->between($beginDate, $endDate)

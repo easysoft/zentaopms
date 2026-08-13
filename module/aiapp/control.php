@@ -168,12 +168,16 @@ class aiapp extends control
      * 模型列表。
      * Models page.
      *
+     * @param string $type 模型类型，all 表示所有类型，其他表示具体类型。 The model type, all means all types, other means specific types.
      * @access public
      * @return void
      */
-    public function models()
+    public function models($type = 'all')
     {
+        $type = str_replace('_', '-', $type);
+
         $this->view->title = $this->lang->aiapp->models;
+        $this->view->type  = $type;
         $this->display();
     }
 

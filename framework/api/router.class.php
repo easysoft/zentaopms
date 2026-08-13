@@ -1763,8 +1763,17 @@ class api extends router
     {
         $defaultParams = $this->resolveDefaultParams();
         $this->rawGet = $_GET;
-        $this->validateRequiredParams($defaultParams, $_GET);
-        $this->params = $this->normalizeGetParams($defaultParams, $_GET);
+        $sourceParams = $_GET;
+
+        /* APIV2 POST/PUT requests may provide route parameters in the JSON body. */
+        if(in_array($this->action, array('post', 'put')))
+        {
+            $requestBody = json_decode((string)file_get_contents('php://input'), true);
+            if(is_array($requestBody)) $sourceParams = array_merge($sourceParams, $requestBody);
+        }
+
+        $this->validateRequiredParams($defaultParams, $sourceParams);
+        $this->params = $this->normalizeGetParams($defaultParams, $sourceParams);
 
         if($this->config->framework->filterParam == 2)
         {

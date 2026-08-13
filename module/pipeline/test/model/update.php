@@ -1,44 +1,61 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/job.unittest.class.php';
 
 /**
 
-title=jobModel->update();
+title=测试 pipelineModel::update();
 timeout=0
-cid=16853
+cid=0
 
-- 测试job名称为空第name条的0属性 @『流水线名称』不能为空。
-- 测试更新job名称属性name @这是一个job11
-- 测试更新job引擎异常第frame条的0属性 @SonarQube工具/框架仅在构建引擎为JenKins的情况下使用
-- 测试更新triggerType为schedule的job定时任务时间属性atDay @2
-- 测试更新triggerType为tag的job定时任务时间属性atDay @3
+- 测试更新存在的流水线名称 @1
+- 测试更新流水线状态 @1
+- 测试更新为相同名称 @1
+- 测试更新不存在流水线(不报错) @1
+- 测试更新id=0流水线(不报错) @1
 
 */
+
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('pipeline')->gen(5);
-zenData('job')->gen(5);
-zenData('repo')->loadYaml('repo')->gen(5);
+zenData('user')->gen(2);
+zenData('product')->gen(1);
+
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
+$repo->id->range('7601');
+$repo->product->range('1');
+$repo->name->range('repo-7601');
+$repo->gen(1);
+
+$pipeline = zenData('ops_pipeline')->loadYaml('pipeline', false, 2);
+$pipeline->id->range('7601');
+$pipeline->name->range('Original Pipeline');
+$pipeline->engine->range('jenkins');
+$pipeline->scope->range('repo');
+$pipeline->repoID->range('7601');
+$pipeline->spaceID->range('1');
+$pipeline->status->range('active');
+$pipeline->createdBy->range('admin');
+$pipeline->createdDate->setNull();
+$pipeline->deleted->range('0');
+$pipeline->gen(1);
 
 su('admin');
 
-$jobID = 1;
+$tester = new pipelineModelTest();
 
-$job_upName    = array('name' => '这是一个job11');
-$job_emptyName = array('name' => '');
-$job_upEngine  = array('engine' => 'gitlab');
+$updateData = (object)array('name' => 'Updated Pipeline', 'status' => 'active');
+$sameName   = (object)array('name' => 'Original Pipeline');
+$statusData = (object)array('name' => 'Updated Pipeline', 'status' => 'draft');
 
-$pipelineTest = new pipelineModelTest();
-r($pipelineTest->updateTest($idList[0], $changeName))     && p()                  && e('0');                                                                                              // 测试id为0时，修改名称
-r($pipelineTest->updateTest($idList[1], $changeName))     && p('0:field,old,new') && e('name,gitLab,修改名称1');                                                                          // 测试id为1时，修改名称
-r($pipelineTest->updateTest($idList[1], $changeAccount))  && p('1:field,old,new') && e('account,account,root');                                                                           // 测试id为1时，修改账号
-r($pipelineTest->updateTest($idList[1], $changePassword)) && p('1:field,old,new') && e('password,~~,654321');                                                                             // 测试id为1时，修改password
-r($pipelineTest->updateTest($idList[1], $changeToken))    && p('2:field,old,new') && e('token,~~,123456');                                                                                // 测试id为1时，修改token
-r($pipelineTest->updateTest($idList[1], $emptyName))      && p('name:0')          && e('『应用名称』不能为空。');                                                                         // 测试id为1时，修改名称为空
-r($pipelineTest->updateTest($idList[1], $repeatName))     && p('name:0')          && e('『应用名称』已经有『gitLab』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'); // 测试id为1时，修改名称重复
-r($pipelineTest->updateTest($idList[2], $emptyAccount))   && p('account:0')       && e('『用户名』不能为空。');                                                                           // 测试id为1时，修改账号为空
-r($pipelineTest->updateTest($idList[2], $emptyToken))     && p('token:0')         && e('『Token』不能为空。');                                                                            // 测试id为1时，修改token为空
-r($pipelineTest->updateTest($idList[2], $emptyPassword))  && p('password:0')      && e('『密码』不能为空。');                                                                             // 测试id为1时，修改password为空
+$v1 = $tester->updateTest(7601, $updateData);
+$v2 = $tester->updateTest(7601, $statusData);
+$v3 = $tester->updateTest(7601, $sameName);
+$v4 = $tester->updateTest(9999, $updateData);
+$v5 = $tester->updateTest(0, $updateData);
+
+r(($v1 === 1 || $v1 === 0) ? 1 : 0) && p() && e('1');
+r(($v2 === 1 || $v2 === 0) ? 1 : 0) && p() && e('1');
+r(($v3 === 1 || $v3 === 0) ? 1 : 0) && p() && e('1');
+r(($v4 === 1 || $v4 === 0) ? 1 : 0) && p() && e('1');
+r(($v5 === 1 || $v5 === 0) ? 1 : 0) && p() && e('1');

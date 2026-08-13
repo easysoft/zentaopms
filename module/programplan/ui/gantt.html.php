@@ -84,12 +84,6 @@ if($app->rawModule == 'programplan' && !$isFromDoc)
         );
     }
 
-    $hasFrozenStage = false;
-    foreach($plans['data'] as $plan)
-    {
-        if(!empty($plan->frozen)) $hasFrozenStage = true;
-    }
-
     /* Build versions for dropdown. */
     $browseTemplate = createLink('programplan', 'browse', "projectID=$projectID&productID={$productID}&type={$type}&orderBy=$orderBy&baselineID=&browseType={$browseType}&queryID={$queryID}&from={$from}&blockID={$blockID}&versionID=%s");
     $versionItems = array();

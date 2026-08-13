@@ -565,8 +565,22 @@ $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList[
 $lang->execution->featureBar['all']['delayed']   = $lang->execution->delayed;
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = 'All';
-$lang->execution->featureBar['bug']['unresolved'] = 'Active';
+$lang->execution->featureBar['bug']['all']          = 'Tous';
+$lang->execution->featureBar['bug']['unclosed']     = 'Non fermés';
+$lang->execution->featureBar['bug']['openedbyme']   = 'Détectés par moi';
+$lang->execution->featureBar['bug']['assigntome']   = 'Affectés à moi';
+$lang->execution->featureBar['bug']['resolvedbyme'] = 'Résolus par moi';
+$lang->execution->featureBar['bug']['assignedbyme'] = 'AssignedByMe';
+$lang->execution->featureBar['bug']['more']         = $lang->more;
+
+$lang->execution->moreSelects['bug']['more']['unresolved']    = 'Actifs';
+$lang->execution->moreSelects['bug']['more']['unconfirmed']   = 'Non confirmés';
+$lang->execution->moreSelects['bug']['more']['assigntonull']  = 'Non affectés';
+$lang->execution->moreSelects['bug']['more']['longlifebugs']  = 'Persistant';
+$lang->execution->moreSelects['bug']['more']['toclosed']      = 'A Fermer';
+$lang->execution->moreSelects['bug']['more']['postponedbugs'] = 'Reporté';
+$lang->execution->moreSelects['bug']['more']['overduebugs']   = 'Retard';
+$lang->execution->moreSelects['bug']['more']['needconfirm']   = 'Story Changée';
 
 $lang->execution->featureBar['build']['all'] = 'Build List';
 

@@ -323,7 +323,7 @@ class formdom
     }
 
     /**
-     * Process zin pickers and date pickers.
+     * Process zin form controls which store their value in zui-create-*.
      *
      * @param  object $xpath
      * @param  object $form
@@ -333,22 +333,36 @@ class formdom
      */
     private function processZinPickers($xpath, $form, &$data)
     {
-        /* 查找所有包含 zui-create-picker 属性的元素（通常是 div.picker-box） */
+        /* 查找所有包含 zui-create 属性的元素（通常是 div.picker-box）。 */
         $pickers = $xpath->query(".//*[@zui-create]", $form);
 
-        foreach ($pickers as $picker) {
+        $supportedPickers = array
+        (
+            'picker',
+            'datepicker',
+            'datetimepicker',
+            'timepicker',
+            'colorpicker',
+            'pripicker',
+            'severitypicker'
+        );
+
+        foreach($pickers as $picker)
+        {
             /* 1. 跳过禁用的picker（如果配置不允许） */
             $pickerDisabled = $picker->hasAttribute('disabled') || $picker->getAttribute('disabled') === 'true';
             if(!$this->options['include_disabled'] && $pickerDisabled) continue;
 
-            /* 2. 获取 zui-create-picker 属性的JSON值 */
-            if($picker->hasAttribute('zui-create-picker'))
+            /* 2. 获取受支持控件的配置。DOMDocument 会将属性名转为小写。 */
+            $pickerConfig = '';
+            foreach($supportedPickers as $pickerName)
             {
-                $pickerConfig = $picker->getAttribute('zui-create-picker');
-            }
-            elseif($picker->hasAttribute('zui-create-datepicker'))
-            {
-                $pickerConfig = $picker->getAttribute('zui-create-datepicker');
+                $attribute = "zui-create-$pickerName";
+                if($picker->hasAttribute($attribute))
+                {
+                    $pickerConfig = $picker->getAttribute($attribute);
+                    break;
+                }
             }
 
             if(empty($pickerConfig)) continue;

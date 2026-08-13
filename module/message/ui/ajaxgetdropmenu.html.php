@@ -33,22 +33,18 @@ $buildMessageList = function($messageGroup) use ($lang)
             $isUnread = $message->status != 'read';
             $dotColor = $isUnread ? 'danger' : 'gray';
 
-            $itemList[] = h::li
-            (
-                setClass('message-item break-all border rounded-lg p-2 mt-2' . ($isUnread ? ' unread' : '')),
-                setData('msgid', $message->id),
-                row
-                (
-                    setClass('text-gray justify-between'),
-                    cell(label(setClass("label-dot {$dotColor} mr-2")), $lang->message->browser),
-                    cell($message->showTime, icon(setClass('ml-2 cursor-pointer delete-message-btn'), 'close'))
-                ),
-                div(setClass('pt-1'), html($message->data))
-            );
+            $liHtml  = "<li class='message-item break-all border rounded-lg p-2 mt-2 " . ($isUnread ? 'unread' : '') . "' data-msgid='{$message->id}'>";
+            $liHtml .= "<div class='row text-gray justify-between'>";
+            $liHtml .= "<div class='cell'><span class='label label-dot {$dotColor} mr-2'></span>{$lang->message->browser}</div>";
+            $liHtml .= "<div class='cell'>{$message->showTime}<i class='icon icon-close ml-2 cursor-pointer delete-message-btn'></i></div>";
+            $liHtml .= "</div>";
+            $liHtml .= "<div class='pt-1'>{$message->data}</div>";
+            $liHtml .= "</li>";
+            $itemList[] = $liHtml;
         }
-        $dateList[] = h::li(setClass('message-date mt-2'), $date, h::ul(setClass('list-unstyled'), $itemList));
+        $dateList[] = "<li class='message-date mt-2'>{$date}<ul class='list-unstyled'>" . implode($itemList) . "</ul></li>";
     }
-    return h::ul(setClass('list-unstyled'), $dateList);
+    return "<ul class='list-unstyled'>" . implode($dateList) . "</ul>";
 };
 
 $browserSetting = $config->message->browser;
@@ -120,13 +116,13 @@ tabs
         set::key('unread-messages'),
         set::title(sprintf($lang->message->unread, $unreadCount)),
         set::active($active == 'unread'),
-        $buildMessageList($unreadMessages)
+        html($buildMessageList($unreadMessages))
     ),
     tabPane
     (
         set::key('all-messages'),
         set::title($lang->message->all),
         set::active($active == 'all'),
-        $buildMessageList($allMessages)
+        html($buildMessageList($allMessages))
     )
 );

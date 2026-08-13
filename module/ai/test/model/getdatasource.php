@@ -7,7 +7,7 @@ title=测试 aiModel::getDataSource();
 timeout=0
 cid=15082
 
-- 返回内置数据源分组数量 @20
+- 返回内置数据源分组数量 @21
 - 返回数据源包含全部内置分组 @1
 - program模块使用配置的字段 @name
 - doc模块使用配置的字段 @title
@@ -30,7 +30,7 @@ $result = $aiTest->getDataSourceTest();
 
 global $config;
 
-r(count($config->ai->moduleGroup)) && p() && e('20'); // 返回内置数据源分组数量
+r(count($config->ai->moduleGroup)) && p() && e('21'); // 返回内置数据源分组数量
 r(count(array_intersect_key($result, $config->ai->moduleGroup)) == count($config->ai->moduleGroup) ? '1' : '0') && p() && e('1'); // 返回数据源包含全部内置分组
 r($result['program']['program'][0]) && p() && e('name'); // program模块使用配置的字段
 r($result['doc']['doc'][0]) && p() && e('title'); // doc模块使用配置的字段

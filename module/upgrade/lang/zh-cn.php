@@ -70,6 +70,7 @@ $lang->upgrade->continue      = '继续升级';
 $lang->upgrade->noteVersion   = "务必选择正确的版本，否则会造成数据丢失。";
 $lang->upgrade->fromVersion   = '原来的版本';
 $lang->upgrade->toVersion     = '升级到';
+
 $lang->upgrade->confirm       = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute   = '确认执行';
 $lang->upgrade->upgradingTips = '正在升级中，请耐心等待，切勿刷新页面、断电、关机！';
@@ -276,3 +277,15 @@ $lang->upgrade->changeActions['updateValue'] = '更新数据库表 %TABLE% 的�
 $lang->upgrade->changeActions['deleteValue'] = '从数据库表 %TABLE% 删除数据';
 $lang->upgrade->changeActions['method']      = '执行 %MODULE% 模块的 %METHOD% 方法';
 $lang->upgrade->changeActions['other']       = '其他操作';
+
+$lang->upgrade->upgradeFeatureDesc = '22.4版本，集成 DevOps 4.0 强大功能';
+
+$lang->upgrade->upgradeFeatures = array();
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'rocket',    'title' => '全面升级', 'desc' => '自研GitFox引擎，打通CI/CD流程，实现代码的全生命周期管理。');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'code-fork', 'title' => '分支类型', 'desc' => '支持自定义分支类型，按分支类型设定规则，管理更规范。');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'bell',      'title' => 'WebHook',  'desc' => '代码库级别的 Webhook 配置，轻松对接外部系统，通知更实时。');
+$lang->upgrade->upgradeFeatures[1][] = array('icon' => 'checkbox',  'title' => '代码扫描', 'desc' => '内置 2000+ 扫描规则，自动检查规范与隐患，严把代码质量。');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'code',      'title' => '代码管理', 'desc' => '完整支持Git代码库管理，支持SVN代码库查看。');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'review',    'title' => '代码评审', 'desc' => '每次推送或合并请求均可发起评审，逐笔把关代码质量。');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'flow',      'title' => '流水线',   'desc' => '支持导入主流流水线（如 Jenkins），可配置多种触发方式。');
+$lang->upgrade->upgradeFeatures[2][] = array('icon' => 'stack',     'title' => '制品库',   'desc' => '多层级、多类型的制品管理，打通 CI/CD流程，流转安全高效。');

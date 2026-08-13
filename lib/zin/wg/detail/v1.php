@@ -131,7 +131,7 @@ class detail extends wg
         .detail-sections .history-panel-header > .listitem {padding: 0}
         .important-w-0 {width: 0!important;}
         .no-width {padding: 0!important; width: 0!important; overflow: hidden!important;}
-        .detail-toggle {margin: 0!important;}
+        .detail-toggle {margin: 0!important; z-index: 1}
         .detail-toggle:hover {background-color: rgba(var(--color-border-rgb), var(--tw-bg-opacity)); transition-duration: .15s; transition-property: background-color; transition-timing-function: cubic-bezier(.4,0,.2,1);}
         .article > .files-list > li.file{white-space:normal;}
         .ai-task-status .status-doing {color: #FAAE1A;}
@@ -317,7 +317,7 @@ CSS;
     {
         global $app, $config;
         $sections = $this->prop('sections', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $sections = $app->control->loadModel('flow')->buildExtendZinValue($sections, $this->prop('object'), 'info');
 
         $list                = array();
         $firstSectionHandled = false;
@@ -513,7 +513,7 @@ CSS;
     {
         global $app, $config;
         $tabs = $this->prop('tabs', []);
-        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading)) $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
+        if($config->edition != 'open' && empty($app->installing) && empty($app->upgrading) && $app->moduleName != 'flow') $tabs = $app->control->loadModel('flow')->buildExtendZinValue($tabs, $this->prop('object'), 'basic');
         if(!$tabs) return null;
 
         $groups = array();
@@ -590,24 +590,16 @@ CSS;
         }
         if($prevBtn === true && $preAndNext && $preAndNext->pre && $linkCreator)
         {
+            if(!isset($preAndNext->pre->name)) $preAndNext->pre->name = '';
             $prevBtn  = array();
             $objectID = $preAndNext->pre->$idKey;
             $prevBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $prevBtn['hint'] = "#{$objectID} " . (isset($preAndNext->pre->title) ? $preAndNext->pre->title : $preAndNext->pre->name);
 
-            if($objectType == 'testcase')
+            if($objectType == 'testcase' && strpos($prevBtn['url'], '{version}') !== false)
             {
-                if(strpos($prevBtn['url'], '{caseVersion}') !== false)
-                {
-                    $caseVersion = !empty($preAndNext->pre->caseVersion) ? $preAndNext->pre->caseVersion : 0;
-                    $prevBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $prevBtn['url']);
-                }
-
-                if(strpos($prevBtn['url'], '{version}') !== false)
-                {
-                    $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
-                    $prevBtn['url'] = str_replace('{version}', "{$version}", $prevBtn['url']);
-                }
+                $version = !empty($preAndNext->pre->version) ? $preAndNext->pre->version : 0;
+                $prevBtn['url'] = str_replace('{version}', "{$version}", $prevBtn['url']);
             }
         }
         elseif(is_string($prevBtn))
@@ -616,24 +608,16 @@ CSS;
         }
         if($nextBtn === true && $preAndNext && $preAndNext->next && $linkCreator)
         {
+            if(!isset($preAndNext->next->name)) $preAndNext->next->name = '';
             $nextBtn  = array();
             $objectID = $preAndNext->next->$idKey;
             $nextBtn['url']  = str_replace('{id}', "{$objectID}", $linkCreator);
             $nextBtn['hint'] = "#{$objectID} " . (isset($preAndNext->next->title) ? $preAndNext->next->title : $preAndNext->next->name);
 
-            if($objectType == 'testcase')
+            if($objectType == 'testcase' && strpos($nextBtn['url'], '{version}') !== false)
             {
-                if(strpos($nextBtn['url'], '{caseVersion}')!== false)
-                {
-                    $caseVersion = !empty($preAndNext->next->caseVersion) ? $preAndNext->next->caseVersion : 0;
-                    $nextBtn['url'] = str_replace('{caseVersion}', "{$caseVersion}", $nextBtn['url']);
-                }
-
-                if(strpos($nextBtn['url'], '{version}') !== false)
-                {
-                    $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
-                    $nextBtn['url'] = str_replace('{version}', "{$version}", $nextBtn['url']);
-                }
+                $version = !empty($preAndNext->next->version) ? $preAndNext->next->version : 0;
+                $nextBtn['url'] = str_replace('{version}', "{$version}", $nextBtn['url']);
             }
         }
         elseif(is_string($nextBtn))

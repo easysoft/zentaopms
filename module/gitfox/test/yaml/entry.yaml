@@ -5,18 +5,16 @@ author: Codex
 version: "1.0"
 
 fields:
-- field: id
-  range: 1
 - field: name
-  range: GitFox入口
+  range: GitFox
 - field: account
   range: admin
 - field: code
   range: gitfox
 - field: key
-  range: testkey1234567890testkey1234567
+  range: gitfox
 - field: freePasswd
-  range: "0"
+  range: "1"
 - field: ip
   range: '*'
 - field: createdBy

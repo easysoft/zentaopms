@@ -23,6 +23,9 @@ cid=19765
 - 测试验证文档类型转换正确 @manual
 - 测试验证Markdown内容包含文档标题 @测试文档1
 - 测试验证不同版本文档的处理 @1
+- 测试内容使用产品项目执行库名称而非ID @1
+- 测试ID为0时不显示0 @1
+- 测试无名称字段时从数据库解析库名 @1
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
@@ -30,6 +33,9 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('doc')->gen(2);
 zenData('doccontent')->gen(1);
+zenData('product')->gen(1);
+zenData('project')->gen(1);
+zenData('doclib')->gen(1);
 
 su('admin');
 
@@ -105,3 +111,61 @@ r($contentContainsDocTitle) && p() && e('1'); // 测试验证Markdown内容包�
 
 /* 测试验证不同版本文档的处理 */
 r($result1['attrs']['version']) && p() && e('1'); // 测试验证不同版本文档的处理
+
+/* 测试内容使用产品项目执行库名称而非ID */
+$doc3 = new stdClass();
+$doc3->id           = 3;
+$doc3->title        = 'TEST';
+$doc3->type         = 'text';
+$doc3->product      = 99;
+$doc3->project      = 88;
+$doc3->execution    = 77;
+$doc3->version      = 1;
+$doc3->lib          = 66;
+$doc3->module       = 0;
+$doc3->productName  = '产品甲';
+$doc3->projectName  = '项目乙';
+$doc3->executionName= '执行丙';
+$doc3->libName      = '文档库丁';
+$doc3->content      = '正文';
+$result3 = $zai->convertDocToMarkdownTest($doc3);
+$usesNames = strpos($result3['content'], '产品甲') !== false
+    && strpos($result3['content'], '项目乙') !== false
+    && strpos($result3['content'], '执行丙') !== false
+    && strpos($result3['content'], '文档库丁') !== false
+    && !preg_match('/所属产品:\s*99/', $result3['content'])
+    && !preg_match('/所属库:\s*66/', $result3['content']);
+r($usesNames ? '1' : '0') && p() && e('1'); // 测试内容使用产品项目执行库名称而非ID
+
+/* 测试ID为0时不显示0 */
+$doc4 = clone $doc3;
+$doc4->id            = 4;
+$doc4->product       = 0;
+$doc4->project       = 0;
+$doc4->execution     = 0;
+$doc4->lib           = 66;
+$doc4->productName   = '';
+$doc4->projectName   = '';
+$doc4->executionName = '';
+$result4 = $zai->convertDocToMarkdownTest($doc4);
+$noZeroIds = !preg_match('/所属产品:\s*0/', $result4['content'])
+    && !preg_match('/所属项目:\s*0/', $result4['content'])
+    && !preg_match('/所属执行:\s*0/', $result4['content']);
+r($noZeroIds ? '1' : '0') && p() && e('1'); // 测试ID为0时不显示0
+
+/* 测试无名称字段时从数据库解析库名 */
+$doc5 = new stdClass();
+$doc5->id        = 5;
+$doc5->title     = '库名解析';
+$doc5->type      = 'text';
+$doc5->product   = 0;
+$doc5->project   = 0;
+$doc5->execution = 0;
+$doc5->version   = 1;
+$doc5->lib       = 1;
+$doc5->module    = 0;
+$doc5->content   = '正文';
+$result5 = $zai->convertDocToMarkdownTest($doc5);
+$libName = $tester->dao->select('name')->from(TABLE_DOCLIB)->where('id')->eq(1)->fetch('name');
+$resolvedFromDb = $libName !== false && strpos($result5['content'], $libName) !== false && !preg_match('/所属库:\s*1\b/', $result5['content']);
+r($resolvedFromDb ? '1' : '0') && p() && e('1'); // 测试无名称字段时从数据库解析库名

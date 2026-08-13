@@ -26,7 +26,7 @@ class customTao extends customModel
             ->andWhere('acl')->eq('program')
             ->fetchGroup('parent', 'id');
 
-        $programPM = $this->dao->select("id,PM")->from(TABLE_PROGRAM)
+        $programPM = $this->dao->select("id,`PM`")->from(TABLE_PROGRAM)
             ->where('id')->in(array_keys($projectGroup))
             ->andWhere('type')->eq('program')
             ->fetchPairs();

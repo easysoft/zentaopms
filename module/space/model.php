@@ -109,14 +109,23 @@ class spaceModel extends model
      * @access public
      * @return array
      */
-    public function getPairs(string $account = ''): array
+    public function getPairs(string $account = '', bool $filterRepoCreate = false): array
     {
         $userSpaces = $this->getSpacesByAccount($account);
 
         $spaces = $this->getByIdList(array_keys($userSpaces), false);
 
         $spacesPairs = array();
-        foreach($spaces as $space) $spacesPairs[$space->id] = $space->name;
+        foreach($spaces as $space)
+        {
+            if($filterRepoCreate && $space->auth == 'reset')
+            {
+                $privs = $this->loadModel('group')->getDevOpsSpacePrivs((int)$space->id);
+                if($privs === null) continue;
+                if(!isset($privs['repo']['create'])) continue;
+            }
+            $spacesPairs[$space->id] = $space->name;
+        }
 
         return $spacesPairs;
     }
@@ -426,6 +435,8 @@ class spaceModel extends model
         }
         else
         {
+            $this->session->set('repoID', 0);
+            $this->session->set('devopsSpace', 0);
             unset($this->lang->devops->homeMenu->pipeline);
             unset($this->lang->devops->homeMenu->artifact);
             unset($this->lang->devops->homeMenu->spaceSetting);
@@ -441,29 +452,47 @@ class spaceModel extends model
      */
     public function getPrivs(): object
     {
-        $this->loadModel('group');
-
-        $devopsPriv   = $this->group->getPrivsByNav('devops');
-        $includedPriv = array();
-        foreach($devopsPriv as $priv)
-        {
-            if(empty($priv->module)) continue;
-            if($priv->module == 'space') continue;
-            $includedPriv[$priv->module][] = $priv->method;
-        }
-
         $privs = new stdclass();
         foreach($this->lang->resource as $module => $methods)
         {
             if(empty($methods)) continue;
-            if(!isset($includedPriv[$module])) continue;
+            if($module == 'space') continue;
+
+            /* Only include modules that belong to the devops nav group. */
+            $navGroup = zget($this->lang->navGroup, $module, '');
+            if($navGroup != 'devops') continue;
 
             foreach($methods as $method => $label)
             {
-                if(!in_array($method, $includedPriv[$module])) continue;
-
                 if(!isset($privs->$module)) $privs->$module = new stdclass();
                 $privs->$module->$method = $label;
+            }
+        }
+
+        return $privs;
+    }
+
+    /**
+     * 获取 DevOps 空间所有的权限列表（数组格式），供 groupModel::getDevOpsSpacePrivs 在管理员场景使用。
+     * Get all devops space privs as array format for admin/manager use.
+     *
+     * @access public
+     * @return array  [module][method] => 1
+     */
+    public function getDevOpsAllPrivs(): array
+    {
+        $privs = array();
+        foreach($this->lang->resource as $module => $methods)
+        {
+            if(empty($methods)) continue;
+            if($module == 'space') continue;
+
+            $navGroup = zget($this->lang->navGroup, $module, '');
+            if($navGroup != 'devops') continue;
+
+            foreach($methods as $method => $label)
+            {
+                $privs[strtolower($module)][strtolower($method)] = 1;
             }
         }
 
@@ -497,11 +526,11 @@ class spaceModel extends model
      */
     public function getRepoUsersBySpace(int $spaceID = 0): array
     {
-        return $this->dao->select('t1.*, t2.name AS repoName, t2.spaceID AS space')->from(TABLE_DEVOPSREPOUSER)->alias('t1')
+        return $this->dao->select('t1.*, t2.name AS `repoName`, t2.`spaceID` AS space')->from(TABLE_DEVOPSREPOUSER)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
             ->where('t2.deleted')->eq(0)
-            ->beginIF($spaceID)->andWhere('t2.spaceID')->eq($spaceID)->fi()
-            ->beginIF(!$spaceID)->andWhere('t2.spaceID')->ne(0)->fi()
+            ->beginIF($spaceID)->andWhere('t2.`spaceID`')->eq($spaceID)->fi()
+            ->beginIF(!$spaceID)->andWhere('t2.`spaceID`')->ne(0)->fi()
             ->fetchAll();
     }
 
@@ -516,12 +545,12 @@ class spaceModel extends model
      */
     public function getGroupMembersBySpace(int $spaceID = 0, bool $allVision = false): array
     {
-        return $this->dao->select('t1.*, t2.id as groupID, t2.name as groupName, t2.devopsSpace as space')->from(TABLE_USERGROUP)->alias('t1')
+        return $this->dao->select('t1.*, t2.id AS `groupID`, t2.name AS `groupName`, t2.`devopsSpace` AS space')->from(TABLE_USERGROUP)->alias('t1')
             ->leftJoin(TABLE_GROUP)->alias('t2')
             ->on('t1.`group` = t2.id')
             ->where('t2.project')->eq(0)
-            ->beginIF($spaceID)->andWhere('t2.devopsSpace')->eq($spaceID)->fi()
-            ->beginIF(!$spaceID)->andWhere('t2.devopsSpace')->ne(0)->fi()
+            ->beginIF($spaceID)->andWhere('t2.`devopsSpace`')->eq($spaceID)->fi()
+            ->beginIF(!$spaceID)->andWhere('t2.`devopsSpace`')->ne(0)->fi()
             ->beginIF(!$allVision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
             ->fetchAll();
     }

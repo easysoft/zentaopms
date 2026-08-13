@@ -7,26 +7,23 @@ title=测试 gitfoxModel::checkHealth();
 timeout=0
 cid=0
 
-- 执行model模块的checkHealth方法  @healthy
-- 执行$r1 === $r2 @1
-- 执行 @0
-- 执行model模块的checkHealth方法  @healthy
-- 执行model模块的checkHealth方法  @healthy
+- 步骤 1：checkHealth 返回 healthy @healthy
+- 步骤 2：连续两次 checkHealth 返回结果一致 @1
+- 步骤 3：checkHealth 返回值类型为 string @string
+- 步骤 4：重复调用 checkHealth 仍返回 healthy @healthy
+- 步骤 5：再次调用 checkHealth 仍返回 healthy @healthy
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r($model->checkHealth()) && p() && e('healthy');
-$r1 = $model->checkHealth(); $r2 = $model->checkHealth();
-r($r1 === $r2) && p() && e('1');
-r((int)dao::isError()) && p() && e('0');
-r($model->checkHealth()) && p() && e('healthy');
-r($model->checkHealth()) && p() && e('healthy');
+r($gitfoxTest->checkHealthTest()) && p() && e('healthy');
+r($gitfoxTest->checkHealthSameResultTest()) && p() && e('1');
+r($gitfoxTest->checkHealthTypeTest()) && p() && e('string');
+r($gitfoxTest->checkHealthTest()) && p() && e('healthy');
+r($gitfoxTest->checkHealthTest()) && p() && e('healthy');

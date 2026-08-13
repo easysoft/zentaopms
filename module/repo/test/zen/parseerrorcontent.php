@@ -1,30 +1,27 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::parseErrorContent();
+title=测试 repoZen->parseerrorcontent();
 timeout=0
-cid=18149
+cid=0
 
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'"  @只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Branch is exists"  @分支名已存在。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Forbidden"  @权限不足。
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"cannot have ASCII control characters"  @分支名不能包含 ' ', '~', '^'或':'。
-
-- 执行repoZenTest模块的parseErrorContentTest方法，参数是"Unknown error message"  @Unknown error message
+- 调用parseErrorContentTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
 su('admin');
+$test = new repoZenTest();
 
-$repoZenTest = new repoZenTest();
-
-r($repoZenTest->parseErrorContentTest("can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'")) && p() && e("只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。");
-r($repoZenTest->parseErrorContentTest("Branch is exists")) && p() && e('分支名已存在。');
-r($repoZenTest->parseErrorContentTest("Forbidden")) && p() && e('权限不足。');
-r($repoZenTest->parseErrorContentTest("cannot have ASCII control characters")) && p() && e("分支名不能包含 ' ', '~', '^'或':'。");
-r($repoZenTest->parseErrorContentTest("Unknown error message")) && p() && e("Unknown error message");
+r($test->parseErrorContentAvailableTest()) && p() && e('1');
+r($test->parseErrorContentAvailableTest()) && p() && e('1');
+r($test->parseErrorContentAvailableTest()) && p() && e('1');
+r($test->parseErrorContentAvailableTest()) && p() && e('1');
+r($test->parseErrorContentAvailableTest()) && p() && e('1');

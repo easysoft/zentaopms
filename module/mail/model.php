@@ -649,8 +649,16 @@ class mailModel extends model
             return sprintf($this->lang->doc->mail->{$titleType}->title, $this->app->user->realname, $object->id, $object->title);
         }
 
-        if($objectType == 'story' or $objectType == 'bug') $suffix = empty($object->product) ? '' : ' - ' . $this->loadModel('product')->getById($object->product)->name;
-        if($objectType == 'task') $suffix = empty($object->execution) ? '' : ' - ' . $this->loadModel('execution')->getById($object->execution)->name;
+        if($objectType == 'story' or $objectType == 'bug')
+        {
+            $product = empty($object->product) ? false : $this->loadModel('product')->getById($object->product);
+            $suffix  = $product ? ' - ' . $product->name : '';
+        }
+        if($objectType == 'task')
+        {
+            $execution = empty($object->execution) ? false : $this->loadModel('execution')->getById($object->execution);
+            $suffix    = $execution ? ' - ' . $execution->name : '';
+        }
 
         if($objectType == 'story') $objectType = $object->type; // 业务需求和用户需求的邮件标题不同。
 

@@ -18,34 +18,15 @@ cid=18054
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(255) NOT NULL DEFAULT '',
-  `commit` int NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(255) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-
-$histories = array(
-    array('id' => 1,  'repo' => 1, 'revision' => 'commit001', 'commit' => 1,  'comment' => '提交信息1',  'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 2,  'repo' => 1, 'revision' => 'commit002', 'commit' => 2,  'comment' => '提交信息2',  'committer' => 'user1', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 3,  'repo' => 1, 'revision' => 'commit003', 'commit' => 3,  'comment' => '提交信息3',  'committer' => 'dev1',  'time' => '2026-07-09 00:00:00'),
-    array('id' => 4,  'repo' => 2, 'revision' => 'commit004', 'commit' => 4,  'comment' => '提交信息4',  'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 5,  'repo' => 2, 'revision' => 'commit005', 'commit' => 5,  'comment' => '提交信息5',  'committer' => 'user1', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 6,  'repo' => 2, 'revision' => 'commit006', 'commit' => 6,  'comment' => '提交信息6',  'committer' => 'dev1',  'time' => '2026-07-09 00:00:00'),
-    array('id' => 7,  'repo' => 3, 'revision' => 'commit007', 'commit' => 7,  'comment' => '提交信息7',  'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 8,  'repo' => 3, 'revision' => 'commit008', 'commit' => 8,  'comment' => '提交信息8',  'committer' => 'user1', 'time' => '2026-07-09 00:00:00'),
-    array('id' => 9,  'repo' => 3, 'revision' => 'commit009', 'commit' => 9,  'comment' => '提交信息9',  'committer' => 'dev1',  'time' => '2026-07-09 00:00:00'),
-    array('id' => 10, 'repo' => 3, 'revision' => 'commit010', 'commit' => 10, 'comment' => '提交信息10', 'committer' => 'admin', 'time' => '2026-07-09 00:00:00'),
-);
-foreach($histories as $history) $tester->dao->insert(TABLE_REPOHISTORY)->data((object)$history)->exec();
+$history = zenData('ops_repohistory');
+$history->id->range('1-10');
+$history->repo->range('1{3},2{3},3{4}');
+$history->revision->range('commit001,commit002,commit003,commit004,commit005,commit006,commit007,commit008,commit009,commit010');
+$history->commit->range('1-10');
+$history->comment->range('1-10')->prefix('提交信息');
+$history->committer->range('admin,user1,dev1{3},admin,user1,dev1,admin');
+$history->time->range('09{10}')->prefix('2026-07-')->postfix(' 00:00:00');
+$history->gen(10);
 
 su('admin');
 

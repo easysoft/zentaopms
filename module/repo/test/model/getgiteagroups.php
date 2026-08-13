@@ -26,8 +26,8 @@ su('admin');
 $repoTest = new repoModelTest();
 
 // 4. 执行测试步骤
-r(is_array($repoTest->getGiteaGroupsTest(4))) && p() && e('1'); // 步骤1：验证返回值是数组类型
-r(count($repoTest->getGiteaGroupsTest(4))) && p() && e('0'); // 步骤2：有效giteaID(4)查询，期望返回空数组
-r(count($repoTest->getGiteaGroupsTest(1))) && p() && e('0'); // 步骤3：有效giteaID(1)查询，期望返回空数组
-r(count($repoTest->getGiteaGroupsTest(0))) && p() && e('0'); // 步骤4：无效giteaID(0)查询，期望返回空数组
-r(count($repoTest->getGiteaGroupsTest(999))) && p() && e('0'); // 步骤5：不存在giteaID(999)查询，期望返回空数组
+r($repoTest->getGiteaGroupsIsArrayTest(4)) && p() && e('1'); // 步骤1：验证返回值是数组类型
+r($repoTest->getGiteaGroupsCountTest(4)) && p() && e('0'); // 步骤2：有效giteaID(4)查询，期望返回空数组
+r($repoTest->getGiteaGroupsCountTest(1)) && p() && e('0'); // 步骤3：有效giteaID(1)查询，期望返回空数组
+r($repoTest->getGiteaGroupsCountTest(0)) && p() && e('0'); // 步骤4：无效giteaID(0)查询，期望返回空数组
+r($repoTest->getGiteaGroupsCountTest(999)) && p() && e('0'); // 步骤5：不存在giteaID(999)查询，期望返回空数组

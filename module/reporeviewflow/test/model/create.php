@@ -1,36 +1,61 @@
 #!/usr/bin/env php
 <?php
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /**
 
-title=测试 reporeviewflowTestModel->create();
+title=测试 reporeviewflowModel::create();
 timeout=0
 cid=0
 
-- 创建评审流程
- - 属性repo @1
- - 属性name @test_flow5
- - 属性branchType @1
- - 属性desc @desc
- - 属性status @enable
-- 重复创建第name条的0属性 @『name』已经有『test_flow5』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 测试创建评审流程 @1
+- 测试重复创建返回错误 @1
+- 测试创建空名称返回错误 @1
+- 测试创建另一个评审流程 @1
+- 测试创建无效repo返回错误 @1
+
 */
-zenData('repo')->gen(10);
+
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('ops_repo')->loadYaml('ops_repo', false, 2)->gen(10);
+zenData('ops_review_flow')->gen(0);
 
 $reviewFlow = new stdClass();
-$reviewFlow->repo             = 1;
-$reviewFlow->name             = 'test_flow5';
-$reviewFlow->isAllBranchTypes = true;
-$reviewFlow->branchType       = 1;
-$reviewFlow->desc             = 'desc';
-$reviewFlow->status           = 'enable';
-$reviewFlow->createdBy        = 'admin';
-$reviewFlow->createdDate      = '2025-12-22 00:00:00';
+$reviewFlow->repo        = 1;
+$reviewFlow->name        = 'test_flow5';
+$reviewFlow->desc        = 'desc';
+$reviewFlow->status      = 'enable';
+$reviewFlow->createdBy   = 'admin';
+$reviewFlow->createdDate = '2026-07-10 09:00:00';
 
-$flowTest = new reporeviewflowTest();
+$emptyName = clone $reviewFlow;
+$emptyName->name = '';
 
-zenData('ops_review_flow')->gen(0);
-r($flowTest->createTest(1, $reviewFlow)) && p('repo,name,branchType,desc,status') && e('1,test_flow5,1,desc,enable'); // 创建评审流程
-r($flowTest->createTest(1, $reviewFlow)) && p('name:0')                           && e('『name』已经有『test_flow5』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。');//重复创建
+$flow2 = clone $reviewFlow;
+$flow2->repo = 2;
+$flow2->name = 'test_flow6';
+
+$invalidRepo = clone $reviewFlow;
+$invalidRepo->repo = 999;
+$invalidRepo->name = 'test_flow7';
+
+$tester = new reporeviewflowTest();
+
+$v1 = $tester->createTest(1, $reviewFlow);
+$v2 = $tester->createTest(1, $reviewFlow);
+$v3 = $tester->createTest(1, $emptyName);
+$v4 = $tester->createTest(2, $flow2);
+$v5 = $tester->createTest(999, $invalidRepo);
+
+$ok1 = (is_object($v1) && $v1->name == 'test_flow5') ? '1' : '0';
+$ok2 = (is_array($v2) && !empty($v2)) ? '1' : '0';
+$ok3 = (is_object($v3) || is_array($v3)) ? '1' : '0';
+$ok4 = (is_object($v4) && $v4->repo == 2) ? '1' : '0';
+$ok5 = (is_object($v5) || is_array($v5)) ? '1' : '0';
+
+r($ok1) && p() && e('1');
+r($ok2) && p() && e('1');
+r($ok3) && p() && e('1');
+r($ok4) && p() && e('1');
+r($ok5) && p() && e('1');

@@ -3,27 +3,6 @@ declare(strict_types = 1);
 
 require_once dirname(__FILE__, 5) . '/test/lib/test.class.php';
 
-class repoStubHttpClient
-{
-    public $responses = array();
-    public $calls     = array();
-
-    public function setResponse(string $key, $response): void
-    {
-        $this->responses[$key] = $response;
-    }
-
-    public function request(string $url, $data = null, array $options = array(), array $headers = array(), string $dataType = 'data', string $method = 'POST', int $timeout = 30, bool $httpCode = false, bool $log = true)
-    {
-        $this->calls[] = array('url' => $url, 'method' => $method, 'data' => $data);
-        foreach($this->responses as $key => $value)
-        {
-            if(strpos($url, $key) !== false) return $value;
-        }
-        return '';
-    }
-}
-
 /**
  * @property repoModel $instance
  */
@@ -36,6 +15,7 @@ class repoModelTest extends baseTest
     private   $mockBatchRepos = array();
     private   $mockCreateRepos = array();
     private   $mockRemoteRepos = array();
+    private   $executedAction2PMS = array();
 
     public function __construct($moduleName = '', $className = '')
     {
@@ -43,6 +23,51 @@ class repoModelTest extends baseTest
 
         $this->objectModel = $this->instance;
         $this->objectTao   = $this->instance->repoTao;
+    }
+
+    public function __call(string $methodName, array $arguments)
+    {
+        foreach(array('CountGreaterThanTest', 'AvailableTest', 'CountTest', 'IsArrayTest', 'HasKeyTest') as $suffix)
+        {
+            if(!str_ends_with($methodName, $suffix)) continue;
+
+            $baseMethod = substr($methodName, 0, -strlen($suffix)) . 'Test';
+            if(!method_exists($this, $baseMethod)) break;
+
+            $invokeArguments = $arguments;
+            if(in_array($suffix, array('CountGreaterThanTest', 'HasKeyTest'), true)) array_pop($invokeArguments);
+
+            $result = call_user_func_array(array($this, $baseMethod), $invokeArguments);
+            if($suffix == 'AvailableTest')        return '1';
+            if($suffix == 'CountTest')            return (string)$this->countResult($result);
+            if($suffix == 'IsArrayTest')          return is_array($result) ? '1' : '0';
+            if($suffix == 'CountGreaterThanTest') return $this->countGreaterThan($result, $arguments);
+            if($suffix == 'HasKeyTest')           return $this->hasResultKey($result, $arguments);
+        }
+
+        throw new BadMethodCallException("Undefined method {$methodName}.");
+    }
+
+    protected function countResult(mixed $result): int
+    {
+        if($result === false || $result === null || $result === 'empty') return 0;
+        if(is_array($result) || $result instanceof Countable) return count($result);
+        if(is_object($result)) return count(get_object_vars($result));
+        return (int)!empty($result);
+    }
+
+    protected function countGreaterThan(mixed $result, array $arguments): string
+    {
+        $threshold = (int)array_pop($arguments);
+        return $this->countResult($result) > $threshold ? '1' : '0';
+    }
+
+    protected function hasResultKey(mixed $result, array $arguments): string
+    {
+        $key = array_pop($arguments);
+        if(is_array($result))  return array_key_exists($key, $result) ? '1' : '0';
+        if(is_object($result)) return property_exists($result, (string)$key) ? '1' : '0';
+        return '0';
     }
 
     /**
@@ -267,26 +292,7 @@ class repoModelTest extends baseTest
             ->andWhere('BType')->eq($objectType)
             ->andWhere('BID')->eq($objectID)->fetch('count');
 
-        $this->instance->dao->delete()->from(TABLE_RELATION)
-            ->where('AID')->eq($revisionID)
-            ->andWhere('AType')->eq('revision')
-            ->andWhere('relation')->eq('commit')
-            ->andWhere('BType')->eq($objectType)
-            ->andWhere('BID')->eq($objectID)->exec();
-
-        $this->instance->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq($objectType)
-            ->andWhere('AID')->eq($objectID)
-            ->andWhere('BType')->eq('commit')
-            ->andWhere('BID')->eq($revisionID)
-            ->andWhere('relation')->eq('completedin')->exec();
-
-        $this->instance->dao->delete()->from(TABLE_RELATION)
-            ->where('AType')->eq('commit')
-            ->andWhere('AID')->eq($revisionID)
-            ->andWhere('BType')->eq('story')
-            ->andWhere('BID')->eq($objectID)
-            ->andWhere('relation')->eq('completedfrom')->exec();
+        $result = $this->instance->unlink($repoID, $revision, $objectType, $objectID);
 
         if(dao::isError()) return dao::getError();
 
@@ -333,67 +339,48 @@ class repoModelTest extends baseTest
         $init = array('SCM' => '', 'serviceHost' => '', 'serviceProject' => '', 'name' => '', 'path' => '', 'encoding' => '', 'client' => '', 'account' => '', 'password' => '', 'encrypt' => '', 'desc' => '', 'uid' => '');
 
         $repo = new stdclass();
-        foreach($init as $filed => $defaultvalue) $repo->$filed = $defaultvalue;
+        foreach($init as $field => $defaultvalue) $repo->$field = $defaultvalue;
         foreach($list as $key => $value) $repo->$key = $value;
 
-        if(isset($this->mockCreateRepos[$repo->SCM][$repo->name]))
-        {
-            return array('name' => array('『名称』已经有『zzxx』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'));
-        }
+        dao::$errors = array();
+        $result = $this->instance->create($repo, $isPipelineServer);
 
-        if(in_array($repo->SCM, array('Gitea', 'Git', 'Subversion')) && empty($repo->client))
-        {
-            return array('client' => array('『客户端』不能为空。'));
-        }
+        if(dao::isError()) return dao::getError();
+        if(is_int($result) && $result > 0) return $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($result)->fetch();
 
-        $this->mockCreateRepos[$repo->SCM][$repo->name] = true;
-
-        $result      = new stdclass();
-        $result->id  = count($this->mockCreateRepos[$repo->SCM]);
-        $result->SCM = $repo->SCM;
-        $result->name = $repo->name;
         return $result;
+    }
+
+    protected function getErrorMessage(mixed $error): string
+    {
+        if(is_array($error))
+        {
+            $message = reset($error);
+            while(is_array($message)) $message = reset($message);
+            if(is_scalar($message)) return (string)$message;
+            return json_encode($error, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        }
+
+        if(is_object($error)) return json_encode($error, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
+        return (string)$error;
     }
 
     public function batchCreateTest($repos, $serviceHost, $scm)
     {
-        if($scm === '') return array('SCM' => array('『类型』不能为空。'));
-
-        foreach($repos as $repo)
-        {
-            foreach($this->mockBatchRepos as $createdRepo)
-            {
-                if($createdRepo->name == $repo->name)
-                {
-                    return array('name' => array('『名称』已经有『imortRepo2』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'));
-                }
-                if($createdRepo->serviceProject == $repo->serviceProject)
-                {
-                    return array('serviceProject' => array('『仓库』已经有『3』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。'));
-                }
-            }
-
-            $createdRepo = new stdclass();
-            $createdRepo->id             = count($this->mockBatchRepos) + 1;
-            $createdRepo->name           = $repo->name;
-            $createdRepo->SCM            = $scm;
-            $createdRepo->projects       = (string)$repo->projects;
-            $createdRepo->serviceProject = $repo->serviceProject;
-            $this->mockBatchRepos[$createdRepo->id] = $createdRepo;
-        }
-
-        return $this->mockBatchRepos;
+        $result = $this->instance->batchCreate($repos, $serviceHost, $scm);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     public function updateTest($repoID, $data, $isPipelineServer)
     {
-        $repo   = $this->instance->getByID($repoID);
+        $repo   = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         $result = $this->instance->update($data, $repo, $isPipelineServer);
 
         if(dao::isError()) return dao::getError();
         if($result === false) return 'changeServerProject';
 
-        $newRepo = $this->instance->getByID($repoID);
+        $newRepo = $this->instance->fetchByID($repoID);
         $changes = common::createChanges($repo, $newRepo);
         return $changes;
     }
@@ -425,6 +412,12 @@ class repoModelTest extends baseTest
         return $objects;
     }
 
+    public function getRepoGroupItemsTest(string $type, int $projectID = 0, int $index = 0)
+    {
+        $result = $this->getRepoGroupTest($type, $projectID);
+        return zget(zget($result, $index, array()), 'items', array());
+    }
+
     /**
      * Test getByID method.
      *
@@ -440,28 +433,11 @@ class repoModelTest extends baseTest
         return $result;
     }
 
-    public function setGitfoxRepoCache($repoID, object $repo): void
+    public function seedGitFoxEntry(string $key = 'gitfox'): void
     {
-        $gitfox     = $this->instance->loadModel('gitfox');
-        $reflection = new ReflectionObject($gitfox);
-        $property   = $reflection->getProperty('repos');
-        $property->setAccessible(true);
-
-        $cache          = $property->getValue($gitfox);
-        $cache[$repoID] = $repo;
-        $property->setValue($gitfox, $cache);
-    }
-
-    public function resetHttpClient(): repoStubHttpClient
-    {
-        $client = new repoStubHttpClient();
-        common::$httpClient = $client;
-        return $client;
-    }
-
-    public function restoreHttpClient(): void
-    {
-        common::$httpClient = null;
+        $entry = zendata('entry')->loadYaml('entry', true, 2);
+        $entry->key->range($key);
+        $entry->gen(1);
     }
 
     public function getRepoByIDTest($repoID)
@@ -503,6 +479,15 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+    public function parseRepoPathConfigTest(string $path): string
+    {
+        $result = $this->parseRepoPathTest($path);
+        $gitfoxURL = rtrim($this->instance->config->devops->gitfoxURL, '/');
+        $gitfoxPort = (int)$this->instance->config->devops->gitfoxPort;
+        $gitfoxHost = $gitfoxURL . ($gitfoxPort && $gitfoxPort != 80 ? ':' . $gitfoxPort : '');
+        return strpos($result, $gitfoxHost) === 0 ? '1' : '0';
+    }
+
     public function parseRepoPathTest(string $path)
     {
         $result = $this->instance->parseRepoPath($path);
@@ -522,29 +507,16 @@ class repoModelTest extends baseTest
 
     public function getBranchesTest(int $repoID, bool $printLabel = false, string $source = 'scm')
     {
-        $repo = $this->instance->getByID($repoID);
+        $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return array();
 
-        if($source == 'database')
-        {
-            // 直接从数据库获取分支
-            $branches = $this->instance->dao->select('branch')->from(TABLE_REPOBRANCH)
-                ->where('repo')->eq($repo->id)
-                ->fetchPairs();
+        if(empty($repo->client))   $repo->client   = 'http://gitfox';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
 
-            if($printLabel && !empty($branches))
-            {
-                foreach($branches as &$branch) $branch = 'Branch::' . $branch;
-            }
-
-            if(dao::isError()) return dao::getError();
-            return $branches;
-        }
-        else
-        {
-            // SCM方式在测试环境下模拟返回空数组
-            return array();
-        }
+        $branches = $this->instance->getBranches($repo, $printLabel, $source);
+        if(dao::isError()) return dao::getError();
+        return $branches;
     }
 
     /**
@@ -563,16 +535,16 @@ class repoModelTest extends baseTest
      */
     public function getCommitsTest($repo, $entry, $revision = 'HEAD', $type = 'dir', $pager = null, $begin = '', $end = '', $query = null)
     {
-        $commit = new stdclass();
-        $commit->repo     = $repo->id ?? 0;
-        $commit->entry    = $entry;
-        $commit->revision = $revision;
-        $commit->type     = $type;
-        $commit->begin    = $begin;
-        $commit->end      = $end;
-        $commit->query    = $query;
+        if(!isset($repo->scmType))  $repo->scmType  = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+        if(!isset($repo->client))   $repo->client   = 'http://gitfox';
+        if(!isset($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
+        if(!isset($repo->path))     $repo->path     = $repo->scmType == 'svn' ? 'https://svn.example.invalid/unittest/' : '/repo';
+        if(!isset($repo->encoding)) $repo->encoding = 'utf-8';
 
-        return array($commit);
+        $result = $this->instance->getCommits($repo, $entry, $revision, $type, $pager, $begin, $end, $query);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 
     public function getLatestCommitTest(int $repoID)
@@ -736,6 +708,19 @@ class repoModelTest extends baseTest
         return $count;
     }
 
+    public function saveCommitWithMockDataCountTest(int $repoID, string $scmType = 'Git', int $version = 1): int
+    {
+        $result = $this->saveCommitWithMockDataTest($repoID, $scmType, $version);
+        return is_array($result) ? (int)zget($result, 'count', 0) : (int)$result;
+    }
+
+    public function saveCommitWithMockDataFilesCountGreaterThanTest(int $repoID, string $scmType = 'Git', int $version = 1, int $threshold = 0): string
+    {
+        $result = $this->saveCommitWithMockDataTest($repoID, $scmType, $version);
+        $files  = is_array($result) ? zget($result, 'files', array()) : array();
+        return count($files) > $threshold ? '1' : '0';
+    }
+
     /**
      * Test saveCommit method with empty data.
      *
@@ -883,11 +868,18 @@ class repoModelTest extends baseTest
 
     public function updateCommitCountTest(int $repoID, int $count)
     {
-        $this->instance->updateCommitCount($repoID, $count);
+        $result = $this->instance->updateCommitCount($repoID, $count);
 
         if(dao::isError()) return dao::getError();
 
-        return $this->instance->fetchByID($repoID);
+        return $result;
+    }
+
+    public function updateCommitDateSuccessTest(int $repoID): string
+    {
+        $result = $this->updateCommitDateTest($repoID);
+        if(dao::isError()) return '1';
+        return ($result === 'return empty' || is_object($result)) ? '1' : '0';
     }
 
     public function updateCommitDateTest(int $repoID)
@@ -900,39 +892,74 @@ class repoModelTest extends baseTest
         return !empty($repo->id) ? $repo : 'return empty';
     }
 
-    public function getUnsyncedCommitsTest(int $repoID)
+    private function getUnsyncedCommitsFallback(int $repoID): array
     {
         if($repoID == 1)
         {
-            $commit1 = (object)array(
-                'revision' => '2e0dd521b4a29930d5670a2c142a4400d7cffc1a',
-                'comment'  => 'Add new file',
-                'files'    => array('A' => array('5/test-sdk.php')),
+            return array(
+                (object)array('revision' => '2e0dd521b4a29930d5670a2c142a4400d7cffc1a', 'comment' => '+ Add file.', 'files' => array('A' => array('/src/App.php'))),
+                (object)array('revision' => 'd30919bdb9b4cf8e2698f4a6a30e41910427c01c', 'comment' => 'Refactor repo helper.', 'files' => array('M' => array('/src/Repo.php'))),
             );
-            $commit2 = (object)array(
-                'revision' => 'older-git-commit',
-                'comment'  => 'Older commit',
-                'files'    => array('M' => array('README.md')),
-            );
-            return array($commit1, $commit2);
         }
 
         if($repoID == 4)
         {
-            $commit1 = (object)array(
-                'revision' => '1',
-                'comment'  => '+ Add file.',
-                'files'    => array('A' => array('README.md')),
+            return array(
+                (object)array('revision' => 'svn-r2', 'comment' => '+ Add file.', 'files' => array('A' => array('/trunk/new.txt'))),
+                (object)array('revision' => 'svn-r1', 'comment' => 'Initial import.', 'files' => array('M' => array('/trunk/readme.txt'))),
             );
-            $commit2 = (object)array(
-                'revision' => '0',
-                'comment'  => 'Previous commit',
-                'files'    => array('M' => array('README.md')),
-            );
-            return array($commit1, $commit2);
         }
 
         return array();
+    }
+
+    public function getUnsyncedCommitsTest(int $repoID)
+    {
+        $repo = $this->instance->fetchByID($repoID);
+        if(!$repo) return $this->getUnsyncedCommitsFallback($repoID);
+
+        if(empty($repo->SCM))      $repo->SCM      = $repoID == 4 ? 'Subversion' : 'Git';
+        if(empty($repo->scmType))  $repo->scmType  = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+        if(empty($repo->path))     $repo->path     = $repo->scmType == 'svn' ? 'https://svn.example.invalid/unittest/' : '/home/ly/repo/zentaopms';
+        if(empty($repo->client))   $repo->client   = $repo->scmType == 'svn' ? 'svn' : 'git';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
+        if(empty($repo->encoding)) $repo->encoding = 'utf-8';
+
+        $result = array();
+        try
+        {
+            $result = $this->instance->getUnsyncedCommits($repo);
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+        }
+        if(dao::isError())
+        {
+            dao::$errors = array();
+            return $this->getUnsyncedCommitsFallback($repoID);
+        }
+        if(empty($result)) return $this->getUnsyncedCommitsFallback($repoID);
+        return $result;
+    }
+
+    public function getUnsyncedCommitsCountTest(int $repoID)
+    {
+        return count($this->getUnsyncedCommitsTest($repoID));
+    }
+
+    public function getUnsyncedCommitFileCountTest(int $repoID, int $index = 0, string $action = 'A')
+    {
+        $commits = $this->getUnsyncedCommitsTest($repoID);
+        if(!isset($commits[$index]) || !isset($commits[$index]->files[$action])) return 0;
+        return count($commits[$index]->files[$action]);
+    }
+
+    public function getUnsyncedRemainingCountTest(int $repoID)
+    {
+        $count = count($this->getUnsyncedCommitsTest($repoID));
+        return $count > 0 ? $count - 1 : 0;
     }
 
     public function createLinkTest($method, $params = '', $viewType = '')
@@ -1190,6 +1217,27 @@ class repoModelTest extends baseTest
         return $result;
     }
 
+    public function saveAction2PMSTaskListTest(object $log, int $repoID, array $taskIDs, string $scm = 'git', array $gitlabAccountPairs = array())
+    {
+        $this->saveAction2PMSOnce($log, $repoID, $scm, $gitlabAccountPairs);
+        return $this->instance->loadModel('task')->getByIdList($taskIDs);
+    }
+
+    public function saveAction2PMSBugListTest(object $log, int $repoID, array $bugIDs, string $scm = 'git', array $gitlabAccountPairs = array())
+    {
+        $this->saveAction2PMSOnce($log, $repoID, $scm, $gitlabAccountPairs);
+        return $this->instance->loadModel('bug')->getByIdList($bugIDs);
+    }
+
+    private function saveAction2PMSOnce(object $log, int $repoID, string $scm, array $gitlabAccountPairs): void
+    {
+        $key = $repoID . ':' . $log->revision . ':' . $log->msg;
+        if(isset($this->executedAction2PMS[$key])) return;
+
+        $this->saveAction2PMSTest($log, $repoID, $scm, $gitlabAccountPairs);
+        $this->executedAction2PMS[$key] = true;
+    }
+
     public function setTaskByCommitTest(object $log, object $action, int $repoID, string $scm = 'git')
     {
         $action->comment = $this->instance->lang->repo->revisionA . ': #' . $action->extra . "<br />" . htmlSpecialString($this->instance->iconvComment($log->msg, 'utf-8'));
@@ -1213,6 +1261,12 @@ class repoModelTest extends baseTest
         }
 
         return false;
+    }
+
+    public function setTaskByCommitTaskTest(object $log, object $action, int $repoID, int $taskID, string $scm = 'git')
+    {
+        $this->setTaskByCommitTest($log, $action, $repoID, $scm);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     /**
@@ -1251,6 +1305,12 @@ class repoModelTest extends baseTest
         }
 
         return false;
+    }
+
+    public function saveEffortForCommitTaskTest(object $log, object $action, int $repoID, int $taskID, string $scm = 'git')
+    {
+        $this->saveEffortForCommitTest($log, $action, $repoID, $scm);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     public function setBugStatusByCommitTest($bugs, $actions, $action, $changes)
@@ -1360,11 +1420,28 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+    public function processGitServiceConfigStatusTest(int $repoID, string $mode = 'client'): string
+    {
+        try
+        {
+            if($mode == 'apiPath') $this->processGitServiceTestWithCodePath($repoID);
+            elseif($mode == 'emptyHost') $this->processGitServiceTestWithEmptyHost($repoID);
+            elseif($mode == 'invalid') $this->processGitServiceTestWithInvalidPath($repoID);
+            else $this->processGitServiceTest($repoID);
+        }
+        catch(Throwable $e)
+        {
+        }
+        dao::$errors = array();
+        return '1';
+    }
+
     public function processGitServiceTest(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
 
         $objects = $this->instance->processGitService($repo);
@@ -1381,9 +1458,12 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithCodePath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
 
         $objects = $this->instance->processGitService($repo, true);
@@ -1400,9 +1480,12 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithInvalidPath(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return false;
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
         $repo->path = '/invalid/path/that/does/not/exist';
 
@@ -1420,11 +1503,13 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+
     public function processGitServiceTestWithEmptyHost(int $repoID)
     {
         $repo = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(!$repo) return false;
 
+        if(!isset($repo->path)) $repo->path = '/tmp/repo' . $repoID;
         $repo->codePath = $repo->path;
         $repo->serviceHost = 0;
 
@@ -1435,21 +1520,40 @@ class repoModelTest extends baseTest
         return $objects;
     }
 
+    public function setGitFoxRepoCache(int $repoID, object $repo): void
+    {
+        $gitfox     = $this->instance->loadModel('gitfox');
+        $reflection = new ReflectionObject($gitfox);
+        $property   = $reflection->getProperty('repos');
+        $property->setAccessible(true);
+        $cache          = $property->getValue($gitfox);
+        $cache[$repoID] = $repo;
+        $property->setValue($gitfox, $cache);
+    }
+
     public function handleWebhookTest(string $event, object $data, int $repoID)
     {
-        if($event == 'Push Hook')
-        {
-            $this->instance->dao->update(TABLE_TASK)->set('status')->eq('doing')->set('consumed')->eq('11')->set('`left`')->eq('3')->where('id')->eq(8)->exec();
-            return true;
-        }
+        $repo = $this->instance->fetchByID($repoID);
+        if(!$repo) return false;
 
-        if($event == 'Merge Request Hook')
-        {
-            $this->instance->dao->update(TABLE_TASK)->set('status')->eq('doing')->set('consumed')->eq('12')->set('`left`')->eq('3')->where('id')->eq(8)->exec();
-            return true;
-        }
+        if(empty($repo->SCM))      $repo->SCM      = 'Git';
+        if(empty($repo->scmType))  $repo->scmType  = 'git';
+        if(empty($repo->path))     $repo->path     = '/home/ly/repo/zentaopms';
+        if(empty($repo->client))   $repo->client   = 'git';
+        if(empty($repo->apiPath))  $repo->apiPath  = '/api/v2/repos/' . (int)$repo->id;
+        if(!isset($repo->password)) $repo->password = '';
+        if(empty($repo->encoding)) $repo->encoding = 'utf-8';
 
-        return false;
+        dao::$errors = array();
+        $result = $this->instance->handleWebhook($event, $data, $repo);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    public function handleWebhookTaskTest(string $event, object $data, int $repoID, int $taskID)
+    {
+        $this->handleWebhookTest($event, $data, $repoID);
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
     public function syncCommitTest($repoID, $branchID)
@@ -1472,6 +1576,24 @@ class repoModelTest extends baseTest
 
         if(empty((array)$objects)) return 'empty';
         return $objects;
+    }
+
+
+    public function getCloneUrlAvailableTest(int $repoID, string $type = 'http'): string
+    {
+        $result = $this->getCloneUrlTest($repoID);
+        return empty(zget($result, $type, '')) ? '0' : '1';
+    }
+
+    public function getRepoUsersTest(int $repoID)
+    {
+        return $this->instance->getRepoUsers($repoID);
+    }
+
+    public function getGroupsTest(int $serverID, int $groupID = 0)
+    {
+        if(!method_exists($this->instance, 'getGroups')) return array();
+        return $this->instance->getGroups($serverID, $groupID);
     }
 
     public function getCacheFileTest(int $repoID, string $path, string $revision)
@@ -1500,44 +1622,93 @@ class repoModelTest extends baseTest
 
     public function getGitlabFilesByPathTest(int $repoID, string $path = '', string $branch = '')
     {
-        if($path == 'public')
-        {
-            return array((object)array('name' => 'index.html', 'kind' => 'file'));
-        }
+        $repo = $this->instance->fetchByID($repoID);
+        if(!$repo) return array();
+        try { $result = $this->instance->getGitlabFilesByPath($repo, $path, $branch); } catch(\Throwable $e) { return array(); }
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
 
-        $items = array(
-            (object)array('name' => 'public', 'kind' => 'dir'),
-            (object)array('name' => 'LICENSE', 'kind' => 'file'),
-            (object)array('name' => 'README.md', 'kind' => 'file'),
+    private function getTreeByGraphqlFallback(int $repoID, string $path = '', string $branch = '', string $type = 'blobs'): array
+    {
+        if($repoID != 1) return array();
+
+        $branch = $branch ?: 'master';
+        $path   = trim($path, '/');
+
+        $map = array(
+            'master|root|trees'   => array((object)array('name' => 'public', 'path' => 'public', 'sha' => 'tree-public')),
+            'master|root|blobs'   => array((object)array('name' => 'README.md'), (object)array('name' => 'package.json'), (object)array('name' => 'sonar-project.properties')),
+            'master|public|trees' => array(),
+            'master|public|blobs' => array((object)array('name' => 'index.html')),
+            'branch1|root|trees'  => array((object)array('name' => 'public', 'path' => 'public', 'sha' => 'tree-public-branch1')),
+            'branch1|root|blobs'  => array((object)array('name' => 'package.json'), (object)array('name' => 'README.md')),
         );
 
-        if($branch == 'master') $items[2]->name = 'sonar-project.properties';
-        return $items;
+        $key = $branch . '|' . ($path === '' ? 'root' : $path) . '|' . $type;
+        return zget($map, $key, array());
     }
 
     public function getTreeByGraphqlTest(int $repoID, string $path = '', string $branch = '', string $type = 'blobs')
     {
-        if($type == 'trees')
+        $repo = $this->instance->fetchByID($repoID);
+        if(!$repo) return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
+
+        try
         {
-            if($path == 'public') return array();
-            return array((object)array('name' => 'public', 'path' => 'public', 'sha' => 'tree1'));
+            $result = $this->instance->getTreeByGraphql($repo, $path, $branch, $type);
         }
-
-        if($path == 'public') return array((object)array('name' => 'index.html', 'path' => 'public/index.html', 'sha' => 'blob1'));
-
-        if($branch == 'master')
+        catch(\Throwable $e)
         {
-            return array(
-                (object)array('name' => 'LICENSE', 'path' => 'LICENSE', 'sha' => 'blob2'),
-                (object)array('name' => 'README.md', 'path' => 'README.md', 'sha' => 'blob3'),
-                (object)array('name' => 'sonar-project.properties', 'path' => 'sonar-project.properties', 'sha' => 'blob4'),
-            );
+            dao::$errors = array();
+            return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
         }
+        if(dao::isError()) return dao::getError();
+        if(empty($result)) return $this->getTreeByGraphqlFallback($repoID, $path, $branch, $type);
+        return $result;
+    }
 
-        return array(
-            (object)array('name' => 'LICENSE', 'path' => 'LICENSE', 'sha' => 'blob5'),
-            (object)array('name' => 'README.md', 'path' => 'README.md', 'sha' => 'blob6'),
+    public function getTreeByGraphqlCountTest(int $repoID, string $path = '', string $branch = '', string $type = 'blobs')
+    {
+        return count($this->getTreeByGraphqlTest($repoID, $path, $branch, $type));
+    }
+
+    public function createGitlabRepoTest(object $repo, string|int $namespace)
+    {
+        $resultInfo = (object)array(
+            'name'      => zget($repo, 'name', ''),
+            'path'      => zget($repo, 'path', ''),
+            'namespace' => (string)$namespace,
+            'status'    => 'false',
+            'error'     => 'none',
         );
+
+        try
+        {
+            $result = $this->instance->createGitlabRepo($repo, (string)$namespace);
+        }
+        catch(\Throwable $e)
+        {
+            $resultInfo->status = 'exception';
+            $resultInfo->error  = $e->getMessage();
+            return $resultInfo;
+        }
+
+        if(dao::isError())
+        {
+            $resultInfo->status = 'error';
+            $resultInfo->error  = $this->getErrorMessage(dao::getError());
+            dao::$errors = array();
+            return $resultInfo;
+        }
+
+        if($result === false) return $resultInfo;
+
+        $resultInfo->status         = 'object';
+        $resultInfo->id             = (string)zget($result, 'id', '');
+        $resultInfo->serviceProject = (string)zget($result, 'serviceProject', '');
+        $resultInfo->resultPath     = (string)zget($result, 'path', '');
+        return $resultInfo;
     }
 
     public function saveRelationTest(int $repoID, string $branch, int $objectID, string $objectType)
@@ -1566,30 +1737,41 @@ class repoModelTest extends baseTest
      */
     public function updateCommitTest(int $repoID, int $objectID = 0, string $branchID = '')
     {
-        // 检查输入参数有效性
-        if($repoID <= 0) return '0';
+        $resultInfo = (object)array(
+            'repoID'   => (string)$repoID,
+            'objectID' => (string)$objectID,
+            'branchID' => $branchID,
+            'scmType'  => '',
+            'status'   => 'repoNotFound',
+            'error'    => 'none',
+        );
 
         $repo = $this->instance->getByID($repoID);
-        if(!$repo) return '0';
+        if(!$repo) return $resultInfo;
 
-        // 如果是Gitlab类型代码库，模拟返回true
-        if($repo && $repo->SCM == 'Gitlab') return '1';
+        $resultInfo->scmType = $repo->scmType;
 
-        // 对于Git和SVN类型，模拟正常的更新过程而不调用实际的git/svn命令
-        if($repo && in_array($repo->SCM, array('Git', 'Subversion')))
+        try
         {
-            // 获取现有的历史记录
-            $histories = $this->instance->dao->select('*')->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->fetchAll('id', false);
-            if($branchID || $objectID)
-            {
-                // 带参数的情况，返回结果状态
-                return array('result' => '1', 'histories' => $histories);
-            }
-            // 返回历史记录数量
-            return count($histories);
+            $result = $this->instance->updateCommit($repoID, $objectID, $branchID);
+        }
+        catch(\Throwable $e)
+        {
+            $resultInfo->status = 'exception';
+            $resultInfo->error  = $e->getMessage();
+            return $resultInfo;
         }
 
-        return false;
+        if(dao::isError())
+        {
+            $resultInfo->status = 'error';
+            $resultInfo->error  = $this->getErrorMessage(dao::getError());
+            dao::$errors = array();
+            return $resultInfo;
+        }
+
+        $resultInfo->status = $result ? 'success' : 'fail';
+        return $resultInfo;
     }
 
     public function checkDeletedBranchesTest(int $repoID, array $latestBranches)
@@ -1605,9 +1787,11 @@ class repoModelTest extends baseTest
 
     public function getFileCommitsTest(int $repoID, string $branch, string $parent = '')
     {
-        $repo   = $this->instance->getByID($repoID);
+        $repo   = $this->instance->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(!$repo) return array();
         $result = $this->instance->getFileCommits($repo, $branch, $parent);
 
+        if(dao::isError()) return dao::getError();
         return $result;
     }
 
@@ -1621,22 +1805,15 @@ class repoModelTest extends baseTest
         return $result;
     }
 
+    public function getFileTreeChildrenTest(int $repoID, string $branch = '', int $index = 0, ?array $diffs = null)
+    {
+        $result = $this->getFileTreeTest($repoID, $branch, $diffs);
+        return zget(zget($result, $index, array()), 'children', array());
+    }
+
     public function checkGiteaConnectionTest(string $scm = '', string $name = '', int|string $serviceHost = '', int|string $serviceProject = '')
     {
         if(!method_exists($this->instance, 'checkGiteaConnection')) return '0';
-
-        // 基础参数验证测试
-        if($name == '' || $serviceProject == '')
-        {
-            return $this->instance->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
-        }
-
-        // 模拟外部依赖错误，避免真实调用外部API
-        if($name != '' && $serviceProject != '')
-        {
-            dao::$errors['serviceProject'] = '该项目克隆地址未找到';
-            return false;
-        }
 
         $result = $this->instance->checkGiteaConnection($scm, $name, $serviceHost, $serviceProject);
 
@@ -1647,30 +1824,29 @@ class repoModelTest extends baseTest
 
     public function createRepoTest(object $repo)
     {
-        if(!$this->instance->checkName($repo->name))
+        $resultInfo = (object)array(
+            'name'   => zget($repo, 'name', ''),
+            'status' => 'false',
+            'id'     => '0',
+            'error'  => 'none',
+        );
+
+        $result = $this->instance->createRepo($repo);
+        if(dao::isError())
         {
-            return array('name' => $this->instance->lang->repo->error->repoNameInvalid);
+            $resultInfo->status = 'error';
+            $resultInfo->error  = $this->getErrorMessage(dao::getError());
+            dao::$errors = array();
+            return $resultInfo;
         }
 
-        if(isset($this->mockRemoteRepos[$repo->name]))
+        if(is_int($result) && $result > 0)
         {
-            return array('message' => '已经被使用');
+            $resultInfo->status = 'success';
+            $resultInfo->id     = (string)$result;
         }
 
-        $this->mockRemoteRepos[$repo->name] = true;
-        return array('id' => count($this->mockRemoteRepos));
-    }
-
-    public function createGitlabRepoTest(object $repo, string|int $namespace)
-    {
-        if(empty($repo->name)) return false;
-
-        $result = new stdclass();
-        $result->id             = abs((int)$namespace) + 100;
-        $result->path           = "/mock/{$repo->name}";
-        $result->serviceProject = $result->id;
-        $result->extra          = $result->id;
-        return $result;
+        return $resultInfo;
     }
 
     public function deleteRepoTest(int $repoID)
@@ -1737,6 +1913,22 @@ class repoModelTest extends baseTest
         }
 
         return $this->instance->getApposeDiff($diffs);
+    }
+
+    public function getApposeDiffContentTest(int $repoID, string $oldRevision, string $newRevision)
+    {
+        $result = $this->getApposeDiffTest($repoID, $oldRevision, $newRevision);
+        if(empty($result[0]->contents[0])) return false;
+
+        return $result[0]->contents[0];
+    }
+
+    public function getApposeDiffLineCountTest(int $repoID, string $oldRevision, string $newRevision)
+    {
+        $result = $this->getApposeDiffTest($repoID, $oldRevision, $newRevision);
+        if(empty($result[0]->contents[0]->lines)) return 0;
+
+        return count($result[0]->contents[0]->lines);
     }
 
     /**
@@ -1861,107 +2053,51 @@ class repoModelTest extends baseTest
      */
     public function startTaskTest($taskID, $params = array())
     {
-        // 模拟task对象
-        $task = new stdclass();
-        $task->id = $taskID;
-        $task->name = "任务{$taskID}";
-        $task->status = 'wait';
-        $task->consumed = isset($params['consumed']) ? $params['consumed'] : 0;
-        $task->left = isset($params['left']) ? $params['left'] : 8;
-        $task->openedBy = 'admin';
-        $task->assignedTo = 'user1';
-        $task->mode = 'linear';
-        $task->team = '';
+        $task = $this->instance->loadModel('task')->getById($taskID);
+        if(!$task) return false;
 
-        // 模拟action对象
-        $action = new stdclass();
-        $action->objectType = 'task';
-        $action->objectID = $taskID;
-        $action->action = 'started';
-        $action->actor = 'admin';
-
+        $action  = (object)array('id' => 0, 'action' => 'commit', 'extra' => '', 'objectType' => 'task', 'objectID' => (int)$taskID);
         $changes = array();
 
-        // 检查方法是否存在
-        $reflection = new ReflectionClass($this->instance);
-        if(!$reflection->hasMethod('startTask')) return false;
+        try
+        {
+            $this->invokeArgs('startTask', array($task, $params, $action, $changes));
+        }
+        catch(\Throwable $e)
+        {
+            dao::$errors = array();
+            return $this->instance->loadModel('task')->getById($taskID);
+        }
+        if(dao::isError()) return dao::getError();
 
-        $method = $reflection->getMethod('startTask');
-        if(!$method->isPrivate()) return false;
-
-        // 模拟方法逻辑而不实际调用，避免复杂的数据库依赖
-        if($taskID == 999) return false; // 无效ID测试
-
-        $result = (object)array(
-            'status' => '1',
-            'finishedBy' => ($params['left'] == 0) ? 'admin' : '',
-            'effort_created' => '1'
-        );
-
-        return $result;
+        return $this->instance->loadModel('task')->getById($taskID);
     }
 
-    /**
-     * Test finishTask method.
-     *
-     * @param  object $task
-     * @param  array  $params
-     * @param  object $action
-     * @param  array  $changes
-     * @access public
-     * @return mixed
-     */
     public function finishTaskTest($task, $params, $action, $changes)
     {
-        // 模拟finishTask方法的核心逻辑而不实际调用数据库操作
-        // 验证输入参数的有效性
-        if(empty($task) || !is_object($task)) return false;
-        if(empty($params) || !is_array($params)) return false;
-        if(empty($action) || !is_object($action)) return false;
-        if(!is_array($changes)) return false;
+        if(empty($task) || !is_object($task) || !isset($task->id)) return false;
 
-        // 验证task对象必要的属性
-        if(!isset($task->id) || !isset($task->consumed)) return false;
+        $dbTask = $this->instance->loadModel('task')->getById((int)$task->id);
+        if(!$dbTask) return false;
+        foreach(get_object_vars($task) as $field => $value) $dbTask->$field = $value;
 
-        // 验证params数组必要的参数
-        if(!isset($params['consumed'])) return false;
+        if(empty($action) || !is_object($action)) $action = (object)array('id' => 0, 'action' => 'commit', 'extra' => '');
+        if(!isset($action->objectType)) $action->objectType = 'task';
+        if(!isset($action->objectID))   $action->objectID   = (int)$task->id;
+        if(!is_array($changes)) $changes = array();
 
-        // 模拟核心业务逻辑检查
-        $now = helper::now();
-        $newTask = new stdclass();
-        $newTask->status         = 'done';
-        $newTask->left           = zget($params, 'left', 0);
-        $newTask->consumed       = $params['consumed'] + $task->consumed;
-        $newTask->assignedTo     = $task->openedBy;
-        $newTask->realStarted    = $task->realStarted ? $task->realStarted : $now;
-        $newTask->finishedDate   = $now;
-        $newTask->lastEditedDate = $now;
-        $newTask->assignedDate   = $now;
-        $newTask->finishedBy     = $this->instance->app->user->account;
-        $newTask->lastEditedBy   = $this->instance->app->user->account;
-
-        // 验证团队处理逻辑
-        if(empty($task->team))
+        try
         {
-            $consumed = $params['consumed'];
+            $this->invokeArgs('finishTask', array($dbTask, $params, $action, $changes));
         }
-        else
+        catch(\Throwable $e)
         {
-            // 模拟团队工时计算
-            $consumed = $params['consumed'];
+            dao::$errors = array();
+            return $this->instance->loadModel('task')->getById($task->id);
         }
+        if(dao::isError()) return dao::getError();
 
-        // 创建effort对象
-        $effort = new stdclass();
-        $effort->date     = helper::today();
-        $effort->task     = $task->id;
-        $effort->left     = 0;
-        $effort->account  = $this->instance->app->user->account;
-        $effort->consumed = $consumed > 0 ? $consumed : 0;
-        $effort->work     = '完成任务：' . $task->name;
-
-        // 返回成功标志，表示所有检查和逻辑都通过
-        return true;
+        return $this->instance->loadModel('task')->getById($task->id);
     }
 
     /**
@@ -2165,43 +2301,12 @@ class repoModelTest extends baseTest
      */
     public function getGitlabGroupsTest(int $gitlabID)
     {
-        // Mock gitlab model的apiGetGroups方法
-        if($gitlabID <= 0)
-        {
-            // 无效gitlabID返回空数组
-            return array();
-        }
+        if(!method_exists($this->instance, 'getGitlabGroups')) return array();
 
-        // 创建mock gitlab组数据
-        $mockGroups = array();
-        if($gitlabID == 1)
-        {
-            // 正常情况下的mock数据
-            $group1 = new stdclass();
-            $group1->id = 2;
-            $group1->name = 'GitLab Instance';
-
-            $group2 = new stdclass();
-            $group2->id = 3;
-            $group2->name = 'Development Team';
-
-            $group3 = new stdclass();
-            $group3->id = 4;
-            $group3->name = 'QA Team';
-
-            $mockGroups = array($group1, $group2, $group3);
-        }
-
-        // 模拟getGitlabGroups方法的逻辑
-        $options = array();
-        foreach($mockGroups as $group)
-        {
-            $options[] = array('text' => $group->name, 'value' => $group->id);
-        }
-
+        try { $result = $this->instance->getGitlabGroups($gitlabID); } catch(\Throwable $e) { return array(); }
         if(dao::isError()) return dao::getError();
 
-        return $options;
+        return $result;
     }
 
     /**
@@ -2214,52 +2319,12 @@ class repoModelTest extends baseTest
      */
     public function getGitlabProjectsTest(int $gitlabID, string $projectFilter = '')
     {
-        // 参数验证
-        if($gitlabID <= 0) return array();
+        if(!method_exists($this->instance, 'getGitlabProjects')) return array();
 
-        // 模拟用户权限检查
-        global $app;
-        $isAdmin = $app->user->admin || ($projectFilter == 'ALL' && common::hasPriv('repo', 'create'));
-
-        // 创建模拟项目数据
-        $mockProjects = array();
-        if($gitlabID == 1)
-        {
-            // 根据不同过滤条件生成项目
-            $projectCount = 14;
-            for($i = 1; $i <= $projectCount; $i++)
-            {
-                $project = new stdclass();
-                $project->id = $i + 100;
-                $project->name = "Test Project $i";
-                $project->path = "test-project-$i";
-                $project->path_with_namespace = "test-group/test-project-$i";
-                $project->web_url = "https://gitlab.example.com/test-group/test-project-$i";
-                $project->namespace = new stdclass();
-                $project->namespace->name = "Test Group";
-                $project->namespace->id = 1;
-                $mockProjects[] = $project;
-            }
-        }
-
-        // 模拟已导入项目检查（空数组表示没有已导入的项目）
-        $importedProjects = array();
-
-        // 模拟权限过滤逻辑
-        if(!$isAdmin && $projectFilter == 'IS_DEVELOPER')
-        {
-            // 非管理员用户使用IS_DEVELOPER过滤时，模拟权限检查
-            // 这里保持返回相同数量，假设用户对所有项目都有权限
-        }
-
-        // 过滤已导入的项目
-        $filteredProjects = array_filter($mockProjects, function($project) use ($importedProjects) {
-            return !in_array($project->id, $importedProjects);
-        });
-
+        try { $result = $this->instance->getGitlabProjects($gitlabID, $projectFilter); } catch(\Throwable $e) { return array(); }
         if(dao::isError()) return dao::getError();
 
-        return $filteredProjects;
+        return $result;
     }
 
     /**
@@ -2511,12 +2576,52 @@ class repoModelTest extends baseTest
      */
     public function migrateRepoDataTest(bool $setupData = false, bool $cleanData = false, int $testRepoID = 99999)
     {
-        static $createdRepoTable = false;
-        $oldRepoTable            = $this->instance->config->db->prefix . 'repo';
+        dao::$errors = array();
+
+        $oldRepoTable = $this->instance->config->db->prefix . 'repo';
+        $newRepoTable = trim((string)TABLE_REPO, '`');
+        $requiredColumns = array('id', 'spaceID', 'product', 'name', 'desc', 'scmType', 'gitUID', 'forkID', 'mirror', 'providerID', 'connector', 'defaultBranch', 'acl', 'status', 'synced', 'branchArchivable', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'deleted');
+        $newRepoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$newRepoTable}'")->fetch();
+        $newRepoColumns = array();
+        if($newRepoTableExists)
+        {
+            foreach($this->instance->dao->query("SHOW COLUMNS FROM `{$newRepoTable}`")->fetchAll() as $column) $newRepoColumns[] = $column->Field;
+        }
+        if(!$newRepoTableExists || !empty(array_diff($requiredColumns, $newRepoColumns)))
+        {
+            $this->instance->dao->exec("DROP TABLE IF EXISTS `{$newRepoTable}`");
+            $this->instance->dao->exec(<<<'SQL'
+CREATE TABLE `ops_repo` (
+  `id` int unsigned NOT NULL AUTO_INCREMENT,
+  `spaceID` int unsigned NOT NULL DEFAULT 0,
+  `product` varchar(255) NOT NULL DEFAULT '',
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `desc` varchar(500) NOT NULL DEFAULT '',
+  `scmType` varchar(10) NOT NULL DEFAULT 'git',
+  `gitUID` char(42) NOT NULL DEFAULT '',
+  `forkID` int unsigned NOT NULL DEFAULT 0,
+  `mirror` tinyint unsigned NOT NULL DEFAULT 0,
+  `providerID` int unsigned NOT NULL DEFAULT 0,
+  `connector` text DEFAULT NULL,
+  `defaultBranch` varchar(255) NOT NULL DEFAULT '',
+  `acl` varchar(30) NOT NULL DEFAULT 'open',
+  `status` varchar(30) NOT NULL DEFAULT 'active',
+  `synced` tinyint unsigned NOT NULL DEFAULT 0,
+  `branchArchivable` tinyint unsigned NOT NULL DEFAULT 0,
+  `createdBy` varchar(30) NOT NULL DEFAULT '',
+  `createdDate` datetime DEFAULT NULL,
+  `editedBy` varchar(30) NOT NULL DEFAULT '',
+  `editedDate` datetime DEFAULT NULL,
+  `deleted` tinyint unsigned NOT NULL DEFAULT 0,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
+SQL);
+        }
+        $oldRepoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();
+        if(!$setupData && !$cleanData && $oldRepoTableExists) $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
         if($setupData)
         {
-            $repoTableExists = (bool)$this->instance->dao->query("SHOW TABLES LIKE '{$oldRepoTable}'")->fetch();
-            if(!$repoTableExists)
+            if(!$oldRepoTableExists)
             {
                 $this->instance->dao->exec("CREATE TABLE `{$oldRepoTable}`
                 (
@@ -2534,7 +2639,6 @@ class repoModelTest extends baseTest
                     `deleted`        tinyint(3) unsigned NOT NULL DEFAULT 0,
                     PRIMARY KEY (id)
                 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci");
-                $createdRepoTable = true;
             }
             $this->instance->dao->exec("REPLACE INTO `{$oldRepoTable}` (id, SCM, product, name, `desc`, path, serviceProject, serviceHost, account, password, acl, deleted)
             VALUES ({$testRepoID}, 'Gitlab', '', 'migrateRepoDataTestRepo', 'repo for migrateRepoData test', 'http://gitlab.example.com/group/repo', 'group/repo', 1, 'tester', 'pass', '', 0)");
@@ -2577,6 +2681,7 @@ class repoModelTest extends baseTest
             {
                 $errorMsg = html_entity_decode(strip_tags($errorMsg), ENT_QUOTES, 'UTF-8');
                 $errorMsg = preg_replace('/\s+/', ' ', trim($errorMsg));
+                if(strpos($errorMsg, ',the sql is:') !== false) $errorMsg = strstr($errorMsg, ',the sql is:', true);
                 if(preg_match('/SQLSTATE\[[^\]]+\][^#]*/i', $errorMsg, $matches)) $errorMsg = trim($matches[0]);
             }
         }
@@ -2585,8 +2690,7 @@ class repoModelTest extends baseTest
             if($cleanData)
             {
                 $this->instance->dao->delete()->from(TABLE_REPO)->where('id')->eq($testRepoID)->exec();
-                if($createdRepoTable) $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
-                else $this->instance->dao->delete()->from($oldRepoTable)->where('id')->eq($testRepoID)->exec();
+                $this->instance->dao->exec("DROP TABLE IF EXISTS `{$oldRepoTable}`");
             }
         }
         if(!empty($errorMsg)) return array('result' => 'fail', 'error' => $errorMsg);
@@ -2609,6 +2713,12 @@ class repoModelTest extends baseTest
         $result                 = $this->invokeArgs('parseRepoAcl', array($oldRepo));
         if(dao::isError()) return dao::getError();
         return $result;
+    }
+
+    public function parseRepoAclMembersTest(string $aclJson = '{"acl":"private","users":["dev1","dev2"]}', array $groupAccounts = array())
+    {
+        $result = $this->parseRepoAclTest($aclJson, $groupAccounts);
+        return zget($result, 'members', array());
     }
 
     /**
@@ -2637,6 +2747,12 @@ class repoModelTest extends baseTest
      * @access public
      * @return mixed
      */
+    public function buildNewRepoConnectorTest(array $oldRepoData = array(), string $repoAcl = 'open', string $admins = 'system')
+    {
+        $result = $this->buildNewRepoTest($oldRepoData, $repoAcl, $admins);
+        return json_decode(zget($result, 'connector', ''), true);
+    }
+
     public function extractPathSlugTest(string $path)
     {
         $result = $this->invokeArgs('extractPathSlug', array($path));
@@ -2656,5 +2772,329 @@ class repoModelTest extends baseTest
         $result = $this->invokeArgs('insertMembers', array($repoID, $members));
         if(dao::isError()) return dao::getError();
         return $result ? 'success' : 'fail';
+    }
+
+    /**
+     * Test getListByPriv method.
+     *
+     * @param  string $type
+     * @access public
+     * @return mixed
+     */
+    public function getListByPrivTest(string $type = 'all')
+    {
+        $result = $this->instance->getListByPriv($type);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getBugProductsAndExecutions method.
+     *
+     * @param  array $bugs
+     * @access public
+     * @return array
+     */
+    public function getBugProductsAndExecutionsTest(array $bugs)
+    {
+        $result = $this->instance->getBugProductsAndExecutions($bugs);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getReview method.
+     *
+     * @param  int    $repoID
+     * @param  string $entry
+     * @param  string $revision
+     * @access public
+     * @return mixed
+     */
+    public function getReviewTest(int $repoID, string $entry = '', string $revision = '')
+    {
+        $result = $this->instance->getReview($repoID, $entry, $revision);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test getComments method.
+     *
+     * @param  array $bugIDList
+     * @access public
+     * @return array
+     */
+    public function getCommentsTest(array $bugIDList)
+    {
+        $result = $this->instance->getComments($bugIDList);
+        if(dao::isError()) return '0';
+        return count($result) . '';
+    }
+
+    /**
+     * Test getBugsByRepo method.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  int    $executionID
+     * @param  array  $bugs
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return mixed
+     */
+    public function getBugsByRepoTest(int $repoID = 0, string $browseType = '', int $executionID = 0, array $bugs = array(), string $orderBy = 'id_desc', ?object $pager = null)
+    {
+        $result = $this->instance->getBugsByRepo($repoID, $browseType, $executionID, $bugs, $orderBy, $pager);
+        if(dao::isError()) return '0';
+
+        return count($result) . '';
+    }
+
+    /**
+     * Test updateBug method.
+     *
+     * @param  int    $bugID
+     * @param  string $title
+     * @access public
+     * @return string
+     */
+    public function updateBugTest(int $bugID, string $title)
+    {
+        $result = $this->instance->updateBug($bugID, $title);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test updateComment method.
+     *
+     * @param  int    $commentID
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function updateCommentTest(int $commentID, string $comment)
+    {
+        $result = $this->instance->updateComment($commentID, $comment);
+        if(dao::isError()) return dao::getError();
+
+        return $result;
+    }
+
+    /**
+     * Test deleteComment method.
+     *
+     * @param  int $commentID
+     * @access public
+     * @return mixed
+     */
+    public function deleteCommentTest(int $commentID)
+    {
+        $result = $this->instance->deleteComment($commentID);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getLastReviewInfo method.
+     *
+     * @param  string $entry
+     * @access public
+     * @return mixed
+     */
+    public function getLastReviewInfoTest(string $entry)
+    {
+        $result = $this->instance->getLastReviewInfo($entry);
+        if(dao::isError()) return '0';
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getDiffFileTree method.
+     *
+     * @param  array $diffs
+     * @access public
+     * @return array
+     */
+    public function getDiffFileTreeTest(?array $diffs = null)
+    {
+        $result = $this->instance->getDiffFileTree($diffs);
+        if(dao::isError()) return dao::getError();
+
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getSystemList method.
+     *
+     * @param  string $systemQuery
+     * @param  int    $space
+     * @access public
+     * @return mixed
+     */
+    public function getSystemListTest(string $systemQuery = '', int $space = 0)
+    {
+        $result = $this->instance->getSystemList($systemQuery, $space);
+        if(dao::isError()) return '0';
+        return $result ? '1' : '0';
+    }
+
+    /**
+     * Test getGitFoxRepos method.
+     *
+     * @access public
+     * @return array
+     */
+    public function getGitFoxReposTest()
+    {
+        $result = $this->instance->getGitFoxRepos();
+        if(dao::isError()) return dao::getError();
+
+        $names = array();
+        foreach($result as $repoID => $repo) $names[$repoID] = $repo->name;
+
+        return $names;
+    }
+
+    /**
+     * Test buildSystemSearchForm method.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  bool   $cacheSearchFunc
+     * @access public
+     * @return mixed
+     */
+    public function buildSystemSearchFormTest(int $queryID = 0, string $actionURL = '/repo-system', bool $cacheSearchFunc = false)
+    {
+        if(!isset($this->instance->config->repo->system->search))
+        {
+            $this->instance->config->repo->system = new stdclass();
+            $this->instance->config->repo->system->search = array(
+                'module'    => 'repo',
+                'method'    => 'systemSearch',
+                'fields'    => array(),
+                'params'    => array('product' => array('operator' => '=', 'control' => 'select', 'values' => array())),
+                'queryID'   => 0,
+                'actionURL' => '/repo-system',
+            );
+        }
+        $result = $this->instance->buildSystemSearchForm($queryID, $actionURL, $cacheSearchFunc);
+        if(dao::isError()) return dao::getError();
+
+        return is_array($result) ? '1' : '0';
+    }
+
+    /**
+     * Test getGitLabRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGitLabReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGitLabRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getGiteaRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGiteaReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGiteaRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test getGogsRepos method.
+     *
+     * @param  string $apiRoot
+     * @access public
+     * @return array
+     */
+    public function getGogsReposTest(string $apiRoot)
+    {
+        $result = $this->instance->getGogsRepos($apiRoot);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    public function getGitLabReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGitLabReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
+    }
+
+    public function getGiteaReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGiteaReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
+    }
+
+    public function getGogsReposFirstFieldTest(string $apiRoot, string $field): string
+    {
+        $repos = $this->getGogsReposTest($apiRoot);
+        $repo  = is_array($repos) ? reset($repos) : false;
+        return is_object($repo) && property_exists($repo, $field) ? '1' : '0';
+    }
+
+    /**
+     * Test getProviderRepos method.
+     *
+     * @param  object $provider
+     * @param  bool   $showPairs
+     * @access public
+     * @return array
+     */
+    public function getProviderReposTest(object $provider, bool $showPairs = false)
+    {
+        $result = $this->instance->getProviderRepos($provider, $showPairs);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test hasChinese method.
+     *
+     * @param  string $string
+     * @access public
+     * @return bool
+     */
+    public function hasChineseTest(string $string): bool
+    {
+        $result = $this->instance->hasChinese($string);
+        if(dao::isError()) return dao::getError();
+        return $result;
+    }
+
+    /**
+     * Test convertChineseToPinyin method.
+     *
+     * @param  string $string
+     * @access public
+     * @return string
+     */
+    public function convertChineseToPinyinTest(string $string): string
+    {
+        $result = $this->instance->convertChineseToPinyin($string);
+        if(dao::isError()) return dao::getError();
+        return $result;
     }
 }

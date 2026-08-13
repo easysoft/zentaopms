@@ -38,12 +38,12 @@ formPanel
         formGroup
         (
             set::label($lang->release->releasedDate),
-            set::width($app->getClientLang() == 'en' ? '1/2' : '1/3'),
+            set::width('1/2'),
             set::required(true),
-            datePicker
+            datetimePicker
             (
                 set::name('releasedDate'),
-                set::value(helper::today())
+                set::value(helper::now())
             )
         )
     ),

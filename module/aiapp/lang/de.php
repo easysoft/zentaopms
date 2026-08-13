@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'Modell-ID';
+$lang->aiapp->abilities          = 'Fähigkeiten';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Modelle suchen';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Funktionsaufruf';
+$lang->aiapp->abilityTypes['reasoning']        = 'Reasoning';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
@@ -94,7 +103,6 @@ $lang->aiapp->langData->formReturnJSONArray = 'Bitte geben Sie ein JSON-Array zu
 $lang->aiapp->langData->formZentaoAPITip    = "Bitte verwenden Sie zuerst die zentao-api-Tools, um die erforderlichen Kontextdaten abzurufen, und verwenden Sie dann das submitFormData-Tool, um die ausgefüllten Formulardaten zurückzugeben. Pflichtfelder müssen Werte haben.\nNormalerweise muss submitFormData nur einmal aufgerufen werden, es sei denn, der Benutzer benötigt mehrere Lösungen.";
 $lang->aiapp->langData->formResultGenerated = 'Formulardaten wurden generiert.';
 $lang->aiapp->langData->formCurrentTarget   = 'Aktuelles';
-$lang->aiapp->langData->formApplyDataTip    = 'Bitte klicken Sie auf die Schaltfläche "Auf das aktuelle Formular anwenden", um die Daten in das Formular zu übernehmen.';
 $lang->aiapp->langData->stepDescription     = 'Schrittbeschreibung';
 $lang->aiapp->langData->expectDescription   = 'Erwartetes Ergebnis';
 

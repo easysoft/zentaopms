@@ -50,21 +50,21 @@ class repoTao extends repoModel
      */
     protected function processSearchQuery(int $queryID): string
     {
-            $queryName = 'repoQuery';
+        $queryName = 'repoQuery';
 
-            if($queryID)
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+
+            if($query)
             {
-                $query = $this->loadModel('search')->getQuery($queryID);
-
-                if($query)
-                {
-                    $this->session->set($queryName, $query->sql);
-                    $this->session->set('repoForm', $query->form);
-                }
+                $this->session->set($queryName, $query->sql);
+                $this->session->set('repoForm', $query->form);
             }
-            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+        if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
 
-            return  $this->session->$queryName;
+        return  $this->session->$queryName;
     }
 
     /**
@@ -268,14 +268,16 @@ class repoTao extends repoModel
      */
     protected function getMatchedReposByUrl(string $url): array
     {
-        /* Convert to id by url. */
-        $this->loadModel('gitlab');
         $matches   = array();
         $parsedUrl = parse_url($url);
+        if(!is_array($parsedUrl) || empty($parsedUrl['scheme']) || empty($parsedUrl['host'])) return $matches;
+
+        /* Convert to id by url. */
+        $this->loadModel('gitlab');
         $isSSH     = $parsedUrl['scheme'] == 'ssh';
         $baseURL   = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
         $url       = str_replace('https://', 'http://', strtolower($url));
-        $gitlabs   = $this->loadModel('pipeline')->getList('gitlab');
+        $gitlabs   = $this->loadModel('pipeline')->getList(0, 0, 'gitlab');
         foreach($gitlabs as $gitlabID => $gitlab)
         {
             if((!$isSSH && $gitlab->url != $baseURL) || ($isSSH && strpos($gitlab->url, $parsedUrl['host']) === false))

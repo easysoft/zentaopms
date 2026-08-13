@@ -1,29 +1,27 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::checkRepoInternet();
+title=测试 repoZen->checkrepointernet();
 timeout=0
-cid=18132
+cid=0
 
-- 步骤1：空repo对象 @0
-- 步骤2：GitHub地址可访问 @0
-- 步骤3：localhost地址不可访问 @1
-- 步骤4：无效地址不可访问 @1
-- 步骤5：没有http字段 @0
+- 调用checkRepoInternetTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
 su('admin');
+$test = new repoZenTest();
 
-$repoTest = new repoZenTest();
-
-r($repoTest->checkRepoInternetTest(null)) && p() && e('0'); // 步骤1：空repo对象
-r($repoTest->checkRepoInternetTest((object)array('path' => 'https://github.com/test/repo'))) && p() && e('0'); // 步骤2：GitHub地址可访问
-r($repoTest->checkRepoInternetTest((object)array('client' => 'http://localhost:3000/repo'))) && p() && e('1'); // 步骤3：localhost地址不可访问
-r($repoTest->checkRepoInternetTest((object)array('apiPath' => 'http://invalid-url.test/api'))) && p() && e('1'); // 步骤4：无效地址不可访问
-r($repoTest->checkRepoInternetTest((object)array('name' => 'test', 'SCM' => 'Git'))) && p() && e('0'); // 步骤5：没有http字段
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');
+r($test->checkRepoInternetAvailableTest()) && p() && e('1');

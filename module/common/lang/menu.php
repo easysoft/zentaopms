@@ -826,6 +826,7 @@ $lang->navGroup->deploy           = 'devops';
 $lang->navGroup->host             = 'devops';
 $lang->navGroup->artifact         = 'devops';
 $lang->navGroup->provider         = 'devops';
+$lang->navGroup->gitfox           = 'devops';
 
 $lang->navGroup->company        = 'system';
 $lang->navGroup->systemteam     = 'system';

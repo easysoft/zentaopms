@@ -21,37 +21,28 @@ cid=18053
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repohistory`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repohistory` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `revision` varchar(255) NOT NULL DEFAULT '',
-  `commit` int NOT NULL DEFAULT 0,
-  `comment` text DEFAULT NULL,
-  `committer` varchar(255) NOT NULL DEFAULT '',
-  `time` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$history = zenData('ops_repohistory');
+$history->id->range('1');
+$history->repo->range('1');
+$history->revision->range('c808480afe22d3a55d94e91c59a8f3170212ade0');
+$history->commit->range('1');
+$history->comment->range('代码注释');
+$history->committer->range('admin');
+$history->time->range('01')->prefix('2026-01-')->postfix(' 00:00:00');
+$history->gen(1);
 
-$tester->dao->insert(TABLE_REPOHISTORY)->data((object)array(
-    'id'        => 1,
-    'repo'      => 1,
-    'revision'  => 'c808480afe22d3a55d94e91c59a8f3170212ade0',
-    'commit'    => 1,
-    'comment'   => '代码注释',
-    'committer' => 'admin',
-    'time'      => '2026-01-01 00:00:00',
-))->exec();
-
-$relations = array(
-    array('product' => 1, 'execution' => 1, 'AType' => 'revision', 'AID' => 1, 'AVersion' => 1, 'relation' => 'commit', 'BType' => 'task',  'BID' => 8001,  'BVersion' => 1, 'extra' => 1),
-    array('product' => 1, 'execution' => 1, 'AType' => 'revision', 'AID' => 1, 'AVersion' => 1, 'relation' => 'commit', 'BType' => 'bug',   'BID' => 4001,  'BVersion' => 1, 'extra' => 1),
-    array('product' => 1, 'execution' => 1, 'AType' => 'revision', 'AID' => 1, 'AVersion' => 1, 'relation' => 'commit', 'BType' => 'story', 'BID' => 10001, 'BVersion' => 1, 'extra' => 1),
-);
-foreach($relations as $relation) $tester->dao->insert(TABLE_RELATION)->data((object)$relation)->exec();
+$relation = zenData('relation');
+$relation->product->range('1{3}');
+$relation->execution->range('1{3}');
+$relation->AType->range('revision{3}');
+$relation->AID->range('1{3}');
+$relation->AVersion->range('1{3}');
+$relation->relation->range('commit{3}');
+$relation->BType->range('task,bug,story');
+$relation->BID->range('8001,4001,10001');
+$relation->BVersion->range('1{3}');
+$relation->extra->range('1{3}');
+$relation->gen(3);
 
 // 3. 用户登录
 su('admin');

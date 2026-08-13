@@ -231,17 +231,17 @@ class metricZen extends metric
 
         /* 保证逻辑集中，这里直接使用sql查询获取数据，保证查询性能。*/
         /* To ensure logical concentration, here we directly use sql to get data to ensure query performance. */
-        $productList = $this->dao->select('id,closedDate')->from(TABLE_PRODUCT)
+        $productList = $this->dao->select('id,`closedDate`')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('shadow')->eq(0)
             ->fetchPairs('id', 'closedDate');
 
-        $projectList = $this->dao->select('id,closedDate')->from(TABLE_PROJECT)
+        $projectList = $this->dao->select('id,`closedDate`')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('project')
             ->fetchPairs('id', 'closedDate');
 
-        $executionList = $this->dao->select('id,closedDate')->from(TABLE_EXECUTION)
+        $executionList = $this->dao->select('id,`closedDate`')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('type')->in('sprint,stage,kanban')
             ->fetchPairs('id', 'closedDate');

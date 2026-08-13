@@ -607,7 +607,7 @@ function getAppCode(urlOrModuleName, defaultCode)
         if(methodLowerCase === 'browsetask') return 'execution';
         if(methodLowerCase === 'browsegroup') return 'bi';
     }
-    if(['ai', 'zai', 'aiteammate', 'aitask'].includes(moduleName)) return 'aiapp';
+    if(['ai', 'zai', 'aiteammate', 'aitask', 'aiprocedure', 'aiworkbench'].includes(moduleName)) return 'aiapp';
 
     code = navGroup[moduleName] || moduleName || urlOrModuleName;
     return apps.map[code] ? code : defaultCode;

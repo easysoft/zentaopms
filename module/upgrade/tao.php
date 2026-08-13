@@ -280,11 +280,11 @@ class upgradeTao extends upgradeModel
      */
     protected function getLinked2releaseActionsSql()
     {
-        return $this->dao->select('objectID, extra, max(`date`) as date, action')
+        return $this->dao->select('`objectID`, extra, max(`date`) as date, action')
             ->from(TABLE_ACTION)
             ->where('objectType')->eq('story')
             ->andWhere('action')->eq('linked2release')
-            ->groupBy('objectID,extra,action')
+            ->groupBy('`objectID`,extra,action')
             ->get();
     }
 
@@ -912,7 +912,7 @@ class upgradeTao extends upgradeModel
      */
     protected function getWorkflowGroupForProcess()
     {
-        return $this->dao->select('id,projectModel,projectType,main')->from(TABLE_WORKFLOWGROUP)
+        return $this->dao->select('id,`projectModel`,`projectType`,main')->from(TABLE_WORKFLOWGROUP)
             ->where('projectModel')->in('scrum,waterfall,agileplus,waterfallplus')
             ->andWhere('deleted')->eq('0')
             ->fetchAll('id');
@@ -1160,7 +1160,7 @@ class upgradeTao extends upgradeModel
             $this->dao->update(TABLE_PROGRAMOUTPUT)->set('output')->eq($newID)->where('id')->eq($id)->exec();
         }
 
-        $auditplans = $this->dao->select('id,objectID')->from(TABLE_AUDITPLAN)
+        $auditplans = $this->dao->select('id,`objectID`')->from(TABLE_AUDITPLAN)
             ->where('objectType')->eq('zoutput')
             ->andWhere('objectID')->in(array_keys($idMap))
             ->andWhere('project')->in($projectIdList)
@@ -1172,7 +1172,7 @@ class upgradeTao extends upgradeModel
             $this->dao->update(TABLE_AUDITPLAN)->set('objectID')->eq($newID)->where('id')->eq($id)->exec();
         }
 
-        $auditcls = $this->dao->select('id, objectID')->from(TABLE_AUDITCL)
+        $auditcls = $this->dao->select('id, `objectID`')->from(TABLE_AUDITCL)
             ->where('objectType')->eq('zoutput')
             ->andWhere('workflowGroup')->eq($group->id)
             ->andWhere('objectID')->in(array_keys($outputList))

@@ -3,15 +3,15 @@
 
 /**
 
-title=测试 gitfoxModel::apigetspaces();
+title=测试 gitfoxModel::apiGetSpaces();
 timeout=0
 cid=0
 
-- 执行 @0
-- 执行model模块的apigetspaces方法，参数是array  @1
-- 执行model模块的apigetspaces方法，参数是array  @1
-- 执行$model->apigetspaces(array())) || is_array($model->apigetspaces(array())) || is_object($model->apigetspaces(array( @1
-- 执行model模块的apigetspaces方法，参数是array  @1
+- 步骤 1：apiGetSpaces 不产生 dao 错误 @0
+- 步骤 2：apiGetSpaces 默认返回值类型为 object @object
+- 步骤 3：apiGetSpaces 默认页码为 1 @1
+- 步骤 4：自定义分页大小时 pageSize 为 5 @5
+- 步骤 5：自定义分页时返回值类型仍为 object @object
 
 */
 
@@ -22,10 +22,10 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
+$customPager = (object)array('pageID' => 1, 'recPerPage' => 5);
 
-r((int)dao::isError()) && p() && e('0');
-r(!is_null($model->apigetspaces(array()))) && p() && e('1');
-r(!is_null($model->apigetspaces(array()))) && p() && e('1');
-r(is_bool($model->apigetspaces(array())) || is_array($model->apigetspaces(array())) || is_object($model->apigetspaces(array()))) && p() && e('1');
-r(!is_null($model->apigetspaces(array()))) && p() && e('1');
+r($gitfoxTest->apiGetSpacesErrorTest(array())) && p() && e('0');
+r($gitfoxTest->apiGetSpacesTypeTest(array())) && p() && e('object');
+r($gitfoxTest->apiGetSpacesTest(array())) && p('pager:page') && e('1');
+r($gitfoxTest->apiGetSpacesTest(array(), $customPager)) && p('pager:pageSize') && e('5');
+r($gitfoxTest->apiGetSpacesTypeTest(array(), $customPager)) && p() && e('object');

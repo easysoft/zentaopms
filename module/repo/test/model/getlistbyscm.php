@@ -30,4 +30,4 @@ r($repoTest->getListBySCMTest('Git,Gitlab')) && p() && e('empty');
 r($repoTest->getListBySCMTest('NotExist')) && p() && e('empty');
 r($repoTest->getListBySCMTest('Subversion')) && p() && e('empty');
 r($repoTest->getListBySCMTest('Git,Gitlab,Subversion,Gogs', 'haspriv')) && p() && e('empty');
-r(is_array($repoTest->getListBySCMTest('Git'))) && p() && e('0');
+r($repoTest->getListBySCMIsArrayTest('Git')) && p() && e('0');

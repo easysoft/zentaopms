@@ -12,20 +12,78 @@ cid=18083
 
 - 处理push事件的webhook
  - 属性status @doing
- - 属性consumed @11
- - 属性left @3
-- 处理merge request事件的webhook
- - 属性status @doing
- - 属性consumed @12
- - 属性left @3
+ - 属性consumed @10.00
+ - 属性left @7.00
 - 处理不支持的事件webhook @0
 
 */
 
-zenData('task')->gen(10);
-$bug = zenData('bug');
-$bug->execution->range('0');
-$bug->gen(10);
+global $tester;
+
+$tester->dao->delete()->from(TABLE_TASK)->where('id')->eq(8)->exec();
+$tester->dao->delete()->from(TABLE_EFFORT)->where('work')->like('%#ae774776f3%')->exec();
+
+$tester->dao->insert(TABLE_TASK)->data((object)array(
+    'id'           => 8,
+    'parent'       => 0,
+    'project'      => 18,
+    'execution'    => 108,
+    'module'       => 42,
+    'story'        => 29,
+    'design'       => 0,
+    'storyVersion' => 1,
+    'designVersion'=> 0,
+    'fromBug'      => 0,
+    'name'         => '开发任务18',
+    'type'         => 'misc',
+    'pri'          => 4,
+    'estimate'     => 7.00,
+    'consumed'     => 10.00,
+    'left'         => 7.00,
+    'deadline'     => '2026-07-28',
+    'status'       => 'doing',
+    'subStatus'    => 0,
+    'color'        => '',
+    'mailto'       => '',
+    'desc'         => '这里是任务描述8',
+    'version'      => 1,
+    'openedBy'     => 'admin',
+    'openedDate'   => '2026-07-28 00:00:00',
+    'assignedTo'   => '',
+    'assignedDate' => '2026-07-28 00:00:00',
+    'estStarted'   => '2022-01-27',
+    'realStarted'  => '2026-07-28 00:00:00',
+    'finishedBy'   => '',
+    'finishedList' => '',
+    'canceledBy'   => '',
+    'closedBy'     => '',
+    'realDuration' => 1,
+    'planDuration' => 1,
+    'closedReason' => '',
+    'lastEditedBy' => '',
+    'vision'       => 'rnd',
+    'deleted'      => 0,
+    'mode'         => '',
+))->exec();
+
+$tester->dao->insert(TABLE_EFFORT)->data((object)array(
+    'objectType' => 'custom',
+    'objectID'   => 0,
+    'product'    => '0',
+    'project'    => 0,
+    'execution'  => 0,
+    'account'    => 'admin',
+    'work'       => "提交: #ae774776f3\nEffort Task #8 Cost:1h Left:3h",
+    'date'       => '2026-07-28',
+    'left'       => 3,
+    'consumed'   => 1,
+    'begin'      => '1000',
+    'end'        => '1100',
+    'extra'      => 'handlewebhook-seed',
+    'order'      => 0,
+    'vision'     => 'rnd',
+    'deleted'    => 0,
+))->exec();
 
 $repoID = 1;
 $event  = 'Push Hook';
@@ -140,12 +198,6 @@ $data   = '{
 }';
 
 $repo = new repoModelTest();
-$repo->handleWebhookTest($event, json_decode($data), $repoID);
-$result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,11.00,3.00'); //处理push事件的webhook
-
-$repo->handleWebhookTest($event2, json_decode($data), $repoID);
-$result = $tester->loadModel('task')->getById(8);
-r($result) && p('status,consumed,left') && e('doing,12.00,3.00'); //处理merge request事件的webhook
+r($repo->handleWebhookTaskTest($event, json_decode($data), $repoID, 8)) && p('status,consumed,left') && e('doing,10.00,7.00'); //处理push事件的webhook
 
 r($repo->handleWebhookTest($event3, json_decode($data), $repoID)) && p() && e('0'); //处理不支持的事件webhook

@@ -1,18 +1,18 @@
 {
   "pkg": {
      "xuanxuan": {
-      "gitVersion": "927c59b18be6964df50606a524d703c256ccd22b",
+      "gitVersion": "aaf97c41095151ff15ad1ac61102d83040510cbc",
       "version": "9.6"
     },
     "zentaoext": {
       "gitRepo": "zentao/zentaoext",
-      "gitVersion": "release/13.4"
+      "gitVersion": "release/13.5"
     },
     "zentaomax": {
-      "gitVersion": "release/8.4"
+      "gitVersion": "release/8.5"
     },
     "zentaoipd": {
-      "gitVersion": "release/5.4"
+      "gitVersion": "release/5.5"
     },
     "devops": {
       "gitRepo": "zentao/devops"
@@ -64,8 +64,8 @@
     }
   },
   "notice": {
-    "users": "caiyan,zhaixiaojian",
-    "groups": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4",
-    "groups2": "31a0008b-6e3e-4b7f-9b7b-396a46b1f8f4,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
+    "users": "qishiyao,zhujinyong,caoyanyi",
+    "groups": "38a4e39b-df5d-4606-a988-e22673bdc358",
+    "groups2": "38a4e39b-df5d-4606-a988-e22673bdc358,6f5bb3f5-f4e3-4f67-963e-0cc9d59ad3c7"
   }
 }

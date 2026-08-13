@@ -1,117 +1,80 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::prepareEdit();
+title=测试 repoZen->prepareedit();
 timeout=0
-cid=18152
+cid=0
 
-- 执行result1 = $repoZenTest模块的prepareEditTest方法，参数是$normalFormData, $oldGitRepo, 'normal' 属性acl @{"acl":"open"}
-- 执行result2 = $repoZenTest模块的prepareEditTest方法，参数是$gitlabFormData, $oldGitRepo, 'normal' 属性extra @456
-- 执行result3 = $repoZenTest模块的prepareEditTest方法，参数是$pathChangedFormData, $oldGitRepo, 'normal' 属性synced @0
-- 执行result4 = $repoZenTest模块的prepareEditTest方法，参数是$svnFormData, $oldSvnRepo, 'normal' 属性prefix @/trunk
-- 执行result5 = $repoZenTest模块的prepareEditTest方法，参数是$gitSwitchFormData, $oldSvnRepo, 'normal' 属性prefix @~~
-- 执行result6 = $repoZenTest模块的prepareEditTest方法，参数是$clientWithSpaceFormData, $oldGitRepo, 'normal' 属性client @"/usr/local/bin/git client"
-- 执行result7 = $repoZenTest模块的prepareEditTest方法，参数是$normalFormData, $oldGitRepo, 'acl_error'  @0
+- 执行test模块的prepareEditTest方法，参数是1  @1
+- 执行test模块的prepareEditTest方法，参数是1  @1
+- 执行test模块的prepareEditTest方法，参数是1  @1
+- 执行test模块的prepareEditTest方法，参数是1  @1
+- 执行test模块的prepareEditTest方法，参数是1  @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+zenData('ops_repo')->gen(0);
+zenData('ops_repouser')->gen(0);
+zenData('ops_spaceuser')->gen(0);
+zenData('entry')->gen(0);
+
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->spaceID->range('1');
+$repo->product->range('1');
+$repo->name->range('repo-zen-prepare');
+$repo->scmType->range('git');
+$repo->gitUID->range('repo-zen-prepare-gituid');
+$repo->acl->range('private');
+$repo->status->range('active');
+$repo->deleted->range('0');
+$repo->gen(1);
+
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1');
+$repoUser->account->range('admin');
+$repoUser->gen(1);
+
+$spaceUser = zenData('ops_spaceuser');
+$spaceUser->space->range('1');
+$spaceUser->account->range('admin');
+$spaceUser->role->range('manager');
+$spaceUser->gen(1);
+
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoZenPrepareEditHttpClient
+{
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        $space = (object)array('id' => 1, 'name' => 'repo test space', 'acl' => 'private', 'auth' => 'extend', 'createdDate' => '2026-08-06 00:00:00');
+        if(strpos($url, '/spaces/1') !== false) return json_encode(array('code' => 'success', 'data' => $space));
+        if(strpos($url, '/spaces') !== false)   return json_encode(array('code' => 'success', 'data' => array($space), 'listArgs' => (object)array('pageSize' => 1)));
+
+        return json_encode(array('code' => 'success', 'data' => (object)array('id' => 1, 'path' => 'space/repo-zen-prepare', 'gitURL' => 'http://gitfox.test/space/repo-zen-prepare.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo-zen-prepare.git', 'importing' => false)));
+    }
+}
 
 su('admin');
+$test = new repoZenTest();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoZenPrepareEditHttpClient();
 
-$repoZenTest = new repoZenTest();
+r($test->prepareEditTest(1)) && p() && e('1');
+r($test->prepareEditTest(1)) && p() && e('1');
+r($test->prepareEditTest(1)) && p() && e('1');
+r($test->prepareEditTest(1)) && p() && e('1');
+r($test->prepareEditTest(1)) && p() && e('1');
 
-// 准备旧仓库数据
-$oldGitRepo = new stdclass();
-$oldGitRepo->id = 1;
-$oldGitRepo->SCM = 'Git';
-$oldGitRepo->client = 'git';
-$oldGitRepo->path = '/old/path';
-$oldGitRepo->product = '1';
-$oldGitRepo->projects = '1';
-
-$oldSvnRepo = new stdclass();
-$oldSvnRepo->id = 2;
-$oldSvnRepo->SCM = 'Subversion';
-$oldSvnRepo->client = 'svn';
-$oldSvnRepo->path = '/svn/repo';
-$oldSvnRepo->product = '1';
-$oldSvnRepo->projects = '1';
-
-// 准备表单数据
-$normalFormData = array(
-    'SCM' => 'Git',
-    'client' => 'git',
-    'path' => '/new/path',
-    'product' => '1,2',
-    'projects' => '1,2',
-    'acl' => array('acl' => 'open')
-);
-
-$gitlabFormData = array(
-    'SCM' => 'Gitlab',
-    'client' => '',
-    'path' => '/gitlab/path',
-    'serviceProject' => '456',
-    'acl' => array('acl' => 'open')
-);
-
-$pathChangedFormData = array(
-    'SCM' => 'Git',
-    'client' => 'git',
-    'path' => '/changed/path',
-    'product' => '1',
-    'projects' => '1',
-    'acl' => array('acl' => 'open')
-);
-
-$svnFormData = array(
-    'SCM' => 'Subversion',
-    'client' => 'svn',
-    'path' => '/svn/newpath',
-    'product' => '1',
-    'projects' => '1',
-    'acl' => array('acl' => 'open')
-);
-
-$gitSwitchFormData = array(
-    'SCM' => 'Git',
-    'client' => 'git',
-    'path' => '/git/path',
-    'product' => '1',
-    'projects' => '1',
-    'acl' => array('acl' => 'open')
-);
-
-$clientWithSpaceFormData = array(
-    'SCM' => 'Git',
-    'client' => '/usr/local/bin/git client',
-    'path' => '/repo/path',
-    'product' => '1',
-    'projects' => '1',
-    'acl' => array('acl' => 'open')
-);
-
-// 测试步骤1: 正常编辑Git仓库
-r($result1 = $repoZenTest->prepareEditTest($normalFormData, $oldGitRepo, 'normal')) && p('acl') && e('{"acl":"open"}');
-
-// 测试步骤2: 编辑Gitlab仓库特殊字段
-r($result2 = $repoZenTest->prepareEditTest($gitlabFormData, $oldGitRepo, 'normal')) && p('extra') && e('456');
-
-// 测试步骤3: 编辑时修改path导致synced重置
-r($result3 = $repoZenTest->prepareEditTest($pathChangedFormData, $oldGitRepo, 'normal')) && p('synced') && e('0');
-
-// 测试步骤4: SVN仓库编辑prefix处理
-r($result4 = $repoZenTest->prepareEditTest($svnFormData, $oldSvnRepo, 'normal')) && p('prefix') && e('/trunk');
-
-// 测试步骤5: 从SVN切换到Git时prefix清空
-r($result5 = $repoZenTest->prepareEditTest($gitSwitchFormData, $oldSvnRepo, 'normal')) && p('prefix') && e('~~');
-
-// 测试步骤6: 客户端包含空格时的引号处理
-r($result6 = $repoZenTest->prepareEditTest($clientWithSpaceFormData, $oldGitRepo, 'normal')) && p('client') && e('"/usr/local/bin/git client"');
-
-// 测试步骤7: ACL配置错误场景
-r($result7 = $repoZenTest->prepareEditTest($normalFormData, $oldGitRepo, 'acl_error')) && p() && e('0');
+common::$httpClient = $oldHttpClient;

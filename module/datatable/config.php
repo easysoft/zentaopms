@@ -19,6 +19,7 @@ $config->datatable->workflowLayoutMap['my-epic']               = array('module' 
 $config->datatable->workflowLayoutMap['my-bug']                = array('module' => 'bug', 'method' => 'browse'); // 地盘Bug加载bug-browse的layout配置。
 $config->datatable->workflowLayoutMap['my-testtask']           = array('module' => 'testtask', 'method' => 'browse'); // 地盘测试单加载testtask-browse的layout配置。
 $config->datatable->workflowLayoutMap['bug-bug']               = array('module' => 'bug', 'method' => 'browse'); // 执行bug列表加载bug-browse的layout配置。
+$config->datatable->workflowLayoutMap['build-generatedBug']    = array('module' => 'bug', 'method' => 'browse'); // 版本产生的Bug列表加载bug-browse的layout配置。
 $config->datatable->workflowLayoutMap['story-story']           = array('module' => 'story', 'method' => 'browse'); // 执行需求列表加载story-browse的layout配置。
 $config->datatable->workflowLayoutMap['testcase-testcase']     = array('module' => 'testcase', 'method' => 'browse'); // 执行用例列表加载testcase-browse的layout配置。
 $config->datatable->workflowLayoutMap['projectrelease-browse'] = array('module' => 'release', 'method' => 'browse'); // 项目发布加载release-browse的layout配置。

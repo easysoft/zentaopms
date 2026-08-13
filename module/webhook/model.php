@@ -146,14 +146,14 @@ class webhookModel extends model
         $dataList  = $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('wait')
             ->andWhere('objectType')->eq('webhook')
-            ->andWhere('(sendTime IS NULL OR sendTime <= "' . $now . '")')
+            ->andWhere('(`sendTime` IS NULL OR `sendTime` <= "' . $now . '")')
             ->orderBy('id')
             ->fetchAll('id', false);
         $threeHoursAgo = date('Y-m-d H:i:s', time() - 3 * 3600);
         $dataList += $this->dao->select('*')->from(TABLE_NOTIFY)
             ->where('status')->eq('senting')
             ->andWhere('objectType')->eq('webhook')
-            ->andWhere('(sendTime IS NULL OR (sendTime <= "' . $now . '" AND sendTime >= "' . $threeHoursAgo . '"))')
+            ->andWhere('(`sendTime` IS NULL OR (`sendTime` <= "' . $now . '" AND sendTime >= "' . $threeHoursAgo . '"))')
             ->orderBy('id')
             ->fetchAll('id', false);
         return $dataList;

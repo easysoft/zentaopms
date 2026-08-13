@@ -39,22 +39,7 @@ foreach($prompts as $prompt)
 {
     if($prompt->actionPurpose)
     {
-        $targetFormPath = explode('.', $prompt->actionPurpose);
-        if(count($targetFormPath) == 2)
-        {
-            if($prompt->actionPurpose == 'empty.empty')
-            {
-                $prompt->targetFormLabel = isset($lang->ai->prompts->noRedirect) ? $lang->ai->prompts->noRedirect : $prompt->actionPurpose;
-            }
-            elseif(isset($lang->ai->targetForm[$targetFormPath[0]]['common']) && isset($lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]]))
-            {
-                $prompt->targetFormLabel = $lang->ai->targetForm[$targetFormPath[0]]['common'] . ' / ' . $lang->ai->targetForm[$targetFormPath[0]][$targetFormPath[1]];
-            }
-            else
-            {
-                $prompt->targetFormLabel = $prompt->actionPurpose;
-            }
-        }
+        $prompt->targetFormLabel = $this->ai->getTargetFormLabel($prompt->actionPurpose, true, $prompt->module);
     }
 }
 
@@ -64,8 +49,11 @@ foreach($userList as $user)
     $userListMap[$user->account] = $user;
 }
 
-unset($lang->ai->prompts->modules['']);
-$moduleList = $this->config->edition == 'open' ? array_intersect_key($lang->ai->prompts->modules, array_flip($promptModules)) : $lang->ai->prompts->modules;
+$promptProcessObjectList = $lang->ai->prompts->modules;
+if(method_exists($this->ai, 'getPromptProcessObjectList')) $promptProcessObjectList = $this->ai->getPromptProcessObjectList();
+unset($promptProcessObjectList['']);
+
+$moduleList = $this->config->edition == 'open' ? array_intersect_key($promptProcessObjectList, array_flip($promptModules)) : $promptProcessObjectList;
 $moduleTree = array();
 $index      = 1;
 $activeKey  = 0;

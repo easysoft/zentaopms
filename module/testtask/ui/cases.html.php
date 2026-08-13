@@ -28,7 +28,7 @@ $canBatchUnlink = hasPriv('testtask', 'batchUnlinkCases');
 $canBatchAssign = hasPriv('testtask', 'batchAssign');
 $canBatchRun    = hasPriv('testtask', 'batchRun');
 $canBatchConfirmCaseChange = hasPriv('testtask', 'batchConfirmCaseChange');
-$canBatchIgnoreCaseChange  = hasPriv('testtask', 'batchConfirmCaseChange');
+$canBatchIgnoreCaseChange  = hasPriv('testtask', 'batchIgnoreCaseChange');
 $canBatchAction = ($canBeChanged && ($canBatchEdit || $canBatchUnlink || $canBatchAssign || $canBatchRun || $canBatchConfirmCaseChange || $canBatchIgnoreCaseChange));
 
 $closeLink = inlink('cases', "taskID={$task->id}&browseType=bymodule&param=0&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}");
@@ -78,7 +78,7 @@ featureBar
             set::items($suiteItems)
         )
     ) : null,
-    li(searchToggle(set::open($browseType == 'bysearch')))
+    li(searchToggle(set::module('testtaskTestcase'), set::open($browseType == 'bysearch')))
 );
 
 $viewItems   = array();
@@ -180,7 +180,7 @@ $runs = initTableData($runs, $cols);
 $runs = array_map(
     function($run)
     {
-        if(isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
+        if(isset($run->caseStatus) && $run->caseStatus == 'normal' && isset($run->version) && isset($run->caseVersion) && $run->version < $run->caseVersion) $run->status = 'changed';
         if($run->isScene) unset($run->actions);
         return $run;
     },

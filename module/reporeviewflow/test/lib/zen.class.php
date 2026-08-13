@@ -7,19 +7,6 @@ class reporeviewflowZenTest extends baseTest
     protected $className  = 'zen';
 
     /**
-     * 测试buildReviewFlowBranchTypes 方法。
-     * Test buildReviewFlowBranchTypes method in zen layer.
-     *
-     * @param  int $repoID
-     * @access public
-     * @return array
-     */
-    public function buildBranchTypesTest(int $repoID): array
-    {
-        return $this->invokeArgs('buildBranchTypes', [$repoID]);
-    }
-
-    /**
      * 测试buildDefinition 方法。
      * Test buildDefinition method in zen layer.
      *

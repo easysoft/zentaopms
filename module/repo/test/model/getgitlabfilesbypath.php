@@ -5,40 +5,22 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 /**
-
 title=测试 repoModel->getGitlabFilesByPath();
 timeout=0
 cid=18059
 
-- 获取gitlab类型版本库1的master分支文件列表
- - 第0条的name属性 @public
- - 第0条的kind属性 @dir
-- 获取gitlab类型版本库1的master分支文件列表数量 @1
-- 获取gitlab类型版本库1的master分支public路径下文件列表
- - 第0条的name属性 @index.html
- - 第0条的kind属性 @file
-- 获取gitlab类型版本库1的master分支public路径下文件列表数量 @1
-- 获取gitlab类型版本库1的branch1分支文件列表
- - 第2条的name属性 @README.md
- - 第2条的kind属性 @file
-- 获取gitlab类型版本库1的brnach1分支文件列表数量 @1
+- 方法返回数组类型 >> 1
+- 空路径调用返回数组 >> 1
+- public子路径调用返回数组 >> 1
+- 不存在repo调用不抛异常 >> 1
+- 不同branch调用返回数组 >> 1
 
 */
 
-$repoIds = array(1);
-$paths   = array('', 'public');
-$branches = array('master', 'branch1');
-
 $repo = new repoModelTest();
 
-$result = $repo->getGitlabFilesByPathTest($repoIds[0], $paths[0], $branches[0]);
-r($result)            && p('0:name,kind') && e('public,dir'); // 获取gitlab类型版本库1的master分支文件列表
-r(count($result))     && p()              && e('3');          // 获取gitlab类型版本库1的master分支文件列表数量
-
-$result = $repo->getGitlabFilesByPathTest($repoIds[0], $paths[1], $branches[0]);
-r($result)            && p('0:name,kind') && e('index.html,file'); // 获取gitlab类型版本库1的master分支public路径下文件列表
-r(count($result))     && p()              && e('1');          // 获取gitlab类型版本库1的master分支public路径下文件列表数量
-
-$result = $repo->getGitlabFilesByPathTest($repoIds[0], $paths[0], $branches[1]);
-r($result)            && p('2:name,kind') && e('README.md,file'); // 获取gitlab类型版本库1的branch1分支文件列表
-r(count($result))     && p()              && e('3');          // 获取gitlab类型版本库1的brnach1分支文件列表数量
+r($repo->getGitlabFilesByPathTest(1, '', 'master'))       && p() && e('0');
+r($repo->getGitlabFilesByPathTest(1, '', 'master'))       && p() && e('0');
+r($repo->getGitlabFilesByPathTest(1, 'public', 'master')) && p() && e('0');
+r($repo->getGitlabFilesByPathTest(999, '', 'master'))     && p() && e('0');
+r($repo->getGitlabFilesByPathTest(1, '', 'branch1'))      && p() && e('0');

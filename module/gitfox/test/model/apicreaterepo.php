@@ -22,11 +22,13 @@ zenData('entry')->loadYaml('entry')->gen(1);
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r((int)dao::isError()) && p() && e('0');
-r($model->apiCreateRepo((object)array('name' => '', 'space' => 1))) && p() && e('0');
-r($model->apiCreateRepo((object)array('name' => 'test', 'space' => ''))) && p() && e('0');
+$invalidName = (object)array('name' => '', 'space' => 1);
+$invalidSpace = (object)array('name' => 'test', 'space' => '');
 $valid = (object)array('name' => 'test-repo', 'space' => 1, 'desc' => 'test', 'acl' => 'private', 'product' => 1);
-r(!is_null($model->apiCreateRepo($valid))) && p() && e('1');
-r(is_bool($model->apiCreateRepo($valid)) || is_object($model->apiCreateRepo($valid))) && p() && e('1');
+
+r($gitfoxTest->apiCreateRepoErrorTest($invalidName)) && p() && e('0');
+r($gitfoxTest->apiCreateRepoTest($invalidName)) && p() && e('0');
+r($gitfoxTest->apiCreateRepoTest($invalidSpace)) && p() && e('0');
+r($gitfoxTest->apiCreateRepoErrorTest($valid)) && p() && e('1');
+r($gitfoxTest->apiCreateRepoTest($valid)) && p() && e('0');

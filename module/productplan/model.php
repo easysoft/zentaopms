@@ -145,7 +145,7 @@ class productplanModel extends model
             {
                 $storyPairs    = $this->story->getPairs(0, $plan->id, 'estimate', true);
                 $plan->stories = count($storyPairs);
-                $isParentPairs = $this->dao->select('id,isParent')->from(TABLE_STORY)->where('id')->in(array_keys($storyPairs))->fetchPairs('id');
+                $isParentPairs = $this->dao->select('id,`isParent`')->from(TABLE_STORY)->where('id')->in(array_keys($storyPairs))->fetchPairs('id');
                 foreach(array_keys($storyPairs) as $storyID)
                 {
                     if(isset($isParentPairs[$storyID]) && $isParentPairs[$storyID] == '1') unset($storyPairs[$storyID]);

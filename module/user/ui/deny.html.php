@@ -19,6 +19,7 @@ if($denyType == 'nopriv')
     $methodName = isset($lang->$module->$groupPriv) && is_string($lang->$module->$groupPriv) ? $lang->$module->$groupPriv : $method;
 
     if($module == 'execution' && $method == 'gantt') $methodName = $methodName->common;
+    if($module == 'repo' && in_array($method, array('view', 'log', 'revision', 'diff'))) $moduleName = $lang->group->package->code;
 
     /* find method name if method is lowercase letter. */
     if(!isset($lang->$module->$method))

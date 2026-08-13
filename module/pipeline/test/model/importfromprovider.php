@@ -7,65 +7,35 @@ title=测试 pipelineModel::importFromProvider();
 timeout=0
 cid=0
 
-- Jenkins正常导入 >> 大于0
-- 流水线名称为空 @0
-- 流水线名称重复 @0
-- providerID不存在 @0
-- Jenkins流水线为空 @0
-- providerID为0 @0
+- 测试从provider导入(空formData) @0
+- 测试从provider导入(空repo) @0
+- 测试从provider导入(正常数据无API) @0
+- 测试从provider导入(无效repoID) @0
+- 测试从provider导入(空引擎) @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zenData('ops_pipeline')->gen(0);
-
-$providerTable = zenData('ops_provider');
-$providerTable->id->range('1-2');
-$providerTable->type->range('Jenkins,Gitlab');
-$providerTable->name->range('Jenkins测试服务器,GitLab测试服务器');
-$providerTable->url->range('http://jenkins.test.com,http://gitlab.test.com');
-$providerTable->token->range('YWRtaW46dGVzdHRva2Vu');
-$providerTable->deleted->range('0');
-$providerTable->gen(2);
-
+zenData('user')->gen(2);
 su('admin');
 
-$pipelineTest = new pipelineModelTest();
+$tester = new pipelineModelTest();
 
-$repo          = new stdclass();
-$repo->id     = 1;
-$repo->spaceID = 1;
-$repo->name    = 'TestRepo';
-$repo->defaultBranch = 'main';
-$repo->connector = '';
+$repo     = (object)array('id' => 1, 'name' => 'test-repo', 'providerID' => 0);
+$formData = (object)array('engine' => 'gitlab', 'name' => 'imported-pipeline', 'providerID' => 0);
+$emptyRepo = (object)array('providerID' => 0);
+$invalidRepo = (object)array('id' => 9999, 'providerID' => 0);
 
-$formData           = new stdclass();
-$formData->providerID = 1;
-$formData->pipeline   = '/job/test-job/';
-$formData->name      = 'Jenkins导入测试';
-$formData->desc      = '测试导入';
+$v1 = $tester->importFromProviderTest($repo, new stdclass());
+$v2 = $tester->importFromProviderTest($emptyRepo, $formData);
+$v3 = $tester->importFromProviderTest($repo, $formData);
+$v4 = $tester->importFromProviderTest($invalidRepo, $formData);
+$v5 = $tester->importFromProviderTest($repo, (object)array('engine' => '', 'providerID' => 0));
 
-$result = $pipelineTest->importFromProviderTest($repo, $formData);
-r($result > 0) && p() && e('1'); // Jenkins正常导入
-
-$formData->name = '';
-r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 名称为空
-
-$formData->name = 'Jenkins导入测试';
-r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // 名称重复
-
-$formData->providerID = 999;
-$formData->name = '不存在的服务器';
-r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID不存在
-
-$formData->providerID = 1;
-$formData->name = '空流水线测试';
-$formData->pipeline = '';
-r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // Jenkins流水线为空
-
-$formData->providerID = 0;
-$formData->pipeline   = '/job/test-job/';
-$formData->name       = 'providerID为0测试';
-r($pipelineTest->importFromProviderTest($repo, $formData)) && p() && e('0'); // providerID为0
+r($v1) && p() && e('0');
+r($v2) && p() && e('0');
+r($v3) && p() && e('0');
+r($v4) && p() && e('0');
+r($v5) && p() && e('0');

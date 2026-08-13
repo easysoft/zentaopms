@@ -129,6 +129,8 @@ $lang->install->dbEncoding     = 'Datenbank Charset';
 $lang->install->dbUser         = 'Datenbank User';
 $lang->install->dbPassword     = 'Datenbank Passwort';
 $lang->install->dbName         = 'Datenbank Name';
+$lang->install->dbSchema       = 'Datenbank-Schema';
+$lang->install->dbSchemaNote   = 'Schema für Gauss/PostgreSQL; wird von MySQL ignoriert.';
 $lang->install->dbPrefix       = 'Tabellen-Prefix';
 $lang->install->clearDB        = 'Tabellen leeren sofern diese scon existieren.';
 $lang->install->importDemoData = 'Import Demo Daten';
@@ -146,6 +148,7 @@ $lang->install->workingList['full']      = 'Volles Development Management';
 
 $lang->install->errorConnectDB      = 'Verbindung zur Datenbank fehlgeschlagen. ';
 $lang->install->errorDBName         = 'Datenbankname darf keinen Punkt enthalten';
+$lang->install->errorDBSchema       = 'Ungültiger Schema-Name.';
 $lang->install->errorCreateDB       = 'Erstellung der Datenbank fehlgeschlagen.';
 $lang->install->errorTableExists    = 'Die Tabellen existieren bereits. Wenn ZenTao bereits installiert war, kehren Sie zum letzen Schritt zurück und wählen Sie den Punkt Tabellen leeren. Dann fahren Sie fort.';
 $lang->install->errorCreateTable    = 'Erstellung der Tabellen fehlgeschlagen.';

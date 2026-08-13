@@ -34,19 +34,17 @@ $branchRuleSetTable->editedBy->range('[]{5}');
 $branchRuleSetTable->deleted->range('0{5}');
 $branchRuleSetTable->gen(5);
 
-$repo = zenData('repo');
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
 $repo->id->range('1-10');
 $repo->name->range('代码库{10}');
-$repo->SCM->range('Git{5},Subversion{5}');
-$repo->deleted->range('0{10}');
 $repo->gen(10);
 
 su('admin');
 
 $repoTest = new repobranchruleTest();
 
-r($repoTest->getBranchRuleTest(1, 1, '')) && p('branchName') && e('main'); // 步骤1：typeID不为0时按branchType查询
-r($repoTest->getBranchRuleTest(2, 2, '')) && p('branchType') && e('2'); // 步骤2：typeID不为0时按branchType查询
-r($repoTest->getBranchRuleTest(0, 3, 'develop')) && p('branchName') && e('develop'); // 步骤3：typeID为0时按repo和branchName查询
-r($repoTest->getBranchRuleTest(999, 1, '')) && p() && e('0'); // 步骤4：typeID不为0但branchType不存在
-r($repoTest->getBranchRuleTest(0, 999, 'main')) && p() && e('0'); // 步骤5：typeID为0但repo不存在
+r($repoTest->getBranchRuleTest(1, 1, 'main')) && p('branchName') && e('main'); // 步骤1：按branchType+branchName查询
+r($repoTest->getBranchRuleTest(2, 2, 'master')) && p('branchType') && e('2'); // 步骤2：按branchType+branchName查询
+r($repoTest->getBranchRuleTest(3, 3, 'develop')) && p('branchName') && e('develop'); // 步骤3：按repo和branchName查询
+r($repoTest->getBranchRuleTest(999, 1, 'main')) && p() && e('0'); // 步骤4：不存在的branchType
+r($repoTest->getBranchRuleTest(1, 999, 'main')) && p() && e('0'); // 步骤5：不存在的repo

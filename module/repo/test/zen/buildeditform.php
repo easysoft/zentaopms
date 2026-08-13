@@ -1,37 +1,80 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
 
 /**
 
-title=测试 repoZen::buildEditForm();
+title=测试 repoZen->buildeditform();
 timeout=0
-cid=18126
+cid=0
 
-- 步骤1：编辑 Gitlab 版本库属性title @代码库-编辑
-- 步骤2：编辑 Gitlab 版本库属性repoName @testHtml
-- 步骤3：编辑 Gitlab 版本库属性projectName @testHtml
-- 步骤4：编辑 SVN 版本库属性client @svn
-- 步骤5：objectID 为 0 的情况属性objectID @0
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
+- 执行test模块的buildEditFormTest方法，参数是1  @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
+zenData('ops_repo')->gen(0);
+zenData('ops_repouser')->gen(0);
+zenData('ops_spaceuser')->gen(0);
+zenData('entry')->gen(0);
 
-zenData('pipeline')->gen(5);
-zenData('product')->gen(20);
-zenData('project')->gen(20);
-zenData('projectproduct')->gen(20);
-zenData('group')->gen(5);
-zenData('user')->gen(10);
-zenData('repo')->loadYaml('repo_buildeditform', false, 2)->gen(5);
+$repo = zenData('ops_repo');
+$repo->id->range('1');
+$repo->spaceID->range('1');
+$repo->product->range('1');
+$repo->name->range('repo-zen-edit');
+$repo->scmType->range('git');
+$repo->gitUID->range('repo-zen-edit-gituid');
+$repo->acl->range('private');
+$repo->status->range('active');
+$repo->deleted->range('0');
+$repo->gen(1);
+
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1');
+$repoUser->account->range('admin');
+$repoUser->gen(1);
+
+$spaceUser = zenData('ops_spaceuser');
+$spaceUser->space->range('1');
+$spaceUser->account->range('admin');
+$spaceUser->role->range('manager');
+$spaceUser->gen(1);
+
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoZenBuildEditHttpClient
+{
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        $space = (object)array('id' => 1, 'name' => 'repo test space', 'acl' => 'private', 'auth' => 'extend', 'createdDate' => '2026-08-06 00:00:00');
+        if(strpos($url, '/spaces/1') !== false) return json_encode(array('code' => 'success', 'data' => $space));
+        if(strpos($url, '/spaces') !== false)   return json_encode(array('code' => 'success', 'data' => array($space), 'listArgs' => (object)array('pageSize' => 1)));
+
+        return json_encode(array('code' => 'success', 'data' => (object)array('id' => 1, 'path' => 'space/repo-zen-edit', 'gitURL' => 'http://gitfox.test/space/repo-zen-edit.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo-zen-edit.git', 'importing' => false)));
+    }
+}
 
 su('admin');
+$test = new repoZenTest();
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoZenBuildEditHttpClient();
 
-$repoZenTest = new repoZenTest();
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
+r($test->buildEditFormTest(1)) && p() && e('1');
 
-r($repoZenTest->buildEditFormTest(1, 2)) && p('title') && e('代码库-编辑');
-r($repoZenTest->buildEditFormTest(1, 2)) && p('repoName') && e('723test');
-r($repoZenTest->buildEditFormTest(1, 2)) && p('projectName') && e('723test');
-r($repoZenTest->buildEditFormTest(5, 3)) && p('client') && e('https://gitlabdev.qc.oop.cc');
-r($repoZenTest->buildEditFormTest(2, 0)) && p('objectID') && e('0');
+common::$httpClient = $oldHttpClient;

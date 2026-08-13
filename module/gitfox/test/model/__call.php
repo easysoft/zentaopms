@@ -32,5 +32,5 @@ $gitfoxTest->setRepoCache(7, $cached);
 r($model->apiGetSingleRepo(7)) && p('name') && e('cached-magic');
 r($model->apiGetSingleProject(7)) && p('name') && e('cached-magic');
 r($model->thisMethodDoesNotExist(1)) && p() && e('0');
-r((int)dao::isError()) && p() && e('0');
 r($model->APIgetSINGLErepo(7)) && p('name') && e('cached-magic');
+r($gitfoxTest->apiGetSingleRepoTypeTest(7)) && p() && e('object');

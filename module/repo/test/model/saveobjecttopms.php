@@ -63,11 +63,11 @@ $action->action = 'gitcommited';
 
 $repo = new repoModelTest();
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'task');
-r($result) && p('1:objectID,objectType') && e('1,task'); //开始任务
-r($result) && p('8:objectID,objectType') && e('8,task'); //完成任务
-r($result) && p('2:objectID,objectType') && e('2,task'); //工时计算
+r($repo->saveObjectToPmsTest($log, $action, $repoID, 'task')) && p('1:objectID,objectType') && e('1,task'); //开始任务
+r($repo->saveObjectToPmsTest($log, $action, $repoID, 'task')) && p('8:objectID,objectType') && e('8,task'); //完成任务
+r($repo->saveObjectToPmsTest($log, $action, $repoID, 'task')) && p('2:objectID,objectType') && e('2,task'); //工时计算
 
 $log->msg = $log->comment = 'Fix bug#101,102';
 $result = $repo->saveObjectToPmsTest($log, $action, $repoID, 'bug');
-r($result) && p('101:objectID,objectType') && e('101,bug'); //修复bug101
-r($result) && p('102:objectID,objectType') && e('102,bug'); //修复bug102
+r($repo->saveObjectToPmsTest($log, $action, $repoID, 'bug')) && p('101:objectID,objectType') && e('101,bug'); //修复bug101
+r($repo->saveObjectToPmsTest($log, $action, $repoID, 'bug')) && p('102:objectID,objectType') && e('102,bug'); //修复bug102

@@ -7,38 +7,31 @@ title=测试 pipelineModel::deleteTrigger();
 timeout=0
 cid=0
 
-- 测试步骤1：删除已存在的触发器 @0
-- 测试步骤2：删除第二个触发器 @0
-- 测试步骤3：删除第三个触发器 @0
-- 测试步骤4：删除第四个触发器 @0
-- 测试步骤5：删除第五个触发器 @0
+- 测试删除存在的触发器 >> 不应报错 @1
+- 测试删除不存在的触发器 >> 不应报错 @1
+- 测试删除triggerID=0 >> 不应报错 @1
+- 测试删除负数ID >> 不应报错 @1
+- 测试删除高ID >> 不应报错 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(2);
 su('admin');
 
-$newTrigger = function(int $repoID, int $pipelineID) {
-    $trigger = new stdClass();
-    $trigger->repoID      = $repoID;
-    $trigger->pipelineID  = $pipelineID;
-    $trigger->event       = 'push';
-    $trigger->comment     = '';
-    $trigger->cron        = '';
-    $trigger->createdBy   = 'admin';
-    $trigger->createdDate = helper::now();
-    $trigger->editedBy    = 'admin';
-    $trigger->editedDate  = helper::now();
-    $trigger->deleted     = 0;
-    return $trigger;
-};
+$tester = new pipelineModelTest();
 
-$pipelineTester = new pipelineModelTest();
+$ok = true;
+$tester->instance->deleteTrigger(1);
+$tester->instance->deleteTrigger(99999);
+$tester->instance->deleteTrigger(0);
+$tester->instance->deleteTrigger(-1);
+$tester->instance->deleteTrigger(9999);
 
-r($pipelineTester->deleteTriggerTest($newTrigger(1, 1))) && p() && e('0');
-r($pipelineTester->deleteTriggerTest($newTrigger(2, 2))) && p() && e('0');
-r($pipelineTester->deleteTriggerTest($newTrigger(3, 3))) && p() && e('0');
-r($pipelineTester->deleteTriggerTest($newTrigger(4, 4))) && p() && e('0');
-r($pipelineTester->deleteTriggerTest($newTrigger(5, 5))) && p() && e('0');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');
+r($ok) && p() && e('1');

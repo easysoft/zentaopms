@@ -313,8 +313,8 @@ $lang->ppm->bug->status   = 'Type';
 
 $lang->ppm->mergeTypeInfoList = array();
 $lang->ppm->mergeTypeInfoList['merge']  = 'All commits on this branch will be added to the base branch via a merge commit.';
-$lang->ppm->mergeTypeInfoList['squash'] = 'All commits on this branch will be merged into a single commit and added to the base branch.';
-$lang->ppm->mergeTypeInfoList['rebase'] = 'All commits on this branch will be rebased and added to the base branch.';
+$lang->ppm->mergeTypeInfoList['squash'] = 'All commits on this branch will be merged into a single commit and added to the base branch. This merge method will alter commit IDs, resulting in missing associated items.';
+$lang->ppm->mergeTypeInfoList['rebase'] = 'All commits on this branch will be rebased and added to the base branch. This merge method will alter commit IDs, resulting in missing associated items.';
 $lang->ppm->mergeTypeInfoList['fast']   = 'All commits on this branch will be added directly to the base branch without generating merge commits, and rebasing may be required.';
 
 $lang->ppm->notice = new stdclass();

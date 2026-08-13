@@ -7,8 +7,14 @@ fields:
   - field: name
     range: 1-10
     prefix: "space"
-  - field: owner
+  - field: code
     range: 1-10
-    prefix: "test"
+    prefix: "code"
   - field: acl
     range: open,private
+  - field: auth
+    range: extend,reset
+  - field: createdBy
+    range: admin,test1,test2,test3,test4
+  - field: deleted
+    range: 0

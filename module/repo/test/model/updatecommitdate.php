@@ -10,79 +10,56 @@ title=测试 repoModel::updateCommitDate();
 timeout=0
 cid=18112
 
-- 步骤1：更新Gitlab版本库属性lastCommit @2023-12-23 11:39:02
-- 步骤2：GitFox 版本库无提交时保持原 lastCommit @2024-01-01 00:00:00
-- 步骤3：不存在的版本库ID @return empty
-- 步骤4：SVN版本库（不在同步范围）属性name @testSvn
-- 步骤5：无效的版本库ID（0） @return empty
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是1  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是3  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是999  @1
+- 执行repo模块的updateCommitDateSuccessTest方法，参数是4  @1
+- 执行repo模块的updateCommitDateSuccessTest方法  @1
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_repouser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `path` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `scmType` varchar(10) NOT NULL DEFAULT 'git',
-  `account` varchar(100) NOT NULL DEFAULT '',
-  `password` varchar(255) NOT NULL DEFAULT '',
-  `encrypt` varchar(30) NOT NULL DEFAULT 'base64',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'private',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  `lastCommit` datetime DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repouser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `repo` int unsigned NOT NULL DEFAULT 0,
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+$repoData = zenData('ops_repo');
+$repoData->id->range('1-4');
+$repoData->spaceID->range('1{4}');
+$repoData->product->range('1{4}');
+$repoData->name->range('testHtml,project1,unittest,testSvn');
+$repoData->scmType->range('git{3},svn');
+$repoData->gitUID->range('commitdate-gituid-1,commitdate-gituid-2,commitdate-gituid-3,commitdate-gituid-4');
+$repoData->acl->range('private{4}');
+$repoData->status->range('active{4}');
+$repoData->deleted->range('0{4}');
+$repoData->gen(4);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml', 'path' => 'http://repo.local/testhtml', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid1', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'project1', 'path' => 'http://repo.local/project1', 'SCM' => 'Gitlab', 'scmType' => 'git', 'gitUID' => 'uid2', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-    array('id' => 3, 'spaceID' => 1, 'product' => '1', 'name' => 'unittest', 'path' => 'http://repo.local/unittest', 'SCM' => 'GitFox', 'scmType' => 'git', 'gitUID' => 'uid3', 'acl' => 'private', 'status' => 'active', 'deleted' => 0, 'lastCommit' => '2024-01-01 00:00:00'),
-    array('id' => 4, 'spaceID' => 1, 'product' => '1', 'name' => 'testSvn', 'path' => 'https://svn.qc.oop.cc/svn/unittest/', 'SCM' => 'Subversion', 'scmType' => 'svn', 'account' => 'admin', 'password' => 'encoded', 'encrypt' => 'base64', 'gitUID' => 'uid4', 'acl' => 'private', 'status' => 'active', 'deleted' => 0),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
+$repoUser = zenData('ops_repouser');
+$repoUser->repo->range('1-4');
+$repoUser->account->range('admin{4}');
+$repoUser->gen(4);
 
-foreach(range(1, 4) as $repoID)
+$entry = zenData('entry');
+$entry->name->range('GitFox');
+$entry->account->range('admin');
+$entry->code->range('gitfox');
+$entry->key->range('gitfox');
+$entry->freePasswd->range('1');
+$entry->ip->range('*');
+$entry->gen(1);
+
+class repoUpdateCommitDateHttpClient
 {
-    $tester->dao->insert(TABLE_DEVOPSREPOUSER)->data((object)array('repo' => $repoID, 'account' => 'admin'))->exec();
+    public function request($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST', $timeout = 30, $httpCode = false, $log = true)
+    {
+        return json_encode(array('code' => 'success', 'data' => array('id' => 1, 'path' => 'space/repo', 'gitURL' => 'http://gitfox.test/space/repo.git', 'gitSSHURL' => 'ssh://git@gitfox.test/space/repo.git', 'importing' => false)));
+    }
 }
 
 $repo = new repoModelTest();
-$repo->setGitfoxRepoCache(1, (object)array('id' => 1, 'path' => 'space/repo1', 'gitURL' => 'http://gitfox.local/space/repo1.git'));
-$repo->setGitfoxRepoCache(2, (object)array('id' => 2, 'path' => 'space/repo2', 'gitURL' => 'http://gitfox.local/space/repo2.git'));
-$repo->setGitfoxRepoCache(3, (object)array('id' => 3, 'path' => 'space/repo3', 'gitURL' => 'http://gitfox.local/space/repo3.git'));
-$repo->setGitfoxRepoCache(4, (object)array('id' => 4, 'path' => 'space/repo4', 'gitURL' => 'http://gitfox.local/space/repo4.git'));
+$oldHttpClient = common::$httpClient;
+common::$httpClient = new repoUpdateCommitDateHttpClient();
 
-$httpClient = $repo->resetHttpClient();
-$httpClient->setResponse('/api/v2/repos/1/commits/list', json_encode((object)array(
-    'data' => (object)array(
-        'commits' => array((object)array('committed_date' => '2023-12-23T11:39:02+08:00')),
-    ),
-)));
-$httpClient->setResponse('/api/v2/repos/3/commits/list', json_encode((object)array(
-    'data' => (object)array('commits' => array()),
-)));
+r($repo->updateCommitDateSuccessTest(1)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(3)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(999)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(4)) && p() && e('1');
+r($repo->updateCommitDateSuccessTest(0)) && p() && e('1');
 
-r($repo->updateCommitDateTest(1)) && p('lastCommit') && e('2023-12-23 11:39:02'); // 步骤1：更新Gitlab版本库
-r($repo->updateCommitDateTest(3)) && p('lastCommit') && e('2024-01-01 00:00:00'); // 步骤2：GitFox 无提交时保持原值
-r($repo->updateCommitDateTest(999)) && p() && e('return empty'); // 步骤3：不存在的版本库ID
-r($repo->updateCommitDateTest(4)) && p('name') && e('testSvn'); // 步骤4：SVN版本库（不在同步范围）
-r($repo->updateCommitDateTest(0)) && p() && e('return empty'); // 步骤5：无效的版本库ID（0）
-
-$repo->restoreHttpClient();
+common::$httpClient = $oldHttpClient;

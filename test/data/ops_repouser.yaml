@@ -1,4 +1,5 @@
-title: zt_ops_spaceuser
+title: table ops_repouser
+desc: "代码库用户关联表"
 author: Yang Li
 version: "1.0"
 fields:

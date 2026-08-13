@@ -11,86 +11,55 @@ title=测试 repoModel::getListByCondition();
 timeout=0
 cid=18070
 
-- 执行repoTest模块的getListByConditionTest方法，参数是'' @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'' @5
-- 执行repoTest模块的getListByConditionTest方法，参数是"name='testHtml'" @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'', 2 @2
-- 执行$results第0条的id属性 @1
-- 执行repoTest模块的getListByConditionTest方法，参数是'', 0, 'id_desc', $pager @2
-- 执行repoTest模块的getListByConditionTest方法，参数是"name like '%test%'" @3
-- 执行repoTest模块的getListByConditionTest方法，参数是"name = 'nonexistent'" @0
+- 执行repoTest模块的getListByConditionIsArrayTest方法，参数是''  @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是''  @5
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name='testHtml'"  @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是'', 2  @2
+- 执行repoTest模块的getListByConditionTest方法，参数是'', 0, 'id_asc' 第0条的id属性 @1
+- 执行repoTest模块的getListByConditionCountTest方法，参数是'', 0, 'id_desc', $pager  @2
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name like '%test%'"  @3
+- 执行repoTest模块的getListByConditionCountTest方法，参数是"name = 'nonexistent'"  @0
 
 */
 
-global $dbh, $tester;
-$dbh->exec('DROP TABLE IF EXISTS `ops_spaceuser`');
-$dbh->exec('DROP TABLE IF EXISTS `ops_repo`');
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_repo` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `spaceID` int NOT NULL DEFAULT 0,
-  `product` varchar(255) NOT NULL DEFAULT '',
-  `name` varchar(255) NOT NULL DEFAULT '',
-  `SCM` varchar(30) NOT NULL DEFAULT '',
-  `gitUID` char(42) NOT NULL DEFAULT '',
-  `acl` varchar(30) NOT NULL DEFAULT 'open',
-  `status` varchar(30) NOT NULL DEFAULT 'active',
-  `deleted` tinyint NOT NULL DEFAULT 0,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
-$dbh->exec(<<<'SQL'
-CREATE TABLE `ops_spaceuser` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `space` int unsigned NOT NULL DEFAULT 0,
-  `role` varchar(10) NOT NULL DEFAULT '',
-  `account` varchar(30) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4
-SQL);
+global $tester;
+zenData('ops_repo')->gen(0);
+zenData('ops_spaceuser')->gen(0);
 
-$tester->dao->delete()->from(TABLE_ENTRY)->where('code')->eq('gitfox')->exec();
-$tester->dao->insert(TABLE_ENTRY)->data((object)array(
-    'name'        => 'GitFox入口',
-    'account'     => 'admin',
-    'code'        => 'gitfox',
-    'key'         => 'testkey1234567890testkey1234567',
-    'freePasswd'  => 0,
-    'ip'          => '*',
-    'createdBy'   => 'admin',
-    'createdDate' => '2026-01-01 00:00:00',
-    'calledTime'  => 0,
-    'editedBy'    => 'admin',
-    'editedDate'  => '2026-01-01 00:00:00',
-    'deleted'     => 0,
-))->exec();
+zenData('ops_space')->gen(0);
+$spaceTable = zenData('ops_space');
+$spaceTable->id->range('1,2');
+$spaceTable->name->range('repo-test-space-1,repo-test-space-2');
+$spaceTable->code->range('repo-test-space-1,repo-test-space-2');
+$spaceTable->acl->range('open{2}');
+$spaceTable->auth->range('extend{2}');
+$spaceTable->deleted->range('0{2}');
+$spaceTable->gen(2);
 
-$repos = array(
-    array('id' => 1, 'spaceID' => 1, 'product' => '1', 'name' => 'testHtml',    'SCM' => 'Gitlab', 'gitUID' => 'uid1', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 2, 'spaceID' => 1, 'product' => '1', 'name' => 'testApi',     'SCM' => 'Gitlab', 'gitUID' => 'uid2', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 3, 'spaceID' => 2, 'product' => '1', 'name' => 'projectRepo', 'SCM' => 'Git',    'gitUID' => 'uid3', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 4, 'spaceID' => 2, 'product' => '1', 'name' => 'testDocs',    'SCM' => 'GitFox', 'gitUID' => 'uid4', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 5, 'spaceID' => 1, 'product' => '1', 'name' => 'archiveRepo', 'SCM' => 'Gitlab', 'gitUID' => 'uid5', 'acl' => 'open', 'status' => 'active',    'deleted' => 0),
-    array('id' => 6, 'spaceID' => 1, 'product' => '1', 'name' => 'hiddenRepo',  'SCM' => 'Gitlab', 'gitUID' => 'uid6', 'acl' => 'open', 'status' => 'importing', 'deleted' => 0),
-    array('id' => 7, 'spaceID' => 1, 'product' => '1', 'name' => 'deletedRepo', 'SCM' => 'Gitlab', 'gitUID' => 'uid7', 'acl' => 'open', 'status' => 'active',    'deleted' => 1),
-);
-foreach($repos as $repoData) $tester->dao->insert(TABLE_REPO)->data((object)$repoData)->exec();
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-7');
+$repoTable->spaceID->range('1,1,2,2,1,1,1');
+$repoTable->product->range('1{7}');
+$repoTable->name->range('testHtml,testApi,projectRepo,testDocs,archiveRepo,hiddenRepo,deletedRepo');
+$repoTable->scmType->range('git{6},svn');
+$repoTable->gitUID->range('uid1,uid2,uid3,uid4,uid5,uid6,uid7');
+$repoTable->providerID->range('0{7}');
+$repoTable->mirror->range('0{7}');
+$repoTable->acl->range('open{7}');
+$repoTable->status->range('active{5},importing,active');
+$repoTable->deleted->range('0{6},1');
+$repoTable->gen(7);
 
-$tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 1, 'role' => 'manager', 'account' => 'admin'))->exec();
-$tester->dao->insert(TABLE_DEVOPSSPACEUSER)->data((object)array('space' => 2, 'role' => 'manager', 'account' => 'admin'))->exec();
+$spaceUserTable = zenData('ops_spaceuser');
+$spaceUserTable->space->range('1,2');
+$spaceUserTable->role->range('manager{2}');
+$spaceUserTable->account->range('admin{2}');
+$spaceUserTable->gen(2);
 
 su('admin');
 
 $repoTest = new repoModelTest();
-$httpClient = $repoTest->resetHttpClient();
-$httpClient->setResponse('/spaces', json_encode((object)array(
-    'code'     => 'success',
-    'data'     => array(
-        (object)array('id' => 1, 'name' => 'space1', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-        (object)array('id' => 2, 'name' => 'space2', 'createdDate' => '2026-01-01T00:00:00+08:00'),
-    ),
-    'listArgs' => (object)array('pageSize' => 2),
-)));
+$repoTest->seedGitFoxEntry();
 
 $pager = new stdclass();
 $pager->recPerPage = 2;
@@ -100,14 +69,11 @@ $repoTest->instance->app->rawMethod = 'browse';
 $repoTest->instance->app->loadClass('pager', true);
 $pager = pager::init(0, $pager->recPerPage, $pager->pageID);
 
-r(is_array($repoTest->getListByConditionTest(''))) && p() && e('1');
-r(count($repoTest->getListByConditionTest(''))) && p() && e('5');
-r(count($repoTest->getListByConditionTest("name='testHtml'"))) && p() && e('1');
-r(count($repoTest->getListByConditionTest('', 2))) && p() && e('2');
-$results = $repoTest->getListByConditionTest('', 0, 'id_asc');
-r(array_values($results)) && p('0:id') && e('1');
-r(count($repoTest->getListByConditionTest('', 0, 'id_desc', $pager))) && p() && e('2');
-r(count($repoTest->getListByConditionTest("name like '%test%'"))) && p() && e('3');
-r(count($repoTest->getListByConditionTest("name = 'nonexistent'"))) && p() && e('0');
-
-$repoTest->restoreHttpClient();
+r($repoTest->getListByConditionIsArrayTest('')) && p() && e('1');
+r($repoTest->getListByConditionCountTest('')) && p() && e('5');
+r($repoTest->getListByConditionCountTest("name='testHtml'")) && p() && e('1');
+r($repoTest->getListByConditionCountTest('', 2)) && p() && e('2');
+r(array_values($repoTest->getListByConditionTest('', 0, 'id_asc'))) && p('0:id') && e('1');
+r($repoTest->getListByConditionCountTest('', 0, 'id_desc', $pager)) && p() && e('2');
+r($repoTest->getListByConditionCountTest("name like '%test%'")) && p() && e('3');
+r($repoTest->getListByConditionCountTest("name = 'nonexistent'")) && p() && e('0');

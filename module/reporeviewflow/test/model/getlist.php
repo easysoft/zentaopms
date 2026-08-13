@@ -17,7 +17,7 @@ cid=0
 - 获取代码库4的审批流程第4条的name属性 @review_flow4
 */
 
-zenData('repo')->gen(10);
+zenData('ops_repo')->loadYaml('ops_repo', false, 2)->gen(10);
 zenData('ops_review_flow')->gen(10);
 
 $flow = new reporeviewflowTest();

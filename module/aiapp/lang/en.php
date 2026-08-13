@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'Model ID';
+$lang->aiapp->abilities          = 'Abilities';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Search Models';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Function Calling';
+$lang->aiapp->abilityTypes['reasoning']        = 'Reasoning';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
@@ -94,7 +103,6 @@ $lang->aiapp->langData->formReturnJSONArray = 'Please return a JSON array, each 
 $lang->aiapp->langData->formZentaoAPITip    = "Please first use the zentao-api tools to obtain the required context data, then use the submitFormData tool to return the filled form data. Required fields must have values.\nUsually submitFormData only needs to be called once, unless the user requires multiple solutions.";
 $lang->aiapp->langData->formResultGenerated = 'Form data has been generated.';
 $lang->aiapp->langData->formCurrentTarget   = 'Current';
-$lang->aiapp->langData->formApplyDataTip    = 'Please click the "Apply to the current form" button to fill the data into the form.';
 $lang->aiapp->langData->stepDescription     = 'Step description';
 $lang->aiapp->langData->expectDescription   = 'Expected result';
 

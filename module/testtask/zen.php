@@ -68,7 +68,7 @@ class testtaskZen extends testtask
         $this->loadModel('testcase');
 
         $searchConfig = $this->config->testcase->search;
-        $searchConfig['module']    = 'testtask';
+        $searchConfig['module']    = 'testtaskTestcase';
         $searchConfig['queryID']   = $queryID;
         $searchConfig['actionURL'] = helper::createLink('testtask', 'cases', "taskID=$testtask->id&browseType=bysearch&queryID=myQueryID");
 
@@ -106,6 +106,7 @@ class testtaskZen extends testtask
             $searchConfig['params']['branch']['values'] = $this->testtask->getBranchesByTask($testtask);
         }
 
+        if(isset($_SESSION['testtaskSearchFunc'])) unset($_SESSION['testtaskSearchFunc']);
         $this->config->testcase->search = $searchConfig;
         $this->loadModel('search')->setSearchParams($searchConfig);
     }
@@ -576,6 +577,13 @@ class testtaskZen extends testtask
     protected function prepareCasesForBatchRun(int $productID, string $orderBy, string $from, int $taskID, string $confirm, array $caseIdList, array $runIdList = array()): array
     {
         $this->setMenu($productID, 0, (int)$this->session->project, (int)$this->session->execution);
+        if($this->app->tab == 'my' && $from == 'work')
+        {
+            $this->loadModel('my');
+            $this->lang->my->menu->{$from}['subModule'] = 'testtask';
+            $this->lang->my->menu->{$from}['subMenu']->testcase['subModule'] = 'testtask';
+        }
+
         $menu = isset($this->lang->{$this->app->tab}->menu) ? $this->lang->{$this->app->tab}->menu : array();
         if($this->app->tab != 'qa')
         {

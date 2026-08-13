@@ -417,7 +417,7 @@ pipeline {
                   stages() {
                     stage("Prepare") {
                       steps {
-                        checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
+                        checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
@@ -478,7 +478,7 @@ pipeline {
                   stages() {
                     stage("Prepare") {
                       steps {
-                        checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
+                        checkout scmGit(branches: [[name: "main"]],
                           extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                           userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                         )
@@ -560,7 +560,7 @@ pipeline {
 
             stage("Notice zbox") {
               steps {
-                checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
+                checkout scmGit(branches: [[name: "main"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                   userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/ci/zbox-builder.git"]]
                 )
@@ -598,7 +598,7 @@ pipeline {
           }
 
           steps {
-            checkout scmGit(branches: [[name: "feature/devops4.0beta"]],
+            checkout scmGit(branches: [[name: "main"]],
                   extensions: [cloneOption(depth: 2, noTags: false, reference: '', shallow: true)],
                   userRemoteConfigs: [[credentialsId: 'gitfox-zcorp-cc-ci-robot', url: "https://${env.GITFOX_HOST}/git/app/zentao.git"]]
                 )

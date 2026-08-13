@@ -76,7 +76,7 @@ $data              = initTableData($assetList, $config->artifact->dtable->fieldL
 $viewLink          = createLink('artifact', 'view', "artifactID={$artifact->id}&spaceID={$spaceID}&repoID={$repoID}&type={$type}&selectPath={$selectPath}&leaf={$leaf}&orderBy={$orderBy}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}");
 $canDeleteArtifact = hasPriv('artifact', 'deleteArtifact');
 $canCreateDir      = hasPriv('artifact', 'createDir') && $artifact->type == 'file' && !$leaf;
-$canUploadArtifact = hasPriv('artifact', 'uploadArtifact') && $artifact->type == 'file' && !$leaf;
+$canUploadArtifact = hasPriv('artifact', 'uploadArtifact') && !empty($selectPath) && $artifact->type == 'file' && !$leaf;
 div
 (
     setClass('surface-light row flex justify-between items-center border-l border-t border-r py-1.5 pl-1 pr-2'),

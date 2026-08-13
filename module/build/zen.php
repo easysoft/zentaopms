@@ -187,6 +187,21 @@ class buildZen extends build
         $generatedBugs = $this->loadModel('bug')->getExecutionBugs((int)$build->execution, $build->product, 'all', "$build->id,{$build->builds}", $type, (int)$param, $type == 'generatedBug' ? $sort : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugs = $this->bug->processBuildForBugs($generatedBugs);
 
+        $storyIdList = $taskIdList = array();
+        foreach($this->view->generatedBugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+
+        $this->view->generatedBugBranchPairs  = $this->loadModel('branch')->getPairs($build->product, 'withClosed');
+        $this->view->generatedBugModulePairs  = $this->loadModel('tree')->getAllModulePairs('bug');
+        $this->view->generatedBugPlans        = array(0 => '') + $this->loadModel('productplan')->getPairs($build->product);
+        $this->view->generatedBugProjectPairs = $this->loadModel('project')->getPairsByProgram();
+        $this->view->generatedBugStories      = $storyIdList ? $this->loadModel('story')->getPairsByList($storyIdList) : array();
+        $this->view->generatedBugTasks        = $taskIdList  ? $this->loadModel('task')->getPairsByIdList($taskIdList) : array();
+
         if($this->app->getViewType() == 'json')
         {
             unset($this->view->generatedBugPager);

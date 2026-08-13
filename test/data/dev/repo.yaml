@@ -1,32 +1,47 @@
-title: zt_repo
-author: Yidong Wang
-version: "1.0"
+title: ops_repo (dev)
+desc: 代码库表开发环境数据定义（对齐db/zentao.sql）
+author: Claude Code
+version: "2.0"
 fields:
-  - field: id
-    range: 1
-  - field: product
-    range: 1
-  - field: name
-    range: 723test
-  - field: path
-    range: 42
-  - field: SCM
-    range: Gitlab
-  - field: client
-    range: 1
-  - field: serviceHost
-    range: 1
-  - field: serviceProject
-    range: 42
-  - field: acl
-    range: open
-  - field: desc
-    range: desc
-  - field: extra
-    range: 42
-  - field: preMerge
-    range: 1
-  - field: job
-    range: 1
-  - field: deleted
-    range: 0
+- field: id
+  range: 1
+- field: spaceID
+  range: 1-10
+- field: product
+  range: 1
+- field: name
+  range: repo{1-100}
+- field: desc
+  range: "测试代码库{1-100}"
+- field: scmType
+  range: git
+- field: gitUID
+  range: uid{1-100}
+- field: forkID
+  range: 0
+- field: mirror
+  range: 0
+- field: providerID
+  range: 0
+- field: connector
+  range: ""
+- field: defaultBranch
+  range: ""
+- field: acl
+  range: open
+- field: status
+  range: active
+- field: synced
+  range: 1
+- field: branchArchivable
+  range: 0
+- field: createdBy
+  range: admin
+- field: createdDate
+  range: "2024-01-01 00:00:00"
+- field: editedBy
+  range: admin
+- field: editedDate
+  range: "2024-01-01 00:00:00"
+- field: deleted
+  range: 0

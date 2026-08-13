@@ -33,50 +33,97 @@ title=bugModel->getExecutionBugs();
 timeout=0
 cid=15381
 
-- 测试获取项目ID为2的bug
+- 测试获取执行ID为2的bug
  - 第0条的title属性 @BUG10
  - 第1条的title属性 @BUG8
  - 第2条的title属性 @BUG6
  - 第3条的title属性 @BUG4
  - 第4条的title属性 @BUG2
-- 测试获取项目ID为2不包含id为10的bug
+- 测试获取执行ID为2不包含id为10的bug
  - 第0条的title属性 @BUG8
  - 第1条的title属性 @BUG6
  - 第2条的title属性 @BUG4
  - 第3条的title属性 @BUG2
-- 测试获取项目ID为2, 影响版本为1的bug
+- 测试获取执行ID为2, 影响版本为1的bug
  - 第0条的title属性 @BUG9
  - 第1条的title属性 @BUG6
  - 第2条的title属性 @BUG3
-- 测试获取项目ID为2,产品ID为2的bug
+- 测试获取执行ID为2,产品ID为2的bug
  - 第0条的title属性 @BUG10
  - 第1条的title属性 @BUG6
  - 第2条的title属性 @BUG2
-- 测试获取项目ID为2,产品ID为2, 分支为1的bug第0条的title属性 @BUG6
-- 测试获取项目ID为2,未解决的bug
+- 测试获取执行ID为2,产品ID为2, 分支为1的bug第0条的title属性 @BUG6
+- 测试获取执行ID为2,未解决的bug
  - 第0条的title属性 @BUG8
  - 第1条的title属性 @BUG2
-- 测试获取项目ID为2,未关闭的bug
+- 测试获取执行ID为2,未关闭的bug(noclosed)
  - 第0条的title属性 @BUG10
  - 第1条的title属性 @BUG8
  - 第2条的title属性 @BUG4
  - 第3条的title属性 @BUG2
+- 测试获取执行ID为2,未关闭的bug(unclosed)
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG8
+ - 第2条的title属性 @BUG4
+ - 第3条的title属性 @BUG2
+- 测试获取执行ID为1,指派给我的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG7
+ - 第2条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第4条的title属性 @BUG1
+- 测试获取执行ID为1,由我创建的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG7
+ - 第2条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第4条的title属性 @BUG1
+- 测试获取执行ID为2,由我解决的bug
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG8
+ - 第2条的title属性 @BUG6
+ - 第3条的title属性 @BUG4
+ - 第4条的title属性 @BUG2
+- 测试获取执行ID为1,未确认的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG7
+ - 第2条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第4条的title属性 @BUG1
+- 测试获取执行ID为2,待关闭的bug
+ - 第0条的title属性 @BUG10
+ - 第1条的title属性 @BUG4
+- 测试获取执行ID为1,被延期的bug
+ - 第0条的title属性 @BUG9
+ - 第1条的title属性 @BUG7
+ - 第2条的title属性 @BUG5
+ - 第3条的title属性 @BUG3
+ - 第4条的title属性 @BUG1
+- 测试获取执行ID为2,未指派的bug数量 @0
 
 */
 
-$executionIdList = array(2);
+$executionIdList = array(2, 1);
 $productIdList   = array(1, 2);
 $branchIdList    = array('1');
 $buildIdList     = array('1', 'trunk');
-$typeList        = array('unresolved', 'noclosed', 'assignedtome', 'openedbyme');
+$typeList        = array('unresolved', 'noclosed', 'assigntome', 'openedbyme', 'unclosed', 'resolvedbyme', 'unconfirmed', 'toclosed', 'postponedbugs', 'assigntonull');
 $paramList       = array(1);
 $excludeBugs     = array(10);
 
 $bug = new bugModelTest();
-r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all'))                               && p('0:title;1:title;2:title;3:title;4:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取项目ID为2的bug
-r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, 'all', 0, $excludeBugs[0])) && p('0:title;1:title;2:title;3:title')         && e('BUG8;BUG6;BUG4;BUG2');       // 测试获取项目ID为2不包含id为10的bug
-r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', $buildIdList[0]))              && p('0:title;1:title;2:title')                 && e('BUG9;BUG6;BUG3');            // 测试获取项目ID为2, 影响版本为1的bug
-r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], 'all'))               && p('0:title;1:title;2:title')                 && e('BUG10;BUG6;BUG2');           // 测试获取项目ID为2,产品ID为2的bug
-r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], $branchIdList[0]))    && p('0:title')                                 && e('BUG6');                      // 测试获取项目ID为2,产品ID为2, 分支为1的bug
-r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[0]))              && p('0:title;1:title')                         && e('BUG8;BUG2');                 // 测试获取项目ID为2,未解决的bug
-r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[1]))              && p('0:title;1:title;2:title;3:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取项目ID为2,未关闭的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all'))                               && p('0:title;1:title;2:title;3:title;4:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取执行ID为2的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, 'all', 0, $excludeBugs[0])) && p('0:title;1:title;2:title;3:title')         && e('BUG8;BUG6;BUG4;BUG2');       // 测试获取执行ID为2不包含id为10的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', $buildIdList[0]))              && p('0:title;1:title;2:title')                 && e('BUG9;BUG6;BUG3');            // 测试获取执行ID为2, 影响版本为1的bug
+r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], 'all'))               && p('0:title;1:title;2:title')                 && e('BUG10;BUG6;BUG2');           // 测试获取执行ID为2,产品ID为2的bug
+r($bug->getExecutionBugsTest($executionIdList[0], $productIdList[1], $branchIdList[0]))    && p('0:title')                                 && e('BUG6');                      // 测试获取执行ID为2,产品ID为2, 分支为1的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[0]))              && p('0:title;1:title')                         && e('BUG8;BUG2');                 // 测试获取执行ID为2,未解决的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[1]))              && p('0:title;1:title;2:title;3:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取执行ID为2,未关闭的bug(noclosed)
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[4]))              && p('0:title;1:title;2:title;3:title')         && e('BUG10;BUG8;BUG4;BUG2');      // 测试获取执行ID为2,未关闭的bug(unclosed)
+r($bug->getExecutionBugsTest($executionIdList[1], 0, 'all', 0, $typeList[2]))              && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取执行ID为1,指派给我的bug
+r($bug->getExecutionBugsTest($executionIdList[1], 0, 'all', 0, $typeList[3]))              && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取执行ID为1,由我创建的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[5]))              && p('0:title;1:title;2:title;3:title;4:title') && e('BUG10;BUG8;BUG6;BUG4;BUG2'); // 测试获取执行ID为2,由我解决的bug
+r($bug->getExecutionBugsTest($executionIdList[1], 0, 'all', 0, $typeList[6]))              && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取执行ID为1,未确认的bug
+r($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[7]))              && p('0:title;1:title')                         && e('BUG10;BUG4');                // 测试获取执行ID为2,待关闭的bug
+r($bug->getExecutionBugsTest($executionIdList[1], 0, 'all', 0, $typeList[8]))              && p('0:title;1:title;2:title;3:title;4:title') && e('BUG9;BUG7;BUG5;BUG3;BUG1');  // 测试获取执行ID为1,被延期的bug
+r(count($bug->getExecutionBugsTest($executionIdList[0], 0, 'all', 0, $typeList[9])))       && p()                                         && e('0');                         // 测试获取执行ID为2,未指派的bug数量

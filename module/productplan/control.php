@@ -82,7 +82,7 @@ class productplan extends control
 
             $actionID = $this->loadModel('action')->create('productplan', $planID, 'opened');
 
-            $planData->id = $planID;
+            $planData->id = (int)$planID;
             $this->loadModel('message')->sendMentionNotice('productplan', 'create', $actionID, $planData);
 
             $message = $this->executeHooks($planID);
@@ -155,7 +155,7 @@ class productplan extends control
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
 
-                $planData->id = $planID;
+                $planData->id = (int)$planID;
                 $this->loadModel('message')->sendMentionNotice('productplan', 'edit', $actionID, $planData, $plan);
             }
             $message = $this->executeHooks($planID);

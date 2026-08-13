@@ -423,7 +423,7 @@ class metricModel extends model
      */
     public function getRecordCalcInfo($recordID)
     {
-        return $this->dao->select('calcType, calculatedBy')->from(TABLE_METRICLIB)->where('id')->eq($recordID)->fetch();
+        return $this->dao->select('`calcType`, `calculatedBy`')->from(TABLE_METRICLIB)->where('id')->eq($recordID)->fetch();
     }
 
     /**

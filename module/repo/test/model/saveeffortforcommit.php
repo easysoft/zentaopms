@@ -75,9 +75,7 @@ $action1->date   = '2023-12-29 13:14:36';
 $action1->extra  = $scm == 'svn' ? $log1->revision : substr($log1->revision, 0, 10);
 $action1->action = 'gitcommited';
 
-$repo->saveEffortForCommitTest($log1, $action1, $repoID);
-$result1 = $tester->loadModel('task')->getById(8);
-r($result1) && p('status,consumed,left') && e('changed,10.00,3.00');
+r($repo->saveEffortForCommitTaskTest($log1, $action1, $repoID, 8)) && p('status,consumed,left') && e('changed,10.00,3.00');
 
 // 测试步骤2：零剩余时间(消耗2小时，剩余0小时)
 $log2 = new stdclass();
@@ -97,9 +95,7 @@ $action2->date   = '2023-12-29 14:00:00';
 $action2->extra  = $scm == 'svn' ? $log2->revision : substr($log2->revision, 0, 10);
 $action2->action = 'gitcommited';
 
-$repo->saveEffortForCommitTest($log2, $action2, $repoID);
-$result2 = $tester->loadModel('task')->getById(9);
-r($result2) && p('status,consumed,left') && e('changed,11.00,0.00');
+r($repo->saveEffortForCommitTaskTest($log2, $action2, $repoID, 9)) && p('status,consumed,left') && e('changed,11.00,0.00');
 
 // 测试步骤3：边界值测试(消耗0小时，剩余5小时)
 $log3 = new stdclass();
@@ -119,9 +115,7 @@ $action3->date   = '2023-12-29 15:00:00';
 $action3->extra  = $scm == 'svn' ? $log3->revision : substr($log3->revision, 0, 10);
 $action3->action = 'gitcommited';
 
-$repo->saveEffortForCommitTest($log3, $action3, $repoID);
-$result3 = $tester->loadModel('task')->getById(10);
-r($result3) && p('status,consumed,left') && e('changed,12.00,9.00');
+r($repo->saveEffortForCommitTaskTest($log3, $action3, $repoID, 10)) && p('status,consumed,left') && e('changed,12.00,9.00');
 
 // 测试步骤4：高工时记录(消耗5小时，剩余1小时)
 $log4 = new stdclass();
@@ -141,9 +135,7 @@ $action4->date   = '2023-12-29 16:00:00';
 $action4->extra  = $scm == 'svn' ? $log4->revision : substr($log4->revision, 0, 10);
 $action4->action = 'gitcommited';
 
-$repo->saveEffortForCommitTest($log4, $action4, $repoID);
-$result4 = $tester->loadModel('task')->getById(8);
-r($result4) && p('status,consumed,left') && e('changed,15.00,1.00');
+r($repo->saveEffortForCommitTaskTest($log4, $action4, $repoID, 8)) && p('status,consumed,left') && e('changed,15.00,1.00');
 
 // 测试步骤5：完整工时记录(消耗3小时，剩余0小时)
 $log5 = new stdclass();
@@ -163,6 +155,4 @@ $action5->date   = '2023-12-29 17:00:00';
 $action5->extra  = $scm == 'svn' ? $log5->revision : substr($log5->revision, 0, 10);
 $action5->action = 'gitcommited';
 
-$repo->saveEffortForCommitTest($log5, $action5, $repoID);
-$result5 = $tester->loadModel('task')->getById(9);
-r($result5) && p('status,consumed,left') && e('changed,14.00,2.00');
+r($repo->saveEffortForCommitTaskTest($log5, $action5, $repoID, 9)) && p('status,consumed,left') && e('changed,14.00,2.00');

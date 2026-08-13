@@ -73,7 +73,7 @@ class caseBasicInfo extends wg
             }
 
         }
-        return empty($modulePath) ? array('/') : $moduleItems;
+        return empty($modulePath) ? array('/') : array(div(setStyle(array('display' => 'block')), $moduleItems));
     }
 
     protected function getFromCase($case): array
@@ -133,7 +133,7 @@ class caseBasicInfo extends wg
         $status = array();
         $status[] = $app->control->processStatus('testcase', $case);
 
-        if($from == 'testtask' && $case->version > $case->currentVersion)
+        if($from == 'testtask' && $case->version > $case->currentVersion && isset($case->caseStatus) && $case->caseStatus == 'normal')
         {
             $status[] = span
             (

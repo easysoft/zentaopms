@@ -371,8 +371,8 @@ $lang->project->featureBar['execution']['suspended'] = '已挂起';
 $lang->project->featureBar['execution']['delayed']   = '已延期';
 $lang->project->featureBar['execution']['closed']    = '已关闭';
 
-$lang->project->featureBar['bug']['all']        = '全部';
-$lang->project->featureBar['bug']['unresolved'] = '未解决';
+$app->loadLang('bug');
+$lang->project->featureBar['bug'] = $lang->bug->featureBar['browse'];
 
 $app->loadLang('testcase');
 if(!empty($lang->testcase->featureBar['browse'])) $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
@@ -520,6 +520,7 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['browse']['more']['suspended'] = '已挂起';
 $lang->project->moreSelects['browse']['more']['delayed']   = '已延期';
 $lang->project->moreSelects['browse']['more']['closed']    = '已关闭';
+$lang->project->moreSelects['bug']['more']                 = $lang->bug->moreSelects['browse']['more'];
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . '迭代';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . '阶段';

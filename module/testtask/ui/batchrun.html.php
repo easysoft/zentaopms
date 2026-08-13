@@ -23,7 +23,8 @@ if(!empty($emptyCases))
 
 unset($lang->testcase->resultList['n/a']);
 
-$caseItems = array();
+$fileModals = array();
+$caseItems  = array();
 foreach($cases as $caseID => $case)
 {
     if($case->status == 'wait') continue;
@@ -96,12 +97,49 @@ foreach($cases as $caseID => $case)
                 $step->type != 'group' ? h::td
                 (
                     set::className("hidden reals"),
-                    input
+                    div
                     (
-                        set::name("reals[$caseID][$stepID]")
+                        setClass('flex items-center'),
+                        input
+                        (
+                            setClass('flex-1 min-w-0'),
+                            set::name("reals[$caseID][$stepID]")
+                        ),
+                        btn
+                        (
+                            setClass('ml-2 text-primary flex-none'),
+                            set::target("#fileModal{$stepID}"),
+                            set('data-toggle', 'modal'),
+                            set('title', $lang->testtask->files),
+                            set::icon('paper-clip')
+                        )
                     )
                 ) : null
             );
+
+            if($step->type != 'group')
+            {
+                $fileModals[] = modal
+                (
+                    set::id("fileModal{$stepID}"),
+                    set::title($lang->testtask->files),
+                    setData('position', 'center'),
+                    fileSelector
+                    (
+                        set::name("files{$stepID}[]")
+                    ),
+                    div
+                    (
+                        setClass('text-center'),
+                        btn
+                        (
+                            setClass('btn-wide primary'),
+                            set('data-dismiss', 'modal'),
+                            $lang->save
+                        )
+                    )
+                );
+            }
         }
     }
 
@@ -228,7 +266,8 @@ formPanel
         (
             $caseItems
         )
-    )
+    ),
+    $fileModals
 );
 
 render();

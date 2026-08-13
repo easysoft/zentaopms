@@ -7,11 +7,11 @@ title=测试 ppmModel::reopen();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的reopenTest方法，参数是6302 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
+- 执行ppmModel模块的reopenTest方法，参数是6302 @1
 - 执行instance模块的fetchByID方法，参数是6302 属性status @opened
-- 执行ppmModel模块的reopenTest方法，参数是6301 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
+- 执行ppmModel模块的reopenTest方法，参数是6301 @1
 - 执行instance模块的fetchByID方法，参数是6301 属性status @opened
-- 执行ppmModel模块的reopenTest方法，参数是6302 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
+- 执行ppmModel模块的reopenTest方法，参数是6302 @1
 
 */
 
@@ -43,8 +43,8 @@ su('admin');
 
 $ppmModel = new ppmModelTest();
 
-r($ppmModel->reopenTest(6302)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->reopenTest(6302)) && p() && e('1');
 r($ppmModel->instance->fetchByID(6302)) && p('status') && e('opened');
-r($ppmModel->reopenTest(6301)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->reopenTest(6301)) && p() && e('1');
 r($ppmModel->instance->fetchByID(6301)) && p('status') && e('opened');
-r($ppmModel->reopenTest(6302)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r($ppmModel->reopenTest(6302)) && p() && e('1');

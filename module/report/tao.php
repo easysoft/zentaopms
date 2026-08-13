@@ -32,13 +32,13 @@ class reportTao extends reportModel
             ->fetchGroup('product', 'id');
         $createdStoryStats = $this->dao->select("product,sum(if((type = 'requirement'), 1, 0)) as requirement, sum(if((type = 'story'), 1, 0)) as story, sum(if((type = 'epic'), 1, 0)) as epic")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('LEFT(openedDate, 4)')->eq($year)
+            ->andWhere('LEFT(`openedDate`, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('openedBy')->in($accounts)->fi()
             ->groupBy('product')
             ->fetchAll('product');
         $closedStoryStats = $this->dao->select("product,sum(if((status = 'closed'), 1, 0)) as closed")->from(TABLE_STORY)
             ->where('deleted')->eq(0)
-            ->andWhere('LEFT(closedDate, 4)')->eq($year)
+            ->andWhere('LEFT(`closedDate`, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('closedBy')->in($accounts)->fi()
             ->groupBy('product')
             ->fetchAll('product');
@@ -46,7 +46,7 @@ class reportTao extends reportModel
         /* Get products created or operated in this year. */
         $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
-            ->andWhere('LEFT(createdDate, 4)', true)->eq($year)
+            ->andWhere('LEFT(`createdDate`, 4)', true)->eq($year)
             ->beginIF($accounts)
             ->andWhere('createdBy', true)->in($accounts)
             ->orWhere('PO')->in($accounts)
@@ -83,8 +83,8 @@ class reportTao extends reportModel
             ->fetchPairs();
         $taskStats = $this->dao->select('execution, COUNT(1) AS finishedTask')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('(finishedBy', true)->ne('')
-            ->andWhere('LEFT(finishedDate, 4)')->eq($year)
+            ->andWhere('(`finishedBy`', true)->ne('')
+            ->andWhere('LEFT(`finishedDate`, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('finishedBy')->in($accounts)->fi()
             ->markRight(1)
             ->orWhere('id')->in($finishedMultiTasks)
@@ -127,7 +127,7 @@ class reportTao extends reportModel
             ->andWhere('status')->eq('closed')
             ->andWhere('resolution')->eq('fixed')
             ->andWhere('execution')->in(array_keys($executions))
-            ->andWhere('LEFT(resolvedDate, 4)')->eq($year)
+            ->andWhere('LEFT(`resolvedDate`, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('resolvedBy')->in($accounts)->fi()
             ->groupBy('execution')
             ->fetchPairs();
@@ -164,7 +164,7 @@ class reportTao extends reportModel
 
         /* Build testcase result stat and run case stat. */
         $stmt = $this->dao->select('*')->from(TABLE_CASE)
-            ->where('LEFT(lastRunDate, 4)')->eq($year)
+            ->where('LEFT(`lastRunDate`, 4)')->eq($year)
             ->andWhere('deleted')->eq('0')
             ->beginIF($accounts)->andWhere('lastRunner')->in($accounts)->fi()
             ->query();
@@ -208,7 +208,7 @@ class reportTao extends reportModel
     {
         /* Get output actions. */
         $outputData = $actionGroup = $objectIdList = array();
-        $stmt       = $this->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)
+        $stmt       = $this->dao->select('id,`objectType`,`objectID`,action,extra')->from(TABLE_ACTION)
             ->where('objectType')->in(array_keys($this->config->report->outputData))
             ->andWhere('LEFT(date, 4)')->eq($year)
             ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()

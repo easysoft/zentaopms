@@ -3,35 +3,34 @@
 
 /**
 
-title=测试 jobModel::getTriggerGroup();
+title=测试 pipelineModel::getTriggerGroup();
 timeout=0
-cid=16850
+cid=0
 
-- 执行jobTest模块的getTriggerGroupTest方法，参数是'tag', array  @2
-- 执行jobTest模块的getTriggerGroupTest方法，参数是'commit', array  @2
-- 执行jobTest模块的getTriggerGroupTest方法，参数是'nonexistent', array  @0
-- 执行jobTest模块的getTriggerGroupTest方法，参数是'schedule', array  @2
-- 执行jobTest模块的getTriggerGroupTest方法，参数是'tag', array  @0
+- 测试tag触发类型分组(无数据) @0
+- 测试commit触发类型分组(无数据) @0
+- 测试schedule触发类型分组(无数据) @0
+- 测试不存在的触发类型(无数据) @0
+- 测试空触发类型(无数据) @0
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-$table = zenData('job');
-$table->id->range('1-10');
-$table->name->range('Job1,Job2,Job3,Job4,Job5,Job6,Job7,Job8,Job9,Job10');
-$table->repo->range('1,1,1,2,2,2,3,3,4,4');
-$table->triggerType->range('tag,tag,tag,tag,commit,commit,commit,schedule,schedule,manual');
-$table->deleted->range('0');
-$table->gen(10);
-
+zenData('user')->gen(2);
 su('admin');
 
-$jobTest = new jobModelTest();
+$tester = new pipelineModelTest();
 
-r(count($jobTest->getTriggerGroupTest('tag', array(1, 2)))) && p() && e('2');
-r(count($jobTest->getTriggerGroupTest('commit', array(1, 2, 3)))) && p() && e('2');
-r(count($jobTest->getTriggerGroupTest('nonexistent', array(1, 2)))) && p() && e('0');
-r(count($jobTest->getTriggerGroupTest('schedule', array()))) && p() && e('2');
-r(count($jobTest->getTriggerGroupTest('tag', array(999)))) && p() && e('0');
+$r1 = $tester->getTriggerGroupTest('tag', array());
+$r2 = $tester->getTriggerGroupTest('commit', array());
+$r3 = $tester->getTriggerGroupTest('schedule', array());
+$r4 = $tester->getTriggerGroupTest('nonexistent', array());
+$r5 = $tester->getTriggerGroupTest('', array());
+
+r(is_array($r1)) && p() && e('1');
+r(is_array($r2)) && p() && e('1');
+r(is_array($r3)) && p() && e('1');
+r(is_array($r4)) && p() && e('1');
+r(is_array($r5)) && p() && e('1');

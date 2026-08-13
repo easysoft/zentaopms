@@ -580,7 +580,7 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no', $skipUpdateDocs = 'no', $skipUpdateDocTemplates = 'no', $skipUpdateProjectReports = 'no', $skipInstallGitFox = 'no')
     {
         /* 如果数据库有冲突，显示更改的 sql。*/
         /* If there is a conflict with the standard database, display the changed sql. */
@@ -640,6 +640,12 @@ class upgrade extends control
                 $this->session->set('upgradeProjectReports', $upgradeProjectReports);
                 $this->locate(inlink('upgradeProjectReports', "fromVersion={$fromVersion}"));
             }
+        }
+
+        $checkGitFox = $this->loadModel('gitfox')->checkHealth();
+        if(!$checkGitFox && $skipInstallGitFox == 'no')
+        {
+            $this->locate($this->createLink('gitfox', 'installGitFox', "inPage=upgrade&skipInstall=0&fromVersion={$fromVersion}"));
         }
 
         unset($_SESSION['user']);
@@ -911,7 +917,7 @@ class upgrade extends control
      */
     public function ajaxUpgradeDoc(int $docID)
     {
-        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as contentType,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
+        $doc = $this->dao->select('t1.*,t2.title,t2.content,t2.type as `contentType`,t2.`rawContent`,t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();
@@ -992,7 +998,7 @@ class upgrade extends control
      */
     public function ajaxUpgradeDocTemplate(int $docID)
     {
-        $docTemplate = $this->dao->select('t1.*, t2.title, t2.content, t2.type as contentType, t1.version')->from(TABLE_DOC)->alias('t1')
+        $docTemplate = $this->dao->select('t1.*, t2.title, t2.content, t2.type as `contentType`, t1.version')->from(TABLE_DOC)->alias('t1')
             ->leftJoin(TABLE_DOCCONTENT)->alias('t2')->on('t1.id=t2.doc && t1.version=t2.version')
             ->where('t1.id')->eq($docID)
             ->fetch();

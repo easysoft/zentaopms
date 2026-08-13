@@ -34,11 +34,9 @@ $branchRuleSetTable->editedBy->range('[]{5}');
 $branchRuleSetTable->deleted->range('0{5}');
 $branchRuleSetTable->gen(5);
 
-$repo = zenData('repo');
+$repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
 $repo->id->range('1-10');
 $repo->name->range('代码库{10}');
-$repo->SCM->range('Git{5},Subversion{5}');
-$repo->deleted->range('0{10}');
 $repo->gen(10);
 
 su('admin');

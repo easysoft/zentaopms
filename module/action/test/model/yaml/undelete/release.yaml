@@ -3,5 +3,7 @@ author: XuePeng Wang
 desc: ""
 version: "1.0"
 fields:
+  - field: system
+    range: 0
   - field: shadow
     range: 0,1{2}

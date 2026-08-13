@@ -300,7 +300,7 @@ class repoZen extends repo
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->account, true);
     }
 
     /**
@@ -334,7 +334,7 @@ class repoZen extends repo
         $this->view->products     = $products;
         $this->view->repoGroups   = $repoGroups;
         $this->view->objectID     = $objectID;
-        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account);
+        $this->view->spaces       = $this->loadModel('space')->getPairs($this->app->user->admin ? '' : $this->app->user->account, true);
     }
 
     /**
@@ -689,7 +689,7 @@ class repoZen extends repo
         unset($this->lang->story->statusList['closed']);
         $storyStatusList = $this->lang->story->statusList;
 
-        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bysearch&queryID=myQueryID");
+        $this->config->product->search['actionURL']                   = $this->createLink('repo', 'linkStory', "repoID=$repoID&revision=$revision&browseType=bySearch&queryID=myQueryID");
         $this->config->product->search['queryID']                     = $queryID;
         $this->config->product->search['style']                       = 'simple';
         $this->config->product->search['params']['plan']['values']    = $this->loadModel('productplan')->getForProducts(array_keys($products));
@@ -737,7 +737,7 @@ class repoZen extends repo
         $linkedStories = $this->repo->getRelationByCommit($repoID, $revision, 'story');
         $linkedStories = empty($linkedStories) ? array() : array_column($linkedStories, 'id');
         $allStories    = array();
-        if($browseType == 'bysearch')
+        if($browseType == 'bySearch')
         {
             foreach($products as $productID => $product)
             {
@@ -966,7 +966,7 @@ class repoZen extends repo
      */
     protected function checkDeleteError(int $repoID): string
     {
-        $relationIds = $this->dao->select('distinct AID as AID')->from(TABLE_RELATION)
+        $relationIds = $this->dao->select('distinct `AID` as `AID`')->from(TABLE_RELATION)
             ->where('extra')->eq($repoID)
             ->andWhere('AType')->eq('design')
             ->fetchAll();
@@ -1023,6 +1023,7 @@ class repoZen extends repo
     {
         $oldRevision = isset($this->post->revision[1]) ? $this->post->revision[1] : '';
         $newRevision = isset($this->post->revision[0]) ? $this->post->revision[0] : '';
+        $encoding    = '';
 
         if($this->post->encoding)      $encoding      = $this->post->encoding;
         if($this->post->isBranchOrTag) $isBranchOrTag = (int)$this->post->isBranchOrTag;
@@ -1074,7 +1075,7 @@ class repoZen extends repo
      */
     protected function syncLocalCommit(object $repo): string
     {
-        $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->SCM) . ".{$repo->name}.log");
+        $logFile = realPath($this->app->getTmpRoot() . $this->config->repo->repoSyncLog->logFilePrefix . strtolower($repo->scmType) . ".{$repo->name}.log");
         if($logFile && file_exists($logFile))
         {
             $content  = file($logFile);

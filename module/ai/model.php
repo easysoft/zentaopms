@@ -100,29 +100,34 @@ class aiModel extends model
         $fieldCache = array();
         $moduleMap  = array('programplans' => 'execution', 'executions' => 'execution', 'stories' => 'story', 'bugs' => 'bug', 'case' => 'testcase', 'tasks' => 'task');
 
-        if(empty($this->workflowfield)) $this->loadModel('workflowfield');
-
         $moduleGroup = $this->config->ai->moduleGroup;
-        $flows       = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
-            ->where('type')->eq('flow')
-            ->andWhere('status')->eq('normal')
-            ->andWhere('buildin')->eq('0')
-            ->fetchPairs();
-
-        foreach($flows as $module => $name)
+        if($this->config->edition != 'open')
         {
-            if(isset($moduleGroup[$module])) continue;
+            if(empty($this->workflowfield)) $this->loadModel('workflowfield');
 
-            $moduleGroup[$module] = array($module);
-            $this->lang->ai->moduleList[$module]['common'] = $name;
+            $flows = $this->dao->select('module, name')->from(TABLE_WORKFLOW)
+                ->where('type')->eq('flow')
+                ->andWhere('status')->eq('normal')
+                ->andWhere('buildin')->eq('0')
+                ->fetchPairs();
+
+            foreach($flows as $module => $name)
+            {
+                if(isset($moduleGroup[$module])) continue;
+
+                $moduleGroup[$module] = array($module);
+                $this->lang->ai->moduleList[$module]['common'] = $name;
+            }
         }
 
+        $hasWorkflowField = !empty($this->workflowfield) && method_exists($this->workflowfield, 'getList');
         foreach($moduleGroup as $group => $modules)
         {
             foreach($modules as $module)
             {
                 $dataSource[$group][$module] = zget($this->config->ai->moduleFields, $module, array());
                 if(!empty($dataSource[$group][$module])) continue;
+                if(!$hasWorkflowField) continue;
 
                 $cacheKey = "$group.$module";
                 if(isset($fieldCache[$cacheKey]))
@@ -2034,21 +2039,31 @@ class aiModel extends model
         /* Handle empty sources array. */
         if(empty($sources)) return '';
 
-        $storyData = [];
-        if(in_array(['task', 'story'], $sources, true) && $data['task']['story'])
+        $storyData = array();
+        $taskStory = 0;
+        if(isset($data['task']))
         {
-            $story     = $this->loadModel('story')->getById($data['task']['story']);
-            $fields    = ['title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate'];
-            $storyData = [];
-            foreach($fields as $field)
+            $taskData = $data['task'];
+            if(is_object($taskData)) $taskData = (array)$taskData;
+            if(is_array($taskData) && isset($taskData['story'])) $taskStory = $taskData['story'];
+        }
+        if(in_array(array('task', 'story'), $sources, true) && !empty($taskStory))
+        {
+            $story     = $this->loadModel('story')->getById($taskStory);
+            $fields    = array('title', 'spec', 'verify', 'product', 'module', 'pri', 'type', 'estimate');
+            $storyData = array();
+            if(!empty($story))
             {
-                $langLabel = $this->lang->story->$field;
-                $value     = $story->$field;
-                if($field == 'title') $langLabel = $this->lang->story->name;
-                if($field == 'type')  $value = zget($this->lang->story->typeList, $story->type);
-                if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
+                foreach($fields as $field)
+                {
+                    $langLabel = $this->lang->story->$field;
+                    $value     = isset($story->$field) ? $story->$field : '';
+                    if($field == 'title') $langLabel = $this->lang->story->name;
+                    if($field == 'type')  $value = zget($this->lang->story->typeList, $value);
+                    if($field == 'spec' || $field == 'verify') $value = strip_tags($value);
 
-                $storyData[$langLabel] = $value;
+                    $storyData[$langLabel] = $value;
+                }
             }
         }
 
@@ -2060,11 +2075,14 @@ class aiModel extends model
         $dataSourceDefinition = $this->getPromptDataSourceDefinition($module);
         foreach($sources as $source)
         {
+            if(!is_array($source) || count($source) < 2) continue;
+
             $objectName = $source[0];
             $objectKey  = $source[1];
 
             if(!isset($dataSourceDefinition[$objectName]['common'])) continue;
             if(!isset($dataSourceDefinition[$objectName][$objectKey])) continue;
+            if(!isset($data[$objectName])) continue;
 
             $semanticName = $dataSourceDefinition[$objectName]['common'];
             $semanticKey  = $dataSourceDefinition[$objectName][$objectKey];
@@ -2072,9 +2090,11 @@ class aiModel extends model
             if(empty($dataObject[$semanticName])) $dataObject[$semanticName] = array();
 
             $obj = $data[$objectName];
+            if(is_object($obj)) $obj = (array)$obj;
+            if(!is_array($obj)) continue;
             if(static::isAssoc($obj))
             {
-                $dataObject[$semanticName][$semanticKey] = isset($data[$objectName][$objectKey]) ? $data[$objectName][$objectKey] : '';
+                $dataObject[$semanticName][$semanticKey] = isset($obj[$objectKey]) ? $obj[$objectKey] : '';
             }
             else
             {
@@ -2082,7 +2102,8 @@ class aiModel extends model
                 {
                     if(empty($dataObject[$semanticName][$idx])) $dataObject[$semanticName][$idx] = array();
                     if(!isset($dataObject[$semanticName][$idx][$semanticKey])) $dataObject[$semanticName][$idx][$semanticKey] = '';
-                    $row = zget($data[$objectName], $idx, array());
+                    $row = zget($obj, $idx, array());
+                    if(is_object($row)) $row = (array)$row;
                     $dataObject[$semanticName][$idx][$semanticKey] = zget($row, $objectKey, '');
                 }
             }
@@ -2169,21 +2190,311 @@ class aiModel extends model
      *
      * @param  string $form
      * @access public
-     * @return array
+     * @return array|object|string
      */
     public function getFunctionCallSchema($form)
     {
         if($form == 'empty.empty') return $form;
 
-        $formPath = explode('.', $form);
+        $formPath = explode('.', $form, 2);
         if(count($formPath) !== 2) return array();
 
-        $targetForm = $this->config->ai->targetForm[$formPath[0]][$formPath[1]] ?? null;
-        if(empty($targetForm)) return array();
+        list($module, $action) = $formPath;
+        $targetForm = $this->config->ai->targetForm[$module][$action] ?? null;
+        if(!empty($targetForm))
+        {
+            $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+            if(!empty($schema)) return $schema;
+        }
 
-        $schema = $this->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)] ?? null;
+        return $this->getWorkflowFunctionCallSchema($module, $action); // 找不到语言项定义的，就去工作流中获取
+    }
 
-        return empty($schema) ? array() : $schema;
+    /**
+     * 从工作流动作动态构建 function call schema。
+     * Build function call schema from workflow action fields.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return array|object
+     */
+    public function getWorkflowFunctionCallSchema(string $module, string $action)
+    {
+        if($this->config->edition == 'open') return array();
+
+        $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+        if(empty($workflowAction)) return array();
+
+        $fields = $this->getWorkflowPromptFields($module, $action);
+        if(empty($fields)) return array();
+
+        $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+
+        $schema = new stdclass();
+        $schema->title      = !empty($workflowAction->name) ? $workflowAction->name : $module;
+        $schema->type       = 'object';
+        $schema->properties = new stdclass();
+        $required           = array();
+
+        foreach($fields as $fieldName => $field)
+        {
+            $prop = new stdclass();
+            $prop->type        = 'string';
+            $prop->description = !empty($field->name) ? $field->name : $fieldName;
+
+            if(!empty($field->options) && is_array($field->options))
+            {
+                $enum = array();
+                foreach($field->options as $key => $value)
+                {
+                    if($key === '' || $key === null) continue;
+                    $enum[] = (string)$key;
+                }
+                if(!empty($enum)) $prop->enum = $enum;
+            }
+
+            $rules = !empty($field->rules) ? ",{$field->rules}," : '';
+            if(strpos($rules, ',notempty,') !== false || strpos($rules, ',1,') !== false) $required[] = $fieldName;
+
+            $schema->properties->$fieldName = $prop;
+        }
+
+        if(empty(get_object_vars($schema->properties))) return array();
+
+        $schema->required = $required;
+        if(empty($this->lang->ai->formSchema[$module])) $this->lang->ai->formSchema[$module] = array();
+        $this->lang->ai->formSchema[$module][$action] = $schema;
+
+        return $schema;
+    }
+
+    /**
+     * 获取工作流动作可用于智能体表单的字段。
+     * Get workflow action fields available for prompt forms.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  bool   $getRealOptions
+     * @access protected
+     * @return array
+     */
+    protected function getWorkflowPromptFields(string $module, string $action, bool $getRealOptions = true): array
+    {
+        if(isset($this->config->edition) && $this->config->edition == 'open') return array();
+        if(!defined('TABLE_WORKFLOWACTION')) return array();
+
+        $workflowAction = $this->loadModel('workflowaction');
+        if(empty($workflowAction) || !method_exists($workflowAction, 'getPageFields')) return array();
+
+        $pageFields = $workflowAction->getPageFields($module, $action, $getRealOptions);
+        $fields     = array();
+        foreach($pageFields as $fieldName => $field)
+        {
+            if(!$this->isWorkflowPromptFieldAvailable($fieldName, $field)) continue;
+            $fields[$fieldName] = $field;
+        }
+
+        return $fields;
+    }
+
+    /**
+     * 判断工作流字段是否可用于智能体表单。
+     * Check whether a workflow field is available for prompt forms.
+     *
+     * @param  string $fieldName
+     * @param  mixed  $field
+     * @access protected
+     * @return bool
+     */
+    protected function isWorkflowPromptFieldAvailable($fieldName, $field): bool
+    {
+        if(empty($field) || !is_object($field)) return false;
+        if(!empty($field->readonly)) return false;
+
+        $fieldName = (string)$fieldName;
+        if(strpos($fieldName, 'sub_') === 0) return false;
+        if(in_array($fieldName, array('actions', 'id', 'deleted', 'uid'), true)) return false;
+
+        return true;
+    }
+
+    /**
+     * 获取智能体可用的工作流动作。
+     * Get workflow action for prompt target form.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object|false
+     */
+    public function getWorkflowActionForPrompt(string $module, string $action)
+    {
+        if(!defined('TABLE_WORKFLOWACTION')) return false;
+
+        $promptWorkflowExcludeActions = isset($this->config->ai->promptWorkflowExcludeActions) ? $this->config->ai->promptWorkflowExcludeActions : array('browse', 'view', 'delete', 'export', 'exporttemplate', 'import', 'showimport', 'report');
+        if(in_array(strtolower($action), $promptWorkflowExcludeActions)) return false;
+
+        return $this->dao->select('module, action, method, name')->from(TABLE_WORKFLOWACTION)
+            ->where('module')->eq($module)
+            ->andWhere('action')->eq($action)
+            ->andWhere('status')->eq('enable')
+            ->andWhere('open')->ne('none')
+            ->andWhere('`virtual`')->eq(0)
+            ->andWhere('buildin')->eq(0)
+            ->fetch();
+    }
+
+    /**
+     * 确保工作流目标表单配置存在。
+     * Ensure workflow target form config exists.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @param  object $workflowAction
+     * @access public
+     * @return object
+     */
+    public function ensureWorkflowTargetForm(string $module, string $action, object $workflowAction): object
+    {
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $this->config->ai->targetForm[$module][$action] = (object)array('m' => $module, 'f' => $action, 'for' => $module);
+        }
+
+        $moduleLabel = $this->getTargetFormModuleLabel($module);
+        if(empty($this->lang->ai->targetForm[$module]['common']) && !empty($moduleLabel))
+        {
+            if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+            $this->lang->ai->targetForm[$module]['common'] = $moduleLabel;
+        }
+        if(empty($this->lang->ai->targetForm[$module][$action]) && !empty($workflowAction->name))
+        {
+            $this->lang->ai->targetForm[$module][$action] = $workflowAction->name;
+        }
+
+        return $this->config->ai->targetForm[$module][$action];
+    }
+
+    /**
+     * 获取目标表单显示名称。
+     * Get target form label.
+     *
+     * @param  string $targetForm
+     * @param  bool   $withModule
+     * @param  string $objectModule
+     * @access public
+     * @return string
+     */
+    public function getTargetFormLabel(string $targetForm, bool $withModule = true, string $objectModule = ''): string
+    {
+        if(empty($targetForm)) return '';
+        if($targetForm == 'empty.empty') return '';
+
+        $targetFormPath = explode('.', $targetForm, 2);
+        if(count($targetFormPath) != 2) return $targetForm;
+
+        list($module, $action) = $targetFormPath;
+        if(empty($this->config->ai->targetForm[$module][$action]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($module, $action);
+            if(!empty($workflowAction)) $this->ensureWorkflowTargetForm($module, $action, $workflowAction);
+        }
+
+        $moduleLabel = $this->getTargetFormModuleLabel(empty($objectModule) ? $module : $objectModule);
+        $actionLabel = $this->getTargetFormActionLabel($module, $action);
+
+        if($withModule && !empty($moduleLabel) && !empty($actionLabel)) return $moduleLabel . ' / ' . $actionLabel;
+        if(!empty($actionLabel)) return $actionLabel;
+
+        return $targetForm;
+    }
+
+    /**
+     * 获取目标表单模块显示名称。
+     * Get target form module label.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
+    public function getTargetFormModuleLabel(string $module): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module]['common'])) return $this->lang->ai->targetForm[$module]['common'];
+        if(isset($this->lang->ai->moduleList[$module]) && is_array($this->lang->ai->moduleList[$module]) && isset($this->lang->ai->moduleList[$module]['common'])) return $this->lang->ai->moduleList[$module]['common'];
+
+        if(defined('TABLE_WORKFLOW'))
+        {
+            $flowName = $this->dao->select('name')->from(TABLE_WORKFLOW)
+                ->where('module')->eq($module)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($flowName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module]['common'] = $flowName;
+                return $flowName;
+            }
+        }
+
+        return '';
+    }
+
+    /**
+     * 获取目标表单动作显示名称。
+     * Get target form action label.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return string
+     */
+    public function getTargetFormActionLabel(string $module, string $action): string
+    {
+        if(isset($this->lang->ai->targetForm[$module]) && is_array($this->lang->ai->targetForm[$module]) && isset($this->lang->ai->targetForm[$module][$action])) return $this->lang->ai->targetForm[$module][$action];
+
+        if(defined('TABLE_WORKFLOWACTION'))
+        {
+            $actionName = $this->dao->select('name')->from(TABLE_WORKFLOWACTION)
+                ->where('module')->eq($module)
+                ->andWhere('action')->eq($action)
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetch('name');
+            if(!empty($actionName))
+            {
+                if(empty($this->lang->ai->targetForm[$module])) $this->lang->ai->targetForm[$module] = array();
+                $this->lang->ai->targetForm[$module][$action] = $actionName;
+                return $actionName;
+            }
+        }
+
+        if($this->config->edition != 'open')
+        {
+            $this->app->loadLang('workflowaction');
+            if(isset($this->lang->workflowaction->approval->actions[$action])) return $this->lang->workflowaction->approval->actions[$action];
+        }
+
+        return '';
+    }
+
+    /**
+     * 构建工作流目标表单的链接参数配置。
+     * Build target form vars config for workflow action.
+     *
+     * @param  string $module
+     * @param  string $action
+     * @access public
+     * @return object
+     */
+    public function buildWorkflowTargetFormVars(string $module, string $action): object
+    {
+        $actionLower = strtolower($action);
+        if($actionLower == 'create' || $actionLower == 'copy' || strpos($actionLower, 'batchcreate') !== false)
+        {
+            return (object)array('format' => '', 'args' => array());
+        }
+
+        return (object)array('format' => 'dataID=%d', 'args' => array($module => 1));
     }
 
     /**
@@ -2245,6 +2556,7 @@ class aiModel extends model
                 }
             }
             if(!empty($field['required'])) $required[] = $name;
+            if(isset($field['controlType']) && in_array($field['controlType'], array('zenEditor', 'editor'))) $prop['format'] = 'html';
             $properties[$name] = $prop;
         }
 
@@ -2263,8 +2575,9 @@ class aiModel extends model
      */
     public function getObjectForPromptById(object $prompt, int $objectId)
     {
-        $module  = $prompt->module;
-        $sources = array_filter(explode(',', $prompt->source));
+        $module       = $prompt->module;
+        $promptSource = isset($prompt->source) ? $prompt->source : '';
+        $sources      = array_filter(explode(',', $promptSource));
 
         /* Explode into grouped sources list. */
         $sourceGroups = array();
@@ -2275,6 +2588,11 @@ class aiModel extends model
             $objectKey  = $source[1];
             if(empty($sourceGroups[$objectName])) $sourceGroups[$objectName] = array();
             $sourceGroups[$objectName][] = $objectKey;
+        }
+        if(empty($sourceGroups))
+        {
+            $sourceModule = $this->getPromptSampleModule($module);
+            $sourceGroups[$sourceModule] = array();
         }
 
         $object     = $this->getObjectByModuleAndSourceGroups($module, $sourceGroups, $objectId);
@@ -2358,6 +2676,15 @@ class aiModel extends model
                 if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->release->stories))));
                 if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->release->bugs))));
                 return $object;
+            case 'build':
+                if(!isset($sourceGroups['build'])) return $object;
+
+                $object->build = $this->loadModel('build')->getByID($objectId);
+                if(empty($object->build)) return $object;
+
+                if(isset($sourceGroups['stories'])) $object->stories = array_values($this->loadModel('story')->getByList(array_filter(explode(',', $object->build->stories))));
+                if(isset($sourceGroups['bugs']))    $object->bugs    = array_values($this->loadModel('bug')->getByIdList(array_filter(explode(',', $object->build->bugs))));
+                return $object;
             case 'productplan':
                 if(isset($sourceGroups['productplan'])) $object->productplan = $this->loadModel('productplan')->getByID($objectId);
                 if(isset($sourceGroups['stories']))     $object->stories     = array_values($this->loadModel('story')->getPlanStories($objectId));
@@ -2377,6 +2704,9 @@ class aiModel extends model
             case 'bug':
                 if(isset($sourceGroups['bug'])) $object->bug = $this->loadModel('bug')->getById($objectId);
                 return $object;
+            case 'feedback':
+                if(isset($sourceGroups['feedback'])) $object->feedback = zget($this->loadModel('feedback')->getByList(array($objectId)), $objectId, null);
+                return $object;
             case 'ticket':
                 if(isset($sourceGroups['ticket'])) $object->ticket = $this->loadModel('ticket')->getByID($objectId);
                 return $object;
@@ -2386,11 +2716,23 @@ class aiModel extends model
             case 'issue':
                 if(isset($sourceGroups['issue'])) $object->issue = $this->loadModel('issue')->getByID($objectId);
                 return $object;
+            case 'opportunity':
+                if(isset($sourceGroups['opportunity'])) $object->opportunity = $this->loadModel('opportunity')->getByID($objectId);
+                return $object;
             case 'doc':
                 if(isset($sourceGroups['doc'])) $object->doc = $this->loadModel('doc')->getById($objectId);
                 return $object;
             case 'my':
             default:
+                if($this->config->edition != 'open')
+                {
+                    $flow = $this->loadModel('workflow')->getByModule($module);
+                    if($flow && $flow->type == 'flow' && empty($flow->buildin))
+                    {
+                        $data = $this->loadModel('flow')->getDataByID($flow, $objectId);
+                        if(!empty($data)) $object->$module = $data;
+                    }
+                }
                 return $object;
         }
     }
@@ -2429,33 +2771,13 @@ class aiModel extends model
     }
 
     /**
-     * Assemble prompt with prompt data.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public static function assemblePrompt($prompt, $dataPrompt)
-    {
-        $wholePrompt = empty($dataPrompt) ? '' : "$dataPrompt\n";
-
-        $wholePrompt .= static::tryPunctuate($prompt->role);
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->characterization, true));
-
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->purpose));
-        $wholePrompt .= static::autoPrependNewline(static::tryPunctuate($prompt->elaboration, true));
-
-        return $wholePrompt;
-    }
-
-    /**
      * Execute prompt on object.
      *
      * @param  int|object    $prompt    prompt (or id) to execute.
      * @param  int|object    $object    object (or id) to execute prompt on.
      * @access public
      * @return string|int    returns either JSON string or negative integer on error.
+     *
      * @throws AIResponseException
      */
     public function executePrompt($prompt, $object)
@@ -2473,7 +2795,8 @@ class aiModel extends model
         $dataPrompt = $this->serializeDataToPrompt($prompt->module, $source, $objectData);
         if(empty($dataPrompt))
         {
-            if($displayPosition != 'form') return -3;
+            $sources = array_filter(explode(',', $source));
+            if($displayPosition != 'form' && !empty($sources)) return -3;
             $dataPrompt = '';
         }
 
@@ -2515,7 +2838,6 @@ class aiModel extends model
         if(empty($displayPosition)) return false;
 
         $requiredFields = array('name', 'module', 'purpose', 'actionPurpose', 'displayPosition');
-        if($displayPosition !== 'form') $requiredFields[] = 'source';
 
         foreach($requiredFields as $field)
         {
@@ -2681,7 +3003,12 @@ class aiModel extends model
         if(count($targetFormPath) !== 2) return array(false, true);
 
         list($m, $f) = $targetFormPath;
-        if(empty($this->config->ai->targetForm[$m][$f])) return array(false, true);
+        if(empty($this->config->ai->targetForm[$m][$f]))
+        {
+            $workflowAction = $this->getWorkflowActionForPrompt($m, $f);
+            if(empty($workflowAction)) return array(false, true);
+            $this->ensureWorkflowTargetForm($m, $f, $workflowAction);
+        }
 
         $targetFormConfig = $this->config->ai->targetForm[$m][$f];
         $module = strtolower($targetFormConfig->m);
@@ -2691,7 +3018,7 @@ class aiModel extends model
 
         if($targetForm == 'doc.create')
         {
-            $objectType = '';
+            $objectType = 'mine';
             $params     = '';
             $objectData = $promptObject;
             if(empty($objectData)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
@@ -2713,13 +3040,24 @@ class aiModel extends model
                 $executionID = $prompt->module == 'execution' ? $objectData->id : $objectData->execution;
                 $params      = helper::safe64Encode("&objectID=$objectData->project&executionID=$executionID");
             }
+            if(in_array($prompt->module, array('feedback', 'ticket')) && !empty($objectData->product))
+            {
+                $objectType = 'product';
+                $params     = helper::safe64Encode("objectID={$objectData->product}");
+            }
+            if(in_array($prompt->module, array('issue', 'risk')) && !empty($objectData->project))
+            {
+                $objectType = 'project';
+                $params     = helper::safe64Encode("objectID={$objectData->project}");
+            }
             if($prompt->module == 'doc') $objectType = 'mine';
 
             return array(helper::createLink('doc', 'selectLibType', "objectType=$objectType&params=$params&from=ai") . '#open-modal?width=300', false);
         }
 
         /* Try to assemble link vars from both passed-in `$linkArgs` and object props. */
-        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : $this->config->ai->targetFormVars[$module][$method];
+        $varsConfig = isset($this->config->ai->targetFormVars[$m][$f]) ? $this->config->ai->targetFormVars[$m][$f] : ($this->config->ai->targetFormVars[$module][$method] ?? null);
+        if(empty($varsConfig)) $varsConfig = $this->buildWorkflowTargetFormVars($module, $method);
         $vars = array();
         foreach($varsConfig->args as $arg => $isRequired)
         {
@@ -2735,6 +3073,14 @@ class aiModel extends model
             elseif(!empty($promptObject->$arg)) // If object has the prop, use it.
             {
                 $var = $promptObject->$arg;
+            }
+            elseif(!empty($promptObject->id) && ($arg == $prompt->module || $arg == $module)) // Workflow object itself.
+            {
+                $var = $promptObject->id;
+            }
+            elseif(!empty($object->id) && ($arg == $prompt->module || $arg == $module)) // Flat workflow object.
+            {
+                $var = $object->id;
             }
             else
             {
@@ -2755,7 +3101,7 @@ class aiModel extends model
             if(!empty($isRequired) && empty($var)) return array(helper::createLink('ai', 'promptExecutionReset', 'failed=1'), true);
             $vars[] = $var;
         }
-        $linkVars = vsprintf($varsConfig->format, $vars);
+        $linkVars = empty($varsConfig->format) ? '' : vsprintf($varsConfig->format, $vars);
 
         /* Overrides for requirements. */
         if(in_array($module, array('story', 'epic', 'requirement')) && $method == 'change' && !empty($object->story) && $object->story->status == 'draft') $method = 'edit';
@@ -3407,28 +3753,6 @@ class aiModel extends model
         }
 
         return $result . "\n";
-    }
-
-
-    /**
-     * Set inject data for a form. For how injection works, see lib/zin/wg/aiforminject/v1.php.
-     *
-     * @param  string|array  $form  'module.method' or array('module', 'method').
-     * @param  string|object $data  data to inject, object will be json encoded.
-     * @access public
-     * @return void
-     */
-    public function setInjectData($form, $data)
-    {
-        if(is_string($form)) $form = explode('.', $form);
-
-        $targetForm = $this->config->ai->targetForm[$form[0]][$form[1]];
-        if(empty($targetForm)) return;
-
-        /* Override method for requirement drafts. */
-        if(in_array($targetForm->m, array('story', 'epic', 'requirement')) && $targetForm->f == 'change') $_SESSION['aiInjectData'][$targetForm->m]['edit'] = is_string($data) ? $data : json_encode($data);
-
-        $_SESSION['aiInjectData'][$targetForm->m][$targetForm->f] = is_string($data) ? $data : json_encode($data);
     }
 
     /**

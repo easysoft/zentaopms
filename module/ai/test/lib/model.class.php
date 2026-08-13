@@ -1855,28 +1855,10 @@ class aiModelTest extends baseTest
      */
     public function getFunctionCallSchemaTest($form = null)
     {
-        // Custom implementation to handle edge cases cleanly
         if(empty($form)) return array();
 
-        $formPath = explode('.', $form);
-        if(count($formPath) !== 2) return array();
-
-        // Check if targetForm config exists for the form path
-        if(!isset($this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]])) {
-            return array();
-        }
-
-        $targetForm = $this->instance->config->ai->targetForm[$formPath[0]][$formPath[1]];
-        if(empty($targetForm)) return array();
-
-        // Check if formSchema exists for the target module and function
-        if(!isset($this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)])) {
-            return array();
-        }
-
-        $schema = $this->instance->lang->ai->formSchema[strtolower($targetForm->m)][strtolower($targetForm->f)];
-
-        return empty($schema) ? array() : $schema;
+        $result = $this->instance->getFunctionCallSchema($form);
+        return empty($result) ? array() : $result;
     }
 
     /**
@@ -1973,21 +1955,6 @@ class aiModelTest extends baseTest
     }
 
     /**
-     * Test assemblePrompt method.
-     *
-     * @param  object $prompt
-     * @param  string $dataPrompt
-     * @access public
-     * @return string
-     */
-    public function assemblePromptTest($prompt = null, $dataPrompt = '')
-    {
-        $result = aiModel::assemblePrompt($prompt, $dataPrompt);
-        if(dao::isError()) return dao::getError();
-        return $result;
-    }
-
-    /**
      * Test isExecutable method.
      *
      * @param  mixed $prompt
@@ -2020,6 +1987,7 @@ class aiModelTest extends baseTest
             3 => (object)array('id' => 3, 'module' => 'bug', 'source' => 'bug.title', 'targetForm' => 'bug.edit', 'actionPurpose' => 'bug.edit', 'model' => 999, 'deleted' => 0),
             4 => (object)array('id' => 4, 'module' => 'project', 'source' => 'project.name', 'targetForm' => 'project.edit', 'actionPurpose' => 'project.edit', 'model' => 1, 'deleted' => 0),
             5 => (object)array('id' => 5, 'module' => 'testcase', 'source' => 'testcase.title', 'targetForm' => 'invalid.form', 'actionPurpose' => 'invalid.form', 'model' => 1, 'deleted' => 0),
+            6 => (object)array('id' => 6, 'module' => 'story', 'source' => ',,', 'targetForm' => 'story.create', 'actionPurpose' => 'story.create', 'model' => 1, 'displayPosition' => 'detail', 'deleted' => 0)
         );
 
         // 模拟object数据
@@ -2436,21 +2404,6 @@ class aiModelTest extends baseTest
         $result = $this->instance->filterPromptsForExecution($prompts, $keepUnauthorized);
         if(dao::isError()) return dao::getError();
         return $result;
-    }
-
-    /**
-     * Test setInjectData method.
-     *
-     * @param  mixed $form
-     * @param  mixed $data
-     * @access public
-     * @return mixed
-     */
-    public function setInjectDataTest($form = null, $data = null)
-    {
-        $this->instance->setInjectData($form, $data);
-        if(dao::isError()) return dao::getError();
-        return '0';
     }
 
     /**

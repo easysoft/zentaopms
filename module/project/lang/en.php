@@ -371,8 +371,8 @@ $lang->project->featureBar['execution']['suspended'] = 'On Hold';
 $lang->project->featureBar['execution']['delayed']   = 'Delayed';
 $lang->project->featureBar['execution']['closed']    = 'Closed';
 
-$lang->project->featureBar['bug']['all']        = 'All';
-$lang->project->featureBar['bug']['unresolved'] = 'Unresolved';
+$app->loadLang('bug');
+$lang->project->featureBar['bug'] = $lang->bug->featureBar['browse'];
 
 $app->loadLang('testcase');
 $lang->project->featureBar['testcase'] = $lang->testcase->featureBar['browse'];
@@ -520,6 +520,7 @@ $lang->project->moreSelects = array();
 $lang->project->moreSelects['browse']['more']['suspended'] = 'On Hold';
 $lang->project->moreSelects['browse']['more']['delayed']   = 'Delayed';
 $lang->project->moreSelects['browse']['more']['closed']    = 'Closed';
+$lang->project->moreSelects['bug']['more']                 = $lang->bug->moreSelects['browse']['more'];
 
 $lang->project->executionList['scrum']         = $lang->projectCommon . ' Sprint';
 $lang->project->executionList['waterfall']     = $lang->projectCommon . ' Phase';

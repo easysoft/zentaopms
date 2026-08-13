@@ -231,7 +231,7 @@ class pivotTao extends pivotModel
      */
     protected function getExecutionList(string $begin, string $end, $executionIDList = array()): array
     {
-        return $this->dao->select("t1.project AS projectID, t1.execution AS executionID, t2.multiple, t2.end, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
+        return $this->dao->select("t1.project AS projectID, t1.execution AS `executionID`, t2.multiple, t2.end, IF(t3.multiple = '1', t2.name, '') AS executionName, t3.name AS projectName, ROUND(SUM(t1.estimate), 2) AS estimate, ROUND(SUM(t1.consumed), 2) AS consumed")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
@@ -260,7 +260,7 @@ class pivotTao extends pivotModel
      */
     protected function getBugGroup(string $begin, string $end, int $product, int $execution): array
     {
-        return $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, openedBy, status")->from(TABLE_BUG)
+        return $this->dao->select("IF(resolution = '', 'unResolved', resolution) AS resolution, `openedBy`, status")->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('openedDate')->ge($begin)
             ->andWhere('openedDate')->le($end)
@@ -279,14 +279,14 @@ class pivotTao extends pivotModel
      */
     protected function getNoAssignExecution(array $deptUsers): array
     {
-        $assignedToList = $this->dao->select("DISTINCT IF(tt1.mode = '', tt1.`assignedTo`, tt2.account) AS assignedTo")->from(TABLE_TASK)->alias('tt1')
+        $assignedToList = $this->dao->select("DISTINCT IF(tt1.mode = '', tt1.`assignedTo`, tt2.account) AS `assignedTo`")->from(TABLE_TASK)->alias('tt1')
             ->leftJoin(TABLE_TASKTEAM)->alias('tt2')->on("tt1.id=tt2.task AND tt1.mode IN ('multi', 'linear')")
             ->where('tt1.status')->notIn('cancel,closed,done,pause')
             ->andWhere("IF(tt1.mode = '', tt1.`assignedTo`, tt2.account)")->ne('')
             ->andWhere('tt1.execution = t1.`root`')
             ->get();
 
-        return $this->dao->select('t1.account AS user, t2.multiple, t2.id AS executionID, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
+        return $this->dao->select('t1.account AS user, t2.multiple, t2.id AS `executionID`, t2.name AS executionName, t3.id AS projectID, t3.name AS projectName')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
             ->where('t1.type')->eq('execution')
@@ -313,7 +313,7 @@ t1.`isParent`,
 CASE WHEN t1.mode = '' THEN t1.`assignedTo` ELSE t4.account END AS user,
 CASE WHEN t1.mode = '' THEN ROUND(t1.`left`, 2) ELSE ROUND(t4.`left`, 2) END AS `left`,
 t2.multiple,
-t2.id AS executionID,
+t2.id AS `executionID`,
 t2.name AS executionName,
 t3.id AS projectID,
 t3.name AS projectName
@@ -357,12 +357,12 @@ EOT)->from(TABLE_TASK)->alias('t1')
      */
     protected function getAssignBugGroup(): array
     {
-        return $this->dao->select('product, assignedTo, COUNT(1) AS bugCount')->from(TABLE_BUG)
+        return $this->dao->select('product, `assignedTo`, COUNT(1) AS bugCount')->from(TABLE_BUG)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('active')
             ->andWhere('assignedTo')->ne('')
             ->andWhere('assignedTo')->ne('closed')
-            ->groupBy('product, assignedTo')
+            ->groupBy('`product`, `assignedTo`')
             ->fetchGroup('assignedTo');
     }
 

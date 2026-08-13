@@ -47,7 +47,7 @@ class projectreleaseModel extends model
         }
 
         $branchGroup = $this->loadModel('branch')->getByProducts($productIdList);
-        $builds      = $this->dao->select("id, project, product, branch, execution, name, scmPath, filePath")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
+        $builds      = $this->dao->select("id, project, product, branch, execution, name, `scmPath`, `filePath`")->from(TABLE_BUILD)->where('id')->in(array_unique($buildIdList))->fetchAll('id');
 
         foreach($releases as $release) $this->projectreleaseTao->processRelease($release, $branchGroup, $builds);
 

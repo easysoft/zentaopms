@@ -22,7 +22,7 @@ class biModel extends model
             'chart'     => TABLE_CHART
         );
 
-        $objects = $this->dao->select('id,createdBy,acl,whitelist')->from($table[$objectType])
+        $objects = $this->dao->select('id,`createdBy`,acl,whitelist')->from($table[$objectType])
             ->where('deleted')->eq('0')
             ->fetchAll('id');
 

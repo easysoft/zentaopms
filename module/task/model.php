@@ -916,12 +916,12 @@ class taskModel extends model
     public function computeBeginAndEnd(int $taskID): bool
     {
         /* Get estStarted realStarted and deadline of the sub-tasks. */
-        $tasks = $this->dao->select('estStarted, realStarted, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
+        $tasks = $this->dao->select('`estStarted`, `realStarted`, deadline')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('status')->ne('cancel')->andWhere('deleted')->eq(0)->fetchAll();
         if(empty($tasks)) return !dao::isError();
 
         /* Initialize task data and update it. */
         $parent        = $this->fetchById($taskID);
-        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($parent->project)->fetch('taskDateLimit');
+        $taskDateLimit = $this->dao->select('`taskDateLimit`')->from(TABLE_PROJECT)->where('id')->eq($parent->project)->fetch('taskDateLimit');
         if($taskDateLimit == 'limit') return !dao::isError();
 
         /* Compute the earliest estStarted, the earliest realStarted and the latest deadline. */
@@ -1568,7 +1568,7 @@ class taskModel extends model
      */
     public function getDataOfTasksPerAssignedTo(): array
     {
-        $tasks = $this->dao->select('id,assignedTo')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,`assignedTo`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->fetchAll('id');
         if(!$tasks) return array();
@@ -1593,7 +1593,7 @@ class taskModel extends model
      */
     public function getDataOfTasksPerClosedReason(): array
     {
-        $tasks = $this->dao->select('id,closedReason')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,`closedReason`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->andWhere('closedReason')->ne('')
             ->fetchAll('id');
@@ -1690,7 +1690,7 @@ class taskModel extends model
      */
     public function getDataOfTasksPerFinishedBy(): array
     {
-        $tasks = $this->dao->select('id,finishedBy')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('id,`finishedBy`')->from(TABLE_TASK)->alias('t1')
             ->where($this->reportCondition())
             ->andWhere('finishedBy')->ne('')
             ->fetchAll('id');
@@ -2045,7 +2045,7 @@ class taskModel extends model
      */
     public function getListByStories(array $storyIdList, int $executionID = 0, int $projectID = 0): array
     {
-        return $this->dao->select('id, story, parent, name, assignedTo, pri, status, estimate, consumed, closedReason, `left`')
+        return $this->dao->select('id, story, parent, name, `assignedTo`, pri, status, estimate, consumed, `closedReason`, `left`')
             ->from(TABLE_TASK)
             ->where('story')->in($storyIdList)
             ->andWhere('deleted')->eq('0')
@@ -2067,7 +2067,7 @@ class taskModel extends model
      */
     public function getListByStory(int $storyID, int $executionID = 0, int $projectID = 0, bool $isTree = true): array
     {
-        $tasks = $this->dao->select('id, parent, name, assignedTo, pri, status, isParent, estimate, consumed, closedReason, `left`')
+        $tasks = $this->dao->select('id, parent, name, `assignedTo`, pri, status, `isParent`, estimate, consumed, `closedReason`, `left`')
             ->from(TABLE_TASK)
             ->where('story')->eq($storyID)
             ->andWhere('deleted')->eq('0')
@@ -2149,7 +2149,7 @@ class taskModel extends model
          过滤自己和后代任务。
         */
         $children = $this->getAllChildId($taskID);
-        $taskList = $this->dao->select('id, name, isParent, consumed')->from(TABLE_TASK)
+        $taskList = $this->dao->select('id, name, `isParent`, consumed')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->notin('cancel,closed')
             ->andWhere('parent')->eq('0')
@@ -2378,7 +2378,7 @@ class taskModel extends model
 
             if($appendParent)
             {
-                $parentTasks = $this->dao->select('id,assignedTo,openedBy,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
+                $parentTasks = $this->dao->select('id,`assignedTo`,`openedBy`,`finishedBy`,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->andWhere('id')->ne($task->id)->fetchAll('id');
                 foreach($parentTasks as $parentTask)
                 {
                     $parentAssignedTo = $parentTask->assignedTo;
@@ -2398,7 +2398,7 @@ class taskModel extends model
 
         if(in_array($action, array('paused', 'closed', 'canceled')) && $task->parent > 0)
         {
-            $parentTasks = $this->dao->select('id,assignedTo,finishedBy,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
+            $parentTasks = $this->dao->select('id,`assignedTo`,`finishedBy`,mailto')->from(TABLE_TASK)->where('id')->in($task->path)->fetchAll('id');
             foreach($parentTasks as $parentTask)
             {
                 $mailto[] = (strtolower($parentTask->assignedTo) == 'closed') ? $parentTask->finishedBy : $parentTask->assignedTo;
@@ -3435,10 +3435,10 @@ class taskModel extends model
 
         if($postData->type == 'task')
         {
-            $project = $this->dao->select('id,taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($oldObject->project)->fetch();
+            $project = $this->dao->select('id,`taskDateLimit`')->from(TABLE_PROJECT)->where('id')->eq($oldObject->project)->fetch();
             if($project->taskDateLimit == 'limit')
             {
-                $parentTasks = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($oldObject->path)->andWhere('id')->ne($oldObject->id)->fetchAll('id');
+                $parentTasks = $this->dao->select('id,`estStarted`,deadline')->from(TABLE_TASK)->where('id')->in($oldObject->path)->andWhere('id')->ne($oldObject->id)->fetchAll('id');
                 foreach(array_reverse(array_filter(explode(',', $oldObject->path))) as $taskID)
                 {
                     if(!isset($parentTasks[$taskID])) continue;
@@ -3683,11 +3683,11 @@ class taskModel extends model
     public function updateParentStatus(int $taskID, int $parentID = 0, bool $createAction = true) :void
     {
         /* Get child task info. */
-        $childTask = $this->dao->select('id,assignedTo,parent,path,realStarted')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $childTask = $this->dao->select('id,`assignedTo`,parent,path,`realStarted`')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($childTask)) return;
 
         $taskIdList = $childTask->path;
-        if($parentID && $childTask->parent != $parentID) $taskIdList = $this->dao->select('id,assignedTo,parent,path')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('path');
+        if($parentID && $childTask->parent != $parentID) $taskIdList = $this->dao->select('id,`assignedTo`,parent,path')->from(TABLE_TASK)->where('id')->eq($parentID)->fetch('path');
 
         $taskIdList  = array_unique(array_filter(explode(',', $taskIdList)));
         $parentTasks = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($taskIdList)->andWhere('id')->ne($taskID)->orderBy('path_desc')->fetchAll('id', false);
@@ -3733,7 +3733,7 @@ class taskModel extends model
     public function updateChildrenStatus(int $taskID, string $oldParentStatus = '') :void
     {
         /* Get child task info. */
-        $parentTask = $this->dao->select('id,status,isParent,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
+        $parentTask = $this->dao->select('id,status,`isParent`,parent,path')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
         if(empty($parentTask)) return;
 
         $parentStatus = $parentTask->status;
@@ -3744,7 +3744,7 @@ class taskModel extends model
         if(empty($childrenTasks)) return;
 
         $autoActions = array();
-        if($parentTask->status == 'doing' && $oldParentStatus == 'pause') $autoActions = $this->dao->select('objectID,extra')->from(TABLE_ACTION)->where('objectType')->eq("task")->andWhere('objectID')->in(array_keys($childrenTasks))->andWhere('action')->eq('paused')->orderBy('date')->fetchAll('objectID');
+        if($parentTask->status == 'doing' && $oldParentStatus == 'pause') $autoActions = $this->dao->select('`objectID`,extra')->from(TABLE_ACTION)->where('objectType')->eq("task")->andWhere('objectID')->in(array_keys($childrenTasks))->andWhere('action')->eq('paused')->orderBy('date')->fetchAll('objectID');
 
         $this->loadModel('story');
         foreach($childrenTasks as $childID => $childTask)
@@ -3944,7 +3944,7 @@ class taskModel extends model
      */
     public function getChildTasksByList(array $taskIdList): array|false
     {
-        $childTasks         = $this->dao->select('id,parent,path,estStarted,deadline')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
+        $childTasks         = $this->dao->select('id,parent,path,`estStarted`,deadline')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         $nonStoryChildTasks = $this->dao->select('id,parent')->from(TABLE_TASK)->where('parent')->in($taskIdList)->andWhere('story')->eq('0')->andWhere('deleted')->eq('0')->fetchGroup('parent', 'id');
         return array($childTasks, $nonStoryChildTasks);
     }
@@ -3980,7 +3980,7 @@ class taskModel extends model
      */
     public function getTeamStoryVersion(int|array|string $taskIdList): array
     {
-        return $this->dao->select('task,storyVersion')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->andWhere('account')->eq($this->app->user->account)->fetchPairs();
+        return $this->dao->select('task,`storyVersion`')->from(TABLE_TASKTEAM)->where('task')->in($taskIdList)->andWhere('account')->eq($this->app->user->account)->fetchPairs();
     }
 
     /**

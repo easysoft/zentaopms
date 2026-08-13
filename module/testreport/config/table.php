@@ -101,6 +101,7 @@ $config->testreport->story->dtable->fieldList['pri']['sort']        = false;
 
 $config->testreport->story->dtable->fieldList['title']['nestedToggle'] = false;
 $config->testreport->story->dtable->fieldList['assignedTo']['type']    = 'user';
+if($app->tab == 'qa') $config->testreport->story->dtable->fieldList['title']['data-app'] = 'product';
 
 $app->loadLang('bug');
 $app->loadModuleConfig('bug');

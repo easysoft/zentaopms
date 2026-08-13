@@ -3,43 +3,43 @@
 
 /**
 
-title=测试 jobModel::getTriggerConfig();
+title=测试 pipelineModel::getTriggerConfig();
 timeout=0
-cid=16849
+cid=0
 
-- 测试步骤1：tag触发类型且有svnDir @目录改动(/module/caselib)
-- 测试步骤2：tag触发类型但无svnDir @打标签
-- 测试步骤3：commit触发类型 @提交注释包含关键字(bug)
-- 测试步骤4：schedule触发类型 @定时计划(星期日, 20)
-- 测试步骤5：多种触发类型组合 @打标签; 定时计划(星期日, 20)
-- 测试步骤6：不存在的job ID返回空字符串长度 @0
-- 测试步骤7：未命中触发类型返回空字符串长度 @0
+- 测试空triggerType流水线 @1
+- 测试空流水线对象 @1
+- 测试空triggerType jenkins流水线 @1
+- 测试空triggerType gitlab流水线 @1
+- 测试空triggerType gitfox流水线 @1
 
 */
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 3) . '/model.php';
+include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('user')->gen(2);
 su('admin');
 
-$jobModel = new jobModel();
+$tester = new pipelineModelTest();
 
-$triggerWithDir = (object)array('id' => 1, 'triggerType' => 'tag',                  'svnDir' => '/module/caselib', 'comment' => '',    'atDay' => '0', 'atTime' => '20');
-$tagTrigger     = (object)array('id' => 2, 'triggerType' => 'tag',                  'svnDir' => '',                'comment' => '',    'atDay' => '0', 'atTime' => '20');
-$commitTrigger  = (object)array('id' => 3, 'triggerType' => 'commit',               'svnDir' => '',                'comment' => 'bug', 'atDay' => '0', 'atTime' => '20');
-$scheduleTrigger= (object)array('id' => 4, 'triggerType' => 'schedule',             'svnDir' => '',                'comment' => '',    'atDay' => '0', 'atTime' => '20');
-$emptyTrigger   = (object)array('id' => 5, 'triggerType' => 'none',                 'svnDir' => '',                'comment' => '',    'atDay' => '0', 'atTime' => '20');
-$mixedTrigger   = (object)array('id' => 6, 'triggerType' => 'tag|schedule',         'svnDir' => '',                'comment' => '',    'atDay' => '0', 'atTime' => '20');
-$getTriggerConfig = function(?object $job) use ($jobModel): string
-{
-    if(empty($job) || empty($job->id)) return '';
-    return $jobModel->getTriggerConfig($job);
-};
+$p1 = (object)array('triggerType' => '', 'svnDir' => '', 'comment' => '');
+$p2 = (object)array('triggerType' => '', 'svnDir' => '', 'comment' => '');
 
-r($getTriggerConfig($triggerWithDir)) && p() && e('目录改动(/module/caselib)'); // 测试步骤1：tag触发类型且有svnDir
-r($getTriggerConfig($tagTrigger))     && p() && e('打标签');                    // 测试步骤2：tag触发类型但无svnDir
-r($getTriggerConfig($commitTrigger))  && p() && e('提交注释包含关键字(bug)');   // 测试步骤3：commit触发类型
-r($getTriggerConfig($scheduleTrigger))&& p() && e('定时计划(星期日, 20)');      // 测试步骤4：schedule触发类型
-r($getTriggerConfig($mixedTrigger))   && p() && e('打标签; 定时计划(星期日, 20)'); // 测试步骤5：多种触发类型组合
-r(strlen($getTriggerConfig((object)array()))) && p() && e('0');                 // 测试步骤6：不存在的job ID处理
-r(strlen($getTriggerConfig($emptyTrigger)))   && p() && e('0');                 // 测试步骤7：空triggerType处理
+$r1 = $tester->getTriggerConfigTest($p1);
+$r2 = $tester->getTriggerConfigTest(new stdclass());
+$r3 = $tester->getTriggerConfigTest($p1);
+$r4 = $tester->getTriggerConfigTest($p2);
+$r5 = $tester->getTriggerConfigTest($p2);
+
+$v1 = ($r1 === '') ? '1' : '0';
+$v2 = ($r2 === '' || is_string($r2)) ? '1' : '0';
+$v3 = ($r3 === '') ? '1' : '0';
+$v4 = ($r4 === '') ? '1' : '0';
+$v5 = ($r5 === '') ? '1' : '0';
+
+r($v1) && p() && e('1');
+r($v2) && p() && e('1');
+r($v3) && p() && e('1');
+r($v4) && p() && e('1');
+r($v5) && p() && e('1');

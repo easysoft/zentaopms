@@ -133,7 +133,7 @@ $domBox = div
             setClass('border px-4 h-12 flex items-center'),
             span(setClass('font-bold'), $lang->ppm->codeConflict),
             $hasConflict == 'yes' ? label(setClass('danger ml-4'), $lang->ppm->checkStatusList['fail']) : label(setClass('success ml-4'), $lang->ppm->checkStatusList['success']),
-            div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
+            //div(setClass('flex flex-auto justify-end'), btn(setClass('ghost text-primary'), span(icon(setClass('mr-2'), 'about'), $lang->ppm->locateView)))
         ),
         div
         (

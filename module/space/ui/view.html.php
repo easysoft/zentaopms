@@ -246,7 +246,7 @@ div
             (
                 set::objectID($space->id),
                 set::commentUrl(createLink('action', 'comment', array('objectType' => 'space', 'objectID' => $space->id))),
-                set::bodyClass('maxh-72 overflow-y-auto')
+                set::bodyClass('overflow-y-auto')
             )
         )
     )

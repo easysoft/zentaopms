@@ -7,20 +7,30 @@ window.renderRowData = function($row, index, story)
 
     if($titleInput.length) $titleInput.attr('title', story.title);
 
+    const needNotReview = story.needNotReview == 1 || story.needNotReview == '1';
+    if(!forceReview && needNotReview) $needNotReview.prop('checked', true);
+
+    $reviewer.on('inited', function(e, info)
+    {
+        const opts = {};
+        if(story.reviewerItems)
+        {
+            const items = [];
+            $.each(story.reviewerItems, function(account, realname)
+            {
+                items.push({value: account, text: realname});
+            });
+            if(items.length) opts.items = items;
+        }
+        if(!forceReview && needNotReview) opts.disabled = true;
+        if(Object.keys(opts).length) info[0].render(opts);
+    });
+
     if(forceReview)
     {
         $needNotReview.closest('td').addClass('hidden');
         $reviewer.attr('data-required', '1');
-        return;
     }
-
-    const needNotReview = story.needNotReview == 1 || story.needNotReview == '1';
-    if(needNotReview) $needNotReview.prop('checked', true);
-
-    $reviewer.on('inited', function(e, info)
-    {
-        if(needNotReview) info[0].render({disabled: true});
-    });
 };
 
 window.toggleBatchReviewer = function(e)

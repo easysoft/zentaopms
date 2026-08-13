@@ -69,7 +69,7 @@ class pageEditor extends wg
                 <<<JS
                 $.registerLib('blocksuite', {
                     src: [
-                        '$zuiPath/editor.umd.cjs',
+                        '$zuiPath/editor.js',
                         '$zuiPath/editor.css',
                     ],
                     root: false,

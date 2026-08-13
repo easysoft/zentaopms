@@ -125,10 +125,10 @@ $config->gitfox->escapeUserList = array();
 $setLang = common::checkNotCN() ? 'en-US' : 'zh-CN';
 $time = time();
 $config->gitfox->downloadGitfoxURL = array();
-$config->gitfox->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/2.0.beta2/linux-amd64.zip?t=' . $time;
-$config->gitfox->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/2.0.beta2/linux-arm64.zip?t=' . $time;
-$config->gitfox->downloadGitfoxURL['win']['amd']   = 'https://pkg.zentao.net/gitfox/2.0.beta2/windows-amd64.zip?t=' . $time;
-$config->gitfox->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/gitfox/2.0.beta2/windows-amd64.zip?t=' . $time;
+$config->gitfox->downloadGitfoxURL['linux']['amd'] = 'https://pkg.zentao.net/gitfox/'. $config->devops->gitfoxVersion . '/linux-amd64.zip?t=' . $time;
+$config->gitfox->downloadGitfoxURL['linux']['arm'] = 'https://pkg.zentao.net/gitfox/'. $config->devops->gitfoxVersion . '/linux-arm64.zip?t=' . $time;
+$config->gitfox->downloadGitfoxURL['win']['amd']   = 'https://pkg.zentao.net/gitfox/'. $config->devops->gitfoxVersion . '/windows-amd64.zip?t=' . $time;
+$config->gitfox->downloadGitfoxURL['win']['arm']   = 'https://pkg.zentao.net/gitfox/'. $config->devops->gitfoxVersion . '/windows-amd64.zip?t=' . $time;
 
 $config->gitfox->installGitfox = array();
 $config->gitfox->installGitfox['linux'] = <<<EOT

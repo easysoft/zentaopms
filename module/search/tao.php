@@ -1173,7 +1173,7 @@ class searchTao extends searchModel
     {
         if($module == 'case') $caseStep = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in(array_keys($dataList))->fetchGroup('case', 'id');
         $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('date asc')->fetchGroup('objectID', 'id');
-        $files   = $this->dao->select('id,objectID,title,extension')->from(TABLE_FILE)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('id asc')->fetchGroup('objectID', 'id');
+        $files   = $this->dao->select('id,`objectID`,title,extension')->from(TABLE_FILE)->where('objectType')->eq($module)->andWhere('objectID')->in(array_keys($dataList))->orderBy('id asc')->fetchGroup('objectID', 'id');
 
         foreach($dataList as $id => $data)
         {

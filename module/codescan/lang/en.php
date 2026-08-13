@@ -56,6 +56,7 @@ $lang->codescan->general         = 'General';
 $lang->codescan->default         = 'Default';
 $lang->codescan->resend          = 'Resend';
 
+$lang->codescan->cSharpDefaultSolution     = 'C# Default Scan Solution';
 $lang->codescan->resolvedByTop             = 'Resolved By Top 10';
 $lang->codescan->issueInjectionTop         = 'Issue Injection Top 10';
 $lang->codescan->issueRanking              = 'Top 10 Issue Ranking';

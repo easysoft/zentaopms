@@ -37,8 +37,8 @@ $config->openMethods[] = 'user.refreshrandom';
 $config->openMethods[] = 'user.reset';
 $config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'gitfox.devopsintroduction';
-$config->openMethods[] = 'gitfox.installgitFox';
-$config->openMethods[] = 'gitfox.ajaxCheckgitFoxhealth';
+$config->openMethods[] = 'gitfox.installgitfox';
+$config->openMethods[] = 'gitfox.ajaxcheckgitfoxhealth';
 
 /* 登录用户可以访问的方法。The methods that can be accessed by the logged users. */
 $config->logonMethods   = [];
@@ -221,6 +221,7 @@ $config->logonMethods[] = 'user.ajaxgetcontactlist';
 $config->logonMethods[] = 'user.ajaxgetcontactusers';
 $config->logonMethods[] = 'user.ajaxgetitems';
 $config->logonMethods[] = 'user.ajaxgettemplates';
+$config->logonMethods[] = 'user.ajaxgetmore';
 $config->logonMethods[] = 'user.ajaxsavetemplate';
 $config->logonMethods[] = 'user.logout';
 $config->logonMethods[] = 'zanode.nodelist';
@@ -253,6 +254,8 @@ $config->logonMethods[] = 'artifact.history';
 $config->logonMethods[] = 'artifact.moveartifact';
 $config->logonMethods[] = 'artifact.copycmd';
 $config->logonMethods[] = 'zai.ajaxgettoken';
+$config->logonMethods[] = 'zai.ajaxgetuseragent';
+$config->logonMethods[] = 'repo.import';
 
 /* Ajax 方法依赖的方法。The methods that Ajax methods depend on. */
 $config->ajaxDependencies['action.ajaxgetlist']                               = ['doc.templatelist', 'reporttemplate.browse', 'doc.edit', 'doc.view'];
@@ -542,4 +545,4 @@ $config->ajaxDependencies['artifact.ajaxgetdirparentitems']                   = 
 $config->ajaxDependencies['artifact.ajaxgetfolders']                          = 'artifact.view';
 $config->ajaxDependencies['artifact.ajaxbatchdeleteartifact']                 = 'artifact.deleteartifact';
 $config->ajaxDependencies['ppm.ajaxgetcreatechecklist']                       = 'ppm.create';
-$config->ajaxDependencies['pipeline.ajaxexeclog']                             = 'ppm.execview';
+$config->ajaxDependencies['pipeline.ajaxexeclog']                             = 'pipeline.execview';

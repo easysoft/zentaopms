@@ -1,4 +1,5 @@
-title: zt_ops_spaceuser
+title: table ops_spaceuser
+desc: "空间用户关联表"
 author: Yang Li
 version: "1.0"
 fields:

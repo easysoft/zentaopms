@@ -1338,7 +1338,7 @@ class bugZen extends bug
             $bug->openedBy    = $this->app->user->account;
             $bug->openedDate  = helper::now();
             $bug->product     = $productID;
-            $bug->steps       = nl2br($bug->steps);
+            $bug->steps       = helper::textarea2Html((string)$bug->steps);
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
@@ -1973,7 +1973,7 @@ class bugZen extends bug
         $this->action->create('todo', $todoID, 'finished', '', "BUG:$bugID");
         if($this->config->edition != 'open')
         {
-            $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+            $todo = $this->dao->select('type, `objectID`')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
             if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
         }
 

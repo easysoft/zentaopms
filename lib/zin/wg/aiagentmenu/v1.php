@@ -55,6 +55,9 @@ class aiAgentMenu extends wg
                 $allowedFields = $app->control->ai->getFormAllowedFields($formModule, $formMethod);
                 $agentRole     = helper::jsonEncode(($prompt->role ?? '') . (!empty($prompt->characterization) ? "\n{$prompt->characterization}" : ''));
                 $agentPurpose  = helper::jsonEncode($prompt->purpose ?? '');
+                $agentSkills   = ($app->config->edition != 'open' && method_exists($app->control->ai, 'getPromptSkillIDs'))
+                    ? $app->control->ai->getPromptSkillIDs($prompt)
+                    : [];
 
                 $itemProps[] = set('data-on', 'click');
                 $itemProps[] = set('data-call', "executeWithFormContext({$prompt->id})");
@@ -62,6 +65,7 @@ class aiAgentMenu extends wg
                 $itemProps[] = set('data-allowed-fields', helper::jsonEncode($allowedFields));
                 $itemProps[] = set('data-agent-role', $agentRole);
                 $itemProps[] = set('data-agent-purpose', $agentPurpose);
+                $itemProps[] = set('data-agent-skills', helper::jsonEncode($agentSkills));
             }
             else
             {

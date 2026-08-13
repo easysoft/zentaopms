@@ -3188,10 +3188,10 @@ class screenModel extends model
         $dataset = array();
         foreach($projectList as $projectID => $projectName)
         {
-            $createdTaskList = $this->dao->select('id,openedBy')->from(TABLE_TASK)
+            $createdTaskList = $this->dao->select('id,`openedBy`')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
-                ->andWhere('year(openedDate)')->eq($year)
-                ->andWhere('month(openedDate)')->eq($month)
+                ->andWhere('year(`openedDate`)')->eq($year)
+                ->andWhere('month(`openedDate`)')->eq($month)
                 ->andWhere('deleted')->eq('0')
                 ->andWhere("NOT FIND_IN_SET('or', vision)")
                 ->andWhere('execution')->notin($deletedExecutionList)
@@ -3199,8 +3199,8 @@ class screenModel extends model
 
             $finishedTaskList = $this->dao->select('id')->from(TABLE_TASK)
                 ->where('project')->eq($projectID)
-                ->andWhere('year(finishedDate)')->eq($year)
-                ->andWhere('month(finishedDate)')->eq($month)
+                ->andWhere('year(`finishedDate`)')->eq($year)
+                ->andWhere('month(`finishedDate`)')->eq($month)
                 ->andWhere('deleted')->eq('0')
                 ->andWhere("NOT FIND_IN_SET('or', vision)")
                 ->andWhere('execution')->notin($deletedExecutionList)
@@ -3398,10 +3398,10 @@ class screenModel extends model
         return $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq('0')
-            ->andWhere('date(openedDate)')->le($date)
+            ->andWhere('date(`openedDate`)')->le($date)
             ->andWhere("NOT FIND_IN_SET('or', vision)")
-            ->andWhere('date(closedDate)', true)->gt($date)
-            ->orWhere('date(closedDate)')->eq('0000-00-00')
+            ->andWhere('date(`closedDate`)', true)->gt($date)
+            ->orWhere('date(`closedDate`)')->eq('0000-00-00')
             ->orWhere('closedDate')->in(NULL)
             ->markRight(true)
             ->fetchPairs();
@@ -3423,7 +3423,7 @@ class screenModel extends model
         return $this->dao->select('id,name')->from(TABLE_PRODUCT)
             ->where('deleted')->eq('0')
             ->andWhere('shadow')->eq(0)
-            ->andWhere('date(createdDate)')->le($date)
+            ->andWhere('date(`createdDate`)')->le($date)
             ->fetchPairs();
     }
 

@@ -57,14 +57,14 @@ class storyTao extends storyModel
     public function getRelation(int $storyID, string $storyType): array
     {
         /* 主动关联。*/
-        $linkedToList = $this->dao->select('BID')->from(TABLE_RELATION)
+        $linkedToList = $this->dao->select('`BID`')->from(TABLE_RELATION)
             ->where('AType')->eq($storyType)
             ->andWhere('AID')->eq($storyID)
             ->andWhere('relation')->eq('linkedto')
             ->fetchPairs();
 
         /* 被动关联。*/
-        $linkedFromList = $this->dao->select('AID')->from(TABLE_RELATION)
+        $linkedFromList = $this->dao->select('`AID`')->from(TABLE_RELATION)
             ->where('BType')->eq($storyType)
             ->andWhere('BID')->eq($storyID)
             ->andWhere('relation')->eq('linkedto')
@@ -175,7 +175,7 @@ class storyTao extends storyModel
 
         /* 获取关联需求的设计、关联版本库提交。 */
         $track->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($story->id)->andWhere('deleted')->eq('0')->fetchAll('id');
-        $track->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
+        $track->revisions = $this->dao->select('`BID`, t2.comment')->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.`BID` = t2.id')
             ->where('t1.`AType`')->eq('design')
             ->andWhere('t1.`BType`')->eq('commit')
@@ -465,12 +465,12 @@ class storyTao extends storyModel
     protected function getRevertStoryIdList(int $productID): array
     {
         if(empty($productID)) return array();
-        return $this->dao->select('objectID')->from(TABLE_ACTION)
+        return $this->dao->select('`objectID`')->from(TABLE_ACTION)
             ->where('product')->like("%,$productID,%")
             ->andWhere('action')->eq('reviewed')
             ->andWhere('objectType')->eq('story')
             ->andWhere('extra')->eq('Revert')
-            ->groupBy('objectID')
+            ->groupBy('`objectID`')
             ->orderBy('objectID_desc')
             ->fetchPairs('objectID', 'objectID');
     }
@@ -1060,7 +1060,7 @@ class storyTao extends storyModel
         $this->loadModel('action')->create('todo', $todoID, 'finished', '', "STORY:$storyID");
         if($this->config->edition == 'open')return;
 
-        $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+        $todo = $this->dao->select('type, `objectID`')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
         if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
     }
 
@@ -1334,7 +1334,7 @@ class storyTao extends storyModel
         }
 
         $parent   = $this->dao->findById($story->parent)->from(TABLE_STORY)->fetch();
-        $children = $this->dao->select('id, stage, closedReason')->from(TABLE_STORY)
+        $children = $this->dao->select('id, stage, `closedReason`')->from(TABLE_STORY)
             ->where('parent')->eq($story->parent)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
@@ -2245,7 +2245,7 @@ class storyTao extends storyModel
 
         if($status == 'closed')
         {
-            $closedReason = $this->dao->select('closedReason')->from(TABLE_STORY)
+            $closedReason = $this->dao->select('`closedReason`')->from(TABLE_STORY)
                 ->where('parent')->eq($parentID)
                 ->andWhere('deleted')->eq(0)
                 ->andWhere('closedReason')->eq('done')
@@ -2386,8 +2386,8 @@ class storyTao extends storyModel
         $designs    = zget($designGroup, 'design', array());
         $commits    = zget($designGroup, 'commit', array());
         $tasks      = $this->getTasksForTrack($storyIdList);
-        $cases      = $this->dao->select('id,project,pri,status,color,title,story,lastRunner,lastRunResult')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
-        $bugs       = $this->dao->select('id,project,pri,status,color,title,story,assignedTo,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $cases      = $this->dao->select('id,project,pri,status,color,title,story,`lastRunner`,`lastRunResult`')->from(TABLE_CASE)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
+        $bugs       = $this->dao->select('id,project,pri,status,color,title,story,`assignedTo`,severity')->from(TABLE_BUG)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project')->fetchGroup('story', 'id');
         $storyGrade = $this->getGradeGroup();
 
         $items = array();
@@ -2435,7 +2435,7 @@ class storyTao extends storyModel
         $stmt = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($storyIdList)->query();
         while($projectStory = $stmt->fetch()) $projectStoryList[$projectStory->project][$projectStory->story] = $projectStory->story;
 
-        $stmt       = $this->dao->select('id,type AS projectType,model,parent,path,grade,name as title,hasProduct,begin,end,status,project,progress,multiple')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
+        $stmt       = $this->dao->select('id,type AS `projectType`,model,parent,path,grade,name as title,`hasProduct`,begin,end,status,project,progress,multiple')->from(TABLE_PROJECT)->where('id')->in(array_keys($projectStoryList))->andWhere('deleted')->eq(0)->orderBy('id')->query();
         $today      = helper::today();
         $storyGroup = array();
         while($project = $stmt->fetch())
@@ -2502,7 +2502,7 @@ class storyTao extends storyModel
      */
     public function getTasksForTrack(array $storyIdList): array
     {
-        $stmt       = $this->dao->select('id,project,execution,mode,pri,status,color,name as title,assignedTo,story,estimate,consumed,`left`,parent,isParent,path')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution,isParent_desc,path')->query();
+        $stmt       = $this->dao->select('id,project,execution,mode,pri,status,color,name as title,`assignedTo`,story,estimate,consumed,`left`,parent,`isParent`,path')->from(TABLE_TASK)->where('story')->in($storyIdList)->andWhere('deleted')->eq(0)->orderBy('project,execution,isParent_desc,path')->query();
         $tasks      = array();
         $multiTasks = array();
         while($task = $stmt->fetch())

@@ -2,11 +2,13 @@
 $config->artifact->form = new stdclass();
 
 $config->artifact->form->create = array();
-$config->artifact->form->create['name']        = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
-$config->artifact->form->create['format']      = array('type' => 'string', 'required' => true, 'default' => 'file', 'filter' => 'trim');
+$config->artifact->form->create['name']   = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
+$config->artifact->form->create['code']   = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
+$config->artifact->form->create['format'] = array('type' => 'string', 'required' => true, 'default' => 'file', 'filter' => 'trim');
 
 $config->artifact->form->edit = array();
 $config->artifact->form->edit['name']       = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
+$config->artifact->form->edit['code']       = array('type' => 'string', 'required' => true, 'default' => '', 'filter' => 'trim');
 $config->artifact->form->edit['editedDate'] = array('type' => 'string', 'required' => false, 'default' => helper::now());
 
 $config->artifact->form->createDir = array();

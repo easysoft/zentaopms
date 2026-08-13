@@ -42,100 +42,63 @@ dashboard
     set::onLayoutChange(jsRaw('handleLayoutChange'))
 );
 
-$upgradeRemind = $this->loadModel('misc')->getUpgradeRemind();
-if($upgradeRemind)
+$featurePages = $this->loadModel('misc')->getFeatureNotices();
+if($featurePages)
 {
-    $clientLang = common::checkNotCN() ? 'en' : 'cn';
-    $guideInfo  = $this->config->upgradeGuide[$config->edition];
-    $version    = $guideInfo['version'];
-    $imagePath  = $guideInfo['imagePath'];
-    $moreLink   = 'https://api.zentao.net/goto.php?item=' . $guideInfo['linkItem'];
+    $pageCount   = count($featurePages);
+    $pageBlocks = array();
+    foreach($featurePages as $index => $page)
+    {
+        $isFirst = $index === 0;
+        $isLast  = $index === $pageCount - 1;
+        $buttons = array();
+
+        if(!$isFirst)
+        {
+            $buttons[] = btn
+            (
+                setClass('mr-4'),
+                on::click('togglePage("page-' . ($index - 1) . '")'),
+                $lang->block->prevPage
+            );
+        }
+
+        if($isLast)
+        {
+            $buttons[] = btn
+            (
+                setClass('primary'),
+                setData('dismiss', 'modal'),
+                $lang->block->experience
+            );
+        }
+        else
+        {
+            $buttons[] = btn
+            (
+                setClass('primary'),
+                on::click('togglePage("page-' . ($index + 1) . '")'),
+                $lang->block->nextPage
+            );
+        }
+
+        $pageBlocks[] = div
+        (
+            setClass('page-block page-' . $index . ($isFirst ? '' : ' hidden')),
+            img(set::src($page['src'])),
+            !empty($page['moreLink']) ? div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($page['moreLink']), set::target('_blank'), $lang->block->learnMore . ' >')) : null,
+            div
+            (
+                setClass('my-6 text-center'),
+                $buttons
+            )
+        );
+    }
 
     modal
     (
-        setID('upgradeModal'),
-        div
-        (
-            setClass('page-block pageOne'),
-            img(set::src("{$imagePath}{$clientLang}_upgrade_guide1_{$version}.svg")),
-            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-            div
-            (
-                setClass('my-6 text-center'),
-                btn
-                (
-                    setClass('primary'),
-                    on::click("togglePage('pageTwo')"),
-                    $lang->block->nextPage
-                )
-            )
-        ),
-        div
-        (
-            setClass('page-block pageTwo hidden'),
-            img(set::src("{$imagePath}{$clientLang}_upgrade_guide2_{$version}.svg")),
-            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-            div
-            (
-                setClass('my-6 text-center'),
-                btn
-                (
-                    setClass('mr-4'),
-                    on::click("togglePage('pageOne')"),
-                    $lang->block->prevPage
-                ),
-                btn
-                (
-                    setClass('primary'),
-                    on::click("togglePage('pageThree')"),
-                    $lang->block->nextPage
-                )
-            )
-        ),
-        div
-        (
-            setClass('page-block pageThree hidden'),
-            img(set::src("{$imagePath}{$clientLang}_upgrade_guide3_{$version}.svg")),
-            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-            div
-            (
-                setClass('my-6 text-center'),
-                btn
-                (
-                    setClass('mr-4'),
-                    on::click("togglePage('pageTwo')"),
-                    $lang->block->prevPage
-                ),
-                btn
-                (
-                    setClass('primary'),
-                    on::click("togglePage('pageFour')"),
-                    $lang->block->nextPage
-                )
-            )
-        ),
-        div
-        (
-            setClass('page-block pageFour hidden'),
-            img(set::src("{$imagePath}{$clientLang}_upgrade_guide4_{$version}.svg")),
-            div(setClass('learn-more-link flex justify-end text-root text-primary-600'), a(set::href($moreLink), set::target('_blank'), $lang->block->learnMore . ' >')),
-            div
-            (
-                setClass('my-6 text-center'),
-                btn
-                (
-                    setClass('mr-4'),
-                    on::click("togglePage('pageThree')"),
-                    $lang->block->prevPage
-                ),
-                btn
-                (
-                    setClass('primary'),
-                    setData('dismiss', 'modal'),
-                    $lang->block->experience
-                )
-            )
-        )
+        setID('featureNoticeModal'),
+        $pageBlocks
     );
 }
 else

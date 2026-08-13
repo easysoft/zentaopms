@@ -437,9 +437,15 @@ class bugModel extends model
      */
     public function confirm(object $bug, array $kanbanData = array()): bool
     {
-        $oldBug = $this->getByID($bug->id);
+        $oldBug         = $this->getByID($bug->id);
+        $requiredFields = $this->config->bug->confirm->requiredFields;
 
-        $this->dao->update(TABLE_BUG)->data($bug, 'comment')->autoCheck()->checkFlow()->where('id')->eq($bug->id)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug, 'comment')
+            ->autoCheck()
+            ->batchCheckIF(!empty($requiredFields), $requiredFields, 'notempty')
+            ->checkFlow()
+            ->where('id')->eq($bug->id)
+            ->exec();
         if(dao::isError()) return false;
 
         /* 确认 bug 后的积分变动。*/
@@ -1016,18 +1022,34 @@ class bugModel extends model
         }
         else
         {
+            $lastEditedDate = '';
+            if($type == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
+
+            $bugIdListAssignedByMe = array();
+            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+                ->beginIF($type == 'needconfirm')->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story=t3.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->beginIF(empty($build))->andWhere('t1.project')->eq($projectID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($productID) and $branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
-                ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'unclosed' || $type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($type == 'assignedtome')->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
                 ->beginIF($type == 'openedbyme')->andWhere('t1.`openedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'resolvedbyme')->andWhere('t1.`resolvedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'assigntonull')->andWhere('t1.`assignedTo`')->eq('')->fi()
+                ->beginIF($type == 'unconfirmed')->andWhere('t1.confirmed')->eq(0)->fi()
+                ->beginIF($type == 'toclosed')->andWhere('t1.status')->eq('resolved')->fi()
+                ->beginIF($type == 'postponedbugs')->andWhere('t1.resolution')->eq('postponed')->fi()
+                ->beginIF($type == 'assignedbyme')->andWhere('t1.status')->ne('closed')->andWhere('t1.id')->in($bugIdListAssignedByMe)->fi()
+                ->beginIF($type == 'longlifebugs')->andWhere('t1.`lastEditedDate`')->lt($lastEditedDate)->andWhere('t1.`openedDate`')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'overduebugs')->andWhere('t1.status')->eq('active')->andWhere('t1.deadline')->lt(helper::today())->fi()
+                ->beginIF($type == 'needconfirm')->andWhere('t3.status')->eq('active')->andWhere('t3.version > t1.`storyVersion`')->fi()
                 ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
                 ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', t1.`openedBuild`, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
@@ -1084,21 +1106,39 @@ class bugModel extends model
                 $condition = "($condition)";
             }
 
+            $lastEditedDate = '';
+            if($type == 'longlifebugs') $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
+
+            $bugIdListAssignedByMe = array();
+            if($type == 'assignedbyme') $bugIdListAssignedByMe = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs();
+
             $bugs = $this->dao->select("t1.*, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) AS priOrder, IF(t1.`severity` = 0, {$this->config->maxPriValue}, t1.`severity`) AS severityOrder, INSTR('active,resolved,closed,', t1.status) as statusOrder")->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module = t2.id')
+                ->beginIF($type == 'needconfirm')->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')->fi()
                 ->where('t1.deleted')->eq('0')
                 ->beginIF(!empty($productID) && $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF(empty($builds))->andWhere('t1.execution')->eq($executionID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
-                ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'unclosed' || $type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'assigntome' || $type == 'assignedtome')->andWhere('t1.`assignedTo`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'openedbyme')->andWhere('t1.`openedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'resolvedbyme')->andWhere('t1.`resolvedBy`')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'assigntonull')->andWhere('t1.`assignedTo`')->eq('')->fi()
+                ->beginIF($type == 'unconfirmed')->andWhere('t1.confirmed')->eq(0)->fi()
+                ->beginIF($type == 'toclosed')->andWhere('t1.status')->eq('resolved')->fi()
+                ->beginIF($type == 'postponedbugs')->andWhere('t1.resolution')->eq('postponed')->fi()
+                ->beginIF($type == 'assignedbyme')->andWhere('t1.status')->ne('closed')->andWhere('t1.id')->in($bugIdListAssignedByMe)->fi()
+                ->beginIF($type == 'longlifebugs')->andWhere('t1.`lastEditedDate`')->lt($lastEditedDate)->andWhere('t1.`openedDate`')->lt($lastEditedDate)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'overduebugs')->andWhere('t1.status')->eq('active')->andWhere('t1.deadline')->lt(helper::today())->fi()
+                ->beginIF($type == 'needconfirm')->andWhere('t3.status')->eq('active')->andWhere('t3.version > t1.`storyVersion`')->fi()
                 ->beginIF($condition)->andWhere("$condition")->fi()
                 ->beginIF(!empty($param))
                 ->andWhere('t2.path')->like("%,$param,%")
                 ->andWhere('t2.deleted')->eq('0')
                 ->fi()
                 ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewers)")->fi()
-                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', reviewedBy)")->fi()
+                ->beginIF($type == 'reviewedby')->andWhere("FIND_IN_SET('{$this->app->user->account}', `reviewedBy`)")->fi()
                 ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1160,7 +1200,7 @@ class bugModel extends model
             ->andWhere('toStory')->eq(0)
             ->andWhere('openedDate')->ge($minBegin)
             ->andWhere('openedDate')->le($maxEnd)
-            ->andWhere("(status = 'active' OR resolvedDate > '{$maxEnd}')")
+            ->andWhere("(status = 'active' OR `resolvedDate` > '{$maxEnd}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
             ->beginIF($branch !== '')->andWhere('branch')->in("0,$branch")->fi()
@@ -1317,7 +1357,7 @@ class bugModel extends model
     {
         /* 获取需求产生的bugs。 */
         /* Get bugs of the story. */
-        return $this->dao->select('id, title, pri, type, status, assignedTo, resolvedBy, resolution')
+        return $this->dao->select('id, title, pri, type, status, `assignedTo`, `resolvedBy`, resolution')
             ->from(TABLE_BUG)
             ->where('story')->eq($storyID)
             ->beginIF($executionID)->andWhere('execution')->eq($executionID)->fi()
@@ -1470,7 +1510,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerBuild(): array
     {
-        $datas = $this->dao->select('openedBuild AS name, COUNT(openedBuild) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('openedBuild')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`openedBuild` AS name, COUNT(`openedBuild`) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('`openedBuild`')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         foreach($datas as $buildIdList => $data)
@@ -1547,7 +1587,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(openedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('name')->fetchAll();
+        return $this->dao->select("DATE_FORMAT(`openedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('name')->fetchAll();
     }
 
     /**
@@ -1559,7 +1599,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(resolvedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(`resolvedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
             ->having('name != 0000-00-00')
@@ -1576,7 +1616,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerDay(): array
     {
-        return $this->dao->select('DATE_FORMAT(closedDate, "%Y-%m-%d") AS name, COUNT(1) AS value')->from(TABLE_BUG)
+        return $this->dao->select("DATE_FORMAT(`closedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
             ->having('name != 0000-00-00')
@@ -1593,7 +1633,7 @@ class bugModel extends model
      */
     public function getDataOfOpenedBugsPerUser(): array
     {
-        $datas = $this->dao->select('openedBy AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`openedBy` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -1611,7 +1651,7 @@ class bugModel extends model
      */
     public function getDataOfResolvedBugsPerUser(): array
     {
-        $datas = $this->dao->select('resolvedBy AS name, COUNT(1) AS value')
+        $datas = $this->dao->select('`resolvedBy` AS name, COUNT(1) AS value')
             ->from(TABLE_BUG)->where($this->reportCondition())
             ->andWhere('resolvedBy')->ne('')
             ->groupBy('name')
@@ -1634,7 +1674,7 @@ class bugModel extends model
      */
     public function getDataOfClosedBugsPerUser(): array
     {
-        $datas = $this->dao->select('closedBy AS name, COUNT(1) AS value')
+        $datas = $this->dao->select('`closedBy` AS name, COUNT(1) AS value')
             ->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->andWhere('closedBy')->ne('')
@@ -1731,7 +1771,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerActivatedCount(): array
     {
-        $datas = $this->dao->select('activatedCount AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`activatedCount` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         foreach($datas as $data) $data->name = $this->lang->bug->report->bugsPerActivatedCount->graph->xAxisName . ':' . $data->name;
@@ -1765,7 +1805,7 @@ class bugModel extends model
      */
     public function getDataOfBugsPerAssignedTo(): array
     {
-        $datas = $this->dao->select('assignedTo AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
+        $datas = $this->dao->select('`assignedTo` AS name, COUNT(1) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
 
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -1784,7 +1824,7 @@ class bugModel extends model
      */
     public function getBySonarqubeID(int $sonarqubeID): array|bool
     {
-        return $this->dao->select('issueKey')->from(TABLE_BUG)->where('issueKey')->like("$sonarqubeID:%")->fetchPairs();
+        return $this->dao->select('`issueKey`')->from(TABLE_BUG)->where('issueKey')->like("$sonarqubeID:%")->fetchPairs();
     }
 
     /**
@@ -1897,7 +1937,7 @@ class bugModel extends model
         }
 
         /* Get bug reactivated actions during the testreport. */
-        $actions = $this->dao->select('id,objectID')->from(TABLE_ACTION)
+        $actions = $this->dao->select('id,`objectID`')->from(TABLE_ACTION)
             ->where('objectType')->eq('bug')
             ->andWhere('action')->eq('activated')
             ->andWhere('date')->ge($begin)
@@ -2076,7 +2116,7 @@ class bugModel extends model
         $addedRelatedBugs   = array_diff($relatedBugs, $oldRelatedBugs);
         $removedRelatedBugs = array_diff($oldRelatedBugs, $relatedBugs);
         $changedRelatedBugs = array_merge($addedRelatedBugs, $removedRelatedBugs);
-        $changedRelatedBugs = $this->dao->select('id, relatedBug')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
+        $changedRelatedBugs = $this->dao->select('id, `relatedBug`')->from(TABLE_BUG)->where('id')->in(array_filter($changedRelatedBugs))->fetchPairs();
 
         /* 更新相关 bug。 */
         /* Update the related bug. */
@@ -2180,7 +2220,7 @@ class bugModel extends model
     {
         $bugQuery = $this->processSearchQuery($object, $queryID, $productIdList, (string)$branch);
 
-        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS priOrder, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS severityOrder, INSTR('active,resolved,closed,', status) as statusOrder")->from(TABLE_BUG)
+        return $this->dao->select("*, IF(`pri` = 0, {$this->config->maxPriValue}, `pri`) AS `priOrder`, IF(`severity` = 0, {$this->config->maxPriValue}, `severity`) AS `severityOrder`, INSTR('active,resolved,closed,', status) AS `statusOrder`")->from(TABLE_BUG)
             ->where($bugQuery)
             ->andWhere('deleted')->eq('0')
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()

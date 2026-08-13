@@ -84,7 +84,7 @@ dtable
     set::userMap($users),
     set::customCols(true),
     set::orderBy($orderBy),
-    set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
+    set::sortLink(createLink('testtask', 'browse', "productID={$product->id}&branch={$branch}&type={$type}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}&beginTime={$beginTime}&endTime={$endTime}")),
     set::onRenderCell(jsRaw('window.onRenderCell')),
     set::footer(array(array('html' => $footerHTML), 'flex', 'pager')),
     set::footPager(usePager()),

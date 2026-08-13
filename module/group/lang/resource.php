@@ -1466,7 +1466,6 @@ $lang->resource->repo->linkStory    = 'linkStory';
 $lang->resource->repo->linkBug      = 'linkBug';
 $lang->resource->repo->linkTask     = 'linkTask';
 $lang->resource->repo->unlink       = 'unlink';
-$lang->resource->repo->import       = 'importAction';
 $lang->resource->repo->createRepo   = 'createRepoAction';
 $lang->resource->repo->browseTag    = 'browseTag';
 $lang->resource->repo->browseBranch = 'browseBranch';

@@ -23,7 +23,7 @@ jsVar('type', $type);
 $hidden              = $type != 'story' && $module->type == 'story';
 $showParent          = $module->type != 'line' && $module->type != 'deliverable' && $module->type != 'aiskill';
 $moduleBoxClass      = $hidden ? 'hidden' : '';
-$parentLabel         = strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $lang->tree->parent;
+$parentLabel         = strpos(',doc,api,docTemplate,', ",{$type},") !== false ? $lang->tree->parentCate : $parentLabel;
 
 /* ====== Define the page structure with zin widgets ====== */
 if($type != 'docTemplate') modalHeader(set::title($title));

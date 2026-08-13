@@ -565,8 +565,22 @@ $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList[
 $lang->execution->featureBar['all']['delayed']   = $lang->execution->delayed;
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
-$lang->execution->featureBar['bug']['all']        = '全部';
-$lang->execution->featureBar['bug']['unresolved'] = '未解决';
+$lang->execution->featureBar['bug']['all']          = '全部';
+$lang->execution->featureBar['bug']['unclosed']     = '未关闭';
+$lang->execution->featureBar['bug']['openedbyme']   = '由我创建';
+$lang->execution->featureBar['bug']['assigntome']   = '指派给我';
+$lang->execution->featureBar['bug']['resolvedbyme'] = '由我解决';
+$lang->execution->featureBar['bug']['assignedbyme'] = '由我指派';
+$lang->execution->featureBar['bug']['more']         = $lang->more;
+
+$lang->execution->moreSelects['bug']['more']['unresolved']    = '未解决';
+$lang->execution->moreSelects['bug']['more']['unconfirmed']   = '未确认';
+$lang->execution->moreSelects['bug']['more']['assigntonull']  = '未指派';
+$lang->execution->moreSelects['bug']['more']['longlifebugs']  = '久未处理';
+$lang->execution->moreSelects['bug']['more']['toclosed']      = '待关闭';
+$lang->execution->moreSelects['bug']['more']['postponedbugs'] = '被延期';
+$lang->execution->moreSelects['bug']['more']['overduebugs']   = '过期Bug';
+$lang->execution->moreSelects['bug']['more']['needconfirm']   = "{$lang->SRCommon}变动";
 
 $lang->execution->featureBar['build']['all'] = '全部构建';
 

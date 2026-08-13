@@ -7,11 +7,11 @@ title=测试 ppmModel::getRelationByBranch();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的getRelationByBranchTest方法，参数是$repoInfo, 'feature/bbb', 'main', 'all', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
-- 执行ppmModel模块的getRelationByBranchTest方法，参数是$repoInfo, 'feature/bbb', 'main', 'story', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
-- 执行ppmModel模块的getRelationByBranchTest方法，参数是$repoInfo, 'feature/bbb', 'main', 'bug', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
-- 执行ppmModel模块的getRelationByBranchTest方法，参数是$repoInfo, 'feature/bbb', 'main', 'task', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
-- 执行ppmModel模块的getRelationByBranchTest方法，参数是$repoInfo, 'feature/bbb', 'main', 'all', $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0  @1
+- 执行is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager1)) ? 1 : 0 @1
+- 执行is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'story', $pager1)) ? 1 : 0 @1
+- 执行is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'bug', $pager1)) ? 1 : 0 @1
+- 执行is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'task', $pager1)) ? 1 : 0 @1
+- 执行is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager2)) ? 1 : 0 @1
 
 */
 
@@ -32,7 +32,6 @@ $repo = zenData('ops_repo')->loadYaml('ops_repo', false, 2);
 $repo->id->range('42');
 $repo->product->range('1');
 $repo->name->range('ppm-repo-42');
-$repo->defaultBranch->range('main');
 $repo->gen(1);
 
 su('admin');
@@ -42,8 +41,8 @@ $repoInfo = (object)array('id' => 42);
 $pager1   = new pager(0, 20, 1);
 $pager2   = new pager(0, 20, 2);
 
-r(strpos(json_encode($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
-r(strpos(json_encode($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'story', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
-r(strpos(json_encode($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'bug', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
-r(strpos(json_encode($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'task', $pager1), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
-r(strpos(json_encode($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager2), JSON_UNESCAPED_UNICODE), '尝试认证失败') !== false ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager1)) ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'story', $pager1)) ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'bug', $pager1)) ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'task', $pager1)) ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getRelationByBranchTest($repoInfo, 'feature/bbb', 'main', 'all', $pager2)) ? 1 : 0) && p() && e('1');

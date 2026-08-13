@@ -72,6 +72,7 @@ class myZen extends my
     {
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->loadModel('testcase')->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+        $users = $this->loadModel('user')->getPairs('noletter');
 
         $failCount = 0;
         foreach($cases as $case)
@@ -86,8 +87,23 @@ class myZen extends my
                 $case->status = 'casechanged';
             }
             if(!$case->lastRunResult) $case->lastRunResult = $this->lang->testcase->unexecuted;
+
+            $stages         = array();
+            $reviewedByList = array();
+            foreach(explode(',', $case->stage) as $stage) $stages[] = zget($this->lang->testcase->stageList, $stage, '');
+            foreach(explode(',', $case->reviewedBy) as $reviewedBy) $reviewedByList[] = zget($users, $reviewedBy, '');
+            $case->stage      = implode(',', array_filter($stages));
+            $case->reviewedBy = implode(',', array_filter($reviewedByList));
         }
+
+        $sceneIdList = array_unique(array_column($cases, 'scene'));
+        $scenePairs  = $sceneIdList ? $this->loadModel('testcase')->getScenesName($sceneIdList) : array();
+        $scenePairs[0] = '/';
+
         $this->view->failCount = $failCount;
+        $this->view->scenePairs = $scenePairs;
+        $this->view->stories = array('') + $this->loadModel('story')->getPairs();
+
         return $cases;
     }
 

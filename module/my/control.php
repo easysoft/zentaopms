@@ -575,10 +575,10 @@ class my extends control
 
         /* Append id for second sort. */
         $this->app->loadLang('project');
-        $sort  = common::appendOrder($orderBy);
-        $count = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
-        $users = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $tasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
+        $sort   = common::appendOrder($orderBy);
+        $count  = array('wait' => 0, 'doing' => 0, 'blocked' => 0);
+        $users  = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $tasks  = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $browseType == 'assignedTo' ? 'wait' : $browseType, $queryID);
         foreach($tasks as $task)
         {
             if($task->status == 'wait' || $task->status == 'doing' || $task->status == 'blocked') $count[$task->status] ++;
@@ -628,7 +628,7 @@ class my extends control
     {
         /* Save session. */
         $uri = $this->app->getURI(true);
-        $this->session->set('caseList', $uri, 'qa');
+        $this->session->set('caseList', $uri, $this->app->tab);
         $this->session->set('bugList',  $uri . "#app={$this->app->tab}", 'qa');
 
         /* Load pager. */
@@ -1742,6 +1742,9 @@ class my extends control
      */
     public function ssh(int $repoID = 0, int $objectID = 0)
     {
+        $health = $this->loadModel('gitfox')->checkHealth();
+        if(!$health) return $this->sendError($this->lang->gitfox->serverFail);
+
         $tab = $this->app->tab;
         if($tab != 'my')
         {

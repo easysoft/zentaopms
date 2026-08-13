@@ -260,6 +260,16 @@ class installZen extends install
             $return->error  = $this->lang->install->errorDBName;
             return $return;
         }
+        if(in_array($data->dbDriver, $this->config->pgsqlDriverList))
+        {
+            $schema = trim($data->dbSchema ?? 'public');
+            if(!preg_match('/^[A-Za-z_][A-Za-z0-9_]*$/', $schema))
+            {
+                $return->result = 'fail';
+                $return->error  = $this->lang->install->errorDBSchema;
+                return $return;
+            }
+        }
         if(!is_object($this->install->dbh))
         {
             /* 没有成功连接数据库的话，则提示错误信息。 */
@@ -316,6 +326,10 @@ class installZen extends install
 
         /* Set the session save path when the session save path is null. */
         $customSession = $this->setSessionPath();
+
+        $dbSchema          = trim((string)getEnvData('ZT_DB_SCHEMA', 'public'));
+        $schemaConfig      = $dbSchema != 'public' ? "\$config->db->schema = getEnvData('ZT_DB_SCHEMA');" : '';
+        $slaveSchemaConfig = $dbSchema != 'public' ? "    \$slaveDB->schema      = getEnvData('ZT_DB_SCHEMA');" : '';
         $configContent = <<<EOT
 <?php
 \$config->installed     = getEnvData('ZT_INSTALLED', true, 'bool');
@@ -330,6 +344,7 @@ class installZen extends install
 \$config->db->encoding  = getEnvData('ZT_DB_ENCODING', 'UTF8');
 \$config->db->password  = getEnvData('ZT_DB_PASSWORD');
 \$config->db->prefix    = getEnvData('ZT_DB_PREFIX');
+$schemaConfig
 \$config->webRoot       = getWebRoot();
 \$config->default->lang = getEnvData('ZT_DEFAULT_LANG', 'zh-cn');
 
@@ -345,6 +360,7 @@ if(\$hasSlaveDB && \$hasSlaveDB != 'false')
     \$slaveDB->driver      = getEnvData('ZT_DB_DRIVER');
     \$slaveDB->encoding    = getEnvData('ZT_DB_ENCODING');
     \$slaveDB->prefix      = getEnvData('ZT_DB_PREFIX');
+$slaveSchemaConfig
     \$config->slaveDBList  = array(\$slaveDB);
 }
 EOT;
@@ -385,6 +401,7 @@ EOT;
             $this->config->db->port     = $data->dbPort;
         }
         $this->config->db->name   = $data->dbName;
+        $this->config->db->schema = in_array($this->config->db->driver, $this->config->pgsqlDriverList) ? trim($data->dbSchema ?? 'public') : 'public';
         $this->config->db->prefix = $data->dbPrefix;
 
         return true;

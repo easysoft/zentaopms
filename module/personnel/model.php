@@ -181,7 +181,7 @@ class personnelModel extends model
     public function getRiskInvest(array $accounts, array $projects): array
     {
         /* Get the risks in projects. */
-        $risks = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_RISK)
+        $risks = $this->dao->select('id,`createdBy`,`resolvedBy`,status,`assignedTo`')->from(TABLE_RISK)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
@@ -218,7 +218,7 @@ class personnelModel extends model
     public function getIssueInvest(array $accounts, array $projects): array
     {
         /* Get issues in the projects. */
-        $issues = $this->dao->select('id,createdBy,resolvedBy,status,assignedTo')->from(TABLE_ISSUE)
+        $issues = $this->dao->select('id,`createdBy`,`resolvedBy`,status,`assignedTo`')->from(TABLE_ISSUE)
             ->where('project')->in(array_keys($projects))
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
@@ -259,23 +259,23 @@ class personnelModel extends model
         $productKeys  = array_keys($productPairs);
 
         /* Get invest bugs, requirements and stories. */
-        $bugs = $this->dao->select('id,status,openedBy,assignedTo,resolvedBy')->from(TABLE_BUG)
+        $bugs = $this->dao->select('id,status,`openedBy`,`assignedTo`,`resolvedBy`')->from(TABLE_BUG)
             ->where('product')->in($productKeys)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-        $requirement = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
+        $requirement = $this->dao->select('`openedBy`, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
             ->andWhere('openedBy')->in(array_keys($accounts))
             ->andWhere('type')->eq('requirement')
             ->andWhere('deleted')->eq(0)
-            ->groupBy('openedBy')
+            ->groupBy('`openedBy`')
             ->fetchPairs('openedBy');
-        $story = $this->dao->select('openedBy, count(id) as number')->from(TABLE_STORY)
+        $story = $this->dao->select('`openedBy`, count(id) as number')->from(TABLE_STORY)
             ->where('product')->in($productKeys)
             ->andWhere('openedBy')->in(array_keys($accounts))
             ->andWhere('type')->eq('story')
             ->andWhere('deleted')->eq(0)
-            ->groupBy('openedBy')
+            ->groupBy('`openedBy`')
             ->fetchPairs('openedBy');
 
         /* Initialize bugs and requirements related to personnel. */
@@ -347,7 +347,7 @@ class personnelModel extends model
     public function getProjectTaskInvest(array $projects, array $accounts): array
     {
         /* Get the tasks in the projects. */
-        $tasks = $this->dao->select('id,status,openedBy,finishedBy,assignedTo,project,`left`,mode')->from(TABLE_TASK)
+        $tasks = $this->dao->select('id,status,`openedBy`,`finishedBy`,`assignedTo`,project,`left`,mode')->from(TABLE_TASK)
           ->where('project')->in(array_keys($projects))
           ->andWhere('deleted')->eq('0')
           ->fetchAll('id');
@@ -428,7 +428,7 @@ class personnelModel extends model
         }
 
         $userHours  = array();
-        $effortList = $this->dao->select('id,account,objectID,`left`,consumed')->from(TABLE_EFFORT)
+        $effortList = $this->dao->select('id,account,`objectID`,`left`,consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
             ->andWhere('deleted')->eq(0)
             ->andWhere('objectID')->in($taskIdList)
@@ -571,7 +571,7 @@ class personnelModel extends model
      */
     public function updateWhitelist(array $users = array(), string $objectType = '', int $objectID = 0, string $type = 'whitelist', string $source = 'add', string $updateType = 'replace'): bool
     {
-        $oldWhitelist = $this->dao->select('account,objectType,objectID,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
+        $oldWhitelist = $this->dao->select('account,`objectType`,`objectID`,type,source')->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll('account');
         if($updateType == 'replace') $this->dao->delete()->from(TABLE_ACL)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
 
         $users    = array_unique(array_filter($users));

@@ -7,17 +7,11 @@ title=测试 gitfoxModel::getPage();
 timeout=0
 cid=0
 
-- 执行model模块的getPage方法，参数是null  @0
-- 执行model模块的getPage方法
- - 属性page @3
- - 属性pageSize @50
-- 执行model模块的getPage方法
- - 属性page @5
- - 属性pageSize @20
-- 执行model模块的getPage方法，参数是new stdclass
- - 属性page @1
- - 属性pageSize @20
-- 执行model模块的getPage方法  @1
+- 步骤 1：getPage(null) 返回空数组 @0
+- 步骤 2：自定义页码和分页大小正确 @3,50
+- 步骤 3：缺少 recPerPage 时使用默认分页大小 @5,20
+- 步骤 4：空对象时使用默认分页信息 @1,20
+- 步骤 5：结果里包含 page 字段 @1
 
 */
 
@@ -27,10 +21,9 @@ include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
 $gitfoxTest = new gitfoxModelTest();
-$model = $gitfoxTest->instance;
 
-r(count($model->getPage(null))) && p() && e('0');
-r($model->getPage((object)array('pageID' => 3, 'recPerPage' => 50))) && p('page,pageSize') && e('3,50');
-r($model->getPage((object)array('pageID' => 5))) && p('page,pageSize') && e('5,20');
-r($model->getPage(new stdclass())) && p('page,pageSize') && e('1,20');
-r(isset($model->getPage((object)array('pageID' => 3, 'recPerPage' => 50))['page'])) && p() && e('1');
+r($gitfoxTest->getPageCountTest(null)) && p() && e('0');
+r($gitfoxTest->getPageTest((object)array('pageID' => 3, 'recPerPage' => 50))) && p('page,pageSize') && e('3,50');
+r($gitfoxTest->getPageTest((object)array('pageID' => 5))) && p('page,pageSize') && e('5,20');
+r($gitfoxTest->getPageTest(new stdclass())) && p('page,pageSize') && e('1,20');
+r($gitfoxTest->getPageHasPageTest((object)array('pageID' => 3, 'recPerPage' => 50))) && p() && e('1');

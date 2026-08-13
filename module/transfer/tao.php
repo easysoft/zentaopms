@@ -86,7 +86,7 @@ class transferTao extends transferModel
     protected function getFileGroups(string $module, array $idList): array
     {
         if(in_array($module, array('epic', 'requirement'))) $module = "{$module},story";
-        return $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)
+        return $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)
             ->where('objectType')->in($module)
             ->beginIf($idList)->andWhere('objectID')->in($idList)->fi()
             ->andWhere('extra')->ne('editor')

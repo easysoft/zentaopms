@@ -22,7 +22,7 @@ class ppmTao extends ppmModel
      */
     protected function getLinkedObjectPairs(int $ppmID, string $objectType = 'story'): array
     {
-        return $this->dao->select('BID')->from(TABLE_RELATION)
+        return $this->dao->select('`BID`')->from(TABLE_RELATION)
             ->where('AType')->eq($this->app->rawModule)
             ->andWhere('BType')->eq($objectType)
             ->andWhere('AID')->eq($ppmID)

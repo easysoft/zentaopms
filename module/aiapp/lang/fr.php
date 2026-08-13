@@ -45,8 +45,17 @@ $lang->aiapp->viewAiToolkit      = 'View AI Toolkit';
 
 $lang->aiapp->id                 = 'ID';
 $lang->aiapp->model              = 'Model Name';
+$lang->aiapp->modelID            = 'ID du modèle';
+$lang->aiapp->abilities          = 'Capacités';
 $lang->aiapp->converse           = 'Converse';
 $lang->aiapp->pageSummary        = 'Total %s items.';
+$lang->aiapp->searchModels       = 'Rechercher des modèles';
+$lang->aiapp->abilityTypes       = [];
+
+$lang->aiapp->abilityTypes['chat']             = 'Chat';
+$lang->aiapp->abilityTypes['function-calling'] = 'Appel de fonction';
+$lang->aiapp->abilityTypes['reasoning']        = 'Raisonnement';
+$lang->aiapp->abilityTypes['embedding']        = 'Embedding';
 
 $lang->aiapp->tips = new stdClass();
 $lang->aiapp->tips->noData = 'No data';
@@ -94,7 +103,6 @@ $lang->aiapp->langData->formReturnJSONArray = 'Veuillez retourner un tableau JSO
 $lang->aiapp->langData->formZentaoAPITip    = "Veuillez d'abord utiliser les outils zentao-api pour obtenir les données de contexte nécessaires, puis utilisez l'outil submitFormData pour retourner les données du formulaire remplies. Les champs obligatoires doivent avoir des valeurs.\nNormalement, submitFormData n'a besoin d'être appelé qu'une seule fois, sauf si l'utilisateur demande plusieurs solutions.";
 $lang->aiapp->langData->formResultGenerated = 'Les données du formulaire ont été générées.';
 $lang->aiapp->langData->formCurrentTarget   = 'Actuel';
-$lang->aiapp->langData->formApplyDataTip    = 'Veuillez cliquer sur le bouton "Appliquer au formulaire actuel" pour remplir les données dans le formulaire.';
 $lang->aiapp->langData->stepDescription     = 'Description de l\'étape';
 $lang->aiapp->langData->expectDescription   = 'Résultat attendu';
 

@@ -524,7 +524,15 @@ class pipeline extends control
     {
         if($_POST)
         {
-            $formData = form::data($this->config->pipeline->form->import)
+            $formConfig = $this->config->pipeline->form->import;
+            $postProviderID = (int)($this->post->providerID ?: $providerID);
+            if($postProviderID)
+            {
+                $postProvider = $this->loadModel('provider')->getByID($postProviderID);
+                if($postProvider && $postProvider->type !== 'GitLab') $formConfig['pipeline']['required'] = true;
+            }
+
+            $formData = form::data($formConfig)
                 ->setDefault('providerID', $providerID)
                 ->get();
             $repo = $this->loadModel('repo')->getByID($repoID);
@@ -1000,7 +1008,7 @@ class pipeline extends control
         /* Sync delete cron job to gitfox. */
         if($field == 'cron')
         {
-            $trigger  = $this->dao->select('pipelineID')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
+            $trigger  = $this->dao->select('`pipelineID`')->from(TABLE_PIPELINETRIGGER)->where('id')->eq($triggerID)->fetch();
             $pipeline = $trigger ? $this->pipeline->getByID((int)$trigger->pipelineID) : null;
             if($pipeline) $this->pipeline->deleteTriggerCronJob((int)$trigger->pipelineID, $pipeline->engine);
         }

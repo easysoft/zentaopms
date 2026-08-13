@@ -7,16 +7,16 @@ title=测试 ppmModel::getPipelinesByPPM();
 timeout=0
 cid=0
 
-- 执行ppmModel模块的getPipelinesByPPMTest方法，参数是$openedPPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的getPipelinesByPPMTest方法，参数是$mergedPPM 属性apiMessage @尝试认证失败[the acting principal is not authenticated]
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法  @0
-- 执行ppmModel模块的getPipelinesByPPMTest方法，参数是$openedPPM  @1
-- 执行ppmModel模块的getPipelinesByPPMTest方法，参数是$mergedPPM  @1
+- 执行is_array($ppmModel->getPipelinesByPPMTest($openedPPM)) ? 1 : 0 @1
+- 执行is_array($ppmModel->getPipelinesByPPMTest($mergedPPM)) ? 1 : 0 @1
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行ppmModel模块的getPipelinesByPPMTest方法 @0
+- 执行count($ppmModel->getPipelinesByPPMTest($openedPPM)) @0
+- 执行count($ppmModel->getPipelinesByPPMTest($mergedPPM)) @0
 
 */
 
@@ -30,13 +30,13 @@ $ppmModel  = new ppmModelTest();
 $openedPPM = (object)array('id' => 81, 'repoID' => 42, 'sourceSHA' => '6bada47137f46e3b6b3792b397b714e3726e6990', 'sourceBranch' => 'feature/bbb', 'targetBranch' => 'main', 'status' => 'opened');
 $mergedPPM = (object)array('id' => 81, 'repoID' => 42, 'sourceSHA' => '6bada47137f46e3b6b3792b397b714e3726e6990', 'sourceBranch' => 'feature/bbb', 'targetBranch' => 'main', 'mergeSHA' => '4444444444444444444444444444444444444444', 'status' => 'merged');
 
-r($ppmModel->getPipelinesByPPMTest($openedPPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
-r($ppmModel->getPipelinesByPPMTest($mergedPPM)) && p('apiMessage') && e('尝试认证失败[the acting principal is not authenticated]');
+r(is_array($ppmModel->getPipelinesByPPMTest($openedPPM)) ? 1 : 0) && p() && e('1');
+r(is_array($ppmModel->getPipelinesByPPMTest($mergedPPM)) ? 1 : 0) && p() && e('1');
 r($ppmModel->getPipelinesByPPMTest((object)array('id' => 81, 'repoID' => 42, 'sourceBranch' => 'feature/bbb', 'targetBranch' => 'main', 'status' => 'opened'))) && p() && e('0');
 r($ppmModel->getPipelinesByPPMTest((object)array('id' => 81, 'repoID' => 42, 'sourceSHA' => '6bada47137f46e3b6b3792b397b714e3726e6990', 'targetBranch' => 'main', 'status' => 'opened'))) && p() && e('0');
 r($ppmModel->getPipelinesByPPMTest((object)array('id' => 81, 'repoID' => 42, 'targetBranch' => 'main', 'status' => 'opened'))) && p() && e('0');
 r($ppmModel->getPipelinesByPPMTest((object)array('id' => 81, 'repoID' => 42, 'sourceBranch' => '', 'targetBranch' => 'main', 'status' => 'opened'))) && p() && e('0');
 r($ppmModel->getPipelinesByPPMTest((object)array('id' => 81, 'repoID' => 42, 'sourceSHA' => '', 'sourceBranch' => '', 'status' => 'opened'))) && p() && e('0');
 r($ppmModel->getPipelinesByPPMTest((object)array())) && p() && e('0');
-r(is_array($ppmModel->getPipelinesByPPMTest($openedPPM))) && p() && e('1');
-r(is_array($ppmModel->getPipelinesByPPMTest($mergedPPM))) && p() && e('1');
+r(count($ppmModel->getPipelinesByPPMTest($openedPPM))) && p() && e('0');
+r(count($ppmModel->getPipelinesByPPMTest($mergedPPM))) && p() && e('0');

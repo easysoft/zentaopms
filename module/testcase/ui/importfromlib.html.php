@@ -65,16 +65,15 @@ foreach($cases as $case)
 
     $case->branchItems = $caseBranchItems;
     $case->branch      = $caseBranch;
+    $case->moduleItems = !empty($canImportModules[$caseBranch][$case->id]) ? $canImportModules[$caseBranch][$case->id] : array();
     if($case->id != key($cases))
     {
         $case->module = 'ditto';
     }
     else
     {
-        $case->module = 0;
+        $case->module = !empty($case->moduleItems) ? $case->moduleItems[0]['value'] : 0;
     }
-
-    $case->moduleItems = !empty($canImportModules[$caseBranch][$case->id]) ? $canImportModules[$caseBranch][$case->id] : array();
 }
 
 $footToolbar = array('items' => array(array('text' => $lang->testcase->import, 'btnType' => 'secondary', 'className' => 'import-btn')));

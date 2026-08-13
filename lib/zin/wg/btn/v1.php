@@ -6,6 +6,7 @@ class btn extends wg
 {
     protected static array $defineProps = array(
         'text?:string',              // 按钮的文本。
+        'textClass?:string',         // 按钮文本的样式类。
         'icon?:string',              // 图标名称。
         'iconClass?:string',         // 图标的样式类。
         'square?:bool',              // 是否为方形按钮，通常用于只显示一个图标的按钮。
@@ -53,11 +54,11 @@ class btn extends wg
 
     private function getChildren()
     {
-        list($caret, $text, $icon, $iconClass, $trailingIcon, $trailingIconClass) = $this->prop(array('caret', 'text', 'icon', 'iconClass', 'trailingIcon', 'trailingIconClass'));
+        list($caret, $text, $textClass, $icon, $iconClass, $trailingIcon, $trailingIconClass) = $this->prop(array('caret', 'text', 'textClass', 'icon', 'iconClass', 'trailingIcon', 'trailingIconClass'));
 
         $children = array();
         if(!empty($icon)) $children[] = icon($icon, setClass($iconClass));
-        if(!empty($text)) $children[] = h::span($text, setClass('text'));
+        if(!empty($text)) $children[] = h::span($text, setClass('text', $textClass));
         $children[] = parent::build();
         if(!empty($trailingIcon)) $children[] = icon($trailingIcon, setClass($trailingIconClass));
         if(!empty($caret))        $children[] = h::span(setClass(is_string($caret) ? "caret-$caret" : 'caret'));

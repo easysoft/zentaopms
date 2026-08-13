@@ -118,6 +118,7 @@ class todoZen extends todo
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
+            ->setDefault('pri', 3)
             ->cleanInt('pri')
             ->setIF($hasObject && $objectType,  'objectID', (int)$objectID)
             ->setIF(empty($rawData->date) || $this->post->switchDate, 'date', FUTURE_TIME)
@@ -143,7 +144,7 @@ class todoZen extends todo
     {
         /* Only handle cases where you add to the backlog by year. */
         if(empty($form->data->config)) return $form;
-        if(!empty($form->data->config) && $form->data->config['type'] != 'year') return $form;
+        if(!empty($form->data->config) && isset($form->data->config['type']) && $form->data->config['type'] != 'year') return $form;
 
         $form->data->config['type']          = 'day';
         $form->data->config['specifiedDate'] = 1;
@@ -296,6 +297,7 @@ class todoZen extends todo
 
         /* Process todo. */
         $todo = $form->add('account', $oldTodo->account)
+            ->setDefault('pri', 3)
             ->cleanInt('pri')
             ->setIF(in_array($objectType, array('bug', 'task', 'story')), 'name', '')
             ->setIF($hasObject && $objectType,  'objectID', $objectID)

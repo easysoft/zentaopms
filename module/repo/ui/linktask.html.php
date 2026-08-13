@@ -61,6 +61,7 @@ dtable
     set::footToolbar($footToolbar),
     set::sortLink(jsRaw('createSortLink')),
     set::onRenderCell(jsRaw('window.renderTaskCell')),
+    set::sortLink(createLink('repo', 'linkTask', "repoID={$repoID}&revision={$revision}&browseType={$browseType}&param={$param}&orderBy={name}_{sortType}&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}")),
     set::footPager(usePager())
 );
 

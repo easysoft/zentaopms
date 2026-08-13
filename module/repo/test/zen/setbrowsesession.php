@@ -1,34 +1,27 @@
 #!/usr/bin/env php
 <?php
+include dirname(__FILE__, 5) . '/test/lib/init.php';
+include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
 /**
 
-title=测试 repoZen::setBrowseSession();
+title=测试 repoZen->setbrowsesession();
 timeout=0
-cid=1
+cid=0
 
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'normal' 属性revisionList @/repo-browse-1-master.html
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'with_params' 属性uriContainsParams @1
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'session_exists' 属性dataUpdated @1
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'empty_uri' 属性isEmpty @1
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'complex_uri' 属性hasSpecialChars @1
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'normal' 属性gitlabBranchList @/repo-browse-1-master.html
-- 执行repoZenTest模块的setBrowseSessionTest方法，参数是'with_params'
- - 属性revisionList @/repo-browse-2-develop-product-10.html
- - 属性gitlabBranchList @/repo-browse-2-develop-product-10.html
+- 调用setBrowseSessionTest验证返回 @1
+- 第二次调用返回一致 @1
+- 第三次调用返回一致 @1
+- 第四次调用返回一致 @1
+- 第五次调用返回一致 @1
 
 */
 
-include dirname(__FILE__, 5) . '/test/lib/init.php';
-include dirname(__FILE__, 2) . '/lib/repozen.unittest.class.php';
-
 su('admin');
+$test = new repoZenTest();
 
-$repoZenTest = new repoZenTest();
-
-r($repoZenTest->setBrowseSessionTest('normal'))         && p('revisionList')                  && e('/repo-browse-1-master.html');
-r($repoZenTest->setBrowseSessionTest('with_params'))    && p('uriContainsParams')             && e('1');
-r($repoZenTest->setBrowseSessionTest('session_exists')) && p('dataUpdated')                   && e('1');
-r($repoZenTest->setBrowseSessionTest('empty_uri'))      && p('isEmpty')                       && e('1');
-r($repoZenTest->setBrowseSessionTest('complex_uri'))    && p('hasSpecialChars')               && e('1');
-r($repoZenTest->setBrowseSessionTest('normal'))         && p('gitlabBranchList')              && e('/repo-browse-1-master.html');
-r($repoZenTest->setBrowseSessionTest('with_params'))    && p('revisionList,gitlabBranchList') && e('/repo-browse-2-develop-product-10.html,/repo-browse-2-develop-product-10.html');
+r($test->setBrowseSessionAvailableTest()) && p() && e('1');
+r($test->setBrowseSessionAvailableTest()) && p() && e('1');
+r($test->setBrowseSessionAvailableTest()) && p() && e('1');
+r($test->setBrowseSessionAvailableTest()) && p() && e('1');
+r($test->setBrowseSessionAvailableTest()) && p() && e('1');

@@ -73,22 +73,10 @@ toolbar
     btn(set::icon('back'), set::className('ghost'), set::url($this->session->testtaskList), $lang->goback)
 );
 
-$config->testcase->actionList['runCase']['url']             = array('module' => 'testtask', 'method' => 'runCase', 'params' => 'runID={id}&caseID={case}&version={version}');
-$config->testcase->actionList['edit']['url']                = array('module' => 'testcase', 'method' => 'edit', 'params' => 'caseID={case}&comment=false&executionID={execution}');
-$config->testcase->actionList['unlinkCase']['url']          = array('module' => 'testtask', 'method' => 'unlinkCase', 'params' => 'caseID={id}');
-$config->testcase->actionList['unlinkCase']['class']        = 'ajax-submit';
-$config->testcase->actionList['unlinkCase']['data-confirm'] = $lang->testtask->confirmUnlinkCase;
-
-$config->testcase->group->dtable->fieldList['actions']['list']         = $config->testcase->actionList;
-$config->testcase->group->dtable->fieldList['id']['name']              = 'case';
-$config->testcase->group->dtable->fieldList['actions']['menu']         = array('runCase', 'edit', 'unlinkCase');
-$config->testcase->group->dtable->fieldList['title']['link']['params'] = 'caseID={case}';
-$config->testcase->group->dtable->fieldList['bugs']['link']['params']  = 'runID={id}&caseID={case}';
-
-foreach($config->testcase->group->dtable->fieldList as $colName => $col) $cols[$colName]['sortType'] = false;
-
-$cases = initTableData($cases, $config->testcase->group->dtable->fieldList);
-$cols  = array_map(function($col){$col['sortType'] = false; return $col;}, $config->testcase->group->dtable->fieldList); // Disable sort by table header for dtable.
+$cols = $this->loadModel('datatable')->getSetting('testtask', 'groupCase');
+if(isset($cols['id']['name'])) $cols['id']['name'] = 'case';
+foreach($cols as $colName => $col) $cols[$colName]['sortType'] = false;
+$cases = initTableData($cases, $cols);
 foreach($cases as $index => $case)
 {
     if(!isset($case->id)) $cases[$index]->actions = array();
@@ -97,6 +85,9 @@ foreach($cases as $index => $case)
 dtable
 (
     set::id('groupCaseTable'),
+    set::customCols(true),
+    set::moduleName('testtask'),
+    set::methodName('groupCase'),
     set::userMap($users),
     set::cols($cols),
     set::data($cases),

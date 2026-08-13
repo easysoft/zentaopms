@@ -5,21 +5,11 @@
 title=测试 spaceModel->createDefaultSpace();
 cid=18392
 
-- 测试传入空用户名创建默认空间
- - 属性name @默认空间
- - 属性k8space @quickon-app
- - 属性owner @admin
- - 属性default @1
-- 测试传入已存在的用户名创建默认空间
- - 属性name @默认空间
- - 属性k8space @quickon-app
- - 属性owner @user1
- - 属性default @1
-- 测试传入不存在的用户名创建默认空间
- - 属性name @默认空间
- - 属性k8space @quickon-app
- - 属性owner @test
- - 属性default @1
+- 创建默认空间返回成功 @1
+- 创建默认空间后空间名称正确 @默认空间
+- 创建默认空间后空间编码正确 @default
+- 创建默认空间后鉴权方式正确 @extend
+- 创建默认空间后管理员数量正确 @1
 
 */
 
@@ -27,11 +17,19 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('user')->gen(5);
-zenData('space')->gen(0);
+zenData('ops_space')->gen(0);
+zenData('company')->gen(1);
+zenData('ops_spaceuser')->gen(0);
 
-$accounts = array('', 'user1', 'test');
+global $tester;
+$tester->dao->update(TABLE_COMPANY)->set('admins')->eq(',admin,')->where('id')->eq(1)->exec();
+
+su('admin');
 
 $spaceTester = new spaceModelTest();
-r($spaceTester->createDefaultSpaceTest($accounts[0])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,admin,1'); // 测试传入空用户名创建默认空间
-r($spaceTester->createDefaultSpaceTest($accounts[1])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,user1,1'); // 测试传入已存在的用户名创建默认空间
-r($spaceTester->createDefaultSpaceTest($accounts[2])) && p('name,k8space,owner,default') && e('默认空间,quickon-app,test,1'); // 测试传入不存在的用户名创建默认空间
+
+r($spaceTester->createDefaultSpaceTest()) && p() && e('1');                            // 创建默认空间返回成功
+r($spaceTester->createDefaultSpaceAndGetFieldTest('name')) && p() && e('默认空间');    // 创建默认空间后空间名称正确
+r($spaceTester->createDefaultSpaceAndGetFieldTest('code')) && p() && e('default');    // 创建默认空间后空间编码正确
+r($spaceTester->createDefaultSpaceAndGetFieldTest('auth')) && p() && e('extend');     // 创建默认空间后鉴权方式正确
+r($spaceTester->createDefaultSpaceAndGetManagerCountTest()) && p() && e('1');         // 创建默认空间后管理员数量正确

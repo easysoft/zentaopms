@@ -151,6 +151,12 @@ $config->project->dtable->fieldList['consume']['type']     = 'number';
 $config->project->dtable->fieldList['consume']['group']    = 7;
 $config->project->dtable->fieldList['consume']['sortType'] = false;
 
+$config->project->dtable->fieldList['left']['title']    = $lang->project->surplus;
+$config->project->dtable->fieldList['left']['name']     = 'left';
+$config->project->dtable->fieldList['left']['type']     = 'number';
+$config->project->dtable->fieldList['left']['group']    = 7;
+$config->project->dtable->fieldList['left']['sortType'] = false;
+
 $config->project->dtable->fieldList['progress']['title'] = $lang->project->progress;
 $config->project->dtable->fieldList['progress']['name']  = 'progress';
 $config->project->dtable->fieldList['progress']['type']  = 'progress';

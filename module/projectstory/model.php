@@ -27,7 +27,7 @@ class projectstoryModel extends model
 
         if(empty($storyIdList)) return $stories;
 
-        return $this->dao->select('t2.id as id, t2.title as title, t3.id as executionID, t3.name as execution')->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select('t2.id as id, t2.title as title, t3.id as `executionID`, t3.name as execution')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.story')->in($storyIdList)

@@ -18,6 +18,7 @@ $lang->artifact->copyCMD             = 'Copy Command';
 $lang->artifact->copied              = 'Copied Successfully';
 
 $lang->artifact->name          = 'Name';
+$lang->artifact->code          = 'Code';
 $lang->artifact->path          = 'Current Path';
 $lang->artifact->type          = 'Type';
 $lang->artifact->size          = 'Size';
