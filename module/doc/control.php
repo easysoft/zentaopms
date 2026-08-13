@@ -2525,6 +2525,8 @@ class doc extends control
         $doc->editors = $this->doc->getEditors($docID);
         $doc->draft   = $doc->status == 'draft' ? $this->doc->getContent($docID, 0) : null;
 
+        unset($doc->order); // 防止order覆盖左侧文档树导致乱跳
+
         $lib        = $this->doc->getLibByID((int)$doc->lib);
         $objectType = $lib->type;
         if(empty($objectType))
