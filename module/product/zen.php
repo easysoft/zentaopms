@@ -674,7 +674,7 @@ class productZen extends product
         if($message) $this->lang->saveSuccess = $message;
 
         /* 移动到control。*/
-        if($this->viewType == 'json') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID);
+        if($this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api')) return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID);
         return $this->getCreatedLocate($productID, $programID);
     }
 
