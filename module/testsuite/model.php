@@ -303,7 +303,7 @@ class testsuiteModel extends model
      */
     public function isClickable(object $report, string $action): bool
     {
-        if($action == 'confirmCaseChange')  return isset($report->caseVersion) && $report->version < $report->caseVersion;
+        if($action == 'confirmCaseChange') return $report->status == 'normal' && isset($report->caseVersion) && $report->version < $report->caseVersion;
         return common::hasPriv('testsuite', $action);
     }
 
