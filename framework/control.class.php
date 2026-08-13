@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include __DIR__ . '/base/control.class.php';
+include_once __DIR__ . '/base/control.class.php';
 
 #[AllowDynamicProperties]
 class control extends baseControl
@@ -40,7 +40,7 @@ class control extends baseControl
         if($this->config->edition == 'open') return false;
 
         /* Code for task #9224. Set requiredFields for workflow. */
-        if($this->dbh && ($this->app->isServing() || (defined('RUN_MODE') and RUN_MODE == 'api')))
+        if($this->dbh && ($this->app->isServing() || (helper::isApiRequest())))
         {
             $this->extendExportFields();
             $this->extendEditorFields();

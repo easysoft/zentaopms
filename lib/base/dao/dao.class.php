@@ -801,7 +801,7 @@ class baseDAO
         {
             $data->lang = $this->app->getClientLang();
             if(isset($this->app->config->cn2tw) and $this->app->config->cn2tw and $data->lang == 'zh-tw') $data->lang = 'zh-cn';
-            if(defined('RUN_MODE') and RUN_MODE == 'front' and !empty($this->app->config->cn2tw)) $data->lang = str_replace('zh-tw', 'zh-cn', $data->lang);
+            if(helper::isRunMode('front') and !empty($this->app->config->cn2tw)) $data->lang = str_replace('zh-tw', 'zh-cn', $data->lang);
         }
 
         $this->sqlobj->data($data, $skipFields);

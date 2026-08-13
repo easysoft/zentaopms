@@ -390,7 +390,7 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID, true);
         if(!$plan)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->createLink('product', 'index'));
         }
 

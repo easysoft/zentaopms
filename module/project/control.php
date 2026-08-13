@@ -603,7 +603,7 @@ class project extends control
 
         $project = commonModel::isTutorialMode() ? $this->loadModel('tutorial')->getProject() : $this->project->fetchByID($projectID);
         if(!empty($project->deleted)) return $this->sendError($this->lang->project->deletedTip, $this->createLink('project', 'browse'));
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
+        if(!helper::isApiRequest()) $projectID = $this->project->checkAccess((int)$projectID, $this->project->getPairsByProgram());
         if(is_bool($projectID)) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->project->accessDenied, 'locate' => $this->createLink('project', 'browse'))));
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
@@ -612,7 +612,7 @@ class project extends control
 
         if(empty($project) || strpos('scrum,waterfall,kanban,agileplus,waterfallplus,ipd', $project->model) === false)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('project', 'browse'))));
         }
 
@@ -823,14 +823,14 @@ class project extends control
         if(!$project->multiple)
         {
             $executionID = $this->execution->getNoMultipleID($projectID);
-            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            if(helper::isApiRequest())
             {
                 $this->view->executionStats = array($this->execution->getByID($executionID));
                 return $this->display();
             }
             return $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
         }
-        if(!empty($project->model) && $project->model == 'kanban' && !(defined('RUN_MODE') && RUN_MODE == 'api')) return $this->locate(inlink('index', "projectID=$projectID"));
+        if(!empty($project->model) && $project->model == 'kanban' && !(helper::isApiRequest())) return $this->locate(inlink('index', "projectID=$projectID"));
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', true);

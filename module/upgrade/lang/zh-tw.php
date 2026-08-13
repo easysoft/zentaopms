@@ -68,6 +68,7 @@ $lang->upgrade->confirm        = '確認要執行的SQL語句';
 $lang->upgrade->sureExecute    = '確認執行';
 $lang->upgrade->forbiddenExt   = '以下插件與新版本不兼容，已經自動禁用：';
 $lang->upgrade->updateFile     = '需要更新附件信息。';
+$lang->upgrade->executeFailed  = '升級請求中斷，請重新整理頁面後重試。已執行的變更會自動跳過，不會重複執行。';
 $lang->upgrade->noticeSQL      = '檢查到你的資料庫跟標準不一致，嘗試修復失敗。請執行以下SQL語句，再刷新頁面檢查。';
 $lang->upgrade->execCommand    = '請在伺服器上執行上述命令，執行後刷新頁面。';
 $lang->upgrade->mergeProgram   = '數據遷移';

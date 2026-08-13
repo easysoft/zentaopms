@@ -111,6 +111,7 @@ class mailTao extends mailModel
             $file = $this->file->getById((int)$fileID);
             if(!$file) continue;
             if(!in_array($file->extension, $this->config->file->imageExtensions)) continue;
+            if(empty($file->realPath) || !file_exists($file->realPath)) continue;
 
             $images[$matches[1][$key]] = $file->realPath;
         }

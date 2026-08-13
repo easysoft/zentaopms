@@ -2129,7 +2129,7 @@ class bugZen extends bug
     protected function responseAfterOperate(int $bugID, array $changes = array(), string $message = '', bool $isInKanban = false): bool|int
     {
         if(!$message) $message = $this->lang->saveSuccess;
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'message' => $message, 'data' => $bugID));
 
         /* 如果 bug 转任务并且 bug 的状态发生变化，提示是否更新任务状态。*/
         /* This bug has been converted to a task, update the status of the related task or not. */
@@ -2193,7 +2193,7 @@ class bugZen extends bug
         /* Return bug id when call the API. */
         if(!$message) $message = $this->lang->saveSuccess;
         if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $message, 'id' => $bug->id));
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $bug->id));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $bug->id));
 
         if(isInModal()) return $this->send($this->responseInModal());
 

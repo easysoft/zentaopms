@@ -925,6 +925,74 @@ class baseHelper
     }
 
     /**
+     * 判断当前是否处于 API 请求。
+     * Check whether current request is an API request.
+     *
+     * API 入口包括旧版 APIv1、显式 /v1、显式 /v2，以及 RUN_MODE=api 的兼容场景。
+     *
+     * @access public
+     * @static
+     * @return bool
+     */
+    public static function isApiRequest(): bool
+    {
+        global $app;
+        if($app and is_object($app) and is_a($app, 'api')) return true;
+        return defined('RUN_MODE') and RUN_MODE == 'api';
+    }
+
+    /**
+     * 判断当前 RUN_MODE。
+     * Check current run mode.
+     *
+     * @param  string $mode
+     * @access public
+     * @static
+     * @return bool
+     */
+    public static function isRunMode(string $mode): bool
+    {
+        return defined('RUN_MODE') and RUN_MODE == $mode;
+    }
+
+    /**
+     * 生成 API 响应。
+     * Build API response.
+     *
+     * @param  mixed $data
+     * @param  int   $code
+     * @access public
+     * @static
+     * @return string
+     */
+    public static function response(mixed $data = '', int $code = 200): string
+    {
+        $statusCodes = array(
+            100 => '100 Continue',
+            200 => '200 OK',
+            201 => '201 Created',
+            204 => '204 No Content',
+            400 => '400 Bad Request',
+            401 => '401 Authorization Required',
+            403 => '403 Forbidden',
+            404 => '404 Not Found',
+            405 => '405 Method Not Allowed',
+            422 => '422 Unprocessable Entity',
+            500 => '500 Internal Server Error',
+        );
+
+        $statusText = $statusCodes[$code] ?? "{$code} Unknown";
+        header('Access-Control-Allow-Origin: *');
+        header('Access-Control-Allow-Credentials: true');
+        header('Access-Control-Allow-Headers: Origin,X-Requested-With,Content-Type,Accept,Authorization,Token,Referer,User-Agent');
+        header('Access-Control-Allow-Methods: GET,POST,PUT,DELETE,OPTIONS,PATCH');
+        header('Content-Type: application/json');
+        header("HTTP/1.1 {$statusText}");
+
+        return !empty($data) ? json_encode($data, JSON_HEX_TAG) : '';
+    }
+
+    /**
      * 301跳转。
      * Header 301 Moved Permanently.
      *
@@ -1041,7 +1109,7 @@ class baseHelper
      */
     public static function setcookie(string $name, string|int|bool $value = '', ?int $expire = null, ?string $path = null, string $domain = '', ?bool $secure = null, bool $httponly = true)
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'test')
+        if(self::isRunMode('test'))
         {
             $_COOKIE[$name] = (string)$value;
             return;
@@ -1333,7 +1401,7 @@ class baseHelper
     public static function needDecodeHtmlSpecialChars()
     {
         /* API模式下，所有页面都需要解码。In API mode, all pages need to be decoded. */
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return true;
+        if(self::isApiRequest()) return true;
 
         global $app, $config;
 

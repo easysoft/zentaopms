@@ -109,7 +109,7 @@ class messageModel extends model
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
                 $requestType = $config->requestType;
-                if(defined('RUN_MODE') && RUN_MODE == 'api')
+                if(helper::isApiRequest())
                 {
                     $configRoot = $this->app->getConfigRoot();
                     include file_exists($configRoot . 'my.php') ? $configRoot . 'my.php' : $configRoot . 'config.php';
@@ -124,7 +124,7 @@ class messageModel extends model
                     $this->loadModel('mail')->sendmail($objectID, $actionID);
                 }
 
-                if(defined('RUN_MODE') && RUN_MODE == 'api') $config->requestType = $requestType;
+                if(helper::isApiRequest()) $config->requestType = $requestType;
             }
         }
 
@@ -560,6 +560,8 @@ class messageModel extends model
         {
             $module = $method == 'comment' ? 'action' : $objectType;
             if(empty($this->config->{$module}->form->{$method})) return;
+
+            if($method == 'comment' && $objectType == 'story' && !empty($object->type)) $objectType = $object->type;
 
             $formConfig = $this->config->{$module}->form->{$method};
 

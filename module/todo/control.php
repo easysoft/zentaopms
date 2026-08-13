@@ -144,7 +144,7 @@ class todo extends control
             $this->todo->update($todoID, $todo);
             if(dao::isError()) return $this->send(array('status' => 'fail', 'message' => dao::getError()));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
         }
 
@@ -235,7 +235,7 @@ class todo extends control
             $this->todo->activate($todoID, $todo);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         }
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
         if(isInModal()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => true));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
@@ -259,7 +259,7 @@ class todo extends control
         }
 
         /* Return json if run mode is API. */
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        if(helper::isApiRequest())
         {
             $this->send(array('status' => 'success'));
         }
@@ -308,7 +308,7 @@ class todo extends control
         $todo = $this->todo->getByID($todoID, true);
         if(!$todo)
         {
-            if((defined('RUN_MODE') && RUN_MODE == 'api') or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if((helper::isApiRequest()) or $this->app->viewType == 'json') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             if(isInModal()) return print(js::start() . "zui.Modal.hide($(document).find('.modal'));zui.Modal.alert('{$this->lang->notFound}');" . js::end());
             return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound)));
         }
@@ -353,14 +353,14 @@ class todo extends control
         if(!$allowDelete)
         {
             if(isonlybody()) return print(js::alert($this->lang->error->accessDenied));
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => $this->lang->error->accessDenied));
             if(helper::isAjaxRequest()) return $this->send(array('result' => 'fail', 'message' => $this->lang->error->accessDenied));
         }
 
         $this->todo->delete(TABLE_TODO, $todoID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'load' => $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo')));
     }
 
@@ -404,7 +404,7 @@ class todo extends control
             return $this->send(array('result' => 'success', 'callback' => "zui.Modal.confirm({message: '{$message}', icon: 'icon-exclamation-sign', iconClass: 'warning-pale rounded-full icon-2x'}).then((res) => {if(res) openPage('{$confirmURL}', '{$tab}'); else reloadPage();});"));
         }
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        if(helper::isApiRequest())
         {
             return $this->send(array('status' => 'success'));
         }

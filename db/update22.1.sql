@@ -11,3 +11,6 @@ ALTER TABLE `zt_projectdeliverable` ADD COLUMN `submittedDate` datetime DEFAULT 
 ALTER TABLE `zt_reviewissue` MODIFY COLUMN `resolutionDate` datetime DEFAULT NULL COMMENT '解决时间';
 
 DELETE FROM `zt_config` WHERE owner = 'system' AND module = 'common' AND `key` = 'webRoot';
+
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;

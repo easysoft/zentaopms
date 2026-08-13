@@ -345,7 +345,18 @@ class upgradeModel extends model
         }
 
         dao::$realTimeLog = true;
-        call_user_func_array(array($model, $method), $params);
+        try
+        {
+            call_user_func_array(array($model, $method), $params);
+        }
+        catch(Throwable $e)
+        {
+            dao::$realTimeLog = false;
+            $message = sprintf('%s::%s failed: %s (%s:%d)', get_class($model), $method, $e->getMessage(), $e->getFile(), $e->getLine());
+            static::$errors[] = $message;
+            $this->saveLogs('Error ' . $message);
+            return false;
+        }
         dao::$realTimeLog = false;
 
         if($this->isError()) return false;
@@ -9218,7 +9229,7 @@ class upgradeModel extends model
                 $this->dbh->exec($sql);
             }
         }
-        catch(Error $e)
+        catch(Throwable $e)
         {
             static::$errors[] = $e->getMessage();
             $this->dbh->rollBack();
@@ -9259,7 +9270,7 @@ class upgradeModel extends model
                 $this->dbh->exec($sql);
             }
         }
-        catch(Error $e)
+        catch(Throwable $e)
         {
             static::$errors[] = $e->getMessage();
             $this->dbh->rollBack();
@@ -10961,6 +10972,7 @@ class upgradeModel extends model
             ->where('TABLE_SCHEMA')->eq($this->config->db->name)
             ->andWhere('TABLE_TYPE')->eq('BASE TABLE')
             ->fetchPairs();
+        $errors = [];
         foreach($tableCollations as $tableName => $tableCollation)
         {
             if(strpos($tableName, $this->config->db->prefix) !== 0) continue;
@@ -10970,7 +10982,22 @@ class upgradeModel extends model
             if($tableName == TABLE_METRICLIB || $tableName == TABLE_ACTION || $tableName == TABLE_HISTORY) continue;
 
             /* 转换表的字符集和排序规则。Convert table charset and collation. */
-            $this->dbh->exec("ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            try
+            {
+                $this->dbh->exec("ALTER TABLE {$tableName} CONVERT TO CHARACTER SET {$serverCharset} COLLATE {$serverCollation}");
+            }
+            catch(PDOException $e)
+            {
+                $message = sprintf('Convert table %s failed: %s', trim($tableName, '`'), $e->getMessage());
+                $errors[] = $message;
+                $this->saveLogs($message);
+            }
+        }
+
+        if(!empty($errors))
+        {
+            static::$errors = array_merge(static::$errors, $errors);
+            return false;
         }
 
         $this->loadModel('setting')->setItems('system.common.global', ['dbConvertedTime' => helper::now(), 'dbCharset' => $serverCharset, 'dbCollation' => $serverCollation]);
@@ -11984,6 +12011,8 @@ class upgradeModel extends model
         }
 
         $this->dao->query("ALTER TABLE " . TABLE_PROJECT . " DROP COLUMN `deliverable`;");
+        $this->dao->query("DROP VIEW IF EXISTS `ztv_projectnotpl`;");
+        $this->dao->query("CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM " . TABLE_PROJECT . " WHERE `deleted` = '0' AND `isTpl` = 0;");
     }
 
     /**

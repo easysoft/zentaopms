@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include __DIR__ . '/base/router.class.php';
+include_once __DIR__ . '/base/router.class.php';
 
 
 #[AllowDynamicProperties]

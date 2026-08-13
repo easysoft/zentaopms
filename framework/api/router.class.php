@@ -10,7 +10,7 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
-include dirname(__FILE__, 2) . '/router.class.php';
+include_once dirname(__FILE__, 2) . '/router.class.php';
 class api extends router
 {
     /**
@@ -129,6 +129,15 @@ class api extends router
     public $workflowSaveStep = false;
 
     /**
+     * 内部执行 API 时注入的原始请求体。
+     * Raw request body injected when executing API internally.
+     *
+     * @var string|null
+     * @access public
+     */
+    public $requestBody = null;
+
+    /**
      * 构造方法, 设置请求路径，版本等
      *
      * The construct function.
@@ -152,6 +161,34 @@ class api extends router
         $this->httpMethod  = strtolower((string) $_SERVER['REQUEST_METHOD']);
 
         $this->loadApiLang();
+    }
+
+    /**
+     * 设置内部执行时的请求体。
+     * Set raw request body for internal API execution.
+     *
+     * @param  string|null $requestBody
+     * @access public
+     * @return void
+     */
+    public function setRequestBody(?string $requestBody): void
+    {
+        $this->requestBody = $requestBody;
+    }
+
+    /**
+     * 获取请求体。内部执行时优先使用注入值，否则读取 php://input。
+     * Get request body. Use injected value for internal execution first, otherwise read php://input.
+     *
+     * @access protected
+     * @return string
+     */
+    protected function getRequestBody(): string
+    {
+        if($this->requestBody !== null) return $this->requestBody;
+
+        $requestBody = file_get_contents('php://input');
+        return $requestBody === false ? '' : $requestBody;
     }
 
     /**
@@ -1267,7 +1304,7 @@ class api extends router
         global $common;
         if($module and $method and !$common->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
-            die(helper::response(array('error' => 'Access not allowed'), 403));
+            throw EndResponseException::create(helper::response(array('error' => 'Access not allowed'), 403));
         }
     }
 
@@ -1459,20 +1496,7 @@ class api extends router
             /* If the version of api don't exists, call parent method. */
             if($this->apiVersion == 'v2')
             {
-                $this->setParams();
-
-                if(in_array($this->action, array('post', 'put', 'delete')))
-                {
-                    $this->setFormData();
-                }
-                else
-                {
-                    $this->checkAccess();
-                }
-
-                if($this->workflowSaveStep && in_array($this->methodName, array('create', 'batchcreate'))) $this->params['step'] = 'save';
-
-                return parent::loadModule();
+                return $this->prepareV2Module();
             }
             elseif(!$this->apiVersion)
             {
@@ -1505,6 +1529,43 @@ class api extends router
     }
 
     /**
+     * 直接执行 APIv2 模块，不捕获 EndResponseException。
+     * Execute APIv2 module directly without catching EndResponseException.
+     *
+     * @access public
+     * @return void
+     */
+    public function loadModuleForInternal()
+    {
+        return $this->prepareV2Module();
+    }
+
+    /**
+     * 准备并执行 APIv2 模块。
+     * Prepare and execute APIv2 module.
+     *
+     * @access protected
+     * @return mixed
+     */
+    protected function prepareV2Module()
+    {
+        $this->setParams();
+
+        if(in_array($this->action, array('post', 'put', 'delete')))
+        {
+            $this->setFormData();
+        }
+        else
+        {
+            $this->checkAccess();
+        }
+
+        if($this->workflowSaveStep && in_array($this->methodName, array('create', 'batchcreate'))) $this->params['step'] = 'save';
+
+        return parent::loadModule();
+    }
+
+    /**
      * 设置form data。
      * Set form data.
      *
@@ -1513,7 +1574,7 @@ class api extends router
      */
     public function setFormData()
     {
-        $requestBody = file_get_contents("php://input");
+        $requestBody = $this->getRequestBody();
         $postData = json_decode($requestBody, true);
         $_POST    = is_array($postData) ? $postData : array();
         $this->normalizeBatchPostData();
@@ -1768,7 +1829,7 @@ class api extends router
         /* APIV2 POST/PUT requests may provide route parameters in the JSON body. */
         if(in_array($this->action, array('post', 'put')))
         {
-            $requestBody = json_decode((string)file_get_contents('php://input'), true);
+            $requestBody = json_decode($this->getRequestBody(), true);
             if(is_array($requestBody)) $sourceParams = array_merge($sourceParams, $requestBody);
         }
 
