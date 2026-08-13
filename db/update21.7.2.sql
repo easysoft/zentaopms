@@ -1,5 +1,6 @@
 ALTER TABLE `zt_project` ADD `tplAcl` char(30) NOT NULL DEFAULT 'open' AFTER `whitelist`;
 ALTER TABLE `zt_project` ADD `tplWhiteList` text NULL AFTER `tplAcl`;
+ALTER VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `createdBy`, `createdDate`, `datasource`, `view`, `keyField`, `valueField`)
 SELECT 'lang', '立项级别',     'charterLevel',        '1', 'rnd',  'admin', '1970-01-01 00:00:01', 'charterLevel', '', '', '' FROM DUAL WHERE NOT EXISTS ( SELECT 1 FROM `zt_workflowdatasource` WHERE `type` = 'lang' AND `code` = 'charterLevel');

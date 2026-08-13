@@ -268,6 +268,8 @@ ALTER TABLE `zt_design`  ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '�
 ALTER TABLE `zt_project` ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `vision`;
 ALTER TABLE `zt_doc`     ADD `frozen` varchar(30) NOT NULL DEFAULT '' COMMENT '冻结状态' AFTER `builtIn`;
 
+ALTER VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
+
 UPDATE `zt_chart` SET `sql`='SELECT
   t1.id,
   t1.name AS execution,

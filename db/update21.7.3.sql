@@ -3,6 +3,7 @@ CHANGE `injection` `injection` varchar(30) NOT NULL DEFAULT '',
 CHANGE `identify` `identify` varchar(30) NOT NULL DEFAULT '';
 
 ALTER TABLE `zt_task` MODIFY `path` varchar(255) NOT NULL DEFAULT '';
+ALTER VIEW `ztv_tasknotpl` AS SELECT * FROM `zt_task` WHERE `deleted` = '0' AND `isTpl` = 0;
 
 CREATE INDEX `parent` ON `zt_story` (`parent`);
 CREATE INDEX `path` ON `zt_task` (`path`);
