@@ -43,7 +43,7 @@ class execution extends control
         if($this->app->upgrading || !isset($this->app->user)) return false;
 
         $mode = $this->app->tab == 'execution' ? 'multiple' : '';
-        if((defined('RUN_MODE') and RUN_MODE == 'api') or $this->viewType == 'json') $mode = '';
+        if((helper::isApiRequest()) or $this->viewType == 'json') $mode = '';
 
         $this->executions = $this->execution->getPairs(0, 'all', "nocode,noprefix,{$mode}");
         $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all', 'ajaxgetcopyprojectexecutions');
@@ -1813,7 +1813,7 @@ class execution extends control
 
         if(empty($execution) || strpos($type, $execution->type) === false) return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'))));
 
-        if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' and helper::isApiRequest()) return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
         /* Load lang and set session. */
         $this->app->loadLang('program');

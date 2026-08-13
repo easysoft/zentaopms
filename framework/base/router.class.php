@@ -3975,7 +3975,7 @@ class ztSessionHandler implements SessionHandlerInterface
     {
         /* API session never expires. */
         global $config;
-        if((defined('RUN_MODE') && RUN_MODE == 'api') || isset($_GET[$config->sessionVar])) return 0;
+        if((helper::isApiRequest()) || isset($_GET[$config->sessionVar])) return 0;
 
         $time  = time();
         $count = 0;

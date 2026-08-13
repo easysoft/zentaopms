@@ -159,7 +159,7 @@ class build extends control
         $build = $this->build->getByID($buildID, true);
         if(!$build)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->send(array('result' => 'success', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('execution', 'all'))));
         }
         if(!$this->loadModel('common')->checkPrivByObject('project', $build->project)) return $this->sendError($this->lang->project->accessDenied, $this->createLink('project', 'browse'));

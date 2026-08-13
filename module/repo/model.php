@@ -1239,7 +1239,7 @@ class repoModel extends model
      */
     public function createLink(string $method, string $params = '', string $viewType = 'html')
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && isset($this->config->originRequestType)) $this->config->requestType = $this->config->originRequestType;
+        if(helper::isApiRequest() && isset($this->config->originRequestType)) $this->config->requestType = $this->config->originRequestType;
         if($this->config->requestType == 'GET') return helper::createLink('repo', $method, $params, $viewType);
 
         $parsedParams = array();

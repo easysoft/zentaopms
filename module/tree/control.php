@@ -570,7 +570,7 @@ class tree extends control
      */
     public function ajaxCreateModule()
     {
-        $isAPIRequest = $this->viewType == 'json' || (defined('RUN_MODE') && RUN_MODE == 'api');
+        $isAPIRequest = $this->viewType == 'json' || (helper::isApiRequest());
         if(!helper::isAjaxRequest() && !$isAPIRequest) return $this->send(array('result' => 'fail', 'message' => ''));
 
         $module = $this->tree->createModule();

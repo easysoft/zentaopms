@@ -351,7 +351,7 @@ class story extends control
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $storyID));
 
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
@@ -459,7 +459,7 @@ class story extends control
 
             $message = $this->executeHooks($storyID);
             if(empty($message)) $message = $this->lang->saveSuccess;
-            if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $storyID));
 
             $response = $this->storyZen->getResponseInModal($message);
             if($response) return $this->send($response);
@@ -546,7 +546,7 @@ class story extends control
         $story   = $this->story->getById($storyID, $version, true);
         $product = $this->product->getByID((int)$story->product);
 
-        $isAPI = defined('RUN_MODE') && RUN_MODE == 'api';
+        $isAPI = helper::isApiRequest();
         if(!isInModal() && $tab == 'product' && !empty($product->shadow) && !$isAPI) return $this->send(array('result' => 'success', 'open' => array('url' => $uri, 'app' => 'project')));
 
         if(!$story || (isset($story->type) && $story->type != $storyType))
@@ -710,7 +710,7 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
             if($this->app->tab == 'execution' and $from == 'taskkanban') return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "refreshKanban()"));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
@@ -746,7 +746,7 @@ class story extends control
                 if($this->app->tab == 'execution') $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
                 return $this->send($this->storyZen->getResponseInModal($message));
             }
-            if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $storyID));
 
             $location = $this->storyZen->getAfterReviewLocation($storyID, $storyType, $from);
             return $this->send(array('result' => 'success', 'message' => $message, 'load' => $location));
@@ -1071,7 +1071,7 @@ class story extends control
                 }
             }
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $storyID));
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
             $params = $this->app->tab == 'project' ? "storyID=$storyID&project={$this->session->project}" : "storyID=$storyID&version=0&param=0&storyType=$storyType";

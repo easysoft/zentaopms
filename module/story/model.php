@@ -561,7 +561,7 @@ class storyModel extends model
         $this->loadModel('file')->updateObjectID($this->post->uid, $storyID, $story->type);
         $files = $this->file->saveUpload($story->type, $storyID, 1);
 
-        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        if(helper::isApiRequest())
         {
             $uidFiles = $this->file->getUploadByUID($this->post->uid);
             $files = $files ? ($files + $uidFiles) : $uidFiles;
