@@ -15,7 +15,7 @@ $config->webhook->form->create['wechatAgentId']    = array('type' => 'string', '
 $config->webhook->form->create['feishuAppId']      = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->create['feishuAppSecret']  = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
 $config->webhook->form->create['domain']           = array('type' => 'string', 'control' => 'text',      'required' => false, 'default' => '', 'filter'  => 'trim');
-$config->webhook->form->create['sendType']         = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => 'sync', 'options'  => $lang->webhook->sendTypeList);
+$config->webhook->form->create['sendType']         = array('type' => 'string', 'control' => 'picker',    'required' => false, 'default' => 'async', 'options'  => $lang->webhook->sendTypeList);
 $config->webhook->form->create['products']         = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'filter'  => 'join', 'multiple' => true);
 $config->webhook->form->create['executions']       = array('type' => 'array',  'control' => 'picker',    'required' => false, 'default' => '', 'filter'  => 'join', 'multiple' => true);
 $config->webhook->form->create['params']           = array('type' => 'array',  'control' => 'checkList', 'required' => false, 'default' => '', 'options'  => $lang->webhook->paramsList, 'width' => 'full', 'inline' => true);

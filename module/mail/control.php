@@ -61,6 +61,7 @@ class mail extends control
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
             $mailConfig->fromAddress = $this->post->fromAddress;
             $mailConfig->domain      = common::getSysURL();
+            $mailConfig->async       = 1;
             $this->session->set('mailConfig', $mailConfig);
 
             $response['load'] = inlink('edit');
