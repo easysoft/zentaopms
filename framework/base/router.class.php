@@ -1247,7 +1247,7 @@ class baseRouter
             }
         }
 
-        $sessionLife = !empty($this->config->sessionLife) ? (int)$this->config->sessionLife : 86400;
+        $sessionLife = !empty($this->config->sessionLife) ? $this->config->sessionLife : 86400;
         ini_set('session.gc_maxlifetime', (string)$sessionLife);
 
         $sessionName = $this->config->sessionVar;
