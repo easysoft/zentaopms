@@ -75,7 +75,7 @@ $config->testsuite->testcase->dtable->fieldList['status']['statusMap']['changed'
 
 foreach($cases as $case)
 {
-    if($case->version < $case->caseVersion) $case->status = 'changed';
+    if($case->status == 'normal' && $case->version < $case->caseVersion) $case->status = 'changed';
 }
 
 $tableData = initTableData($cases, $config->testsuite->testcase->dtable->fieldList);
