@@ -351,10 +351,10 @@ class actionTao extends actionModel
             ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
             ->fi()
             ->beginIF(!empty($subTables))
-            ->where('(objectType')->eq($objectType)
+            ->where('(`objectType`')->eq($objectType)
             ->andWhere('objectID')->in($objectID)
             ->markRight(1)
-            ->orWhere('(objectType')->in($subTables)
+            ->orWhere('(`objectType`')->in($subTables)
             ->andWhere('extra')->in($objectID)
             ->markRight(1)
             ->fi()
@@ -871,7 +871,7 @@ class actionTao extends actionModel
     {
         if($action->objectType == 'doc')
         {
-            $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
+            $assetLibType = $this->dao->select('`assetLibType`')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
             if($assetLibType) $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
         }
         else

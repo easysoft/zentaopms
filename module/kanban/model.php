@@ -1291,7 +1291,7 @@ class kanbanModel extends model
             $creators = array();
             if($fromType == 'productplan' || $fromType == 'release')
             {
-                $creators = $this->dao->select('objectID, actor')->from(TABLE_ACTION)
+                $creators = $this->dao->select('`objectID`, actor')->from(TABLE_ACTION)
                     ->where('objectID')->in(array_keys($objectCards))
                     ->andWhere('objectType')->eq($fromType)
                     ->andWhere('action')->eq('opened')

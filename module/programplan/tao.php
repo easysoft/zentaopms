@@ -48,7 +48,7 @@ class programplanTao extends programplanModel
 
         if($projectModel == 'ipd')
         {
-            $stagePointGroup = $this->dao->select('execution,category,categoryTitle')->from(TABLE_OBJECT)
+            $stagePointGroup = $this->dao->select('execution,category,`categoryTitle`')->from(TABLE_OBJECT)
                 ->where('execution')->in(array_keys($stageList))
                 ->andWhere('type')->eq('decision')
                 ->andWhere('enabled')->eq('1')
@@ -297,7 +297,7 @@ class programplanTao extends programplanModel
 
         $firstTask     = reset($tasks);
         $projectID     = $firstTask ? $firstTask->project : 0;
-        $taskDateLimit = $this->dao->select('taskDateLimit')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
+        $taskDateLimit = $this->dao->select('`taskDateLimit`')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('taskDateLimit');
         foreach($tasks as $task)
         {
             $plan             = zget($plans, $task->execution, null);

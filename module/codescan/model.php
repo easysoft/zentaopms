@@ -880,7 +880,7 @@ class codescanModel extends model
 
         if(empty($result) || empty($result->data)) return array();
 
-        $bugList = $this->dao->select('issueKey,id')->from(TABLE_BUG)->where('issueKey')->in(array_column($result->data, 'id'))->fetchPairs();
+        $bugList = $this->dao->select('`issueKey`,id')->from(TABLE_BUG)->where('issueKey')->in(array_column($result->data, 'id'))->fetchPairs();
         foreach($result->data as $issue)
         {
             $issue->bugID     = isset($bugList[$issue->id]) ? $bugList[$issue->id] : 0;
@@ -1029,12 +1029,12 @@ class codescanModel extends model
     {
         return $this->dao->select('t2.realname, count(t1.id) as count')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.resolvedBy = t2.account')
+            ->on('t1.`resolvedBy` = t2.account')
             ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.issueKey')->ne('')
+            ->andWhere('t1.`issueKey`')->ne('')
             ->andWhere('t1.resolution')->eq('fixed')
             ->beginIF($repoID)->andWhere('t1.repo')->eq($repoID)->fi()
-            ->groupBy('t1.resolvedBy')
+            ->groupBy('t1.`resolvedBy`')
             ->orderBy('count_desc')
             ->limit($top)
             ->fetchPairs();

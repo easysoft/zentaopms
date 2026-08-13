@@ -603,8 +603,12 @@ class messageModel extends model
             {
                 $mailModule = in_array($objectType, array('story', 'requirement', 'epic')) ? 'story' : $linkModule;
 
+                $mailObjectType = $objectType == 'kanbancard' ? 'kanbancard' : $mailModule;
+                $mailObject     = $this->loadModel('mail')->getObjectForMail($mailObjectType, (int)$object->id);
+                if($mailObject) $object = $mailObject;
+
                 $subject     = sprintf($this->lang->message->mention, $actorRealname, $objectTitle);
-                $mailContent = $this->loadModel('mail')->getMailContent($mailModule, $object, $action);
+                $mailContent = $this->mail->getMailContent($mailModule, $object, $action);
                 $this->mail->send(implode(',', $mentionUsers), $subject, $mailContent);
             }
         }

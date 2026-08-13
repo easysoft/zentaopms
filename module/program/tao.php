@@ -21,7 +21,7 @@ class programTao extends programModel
      */
     protected function getRootProgramList(): array
     {
-        return $this->dao->select('id,name,PM,path,parent,type')
+        return $this->dao->select('id,name,`PM`,path,parent,type')
             ->from(TABLE_PROGRAM)
             ->where('parent')->eq('0')
             ->andWhere('deleted')->eq('0')

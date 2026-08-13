@@ -1526,7 +1526,7 @@ class taskZen extends task
 
         /* Get related objects title or names. */
         $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
-        $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $relatedFiles   = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('task')->andWhere('objectID')->in(array_keys($tasks))->andWhere('extra')->ne('editor')->fetchGroup('objectID');
         $relatedModules = $this->loadModel('tree')->getAllModulePairs('task');
 
         $bugs = $this->loadModel('bug')->getByIdList($relatedBugIdList);
@@ -2158,7 +2158,7 @@ class taskZen extends task
         if(empty($pathPairs)) return array();
 
         $allParentIdList = array_filter(array_unique(explode(',', implode(',', $pathPairs))));
-        $allParents      = $this->dao->select('id,estStarted,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
+        $allParents      = $this->dao->select('id,`estStarted`,deadline')->from(TABLE_TASK)->where('id')->in($allParentIdList)->fetchAll('id');
         $parents         = array();
         foreach($pathPairs as $parentID => $path)
         {

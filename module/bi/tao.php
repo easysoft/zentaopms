@@ -38,8 +38,8 @@ class biTao extends biModel
 
         return $this->dao->select('object')->from(TABLE_DUCKDBQUEUE)
             ->where('object')->notin($excludes)
-            ->andWhere('updatedTime >= syncTime', true)
-            ->orWhere('syncTime IS NULL')
+            ->andWhere('`updatedTime` >= `syncTime`', true)
+            ->orWhere('`syncTime` IS NULL')
             ->markRight(1)
             ->fetchPairs();
     }

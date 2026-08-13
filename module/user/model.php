@@ -1149,7 +1149,7 @@ class userModel extends model
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
                 ->andWhere('t1.project')->eq(0)
-                ->andWhere('t1.devopsSpace')->eq(0)
+                ->andWhere('t1.`devopsSpace`')->eq(0)
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->query();
         }
@@ -1695,7 +1695,7 @@ class userModel extends model
         if(empty($stakeholders[$account]))
         {
             $stakeholders[$account] = [];
-            $cachedHolders = $this->dao->select('objectID, objectType, user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->andWhere('user')->eq($account)->fetchAll();
+            $cachedHolders = $this->dao->select('`objectID`, `objectType`, user')->from(TABLE_STAKEHOLDER)->where('deleted')->eq('0')->andWhere('user')->eq($account)->fetchAll();
             foreach($cachedHolders as $holder) $stakeholders[$account][$holder->objectType][$holder->objectID][$holder->user] = $holder->user;
         }
 
@@ -2002,7 +2002,7 @@ class userModel extends model
     private function getProgramStakeholder($programProduct): array
     {
         $stakeholderGroups = array();
-        $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+        $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
             ->where('objectType')->eq('program')
             ->andWhere('objectID')->in(array_keys($programProduct))
             ->query();
@@ -2013,7 +2013,7 @@ class userModel extends model
             foreach($productIDList as $productID) $stakeholderGroups[$productID][$programStakeholder->user] = $programStakeholder->user;
         }
 
-        $programOwners = $this->mao->select('id,PM')->from(TABLE_PROGRAM)
+        $programOwners = $this->mao->select('id,`PM`')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('id')->in(array_keys($programProduct))
             ->fetchAll();
@@ -2049,7 +2049,7 @@ class userModel extends model
         while($projectProduct = $stmt->fetch()) $projectProducts[$projectProduct->project][$projectProduct->product] = $projectProduct->product;
 
         /* Get linked projects stakeholders. */
-        $stmt = $this->dao->select('objectID,user')->from(TABLE_STAKEHOLDER)
+        $stmt = $this->dao->select('`objectID`,user')->from(TABLE_STAKEHOLDER)
             ->where('objectType')->eq('project')
             ->andWhere('objectID')->in(array_keys($projectProducts))
             ->andWhere('deleted')->eq(0)
@@ -2220,7 +2220,7 @@ class userModel extends model
         $parentPMGroup          = $this->loadModel('program')->getParentPM($programIDList);             // Get all parent program and subprogram relation.
         $programAdmins          = $this->loadModel('group')->getAdmins($programIDList, 'programs');     // Get programs's admins.
 
-        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('program')->andWhere('objectID')->in($programIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('program')->andWhere('objectID')->in($programIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2279,7 +2279,7 @@ class userModel extends model
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('project')->andWhere('objectID')->in($projectIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2341,7 +2341,7 @@ class userModel extends model
         list($teamsGroup, $stakeholderGroup) = $this->getProductMembers($products);
 
         /* Get white list group. */
-        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->in($productIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('product')->andWhere('objectID')->in($productIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2405,7 +2405,7 @@ class userModel extends model
         $teamsGroup = array();
         while($team = $stmt->fetch()) $teamsGroup[$team->root][$team->account] = $team->account;
 
-        $stmt            = $this->dao->select('objectID,account')->from(TABLE_ACL)->where('objectType')->eq('sprint')->andWhere('objectID')->in($sprintIDList)->query();
+        $stmt            = $this->dao->select('`objectID`,account')->from(TABLE_ACL)->where('objectType')->eq('sprint')->andWhere('objectID')->in($sprintIDList)->query();
         $whiteListGroup  = array();
         while($whiteList = $stmt->fetch()) $whiteListGroup[$whiteList->objectID][$whiteList->account] = $whiteList->account;
 
@@ -2571,7 +2571,7 @@ class userModel extends model
         if($program->parent != 0 && $program->acl == 'program')
         {
             $path    = str_replace(",{$program->id},", ',', "{$program->path}");
-            $parents = $this->mao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            $parents = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
             foreach($parents as $parent)
             {
                 /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
@@ -2613,7 +2613,7 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
-            $programs = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
                 /* 当前用户是其中一个父项目集的PM或创建者则判断为有权限。 */
@@ -2624,7 +2624,7 @@ class userModel extends model
         /* 如果是迭代并且是私有的，则检查所属项目的权限。 */
         if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
-            $project = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            $project = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($project)) return false;
 
             /* 当前用户是所属项目的PM或创建者则判断为有权限。 */
@@ -2696,7 +2696,7 @@ class userModel extends model
         if($program->parent != 0 && $program->acl == 'program')
         {
             $path    = str_replace(",{$program->id},", ',', "{$program->path}");
-            $parents = $this->mao->select('openedBy,PM')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
+            $parents = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROGRAM)->where('id')->in($path)->fetchAll();
             foreach($parents as $parent)
             {
                 $users[$parent->openedBy] = $parent->openedBy;
@@ -2740,7 +2740,7 @@ class userModel extends model
         if($project->type == 'project' && $project->parent != 0 && $project->acl == 'program')
         {
             $path     = str_replace(",{$project->id},", ',', "{$project->path}");
-            $programs = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
+            $programs = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROJECT)->where('id')->in($path)->fetchAll();
             foreach($programs as $program)
             {
                 $users[$program->openedBy] = $program->openedBy;
@@ -2751,7 +2751,7 @@ class userModel extends model
         /* 如果是迭代类型并且是私有的，则所属项目的PM和创建者是关系人。 */
         if(($project->type == 'sprint' || $project->type == 'stage' || $project->type == 'kanban') && $project->acl == 'private')
         {
-            $parent = $this->mao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
+            $parent = $this->mao->select('`openedBy`,`PM`')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if($parent)
             {
                 $users[$parent->openedBy] = $parent->openedBy;

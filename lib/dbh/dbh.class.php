@@ -592,6 +592,8 @@ class dbh
         $sql = $this->processDmTableIndex($sql);
         $sql = $this->formatLimitOffset($sql);
 
+        if(stripos($sql, 'CURDATE()') !== false) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
+
         $actionPos = strcspn($sql, " \t\n\r\0\v");
         $action    = strtoupper(substr($sql, 0, $actionPos));
         $setPos    = 0;
@@ -612,7 +614,6 @@ class dbh
                 if(strpos($sql, "\\'") !== false) $sql = str_replace("\\'", "''''", $sql);
                 if(strpos($sql, '\"') !== false) $sql = str_replace('\"', '"', $sql);
                 if(strpos($sql, '\\\\') !== false) $sql = str_replace('\\\\', '\\', $sql);
-                if(stripos($sql, 'CURDATE()')) $sql = str_replace('CURDATE()', 'CURRENT_DATE', $sql);
             case 'DELETE':
             case 'TRUNCATE':
                 if(strpos($sql, '`') !== false) $sql = str_replace('`', '"', $sql);
@@ -867,12 +868,20 @@ class dbh
             'DATE_FORMAT',
             'DATE',
             'DATE_SUB',
-            'INSTR'
+            'INSTR',
+            'TRUNCATE',
+            'CURDATE',
+            'DATE_ADD',
+            'ADDDATE',
+            'QUARTER',
+            'WEEK',
+            'YEARWEEK',
+            'TO_DAYS'
         );
 
         foreach($gaussCompatibleFunctions as $function)
         {
-            $sql = preg_replace("/(?<=\s){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
+            $sql = preg_replace("/(?<![\\w.\"']){$function}(?=\s*\()/i", '"' . $function . '"', $sql);
         }
 
         return $sql;
@@ -937,7 +946,14 @@ class dbh
             $pos = stripos($sql, ' ENGINE');
             if($pos > 0) $sql = substr($sql, 0, $pos);
 
-            $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            if($this->dbConfig->driver == 'dm')
+            {
+                $sql = preg_replace('/\(\ *\d+\ *\)/', '', $sql);
+            }
+            else
+            {
+                $sql = preg_replace('/\b(?:char|varchar)\s*\(\s*\d+\s*\)(*SKIP)(*F)|\(\ *\d+\ *\)/i', '', $sql);
+            }
 
             $replace = array(
                 " int "                     => ' integer ',

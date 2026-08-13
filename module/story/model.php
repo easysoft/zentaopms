@@ -31,7 +31,7 @@ class storyModel extends model
         if($version == 0) $version = $story->version;
 
         $this->loadModel('file');
-        $spec = $this->dao->select('title,spec,verify,files,docs,docVersions')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
+        $spec = $this->dao->select('title,spec,verify,files,docs,`docVersions`')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title       = !empty($spec->title)       ? $spec->title  : '';
         $story->spec        = !empty($spec->spec)        ? $spec->spec   : '';
         $story->verify      = !empty($spec->verify)      ? $spec->verify : '';
@@ -55,7 +55,7 @@ class storyModel extends model
             ->orderBy('t1.`order` DESC')
             ->fetchAll('id');
 
-        $story->tasks = $this->dao->select('id,name,assignedTo,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
+        $story->tasks = $this->dao->select('id,name,`assignedTo`,execution,project,status,consumed,`left`,type')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('story')->in($storyIdList)->orderBy('id DESC')->fetchGroup('execution');
         if($this->config->vision == 'lite' && $story->tasks) $story->executions += $this->dao->select('project,id,name,status,type,multiple')->from(TABLE_EXECUTION)->where('id')->in(array_keys($story->tasks))->orderBy('`order` DESC')->fetchAll('id');
 
         if($story->parent > 0)
@@ -510,7 +510,7 @@ class storyModel extends model
      */
     public function getStoriesByPlanIdList(array|string $planIdList = ''): array
     {
-        return $this->dao->select('t1.plan as planID, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
+        return $this->dao->select('t1.plan as `planID`, t2.*')->from(TABLE_PLANSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->where('t2.deleted')->eq(0)
             ->beginIF($planIdList)->andWhere('t1.plan')->in($planIdList)->fi()
@@ -618,7 +618,7 @@ class storyModel extends model
 
             if($this->config->edition != 'open')
             {
-                $todo = $this->dao->select('type, objectID')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                $todo = $this->dao->select('type, `objectID`')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
                 if($todo->type == 'feedback' && $todo->objectID) $this->loadModel('feedback')->updateStatus('todo', $todo->objectID, 'done', '', $todoID);
             }
         }
@@ -2745,7 +2745,7 @@ class storyModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
         $actionIDList = array();
-        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
+        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('`objectID`')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
         $sql = $this->dao->select("t1.*, t1.`path`, t1.`plan`, IF(t1.`pri` = 0, {$this->config->maxPriValue}, t1.`pri`) as priOrder")->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
@@ -3753,9 +3753,9 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerOpenedBy(string $storyType = 'story'): array
     {
-        $datas = $this->dao->select('openedBy as name, count(openedBy) as value')->from(TABLE_STORY)
+        $datas = $this->dao->select('`openedBy` as name, count(`openedBy`) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
-            ->groupBy('openedBy')->orderBy('value DESC')
+            ->groupBy('`openedBy`')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -3773,9 +3773,9 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerAssignedTo(string $storyType = 'story'): array
     {
-        $datas = $this->dao->select('assignedTo as name, count(assignedTo) as value')->from(TABLE_STORY)
+        $datas = $this->dao->select('`assignedTo` as name, count(`assignedTo`) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
-            ->groupBy('assignedTo')->orderBy('value DESC')
+            ->groupBy('`assignedTo`')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
         if(!isset($this->users)) $this->users = $this->loadModel('user')->getPairs('noletter');
@@ -3793,9 +3793,9 @@ class storyModel extends model
      */
     public function getDataOfStoriesPerClosedReason(string $storyType = 'story'): array
     {
-        $datas = $this->dao->select('closedReason as name, count(closedReason) as value')->from(TABLE_STORY)
+        $datas = $this->dao->select('`closedReason` as name, count(`closedReason`) as value')->from(TABLE_STORY)
             ->where($this->reportCondition($storyType))
-            ->groupBy('closedReason')->orderBy('value DESC')
+            ->groupBy('`closedReason`')->orderBy('value DESC')
             ->fetchAll('name');
         if(!$datas) return array();
 
@@ -4275,7 +4275,7 @@ class storyModel extends model
         if(empty($stories)) return array();
 
         $rootIdList = array_unique(array_column($stories, 'root'));
-        $allStories = $this->dao->select('id,parent,color,isParent,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('id');
+        $allStories = $this->dao->select('id,parent,color,`isParent`,root,path,grade,product,pri,type,status,stage,title,estimate')->from(TABLE_STORY)->where('root')->in($rootIdList)->andWhere('deleted')->eq(0)->orderBy('id')->fetchAll('id');
         $stories    = $this->storyTao->mergeChildrenForTrack($allStories, $stories, $storyType);
         $leafNodes  = $this->storyTao->getLeafNodes($stories, $storyType);
 
@@ -4980,7 +4980,7 @@ class storyModel extends model
         if($this->session->$onlyCondition)
         {
             $queryCondition = $postData->exportType == 'selected' ? ' `id` ' . helper::dbIN($selectedIDList) : str_replace('`story`', '`id`', $this->session->$queryCondition);
-            $stories        = $this->dao->select('id,title,type,grade,linkStories,parent,mailto,reviewedBy')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
+            $stories        = $this->dao->select('id,title,type,grade,`linkStories`,parent,mailto,`reviewedBy`')->from(TABLE_STORY)->where($queryCondition)->orderBy($orderBy)->fetchAll('id');
         }
         else
         {
@@ -5039,8 +5039,8 @@ class storyModel extends model
             if(!empty($relatedSpec[0]->files)) $fileIdList[] = $relatedSpec[0]->files;
         }
         $fileIdList   = array_unique($fileIdList);
-        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($storyType)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
-        $filesInfo    = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
+        $relatedFiles = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('objectType')->eq($storyType)->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
+        $filesInfo    = $this->dao->select('id, `objectID`, pathname, title')->from(TABLE_FILE)->where('id')->in($fileIdList)->andWhere('extra')->ne('editor')->fetchAll('id');
 
         $gradeGroup = $this->getGradeGroup();
         foreach($stories as $story)

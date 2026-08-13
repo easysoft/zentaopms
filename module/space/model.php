@@ -526,11 +526,11 @@ class spaceModel extends model
      */
     public function getRepoUsersBySpace(int $spaceID = 0): array
     {
-        return $this->dao->select('t1.*, t2.name AS repoName, t2.spaceID AS space')->from(TABLE_DEVOPSREPOUSER)->alias('t1')
+        return $this->dao->select('t1.*, t2.name AS `repoName`, t2.`spaceID` AS space')->from(TABLE_DEVOPSREPOUSER)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo = t2.id')
             ->where('t2.deleted')->eq(0)
-            ->beginIF($spaceID)->andWhere('t2.spaceID')->eq($spaceID)->fi()
-            ->beginIF(!$spaceID)->andWhere('t2.spaceID')->ne(0)->fi()
+            ->beginIF($spaceID)->andWhere('t2.`spaceID`')->eq($spaceID)->fi()
+            ->beginIF(!$spaceID)->andWhere('t2.`spaceID`')->ne(0)->fi()
             ->fetchAll();
     }
 
