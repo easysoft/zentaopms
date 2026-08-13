@@ -12011,6 +12011,8 @@ class upgradeModel extends model
         }
 
         $this->dao->query("ALTER TABLE " . TABLE_PROJECT . " DROP COLUMN `deliverable`;");
+        $this->dao->query("DROP VIEW IF EXISTS `ztv_projectnotpl`;");
+        $this->dao->query("CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM " . TABLE_PROJECT . " WHERE `deleted` = '0' AND `isTpl` = 0;");
     }
 
     /**
