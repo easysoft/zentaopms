@@ -1316,7 +1316,7 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $skipFields      = 'finalResult,result';
+        $skipFields      = 'finalResult,result,comment';
         $isSuperReviewer = $this->storyTao->isSuperReviewer();
         if($isSuperReviewer)
         {
@@ -1333,11 +1333,17 @@ class storyModel extends model
         if($oldStory->parent) $this->computeEstimate($oldStory->parent);
 
         $changes = common::createChanges($oldStory, $story);
-        if($changes)
+        if($changes || $comment)
         {
             $story->id = $storyID;
             $actionID  = $this->recordReviewAction($oldStory, $story, $comment);
-            if($actionID) $this->action->logHistory($actionID, $changes);
+            if($actionID && $changes) $this->action->logHistory($actionID, $changes);
+
+            if($comment && $actionID)
+            {
+                $oldStory->comment = $comment;
+                $this->loadModel('message')->sendMentionNotice($oldStory->type, 'review', $actionID, $oldStory);
+            }
         }
 
         if(!empty($oldStory->twins)) $this->syncTwins($oldStory->id, $oldStory->twins, $changes, 'Reviewed');
