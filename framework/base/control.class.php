@@ -1034,69 +1034,17 @@ class baseControl
      */
     public function render($moduleName = '', $methodName = '')
     {
-        if(isset($this->app->apiVersion) and $this->app->apiVersion == 'v2' and $this->getFormData)
-        {
-            if(empty($moduleName)) $moduleName = $this->moduleName;
-            if(empty($methodName)) $methodName = $this->methodName;
+        if(empty($moduleName)) $moduleName = $this->moduleName;
+        if(empty($methodName)) $methodName = $this->methodName;
 
-            /* Load zin lib */
-            $this->app->loadClass('zin', true);
-            \zin\loadConfig();
-
-            $results  = $this->setViewFile($moduleName, $methodName, 'ui');
-            $viewFile = $results;
-            if(is_array($results)) extract($results);
-
-            $currentPWD = getcwd();
-            chdir(dirname($viewFile));
-
-            $context = \zin\context();
-            $context->control = $this;
-            $context->data    = (array)$this->view;
-
-            extract($context->data);
-
-            if(!empty($hookFiles)) $context->addHookFiles($hookFiles);
-
-            $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
-            $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
-            helper::import($commonFieldFile);
-            helper::import($methodFieldFile);
-
-            ob_start();
-            include $viewFile;
-
-            $this->setResponseHeader();
-
-            \zin\renderPage(array('type' => 'html'));
-            $content = ob_get_clean();
-
-            $this->app->loadClass('formdom');
-            $parser = new formdom(array('include_disabled' => true));
-
-            $this->formData = $parser->parse($content);
-
-            chdir($currentPWD);
-            return;
-        }
-
-        if(isset($this->app->apiVersion) and $this->app->apiVersion == 'v2' and $this->viewType != 'html')
-        {
-            $this->parseJSON($moduleName, $methodName);
-
-            ob_start();
-            echo $this->output;
-            return;
-        }
+        if($this->renderFormData($moduleName, $methodName)) return;
+        if($this->renderApiJSON($moduleName, $methodName)) return;
 
         if(isset($_GET['zin']) && $_GET['zin'] == '0')
         {
             $this->display($moduleName, $methodName);
             return;
         }
-
-        if(empty($moduleName)) $moduleName = $this->moduleName;
-        if(empty($methodName)) $methodName = $this->methodName;
 
         /* Load zin lib */
         $this->app->loadClass('zin', true);
@@ -1174,6 +1122,80 @@ class baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * 渲染视图并收集 API v2 表单数据。
+     * Render the view and collect form data for API v2.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return bool
+     */
+    public function renderFormData(string $moduleName = '', string $methodName = ''): bool
+    {
+        if(!(isset($this->app->apiVersion) and $this->app->apiVersion == 'v2' and $this->getFormData)) return false;
+
+        /* Load zin lib */
+        $this->app->loadClass('zin', true);
+        \zin\loadConfig();
+
+        $results  = $this->setViewFile($moduleName, $methodName, 'ui');
+        $viewFile = $results;
+        if(is_array($results)) extract($results);
+
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        $context = \zin\context();
+        $context->control = $this;
+        $context->data    = (array)$this->view;
+
+        extract($context->data);
+
+        if(!empty($hookFiles)) $context->addHookFiles($hookFiles);
+
+        $commonFieldFile = dirname($viewFile) . DS . 'common.field.php';
+        $methodFieldFile = dirname($viewFile) . DS . $methodName . '.field.php';
+        helper::import($commonFieldFile);
+        helper::import($methodFieldFile);
+
+        ob_start();
+        include $viewFile;
+
+        $this->setResponseHeader();
+
+        \zin\renderPage(array('type' => 'html'));
+        $content = ob_get_clean();
+
+        $this->app->loadClass('formdom');
+        $parser = new formdom(array('include_disabled' => true));
+
+        $this->formData = $parser->parse($content);
+
+        chdir($currentPWD);
+        return true;
+    }
+
+    /**
+     * 输出 API v2 的 JSON 内容。
+     * Output JSON content for API v2.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return bool
+     */
+    public function renderApiJSON(string $moduleName = '', string $methodName = ''): bool
+    {
+        if(!(isset($this->app->apiVersion) and $this->app->apiVersion == 'v2' and $this->viewType != 'html')) return false;
+
+        $this->parseJSON($moduleName, $methodName);
+
+        ob_start();
+        echo $this->output;
+        return true;
     }
 
     /**
