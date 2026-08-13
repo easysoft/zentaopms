@@ -9,7 +9,8 @@ ADD `sql` text NULL AFTER `params`;
 ALTER TABLE `zt_workflowlayout` ADD `ditto` tinyint unsigned NOT NULL DEFAULT 0 AFTER `position`;
 
 ALTER TABLE `zt_project` MODIFY COLUMN `budget` decimal(14,2) unsigned NOT NULL DEFAULT 0.00 COMMENT '预算';
-ALTER VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
 
 ALTER TABLE `zt_workflowdatasource` MODIFY COLUMN `view` varchar(50) NOT NULL DEFAULT '' COMMENT '视图';
 

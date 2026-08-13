@@ -12,4 +12,5 @@ ALTER TABLE `zt_reviewissue` MODIFY COLUMN `resolutionDate` datetime DEFAULT NUL
 
 DELETE FROM `zt_config` WHERE owner = 'system' AND module = 'common' AND `key` = 'webRoot';
 
-ALTER VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
+DROP VIEW IF EXISTS `ztv_projectnotpl`;
+CREATE OR REPLACE VIEW `ztv_projectnotpl` AS SELECT * FROM `zt_project` WHERE `deleted` = '0' AND `isTpl` = 0;
