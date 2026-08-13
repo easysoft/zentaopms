@@ -13603,4 +13603,62 @@ class upgradeModel extends model
             return false;
         }
     }
+
+    /**
+     * 删除 company 字段
+     * drop company field.
+     *
+     * @access public
+     * @return bool
+     */
+    public function dropCompanyField()
+    {
+        $oldHasCompanyTables = array();
+
+        if(defined('TABLE_ACTION'))          $oldHasCompanyTables[] = TABLE_ACTION;
+        if(defined('TABLE_BUG'))             $oldHasCompanyTables[] = TABLE_BUG;
+        if(defined('TABLE_BUILD'))           $oldHasCompanyTables[] = TABLE_BUILD;
+        if(defined('TABLE_BURN'))            $oldHasCompanyTables[] = TABLE_BURN;
+        if(defined('TABLE_CASE'))            $oldHasCompanyTables[] = TABLE_CASE;
+        if(defined('TABLE_CASESTEP'))        $oldHasCompanyTables[] = TABLE_CASESTEP;
+        if(defined('TABLE_DEPT'))            $oldHasCompanyTables[] = TABLE_DEPT;
+        if(defined('TABLE_DOC'))             $oldHasCompanyTables[] = TABLE_DOC;
+        if(defined('TABLE_DOCLIB'))          $oldHasCompanyTables[] = TABLE_DOCLIB;
+        if(defined('TABLE_EXTENSION'))       $oldHasCompanyTables[] = TABLE_EXTENSION;
+        if(defined('TABLE_EFFORT'))          $oldHasCompanyTables[] = TABLE_EFFORT;
+        if(defined('TABLE_FILE'))            $oldHasCompanyTables[] = TABLE_FILE;
+        if(defined('TABLE_GROUP'))           $oldHasCompanyTables[] = TABLE_GROUP;
+        if(defined('TABLE_HISTORY'))         $oldHasCompanyTables[] = TABLE_HISTORY;
+        if(defined('TABLE_MODULE'))          $oldHasCompanyTables[] = TABLE_MODULE;
+        if(defined('TABLE_PRODUCT'))         $oldHasCompanyTables[] = TABLE_PRODUCT;
+        if(defined('TABLE_PRODUCTPLAN'))     $oldHasCompanyTables[] = TABLE_PRODUCTPLAN;
+        if(defined('TABLE_PROJECT'))         $oldHasCompanyTables[] = TABLE_PROJECT;
+        if(defined('TABLE_PROJECTPRODUCT'))  $oldHasCompanyTables[] = TABLE_PROJECTPRODUCT;
+        if(defined('TABLE_PROJECTSTORY'))    $oldHasCompanyTables[] = TABLE_PROJECTSTORY;
+        if(defined('TABLE_RELEASE'))         $oldHasCompanyTables[] = TABLE_RELEASE;
+        if(defined('TABLE_STORY'))           $oldHasCompanyTables[] = TABLE_STORY;
+        if(defined('TABLE_STORYSPEC'))       $oldHasCompanyTables[] = TABLE_STORYSPEC;
+        if(defined('TABLE_TASK'))            $oldHasCompanyTables[] = TABLE_TASK;
+        if(defined('TABLE_TASKESTIMATE'))    $oldHasCompanyTables[] = TABLE_TASKESTIMATE;
+        if(defined('TABLE_TEAM'))            $oldHasCompanyTables[] = TABLE_TEAM;
+        if(defined('TABLE_TESTRESULT'))      $oldHasCompanyTables[] = TABLE_TESTRESULT;
+        if(defined('TABLE_TESTRUN'))         $oldHasCompanyTables[] = TABLE_TESTRUN;
+        if(defined('TABLE_TESTTASK'))        $oldHasCompanyTables[] = TABLE_TESTTASK;
+        if(defined('TABLE_TODO'))            $oldHasCompanyTables[] = TABLE_TODO;
+        if(defined('TABLE_USERCONTACT'))     $oldHasCompanyTables[] = TABLE_USERCONTACT;
+        if(defined('TABLE_USERGROUP'))       $oldHasCompanyTables[] = TABLE_USERGROUP;
+        if(defined('TABLE_USERQUERY'))       $oldHasCompanyTables[] = TABLE_USERQUERY;
+        if(defined('TABLE_USERTPL'))         $oldHasCompanyTables[] = TABLE_USERTPL;
+        if(defined('TABLE_RELATIONOFTASKS')) $oldHasCompanyTables[] = TABLE_RELATIONOFTASKS;
+        if(defined('TABLE_REPO'))            $oldHasCompanyTables[] = TABLE_REPO;
+
+        foreach($oldHasCompanyTables as $table)
+        {
+            $fieldDesc  = $this->dao->descTable($table);
+            if(!isset($fieldDesc['company'])) continue;
+
+            $this->dao->exec("ALTER TABLE {$table} DROP COLUMN `company`");
+        }
+        return true;
+    }
 }
