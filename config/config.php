@@ -23,6 +23,7 @@ $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The co
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
+$config->sessionLife   = 86400;                // Session超时时间，单位秒，默认1天。Session timeout in seconds, default 1 day.
 $config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 $config->tabSession    = false;                // 是否开启浏览器新标签独立session.
 $config->clientCache   = false;                // 是否开启客户端缓存。Whether enable client cache or not.
