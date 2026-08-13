@@ -259,6 +259,7 @@ detailBody
             set::className('w-full'),
             set::id('releaseTabs'),
             set::headerClass('border-b'),
+            on::shown('.tab-pane')->call('$.apps.updateAppUrl', jsRaw('$this.data("url")')),
 
             /* Linked story table. */
             tabPane
@@ -267,6 +268,7 @@ detailBody
                 set::key('finishedStory'),
                 set::title($lang->release->stories),
                 set::active($type == 'story'),
+                setData('url', sprintf($tabUrl, 'story')),
                 div
                 (
                     setClass('tab-actions'),
@@ -298,6 +300,7 @@ detailBody
                 set::key('resolvedBug'),
                 set::title($lang->release->bugs),
                 set::active($type == 'bug'),
+                setData('url', sprintf($tabUrl, 'bug')),
                 div
                 (
                     setClass('tab-actions'),
@@ -329,6 +332,7 @@ detailBody
                 set::key('leftBug'),
                 set::title($lang->release->generatedBugs),
                 set::active($type == 'leftBug'),
+                setData('url', sprintf($tabUrl, 'leftBug')),
                 div
                 (
                     setClass('tab-actions'),
@@ -359,6 +363,7 @@ detailBody
                 to::suffix(set::title($lang->release->escapedBugTip), icon('help')),
                 set::title($lang->release->escapedBugs),
                 set::active($type == 'escapedBug'),
+                setData('url', sprintf($tabUrl, 'escapedBug')),
                 div
                 (
                     setClass('tab-actions'),
@@ -386,6 +391,7 @@ detailBody
                 set::key('releaseInfo'),
                 set::title($lang->release->basicInfo),
                 set::active($type == 'releaseInfo'),
+                setData('url', sprintf($tabUrl, 'releaseInfo')),
                 div
                 (
                     setClass('tab-actions'),
