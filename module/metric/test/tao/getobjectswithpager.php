@@ -24,7 +24,16 @@ zenData('metric')->loadYaml('getobjectswithpager/metric', false, 2)->gen(10);
 zenData('metriclib')->loadYaml('getobjectswithpager/metriclib', false, 2)->gen(30);
 zenData('product')->loadYaml('getobjectswithpager/product', false, 2)->gen(10);
 zenData('user')->loadYaml('getobjectswithpager/user', false, 2)->gen(10);
-zenData('repo')->loadYaml('getobjectswithpager/repo', false, 2)->gen(10);
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-10');
+$repoTable->spaceID->range('1');
+$repoTable->product->range('1');
+$repoTable->name->range('repo1,repo2,repo3,repo4,repo5,repo6,repo7,repo8,repo9,repo10');
+$repoTable->scmType->range('git');
+$repoTable->gitUID->range('uid0001,uid0002,uid0003,uid0004,uid0005,uid0006,uid0007,uid0008,uid0009,uid0010');
+$repoTable->status->range('active');
+$repoTable->deleted->range('0');
+$repoTable->gen(10);
 
 $projectTable = zenData('project');
 $projectTable->id->range('1-20');

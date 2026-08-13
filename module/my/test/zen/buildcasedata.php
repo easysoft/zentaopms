@@ -43,6 +43,9 @@ $case1->needconfirm = 0;
 $case1->story = 0;
 $case1->storyVersion = 1;
 $case1->case = 1;
+$case1->stage = '';
+$case1->reviewedBy = '';
+$case1->scene = 0;
 
 $case2 = new stdClass();
 $case2->id = 2;
@@ -56,6 +59,9 @@ $case2->needconfirm = 0;
 $case2->story = 0;
 $case2->storyVersion = 1;
 $case2->case = 2;
+$case2->stage = '';
+$case2->reviewedBy = '';
+$case2->scene = 0;
 
 $case3 = new stdClass();
 $case3->id = 3;
@@ -69,6 +75,9 @@ $case3->needconfirm = 1;
 $case3->story = 1;
 $case3->storyVersion = 1;
 $case3->case = 3;
+$case3->stage = '';
+$case3->reviewedBy = '';
+$case3->scene = 0;
 
 $case4 = new stdClass();
 $case4->id = 4;
@@ -82,6 +91,9 @@ $case4->needconfirm = 0;
 $case4->story = 0;
 $case4->storyVersion = 1;
 $case4->case = 4;
+$case4->stage = '';
+$case4->reviewedBy = '';
+$case4->scene = 0;
 
 $case5 = new stdClass();
 $case5->id = 5;
@@ -95,6 +107,9 @@ $case5->needconfirm = 0;
 $case5->story = 0;
 $case5->storyVersion = 1;
 $case5->case = 5;
+$case5->stage = '';
+$case5->reviewedBy = '';
+$case5->scene = 0;
 
 $normalCases = array($case1);
 $caseWithEmptyResult = array($case2);

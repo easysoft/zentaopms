@@ -7,15 +7,18 @@ title=测试 metricModel::deduplication();
 timeout=0
 cid=17073
 
-- 执行metricTest模块的deduplicationTest方法，参数是'count_of_bug'，验证去重前记录数 @10
-- 执行metricTest模块的deduplicationTest方法，参数是'count_of_bug'，验证去重后记录数 @9
-- 执行metricTest模块的deduplicationTest方法，参数是'count_of_annual_created_project'，验证去重后记录数 @5
-- 执行metricTest模块的deduplicationTest方法，参数是'count_of_release_in_product'，验证去重后记录数 @2
-- 执行metricTest模块的deduplicationTest方法，参数是'nonexistent_metric_code'，验证返回值 @0
+- 执行$bugDeduplication属性beforeCount @10
+- 执行$bugDeduplication属性afterCount @9
+- 执行$annualDeduplication属性afterCount @5
+- 执行$releaseDeduplication属性afterCount @2
+- 执行$missingDeduplication属性result @0
 
 */
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
+
+zenData('metric')->gen(0);
+zenData('metriclib')->gen(0);
 
 $metricRows = array(
     array('id' => 1, 'scope' => 'system',  'object' => 'bug',     'code' => 'count_of_bug',                   'dateType' => 'nodate'),

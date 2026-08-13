@@ -19,24 +19,21 @@ cid=18923
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/taskzen.unittest.class.php';
 
-// 2. zendata数据准备（根据需要配置）
-// 直接使用SQL准备数据以确保正确性
-global $tester;
-$dao = $tester->loadModel('')->dao;
+// 2. zendata数据准备
+$repoTable = zenData('ops_repo');
+$repoTable->id->range('1-3');
+$repoTable->product->range('`1,2`,`2,3`,``');
+$repoTable->scmType->range('git');
+$repoTable->name->range('repo1,repo2,repo3');
+$repoTable->status->range('active');
+$repoTable->deleted->range('0');
+$repoTable->gen(3);
 
-// 清理并插入仓库数据
-$dao->exec("DELETE FROM zt_repo");
-$dao->exec("INSERT INTO zt_repo (id, product, SCM, name, deleted, synced) VALUES
-    (1, '1,2', 'Gitlab', 'repo1', '0', '1'),
-    (2, '2,3', 'Gitea', 'repo2', '0', '1'),
-    (3, '', 'Gogs', 'repo3', '0', '1')");
-
-// 清理并插入项目产品关联数据
-$dao->exec("DELETE FROM zt_projectproduct");
-$dao->exec("INSERT INTO zt_projectproduct (project, product, branch) VALUES
-    (1, 1, 0),
-    (2, 2, 0),
-    (3, 3, 0)");
+$projectProductTable = zenData('projectproduct');
+$projectProductTable->project->range('1-3');
+$projectProductTable->product->range('1-3');
+$projectProductTable->branch->range('0');
+$projectProductTable->gen(3);
 
 // 3. 用户登录（选择合适角色）
 su('admin');

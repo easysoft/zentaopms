@@ -7,21 +7,21 @@ title=测试 zaiModel::convertDocToMarkdown();
 timeout=0
 cid=19765
 
-- 测试转换完整的文档对象 @1
-- 测试转换没有docContent的文档对象 @2
+- 测试转换完整的文档对象属性id @1
+- 测试转换没有docContent的文档对象属性id @2
 - 测试验证Markdown内容包含文档信息 @1
 - 测试验证属性设置正确
-  - 产品 @1
-  - 库 @1
-  - 模块 @1
-  - 项目 @1
-  - 执行 @1
-  - 类型 @manual
+ - 属性product @1
+ - 属性lib @1
+ - 属性module @1
+ - 属性project @1
+ - 属性execution @1
+ - 属性type @manual
 - 测试验证标题包含ID @1
 - 测试验证内容包含基本信息标题 @1
 - 测试验证内容包含直接内容 @1
 - 测试验证文档类型转换正确 @manual
-- 测试验证Markdown内容包含文档标题 @测试文档1
+- 测试验证Markdown内容包含文档标题 @1
 - 测试验证不同版本文档的处理 @1
 - 测试内容使用产品项目执行库名称而非ID @1
 - 测试ID为0时不显示0 @1
@@ -117,24 +117,22 @@ $doc3 = new stdClass();
 $doc3->id           = 3;
 $doc3->title        = 'TEST';
 $doc3->type         = 'text';
-$doc3->product      = 99;
-$doc3->project      = 88;
-$doc3->execution    = 77;
+$doc3->product      = 1;
+$doc3->project      = 1;
+$doc3->execution    = 0;
 $doc3->version      = 1;
-$doc3->lib          = 66;
+$doc3->lib          = 1;
 $doc3->module       = 0;
-$doc3->productName  = '产品甲';
-$doc3->projectName  = '项目乙';
-$doc3->executionName= '执行丙';
-$doc3->libName      = '文档库丁';
 $doc3->content      = '正文';
 $result3 = $zai->convertDocToMarkdownTest($doc3);
-$usesNames = strpos($result3['content'], '产品甲') !== false
-    && strpos($result3['content'], '项目乙') !== false
-    && strpos($result3['content'], '执行丙') !== false
-    && strpos($result3['content'], '文档库丁') !== false
-    && !preg_match('/所属产品:\s*99/', $result3['content'])
-    && !preg_match('/所属库:\s*66/', $result3['content']);
+$productName = $tester->dao->select('name')->from(TABLE_PRODUCT)->where('id')->eq(1)->fetch('name');
+$projectName = $tester->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq(1)->fetch('name');
+$libName     = $tester->dao->select('name')->from(TABLE_DOCLIB)->where('id')->eq(1)->fetch('name');
+$usesNames = strpos($result3['content'], $productName) !== false
+    && strpos($result3['content'], $projectName) !== false
+    && strpos($result3['content'], $libName) !== false
+    && !preg_match('/所属产品:\s*1\b/', $result3['content'])
+    && !preg_match('/所属库:\s*1\b/', $result3['content']);
 r($usesNames ? '1' : '0') && p() && e('1'); // 测试内容使用产品项目执行库名称而非ID
 
 /* 测试ID为0时不显示0 */

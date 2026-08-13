@@ -1,8 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 designModel->linkCommit();
+timeout=0
 cid=15995
 
 - 测试空数据 @0
@@ -11,8 +13,8 @@ cid=15995
 - 测试提交记录为空的情况 @0
 - 测试正常情况 @1;2;3
 - 测试designID不存在的情况 @0
-- 测试repoID不存在的情况 @1;2;3
-- 测试提交记录不存在的情况 @1;2;3;
+- 测试repoID不存在的情况 @1;2;3;
+- 测试提交记录不存在的情况 @1;2;3;;
 - 测试传入的参数都不存在的情况 @0
 
 */
@@ -21,9 +23,9 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 zenData('file')->gen(0);
-zenData('repo')->loadYaml('repo')->gen(1);
-zenData('pipeline')->gen(1);
-zenData('repohistory')->loadYaml('repohistory')->gen(3);
+zenData('ops_repo')->loadYaml('repo')->gen(1);
+zenData('ops_pipeline')->gen(1);
+zenData('ops_repohistory')->loadYaml('repohistory')->gen(3);
 zenData('design')->loadYaml('design')->gen(1);
 zenData('relation')->gen(0);
 
@@ -40,6 +42,6 @@ r($designTester->linkCommitTest($designs[1], $repos[0], $revisions[1])) && p() &
 r($designTester->linkCommitTest($designs[1], $repos[1], $revisions[0])) && p() && e('0');      // 测试提交记录为空的情况
 r($designTester->linkCommitTest($designs[1], $repos[1], $revisions[1])) && p() && e('1;2;3');  // 测试正常情况
 r($designTester->linkCommitTest($designs[2], $repos[1], $revisions[1])) && p() && e('0');      // 测试designID不存在的情况
-r($designTester->linkCommitTest($designs[1], $repos[2], $revisions[1])) && p() && e('1;2;3');  // 测试repoID不存在的情况
-r($designTester->linkCommitTest($designs[1], $repos[1], $revisions[2])) && p() && e('1;2;3;'); // 测试提交记录不存在的情况
+r($designTester->linkCommitTest($designs[1], $repos[2], $revisions[1])) && p() && e('1;2;3;'); // 测试repoID不存在的情况
+r($designTester->linkCommitTest($designs[1], $repos[1], $revisions[2])) && p() && e('1;2;3;;'); // 测试提交记录不存在的情况
 r($designTester->linkCommitTest($designs[2], $repos[2], $revisions[2])) && p() && e('0');      // 测试传入的参数都不存在的情况

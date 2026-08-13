@@ -12,11 +12,11 @@ title=测试 codescanZen->processExecBranch();
 timeout=0
 cid=0
 
-- 测试空planID调用 >> 1
-- 测试返回类型为数组 >> 1
-- 测试repoID=0调用 >> 1
-- 测试多次调用一致性 >> 1
-- 测试无fatal错误 >> 1
+- 执行test模块的processExecBranchTest方法，参数是0, 0  @1
+- 执行test模块的processExecBranchTest方法，参数是1, 0  @1
+- 执行test模块的processExecBranchTest方法，参数是0, 1  @1
+- 执行test模块的processExecBranchTest方法，参数是2, 0  @1
+- 执行test模块的processExecBranchTest方法，参数是1, 1  @1
 
 */
 

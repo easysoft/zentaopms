@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 准备仓库历史记录数据
-$repohistory = zendata('repohistory');
+$repohistory = zendata('ops_repohistory');
 $repohistory->id->range('1-10');
 $repohistory->repo->range('1{5},2{5}');
 $repohistory->revision->range('rev001,rev002,rev003,rev004,rev005,rev006,rev007,rev008,rev009,rev010');

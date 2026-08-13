@@ -27,6 +27,13 @@ zenData('branch')->loadYaml('branch', false, 2)->gen(10);
 
 su('admin');
 
+global $config, $lang;
+$lang->ERCommon = '业务需求';
+$lang->URCommon = '用户需求';
+$lang->SRCommon = '研发需求';
+$config->product->search['fields']['stage']  = '所处阶段';
+$config->product->search['fields']['module'] = '所属模块';
+
 $productTest = new productModelTest();
 
 r($productTest->buildSearchConfigTest(1, 'story')) && p('fields:title') && e('需求名称'); // 测试步骤1:正常产品story类型

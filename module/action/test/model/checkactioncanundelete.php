@@ -58,10 +58,12 @@ $repoAction->objectType = 'repo';
 
 $repoObject = new stdClass();
 $repoObject->id = 1;
+$repoObject->mirror = 1;
 $repoObject->providerID = 1;
 
 $repoObjectNoServer = new stdClass();
 $repoObjectNoServer->id = 2;
+$repoObjectNoServer->mirror = 1;
 $repoObjectNoServer->providerID = 999;
 
 $otherAction = new stdClass();

@@ -20,7 +20,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 // 2. zendata数据准备（根据需要配置）
-$spaceTable = zenData('space');
+$spaceTable = zenData('ops_space');
 $spaceTable->loadYaml('space_restore', false, 2)->gen(5);
 
 $instanceTable = zenData('instance');

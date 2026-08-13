@@ -7,11 +7,11 @@ title=测试 gitfoxModel::apigetcommits();
 timeout=0
 cid=0
 
-- 步骤 1：apiGetCommits 不产生 dao 错误 @0
-- 步骤 2：apiGetCommits 返回 false @0
-- 步骤 3：apiGetCommits 返回值类型为 bool @bool
-- 步骤 4：apiGetCommits 的结果条数为 0 @0
-- 步骤 5：带分页参数时仍返回 false @0
+- 执行gitfoxTest模块的apiGetCommitsErrorTest方法，参数是1, array  @0
+- 执行gitfoxTest模块的apiGetCommitsTest方法，参数是1, array  @0
+- 执行gitfoxTest模块的apiGetCommitsTypeTest方法，参数是1, array  @bool
+- 执行gitfoxTest模块的apiGetCommitsCountTest方法，参数是1, array  @0
+- 执行gitfoxTest模块的apiGetCommitsTest方法，参数是1, array  @0
 
 */
 

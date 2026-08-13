@@ -108,7 +108,12 @@ if(!empty($dbPool) && !empty($poolID))
     $app->connectDB();
 }
 
+/* 防止 loadCommon 在测试数据准备前用残留数据初始化用户视图的静态缓存。 */
+$config->userview->updateTime              = PHP_INT_MAX;
+$config->userview->relatedTablesUpdateTime = 1;
 $tester = $app->loadCommon();
+unset($config->userview->updateTime);
+unset($config->userview->relatedTablesUpdateTime);
 
 /* Set configs. */
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';

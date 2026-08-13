@@ -626,7 +626,7 @@ class devModelTest extends baseTest
      * @access public
      * @return mixed
      */
-    public function getAPIDataTest($apiID = 0, $version = '16.0')
+    public function getAPIDataTest($apiID = 0, $version = 'v1')
     {
         $result = $this->instance->getAPIData($apiID, $version);
         if(dao::isError()) return dao::getError();

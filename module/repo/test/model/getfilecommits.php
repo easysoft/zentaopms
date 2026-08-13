@@ -10,11 +10,11 @@ title=测试 repoModel->getFileCommits();
 timeout=0
 cid=18056
 
-- 执行repo模块的getFileCommitsTest方法，参数是1, 'branch3'
+- 执行repo模块的getFileCommitsTest方法，参数是1, 'branch3' 
  - 第0条的revision属性 @c808480afe22d3a55d94e91c59a8f3170212ade0
  - 第0条的date属性 @2023-12-13 19:00:25
 - 执行repo模块的getFileCommitsTest方法，参数是3, ''  @0
-- 执行repo模块的getFileCommitsTest方法，参数是4, '', $parent
+- 执行repo模块的getFileCommitsTest方法，参数是4, '', $parent 
  - 第0条的revision属性 @1
  - 第0条的comment属性 @+ Add file.
 

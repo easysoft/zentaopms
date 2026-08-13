@@ -7,17 +7,17 @@ title=测试 repoModel::getLatestCommit();
 timeout=0
 cid=18067
 
-- 执行repo模块的getLatestCommitTest方法，参数是1
+- 执行repo模块的getLatestCommitTest方法，参数是1 
  - 属性id @1
  - 属性revision @c808480afe22d3a55d94e91c59a8f3170212ade0
-- 执行repo模块的getLatestCommitTest方法，参数是3
+- 执行repo模块的getLatestCommitTest方法，参数是3 
  - 属性id @2
  - 属性commit @1
 - 执行repo模块的getLatestCommitTest方法，参数是2  @0
-- 执行repo模块的getLatestCommitTest方法，参数是4
+- 执行repo模块的getLatestCommitTest方法，参数是4 
  - 属性id @6
  - 属性revision @3
-- 执行repo模块的getLatestCommitTestWithoutCount方法，参数是1
+- 执行repo模块的getLatestCommitTestWithoutCount方法，参数是1 
  - 属性id @1
  - 属性revision @c808480afe22d3a55d94e91c59a8f3170212ade0
 

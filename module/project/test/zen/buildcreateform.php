@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 projectZen::buildCreateForm();
@@ -25,6 +26,10 @@ cid=0
 
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/zen.class.php';
+
+global $app, $config, $lang;
+$app->loadLang('project');
+$config->project->unitList = 'CNY,USD';
 
 $table = zenData('project');
 $table->id->range('1-10');

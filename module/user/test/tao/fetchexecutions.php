@@ -1,7 +1,10 @@
 #!/usr/bin/env php
 <?php
+
 /**
+
 title=测试 userTao->fetchExecutions();
+timeout=0
 cid=19667
 
 - 用户名为空，返回空数组。 @0

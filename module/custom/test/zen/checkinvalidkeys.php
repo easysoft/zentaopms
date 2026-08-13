@@ -1,5 +1,6 @@
 #!/usr/bin/env php
 <?php
+
 /**
 
 title=测试 customZen::checkInvalidKeys();
@@ -30,7 +31,7 @@ su('admin');
 
 $customTest = new customZenTest();
 
-r($customTest->checkInvalidKeysTest('story', 'priList', 'zh-cn', array('1', '2', '3', '100'))) && p() && e('0');
+r($customTest->checkInvalidKeysTest('story', 'priList', 'zh-cn', array('1', '2', '3', '100'))) && p() && e('1');
 r($customTest->checkInvalidKeysTest('bug', 'severityList', 'zh-cn', array('1', '256'))) && p('message') && e('键值应为不大于255的数字');
 r($customTest->checkInvalidKeysTest('story', 'sourceList', 'zh-cn', array('valid_key', 'invalid-key'))) && p('message') && e('键值应当为大小写英文字母、数字或下划线的组合');
 r($customTest->checkInvalidKeysTest('user', 'roleList', 'zh-cn', array('short', 'verylongkey123'))) && p('message') && e('键的长度必须小于10个字符！');

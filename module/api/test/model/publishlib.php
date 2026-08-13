@@ -8,7 +8,7 @@ timeout=0
 cid=15120
 
 - 执行apiTest模块的publishLibTest方法，参数是$formData1  @1
-- 执行apiTest模块的publishLibTest方法，参数是$formData2 第version条的0属性 @『版本号』不能为空。
+- 执行apiTest模块的publishLibTest方法，参数是$formData2 第version条的0属性 @『version』不能为空。
 - 执行apiTest模块的publishLibTest方法，参数是$formData3 第lib条的0属性 @『lib』应当是数字。
 - 执行apiTest模块的publishLibTest方法，参数是$formData4  @1
 - 执行apiTest模块的publishLibTest方法，参数是$formData5  @1
@@ -66,7 +66,7 @@ $formData7->version = '1.0.0';
 $formData7->desc    = '';
 
 r($apiTest->publishLibTest($formData1)) && p() && e(1);
-r($apiTest->publishLibTest($formData2)) && p('version:0') && e('『版本号』不能为空。');
+r($apiTest->publishLibTest($formData2)) && p('version:0') && e('『version』不能为空。');
 r($apiTest->publishLibTest($formData3)) && p('lib:0') && e('『lib』应当是数字。');
 r($apiTest->publishLibTest($formData4)) && p() && e(1);
 r($apiTest->publishLibTest($formData5)) && p() && e(1);
