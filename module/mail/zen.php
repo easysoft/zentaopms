@@ -28,6 +28,7 @@ class mailZen extends mail
             $mailConfig->fromAddress = $this->config->mail->fromAddress;
             $mailConfig->fromName    = $this->config->mail->fromName;
             $mailConfig->charset     = zget($mailConfig, 'charset', 'utf-8');
+            $mailConfig->async       = $this->config->mail->async;
         }
 
         if(empty($mailConfig) || !is_object($mailConfig)) return false;
