@@ -340,6 +340,10 @@ class release extends control
         $this->view->executions     = $this->loadModel('execution')->fetchPairs($this->app->tab == 'project' ? (int)$this->session->project : 0, 'all', false);
         $this->view->bugStories     = $this->loadModel('story')->getPairsByList($storyIdList);
         $this->view->bugTasks       = $this->loadModel('task')->getPairsByIdList($taskIdList);
+
+        /* 页签切换时同步 URL 中的 type 参数,保证自定义列保存等整页刷新后仍停留在当前页签。 */
+        $releaseModule  = $this->app->rawModule == 'projectrelease' ? 'projectrelease' : 'release';
+        $this->view->tabUrl = $this->createLink($releaseModule, 'view', "releaseID=$releaseID&type=%s&link=$link&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
         $this->display();
     }
 
