@@ -13,7 +13,10 @@ $routes['/products/:productID']       = array('response' => 'product,dynamics,me
 $routes['/products/:productID/close'] = array('post' => array('response' => '*'));
 
 $routes['/products/:productID/stories']     = array('redirect' => '/products/browse?productID=:productID', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/stories']     = array('redirect' => '/projectstories/story?projectID=:projectID', 'response' => 'stories(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'projectstory', 'querySessionKey' => 'projectstory'));
+$routes['/projects/:projectID/stories']     = array(
+    'get' => array('redirect' => '/projectstories/story?projectID=:projectID', 'response' => 'stories(array),pager', 'search' => array('enabled' => true, 'searchModule' => 'projectstory', 'querySessionKey' => 'projectstory')),
+    'post' => array('redirect' => '/story/create?productID=0&branch=0&objectID=:projectID', 'data' => 'project=:projectID')
+);
 $routes['/executions/:executionID/stories'] = array('redirect' => '/executions/story?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionStory', 'querySessionKey' => 'executionStory'));
 $routes['/stories/:storyID']                = array('response' => 'story,actions(array)');
 
@@ -42,6 +45,7 @@ $routes['/projects/team']               = array('response' => 'teamMembers(array
 $routes['/projects/:projectID/members'] = array('get' => array('redirect' => '/projects/team?projectID=:projectID'), 'put' => array('redirect' => '/projects/manageMembers?projectID=:projectID'));
 $routes['/projects/:projectID']         = array('response' => 'project');
 $routes['/projects/:projectID/close']   = array('post' => array('response' => '*'));
+$routes['/projects/:projectID/tasks']   = array('post' => array('redirect' => '/task/create?executionID=0', 'data' => 'project=:projectID'));
 
 $routes['/executions']                      = array('method' => 'all', 'response' => 'executionStats(array)|executions,pager', 'search' => array('enabled' => true, 'searchModule' => 'execution', 'querySessionKey' => 'execution'));
 $routes['/projects/:projectID/executions']  = array('redirect' => '/projects/execution?projectID=:projectID');
@@ -65,7 +69,10 @@ $routes['/executions/:executionID/builds'] = array('redirect' => '/executions/bu
 $routes['/builds/:buildID']                = array('response' => 'build,actions(array)');
 
 $routes['/products/:productID/bugs']     = array('redirect' => '/bugs?productID=:productID', 'response' => 'bugs(array),pager', 'search' => array('enabled' => true));
-$routes['/projects/:projectID/bugs']     = array('redirect' => '/projects/bug?projectID=:projectID', 'search' => array('enabled' => true, 'searchModule' => 'projectBug', 'querySessionKey' => 'projectBug'));
+$routes['/projects/:projectID/bugs']     = array(
+    'get' => array('redirect' => '/projects/bug?projectID=:projectID', 'search' => array('enabled' => true, 'searchModule' => 'projectBug', 'querySessionKey' => 'projectBug')),
+    'post' => array('redirect' => '/bug/create?productID=0&branch=0&extras=projectID=:projectID', 'data' => 'project=:projectID')
+);
 $routes['/executions/:executionID/bugs'] = array('redirect' => '/executions/bug?executionID=:executionID', 'search' => array('enabled' => true, 'searchModule' => 'executionBug', 'querySessionKey' => 'executionBug'));
 $routes['/feedbacks/:feedbackID/bugs']   = array('post' => array('redirect' => '/bug/create?productID=0&branch=0&extras=projectID=0,fromType=feedback,fromID=:feedbackID', 'data' => 'feedback=:feedbackID'));
 $routes['/bugs/:bugID']                  = array('response' => 'bug,actions(array)');
@@ -116,12 +123,16 @@ $routes['/executions/:executionID/auditplans']  = array('redirect' => '/auditpla
 $routes['/feedbacks']                     = array('method' => 'admin', 'response' => 'feedbacks(array),pager', 'search' => array('enabled' => true));
 $routes['/products/:productID/feedbacks'] = array('redirect' => '/feedbacks?param=:productID', 'search' => array('enabled' => true));
 $routes['/feedbacks/:feedbackID/todos']   = array('post' => array('redirect' => '/todo/create?date=today&from=feedback&param=:feedbackID', 'data' => 'feedback=:feedbackID&type=feedback'));
+$routes['/feedbacks/:feedbackID/stories'] = array('post' => array('redirect' => '/story/create?productID=0&branch=0&extra=fromType=feedback,fromID=:feedbackID', 'data' => 'feedback=:feedbackID'));
 $routes['/feedbacks/:feedbackID']         = array('response' => 'feedback,actions(array)');
 
 $routes['/tickets']                       = array('response' => 'tickets(array),pager', 'search' => array('enabled' => true));
 $routes['/feedbacks/:feedbackID/tickets'] = array('post' => array('redirect' => '/ticket/create?productID=0&extras=fromType=feedback,fromID=:feedbackID', 'data' => 'feedback=:feedbackID'));
+$routes['/feedbacks/:feedbackID/tasks']   = array('post' => array('redirect' => '/task/create?executionID=0', 'data' => 'feedback=:feedbackID'));
 $routes['/products/:productID/tickets']   = array('redirect' => '/tickets?param=:productID', 'search' => array('enabled' => true));
 $routes['/tickets/:ticketID']             = array('response' => 'ticket,actions(array)');
+$routes['/tickets/:ticketID/stories']     = array('post' => array('redirect' => '/story/create?productID=0&branch=0&extra=fromType=ticket,fromID=:ticketID', 'data' => 'ticket=:ticketID'));
+$routes['/tickets/:ticketID/bugs']        = array('post' => array('redirect' => '/bug/create?productID=0&branch=0&extras=projectID=0,fromType=ticket,fromID=:ticketID', 'data' => 'ticket=:ticketID'));
 
 $routes['/systems']                     = array('response' => 'appList(array)|systems,pager');
 $routes['/products/:productID/systems'] = array('redirect' => '/systems?productID=:productID');
