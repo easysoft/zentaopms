@@ -846,7 +846,7 @@ class dbh
         if($this->dbConfig->driver == 'dm' || in_array($this->dbConfig->driver, $this->config->pgsqlDriverList))
         {
             $sql = str_replace('`', '"', $sql);
-            $sql = preg_replace('/(?<!\w)if\(/i', '"IF"(', $sql);
+            $sql = preg_replace('/(?<!\w)if\s*\(/i', '"IF"(', $sql);
         }
         if($this->dbConfig->driver == 'gauss') $sql = self::formatGaussFunctions($sql);
 

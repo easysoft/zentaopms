@@ -1602,7 +1602,7 @@ class bugModel extends model
         return $this->dao->select("DATE_FORMAT(`resolvedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
-            ->having('name != 0000-00-00')
+            ->having("MIN(DATE_FORMAT(`resolvedDate`, '%Y-%m-%d')) != '0000-00-00'")
             ->orderBy('name')
             ->fetchAll();
     }
@@ -1619,7 +1619,7 @@ class bugModel extends model
         return $this->dao->select("DATE_FORMAT(`closedDate`, '%Y-%m-%d') AS name, COUNT(1) AS value")->from(TABLE_BUG)
             ->where($this->reportCondition())
             ->groupBy('name')
-            ->having('name != 0000-00-00')
+            ->having("MIN(DATE_FORMAT(`closedDate`, '%Y-%m-%d')) != '0000-00-00'")
             ->orderBy('name')
             ->fetchAll();
     }
