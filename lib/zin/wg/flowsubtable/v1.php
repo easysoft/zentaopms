@@ -85,7 +85,7 @@ class flowSubTable extends wg
             set::tagName('div'),
             set::mode('add'),
             set::actions([]),
-            set::maxRows($rows ? count($rows) : 1),
+            set::minRows($rows ? count($rows) : 1),
             set::items($items),
             set::data(array_values($rows))
         );
