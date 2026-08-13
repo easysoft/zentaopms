@@ -7,7 +7,8 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang', '发现环节', 'bugIdentify',         '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'bugIdentify',  '', '', ''),
 ('lang', '关闭原因', 'ticketClosedReason',  '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'ticketClosedReason', '', '', ''),
 ('lang', '反馈优先级','feedbackPri',        '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'feedbackPri',  '', '', ''),
-('sql',  '重复工单',  'ticketRepeat',       '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_ticket WHERE `deleted`=\'0\'', 'view_datasource_ticketRepeat', 'id', 'title');
+('sql',  '重复工单',  'ticketRepeat',       '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_ticket WHERE `deleted`=\'0\'', 'view_datasource_ticketRepeat', 'id', 'title'),
+('sql',  '重复反馈',  'feedbackRepeat',     '1', 'rnd', 'admin', '1970-01-01 00:00:01', 'SELECT `id`,`title` FROM zt_feedback WHERE `deleted`=\'0\'', 'view_datasource_feedbackRepeat', 'id', 'title');
 
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'taskMode'           LIMIT 1) WHERE `module` = 'task'     AND `field` = 'mode';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'storyCategory'      LIMIT 1) WHERE `module` = 'story'    AND `field` = 'category';
@@ -18,14 +19,17 @@ UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasour
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketClosedReason' LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'closedReason';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackPri'        LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'pri';
 UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'ticketRepeat'       LIMIT 1) WHERE `module` = 'ticket'   AND `field` = 'repeatTicket';
+UPDATE `zt_workflowfield` SET `options` = (SELECT `id` FROM `zt_workflowdatasource` WHERE `code` = 'feedbackRepeat'     LIMIT 1) WHERE `module` = 'feedback' AND `field` = 'repeatFeedback';
 
 DROP VIEW IF EXISTS `view_datasource_taskDocs`;
 DROP VIEW IF EXISTS `view_datasource_caseScene`;
 DROP VIEW IF EXISTS `view_datasource_ticketRepeat`;
+DROP VIEW IF EXISTS `view_datasource_feedbackRepeat`;
 
-CREATE VIEW `view_datasource_taskDocs`     AS SELECT `id`,`title` FROM `zt_doc`    WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_caseScene`    AS SELECT `id`,`title` FROM `zt_scene`  WHERE `deleted` = '0';
-CREATE VIEW `view_datasource_ticketRepeat` AS SELECT `id`,`title` FROM `zt_ticket` WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_taskDocs`       AS SELECT `id`,`title` FROM `zt_doc`      WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_caseScene`      AS SELECT `id`,`title` FROM `zt_scene`    WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_ticketRepeat`   AS SELECT `id`,`title` FROM `zt_ticket`   WHERE `deleted` = '0';
+CREATE VIEW `view_datasource_feedbackRepeat` AS SELECT `id`,`title` FROM `zt_feedback` WHERE `deleted` = '0';
 
 DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='consumed';
 DELETE FROM zt_workflowfield WHERE `module`='ticket'   AND `field`='deleted';
