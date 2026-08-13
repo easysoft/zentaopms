@@ -1609,13 +1609,13 @@ SELECT
     SUM(IFNULL(t4.`allStory`, 0)) AS `allStory`,
     CASE
         WHEN SUM(IFNULL(t4.`allStory`, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
-        ELSE CAST((SUM(IFNULL(t3.`doneStory`, 0)) / SUM(IFNULL(t4.`allStory`, 0)) * 100) AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t3.`doneStory`, 0)) * 1.0 / SUM(IFNULL(t4.`allStory`, 0)) * 100) AS DECIMAL(10,2))
     END AS `storyDoneRate`,
     SUM(IFNULL(t5.`solvedBug`, 0)) AS `solvedBug`,
     SUM(IFNULL(t6.`allBug`, 0)) AS `allBug`,
     CASE
         WHEN SUM(IFNULL(t6.`allBug`, 0)) <= 0 THEN CAST(0.00 AS DECIMAL(10,2))
-        ELSE CAST((SUM(IFNULL(t5.`solvedBug`, 0)) / SUM(IFNULL(t6.`allBug`, 0)) * 100) AS DECIMAL(10,2))
+        ELSE CAST((SUM(IFNULL(t5.`solvedBug`, 0)) * 1.0 / SUM(IFNULL(t6.`allBug`, 0)) * 100) AS DECIMAL(10,2))
     END AS `bugSolvedRate`
 FROM zt_project AS t1
 LEFT JOIN zt_product AS t2 ON t1.id = t2.program
@@ -1838,7 +1838,7 @@ SELECT
   IFNULL(t3.name, '/') AS `productLine`,
   IFNULL(t4.story, 0) AS `closedStory`,
   t5.story AS `totalStory`,
-  ROUND(IFNULL(t4.story, 0) / t5.story * 100, 2) AS `closedRate`
+  ROUND(IFNULL(t4.story, 0) * 1.0 / t5.story * 100, 2) AS `closedRate`
 FROM zt_product AS t1
 LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
 LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
@@ -1901,7 +1901,7 @@ SELECT
   IFNULL(t3.name, '/') AS `productLine`,
   IFNULL(t4.bug, 0) AS `fixedBug`,
   t5.bug AS `totalBug`,
-  ROUND(IFNULL(t4.bug, 0) / t5.bug * 100, 2) AS `fixedRate`
+  ROUND(IFNULL(t4.bug, 0) * 1.0 / t5.bug * 100, 2) AS `fixedRate`
 FROM zt_product AS t1
 LEFT JOIN zt_project AS t2 ON t1.program = t2.id AND t2.type = 'program' AND t2.grade = 1
 LEFT JOIN zt_module AS t3 ON t1.line = t3.id AND t3.type = 'line'
@@ -3339,7 +3339,7 @@ SELECT
   ROUND(
     CASE
       WHEN IFNULL(t3.consumed, 0) = 0 THEN 0
-      ELSE IFNULL(t2.story, 0) / IFNULL(t3.consumed, 0)
+      ELSE IFNULL(t2.story, 0) * 1.0 / IFNULL(t3.consumed, 0)
     END,
     2
   ) AS ratio
@@ -3404,7 +3404,7 @@ SELECT
   ROUND(
     SUM(
       IFNULL(t2.budget, '0')
-    ) / 10000,
+    ) * 1.0 / 10000,
     2
   ) AS budget
 FROM
@@ -4106,7 +4106,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '42',
     'sql'       => <<<EOT
 SELECT `year`, id,name,status,`begin`,`end`,`realBegan`,`realEnd`,
-ROUND((IF(LEFT(`realEnd`,4) != '0000', DATEDIFF(`realEnd`, `realBegan`), DATEDIFF(NOW(),`realBegan`)) - DATEDIFF(`end`, `begin`)) / DATEDIFF(`end`,`begin`) * 100) as duration
+ROUND((IF(LEFT(`realEnd`,4) != '0000', DATEDIFF(`realEnd`, `realBegan`), DATEDIFF(NOW(),`realBegan`)) - DATEDIFF(`end`, `begin`)) * 1.0 / DATEDIFF(`end`,`begin`) * 100) as duration
 FROM (SELECT DISTINCT YEAR(`date`) as `year` FROM zt_action) AS t1
 LEFT JOIN zt_project AS t2 ON 1 = 1
 WHERE deleted = '0' AND type = 'project'
@@ -5551,7 +5551,7 @@ $config->bi->builtin->charts[] = array
     'group'     => '71',
     'sql'       => <<<EOT
 select tt.*,
-tt.`故事点` / tt.`工时` as `单位时间交付需求规模数`
+tt.`故事点` * 1.0 / tt.`工时` as `单位时间交付需求规模数`
 from (
 select
 t1.id,t1.name as project,
@@ -5880,21 +5880,21 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`,LEFT(t1.`end`, 4) AS `endYear`
+SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`,LEFT(t1.`end`, 4) AS `endYear`
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
     AND t22.deleted = '0' AND t22.parent < 1
     GROUP BY t22.project
     UNION
-    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
+    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent * 1.0 / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 * 1.0 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -5907,7 +5907,7 @@ LEFT JOIN (
 WHERE t1.deleted = '0'
 AND t1.status = 'doing'
 AND t1.type = 'project'
-AND ((IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059' AND DATEDIFF(`end`, NOW()) >= 0) OR LEFT(t1.`end`, 4) = '2059' )
+AND ((IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059' AND DATEDIFF(`end`, NOW()) >= 0) OR LEFT(t1.`end`, 4) = '2059' )
 EOT
 ,
     'settings'  => array
@@ -5932,8 +5932,8 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT id, prograss, `planPrograss`, `end`
 FROM (
-SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,t1.`end`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,t1.`end`,
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) * 1.0 / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
@@ -5963,22 +5963,22 @@ $config->bi->builtin->charts[] = array
     'type'      => 'card',
     'group'     => '72',
     'sql'       => <<<EOT
-SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`
+SELECT t1.id, t1.name, IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`
 , LEFT(t1.`end`, 4) AS `endYear`
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
     AND t22.deleted = '0' AND t22.parent < 1
     GROUP BY t22.project
     UNION
-    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
+    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent * 1.0 / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 * 1.0 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -5992,7 +5992,7 @@ WHERE t1.deleted = '0'
 AND t1.status = 'doing'
 AND t1.type = 'project'
 AND LEFT(t1.`end`, 4) != '2059'
-AND IFNULL(prograss, 0) < (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100)  AND DATEDIFF(`end`, NOW()) >= 0
+AND IFNULL(prograss, 0) < (DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100)  AND DATEDIFF(`end`, NOW()) >= 0
 EOT
 ,
     'settings'  => array
@@ -6017,8 +6017,8 @@ $config->bi->builtin->charts[] = array
     'sql'       => <<<EOT
 SELECT id, prograss, `planPrograss`
 FROM (
-SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+SELECT t1.id,ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) * 1.0 / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1' AND DATEDIFF(t1.`end`, NOW()) >= 0
@@ -6244,26 +6244,26 @@ IF(
     DATEDIFF(t1.`end`, NOW()) < 0,
     '延期',
     (IF(
-        (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
+        (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
         OR LEFT(t1.`end`, 4) = '2059' ,
         '顺利',
         '滞后'
     ))) AS `status`,
-IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`,LEFT(t1.`end`, 4) AS `endYear`
+IFNULL(prograss, 0) AS prograss, ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2)  AS `planPrograss`,LEFT(t1.`end`, 4) AS `endYear`
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban')
     AND t22.deleted = '0' AND t22.parent < 1
     GROUP BY t22.project
     UNION
-    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent / 100)), 2) as prograss
+    SELECT  t.project, ROUND(SUM(t.prograss * (t.percent * 1.0 / 100)), 2) as prograss
     FROM (
         SELECT t21.id,t21.percent, t22.project,
-        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 / 1000 * 100, 2), 0)  AS prograss
+        IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, ROUND(SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))) * 1000 * 1.0 / 1000 * 100, 2), 0)  AS prograss
         FROM zt_project AS t21
         LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
         WHERE t21.deleted = '0' AND t21.type = 'stage'
@@ -6336,8 +6336,8 @@ SELECT id, name,IF(
 ) AS status,
 prograss, `planPrograss`, `end`
 FROM (
-SELECT t1.id,t1.name,ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,t1.`end`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+SELECT t1.id,t1.name,ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,t1.`end`,
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) * 1.0 / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 WHERE t1.deleted = '0' AND t1.type IN ('sprint', 'stage', 'kanban') AND t1.status = 'doing' AND t1.multiple = '1'
@@ -6409,7 +6409,7 @@ $config->bi->builtin->charts[] = array
         DATEDIFF(t1.`end`, NOW()) < 0,
         '延期',
         (IF(
-            (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
+            (IFNULL(prograss, 0) >= (DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100) AND LEFT(t1.`end`, 4) != '2059')
             OR LEFT(t1.`end`, 4) = '2059' ,
             '顺利',
             '滞后'
@@ -6418,7 +6418,7 @@ CONCAT(IFNULL(prograss, 0), '%') AS prograss
 FROM zt_project AS t1
 LEFT JOIN (
     SELECT t22.project,
-    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
+    ROUND(IF(SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0)) > 0, SUM(t22.consumed) * 1.0 / (SUM(t22.consumed) + SUM(IF(t22.status != 'closed' AND t22.status != 'cancel', t22.`left`, 0))), 0) * 100, 2) AS prograss
     FROM zt_project AS t21
     LEFT JOIN zt_task AS t22 ON t21.id = t22.execution
     WHERE t21.deleted = '0' AND t21.type IN ('sprint', 'kanban', 'stage')
@@ -6476,8 +6476,8 @@ IF(
 FROM (
 SELECT t1.id,t1.name,t1.`begin`,t1.`end`,t1.`realBegan`,IFNULL(t3.name, '/') AS project,t3.id AS `projectID`,
 DATEDIFF(t1.`end`, t1.`begin`) + 1 AS `planDuration`, IF(DATEDIFF(t1.`end`, NOW()) >= 0, DATEDIFF(t1.`end`, NOW()) + 1, 0) AS `realDuration`,
-ROUND(DATEDIFF(NOW(), t1.`begin`) / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,
-ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
+ROUND(DATEDIFF(NOW(), t1.`begin`) * 1.0 / DATEDIFF(t1.`end`, t1.`begin`) * 100, 2) AS `planPrograss`,
+ROUND(IF(SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0)) > 0, SUM(t2.consumed) * 1.0 / (SUM(t2.consumed) + SUM(IF(t2.status != 'closed' AND t2.status != 'cancel', t2.`left`, 0))), 0) * 100, 2) AS prograss
 FROM zt_project AS t1
 LEFT JOIN zt_task AS t2 ON t1.id = t2.execution
 LEFT JOIN zt_project AS t3 on t1.project = t3.id AND t3.type = 'project' AND t3.deleted = '0'
@@ -7849,10 +7849,10 @@ SELECT
     t6.year,
     t6.month,
     IFNULL(t5.`createdCases`, 0) AS `createdCases`,
-    IFNULL(t4.`relativedBugs` / t5.`createdCases`, 0) AS `avgBugsOfCase`,
+    IFNULL(t4.`relativedBugs` * 1.0 / t5.`createdCases`, 0) AS `avgBugsOfCase`,
     IFNULL(t1.`createdBugs`, 0) AS `createdBugs`,
     IFNULL(t2.`fixedBugs`, 0) AS `fixedBugs`,
-    IFNULL(t3.`fixedCycle` / t2.`fixedBugs`, 0) AS `avgFixedCycle`
+    IFNULL(t3.`fixedCycle` * 1.0 / t2.`fixedBugs`, 0) AS `avgFixedCycle`
 FROM
     (
     select distinct year(date) as `year`, month(date) as month
