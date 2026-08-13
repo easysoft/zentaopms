@@ -965,7 +965,7 @@ class fileModel extends model
             $data = new stdclass();
             $data->objectID   = $objectID;
             $data->objectType = $objectType;
-            if(!defined('RUN_MODE') || RUN_MODE != 'api') $data->extra = 'editor';
+            if(!helper::isApiRequest()) $data->extra = 'editor';
 
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$value])->exec();
         }
@@ -1536,7 +1536,7 @@ class fileModel extends model
 
         $addedFiles = $this->saveUpload($objectType, $oldObject->id, $extra, $filesName, $labelsName);
 
-        if(defined('RUN_MODE') && RUN_MODE === 'api')
+        if(helper::isApiRequest())
         {
             $uidFiles = $this->getUploadByUID($this->post->uid, $filesName, $labelsName);
 

@@ -81,7 +81,7 @@ class programplan extends control
         }
         setcookie('ganttType', json_encode(array($this->app->tab => array($projectID => $type))), $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
+        if(!helper::isApiRequest()) $projectID = $this->project->checkAccess($projectID, $this->project->getPairsByProgram());
 
         /* Get the product under the project and adjust the three-level navigation action button. */
         $products = $this->loadModel('product')->getProducts($projectID);

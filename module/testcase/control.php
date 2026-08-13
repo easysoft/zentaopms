@@ -558,7 +558,7 @@ class testcase extends control
         /* If testcase isn't exist, locate to qa-ndex.*/
         if(!$case)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             if(!$this->server->http_referer) return print(js::alert($this->lang->notFound) . js::locate($this->createLink('testcase', 'browse', '')));
             return $this->send(array('result' => 'fail', 'load' => array('alert' => $this->lang->notFound, 'locate' => $this->createLink('testcase', 'browse'))));
         }
@@ -566,7 +566,7 @@ class testcase extends control
         $case->caseID = $case->id;
         $this->executeHooks($caseID);
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api' && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
+        if(helper::isApiRequest() && !empty($this->app->version)) return $this->send(array('status' => 'success', 'case' => $case));
 
         $this->testcaseZen->assignCaseForView($case, $from, $taskID, $suiteID);
 
@@ -645,7 +645,7 @@ class testcase extends control
             $message = $this->executeHooks($caseID);
             if(!$message) $message = $this->lang->saveSuccess;
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $caseID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $caseID));
             if(isInModal() && $this->app->tab == 'my') return $this->send(array('result' => 'success', 'message' => $message, 'closeModal' => true));
             $testtaskID = $from == 'testtask' && $this->session->testtaskID ? $this->session->testtaskID : 0;
             $locate     = $oldCase->lib ? $this->createLink('caselib', 'viewCase', "caseID={$caseID}") : $this->createLink('testcase', 'view', "caseID={$caseID}&version=0&from={$from}&testtaskID={$testtaskID}");
@@ -837,7 +837,7 @@ class testcase extends control
         $message = $this->executeHooks($caseID);
         if(!$message) $message = $this->lang->saveSuccess;
 
-        if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+        if(helper::isApiRequest()) return $this->send(array('status' => 'success'));
 
         $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
         return $this->send(array('result' => 'success', 'message' => $message, 'load' => $locateLink));
@@ -1771,7 +1771,7 @@ class testcase extends control
             $this->testcase->updateScene($scene, $oldScene);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $sceneID));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'success', 'data' => $sceneID));
 
             $locate = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$scene->product}&branch={$scene->branch}&browseType=all&param={$scene->module}");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'load' => $locate));

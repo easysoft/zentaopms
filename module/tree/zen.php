@@ -61,7 +61,7 @@ class treeZen extends tree
 
         if(empty($root))
         {
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
+            if($this->viewType == 'json' or (helper::isApiRequest())) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
             $this->locate($this->createLink('product', 'create'));
         }
 

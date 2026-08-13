@@ -1285,7 +1285,7 @@ class productZen extends product
      */
     protected function responseNotFound4View(): void
     {
-        if(defined('RUN_MODE') && RUN_MODE == 'api')
+        if(helper::isApiRequest())
         {
             $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return;

@@ -373,7 +373,7 @@ class task extends control
         $task = $this->task->getById($taskID, true, $vision = 'all'); // TODO: $vision is for compatibling with viewing drill data.
         if(!$task)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return $this->sendError($this->lang->notFound, $this->config->vision == 'lite' ? $this->createLink('project', 'index') : $this->createLink('execution', 'all'));
         }
         if(!$this->loadModel('common')->checkPrivByObject('execution', $task->execution)) return $this->sendError($this->lang->execution->accessDenied, $this->createLink('execution', 'all'));
@@ -385,7 +385,7 @@ class task extends control
         $this->session->set('executionList', $this->app->getURI(true), 'execution'); // This allow get var of session as `$_SESSION['app-execution']['executionList']`.
 
         $execution    = $this->view->execution ?? $this->execution->getById($task->execution);
-        $isModalOrApi = helper::isAjaxRequest('modal') || (defined('RUN_MODE') && RUN_MODE == 'api');
+        $isModalOrApi = helper::isAjaxRequest('modal') || (helper::isApiRequest());
         if(!$isModalOrApi && $execution->type == 'kanban')
         {
             helper::setcookie('taskToOpen', (string)$taskID);

@@ -17,7 +17,7 @@
  *
  * @package framework
  */
-include __DIR__ . '/base/helper.class.php';
+include_once __DIR__ . '/base/helper.class.php';
 class helper extends baseHelper
 {
     public static function getViewType(bool $source = false)

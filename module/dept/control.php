@@ -110,7 +110,7 @@ class dept extends control
         $sons = $this->dept->getSons($deptID);
         if($sons)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasSons}');"));
         }
 
@@ -118,7 +118,7 @@ class dept extends control
         $users = $this->dept->getUsers('all', array($deptID));
         if($users)
         {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
+            if(helper::isApiRequest()) return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
             return $this->send(array('result' => 'fail', 'callback' => "zui.Modal.alert('{$this->lang->dept->error->hasUsers}');"));
         }
 
