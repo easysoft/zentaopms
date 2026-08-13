@@ -595,8 +595,7 @@ class testcaseModel extends model
         {
             $caseID = isset($row->case) ? $row->case : $row->id;
 
-            if($exportType == 'selected' && $taskID  && strpos(",{$this->cookie->checkedItem},", ",$row->id,") === false) continue;
-            if($exportType == 'selected' && !$taskID && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
+            if($exportType == 'selected' && strpos(",{$this->cookie->checkedItem},", ",$caseID,") === false) continue;
 
             $row->id        = $caseID;
             $cases[$caseID] = $row;
