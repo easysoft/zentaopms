@@ -910,7 +910,7 @@ class zaiModelTest extends baseTest
                 if($this->httpResponse === false) return false;
                 if(is_string($this->httpResponse)) return $this->httpResponse;
 
-                return json_encode(array('id' => $this->agentId));
+                return json_encode(array('agent' => array('id' => $this->agentId)));
             }
         };
 

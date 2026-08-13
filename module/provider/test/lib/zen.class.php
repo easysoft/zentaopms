@@ -17,6 +17,7 @@ class providerZenTest extends baseTest
      */
     public function checkServiceUrlTest(object $provider): bool|array
     {
+        dao::$errors = array();
         $result = $this->invokeArgs('checkServiceUrl', array($provider));
         $errors = dao::getError();
 

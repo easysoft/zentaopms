@@ -23,7 +23,7 @@ $design->story->range('6-10');
 $design->commit->range('5-1');
 $design->gen(5);
 
-$commit = zenData('repohistory');
+$commit = zenData('ops_repohistory');
 $commit->id->range('1-5');
 $commit->comment->range('1-5')->prefix('comment');
 $commit->gen('5');

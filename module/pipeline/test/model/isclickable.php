@@ -7,11 +7,11 @@ title=测试 pipelineModel::isClickable();
 timeout=0
 cid=0
 
-- 测试draft状态exec不可点击 @0
-- 测试active状态exec可点击 @1
-- 测试empty状态execution不可点击 @0
-- 测试active状态执行可点击 @1
-- 测试普通action(edit)总是可点击 @1
+- 执行tester模块的isClickableTest方法，参数是$draftPipeline, 'exec') ? '1' : '0  @0
+- 执行tester模块的isClickableTest方法，参数是$activePipeline, 'exec') ? '1' : '0  @1
+- 执行tester模块的isClickableTest方法，参数是$emptyPipeline, 'execution') ? '1' : '0  @0
+- 执行tester模块的isClickableTest方法，参数是$activePipeline, 'execution') ? '1' : '0  @1
+- 执行tester模块的isClickableTest方法，参数是$draftPipeline, 'edit') ? '1' : '0  @1
 
 */
 

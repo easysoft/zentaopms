@@ -11,10 +11,11 @@ timeout=0
 cid=18728
 
 - 默认创建 @1
-- 重复创建第name条的0属性 @『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
-- 创建空名称失败第name条的0属性 @『应用名称』不能为空。
-- 创建非数字失败第product条的0属性 @『product』应当是数字。
+- 重复创建第systemName条的0属性 @『应用名称』已经有『应用10』这条记录了。如果您确定该记录已删除，请到后台-系统设置-回收站还原。
+- 创建空名称失败第systemName条的0属性 @『应用名称』不能为空。
+- 创建非数字失败第product条的0属性 @『所属产品』应当是数字。
 - 创建非法状态后保存status属性 @test
+
 */
 global $tester;
 $system = $tester->loadModel('system');
@@ -38,7 +39,7 @@ r(dao::getError()) && p('systemName:0') && e('『应用名称』不能为空。'
 $default->name    = '应用11';
 $default->product = '字符串';
 $system->create($default);
-r(dao::getError()) && p('product:0') && e('『product』应当是数字。'); // 创建非数字失败
+r(dao::getError()) && p('product:0') && e('『所属产品』应当是数字。'); // 创建非数字失败
 $default->product = 1;
 $default->status  = 'test';
 $systemID = $system->create($default);

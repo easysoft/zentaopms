@@ -1,17 +1,16 @@
-title: zt_docaction.
-author: Shujie Tian
-version: "1.0"
+title: zt_docaction
+author: Codex
+version: "2.0"
 fields:
   - field: id
-    range: 1-100
+    range: 1-15
   - field: doc
-    range: 1-10
+    range: 1,2,3,4,5,6,7,8,9,10,3,6,9,1,7
   - field: action
-    range: 'collect{10},view{10}'
+    range: collect{10},view{3},edited{2}
   - field: actor
-    range: admin,user1,user2
+    range: admin,user1,user2,admin,user1,user2,admin,user1,user2,admin,admin,admin,admin,admin,admin
   - field: date
     range: "(-2w):1D"
     type: timestamp
-    format: "YY/MM/DD"
-    postfix: "\t"
+    format: "YYYY-MM-DD hh:mm:ss"

@@ -19,7 +19,7 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
 /* Use the stable module-level yaml data and override only the fields required by this case. */
-$repohistory = zenData('repohistory')->loadYaml('repohistory');
+$repohistory = zenData('ops_repohistory')->loadYaml('repohistory');
 $repohistory->repo->range('1{5}');
 $repohistory->revision->range('abc123,def456,ghi789,jkl012,mno345');
 $repohistory->gen(5);

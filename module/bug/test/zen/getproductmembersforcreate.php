@@ -11,7 +11,7 @@ cid=15456
 - 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug2 属性admin @A:管理员
 - 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug3 属性admin @A:管理员
 - 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug4 属性admin @管理员
-- 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug5 属性admin @管理员
+- 执行bugTest模块的getProductMembersForCreateTest方法，参数是$bug5 属性admin @A:管理员
 
 */
 
@@ -112,4 +112,4 @@ $bug5->productID = 0;
 $bug5->branch = 0;
 $bug5->executionID = 0;
 $bug5->projectID = 0;
-r($bugTest->getProductMembersForCreateTest($bug5)) && p('admin') && e('管理员');
+r($bugTest->getProductMembersForCreateTest($bug5)) && p('admin') && e('A:管理员');

@@ -16,6 +16,7 @@ cid=19222
 - 处理product=2,paramID=1的查询语句 @( 1 = 1 AND t1.`product` ='2')
 
 */
+zenData('userquery')->gen(0);
 zenData('product')->gen(5);
 
 $productID   = array(0, 1, 2);

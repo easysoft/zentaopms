@@ -1,43 +1,31 @@
 ---
-title: Space data for getBackupList test
+title: ops_space
 desc: Test data for space table used in systemModel::getBackupList() method
-author: Claude
-version: 1.0
+author: Codex
+version: "2.0"
 
 fields:
 - field: id
   note: Space ID
   range: 1-5
-  prefix: ""
-  postfix: ""
-  format: ""
-
 - field: name
   note: Space name
   range: test-space{2}, prod-space{2}, dev-space{1}
-  format: ""
-
-- field: k8space
-  note: Kubernetes namespace
-  range: test-ns{2}, prod-ns{2}, dev-ns{1}
-  format: ""
-
-- field: owner
-  note: Space owner
+- field: code
+  range: code{1-5}
+- field: acl
+  range: open
+- field: auth
+  range: extend
+- field: desc
+  range: ""
+- field: createdBy
   range: admin{2}, user{2}, tester{1}
-  format: ""
-
-- field: status
-  note: Space status
-  range: active{4}, inactive{1}
-  format: ""
-
+- field: editedBy
+  range: admin
 - field: deleted
   note: Delete status
   range: 0{4}, 1{1}
-  format: ""
-
-- field: createdBy
   note: Creator
   range: admin{3}, user{2}
   format: ""

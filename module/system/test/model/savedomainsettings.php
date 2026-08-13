@@ -3,7 +3,7 @@
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 
 zenData('instance')->gen(1);
-zenData('space')->gen(1);
+zenData('ops_space')->gen(1);
 
 $configData = zenData('config');
 $configData->owner->range('system');

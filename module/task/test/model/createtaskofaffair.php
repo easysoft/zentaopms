@@ -4,6 +4,10 @@ include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 su('admin');
 
+global $lang;
+$lang->SRCommon = '研发需求';
+$lang->task->story = '相关研发需求';
+
 zenData('task')->gen(0);
 zenData('taskspec')->gen(0);
 zenData('project')->loadYaml('project')->gen(5);
@@ -24,9 +28,9 @@ cid=18783
 - 测试创建看板下的事务任务
  - 第3条的execution属性 @5
  - 第3条的name属性 @看板下的任务
-- 测试创建迭代下的多个事务任务第4条的assignedTo属性 @admin
-- 测试创建阶段下的多个事务任务第8条的assignedTo属性 @user1
-- 测试创建看板下的多个事务任务第12条的assignedTo属性 @user2
+- 测试创建迭代下的事务任务第4条的assignedTo属性 @admin
+- 测试创建阶段下的事务任务第5条的assignedTo属性 @user1
+- 测试创建看板下的事务任务第6条的assignedTo属性 @user2
 - 测试创建迭代下的事务任务的预计必填项第estimate条的0属性 @『最初预计』不能为空。
 - 测试创建迭代下的事务任务的需求必填项第story条的0属性 @『相关研发需求』不能为空。
 - 测试创建迭代下的事务任务的预计开始必填项第estStarted条的0属性 @『预计开始』不能为空。
@@ -43,7 +47,9 @@ $notStoryTask      = array('execution' => 3, 'name' => '迭代下的任务', 'st
 $notEstStartedTask = array('execution' => 3, 'name' => '迭代下的任务', 'estStarted' => '');
 $notDeadlineTask   = array('execution' => 3, 'name' => '迭代下的任务', 'deadline' => '');
 $notModuleTask     = array('execution' => 3, 'name' => '迭代下的任务', 'module' => 0);
-$assignedToList    = array('admin', 'user1', 'user2');
+$assignedToList    = array('admin');
+$assignedToList1   = array('user1');
+$assignedToList2   = array('user2');
 $emptyAssignedTo   = array(0 => '');
 
 $taskTester = new taskModelTest();
@@ -51,9 +57,9 @@ r($taskTester->createTaskOfAffairObject())                                      
 r($taskTester->createTaskOfAffairObject($sprintTask,        $emptyAssignedTo))               && p('1:execution,name')           && e('3,迭代下的任务');             // 测试创建迭代下的事务任务
 r($taskTester->createTaskOfAffairObject($stageTask,         $emptyAssignedTo))               && p('2:execution,name')           && e('4,阶段下的任务');             // 测试创建阶段下的事务任务
 r($taskTester->createTaskOfAffairObject($kanbanTask,        $emptyAssignedTo))               && p('3:execution,name')           && e('5,看板下的任务');             // 测试创建看板下的事务任务
-r($taskTester->createTaskOfAffairObject($sprintTask,        $assignedToList))                && p('4:assignedTo')               && e('admin');                      // 测试创建迭代下的多个事务任务
-r($taskTester->createTaskOfAffairObject($stageTask,         $assignedToList))                && p('8:assignedTo')               && e('user1');                      // 测试创建阶段下的多个事务任务
-r($taskTester->createTaskOfAffairObject($kanbanTask,        $assignedToList))                && p('12:assignedTo')              && e('user2');                      // 测试创建看板下的多个事务任务
+r($taskTester->createTaskOfAffairObject($sprintTask,        $assignedToList))                && p('4:assignedTo')               && e('admin');                      // 测试创建迭代下的事务任务
+r($taskTester->createTaskOfAffairObject($stageTask,         $assignedToList1))               && p('5:assignedTo')               && e('user1');                      // 测试创建阶段下的事务任务
+r($taskTester->createTaskOfAffairObject($kanbanTask,        $assignedToList2))               && p('6:assignedTo')               && e('user2');                      // 测试创建看板下的事务任务
 r($taskTester->createTaskOfAffairObject($notEstimateTask,   $emptyAssignedTo, 'estimate'))   && p('estimate:0')                 && e('『最初预计』不能为空。');     // 测试创建迭代下的事务任务的预计必填项
 r($taskTester->createTaskOfAffairObject($notStoryTask,      $emptyAssignedTo, 'story'))      && p('story:0')                    && e('『相关研发需求』不能为空。'); // 测试创建迭代下的事务任务的需求必填项
 r($taskTester->createTaskOfAffairObject($notEstStartedTask, $emptyAssignedTo, 'estStarted')) && p('estStarted:0')               && e('『预计开始』不能为空。');     // 测试创建迭代下的事务任务的预计开始必填项

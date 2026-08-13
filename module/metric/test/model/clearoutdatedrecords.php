@@ -18,6 +18,8 @@ cid=17071
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
+zenData('metriclib')->gen(0);
+
 $metricTest = new metricModelTest();
 
 /* Build records that match the current date so the tested method can remove them. */

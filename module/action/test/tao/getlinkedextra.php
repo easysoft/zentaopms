@@ -30,7 +30,7 @@ zenData('productplan')->loadYaml('productplan_getlinkedextra', false, 2)->gen(10
 zenData('build')->loadYaml('build_getlinkedextra', false, 2)->gen(10);
 
 // 准备repohistory表测试数据
-zenData('repohistory')->loadYaml('repohistory_getlinkedextra', false, 2)->gen(10);
+zenData('ops_repohistory')->loadYaml('repohistory_getlinkedextra', false, 2)->gen(10);
 
 // 3. 用户登录（选择合适角色）
 su('admin');

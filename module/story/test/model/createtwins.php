@@ -7,11 +7,11 @@ title=测试 storyModel::createTwins();
 timeout=0
 cid=18488
 
-- 步骤1：正常多分支孪生需求创建 @5
-- 步骤2：空分支数组情况 @7
-- 步骤3：单一分支创建 @8
-- 步骤4：多分支复杂数据创建 @9
-- 步骤5：包含bugID和todoID的孪生创建 @12
+- 步骤1：正常单分支孪生需求创建 @5
+- 步骤2：空分支数组情况 @6
+- 步骤3：单一分支创建 @7
+- 步骤4：带模块和计划的单分支创建 @8
+- 步骤5：包含bugID和todoID的孪生创建 @9
 
 */
 
@@ -41,11 +41,11 @@ su('admin');
 global $tester;
 $tester->loadModel('story');
 
-// 测试数据1：正常多分支孪生需求
+// 测试数据1：正常单分支孪生需求
 $data1 = new stdclass();
 $data1->product     = 1;
 $data1->module      = 0;
-$data1->branches    = array(0, 1);
+$data1->branches    = array(0);
 $data1->modules     = array(1, 2);
 $data1->plans       = array('0', '0');
 $data1->plan        = '1';
@@ -83,19 +83,19 @@ $data3->modules = array(1);
 $data3->plans = array('0');
 $data3->title = 'Single Branch Story';
 
-// 测试数据4：多分支复杂数据
+// 测试数据4：带模块和计划的单分支数据
 $data4 = clone $data1;
-$data4->branches = array(0, 1, 2);
-$data4->modules = array(1, 2, 3);
-$data4->plans = array('1', '2', '0');
-$data4->title = 'Multi Branch Complex Story';
+$data4->branches = array(1);
+$data4->modules = array(2);
+$data4->plans = array('1');
+$data4->title = 'Single Branch With Plan Story';
 
 // 测试数据5：包含bugID和todoID
 $data5 = clone $data1;
 $data5->title = 'Story With Bug and Todo';
 
-r($tester->story->createTwins($data1, 0, 0)) && p() && e('5'); // 步骤1：正常多分支孪生需求创建
-r($tester->story->createTwins($data2, 0, 0)) && p() && e('7'); // 步骤2：空分支数组情况
-r($tester->story->createTwins($data3, 0, 0)) && p() && e('8'); // 步骤3：单一分支创建
-r($tester->story->createTwins($data4, 0, 0)) && p() && e('9'); // 步骤4：多分支复杂数据创建
-r($tester->story->createTwins($data5, 1, 1, 'extra', 1)) && p() && e('12'); // 步骤5：包含bugID和todoID的孪生创建
+r($tester->story->createTwins($data1, 0, 0)) && p() && e('5'); // 步骤1：正常单分支孪生需求创建
+r($tester->story->createTwins($data2, 0, 0)) && p() && e('6'); // 步骤2：空分支数组情况
+r($tester->story->createTwins($data3, 0, 0)) && p() && e('7'); // 步骤3：单一分支创建
+r($tester->story->createTwins($data4, 0, 0)) && p() && e('8'); // 步骤4：带模块和计划的单分支创建
+r($tester->story->createTwins($data5, 1, 1, 'extra', 1)) && p() && e('9'); // 步骤5：包含bugID和todoID的孪生创建

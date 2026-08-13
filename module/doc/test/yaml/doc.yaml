@@ -1,6 +1,6 @@
-title: zt_doc.
-author: Shujie Tian
-version: "1.0"
+title: zt_doc
+author: Codex
+version: "2.0"
 fields:
   - field: id
     range: 1-100
@@ -29,3 +29,7 @@ fields:
     range: 1
   - field: collects
     range: 2
+  - field: addedBy
+    range: admin
+  - field: vision
+    range: rnd

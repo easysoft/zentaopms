@@ -18,7 +18,7 @@ cid=18541
 include dirname(__FILE__, 5) . '/test/lib/init.php';
 include dirname(__FILE__, 2) . '/lib/model.class.php';
 
-zendata('repohistory')->loadYaml('repohistory_getlinkedcommits', false, 2)->gen(5);
+zendata('ops_repohistory')->loadYaml('repohistory_getlinkedcommits', false, 2)->gen(5);
 zendata('relation')->loadYaml('relation_getlinkedcommits', false, 2)->gen(5);
 zendata('story')->loadYaml('story_getlinkedcommits', false, 2)->gen(5);
 

@@ -22,7 +22,7 @@ include dirname(__FILE__, 2) . '/lib/zen.class.php';
 // 2. zendata数据准备（根据需要配置）
 zenData('bug')->gen(10);
 zenData('product')->gen(3);
-zenData('repo')->gen(3);
+zenData('ops_repo')->gen(3);
 
 // 3. 用户登录（选择合适角色）
 su('admin');

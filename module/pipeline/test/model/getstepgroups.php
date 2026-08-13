@@ -7,11 +7,11 @@ title=测试 pipelineModel::getStepGroups();
 timeout=0
 cid=0
 
-- 测试getStepGroups方法调用(无API) @1
-- 测试getStepGroups返回类型为false @1
-- 测试getStepGroups不抛异常 @1
-- 测试getStepGroups多次调用一致性 @1
-- 测试getStepGroups空参数调用 @1
+- 执行$result1 === false ? '1' : '0 @1
+- 执行$result2 === false ? '1' : '0 @1
+- 执行$result3 === false ? '1' : '0 @1
+- 执行$result4 === false ? '1' : '0 @1
+- 执行$result5 === false ? '1' : '0 @1
 
 */
 

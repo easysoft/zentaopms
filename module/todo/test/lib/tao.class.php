@@ -393,14 +393,14 @@ class todoTaoTest extends baseTest
      */
     public function closeTodoTest(int $todoID): object
     {
-        $oldTodo = $this->instance->getById($todoID);
+        $oldTodo = $this->instance->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
 
         $reflection = new ReflectionClass($this->instance);
         $method = $reflection->getMethod('closeTodo');
         $method->setAccessible(true);
         $isClosed = $method->invoke($this->instance, $todoID);
 
-        $newTodo = $this->instance->getById($todoID);
+        $newTodo = $this->instance->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
 
         $testResult = new stdclass();
         $testResult->oldStatus = $oldTodo->status;
@@ -743,7 +743,7 @@ class todoTaoTest extends baseTest
      */
     public function setTodoNameByTypeTest(int $todoID): object
     {
-        $todo = $this->objectModel->getByID($todoID);
+        $todo = $this->instance->dao->select('*')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
         if(!$todo) return new stdclass();
 
         $reflection = new ReflectionClass($this->instance);

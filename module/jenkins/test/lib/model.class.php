@@ -52,7 +52,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($mockJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -68,7 +68,7 @@ class jenkinsModelTest extends baseTest
     {
         $emptyJobs = array();
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($emptyJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($emptyJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -92,7 +92,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 5); // depth > 4
+        $result = $this->instance->getDepthJobs($mockJobs, $userPWD, 5); // depth > 4
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -122,7 +122,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($invalidJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($invalidJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -158,7 +158,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($mockJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -188,7 +188,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($mockJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -214,7 +214,7 @@ class jenkinsModelTest extends baseTest
         );
 
         $userPWD = 'test:test';
-        $result = $this->jenkins->getDepthJobs($mockJobs, $userPWD, 1);
+        $result = $this->instance->getDepthJobs($mockJobs, $userPWD, 1);
         if(dao::isError()) return dao::getError();
 
         return json_encode($result);
@@ -289,6 +289,6 @@ class jenkinsModelTest extends baseTest
     {
         global $tester;
         $jenkins = $tester->dao->select('*')->from(TABLE_PIPELINE)->where('id')->eq($jenkinsID)->fetch();
-        return $this->jenkins->getApiUserPWD($jenkins);
+        return $this->instance->getApiUserPWD($jenkins);
     }
 }

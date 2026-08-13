@@ -9,7 +9,9 @@ fields:
     range: 1-5
     prefix: 项目
   - field: type
-    range: project{3},sprint{2}
+    range: project{2},sprint{1},project{2}
+  - field: project
+    range: 0,0,1,0,0
   - field: model
     range: scrum{2},waterfall{2},kanban
   - field: status

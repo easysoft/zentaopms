@@ -29,6 +29,10 @@ zenData('doclib')->loadYaml('doclib')->gen(2);
 zenData('productplan')->loadYaml('productplan')->gen(2);
 zenData('task')->loadYaml('task')->gen(2);
 
+/* repo无服务器的镜像库校验：repo1无服务器，repo2、repo3挂接server1。 */
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq('1')->set('providerID')->eq('999')->where('id')->eq('1')->exec();
+$tester->dao->update(TABLE_REPO)->set('mirror')->eq('1')->set('providerID')->eq('1')->where('id')->in('2,3')->exec();
+
 /**
 
 title=测试 actionModel->undelete();
@@ -58,7 +62,7 @@ cid=14934
 - 测试还原action 22, objectType scene 的数据。 @1
 - 测试还原action 23, objectType doc 的数据。 @1
 - 测试还原action 24, objectType productplan 的数据。 @1
-- 测试还原action 25, objectType task 的数据。 @0
+- 测试还原action 25, objectType task 的数据。 @1
 
 */
 

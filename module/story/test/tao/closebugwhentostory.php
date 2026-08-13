@@ -4,6 +4,7 @@
 /**
 
 title=测试 storyModel->closeBugWhenToStory();
+timeout=0
 cid=18612
 
 - 不传入Bug，也不传入需求。 @0
