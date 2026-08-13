@@ -67,6 +67,7 @@ $lang->upgrade->toVersion     = 'Upgrade nach Version';
 $lang->upgrade->confirm       = 'SQL Bestätigen';
 $lang->upgrade->sureExecute   = 'Ausführen';
 $lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
+$lang->upgrade->executeFailed = 'Die Upgrade-Anforderung wurde unterbrochen. Bitte aktualisieren Sie die Seite, um es erneut zu versuchen. Bereits ausgeführte Änderungen werden automatisch übersprungen und nicht erneut ausgeführt.';
 $lang->upgrade->forbiddenExt  = 'Die Erweiterung ist nicht kompatibel mit der Upgradeversion. Sie wurde deaktiviert:';
 $lang->upgrade->updateFile    = 'Updateinformation wurden hinzugefügt.';
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';

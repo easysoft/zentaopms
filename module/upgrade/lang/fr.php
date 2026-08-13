@@ -68,6 +68,7 @@ $lang->upgrade->toVersion     = 'à';
 $lang->upgrade->confirm       = 'Confirmez SQL';
 $lang->upgrade->sureExecute   = 'Executez';
 $lang->upgrade->upgradingTips = 'La mise à jour est en cours, veuillez être patient. Ne pas actualiser la page ou éteindre votre ordinateur!';
+$lang->upgrade->executeFailed = 'La demande de mise à niveau a été interrompue. Veuillez actualiser la page pour réessayer. Les modifications déjà exécutées seront automatiquement ignorées et ne seront pas réexécutées.';
 $lang->upgrade->forbiddenExt  = 'Cette extension est incompatible avec la version. Elle a été désactivée :';
 $lang->upgrade->updateFile    = "Le fichier information a besoin d'une mise à jour.";
 $lang->upgrade->showSQLLog    = 'Your database is inconsistent with the standard and try fix it.';

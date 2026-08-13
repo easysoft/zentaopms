@@ -74,6 +74,8 @@ common:
 	curl https://$(GITFOX_HOST)/_artifacts/space/zentao/default/zui3/static/whiteboard/$(WHITEBDVERSION)/whiteboard-$(WHITEBDVERSION).tar.gz  | tar zxf - -C zentaopms/www/js/zui3/whiteboard/
 	# disable the autoExclude function.
 	sed -i 's/\$$autoExclude = true;/\$$autoExclude = false;/' zentaopms/lib/base/dao/dao.class.php
+	# 禁用 MySQL 严格模式
+	sed -i 's/\$$config->db->strictMode    = true;/\$$config->db->strictMode    = false;/' zentaopms/config/config.php
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/duckdb/

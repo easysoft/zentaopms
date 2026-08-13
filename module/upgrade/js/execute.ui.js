@@ -141,10 +141,10 @@ $(function()
             }
             catch(error)
             {
-                /* 升级操作执行失败（网络或 HTTP 错误）*/
+                /* 升级操作执行失败（网络或 HTTP 错误），提示用户刷新后重试，已执行的变更会自动跳过。*/
                 abortUpgrade();
                 console.error('Upgrade failed:', error);
-                console.warn('An error occurred during the upgrade process. Please try again.');
+                zui.Modal.alert(executeFailed);
                 return;
             }
 
