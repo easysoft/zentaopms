@@ -723,7 +723,21 @@ class baseControl
             unset($this->view->pager->app);
             unset($this->view->pager->lang);
 
-            $this->output = $this->view ? json_encode($this->view) : null;
+            $output = $this->view ? json_encode($this->view) : null;
+
+            if($this->app->responseExtractor != '*')
+            {
+                $this->app->loadClass('jsonextractor');
+                $extractor = new jsonextractor();
+
+                $responseExtractor = 'status,' . $this->app->responseExtractor;
+                $this->output      = $extractor->extract($output, $responseExtractor);
+            }
+            else
+            {
+                $this->output = $output;
+            }
+
             return;
         }
 
